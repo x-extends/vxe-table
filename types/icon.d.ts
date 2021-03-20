@@ -1,6 +1,6 @@
-import { VXEComponentInstall } from './component'
+import { VXEComponent } from './component'
 
 /**
  * 组件 - 类图标库
  */
-export const Icon: VXEComponentInstall<{}>;
+export const Icon: VXEComponent<{}>;

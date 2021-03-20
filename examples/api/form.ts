@@ -94,6 +94,15 @@ const apis = [
         list: []
       },
       {
+        name: 'title-overflow',
+        descKey: 'app.api.form.desc.titleOverflow',
+        version: '4.0.4',
+        type: 'string | boolean',
+        enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'items',
         desc: '项列表',
         version: '',

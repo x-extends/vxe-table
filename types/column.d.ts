@@ -1,5 +1,5 @@
 import { VNode, DefineComponent } from 'vue'
-import { VXEComponentInstall } from './component'
+import { VXEComponent } from './component'
 import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes } from './table'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeFilterPanel } from './filter'
@@ -7,7 +7,7 @@ import { VxeFilterPanel } from './filter'
 /**
  * 组件 - 表格列
  */
-export const Column: VXEComponentInstall<DefineComponent>;
+export const Column: VXEComponent<VxeColumnProps>;
 
 export interface VxeColumnOptions extends VxeColumnProps {
   children?: VxeColumnOptions[];
@@ -205,7 +205,7 @@ export namespace VxeColumnPropTypes {
   };
 }
 
-export interface VxeColumnProps {
+export type VxeColumnProps = {
   colId?: VxeColumnPropTypes.ColId;
   /**
    * 渲染类型

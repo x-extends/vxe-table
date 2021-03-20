@@ -103,6 +103,15 @@ const apis = [
         list: []
       },
       {
+        name: 'title-overflow',
+        descKey: 'app.api.formItem.desc.titleOverflow',
+        version: '4.0.4',
+        type: 'string | boolean',
+        enum: 'ellipsis（只显示省略号）, title（并且显示为原生 title）, tooltip（并且显示为 tooltip 提示）',
+        defVal: '继承 form.title-overflow',
+        list: []
+      },
+      {
         name: 'class-name',
         desc: '给表单项附加 className',
         version: '',

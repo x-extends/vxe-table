@@ -818,11 +818,11 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     const handleFileImport = (file: File, opts: any) => {
-      const { afterImportMethod } = opts
+      const { importMethod, afterImportMethod } = opts
       const { type, filename } = UtilTools.parseFile(file)
 
-      // 检查类型
-      if (!XEUtils.includes(VXETable.config.importTypes, type)) {
+      // 检查类型，如果为自定义导出，则不需要校验类型
+      if (!importMethod && !XEUtils.includes(VXETable.config.importTypes, type)) {
         if (opts.message !== false) {
           VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
         }
@@ -846,8 +846,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         if (window.FileReader) {
           const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
           if (options.remote) {
-            if (options.importMethod) {
-              Promise.resolve(options.importMethod({ file, options, $table: $xetable })).then(() => {
+            if (importMethod) {
+              Promise.resolve(importMethod({ file, options, $table: $xetable })).then(() => {
                 _importResolve({ status: true })
               }).catch(() => {
                 _importResolve({ status: true })
@@ -1076,8 +1076,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           opts.sheetName = document.title
         }
 
-        // 检查类型
-        if (!XEUtils.includes(VXETable.config.exportTypes, type)) {
+        // 检查类型，如果为自定义导出，则不需要校验类型
+        if (!opts.exportMethod && !XEUtils.includes(VXETable.config.exportTypes, type)) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             UtilTools.error('vxe.error.notType', [type])
           }

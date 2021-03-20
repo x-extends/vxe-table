@@ -50,8 +50,9 @@
           <span style="color: red;">名字：{{ row.name }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
       <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+      <vxe-table-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-table-column>
+      <vxe-table-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -113,6 +114,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { VxeColumnPropTypes, VxeTableEvents } from '../../../../types/index'
+import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -128,27 +130,31 @@ export default defineComponent({
     ])
 
     const tableData2 = ref([
-      { name: '小红11', role: '前端', num: 7 },
-      { name: '老王1', role: '后端', num: 6 },
-      { name: '小红111111', role: '后端', num: 1 },
-      { name: '小明11', role: '前端', num: 2 },
-      { name: '老徐111', role: '测试', num: 3 },
-      { name: '老王11', role: '前端', num: 3 },
-      { name: '老徐11111111', role: '测试', num: 4 },
-      { name: '小明111111111', role: '前端', num: 4 },
-      { name: '小明1', role: '前端', num: 8 },
-      { name: '小明111', role: '测试', num: 6 },
-      { name: '小红11111', role: '后端', num: 9 },
-      { name: '老徐11', role: '前端', num: 5 },
-      { name: '老徐11', role: '测试', num: 1 },
-      { name: '小红1111', role: '前端', num: 4 },
-      { name: '小红111', role: '前端', num: 2 },
-      { name: '小明111', role: '测试', num: 3 },
-      { name: '老王1', role: '前端', num: 6 },
-      { name: '老王1111', role: '后端', num: 4 },
-      { name: '老徐11', role: '前端', num: 8 },
-      { name: '小明111111', role: '测试', num: 7 }
+      { name: '小红11', role: '前端', num: 7, num1: 1368.7, num2: '1368.7' },
+      { name: '老王1', role: '后端', num: 6, num1: 89657, num2: '89657' },
+      { name: '小红111111', role: '后端', num: 1, num1: 672, num2: '672' },
+      { name: '小明11', role: '前端', num: 2, num1: 482456, num2: '482456' },
+      { name: '老徐111', role: '测试', num: 3, num1: 7546.7, num2: '7546.7' },
+      { name: '老王11', role: '前端', num: 3, num1: 6897, num2: '6897' },
+      { name: '老徐11111111', role: '测试', num: 4, num1: 8957, num2: '8957' },
+      { name: '小明111111111', role: '前端', num: 4, num1: 56433.57, num2: '56433.57' },
+      { name: '小明1', role: '前端', num: 8, num1: 977, num2: '977' },
+      { name: '小明111', role: '测试', num: 6, num1: 98477, num2: '98477' },
+      { name: '小红11111', role: '后端', num: 9, num1: 67017, num2: '67017' },
+      { name: '老徐11', role: '前端', num: 5, num1: 7364, num2: '7364' },
+      { name: '老徐11', role: '测试', num: 1, num1: 1573.7, num2: '1573.7' },
+      { name: '小红1111', role: '前端', num: 4, num1: 16807, num2: '16807' },
+      { name: '小红111', role: '前端', num: 2, num1: 744345.7, num2: '744345.7' },
+      { name: '小明111', role: '测试', num: 3, num1: 10957, num2: '10957' },
+      { name: '老王1', role: '前端', num: 6, num1: 6737, num2: '6737' },
+      { name: '老王1111', role: '后端', num: 4, num1: 83445.1, num2: '83445.1' },
+      { name: '老徐11', role: '前端', num: 8, num1: 4636677, num2: '4636677' },
+      { name: '小明111111', role: '测试', num: 7, num1: 5783537, num2: '5783537' }
     ])
+
+    const formatterNum2: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
+      return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+    }
 
     const sortNameMethod2: VxeColumnPropTypes.SortBy = (row) => {
       // 按名称长度进行排序
@@ -189,6 +195,7 @@ export default defineComponent({
     return {
       tableData,
       tableData2,
+      formatterNum2,
       sortNameMethod2,
       tableData3,
       sortChangeEvent3,
@@ -251,38 +258,44 @@ export default defineComponent({
               <span style="color: red;">名字：{{ row.name }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
           <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+          <vxe-table-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-table-column>
+          <vxe-table-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-table-column>
         </vxe-table>
         `,
         `
         import { defineComponent, ref } from 'vue'
+        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
             const tableData2 = ref([
-              { name: '小红11', role: '前端', num: 7 },
-              { name: '老王1', role: '后端', num: 6 },
-              { name: '小红111111', role: '后端', num: 1 },
-              { name: '小明11', role: '前端', num: 2 },
-              { name: '老徐111', role: '测试', num: 3 },
-              { name: '老王11', role: '前端', num: 3 },
-              { name: '老徐11111111', role: '测试', num: 4 },
-              { name: '小明111111111', role: '前端', num: 4 },
-              { name: '小明1', role: '前端', num: 8 },
-              { name: '小明111', role: '测试', num: 6 },
-              { name: '小红11111', role: '后端', num: 9 },
-              { name: '老徐11', role: '前端', num: 5 },
-              { name: '老徐11', role: '测试', num: 1 },
-              { name: '小红1111', role: '前端', num: 4 },
-              { name: '小红111', role: '前端', num: 2 },
-              { name: '小明111', role: '测试', num: 3 },
-              { name: '老王1', role: '前端', num: 6 },
-              { name: '老王1111', role: '后端', num: 4 },
-              { name: '老徐11', role: '前端', num: 8 },
-              { name: '小明111111', role: '测试', num: 7 }
+              { name: '小红11', role: '前端', num: 7, num1: 1368.7, num2: '1368.7' },
+              { name: '老王1', role: '后端', num: 6, num1: 89657, num2: '89657' },
+              { name: '小红111111', role: '后端', num: 1, num1: 672, num2: '672' },
+              { name: '小明11', role: '前端', num: 2, num1: 482456, num2: '482456' },
+              { name: '老徐111', role: '测试', num: 3, num1: 7546.7, num2: '7546.7' },
+              { name: '老王11', role: '前端', num: 3, num1: 6897, num2: '6897' },
+              { name: '老徐11111111', role: '测试', num: 4, num1: 8957, num2: '8957' },
+              { name: '小明111111111', role: '前端', num: 4, num1: 56433.57, num2: '56433.57' },
+              { name: '小明1', role: '前端', num: 8, num1: 977, num2: '977' },
+              { name: '小明111', role: '测试', num: 6, num1: 98477, num2: '98477' },
+              { name: '小红11111', role: '后端', num: 9, num1: 67017, num2: '67017' },
+              { name: '老徐11', role: '前端', num: 5, num1: 7364, num2: '7364' },
+              { name: '老徐11', role: '测试', num: 1, num1: 1573.7, num2: '1573.7' },
+              { name: '小红1111', role: '前端', num: 4, num1: 16807, num2: '16807' },
+              { name: '小红111', role: '前端', num: 2, num1: 744345.7, num2: '744345.7' },
+              { name: '小明111', role: '测试', num: 3, num1: 10957, num2: '10957' },
+              { name: '老王1', role: '前端', num: 6, num1: 6737, num2: '6737' },
+              { name: '老王1111', role: '后端', num: 4, num1: 83445.1, num2: '83445.1' },
+              { name: '老徐11', role: '前端', num: 8, num1: 4636677, num2: '4636677' },
+              { name: '小明111111', role: '测试', num: 7, num1: 5783537, num2: '5783537' }
             ])
             
+            const formatterNum2: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
+              return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+            }
+
             const sortNameMethod2: VxeColumnPropTypes.SortBy = (row) => {
               // 按名称长度进行排序
               return row.name.length
@@ -290,6 +303,7 @@ export default defineComponent({
 
             return {
               tableData2,
+              formatterNum2,
               sortNameMethod2
             }
           }

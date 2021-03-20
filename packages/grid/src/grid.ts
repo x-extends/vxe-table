@@ -7,7 +7,7 @@ import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableListeners, VxeTableDefines } from '../../../types/all'
+import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps } from '../../../types/all'
 
 function getOffsetHeight (elem: HTMLElement) {
   return elem ? elem.offsetHeight : 0
@@ -519,9 +519,9 @@ export default defineComponent({
       return []
     }
 
-    const tableCompEvents: VxeTableListeners = {}
+    const tableCompEvents: VxeTableEventProps = {}
     tableComponentEmits.forEach(name => {
-      const type = XEUtils.camelCase(`on-${name}`) as keyof VxeTableListeners
+      const type = XEUtils.camelCase(`on-${name}`) as keyof VxeTableEventProps
       tableCompEvents[type] = (...args: any[]) => emit(name, ...args)
     })
 

@@ -77,7 +77,7 @@ export default defineComponent({
     ]
 
     const formatterNum: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
-      return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+      return XEUtils.commafy(Number(cellValue), { digits: 2 })
     }
 
     const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
@@ -146,7 +146,7 @@ export default defineComponent({
             ]
 
             const formatterNum: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
-              return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+              return XEUtils.commafy(Number(cellValue), { digits: 2 })
             }
 
             const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
@@ -188,7 +188,7 @@ export default defineComponent({
           },
           // 四舍五入金额，每隔3位逗号分隔，默认2位数
           formatAmount ({ cellValue }, digits = 2) {
-            return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
+            return XEUtils.commafy(Number(cellValue), { digits })
           },
           // 格式化银行卡，默认每4位空格隔开
           formatBankcard ({ cellValue }) {

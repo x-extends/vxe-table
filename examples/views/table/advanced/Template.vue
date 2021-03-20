@@ -231,11 +231,19 @@ export default defineComponent({
       demo1.selectRecords = $table.getCheckboxRecords()
     }
 
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       return [
         columns.map(column => {
           if (['sex', 'num'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return sumNum(data, column.property)
           }
           return null
         })
@@ -467,11 +475,19 @@ export default defineComponent({
               demo1.selectRecords = $table.getCheckboxRecords()
             }
 
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               return [
                 columns.map(column => {
                   if (['sex', 'num'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return sumNum(data, column.property)
                   }
                   return null
                 })

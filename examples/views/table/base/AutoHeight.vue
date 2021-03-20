@@ -100,7 +100,6 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { VxeTablePropTypes } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -139,6 +138,22 @@ export default defineComponent({
       ]
     })
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       const means: any[] = []
       const sums: any[] = []
@@ -152,14 +167,15 @@ export default defineComponent({
           switch (column.property) {
             case 'age':
             case 'rate':
-              meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
-              sumCell = XEUtils.sum(data, column.property)
+              meanCell = meanNum(data, column.property)
+              sumCell = sumNum(data, column.property)
               break
           }
           means.push(meanCell)
           sums.push(sumCell)
         }
       })
+
       // 返回一个二维数组的表尾合计
       return [means, sums]
     }
@@ -281,7 +297,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -302,6 +317,22 @@ export default defineComponent({
               ]
             })
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               const means: any[] = []
               const sums: any[] = []
@@ -315,17 +346,14 @@ export default defineComponent({
                   switch (column.property) {
                     case 'age':
                     case 'rate':
-                      meanCell = XEUtils.toInteger(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
+                      meanCell = meanNum(data, column.property)
+                      sumCell = sumNum(data, column.property)
                       break
                   }
                   means.push(meanCell)
                   sums.push(sumCell)
                 }
               })
-              // 返回一个二维数组的表尾合计
-              return [means, sums]
-            }
 
             return {
               demo3,

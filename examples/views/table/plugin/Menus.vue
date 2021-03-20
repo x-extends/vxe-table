@@ -43,7 +43,6 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { VxeTablePropTypes } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -124,6 +123,14 @@ export default defineComponent({
       } as VxeTablePropTypes.MenuConfig
     })
 
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       return [
         columns.map((column, columnIndex) => {
@@ -131,7 +138,7 @@ export default defineComponent({
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return sumNum(data, column.property)
           }
           return null
         })
@@ -172,7 +179,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -253,6 +259,14 @@ export default defineComponent({
               } as VxeTablePropTypes.MenuConfig
             })
 
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               return [
                 columns.map((column, columnIndex) => {
@@ -260,7 +274,7 @@ export default defineComponent({
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return sumNum(data, column.property)
                   }
                   return null
                 })

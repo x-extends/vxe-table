@@ -21,7 +21,6 @@
       "highlight-hover-row",
       "highlight-current-column",
       "highlight-hover-column",
-      "highlight-cell",
       "row-class-name",
       "cell-class-name",
       "header-row-class-name",
@@ -164,7 +163,6 @@
       "highlight-hover-row",
       "highlight-current-column",
       "highlight-hover-column",
-      "highlight-cell",
       "row-class-name",
       "cell-class-name",
       "header-row-class-name",
@@ -265,7 +263,7 @@
   },
   "vxe-radio": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "label",
       "content",
       "size",
@@ -276,7 +274,7 @@
   },
   "vxe-radio-group": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "size",
       "disabled"
     ],
@@ -284,7 +282,7 @@
   },
   "vxe-radio-button": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "label",
       "content",
       "disabled"
@@ -293,7 +291,7 @@
   },
   "vxe-checkbox": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "label",
       "content",
       "size",
@@ -305,7 +303,7 @@
   },
   "vxe-checkbox-group": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "size",
       "disabled"
     ],
@@ -313,7 +311,7 @@
   },
   "vxe-switch": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "disabled",
       "size",
       "open-label",
@@ -327,7 +325,7 @@
   },
   "vxe-input": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "size",
       "type",
       "name",
@@ -350,6 +348,7 @@
       "max-date",
       "start-week",
       "label-format",
+      "parse-format",
       "value-format",
       "editable",
       "disabled-method",
@@ -360,7 +359,7 @@
   },
   "vxe-select": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "size",
       "multiple",
       "multi-char-overflow",
@@ -437,7 +436,7 @@
   },
   "vxe-modal": {
     "attributes": [
-      "v-model / model-value",
+      "v-model / value",
       "size",
       "loading",
       "id",
@@ -488,6 +487,7 @@
       "title-width",
       "title-colon",
       "title-asterisk",
+      "title-overflow",
       "items",
       "rules",
       "prevent-submit",
@@ -506,6 +506,7 @@
       "align",
       "title-align",
       "title-width",
+      "title-overflow",
       "class-name",
       "visible",
       "visible-method",

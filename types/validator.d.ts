@@ -1,10 +1,10 @@
-import { VXEComponentInstall } from './component'
+import { VXEComponent } from './component'
 import { VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
  * 表格扩展 - 校验模块
  */
-export const Validator: VXEComponentInstall<{}>;
+export const Validator: VXEComponent<{}>;
 
 export interface TableValidatorMethods {
   /**

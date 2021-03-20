@@ -32,32 +32,42 @@ import 'element-plus/lib/theme-chalk/index.css'
 
 import {
   VXETable,
-  Table,
-  Column,
+
+  Icon,
+  Filter,
+  Menu,
+  Edit,
+  Export,
+  Keyboard,
+  Validator,
   Header,
   Footer,
+
+  Column,
+  Colgroup,
   Grid,
   Toolbar,
   Pager,
   Checkbox,
+  CheckboxGroup,
   Radio,
+  RadioGroup,
+  RadioButton,
   Input,
   Textarea,
   Button,
   Modal,
   Tooltip,
   Form,
+  FormItem,
   Select,
+  Optgroup,
+  Option,
   Switch,
   List,
   Pulldown,
 
-  Filter,
-  Menu,
-  Edit,
-  Export,
-  Keyboard,
-  Validator
+  Table
 } from '../packages/all'
 
 const app = createApp(App)
@@ -78,30 +88,40 @@ app.component(FilterContent.name, FilterContent)
 app.component(FilterComplex.name, FilterComplex)
 app.component(FilterExcel.name, FilterExcel)
 
-app.use(Column)
-app.use(Header)
-app.use(Footer)
-app.use(Grid)
-app.use(Toolbar)
-app.use(Pager)
-app.use(Checkbox)
-app.use(Radio)
-app.use(Input)
-app.use(Textarea)
-app.use(Button)
-app.use(Modal)
-app.use(Select)
-app.use(Switch)
-app.use(Tooltip)
-app.use(Form)
-app.use(List)
-app.use(Pulldown)
+app.use(Icon)
 app.use(Filter)
 app.use(Menu)
 app.use(Edit)
 app.use(Export)
 app.use(Keyboard)
 app.use(Validator)
+app.use(Header)
+app.use(Footer)
+
+app.use(Column)
+app.use(Colgroup)
+app.use(Grid)
+app.use(Toolbar)
+app.use(Pager)
+app.use(Checkbox)
+app.use(CheckboxGroup)
+app.use(Radio)
+app.use(RadioGroup)
+app.use(RadioButton)
+app.use(Input)
+app.use(Textarea)
+app.use(Button)
+app.use(Modal)
+app.use(Select)
+app.use(Optgroup)
+app.use(Option)
+app.use(Switch)
+app.use(Tooltip)
+app.use(Form)
+app.use(FormItem)
+app.use(List)
+app.use(Pulldown)
+
 app.use(Table)
 
 app.use(Antd)

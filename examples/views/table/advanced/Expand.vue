@@ -9,6 +9,7 @@
       <template #buttons>
         <vxe-button @click="toggleSeqFixed">切换第一固定列</vxe-button>
         <vxe-button @click="toggleExpandFixed">切换第二固定列</vxe-button>
+        <vxe-button @click="toggleAgeFixed">切换第五固定列</vxe-button>
         <vxe-button @click="$refs.xTable1.toggleRowExpand(demo1.tableData[1])">切换第二行展开</vxe-button>
         <vxe-button @click="$refs.xTable1.setRowExpand([demo1.tableData[2], demo1.tableData[3]], true)">设置第三、四行展开</vxe-button>
         <vxe-button @click="$refs.xTable1.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -19,6 +20,7 @@
     <vxe-table
       ref="xTable1"
       border
+      auto-resize
       :data="demo1.tableData"
       @toggle-row-expand="toggleExpandChangeEvent">
       <vxe-table-column type="seq" width="60" :fixed="demo1.seqFixed"></vxe-table-column>
@@ -29,7 +31,7 @@
               border
               :data="demo1.otherList">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
-              <vxe-table-column field="age" title="Age"></vxe-table-column>
+              <vxe-table-column field="address" title="Address"></vxe-table-column>
             </vxe-table>
           </template>
           <template v-else>
@@ -56,7 +58,7 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="400"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="400"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" width="400" :fixed="demo1.ageFixed"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -174,17 +176,18 @@ export default defineComponent({
     const demo1 = reactive({
       seqFixed: null as VxeColumnPropTypes.Fixed,
       expandFixed: null as VxeColumnPropTypes.Fixed,
+      ageFixed: null as VxeColumnPropTypes.Fixed,
       tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃' },
         { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
       ],
       otherList: [
         { id: 50001, name: 'Test5001', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 50002, name: 'Test5002', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' }
+        { id: 50002, name: 'Test5002', role: 'Test', sex: 'Women', age: 22, address: 'vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃' }
       ]
     })
 
@@ -198,6 +201,14 @@ export default defineComponent({
 
     const toggleExpandFixed = () => {
       demo1.expandFixed = demo1.expandFixed ? null : 'left'
+      nextTick(() => {
+        const $table = xTable1.value
+        $table.refreshColumn()
+      })
+    }
+
+    const toggleAgeFixed = () => {
+      demo1.ageFixed = demo1.ageFixed ? null : 'right'
       nextTick(() => {
         const $table = xTable1.value
         $table.refreshColumn()
@@ -235,6 +246,7 @@ export default defineComponent({
       demo1,
       toggleSeqFixed,
       toggleExpandFixed,
+      toggleAgeFixed,
       toggleExpandChangeEvent,
       demo2,
       demo3,
@@ -244,6 +256,7 @@ export default defineComponent({
           <template #buttons>
             <vxe-button @click="toggleSeqFixed">切换第一固定列</vxe-button>
             <vxe-button @click="toggleExpandFixed">切换第二固定列</vxe-button>
+            <vxe-button @click="toggleAgeFixed">切换第五固定列</vxe-button>
             <vxe-button @click="$refs.xTable1.toggleRowExpand(demo1.tableData[1])">切换第二行展开</vxe-button>
             <vxe-button @click="$refs.xTable1.setRowExpand([demo1.tableData[2], demo1.tableData[3]], true)">设置第三、四行展开</vxe-button>
             <vxe-button @click="$refs.xTable1.setAllRowExpand(true)">设置所有行展开</vxe-button>
@@ -254,6 +267,7 @@ export default defineComponent({
         <vxe-table
           ref="xTable1"
           border
+          auto-resize
           :data="demo1.tableData"
           @toggle-row-expand="toggleExpandChangeEvent">
           <vxe-table-column type="seq" width="60" :fixed="demo1.seqFixed"></vxe-table-column>
@@ -264,7 +278,7 @@ export default defineComponent({
                   border
                   :data="demo1.otherList">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
-                  <vxe-table-column field="age" title="Age"></vxe-table-column>
+                  <vxe-table-column field="address" title="Address"></vxe-table-column>
                 </vxe-table>
               </template>
               <template v-else>
@@ -291,7 +305,7 @@ export default defineComponent({
           </vxe-table-column>
           <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="400"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="400"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="400" :fixed="demo1.ageFixed"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -305,17 +319,18 @@ export default defineComponent({
             const demo1 = reactive({
               seqFixed: null as VxeColumnPropTypes.Fixed,
               expandFixed: null as VxeColumnPropTypes.Fixed,
+              ageFixed: null as VxeColumnPropTypes.Fixed,
               tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃' },
                 { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
               ],
               otherList: [
                 { id: 50001, name: 'Test5001', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 50002, name: 'Test5002', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' }
+                { id: 50002, name: 'Test5002', role: 'Test', sex: 'Women', age: 22, address: 'vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃 vxe-table 从入门到放弃' }
               ]
             })
 
@@ -335,6 +350,14 @@ export default defineComponent({
               })
             }
 
+            const toggleAgeFixed = () => {
+              demo1.ageFixed = demo1.ageFixed ? null : 'right'
+              nextTick(() => {
+                const $table = xTable1.value
+                $table.refreshColumn()
+              })
+            }
+
             const toggleExpandChangeEvent: VxeTableEvents.ToggleRowExpand = ({ expanded }) => {
               console.log('行展开事件' + expanded)
             }
@@ -343,6 +366,7 @@ export default defineComponent({
               demo1,
               toggleSeqFixed,
               toggleExpandFixed,
+              toggleAgeFixed,
               toggleExpandChangeEvent
             }
           }

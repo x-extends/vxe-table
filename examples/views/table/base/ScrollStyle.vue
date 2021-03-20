@@ -33,7 +33,6 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { VxeTablePropTypes } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -50,6 +49,14 @@ export default defineComponent({
       ]
     })
 
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       return [
         columns.map((column, columnIndex) => {
@@ -57,7 +64,7 @@ export default defineComponent({
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.toInteger(XEUtils.sum(data, column.property))
+            return sumNum(data, column.property)
           }
           return '-'
         })
@@ -87,7 +94,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -104,6 +110,14 @@ export default defineComponent({
               ]
             })
 
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               return [
                 columns.map((column, columnIndex) => {
@@ -111,7 +125,7 @@ export default defineComponent({
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.toInteger(XEUtils.sum(data, column.property))
+                    return sumNum(data, column.property)
                   }
                   return '-'
                 })

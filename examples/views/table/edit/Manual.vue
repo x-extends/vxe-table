@@ -12,12 +12,12 @@
       :data="demo1.tableData1"
       :edit-config="{trigger: 'manual', mode: 'row'}">
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+      <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', attrs: {type: 'text', placeholder: '请输入昵称'}}"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: demo1.sexList1}"></vxe-table-column>
       <vxe-table-column field="sex2" title="多选下拉" :edit-render="{name: '$select', options: demo1.sexList1, props: {multiple: true}}"></vxe-table-column>
-      <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+      <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2, placeholder: '请输入数值'}}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-      <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+      <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week', placeholder: '请选择日期'}}"></vxe-table-column>
       <vxe-table-column title="操作" width="160">
         <template #default="{ row }">
           <template v-if="isActiveStatus(row)">
@@ -119,12 +119,12 @@ export default defineComponent({
           :data="demo1.tableData1"
           :edit-config="{trigger: 'manual', mode: 'row'}">
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
+          <vxe-table-column field="nickname" title="Role" :edit-render="{name: 'input', attrs: {type: 'text', placeholder: '请输入昵称'}}"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: demo1.sexList1}"></vxe-table-column>
           <vxe-table-column field="sex2" title="多选下拉" :edit-render="{name: '$select', options: demo1.sexList1, props: {multiple: true}}"></vxe-table-column>
-          <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+          <vxe-table-column field="num1" title="Amount" :edit-render="{name: '$input', props: {type: 'float', digits: 2, placeholder: '请输入数值'}}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
-          <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-table-column>
+          <vxe-table-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week', placeholder: '请选择日期'}}"></vxe-table-column>
           <vxe-table-column title="操作" width="160">
             <template #default="{ row }">
               <template v-if="isActiveStatus(row)">

@@ -292,7 +292,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -415,7 +414,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {

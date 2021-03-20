@@ -81,7 +81,7 @@ export default defineComponent({
           filterMethod (params) {
             const { option, row, column } = params
             const { data } = option
-            const cellValue = XEUtils.get(row, column.property)
+            const cellValue = row[column.property]
             if (cellValue) {
               return cellValue.indexOf(data) > -1
             }

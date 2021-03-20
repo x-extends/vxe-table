@@ -1,12 +1,12 @@
 import { DefineComponent } from 'vue'
-import { VXEComponentInstall } from './component'
+import { VXEComponent } from './component'
 
 /**
  * 组件 - 下拉框选项分组
  */
-export const Optgroup: VXEComponentInstall<DefineComponent>;
+export const Optgroup: VXEComponent<VxeOptgroupProps>;
 
-export interface VxeOptgroupOptions {
+export type VxeOptgroupProps = {
   /**
    * 显示内容
    */

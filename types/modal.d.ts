@@ -1,14 +1,14 @@
 import { VNode, RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 模态窗口
  */
-export const Modal: VXEComponentInstall<DefineComponent>;
+export const Modal: VXEComponent<VxeModalProps & VxeModalEventProps>;
 
 export type VxeModalInstance = ComponentPublicInstance<VxeModalProps, VxeModalConstructor>;
 
-export interface VxeModalConstructor extends VxeComponentInstance, VxeModalMethods {
+export interface VxeModalConstructor extends VxeComponentBase, VxeModalMethods {
   props: VxeModalProps;
   context: SetupContext<VxeModalEmits>;
   reactData: ModalReactData;
@@ -102,7 +102,7 @@ export type ModalPosition = {
  */
 export type ModalEventTypes = 'default' | 'mask' | 'close' | 'confirm' | 'cancel' | 'keydown' | 'exist'
 
-export interface VxeModalOptions extends VxeModalProps, VxeModalListeners { }
+export interface VxeModalOptions extends VxeModalProps, VxeModalEventProps { }
 
 export namespace VxeModalPropTypes {
   export type Size = SizeType;
@@ -148,7 +148,7 @@ export namespace VxeModalPropTypes {
   export type Slots = ModalSlots;
 }
 
-export interface VxeModalProps {
+export type VxeModalProps = {
   size?: VxeModalPropTypes.Size;
   modelValue?: VxeModalPropTypes.ModelValue;
   id?: VxeModalPropTypes.ID;
@@ -304,23 +304,21 @@ export namespace VxeModalDefines {
   export interface ZoomEventParams extends ModalEventParams, ZoomParams { }
 }
 
-export interface VxeModalListeners {
+export type VxeModalEventProps = {
   onShow?: VxeModalEvents.Show;
-  show?: VxeModalEvents.Show;
-
   onHide?: VxeModalEvents.Hide;
-  hide?: VxeModalEvents.Hide;
-
   onConfirm?: VxeModalEvents.Confirm;
-  confirm?: VxeModalEvents.Confirm;
-
   onCancel?: VxeModalEvents.Cancel;
-  cancel?: VxeModalEvents.Cancel;
-
   onClose?: VxeModalEvents.Close;
-  close?: VxeModalEvents.Close;
-
   onZoom?: VxeModalEvents.Zoom;
+}
+
+export interface VxeModalListeners {
+  show?: VxeModalEvents.Show;
+  hide?: VxeModalEvents.Hide;
+  confirm?: VxeModalEvents.Confirm;
+  cancel?: VxeModalEvents.Cancel;
+  close?: VxeModalEvents.Close;
   zoom?: VxeModalEvents.Zoom;
 }
 

@@ -31,9 +31,10 @@
         import 'xe-utils'
         import {
           VXETable,
+
           Header,
           // Footer,
-          // Icon
+          // Icon,
           // Filter,
           // Edit,
           // Menu,
@@ -41,17 +42,24 @@
           // Keyboard,
           // Validator,
 
-          // Column,
+          Column,
+          // Colgroup,
           // Grid,
           // Tooltip,
           // Toolbar,
           // Pager,
           // Form,
+          // FormItem,
           // Checkbox,
+          // CheckboxGroup,
           // Radio,
+          // RadioGroup,
+          // RadioButton,
           // Switch,
           // Input,
           // Select,
+          // Optgroup,
+          // Option,
           // Textarea,
           // Button,
           // Modal,
@@ -69,7 +77,7 @@
 
         const app = createApp(App)
 
-        // 表格模块
+        // 表格功能
         app.use(Header)
         // .use(Footer)
         // .use(Icon)
@@ -82,16 +90,23 @@
 
         // 可选组件
         .use(Column)
+        // .use(Colgroup)
         // .use(Grid)
         // .use(Tooltip)
         // .use(Toolbar)
         // .use(Pager)
         // .use(Form)
+        // .use(FormItem)
         // .use(Checkbox)
+        // .use(CheckboxGroup)
         // .use(Radio)
+        // .use(RadioGroup)
+        // .use(RadioButton)
         // .use(Switch)
         // .use(Input)
         // .use(Select)
+        // .use(Optgroup)
+        // .use(Option)
         // .use(Textarea)
         // .use(Button)
         // .use(Modal)

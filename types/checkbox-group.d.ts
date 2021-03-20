@@ -1,15 +1,15 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, SizeType, VxeEvent, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
 import { VxeCheckboxEvents } from './checkbox'
 
 /**
  * 组件 - 复选框组
  */
-export const CheckboxGroup: VXEComponentInstall<DefineComponent>;
+export const CheckboxGroup: VXEComponent<VxeCheckboxGroupOptions & VxeCheckboxGroupEventProps>;
 
 export type VxeCheckboxGroupInstance = ComponentPublicInstance<VxeCheckboxGroupOptions, VxeCheckboxGroupConstructor>;
 
-export interface VxeCheckboxGroupConstructor extends VxeComponentInstance, VxeCheckboxGroupMethods {
+export interface VxeCheckboxGroupConstructor extends VxeComponentBase, VxeCheckboxGroupMethods {
   props: VxeCheckboxGroupOptions;
   context: SetupContext<VxeCheckboxGroupEmits>;
   renderVN: RenderFunction;
@@ -17,7 +17,7 @@ export interface VxeCheckboxGroupConstructor extends VxeComponentInstance, VxeCh
 
 export interface VxeCheckboxGroupOptions extends VxeCheckboxGroupProps, VxeCheckboxGroupListeners { }
 
-export interface VxeCheckboxGroupProps {
+export type VxeCheckboxGroupProps = {
   size?: SizeType;
   /**
    * 绑定值
@@ -55,8 +55,11 @@ export namespace VxeCheckboxGroupDefines {
   export interface ChangeEventParams extends CheckboxGroupEventParams, ChangeParams { }
 }
 
-export interface VxeCheckboxGroupListeners {
+export type VxeCheckboxGroupEventProps = {
   onChange?: VxeCheckboxGroupEvents.Change;
+}
+
+export interface VxeCheckboxGroupListeners {
   change?: VxeCheckboxGroupEvents.Change;
 }
 

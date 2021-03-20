@@ -1,14 +1,14 @@
-import { DefineComponent, VNode } from 'vue'
-import { VXEComponentInstall } from './component'
+import { VNode, DefineComponent } from 'vue'
+import { VXEComponent } from './component'
 import { VxeFormConstructor, VxeFormDefines, VxeFormPropTypes } from './form'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 组件 - 表单项
  */
-export const FormItem: VXEComponentInstall<DefineComponent>;
+export const FormItem: VXEComponent<VxeFormItemProps>;
 
-export interface VxeFormItemOptions {
+export interface VxeFormItemProps {
   /**
    * 标题
    */
@@ -45,6 +45,7 @@ export interface VxeFormItemOptions {
    * 后缀配置项
    */
   titleSuffix?: VxeFormItemPropTypes.TitleSuffix;
+  titleOverflow?: VxeFormItemPropTypes.TitleOverflow;
   /**
    * 重置时的默认值
    */
@@ -96,6 +97,7 @@ export namespace VxeFormItemPropTypes {
   }
   export type TitlePrefix = PrefixOption
   export type TitleSuffix = PrefixOption
+  export type TitleOverflow = VxeFormPropTypes.TitleOverflow
 
   export type ResetValue = any;
   export type Visible = boolean;

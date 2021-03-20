@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 单选框
  */
-export const Radio: VXEComponentInstall<DefineComponent>;
+export const Radio: VXEComponent<VxeRadioProps & VxeRadioEventProps>;
 
 export type VxeRadioInstance = ComponentPublicInstance<VxeRadioProps, VxeRadioConstructor>;
 
-export interface VxeRadioConstructor extends VxeComponentInstance, VxeRadioMethods {
+export interface VxeRadioConstructor extends VxeComponentBase, VxeRadioMethods {
   props: VxeRadioProps;
   context: SetupContext<VxeRadioEmits>;
   renderVN: RenderFunction;
@@ -16,7 +16,7 @@ export interface VxeRadioConstructor extends VxeComponentInstance, VxeRadioMetho
 
 export interface VxeRadioOptions extends VxeRadioProps, VxeRadioListeners { }
 
-export interface VxeRadioProps {
+export type VxeRadioProps = {
   size?: SizeType;
   /**
    * 绑定值
@@ -68,8 +68,11 @@ export namespace VxeRadioDefines {
   export interface ChangeEventParams extends RadioEventParams, ChangeParams { }
 }
 
-export interface VxeRadioListeners {
+export type VxeRadioEventProps = {
   onChange?: VxeRadioEvents.Change;
+}
+
+export interface VxeRadioListeners {
   change?: VxeRadioEvents.Change;
 }
 

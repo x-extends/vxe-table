@@ -17,34 +17,43 @@ const ts = require('gulp-typescript')
 const time = Date.now()
 
 const components = [
-  'table',
-  'column',
-  'toolbar',
-  'grid',
-  'pager',
-  'checkbox',
-  'radio',
-  'input',
-  'textarea',
-  'button',
-  'modal',
-  'tooltip',
-  'form',
-  'select',
-  'switch',
-  'list',
-  'pulldown',
+  'v-x-e-table',
 
   'icon',
-  'header',
-  'footer',
   'filter',
   'menu',
   'edit',
   'export',
   'keyboard',
   'validator',
-  'v-x-e-table'
+  'header',
+  'footer',
+
+  'column',
+  'colgroup',
+  'toolbar',
+  'grid',
+  'pager',
+  'checkbox',
+  'checkbox-group',
+  'radio',
+  'radio-group',
+  'radio-button',
+  'input',
+  'textarea',
+  'button',
+  'modal',
+  'tooltip',
+  'form',
+  'form-item',
+  'select',
+  'optgroup',
+  'option',
+  'switch',
+  'list',
+  'pulldown',
+
+  'table'
 ]
 
 const languages = [

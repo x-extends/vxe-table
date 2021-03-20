@@ -44,7 +44,6 @@
 import { defineComponent, reactive } from 'vue'
 import { VXETable } from '../../../../packages/all'
 import { VxeTableEvents, VxeTablePropTypes } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({
@@ -121,6 +120,14 @@ export default defineComponent({
       }
     }
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       return [
         columns.map((column, columnIndex) => {
@@ -128,7 +135,7 @@ export default defineComponent({
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.toInteger(XEUtils.mean(data, column.property))
+            return meanNum(data, column.property)
           }
           return null
         })
@@ -160,7 +167,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VXETable, VxeTableEvents, VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
         import XEClipboard from 'xe-clipboard'
 
         export default defineComponent({
@@ -237,6 +243,14 @@ export default defineComponent({
               }
             }
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               return [
                 columns.map((column, columnIndex) => {
@@ -244,7 +258,7 @@ export default defineComponent({
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.toInteger(XEUtils.mean(data, column.property))
+                    return meanNum(data, column.property)
                   }
                   return null
                 })

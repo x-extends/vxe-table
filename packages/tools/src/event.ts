@@ -1,13 +1,13 @@
 import XEUtils from 'xe-utils'
 import DomTools from './dom'
 
-import { VxeComponentInstance } from '../../../types/all'
+import { VxeComponentBase } from '../../../types/all'
 
 // 监听全局事件
 const browse = DomTools.browse
 const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const eventStore: {
-  comp: VxeComponentInstance;
+  comp: VxeComponentBase;
   type: string;
   cb: Function;
 }[] = []
@@ -22,12 +22,12 @@ function triggerEvent (evnt: Event) {
 }
 
 export const GlobalEvent = {
-  on (comp: VxeComponentInstance, type: string, cb: Function) {
+  on (comp: VxeComponentBase, type: string, cb: Function) {
     if (cb) {
       eventStore.push({ comp, type, cb })
     }
   },
-  off (comp: VxeComponentInstance, type: string) {
+  off (comp: VxeComponentBase, type: string) {
     XEUtils.remove(eventStore, item => item.comp === comp && item.type === type)
   },
   trigger: triggerEvent,

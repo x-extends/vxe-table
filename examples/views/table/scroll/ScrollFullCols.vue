@@ -7,17 +7,7 @@
       <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头)</span>
     </p>
 
-    <vxe-grid
-      border
-      show-overflow
-      show-header-overflow
-      highlight-hover-row
-      highlight-current-row
-      ref="xGrid"
-      height="600"
-      :loading="demo1.loading"
-      :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-      :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+    <vxe-grid ref="xGrid" v-bind="gridOptions">
       <template #toolbar_buttons>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
@@ -57,7 +47,7 @@
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/all'
-import { VxeGridInstance } from '../../../../types/index'
+import { VxeGridInstance, VxeGridOptions } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 const columnList: any[] = []
@@ -65,10 +55,24 @@ const dataList: any[] = []
 
 export default defineComponent({
   setup () {
-    const demo1 = reactive({
+    const gridOptions = reactive({
+      border: true,
+      showOverflow: true,
+      showHeaderOverflow: true,
+      highlightHoverRow: true,
+      highlightCurrentRow: true,
+      height: 600,
       loading: false,
-      tableData: []
-    })
+      toolbarConfig: {
+        slots: {
+          buttons: 'toolbar_buttons'
+        }
+      },
+      checkboxConfig: {
+        checkField: 'checked',
+        labelField: 'nickname'
+      }
+    } as VxeGridOptions)
 
     const xGrid = ref({} as VxeGridInstance)
 
@@ -150,7 +154,7 @@ export default defineComponent({
     }
 
     const loadColumnAndData = (colSize: number, rowSize: number) => {
-      demo1.loading = true
+      gridOptions.loading = true
       Promise.all([
         mockColumns(colSize),
         mockList(rowSize)
@@ -166,10 +170,10 @@ export default defineComponent({
             $grid.reloadData(data)
           ]).then(() => {
             VXETable.modal.message({ message: `渲染 ${colSize} 列 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
-            demo1.loading = false
+            gridOptions.loading = false
           })
         } else {
-          demo1.loading = false
+          gridOptions.loading = false
         }
       })
     }
@@ -186,22 +190,12 @@ export default defineComponent({
 
     return {
       xGrid,
-      demo1,
+      gridOptions,
       loadColumnAndData,
       getSelectEvent,
       demoCodes: [
         `
-        <vxe-grid
-          border
-          show-overflow
-          show-header-overflow
-          highlight-hover-row
-          highlight-current-row
-          ref="xGrid"
-          height="600"
-          :loading="demo1.loading"
-          :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-          :checkbox-config="{checkField: 'checked', labelField: 'nickname'}">
+        <vxe-grid ref="xGrid" v-bind="gridOptions">
           <template #toolbar_buttons>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
@@ -217,7 +211,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
-        import { VXETable, VxeGridInstance } from '../../../../types/index'
+        import { VXETable, VxeGridInstance, VxeGridOptions } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         const columnList: any[] = []
@@ -225,10 +219,24 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const demo1 = reactive({
+            const gridOptions = reactive({
+              border: true,
+              showOverflow: true,
+              showHeaderOverflow: true,
+              highlightHoverRow: true,
+              highlightCurrentRow: true,
+              height: 600,
               loading: false,
-              tableData: []
-            })
+              toolbarConfig: {
+                slots: {
+                  buttons: 'toolbar_buttons'
+                }
+              },
+              checkboxConfig: {
+                checkField: 'checked',
+                labelField: 'nickname'
+              }
+            } as VxeGridOptions)
 
             const xGrid = ref({} as VxeGridInstance)
 
@@ -241,7 +249,8 @@ export default defineComponent({
                       columnList.push({
                         field: 'attr' + i,
                         title: 'Attr' + i,
-                        width: 140
+                        width: 140,
+                        fixed: i < 1 ? 'left' : null
                       })
                     }
                   }
@@ -309,7 +318,7 @@ export default defineComponent({
             }
 
             const loadColumnAndData = (colSize: number, rowSize: number) => {
-              demo1.loading = true
+              gridOptions.loading = true
               Promise.all([
                 mockColumns(colSize),
                 mockList(rowSize)
@@ -325,12 +334,18 @@ export default defineComponent({
                     $grid.reloadData(data)
                   ]).then(() => {
                     VXETable.modal.message({ message: \`渲染 \${colSize} 列 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
-                    demo1.loading = false
+                    gridOptions.loading = false
                   })
                 } else {
-                  demo1.loading = false
+                  gridOptions.loading = false
                 }
               })
+            }
+
+            const getSelectEvent = () => {
+              const $grid = xGrid.value
+              const selectRecords = $grid.getCheckboxRecords()
+              VXETable.modal.alert(\`\${selectRecords.length}\`)
             }
 
             nextTick(() => {
@@ -339,8 +354,9 @@ export default defineComponent({
 
             return {
               xGrid,
-              demo1,
-              loadColumnAndData
+              gridOptions,
+              loadColumnAndData,
+              getSelectEvent
             }
           }
         }

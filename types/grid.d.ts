@@ -1,20 +1,20 @@
 import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, DefineComponent } from 'vue'
 import { VxeColumnOptions } from './column'
 import { VxeFormInstance, VxeFormOptions, VxeFormDefines } from './form'
-import { VxeFormItemOptions } from './form-item'
+import { VxeFormItemProps } from './form-item'
 import { VxeToolbarInstance, VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
 import { VxePagerInstance, VxePagerOptions, VxePagerDefines } from './pager'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeTableInstance, VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
  * 组件 - 高级表格
  */
-export const Grid: VXEComponentInstall<DefineComponent>;
+export const Grid: VXEComponent<VxeGridProps & VxeGridEventProps>;
 
 export type VxeGridInstance = ComponentPublicInstance<VxeGridProps, VxeGridConstructor>;
 
-export interface VxeGridConstructor extends VxeComponentInstance, VxeGridMethods {
+export interface VxeGridConstructor extends VxeComponentBase, VxeGridMethods {
   props: VxeGridProps;
   context: SetupContext<VxeGridEmits>;
   instance: ComponentInternalInstance;
@@ -87,7 +87,7 @@ export interface GridPublicMethods {
   /**
    * 获取表单项列表
    */
-  getFormItems(): VxeFormItemOptions[];
+  getFormItems(): VxeFormItemProps[];
   /**
    * 获取已标记删除的数据
    */
@@ -239,7 +239,7 @@ export namespace VxeGridPropTypes {
 
   export interface FormConfig extends VxeFormOptions {
     enabled?: boolean;
-    items?: VxeFormItemOptions[];
+    items?: VxeFormItemProps[];
   }
   export interface FormOpts extends FormConfig {
     inited?: boolean;
@@ -251,7 +251,7 @@ export namespace VxeGridPropTypes {
   export interface ZoomOpts extends ZoomConfig { }
 }
 
-export interface VxeGridProps extends VxeTableProps {
+export type VxeGridProps = VxeTableProps & {
   columns?: VxeGridPropTypes.ColumnOptions[];
   pagerConfig?: VxeGridPropTypes.PagerConfig;
   proxyConfig?: VxeGridPropTypes.ProxyConfig;
@@ -318,129 +318,95 @@ export namespace VxeGridDefines {
   export interface ZoomEventParams extends GridEventParams, ZoomParams { }
 }
 
-export interface VxeGridListeners {
+export interface VxeGridEventProps {
   onKeydown?: VxeGridEvents.Keydown;
-  keydown?: VxeGridEvents.Keydown;
-
   onPaste?: VxeGridEvents.Paste;
-  paste?: VxeGridEvents.Paste;
-
   onCopy?: VxeGridEvents.Copy;
-  copy?: VxeGridEvents.Copy;
-
   onCut?: VxeGridEvents.Cut;
-  cut?: VxeGridEvents.Cut;
-
   onCurrentChange?: VxeGridEvents.CurrentChange;
-  currentChange?: VxeGridEvents.CurrentChange;
-
   onRadioChange?: VxeGridEvents.RadioChange;
-  radioChange?: VxeGridEvents.RadioChange;
-
   onCheckboxChange?: VxeGridEvents.CheckboxChange;
-  checkboxChange?: VxeGridEvents.CheckboxChange;
-
   onCheckboxAll?: VxeGridEvents.CheckboxAll;
-  checkboxAll?: VxeGridEvents.CheckboxAll;
-
   onCheckboxRangeStart?: VxeGridEvents.CheckboxRangeStart;
-  checkboxRangeStart?: VxeGridEvents.CheckboxRangeStart;
-
   onCheckboxRangeChange?: VxeGridEvents.CheckboxRangeChange;
-  checkboxRangeChange?: VxeGridEvents.CheckboxRangeChange;
-
   onCheckboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd;
-  checkboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd;
-
   onCellClick?: VxeGridEvents.CellClick;
-  cellClick?: VxeGridEvents.CellClick;
-
   onCellDBLClick?: VxeGridEvents.CellDBLClick;
-  cellDBLClick?: VxeGridEvents.CellDBLClick;
-
   onCellMenu?: VxeGridEvents.CellMenu;
-  cellMenu?: VxeGridEvents.CellMenu;
-
   onCellMouseenter?: VxeGridEvents.CellMouseenter;
-  cellMouseenter?: VxeGridEvents.CellMouseenter;
-
   onCellMouseleave?: VxeGridEvents.CellMouseleave;
-  cellMouseleave?: VxeGridEvents.CellMouseleave;
-
   onHeaderCellClick?: VxeGridEvents.HeaderCellClick;
-  headerCellClick?: VxeGridEvents.HeaderCellClick;
-
   onHeaderCellDblclick?: VxeGridEvents.HeaderCellDblclick;
-  headerCellDblclick?: VxeGridEvents.HeaderCellDblclick;
-
   onHeaderCellMenu?: VxeGridEvents.HeaderCellMenu;
-  headerCellMenu?: VxeGridEvents.HeaderCellMenu;
-
   onFooterCellClick?: VxeGridEvents.FooterCellClick;
-  footerCellClick?: VxeGridEvents.FooterCellClick;
-
   onFooterCellDblclick?: VxeGridEvents.FooterCellDblclick;
-  footerCellDblclick?: VxeGridEvents.FooterCellDblclick;
-
   onFooterCellMenu?: VxeGridEvents.FooterCellMenu;
-  footerCellMenu?: VxeGridEvents.FooterCellMenu;
-
   onSortChange?: VxeGridEvents.SortChange;
-  sortChange?: VxeGridEvents.SortChange;
-
   onFilterChange?: VxeGridEvents.FilterChange;
-  filterChange?: VxeGridEvents.FilterChange;
-
   onResizableChange?: VxeGridEvents.ResizableChange;
-  resizableChange?: VxeGridEvents.ResizableChange;
-
   onToggleRowExpand?: VxeGridEvents.ToggleRowExpand;
-  toggleRowExpand?: VxeGridEvents.ToggleRowExpand;
-
   onToggleTreeExpand?: VxeGridEvents.ToggleTreeExpand;
-  toggleTreeExpand?: VxeGridEvents.ToggleTreeExpand;
-
   onMenuClick?: VxeGridEvents.MenuClick;
-  menuClick?: VxeGridEvents.MenuClick;
-
   onEditClosed?: VxeGridEvents.EditClosed;
-  editClosed?: VxeGridEvents.EditClosed;
-
   onEditActived?: VxeGridEvents.EditActived;
-  editActived?: VxeGridEvents.EditActived;
-
   onEditDisabled?: VxeGridEvents.EditDisabled;
-  editDisabled?: VxeGridEvents.EditDisabled;
-
   onValidError?: VxeGridEvents.ValidError;
-  validError?: VxeGridEvents.ValidError;
-
   onScroll?: VxeGridEvents.Scroll;
-  scroll?: VxeGridEvents.Scroll;
-
   onCustom?: VxeGridEvents.Custom;
-  custom?: VxeGridEvents.Custom;
 
   // grid
   onPageChange?: VxeGridEvents.PageChange;
-  pageChange?: VxeGridEvents.PageChange;
-
   onFormSubmitEvent?: VxeGridEvents.FormSubmitEvent;
-  formSubmitEvent?: VxeGridEvents.FormSubmitEvent;
-
   onFormSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
-  formSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
-
   onFormReset?: VxeGridEvents.FormReset;
-  formReset?: VxeGridEvents.FormReset;
-
   onFormToggleCollapse?: VxeGridEvents.FormToggleCollapse;
-  formToggleCollapse?: VxeGridEvents.FormToggleCollapse;
-
   onToolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
-  toolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
-
   onZoom?: VxeGridEvents.Zoom;
+}
+
+export interface VxeGridListeners {
+  keydown?: VxeGridEvents.Keydown;
+  paste?: VxeGridEvents.Paste;
+  copy?: VxeGridEvents.Copy;
+  cut?: VxeGridEvents.Cut;
+  currentChange?: VxeGridEvents.CurrentChange;
+  radioChange?: VxeGridEvents.RadioChange;
+  checkboxChange?: VxeGridEvents.CheckboxChange;
+  checkboxAll?: VxeGridEvents.CheckboxAll;
+  checkboxRangeStart?: VxeGridEvents.CheckboxRangeStart;
+  checkboxRangeChange?: VxeGridEvents.CheckboxRangeChange;
+  checkboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd;
+  cellClick?: VxeGridEvents.CellClick
+  cellDBLClick?: VxeGridEvents.CellDBLClick;
+  cellMenu?: VxeGridEvents.CellMenu;
+  cellMouseenter?: VxeGridEvents.CellMouseenter;
+  cellMouseleave?: VxeGridEvents.CellMouseleave;
+  headerCellClick?: VxeGridEvents.HeaderCellClick;
+  headerCellDblclick?: VxeGridEvents.HeaderCellDblclick;
+  headerCellMenu?: VxeGridEvents.HeaderCellMenu;
+  footerCellClick?: VxeGridEvents.FooterCellClick;
+  footerCellDblclick?: VxeGridEvents.FooterCellDblclick;
+  footerCellMenu?: VxeGridEvents.FooterCellMenu;
+  sortChange?: VxeGridEvents.SortChange;
+  filterChange?: VxeGridEvents.FilterChange;
+  resizableChange?: VxeGridEvents.ResizableChange;
+  toggleRowExpand?: VxeGridEvents.ToggleRowExpand;
+  toggleTreeExpand?: VxeGridEvents.ToggleTreeExpand;
+  menuClick?: VxeGridEvents.MenuClick;
+  editClosed?: VxeGridEvents.EditClosed;
+  editActived?: VxeGridEvents.EditActived;
+  editDisabled?: VxeGridEvents.EditDisabled;
+  validError?: VxeGridEvents.ValidError;
+  scroll?: VxeGridEvents.Scroll;
+  custom?: VxeGridEvents.Custom;
+
+  // grid
+  pageChange?: VxeGridEvents.PageChange;
+  formSubmitEvent?: VxeGridEvents.FormSubmitEvent;
+  formSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
+  formReset?: VxeGridEvents.FormReset;
+  formToggleCollapse?: VxeGridEvents.FormToggleCollapse;
+  toolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
   zoom?: VxeGridEvents.Zoom;
 }
 

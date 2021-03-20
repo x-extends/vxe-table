@@ -105,7 +105,7 @@ import GridGroup from '../views/grid/Group.vue'
 import GridReverse from '../views/grid/Reverse.vue'
 import GridTemplate from '../views/grid/Template.vue'
 import GridFooter from '../views/grid/Footer.vue'
-// import GridPage from '../views/grid/Page.vue'
+import GridPage from '../views/grid/Page.vue'
 import GridFullQuery from '../views/grid/FullQuery.vue'
 import GridProxy from '../views/grid/Proxy.vue'
 import GridPageProxy from '../views/grid/PageProxy.vue'
@@ -177,8 +177,8 @@ import TableScrollEdit from '../views/table/scroll/Edit.vue'
 // import TableScrollForceRowValid from '../views/table/scroll/ForceRowValid.vue'
 import TableScrollPartialLoad from '../views/table/scroll/PartialLoad.vue'
 import TableScrollFullPartialLoad from '../views/table/scroll/FullPartialLoad.vue'
-// import TableScrollFooter from '../views/table/scroll/Footer.vue'
-// import TableScrollTemplate from '../views/table/scroll/Template.vue'
+import TableScrollFooter from '../views/table/scroll/Footer.vue'
+import TableScrollTemplate from '../views/table/scroll/Template.vue'
 // import TableScrollTabs from '../views/table/scroll/Tabs.vue'
 import TableScrollKeepAlives from '../views/table/scroll/KeepAlives.vue'
 import TableScrollKeepAliveTable1 from '../views/table/scroll/keepAlives/Table1.vue'
@@ -1013,11 +1013,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'GridFooter',
     component: GridFooter
   },
-  // {
-  //   path: '/table/grid/page',
-  //   name: 'GridPage',
-  //   component: GridPage
-  // },
+  {
+    path: '/table/grid/page',
+    name: 'GridPage',
+    component: GridPage
+  },
   {
     path: '/table/grid/proxy',
     name: 'GridProxy',
@@ -1213,16 +1213,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableScrollFullPartialLoad',
     component: TableScrollFullPartialLoad
   },
-  // {
-  //   path: '/table/scroll/footer',
-  //   name: 'TableScrollFooter',
-  //   component: TableScrollFooter
-  // },
-  // {
-  //   path: '/table/scroll/template',
-  //   name: 'TableScrollTemplate',
-  //   component: TableScrollTemplate
-  // },
+  {
+    path: '/table/scroll/footer',
+    name: 'TableScrollFooter',
+    component: TableScrollFooter
+  },
+  {
+    path: '/table/scroll/template',
+    name: 'TableScrollTemplate',
+    component: TableScrollTemplate
+  },
   // {
   //   path: '/table/scroll/tabs',
   //   name: 'TableScrollTabs',

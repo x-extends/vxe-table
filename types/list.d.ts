@@ -1,14 +1,14 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 虚拟列表
  */
-export const List: VXEComponentInstall<DefineComponent>;
+export const List: VXEComponent<VxeListProps & VxeListEventProps>;
 
 export type VxeListInstance = ComponentPublicInstance<VxeListProps, VxeListConstructor>;
 
-export interface VxeListConstructor extends VxeComponentInstance, VxeListMethods {
+export interface VxeListConstructor extends VxeComponentBase, VxeListMethods {
   props: VxeListProps;
   context: SetupContext<VxeListEmits>;
   reactData: ListReactData;
@@ -113,7 +113,7 @@ export namespace VxeListPropTypes {
   }
 }
 
-export interface VxeListProps {
+export type VxeListProps = {
   size?: VxeListPropTypes.Size;
   data?: VxeListPropTypes.Data;
   height?: VxeListPropTypes.Height;
@@ -137,8 +137,11 @@ export namespace VxeListDefines {
   export interface ScrollEventParams extends ListEventParams, ScrollParams { }
 }
 
-export interface VxeListListeners {
+export type VxeListEventProps = {
   onScroll?: VxeListEvents.Scroll;
+}
+
+export interface VxeListListeners {
   scroll?: VxeListEvents.Scroll;
 }
 

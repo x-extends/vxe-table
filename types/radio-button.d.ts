@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
-import { SizeType, VXEComponentInstall, VxeComponentInstance, VxeEvent, ValueOf } from './component'
+import { SizeType, VXEComponent, VxeComponentBase, VxeEvent, ValueOf } from './component'
 
 /**
  * 组件 - 单选框按钮
  */
-export const RadioButton: VXEComponentInstall<DefineComponent>;
+export const RadioButton: VXEComponent<VxeRadioButtonProps & VxeRadioButtonEventProps>;
 
 export type VxeRadioButtonInstance = ComponentPublicInstance<VxeRadioButtonProps, VxeRadioButtonConstructor>;
 
-export interface VxeRadioButtonConstructor extends VxeComponentInstance, VxeRadioButtonMethods {
+export interface VxeRadioButtonConstructor extends VxeComponentBase, VxeRadioButtonMethods {
   props: VxeRadioButtonProps;
   context: SetupContext<VxeRadioButtonEmits>;
   renderVN: RenderFunction;
@@ -29,7 +29,7 @@ export type VxeRadioButtonEmits = [
   'change'
 ]
 
-export interface VxeRadioButtonProps {
+export type VxeRadioButtonProps = {
   size?: SizeType;
   modelValue: any;
   label: any;
@@ -49,8 +49,11 @@ export namespace VxeRadioButtonDefines {
   export interface ChangeEventParams extends RadioButtonEventParams, ChangeParams { }
 }
 
-export interface VxeRadioButtonListeners {
+export type VxeRadioButtonEventProps = {
   onChange?: VxeRadioButtonEvents.Change;
+}
+
+export interface VxeRadioButtonListeners {
   change?: VxeRadioButtonEvents.Change;
 }
 

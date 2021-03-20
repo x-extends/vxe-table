@@ -1,10 +1,10 @@
-import { VXEComponentInstall, RecordInfo } from './component'
+import { VXEComponent, RecordInfo } from './component'
 import { VxeTableDefines } from './table'
 
 /**
  * 表格扩展 - 编辑
  */
-export const Edit: VXEComponentInstall<{}>;
+export const Edit: VXEComponent<{}>;
 
 export interface TableEditMethods {
   /**

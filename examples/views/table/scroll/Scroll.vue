@@ -132,6 +132,14 @@ export default defineComponent({
       tableData: XEUtils.clone(mockList2, true)
     })
 
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod = ({ columns, data }: any) => {
       // 返回一个二维数组的表尾合计
       const footData = [
@@ -141,7 +149,7 @@ export default defineComponent({
           }
           switch (column.property) {
             case 'attr1':
-              return XEUtils.sum(data, 'attr1')
+              return sumNum(data, 'attr1')
           }
           return '-'
         })
@@ -260,6 +268,14 @@ export default defineComponent({
               tableData: XEUtils.clone(mockList2, true)
             })
 
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod = ({ columns, data }: any) => {
               // 返回一个二维数组的表尾合计
               const footData = [
@@ -269,7 +285,7 @@ export default defineComponent({
                   }
                   switch (column.property) {
                     case 'attr1':
-                      return XEUtils.sum(data, 'attr1')
+                      return sumNum(data, 'attr1')
                   }
                   return '-'
                 })

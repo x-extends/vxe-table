@@ -4,7 +4,7 @@
       虚拟滚动渲染，更加复杂局部递增数据、局部递增列、固定列<br>
     </p>
 
-    <vxe-toolbar :loading="demo1.loading">
+    <vxe-toolbar :loading="gridOptions.loading">
       <template #buttons>
         <vxe-button @click="loadList(20)">+20条</vxe-button>
         <vxe-button @click="loadList(50)">+50条</vxe-button>
@@ -22,16 +22,7 @@
       </template>
     </vxe-toolbar>
 
-    <vxe-grid
-      border
-      show-overflow
-      show-header-overflow
-      ref="xGrid"
-      height="500"
-      row-id="id"
-      :checkbox-config="{checkField: 'checked', labelField: 'id'}"
-      :loading="demo1.loading">
-    </vxe-grid>
+    <vxe-grid ref="xGrid" v-bind="gridOptions"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -44,15 +35,24 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridPropTypes } from '../../../../types/index'
+import { VxeGridInstance, VxeGridPropTypes, VxeGridOptions } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
-    const demo1 = reactive({
-      loading: false
-    })
-
     const xGrid = ref({} as VxeGridInstance)
+
+    const gridOptions = reactive({
+      border: true,
+      showOverflow: true,
+      showHeaderOverflow: true,
+      height: 500,
+      rowId: 'id',
+      checkboxConfig: {
+        checkField: 'checked',
+        labelField: 'id'
+      },
+      loading: false
+    } as VxeGridOptions)
 
     let colIndex = 0
     let rowIndex = 1
@@ -105,31 +105,31 @@ export default defineComponent({
     }
 
     const removeColumn = (size: number) => {
-      demo1.loading = true
+      gridOptions.loading = true
       if (allColumn.length > size) {
         const $grid = xGrid.value
         allColumn = allColumn.slice(0, allColumn.length - size)
         if ($grid) {
           $grid.loadColumn(allColumn)
         }
-        demo1.loading = false
+        gridOptions.loading = false
       }
     }
 
     const loadColumns = (size: number) => {
-      demo1.loading = true
+      gridOptions.loading = true
       findColumnList(size).then(data => {
         const $grid = xGrid.value
         allColumn = allColumn.concat(data) // 局部追加并保存全量数据
         if ($grid) {
           $grid.loadColumn(allColumn)
         }
-        demo1.loading = false
+        gridOptions.loading = false
       })
     }
 
     const removeList = (size: number) => {
-      demo1.loading = true
+      gridOptions.loading = true
       setTimeout(() => {
         if (allData.length > size) {
           const $grid = xGrid.value
@@ -138,24 +138,24 @@ export default defineComponent({
             $grid.loadData(allData)
           }
         }
-        demo1.loading = false
+        gridOptions.loading = false
       }, 100)
     }
 
     const loadList = (size: number) => {
-      demo1.loading = true
+      gridOptions.loading = true
       findDataList(size).then(data => {
         const $grid = xGrid.value
         allData = allData.concat(data) // 局部追加并保存全量数据
         if ($grid) {
           $grid.loadData(allData)
         }
-        demo1.loading = false
+        gridOptions.loading = false
       })
     }
 
     const init = () => {
-      demo1.loading = true
+      gridOptions.loading = true
       Promise.all([
         findColumnList(200).then(data => {
           const $grid = xGrid.value
@@ -172,7 +172,7 @@ export default defineComponent({
           }
         })
       ]).then(() => {
-        demo1.loading = false
+        gridOptions.loading = false
       })
     }
 
@@ -180,14 +180,14 @@ export default defineComponent({
 
     return {
       xGrid,
-      demo1,
+      gridOptions,
       removeColumn,
       loadColumns,
       removeList,
       loadList,
       demoCodes: [
         `
-        <vxe-toolbar :loading="demo1.loading">
+        <vxe-toolbar :loading="gridOptions.loading">
           <template #buttons>
             <vxe-button @click="loadList(20)">+20条</vxe-button>
             <vxe-button @click="loadList(50)">+50条</vxe-button>
@@ -205,28 +205,28 @@ export default defineComponent({
           </template>
         </vxe-toolbar>
 
-        <vxe-grid
-          border
-          show-overflow
-          show-header-overflow
-          ref="xGrid"
-          height="500"
-          row-id="id"
-          :checkbox-config="{checkField: 'checked', labelField: 'id'}"
-          :loading="demo1.loading">
-        </vxe-grid>
+        <vxe-grid ref="xGrid" v-bind="gridOptions"></vxe-grid>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeGridInstance, VxeGridPropTypes } from 'vxe-table'
+        import { VxeGridInstance, VxeGridPropTypes, VxeGridOptions } from 'vxe-table'
 
         export default defineComponent({
           setup () {
-            const demo1 = reactive({
-              loading: false
-            })
-
             const xGrid = ref({} as VxeGridInstance)
+
+            const gridOptions = reactive({
+              border: true,
+              showOverflow: true,
+              showHeaderOverflow: true,
+              height: 500,
+              rowId: 'id',
+              checkboxConfig: {
+                checkField: 'checked',
+                labelField: 'id'
+              },
+              loading: false
+            } as VxeGridOptions)
 
             let colIndex = 0
             let rowIndex = 1
@@ -279,31 +279,31 @@ export default defineComponent({
             }
 
             const removeColumn = (size: number) => {
-              demo1.loading = true
+              gridOptions.loading = true
               if (allColumn.length > size) {
                 const $grid = xGrid.value
                 allColumn = allColumn.slice(0, allColumn.length - size)
                 if ($grid) {
                   $grid.loadColumn(allColumn)
                 }
-                demo1.loading = false
+                gridOptions.loading = false
               }
             }
 
             const loadColumns = (size: number) => {
-              demo1.loading = true
+              gridOptions.loading = true
               findColumnList(size).then(data => {
                 const $grid = xGrid.value
                 allColumn = allColumn.concat(data) // 局部追加并保存全量数据
                 if ($grid) {
                   $grid.loadColumn(allColumn)
                 }
-                demo1.loading = false
+                gridOptions.loading = false
               })
             }
 
             const removeList = (size: number) => {
-              demo1.loading = true
+              gridOptions.loading = true
               setTimeout(() => {
                 if (allData.length > size) {
                   const $grid = xGrid.value
@@ -312,24 +312,24 @@ export default defineComponent({
                     $grid.loadData(allData)
                   }
                 }
-                demo1.loading = false
+                gridOptions.loading = false
               }, 100)
             }
 
             const loadList = (size: number) => {
-              demo1.loading = true
+              gridOptions.loading = true
               findDataList(size).then(data => {
                 const $grid = xGrid.value
                 allData = allData.concat(data) // 局部追加并保存全量数据
                 if ($grid) {
                   $grid.loadData(allData)
                 }
-                demo1.loading = false
+                gridOptions.loading = false
               })
             }
 
             const init = () => {
-              demo1.loading = true
+              gridOptions.loading = true
               Promise.all([
                 findColumnList(200).then(data => {
                   const $grid = xGrid.value
@@ -346,7 +346,7 @@ export default defineComponent({
                   }
                 })
               ]).then(() => {
-                demo1.loading = false
+                gridOptions.loading = false
               })
             }
 
@@ -354,7 +354,7 @@ export default defineComponent({
 
             return {
               xGrid,
-              demo1,
+              gridOptions,
               removeColumn,
               loadColumns,
               removeList,

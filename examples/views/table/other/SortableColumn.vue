@@ -48,7 +48,6 @@
 import { defineComponent, reactive, ref, onUnmounted, nextTick } from 'vue'
 import { VXETable } from '../../../../packages/all'
 import { VxeGridInstance, VxeGridOptions, VxeTableInstance } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 import Sortable from 'sortablejs'
 
 export default defineComponent({
@@ -101,6 +100,22 @@ export default defineComponent({
 
     const xGrid2 = ref({} as VxeGridInstance)
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const gridOptions2 = reactive({
       border: true,
       columnKey: true,
@@ -134,7 +149,7 @@ export default defineComponent({
               return '平均'
             }
             if (['age', 'sex'].includes(column.property)) {
-              return XEUtils.mean(data, column.property)
+              return meanNum(data, column.property)
             }
             return null
           }),
@@ -143,7 +158,7 @@ export default defineComponent({
               return '和值'
             }
             if (['age', 'sex'].includes(column.property)) {
-              return XEUtils.sum(data, column.property)
+              return sumNum(data, column.property)
             }
             return null
           })
@@ -229,7 +244,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref, onUnmounted, nextTick } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridOptions, VxeTableInstance } from 'vxe-table'
-        import XEUtils from 'xe-utils'
         import Sortable from 'sortablejs'
 
         export default defineComponent({
@@ -315,12 +329,27 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref, onUnmounted, nextTick } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridOptions, VxeTableInstance } from 'vxe-table'
-        import XEUtils from 'xe-utils'
         import Sortable from 'sortablejs'
 
         export default defineComponent({
           setup () {
             const xGrid2 = ref({} as VxeGridInstance)
+
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
 
             const gridOptions2 = reactive({
               border: true,
@@ -355,7 +384,7 @@ export default defineComponent({
                       return '平均'
                     }
                     if (['age', 'sex'].includes(column.property)) {
-                      return XEUtils.mean(data, column.property)
+                      return meanNum(data, column.property)
                     }
                     return null
                   }),
@@ -364,7 +393,7 @@ export default defineComponent({
                       return '和值'
                     }
                     if (['age', 'sex'].includes(column.property)) {
-                      return XEUtils.sum(data, column.property)
+                      return sumNum(data, column.property)
                     }
                     return null
                   })

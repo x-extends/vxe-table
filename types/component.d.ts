@@ -3,11 +3,15 @@ import { App, ComponentPublicInstance } from 'vue'
 export type SizeType = null | 'medium' | 'small' | 'mini';
 export type ValueOf<T> = T extends any[] ? T[number] : T[keyof T];
 
-export type VXEComponentInstall<T> = T & {
+export type VXEComponent<P = {}, E = {}> = {
+  new (): {
+    $props: P & Partial<E>;
+  };
+} & {
   install(app: App): void;
 }
 
-export interface VxeComponentInstance {
+export interface VxeComponentBase {
   xID: string;
 }
 

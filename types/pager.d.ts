@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 分页
  */
-export const Pager: VXEComponentInstall<DefineComponent>;
+export const Pager: VXEComponent<VxePagerProps & VxePagerEventProps>;
 
 export type VxePagerInstance = ComponentPublicInstance<VxePagerProps, VxePagerConstructor>;
 
-export interface VxePagerConstructor extends VxeComponentInstance, VxePagerMethods {
+export interface VxePagerConstructor extends VxeComponentBase, VxePagerMethods {
   props: VxePagerProps;
   context: SetupContext<VxePagerEmits>;
   getRefMaps(): PagerPrivateRef;
@@ -22,7 +22,7 @@ export interface VxePagerPrivateRef extends PagerPrivateRef { }
 
 export interface VxePagerOptions extends VxePagerProps, VxePagerListeners { }
 
-export interface VxePagerProps {
+export type VxePagerProps = {
   size?: SizeType;
   /**
    * 自定义布局
@@ -136,8 +136,11 @@ export namespace VxePagerDefines {
   export interface PageChangeEventParams extends PagerEventParams, PageChangeParams { }
 }
 
-export interface VxePagerListeners {
+export type VxePagerEventProps = {
   onPageChange?: VxePagerEvents.PageChange;
+}
+
+export interface VxePagerListeners {
   pageChange?: VxePagerEvents.PageChange;
 }
 

@@ -1,15 +1,15 @@
 import { DefineComponent } from 'vue'
-import { VXEComponentInstall } from './component'
+import { VXEComponent } from './component'
 import { VxeColumnPropTypes } from './column'
 
 /**
  * 组件 - 表格分组列
  */
-export const Colgroup: VXEComponentInstall<DefineComponent>;
+export const Colgroup: VXEComponent<VxeColgroupProps>;
 
 export interface VxeColgroupOptions extends VxeColgroupProps {}
 
-export interface VxeColgroupProps {
+export type VxeColgroupProps = {
   /**
    * 渲染类型
    */

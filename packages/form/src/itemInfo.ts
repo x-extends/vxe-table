@@ -12,6 +12,7 @@ export class ItemInfo {
       titleWidth: item.titleWidth,
       titlePrefix: item.titlePrefix,
       titleSuffix: item.titleSuffix,
+      titleOverflow: item.titleOverflow,
       resetValue: item.resetValue,
       visibleMethod: item.visibleMethod,
       visible: item.visible,

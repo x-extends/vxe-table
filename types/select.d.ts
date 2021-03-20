@@ -1,15 +1,15 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 组件 - 下拉框
  */
-export const Select: VXEComponentInstall<DefineComponent>;
+export const Select: VXEComponent<VxeSelectProps & VxeSelectEventProps>;
 
 export type VxeSelectInstance = ComponentPublicInstance<VxeSelectProps, VxeSelectConstructor>;
 
-export interface VxeSelectConstructor extends VxeComponentInstance, VxeSelectMethods {
+export interface VxeSelectConstructor extends VxeComponentBase, VxeSelectMethods {
   props: VxeSelectProps;
   context: SetupContext<VxeSelectEmits>;
   reactData: SelectReactData;
@@ -40,7 +40,7 @@ export interface SelectReactData {
 
 export interface VxeSelectOptions extends VxeSelectProps, VxeSelectListeners { }
 
-export interface VxeSelectProps {
+export type VxeSelectProps = {
   size?: SizeType;
   modelValue: any;
   clearable: boolean;
@@ -113,8 +113,11 @@ export namespace VxeSelectDefines {
   export interface ChangeEventParams extends SelectEventParams, ChangeParams { }
 }
 
-export interface VxeSelectListeners {
+export type VxeSelectEventProps = {
   onChange?: VxeSelectEvents.Change;
+}
+
+export interface VxeSelectListeners {
   change?: VxeSelectEvents.Change;
 }
 

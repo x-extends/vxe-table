@@ -1,5 +1,5 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnOptions, VxeColumnPropTypes } from './column'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
@@ -11,11 +11,11 @@ import { VxeMenuPanelInstance } from './menu'
 /**
  * 组件 - 表格
  */
-export const Table: VXEComponentInstall<DefineComponent>;
+export const Table: VXEComponent<VxeTableProps & VxeTableEventProps>;
 
 export type VxeTableInstance = ComponentPublicInstance<VxeTableProps, VxeTableConstructor>;
 
-export interface VxeTableConstructor extends VxeComponentInstance, VxeTableMethods {
+export interface VxeTableConstructor extends VxeComponentBase, VxeTableMethods {
   props: VxeTableProps;
   context: SetupContext<VxeTableEmits>;
   instance: ComponentInternalInstance;
@@ -1713,7 +1713,7 @@ export namespace VxeTablePropTypes {
   export type Params = any;
 }
 
-export interface VxeTableProps {
+export type VxeTableProps = {
   size?: VxeTablePropTypes.Size;
   id?: VxeTablePropTypes.ID;
   data?: VxeTablePropTypes.Data;
@@ -2165,107 +2165,77 @@ export namespace VxeTableDefines {
   export interface CustomEventParams extends TableEventParams, CustomParams { }
 }
 
-export interface VxeTableListeners {
+export interface VxeTableEventProps {
   onKeydown?: VxeTableEvents.Keydown;
-  keydown?: VxeTableEvents.Keydown;
-
   onPaste?: VxeTableEvents.Paste;
-  paste?: VxeTableEvents.Paste;
-
   onCopy?: VxeTableEvents.Copy;
-  copy?: VxeTableEvents.Copy;
-
   onCut?: VxeTableEvents.Cut;
-  cut?: VxeTableEvents.Cut;
-
   onCurrentChange?: VxeTableEvents.CurrentChange;
-  currentChange?: VxeTableEvents.CurrentChange;
-
   onRadioChange?: VxeTableEvents.RadioChange;
-  radioChange?: VxeTableEvents.RadioChange;
-
   onCheckboxChange?: VxeTableEvents.CheckboxChange;
-  checkboxChange?: VxeTableEvents.CheckboxChange;
-
   onCheckboxAll?: VxeTableEvents.CheckboxAll;
-  checkboxAll?: VxeTableEvents.CheckboxAll;
-
   onCheckboxRangeStart?: VxeTableEvents.CheckboxRangeStart;
-  checkboxRangeStart?: VxeTableEvents.CheckboxRangeStart;
-
   onCheckboxRangeChange?: VxeTableEvents.CheckboxRangeChange;
-  checkboxRangeChange?: VxeTableEvents.CheckboxRangeChange;
-
   onCheckboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd;
-  checkboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd;
-
   onCellClick?: VxeTableEvents.CellClick;
-  cellClick?: VxeTableEvents.CellClick;
-
   onCellDBLClick?: VxeTableEvents.CellDBLClick;
-  cellDBLClick?: VxeTableEvents.CellDBLClick;
-
   onCellMenu?: VxeTableEvents.CellMenu;
-  cellMenu?: VxeTableEvents.CellMenu;
-
   onCellMouseenter?: VxeTableEvents.CellMouseenter;
-  cellMouseenter?: VxeTableEvents.CellMouseenter;
-
   onCellMouseleave?: VxeTableEvents.CellMouseleave;
-  cellMouseleave?: VxeTableEvents.CellMouseleave;
-
   onHeaderCellClick?: VxeTableEvents.HeaderCellClick;
-  headerCellClick?: VxeTableEvents.HeaderCellClick;
-
   onHeaderCellDblclick?: VxeTableEvents.HeaderCellDblclick;
-  headerCellDblclick?: VxeTableEvents.HeaderCellDblclick;
-
   onHeaderCellMenu?: VxeTableEvents.HeaderCellMenu;
-  headerCellMenu?: VxeTableEvents.HeaderCellMenu;
-
   onFooterCellClick?: VxeTableEvents.FooterCellClick;
-  footerCellClick?: VxeTableEvents.FooterCellClick;
-
   onFooterCellDblclick?: VxeTableEvents.FooterCellDblclick;
-  footerCellDblclick?: VxeTableEvents.FooterCellDblclick;
-
   onFooterCellMenu?: VxeTableEvents.FooterCellMenu;
-  footerCellMenu?: VxeTableEvents.FooterCellMenu;
-
   onSortChange?: VxeTableEvents.SortChange;
-  sortChange?: VxeTableEvents.SortChange;
-
   onFilterChange?: VxeTableEvents.FilterChange;
-  filterChange?: VxeTableEvents.FilterChange;
-
   onResizableChange?: VxeTableEvents.ResizableChange;
-  resizableChange?: VxeTableEvents.ResizableChange;
-
   onToggleRowExpand?: VxeTableEvents.ToggleRowExpand;
-  toggleRowExpand?: VxeTableEvents.ToggleRowExpand;
-
   onToggleTreeExpand?: VxeTableEvents.ToggleTreeExpand;
-  toggleTreeExpand?: VxeTableEvents.ToggleTreeExpand;
-
   onMenuClick?: VxeTableEvents.MenuClick;
-  menuClick?: VxeTableEvents.MenuClick;
-
   onEditClosed?: VxeTableEvents.EditClosed;
-  editClosed?: VxeTableEvents.EditClosed;
-
   onEditActived?: VxeTableEvents.EditActived;
-  editActived?: VxeTableEvents.EditActived;
-
   onEditDisabled?: VxeTableEvents.EditDisabled;
-  editDisabled?: VxeTableEvents.EditDisabled;
-
   onValidError?: VxeTableEvents.ValidError;
-  validError?: VxeTableEvents.ValidError;
-
   onScroll?: VxeTableEvents.Scroll;
-  scroll?: VxeTableEvents.Scroll;
-
   onCustom?: VxeTableEvents.Custom;
+}
+
+export interface VxeTableListeners {
+  keydown?: VxeTableEvents.Keydown;
+  paste?: VxeTableEvents.Paste;
+  copy?: VxeTableEvents.Copy;
+  cut?: VxeTableEvents.Cut;
+  currentChange?: VxeTableEvents.CurrentChange;
+  radioChange?: VxeTableEvents.RadioChange;
+  checkboxChange?: VxeTableEvents.CheckboxChange;
+  checkboxAll?: VxeTableEvents.CheckboxAll;
+  checkboxRangeStart?: VxeTableEvents.CheckboxRangeStart;
+  checkboxRangeChange?: VxeTableEvents.CheckboxRangeChange;
+  checkboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd;
+  cellClick?: VxeTableEvents.CellClick;
+  cellDBLClick?: VxeTableEvents.CellDBLClick;
+  cellMenu?: VxeTableEvents.CellMenu;
+  cellMouseenter?: VxeTableEvents.CellMouseenter;
+  cellMouseleave?: VxeTableEvents.CellMouseleave;
+  headerCellClick?: VxeTableEvents.HeaderCellClick;
+  headerCellDblclick?: VxeTableEvents.HeaderCellDblclick;
+  headerCellMenu?: VxeTableEvents.HeaderCellMenu;
+  footerCellClick?: VxeTableEvents.FooterCellClick;
+  footerCellDblclick?: VxeTableEvents.FooterCellDblclick;
+  footerCellMenu?: VxeTableEvents.FooterCellMenu;
+  sortChange?: VxeTableEvents.SortChange;
+  filterChange?: VxeTableEvents.FilterChange;
+  resizableChange?: VxeTableEvents.ResizableChange;
+  toggleRowExpand?: VxeTableEvents.ToggleRowExpand;
+  toggleTreeExpand?: VxeTableEvents.ToggleTreeExpand;
+  menuClick?: VxeTableEvents.MenuClick;
+  editClosed?: VxeTableEvents.EditClosed;
+  editActived?: VxeTableEvents.EditActived;
+  editDisabled?: VxeTableEvents.EditDisabled;
+  validError?: VxeTableEvents.ValidError;
+  scroll?: VxeTableEvents.Scroll;
   custom?: VxeTableEvents.Custom;
 }
 

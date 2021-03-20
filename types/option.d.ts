@@ -1,12 +1,12 @@
 import { DefineComponent } from 'vue'
-import { VXEComponentInstall } from './component'
+import { VXEComponent } from './component'
 
 /**
  * 组件 - 下拉框选项
  */
-export const Option: VXEComponentInstall<DefineComponent>;
+export const Option: VXEComponent<VxeOptionProps>;
 
-export interface VxeOptionOption {
+export type VxeOptionProps = {
   /**
    * 绑定值
    */

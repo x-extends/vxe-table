@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, SizeType, VxeEvent, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
 
 /**
  * 组件 - 单选框组
  */
-export const RadioGroup: VXEComponentInstall<DefineComponent>;
+export const RadioGroup: VXEComponent<VxeRadioGroupProps & VxeRadioGroupEventProps>;
 
 export type VxeRadioGroupInstance = ComponentPublicInstance<VxeRadioGroupProps, VxeRadioGroupConstructor>;
 
-export interface VxeRadioGroupConstructor extends VxeComponentInstance, VxeRadioGroupMethods {
+export interface VxeRadioGroupConstructor extends VxeComponentBase, VxeRadioGroupMethods {
   name: string;
   props: VxeRadioGroupProps;
   context: SetupContext<VxeRadioGroupEmits>;
@@ -22,7 +22,7 @@ export type VxeRadioGroupEmits = [
 
 export interface VxeRadioGroupOptions extends VxeRadioGroupProps, VxeRadioGroupListeners { }
 
-export interface VxeRadioGroupProps {
+export type VxeRadioGroupProps = {
   size?: SizeType;
   modelValue?: any;
   disabled?: boolean;
@@ -49,8 +49,11 @@ export namespace VxeRadioGroupDefines {
   export interface ChangeEventParams extends RadioGroupEventParams, ChangeParams { }
 }
 
-export interface VxeRadioGroupListeners {
+export type VxeRadioGroupEventProps = {
   onChange?: VxeRadioGroupEvents.Change;
+}
+
+export interface VxeRadioGroupListeners {
   change?: VxeRadioGroupEvents.Change;
 }
 

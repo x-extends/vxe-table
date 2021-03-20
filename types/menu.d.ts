@@ -1,15 +1,15 @@
-import { RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance } from './component'
+import { RenderFunction, SetupContext, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VXEComponent, VxeComponentBase } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 表格扩展 - 快捷菜单
  */
-export const Menu: VXEComponentInstall<{}>;
+export const Menu: VXEComponent<{}>;
 
 export type VxeMenuPanelInstance = ComponentPublicInstance<VxeMenuPanelProps, VxeMenuPanelConstructor>;
 
-export interface VxeMenuPanelConstructor extends VxeComponentInstance, VxeMenuPanelMethods {
+export interface VxeMenuPanelConstructor extends VxeComponentBase, VxeMenuPanelMethods {
   props: VxeMenuPanelProps;
   context: SetupContext;
   getRefMaps(): MenuPanelPrivateRef;
@@ -23,7 +23,7 @@ export interface VxeMenuPanelPrivateRef extends MenuPanelPrivateRef { }
 
 export interface VxeMenuPanelMethods { }
 
-export interface VxeMenuPanelProps { }
+export type VxeMenuPanelProps = { }
 
 export interface TableMenuMethods {
   /**

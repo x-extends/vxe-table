@@ -1,14 +1,14 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, VNodeStyle, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, VNodeStyle, ValueOf } from './component'
 
 /**
  * 组件 - 输入框
  */
-export const Input: VXEComponentInstall<DefineComponent>;
+export const Input: VXEComponent<VxeInputProps & VxeInputEventProps>;
 
 export type VxeInputInstance = ComponentPublicInstance<VxeInputProps, VxeInputConstructor>;
 
-export interface VxeInputConstructor extends VxeComponentInstance, VxeInputMethods {
+export interface VxeInputConstructor extends VxeComponentBase, VxeInputMethods {
   props: VxeInputProps;
   context: SetupContext<VxeInputEmits>;
   reactData: InputReactData;
@@ -75,7 +75,7 @@ export namespace VxeInputPropTypes {
   export type Transfer = boolean;
 }
 
-export interface VxeInputProps {
+export type VxeInputProps = {
   size?: VxeInputPropTypes.Size;
   modelValue?: VxeInputPropTypes.ModelValue;
   immediate?: VxeInputPropTypes.Immediate;
@@ -214,17 +214,17 @@ export namespace VxeInputDefines {
   export interface KeydownEventParams extends InputKeyboardEventParams, KeydownParams { }
 }
 
-export interface VxeInputListeners {
+export type VxeInputEventProps = {
   onInput?: VxeInputEvents.Input;
-  input?: VxeInputEvents.Input;
-
   onChange?: VxeInputEvents.Change;
-  change?: VxeInputEvents.Change;
-
   onKeydown?: VxeInputEvents.Keydown;
-  keydown?: VxeInputEvents.Keydown;
-
   onKeyup?: VxeInputEvents.Keyup;
+}
+
+export interface VxeInputListeners {
+  input?: VxeInputEvents.Input;
+  change?: VxeInputEvents.Change;
+  keydown?: VxeInputEvents.Keydown;
   keyup?: VxeInputEvents.Keyup;
 }
 

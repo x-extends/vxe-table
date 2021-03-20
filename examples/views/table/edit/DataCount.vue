@@ -36,7 +36,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { VxeTablePropTypes } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -48,11 +47,23 @@ export default defineComponent({
     ])
 
     const countAmount = (row: any) => {
-      return XEUtils.multiply(row.amount, row.number)
+      return row.amount * row.number
     }
 
     const countAllAmount = (data: any[]) => {
-      return XEUtils.sum(data.map(row => countAmount(row)))
+      let count = 0
+      data.forEach(row => {
+        count += countAmount(row)
+      })
+      return count
+    }
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
     }
 
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
@@ -62,7 +73,7 @@ export default defineComponent({
             return '合计'
           }
           if (columnIndex === 3) {
-            return `${XEUtils.sum(data, 'number')} 本`
+            return `${sumNum(data, 'number')} 本`
           } else if (columnIndex === 4) {
             return `共 ${countAllAmount(data)} 元`
           }
@@ -70,6 +81,7 @@ export default defineComponent({
         })
       ]
     }
+
     return {
       tableData,
       countAmount,
@@ -98,7 +110,6 @@ export default defineComponent({
         `
         import { defineComponent, ref } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -110,11 +121,23 @@ export default defineComponent({
             ])
 
             const countAmount = (row: any) => {
-              return XEUtils.multiply(row.amount, row.number)
+              return row.amount * row.number
             }
 
             const countAllAmount = (data: any[]) => {
-              return XEUtils.sum(data.map(row => countAmount(row)))
+              let count = 0
+              data.forEach(row => {
+                count += countAmount(row)
+              })
+              return count
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
             }
 
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
@@ -124,7 +147,7 @@ export default defineComponent({
                     return '合计'
                   }
                   if (columnIndex === 3) {
-                    return \`\${XEUtils.sum(data, 'number')} 本\`
+                    return \`\${sumNum(data, 'number')} 本\`
                   } else if (columnIndex === 4) {
                     return \`共 \${countAllAmount(data)} 元\`
                   }
@@ -132,6 +155,7 @@ export default defineComponent({
                 })
               ]
             }
+
             return {
               tableData,
               countAmount,

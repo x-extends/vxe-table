@@ -1,7 +1,7 @@
 import { DefineComponent } from 'vue'
-import { VXEComponentInstall } from './component'
+import { VXEComponent } from './component'
 
 /**
  * 表格扩展 - 表头
  */
-export const Header: VXEComponentInstall<DefineComponent>;
+export const Header: VXEComponent<{}>;

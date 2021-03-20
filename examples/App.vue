@@ -1223,12 +1223,12 @@ export default defineComponent({
                 name: 'GridFooter'
               }
             },
-            // {
-            //   label: 'app.aside.nav.pager',
-            //   locat: {
-            //     name: 'GridPage'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.pager',
+              locat: {
+                name: 'GridPage'
+              }
+            },
             // {
             //   label: 'app.aside.nav.form',
             //   locat: {
@@ -1457,18 +1457,18 @@ export default defineComponent({
                 name: 'TableScrollFullPartialLoad'
               }
             },
-            // {
-            //   label: 'app.aside.nav.footer',
-            //   locat: {
-            //     name: 'TableScrollFooter'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.template',
-            //   locat: {
-            //     name: 'TableScrollTemplate'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.footer',
+              locat: {
+                name: 'TableScrollFooter'
+              }
+            },
+            {
+              label: 'app.aside.nav.template',
+              locat: {
+                name: 'TableScrollTemplate'
+              }
+            },
             // {
             //   label: 'app.aside.nav.tabs',
             //   locat: {

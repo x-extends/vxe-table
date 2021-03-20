@@ -1,18 +1,19 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
-import { VxeFormItemOptions, VxeFormItemPropTypes } from './form-item'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
+import { VxeFormItemProps, VxeFormItemPropTypes } from './form-item'
 
 /**
  * 组件 - 表单
  */
-export const Form: VXEComponentInstall<DefineComponent>;
+export const Form: VXEComponent<VxeFormProps & VxeFormEventProps>;
 
 export type VxeFormInstance = ComponentPublicInstance<VxeFormProps, VxeFormConstructor>;
 
-export interface VxeFormConstructor extends VxeComponentInstance, VxeFormMethods {
+export interface VxeFormConstructor extends VxeComponentBase, VxeFormMethods {
   props: VxeFormProps;
   context: SetupContext<VxeFormEmits>;
   reactData: FormReactData;
+  internalData: FormInternalData;
   getRefMaps(): FormPrivateRef;
   renderVN: RenderFunction;
 }
@@ -26,6 +27,15 @@ export interface FormReactData {
   collapseAll: boolean;
   staticItems: any[];
   formItems: VxeFormDefines.ItemInfo[];
+}
+
+export interface FormInternalData {
+  tooltipTimeout: any;
+  tooltipActive: boolean;
+  tooltipStore: {
+    item: VxeFormDefines.ItemInfo | null;
+    visible: boolean;
+  }
 }
 
 export interface VxeFormOptions extends VxeFormProps, VxeFormListeners { }
@@ -47,7 +57,8 @@ export namespace VxeFormPropTypes {
   export type TitleWidth = string | number;
   export type TitleColon = boolean;
   export type TitleAsterisk = boolean;
-  export type Items = VxeFormItemOptions[];
+  export type TitleOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null;
+  export type Items = VxeFormItemProps[];
 
   /**
    * 校验规则配置项
@@ -60,9 +71,21 @@ export namespace VxeFormPropTypes {
   export type ValidConfig = {
     autoPos: boolean;
   };
+  export interface ValidOpts extends ValidConfig { }
+
+  /**
+   * 提示信息配置项
+   */
+  export interface TooltipConfig {
+    theme?: 'dark' | 'light';
+    enterable?: boolean;
+    leaveDelay?: number;
+    leaveMethod?: (params: { $event: Event }) => boolean;
+  }
+  export interface TooltipOpts extends TooltipConfig { }
 }
 
-export interface VxeFormProps {
+export type VxeFormProps = {
   size?: VxeFormPropTypes.Size;
   loading?: VxeFormPropTypes.Loading;
   data?: VxeFormPropTypes.Data;
@@ -72,10 +95,12 @@ export interface VxeFormProps {
   titleWidth?: VxeFormPropTypes.TitleWidth;
   titleColon?: VxeFormPropTypes.TitleColon;
   titleAsterisk?: VxeFormPropTypes.TitleAsterisk;
+  titleOverflow?: VxeFormPropTypes.TitleOverflow;
   items?: VxeFormPropTypes.Items;
   rules?: VxeFormPropTypes.Rules;
   preventSubmit?: VxeFormPropTypes.PreventSubmit;
   validConfig?: VxeFormPropTypes.ValidConfig;
+  tooltipConfig?: VxeFormPropTypes.TooltipConfig;
 }
 
 export interface FormMethods {
@@ -105,6 +130,10 @@ export interface FormMethods {
    */
   getItems(): VxeFormDefines.ItemInfo[];
   /**
+   * 关闭 tooltip 提示
+   */
+  closeTooltip(): Promise<any>;
+  /**
    * 手动切换折叠状态
    */
   toggleCollapse(): Promise<any>;
@@ -126,6 +155,7 @@ export namespace VxeFormDefines {
     titleWidth: VxeFormItemPropTypes.TitleWidth;
     titlePrefix: VxeFormItemPropTypes.TitlePrefix;
     titleSuffix: VxeFormItemPropTypes.TitleSuffix;
+    titleOverflow: VxeFormItemPropTypes.TitleOverflow;
     resetValue: VxeFormItemPropTypes.ResetValue;
     visibleMethod: VxeFormItemPropTypes.VisibleMethod;
     visible: VxeFormItemPropTypes.Visible;
@@ -207,17 +237,17 @@ export namespace VxeFormDefines {
   export interface ResetEventParams extends FormEventParams, ToggleCollapseParams { }
 }
 
-export interface VxeFormListeners {
+export type VxeFormEventProps = {
   onToggleCollapse?: VxeFormEvents.ToggleCollapse;
-  toggleCollapse?: VxeFormEvents.ToggleCollapse;
-
   onSubmit?: VxeFormEvents.Submit;
-  submit?: VxeFormEvents.Submit;
-  
   onSubmitInvalid?: VxeFormEvents.SubmitInvalid;
-  submitInvalid?: VxeFormEvents.SubmitInvalid;
-  
   onReset?: VxeFormEvents.Reset;
+}
+
+export interface VxeFormListeners {
+  toggleCollapse?: VxeFormEvents.ToggleCollapse;
+  submit?: VxeFormEvents.Submit;
+  submitInvalid?: VxeFormEvents.SubmitInvalid;
   reset?: VxeFormEvents.Reset;
 }
 

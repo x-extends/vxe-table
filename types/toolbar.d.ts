@@ -1,16 +1,16 @@
 import { VNode, RenderFunction, SetupContext, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from './table'
 
 /**
  * 组件 - 工具栏
  */
-export const Toolbar: VXEComponentInstall<DefineComponent>;
+export const Toolbar: VXEComponent<VxeToolbarProps & VxeToolbarEventProps>;
 
 export type VxeToolbarInstance = ComponentPublicInstance<VxeToolbarProps, VxeToolbarConstructor>;
 
-export interface VxeToolbarConstructor extends VxeComponentInstance, VxeToolbarMethods {
+export interface VxeToolbarConstructor extends VxeComponentBase, VxeToolbarMethods {
   props: VxeToolbarProps;
   context: SetupContext<VxeToolbarEmits>;
   reactData: ToolbarReactData;
@@ -102,7 +102,7 @@ export namespace VxeToolbarPropTypes {
   export type Perfect = boolean;
 }
 
-export interface VxeToolbarProps {
+export type VxeToolbarProps = {
   size?: VxeToolbarPropTypes.Size;
   /**
    * 唯一 ID 标识
@@ -170,6 +170,8 @@ export namespace VxeToolbarDefines {
     $toolbar: VxeToolbarConstructor;
   }
 }
+
+export type VxeToolbarEventProps = {}
 
 export interface VxeToolbarListeners { }
 

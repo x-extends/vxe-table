@@ -962,14 +962,13 @@ export default defineComponent({
       } else {
         tableFullColumn.forEach(handleFunc)
       }
+
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (expandColumn && hasFixed) {
-          UtilTools.warn('vxe.error.errConflicts', ['column.fixed', 'column.type=expand'])
+        if (expandColumn && mouseOpts.area) {
+          UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
         }
       }
-      if (expandColumn && mouseOpts.area) {
-        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
-      }
+
       reactData.isGroup = isGroup
       reactData.treeNodeColumn = treeNodeColumn
       reactData.expandColumn = expandColumn
@@ -1100,11 +1099,13 @@ export default defineComponent({
 
     const getOrderField = (column: any) => {
       const { sortBy, sortType } = column
-      if (sortBy) {
-        return sortBy
-      }
       return (row: any) => {
-        const cellValue = tablePrivateMethods.getCellLabel(row, column)
+        let cellValue
+        if (sortBy) {
+          cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
+        } else {
+          cellValue = tablePrivateMethods.getCellLabel(row, column)
+        }
         if (!sortType || sortType === 'auto') {
           return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
         } else if (sortType === 'number') {
@@ -2586,7 +2587,7 @@ export default defineComponent({
             // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
             return computeScrollLoad().then(() => {
               autoCellWidth(headerElem, bodyElem, footerElem)
-              computeScrollLoad()
+              return computeScrollLoad()
             })
           }
         }
@@ -3942,8 +3943,8 @@ export default defineComponent({
       if ($xetable.closeMenu) {
         $xetable.closeMenu()
       }
-      tableMethods.recalculate(true)
       tablePrivateMethods.updateCellAreas()
+      tableMethods.recalculate(true)
     }
 
     const handleTargetEnterEvent = () => {
@@ -5091,14 +5092,14 @@ export default defineComponent({
         if (props.showFooter && !props.footerMethod) {
           UtilTools.warn('vxe.error.reqProp', ['footer-method'])
         }
-        // 检查导入导出类型
+        // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
         const { exportConfig, importConfig } = props
         const exportOpts = computeExportOpts.value
         const importOpts = computeImportOpts.value
-        if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
+        if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
           UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
         }
-        if (exportConfig && exportOpts.types && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
+        if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
           UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
         }
       }

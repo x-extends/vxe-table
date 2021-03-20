@@ -1,14 +1,14 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, SizeType, VNodeStyle, VxeEvent, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, SizeType, VNodeStyle, VxeEvent, ValueOf } from './component'
 
 /**
  * 组件 - 下拉容器
  */
-export const Pulldown: VXEComponentInstall<DefineComponent>;
+export const Pulldown: VXEComponent<VxePulldownProps & VxePulldownEventProps>;
 
 export type VxePulldownInstance = ComponentPublicInstance<VxePulldownProps, VxePulldownConstructor>;
 
-export interface VxePulldownConstructor extends VxeComponentInstance, VxePulldownMethods {
+export interface VxePulldownConstructor extends VxeComponentBase, VxePulldownMethods {
   props: VxePulldownProps;
   context: SetupContext<VxePulldownEmits>;
   reactData: PulldownReactData;
@@ -73,7 +73,7 @@ export namespace VxePulldownPropTypes {
   export type Transfer = boolean;
 }
 
-export interface VxePulldownProps {
+export type VxePulldownProps = {
   size?: VxePulldownPropTypes.Size;
   /**
    * 是否禁用
@@ -102,8 +102,11 @@ export namespace VxePulldownDefines {
   export interface HidePanelEventParams extends HidePanelParams { }
 }
 
-export interface VxePulldownListeners {
+export type VxePulldownEventProps = {
   onHidePanel?: VxePulldownEvents.HidePanel;
+}
+
+export interface VxePulldownListeners {
   hidePanel?: VxePulldownEvents.HidePanel;
 }
 

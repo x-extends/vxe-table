@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 
 /**
  * 组件 - 工具提示
  */
-export const Tooltip: VXEComponentInstall<DefineComponent>;
+export const Tooltip: VXEComponent<VxeTooltipProps & VxeTooltipEventProps>;
 
 export type VxeTooltipInstance = ComponentPublicInstance<VxeTooltipProps, VxeTooltipConstructor>;
 
-export interface VxeTooltipConstructor extends VxeComponentInstance, VxeTooltipMethods {
+export interface VxeTooltipConstructor extends VxeComponentBase, VxeTooltipMethods {
   props: VxeTooltipProps;
   context: SetupContext<VxeTooltipEmits>;
   reactData: TooltipReactData;
@@ -51,7 +51,7 @@ export namespace VxeTooltipPropTypes {
   export type LeaveMethod = (params: { $event: MouseEvent }) => boolean;
 }
 
-export interface VxeTooltipProps {
+export type VxeTooltipProps = {
   size?: VxeTooltipPropTypes.Size;
   modelValue?: VxeTooltipPropTypes.ModelValue;
   trigger?: VxeTooltipPropTypes.Trigger;
@@ -93,6 +93,8 @@ export namespace VxeTooltipDefines {
     $tooltip: VxeTooltipConstructor;
   }
 }
+
+export type VxeTooltipEventProps = {}
 
 export interface VxeTooltipListeners { }
 

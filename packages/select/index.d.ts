@@ -1,4 +1,4 @@
-import { Select } from '../../types/select'
+import { Optgroup } from '../../types/optgroup'
 
-export * from '../../types/select'
-export default Select
+export * from '../../types/optgroup'
+export default Optgroup

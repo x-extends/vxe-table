@@ -91,7 +91,7 @@
       <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
-    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式</p>
+    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式，用户手动选中时会触发 <table-api-link prop="current-change"/> 事件</p>
 
     <vxe-table
       border

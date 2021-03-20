@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 
 /**
  * 组件 - 按钮
  */
-export const Button: VXEComponentInstall<DefineComponent>;
+export const Button: VXEComponent<VxeButtonProps>;
 
 export type VxeButtonInstance = ComponentPublicInstance<VxeButtonProps, VxeButtonConstructor>;
 
-export interface VxeButtonConstructor extends VxeComponentInstance, VxeButtonMethods {
+export interface VxeButtonConstructor extends VxeComponentBase, VxeButtonMethods {
   props: VxeButtonProps;
   context: SetupContext<VxeButtonEmits>;
   reactData: ButtonReactData;
@@ -53,7 +53,7 @@ export namespace VxeButtonPropTypes {
   export type Transfer = boolean;
 }
 
-export interface VxeButtonProps {
+export type VxeButtonProps = {
   size?: VxeButtonPropTypes.Size;
   /**
    * 按钮类型

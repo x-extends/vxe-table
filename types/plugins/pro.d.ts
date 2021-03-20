@@ -187,14 +187,14 @@ export type VxeTableProEmits = [
 ]
 
 declare module '../table' {
-  interface VxeTableListeners {
+  interface VxeTableEventProps {
     onOpenFnr?: VxeTableEvents.OpenFnr;
-    openFnr?: VxeTableEvents.OpenFnr;
-
     onChangeFnr?: VxeTableEvents.ChangeFnr;
-    changeFnr?: VxeTableEvents.ChangeFnr;
-
     onCellAreaCopy?: VxeTableEvents.CellAreaCopy;
+  }
+  interface VxeTableListeners {
+    openFnr?: VxeTableEvents.OpenFnr;
+    changeFnr?: VxeTableEvents.ChangeFnr;
     cellAreaCopy?: VxeTableEvents.CellAreaCopy;
   }
   namespace VxeTableEvents {
@@ -205,14 +205,14 @@ declare module '../table' {
 }
 
 declare module '../grid' {
-  interface VxeGridListeners {
+  interface VxeGridEventProps {
     onOpenFnr?: VxeGridEvents.OpenFnr;
-    openFnr?: VxeGridEvents.OpenFnr;
-
     onChangeFnr?: VxeGridEvents.ChangeFnr;
-    changeFnr?: VxeGridEvents.ChangeFnr;
-
     onCellAreaCopy?: VxeGridEvents.CellAreaCopy;
+  }
+  interface VxeGridListeners {
+    openFnr?: VxeGridEvents.OpenFnr;
+    changeFnr?: VxeGridEvents.ChangeFnr;
     cellAreaCopy?: VxeGridEvents.CellAreaCopy;
   }
   namespace VxeGridEvents {

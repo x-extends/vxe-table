@@ -1,14 +1,14 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 文本域
  */
-export const Textarea: VXEComponentInstall<DefineComponent>;
+export const Textarea: VXEComponent<VxeTextareaProps & VxeTextareaEventProps>;
 
 export type VxeTextareaInstance = ComponentPublicInstance<VxeTextareaProps, VxeTextareaConstructor>;
 
-export interface VxeTextareaConstructor extends VxeComponentInstance, VxeTextareaMethods {
+export interface VxeTextareaConstructor extends VxeComponentBase, VxeTextareaMethods {
   props: VxeTextareaProps;
   context: SetupContext<VxeTextareaEmits>;
   reactData: TextareaReactData;
@@ -28,7 +28,7 @@ export interface VxeTextareaPrivateRef extends TextareaPrivateRef { }
 
 export interface VxeTextareaOptions extends VxeTextareaProps, VxeTextareaListeners { }
 
-export interface VxeTextareaProps {
+export type VxeTextareaProps = {
   size?: SizeType;
   /**
    * 绑定值
@@ -109,6 +109,8 @@ export namespace VxeTextareaDefines {
     $textarea: VxeTextareaConstructor;
   }
 }
+
+export type VxeTextareaEventProps = {}
 
 export interface VxeTextareaListeners { }
 

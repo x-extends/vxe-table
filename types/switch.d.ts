@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 开关
  */
-export const Switch: VXEComponentInstall<DefineComponent>;
+export const Switch: VXEComponent<VxeSwitchProps & VxeSwitchEventProps>;
 
 export type VxeSwitchInstance = ComponentPublicInstance<VxeSwitchProps, VxeSwitchConstructor>;
 
-export interface VxeSwitchConstructor extends VxeComponentInstance, VxeSwitchMethods {
+export interface VxeSwitchConstructor extends VxeComponentBase, VxeSwitchMethods {
   props: VxeSwitchProps;
   context: SetupContext<VxeSwitchEmits>;
   reactData: SwitchReactData;
@@ -23,7 +23,7 @@ export interface SwitchReactData {
 
 export interface VxeSwitchOptions extends VxeSwitchProps, VxeSwitchListeners { }
 
-export interface VxeSwitchProps {
+export type VxeSwitchProps = {
   size?: SizeType;
   modelValue?: string | number | boolean;
   disabled?: boolean;
@@ -63,6 +63,8 @@ export namespace VxeSwitchDefines {
     $switch: VxeSwitchConstructor;
   }
 }
+
+export type VxeSwitchEventProps = {}
 
 export interface VxeSwitchListeners { }
 

@@ -1,14 +1,14 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
-import { VXEComponentInstall, VxeComponentInstance, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
  * 组件 - 复选框
  */
-export const Checkbox: VXEComponentInstall<DefineComponent>;
+export const Checkbox: VXEComponent<VxeCheckboxProps & VxeCheckboxEventProps>;
 
 export type VxeCheckboxInstance = ComponentPublicInstance<VxeCheckboxProps, VxeCheckboxConstructor>;
 
-export interface VxeCheckboxConstructor extends VxeComponentInstance, VxeCheckboxMethods {
+export interface VxeCheckboxConstructor extends VxeComponentBase, VxeCheckboxMethods {
   props: VxeCheckboxProps;
   context: SetupContext<VxeCheckboxEmits>;
   renderVN: RenderFunction;
@@ -16,7 +16,7 @@ export interface VxeCheckboxConstructor extends VxeComponentInstance, VxeCheckbo
 
 export interface VxeCheckboxOptions extends VxeCheckboxProps, VxeCheckboxListeners { }
 
-export interface VxeCheckboxProps {
+export type VxeCheckboxProps = {
   size?: SizeType;
   /**
    * 绑定值
@@ -69,8 +69,11 @@ export namespace VxeCheckboxDefines {
   export interface ChangeEventParams extends CheckboxEventParams, ChangeParams { }
 }
 
-export interface VxeCheckboxListeners {
+export type VxeCheckboxEventProps = {
   onChange?: VxeCheckboxEvents.Change;
+}
+
+export interface VxeCheckboxListeners {
   change?: VxeCheckboxEvents.Change;
 }
 

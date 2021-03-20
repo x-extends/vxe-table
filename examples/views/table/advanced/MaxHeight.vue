@@ -62,7 +62,6 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { VxeTablePropTypes } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -103,6 +102,22 @@ export default defineComponent({
       demo2.loading = false
     }, 500)
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       const footerData = [
         columns.map((column, columnIndex) => {
@@ -110,7 +125,7 @@ export default defineComponent({
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property).toFixed(2)
+            return meanNum(data, column.property).toFixed(2)
           }
           return null
         }),
@@ -119,7 +134,7 @@ export default defineComponent({
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return sumNum(data, column.property)
           }
           return null
         })
@@ -156,7 +171,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -175,6 +189,22 @@ export default defineComponent({
               demo1.loading = false
             }, 500)
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -182,7 +212,7 @@ export default defineComponent({
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property).toFixed(2)
+                    return meanNum(data, column.property).toFixed(2)
                   }
                   return null
                 }),
@@ -191,7 +221,7 @@ export default defineComponent({
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return sumNum(data, column.property)
                   }
                   return null
                 })
@@ -229,7 +259,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive } from 'vue'
         import { VxeTablePropTypes } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -255,6 +284,22 @@ export default defineComponent({
               demo2.loading = false
             }, 500)
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -262,7 +307,7 @@ export default defineComponent({
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property).toFixed(2)
+                    return meanNum(data, column.property).toFixed(2)
                   }
                   return null
                 }),
@@ -271,7 +316,7 @@ export default defineComponent({
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return sumNum(data, column.property)
                   }
                   return null
                 })
