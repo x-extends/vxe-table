@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      通过给需要排序功能的列加上 <table-api-link prop="sortable"/> 属性可以支持排序，还可以通过设置 <table-column-api-link prop="sort-by"/> 多字段进行排序<br>
+      通过给需要排序功能的列加上 <table-api-link prop="sortable"/> 属性可以支持排序，还可以通过设置 <table-column-api-link prop="sort-by"/> 指定字段进行排序<br>
       如果该列的值为字符串类型，但实际是数值，可以设置 <table-column-api-link prop="sort-type"/>=number|string 按指定类型进行排序，默认 auto 自动转换数值<br>
       如果是服务端排序，只需加上 <table-api-link prop="sort-config"/>.<table-api-link prop="remote"/> 和 <table-api-link prop="sort-change"/> 事件就可以实现<br>
       还可以通过调用 <table-api-link prop="sort"/> 方法实现手动排序
@@ -37,7 +37,7 @@
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
-    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 指定字段排序、或者方法返回自定义排序的值</p>
+    <p class="tip">配置 <table-column-api-link prop="sort-by"/> 指定字段排序、或者方法返回自定义排序的值；例如：当使用格式化函数时，排序还是使用原始值</p>
 
     <vxe-table
       border
@@ -50,8 +50,9 @@
           <span style="color: red;">名字：{{ row.name }}</span>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
       <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+      <vxe-table-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-table-column>
+      <vxe-table-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -111,6 +112,8 @@
 </template>
 
 <script>
+import XEUtils from 'xe-utils'
+
 export default {
   data () {
     return {
@@ -125,26 +128,26 @@ export default {
         { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, num: '5000', num2: '5000', address: 'vxe-table 从入门到放弃' }
       ],
       tableData2: [
-        { name: '小红11', role: '前端', num: 7 },
-        { name: '老王1', role: '后端', num: 6 },
-        { name: '小红111111', role: '后端', num: 1 },
-        { name: '小明11', role: '前端', num: 2 },
-        { name: '老徐111', role: '测试', num: 3 },
-        { name: '老王11', role: '前端', num: 3 },
-        { name: '老徐11111111', role: '测试', num: 4 },
-        { name: '小明111111111', role: '前端', num: 4 },
-        { name: '小明1', role: '前端', num: 8 },
-        { name: '小明111', role: '测试', num: 6 },
-        { name: '小红11111', role: '后端', num: 9 },
-        { name: '老徐11', role: '前端', num: 5 },
-        { name: '老徐11', role: '测试', num: 1 },
-        { name: '小红1111', role: '前端', num: 4 },
-        { name: '小红111', role: '前端', num: 2 },
-        { name: '小明111', role: '测试', num: 3 },
-        { name: '老王1', role: '前端', num: 6 },
-        { name: '老王1111', role: '后端', num: 4 },
-        { name: '老徐11', role: '前端', num: 8 },
-        { name: '小明111111', role: '测试', num: 7 }
+        { name: '小红11', role: '前端', num: 7, num1: 1368.7, num2: '1368.7' },
+        { name: '老王1', role: '后端', num: 6, num1: 89657, num2: '89657' },
+        { name: '小红111111', role: '后端', num: 1, num1: 672, num2: '672' },
+        { name: '小明11', role: '前端', num: 2, num1: 482456, num2: '482456' },
+        { name: '老徐111', role: '测试', num: 3, num1: 7546.7, num2: '7546.7' },
+        { name: '老王11', role: '前端', num: 3, num1: 6897, num2: '6897' },
+        { name: '老徐11111111', role: '测试', num: 4, num1: 8957, num2: '8957' },
+        { name: '小明111111111', role: '前端', num: 4, num1: 56433.57, num2: '56433.57' },
+        { name: '小明1', role: '前端', num: 8, num1: 977, num2: '977' },
+        { name: '小明111', role: '测试', num: 6, num1: 98477, num2: '98477' },
+        { name: '小红11111', role: '后端', num: 9, num1: 67017, num2: '67017' },
+        { name: '老徐11', role: '前端', num: 5, num1: 7364, num2: '7364' },
+        { name: '老徐11', role: '测试', num: 1, num1: 1573.7, num2: '1573.7' },
+        { name: '小红1111', role: '前端', num: 4, num1: 16807, num2: '16807' },
+        { name: '小红111', role: '前端', num: 2, num1: 744345.7, num2: '744345.7' },
+        { name: '小明111', role: '测试', num: 3, num1: 10957, num2: '10957' },
+        { name: '老王1', role: '前端', num: 6, num1: 6737, num2: '6737' },
+        { name: '老王1111', role: '后端', num: 4, num1: 83445.1, num2: '83445.1' },
+        { name: '老徐11', role: '前端', num: 8, num1: 4636677, num2: '4636677' },
+        { name: '小明111111', role: '测试', num: 7, num1: 5783537, num2: '5783537' }
       ],
       tableData3: [
         { name: '小红', role: '前端', num: 7 },
@@ -223,39 +226,45 @@ export default {
               <span style="color: red;">名字：{{ row.name }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="role" title="指定字段排序 num" sort-by="num" sortable></vxe-table-column>
           <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+          <vxe-table-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-table-column>
+          <vxe-table-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-table-column>
         </vxe-table>
         `,
         `
+        import XEUtils from 'xe-utils'
+
         export default {
           data () {
             return {
               tableData2: [
-                { name: '小红11', role: '前端', num: 7 },
-                { name: '老王1', role: '后端', num: 6 },
-                { name: '小红111111', role: '后端', num: 1 },
-                { name: '小明11', role: '前端', num: 2 },
-                { name: '老徐111', role: '测试', num: 3 },
-                { name: '老王11', role: '前端', num: 3 },
-                { name: '老徐11111111', role: '测试', num: 4 },
-                { name: '小明111111111', role: '前端', num: 4 },
-                { name: '小明1', role: '前端', num: 8 },
-                { name: '小明111', role: '测试', num: 6 },
-                { name: '小红11111', role: '后端', num: 9 },
-                { name: '老徐11', role: '前端', num: 5 },
-                { name: '老徐11', role: '测试', num: 1 },
-                { name: '小红1111', role: '前端', num: 4 },
-                { name: '小红111', role: '前端', num: 2 },
-                { name: '小明111', role: '测试', num: 3 },
-                { name: '老王1', role: '前端', num: 6 },
-                { name: '老王1111', role: '后端', num: 4 },
-                { name: '老徐11', role: '前端', num: 8 },
-                { name: '小明111111', role: '测试', num: 7 }
+                { name: '小红11', role: '前端', num: 7, num1: 1368.7, num2: '1368.7' },
+                { name: '老王1', role: '后端', num: 6, num1: 89657, num2: '89657' },
+                { name: '小红111111', role: '后端', num: 1, num1: 672, num2: '672' },
+                { name: '小明11', role: '前端', num: 2, num1: 482456, num2: '482456' },
+                { name: '老徐111', role: '测试', num: 3, num1: 7546.7, num2: '7546.7' },
+                { name: '老王11', role: '前端', num: 3, num1: 6897, num2: '6897' },
+                { name: '老徐11111111', role: '测试', num: 4, num1: 8957, num2: '8957' },
+                { name: '小明111111111', role: '前端', num: 4, num1: 56433.57, num2: '56433.57' },
+                { name: '小明1', role: '前端', num: 8, num1: 977, num2: '977' },
+                { name: '小明111', role: '测试', num: 6, num1: 98477, num2: '98477' },
+                { name: '小红11111', role: '后端', num: 9, num1: 67017, num2: '67017' },
+                { name: '老徐11', role: '前端', num: 5, num1: 7364, num2: '7364' },
+                { name: '老徐11', role: '测试', num: 1, num1: 1573.7, num2: '1573.7' },
+                { name: '小红1111', role: '前端', num: 4, num1: 16807, num2: '16807' },
+                { name: '小红111', role: '前端', num: 2, num1: 744345.7, num2: '744345.7' },
+                { name: '小明111', role: '测试', num: 3, num1: 10957, num2: '10957' },
+                { name: '老王1', role: '前端', num: 6, num1: 6737, num2: '6737' },
+                { name: '老王1111', role: '后端', num: 4, num1: 83445.1, num2: '83445.1' },
+                { name: '老徐11', role: '前端', num: 8, num1: 4636677, num2: '4636677' },
+                { name: '小明111111', role: '测试', num: 7, num1: 5783537, num2: '5783537' }
               ]
             }
           },
           methods: {
+            formatterNum2 ({ cellValue }) {
+              return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+            },
             sortNameMethod2 (row) {
               // 按名称长度进行排序
               return row.name.length
@@ -356,6 +365,9 @@ export default {
     }
   },
   methods: {
+    formatterNum2 ({ cellValue }) {
+      return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+    },
     sortNameMethod2 (row) {
       // 按名称长度进行排序
       return row.name.length

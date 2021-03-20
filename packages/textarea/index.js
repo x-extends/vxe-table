@@ -6,4 +6,4 @@ export const Textarea = Object.assign(VxeTextarea, {
   }
 })
 
-export default VxeTextarea
+export default Textarea

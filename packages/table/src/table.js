@@ -712,12 +712,12 @@ export default {
       if (this.tooltipOpts.enabled) {
         UtilTools.warn('vxe.error.delProp', ['tooltip-config.enabled', 'tooltip-config.showAll'])
       }
-      // 检查导入导出类型
+      // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
       const { exportConfig, exportOpts, importConfig, importOpts } = this
-      if (importConfig && importOpts.types && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
+      if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
         UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
       }
-      if (exportConfig && exportOpts.types && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
+      if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
         UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
       }
     }

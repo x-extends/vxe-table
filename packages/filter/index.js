@@ -12,4 +12,4 @@ export const Filter = {
   }
 }
 
-export default Panel
+export default Filter

@@ -118,7 +118,7 @@ export default {
         },
         columns: [
           { type: 'checkbox', title: 'ID', width: 120 },
-          { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写！' }, editRender: { name: 'input' } },
+          { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写！' }, editRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
           {
             field: 'role',
             title: 'Role',
@@ -130,13 +130,13 @@ export default {
               { label: '程序员鼓励师', value: '程序员鼓励师' }
             ],
             filterMultiple: false,
-            editRender: { name: 'input' }
+            editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
           },
-          { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
+          { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
           { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-          { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+          { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
           { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
-          { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
+          { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } } },
           { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
           { field: 'createDate', title: 'Create Date', width: 160, visible: false, sortable: true, formatter: this.formatDate }
         ],
@@ -277,7 +277,7 @@ export default {
                 },
                 columns: [
                   { type: 'checkbox', title: 'ID', width: 120 },
-                  { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写！' }, editRender: { name: 'input' } },
+                  { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写！' }, editRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
                   {
                     field: 'role',
                     title: 'Role',
@@ -289,13 +289,13 @@ export default {
                       { label: '程序员鼓励师', value: '程序员鼓励师' }
                     ],
                     filterMultiple: false,
-                    editRender: { name: 'input' }
+                    editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
                   },
-                  { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
+                  { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
                   { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                  { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+                  { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
                   { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
-                  { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
+                  { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } } },
                   { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
                   { field: 'createDate', title: 'Create Date', width: 160, visible: false, sortable: true, formatter: this.formatDate }
                 ],

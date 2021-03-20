@@ -6,4 +6,4 @@ export const Input = Object.assign(VxeInput, {
   }
 })
 
-export default VxeInput
+export default Input

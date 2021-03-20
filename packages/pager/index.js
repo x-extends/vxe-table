@@ -6,4 +6,4 @@ export const Pager = Object.assign(VxePager, {
   }
 })
 
-export default VxePager
+export default Pager

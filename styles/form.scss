@@ -35,10 +35,12 @@
 
 .vxe-form--item-title {
   max-width: 320px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   padding-right: 0.8em;
+  &.is--ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .vxe-form--item-title-prefix,
   .vxe-form--item-title-suffix {
     cursor: help;

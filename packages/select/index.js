@@ -12,4 +12,4 @@ export const Select = Object.assign(VxeSelect, {
   }
 })
 
-export default VxeSelect
+export default Select

@@ -6,4 +6,4 @@ export const Button = Object.assign(VxeButton, {
   }
 })
 
-export default VxeButton
+export default Button

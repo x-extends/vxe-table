@@ -33,7 +33,8 @@
     }
   }
   &.is--loading {
-    .vxe-modal--header {
+    .vxe-modal--header,
+    .vxe-modal--footer {
       position: relative;
       border-bottom-color: $vxe-loading-background-color;
       &:before {

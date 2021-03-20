@@ -693,6 +693,7 @@ export default {
           size: 'Size',
           titleAlign: 'All title align',
           titleWidth: 'All title width',
+          titleOverflow: '所有设置标题内容过长时显示为省略号',
           titleColon: 'Whether to display the title colon',
           titleAsterisk: 'Show red asterisk for required fields',
           rules: 'Checksum rule configuration entries'
@@ -706,6 +707,7 @@ export default {
           align: 'Content align',
           titleAlign: 'Title align',
           titleWidth: 'Title width',
+          titleOverflow: '标题内容过长时显示为省略号',
           folding: 'Default folding',
           visible: '默认是否显示',
           visibleMethod: 'The return value of this method Function({data, property}) determines whether the item is displayed',

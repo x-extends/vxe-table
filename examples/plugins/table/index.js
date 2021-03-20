@@ -3,32 +3,42 @@ import i18n from '@/i18n'
 
 import {
   VXETable,
-  Table,
-  Column,
+
+  Icon,
+  Filter,
+  Menu,
+  Edit,
+  Export,
+  Keyboard,
+  Validator,
   Header,
   Footer,
-  Filter,
+
+  Column,
+  Colgroup,
   Grid,
-  Menu,
   Toolbar,
   Pager,
   Checkbox,
+  CheckboxGroup,
   Radio,
+  RadioGroup,
+  RadioButton,
   Input,
   Textarea,
   Button,
   Modal,
   Tooltip,
   Form,
+  FormItem,
   Select,
+  Optgroup,
+  Option,
   Switch,
   List,
   Pulldown,
 
-  Edit,
-  Export,
-  Keyboard,
-  Validator
+  Table
 } from '../../../packages/all'
 
 import VXETablePluginElement from 'vxe-table-plugin-element'
@@ -60,34 +70,44 @@ VXETable.setup({
   i18n: (key, args) => i18n.t(key, args)
 })
 
-// 先安装依赖模块
-Vue.use(Column)
-Vue.use(Header)
-Vue.use(Footer)
-Vue.use(Filter)
-Vue.use(Grid)
-Vue.use(Menu)
-Vue.use(Toolbar)
-Vue.use(Pager)
-Vue.use(Checkbox)
-Vue.use(Radio)
-Vue.use(Input)
-Vue.use(Textarea)
-Vue.use(Button)
-Vue.use(Modal)
-Vue.use(Tooltip)
-Vue.use(Form)
-Vue.use(Select)
-Vue.use(Switch)
-Vue.use(List)
-Vue.use(Pulldown)
+// 功能模块
+Vue.use(Icon)
+  .use(Filter)
+  .use(Menu)
+  .use(Edit)
+  .use(Export)
+  .use(Keyboard)
+  .use(Validator)
+  .use(Header)
+  .use(Footer)
 
-Vue.use(Edit)
-Vue.use(Export)
-Vue.use(Keyboard)
-Vue.use(Validator)
-// 再安装核心
-Vue.use(Table)
+  // 可选组件
+  .use(Column)
+  .use(Colgroup)
+  .use(Grid)
+  .use(Toolbar)
+  .use(Pager)
+  .use(Checkbox)
+  .use(CheckboxGroup)
+  .use(Radio)
+  .use(RadioGroup)
+  .use(RadioButton)
+  .use(Input)
+  .use(Textarea)
+  .use(Button)
+  .use(Modal)
+  .use(Tooltip)
+  .use(Form)
+  .use(FormItem)
+  .use(Select)
+  .use(Optgroup)
+  .use(Option)
+  .use(Switch)
+  .use(List)
+  .use(Pulldown)
+
+  // 再安装核心
+  .use(Table)
 
 // 给 vue 实例挂载窗口对象
 Vue.prototype.$XModal = VXETable.modal

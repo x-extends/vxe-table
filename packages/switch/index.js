@@ -6,4 +6,4 @@ export const Switch = Object.assign(VxeSwitch, {
   }
 })
 
-export default VxeSwitch
+export default Switch

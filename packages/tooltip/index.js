@@ -8,4 +8,4 @@ export const Tooltip = Object.assign(VxeTooltip, {
   }
 })
 
-export default VxeTooltip
+export default Tooltip

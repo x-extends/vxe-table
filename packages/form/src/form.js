@@ -97,15 +97,20 @@ function renderTitle (h, _vm, item) {
 }
 
 function renderItems (h, _vm) {
-  const { _e, rules, formItems, data, collapseAll, validOpts } = _vm
+  const { _e, rules, formItems, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
   return formItems.map((item, index) => {
-    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className } = item
+    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const span = item.span || _vm.span
     const align = item.align || _vm.align
     const titleAlign = item.titleAlign || _vm.titleAlign
     const titleWidth = item.titleWidth || _vm.titleWidth
     let itemVisibleMethod = visibleMethod
+    const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
+    const showEllipsis = itemOverflow === 'ellipsis'
+    const showTitle = itemOverflow === 'title'
+    const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
+    const hasEllipsis = showTitle || showTooltip || showEllipsis
     const params = { data, property: field, item, $form: _vm }
     let isRequired
     if (visible === false) {
@@ -130,6 +135,12 @@ function renderItems (h, _vm) {
     } else if (field) {
       contentVNs = [`${XEUtils.get(data, field)}`]
     }
+    const ons = showTooltip ? {
+      mouseenter (evnt) {
+        _vm.triggerHeaderHelpEvent(evnt, params)
+      },
+      mouseleave: _vm.handleTargetLeaveEvent
+    } : {}
     return h('div', {
       class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
         'is--title': title,
@@ -144,10 +155,16 @@ function renderItems (h, _vm) {
         class: 'vxe-form--item-inner'
       }, [
         title || (slots && slots.title) ? h('div', {
-          class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null],
+          class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null, {
+            'is--ellipsis': hasEllipsis
+          }],
           style: titleWidth ? {
             width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
-          } : null
+          } : null,
+          attrs: {
+            title: showTitle ? UtilTools.getFuncText(title) : null
+          },
+          on: ons
         }, renderTitle(h, _vm, item)) : null,
         h('div', {
           class: ['vxe-form--item-content', align ? `align--${align}` : null]
@@ -192,6 +209,7 @@ export default {
     titleWidth: [String, Number],
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
+    titleOverflow: { type: [Boolean, String], default: null },
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
@@ -201,7 +219,14 @@ export default {
     return {
       collapseAll: true,
       staticItems: [],
-      formItems: []
+      formItems: [],
+
+      tooltipTimeout: null,
+      tooltipActive: false,
+      tooltipStore: {
+        item: null,
+        visible: false
+      }
     }
   },
   provide () {
@@ -212,6 +237,13 @@ export default {
   computed: {
     validOpts () {
       return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
+    },
+    tooltipOpts () {
+      const opts = Object.assign({ leaveDelay: 300 }, GlobalConfig.form.tooltipConfig, this.tooltipConfig)
+      if (opts.enterable) {
+        opts.leaveMethod = this.handleTooltipLeaveMethod
+      }
+      return opts
     }
   },
   created () {
@@ -229,7 +261,8 @@ export default {
     }
   },
   render (h) {
-    const { loading, vSize } = this
+    const { _e, loading, vSize, tooltipOpts } = this
+    const hasUseTooltip = VXETable._tooltip
     return h('form', {
       class: ['vxe-form', 'vxe-row', {
         [`size--${vSize}`]: vSize,
@@ -254,7 +287,14 @@ export default {
         h('div', {
           class: 'vxe-loading--spinner'
         })
-      ])
+      ]),
+      /**
+       * 工具提示
+       */
+      hasUseTooltip ? h('vxe-tooltip', {
+        ref: 'tooltip',
+        ...tooltipOpts
+      }) : _e()
     ]))
   },
   methods: {
@@ -330,6 +370,63 @@ export default {
       evnt.preventDefault()
       this.reset()
       this.$emit('reset', { data: this.data, $form: this, $event: evnt })
+    },
+    handleTooltipLeaveMethod () {
+      const { tooltipOpts } = this
+      setTimeout(() => {
+        if (!this.tooltipActive) {
+          this.closeTooltip()
+        }
+      }, tooltipOpts.leaveDelay)
+      return false
+    },
+    closeTooltip () {
+      const { tooltipStore } = this
+      const $tooltip = this.$refs.tooltip
+      if (tooltipStore.visible) {
+        Object.assign(tooltipStore, {
+          item: null,
+          visible: false
+        })
+        if ($tooltip) {
+          $tooltip.close()
+        }
+      }
+      return this.$nextTick()
+    },
+    triggerHeaderHelpEvent (evnt, params) {
+      const { item } = params
+      const { tooltipStore } = this
+      const $tooltip = this.$refs.tooltip
+      const overflowElem = evnt.currentTarget
+      const content = (overflowElem.textContent || '').trim()
+      const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
+      clearTimeout(this.tooltipTimeout)
+      this.tooltipActive = true
+      this.closeTooltip()
+      if (content && isCellOverflow) {
+        Object.assign(tooltipStore, {
+          item,
+          visible: true
+        })
+        if ($tooltip) {
+          $tooltip.open(overflowElem, content)
+        }
+      }
+    },
+    handleTargetLeaveEvent () {
+      const { tooltipOpts } = this
+      this.tooltipActive = false
+      if (tooltipOpts.enterable) {
+        this.tooltipTimeout = setTimeout(() => {
+          const $tooltip = this.$refs.tooltip
+          if ($tooltip && !$tooltip.isHover) {
+            this.closeTooltip()
+          }
+        }, tooltipOpts.leaveDelay)
+      } else {
+        this.closeTooltip()
+      }
     },
     clearValidate (field) {
       const { formItems } = this

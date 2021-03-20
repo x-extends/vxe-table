@@ -9,4 +9,4 @@ export const Grid = Object.assign(VxeGrid, {
   }
 })
 
-export default VxeGrid
+export default Grid

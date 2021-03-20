@@ -9,6 +9,7 @@ const props = {
   titleAlign: String,
   titleWidth: [String, Number],
   className: [String, Function],
+  titleOverflow: { type: [Boolean, String], default: null },
   titlePrefix: Object,
   titleSuffix: Object,
   resetValue: { default: null },

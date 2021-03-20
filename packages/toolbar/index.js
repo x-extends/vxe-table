@@ -6,4 +6,4 @@ export const Toolbar = Object.assign(VxeToolbar, {
   }
 })
 
-export default VxeToolbar
+export default Toolbar

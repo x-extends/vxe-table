@@ -12,4 +12,4 @@ export const Menu = {
   }
 }
 
-export default Panel
+export default Menu

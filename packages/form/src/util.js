@@ -14,6 +14,7 @@ class ItemConfig {
       titleWidth: item.titleWidth,
       titlePrefix: item.titlePrefix,
       titleSuffix: item.titleSuffix,
+      titleOverflow: item.titleOverflow,
       resetValue: item.resetValue,
       visible: item.visible,
       visibleMethod: item.visibleMethod,

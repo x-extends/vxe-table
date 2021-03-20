@@ -18,7 +18,6 @@
 
     <vxe-table
       highlight-hover-row
-      border="inner"
       ref="xTable1"
       height="300"
       :export-config="{}"
@@ -181,7 +180,6 @@ export default {
 
         <vxe-table
           highlight-hover-row
-          border="inner"
           ref="xTable1"
           height="300"
           :export-config="{}"

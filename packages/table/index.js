@@ -21,4 +21,4 @@ export const Table = Object.assign(VxeTable, {
   }
 })
 
-export default VxeTable
+export default Table

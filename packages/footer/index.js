@@ -6,4 +6,4 @@ export const Footer = Object.assign(VxeTableFooter, {
   }
 })
 
-export default VxeTableFooter
+export default Footer

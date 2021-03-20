@@ -6,4 +6,4 @@ export const List = Object.assign(VxeList, {
   }
 })
 
-export default VxeList
+export default List

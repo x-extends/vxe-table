@@ -6,4 +6,4 @@ export const Pulldown = Object.assign(VxePulldown, {
   }
 })
 
-export default VxePulldown
+export default Pulldown

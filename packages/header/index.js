@@ -6,4 +6,4 @@ export const Header = Object.assign(VxeTableHeader, {
   }
 })
 
-export default VxeTableHeader
+export default Header

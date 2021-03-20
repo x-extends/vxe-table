@@ -107,4 +107,4 @@ export const Modal = Object.assign(VXEModal, {
   }
 })
 
-export default VXEModal
+export default Modal

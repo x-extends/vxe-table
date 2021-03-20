@@ -237,11 +237,13 @@ function clearAllSort (_vm) {
 
 function getOrderField (_vm, column) {
   const { sortBy, sortType } = column
-  if (sortBy) {
-    return XEUtils.isArray(sortBy) ? sortBy[0] : sortBy
-  }
   return (row) => {
-    const cellValue = _vm.getCellLabel(row, column)
+    let cellValue
+    if (sortBy) {
+      cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
+    } else {
+      cellValue = _vm.getCellLabel(row, column)
+    }
     if (!sortType || sortType === 'auto') {
       return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
     } else if (sortType === 'number') {
@@ -1059,8 +1061,8 @@ const Methods = {
         } else {
           // 兼容 v2，在 v4 中废弃， sortBy 不能为数组
           let sortByConfs
-          if (firstOrderColumn.sortBy) {
-            sortByConfs = (XEUtils.isArray(firstOrderColumn.sortBy) ? firstOrderColumn.sortBy : [firstOrderColumn.sortBy]).map(item => [item, firstOrderColumn.order])
+          if (XEUtils.isArray(firstOrderColumn.sortBy)) {
+            sortByConfs = firstOrderColumn.sortBy.map(item => [item, firstOrderColumn.order])
           }
           tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, order }) => [getOrderField(this, column), order]))
         }
