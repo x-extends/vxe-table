@@ -770,6 +770,11 @@
     padding-right: $vxe-table-cell-padding-right;
   }
 
+  // 单元格占位符
+  .vxe-cell--placeholder {
+    color: $vxe-table-cell-placeholder-color;
+  }
+
   // 单选框和复选框
   .vxe-cell--radio {
     @extend %XERadio;

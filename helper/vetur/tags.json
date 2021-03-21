@@ -21,7 +21,6 @@
       "highlight-hover-row",
       "highlight-current-column",
       "highlight-hover-column",
-      "highlight-cell",
       "row-class-name",
       "cell-class-name",
       "header-row-class-name",
@@ -48,6 +47,7 @@
       "row-id",
       "keep-source",
       "column-config",
+      "resizable-config",
       "seq-config",
       "sort-config",
       "filter-config",
@@ -63,6 +63,7 @@
       "clip-config",
       "fnr-config",
       "mouse-config",
+      "area-config",
       "keyboard-config",
       "edit-config",
       "valid-config",
@@ -75,9 +76,32 @@
       "params"
     ],
     "subtags": [
+      "vxe-colgroup",
+      "vxe-table-colgroup",
+      "vxe-column",
       "vxe-table-column"
     ],
     "description": "基础表格"
+  },
+  "vxe-colgroup": {
+    "attributes": [
+      "field",
+      "title",
+      "width",
+      "min-width",
+      "resizable",
+      "visible",
+      "fixed",
+      "align",
+      "header-align",
+      "show-overflow",
+      "show-header-overflow",
+      "header-class-name"
+    ],
+    "subtags": [
+      "vxe-column"
+    ],
+    "description": "基础表格 - 分组列"
   },
   "vxe-table-colgroup": {
     "attributes": [
@@ -94,7 +118,53 @@
       "show-header-overflow",
       "header-class-name"
     ],
+    "subtags": [
+      "vxe-table-column"
+    ],
     "description": "基础表格 - 分组列"
+  },
+  "vxe-column": {
+    "attributes": [
+      "type",
+      "field",
+      "title",
+      "width",
+      "min-width",
+      "resizable",
+      "visible",
+      "fixed",
+      "align",
+      "header-align",
+      "footer-align",
+      "show-overflow",
+      "show-header-overflow",
+      "show-footer-overflow",
+      "class-name",
+      "header-class-name",
+      "footer-class-name",
+      "formatter",
+      "seq-method",
+      "sortable",
+      "sort-by",
+      "sort-type",
+      "filters",
+      "filter-multiple",
+      "filter-method",
+      "filter-reset-method",
+      "filter-recover-method",
+      "filter-render",
+      "export-method",
+      "footer-export-method",
+      "title-help",
+      "cell-type",
+      "cell-render",
+      "edit-render",
+      "content-render",
+      "tree-node",
+      "params",
+      "col-id"
+    ],
+    "description": "基础表格 - 列"
   },
   "vxe-table-column": {
     "attributes": [
@@ -119,9 +189,12 @@
       "seq-method",
       "sortable",
       "sort-by",
+      "sort-type",
       "filters",
       "filter-multiple",
       "filter-method",
+      "filter-reset-method",
+      "filter-recover-method",
       "filter-render",
       "export-method",
       "footer-export-method",
@@ -159,7 +232,6 @@
       "highlight-hover-row",
       "highlight-current-column",
       "highlight-hover-column",
-      "highlight-cell",
       "row-class-name",
       "cell-class-name",
       "header-row-class-name",
@@ -186,6 +258,7 @@
       "row-id",
       "keep-source",
       "column-config",
+      "resizable-config",
       "seq-config",
       "sort-config",
       "filter-config",
@@ -201,6 +274,7 @@
       "clip-config",
       "fnr-config",
       "mouse-config",
+      "area-config",
       "keyboard-config",
       "edit-config",
       "valid-config",
@@ -258,7 +332,7 @@
   },
   "vxe-radio": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "label",
       "content",
       "size",
@@ -269,13 +343,19 @@
   },
   "vxe-radio-group": {
     "attributes": [
-      "label",
+      "v-model / value",
+      "size",
       "disabled"
+    ],
+    "subtags": [
+      "vxe-radio",
+      "vxe-radio-button"
     ],
     "description": "单选组"
   },
   "vxe-radio-button": {
     "attributes": [
+      "v-model / value",
       "label",
       "content",
       "disabled"
@@ -284,7 +364,7 @@
   },
   "vxe-checkbox": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "label",
       "content",
       "size",
@@ -296,14 +376,18 @@
   },
   "vxe-checkbox-group": {
     "attributes": [
-      "label",
+      "v-model / value",
+      "size",
       "disabled"
+    ],
+    "subtags": [
+      "vxe-checkbox"
     ],
     "description": "复选组"
   },
   "vxe-switch": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "disabled",
       "size",
       "open-label",
@@ -317,7 +401,7 @@
   },
   "vxe-input": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "size",
       "type",
       "name",
@@ -351,7 +435,7 @@
   },
   "vxe-select": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "size",
       "multiple",
       "multi-char-overflow",
@@ -419,7 +503,7 @@
       "content",
       "trigger",
       "theme",
-      "zindex",
+      "z-index",
       "is-arrow",
       "enterable",
       "leave-delay"
@@ -428,7 +512,7 @@
   },
   "vxe-modal": {
     "attributes": [
-      "v-model",
+      "v-model / value",
       "size",
       "loading",
       "id",
@@ -456,7 +540,7 @@
       "min-height",
       "top",
       "position",
-      "zindex",
+      "z-index",
       "show-title-overflow",
       "transfer",
       "fullscreen",
@@ -479,6 +563,7 @@
       "title-width",
       "title-colon",
       "title-asterisk",
+      "title-overflow",
       "items",
       "rules",
       "prevent-submit",
@@ -497,6 +582,8 @@
       "align",
       "title-align",
       "title-width",
+      "title-overflow",
+      "class-name",
       "visible",
       "visible-method",
       "folding",

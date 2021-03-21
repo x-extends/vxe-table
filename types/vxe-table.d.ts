@@ -109,6 +109,7 @@ export interface VXETableByVueProperty {
    * 读取内置国际化
    */
   t(key: string, args?: any): any;
+  _t(key: string, args?: any): any;
   /**
    * 全局的模态窗口
    */

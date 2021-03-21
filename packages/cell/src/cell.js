@@ -156,7 +156,7 @@ export const Cell = {
     return renderHelpIcon(h, params).concat(Cell.renderHeaderTitle(h, params))
   },
   renderDefaultCell (h, params) {
-    const { $table, column } = params
+    const { $table, row, column } = params
     const { slots, editRender, cellRender } = column
     const renderOpts = editRender || cellRender
     if (slots && slots.default) {
@@ -169,10 +169,17 @@ export const Cell = {
         return compConf[funName].call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell', isEdit: !!editRender }, params), { $type: editRender ? 'edit' : 'cell', $grid: $table.$xegrid, $excel: $table.$parent, $table })
       }
     }
+    const cellValue = $table.getCellLabel(row, column)
+    const cellPlaceholder = editRender ? editRender.placeholder : ''
     return [
       h('span', {
         class: 'vxe-cell--label'
-      }, [getDefaultCellLabel(params)])
+      }, editRender && !cellValue ? [
+        // 如果设置占位符
+        h('span', {
+          class: 'vxe-cell--placeholder'
+        }, UtilTools.formatText(UtilTools.getFuncText(cellPlaceholder), 1))
+      ] : UtilTools.formatText(cellValue, 1))
     ]
   },
   renderTreeCell (h, params) {

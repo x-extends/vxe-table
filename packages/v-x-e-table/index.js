@@ -32,8 +32,13 @@ function reg (key) {
   VXETable[`_${key}`] = 1
 }
 
+function _t (key, args) {
+  return key ? XEUtils.toValueString(GlobalConfig.translate ? GlobalConfig.translate(key, args) : key) : ''
+}
+
 export const VXETable = {
   t: (key, args) => GlobalConfig.i18n(key, args),
+  _t,
   v: 'v2',
   reg,
   use,

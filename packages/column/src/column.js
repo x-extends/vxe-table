@@ -98,7 +98,7 @@ Object.keys(props).forEach(name => {
 })
 
 export default {
-  name: 'VxeTableColumn',
+  name: 'VxeColumn',
   props,
   provide () {
     return {

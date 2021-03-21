@@ -1002,6 +1002,12 @@ export default {
                 name: 'TableAutoClearManual'
               }
             },
+            // {
+            //   label: 'app.aside.nav.cellPlaceholder',
+            //   locat: {
+            //     name: 'TableEditCellPlaceholder'
+            //   }
+            // },
             {
               label: 'app.aside.nav.insert',
               // demoUrl: 'https://jsrun.pro/vcWKp',
