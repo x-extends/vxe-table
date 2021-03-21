@@ -63,8 +63,8 @@ import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
-import tableColgroupAPI from '../../api/table-colgroup'
-import tableColumnAPI from '../../api/column'
+import colgroupAPI from '../../api/colgroup'
+import columnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
 import virtualTreeAPI from '../../api/virtual-tree'
@@ -94,8 +94,8 @@ import pulldownAPI from '../../api/pulldown'
 // const tags = window.tags = {}
 
 // const tagMaps = [
-//   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
-//   ['vxe-table-colgroup', tableColgroupAPI, { description: '基础表格 - 分组列' }],
+//   ['vxe-table', tableAPI, { subtags: ['vxe-colgroup', 'vxe-table-colgroup', 'vxe-column', 'vxe-table-column'], description: '基础表格' }],
+//   ['vxe-column', tableColumnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-grid', gridAPI, { description: '高级表格' }],
 //   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
@@ -234,11 +234,11 @@ export default {
             case 'table':
               apis = tableAPI
               break
-            case 'table-colgroup':
-              apis = tableColgroupAPI
+            case 'colgroup':
+              apis = colgroupAPI
               break
-            case 'table-column':
-              apis = tableColumnAPI
+            case 'column':
+              apis = columnAPI
               break
             case 'toolbar':
               apis = toolbarAPI

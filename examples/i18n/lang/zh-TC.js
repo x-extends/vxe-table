@@ -3,8 +3,8 @@ export default {
     aside: {
       nav: {
         start: '開發指南',
-        install: '安裝',
-        use: '快速上手',
+        install: '全局安装',
+        use: '按需加载',
         global: '全域參數',
         icons: '全域圖標',
         theme: '全域主題',
@@ -145,6 +145,7 @@ export default {
         dblclick: '双击触发',
         selectContent: '选中内容',
         autoClear: '关闭自动清除',
+        cellPlaceholder: '单元格占位符',
         insert: '插入数据',
         delete: '删除数据',
         revert: '还原数据',
@@ -177,7 +178,7 @@ export default {
         input: '输入框',
         textarea: '文本域',
         select: '下拉框',
-        modal: '模态窗口',
+        modal: '弹窗',
         tooltip: '工具提示',
         form: '表单',
         switch: '开关',
@@ -237,8 +238,8 @@ export default {
 
         api: 'API',
         vxeTable: 'vxe-table',
-        vxeTableColgroup: 'vxe-table-colgroup',
-        vxeTableColumn: 'vxe-table-column',
+        vxeTableColgroup: 'vxe-colgroup',
+        vxeTableColumn: 'vxe-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
         vxeExcel: 'vxe-excel',
@@ -321,8 +322,8 @@ export default {
         plan: {
           v1: 'v1 基於 vue2.6+，支持所有主流的瀏覽器，實現表格的一切實用的功能',
           v2: 'v2 基於 vue2.6+，支持所有主流的瀏覽器，同時兼具功能與效能',
-          v3: 'v3 基於 vue2.6+，只支持現代瀏覽器，不支持IE，提升渲染效能',
-          v4: 'v4 基於 vue3.0+，只支持現代瀏覽器，不支持IE，提升渲染效能'
+          v3: 'v3 基於 vue2.6+，只支持現代瀏覽器，提升渲染效能',
+          v4: 'v4 基於 vue3.0+，只支持現代瀏覽器，不支持IE'
         },
         compatibility: '相容性變動',
         releases: '更新日誌',
@@ -534,6 +535,8 @@ export default {
           filters: '配置筛选条件（注：筛选只能用于列表，如果是树结构则过滤根节点）',
           filterMultiple: '只对 filters 有效，筛选是否允许多选',
           filterMethod: '只对 filters 有效，列的筛选方法，该方法的返回值用来决定该行是否显示',
+          filterResetMethod: '只对 filters 有效，自定义筛选重置方法',
+          filterRecoverMethod: '只对 filters 有效，自定义筛选复原方法（使用自定义筛选时可能会用到）',
           filterRender: '筛选渲染器配置项',
           treeNode: '只对 tree-config 配置时有效，指定为树节点',
           columnKey: '即将废弃，请使用 table.column-key',
@@ -690,6 +693,7 @@ export default {
           size: '尺寸',
           titleAlign: '所有项的标题对齐方式',
           titleWidth: '所有项的标题宽度',
+          titleOverflow: '所有设置标题内容过长时显示为省略号',
           titleColon: '是否显示标题冒号',
           titleAsterisk: '是否显示必填字段的红色星号',
           rules: '校验规则配置项'
@@ -703,6 +707,7 @@ export default {
           align: '内容对齐方式',
           titleAlign: '标题对齐方式',
           titleWidth: '标题宽度',
+          titleOverflow: '标题内容过长时显示为省略号',
           folding: '默认收起',
           visible: '默认是否显示',
           visibleMethod: '该方法的返回值用来决定该项是否显示',

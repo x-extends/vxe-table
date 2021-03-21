@@ -1944,7 +1944,7 @@ export default {
               locat: {
                 name: 'VXEAPI',
                 params: {
-                  name: 'table-column'
+                  name: 'column'
                 }
               }
             },

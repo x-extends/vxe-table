@@ -3,8 +3,8 @@ export default {
     aside: {
       nav: {
         start: 'Development',
-        install: 'Install',
-        use: 'Quick start',
+        install: 'Global install',
+        use: 'Import on demand',
         global: 'Global props',
         icons: 'Global icon',
         theme: 'Global theme',
@@ -146,6 +146,7 @@ export default {
         dblclick: 'dblclick trigger',
         selectContent: 'Select the content',
         autoClear: 'Auto clear',
+        cellPlaceholder: 'Cell placeholder',
         insert: 'Insert',
         delete: 'Delete',
         revert: 'Revert',
@@ -238,8 +239,8 @@ export default {
 
         api: 'API',
         vxeTable: 'vxe-table',
-        vxeTableColgroup: 'vxe-table-colgroup',
-        vxeTableColumn: 'vxe-table-column',
+        vxeTableColgroup: 'vxe-colgroup',
+        vxeTableColumn: 'vxe-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
         vxeExcel: 'vxe-excel',
@@ -322,8 +323,8 @@ export default {
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',
           v2: 'v2 Based on vue2.6+, Support for all major browsers',
-          v3: 'v3 Based on vue2.6+, Only supports modern browsers, not IE, improving rendering performance',
-          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE, improving rendering performance'
+          v3: 'v3 Based on vue2.6+, Only supports modern browsers, improving rendering performance',
+          v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE'
         },
         compatibility: 'Compatibility',
         releases: 'Releases',
@@ -535,6 +536,8 @@ export default {
           filters: 'Configure filter conditions(note: filtering can only be used for lists, if it is a tree, filter the root node)',
           filterMultiple: 'Works only for filters, filtering whether multiple selections are allowed',
           filterMethod: 'Valid only for filters, the filter method for the column, whose return value is used to determine whether the row is displayed',
+          filterResetMethod: '只对 filters 有效，自定义筛选重置方法',
+          filterRecoverMethod: '只对 filters 有效，自定义筛选复原方法（使用自定义筛选时可能会用到）',
           filterRender: 'Filter renderer config',
           treeNode: 'Only valid for tree-config configuration, specified as the tree node',
           columnKey: 'Obsolete, please use "table.column-key"',
@@ -691,6 +694,7 @@ export default {
           size: 'Size',
           titleAlign: 'All title align',
           titleWidth: 'All title width',
+          titleOverflow: '所有设置标题内容过长时显示为省略号',
           titleColon: 'Whether to display the title colon',
           titleAsterisk: 'Show red asterisk for required fields',
           rules: 'Checksum rule configuration entries'
@@ -704,6 +708,7 @@ export default {
           align: 'Content align',
           titleAlign: 'Title align',
           titleWidth: 'Title width',
+          titleOverflow: '标题内容过长时显示为省略号',
           folding: 'Default folding',
           visible: '默认是否显示',
           visibleMethod: 'The return value of this method Function({data, property}) determines whether the item is displayed',
