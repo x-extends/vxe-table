@@ -224,6 +224,8 @@ export const UtilTools = {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if ($xecolumn.$options._componentTag === 'vxe-table-column') {
           UtilTools.error('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
+        } else if ($xecolumn.$options._componentTag === 'vxe-column') {
+          UtilTools.warn('vxe.error.groupTag', [`<vxe-colgroup title=${$xecolumn.title} ...>`, `<vxe-column title=${$xecolumn.title} ...>`])
         }
       }
       if (!groupConfig.children) {

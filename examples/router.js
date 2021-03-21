@@ -207,6 +207,7 @@ import TableEditClick from './views/table/edit/Click.vue'
 import TableEditDBLClick from './views/table/edit/DBLClick.vue'
 import TableEditSelect from './views/table/edit/Select.vue'
 import TableAutoClearManual from './views/table/edit/AutoClear.vue'
+import TableEditCellPlaceholder from './views/table/edit/CellPlaceholder.vue'
 import TableEditInsert from './views/table/edit/Insert.vue'
 import TableEditRemove from './views/table/edit/Remove.vue'
 import TableEditRevert from './views/table/edit/Revert.vue'
@@ -1290,6 +1291,11 @@ export default new Router({
       path: '/table/edit/autoClear',
       name: 'TableAutoClearManual',
       component: TableAutoClearManual
+    },
+    {
+      path: '/table/edit/cellPlaceholder',
+      name: 'TableEditCellPlaceholder',
+      component: TableEditCellPlaceholder
     },
     {
       path: '/table/edit/insert',

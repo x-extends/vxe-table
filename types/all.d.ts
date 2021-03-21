@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import { ModalController } from './modal'
-import { VXETableSetupOptions, VXETableCore } from './v-x-e-table'
+import { VXETableSetupOptions, VXETableCore, VxeGlobalTranslate, VxeGlobalI18n } from './v-x-e-table'
 
 export function install(app: typeof Vue, options?: VXETableSetupOptions): void;
 
@@ -14,7 +14,8 @@ export interface VXETableByVueProperty {
   /**
    * 读取内置国际化
    */
-  t(key: string, args?: any): any;
+  t: VxeGlobalI18n;
+  _t: VxeGlobalTranslate;
   /**
    * 全局的模态窗口
    */

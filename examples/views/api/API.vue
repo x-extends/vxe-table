@@ -93,17 +93,19 @@ import pulldownAPI from '../../api/pulldown'
 // const tags = window.tags = {}
 
 // const tagMaps = [
-//   ['vxe-table', tableAPI, { subtags: ['vxe-table-column'], description: '基础表格' }],
-//   ['vxe-table-colgroup', tableColgroupAPI, { description: '基础表格 - 分组列' }],
+//   ['vxe-table', tableAPI, { subtags: ['vxe-colgroup', 'vxe-table-colgroup', 'vxe-column', 'vxe-table-column'], description: '基础表格' }],
+//   ['vxe-colgroup', tableColgroupAPI, { subtags: ['vxe-column'], description: '基础表格 - 分组列' }],
+//   ['vxe-table-colgroup', tableColgroupAPI, { subtags: ['vxe-table-column'], description: '基础表格 - 分组列' }],
+//   ['vxe-column', tableColumnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-grid', gridAPI, { description: '高级表格' }],
 //   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
 //   ['vxe-pager', pagerAPI, { description: '分页' }],
 //   ['vxe-radio', radioAPI, { description: '单选框' }],
-//   ['vxe-radio-group', radioGroupAPI, { description: '单选组' }],
+//   ['vxe-radio-group', radioGroupAPI, { subtags: ['vxe-radio', 'vxe-radio-button'], description: '单选组' }],
 //   ['vxe-radio-button', radioButtonAPI, { description: '单选按钮' }],
 //   ['vxe-checkbox', checkboxAPI, { description: '复选框' }],
-//   ['vxe-checkbox-group', checkboxGroupAPI, { description: '复选组' }],
+//   ['vxe-checkbox-group', checkboxGroupAPI, { subtags: ['vxe-checkbox'], description: '复选组' }],
 //   ['vxe-switch', switchAPI, { description: '开关按钮' }],
 //   ['vxe-input', inputAPI, { description: '输入框' }],
 //   ['vxe-select', selectAPI, { subtags: ['vxe-optgroup', 'vxe-option'], description: '下拉框' }],

@@ -76,9 +76,32 @@
       "params"
     ],
     "subtags": [
+      "vxe-colgroup",
+      "vxe-table-colgroup",
+      "vxe-column",
       "vxe-table-column"
     ],
     "description": "基础表格"
+  },
+  "vxe-colgroup": {
+    "attributes": [
+      "field",
+      "title",
+      "width",
+      "min-width",
+      "resizable",
+      "visible",
+      "fixed",
+      "align",
+      "header-align",
+      "show-overflow",
+      "show-header-overflow",
+      "header-class-name"
+    ],
+    "subtags": [
+      "vxe-column"
+    ],
+    "description": "基础表格 - 分组列"
   },
   "vxe-table-colgroup": {
     "attributes": [
@@ -95,7 +118,53 @@
       "show-header-overflow",
       "header-class-name"
     ],
+    "subtags": [
+      "vxe-table-column"
+    ],
     "description": "基础表格 - 分组列"
+  },
+  "vxe-column": {
+    "attributes": [
+      "type",
+      "field",
+      "title",
+      "width",
+      "min-width",
+      "resizable",
+      "visible",
+      "fixed",
+      "align",
+      "header-align",
+      "footer-align",
+      "show-overflow",
+      "show-header-overflow",
+      "show-footer-overflow",
+      "class-name",
+      "header-class-name",
+      "footer-class-name",
+      "formatter",
+      "seq-method",
+      "sortable",
+      "sort-by",
+      "sort-type",
+      "filters",
+      "filter-multiple",
+      "filter-method",
+      "filter-reset-method",
+      "filter-recover-method",
+      "filter-render",
+      "export-method",
+      "footer-export-method",
+      "title-help",
+      "cell-type",
+      "cell-render",
+      "edit-render",
+      "content-render",
+      "tree-node",
+      "params",
+      "col-id"
+    ],
+    "description": "基础表格 - 列"
   },
   "vxe-table-column": {
     "attributes": [
@@ -278,6 +347,10 @@
       "size",
       "disabled"
     ],
+    "subtags": [
+      "vxe-radio",
+      "vxe-radio-button"
+    ],
     "description": "单选组"
   },
   "vxe-radio-button": {
@@ -306,6 +379,9 @@
       "v-model / value",
       "size",
       "disabled"
+    ],
+    "subtags": [
+      "vxe-checkbox"
     ],
     "description": "复选组"
   },

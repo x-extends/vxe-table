@@ -706,6 +706,15 @@ const apis = [
             enum: '',
             defVal: 'false',
             list: []
+          },
+          {
+            name: 'placeholder',
+            desc: '单元格占位符，但单元格为空值时显示的占位符',
+            version: '3.2.4',
+            type: 'string',
+            enum: '',
+            defVal: '',
+            list: []
           }
         ]
       },

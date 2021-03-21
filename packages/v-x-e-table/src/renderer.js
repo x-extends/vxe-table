@@ -84,6 +84,19 @@ function getItemProps (renderOpts, params, value, defaultProps) {
   return XEUtils.assign(vSize ? { size: vSize } : {}, defaultCompProps, defaultProps, renderOpts.props, { [componentDefaultModelProp]: value })
 }
 
+function getCellLabelVNs (h, renderOpts, params, cellLabel) {
+  const { placeholder } = renderOpts
+  return [
+    h('span', {
+      class: 'vxe-cell--label'
+    }, placeholder && isEmptyValue(cellLabel) ? [
+      h('span', {
+        class: 'vxe-cell--placeholder'
+      }, UtilTools.formatText(UtilTools.getFuncText(placeholder), 1))
+    ] : UtilTools.formatText(cellLabel, 1))
+  ]
+}
+
 function getNativeOns (renderOpts, params) {
   const { nativeEvents } = renderOpts
   const nativeOns = {}
@@ -511,7 +524,7 @@ const renderMap = {
     renderEdit: nativeSelectEditRender,
     renderDefault: nativeSelectEditRender,
     renderCell (h, renderOpts, params) {
-      return getSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params
@@ -559,7 +572,7 @@ const renderMap = {
             break
         }
       }
-      return cellValue
+      return getCellLabelVNs(h, renderOpts, params, cellValue)
     },
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
@@ -583,7 +596,7 @@ const renderMap = {
     renderEdit: defaultSelectEditRender,
     renderDefault: defaultSelectEditRender,
     renderCell (h, renderOpts, params) {
-      return getSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
     },
     renderFilter (h, renderOpts, params) {
       const { column } = params

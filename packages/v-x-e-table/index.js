@@ -77,6 +77,10 @@ export function t (key, args) {
   return GlobalConfig.i18n(key, args)
 }
 
+export function _t (key, args) {
+  return key ? XEUtils.toValueString(GlobalConfig.translate ? GlobalConfig.translate(key, args) : key) : ''
+}
+
 export const v = 'v3'
 
 export const VXETable = {
@@ -90,7 +94,8 @@ export const VXETable = {
   formats,
   menus,
   config,
-  t
+  t,
+  _t
 }
 
 export * from './src/interceptor'
