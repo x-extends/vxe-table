@@ -192,7 +192,7 @@
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridOptions, VxeTableEvents } from '../../../types/index'
+import { VxeGridInstance, VxeGridProps, VxeTableEvents } from '../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -299,7 +299,7 @@ export default defineComponent({
           })
         ]
       }
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const searchEvent = () => {
       VXETable.modal.alert('查询')
@@ -515,7 +515,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridOptions, VxeTableEvents } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridProps, VxeTableEvents } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({
@@ -622,7 +622,7 @@ export default defineComponent({
                   })
                 ]
               }
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const searchEvent = () => {
               VXETable.modal.alert('查询')

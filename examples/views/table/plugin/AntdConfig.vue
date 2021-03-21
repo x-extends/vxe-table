@@ -27,7 +27,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { Modal } from 'ant-design-vue'
-import { VxeGridInstance, VxeGridOptions, VxeGridListeners } from '../../../../types/index'
+import { VxeGridInstance, VxeGridProps, VxeGridListeners } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -99,7 +99,7 @@ export default defineComponent({
         { field: 'flag', title: 'ASwitch', width: 100, cellRender: { name: 'ASwitch' } },
         { field: 'rate', title: 'ARate', width: 200, cellRender: { name: 'ARate' } }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const gridEvents: VxeGridListeners = {
       checkboxAll () {
@@ -291,7 +291,7 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { Modal } from 'ant-design-vue'
-        import { VxeGridInstance, VxeGridOptions, VxeGridListeners } from 'vxe-table'
+        import { VxeGridInstance, VxeGridProps, VxeGridListeners } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -363,7 +363,7 @@ export default defineComponent({
                 { field: 'flag', title: 'ASwitch', width: 100, cellRender: { name: 'ASwitch' } },
                 { field: 'rate', title: 'ARate', width: 200, cellRender: { name: 'ARate' } }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const gridEvents: VxeGridListeners = {
               checkboxAll () {

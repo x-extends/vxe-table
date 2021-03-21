@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridOptions, VxePagerEvents } from '../../../types/index'
+import { VxeGridProps, VxePagerEvents } from '../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -52,7 +52,7 @@ export default defineComponent({
         { field: 'role', title: 'Role' },
         { field: 'address', title: 'Address', showOverflow: true }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const findList = () => {
       gridOptions.loading = true
@@ -108,7 +108,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeGridOptions, VxePagerEvents } from 'vxe-table'
+        import { VxeGridProps, VxePagerEvents } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -132,7 +132,7 @@ export default defineComponent({
                 { field: 'role', title: 'Role' },
                 { field: 'address', title: 'Address', showOverflow: true }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const findList = () => {
               gridOptions.loading = true

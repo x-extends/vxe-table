@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 开关
+ * @example import { Switch as VxeSwitch } from 'vxe-table'
  */
-export const Switch: VXEComponent<VxeSwitchProps & VxeSwitchEventProps>;
+export const Switch: VXEComponent<VxeSwitchProps, VxeSwitchEventProps>;
 
 export type VxeSwitchInstance = ComponentPublicInstance<VxeSwitchProps, VxeSwitchConstructor>;
 
@@ -20,8 +21,6 @@ export interface SwitchReactData {
   hasAnimat: boolean;
   offsetLeft: number;
 }
-
-export interface VxeSwitchOptions extends VxeSwitchProps, VxeSwitchListeners { }
 
 export type VxeSwitchProps = {
   size?: SizeType;

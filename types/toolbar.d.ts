@@ -5,8 +5,9 @@ import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from './
 
 /**
  * 组件 - 工具栏
+ * @example import { Toolbar as VxeToolbar } from 'vxe-table'
  */
-export const Toolbar: VXEComponent<VxeToolbarProps & VxeToolbarEventProps>;
+export const Toolbar: VXEComponent<VxeToolbarProps, VxeToolbarEventProps>;
 
 export type VxeToolbarInstance = ComponentPublicInstance<VxeToolbarProps, VxeToolbarConstructor>;
 
@@ -22,8 +23,6 @@ export interface ToolbarPrivateRef {
   refElem: Ref<HTMLDivElement>;
 }
 export interface VxeToolbarPrivateRef extends ToolbarPrivateRef { }
-
-export interface VxeToolbarOptions extends VxeToolbarProps, VxeToolbarListeners { }
 
 export namespace VxeToolbarPropTypes {
   export type Size = SizeType;

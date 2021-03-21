@@ -145,6 +145,7 @@ export default {
         dblclick: '双击触发',
         selectContent: '选中内容',
         autoClear: '关闭自动清除',
+        cellPlaceholder: '单元格占位符',
         insert: '插入数据',
         delete: '删除数据',
         revert: '还原数据',

@@ -1,7 +1,7 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode, DefineComponent } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
-import { VxeColumnOptions, VxeColumnPropTypes } from './column'
+import { VxeColumnPropTypes, VxeColumnProps } from './column'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
@@ -10,8 +10,9 @@ import { VxeMenuPanelInstance } from './menu'
 
 /**
  * 组件 - 表格
+ * @example import { Table as VxeTable } from 'vxe-table'
  */
-export const Table: VXEComponent<VxeTableProps & VxeTableEventProps>;
+export const Table: VXEComponent<VxeTableProps, VxeTableEventProps>;
 
 export type VxeTableInstance = ComponentPublicInstance<VxeTableProps, VxeTableConstructor>;
 
@@ -131,12 +132,12 @@ export interface TablePublicMethods {
    * 加载列配置
    * @param columns 列对象
    */
-  loadColumn(columns: VxeColumnOptions[]): Promise<any>;
+  loadColumn(columns: VxeTableDefines.ColumnOptions[]): Promise<any>;
   /**
    * 加载列配置并恢复到初始状态
    * @param columns 列对象
    */
-  reloadColumn(columns: VxeColumnOptions[]): Promise<any>;
+  reloadColumn(columns: VxeTableDefines.ColumnOptions[]): Promise<any>;
   /**
    * 根据 tr 元素获取对应的 row 信息
    * @param tr 行节点元素
@@ -948,8 +949,6 @@ export interface TableInternalData {
   _currMenuParams?: any;
 }
 
-export interface VxeTableOptions extends VxeTableProps, VxeTableListeners { }
-
 export namespace VxeTablePropTypes {
   export type Size = SizeType;
   export type ID = string;
@@ -1600,9 +1599,9 @@ export namespace VxeTablePropTypes {
       targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: string[][];
       pasteCells: string[][];
-      insertColumns: VxeColumnOptions[];
+      insertColumns: VxeTableDefines.ColumnOptions[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
-    }): VxeColumnOptions[];
+    }): VxeTableDefines.ColumnOptions[];
   }
   export interface ClipOpts extends ClipConfig { }
 
@@ -1713,10 +1712,10 @@ export namespace VxeTablePropTypes {
   export type Params = any;
 }
 
-export type VxeTableProps = {
+export type VxeTableProps<D = any> = {
   size?: VxeTablePropTypes.Size;
   id?: VxeTablePropTypes.ID;
-  data?: VxeTablePropTypes.Data;
+  data?: D[];
   height?: VxeTablePropTypes.Height;
   maxHeight?: VxeTablePropTypes.MaxHeight;
   resizable?: VxeTablePropTypes.Resizable;
@@ -1858,6 +1857,11 @@ export namespace VxeTableDefines {
     _col: VxeTableDefines.ColumnInfo;
     _rowspan: number;
     _colspan: number;
+  }
+
+  export interface ColumnOptions extends VxeColumnProps {
+    children?: ColumnOptions[];
+    slots?: VxeColumnPropTypes.Slots;
   }
 
   /**

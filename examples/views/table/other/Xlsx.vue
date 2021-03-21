@@ -49,7 +49,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/all'
-import { VxeGridOptions, VxeGridInstance } from '../../../../types/index'
+import { VxeGridProps, VxeGridInstance } from '../../../../types/index'
 import XLSX from 'xlsx'
 
 export default defineComponent({
@@ -79,7 +79,7 @@ export default defineComponent({
         { field: 'address', title: 'Address', showOverflow: true }
       ],
       data: [] as any[]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const impotEvent = async () => {
       const $grid = xGrid1.value
@@ -150,7 +150,7 @@ export default defineComponent({
         { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', age: 24, address: 'Shenzhen' },
         { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', age: 20, address: 'Guangzhou' }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const toBuffer = (wbout: any) => {
       const buf = new ArrayBuffer(wbout.length)
@@ -193,7 +193,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeGridOptions, VxeGridInstance } from 'vxe-table'
+        import { VxeGridProps, VxeGridInstance } from 'vxe-table'
         import XLSX from 'xlsx'
 
         export default defineComponent({
@@ -223,7 +223,7 @@ export default defineComponent({
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
               data: [] as any[]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const impotEvent = async () => {
               const $grid = xGrid1.value
@@ -279,7 +279,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeGridOptions, VxeGridInstance } from 'vxe-table'
+        import { VXETable, VxeGridProps, VxeGridInstance } from 'vxe-table'
         import XLSX from 'xlsx'
 
         export default defineComponent({
@@ -320,7 +320,7 @@ export default defineComponent({
                 { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', age: 24, address: 'Shenzhen' },
                 { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', age: 20, address: 'Guangzhou' }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const toBuffer = (wbout: any) => {
               const buf = new ArrayBuffer(wbout.length)

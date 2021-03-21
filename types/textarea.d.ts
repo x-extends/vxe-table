@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 文本域
+ * @example import { Textarea as VxeTextarea } from 'vxe-table'
  */
-export const Textarea: VXEComponent<VxeTextareaProps & VxeTextareaEventProps>;
+export const Textarea: VXEComponent<VxeTextareaProps, VxeTextareaEventProps>;
 
 export type VxeTextareaInstance = ComponentPublicInstance<VxeTextareaProps, VxeTextareaConstructor>;
 
@@ -25,8 +26,6 @@ export interface TextareaPrivateRef {
   refTextarea: Ref<HTMLTextAreaElement>;
 }
 export interface VxeTextareaPrivateRef extends TextareaPrivateRef { }
-
-export interface VxeTextareaOptions extends VxeTextareaProps, VxeTextareaListeners { }
 
 export type VxeTextareaProps = {
   size?: SizeType;

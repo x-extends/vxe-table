@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridOptions } from '../../../types/index'
+import { VxeGridInstance, VxeGridProps } from '../../../types/index'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 
@@ -256,7 +256,7 @@ export default defineComponent({
         mode: 'row',
         showStatus: true
       }
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     onMounted(() => {
       const sexList = [
@@ -287,7 +287,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, onMounted, reactive, ref, Ref } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridOptions } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
         import XEUtils from 'xe-utils'
         import XEAjax from 'xe-ajax'
 
@@ -520,7 +520,7 @@ export default defineComponent({
                 mode: 'row',
                 showStatus: true
               }
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             onMounted(() => {
               const sexList = [

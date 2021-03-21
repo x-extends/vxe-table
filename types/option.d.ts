@@ -3,6 +3,7 @@ import { VXEComponent } from './component'
 
 /**
  * 组件 - 下拉框选项
+ * @example import { Option as VxeOption } from 'vxe-table'
  */
 export const Option: VXEComponent<VxeOptionProps>;
 

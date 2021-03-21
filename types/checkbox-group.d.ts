@@ -4,18 +4,17 @@ import { VxeCheckboxEvents } from './checkbox'
 
 /**
  * 组件 - 复选框组
+ * @example import { CheckboxGroup as VxeCheckboxGroup } from 'vxe-table'
  */
-export const CheckboxGroup: VXEComponent<VxeCheckboxGroupOptions & VxeCheckboxGroupEventProps>;
+export const CheckboxGroup: VXEComponent<VxeCheckboxGroupProps, VxeCheckboxGroupEventProps>;
 
-export type VxeCheckboxGroupInstance = ComponentPublicInstance<VxeCheckboxGroupOptions, VxeCheckboxGroupConstructor>;
+export type VxeCheckboxGroupInstance = ComponentPublicInstance<VxeCheckboxGroupProps, VxeCheckboxGroupConstructor>;
 
 export interface VxeCheckboxGroupConstructor extends VxeComponentBase, VxeCheckboxGroupMethods {
-  props: VxeCheckboxGroupOptions;
+  props: VxeCheckboxGroupProps;
   context: SetupContext<VxeCheckboxGroupEmits>;
   renderVN: RenderFunction;
 }
-
-export interface VxeCheckboxGroupOptions extends VxeCheckboxGroupProps, VxeCheckboxGroupListeners { }
 
 export type VxeCheckboxGroupProps = {
   size?: SizeType;

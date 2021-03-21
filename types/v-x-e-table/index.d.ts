@@ -24,7 +24,8 @@ export class VXETableConfig {
    get importTypes(): string[];
 }
 
-export type VxeGlobalT = (key: string, args?: any) => string;
+export type VxeGlobalI18n = (key: string, args?: any) => string;
+export type VxeGlobalTranslate = (key: string, args?: any) => string;
 export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore;
 
 export const setup: VxeGlobalSetup;
@@ -39,7 +40,8 @@ export const saveFile: SaveFileFunction;
 export const readFile: ReadFileFunction;
 export const print: PrintFunction;
 export const config: VXETableConfig;
-export const t: VxeGlobalT;
+export const t: VxeGlobalI18n;
+export const _t: VxeGlobalTranslate;
 export const use: VxeGlobalUse;
 
 export interface VXETablePluginObject {
@@ -111,7 +113,8 @@ export interface VXETableCore {
   /**
    * 读取内置国际化
    */
-  t: VxeGlobalT;
+  t: VxeGlobalI18n;
+  _t: VxeGlobalTranslate;
 }
 
 /**

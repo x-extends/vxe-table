@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridOptions } from '../../../types/index'
+import { VxeGridInstance, VxeGridProps } from '../../../types/index'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 
@@ -182,7 +182,7 @@ export default defineComponent({
           }
         }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     return {
       xGrid,
@@ -213,7 +213,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeGridInstance, VxeGridOptions } from 'vxe-table'
+        import { VxeGridInstance, VxeGridProps } from 'vxe-table'
         import XEUtils from 'xe-utils'
         import XEAjax from 'xe-ajax'
 
@@ -358,7 +358,7 @@ export default defineComponent({
                   }
                 }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
             
             return {
               xGrid,

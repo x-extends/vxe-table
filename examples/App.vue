@@ -1007,6 +1007,12 @@ export default defineComponent({
               }
             },
             {
+              label: 'app.aside.nav.cellPlaceholder',
+              locat: {
+                name: 'TableEditCellPlaceholder'
+              }
+            },
+            {
               label: 'app.aside.nav.insert',
               // demoUrl: 'https://jsrun.pro/vcWKp/edit',
               locat: {

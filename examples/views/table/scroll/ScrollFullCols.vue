@@ -47,7 +47,7 @@
 <script lang="ts">
 import { defineComponent, nextTick, reactive, ref } from 'vue'
 import { VXETable } from '../../../../packages/all'
-import { VxeGridInstance, VxeGridOptions } from '../../../../types/index'
+import { VxeGridInstance, VxeGridProps } from '../../../../types/index'
 import XEUtils from 'xe-utils'
 
 const columnList: any[] = []
@@ -72,7 +72,7 @@ export default defineComponent({
         checkField: 'checked',
         labelField: 'nickname'
       }
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const xGrid = ref({} as VxeGridInstance)
 
@@ -211,7 +211,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, nextTick, reactive, ref } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridOptions } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridProps } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         const columnList: any[] = []
@@ -236,7 +236,7 @@ export default defineComponent({
                 checkField: 'checked',
                 labelField: 'nickname'
               }
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const xGrid = ref({} as VxeGridInstance)
 

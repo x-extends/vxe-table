@@ -6,7 +6,7 @@ import Cell from '../../table/src/cell'
 import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnProps } from '../../../types/all'
 
 export default defineComponent({
-  name: 'VxeTableColgroup',
+  name: 'VxeColgroup',
   props: columnProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>

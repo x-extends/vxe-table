@@ -20,6 +20,10 @@ export function isEnableConf (conf: any): boolean {
   return conf && conf.enabled !== false
 }
 
+export function isEmptyValue (cellValue: any) {
+  return cellValue === null || cellValue === undefined || cellValue === ''
+}
+
 export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),
@@ -54,7 +58,7 @@ export const UtilTools = {
     return property ? XEUtils.isFunction(property) ? property(params) : property : ''
   },
   formatText (value: any, placeholder?: any) {
-    return '' + (value === '' || value === null || value === undefined ? (placeholder ? GlobalConfig.emptyCell : '') : value)
+    return '' + (isEmptyValue(value) ? (placeholder ? GlobalConfig.emptyCell : '') : value)
   },
   getCellValue (row: any, column: any) {
     return XEUtils.get(row, column.property)

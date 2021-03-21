@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 单选框
+ * @example import { Radio as VxeRadio } from 'vxe-table'
  */
-export const Radio: VXEComponent<VxeRadioProps & VxeRadioEventProps>;
+export const Radio: VXEComponent<VxeRadioProps, VxeRadioEventProps>;
 
 export type VxeRadioInstance = ComponentPublicInstance<VxeRadioProps, VxeRadioConstructor>;
 
@@ -13,8 +14,6 @@ export interface VxeRadioConstructor extends VxeComponentBase, VxeRadioMethods {
   context: SetupContext<VxeRadioEmits>;
   renderVN: RenderFunction;
 }
-
-export interface VxeRadioOptions extends VxeRadioProps, VxeRadioListeners { }
 
 export type VxeRadioProps = {
   size?: SizeType;

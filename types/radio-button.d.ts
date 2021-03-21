@@ -3,8 +3,9 @@ import { SizeType, VXEComponent, VxeComponentBase, VxeEvent, ValueOf } from './c
 
 /**
  * 组件 - 单选框按钮
+ * @example import { RadioButton as VxeRadioButton } from 'vxe-table'
  */
-export const RadioButton: VXEComponent<VxeRadioButtonProps & VxeRadioButtonEventProps>;
+export const RadioButton: VXEComponent<VxeRadioButtonProps, VxeRadioButtonEventProps>;
 
 export type VxeRadioButtonInstance = ComponentPublicInstance<VxeRadioButtonProps, VxeRadioButtonConstructor>;
 
@@ -13,8 +14,6 @@ export interface VxeRadioButtonConstructor extends VxeComponentBase, VxeRadioBut
   context: SetupContext<VxeRadioButtonEmits>;
   renderVN: RenderFunction;
 }
-
-export interface RadioButtonOptions extends VxeRadioButtonProps, VxeRadioButtonListeners { }
 
 export interface RadioButtonMethods {
   dispatchEvent(type: ValueOf<VxeRadioButtonEmits>, params: any, evnt: Event): void;
@@ -31,11 +30,11 @@ export type VxeRadioButtonEmits = [
 
 export type VxeRadioButtonProps = {
   size?: SizeType;
-  modelValue: any;
-  label: any;
-  title: string | number;
-  content: string | number;
-  disabled: boolean;
+  modelValue?: any;
+  label?: any;
+  title?: string | number;
+  content?: string | number;
+  disabled?: boolean;
 }
 
 export namespace VxeRadioButtonDefines {

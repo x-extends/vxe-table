@@ -1,8 +1,8 @@
 import { SizeType } from '../component'
-import { VxeTableOptions } from '../table'
-import { VxeGridOptions } from '../grid'
-import { VxeToolbarOptions } from '../toolbar'
-import { VxePagerOptions } from '../pager'
+import { VxeTableProps } from '../table'
+import { VxeGridProps } from '../grid'
+import { VxeToolbarProps } from '../toolbar'
+import { VxePagerProps } from '../pager'
 
 interface DefaultOptions {
   size?: SizeType;
@@ -17,8 +17,8 @@ export interface VXETableSetupOptions {
   icon?: {
     [key: string]: string;
   };
-  table?: VxeTableOptions;
-  grid?: VxeGridOptions;
+  table?: VxeTableProps;
+  grid?: VxeGridProps;
   export?: {
     types?: {
       [key: string]: 0 | 1 | 2;
@@ -26,12 +26,12 @@ export interface VXETableSetupOptions {
     [key: string]: any;
   };
   tooltip?: DefaultOptions;
-  pager?: VxePagerOptions;
+  pager?: VxePagerProps;
   form?: DefaultOptions;
   input?: DefaultOptions;
   textarea?: DefaultOptions;
   select?: DefaultOptions;
-  toolbar?: VxeToolbarOptions;
+  toolbar?: VxeToolbarProps;
   button?: DefaultOptions;
   radio?: DefaultOptions;
   checkbox?: DefaultOptions;
@@ -51,8 +51,8 @@ export interface VXETableGlobalConfig extends VXETableSetupOptions {
   icon: {
     [key: string]: string;
   };
-  table: VxeTableOptions;
-  grid: VxeGridOptions;
+  table: VxeTableProps;
+  grid: VxeGridProps;
   export: {
     types: {
       [key: string]: 0 | 1 | 2;
@@ -60,12 +60,12 @@ export interface VXETableGlobalConfig extends VXETableSetupOptions {
     [key: string]: any;
   };
   tooltip: DefaultOptions;
-  pager: VxePagerOptions;
+  pager: VxePagerProps;
   form: DefaultOptions;
   input: DefaultOptions;
   textarea: DefaultOptions;
   select: DefaultOptions;
-  toolbar: VxeToolbarOptions;
+  toolbar: VxeToolbarProps;
   button: DefaultOptions;
   radio: DefaultOptions;
   checkbox: DefaultOptions;

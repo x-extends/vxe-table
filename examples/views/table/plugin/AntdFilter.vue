@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridOptions, VxeColumnPropTypes } from '../../../../types/index'
+import { VxeGridProps, VxeColumnPropTypes } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -62,7 +62,7 @@ export default defineComponent({
         { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', sex1: ['0'], region: [], age: 24, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 52, flag: false, address: 'Shenzhen' },
         { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', sex1: [], region: [], age: 20, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 4, rate1: 83, flag: false, address: 'Guangzhou' }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
       return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''
@@ -98,7 +98,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeGridOptions, VxeColumnPropTypes } from 'vxe-table'
+        import { VxeGridProps, VxeColumnPropTypes } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -134,7 +134,7 @@ export default defineComponent({
                 { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', sex1: ['0'], region: [], age: 24, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, flag: false, address: 'Shenzhen' },
                 { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', sex1: [], region: [], age: 20, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 4, flag: false, address: 'Guangzhou' }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
               return cellValue === '1' ? '男' : cellValue === '0' ? '女' : ''

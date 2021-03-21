@@ -72,6 +72,7 @@ declare module './table' {
       data: any;
       resetValue: any;
       checked: boolean;
+      _checked: boolean;
     }
   }
 }

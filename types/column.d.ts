@@ -6,13 +6,9 @@ import { VxeFilterPanel } from './filter'
 
 /**
  * 组件 - 表格列
+ * @example import { Column as VxeColumn } from 'vxe-table'
  */
 export const Column: VXEComponent<VxeColumnProps>;
-
-export interface VxeColumnOptions extends VxeColumnProps {
-  children?: VxeColumnOptions[];
-  slots?: VxeColumnPropTypes.Slots;
-}
 
 export namespace VxeColumnPropTypes {
   export type ColId = string | number;
@@ -133,6 +129,7 @@ export namespace VxeColumnPropTypes {
     defaultValue?: any;
     immediate?: boolean;
     content?: string;
+    placeholder?: string;
   }
 
   /**

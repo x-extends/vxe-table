@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle
 
 /**
  * 组件 - 工具提示
+ * @example import { Tooltip as VxeTooltip } from 'vxe-table'
  */
-export const Tooltip: VXEComponent<VxeTooltipProps & VxeTooltipEventProps>;
+export const Tooltip: VXEComponent<VxeTooltipProps, VxeTooltipEventProps>;
 
 export type VxeTooltipInstance = ComponentPublicInstance<VxeTooltipProps, VxeTooltipConstructor>;
 
@@ -35,8 +36,6 @@ export interface TooltipReactData {
     arrowStyle: VNodeStyle
   }
 }
-
-export interface VxeTooltipOptions extends VxeTooltipProps, VxeTooltipListeners { }
 
 export namespace VxeTooltipPropTypes {
   export type Size = SizeType;

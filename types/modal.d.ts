@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 模态窗口
+ * @example import { Modal as VxeModal } from 'vxe-table'
  */
-export const Modal: VXEComponent<VxeModalProps & VxeModalEventProps>;
+export const Modal: VXEComponent<VxeModalProps, VxeModalEventProps>;
 
 export type VxeModalInstance = ComponentPublicInstance<VxeModalProps, VxeModalConstructor>;
 
@@ -101,8 +102,6 @@ export type ModalPosition = {
  * 窗口事件类型
  */
 export type ModalEventTypes = 'default' | 'mask' | 'close' | 'confirm' | 'cancel' | 'keydown' | 'exist'
-
-export interface VxeModalOptions extends VxeModalProps, VxeModalEventProps { }
 
 export namespace VxeModalPropTypes {
   export type Size = SizeType;
@@ -217,43 +216,43 @@ export interface ModalController {
    * 创建窗口
    * @param options 参数
    */
-  open(options: VxeModalOptions): Promise<ModalEventTypes>;
+  open(options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建提示框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  alert(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<ModalEventTypes>;
+  alert(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建提示框
    * @param options 参数
    */
-  alert(options: VxeModalOptions): Promise<ModalEventTypes>;
+  alert(options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建确认框
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  confirm(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalOptions): Promise<ModalEventTypes>;
+  confirm(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建确认框
    * @param options 参数
    */
-  confirm(options: VxeModalOptions): Promise<ModalEventTypes>;
+  confirm(options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建消息提示
    * @param message 消息内容
    * @param title 标题
    * @param options 参数
    */
-  message(message: VxeModalPropTypes.Message, options?: VxeModalOptions): Promise<ModalEventTypes>;
+  message(message: VxeModalPropTypes.Message, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建消息提示
    * @param options 参数
    */
-  message(options: VxeModalOptions): Promise<ModalEventTypes>;
+  message(options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 获取动态的活动窗口
    * @param id 窗口唯一标识
@@ -279,6 +278,10 @@ interface ModalVisibleParams {
 }
 
 export namespace VxeModalDefines {
+  export interface ModalOptions extends VxeModalProps, VxeModalEventProps {
+    key?: string | number;
+  }
+
   interface ModalEventParams extends VxeEvent {
     $modal: VxeModalConstructor & VxeModalMethods;
   }

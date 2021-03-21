@@ -35,7 +35,7 @@
 
 <script lang="tsx">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridPropTypes, VxeGridOptions } from '../../../../types/index'
+import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -52,7 +52,7 @@ export default defineComponent({
         labelField: 'id'
       },
       loading: false
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     let colIndex = 0
     let rowIndex = 1
@@ -209,7 +209,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeGridInstance, VxeGridPropTypes, VxeGridOptions } from 'vxe-table'
+        import { VxeGridInstance, VxeGridPropTypes, VxeGridProps } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -226,7 +226,7 @@ export default defineComponent({
                 labelField: 'id'
               },
               loading: false
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             let colIndex = 0
             let rowIndex = 1

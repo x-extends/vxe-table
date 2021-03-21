@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 虚拟列表
+ * @example import { List as VxeList } from 'vxe-table'
  */
-export const List: VXEComponent<VxeListProps & VxeListEventProps>;
+export const List: VXEComponent<VxeListProps, VxeListEventProps>;
 
 export type VxeListInstance = ComponentPublicInstance<VxeListProps, VxeListConstructor>;
 
@@ -85,10 +86,6 @@ export interface VxeListMethods extends ListMethods { }
 export interface ListPrivateMethods { }
 export interface VxeListPrivateMethods extends ListPrivateMethods { }
 
-export interface VxeListOptions extends VxeListProps, VxeListListeners {
-  onScroll?: VxeListEvents.Scroll;
-}
-
 export namespace VxeListPropTypes {
   export type Size = SizeType;
   export type Data = any[];
@@ -113,9 +110,9 @@ export namespace VxeListPropTypes {
   }
 }
 
-export type VxeListProps = {
+export type VxeListProps<D = any> = {
   size?: VxeListPropTypes.Size;
-  data?: VxeListPropTypes.Data;
+  data?: D[];
   height?: VxeListPropTypes.Height;
   maxHeight?: VxeListPropTypes.MaxHeight;
   loading?: VxeListPropTypes.Loading;

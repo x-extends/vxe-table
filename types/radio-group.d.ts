@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './c
 
 /**
  * 组件 - 单选框组
+ * @example import { RadioGroup as VxeRadioGroup } from 'vxe-table'
  */
-export const RadioGroup: VXEComponent<VxeRadioGroupProps & VxeRadioGroupEventProps>;
+export const RadioGroup: VXEComponent<VxeRadioGroupProps, VxeRadioGroupEventProps>;
 
 export type VxeRadioGroupInstance = ComponentPublicInstance<VxeRadioGroupProps, VxeRadioGroupConstructor>;
 
@@ -19,8 +20,6 @@ export type VxeRadioGroupEmits = [
   'update:modelValue',
   'change'
 ]
-
-export interface VxeRadioGroupOptions extends VxeRadioGroupProps, VxeRadioGroupListeners { }
 
 export type VxeRadioGroupProps = {
   size?: SizeType;

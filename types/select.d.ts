@@ -4,8 +4,9 @@ import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 组件 - 下拉框
+ * @example import { Select as VxeSelect } from 'vxe-table'
  */
-export const Select: VXEComponent<VxeSelectProps & VxeSelectEventProps>;
+export const Select: VXEComponent<VxeSelectProps, VxeSelectEventProps>;
 
 export type VxeSelectInstance = ComponentPublicInstance<VxeSelectProps, VxeSelectConstructor>;
 
@@ -38,26 +39,24 @@ export interface SelectReactData {
   isActivated: boolean;
 }
 
-export interface VxeSelectOptions extends VxeSelectProps, VxeSelectListeners { }
-
 export type VxeSelectProps = {
   size?: SizeType;
-  modelValue: any;
-  clearable: boolean;
-  placeholder: string;
-  disabled: boolean;
-  multiple: boolean;
-  multiCharOverflow: number | string;
-  prefixIcon: string;
-  placement: string;
-  options: any[];
-  optionProps: VxeGlobalRendererHandles.RenderOptionProps;
-  optionGroups: any[];
-  optionGroupProps: VxeGlobalRendererHandles.RenderOptionGroupProps;
-  emptyText: string;
-  optionId: string;
-  optionKey: boolean;
-  transfer: boolean;
+  modelValue?: any;
+  clearable?: boolean;
+  placeholder?: string;
+  disabled?: boolean;
+  multiple?: boolean;
+  multiCharOverflow?: number | string;
+  prefixIcon?: string;
+  placement?: string;
+  options?: any[];
+  optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
+  optionGroups?: any[];
+  optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps;
+  emptyText?: string;
+  optionId?: string;
+  optionKey?: boolean;
+  transfer?: boolean;
 }
 
 export interface SelectMethods {

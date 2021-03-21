@@ -26,7 +26,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridOptions, VxeGridInstance, VxeGridEvents } from '../../../types/index'
+import { VxeGridProps, VxeGridInstance, VxeGridEvents } from '../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -57,7 +57,7 @@ export default defineComponent({
         { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
         { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const editDisabledEvent: VxeGridEvents.EditDisabled = () => {
       console.log('禁止编辑')
@@ -92,7 +92,7 @@ export default defineComponent({
         { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
         { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     return {
       gridOptions1,
@@ -105,7 +105,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeGridOptions, VxeGridEvents } from 'vxe-table'
+        import { VxeGridProps, VxeGridEvents } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -136,7 +136,7 @@ export default defineComponent({
                 { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
                 { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const editDisabledEvent: VxeGridEvents.EditDisabled = () => {
               console.log('禁止编辑')
@@ -154,7 +154,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeGridOptions, VxeGridInstance, VxeGridEvents } from 'vxe-table'
+        import { VxeGridProps, VxeGridInstance, VxeGridEvents } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -187,7 +187,7 @@ export default defineComponent({
                 { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
                 { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const editDisabledEvent: VxeGridEvents.EditDisabled = () => {
               console.log('禁止编辑')

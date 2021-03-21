@@ -82,7 +82,7 @@ export const columnProps = {
 }
 
 export default defineComponent({
-  name: 'VxeTableColumn',
+  name: 'VxeColumn',
   props: columnProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>

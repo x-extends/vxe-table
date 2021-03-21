@@ -325,12 +325,11 @@ export default defineComponent({
     const renderDropdowns = (item: VxeToolbarPropTypes.ButtonConfig) => {
       const { dropdowns } = item
       const downVNs: VNode[] = []
-      const ButtonComponent = resolveComponent('vxe-button') as ComponentOptions
       if (dropdowns) {
         dropdowns.forEach((child: any, index: number) => {
           if (child.visible !== false) {
             downVNs.push(
-              h(ButtonComponent, {
+              h(resolveComponent('vxe-button') as ComponentOptions, {
                 key: index,
                 disabled: child.disabled,
                 loading: child.loading,
@@ -357,7 +356,6 @@ export default defineComponent({
       if (slots.buttons) {
         return slots.buttons({ $grid: $xegrid, $table: $xetable })
       }
-      const VxeButtonConstructor = resolveComponent('vxe-button') as ComponentOptions
       const btnVNs: VNode[] = []
       if (buttons) {
         buttons.forEach((item) => {
@@ -372,7 +370,7 @@ export default defineComponent({
               )
             } else {
               btnVNs.push(
-                h(VxeButtonConstructor, {
+                h(resolveComponent('vxe-button') as ComponentOptions, {
                   disabled: item.disabled,
                   loading: item.loading,
                   type: item.type,
@@ -409,7 +407,6 @@ export default defineComponent({
     const renderCustoms = () => {
       const { columns } = reactData
       const customOpts = computeCustomOpts.value
-      const VxeButtonConstructor = resolveComponent('vxe-button') as ComponentOptions
       const colVNs: VNode[] = []
       const customBtnOns: any = {}
       const customWrapperOns: any = {}
@@ -474,7 +471,7 @@ export default defineComponent({
         }],
         ref: refCustomWrapper
       }, [
-        h(VxeButtonConstructor, {
+        h(resolveComponent('vxe-button') as ComponentOptions, {
           circle: true,
           icon: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM,
           title: GlobalConfig.i18n('vxe.toolbar.custom'),
@@ -560,7 +557,6 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const ButtonComponent = resolveComponent('vxe-button') as ComponentOptions
       const { perfect, loading, refresh, zoom, custom } = props
       const vSize = computeSize.value
       const refreshOpts = computeRefreshOpts.value
@@ -585,31 +581,31 @@ export default defineComponent({
         h('div', {
           class: 'vxe-tools--operate'
         }, [
-          props.import ? h(ButtonComponent, {
+          props.import ? h(resolveComponent('vxe-button') as ComponentOptions, {
             circle: true,
             icon: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT,
             title: GlobalConfig.i18n('vxe.toolbar.import'),
             onClick: importEvent
           }) : createCommentVNode(),
-          props.export ? h(ButtonComponent, {
+          props.export ? h(resolveComponent('vxe-button') as ComponentOptions, {
             circle: true,
             icon: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT,
             title: GlobalConfig.i18n('vxe.toolbar.export'),
             onClick: exportEvent
           }) : createCommentVNode(),
-          props.print ? h(ButtonComponent, {
+          props.print ? h(resolveComponent('vxe-button') as ComponentOptions, {
             circle: true,
             icon: printOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_PRINT,
             title: GlobalConfig.i18n('vxe.toolbar.print'),
             onClick: printEvent
           }) : createCommentVNode(),
-          refresh ? h(ButtonComponent, {
+          refresh ? h(resolveComponent('vxe-button') as ComponentOptions, {
             circle: true,
             icon: reactData.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH),
             title: GlobalConfig.i18n('vxe.toolbar.refresh'),
             onClick: refreshEvent
           }) : createCommentVNode(),
-          zoom && $xegrid ? h(ButtonComponent, {
+          zoom && $xegrid ? h(resolveComponent('vxe-button') as ComponentOptions, {
             circle: true,
             icon: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN),
             title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`),

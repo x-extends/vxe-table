@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VxeGridInstance, VxeGridOptions } from '../../../types/index'
+import { VxeGridInstance, VxeGridProps } from '../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -123,7 +123,7 @@ export default defineComponent({
         // 返回一个二维数组的表尾合计
         return [sums]
       }
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     return {
       xGrid,
@@ -143,7 +143,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VxeGridInstance, VxeGridOptions } from 'vxe-table'
+        import { VxeGridInstance, VxeGridProps } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({
@@ -242,7 +242,7 @@ export default defineComponent({
                 // 返回一个二维数组的表尾合计
                 return [sums]
               }
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             return {
               xGrid,

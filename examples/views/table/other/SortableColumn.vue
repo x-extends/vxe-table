@@ -47,7 +47,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, onUnmounted, nextTick } from 'vue'
 import { VXETable } from '../../../../packages/all'
-import { VxeGridInstance, VxeGridOptions, VxeTableInstance } from '../../../../types/index'
+import { VxeGridInstance, VxeGridProps, VxeTableInstance } from '../../../../types/index'
 import Sortable from 'sortablejs'
 
 export default defineComponent({
@@ -164,7 +164,7 @@ export default defineComponent({
           })
         ]
       }
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     let sortable2: any
 
@@ -243,7 +243,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref, onUnmounted, nextTick } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridOptions, VxeTableInstance } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridProps, VxeTableInstance } from 'vxe-table'
         import Sortable from 'sortablejs'
 
         export default defineComponent({
@@ -328,7 +328,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref, onUnmounted, nextTick } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridOptions, VxeTableInstance } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridProps, VxeTableInstance } from 'vxe-table'
         import Sortable from 'sortablejs'
 
         export default defineComponent({
@@ -399,7 +399,7 @@ export default defineComponent({
                   })
                 ]
               }
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             let sortable2: any
 

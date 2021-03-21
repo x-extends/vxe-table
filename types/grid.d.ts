@@ -1,16 +1,16 @@
 import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, DefineComponent } from 'vue'
-import { VxeColumnOptions } from './column'
-import { VxeFormInstance, VxeFormOptions, VxeFormDefines } from './form'
+import { VxeFormInstance, VxeFormProps, VxeFormDefines } from './form'
 import { VxeFormItemProps } from './form-item'
-import { VxeToolbarInstance, VxeToolbarOptions, VxeToolbarPropTypes } from './toolbar'
-import { VxePagerInstance, VxePagerOptions, VxePagerDefines } from './pager'
+import { VxeToolbarInstance, VxeToolbarProps, VxeToolbarPropTypes } from './toolbar'
+import { VxePagerInstance, VxePagerProps, VxePagerDefines } from './pager'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeTableInstance, VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
  * 组件 - 高级表格
+ * @example import { Grid as VxeGrid } from 'vxe-table'
  */
-export const Grid: VXEComponent<VxeGridProps & VxeGridEventProps>;
+export const Grid: VXEComponent<VxeGridProps, VxeGridEventProps>;
 
 export type VxeGridInstance = ComponentPublicInstance<VxeGridProps, VxeGridConstructor>;
 
@@ -59,8 +59,6 @@ export interface GridReactData {
     currentPage: number;
   }
 }
-
-export interface VxeGridOptions extends VxeGridProps, VxeGridListeners { }
 
 export type VxeGridEmits = [
   ...VxeTableEmits,
@@ -138,10 +136,9 @@ export interface VxeGridPrivateMethods extends GridPrivateMethods { }
 export namespace VxeGridPropTypes {
   export type Size = SizeType;
 
-  export interface ColumnOptions extends VxeColumnOptions { }
-  export type Columns = ColumnOptions[];
+  export type Columns = VxeTableDefines.ColumnOptions[];
 
-  export interface PagerConfig extends VxePagerOptions {
+  export interface PagerConfig extends VxePagerProps {
     enabled?: boolean;
     slots?: any;
   }
@@ -223,7 +220,7 @@ export namespace VxeGridPropTypes {
   export interface ProxyOpts extends ProxyConfig { }
 
   export interface ToolbarOpts extends ToolbarConfig { }
-  export interface ToolbarConfig extends VxeToolbarOptions {
+  export interface ToolbarConfig extends VxeToolbarProps {
     enabled?: boolean;
     buttons?: any[];
     zoom?: boolean | {
@@ -237,7 +234,7 @@ export namespace VxeGridPropTypes {
     }
   }
 
-  export interface FormConfig extends VxeFormOptions {
+  export interface FormConfig extends VxeFormProps {
     enabled?: boolean;
     items?: VxeFormItemProps[];
   }
@@ -251,8 +248,8 @@ export namespace VxeGridPropTypes {
   export interface ZoomOpts extends ZoomConfig { }
 }
 
-export type VxeGridProps = VxeTableProps & {
-  columns?: VxeGridPropTypes.ColumnOptions[];
+export type VxeGridProps<D = any> = VxeTableProps<D> & {
+  columns?: VxeGridPropTypes.Columns;
   pagerConfig?: VxeGridPropTypes.PagerConfig;
   proxyConfig?: VxeGridPropTypes.ProxyConfig;
   toolbarConfig?: VxeGridPropTypes.ToolbarConfig;
@@ -454,3 +451,9 @@ export namespace VxeGridEvents {
   export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickEventParams) => void;
   export type Zoom = (params: VxeGridDefines.ZoomEventParams) => void;
 }
+
+/**
+ * 已删除，请使用 VxeGridProps
+ * @deprecated
+ */
+ export interface VxeGridOptions extends VxeGridProps { }

@@ -6,6 +6,8 @@ export const Colgroup = Object.assign(VxeTableColgroupComponent, {
   install (app: App) {
     dynamicApp.component(VxeTableColgroupComponent.name, VxeTableColgroupComponent)
     app.component(VxeTableColgroupComponent.name, VxeTableColgroupComponent)
+    dynamicApp.component('VxeTableColgroup', VxeTableColgroupComponent)
+    app.component('VxeTableColgroup', VxeTableColgroupComponent)
   }
 })
 

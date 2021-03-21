@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridOptions } from '../../../types/index'
+import { VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -80,7 +80,7 @@ export default defineComponent({
         { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
         { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     return {
       gridOptions,
@@ -90,7 +90,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeGridOptions } from 'vxe-table'
+        import { VxeGridProps } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -155,7 +155,7 @@ export default defineComponent({
                 { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             return {
               gridOptions

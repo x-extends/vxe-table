@@ -4,8 +4,9 @@ import { VxeFormItemProps, VxeFormItemPropTypes } from './form-item'
 
 /**
  * 组件 - 表单
+ * @example import { Form as VxeForm } from 'vxe-table'
  */
-export const Form: VXEComponent<VxeFormProps & VxeFormEventProps>;
+export const Form: VXEComponent<VxeFormProps, VxeFormEventProps>;
 
 export type VxeFormInstance = ComponentPublicInstance<VxeFormProps, VxeFormConstructor>;
 
@@ -37,8 +38,6 @@ export interface FormInternalData {
     visible: boolean;
   }
 }
-
-export interface VxeFormOptions extends VxeFormProps, VxeFormListeners { }
 
 export type VxeFormEmits = [
   'toggle-collapse',
@@ -85,10 +84,10 @@ export namespace VxeFormPropTypes {
   export interface TooltipOpts extends TooltipConfig { }
 }
 
-export type VxeFormProps = {
+export type VxeFormProps<D = any> = {
   size?: VxeFormPropTypes.Size;
   loading?: VxeFormPropTypes.Loading;
-  data?: VxeFormPropTypes.Data;
+  data?: D[];
   span?: VxeFormPropTypes.Span;
   align?: VxeFormPropTypes.Align;
   titleAlign?: VxeFormPropTypes.TitleAlign;

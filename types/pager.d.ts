@@ -3,8 +3,9 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 分页
+ * @example import { Pager as VxePager } from 'vxe-table'
  */
-export const Pager: VXEComponent<VxePagerProps & VxePagerEventProps>;
+export const Pager: VXEComponent<VxePagerProps, VxePagerEventProps>;
 
 export type VxePagerInstance = ComponentPublicInstance<VxePagerProps, VxePagerConstructor>;
 
@@ -19,8 +20,6 @@ export interface PagerPrivateRef {
   refElem: Ref<HTMLDivElement>;
 }
 export interface VxePagerPrivateRef extends PagerPrivateRef { }
-
-export interface VxePagerOptions extends VxePagerProps, VxePagerListeners { }
 
 export type VxePagerProps = {
   size?: SizeType;

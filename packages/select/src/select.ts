@@ -41,8 +41,6 @@ export default defineComponent({
     'clear'
   ] as VxeSelectEmits,
   setup (props, context) {
-    const InputComponent = resolveComponent('vxe-input') as ComponentOptions
-
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
@@ -737,7 +735,7 @@ export default defineComponent({
           class: 'vxe-select-slots',
           ref: 'hideOption'
         }, slots.default ? slots.default({}) : []),
-        h(InputComponent, {
+        h(resolveComponent('vxe-input') as ComponentOptions, {
           ref: refInput,
           clearable: props.clearable,
           placeholder: props.placeholder,

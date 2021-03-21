@@ -28,7 +28,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridListeners, VxeGridOptions } from '../../../types/index'
+import { VxeGridInstance, VxeGridListeners, VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -64,7 +64,7 @@ export default defineComponent({
         { title: '操作', width: 200, slots: { default: 'operate' } }
       ],
       data: []
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const findList = () => {
       gridOptions.loading = true
@@ -163,7 +163,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridListeners, VxeGridOptions } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -199,7 +199,7 @@ export default defineComponent({
                 { title: '操作', width: 200, slots: { default: 'operate' } }
               ],
               data: []
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const findList = () => {
               gridOptions.loading = true

@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridEvents, VxeGridOptions } from '../../../types/index'
+import { VxeGridInstance, VxeGridEvents, VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -86,7 +86,7 @@ export default defineComponent({
         { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
         { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const toolbarButtonClickEvent: VxeGridEvents.ToolbarButtonClick = ({ code }) => {
       const $grid = xGrid.value
@@ -124,7 +124,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridEvents, VxeGridOptions } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridEvents, VxeGridProps } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -191,7 +191,7 @@ export default defineComponent({
                 { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
                 { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const toolbarButtonClickEvent: VxeGridEvents.ToolbarButtonClick = ({ code }) => {
               const $grid = xGrid.value

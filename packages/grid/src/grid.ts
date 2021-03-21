@@ -52,11 +52,6 @@ export default defineComponent({
   },
   emits: gridComponentEmits,
   setup (props, context) {
-    const TableComponent = resolveComponent('vxe-table') as ComponentOptions
-    const FormComponent = resolveComponent('vxe-form') as ComponentOptions
-    const ToolbarComponent = resolveComponent('vxe-toolbar') as ComponentOptions
-    const PagerComponent = resolveComponent('vxe-pager') as ComponentOptions
-
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
@@ -438,7 +433,7 @@ export default defineComponent({
               }
             }
             slotVNs.push(
-              h(FormComponent, {
+              h(resolveComponent('vxe-form') as ComponentOptions, {
                 ref: refForm,
                 ...Object.assign({}, formOpts, {
                   data: proxyConfig && proxyOpts.form ? formData : formOpts.data
@@ -488,7 +483,7 @@ export default defineComponent({
             }
           }
           slotVNs.push(
-            h(ToolbarComponent, {
+            h(resolveComponent('vxe-toolbar') as ComponentOptions, {
               ref: refToolbar,
               ...toolbarOpts
             }, toolbarSlots)
@@ -542,7 +537,7 @@ export default defineComponent({
         }
       }
       return [
-        h(TableComponent, {
+        h(resolveComponent('vxe-table') as ComponentOptions, {
           ref: refTable,
           ...tableProps,
           ...tableOns
@@ -595,7 +590,7 @@ export default defineComponent({
             }
           }
           slotVNs.push(
-            h(PagerComponent, {
+            h(resolveComponent('vxe-pager') as ComponentOptions, {
               ref: refPager,
               ...pagerProps,
               onPageChange: pageChangeEvent

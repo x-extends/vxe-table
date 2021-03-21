@@ -4,15 +4,9 @@ import VxeModalComponent, { allActivedModals } from './src/modal'
 import { VXETable } from '../v-x-e-table'
 import { dynamicApp, dynamicStore, checkDynamic } from '../dynamics'
 
-import { VxeModalOptions, VxeModalPropTypes, ModalEventTypes } from '../../types/all'
+import { VxeModalPropTypes, ModalEventTypes, VxeModalDefines } from '../../types/all'
 
-declare module '../../types/all' {
-  interface VxeModalOptions {
-    key?: string | number;
-  }
-}
-
-function openModal (options: VxeModalOptions): Promise<ModalEventTypes> {
+function openModal (options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes> {
   // 使用动态组件渲染动态弹框
   checkDynamic()
   return new Promise(resolve => {
@@ -31,7 +25,7 @@ function openModal (options: VxeModalOptions): Promise<ModalEventTypes> {
           dynamicStore.modals = modalList.filter(item => item.key !== modalOpts.key)
           resolve(params.type)
         }
-      } as VxeModalOptions)
+      } as VxeModalDefines.ModalOptions)
       dynamicStore.modals.push(modalOpts)
     }
   })
@@ -57,7 +51,7 @@ function closeModal (id?: VxeModalPropTypes.ID) {
   return Promise.all(restPromises)
 }
 
-function handleOpen (defOpts: VxeModalOptions, message: VxeModalPropTypes.Message | VxeModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalOptions) {
+function handleOpen (defOpts: VxeModalDefines.ModalOptions, message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
   let opts
   if (XEUtils.isObject(message)) {
     opts = message
@@ -67,14 +61,14 @@ function handleOpen (defOpts: VxeModalOptions, message: VxeModalPropTypes.Messag
   return openModal({ ...defOpts, ...options, ...opts })
 }
 
-function openAlert (message: VxeModalPropTypes.Message | VxeModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalOptions) {
+function openAlert (message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
   return handleOpen({
     type: 'alert',
     showFooter: true
   }, message, title, options)
 }
 
-function openConfirm (message: VxeModalPropTypes.Message | VxeModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalOptions) {
+function openConfirm (message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
   return handleOpen({
     type: 'confirm',
     status: 'question',
@@ -82,7 +76,7 @@ function openConfirm (message: VxeModalPropTypes.Message | VxeModalOptions, titl
   }, message, title, options)
 }
 
-function openMessage (message: VxeModalPropTypes.Message | VxeModalOptions, options?: VxeModalOptions) {
+function openMessage (message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, options?: VxeModalDefines.ModalOptions) {
   return handleOpen({
     type: 'message',
     mask: false,

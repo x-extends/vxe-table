@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeGridListeners, VxeGridOptions } from '../../../types/index'
+import { VxeGridListeners, VxeGridProps } from '../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
@@ -97,7 +97,7 @@ export default defineComponent({
           })
         ]
       }
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const gridEvents: VxeGridListeners = {
       headerCellClick ({ column }) {
@@ -156,7 +156,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeGridListeners, VxeGridOptions } from 'vxe-table'
+        import { VxeGridListeners, VxeGridProps } from 'vxe-table'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({
@@ -235,7 +235,7 @@ export default defineComponent({
                   })
                 ]
               }
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const gridEvents: VxeGridListeners = {
               headerCellClick ({ column }) {

@@ -6,17 +6,7 @@
       </template>
       <template #dropdown>
         <div class="edit-down-wrapper">
-          <vxe-grid
-            highlight-hover-row
-            auto-resize
-            height="auto"
-            :loading="demo1.loading"
-            :pager-config="demo1.tablePage"
-            :data="demo1.tableData"
-            :columns="demo1.tableColumn"
-            @cell-click="selectEvent"
-            @page-change="pageChangeEvent">
-          </vxe-grid>
+          <vxe-grid v-bind="gridOptions" @cell-click="selectEvent" @page-change="pageChangeEvent"></vxe-grid>
         </div>
       </template>
     </vxe-pulldown>
@@ -25,7 +15,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType, reactive, ref } from 'vue'
-import { VxePulldownInstance, VxeTableEvents, VxeColumnOptions, VxePagerEvents, VxeGlobalRendererHandles } from '../../../../../types/index'
+import { VxePulldownInstance, VxeTableEvents, VxeGridProps, VxePagerEvents, VxeGlobalRendererHandles } from '../../../../../types/index'
 
 export default defineComponent({
   name: 'EditDownTable',
@@ -35,23 +25,29 @@ export default defineComponent({
   setup (props) {
     const demo1 = reactive({
       row: null as any,
-      column: null as any,
+      column: null as any
+    })
+
+    const xDown = ref({} as VxePulldownInstance)
+
+    const gridOptions = reactive({
+      highlightHoverRow: true,
+      autoResize: true,
+      height: 'auto',
       loading: false,
-      tableData: [] as any[],
-      tableColumn: [
+      pagerConfig: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10
+      },
+      columns: [
         { type: 'seq' },
         { field: 'name', title: 'Name' },
         { field: 'role', title: 'Role' },
         { field: 'sex', title: 'Sex' }
-      ] as VxeColumnOptions[],
-      tablePage: {
-        total: 0,
-        currentPage: 1,
-        pageSize: 10
-      }
-    })
-
-    const xDown = ref({} as VxePulldownInstance)
+      ],
+      data: []
+    } as VxeGridProps)
 
     const getData = (): Promise<any[]> => {
       return new Promise(resolve => {
@@ -77,7 +73,7 @@ export default defineComponent({
         demo1.row = row
         demo1.column = column
         getData().then((data) => {
-          demo1.tableData = data
+          gridOptions.data = data
         })
       }
     }
@@ -91,13 +87,13 @@ export default defineComponent({
       const { row, column } = demo1
       if (column) {
         const cellValue = row[column.property]
-        demo1.loading = true
+        gridOptions.loading = true
         getData().then((data) => {
-          demo1.loading = false
+          gridOptions.loading = false
           if (cellValue) {
-            demo1.tableData = data.filter((item) => item.name.indexOf(cellValue) > -1)
+            gridOptions.data = data.filter((item) => item.name.indexOf(cellValue) > -1)
           } else {
-            demo1.tableData = data
+            gridOptions.data = data
           }
         })
       }
@@ -109,12 +105,15 @@ export default defineComponent({
     }
 
     const pageChangeEvent: VxePagerEvents.PageChange = ({ currentPage, pageSize }) => {
-      demo1.tablePage.currentPage = currentPage
-      demo1.tablePage.pageSize = pageSize
-      demo1.loading = true
+      const { pagerConfig } = gridOptions
+      if (pagerConfig) {
+        pagerConfig.currentPage = currentPage
+        pagerConfig.pageSize = pageSize
+      }
+      gridOptions.loading = true
       getData().then((data) => {
-        demo1.loading = false
-        demo1.tableData = data
+        gridOptions.loading = false
+        gridOptions.data = data
       })
     }
 
@@ -131,6 +130,7 @@ export default defineComponent({
 
     return {
       demo1,
+      gridOptions,
       xDown,
       clickEvent,
       keyupEvent,

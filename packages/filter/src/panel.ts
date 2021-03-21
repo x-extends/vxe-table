@@ -84,7 +84,7 @@ export default defineComponent({
     }
 
     // （单选）筛选发生改变
-    const changeRadioOption = (evnt: Event, checked: any, item: any) => {
+    const changeRadioOption = (evnt: Event, checked: boolean, item: any) => {
       const { filterStore } = props
       filterStore.options.forEach((option: any) => {
         option._checked = false
@@ -106,13 +106,13 @@ export default defineComponent({
     }
 
     // （多选）筛选发生改变
-    const changeMultipleOption = (evnt: Event, checked: any, item: any) => {
+    const changeMultipleOption = (evnt: Event, checked: boolean, item: any) => {
       item._checked = checked
       $xetable.checkFilterOptions()
     }
 
     // 筛选发生改变
-    const changeOption = (evnt: Event, checked: any, item: any) => {
+    const changeOption = (evnt: Event, checked: boolean, item: any) => {
       const { filterStore } = props
       if (filterStore.multiple) {
         changeMultipleOption(evnt, checked, item)
@@ -121,7 +121,7 @@ export default defineComponent({
       }
     }
 
-    const changeAllOption = (evnt: Event, checked: any) => {
+    const changeAllOption = (evnt: Event, checked: boolean) => {
       const { filterStore } = props
       if (filterStore.multiple) {
         filterCheckAllEvent(evnt, checked)
@@ -171,7 +171,7 @@ export default defineComponent({
               'is--indeterminate': multiple && filterStore.isIndeterminate
             }],
             title: GlobalConfig.i18n(multiple ? 'vxe.table.allTitle' : 'vxe.table.allFilter'),
-            onClick: (evnt: Event) => {
+            onClick: (evnt: MouseEvent) => {
               changeAllOption(evnt, !filterStore.isAllSelected)
             }
           }, (multiple ? [
@@ -198,7 +198,7 @@ export default defineComponent({
               'is--checked': item._checked
             }],
             title: item.label,
-            onClick: (evnt: any) => {
+            onClick: (evnt: MouseEvent) => {
               changeOption(evnt, !item._checked, item)
             }
           }, (multiple ? [

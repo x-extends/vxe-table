@@ -2,7 +2,7 @@ import { h, VNode } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { UtilTools, DomTools, isEnableConf, isEmptyValue } from '../../tools'
 import { createColumn } from './util'
 
 import { VxeColumnProps, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
@@ -164,7 +164,7 @@ export const Cell = {
     return renderHelpIcon(params).concat(Cell.renderHeaderTitle(params))
   },
   renderDefaultCell (params: VxeTableDefines.CellRenderBodyParams) {
-    const { $table, column } = params
+    const { $table, row, column } = params
     const { slots, editRender, cellRender } = column
     const renderOpts = editRender || cellRender
     const defaultSlot = slots ? slots.default : null
@@ -179,10 +179,17 @@ export const Cell = {
         return compFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))
       }
     }
+    const cellValue = $table.getCellLabel(row, column)
+    const cellPlaceholder = editRender ? editRender.placeholder : ''
     return [
       h('span', {
         class: 'vxe-cell--label'
-      }, getDefaultCellLabel(params))
+      }, editRender && isEmptyValue(cellValue) ? [
+        // 如果设置占位符
+        h('span', {
+          class: 'vxe-cell--placeholder'
+        }, UtilTools.formatText(UtilTools.getFuncText(cellPlaceholder), 1))
+      ] : UtilTools.formatText(cellValue, 1))
     ]
   },
   renderTreeCell (params: VxeTableDefines.CellRenderBodyParams) {

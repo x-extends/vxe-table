@@ -146,6 +146,7 @@ export default {
         dblclick: 'dblclick trigger',
         selectContent: 'Select the content',
         autoClear: 'Auto clear',
+        cellPlaceholder: 'Cell placeholder',
         insert: 'Insert',
         delete: 'Delete',
         revert: 'Revert',

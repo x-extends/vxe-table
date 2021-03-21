@@ -1,7 +1,7 @@
 import { h, resolveComponent, ComponentOptions } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from './conf'
-import { VNTools, UtilTools } from '../../tools'
+import { VNTools, UtilTools, isEmptyValue } from '../../tools'
 
 import { VxeGlobalRendererHandles, VxeGlobalRenderer, VxeColumnPropTypes } from '../../../types/all'
 
@@ -10,10 +10,6 @@ const { getOnName } = VNTools
 const componentDefaultModelProp = 'modelValue'
 
 const defaultCompProps = { transfer: true }
-
-function isEmptyValue (cellValue: any) {
-  return cellValue === null || cellValue === undefined || cellValue === ''
-}
 
 function getModelEvent (renderOpts: any) {
   switch (renderOpts.name) {
@@ -98,6 +94,19 @@ function getComponentFormItemProps (renderOpts: any, params: any, value: any, de
 
 function isImmediateCell (renderOpts: VxeColumnPropTypes.EditRender, params: any) {
   return params.$type === 'cell' || getInputImmediateModel(renderOpts)
+}
+
+function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any) {
+  const { placeholder } = renderOpts
+  return [
+    h('span', {
+      class: 'vxe-cell--label'
+    }, isEmptyValue(cellLabel) ? [
+      h('span', {
+        class: 'vxe-cell--placeholder'
+      }, UtilTools.formatText(UtilTools.getFuncText(placeholder), 1))
+    ] : UtilTools.formatText(cellLabel, 1))
+  ]
 }
 
 /**
@@ -416,7 +425,7 @@ function getSelectCellValue (renderOpts: any, { row, column }: any) {
       return selectItem ? selectItem[labelProp] : value
     }).join(', ')
   }
-  return null
+  return ''
 }
 
 /**
@@ -540,7 +549,7 @@ const renderMap: { [name: string]: any } = {
     renderEdit: nativeSelectEditRender,
     renderDefault: nativeSelectEditRender,
     renderCell (renderOpts: any, params: any) {
-      return getSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
     renderFilter (renderOpts: any, params: any) {
       const { column } = params
@@ -588,7 +597,7 @@ const renderMap: { [name: string]: any } = {
             break
         }
       }
-      return cellValue
+      return getCellLabelVNs(renderOpts, params, cellValue)
     },
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
@@ -612,7 +621,7 @@ const renderMap: { [name: string]: any } = {
     renderEdit: defaultSelectEditRender,
     renderDefault: defaultSelectEditRender,
     renderCell (renderOpts: any, params: any) {
-      return getSelectCellValue(renderOpts, params)
+      return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
     renderFilter (renderOpts: any, params: any) {
       const { column } = params

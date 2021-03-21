@@ -1,11 +1,11 @@
 import { defineComponent, h, createApp, resolveComponent, reactive, ComponentOptions } from 'vue'
 
-import { VxeModalOptions } from '../../types/all'
+import { VxeModalDefines } from '../../types/all'
 
 let dynamicContainerElem: HTMLElement
 
 export const dynamicStore = reactive({
-  modals: [] as VxeModalOptions[]
+  modals: [] as VxeModalDefines.ModalOptions[]
 })
 
 /**
@@ -14,11 +14,10 @@ export const dynamicStore = reactive({
 const VxeDynamics = defineComponent({
   setup () {
     return () => {
-      const ModalComponent = resolveComponent('vxe-modal') as ComponentOptions
       const { modals } = dynamicStore
       return h('div', {
         class: 'vxe-dynamics--modal'
-      }, modals.map((item) => h(ModalComponent, item)))
+      }, modals.map((item) => h(resolveComponent('vxe-modal') as ComponentOptions, item)))
     }
   }
 })

@@ -27,7 +27,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { ElMessageBox } from 'element-plus'
-import { VxeGridInstance, VxeGridOptions, VxeGridListeners } from '../../../../types/index'
+import { VxeGridInstance, VxeGridProps, VxeGridListeners } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -91,7 +91,7 @@ export default defineComponent({
         { field: 'flag', title: 'ElSwitch', width: 100, cellRender: { name: 'ElSwitch' } },
         { field: 'rate', title: 'ElRate', width: 200, cellRender: { name: 'ElRate' } }
       ]
-    } as VxeGridOptions)
+    } as VxeGridProps)
 
     const gridEvents: VxeGridListeners = {
       checkboxAll () {
@@ -246,7 +246,7 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { ElMessageBox } from 'element-plus'
-        import { VxeGridInstance, VxeGridOptions, VxeGridListeners } from 'vxe-table'
+        import { VxeGridInstance, VxeGridProps, VxeGridListeners } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -310,7 +310,7 @@ export default defineComponent({
                 { field: 'flag', title: 'ElSwitch', width: 100, cellRender: { name: 'ElSwitch' } },
                 { field: 'rate', title: 'ElRate', width: 200, cellRender: { name: 'ElRate' } }
               ]
-            } as VxeGridOptions)
+            } as VxeGridProps)
 
             const gridEvents: VxeGridListeners = {
               checkboxAll () {
