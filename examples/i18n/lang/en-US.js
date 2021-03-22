@@ -239,8 +239,8 @@ export default {
 
         api: 'API',
         vxeTable: 'vxe-table',
-        vxeTableColgroup: 'vxe-table-colgroup',
-        vxeTableColumn: 'vxe-table-column',
+        vxeTableColgroup: 'vxe-colgroup',
+        vxeTableColumn: 'vxe-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
         vxeExcel: 'vxe-excel',
