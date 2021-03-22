@@ -63,8 +63,8 @@ import XEUtils from 'xe-utils'
 import pack from '../../../package.json'
 import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
-import tableColgroupAPI from '../../api/table-colgroup'
-import tableColumnAPI from '../../api/column'
+import colgroupAPI from '../../api/colgroup'
+import columnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
 import virtualTreeAPI from '../../api/virtual-tree'
@@ -235,11 +235,11 @@ export default {
             case 'table':
               apis = tableAPI
               break
-            case 'table-colgroup':
-              apis = tableColgroupAPI
+            case 'colgroup':
+              apis = colgroupAPI
               break
-            case 'table-column':
-              apis = tableColumnAPI
+            case 'column':
+              apis = columnAPI
               break
             case 'toolbar':
               apis = toolbarAPI
