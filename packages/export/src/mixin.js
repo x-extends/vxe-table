@@ -209,9 +209,9 @@ function getFooterCellValue ($xetable, opts, items, column) {
   return cellValue
 }
 
-function getFooterData (opts, footerData) {
+function getFooterData (opts, footerTableData) {
   const { footerFilterMethod } = opts
-  return footerFilterMethod ? footerData.filter((items, index) => footerFilterMethod({ items, $rowIndex: index })) : footerData
+  return footerFilterMethod ? footerTableData.filter((items, index) => footerFilterMethod({ items, $rowIndex: index })) : footerTableData
 }
 
 function toCsv ($xetable, opts, columns, datas) {
@@ -223,8 +223,8 @@ function toCsv ($xetable, opts, columns, datas) {
     content += columns.map(column => `"${row[column.id]}"`).join(',') + enterSymbol
   })
   if (opts.isFooter) {
-    const footerData = $xetable.footerData
-    const footers = getFooterData(opts, footerData)
+    const footerTableData = $xetable.footerTableData
+    const footers = getFooterData(opts, footerTableData)
     footers.forEach(rows => {
       content += columns.map(column => `"${getFooterCellValue($xetable, opts, rows, column)}"`).join(',') + enterSymbol
     })
@@ -241,8 +241,8 @@ function toTxt ($xetable, opts, columns, datas) {
     content += columns.map(column => `${row[column.id]}`).join('\t') + enterSymbol
   })
   if (opts.isFooter) {
-    const footerData = $xetable.footerData
-    const footers = getFooterData(opts, footerData)
+    const footerTableData = $xetable.footerTableData
+    const footers = getFooterData(opts, footerTableData)
     footers.forEach(rows => {
       content += columns.map(column => `${getFooterCellValue($xetable, opts, rows, column)}`).join(',') + enterSymbol
     })
@@ -360,8 +360,8 @@ function toHtml ($xetable, opts, columns, datas) {
     body += '</tbody>'
   }
   if (isFooter) {
-    const footerData = $xetable.footerData
-    const footers = getFooterData(opts, footerData)
+    const footerTableData = $xetable.footerTableData
+    const footers = getFooterData(opts, footerTableData)
     if (footers.length) {
       body += '<tfoot>'
       footers.forEach(rows => {
@@ -411,8 +411,8 @@ function toXML ($xetable, opts, columns, datas) {
     xml += '<Row>' + columns.map(column => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('') + '</Row>'
   })
   if (opts.isFooter) {
-    const footerData = $xetable.footerData
-    const footers = getFooterData(opts, footerData)
+    const footerTableData = $xetable.footerTableData
+    const footers = getFooterData(opts, footerTableData)
     footers.forEach(rows => {
       xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, rows, column)}</Data></Cell>`).join('')}</Row>`
     })
@@ -972,9 +972,9 @@ export default {
       Object.assign(this.importParams, defOpts)
     },
     _openExport (options) {
-      const { $toolbar, exportConfig, customOpts, exportOpts, collectColumn, footerData } = this
+      const { $toolbar, exportConfig, customOpts, exportOpts, collectColumn, footerTableData } = this
       const selectRecords = this.getCheckboxRecords()
-      const hasFooter = !!footerData.length
+      const hasFooter = !!footerTableData.length
       const defOpts = Object.assign({ message: true, isHeader: true }, exportOpts, options)
       const types = defOpts.types || VXETable.exportTypes
       const checkMethod = customOpts.checkMethod || ($toolbar ? $toolbar.customOpts.checkMethod : null)

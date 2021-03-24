@@ -154,8 +154,71 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: '*',
-        desc: '原生事件',
+        name: 'change',
+        desc: '在值发生变化时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'keydown',
+        desc: '在键盘按下时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'keyup',
+        desc: '在键盘按下弹起时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'mousewheel',
+        desc: '在鼠标在输入框内滚动时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'click',
+        desc: '在单击输入框时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'dblclick',
+        desc: '在双击输入框时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'focus',
+        desc: '在输入框聚焦时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ $event }',
+        list: []
+      },
+      {
+        name: 'blur',
+        desc: '在输入框失焦时触发该事件',
         version: '',
         type: '',
         enum: '',
