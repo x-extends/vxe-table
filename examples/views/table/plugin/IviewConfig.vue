@@ -37,14 +37,43 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-
 export default {
   data () {
     const restaurants = ['前端', '后端', '开发', '测试']
     return {
       loading: false,
       tableData: [],
+      sexList: [
+        { label: '', value: '' },
+        { label: '男', value: '1' },
+        { label: '女', value: '0' }
+      ],
+      regionList: [
+        {
+          label: '北京',
+          value: 1,
+          children: [
+            { value: 3, label: '东城区' },
+            { value: 4, label: '西城区' }
+          ]
+        },
+        {
+          label: '上海',
+          value: 21,
+          children: [
+            { value: 23, label: '黄浦区' },
+            { value: 24, label: '卢湾区' }
+          ]
+        },
+        {
+          label: '广东',
+          value: 42,
+          children: [
+            { value: 43, label: '广州市' },
+            { value: 67, label: '深圳市' }
+          ]
+        }
+      ],
       selectRecords: [],
       tableColumn: [
         { type: 'checkbox', width: 60 },
@@ -93,10 +122,41 @@ export default {
         `
         export default {
           data () {
-            let restaurants = ['前端', '后端', '开发', '测试']
+            const restaurants = ['前端', '后端', '开发', '测试']
             return {
               loading: false,
               tableData: [],
+              sexList: [
+                { label: '', value: '' },
+                { label: '男', value: '1' },
+                { label: '女', value: '0' }
+              ],
+              regionList: [
+                {
+                  label: '北京',
+                  value: 1,
+                  children: [
+                    { value: 3, label: '东城区' },
+                    { value: 4, label: '西城区' }
+                  ]
+                },
+                {
+                  label: '上海',
+                  value: 21,
+                  children: [
+                    { value: 23, label: '黄浦区' },
+                    { value: 24, label: '卢湾区' }
+                  ]
+                },
+                {
+                  label: '广东',
+                  value: 42,
+                  children: [
+                    { value: 43, label: '广州市' },
+                    { value: 67, label: '深圳市' }
+                  ]
+                }
+              ],
               selectRecords: [],
               tableColumn: [
                 { type: 'checkbox', width: 60 },
@@ -123,27 +183,28 @@ export default {
           created () {
             this.loading = true
             setTimeout(() => {
-              this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+              this.tableData = [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex1: [], region: [], age: 28, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 5, rate1: 59, flag: false, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '1', sex1: [], region: [], age: 22, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 2, rate1: 22, flag: false, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '0', sex1: [], region: [], age: 32, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 12, flag: false, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', sex1: ['1', '0'], region: [], age: 23, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', color1: '', tree1: '', tree2: [], date7: '', rate: 33, rate1: 4, flag: true, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', sex1: ['1', '0'], region: [], age: 30, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', color1: '', tree1: '', tree2: [], date7: '', rate: 0, rate1: 15, flag: true, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '0', sex1: [], region: [], age: 21, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 73, flag: false, address: 'Shenzhen' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1', sex1: ['1'], region: [], age: 29, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 0, rate1: 0, flag: true, address: 'Guangzhou' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1', sex1: [], region: [], age: 35, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 2, rate1: 14, flag: false, address: 'Shenzhen' },
+                { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', sex1: ['0'], region: [], age: 24, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 52, flag: false, address: 'Shenzhen' },
+                { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', sex1: [], region: [], age: 20, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 4, rate1: 83, flag: false, address: 'Guangzhou' }
+              ]
               this.loading = false
             }, 500)
-            this.findSexList()
-            this.findRegionList()
+            this.tableColumn[5].editRender.options = this.sexList
+            this.tableColumn[6].editRender.options = this.sexList
+            this.tableColumn[8].editRender.props.data = this.regionList
             this.findSexGroupList()
           },
           methods: {
-            findSexList () {
-              return XEAjax.get('/api/conf/sex/list').then(data => {
-                this.tableColumn[5].editRender.options = data
-                this.tableColumn[6].editRender.options = data
-              })
-            },
-            findRegionList () {
-              return XEAjax.get('/api/conf/region/list').then(data => {
-                this.tableColumn[8].editRender.props.data = data
-              })
-            },
             findSexGroupList () {
-              let sexGroupList = [
+              const sexGroupList = [
                 {
                   label: '分组1',
                   options: [
@@ -166,8 +227,8 @@ export default {
               this.tableColumn[7].editRender.optionGroups = sexGroupList
             },
             insertEvent () {
-              let xGrid = this.$refs.xGrid
-              let record = {
+              const xGrid = this.$refs.xGrid
+              const record = {
                 role: '',
                 age: 18,
                 sex1: [],
@@ -178,7 +239,7 @@ export default {
               xGrid.insert(record).then(({ row }) => xGrid.setActiveRow(row))
             },
             saveEvent () {
-              let { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+              const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
                 this.$alert(\`insertRecords=\${insertRecords.length}; removeRecords=\${removeRecords.length}; updateRecords=\${updateRecords.length}\`)
               } else {
@@ -200,25 +261,26 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      this.tableData = window.MOCK_DATA_LIST.slice(0, 10)
+      this.tableData = [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex1: [], region: [], age: 28, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 5, rate1: 59, flag: false, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: '1', sex1: [], region: [], age: 22, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 2, rate1: 22, flag: false, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: '0', sex1: [], region: [], age: 32, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 12, flag: false, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0', sex1: ['1', '0'], region: [], age: 23, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', color1: '', tree1: '', tree2: [], date7: '', rate: 33, rate1: 4, flag: true, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0', sex1: ['1', '0'], region: [], age: 30, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', color1: '', tree1: '', tree2: [], date7: '', rate: 0, rate1: 15, flag: true, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '0', sex1: [], region: [], age: 21, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 73, flag: false, address: 'Shenzhen' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1', sex1: ['1'], region: [], age: 29, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 0, rate1: 0, flag: true, address: 'Guangzhou' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1', sex1: [], region: [], age: 35, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 2, rate1: 14, flag: false, address: 'Shenzhen' },
+        { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: '1', sex1: ['0'], region: [], age: 24, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 3, rate1: 52, flag: false, address: 'Shenzhen' },
+        { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: '1', sex1: [], region: [], age: 20, date: '', date1: '', date2: '', date3: '', date4: [], date5: '', date7: '', color1: '', tree1: '', tree2: [], rate: 4, rate1: 83, flag: false, address: 'Guangzhou' }
+      ]
       this.loading = false
     }, 500)
-    this.findSexList()
-    this.findRegionList()
+    this.tableColumn[5].editRender.options = this.sexList
+    this.tableColumn[6].editRender.options = this.sexList
+    this.tableColumn[8].editRender.props.data = this.regionList
     this.findSexGroupList()
   },
   methods: {
-    findSexList () {
-      return XEAjax.get('/api/conf/sex/list').then(data => {
-        this.tableColumn[5].editRender.options = data
-        this.tableColumn[6].editRender.options = data
-      })
-    },
-    findRegionList () {
-      return XEAjax.get('/api/conf/region/list').then(data => {
-        this.tableColumn[8].editRender.props.data = data
-      })
-    },
     findSexGroupList () {
       const sexGroupList = [
         {

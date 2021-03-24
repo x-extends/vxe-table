@@ -1093,12 +1093,12 @@ const Methods = {
    * 如果存在排序，继续处理
    */
   getTableData () {
-    const { tableFullData, afterFullData, tableData, footerData } = this
+    const { tableFullData, afterFullData, tableData, footerTableData } = this
     return {
       fullData: tableFullData.slice(0),
       visibleData: afterFullData.slice(0),
       tableData: tableData.slice(0),
-      footerData: footerData.slice(0)
+      footerData: footerTableData.slice(0)
     }
   },
   /**
@@ -3928,7 +3928,7 @@ const Methods = {
   updateFooter () {
     const { showFooter, visibleColumn, footerMethod } = this
     if (showFooter && footerMethod) {
-      this.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: this, $grid: this.$xegrid }) : []
+      this.footerTableData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: this, $grid: this.$xegrid }) : []
     }
     return this.$nextTick()
   },

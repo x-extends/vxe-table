@@ -20,7 +20,7 @@ function mergeFooterMethod (mergeFooterList, _rowIndex, _columnIndex) {
 export default {
   name: 'VxeTableFooter',
   props: {
-    footerData: Array,
+    footerTableData: Array,
     tableColumn: Array,
     fixedColumn: Array,
     fixedType: String,
@@ -37,7 +37,7 @@ export default {
     elemStore[`${prefix}xSpace`] = $refs.xSpace
   },
   render (h) {
-    let { _e, $parent: $xetable, fixedType, fixedColumn, tableColumn, footerData } = this
+    let { _e, $parent: $xetable, fixedType, fixedColumn, tableColumn, footerTableData } = this
     const {
       $listeners: tableListeners,
       tId,
@@ -110,7 +110,7 @@ export default {
          */
         h('tfoot', {
           ref: 'tfoot'
-        }, footerData.map((list, _rowIndex) => {
+        }, footerTableData.map((list, _rowIndex) => {
           const $rowIndex = _rowIndex
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: cellType }) : footerRowClassName : ''],
@@ -131,7 +131,7 @@ export default {
             const columnIndex = $xetable.getColumnIndex(column)
             const _columnIndex = $xetable.getVTColumnIndex(column)
             const itemIndex = _columnIndex
-            const params = { $table: $xetable, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerData }
+            const params = { $table: $xetable, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerTableData }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true

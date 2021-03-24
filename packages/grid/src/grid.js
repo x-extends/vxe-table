@@ -23,8 +23,9 @@ function getPaddingTopBottomSize (elem) {
 }
 
 function renderDefaultForm (h, _vm) {
-  const { proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
+  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
   if (isEnableConf(formConfig) && formOpts.items && formOpts.items.length) {
+    const formSlots = {}
     if (!formOpts.inited) {
       formOpts.inited = true
       const beforeItem = proxyOpts.beforeItem
@@ -34,6 +35,16 @@ function renderDefaultForm (h, _vm) {
         })
       }
     }
+    // 处理插槽
+    formOpts.items.forEach((item) => {
+      XEUtils.each(item.slots, (func) => {
+        if (!XEUtils.isFunction(func)) {
+          if ($scopedSlots[func]) {
+            formSlots[func] = $scopedSlots[func]
+          }
+        }
+      })
+    })
     return [
       h('vxe-form', {
         props: Object.assign({}, formOpts, {
@@ -44,7 +55,8 @@ function renderDefaultForm (h, _vm) {
           reset: _vm.resetEvent,
           'submit-invalid': _vm.submitInvalidEvent,
           'toggle-collapse': _vm.togglCollapseEvent
-        }
+        },
+        scopedSlots: formSlots
       })
     ]
   }

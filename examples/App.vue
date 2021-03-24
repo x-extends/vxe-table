@@ -1780,13 +1780,14 @@ export default {
             //     name: 'TablePluginShortcutKey'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.exportXLSXPlugin',
-            //   demoUrl: 'https://jsrun.pro/PIWKp/edit',
-            //   locat: {
-            //     name: 'TablePluginExportXLSX'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.exportXLSXPlugin',
+              disabled: XEUtils.browse().msie,
+              demoUrl: 'https://jsrun.pro/PIWKp/edit',
+              locat: {
+                name: 'TablePluginExportXLSX'
+              }
+            },
             {
               label: 'app.aside.nav.exportPDFPlugin',
               demoUrl: 'https://jsrun.pro/I8WKp/edit',

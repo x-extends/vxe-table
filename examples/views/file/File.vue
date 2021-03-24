@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-
 export default {
   data () {
     return {
@@ -95,7 +93,7 @@ export default {
             },
             clickEvent10 () {
               // 请求文件
-              XEAjax.fetch('/vxe-table/static/other/img2.gif').then(response => {
+              fetch('/vxe-table/static/other/img2.gif').then(response => {
                 response.blob().then(blob => {
                   // 下载到本地
                   this.$XSaveFile({ filename: '图片', type: 'gif', content: blob })
@@ -147,7 +145,7 @@ export default {
     },
     clickEvent10 () {
       // 请求文件
-      XEAjax.fetch('/vxe-table/static/other/img2.gif').then(response => {
+      fetch('/vxe-table/static/other/img2.gif').then(response => {
         response.blob().then(blob => {
           // 下载到本地
           this.$XSaveFile({ filename: '图片', type: 'gif', content: blob })

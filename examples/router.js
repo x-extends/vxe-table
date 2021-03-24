@@ -1612,11 +1612,11 @@ export default new Router({
       name: 'TablePluginShortcutKey',
       component: TablePluginShortcutKey
     },
-    // {
-    //   path: '/table/plugin/exportXLSX',
-    //   name: 'TablePluginExportXLSX',
-    //   component: TablePluginExportXLSX
-    // },
+    {
+      path: '/table/plugin/exportXLSX',
+      name: 'TablePluginExportXLSX',
+      component: () => import(/* webpackChunkName: 'export-xlsx' */ './views/table/plugin/ExportXLSX.vue')
+    },
     {
       path: '/table/plugin/exportPDF',
       name: 'TablePluginExportPDF',

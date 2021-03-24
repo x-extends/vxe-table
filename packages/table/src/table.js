@@ -15,7 +15,7 @@ import methods from './methods'
  * @param {String} fixedType 固定列类型
  */
 function renderFixed (h, $xetable, fixedType) {
-  const { _e, tableData, tableColumn, tableGroupColumn, vSize, showHeader, showFooter, columnStore, footerData } = $xetable
+  const { _e, tableData, tableColumn, tableGroupColumn, vSize, showHeader, showFooter, columnStore, footerTableData } = $xetable
   const fixedColumn = columnStore[`${fixedType}List`]
   return h('div', {
     class: `vxe-table--fixed-${fixedType}-wrapper`,
@@ -44,7 +44,7 @@ function renderFixed (h, $xetable, fixedType) {
     }),
     showFooter ? h('vxe-table-footer', {
       props: {
-        footerData,
+        footerTableData,
         tableColumn,
         fixedColumn,
         fixedType,
@@ -294,7 +294,7 @@ export default {
       // 单选框属性，选中行
       selectRow: null,
       // 表尾合计数据
-      footerData: [],
+      footerTableData: [],
       // 展开列信息
       expandColumn: null,
       hasFixedColumn: false,
@@ -907,7 +907,7 @@ export default {
       filterStore,
       ctxMenuStore,
       ctxMenuOpts,
-      footerData,
+      footerTableData,
       hasTip
     } = this
     const { leftList, rightList } = columnStore
@@ -978,7 +978,7 @@ export default {
           showFooter ? h('vxe-table-footer', {
             ref: 'tableFooter',
             props: {
-              footerData,
+              footerTableData,
               tableColumn,
               size: vSize
             }

@@ -32,6 +32,19 @@ function getResetValue (value, resetValue) {
   return resetValue
 }
 
+function callSlot (_vm, slotFunc, params, h) {
+  if (slotFunc) {
+    const { $scopedSlots } = _vm
+    if (XEUtils.isString(slotFunc)) {
+      slotFunc = $scopedSlots[slotFunc] || null
+    }
+    if (XEUtils.isFunction(slotFunc)) {
+      return slotFunc.call(_vm, params, h)
+    }
+  }
+  return []
+}
+
 function renderPrefixIcon (h, titlePrefix) {
   return h('span', {
     class: 'vxe-form--item-title-prefix'
@@ -76,7 +89,7 @@ function renderTitle (h, _vm, item) {
   tss.push(
     h('span', {
       class: 'vxe-form--item-title-label'
-    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? _vm.callSlot(slots.title, params, h) : UtilTools.getFuncText(item.title)))
+    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? callSlot(_vm, slots.title, params, h) : UtilTools.getFuncText(item.title)))
   )
   if (titleSuffix) {
     tss.push(
@@ -127,7 +140,7 @@ function renderItems (h, _vm) {
     }
     let contentVNs = []
     if (slots && slots.default) {
-      contentVNs = _vm.callSlot(slots.default, params, h)
+      contentVNs = callSlot(_vm, slots.default, params, h)
     } else if (compConf && compConf.renderItemContent) {
       contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
     } else if (compConf && compConf.renderItem) {
@@ -247,10 +260,12 @@ export default {
     }
   },
   created () {
-    const { items } = this
-    if (items) {
-      this.loadItem(items)
-    }
+    this.$nextTick(() => {
+      const { items } = this
+      if (items) {
+        this.loadItem(items)
+      }
+    })
   },
   watch: {
     staticItems (value) {
@@ -298,18 +313,6 @@ export default {
     ]))
   },
   methods: {
-    callSlot (slotFunc, params, h) {
-      if (slotFunc) {
-        const { $scopedSlots } = this
-        if (XEUtils.isString(slotFunc)) {
-          slotFunc = $scopedSlots[slotFunc] || null
-        }
-        if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params, h)
-        }
-      }
-      return []
-    },
     loadItem (list) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         const { $scopedSlots } = this

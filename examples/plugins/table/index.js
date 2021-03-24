@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
 
+import XEUtils from 'xe-utils'
 import {
   VXETable,
 
@@ -46,7 +47,6 @@ import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
 import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
-// import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx'
 import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
 import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 // import VXETablePluginShortcutKey from 'vxe-table-plugin-shortcut-key'
@@ -124,7 +124,17 @@ VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
 VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginMenus)
-// VXETable.use(VXETablePluginExportXLSX)
 VXETable.use(VXETablePluginExportPDF)
 VXETable.use(VXETablePluginRenderer)
 // VXETable.use(VXETablePluginShortcutKey)
+
+if (!XEUtils.browse().msie) {
+  const exceljs = document.createElement('script')
+  exceljs.src = 'https://cdn.jsdelivr.net/npm/exceljs@4.2.1/dist/exceljs.js'
+  exceljs.onload = () => {
+    import(/* webpackChunkName: 'export-xlsx' */ 'vxe-table-plugin-export-xlsx').then((VXETablePluginExportXLSX) => {
+      VXETable.use(VXETablePluginExportXLSX.default)
+    })
+  }
+  document.body.appendChild(exceljs)
+}

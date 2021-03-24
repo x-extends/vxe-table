@@ -30,8 +30,10 @@
         import Vue from 'vue'
         import XEUtils from 'xe-utils'
         import {
+          // 核心
           VXETable,
 
+          // 功能模块
           // Icon,
           // Filter,
           // Menu,
@@ -42,6 +44,7 @@
           Header,
           // Footer,
 
+          // 可选组件
           Column,
           // Colgroup,
           // Grid,
@@ -66,6 +69,7 @@
           // List,
           // Pulldown,
 
+          // 表格
           Table
         } from 'vxe-table'
         import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
