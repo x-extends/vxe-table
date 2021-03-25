@@ -26,8 +26,11 @@ export function use (Plugin, options) {
  */
 function reg (key) {
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  if (VXETable.Table) {
-    UtilTools.error('vxe.error.useErr', [key])
+  // 检测安装顺序是否正确
+  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (VXETable.Table) {
+      UtilTools.error('vxe.error.useErr', [key])
+    }
   }
   VXETable[`_${key}`] = 1
 }

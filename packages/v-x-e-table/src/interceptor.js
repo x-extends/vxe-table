@@ -1,3 +1,4 @@
+import { UtilTools } from '../../tools'
 import XEUtils from 'xe-utils'
 
 function toType (type) {
@@ -9,27 +10,43 @@ const storeMap = {}
 
 export const interceptor = {
   mixin (map) {
-    XEUtils.each(map, (evntFn, type) => interceptor.add(type, evntFn))
+    XEUtils.each(map, (callback, type) => interceptor.add(type, callback))
     return interceptor
   },
   get (type) {
     return storeMap[toType(type)] || []
   },
-  add (type, evntFn) {
+  add (type, callback) {
     type = toType(type)
-    if (evntFn && eventTypes.indexOf(type) > -1) {
+
+    // 检测类型
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (eventTypes.indexOf(type) === -1) {
+        UtilTools.warn('vxe.error.errProp', [`Interceptor.${type}`, eventTypes.join('|')])
+      }
+    }
+
+    if (callback && eventTypes.indexOf(type) > -1) {
       let eList = storeMap[type]
       if (!eList) {
         eList = storeMap[type] = []
       }
-      eList.push(evntFn)
+
+      // 检测重复
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (eList.indexOf(callback) > -1) {
+          UtilTools.warn('vxe.error.coverProp', ['Interceptor', type])
+        }
+      }
+
+      eList.push(callback)
     }
     return interceptor
   },
-  delete (type, evntFn) {
+  delete (type, callback) {
     const eList = storeMap[toType(type)]
     if (eList) {
-      XEUtils.remove(eList, fn => fn === evntFn)
+      XEUtils.remove(eList, fn => fn === callback)
     }
     return interceptor
   }

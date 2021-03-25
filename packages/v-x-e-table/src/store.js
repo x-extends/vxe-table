@@ -1,3 +1,6 @@
+import { UtilTools } from '../../tools'
+import XEUtils from 'xe-utils'
+
 /**
  * 创建数据仓库
  */
@@ -11,17 +14,23 @@ class Store {
     return Store
   }
 
-  get (type) {
-    return this.store[type]
+  get (name) {
+    return this.store[name]
   }
 
-  add (type, render) {
-    this.store[type] = render
+  add (name, render) {
+    // 检测是否覆盖
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (!XEUtils.eqNull(this.store[name]) && this.store[name] !== render) {
+        UtilTools.warn('vxe.error.coverProp', [this._name, name])
+      }
+    }
+    this.store[name] = render
     return Store
   }
 
-  delete (type) {
-    delete this.store[type]
+  delete (name) {
+    delete this.store[name]
     return Store
   }
 }
