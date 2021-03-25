@@ -31,7 +31,7 @@
     "examples/**/*.tsx",
     "examples/**/*.vue",
     "types/**/*.ts",
-    "types/**/*.tsx",
+    "types/**/*.tsx", "examples/api/form-gather.js",
   ],
   "exclude": [
     "node_modules"

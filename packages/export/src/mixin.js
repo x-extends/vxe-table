@@ -229,14 +229,14 @@ function getCsvCellTypeLabel (column, cellValue) {
     switch (column.cellType) {
       case 'string':
         if (!isNaN(cellValue)) {
-          return '\t' + cellValue
+          return `\t${cellValue}`
         }
         break
       case 'number':
         break
       default:
         if (cellValue.length >= 12 && !isNaN(cellValue)) {
-          return '\t' + cellValue
+          return `\t${cellValue}`
         }
         break
     }
@@ -245,7 +245,7 @@ function getCsvCellTypeLabel (column, cellValue) {
 }
 
 function toTxtCellLabel (val) {
-  if (/[",]/.test(val)) {
+  if (/[",\s\n]/.test(val)) {
     return `"${val.replace(/"/g, '""')}"`
   }
   return val

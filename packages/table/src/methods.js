@@ -939,7 +939,7 @@ const Methods = {
    */
   getColumns (columnIndex) {
     const columns = this.visibleColumn
-    return arguments.length ? columns[columnIndex] : columns.slice(0)
+    return XEUtils.isUndefined(columnIndex) ? columns.slice(0) : columns[columnIndex]
   },
   /**
    * 根据列的唯一主键获取列
@@ -974,7 +974,7 @@ const Methods = {
    */
   getData (rowIndex) {
     const tableSynchData = this.data || this.tableSynchData
-    return arguments.length ? tableSynchData[rowIndex] : tableSynchData.slice(0)
+    return XEUtils.isUndefined(rowIndex) ? tableSynchData.slice(0) : tableSynchData[rowIndex]
   },
   /**
    * 用于多选行，获取已选中的数据
@@ -1662,9 +1662,11 @@ const Methods = {
 
           // 如果是使用优化模式
           let isOptimize = false
-          if (fixedType) {
-            if (scrollXLoad || allColumnHeaderOverflow) {
-              isOptimize = true
+          if (!isGroup) {
+            if (fixedType) {
+              if (scrollXLoad || allColumnHeaderOverflow) {
+                isOptimize = true
+              }
             }
           }
           if (isOptimize) {

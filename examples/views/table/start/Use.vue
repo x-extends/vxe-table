@@ -62,6 +62,7 @@
           // Tooltip,
           // Form,
           // FormItem,
+          // FormGather,
           // Select,
           // Optgroup,
           // Option,
@@ -108,6 +109,7 @@
         // .use(Tooltip)
         // .use(Form)
         // .use(FormItem)
+        // .use(FormGather)
         // .use(Select)
         // .use(Optgroup)
         // .use(Option)

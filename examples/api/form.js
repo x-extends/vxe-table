@@ -1,7 +1,9 @@
 import XEUtils from 'xe-utils'
 import itemAPI from './form-item'
+import gatherAPI from './form-gather'
 
 const itemProps = itemAPI.find(item => item.name === 'Props')
+const gatherProps = gatherAPI.find(item => item.name === 'Props')
 
 const apis = [
   {
@@ -109,7 +111,17 @@ const apis = [
         type: 'any[]',
         enum: '',
         defVal: '',
-        list: XEUtils.mapTree(itemProps.list, (item) => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
+        list: XEUtils.mapTree(itemProps.list, (item) => Object.assign({}, item, { name: XEUtils.camelCase(item.name) })).concat([
+          {
+            name: 'children',
+            desc: '项集合',
+            version: '3.2.6',
+            type: 'any[]',
+            enum: '',
+            defVal: '',
+            list: XEUtils.clone(gatherProps.list, true)
+          }
+        ])
       },
       {
         name: 'rules',

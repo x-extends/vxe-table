@@ -33,6 +33,9 @@ export default {
   inject: {
     $xeform: {
       default: null
+    },
+    xeformgather: {
+      default: null
     }
   },
   watch,

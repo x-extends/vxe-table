@@ -28,6 +28,7 @@ import { Modal } from './modal'
 import { Tooltip } from './tooltip'
 import { Form } from './form'
 import { FormItem } from './form-item'
+import { FormGather } from './form-gather'
 import { Select } from './select'
 import { Optgroup } from './optgroup'
 import { Option } from './option'
@@ -70,6 +71,7 @@ const components = [
   Tooltip,
   Form,
   FormItem,
+  FormGather,
   Select,
   Optgroup,
   Option,
@@ -123,6 +125,7 @@ export * from './modal'
 export * from './tooltip'
 export * from './form'
 export * from './form-item'
+export * from './form-gather'
 export * from './select'
 export * from './optgroup'
 export * from './option'

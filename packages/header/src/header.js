@@ -41,13 +41,17 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
-    const { $listeners: tableListeners, tId, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig } = $xetable
+    const { $listeners: tableListeners, tId, isGroup, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig } = $xetable
     let { tableColumn } = this
+    let headerGroups = headerColumn
     // 如果是使用优化模式
-    if (fixedType) {
-      if (scrollXLoad || allColumnHeaderOverflow) {
-        tableColumn = fixedColumn
+    if (!isGroup) {
+      if (fixedType) {
+        if (scrollXLoad || allColumnHeaderOverflow) {
+          tableColumn = fixedColumn
+        }
       }
+      headerGroups = [tableColumn]
     }
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
@@ -93,7 +97,7 @@ export default {
          */
         h('thead', {
           ref: 'thead'
-        }, headerColumn.map((cols, $rowIndex) => {
+        }, headerGroups.map((cols, $rowIndex) => {
           return h('tr', {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowClassName : ''],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowStyle) : null
@@ -188,7 +192,7 @@ export default {
   methods: {
     uploadColumn () {
       const { $parent: $xetable } = this
-      this.headerColumn = $xetable.isGroup ? convertToRows(this.tableGroupColumn) : [$xetable.scrollXLoad && this.fixedType ? this.fixedColumn : this.tableColumn]
+      this.headerColumn = $xetable.isGroup ? convertToRows(this.tableGroupColumn) : []
     },
     resizeMousedown (evnt, params) {
       const { column } = params

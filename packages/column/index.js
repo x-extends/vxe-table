@@ -1,4 +1,4 @@
-import VxeTableColumn from './src/column'
+import VxeTableColumn from '../table/src/column'
 
 export const Column = Object.assign(VxeTableColumn, {
   install (Vue) {

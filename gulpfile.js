@@ -43,6 +43,7 @@ const components = [
   'tooltip',
   'form',
   'form-item',
+  'form-gather',
   'select',
   'optgroup',
   'option',
@@ -126,6 +127,7 @@ gulp.task('build_lib', () => {
     gulp.src('lib_temp/index.umd.min.js')
       .pipe(gulp.dest('lib')),
     gulp.src('lib_temp/index.css')
+      .pipe(gulp.dest('lib'))
       .pipe(rename({
         basename: 'style',
         extname: '.css'

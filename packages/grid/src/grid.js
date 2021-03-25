@@ -719,10 +719,13 @@ export default {
       }
       return Promise.resolve()
     },
-    getFormItems (index) {
+    getFormItems (itemIndex) {
       const { formConfig, formOpts } = this
-      const items = isEnableConf(formConfig) && formOpts.items ? formOpts.items : []
-      return arguments.length ? items[index] : items
+      const itemList = []
+      XEUtils.eachTree(isEnableConf(formConfig) && formOpts.items ? formOpts.items : [], item => {
+        itemList.push(item)
+      }, { children: 'children' })
+      return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
     },
     getPendingRecords () {
       return this.pendingRecords

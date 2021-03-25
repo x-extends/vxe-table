@@ -1,4 +1,4 @@
-import VxeTableColgroup from '../column/src/group'
+import VxeTableColgroup from '../table/src/group'
 
 export const Colgroup = Object.assign(VxeTableColgroup, {
   install (Vue) {

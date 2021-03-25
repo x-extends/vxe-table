@@ -33,6 +33,7 @@
 .vxe-table--filter-wrapper {
   display: none;
   position: absolute;
+  top: 0;
   min-width: 100px;
   border-radius: $vxe-border-radius;
   background-color: $vxe-table-filter-panel-background-color;

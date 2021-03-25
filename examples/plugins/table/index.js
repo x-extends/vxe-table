@@ -32,6 +32,7 @@ import {
   Tooltip,
   Form,
   FormItem,
+  FormGather,
   Select,
   Optgroup,
   Option,
@@ -99,6 +100,7 @@ Vue.use(Icon)
   .use(Tooltip)
   .use(Form)
   .use(FormItem)
+  .use(FormGather)
   .use(Select)
   .use(Optgroup)
   .use(Option)

@@ -84,6 +84,7 @@ import tooltipAPI from '../../api/tooltip'
 import modalAPI from '../../api/modal'
 import formAPI from '../../api/form'
 import formItemAPI from '../../api/form-item'
+import formGatherAPI from '../../api/form-gather'
 import switchAPI from '../../api/switch'
 import listAPI from '../../api/list'
 import pulldownAPI from '../../api/pulldown'
@@ -116,6 +117,7 @@ import pulldownAPI from '../../api/pulldown'
 //   ['vxe-modal', modalAPI, { description: '模态窗口' }],
 //   ['vxe-form', formAPI, { subtags: ['vxe-form-item'], description: '表单' }],
 //   ['vxe-form-item', formItemAPI, { description: '表单 - 项' }],
+//   ['vxe-form-gather', formGatherAPI, { description: '表单 - 项集合' }],
 //   ['vxe-list', listAPI, { description: '列表' }],
 //   ['vxe-pulldown', pulldownAPI, { description: '下拉容器' }]
 // ]
@@ -297,6 +299,9 @@ export default {
               break
             case 'form-item':
               apis = formItemAPI
+              break
+            case 'form-gather':
+              apis = formGatherAPI
               break
             case 'switch':
               apis = switchAPI

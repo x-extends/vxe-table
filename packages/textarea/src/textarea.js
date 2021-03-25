@@ -62,8 +62,8 @@ export default {
     }
   },
   mounted () {
-    const { inputValue } = this
-    if (inputValue) {
+    const { autosize } = this
+    if (autosize) {
       this.updateAutoTxt()
       this.handleResize()
     }

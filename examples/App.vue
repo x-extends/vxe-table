@@ -2138,6 +2138,15 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.vxeFormGather',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'form-gather'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeFormItem',
               locat: {
                 name: 'VXEAPI',
@@ -2311,9 +2320,9 @@ export default {
         const betaVersionList = []
         if (versions) {
           versions.forEach(version => {
-            if (/^3.\d{1,3}.\d{1,3}$/.test(version)) {
+            if (new RegExp(`^${this.version}.\\d{1,3}.\\d{1,3}$`).test(version)) {
               stableVersionList.push({ label: version, value: version })
-            } else if (/^3.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
+            } else if (new RegExp(`^${this.version}.\\d{1,3}.\\d{1,3}-beta.\\d{1,3}$`).test(version)) {
               betaVersionList.push({ label: version, value: version })
             }
           })
@@ -2321,7 +2330,7 @@ export default {
         this.stableVersionList = stableVersionList
         this.betaVersionList = betaVersionList
         if (stableVersionList.length) {
-          this.selectStableVersion = tags && tags.latest ? tags.latest : stableVersionList[0].value
+          this.selectStableVersion = tags && tags[`xtable-v${this.version}`] ? tags[`xtable-v${this.version}`] : stableVersionList[0].value
         }
         if (betaVersionList.length) {
           this.selectBetaVersion = betaVersionList[0].value

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <p class="tip"><table-api-link name="vxe-table"/> 基础表格，基于模板方式使用非常简单、便捷</p>
+    <p class="tip">
+      <table-api-link name="vxe-table"/> 基础表格，基于模板方式使用非常简单、便捷<br>
+      <span class="red">（注：每一列 field 字段属性不可更改）</span>
+    </p>
 
     <vxe-toolbar>
       <template #buttons>

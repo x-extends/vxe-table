@@ -109,10 +109,10 @@ function renderTitle (h, _vm, item) {
   return tss
 }
 
-function renderItems (h, _vm) {
-  const { _e, rules, formItems, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
-  return formItems.map((item, index) => {
-    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
+function renderItems (h, _vm, itemList) {
+  const { _e, rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
+  return itemList.map((item, index) => {
+    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const span = item.span || _vm.span
     const align = item.align || _vm.align
@@ -128,6 +128,14 @@ function renderItems (h, _vm) {
     let isRequired
     if (visible === false) {
       return _e()
+    }
+    // 如果为项集合
+    const isGather = children && children.length > 0
+    if (isGather) {
+      const childVNs = renderItems(h, _vm, item.children)
+      return childVNs.length ? h('div', {
+        class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
+      }, childVNs) : _e()
     }
     if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
       itemVisibleMethod = compConf.itemVisibleMethod
@@ -276,10 +284,10 @@ export default {
     }
   },
   render (h) {
-    const { _e, loading, vSize, tooltipOpts } = this
+    const { _e, loading, vSize, tooltipOpts, formItems } = this
     const hasUseTooltip = VXETable._tooltip
     return h('form', {
-      class: ['vxe-form', 'vxe-row', {
+      class: ['vxe-form', {
         [`size--${vSize}`]: vSize,
         'is--colon': this.titleColon,
         'is--asterisk': this.titleAsterisk,
@@ -289,7 +297,10 @@ export default {
         submit: this.submitEvent,
         reset: this.resetEvent
       }
-    }, renderItems(h, this).concat([
+    }, [
+      h('div', {
+        class: 'vxe-form--wrapper vxe-row'
+      }, renderItems(h, this, formItems)),
       h('div', {
         class: 'vxe-form-slots',
         ref: 'hideItem'
@@ -310,7 +321,7 @@ export default {
         ref: 'tooltip',
         ...tooltipOpts
       }) : _e()
-    ]))
+    ])
   },
   methods: {
     loadItem (list) {
@@ -332,7 +343,11 @@ export default {
       return this.$nextTick()
     },
     getItems () {
-      return this.formItems.slice(0)
+      const itemList = []
+      XEUtils.eachTree(this.formItems, item => {
+        itemList.push(item)
+      }, { children: 'children' })
+      return itemList
     },
     toggleCollapse () {
       this.collapseAll = !this.collapseAll
@@ -353,9 +368,10 @@ export default {
       }
     },
     reset () {
-      const { data, formItems } = this
+      const { data } = this
       if (data) {
-        formItems.forEach(item => {
+        const itemList = this.getItems()
+        itemList.forEach(item => {
           const { field, resetValue, itemRender } = item
           if (isEnableConf(itemRender)) {
             const compConf = VXETable.renderer.get(itemRender.name)
@@ -432,31 +448,32 @@ export default {
       }
     },
     clearValidate (field) {
-      const { formItems } = this
+      const itemList = this.getItems()
       if (field) {
-        const item = formItems.find(item => item.field === field)
+        const item = itemList.find(item => item.field === field)
         if (item) {
           item.showError = false
         }
       } else {
-        formItems.forEach(item => {
+        itemList.forEach(item => {
           item.showError = false
         })
       }
       return this.$nextTick()
     },
     validate (callback) {
-      return this.beginValidate(callback)
+      return this.beginValidate('', callback)
     },
     beginValidate (type, callback) {
-      const { data, rules: formRules, formItems, validOpts } = this
+      const { data, rules: formRules, validOpts } = this
       const validRest = {}
       const validFields = []
       const itemValids = []
+      const itemList = this.getItems()
       this.clearValidate()
       clearTimeout(this.showErrTime)
       if (data && formRules) {
-        formItems.forEach(item => {
+        itemList.forEach(item => {
           const { field } = item
           if (field) {
             itemValids.push(
@@ -481,7 +498,7 @@ export default {
           }
         }).catch(() => {
           this.showErrTime = setTimeout(() => {
-            formItems.forEach(item => {
+            itemList.forEach(item => {
               if (item.errRule) {
                 item.showError = true
               }
@@ -576,9 +593,10 @@ export default {
       })
     },
     handleFocus (fields) {
-      const { $el, formItems } = this
+      const { $el } = this
+      const itemList = this.getItems()
       fields.some(property => {
-        const item = formItems.find(item => item.field === property)
+        const item = itemList.find(item => item.field === property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
@@ -617,7 +635,8 @@ export default {
             this.clearValidate(property)
           })
           .catch(({ rule }) => {
-            const item = this.formItems.find(item => item.field === property)
+            const itemList = this.getItems()
+            const item = itemList.find(item => item.field === property)
             if (item) {
               item.showError = true
               item.errRule = rule

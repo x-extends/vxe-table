@@ -25,7 +25,8 @@ class ItemConfig {
       // 渲染属性
       showError: false,
       errRule: null,
-      slots: item.slots
+      slots: item.slots,
+      children: []
     })
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const compConf = item.itemRender ? VXETable.renderer.get(item.itemRender.name) : null
@@ -61,7 +62,15 @@ export function destroyItem (_vm) {
 }
 
 export function assemItem (_vm) {
-  const { $el, $xeform, itemConfig } = _vm
+  const { $el, $xeform, xeformgather, itemConfig } = _vm
+  const itemGather = xeformgather ? xeformgather.itemConfig : null
   itemConfig.slots = _vm.$scopedSlots
-  $xeform.staticItems.splice([].indexOf.call($xeform.$refs.hideItem.children, $el), 0, itemConfig)
+  if (itemGather) {
+    if (!itemGather.children) {
+      itemGather.children = []
+    }
+    itemGather.children.splice([].indexOf.call(xeformgather.$el.children, $el), 0, itemConfig)
+  } else {
+    $xeform.staticItems.splice([].indexOf.call($xeform.$refs.hideItem.children, $el), 0, itemConfig)
+  }
 }

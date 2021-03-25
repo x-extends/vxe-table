@@ -67,7 +67,8 @@ export default {
           const filterWrapperElem = $refs.filterWrapper.$el
           const filterWidth = filterWrapperElem.offsetWidth
           const centerWidth = filterWidth / 2
-          const minMargin = 32
+          const minMargin = 10
+          const maxLeft = bodyElem.clientWidth - filterWidth - minMargin
           let left, right
           const style = {
             top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight + 8}px`
@@ -84,13 +85,13 @@ export default {
             if (overflowWidth > 0) {
               left -= overflowWidth
             }
-            style.left = `${Math.max(minMargin, left)}px`
+            style.left = `${Math.min(maxLeft, Math.max(minMargin, left))}px`
           } else if (right) {
             const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
             if (overflowWidth > 0) {
               right += overflowWidth
             }
-            style.right = `${right}px`
+            style.right = `${Math.max(minMargin, right)}px`
           }
           filterStore.style = style
         })

@@ -48,9 +48,9 @@
       border
       highlight-hover-row
       height="300"
-      :seq-config="{seqMethod: seqMethod}"
+      :seq-config="{seqMethod}"
       :data="tableData">
-      <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+      <vxe-table-column type="seq" title="序号" width="80"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -148,9 +148,9 @@ export default {
           border
           highlight-hover-row
           height="300"
-          :seq-config="{seqMethod: seqMethod}"
+          :seq-config="{seqMethod}"
           :data="tableData">
-          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column type="seq" title="序号" width="80"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -172,6 +172,11 @@ export default {
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
             }
+          },
+          methods: {
+            seqMethod ({ rowIndex }) {
+              return \`NO\${rowIndex + 1000}\`
+            }
           }
         }
         `
@@ -180,7 +185,7 @@ export default {
   },
   methods: {
     seqMethod ({ rowIndex }) {
-      return rowIndex * 2
+      return `NO${rowIndex + 1000}`
     }
   }
 }
