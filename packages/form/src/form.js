@@ -251,7 +251,7 @@ export default {
       return this.$nextTick()
     },
     validate (callback) {
-      return this.beginValidate(callback)
+      return this.beginValidate('', callback)
     },
     beginValidate (type, callback) {
       const { data, rules: formRules, validOpts } = this

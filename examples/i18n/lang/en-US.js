@@ -261,6 +261,7 @@ export default {
         vxeModal: 'vxe-modal',
         vxeForm: 'vxe-form',
         vxeFormItem: 'vxe-form-item',
+        vxeFormGather: 'vxe-form-gather',
         vxeSwitch: 'vxe-switch',
         vxeList: 'vxe-list',
         vxePulldown: 'vxe-pulldown'

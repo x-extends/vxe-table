@@ -84,6 +84,7 @@ import tooltipAPI from '../../api/tooltip'
 import modalAPI from '../../api/modal'
 import formAPI from '../../api/form'
 import formItemAPI from '../../api/form-item'
+import formGatherAPI from '../../api/form-gather'
 import switchAPI from '../../api/switch'
 import listAPI from '../../api/list'
 import pulldownAPI from '../../api/pulldown'
@@ -297,6 +298,9 @@ export default {
               break
             case 'form-item':
               apis = formItemAPI
+              break
+            case 'form-gather':
+              apis = formGatherAPI
               break
             case 'switch':
               apis = switchAPI
