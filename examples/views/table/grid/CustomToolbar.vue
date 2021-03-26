@@ -2,20 +2,7 @@
   <div>
     <p class="tip">工具栏：通过 <grid-api-link prop="toolbar"/> 属性开启，还可以使用 <grid-api-link prop="slot"/> 插槽自定义模板</p>
 
-    <vxe-grid
-      border
-      resizable
-      keep-source
-      show-overflow
-      ref="xGrid"
-      height="530"
-      id="toolbar_demo_2"
-      :loading="loading"
-      :custom-config="tableCustom"
-      :data="tableData"
-      :columns="tableColumn"
-      :toolbar-config="tableToolbar"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+    <vxe-grid ref="xGrid" v-bind="gridOptions">
       <template #toolbar_buttons>
         <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
         <vxe-button status="primary" @click="loadData">搜索</vxe-button>
@@ -40,51 +27,51 @@ export default {
   data () {
     return {
       searchName: '',
-      loading: false,
-      tableData: [],
-      tableCustom: {
-        storage: true
-      },
-      tableToolbar: {
-        custom: true,
-        slots: {
-          buttons: 'toolbar_buttons'
-        }
-      },
-      tableColumn: [
-        { type: 'checkbox', width: 50 },
-        { type: 'seq', width: 60 },
-        { field: 'name', title: 'Name', editRender: { name: 'input' } },
-        {
-          title: '分类',
-          children: [
-            { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-            {
-              title: '子类',
-              children: [
-                { field: 'role', title: 'Role', editRender: { name: 'input' } }
-              ]
-            }
-          ]
+      gridOptions: {
+        border: true,
+        resizable: true,
+        keepSource: true,
+        showOverflow: true,
+        loading: false,
+        height: 530,
+        id: 'toolbar_demo_2',
+        editConfig: {
+          trigger: 'click',
+          mode: 'row',
+          showStatus: true
         },
-        { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
-      ],
+        customConfig: {
+          storage: true
+        },
+        toolbarConfig: {
+          custom: true,
+          slots: {
+            buttons: 'toolbar_buttons'
+          }
+        },
+        columns: [
+          { type: 'checkbox', width: 50 },
+          { type: 'seq', width: 60 },
+          { field: 'name', title: 'Name', editRender: { name: 'input' } },
+          {
+            title: '分类',
+            children: [
+              { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+              {
+                title: '子类',
+                children: [
+                  { field: 'role', title: 'Role', editRender: { name: 'input' } }
+                ]
+              }
+            ]
+          },
+          { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+        ],
+        data: []
+      },
       demoCodes: [
         `
-        <vxe-grid
-          border
-          resizable
-          keep-source
-          show-overflow
-          ref="xGrid"
-          height="530"
-          id="toolbar_demo_2"
-          :loading="loading"
-          :custom-config="tableCustom"
-          :data="tableData"
-          :columns="tableColumn"
-          :toolbar-config="tableToolbar"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+        <vxe-grid ref="xGrid" v-bind="gridOptions">
           <template #toolbar_buttons>
             <vxe-input v-model="searchName" placeholder="搜索"></vxe-input>
             <vxe-button status="primary" @click="loadData">搜索</vxe-button>
@@ -100,35 +87,48 @@ export default {
           data () {
             return {
               searchName: '',
-              loading: false,
-              tableData: [],
-              tableCustom: {
-                storage: true
-              },
-              tableToolbar: {
-                custom: true,
-                slots: {
-                  buttons: 'toolbar_buttons'
-                }
-              },
-              tableColumn: [
-                { type: 'checkbox', width: 50 },
-                { type: 'seq', width: 60 },
-                { field: 'name', title: 'Name', editRender: { name: 'input' } },
-                {
-                  title: '分类',
-                  children: [
-                    { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                    {
-                      title: '子类',
-                      children: [
-                        { field: 'role', title: 'Role', editRender: { name: 'input' } }
-                      ]
-                    }
-                  ]
+              gridOptions: {
+                border: true,
+                resizable: true,
+                keepSource: true,
+                showOverflow: true,
+                loading: false,
+                height: 530,
+                id: 'toolbar_demo_2',
+                editConfig: {
+                  trigger: 'click',
+                  mode: 'row',
+                  showStatus: true
                 },
-                { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
-              ]
+                customConfig: {
+                  storage: true
+                },
+                toolbarConfig: {
+                  custom: true,
+                  slots: {
+                    buttons: 'toolbar_buttons'
+                  }
+                },
+                columns: [
+                  { type: 'checkbox', width: 50 },
+                  { type: 'seq', width: 60 },
+                  { field: 'name', title: 'Name', editRender: { name: 'input' } },
+                  {
+                    title: '分类',
+                    children: [
+                      { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                      {
+                        title: '子类',
+                        children: [
+                          { field: 'role', title: 'Role', editRender: { name: 'input' } }
+                        ]
+                      }
+                    ]
+                  },
+                  { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+                ],
+                data: []
+              }
             }
           },
           created () {
@@ -136,9 +136,10 @@ export default {
           },
           methods: {
             loadData () {
-              this.loading = true
+              const { gridOptions } = this
+              gridOptions.loading = true
               setTimeout(() => {
-                this.tableData = [
+                gridOptions.data = [
                   { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
                   { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                   { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
@@ -150,7 +151,7 @@ export default {
                   { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: 'Man ', age: 24, address: 'Shenzhen' },
                   { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: 'Man ', age: 20, address: 'Guangzhou' }
                 ]
-                this.loading = false
+                gridOptions.loading = false
               }, 100)
             },
             insertEvent () {
@@ -176,9 +177,10 @@ export default {
   },
   methods: {
     loadData () {
-      this.loading = true
+      const { gridOptions } = this
+      gridOptions.loading = true
       setTimeout(() => {
-        this.tableData = [
+        gridOptions.data = [
           { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
           { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
           { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
@@ -190,7 +192,7 @@ export default {
           { id: 10009, name: 'Test9', nickname: 'T9', role: 'Test', sex: 'Man ', age: 24, address: 'Shenzhen' },
           { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: 'Man ', age: 20, address: 'Guangzhou' }
         ]
-        this.loading = false
+        gridOptions.loading = false
       }, 100)
     },
     insertEvent () {

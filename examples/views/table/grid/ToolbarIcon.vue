@@ -2,19 +2,7 @@
   <div>
     <p class="tip">自定义工具栏按钮图标，例如第三方图标库：font-awesome、inconfont，可以局部替换也可以 <router-link :to="{name: 'StartIcons'}">全部替换</router-link></p>
 
-    <vxe-grid
-      border
-      resizable
-      keep-source
-      height="500"
-      :print-config="{}"
-      :import-config="{}"
-      :export-config="{}"
-      :pager-config="tablePage"
-      :proxy-config="tableProxy"
-      :columns="tableColumn"
-      :toolbar-config="tableToolbar"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -26,139 +14,229 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
-
 export default {
   data () {
     return {
-      tablePage: {
-        perfect: true,
-        pageSize: 15
+      gridOptions: {
+        border: true,
+        resizable: true,
+        keepSource: true,
+        height: 500,
+        printConfig: {},
+        importConfig: {},
+        exportConfig: {},
+        pagerConfig: {
+          perfect: true,
+          pageSize: 15
+        },
+        editConfig: {
+          trigger: 'click',
+          mode: 'row',
+          showStatus: true
+        },
+        toolbarConfig: {
+          buttons: [
+            { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus' },
+            { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o' },
+            { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save' }
+          ],
+          perfect: true,
+          refresh: {
+            icon: 'fa fa-refresh',
+            iconLoading: 'fa fa-spinner fa-spin'
+          },
+          import: {
+            icon: 'fa fa-upload'
+          },
+          export: {
+            icon: 'fa fa-download'
+          },
+          print: {
+            icon: 'fa fa-print'
+          },
+          zoom: {
+            iconIn: 'fa fa-arrows-alt',
+            iconOut: 'fa fa-expand'
+          },
+          custom: {
+            icon: 'fa fa-cog'
+          }
+        },
+        proxyConfig: {
+          props: {
+            result: 'result',
+            total: 'page.total'
+          },
+          ajax: {
+            // 接收 Promise
+            query: ({ page }) => {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  const list = [
+                    { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                    { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                    { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                    { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                    { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                    { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+                    { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+                    { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' },
+                    { id: 10009, name: 'Test9', nickname: 'T9', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' },
+                    { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: 'Man ', age: 35, address: 'Guangzhou' },
+                    { id: 100011, name: 'Test11', nickname: 'T11', role: 'Test', sex: 'Women ', age: 26, address: 'vxe-table 从入门到放弃' },
+                    { id: 100012, name: 'Test12', nickname: 'T12', role: 'Develop', sex: 'Man ', age: 34, address: 'Guangzhou' },
+                    { id: 100013, name: 'Test13', nickname: 'T13', role: 'Test', sex: 'Women ', age: 22, address: 'Shenzhen' }
+                  ]
+                  resolve({
+                    page: {
+                      total: list.length
+                    },
+                    result: list.slice((page.currentPage - 1) * page.pageSize, page.currentPage * page.pageSize)
+                  })
+                }, 100)
+              })
+            },
+            // body 对象： { removeRecords }
+            delete: () => {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  resolve({})
+                }, 100)
+              })
+            },
+            // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
+            save: () => {
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  resolve({})
+                }, 100)
+              })
+            }
+          }
+        },
+        columns: [
+          { type: 'checkbox', width: 50 },
+          { type: 'seq', width: 60 },
+          { field: 'name', title: 'Name', editRender: { name: 'input' } },
+          { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+          { field: 'role', title: 'Role', editRender: { name: 'input' } },
+          { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+        ]
       },
-      tableProxy: {
-        props: {
-          result: 'result',
-          total: 'page.total'
-        },
-        ajax: {
-          // page 对象： { pageSize, currentPage }
-          query: ({ page }) => XEAjax.get(`/api/user/page/list/${page.pageSize}/${page.currentPage}`),
-          // body 对象： { removeRecords }
-          delete: ({ body }) => XEAjax.post('/api/user/save', body),
-          // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-          save: ({ body }) => XEAjax.post('/api/user/save', body)
-        }
-      },
-      tableToolbar: {
-        buttons: [
-          { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus' },
-          { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o' },
-          { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save' }
-        ],
-        perfect: true,
-        refresh: {
-          icon: 'fa fa-refresh',
-          iconLoading: 'fa fa-spinner fa-spin'
-        },
-        import: {
-          icon: 'fa fa-upload'
-        },
-        export: {
-          icon: 'fa fa-download'
-        },
-        print: {
-          icon: 'fa fa-print'
-        },
-        zoom: {
-          iconIn: 'fa fa-arrows-alt',
-          iconOut: 'fa fa-expand'
-        },
-        custom: {
-          icon: 'fa fa-cog'
-        }
-      },
-      tableColumn: [
-        { type: 'checkbox', width: 50 },
-        { type: 'seq', width: 60 },
-        { field: 'name', title: 'Name', editRender: { name: 'input' } },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-        { field: 'role', title: 'Role', editRender: { name: 'input' } },
-        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
-      ],
       demoCodes: [
         `
-        <vxe-grid
-          border
-          resizable
-          keep-source
-          height="500"
-          :print-config="{}"
-          :import-config="{}"
-          :export-config="{}"
-          :pager-config="tablePage"
-          :proxy-config="tableProxy"
-          :columns="tableColumn"
-          :toolbar-config="tableToolbar"
-          :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"></vxe-grid>
+        <vxe-grid v-bind="gridOptions"></vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              tablePage: {
-                perfect: true,
-                pageSize: 15
-              },
-              tableProxy: {
-                props: {
-                  result: 'result',
-                  total: 'page.total'
+              gridOptions: {
+                border: true,
+                resizable: true,
+                keepSource: true,
+                height: 500,
+                printConfig: {},
+                importConfig: {},
+                exportConfig: {},
+                pagerConfig: {
+                  perfect: true,
+                  pageSize: 15
                 },
-                ajax: {
-                  // page 对象： { pageSize, currentPage }
-                  query: ({ page }) => XEAjax.get(\`/api/user/page/list/\${page.pageSize}/\${page.currentPage}\`),
-                  // body 对象： { removeRecords }
-                  delete: ({ body }) => XEAjax.post('/api/user/save', body),
-                  // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
-                  save: ({ body }) => XEAjax.post('/api/user/save', body)
-                }
-              },
-              tableToolbar: {
-                buttons: [
-                  { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus' },
-                  { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o' },
-                  { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save' }
-                ],
-                perfect: true,
-                refresh: {
-                  icon: 'fa fa-refresh',
-                  iconLoading: 'fa fa-spinner fa-spin'
+                editConfig: {
+                  trigger: 'click',
+                  mode: 'row',
+                  showStatus: true
                 },
-                import: {
-                  icon: 'fa fa-upload'
+                toolbarConfig: {
+                  buttons: [
+                    { code: 'insert_actived', name: '新增', status: 'perfect', icon: 'fa fa-plus' },
+                    { code: 'mark_cancel', name: 'app.body.button.markCancel', status: 'perfect', icon: 'fa fa-trash-o' },
+                    { code: 'save', name: 'app.body.button.save', status: 'perfect', icon: 'fa fa-save' }
+                  ],
+                  perfect: true,
+                  refresh: {
+                    icon: 'fa fa-refresh',
+                    iconLoading: 'fa fa-spinner fa-spin'
+                  },
+                  import: {
+                    icon: 'fa fa-upload'
+                  },
+                  export: {
+                    icon: 'fa fa-download'
+                  },
+                  print: {
+                    icon: 'fa fa-print'
+                  },
+                  zoom: {
+                    iconIn: 'fa fa-arrows-alt',
+                    iconOut: 'fa fa-expand'
+                  },
+                  custom: {
+                    icon: 'fa fa-cog'
+                  }
                 },
-                export: {
-                  icon: 'fa fa-download'
+                proxyConfig: {
+                  props: {
+                    result: 'result',
+                    total: 'page.total'
+                  },
+                  ajax: {
+                    // 接收 Promise
+                    query: ({ page }) => {
+                      return new Promise(resolve => {
+                        setTimeout(() => {
+                          const list = [
+                            { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                            { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                            { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                            { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
+                            { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                            { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'Shenzhen' },
+                            { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
+                            { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' },
+                            { id: 10009, name: 'Test9', nickname: 'T9', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' },
+                            { id: 100010, name: 'Test10', nickname: 'T10', role: 'Develop', sex: 'Man ', age: 35, address: 'Guangzhou' },
+                            { id: 100011, name: 'Test11', nickname: 'T11', role: 'Test', sex: 'Women ', age: 26, address: 'vxe-table 从入门到放弃' },
+                            { id: 100012, name: 'Test12', nickname: 'T12', role: 'Develop', sex: 'Man ', age: 34, address: 'Guangzhou' },
+                            { id: 100013, name: 'Test13', nickname: 'T13', role: 'Test', sex: 'Women ', age: 22, address: 'Shenzhen' }
+                          ]
+                          resolve({
+                            page: {
+                              total: list.length
+                            },
+                            result: list.slice((page.currentPage - 1) * page.pageSize, page.currentPage * page.pageSize)
+                          })
+                        }, 100)
+                      })
+                    },
+                    // body 对象： { removeRecords }
+                    delete: () => {
+                      return new Promise(resolve => {
+                        setTimeout(() => {
+                          resolve({})
+                        }, 100)
+                      })
+                    },
+                    // body 对象： { insertRecords, updateRecords, removeRecords, pendingRecords }
+                    save: () => {
+                      return new Promise(resolve => {
+                        setTimeout(() => {
+                          resolve({})
+                        }, 100)
+                      })
+                    }
+                  }
                 },
-                print: {
-                  icon: 'fa fa-print'
-                },
-                zoom: {
-                  iconIn: 'fa fa-arrows-alt',
-                  iconOut: 'fa fa-expand'
-                },
-                custom: {
-                  icon: 'fa fa-cog'
-                }
-              },
-              tableColumn: [
-                { type: 'checkbox', width: 50 },
-                { type: 'seq', width: 60 },
-                { field: 'name', title: 'Name', editRender: { name: 'input' } },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                { field: 'role', title: 'Role', editRender: { name: 'input' } },
-                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
-              ]
+                columns: [
+                  { type: 'checkbox', width: 50 },
+                  { type: 'seq', width: 60 },
+                  { field: 'name', title: 'Name', editRender: { name: 'input' } },
+                  { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                  { field: 'role', title: 'Role', editRender: { name: 'input' } },
+                  { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
+                ]
+              }
             }
           }
         }

@@ -9,7 +9,6 @@ import VirtualTreeAPILink from '../components/VirtualTreeAPILink.vue'
 import PreCode from '../components/PreCode.vue'
 
 import './utils'
-import './ajax'
 import './highlight'
 import './codemirror'
 import './element'
