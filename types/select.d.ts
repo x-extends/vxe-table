@@ -1,4 +1,4 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { SetupContext, RenderFunction, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 
@@ -40,23 +40,43 @@ export interface SelectReactData {
 }
 
 export type VxeSelectProps = {
-  size?: SizeType;
-  modelValue?: any;
-  clearable?: boolean;
-  placeholder?: string;
-  disabled?: boolean;
-  multiple?: boolean;
-  multiCharOverflow?: number | string;
-  prefixIcon?: string;
-  placement?: string;
-  options?: any[];
-  optionProps?: VxeGlobalRendererHandles.RenderOptionProps;
-  optionGroups?: any[];
-  optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps;
-  emptyText?: string;
-  optionId?: string;
-  optionKey?: boolean;
-  transfer?: boolean;
+  size?: VxeSelectPropTypes.Size;
+  modelValue?: VxeSelectPropTypes.ModelValue;
+  clearable?: VxeSelectPropTypes.Clearable;
+  placeholder?: VxeSelectPropTypes.Placeholder;
+  disabled?: VxeSelectPropTypes.Disabled;
+  multiple?: VxeSelectPropTypes.Multiple;
+  multiCharOverflow?: VxeSelectPropTypes.MultiCharOverflow;
+  prefixIcon?: VxeSelectPropTypes.PrefixIcon;
+  placement?: VxeSelectPropTypes.Placement;
+  options?: VxeSelectPropTypes.Options;
+  optionProps?: VxeSelectPropTypes.OptionProps;
+  optionGroups?: VxeSelectPropTypes.OptionGroups;
+  optionGroupProps?: VxeSelectPropTypes.OptionGroupProps;
+  emptyText?: VxeSelectPropTypes.EmptyText;
+  optionId?: VxeSelectPropTypes.OptionId;
+  optionKey?: VxeSelectPropTypes.OptionKey;
+  transfer?: VxeSelectPropTypes.Transfer;
+}
+
+export namespace VxeSelectPropTypes {
+  export type Size = SizeType;
+  export type ModelValue = any;
+  export type Clearable = boolean;
+  export type Placeholder = string;
+  export type Disabled = boolean;
+  export type Multiple = boolean;
+  export type MultiCharOverflow = number | string;
+  export type PrefixIcon = string;
+  export type Placement = string;
+  export type Options = any[];
+  export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps;
+  export type OptionGroups = any[];
+  export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps;
+  export type EmptyText = string;
+  export type OptionId = string;
+  export type OptionKey = boolean;
+  export type Transfer = boolean;
 }
 
 export interface SelectMethods {

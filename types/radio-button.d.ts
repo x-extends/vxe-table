@@ -1,5 +1,6 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
+import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
 import { SizeType, VXEComponent, VxeComponentBase, VxeEvent, ValueOf } from './component'
+import { VxeRadioPropTypes } from './radio'
 
 /**
  * 组件 - 单选框按钮
@@ -29,12 +30,21 @@ export type VxeRadioButtonEmits = [
 ]
 
 export type VxeRadioButtonProps = {
-  size?: SizeType;
-  modelValue?: any;
-  label?: any;
-  title?: string | number;
-  content?: string | number;
-  disabled?: boolean;
+  size?: VxeRadioButtonPropTypes.Size;
+  modelValue?: VxeRadioButtonPropTypes.ModelValue;
+  label?: VxeRadioButtonPropTypes.Label;
+  title?: VxeRadioButtonPropTypes.Title;
+  content?: VxeRadioButtonPropTypes.Content;
+  disabled?: VxeRadioButtonPropTypes.Disabled;
+}
+
+export namespace VxeRadioButtonPropTypes {
+  export type Size = VxeRadioPropTypes.Size;
+  export type ModelValue = any;
+  export type Label = VxeRadioPropTypes.Label;
+  export type Title = string | number;
+  export type Content = string | number;
+  export type Disabled = boolean;
 }
 
 export namespace VxeRadioButtonDefines {

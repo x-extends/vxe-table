@@ -1,4 +1,4 @@
-import { VNode, DefineComponent } from 'vue'
+import { VNode } from 'vue'
 import { VXEComponent } from './component'
 import { VxeFormConstructor, VxeFormDefines, VxeFormPropTypes } from './form'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
@@ -72,6 +72,7 @@ export interface VxeFormItemProps {
    */
   itemRender?: FormItemRenderOptions;
   slots?: VxeFormItemPropTypes.Slots;
+  children?: VxeFormItemProps[];
 }
 
 export namespace VxeFormItemPropTypes {

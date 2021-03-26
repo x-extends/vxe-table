@@ -35,6 +35,8 @@ export default defineComponent({
     return {
       demoCodes: [
         `
+        // ... 代码片段，仅供参考
+        
         <p class="btns">
           <router-link class="link" :to="{name: 'TableScrollKeepAliveTable1'}">表格1</router-link>
           <router-link class="link" :to="{name: 'TableScrollKeepAliveTable2'}">表格2</router-link>

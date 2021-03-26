@@ -1,4 +1,4 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
+import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
@@ -23,15 +23,27 @@ export interface SwitchReactData {
 }
 
 export type VxeSwitchProps = {
-  size?: SizeType;
-  modelValue?: string | number | boolean;
-  disabled?: boolean;
-  openLabel?: string;
-  closeLabel?: string;
-  openValue?: string | number | boolean;
-  closeValue?: string | number | boolean;
-  openIcon?: string;
-  closeIcon?: string;
+  size?: VxeSwitchPropTypes.Size;
+  modelValue?: VxeSwitchPropTypes.ModelValue;
+  disabled?: VxeSwitchPropTypes.Disabled;
+  openLabel?: VxeSwitchPropTypes.OpenLabel;
+  closeLabel?: VxeSwitchPropTypes.CloseLabel;
+  openValue?: VxeSwitchPropTypes.OpenValue;
+  closeValue?: VxeSwitchPropTypes.CloseValue;
+  openIcon?: VxeSwitchPropTypes.OpenIcon;
+  closeIcon?: VxeSwitchPropTypes.CloseIcon;
+}
+
+export namespace VxeSwitchPropTypes {
+  export type Size = SizeType;
+  export type ModelValue = string | number | boolean;
+  export type Disabled = boolean;
+  export type OpenLabel = string;
+  export type CloseLabel = string;
+  export type OpenValue = string | number | boolean;
+  export type CloseValue = string | number | boolean;
+  export type OpenIcon = string;
+  export type CloseIcon = string;
 }
 
 export interface SwitchMethods {

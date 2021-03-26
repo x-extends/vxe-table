@@ -116,7 +116,7 @@ export function watchColumn (props: any, column: ColumnInfo) {
   })
 }
 
-export function assemColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, elem: HTMLElement, column: ColumnInfo, colgroup?: XEColumnInstance | null) {
+export function assemColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, elem: HTMLElement, column: ColumnInfo, colgroup: XEColumnInstance | null) {
   const { reactData } = $xetable
   const { staticColumns } = reactData
   const parentElem = elem.parentNode

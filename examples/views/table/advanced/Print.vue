@@ -62,22 +62,22 @@ export default defineComponent({
       tablePrint: {
         // 自定义打印的样式示例
         style: `
-        table.vxe-table {
+        .vxe-table {
           color: #000000; // 修改表格默认颜色
           font-size: 12px; // 修改表格默认字体大小
           font-family: "Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu; // 修改表格默认字体
         }
-        table.vxe-table,
-        table.vxe-table thead th,
-        table.vxe-table tbody td,
-        table.vxe-table tfoot td  {
+        .vxe-table,
+        .vxe-table thead th,
+        .vxe-table tbody td,
+        .vxe-table tfoot td  {
           border-color: #000000; // 修改表格边框颜色
         }
-        table.vxe-table thead th {
+        .vxe-table thead th {
           color: green; // 修改表头字体颜色
           font-size: 14px; // 修改表头默认字体大小
         }
-        table.vxe-table tfoot td {
+        .vxe-table tfoot td {
           color: red; // 修改表尾字体颜色
         }
         `
@@ -200,22 +200,22 @@ export default defineComponent({
               tablePrint: {
                 // 自定义打印的样式示例
                 style: \`
-                table.vxe-table {
+                .vxe-table {
                   color: #000000; // 修改表格默认颜色
                   font-size: 12px; // 修改表格默认字体大小
                   font-family: "Microsoft YaHei",微软雅黑,"MicrosoftJhengHei",华文细黑,STHeiti,MingLiu; // 修改表格默认字体
                 }
-                table.vxe-table,
-                table.vxe-table thead th,
-                table.vxe-table tbody td,
-                table.vxe-table tfoot td  {
+                .vxe-table,
+                .vxe-table thead th,
+                .vxe-table tbody td,
+                .vxe-table tfoot td  {
                   border-color: #000000; // 修改表格边框颜色
                 }
-                table.vxe-table thead th {
+                .vxe-table thead th {
                   color: green; // 修改表头字体颜色
                   font-size: 14px; // 修改表头默认字体大小
                 }
-                table.vxe-table tfoot td {
+                .vxe-table tfoot td {
                   color: red; // 修改表尾字体颜色
                 }
                 \`

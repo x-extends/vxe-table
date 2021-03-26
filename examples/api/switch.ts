@@ -8,7 +8,7 @@ const apis = [
     defVal: '',
     list: [
       {
-        name: 'v-model / modelValue',
+        name: 'modelValue',
         descKey: 'app.api.switch.desc.value',
         version: '',
         type: 'string | number | boolean',

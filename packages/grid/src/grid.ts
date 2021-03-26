@@ -7,7 +7,7 @@ import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps } from '../../../types/all'
+import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps } from '../../../types/all'
 
 function getOffsetHeight (elem: HTMLElement) {
   return elem ? elem.offsetHeight : 0
@@ -423,6 +423,7 @@ export default defineComponent({
           slotVNs = slots.form({ $grid: $xegrid })
         } else {
           if (formOpts.items) {
+            const formSlots: { [key: string]: () => VNode[] } = {}
             if (!formOpts.inited) {
               formOpts.inited = true
               const beforeItem = proxyOpts.beforeItem
@@ -432,6 +433,16 @@ export default defineComponent({
                 })
               }
             }
+            // 处理插槽
+            formOpts.items.forEach((item) => {
+              XEUtils.each(item.slots, (func) => {
+                if (!XEUtils.isFunction(func)) {
+                  if (slots[func]) {
+                    formSlots[func] = slots[func] as any
+                  }
+                }
+              })
+            })
             slotVNs.push(
               h(resolveComponent('vxe-form') as ComponentOptions, {
                 ref: refForm,
@@ -442,7 +453,7 @@ export default defineComponent({
                 onReset: resetFormEvent,
                 onSubmitInvalid: submitInvalidEvent,
                 onToggleCollapse: togglCollapseEvent
-              })
+              }, formSlots)
             )
           }
         }
@@ -883,11 +894,15 @@ export default defineComponent({
       revert () {
         return handleZoom()
       },
-      getFormItems () {
+      getFormItems (itemIndex?: number): any {
         const formOpts = computeFormOpts.value
         const { formConfig } = props
         const { items } = formOpts
-        return isEnableConf(formConfig) && items ? items : []
+        const itemList: VxeFormItemProps[] = []
+        XEUtils.eachTree(isEnableConf(formConfig) && items ? items : [], item => {
+          itemList.push(item)
+        }, { children: 'children' })
+        return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
       },
       getPendingRecords () {
         return reactData.pendingRecords

@@ -113,8 +113,8 @@ import GridPageProxy from '../views/grid/PageProxy.vue'
 import GridEdit from '../views/grid/Edit.vue'
 import GridCellDisable from '../views/grid/CellDisable.vue'
 import GridRowDisable from '../views/grid/RowDisable.vue'
-// import GridForm from '../views/grid/Form.vue'
-// import GridFormProxy from '../views/grid/FormProxy.vue'
+import GridForm from '../views/grid/Form.vue'
+import GridFormProxy from '../views/grid/FormProxy.vue'
 import GridToolbar from '../views/grid/Toolbar.vue'
 import GridCustomToolbar from '../views/grid/CustomToolbar.vue'
 import GridToolbarIcon from '../views/grid/ToolbarIcon.vue'
@@ -223,8 +223,8 @@ import TableEditFooter from '../views/table/edit/Footer.vue'
 import TableEditFooterImmediately from '../views/table/edit/FooterImmediately.vue'
 import TableEditExpand from '../views/table/edit/Expand.vue'
 import TableEditMenu from '../views/table/edit/Menu.vue'
-// import TableEditSpan from '../views/table/edit/Span.vue'
-// import TableEditForm from '../views/table/edit/Form.vue'
+import TableEditSpan from '../views/table/edit/Span.vue'
+import TableEditForm from '../views/table/edit/Form.vue'
 import TableEditUpload from '../views/table/edit/Upload.vue'
 import TableEditRealtimeSave from '../views/table/edit/RealtimeSave.vue'
 import TableEditDataCount from '../views/table/edit/DataCount.vue'
@@ -1049,16 +1049,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'GridRowDisable',
     component: GridRowDisable
   },
-  // {
-  //   path: '/table/grid/form',
-  //   name: 'GridForm',
-  //   component: GridForm
-  // },
-  // {
-  //   path: '/table/grid/formProxy',
-  //   name: 'GridFormProxy',
-  //   component: GridFormProxy
-  // },
+  {
+    path: '/table/grid/form',
+    name: 'GridForm',
+    component: GridForm
+  },
+  {
+    path: '/table/grid/formProxy',
+    name: 'GridFormProxy',
+    component: GridFormProxy
+  },
   {
     path: '/table/grid/toolbar',
     name: 'GridToolbar',
@@ -1370,16 +1370,16 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableEditMenu',
     component: TableEditMenu
   },
-  // {
-  //   path: '/table/edit/span',
-  //   name: 'TableEditSpan',
-  //   component: TableEditSpan
-  // },
-  // {
-  //   path: '/table/edit/form',
-  //   name: 'TableEditForm',
-  //   component: TableEditForm
-  // },
+  {
+    path: '/table/edit/span',
+    name: 'TableEditSpan',
+    component: TableEditSpan
+  },
+  {
+    path: '/table/edit/form',
+    name: 'TableEditForm',
+    component: TableEditForm
+  },
   {
     path: '/table/edit/upload',
     name: 'TableEditUpload',

@@ -142,7 +142,7 @@ export default defineComponent({
           const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
           let panelPlacement = 'bottom'
           if (transfer) {
-            let left = boundingLeft
+            let left = boundingLeft + targetWidth - panelWidth
             let top = boundingTop + targetHeight
             if (placement === 'top') {
               panelPlacement = 'top'
@@ -169,6 +169,7 @@ export default defineComponent({
             }
             Object.assign(panelStyle, {
               left: `${left}px`,
+              right: 'auto',
               top: `${top}px`,
               minWidth: `${targetWidth}px`
             })

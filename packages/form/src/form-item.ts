@@ -1,9 +1,9 @@
 import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType } from 'vue'
-import { createItem, watchItem, destroyItem, assemItem } from './util'
+import { createItem, watchItem, destroyItem, assemItem, XEFormItemProvide } from './util'
 
 import { VxeFormConstructor, VxeFormItemPropTypes } from '../../../types/all'
 
-const itemProps = {
+export const formItemProps = {
   title: String as PropType<VxeFormItemPropTypes.Title>,
   field: String as PropType<VxeFormItemPropTypes.Field>,
   span: [String, Number] as PropType<VxeFormItemPropTypes.Span>,
@@ -24,17 +24,18 @@ const itemProps = {
 
 export default defineComponent({
   name: 'VxeFormItem',
-  props: itemProps,
+  props: formItemProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>
     const $xeform = inject('$xeform', {} as VxeFormConstructor)
+    const formGather = inject('xeformgather', null as XEFormItemProvide | null)
     const formItem = createItem($xeform, props)
     formItem.slots = slots
 
     watchItem(props, formItem)
 
     nextTick(() => {
-      assemItem($xeform, refElem.value, formItem)
+      assemItem($xeform, refElem.value, formItem, formGather)
     })
 
     onUnmounted(() => {

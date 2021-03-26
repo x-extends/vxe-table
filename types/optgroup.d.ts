@@ -1,5 +1,5 @@
-import { DefineComponent } from 'vue'
 import { VXEComponent } from './component'
+import { VxeOptionPropTypes } from './option'
 
 /**
  * 组件 - 下拉框选项分组
@@ -11,13 +11,13 @@ export type VxeOptgroupProps = {
   /**
    * 显示内容
    */
-  label?: string | number | boolean;
+  label?: VxeOptionPropTypes.Label;
   /**
    * 是否禁用
    */
-  visible?: boolean;
+  visible?: VxeOptionPropTypes.Visible;
   /**
    * 是否禁用
    */
-  disabled?: boolean;
+  disabled?: VxeOptionPropTypes.Disabled;
 }

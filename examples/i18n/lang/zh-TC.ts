@@ -238,8 +238,8 @@ export default {
 
         api: 'API',
         vxeTable: 'vxe-table',
-        vxeTableColgroup: 'vxe-table-colgroup',
-        vxeTableColumn: 'vxe-table-column',
+        vxeTableColgroup: 'vxe-colgroup',
+        vxeTableColumn: 'vxe-column',
         vxeGrid: 'vxe-grid',
         vxeVirtualTree: 'vxe-virtual-tree',
         vxeExcel: 'vxe-excel',
@@ -260,6 +260,7 @@ export default {
         vxeModal: 'vxe-modal',
         vxeForm: 'vxe-form',
         vxeFormItem: 'vxe-form-item',
+        vxeFormGather: 'vxe-form-gather',
         vxeSwitch: 'vxe-switch',
         vxeList: 'vxe-list',
         vxePulldown: 'vxe-pulldown'
@@ -607,7 +608,7 @@ export default {
       },
       radio: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           label: '值',
           size: '尺寸',
           disabled: '是否禁用',
@@ -616,7 +617,7 @@ export default {
       },
       checkbox: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           disabled: '是否禁用',
           label: '只对 checkbox-group 有效，值',
@@ -626,7 +627,7 @@ export default {
       },
       input: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           immediate: '默认情况下输入会实时同步值，当在复杂渲染时会导致卡顿，可以设置为 false 在 change 之后才同步值',
           size: '尺寸',
           disabled: '是否禁用',
@@ -650,7 +651,7 @@ export default {
       },
       modal: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           loading: '是否加载中',
           id: '设置唯一的 id（对于 Message 防止重复弹出 或 Storage 拖动状态保存等场景可能会用到）',
           title: '窗口的标题（支持开启国际化）',
@@ -720,7 +721,7 @@ export default {
       },
       select: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           multiple: '是否多选',
           placeholder: '空值显示的占位符',
@@ -740,7 +741,7 @@ export default {
       },
       option: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           label: '显示内容',
           disabled: '是否禁用',
           size: '尺寸'
@@ -748,7 +749,7 @@ export default {
       },
       switch: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           disabled: '是否禁用',
           onLabel: '打开时显示的文字',

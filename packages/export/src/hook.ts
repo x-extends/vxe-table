@@ -95,9 +95,9 @@ function getHeaderTitle (opts: any, column: any) {
   return (opts.original ? column.property : column.getTitle()) || ''
 }
 
-function getFooterData (opts: any, footerData: any) {
+function getFooterData (opts: any, footerTableData: any) {
   const { footerFilterMethod } = opts
-  return footerFilterMethod ? footerData.filter((items: any, index: any) => footerFilterMethod({ items, $rowIndex: index })) : footerData
+  return footerFilterMethod ? footerTableData.filter((items: any, index: any) => footerFilterMethod({ items, $rowIndex: index })) : footerTableData
 }
 
 function getCsvCellTypeLabel (column: any, cellValue: any) {
@@ -105,14 +105,14 @@ function getCsvCellTypeLabel (column: any, cellValue: any) {
     switch (column.cellType) {
       case 'string':
         if (!isNaN(cellValue)) {
-          return '\t' + cellValue
+          return `\t${cellValue}`
         }
         break
       case 'number':
         break
       default:
         if (cellValue.length >= 12 && !isNaN(cellValue)) {
-          return '\t' + cellValue
+          return `\t${cellValue}`
         }
         break
     }
@@ -121,7 +121,7 @@ function getCsvCellTypeLabel (column: any, cellValue: any) {
 }
 
 function toTxtCellLabel (val: any) {
-  if (/[",]/.test(val)) {
+  if (/[",\s\n]/.test(val)) {
     return `"${val.replace(/"/g, '""')}"`
   }
   return val
@@ -464,8 +464,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         content += columns.map((column: any) => toTxtCellLabel(getCsvCellTypeLabel(column, row[column.id]))).join(',') + enterSymbol
       })
       if (opts.isFooter) {
-        const { footerData } = reactData
-        const footers = getFooterData(opts, footerData)
+        const { footerTableData } = reactData
+        const footers = getFooterData(opts, footerTableData)
         footers.forEach((rows: any) => {
           content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, rows, column))).join(',') + enterSymbol
         })
@@ -482,8 +482,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         content += columns.map((column: any) => toTxtCellLabel(row[column.id])).join('\t') + enterSymbol
       })
       if (opts.isFooter) {
-        const { footerData } = reactData
-        const footers = getFooterData(opts, footerData)
+        const { footerTableData } = reactData
+        const footers = getFooterData(opts, footerTableData)
         footers.forEach((rows: any) => {
           content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, rows, column))).join(',') + enterSymbol
         })
@@ -644,8 +644,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         tables.push('</tbody>')
       }
       if (isFooter) {
-        const { footerData } = reactData
-        const footers = getFooterData(opts, footerData)
+        const { footerTableData } = reactData
+        const footers = getFooterData(opts, footerTableData)
         if (footers.length) {
           tables.push('<tfoot>')
           footers.forEach((rows: any) => {
@@ -697,8 +697,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         xml += '<Row>' + columns.map((column: any) => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('') + '</Row>'
       })
       if (opts.isFooter) {
-        const { footerData } = reactData
-        const footers = getFooterData(opts, footerData)
+        const { footerTableData } = reactData
+        const footers = getFooterData(opts, footerTableData)
         footers.forEach((rows: any) => {
           xml += `<Row>${columns.map((column: any) => `<Cell><Data ss:Type="String">${getFooterCellValue(opts, rows, column)}</Data></Cell>`).join('')}</Row>`
         })
@@ -892,12 +892,12 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
 
     const handleExportAndPrint = (options: any, isPrint?: boolean) => {
       const { treeConfig, showHeader, showFooter } = props
-      const { initStore, mergeList, isGroup, footerData, exportStore, exportParams } = reactData
+      const { initStore, mergeList, isGroup, footerTableData, exportStore, exportParams } = reactData
       const { collectColumn } = internalData
       const hasTree = treeConfig
       const customOpts = computeCustomOpts.value
       const selectRecords = $xetable.getCheckboxRecords()
-      const hasFooter = !!footerData.length
+      const hasFooter = !!footerTableData.length
       const hasMerge = !hasTree && mergeList.length
       const defOpts = Object.assign({ message: true, isHeader: showHeader, isFooter: showFooter }, options)
       const types: string[] = defOpts.types || VXETable.config.exportTypes

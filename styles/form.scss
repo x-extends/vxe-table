@@ -84,6 +84,9 @@
 }
 
 .vxe-form {
+  .vxe-form--gather {
+    display: inline-block;
+  }
   .vxe-form--item {
     display: none;
     padding: 0.5em 0.8em 0.5em 0;

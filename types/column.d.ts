@@ -1,4 +1,4 @@
-import { VNode, DefineComponent } from 'vue'
+import { VNode } from 'vue'
 import { VXEComponent } from './component'
 import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes } from './table'
 import { VxeGlobalRendererHandles } from './v-x-e-table'

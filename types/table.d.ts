@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode, DefineComponent } from 'vue'
+import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnPropTypes, VxeColumnProps } from './column'
@@ -737,7 +737,7 @@ export interface TableReactData {
   // 单选框属性，选中行
   selectRow: any;
   // 表尾合计数据
-  footerData: any[];
+  footerTableData: any[];
   // 展开列信息
   expandColumn: any;
   hasFixedColumn: boolean;
@@ -1160,7 +1160,7 @@ export namespace VxeTablePropTypes {
       row: any;
       rowIndex: number;
       $rowIndex: number;
-    }): number;
+    }): number | string;
   }
   export interface SeqOpts extends SeqConfig { }
 
@@ -1178,7 +1178,7 @@ export namespace VxeTablePropTypes {
     sortMethod?(params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods;
       data: any[];
-      sortList: any[];
+      sortList: VxeTableDefines.SortCheckedParams[];
     }): any[];
     remote?: boolean;
     multiple?: boolean;

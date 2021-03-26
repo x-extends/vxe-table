@@ -4,7 +4,7 @@ import { OptionInfo } from './optionInfo'
 
 import { VxeSelectConstructor } from '../../../types/all'
 
-export interface XEOptionInstance {
+export interface XEOptionProvide {
   option: OptionInfo;
 }
 
@@ -24,7 +24,7 @@ export function watchOption (props: any, option: OptionInfo) {
   })
 }
 
-export function assemOption ($xeselect: VxeSelectConstructor, el: HTMLDivElement, option: OptionInfo, optgroup?: XEOptionInstance | null) {
+export function assemOption ($xeselect: VxeSelectConstructor, el: HTMLDivElement, option: OptionInfo, optgroup?: XEOptionProvide | null) {
   const { reactData } = $xeselect
   const { staticOptions } = reactData
   const parentElem = el.parentNode

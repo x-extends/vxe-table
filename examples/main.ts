@@ -60,6 +60,7 @@ import {
   Tooltip,
   Form,
   FormItem,
+  FormGather,
   Select,
   Optgroup,
   Option,
@@ -119,6 +120,7 @@ app.use(Switch)
 app.use(Tooltip)
 app.use(Form)
 app.use(FormItem)
+app.use(FormGather)
 app.use(List)
 app.use(Pulldown)
 

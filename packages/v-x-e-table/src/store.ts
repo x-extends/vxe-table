@@ -1,3 +1,4 @@
+import { UtilTools } from '../../tools'
 import XEUtils from 'xe-utils'
 
 /**
@@ -20,6 +21,12 @@ export class Store {
   }
 
   add (name: string, render: any) {
+    // 检测是否覆盖
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (!XEUtils.eqNull(this.store[name]) && this.store[name] !== render) {
+        UtilTools.warn('vxe.error.coverProp', [(this as any)._name, name])
+      }
+    }
     this.store[name] = render
     return this
   }

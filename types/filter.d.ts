@@ -1,4 +1,3 @@
-import { DefineComponent } from 'vue'
 import { VXEComponent } from './component'
 import { VxeTableDefines, VxeTableMethods, VxeTablePrivateMethods } from './table'
 import { VxeColumnPropTypes } from './column'

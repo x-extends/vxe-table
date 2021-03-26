@@ -116,7 +116,6 @@
       <vxe-form
         title-colon
         ref="xForm"
-        class="my-form2"
         title-align="right"
         title-width="100"
         :data="demo2.formData2"
@@ -124,33 +123,37 @@
         :loading="demo2.loading2"
         @submit="submitEvent2"
         @reset="resetEvent">
-        <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
-        <vxe-form-item title="昵称" span="24">
-          <template #default>自定义 {{ demo2.formData2.nickname }}</template>
-        </vxe-form-item>
-        <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
-          <template #default="params">
-            <vxe-select v-model="demo2.formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(params)">
-              <vxe-option value="1" label="女"></vxe-option>
-              <vxe-option value="2" label="男"></vxe-option>
-            </vxe-select>
-          </template>
-        </vxe-form-item>
-        <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
-          <template #default>
-            <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
-          </template>
-        </vxe-form-item>
-        <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
-          <template #default>
-            <vxe-input v-model="demo2.formData2.date" type="date" placeholder="请选择日期" clearable></vxe-input>
-          </template>
-        </vxe-form-item>
-        <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
-          <template #default>
-            <vxe-textarea v-model="demo2.formData2.address" placeholder="请输入地址" clearable></vxe-textarea>
-          </template>
-        </vxe-form-item>
+        <vxe-form-gather span="12">
+          <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
+          <vxe-form-item title="昵称" span="24">
+            <template #default>自定义 {{ demo2.formData2.nickname }}</template>
+          </vxe-form-item>
+          <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
+            <template #default="params">
+              <vxe-select v-model="demo2.formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(params)">
+                <vxe-option value="1" label="女"></vxe-option>
+                <vxe-option value="2" label="男"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
+            <template #default>
+              <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+            </template>
+          </vxe-form-item>
+          <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
+            <template #default>
+              <vxe-input v-model="demo2.formData2.date" type="date" placeholder="请选择日期" clearable></vxe-input>
+            </template>
+          </vxe-form-item>
+        </vxe-form-gather>
+        <vxe-form-gather span="12">
+          <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
+            <template #default>
+              <vxe-textarea v-model="demo2.formData2.address" placeholder="请输入地址" :autosize="{minRows: 6, maxRows: 10}" clearable></vxe-textarea>
+            </template>
+          </vxe-form-item>
+        </vxe-form-gather>
         <vxe-form-item align="center" span="24">
           <template #default>
             <vxe-button type="submit" status="primary">基本表单</vxe-button>
@@ -278,7 +281,7 @@ export default defineComponent({
         sex: '',
         age: 26,
         date: null,
-        address: null
+        address: '左右布局'
       },
       formRules2: {
         name: [
@@ -464,7 +467,6 @@ export default defineComponent({
           <vxe-form
             title-colon
             ref="xForm"
-            class="my-form2"
             title-align="right"
             title-width="100"
             :data="demo2.formData2"
@@ -472,33 +474,37 @@ export default defineComponent({
             :loading="demo2.loading2"
             @submit="submitEvent2"
             @reset="resetEvent">
-            <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
-            <vxe-form-item title="昵称" span="24">
-              <template #default>自定义 {{ demo2.formData2.nickname }}</template>
-            </vxe-form-item>
-            <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
-              <template #default="params">
-                <vxe-select v-model="demo2.formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(params)">
-                  <vxe-option value="1" label="女"></vxe-option>
-                  <vxe-option value="2" label="男"></vxe-option>
-                </vxe-select>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
-              <template #default>
-                <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
-              <template #default>
-                <vxe-input v-model="demo2.formData2.date" type="date" placeholder="请选择日期" clearable></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
-              <template #default>
-                <vxe-textarea v-model="demo2.formData2.address" placeholder="请输入地址" clearable></vxe-textarea>
-              </template>
-            </vxe-form-item>
+            <vxe-form-gather span="12">
+              <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
+              <vxe-form-item title="昵称" span="24">
+                <template #default>自定义 {{ demo2.formData2.nickname }}</template>
+              </vxe-form-item>
+              <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
+                <template #default="params">
+                  <vxe-select v-model="demo2.formData2.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(params)">
+                    <vxe-option value="1" label="女"></vxe-option>
+                    <vxe-option value="2" label="男"></vxe-option>
+                  </vxe-select>
+                </template>
+              </vxe-form-item>
+              <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
+                <template #default>
+                  <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+                </template>
+              </vxe-form-item>
+              <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
+                <template #default>
+                  <vxe-input v-model="demo2.formData2.date" type="date" placeholder="请选择日期" clearable></vxe-input>
+                </template>
+              </vxe-form-item>
+            </vxe-form-gather>
+            <vxe-form-gather span="12">
+              <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
+                <template #default>
+                  <vxe-textarea v-model="demo2.formData2.address" placeholder="请输入地址" :autosize="{minRows: 6, maxRows: 10}" clearable></vxe-textarea>
+                </template>
+              </vxe-form-item>
+            </vxe-form-gather>
             <vxe-form-item align="center" span="24">
               <template #default>
                 <vxe-button type="submit" status="primary">基本表单</vxe-button>
@@ -608,7 +614,7 @@ export default defineComponent({
                 sex: '',
                 age: 26,
                 date: null,
-                address: null
+                address: 左右布局''
               },
               formRules2: {
                 name: [
@@ -685,20 +691,9 @@ export default defineComponent({
             }
           }
         }
-        `,
-        `
-        .my-form2 {
-          width: 400px;
-        }
         `
       ]
     }
   }
 })
 </script>
-
-<style scoped>
-.my-form2 {
-  width: 400px;
-}
-</style>

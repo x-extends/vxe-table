@@ -1,4 +1,4 @@
-import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { SetupContext, RenderFunction, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 
 /**

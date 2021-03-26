@@ -1,7 +1,8 @@
-import { VNode, RenderFunction, SetupContext, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { VNode, RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from './table'
+import { VxeButtonProps } from './button'
 
 /**
  * 组件 - 工具栏
@@ -45,21 +46,18 @@ export namespace VxeToolbarPropTypes {
 
   interface ImportConfig {
     icon?: string;
-    [key: string]: any;
   }
   export type Import = boolean | ImportConfig;
   export interface ImportOpts extends ImportConfig { }
 
   interface ExportConfig {
     icon?: string;
-    [key: string]: any;
   }
   export type Export = boolean | ExportConfig;
   export interface ExportOpts extends ExportConfig { }
 
   export interface PrintConfig {
     icon?: string;
-    [key: string]: any;
   }
   export type Print = boolean | PrintConfig;
   export interface PrintOpts extends PrintConfig { }
@@ -67,7 +65,6 @@ export namespace VxeToolbarPropTypes {
   interface ZoomConfig {
     iconIn?: string;
     iconOut?: string;
-    [key: string]: any;
   }
   export type Zoom = boolean | ZoomConfig;
   export interface ZoomOpts extends ZoomConfig { }
@@ -79,22 +76,16 @@ export namespace VxeToolbarPropTypes {
     checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean;
     isFooter?: Boolean;
     icon?: string;
-    [key: string]: any;
   }
   export type Custom = boolean | CustomConfig;
   export interface CustomOpts extends CustomConfig { }
 
-  export interface ButtonConfig {
-    name?: string;
-    type?: string;
-    status?: string;
+  export interface ButtonConfig extends VxeButtonProps {
     code?: string;
     visible?: boolean;
-    disabled?: boolean;
-    icon?: string;
     dropdowns?: ButtonConfig[];
     buttonRender?: VxeGlobalRendererHandles.RenderButtonOptions;
-    [key: string]: any;
+    params?: any;
   }
   export type Buttons = ButtonConfig[];
 
@@ -145,13 +136,13 @@ export type VxeToolbarProps = {
 
 export interface ToolbarReactData {
   isRefresh: boolean;
-  columns: any[];
+  columns: VxeTableDefines.ColumnInfo[];
 }
 
 export interface ToolbarMethods {
   dispatchEvent(type: ValueOf<VxeToolbarEmits>, params: any, evnt: Event): void;
   syncUpdate(params: {
-    collectColumn: any[];
+    collectColumn: VxeTableDefines.ColumnInfo[];
     $table: VxeTableConstructor & VxeTablePrivateMethods;
   }): void;
 }

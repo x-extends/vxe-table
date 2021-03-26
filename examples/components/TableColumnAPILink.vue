@@ -1,5 +1,5 @@
 <template>
-  <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'table-column'}, query: {filterName: prop}}">{{ prop || name }}</router-link>
+  <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'column'}, query: {filterName: prop}}">{{ prop || name }}</router-link>
 </template>
 
 <script lang="ts">

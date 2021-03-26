@@ -3,14 +3,14 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeRadioGroupConstructor, VxeRadioGroupEmits, VxeRadioGroupPrivateMethods, RadioGroupPrivateMethods, RadioGroupMethods } from '../../../types/all'
+import { VxeRadioGroupPropTypes, VxeRadioGroupConstructor, VxeRadioGroupEmits, VxeRadioGroupPrivateMethods, RadioGroupPrivateMethods, RadioGroupMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeRadioGroup',
   props: {
-    modelValue: [String, Number, Boolean],
-    disabled: Boolean,
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
+    modelValue: [String, Number, Boolean] as PropType<VxeRadioGroupPropTypes.ModelValue>,
+    disabled: Boolean as PropType<VxeRadioGroupPropTypes.Disabled>,
+    size: { type: String as PropType<VxeRadioGroupPropTypes.Size>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',

@@ -1,4 +1,3 @@
-import { DefineComponent } from 'vue'
 import { VXEComponent } from './component'
 import { VxeTablePropTypes, VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from './table'
 import { VxeGridConstructor } from './grid'

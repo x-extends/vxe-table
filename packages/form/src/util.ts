@@ -4,6 +4,10 @@ import { ItemInfo } from './itemInfo'
 
 import { VxeFormConstructor } from '../../../types/all'
 
+export interface XEFormItemProvide {
+  formItem: ItemInfo;
+}
+
 export function isFormItem (item: any): item is ItemInfo {
   return item instanceof ItemInfo
 }
@@ -20,12 +24,14 @@ export function watchItem (props: any, formItem: ItemInfo) {
   })
 }
 
-export function assemItem ($xeform: VxeFormConstructor, el: HTMLDivElement, formItem: ItemInfo) {
+export function assemItem ($xeform: VxeFormConstructor, el: HTMLDivElement, formItem: ItemInfo, formGather: XEFormItemProvide | null) {
   const { reactData } = $xeform
   const { staticItems } = reactData
   const parentElem = el.parentNode
+  const parentItem = formGather ? formGather.formItem : null
+  const parentItems = parentItem ? parentItem.children : staticItems
   if (parentElem) {
-    staticItems.splice(XEUtils.arrayIndexOf(parentElem.children, el), 0, formItem)
+    parentItems.splice(XEUtils.arrayIndexOf(parentElem.children, el), 0, formItem)
     reactData.staticItems = staticItems.slice(0)
   }
 }

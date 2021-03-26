@@ -105,10 +105,10 @@ export default defineComponent({
     festivalMethod: { type: Function as PropType<VxeInputPropTypes.FestivalMethod>, default: () => GlobalConfig.input.festivalMethod },
     disabledMethod: { type: Function as PropType<VxeInputPropTypes.DisabledMethod>, default: () => GlobalConfig.input.disabledMethod },
 
-    prefixIcon: String,
-    suffixIcon: String,
-    placement: String,
-    transfer: { type: Boolean, default: () => GlobalConfig.input.transfer }
+    prefixIcon: String as PropType<VxeInputPropTypes.PrefixIcon>,
+    suffixIcon: String as PropType<VxeInputPropTypes.SuffixIcon>,
+    placement: String as PropType<VxeInputPropTypes.Placement>,
+    transfer: { type: Boolean as PropType<VxeInputPropTypes.Transfer>, default: () => GlobalConfig.input.transfer }
   },
   emits: [
     'update:modelValue',

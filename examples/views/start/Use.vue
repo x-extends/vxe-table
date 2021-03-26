@@ -30,8 +30,10 @@
         import { createApp } = 'vue'
         import 'xe-utils'
         import {
+          // 核心
           VXETable,
 
+          // 表格功能
           Header,
           // Footer,
           // Icon,
@@ -42,6 +44,7 @@
           // Keyboard,
           // Validator,
 
+          // 可选组件
           Column,
           // Colgroup,
           // Grid,
@@ -50,6 +53,7 @@
           // Pager,
           // Form,
           // FormItem,
+          // FormGather,
           // Checkbox,
           // CheckboxGroup,
           // Radio,
@@ -66,6 +70,7 @@
           // List,
           // Pulldown,
 
+          // 表格
           Table
         } from 'vxe-table'
         import zhCN from 'vxe-table/lib/locale/lang/zh-CN'
@@ -97,6 +102,7 @@
         // .use(Pager)
         // .use(Form)
         // .use(FormItem)
+        // .use(FormGather)
         // .use(Checkbox)
         // .use(CheckboxGroup)
         // .use(Radio)

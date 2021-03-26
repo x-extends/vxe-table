@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 

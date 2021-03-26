@@ -135,7 +135,7 @@ export default defineComponent({
         const clientVisibleWidth = document.documentElement.clientWidth || document.body.clientWidth
         const clientVisibleHeight = document.documentElement.clientHeight || document.body.clientHeight
         const isPosCenter = position === 'center'
-        const { top, left }: any = isPosCenter ? { top: position, left: position } : Object.assign({}, position)
+        const { top, left }: any = XEUtils.isString(position) ? { top: position, left: position } : Object.assign({}, position)
         const topCenter = isPosCenter || top === 'center'
         const leftCenter = isPosCenter || left === 'center'
         let posTop = ''
@@ -699,7 +699,9 @@ export default defineComponent({
       const headerSlot = slots.header || propSlots.header
       const headVNs: VNode[] = []
       if (props.showHeader) {
-        const headerOns: any = {}
+        const headerOns: {
+          onDblclick?: typeof toggleZoomEvent;
+        } = {}
         if (showZoom && props.dblclickZoom && props.type === 'modal') {
           headerOns.onDblclick = toggleZoomEvent
         }

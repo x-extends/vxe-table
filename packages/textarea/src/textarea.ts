@@ -4,26 +4,26 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef } from '../../../types/all'
+import { VxeTextareaPropTypes, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef } from '../../../types/all'
 
 let autoTxtElem: HTMLDivElement
 
 export default defineComponent({
   name: 'VxeTextarea',
   props: {
-    modelValue: [String, Number],
-    immediate: { type: Boolean, default: true },
-    name: String,
-    readonly: Boolean,
-    disabled: Boolean,
-    placeholder: String,
-    maxlength: [String, Number],
-    rows: { type: [String, Number], default: 2 },
-    showWordCount: Boolean,
-    autosize: [Boolean, Object],
-    form: String,
-    resize: { type: String, default: () => GlobalConfig.textarea.resize },
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
+    modelValue: [String, Number] as PropType<VxeTextareaPropTypes.ModelValue>,
+    immediate: { type: Boolean as PropType<VxeTextareaPropTypes.Immediate>, default: true },
+    name: String as PropType<VxeTextareaPropTypes.Name>,
+    readonly: Boolean as PropType<VxeTextareaPropTypes.Readonly>,
+    disabled: Boolean as PropType<VxeTextareaPropTypes.Disabled>,
+    placeholder: String as PropType<VxeTextareaPropTypes.Placeholder>,
+    maxlength: [String, Number] as PropType<VxeTextareaPropTypes.Maxlength>,
+    rows: { type: [String, Number] as PropType<VxeTextareaPropTypes.Rows>, default: 2 },
+    showWordCount: Boolean as PropType<VxeTextareaPropTypes.ShowWordCount>,
+    autosize: [Boolean, Object] as PropType<VxeTextareaPropTypes.Autosize>,
+    form: String as PropType<VxeTextareaPropTypes.Form>,
+    resize: { type: String as PropType<VxeTextareaPropTypes.Resize>, default: () => GlobalConfig.textarea.resize },
+    size: { type: String as PropType<VxeTextareaPropTypes.Size>, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',
@@ -189,8 +189,8 @@ export default defineComponent({
     })
 
     nextTick(() => {
-      const { inputValue } = reactData
-      if (inputValue) {
+      const { autosize } = props
+      if (autosize) {
         updateAutoTxt()
         handleResize()
       }

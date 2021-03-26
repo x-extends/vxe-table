@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeFormItemProps, VxeFormItemPropTypes } from './form-item'
 
@@ -87,7 +87,7 @@ export namespace VxeFormPropTypes {
 export type VxeFormProps<D = any> = {
   size?: VxeFormPropTypes.Size;
   loading?: VxeFormPropTypes.Loading;
-  data?: D[];
+  data?: D;
   span?: VxeFormPropTypes.Span;
   align?: VxeFormPropTypes.Align;
   titleAlign?: VxeFormPropTypes.TitleAlign;
@@ -166,6 +166,7 @@ export namespace VxeFormDefines {
     showError: boolean;
     errRule: any;
     slots: VxeFormItemPropTypes.Slots;
+    children: ItemInfo[];
   }
 
   export interface FormRule {

@@ -77,7 +77,7 @@ export default defineComponent({
       // 单选框属性，选中行
       selectRow: null,
       // 表尾合计数据
-      footerData: [],
+      footerTableData: [],
       // 展开列信息
       expandColumn: null,
       // 树节点列信息
@@ -1067,32 +1067,45 @@ export default defineComponent({
       }
       const tableHeight = bodyElem.offsetHeight
       const overflowY = bodyElem.scrollHeight > bodyElem.clientHeight
-      reactData.scrollbarWidth = overflowY ? bodyElem.offsetWidth - bodyElem.clientWidth : 0
+      let scrollbarWidth = 0
+      if (overflowY) {
+        scrollbarWidth = Math.max(bodyElem.offsetWidth - bodyElem.clientWidth, 0)
+      }
+      reactData.scrollbarWidth = scrollbarWidth
       reactData.overflowY = overflowY
       internalData.tableWidth = tableWidth
       internalData.tableHeight = tableHeight
+      let headerHeight = 0
       if (headerElem) {
-        internalData.headerHeight = headerElem.clientHeight
+        headerHeight = headerElem.clientHeight
         // 检测是否同步滚动
         if (headerElem.scrollLeft !== bodyElem.scrollLeft) {
           headerElem.scrollLeft = bodyElem.scrollLeft
         }
-      } else {
-        internalData.headerHeight = 0
       }
+      internalData.headerHeight = headerHeight
+
+      let overflowX = false
+      let footerHeight = 0
+      let scrollbarHeight = 0
       if (footerElem) {
-        const footerHeight = footerElem.offsetHeight
-        reactData.scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
-        reactData.overflowX = tableWidth > footerElem.clientWidth
-        internalData.footerHeight = footerHeight
+        footerHeight = footerElem.offsetHeight
+        overflowX = tableWidth > footerElem.clientWidth
+        if (overflowX) {
+          scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
+        }
       } else {
-        internalData.footerHeight = 0
-        reactData.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
-        reactData.overflowX = tableWidth > bodyWidth
+        overflowX = tableWidth > bodyWidth
+        if (overflowX) {
+          scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
+        }
       }
+      internalData.footerHeight = footerHeight
+      reactData.overflowX = overflowX
+      reactData.scrollbarHeight = scrollbarHeight
       updateHeight()
-      reactData.parentHeight = Math.max(internalData.headerHeight + internalData.footerHeight + 20, tablePrivateMethods.getParentHeight())
-      if (reactData.overflowX) {
+      reactData.parentHeight = Math.max(internalData.headerHeight + footerHeight + 20, tablePrivateMethods.getParentHeight())
+      if (overflowX) {
         tablePrivateMethods.checkScrolling()
       }
     }
@@ -1225,9 +1238,11 @@ export default defineComponent({
 
             // 如果是使用优化模式
             let isOptimize = false
-            if (fixedType) {
-              if (scrollXLoad || allColumnHeaderOverflow) {
-                isOptimize = true
+            if (!isGroup) {
+              if (fixedType) {
+                if (scrollXLoad || allColumnHeaderOverflow) {
+                  isOptimize = true
+                }
               }
             }
             if (isOptimize) {
@@ -2401,13 +2416,13 @@ export default defineComponent({
        * 如果存在排序，继续处理
        */
       getTableData () {
-        const { tableData, footerData } = reactData
+        const { tableData, footerTableData } = reactData
         const { tableFullData, afterFullData } = internalData
         return {
           fullData: tableFullData.slice(0),
           visibleData: afterFullData.slice(0),
           tableData: tableData.slice(0),
-          footerData: footerData.slice(0)
+          footerData: footerTableData.slice(0)
         }
       },
       /**
@@ -3409,7 +3424,7 @@ export default defineComponent({
         const { showFooter, footerMethod } = props
         const { visibleColumn, afterFullData } = internalData
         if (showFooter && footerMethod) {
-          reactData.footerData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xetable, $grid: $xegrid }) : []
+          reactData.footerTableData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xetable, $grid: $xegrid }) : []
         }
         return nextTick()
       },
@@ -4926,7 +4941,7 @@ export default defineComponent({
      */
     const renderFixed = (fixedType: 'left' | 'right') => {
       const { showHeader, showFooter } = props
-      const { tableData, tableColumn, tableGroupColumn, columnStore, footerData } = reactData
+      const { tableData, tableColumn, tableGroupColumn, columnStore, footerTableData } = reactData
       const isFixedLeft = fixedType === 'left'
       const fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
       return h('div', {
@@ -4950,7 +4965,7 @@ export default defineComponent({
         }),
         showFooter ? h(resolveComponent('vxe-table-footer') as ComponentOptions, {
           ref: isFixedLeft ? refTableLeftFooter : refTableRightFooter,
-          footerData,
+          footerTableData,
           tableColumn,
           fixedColumn,
           fixedType
@@ -5236,7 +5251,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig } = props
-      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerData, initStore, columnStore, filterStore } = reactData
+      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
       const { leftList, rightList } = columnStore
       const tooltipOpts = computeTooltipOpts.value
       const treeOpts = computeTreeOpts.value
@@ -5307,7 +5322,7 @@ export default defineComponent({
              */
             showFooter ? h(resolveComponent('vxe-table-footer') as ComponentOptions, {
               ref: refTableFooter,
-              footerData,
+              footerTableData,
               tableColumn
             }) : createCommentVNode()
           ]),

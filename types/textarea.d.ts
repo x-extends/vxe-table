@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, DefineComponent } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
@@ -28,55 +28,71 @@ export interface TextareaPrivateRef {
 export interface VxeTextareaPrivateRef extends TextareaPrivateRef { }
 
 export type VxeTextareaProps = {
-  size?: SizeType;
+  size?: VxeTextareaPropTypes.Size;
   /**
    * 绑定值
    */
-  modelValue?: string | number;
-  immediate?: boolean;
+  modelValue?: VxeTextareaPropTypes.ModelValue;
+  immediate?: VxeTextareaPropTypes.Immediate;
   /**
    * 原生 name 属性
    */
-  name?: string;
+  name?: VxeTextareaPropTypes.Name;
   /**
    * 是否只读
    */
-  readonly?: boolean;
+  readonly?: VxeTextareaPropTypes.Readonly;
   /**
    * 是否禁用
    */
-  disabled?: boolean;
+  disabled?: VxeTextareaPropTypes.Disabled;
   /**
    * 当值为空时，显示的占位符
    */
-  placeholder?: string;
+  placeholder?: VxeTextareaPropTypes.Placeholder;
   /**
    * 最大长度
    */
-  maxlength?: string | number;
+  maxlength?: VxeTextareaPropTypes.Maxlength;
   /**
    * 原生 rows 属性
    */
-  rows?: string | number;
+  rows?: VxeTextareaPropTypes.Rows;
   /**
    * 是否显示字数统计
    */
-  showWordCount?: boolean;
+  showWordCount?: VxeTextareaPropTypes.ShowWordCount;
   /**
    * 自适应文本高度
    */
-  autosize?: {
-    minRows?: number;
-    maxRows?: number;
-  };
+  autosize?: VxeTextareaPropTypes.Autosize;
   /**
    * 原生 form 属性
    */
-  form?: string;
+  form?: VxeTextareaPropTypes.Form;
   /**
    * 调整文本域大小的方式
    */
-  resize?: string;
+  resize?: VxeTextareaPropTypes.Resize;
+}
+
+export namespace VxeTextareaPropTypes {
+  export type Size = SizeType;
+  export type ModelValue = string | number;
+  export type Immediate = boolean;
+  export type Name = string;
+  export type Readonly = boolean;
+  export type Disabled = boolean;
+  export type Placeholder = string;
+  export type Maxlength = string | number;
+  export type Rows = string | number;
+  export type ShowWordCount = boolean;
+  export type Autosize = {
+    minRows?: number;
+    maxRows?: number;
+  };
+  export type Form = string;
+  export type Resize = string;
 }
 
 export interface TextareaMethods {

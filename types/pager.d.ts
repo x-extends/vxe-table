@@ -1,4 +1,4 @@
-import { SetupContext, RenderFunction, Ref, ComponentPublicInstance, DefineComponent } from 'vue'
+import { SetupContext, RenderFunction, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
@@ -22,64 +22,86 @@ export interface PagerPrivateRef {
 export interface VxePagerPrivateRef extends PagerPrivateRef { }
 
 export type VxePagerProps = {
-  size?: SizeType;
+  size?: VxePagerPropTypes.Size;
   /**
    * 自定义布局
    */
-  layouts?: Array<'PrevJump' | 'PrevPage' | 'Number' | 'JumpNumber' | 'NextPage' | 'NextJump' | 'Sizes' | 'Jump' | 'FullJump' | 'PageCount' | 'Total'>;
+  layouts?: VxePagerPropTypes.Layouts;
   /**
    * 当前页
    */
-  currentPage?: number;
+  currentPage?: VxePagerPropTypes.CurrentPage;
   /**
    * 加载中
    */
-  loading?: boolean;
+  loading?: VxePagerPropTypes.Loading;
   /**
    * 每页大小
    */
-  pageSize?: number;
+  pageSize?: VxePagerPropTypes.PageSize;
   /**
    * 总条数
    */
-  total?: number;
+  total?: VxePagerPropTypes.Total;
   /**
    * 显示页码按钮的数量
    */
-  pagerCount?: number;
+  pagerCount?: VxePagerPropTypes.PagerCount;
   /**
    * 每页大小选项列表
    */
-  pageSizes?: number[];
+  pageSizes?: VxePagerPropTypes.PageSizes;
   /**
    * 列对其方式
    */
-  align?: string;
+  align?: VxePagerPropTypes.Align;
   /**
    * 带边框
    */
-  border?: boolean;
+  border?: VxePagerPropTypes.Border;
   /**
    * 带背景颜色
    */
-  background?: boolean;
+  background?: VxePagerPropTypes.Background;
   /**
    * 配套的样式
    */
-  perfect?: boolean;
+  perfect?: VxePagerPropTypes.Perfect;
   /**
    * 当只有一页时隐藏
    */
-  autoHidden?: boolean;
-  transfer?: boolean;
+  autoHidden?: VxePagerPropTypes.AutoHidden;
+  transfer?: VxePagerPropTypes.Transfer;
   /**
    * 自定义图标
    */
-  iconPrevPage?: string;
-  iconJumpPrev?: string;
-  iconJumpNext?: string;
-  iconNextPage?: string;
-  iconJumpMore?: string;
+  iconPrevPage?: VxePagerPropTypes.IconPrevPage;
+  iconJumpPrev?: VxePagerPropTypes.IconJumpPrev;
+  iconJumpNext?: VxePagerPropTypes.IconJumpNext;
+  iconNextPage?: VxePagerPropTypes.IconNextPage;
+  iconJumpMore?: VxePagerPropTypes.IconJumpMore;
+}
+
+export namespace VxePagerPropTypes {
+  export type Size = SizeType;
+  export type Layouts = Array<'PrevJump' | 'PrevPage' | 'Number' | 'JumpNumber' | 'NextPage' | 'NextJump' | 'Sizes' | 'Jump' | 'FullJump' | 'PageCount' | 'Total'>;
+  export type CurrentPage = number;
+  export type Loading = boolean;
+  export type PageSize = number;
+  export type Total = number;
+  export type PagerCount = number;
+  export type PageSizes = PageSizeItemType[];
+  export type Align = string;
+  export type Border = boolean;
+  export type Background = boolean;
+  export type Perfect = boolean;
+  export type AutoHidden = boolean;
+  export type Transfer = boolean;
+  export type IconPrevPage = string;
+  export type IconJumpPrev = string;
+  export type IconJumpNext = string;
+  export type IconNextPage = string;
+  export type IconJumpMore = string;
 }
 
 export type PageSizeItemType = number | {

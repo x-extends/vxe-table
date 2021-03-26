@@ -4,7 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeGlobalRendererHandles, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor } from '../../../types/all'
+import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps } from '../../../types/all'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -18,22 +18,22 @@ export default defineComponent({
   name: 'VxeSelect',
   props: {
     modelValue: null,
-    clearable: Boolean,
-    placeholder: String,
-    disabled: Boolean,
-    multiple: Boolean,
-    multiCharOverflow: { type: [Number, String], default: () => GlobalConfig.select.multiCharOverflow },
-    prefixIcon: String,
-    placement: String,
-    options: Array as PropType<any[]>,
-    optionProps: Object as PropType<VxeGlobalRendererHandles.RenderOptionProps>,
-    optionGroups: Array as PropType<any[]>,
-    optionGroupProps: Object as PropType<VxeGlobalRendererHandles.RenderOptionGroupProps>,
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.select.size || GlobalConfig.size },
-    emptyText: String,
-    optionId: { type: String, default: () => GlobalConfig.select.optionId },
-    optionKey: Boolean,
-    transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
+    clearable: Boolean as PropType<VxeSelectPropTypes.Clearable>,
+    placeholder: String as PropType<VxeSelectPropTypes.Placeholder>,
+    disabled: Boolean as PropType<VxeSelectPropTypes.Disabled>,
+    multiple: Boolean as PropType<VxeSelectPropTypes.Multiple>,
+    multiCharOverflow: { type: [Number, String] as PropType<VxeSelectPropTypes.MultiCharOverflow>, default: () => GlobalConfig.select.multiCharOverflow },
+    prefixIcon: String as PropType<VxeSelectPropTypes.PrefixIcon>,
+    placement: String as PropType<VxeSelectPropTypes.Placement>,
+    options: Array as PropType<VxeSelectPropTypes.Options>,
+    optionProps: Object as PropType<VxeSelectPropTypes.OptionProps>,
+    optionGroups: Array as PropType<VxeSelectPropTypes.OptionGroups>,
+    optionGroupProps: Object as PropType<VxeSelectPropTypes.OptionGroupProps>,
+    size: { type: String as PropType<VxeSelectPropTypes.Size>, default: () => GlobalConfig.select.size || GlobalConfig.size },
+    emptyText: String as PropType<VxeSelectPropTypes.EmptyText>,
+    optionId: { type: String as PropType<VxeSelectPropTypes.OptionId>, default: () => GlobalConfig.select.optionId },
+    optionKey: Boolean as PropType<VxeSelectPropTypes.OptionKey>,
+    transfer: { type: Boolean as PropType<VxeSelectPropTypes.Transfer>, default: () => GlobalConfig.select.transfer }
   },
   emits: [
     'update:modelValue',
@@ -135,7 +135,7 @@ export default defineComponent({
           }
         }
       }
-      return fullOptionList.find((item: any) => optionValue === item[valueField])
+      return fullOptionList.find((item) => optionValue === item[valueField])
     }
 
     const getSelectLabel = (value: any) => {
@@ -148,7 +148,7 @@ export default defineComponent({
       const { modelValue, multiple } = props
       const multiMaxCharNum = computeMultiMaxCharNum.value
       if (modelValue && multiple) {
-        return modelValue.map((val: any) => {
+        return (modelValue as any[]).map((val) => {
           const label = getSelectLabel(val)
           if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
             return `${label.substring(0, multiMaxCharNum)}...`
@@ -211,7 +211,7 @@ export default defineComponent({
       }
     }
 
-    const scrollToOption = (option: any, isAlignBottom?: any) => {
+    const scrollToOption = (option: any, isAlignBottom?: boolean) => {
       return nextTick().then(() => {
         if (option) {
           const optWrapperElem = refOptionWrapper.value
@@ -353,12 +353,12 @@ export default defineComponent({
       selectMethods.dispatchEvent('clear', { value: selectValue }, evnt)
     }
 
-    const clearEvent = (params: any, evnt: any) => {
+    const clearEvent = (params: any, evnt: Event) => {
       clearValueEvent(evnt, null)
       hideOptionPanel()
     }
 
-    const changeOptionEvent = (evnt: any, selectValue: any) => {
+    const changeOptionEvent = (evnt: Event, selectValue: any) => {
       const { modelValue, multiple } = props
       if (multiple) {
         let multipleValue
@@ -366,7 +366,7 @@ export default defineComponent({
           if (modelValue.indexOf(selectValue) === -1) {
             multipleValue = modelValue.concat([selectValue])
           } else {
-            multipleValue = modelValue.filter((val: any) => val !== selectValue)
+            multipleValue = (modelValue as any[]).filter((val) => val !== selectValue)
           }
         } else {
           multipleValue = [selectValue]
@@ -378,7 +378,7 @@ export default defineComponent({
       }
     }
 
-    const handleGlobalMousewheelEvent = (evnt: any) => {
+    const handleGlobalMousewheelEvent = (evnt: MouseEvent) => {
       const { disabled } = props
       const { visiblePanel } = reactData
       if (!disabled) {
@@ -393,7 +393,7 @@ export default defineComponent({
       }
     }
 
-    const handleGlobalMousedownEvent = (evnt: any) => {
+    const handleGlobalMousedownEvent = (evnt: MouseEvent) => {
       const { disabled } = props
       const { visiblePanel } = reactData
       if (!disabled) {
@@ -406,7 +406,7 @@ export default defineComponent({
       }
     }
 
-    const findOffsetOption = (optionValue: any, isUpArrow: any) => {
+    const findOffsetOption = (optionValue: any, isUpArrow: boolean) => {
       const { visibleOptionList, visibleGroupList } = reactData
       const isGroup = computeIsGroup.value
       const valueField = computeValueField.value
@@ -479,7 +479,7 @@ export default defineComponent({
       return { firstOption }
     }
 
-    const handleGlobalKeydownEvent = (evnt: any) => {
+    const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
       const { clearable, disabled } = props
       const { visiblePanel, currentValue } = reactData
       if (!disabled) {
@@ -548,13 +548,13 @@ export default defineComponent({
       }
     }
 
-    const renderOption = (list: any, group?: any) => {
+    const renderOption = (list: any[], group?: VxeOptgroupProps) => {
       const { optionKey, modelValue, multiple } = props
       const { currentValue } = reactData
       const labelField = computeLabelField.value
       const valueField = computeValueField.value
       const isGroup = computeIsGroup.value
-      return list.map((option: any, cIndex: any) => {
+      return list.map((option, cIndex) => {
         const isVisible = !isGroup || isOptionVisible(option)
         const isDisabled = (group && group.disabled) || option.disabled
         const optionValue = option[valueField]
@@ -569,7 +569,7 @@ export default defineComponent({
           // attrs
           optid: optid,
           // event
-          onClick: (evnt: any) => {
+          onClick: (evnt: Event) => {
             if (!isDisabled) {
               changeOptionEvent(evnt, optionValue)
             }
@@ -588,7 +588,7 @@ export default defineComponent({
       const { visibleGroupList } = reactData
       const groupLabelField = computeGroupLabelField.value
       const groupOptionsField = computeGroupOptionsField.value
-      return visibleGroupList.map((group: any, gIndex: any) => {
+      return visibleGroupList.map((group, gIndex) => {
         const optid = getOptid(group)
         const isGroupDisabled = group.disabled
         return h('div', {

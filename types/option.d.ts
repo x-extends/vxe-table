@@ -1,4 +1,3 @@
-import { DefineComponent } from 'vue'
 import { VXEComponent } from './component'
 
 /**
@@ -11,17 +10,24 @@ export type VxeOptionProps = {
   /**
    * 绑定值
    */
-  value?: any;
+  value?: VxeOptionPropTypes.Value;
   /**
    * 显示内容
    */
-  label?: string | number | boolean;
+  label?: VxeOptionPropTypes.Label;
+  /**
+   * 是否显示
+   */
+  visible?: VxeOptionPropTypes.Visible;
   /**
    * 是否禁用
    */
-  visible?: boolean;
-  /**
-   * 是否禁用
-   */
-  disabled?: boolean;
+  disabled?: VxeOptionPropTypes.Disabled;
+}
+
+export namespace VxeOptionPropTypes {
+  export type Value = any;
+  export type Label = string | number | boolean;
+  export type Visible = boolean;
+  export type Disabled = boolean;
 }

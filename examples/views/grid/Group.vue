@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">分组表头</p>
+    <p class="tip">分组表头，通过属性 <grid-api-link prop="children"/> 定义子列</p>
 
     <vxe-grid v-bind="gridOptions"></vxe-grid>
 

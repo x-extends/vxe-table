@@ -1,4 +1,4 @@
-import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, DefineComponent } from 'vue'
+import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
 import { VxeFormInstance, VxeFormProps, VxeFormDefines } from './form'
 import { VxeFormItemProps } from './form-item'
 import { VxeToolbarInstance, VxeToolbarProps, VxeToolbarPropTypes } from './toolbar'
@@ -86,6 +86,7 @@ export interface GridPublicMethods {
    * 获取表单项列表
    */
   getFormItems(): VxeFormItemProps[];
+  getFormItems(itemIndex?: number): VxeFormItemProps;
   /**
    * 获取已标记删除的数据
    */
@@ -353,7 +354,7 @@ export interface VxeGridEventProps {
 
   // grid
   onPageChange?: VxeGridEvents.PageChange;
-  onFormSubmitEvent?: VxeGridEvents.FormSubmitEvent;
+  onFormSubmit?: VxeGridEvents.FormSubmit;
   onFormSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
   onFormReset?: VxeGridEvents.FormReset;
   onFormToggleCollapse?: VxeGridEvents.FormToggleCollapse;
@@ -399,7 +400,7 @@ export interface VxeGridListeners {
 
   // grid
   pageChange?: VxeGridEvents.PageChange;
-  formSubmitEvent?: VxeGridEvents.FormSubmitEvent;
+  formSubmit?: VxeGridEvents.FormSubmit;
   formSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
   formReset?: VxeGridEvents.FormReset;
   formToggleCollapse?: VxeGridEvents.FormToggleCollapse;
@@ -444,7 +445,7 @@ export namespace VxeGridEvents {
   export type Custom = (params: VxeGridDefines.CustomEventParams) => void;
 
   export type PageChange = (params: VxeGridDefines.PageChangeEventParams) => void;
-  export type FormSubmitEvent = (params: VxeGridDefines.FormSubmitEventParams) => void;
+  export type FormSubmit = (params: VxeGridDefines.FormSubmitEventParams) => void;
   export type FormSubmitInvalid = (params: VxeGridDefines.FormSubmitInvalidEventParams) => void;
   export type FormReset = (params: VxeGridDefines.FormResetEventParams) => void;
   export type FormToggleCollapse = (params: VxeGridDefines.FormToggleCollapseEventParams) => void;

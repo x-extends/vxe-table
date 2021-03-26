@@ -35,6 +35,7 @@ export default defineComponent({
           //   stripe: false,
           //   border: false,
           //   round: false,
+          //   emptyText: '暂无数据',
           //   radioConfig: {
           //     trigger: 'default'
           //   },

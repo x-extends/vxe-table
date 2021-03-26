@@ -1,20 +1,20 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick } from 'vue'
-import { XEOptionInstance, createOption, watchOption, destroyOption, assemOption } from './util'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType } from 'vue'
+import { XEOptionProvide, createOption, watchOption, destroyOption, assemOption } from './util'
 
-const optionProps = {
-  value: null,
-  label: { type: [String, Number, Boolean], default: '' },
-  visible: { type: Boolean, default: null },
-  disabled: Boolean
-}
+import { VxeSelectConstructor, VxeOptionPropTypes } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeOption',
-  props: optionProps,
+  props: {
+    value: null,
+    label: { type: [String, Number, Boolean] as PropType<VxeOptionPropTypes.Label>, default: '' },
+    visible: { type: Boolean as PropType<VxeOptionPropTypes.Visible>, default: null },
+    disabled: Boolean as PropType<VxeOptionPropTypes.Disabled>
+  },
   setup (props, { slots }) {
     const elem = ref() as Ref<HTMLDivElement>
-    const $xeselect = inject('$xeselect', null as any)
-    const optgroup = inject('xeoptgroup', null as XEOptionInstance | null)
+    const $xeselect = inject('$xeselect', {} as VxeSelectConstructor)
+    const optgroup = inject('xeoptgroup', null as XEOptionProvide | null)
     const option = createOption($xeselect, props)
     option.slots = slots
 

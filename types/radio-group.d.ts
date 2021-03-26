@@ -1,4 +1,4 @@
-import { SetupContext, RenderFunction, ComponentPublicInstance, DefineComponent } from 'vue'
+import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
 
 /**
@@ -22,9 +22,15 @@ export type VxeRadioGroupEmits = [
 ]
 
 export type VxeRadioGroupProps = {
-  size?: SizeType;
-  modelValue?: any;
-  disabled?: boolean;
+  size?: VxeRadioGroupPropTypes.Size;
+  modelValue?: VxeRadioGroupPropTypes.ModelValue;
+  disabled?: VxeRadioGroupPropTypes.Disabled;
+}
+
+export namespace VxeRadioGroupPropTypes {
+  export type Size = SizeType;
+  export type ModelValue = any;
+  export type Disabled = boolean;
 }
 
 export interface RadioGroupMethods {

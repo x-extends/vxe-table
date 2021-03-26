@@ -23,7 +23,8 @@ export class ItemInfo {
       // 渲染属性
       showError: false,
       errRule: null,
-      slots: item.slots
+      slots: item.slots,
+      children: []
     })
   }
 

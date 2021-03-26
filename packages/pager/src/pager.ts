@@ -3,43 +3,43 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxePagerConstructor, VxePagerEmits, PageSizeItemType, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods } from '../../../types/all'
+import { VxePagerPropTypes, VxePagerConstructor, VxePagerEmits, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxePager',
   props: {
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.pager.size || GlobalConfig.size },
+    size: { type: String as PropType<VxePagerPropTypes.Size>, default: () => GlobalConfig.pager.size || GlobalConfig.size },
     // 自定义布局
-    layouts: { type: Array, default: () => GlobalConfig.pager.layouts || ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] },
+    layouts: { type: Array as PropType<VxePagerPropTypes.Layouts>, default: () => GlobalConfig.pager.layouts || ['PrevJump', 'PrevPage', 'Jump', 'PageCount', 'NextPage', 'NextJump', 'Sizes', 'Total'] },
     // 当前页
-    currentPage: { type: Number, default: 1 },
+    currentPage: { type: Number as PropType<VxePagerPropTypes.CurrentPage>, default: 1 },
     // 加载中
-    loading: Boolean,
+    loading: Boolean as PropType<VxePagerPropTypes.Loading>,
     // 每页大小
-    pageSize: { type: Number, default: () => GlobalConfig.pager.pageSize || 10 },
+    pageSize: { type: Number as PropType<VxePagerPropTypes.PageSize>, default: () => GlobalConfig.pager.pageSize || 10 },
     // 总条数
-    total: { type: Number, default: 0 },
+    total: { type: Number as PropType<VxePagerPropTypes.Total>, default: 0 },
     // 显示页码按钮的数量
-    pagerCount: { type: Number, default: () => GlobalConfig.pager.pagerCount || 7 },
+    pagerCount: { type: Number as PropType<VxePagerPropTypes.PagerCount>, default: () => GlobalConfig.pager.pagerCount || 7 },
     // 每页大小选项列表
-    pageSizes: { type: Array as PropType<PageSizeItemType[]>, default: () => GlobalConfig.pager.pageSizes || [10, 15, 20, 50, 100] },
+    pageSizes: { type: Array as PropType<VxePagerPropTypes.PageSizes>, default: () => GlobalConfig.pager.pageSizes || [10, 15, 20, 50, 100] },
     // 列对其方式
-    align: { type: String, default: () => GlobalConfig.pager.align },
+    align: { type: String as PropType<VxePagerPropTypes.Align>, default: () => GlobalConfig.pager.align },
     // 带边框
-    border: { type: Boolean, default: () => GlobalConfig.pager.border },
+    border: { type: Boolean as PropType<VxePagerPropTypes.Border>, default: () => GlobalConfig.pager.border },
     // 带背景颜色
-    background: { type: Boolean, default: () => GlobalConfig.pager.background },
+    background: { type: Boolean as PropType<VxePagerPropTypes.Background>, default: () => GlobalConfig.pager.background },
     // 配套的样式
-    perfect: { type: Boolean, default: () => GlobalConfig.pager.perfect },
+    perfect: { type: Boolean as PropType<VxePagerPropTypes.Perfect>, default: () => GlobalConfig.pager.perfect },
     // 当只有一页时隐藏
-    autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
-    transfer: { type: Boolean, default: () => GlobalConfig.pager.transfer },
+    autoHidden: { type: Boolean as PropType<VxePagerPropTypes.AutoHidden>, default: () => GlobalConfig.pager.autoHidden },
+    transfer: { type: Boolean as PropType<VxePagerPropTypes.Transfer>, default: () => GlobalConfig.pager.transfer },
     // 自定义图标
-    iconPrevPage: String,
-    iconJumpPrev: String,
-    iconJumpNext: String,
-    iconNextPage: String,
-    iconJumpMore: String
+    iconPrevPage: String as PropType<VxePagerPropTypes.IconPrevPage>,
+    iconJumpPrev: String as PropType<VxePagerPropTypes.IconJumpPrev>,
+    iconJumpNext: String as PropType<VxePagerPropTypes.IconJumpNext>,
+    iconNextPage: String as PropType<VxePagerPropTypes.IconNextPage>,
+    iconJumpMore: String as PropType<VxePagerPropTypes.IconJumpMore>
   },
   emits: [
     'update:pageSize',
@@ -125,7 +125,7 @@ export default defineComponent({
             label: `${GlobalConfig.i18n('vxe.pager.pagesize', [item])}`
           }
         }
-        return { value: '', label: '', ...item } as PageSizeItemType
+        return { value: '', label: '', ...item }
       })
     })
 

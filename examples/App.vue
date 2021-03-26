@@ -36,7 +36,7 @@
             <!-- <vxe-option value="4.5" :label="$t('app.body.other.v4d5')" disabled></vxe-option> -->
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <!-- <a class="link support" :title="$t('app.body.support.title')" @click="supportEvent">💡{{ $t('app.header.label.support') }}</a> -->
+          <a v-if="appData.showPlugin" class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡扩展与支持</a>
         </div>
       </div>
     </header>
@@ -124,6 +124,7 @@ export default defineComponent({
       version: '4',
       usedJSHeapSize: '0',
       sponsorList: [],
+      showPlugin: false,
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -1120,18 +1121,18 @@ export default defineComponent({
                 name: 'TableEditMenu'
               }
             },
-            // {
-            //   label: 'app.aside.nav.span',
-            //   locat: {
-            //     name: 'TableEditSpan'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.form',
-            //   locat: {
-            //     name: 'TableEditForm'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.span',
+              locat: {
+                name: 'TableEditSpan'
+              }
+            },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'TableEditForm'
+              }
+            },
             {
               label: 'app.aside.nav.upload',
               locat: {
@@ -1235,12 +1236,12 @@ export default defineComponent({
                 name: 'GridPage'
               }
             },
-            // {
-            //   label: 'app.aside.nav.form',
-            //   locat: {
-            //     name: 'GridForm'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.form',
+              locat: {
+                name: 'GridForm'
+              }
+            },
             {
               label: 'app.aside.nav.proxy',
               // demoUrl: 'https://jsrun.pro/XwWKp/edit',
@@ -1255,12 +1256,12 @@ export default defineComponent({
                 name: 'GridPageProxy'
               }
             },
-            // {
-            //   label: 'app.aside.nav.formProxy',
-            //   locat: {
-            //     name: 'GridFormProxy'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.formProxy',
+              locat: {
+                name: 'GridFormProxy'
+              }
+            },
             {
               label: 'app.aside.nav.edit',
               locat: {
@@ -1928,7 +1929,7 @@ export default defineComponent({
               locat: {
                 name: 'VXEAPI',
                 params: {
-                  name: 'table-colgroup'
+                  name: 'colgroup'
                 }
               }
             },
@@ -1937,7 +1938,7 @@ export default defineComponent({
               locat: {
                 name: 'VXEAPI',
                 params: {
-                  name: 'table-column'
+                  name: 'column'
                 }
               }
             },
@@ -2113,6 +2114,15 @@ export default defineComponent({
               }
             },
             {
+              label: 'app.aside.nav.vxeFormGather',
+              locat: {
+                name: 'VXEAPI',
+                params: {
+                  name: 'form-gather'
+                }
+              }
+            },
+            {
               label: 'app.aside.nav.vxeFormItem',
               locat: {
                 name: 'VXEAPI',
@@ -2146,13 +2156,14 @@ export default defineComponent({
 
     const getVersion = () => {
       XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ time, tags, versions }) => {
+        appData.showPlugin = true
         const stableVersionList: any = []
         const betaVersionList: any = []
         if (versions) {
           versions.forEach((version: any) => {
-            if (/^4.\d{1,3}.\d{1,3}$/.test(version)) {
+            if (new RegExp(`^${appData.version}.\\d{1,3}.\\d{1,3}$`).test(version)) {
               stableVersionList.push({ label: version, value: version })
-            } else if (/^4.\d{1,3}.\d{1,3}-beta.\d{1,3}$/.test(version)) {
+            } else if (new RegExp(`^${appData.version}.\\d{1,3}.\\d{1,3}-beta.\\d{1,3}$`).test(version)) {
               betaVersionList.push({ label: version, value: version })
             }
           })
@@ -2160,7 +2171,7 @@ export default defineComponent({
         appData.stableVersionList = stableVersionList
         appData.betaVersionList = betaVersionList
         if (stableVersionList.length) {
-          appData.selectStableVersion = tags && tags.next ? tags.next : stableVersionList[0].value
+          appData.selectStableVersion = tags && tags[`xtable-v${appData.version}`] ? tags[`xtable-v${appData.version}`] : stableVersionList[0].value
         }
         if (betaVersionList.length) {
           appData.selectBetaVersion = betaVersionList[0].value

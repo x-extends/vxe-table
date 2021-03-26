@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import VxeTableColumnComponent from './src/column'
+import VxeTableColumnComponent from '../table/src/column'
 import { dynamicApp } from '../dynamics'
 
 export const Column = Object.assign(VxeTableColumnComponent, {

@@ -4,18 +4,18 @@ import { UtilTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeCheckboxConstructor, VxeCheckboxGroupConstructor, VxeCheckboxEmits, VxeCheckboxGroupPrivateMethods, CheckboxMethods } from '../../../types/all'
+import { VxeCheckboxConstructor, VxeCheckboxGroupConstructor, VxeCheckboxEmits, VxeCheckboxGroupPrivateMethods, CheckboxMethods, VxeCheckboxPropTypes } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeCheckbox',
   props: {
-    modelValue: Boolean,
-    label: { type: [String, Number], default: null },
-    indeterminate: Boolean,
-    title: [String, Number],
-    content: [String, Number],
-    disabled: Boolean,
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
+    modelValue: Boolean as PropType<VxeCheckboxPropTypes.ModelValue>,
+    label: { type: [String, Number] as PropType<VxeCheckboxPropTypes.Label>, default: null },
+    indeterminate: Boolean as PropType<VxeCheckboxPropTypes.Indeterminate>,
+    title: [String, Number] as PropType<VxeCheckboxPropTypes.Title>,
+    content: [String, Number] as PropType<VxeCheckboxPropTypes.Content>,
+    disabled: Boolean as PropType<VxeCheckboxPropTypes.Disabled>,
+    size: { type: String as PropType<VxeCheckboxPropTypes.Size>, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',

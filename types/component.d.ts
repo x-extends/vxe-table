@@ -19,10 +19,6 @@ export interface RecordInfo {
   [key: string]: any;
 }
 
-export interface RowInfo {
-  [key: string]: any;
-}
-
 export interface VxeEvent {
   $event: Event;
   [key: string]: any;

@@ -101,7 +101,7 @@ function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any) {
   return [
     h('span', {
       class: 'vxe-cell--label'
-    }, isEmptyValue(cellLabel) ? [
+    }, placeholder && isEmptyValue(cellLabel) ? [
       h('span', {
         class: 'vxe-cell--placeholder'
       }, UtilTools.formatText(UtilTools.getFuncText(placeholder), 1))
@@ -680,6 +680,15 @@ export const renderer: VxeGlobalRenderer = {
     if (name && options) {
       const renders = renderMap[name]
       if (renders) {
+        // 检测是否覆盖
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          XEUtils.each(options, (val, key) => {
+            if (!XEUtils.eqNull(renders[key]) && renders[key] !== val) {
+              UtilTools.warn('vxe.error.coverProp', [`Renderer.${name}`, key])
+            }
+          })
+        }
+
         Object.assign(renders, options)
       } else {
         renderMap[name] = options

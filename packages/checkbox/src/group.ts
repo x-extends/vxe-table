@@ -3,14 +3,14 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods } from '../../../types/all'
+import { VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods, VxeCheckboxGroupPropTypes } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeCheckboxGroup',
   props: {
-    modelValue: Array as PropType<any[]>,
-    disabled: Boolean,
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
+    modelValue: Array as PropType<VxeCheckboxGroupPropTypes.ModelValue>,
+    disabled: Boolean as PropType<VxeCheckboxGroupPropTypes.Disabled>,
+    size: { type: String as PropType<VxeCheckboxGroupPropTypes.Size>, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',

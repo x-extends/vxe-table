@@ -1,4 +1,3 @@
-import { DefineComponent } from 'vue'
 import { VXEComponent } from './component'
 
 /**

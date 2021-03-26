@@ -33,8 +33,8 @@ export default defineComponent({
     const refHeaderBorderRepair = ref() as Ref<HTMLDivElement>
 
     const uploadColumn = () => {
-      const { isGroup, scrollXLoad } = tableReactData
-      headerColumn.value = isGroup ? convertToRows(props.tableGroupColumn) : [scrollXLoad && props.fixedType ? props.fixedColumn as VxeTableDefines.ColumnInfo[] : props.tableColumn as VxeTableDefines.ColumnInfo[]]
+      const { isGroup } = tableReactData
+      headerColumn.value = isGroup ? convertToRows(props.tableGroupColumn) : []
     }
 
     const resizeMousedown = (evnt: MouseEvent, params: any) => {
@@ -146,12 +146,16 @@ export default defineComponent({
     const renderVN = () => {
       let { fixedType, fixedColumn, tableColumn } = props
       const { resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
+      const { isGroup, currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
+      let headerGroups: VxeTableDefines.ColumnInfo[][] = headerColumn.value
       // 如果是使用优化模式
-      if (fixedType) {
-        if (scrollXLoad || allColumnHeaderOverflow) {
-          tableColumn = fixedColumn
+      if (!isGroup) {
+        if (fixedType) {
+          if (scrollXLoad || allColumnHeaderOverflow) {
+            tableColumn = fixedColumn
+          }
         }
+        headerGroups = [tableColumn as VxeTableDefines.ColumnInfo[]]
       }
       return h('div', {
         ref: refElem,
@@ -190,7 +194,7 @@ export default defineComponent({
            */
           h('thead', {
             ref: refHeaderTHead
-          }, headerColumn.value.map((cols, $rowIndex) => {
+          }, headerGroups.map((cols, $rowIndex) => {
             return h('tr', {
               class: ['vxe-header--row', headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowClassName) : ''],
               style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowStyle) : null

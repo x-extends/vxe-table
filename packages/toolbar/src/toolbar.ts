@@ -5,7 +5,7 @@ import { VXETable } from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
 
-import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData } from '../../../types/all'
+import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeToolbar',
@@ -169,20 +169,20 @@ export default defineComponent({
       emitCustomEvent('reset', evnt)
     }
 
-    const handleOptionCheck = (column: any) => {
+    const handleOptionCheck = (column: VxeTableDefines.ColumnInfo) => {
       const { columns } = reactData
       const matchObj = XEUtils.findTree(columns, item => item === column)
       if (matchObj && matchObj.parent) {
         const { parent } = matchObj
         if (parent.children && parent.children.length) {
-          parent.visible = parent.children.every((column: any) => column.visible)
-          parent.halfVisible = !parent.visible && parent.children.some((column: any) => column.visible || column.halfVisible)
+          parent.visible = parent.children.every((column) => column.visible)
+          parent.halfVisible = !parent.visible && parent.children.some((column) => column.visible || column.halfVisible)
           handleOptionCheck(parent)
         }
       }
     }
 
-    const changeCustomOption = (column: any) => {
+    const changeCustomOption = (column: VxeTableDefines.ColumnInfo) => {
       const isChecked = !column.visible
       const customOpts = computeCustomOpts.value
       XEUtils.eachTree([column], (item) => {
@@ -326,7 +326,7 @@ export default defineComponent({
       const { dropdowns } = item
       const downVNs: VNode[] = []
       if (dropdowns) {
-        dropdowns.forEach((child: any, index: number) => {
+        dropdowns.forEach((child, index: number) => {
           if (child.visible !== false) {
             downVNs.push(
               h(resolveComponent('vxe-button') as ComponentOptions, {
@@ -408,9 +408,16 @@ export default defineComponent({
       const { columns } = reactData
       const customOpts = computeCustomOpts.value
       const colVNs: VNode[] = []
-      const customBtnOns: any = {}
-      const customWrapperOns: any = {}
-      let checkMethod: any
+      const customBtnOns: {
+        onClick?: typeof handleClickSettingEvent;
+        onMouseenter?: typeof handleMouseenterSettingEvent;
+        onMouseleave?: typeof handleMouseleaveSettingEvent;
+      } = {}
+      const customWrapperOns: {
+        onMouseenter?: typeof handleWrapperMouseenterEvent;
+        onMouseleave?: typeof handleWrapperMouseleaveEvent;
+      } = {}
+      let checkMethod: Function | undefined
       if ($xetable) {
         const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
         const tableCustomOpts = computeTableCustomOpts.value

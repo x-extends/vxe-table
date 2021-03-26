@@ -4,17 +4,17 @@ import { UtilTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { SizeType, VxeRadioGroupConstructor, VxeRadioButtonConstructor, VxeRadioButtonEmits, VxeRadioGroupPrivateMethods, RadioButtonMethods } from '../../../types/all'
+import { VxeRadioButtonPropTypes, VxeRadioGroupConstructor, VxeRadioButtonConstructor, VxeRadioButtonEmits, VxeRadioGroupPrivateMethods, RadioButtonMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeRadioButton',
   props: {
-    modelValue: [String, Number, Boolean],
-    label: { type: [String, Number, Boolean], default: null },
-    title: [String, Number],
-    content: [String, Number],
-    disabled: Boolean,
-    size: { type: String as PropType<SizeType>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
+    modelValue: [String, Number, Boolean] as PropType<VxeRadioButtonPropTypes.ModelValue>,
+    label: { type: [String, Number, Boolean] as PropType<VxeRadioButtonPropTypes.Label>, default: null },
+    title: [String, Number] as PropType<VxeRadioButtonPropTypes.Title>,
+    content: [String, Number] as PropType<VxeRadioButtonPropTypes.Content>,
+    disabled: Boolean as PropType<VxeRadioButtonPropTypes.Disabled>,
+    size: { type: String as PropType<VxeRadioButtonPropTypes.Size>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',

@@ -46,6 +46,7 @@ const components = [
   'tooltip',
   'form',
   'form-item',
+  'form-gather',
   'select',
   'optgroup',
   'option',

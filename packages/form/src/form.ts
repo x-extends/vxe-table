@@ -160,7 +160,11 @@ export default defineComponent({
     }
 
     const getItems = () => {
-      return reactData.formItems.slice(0)
+      const itemList: VxeFormDefines.ItemInfo[] = []
+      XEUtils.eachTree(reactData.formItems, item => {
+        itemList.push(item)
+      }, { children: 'children' })
+      return itemList
     }
 
     const toggleCollapse = () => {
@@ -174,14 +178,14 @@ export default defineComponent({
     }
 
     const clearValidate = (field?: string) => {
-      const { formItems } = reactData
+      const itemList = getItems()
       if (field) {
-        const item = formItems.find((item) => item.field === field)
+        const item = itemList.find((item) => item.field === field)
         if (item) {
           item.showError = false
         }
       } else {
-        formItems.forEach((item) => {
+        itemList.forEach((item) => {
           item.showError = false
         })
       }
@@ -190,9 +194,9 @@ export default defineComponent({
 
     const reset = () => {
       const { data } = props
-      const { formItems } = reactData
+      const itemList = getItems()
       if (data) {
-        formItems.forEach((item) => {
+        itemList.forEach((item) => {
           const { field, resetValue, itemRender } = item
           if (isEnableConf(itemRender)) {
             const compConf = VXETable.renderer.get(itemRender.name)
@@ -214,10 +218,10 @@ export default defineComponent({
     }
 
     const handleFocus = (fields: string[]) => {
-      const { formItems } = reactData
+      const itemList = getItems()
       const el = refElem.value
       fields.some((property) => {
-        const item = formItems.find((item) => item.field === property)
+        const item = itemList.find((item) => item.field === property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
@@ -315,15 +319,15 @@ export default defineComponent({
 
     const beginValidate = (type?: string, callback?: any) => {
       const { data, rules: formRules } = props
-      const { formItems } = reactData
       const validOpts = computeValidOpts.value
       const validRest: any = {}
       const validFields: string[] = []
       const itemValids: any[] = []
+      const itemList = getItems()
       clearValidate()
       clearTimeout(showErrTime)
       if (data && formRules) {
-        formItems.forEach((item) => {
+        itemList.forEach((item) => {
           const { field } = item
           if (field) {
             itemValids.push(
@@ -348,7 +352,7 @@ export default defineComponent({
           }
         }).catch(() => {
           showErrTime = window.setTimeout(() => {
-            formItems.forEach((item) => {
+            itemList.forEach((item) => {
               if (item.errRule) {
                 item.showError = true
               }
@@ -372,7 +376,7 @@ export default defineComponent({
     }
 
     const validate = (callback: any) => {
-      return beginValidate(callback)
+      return beginValidate('', callback)
     }
 
     const submitEvent = (evnt: Event) => {
@@ -446,14 +450,14 @@ export default defineComponent({
      */
     const updateStatus = (scope: any, itemValue?: any) => {
       const { property } = scope
-      const { formItems } = reactData
       if (property) {
         validItemRules('change', property, itemValue)
           .then(() => {
             clearValidate(property)
           })
           .catch(({ rule }) => {
-            const item = formItems.find((item) => item.field === property)
+            const itemList = getItems()
+            const item = itemList.find((item) => item.field === property)
             if (item) {
               item.showError = true
               item.errRule = rule
@@ -523,12 +527,12 @@ export default defineComponent({
       return tss
     }
 
-    const renderItems = () => {
+    const renderItems = (itemList: VxeFormDefines.ItemInfo[]): VNode[] => {
       const { rules, data, titleOverflow: allTitleOverflow } = props
-      const { formItems, collapseAll } = reactData
+      const { collapseAll } = reactData
       const validOpts = computeValidOpts.value
-      return formItems.map((item, index) => {
-        const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
+      return itemList.map((item, index) => {
+        const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
         const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
         const defaultSlot = slots ? slots.default : null
         const titleSlot = slots ? slots.title : null
@@ -546,6 +550,14 @@ export default defineComponent({
         let isRequired
         if (visible === false) {
           return createCommentVNode()
+        }
+        // 如果为项集合
+        const isGather = children && children.length > 0
+        if (isGather) {
+          const childVNs = renderItems(item.children)
+          return childVNs.length ? h('div', {
+            class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
+          }, childVNs) : createCommentVNode()
         }
         if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
           itemVisibleMethod = compConf.itemVisibleMethod
@@ -596,7 +608,7 @@ export default defineComponent({
           onMouseleave: handleTargetLeaveEvent
         } : {}
         return h('div', {
-          class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
+          class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
             'is--title': title,
             'is--required': isRequired,
             'is--hidden': folding && collapseAll,
@@ -655,11 +667,12 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading } = props
+      const { formItems } = reactData
       const vSize = computeSize.value
       const tooltipOpts = computeTooltipOpts.value
       return h('form', {
         ref: refElem,
-        class: ['vxe-form', 'vxe-row', {
+        class: ['vxe-form', {
           [`size--${vSize}`]: vSize,
           'is--colon': props.titleColon,
           'is--asterisk': props.titleAsterisk,
@@ -667,7 +680,10 @@ export default defineComponent({
         }],
         onSubmit: submitEvent,
         onReset: resetEvent
-      }, renderItems().concat([
+      }, [
+        h('div', {
+          class: 'vxe-form--wrapper vxe-row'
+        }, renderItems(formItems)),
         h('div', {
           class: 'vxe-form-slots',
           ref: 'hideItem'
@@ -688,7 +704,7 @@ export default defineComponent({
           ref: refTooltip,
           ...tooltipOpts
         }) : createCommentVNode()
-      ]))
+      ])
     }
 
     $xeform.renderVN = renderVN
