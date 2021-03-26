@@ -118,7 +118,7 @@ import GridToolbar from './views/table/grid/Toolbar.vue'
 import GridCustomToolbar from './views/table/grid/CustomToolbar.vue'
 import GridToolbarIcon from './views/table/grid/ToolbarIcon.vue'
 import GridFullscreen from './views/table/grid/Fullscreen.vue'
-import GridDynamic from './views/table/grid/Dynamic.vue'
+// import GridDynamic from './views/table/grid/Dynamic.vue'
 import GridMenu from './views/table/grid/Menu.vue'
 import GridSpan from './views/table/grid/Span.vue'
 import GridUpload from './views/table/grid/Upload.vue'
@@ -1069,11 +1069,11 @@ export default new Router({
       name: 'GridFullscreen',
       component: GridFullscreen
     },
-    {
-      path: '/table/grid/dynamic',
-      name: 'GridDynamic',
-      component: GridDynamic
-    },
+    // {
+    //   path: '/table/grid/dynamic',
+    //   name: 'GridDynamic',
+    //   component: GridDynamic
+    // },
     {
       path: '/table/grid/menu',
       name: 'GridMenu',

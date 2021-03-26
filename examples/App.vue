@@ -1293,12 +1293,12 @@ export default {
                 name: 'GridFullscreen'
               }
             },
-            {
-              label: 'app.aside.nav.dynamicColumn',
-              locat: {
-                name: 'GridDynamic'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.dynamicColumn',
+            //   locat: {
+            //     name: 'GridDynamic'
+            //   }
+            // },
             {
               label: 'app.aside.nav.contextMenu',
               // demoUrl: 'https://jsrun.pro/m6WKp/edit',
