@@ -73,8 +73,7 @@ export default {
             [
               { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
               {
-                code: 'filter',
-                name: 'app.body.label.filter',
+                name: '筛选',
                 children: [
                   { code: 'clearFilter', name: '清除筛选' },
                   { code: 'filterSelect', name: '按所选单元格的值筛选' }
@@ -82,7 +81,7 @@ export default {
               },
               {
                 code: 'sort',
-                name: 'app.body.label.sort',
+                name: '排序',
                 prefixIcon: 'fa fa-sort color-blue',
                 children: [
                   { code: 'clearSort', name: '清除排序' },
@@ -153,8 +152,7 @@ export default {
                     [
                       { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
                       {
-                        code: 'filter',
-                        name: 'app.body.label.filter',
+                        name: '筛选',
                         children: [
                           { code: 'clearFilter', name: '清除筛选' },
                           { code: 'filterSelect', name: '按所选单元格的值筛选' }
@@ -162,7 +160,7 @@ export default {
                       },
                       {
                         code: 'sort',
-                        name: 'app.body.label.sort',
+                        name: '排序',
                         prefixIcon: 'fa fa-sort color-blue',
                         children: [
                           { code: 'clearSort', name: '清除排序' },

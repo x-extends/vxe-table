@@ -2056,11 +2056,47 @@ const apis = [
           },
           {
             name: 'extendByCopy',
-            desc: '只对 mouse-config.extension 启用后有效，将被选取区域的值复制到扩展区域中',
+            desc: '只对 mouse-config.extension 启用后有效，将被选取区域的值复制到扩展区域中（同时按住 shift 键可取消值复制功能）',
             version: 'pro',
             type: 'boolean',
             enum: '',
             defVal: 'true',
+            list: []
+          },
+          {
+            name: 'isCalcValue',
+            desc: '只对 extendByCopy 启用后有效，当选取大于两行或两列时，扩展区域时将自动识别数字规则进行计算（同时按住 ctrl 键可取消值自动识别数字功能）',
+            version: 'pro',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'extendCalcMethod',
+            desc: '只对 isCalcValue 启用后有效，重写单元格扩展区域计算值的方法',
+            version: 'pro',
+            type: '(params: { rows, cols, targetValues, targetRows, targetCols, extendRows, extendCols, direction }) => any[][]',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'extendSetMethod',
+            desc: '只对 extendByCopy 启用后有效，重写单元格扩展区域赋值的方法',
+            version: 'pro',
+            type: '(params: { cellValue, row, column, rows, cols, targetValues, targetRows, targetCols, extendRows, extendCols, direction }) => void',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'beforeExtendSetMethod',
+            desc: '只对 extendByCopy 启用后有效，自定义单元格扩展区域赋值之前的方法，可以通过返回 false 阻止扩展行为',
+            version: 'pro',
+            type: '(params: { rows, cols, targetValues, targetRows, targetCols, extendRows, extendCols, direction }) => boolean',
+            enum: '',
+            defVal: '',
             list: []
           }
         ]

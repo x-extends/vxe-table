@@ -1573,10 +1573,12 @@ const Methods = {
     this.tableHeight = tableHeight
     if (headerElem) {
       this.headerHeight = headerElem.clientHeight
-      // 检测是否同步滚动
-      if (headerElem.scrollLeft !== bodyElem.scrollLeft) {
-        headerElem.scrollLeft = bodyElem.scrollLeft
-      }
+      this.$nextTick(() => {
+        // 检测是否同步滚动
+        if (headerElem && bodyElem && headerElem.scrollLeft !== bodyElem.scrollLeft) {
+          headerElem.scrollLeft = bodyElem.scrollLeft
+        }
+      })
     } else {
       this.headerHeight = 0
     }
@@ -4049,11 +4051,9 @@ const Methods = {
     }
   },
   updateCellAreas () {
-    this.recalculate().then(() => this.refreshScroll()).then(() => {
-      if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
-        this.handleUpdateCellAreas()
-      }
-    })
+    if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
+      this.handleUpdateCellAreas()
+    }
   },
   emitEvent (type, params, evnt) {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
