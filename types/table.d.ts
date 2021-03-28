@@ -1390,6 +1390,29 @@ export namespace VxeTablePropTypes {
      * 只对 mouse-config.extension 启用后有效，将被选取区域的值复制到扩展区域中
      */
     extendByCopy?: boolean;
+    /**
+     * 只对 extendByCopy 启用后有效，扩展区域时将自动识别数字规则进行计算
+     */
+    isCalcValue?: boolean;
+    /**
+     * 只对 isCalcValue 启用后有效，重写单元格扩展区域计算值的方法
+     * @param params
+     */
+    extendCalcMethod?(params: VxeTableProDefines.ExtendCellAreaCalcBaseParams): any[][];
+    /**
+     * 只对 extendByCopy 启用后有效，重写单元格扩展区域赋值的方法
+     * @param params
+     */
+    extendSetMethod?(params: {
+      cellValue: any;
+      row: any;
+      column: VxeTableDefines.ColumnInfo;
+    } & VxeTableProDefines.ExtendCellAreaCalcBaseParams): void;
+    /**
+     * 只对 extendByCopy 启用后有效，自定义单元格扩展区域赋值之前的方法，可以通过返回 false 阻止扩展行为
+     * @param params
+     */
+    beforeExtendSetMethod?(params: VxeTableProDefines.ExtendCellAreaCalcBaseParams): boolean;
   }
   export interface AreaOpts extends AreaConfig { }
 
@@ -1565,7 +1588,7 @@ export namespace VxeTablePropTypes {
     beforePasteMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
-      cellValues: string[][];
+      cellValues: any[][];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
     /**
@@ -1574,7 +1597,7 @@ export namespace VxeTablePropTypes {
     afterPasteMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
-      cellValues: string[][];
+      cellValues: any[][];
       pasteCells: string[][];
       insertRows: any[];
       insertColumns: VxeTableDefines.ColumnInfo[];
@@ -1586,7 +1609,7 @@ export namespace VxeTablePropTypes {
     createRowsMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
-      cellValues: string[][];
+      cellValues: any[][];
       pasteCells: string[][];
       insertRows: any[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -1597,7 +1620,7 @@ export namespace VxeTablePropTypes {
     createColumnsMethod?(params: {
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
-      cellValues: string[][];
+      cellValues: any[][];
       pasteCells: string[][];
       insertColumns: VxeTableDefines.ColumnOptions[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;

@@ -1,4 +1,4 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType } from 'vue'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, onMounted, PropType } from 'vue'
 import { XEOptionProvide, createOption, watchOption, destroyOption, assemOption } from './util'
 
 import { VxeSelectConstructor, VxeOptionPropTypes } from '../../../types/all'
@@ -20,7 +20,7 @@ export default defineComponent({
 
     watchOption(props, option)
 
-    nextTick(() => {
+    onMounted(() => {
       assemOption($xeselect, elem.value, option, optgroup)
     })
 

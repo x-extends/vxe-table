@@ -149,6 +149,20 @@ export namespace VxeTableProDefines {
     row: any;
   }
 
+  export type ExtendCellAreaDirection = 'up' | 'down' | 'left' | 'right'
+
+  export interface ExtendCellAreaCalcBaseParams {
+    rows: any[];
+    cols: VxeTableDefines.ColumnInfo[];
+    targetValues: any[][];
+    targetRows: any[];
+    targetCols: VxeTableDefines.ColumnInfo[];
+    extendRows: any[];
+    extendCols: VxeTableDefines.ColumnInfo[];
+    direction: ExtendCellAreaDirection;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+  }
+
   interface EventParams extends VxeEvent {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $grid: VxeGridConstructor & VxeGridPrivateMethods;

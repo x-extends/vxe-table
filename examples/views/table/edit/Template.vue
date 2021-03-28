@@ -62,18 +62,18 @@
           <template v-if="scope.rowIndex === 0">
             <vxe-input type="date" v-model="scope.row.attr1" placeholder="请选择日期" @input="$refs.xTable.updateStatus(scope)" transfer></vxe-input>
           </template>
-          <template v-else-if="rowIndex === 1">
-            <vxe-select v-model="row.attr1" placeholder="请选择下拉" transfer>
+          <template v-else-if="scope.rowIndex === 1">
+            <vxe-select v-model="scope.row.attr1" placeholder="请选择下拉" transfer>
               <vxe-option value="选项1" label="选项1"></vxe-option>
               <vxe-option value="选项2" label="选项2"></vxe-option>
               <vxe-option value="选项3" label="选项3"></vxe-option>
             </vxe-select>
           </template>
-          <template v-else-if="rowIndex === 2">
-            <vxe-input type="number" v-model="row.attr1" placeholder="请输入数值"></vxe-input>
+          <template v-else-if="scope.rowIndex === 2">
+            <vxe-input type="number" v-model="scope.row.attr1" placeholder="请输入数值"></vxe-input>
           </template>
           <template v-else>
-            <vxe-input type="text" v-model="row.attr1" placeholder="请输入内容"></vxe-input>
+            <vxe-input type="text" v-model="scope.row.attr1" placeholder="请输入内容"></vxe-input>
           </template>
         </template>
       </vxe-table-column>
@@ -248,22 +248,22 @@ export default defineComponent({
             </vxe-table-column>
           </vxe-table-colgroup>
           <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
-            <template #edit="{ row, rowIndex }">
-              <template v-if="rowIndex === 0">
-                <vxe-input type="date" v-model="row.attr1" placeholder="请选择日期" transfer></vxe-input>
+            <template #edit="scope">
+              <template v-if="scope.rowIndex === 0">
+                <vxe-input type="date" v-model="scope.row.attr1" placeholder="请选择日期" @input="$refs.xTable.updateStatus(scope)" transfer></vxe-input>
               </template>
-              <template v-else-if="rowIndex === 1">
-                <vxe-select v-model="row.attr1" placeholder="请选择下拉" transfer>
+              <template v-else-if="scope.rowIndex === 1">
+                <vxe-select v-model="scope.row.attr1" placeholder="请选择下拉" transfer>
                   <vxe-option value="选项1" label="选项1"></vxe-option>
                   <vxe-option value="选项2" label="选项2"></vxe-option>
                   <vxe-option value="选项3" label="选项3"></vxe-option>
                 </vxe-select>
               </template>
-              <template v-else-if="rowIndex === 2">
-                <vxe-input type="number" v-model="row.attr1" placeholder="请输入数值"></vxe-input>
+              <template v-else-if="scope.rowIndex === 2">
+                <vxe-input type="number" v-model="scope.row.attr1" placeholder="请输入数值"></vxe-input>
               </template>
               <template v-else>
-                <vxe-input type="text" v-model="row.attr1" placeholder="请输入内容"></vxe-input>
+                <vxe-input type="text" v-model="scope.row.attr1" placeholder="请输入内容"></vxe-input>
               </template>
             </template>
           </vxe-table-column>

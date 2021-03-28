@@ -1,4 +1,4 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, provide } from 'vue'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, onMounted, provide } from 'vue'
 import { createItem, watchItem, destroyItem, assemItem, XEFormItemProvide } from './util'
 import { formItemProps } from './form-item'
 
@@ -19,7 +19,7 @@ export default defineComponent({
 
     watchItem(props, formItem)
 
-    nextTick(() => {
+    onMounted(() => {
       assemItem($xeform, refElem.value, formItem, formGather)
     })
 

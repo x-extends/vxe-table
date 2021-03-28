@@ -1078,10 +1078,12 @@ export default defineComponent({
       let headerHeight = 0
       if (headerElem) {
         headerHeight = headerElem.clientHeight
-        // 检测是否同步滚动
-        if (headerElem.scrollLeft !== bodyElem.scrollLeft) {
-          headerElem.scrollLeft = bodyElem.scrollLeft
-        }
+        nextTick(() => {
+          // 检测是否同步滚动
+          if (headerElem && bodyElem && headerElem.scrollLeft !== bodyElem.scrollLeft) {
+            headerElem.scrollLeft = bodyElem.scrollLeft
+          }
+        })
       }
       internalData.headerHeight = headerHeight
 
@@ -4829,13 +4831,11 @@ export default defineComponent({
         }
       },
       updateCellAreas () {
-        tableMethods.recalculate().then(() => tableMethods.refreshScroll()).then(() => {
-          const { mouseConfig } = props
-          const mouseOpts = computeMouseOpts.value
-          if (mouseConfig && mouseOpts.area && $xetable.handleUpdateCellAreas) {
-            $xetable.handleUpdateCellAreas()
-          }
-        })
+        const { mouseConfig } = props
+        const mouseOpts = computeMouseOpts.value
+        if (mouseConfig && mouseOpts.area && $xetable.handleUpdateCellAreas) {
+          $xetable.handleUpdateCellAreas()
+        }
       },
       /**
        * 行 hover 事件

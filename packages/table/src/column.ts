@@ -1,4 +1,4 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, nextTick, PropType, provide } from 'vue'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, PropType, provide, onMounted } from 'vue'
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
@@ -95,7 +95,7 @@ export default defineComponent({
 
     watchColumn(props, column)
 
-    nextTick(() => {
+    onMounted(() => {
       assemColumn($xetable, refElem.value, column, colgroup)
     })
 

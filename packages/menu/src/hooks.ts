@@ -282,7 +282,8 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
        * 快捷菜单点击事件
        */
       ctxMenuLinkEvent (evnt, menu) {
-        if (!menu.disabled && (!menu.children || !menu.children.length)) {
+        // 如果一级菜单有配置 code 则允许点击，否则不能点击
+        if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
           const ctxMenuMethod = VXETable.menus.get(menu.code)
           const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xetable, $event: evnt })
           if (ctxMenuMethod) {
