@@ -100,6 +100,21 @@
       <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[9] }}</pre-code>
     </pre>
+
+    <vxe-toolbar>
+      <template #buttons>
+        <vxe-button @click="printEvent6">打印图片</vxe-button>
+      </template>
+    </vxe-toolbar>
+
+    <img id="myPrint6" src="/vxe-table/static/other/invoice.png" style="width: 300px">
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[10] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[11] }}</pre-code>
+    </pre>
   </div>
 </template>
 
@@ -589,6 +604,28 @@ export default {
             }
           }
         }
+        `,
+        `
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button @click="printEvent6">打印图片</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <img id="myPrint6" src="/vxe-table/static/other/invoice.png" style="width: 300px">
+        `,
+        `
+        export default {
+           methods: {
+            printEvent6 () {
+              const imgEl = document.getElementById('myPrint6')
+              this.$XPrint({
+                sheetName: '打印图片',
+                content: \`<img src="\${imgEl.src}">\`
+              })
+            }
+          }
+        }
         `
       ]
     }
@@ -826,6 +863,13 @@ export default {
       this.$XPrint({
         sheetName: '打印下面区域',
         content: divEl.innerHTML
+      })
+    },
+    printEvent6 () {
+      const imgEl = document.getElementById('myPrint6')
+      this.$XPrint({
+        sheetName: '打印图片',
+        content: `<img src="${imgEl.src}">`
       })
     }
   }

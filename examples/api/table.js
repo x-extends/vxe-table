@@ -1112,7 +1112,7 @@ const apis = [
             name: 'filterMethod',
             desc: '全局筛选方法，当触发筛选时会调用该函数返回是否有效',
             version: '',
-            type: '(params: { options, values, row, column }) => boolean',
+            type: '(params: { options, values, cellValue, row, column }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -2064,8 +2064,8 @@ const apis = [
             list: []
           },
           {
-            name: 'isCalcValue',
-            desc: '只对 extendByCopy 启用后有效，当选取大于两行或两列时，扩展区域时将自动识别数字规则进行计算（同时按住 ctrl 键可取消值自动识别数字功能）',
+            name: 'extendByCalc',
+            desc: '只对 mouse-config.extension 启用后有效，当选取大于两行或两列时，自动识别最近两行或两列数据运算规则进行计算（同时按住 ctrl 键可取消值自动识别数字功能）',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -2074,7 +2074,7 @@ const apis = [
           },
           {
             name: 'extendCalcMethod',
-            desc: '只对 isCalcValue 启用后有效，重写单元格扩展区域计算值的方法',
+            desc: '只对 extendByCalc 启用后有效，重写单元格扩展区域计算值的方法',
             version: 'pro',
             type: '(params: { rows, cols, targetValues, targetRows, targetCols, extendRows, extendCols, direction }) => any[][]',
             enum: '',
