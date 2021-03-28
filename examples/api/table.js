@@ -1117,7 +1117,7 @@ const apis = [
           },
           {
             name: 'filterMethod',
-            desc: '全局筛选方法，当触发筛选时会调用该函数 Function({value, row, column}) 返回是否有效',
+            desc: '全局筛选方法，当触发筛选时会调用该函数 Function({options, values, row, column}) 返回是否有效',
             version: '2.9.10',
             type: 'Function',
             enum: '',

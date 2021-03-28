@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.button') }}</h2>
-    <p class="tip">标准按钮，文本按钮、下拉按钮</p>
+    <p class="tip">标准按钮，文本按钮、下拉按钮，可以使用任意第三方字体图标，例如：font-awesome、inconfont...</p>
 
     <p>
       <vxe-button content="默认尺寸"></vxe-button>
