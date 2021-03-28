@@ -273,15 +273,35 @@ export default {
           created () {
             this.loading = true
             setTimeout(() => {
-              let tableData = window.MOCK_DATA_LIST.slice(0, 600)
-              // 使用函数式加载，阻断 vue 对大数组的双向绑定，大数据性能翻倍提升
-              if (this.$refs.xGrid) {
-                this.$refs.xGrid.loadData(tableData)
-              }
-              this.loading = false
+              this.mockList(400).then(data => {
+                // 使用函数式加载
+                if (this.$refs.xGrid) {
+                  this.$refs.xGrid.loadData(data)
+                }
+                this.loading = false
+              })
             }, 500)
           },
           methods: {
+            mockList (size) {
+              return new Promise(resolve => {
+                const list = []
+                for (let index = 0; index < size; index++) {
+                  list.push({
+                    name: \`名称\${index}\`,
+                    sex: '0',
+                    num: 123,
+                    age: 18,
+                    num2: 234,
+                    rate: 3,
+                    img1: '/vxe-table/static/other/img1.gif',
+                    html2: \`<span style="color:red">HTML标签\${index}</span>\`,
+                    address: \`vxe-table 从入门到放弃系列\${index}\`
+                  })
+                }
+                resolve(list)
+              })
+            },
             showDetailEvent (row) {
               this.selectRow = row
               this.showDetails = true
@@ -307,14 +327,35 @@ export default {
   created () {
     this.loading = true
     setTimeout(() => {
-      // 使用函数式加载，阻断 vue 对大数组的监听
-      if (this.$refs.xGrid) {
-        this.$refs.xGrid.loadData(window.MOCK_DATA_LIST.slice(0, 600))
-      }
-      this.loading = false
+      this.mockList(400).then(data => {
+        // 使用函数式加载
+        if (this.$refs.xGrid) {
+          this.$refs.xGrid.loadData(data)
+        }
+        this.loading = false
+      })
     }, 500)
   },
   methods: {
+    mockList (size) {
+      return new Promise(resolve => {
+        const list = []
+        for (let index = 0; index < size; index++) {
+          list.push({
+            name: `名称${index}`,
+            sex: '0',
+            num: 123,
+            age: 18,
+            num2: 234,
+            rate: 3,
+            img1: '/vxe-table/static/other/img1.gif',
+            html2: `<span style="color:red">HTML标签${index}</span>`,
+            address: `vxe-table 从入门到放弃系列${index}`
+          })
+        }
+        resolve(list)
+      })
+    },
     showDetailEvent (row) {
       this.selectRow = row
       this.showDetails = true

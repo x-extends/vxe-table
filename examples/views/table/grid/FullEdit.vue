@@ -341,17 +341,23 @@ export default {
             this.findSexList()
           },
           methods: {
-            async findSexList () {
-              const sexList = await XEAjax.get('/api/conf/sex/list')
-              // 异步更新下拉选项
-              this.sexList = sexList
-              const xGrid = this.$refs.xGrid
-              if (xGrid) {
-                const sexColumn = xGrid.getColumnByField('sex')
-                sexColumn.editRender.options = sexList
-                const sexItem = xGrid.getFormItems(4)
-                sexItem.itemRender.options = sexList
-              }
+            findSexList () {
+              setTimeout(() => {
+                const sexList = [
+                  { label: '', value: '' },
+                  { label: '男', value: '1' },
+                  { label: '女', value: '0' }
+                ]
+                // 异步更新下拉选项
+                this.sexList = sexList
+                const xGrid = this.$refs.xGrid
+                if (xGrid) {
+                  const sexColumn = xGrid.getColumnByField('sex')
+                  sexColumn.editRender.options = sexList
+                  const sexItem = xGrid.getFormItems(4)
+                  sexItem.itemRender.options = sexList
+                }
+              }, 100)
             },
             formatAmount ({ cellValue }) {
               return cellValue ? \`$\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
@@ -422,17 +428,23 @@ export default {
     this.findSexList()
   },
   methods: {
-    async findSexList () {
-      const sexList = await XEAjax.get('/api/conf/sex/list')
-      // 异步更新下拉选项
-      this.sexList = sexList
-      const xGrid = this.$refs.xGrid
-      if (xGrid) {
-        const sexColumn = xGrid.getColumnByField('sex')
-        sexColumn.editRender.options = sexList
-        const sexItem = xGrid.getFormItems(4)
-        sexItem.itemRender.options = sexList
-      }
+    findSexList () {
+      setTimeout(() => {
+        const sexList = [
+          { label: '', value: '' },
+          { label: '男', value: '1' },
+          { label: '女', value: '0' }
+        ]
+        // 异步更新下拉选项
+        this.sexList = sexList
+        const xGrid = this.$refs.xGrid
+        if (xGrid) {
+          const sexColumn = xGrid.getColumnByField('sex')
+          sexColumn.editRender.options = sexList
+          const sexItem = xGrid.getFormItems(4)
+          sexItem.itemRender.options = sexList
+        }
+      }, 100)
     },
     formatAmount ({ cellValue }) {
       return cellValue ? `$${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''

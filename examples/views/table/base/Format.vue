@@ -162,10 +162,6 @@ export default {
           // 向下舍入,默认两位数
           formatCutNumber ({ cellValue }, digits = 2) {
             return XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
-          },
-          // 转换 moment 类型为字符串
-          toMomentString ({ cellValue }, format) {
-            return cellValue ? cellValue.format(format) : ''
           }
         })
         `,

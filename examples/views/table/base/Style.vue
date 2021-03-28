@@ -213,9 +213,6 @@ export default {
       ]
     }
   },
-  created () {
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 6)
-  },
   methods: {
     headerCellClassName ({ column }) {
       if (column.property === 'name') {

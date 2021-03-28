@@ -64,7 +64,6 @@ module.exports = {
           .set('jsbarcode', 'JsBarcode')
           .set('qrcode', 'QRCode')
           .set('dayjs', 'dayjs')
-          .set('moment', 'moment')
           .set('sortablejs', 'Sortable')
       } else {
         config
@@ -75,7 +74,6 @@ module.exports = {
             'jsbarcode': 'JsBarcode',
             'qrcode': 'QRCode',
             'dayjs': 'dayjs',
-            'moment': 'moment',
             'sortablejs': 'Sortable'
           })
       }

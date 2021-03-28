@@ -272,7 +272,6 @@ export default {
   },
   created () {
     this.formItems[4].itemRender.options = this.sexList
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 20)
   },
   methods: {
     formatterSex ({ cellValue }) {

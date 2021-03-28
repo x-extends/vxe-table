@@ -375,7 +375,6 @@ export default {
       this.columns3 = this.$refs.xTable3.getColumns()
     })
     this.loading = true
-    this.tableData = window.MOCK_DATA_LIST.slice(0, 8)
     setTimeout(() => {
       // 将指定列设置为隐藏状态
       this.columns2.forEach(column => {
