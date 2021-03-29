@@ -2139,7 +2139,6 @@ export namespace VxeTableDefines {
   }
   export interface SortChangeEventParams extends TableEventParams, SortChangeParams { }
 
-
   export interface FilterCheckedParams {
     column: VxeTableDefines.ColumnInfo;
     property: VxeColumnPropTypes.Field;

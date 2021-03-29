@@ -452,3 +452,10 @@ export namespace VxeGridEvents {
   export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickEventParams) => void;
   export type Zoom = (params: VxeGridDefines.ZoomEventParams) => void;
 }
+
+/**
+ * 已删除，请使用 VxeGridProps
+ * @deprecated
+ */
+ export interface VxeGridOptions extends VxeGridProps { }
+ 
