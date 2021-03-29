@@ -2,6 +2,7 @@
   <div>
     <p class="tip">
       自定义渲染 <a class="link" href="https://www.npmjs.com/package/ant-design-vue" target="_blank">ant-design-vue</a> 组件，自定义渲染需要配合 <table-api-link prop="updateStatus"/> 方法使用，在对应单元格的值发生改变时调用更新状态<br>
+      建议通过使用 <router-link class="link" :to="{name: 'TablePluginAntdConfig'}">vxe-table-plugin-antd</router-link> 适配插件来解决跨组件渲染的兼容性问题，例如：无法下拉选中...等<br>
       <span class="red">（注：该示例仅供参考，具体逻辑请自行实现）</span>
     </p>
 

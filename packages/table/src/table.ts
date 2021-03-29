@@ -1,6 +1,7 @@
 import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
 import XEUtils from 'xe-utils'
 import { UtilTools, DomTools, GlobalEvent, createResizeEvent, XEResizeObserver, isEnableConf } from '../../tools'
+import { getPaddingTopBottomSize } from '../../tools/src/dom'
 import { useSize } from '../../hooks/size'
 import { VXETable } from '../../v-x-e-table'
 import GlobalConfig from '../../v-x-e-table/src/conf'
@@ -486,11 +487,12 @@ export default defineComponent({
 
     const computeIsAllCheckboxDisabled = computed(() => {
       const { treeConfig } = props
+      const { tableData } = reactData
       const { tableFullData } = internalData
       const checkboxOpts = computeCheckboxOpts.value
       const { strict, checkMethod } = checkboxOpts
       if (strict) {
-        if (tableFullData.length) {
+        if (tableData.length || tableFullData.length) {
           if (checkMethod) {
             if (treeConfig) {
               // 暂时不支持树形结构
@@ -1162,7 +1164,7 @@ export default defineComponent({
             }
           }
           if (!allRemoteSort && sortable && order) {
-            orderColumns.push({ column, sortBy: column.sortBy, property: column.property, order })
+            orderColumns.push({ column, property: column.property, order })
           }
         })
 
@@ -1174,12 +1176,13 @@ export default defineComponent({
               const { filterMethod, filterRender } = column
               const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
               const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
+              const cellValue = UtilTools.getCellValue(row, column)
               if (filterMethod) {
-                return itemList.some((item: any) => filterMethod({ value: item.value, option: item, row, column, $table: $xetable }))
+                return itemList.some((item: any) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               } else if (compFilterMethod) {
-                return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, row, column, $table: $xetable }))
+                return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               } else if (allFilterMethod) {
-                return allFilterMethod({ options: itemList, values: valueList, row, column })
+                return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
               }
               return valueList.indexOf(XEUtils.get(row, column.property)) > -1
             })
@@ -3019,7 +3022,7 @@ export default defineComponent({
         visibleColumn.forEach((column) => {
           const { order } = column
           if (column.sortable && order) {
-            sortList.push({ column, sortBy: column.sortBy, property: column.property, order })
+            sortList.push({ column, property: column.property, order })
           }
         })
         return sortList
@@ -4031,8 +4034,11 @@ export default defineComponent({
        * 获取父容器的高度
        */
       getParentHeight () {
+        const { height } = props
         const el = refElem.value
-        return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height))
+        const parentElem = el.parentNode as HTMLElement
+        const parentPaddingSize = height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+        return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
       },
       /**
        * 获取需要排除的高度
@@ -4685,7 +4691,7 @@ export default defineComponent({
           } else {
             tableMethods.sort({ field: property, order })
           }
-          const params = { column, property, order: column.order, sortBy: column.sortBy, sortList: tableMethods.getSortColumns() }
+          const params = { column, property, order: column.order, sortList: tableMethods.getSortColumns() }
           tableMethods.dispatchEvent('sort-change', params, evnt)
         }
       },

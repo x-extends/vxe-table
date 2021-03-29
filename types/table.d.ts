@@ -1196,7 +1196,13 @@ export namespace VxeTablePropTypes {
    * 筛选配置项
    */
   export interface FilterConfig {
-    filterMethod?: (params: { options: any[], values: any[], row: any, column: any }) => any;
+    filterMethod?: (params: {
+      options: VxeTableDefines.FilterOption[];
+      values: any[];
+      cellValue: any;
+      row: any;
+      column: VxeTableDefines.ColumnInfo;
+    }) => any;
     remote?: boolean;
     showIcon?: boolean;
     iconNone?: string;
@@ -1353,7 +1359,7 @@ export namespace VxeTablePropTypes {
     className?: string;
     visibleMethod?(params: {
       type: string;
-      options: (VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption)[][];
+      options: VxeTableDefines.MenuFirstOption[][];
       columns: VxeTableDefines.ColumnInfo[];
       row?: any;
       rowIndex?: number;
@@ -1391,11 +1397,11 @@ export namespace VxeTablePropTypes {
      */
     extendByCopy?: boolean;
     /**
-     * 只对 extendByCopy 启用后有效，扩展区域时将自动识别数字规则进行计算
+     * 只对 mouse-config.extension 启用后有效，扩展区域时将自动识别数字规则进行计算
      */
-    isCalcValue?: boolean;
+    extendByCalc?: boolean;
     /**
-     * 只对 isCalcValue 启用后有效，重写单元格扩展区域计算值的方法
+     * 只对 extendByCalc 启用后有效，重写单元格扩展区域计算值的方法
      * @param params
      */
     extendCalcMethod?(params: VxeTableProDefines.ExtendCellAreaCalcBaseParams): any[][];
@@ -2126,7 +2132,6 @@ export namespace VxeTableDefines {
   export interface SortCheckedParams {
     column: VxeTableDefines.ColumnInfo;
     property: VxeColumnPropTypes.Field;
-    sortBy: VxeColumnPropTypes.SortBy;
     order: VxeTablePropTypes.SortOrder;
   }
   export interface SortChangeParams extends SortCheckedParams {

@@ -31,9 +31,10 @@ const GlobalConfig: VXETableGlobalConfig = {
     // radioConfig: {
     //   trigger: 'default'
     // },
-    // checkboxConfig: {
-    //   trigger: 'default'
-    // },
+    checkboxConfig: {
+      // trigger: 'default',
+      strict: true
+    },
     // tooltipConfig: {
     //   theme: 'dark',
     //   enterable: false

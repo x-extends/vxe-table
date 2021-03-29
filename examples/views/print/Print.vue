@@ -100,6 +100,24 @@
       <pre-code class="xml">{{ demoCodes[8] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[9] }}</pre-code>
     </pre>
+
+    <p class="tip">打印图片</p>
+
+    <vxe-toolbar>
+      <template #buttons>
+        <vxe-button @click="printEvent6">打印图片</vxe-button>
+      </template>
+    </vxe-toolbar>
+
+    <img id="myPrint6" src="/vxe-table/static/other/invoice.png" style="width: 300px">
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[10] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[11] }}</pre-code>
+    </pre>
+
   </div>
 </template>
 
@@ -444,6 +462,19 @@ export default defineComponent({
       })
     }
 
+    const printEvent6 = () => {
+      const imgEl = document.getElementById('myPrint6') as HTMLImageElement
+      VXETable.print({
+        sheetName: '打印图片',
+        style: `
+        img {
+          width: 100%;
+        }
+        `,
+        content: `<img src="${imgEl.src}">`
+      })
+    }
+
     return {
       xTable,
       xToolbar,
@@ -454,6 +485,7 @@ export default defineComponent({
       printEvent3,
       printEvent4,
       printEvent5,
+      printEvent6,
       demoCodes: [
         `
         <vxe-toolbar ref="xToolbar" print>
@@ -904,6 +936,38 @@ export default defineComponent({
 
             return {
               printEvent4
+            }
+          }
+        })
+        `,
+        `
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button @click="printEvent6">打印图片</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <img id="myPrint6" src="/vxe-table/static/other/invoice.png" style="width: 300px">
+        `,
+        `
+        import { defineComponent } from 'vue'
+
+        export default defineComponent({
+          setup () {
+            const printEvent6 = () => {
+              const imgEl = document.getElementById('myPrint6') as HTMLImageElement
+              VXETable.print({
+                sheetName: '打印图片',
+                style: \`
+                img {
+                  width: 100%;
+                }
+                \`,
+                content: \`<img src="\${imgEl.src}">\`
+              })
+            }
+            return {
+              printEvent6
             }
           }
         })

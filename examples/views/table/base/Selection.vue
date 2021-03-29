@@ -64,7 +64,7 @@
       <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
-    <p class="tip">还可以通过 <table-api-link prop="strict"/> 设置为严格模式，当表格中不存在有效数据时列头复选框为禁用状态</p>
+    <p class="tip">当表格中不存在有效数据时列头复选框为禁用状态</p>
 
     <vxe-table
       border
@@ -87,8 +87,8 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
-        <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
+        <vxe-button @click="$refs.xTable4.toggleCheckboxRow(demo4.tableData[1])">切换第二行选中</vxe-button>
+        <vxe-button @click="$refs.xTable4.setCheckboxRow([demo4.tableData[2], demo4.tableData[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable4.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
         <vxe-button @click="$refs.xTable4.clearCheckboxRow()">清除所有行选中</vxe-button>
       </template>
@@ -145,7 +145,7 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTable6.setCheckboxRow(tableData, true)">设置所有行选中</vxe-button>
+        <vxe-button @click="$refs.xTable6.setCheckboxRow(tableData6, true)">设置所有行选中</vxe-button>
         <vxe-button @click="$refs.xTable6.clearCheckboxRow()">清除所有行选中</vxe-button>
       </template>
     </vxe-toolbar>
@@ -154,7 +154,7 @@
       border
       highlight-hover-row
       ref="xTable6"
-      :data="demo6.tableData"
+      :data="tableData6"
       :checkbox-config="{checkStrictly: true}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -175,7 +175,7 @@
     <vxe-table
       border
       highlight-hover-row
-      :data="demo7.tableData"
+      :data="tableData7"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
@@ -191,14 +191,15 @@
       <pre-code class="typescript">{{ demoCodes[13] }}</pre-code>
     </pre>
 
-    <p class="tip">不仅如此，还可以多种方式混合使用，通过 <table-api-link prop="range"/> 启用范围选中</p>
+    <p class="tip">不仅如此，还可以多种方式混合使用，通过 <table-api-link prop="range"/> 启用范围选中，通过鼠标按住复选框的列，向上或向下滑动选取，还可以同时按住 Ctrl 键局部选取</p>
 
     <vxe-table
       border
       resizable
       highlight-hover-row
       highlight-current-row
-      :data="demo8.tableData"
+      height="300"
+      :data="tableData8"
       :radio-config="{labelField: 'role'}"
       :checkbox-config="{labelField: 'name', highlight: true, range: true}">
       <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
@@ -276,7 +277,6 @@ export default defineComponent({
       ],
       tableCheckboxConfig: {
         labelField: 'name',
-        strict: true,
         checkMethod: () => {
           return false
         }
@@ -285,11 +285,11 @@ export default defineComponent({
 
     const demo4 = reactive({
       tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', checked: false },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', checked: false },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', checked: false },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', checked: false }
       ]
     })
 
@@ -304,35 +304,34 @@ export default defineComponent({
       ]
     })
 
-    const demo6 = reactive({
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
-      ]
-    })
+    const tableData6 = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+    ])
 
-    const demo7 = reactive({
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
-      ]
-    })
+    const tableData7 = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+    ])
 
-    const demo8 = reactive({
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
-      ]
-    })
+    const tableData8 = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10007, name: 'Test7', role: 'PM', sex: 'Women ', age: 38, address: 'Shanghai' },
+      { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 24, address: 'vxe-table 从入门到放弃' },
+      { id: 10009, name: 'Test9', role: 'Test', sex: 'Man ', age: 35, address: 'Shanghai' },
+      { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women ', age: 31, address: 'Shanghai' }
+    ])
 
     return {
       demo1,
@@ -344,9 +343,9 @@ export default defineComponent({
       demo3,
       demo4,
       demo5,
-      demo6,
-      demo7,
-      demo8,
+      tableData6,
+      tableData7,
+      tableData8,
       demoCodes: [
         `
         <vxe-toolbar>
@@ -491,7 +490,6 @@ export default defineComponent({
               ],
               tableCheckboxConfig: {
                 labelField: 'name',
-                strict: true,
                 checkMethod: () => {
                   return false
                 }
@@ -507,8 +505,8 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
-            <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
+            <vxe-button @click="$refs.xTable4.toggleCheckboxRow(demo4.tableData[1])">切换第二行选中</vxe-button>
+            <vxe-button @click="$refs.xTable4.setCheckboxRow([demo4.tableData[2], demo4.tableData[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable4.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
             <vxe-button @click="$refs.xTable4.clearCheckboxRow()">清除所有行选中</vxe-button>
           </template>
@@ -519,7 +517,7 @@ export default defineComponent({
           highlight-hover-row
           class="checkbox-table"
           ref="xTable4"
-          :data="tableData"
+          :data="demo4.tableData"
           :checkbox-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -535,11 +533,11 @@ export default defineComponent({
           setup () {
             const demo4 = reactive({
               tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', checked: false },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', checked: false },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', checked: false },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', checked: false }
               ]
             })
 
@@ -554,7 +552,7 @@ export default defineComponent({
           border
           highlight-hover-row
           row-id="id"
-          :data="tableData"
+          :data="demo5.tableData"
           :checkbox-config="{checkRowKeys: demo5.defaultSelecteRows5, highlight: true}"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -589,7 +587,7 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="$refs.xTable6.setCheckboxRow(tableData, true)">设置所有行选中</vxe-button>
+            <vxe-button @click="$refs.xTable6.setCheckboxRow(tableData6, true)">设置所有行选中</vxe-button>
             <vxe-button @click="$refs.xTable6.clearCheckboxRow()">清除所有行选中</vxe-button>
           </template>
         </vxe-toolbar>
@@ -598,7 +596,7 @@ export default defineComponent({
           border
           highlight-hover-row
           ref="xTable6"
-          :data="tableData"
+          :data="tableData6"
           :checkbox-config="{checkStrictly: true}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -608,22 +606,20 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, ref } from 'vue'
 
         export default defineComponent({
           setup () {
-            const demo6 = reactive({
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
-              ]
-            })
+            const tableData6 = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+            ])
 
             return {
-              demo6
+              tableData6
             }
           }
         })
@@ -632,7 +628,7 @@ export default defineComponent({
         <vxe-table
           border
           highlight-hover-row
-          :data="tableData"
+          :data="tableData7"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
@@ -642,22 +638,20 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, ref } from 'vue'
 
         export default defineComponent({
           setup () {
-            const demo7 = reactive({
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
-              ]
-            })
+            const tableData7 = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+            ])
 
             return {
-              demo7
+              tableData7
             }
           }
         })
@@ -668,7 +662,8 @@ export default defineComponent({
           resizable
           highlight-hover-row
           highlight-current-row
-          :data="tableData"
+          height="300"
+          :data="tableData8"
           :radio-config="{labelField: 'role'}"
           :checkbox-config="{labelField: 'name', highlight: true, range: true}">
           <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
@@ -679,22 +674,25 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, ref } from 'vue'
 
         export default defineComponent({
           setup () {
-            const demo8 = reactive({
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
-              ]
-            })
+            const tableData8 = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10007, name: 'Test7', role: 'PM', sex: 'Women ', age: 38, address: 'Shanghai' },
+              { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 24, address: 'vxe-table 从入门到放弃' },
+              { id: 10009, name: 'Test9', role: 'Test', sex: 'Man ', age: 35, address: 'Shanghai' },
+              { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women ', age: 31, address: 'Shanghai' }
+            ])
 
             return {
-              demo8
+              tableData8
             }
           }
         })

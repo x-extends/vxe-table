@@ -25,6 +25,10 @@
   * [x] v3.0 基于 vue2.6+，只支持现代浏览器，提升渲染性能
   * [x] v4.0 基于 vue3.0+，只支持现代浏览器，不支持 IE
 
+## QQ 交流群
+
+![qq](https://gitee.com/xuliangzhan_admin/vxe-table/raw/master/public/static/support/qq.png)
+
 ## 浏览器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)

@@ -1064,7 +1064,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（点击按钮触发）, cell（点击表头触发）',
@@ -1121,7 +1121,7 @@ const apis = [
             name: 'filterMethod',
             desc: '全局筛选方法，当触发筛选时会调用该函数，返回是否有效',
             version: '',
-            type: '(params: { value, row, column }) => boolean',
+            type: '(params: { options, values, cellValue, row, column }) => boolean',
             enum: '',
             defVal: '',
             list: []
@@ -1228,7 +1228,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
@@ -1314,7 +1314,7 @@ const apis = [
             version: '',
             type: 'boolean',
             enum: '',
-            defVal: 'false',
+            defVal: 'true',
             list: []
           },
           {
@@ -1328,7 +1328,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
@@ -1465,7 +1465,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
@@ -1619,7 +1619,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
@@ -1758,7 +1758,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'string',
-            enum: 'default（默认触发）, cell（右键单元格触发）',
+            enum: 'default（默认右键表格触发）, cell（右键单元格触发）',
             defVal: 'default',
             list: []
           },
@@ -2073,8 +2073,8 @@ const apis = [
             list: []
           },
           {
-            name: 'isCalcValue',
-            desc: '只对 extendByCopy 启用后有效，当选取大于两行或两列时，扩展区域时将自动识别数字规则进行计算（同时按住 ctrl 键可取消值自动识别数字功能）',
+            name: 'extendByCalc',
+            desc: '只对 mouse-config.extension 启用后有效，当选取大于两行或两列时，自动识别最近两行或两列数据运算规则进行计算（同时按住 ctrl 键可取消值自动识别数字功能）',
             version: 'pro',
             type: 'boolean',
             enum: '',
@@ -2083,7 +2083,7 @@ const apis = [
           },
           {
             name: 'extendCalcMethod',
-            desc: '只对 isCalcValue 启用后有效，重写单元格扩展区域计算值的方法',
+            desc: '只对 extendByCalc 启用后有效，重写单元格扩展区域计算值的方法',
             version: 'pro',
             type: '(params: { rows, cols, targetValues, targetRows, targetCols, extendRows, extendCols, direction }) => any[][]',
             enum: '',

@@ -68,6 +68,7 @@ export namespace VxeGlobalRendererHandles {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     value: any;
     option: VxeTableDefines.FilterOption;
+    cellValue: any;
     row: any;
     column: VxeTableDefines.ColumnInfo;
   };

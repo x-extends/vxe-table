@@ -1,6 +1,7 @@
 import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance } from 'vue'
 import XEUtils from 'xe-utils'
 import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
+import { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/src/dom'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import tableComponentProps from '../../table/src/props'
@@ -8,20 +9,6 @@ import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
 
 import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps } from '../../../types/all'
-
-function getOffsetHeight (elem: HTMLElement) {
-  return elem ? elem.offsetHeight : 0
-}
-
-function getPaddingTopBottomSize (elem: HTMLElement) {
-  if (elem) {
-    const computedStyle = getComputedStyle(elem)
-    const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
-    const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
-    return paddingTop + paddingBottom
-  }
-  return 0
-}
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 

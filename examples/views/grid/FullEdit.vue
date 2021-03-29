@@ -107,7 +107,7 @@ export default defineComponent({
           total: 'page.total'
         },
         ajax: {
-          // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
+          // 接收 Promise
           query: ({ page, sorts, filters, form }) => {
             const queryParams: any = Object.assign({}, form)
             // 处理排序条件
@@ -143,14 +143,14 @@ export default defineComponent({
           editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
         },
         { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
-        { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+        { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
         { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
         { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
         {
           field: 'amount',
           title: 'Amount',
           formatter ({ cellValue }) {
-            return cellValue ? `$${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
+            return cellValue ? `￥${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
           },
           editRender:
            { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } }
@@ -180,6 +180,7 @@ export default defineComponent({
         remote: true,
         types: ['xlsx'],
         modes: ['insert'],
+        // 自定义服务端导入
         importMethod ({ file }) {
           const $grid = xGrid.value
           const formBody = new FormData()
@@ -197,6 +198,7 @@ export default defineComponent({
         remote: true,
         types: ['xlsx'],
         modes: ['current', 'selected', 'all'],
+        // 自定义服务端导出
         exportMethod ({ options }) {
           const $grid = xGrid.value
           const proxyInfo = $grid.getProxyInfo()
@@ -371,8 +373,8 @@ export default defineComponent({
                   total: 'page.total'
                 },
                 ajax: {
-                  // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
-                  query: ({ page, sort, filters, form }) => {
+                  // 接收 Promise
+                  query: ({ page, sorts, filters, form }) => {
                     const queryParams: any = Object.assign({}, form)
                     // 处理排序条件
                     const firstSort = sorts[0]
@@ -407,14 +409,14 @@ export default defineComponent({
                   editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
                 },
                 { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
-                { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
                 { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
                 { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                 {
                   field: 'amount',
                   title: 'Amount',
                   formatter ({ cellValue }) {
-                    return cellValue ? \`$\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
+                    return cellValue ? \`￥\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
                   },
                   editRender:
                   { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } }
@@ -444,6 +446,7 @@ export default defineComponent({
                 remote: true,
                 types: ['xlsx'],
                 modes: ['insert'],
+                // 自定义服务端导入
                 importMethod ({ file }) {
                   const $grid = xGrid.value
                   const formBody = new FormData()
@@ -461,6 +464,7 @@ export default defineComponent({
                 remote: true,
                 types: ['xlsx'],
                 modes: ['current', 'selected', 'all'],
+                // 自定义服务端导出
                 exportMethod ({ options }) {
                   const $grid = xGrid.value
                   const proxyInfo = $grid.getProxyInfo()
@@ -471,7 +475,7 @@ export default defineComponent({
                     isHeader: options.isHeader,
                     original: options.original,
                     mode: options.mode,
-                    pager: proxyInfo.pager,
+                    pager: proxyInfo ? proxyInfo.pager : null,
                     ids: options.mode === 'selected' ? options.data.map((item) => item.id) : [],
                     fields: options.columns.map((column) => {
                       return {

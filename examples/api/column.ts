@@ -216,15 +216,6 @@ const apis = [
         list: []
       },
       {
-        name: 'seq-method',
-        descKey: 'app.api.tableColumn.desc.seqMethod',
-        version: '',
-        type: '({ row, rowIndex, column, columnIndex }) => number',
-        enum: '',
-        defVal: '',
-        list: []
-      },
-      {
         name: 'sortable',
         descKey: 'app.api.tableColumn.desc.sortable',
         version: '',
@@ -237,7 +228,7 @@ const apis = [
         name: 'sort-by',
         descKey: 'app.api.tableColumn.desc.sortBy',
         version: '',
-        type: 'string | ((row) => string | number)',
+        type: 'string | (({ row, column }) => string | number)',
         enum: '',
         defVal: '',
         list: []
@@ -319,7 +310,7 @@ const apis = [
         name: 'filter-method',
         descKey: 'app.api.tableColumn.desc.filterMethod',
         version: '',
-        type: '({ value, row, column }) => boolean',
+        type: '({ value, cellValue, row, column }) => boolean',
         enum: '',
         defVal: '',
         list: []
