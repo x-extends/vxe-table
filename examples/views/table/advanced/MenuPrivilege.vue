@@ -8,6 +8,7 @@
       highlight-current-row
       highlight-current-column
       ref="xTable"
+      height="400"
       :footer-method="footerMethod"
       :data="tableData"
       :menu-config="tableMenu"
@@ -53,9 +54,7 @@ export default {
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' }
       ],
       tableMenu: {
         header: {
@@ -118,6 +117,7 @@ export default {
           highlight-current-row
           highlight-current-column
           ref="xTable"
+          height="400"
           :footer-method="footerMethod"
           :data="tableData"
           :menu-config="tableMenu"
@@ -142,9 +142,7 @@ export default {
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 24, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Man ', age: 34, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' }
               ],
               tableMenu: {
                 header: {
@@ -215,13 +213,23 @@ export default {
               const isVisible = column && column.property === 'age'
               options.forEach(list => {
                 list.forEach(item => {
-                  if (['copy', 'remove'].includes(item.code)) {
-                    item.disabled = isDisabled
+                  if (column) {
+                    item.disabled = false
+                    if (['copy', 'remove'].includes(item.code)) {
+                      item.disabled = isDisabled
+                    }
+                    if (['details'].includes(item.code)) {
+                      item.visible = column.property === 'name'
+                    } else if (['clear', 'filter'].includes(item.code)) {
+                      item.visible = isVisible
+                    }
+                  } else {
+                    item.disabled = true
                   }
-                  if (['details'].includes(item.code)) {
-                    item.visible = column.property === 'name'
-                  } else if (['clear', 'filter'].includes(item.code)) {
-                    item.visible = isVisible
+                  if (item.children) {
+                    item.children.forEach(childItem => {
+                      childItem.disabled = item.disabled
+                    })
                   }
                 })
               })
@@ -274,13 +282,23 @@ export default {
       const isVisible = column && column.property === 'age'
       options.forEach(list => {
         list.forEach(item => {
-          if (['copy', 'remove'].includes(item.code)) {
-            item.disabled = isDisabled
+          if (column) {
+            item.disabled = false
+            if (['copy', 'remove'].includes(item.code)) {
+              item.disabled = isDisabled
+            }
+            if (['details'].includes(item.code)) {
+              item.visible = column.property === 'name'
+            } else if (['clear', 'filter'].includes(item.code)) {
+              item.visible = isVisible
+            }
+          } else {
+            item.disabled = true
           }
-          if (['details'].includes(item.code)) {
-            item.visible = column.property === 'name'
-          } else if (['clear', 'filter'].includes(item.code)) {
-            item.visible = isVisible
+          if (item.children) {
+            item.children.forEach(childItem => {
+              childItem.disabled = item.disabled
+            })
           }
         })
       })

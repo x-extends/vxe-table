@@ -1055,7 +1055,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（点击按钮触发）, cell（点击表头触发）',
@@ -1219,7 +1219,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
@@ -1305,7 +1305,7 @@ const apis = [
             version: '',
             type: 'boolean',
             enum: '',
-            defVal: 'false',
+            defVal: 'true',
             list: []
           },
           {
@@ -1319,7 +1319,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（默认）, cell（点击单元格触发）, row（点击行触发）',
@@ -1456,7 +1456,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
@@ -1610,7 +1610,7 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发方式',
+            desc: '触发方式（注：当多种功能重叠时，会同时触发）',
             version: '',
             type: 'string',
             enum: 'default（点击按钮触发）, cell（点击单元格触发）, row（点击行触发）',
@@ -1749,7 +1749,7 @@ const apis = [
             desc: '触发方式',
             version: '',
             type: 'string',
-            enum: 'default（默认触发）, cell（右键单元格触发）',
+            enum: 'default（默认右键表格触发）, cell（右键单元格触发）',
             defVal: 'default',
             list: []
           },

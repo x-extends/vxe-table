@@ -621,6 +621,11 @@ export default {
               const imgEl = document.getElementById('myPrint6')
               this.$XPrint({
                 sheetName: '打印图片',
+                style: \`
+                img {
+                  width: 100%;
+                }
+                \`,
                 content: \`<img src="\${imgEl.src}">\`
               })
             }
@@ -869,6 +874,11 @@ export default {
       const imgEl = document.getElementById('myPrint6')
       this.$XPrint({
         sheetName: '打印图片',
+        style: `
+        img {
+          width: 100%;
+        }
+        `,
         content: `<img src="${imgEl.src}">`
       })
     }

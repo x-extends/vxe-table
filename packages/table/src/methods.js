@@ -4,6 +4,7 @@ import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { clearTableAllStatus, handleFieldOrColumn } from './util'
+import { getPaddingTopBottomSize } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
@@ -279,8 +280,10 @@ const Methods = {
    * 获取父容器的高度
    */
   getParentHeight () {
-    const { $el, $xegrid } = this
-    return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle($el.parentNode).height))
+    const { $el, $xegrid, height } = this
+    const parentElem = $el.parentNode
+    const parentPaddingSize = height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+    return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
   },
   /**
    * 获取需要排除的高度
@@ -1026,7 +1029,7 @@ const Methods = {
         }
       }
       if (!allRemoteSort && sortable && order) {
-        orderColumns.push({ column, sortBy: column.sortBy, property: column.property, order })
+        orderColumns.push({ column, property: column.property, order })
       }
     })
     if (filterColumns.length) {
@@ -3109,6 +3112,7 @@ const Methods = {
             const column = this.getColumnByField(field)
             if (column && column.sortable) {
               column.order = order
+              column.sortTime = Date.now()
             }
           }
         })
@@ -3130,7 +3134,7 @@ const Methods = {
       } else {
         this.sort({ field: property, order })
       }
-      const params = { column, property, order: column.order, sortBy: column.sortBy, sortList: this.getSortColumns() }
+      const params = { column, property, order: column.order, sortList: this.getSortColumns() }
       this.emitEvent('sort-change', params, evnt)
     }
   },
@@ -3217,7 +3221,7 @@ const Methods = {
     this.visibleColumn.forEach((column) => {
       const { order } = column
       if ((column.sortable || column.remoteSort) && order) {
-        sortList.push({ column, sortBy: column.sortBy, property: column.property, order })
+        sortList.push({ column, property: column.property, order })
       }
     })
     return sortList

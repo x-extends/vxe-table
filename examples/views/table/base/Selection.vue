@@ -64,12 +64,12 @@
       <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
     </pre>
 
-    <p class="tip">还可以通过 <table-api-link prop="strict"/> 设置为严格模式，当表格中不存在有效数据时列头复选框为禁用状态</p>
+    <p class="tip">当表格中不存在有效数据时列头复选框为禁用状态</p>
 
     <vxe-table
       border
       :data="tableData"
-      :checkbox-config="{labelField: 'name', strict: true, checkMethod:checCheckboxkMethod3}">
+      :checkbox-config="{labelField: 'name', checkMethod:checCheckboxkMethod3}">
       <vxe-table-column type="checkbox" title="All"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -87,8 +87,8 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
-        <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
+        <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData4[1])">切换第二行选中</vxe-button>
+        <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData4[2], tableData4[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable4.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
         <vxe-button @click="$refs.xTable4.clearCheckboxRow()">清除所有行选中</vxe-button>
       </template>
@@ -99,7 +99,7 @@
       highlight-hover-row
       class="checkbox-table"
       ref="xTable4"
-      :data="tableData"
+      :data="tableData4"
       :checkbox-config="{checkField: 'checked', trigger: 'row'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -191,14 +191,15 @@
       <pre-code class="javascript">{{ demoCodes[13] }}</pre-code>
     </pre>
 
-    <p class="tip">不仅如此，还可以多种方式混合使用，通过 <table-api-link prop="range"/> 启用范围选中</p>
+    <p class="tip">不仅如此，还可以多种方式混合使用，通过 <table-api-link prop="range"/> 启用范围选中，通过鼠标按住复选框的列，向上或向下滑动选取，还可以同时按住 Ctrl 键局部选取</p>
 
     <vxe-table
       border
       resizable
       highlight-hover-row
       highlight-current-row
-      :data="tableData"
+      height="300"
+      :data="tableData8"
       :radio-config="{labelField: 'role'}"
       :checkbox-config="{labelField: 'name', highlight: true, range: true}">
       <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
@@ -230,6 +231,25 @@ export default {
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
         { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
         { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+      ],
+      tableData4: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', checked: false },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', checked: false },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', checked: false },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', checked: false }
+      ],
+      tableData8: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', role: 'PM', sex: 'Women ', age: 38, address: 'Shanghai' },
+        { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 24, address: 'vxe-table 从入门到放弃' },
+        { id: 10009, name: 'Test9', role: 'Test', sex: 'Man ', age: 35, address: 'Shanghai' },
+        { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women ', age: 31, address: 'Shanghai' }
       ],
       demoCodes: [
         `
@@ -329,7 +349,7 @@ export default {
         <vxe-table
           border
           :data="tableData"
-          :checkbox-config="{labelField: 'name', strict: true, checkMethod: checCheckboxkMethod3}">
+          :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod3}">
           <vxe-table-column type="checkbox" title="All"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -359,8 +379,8 @@ export default {
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
-            <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
+            <vxe-button @click="$refs.xTable4.toggleCheckboxRow(tableData4[1])">切换第二行选中</vxe-button>
+            <vxe-button @click="$refs.xTable4.setCheckboxRow([tableData4[2], tableData4[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable4.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
             <vxe-button @click="$refs.xTable4.clearCheckboxRow()">清除所有行选中</vxe-button>
           </template>
@@ -371,7 +391,7 @@ export default {
           highlight-hover-row
           class="checkbox-table"
           ref="xTable4"
-          :data="tableData"
+          :data="tableData4"
           :checkbox-config="{checkField: 'checked', trigger: 'row'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -384,12 +404,12 @@ export default {
         export default {
           data () {
             return {
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+              tableData4: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', checked: false },
+                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', checked: false },
+                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', checked: false },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', checked: false }
               ]
             }
           }
@@ -496,7 +516,8 @@ export default {
           resizable
           highlight-hover-row
           highlight-current-row
-          :data="tableData"
+          height="300"
+          :data="tableData8"
           :radio-config="{labelField: 'role'}"
           :checkbox-config="{labelField: 'name', highlight: true, range: true}">
           <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
@@ -510,12 +531,17 @@ export default {
         export default {
           data () {
             return {
-              tableData: [
+              tableData8: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', role: 'PM', sex: 'Women ', age: 38, address: 'Shanghai' },
+                { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 24, address: 'vxe-table 从入门到放弃' },
+                { id: 10009, name: 'Test9', role: 'Test', sex: 'Man ', age: 35, address: 'Shanghai' },
+                { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women ', age: 31, address: 'Shanghai' }
               ]
             }
           }

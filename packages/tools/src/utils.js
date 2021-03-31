@@ -106,6 +106,7 @@ class ColumnInfo {
       rowSpan: 1,
       colSpan: 1,
       order: null,
+      sortTime: 0,
       renderWidth: 0,
       renderHeight: 0,
       resizeWidth: 0,

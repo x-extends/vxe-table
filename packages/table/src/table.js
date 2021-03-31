@@ -567,10 +567,10 @@ export default {
      * 判断列全选的复选框是否禁用
      */
     isAllCheckboxDisabled () {
-      const { tableFullData, treeConfig, checkboxOpts } = this
+      const { tableFullData, tableData, treeConfig, checkboxOpts } = this
       const { strict, checkMethod } = checkboxOpts
       if (strict) {
-        if (tableFullData.length) {
+        if (tableData.length || tableFullData.length) {
           if (checkMethod) {
             if (treeConfig) {
               // 暂时不支持树形结构

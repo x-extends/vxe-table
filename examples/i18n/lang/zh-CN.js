@@ -529,7 +529,7 @@ export default {
           indexMethod: '即将废弃，请使用 seqMethod',
           seqMethod: '只对 type=seq 有效，自定义索引方法',
           sortable: '是否允许列排序',
-          sortBy: '只对 sortable 有效，自定义排序的属性',
+          sortBy: '只对 sortable 有效，指定排序的字段（当值 formatter 格式化后，可以设置该字段，使用值进行排序）',
           sortType: '排序的字段类型，比如字符串转数值等',
           sortMethod: '只对 sortable 有效，列的排序方法，该方法的返回值用来决定该行的排序规则',
           remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',

@@ -54,6 +54,20 @@ function getDomNode () {
   }
 }
 
+export function getOffsetHeight (elem) {
+  return elem ? elem.offsetHeight : 0
+}
+
+export function getPaddingTopBottomSize (elem) {
+  if (elem) {
+    const computedStyle = getComputedStyle(elem)
+    const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
+    const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
+    return paddingTop + paddingBottom
+  }
+  return 0
+}
+
 export const DomTools = {
   browse,
   isPx (val) {

@@ -133,7 +133,7 @@ export default {
             editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
           },
           { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
-          { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+          { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
           { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
           { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
           { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } } },
@@ -292,7 +292,7 @@ export default {
                     editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
                   },
                   { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
-                  { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
+                  { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
                   { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
                   { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                   { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } } },
@@ -360,7 +360,7 @@ export default {
               }, 100)
             },
             formatAmount ({ cellValue }) {
-              return cellValue ? \`$\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
+              return cellValue ? \`￥\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
             },
             formatDate ({ cellValue }) {
               return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -371,6 +371,7 @@ export default {
               }
               return true
             },
+            // 自定义服务端导入
             importMethod ({ file }) {
               // 处理表单
               const formBody = new FormData()
@@ -384,6 +385,7 @@ export default {
                 this.$XModal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
               })
             },
+            // 自定义服务端导出
             exportMethod ({ options }) {
               const proxyInfo = this.$refs.xGrid.getProxyInfo()
               // 传给服务端的参数
@@ -447,7 +449,7 @@ export default {
       }, 100)
     },
     formatAmount ({ cellValue }) {
-      return cellValue ? `$${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
+      return cellValue ? `￥${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
     },
     formatDate ({ cellValue }) {
       return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
@@ -458,6 +460,7 @@ export default {
       }
       return true
     },
+    // 自定义服务端导入
     importMethod ({ file }) {
       // 处理表单
       const formBody = new FormData()
@@ -471,6 +474,7 @@ export default {
         this.$XModal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
       })
     },
+    // 自定义服务端导出
     exportMethod ({ options }) {
       const proxyInfo = this.$refs.xGrid.getProxyInfo()
       // 传给服务端的参数

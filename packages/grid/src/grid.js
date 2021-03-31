@@ -4,23 +4,10 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
+import { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/src/dom'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
-
-function getOffsetHeight (elem) {
-  return elem ? elem.offsetHeight : 0
-}
-
-function getPaddingTopBottomSize (elem) {
-  if (elem) {
-    const computedStyle = getComputedStyle(elem)
-    const paddingTop = XEUtils.toNumber(computedStyle.paddingTop)
-    const paddingBottom = XEUtils.toNumber(computedStyle.paddingBottom)
-    return paddingTop + paddingBottom
-  }
-  return 0
-}
 
 function renderDefaultForm (h, _vm) {
   const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm

@@ -530,7 +530,7 @@ export default {
           indexMethod: 'Obsolete, please use "seqMethod"',
           seqMethod: 'Only valid for type=seq, custom indexing method',
           sortable: 'Whether column sorting is allowed',
-          sortBy: 'Only valid for sortable, custom sort attributes',
+          sortBy: 'Only valid for sortable, 指定排序的字段（当值 formatter 格式化后，可以设置该字段，使用值进行排序）',
           sortType: '排序的字段类型，比如字符串转数值等',
           sortMethod: 'Only valid for sortable, the sorting method of the column, whose return value is used to determine the collation of the row',
           remoteSort: 'Whether to use remote sorting',
