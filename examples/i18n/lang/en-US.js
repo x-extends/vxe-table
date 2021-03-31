@@ -530,7 +530,7 @@ export default {
           indexMethod: 'Obsolete, please use "seqMethod"',
           seqMethod: 'Only valid for type=seq, custom indexing method',
           sortable: 'Whether column sorting is allowed',
-          sortBy: 'Only valid for sortable, custom sort attributes',
+          sortBy: 'Only valid for sortable, 指定排序的字段（当值 formatter 格式化后，可以设置该字段，使用值进行排序）',
           sortType: '排序的字段类型，比如字符串转数值等',
           sortMethod: 'Only valid for sortable, the sorting method of the column, whose return value is used to determine the collation of the row',
           remoteSort: 'Whether to use remote sorting',
@@ -609,7 +609,7 @@ export default {
       },
       radio: {
         desc: {
-          value: 'Binding value',
+          value: 'v-model Binding value',
           label: 'value',
           size: 'Size',
           disabled: 'Whether to disable',
@@ -618,7 +618,7 @@ export default {
       },
       checkbox: {
         desc: {
-          value: 'Binding values',
+          value: 'v-model Binding value',
           size: 'Size',
           disabled: 'Whether to disable',
           label: 'For checkbox-group only, value',
@@ -628,7 +628,7 @@ export default {
       },
       input: {
         desc: {
-          value: 'Binding values',
+          value: 'v-model Binding value',
           immediate: 'By default the input will synchronize the value in real time. This will cause delays in complex renderings and can be set to false before synchronizing the value after change',
           size: 'Size',
           disabled: 'Whether to disable',
@@ -652,7 +652,7 @@ export default {
       },
       modal: {
         desc: {
-          value: 'Binding values',
+          value: 'v-model Binding value',
           loading: 'Loading or not',
           id: 'Set a unique id (may be used in scenarios such as Message preventing repeated pop-ups or Storage drag state saving)',
           title: 'Message title (support internationalization)',
@@ -722,7 +722,7 @@ export default {
       },
       select: {
         desc: {
-          value: 'Binding values',
+          value: 'v-model Binding value',
           size: 'Size',
           multiple: 'Whether alternative',
           placeholder: 'Placeholder for null value empty',
@@ -742,7 +742,7 @@ export default {
       },
       option: {
         desc: {
-          value: 'Binding values',
+          value: 'v-model Binding value',
           label: 'display content',
           disabled: 'Whether to disable',
           size: 'Size'
@@ -750,7 +750,7 @@ export default {
       },
       switch: {
         desc: {
-          value: 'Binding values',
+          value: 'v-model Binding value',
           size: 'Size',
           disabled: 'Disable',
           onLabel: 'Text displayed on open',

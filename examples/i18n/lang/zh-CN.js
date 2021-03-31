@@ -529,7 +529,7 @@ export default {
           indexMethod: '即将废弃，请使用 seqMethod',
           seqMethod: '只对 type=seq 有效，自定义索引方法',
           sortable: '是否允许列排序',
-          sortBy: '只对 sortable 有效，自定义排序的属性',
+          sortBy: '只对 sortable 有效，指定排序的字段（当值 formatter 格式化后，可以设置该字段，使用值进行排序）',
           sortType: '排序的字段类型，比如字符串转数值等',
           sortMethod: '只对 sortable 有效，列的排序方法，该方法的返回值用来决定该行的排序规则',
           remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
@@ -608,7 +608,7 @@ export default {
       },
       radio: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           label: '值',
           size: '尺寸',
           disabled: '是否禁用',
@@ -617,7 +617,7 @@ export default {
       },
       checkbox: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           disabled: '是否禁用',
           label: '只对 checkbox-group 有效，值',
@@ -627,7 +627,7 @@ export default {
       },
       input: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           immediate: '默认情况下输入会实时同步值，当在复杂渲染时会导致卡顿，可以设置为 false 在 change 之后才同步值',
           size: '尺寸',
           disabled: '是否禁用',
@@ -651,7 +651,7 @@ export default {
       },
       modal: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           loading: '是否加载中',
           id: '设置唯一的 id（对于 Message 防止重复弹出 或 Storage 拖动状态保存等场景可能会用到）',
           title: '窗口的标题（支持开启国际化）',
@@ -721,7 +721,7 @@ export default {
       },
       select: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           multiple: '是否多选',
           placeholder: '空值显示的占位符',
@@ -741,7 +741,7 @@ export default {
       },
       option: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           label: '显示内容',
           disabled: '是否禁用',
           size: '尺寸'
@@ -749,7 +749,7 @@ export default {
       },
       switch: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           disabled: '是否禁用',
           onLabel: '打开时显示的文字',

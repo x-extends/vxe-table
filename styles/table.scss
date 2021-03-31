@@ -380,9 +380,11 @@
       visibility: hidden;
     }
   }
-  .vxe-table--body-wrapper,
+  .vxe-table--body-wrapper {
+    background-color: $vxe-table-body-background-color;
+  }
   .vxe-table--footer-wrapper {
-    background-color: $vxe-table-background-color;
+    background-color: $vxe-table-footer-background-color;
   }
   .vxe-table--header,
   .vxe-table--body,

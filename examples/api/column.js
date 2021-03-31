@@ -247,6 +247,7 @@ const apis = [
       },
       {
         name: 'seq-method',
+        disabled: true,
         descKey: 'app.api.tableColumn.desc.seqMethod',
         version: '2.8.31',
         type: 'Function',
