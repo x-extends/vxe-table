@@ -380,15 +380,15 @@ export default {
               return dd > 15
             },
             // 渲染日期小圆点
-            festivalNoticeMethod ({ date, type }) {
-              if (type === 'day') {
+            festivalNoticeMethod ({ date, viewType }) {
+              if (viewType === 'day') {
                 const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
                 return this.noticeMaps[ymd] || { label: '无' }
               }
             },
             // 显示日期农历节假日
-            festivalCalendarMethod ({ date, type }) {
-              if (type === 'day') {
+            festivalCalendarMethod ({ date, viewType }) {
+              if (viewType === 'day') {
                 const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
                 return this.calendarMaps[ymd] || { label: '无' }
               }
@@ -446,15 +446,15 @@ export default {
       return dd > 15
     },
     // 渲染日期小圆点
-    festivalNoticeMethod ({ date, type }) {
-      if (type === 'day') {
+    festivalNoticeMethod ({ date, viewType }) {
+      if (viewType === 'day') {
         const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
         return this.noticeMaps[ymd] || { label: '无' }
       }
     },
     // 显示日期农历节假日
-    festivalCalendarMethod ({ date, type }) {
-      if (type === 'day') {
+    festivalCalendarMethod ({ date, viewType }) {
+      if (viewType === 'day') {
         const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
         return this.calendarMaps[ymd] || { label: '无' }
       }

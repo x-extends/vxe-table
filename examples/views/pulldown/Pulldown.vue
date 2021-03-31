@@ -65,7 +65,8 @@
               :pager-config="tablePage4"
               :data="tableData4"
               :columns="tableColumn4"
-              @cell-click="cellClickEvent4">
+              @cell-click="cellClickEvent4"
+              @page-change="pageChangeEvent4">
             </vxe-grid>
           </div>
         </template>
@@ -182,7 +183,8 @@ export default {
                   :pager-config="tablePage4"
                   :data="tableData4"
                   :columns="tableColumn4"
-                  @cell-click="cellClickEvent4">
+                  @cell-click="cellClickEvent4"
+                  @page-change="pageChangeEvent4">
                 </vxe-grid>
               </div>
             </template>
@@ -293,6 +295,10 @@ export default {
             cellClickEvent4 ({ row }) {
               this.value4 = row.name
               this.$refs.xDown4.hidePanel()
+            },
+            pageChangeEvent4 ({ currentPage, pageSize }) {
+              this.tablePage4.currentPage = currentPage
+              this.tablePage4.pageSize = pageSize
             }
           }
         }
@@ -399,6 +405,10 @@ export default {
     cellClickEvent4 ({ row }) {
       this.value4 = row.name
       this.$refs.xDown4.hidePanel()
+    },
+    pageChangeEvent4 ({ currentPage, pageSize }) {
+      this.tablePage4.currentPage = currentPage
+      this.tablePage4.pageSize = pageSize
     }
   }
 }
