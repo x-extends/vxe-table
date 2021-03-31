@@ -227,9 +227,6 @@ export default {
         tableProps.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
       }
       return tableProps
-    },
-    pagerProps () {
-      return Object.assign({}, this.pagerOpts, this.proxyConfig ? this.tablePage : {})
     }
   },
   watch: {
@@ -355,7 +352,7 @@ export default {
         ? $scopedSlots.pager.call(this, { $grid: this }, h)
         : [
           h('vxe-pager', {
-            props: this.pagerProps,
+            props: { ...this.pagerOpts, ...(this.proxyConfig ? this.tablePage : {}) },
             on: {
               'page-change': this.pageChangeEvent
             },

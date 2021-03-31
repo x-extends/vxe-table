@@ -132,7 +132,8 @@ export function renderOption (h, _vm, list, group) {
         optid: optid
       },
       on: {
-        click: (evnt) => {
+        mousedown: (evnt) => {
+          evnt.stopPropagation()
           if (!isDisabled) {
             _vm.changeOptionEvent(evnt, optionValue)
           }
@@ -466,7 +467,10 @@ export default {
         this.changeEvent(evnt, multipleValue)
       } else {
         this.changeEvent(evnt, selectValue)
-        this.hideOptionPanel()
+        // 显示效果
+        setTimeout(() => {
+          this.hideOptionPanel()
+        }, 50)
       }
     },
     handleGlobalMousewheelEvent (evnt) {

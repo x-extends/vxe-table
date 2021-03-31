@@ -3712,7 +3712,7 @@ const Methods = {
   loadScrollYData (evnt) {
     const { mergeList, scrollYStore } = this
     const { startIndex, endIndex, visibleSize, offsetSize, rowHeight } = scrollYStore
-    const scrollBodyElem = evnt.target
+    const scrollBodyElem = evnt.currentTarget
     const scrollTop = scrollBodyElem.scrollTop
     const toVisibleIndex = Math.floor(scrollTop / rowHeight)
     const offsetItem = {

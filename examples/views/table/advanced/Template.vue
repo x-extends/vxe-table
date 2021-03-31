@@ -406,7 +406,7 @@ export default {
             footerMethod ({ columns, data }) {
               return [
                 columns.map(column => {
-                  if (['sex', 'num'].includes(column.property)) {
+                  if (['num'].includes(column.property)) {
                     return this.sumNum(data, column.property)
                   }
                   return null
@@ -491,7 +491,7 @@ export default {
     footerMethod ({ columns, data }) {
       return [
         columns.map(column => {
-          if (['sex', 'num'].includes(column.property)) {
+          if (['num'].includes(column.property)) {
             return this.sumNum(data, column.property)
           }
           return null

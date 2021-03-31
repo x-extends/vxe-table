@@ -42,7 +42,7 @@ function getNumberValue (_vm, val) {
 function renderDateLabel (h, _vm, item, label) {
   const festivalMethod = _vm.festivalMethod
   if (festivalMethod) {
-    const festivalRest = festivalMethod({ type: _vm.datePanelType, ...item })
+    const festivalRest = festivalMethod({ $input: _vm, type: _vm.datePanelType, viewType: _vm.datePanelType, ...item })
     const festivalItem = festivalRest ? (XEUtils.isString(festivalRest) ? { label: festivalRest } : festivalRest) : {}
     const extraItem = festivalItem.extra ? (XEUtils.isString(festivalItem.extra) ? { label: festivalItem.extra } : festivalItem.extra) : null
     const labels = [
@@ -82,7 +82,7 @@ function renderDateLabel (h, _vm, item, label) {
 
 function isDateDisabled (_vm, item) {
   const disabledMethod = _vm.disabledMethod
-  return disabledMethod && disabledMethod({ type: _vm.type, date: item.date })
+  return disabledMethod && disabledMethod({ $input: _vm, type: _vm.datePanelType, viewType: _vm.datePanelType, date: item.date })
 }
 
 function renderDateDayTable (h, _vm) {
