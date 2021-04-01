@@ -45,8 +45,8 @@ export default {
         export: true,
         custom: true,
         buttons: [
-          { name: '刷新', code: 'reload', icon: 'fa fa-refresh' },
-          { code: 'query', buttonRender: { name: 'ToolbarButtonRefresh', events: { click: this.btnClickEvent } } }
+          { name: '自定义1', code: 'custom1', icon: 'fa fa-bell' },
+          { buttonRender: { name: 'ToolbarButtonDownload', events: { click: this.btnDownEvent } } }
         ]
       },
       tableProxy: {
@@ -56,13 +56,17 @@ export default {
       },
       demoCodes: [
         `
-        // 创建一个简单的工具栏-按钮渲染
-        VXETable.renderer.add('ToolbarButtonRefresh', {
+        // 创建一个简单的工具栏-左侧按钮渲染
+        VXETable.renderer.add('ToolbarButtonDownload', {
           renderToolbarButton (h, renderOpts, params) {
-            const { events } = renderOpts
+            const { events = {} } = renderOpts
             const { button } = params
             return [
-              <vxe-button onClick={ e => { events.click(button) } }>自定义按钮</vxe-button>
+              <vxe-button circle icon="fa fa-cloud-download" onClick={
+                () => {
+                  events.click(button)
+                }
+              }></vxe-button>
             ]
           }
         })
@@ -94,8 +98,8 @@ export default {
                 export: true,
                 custom: true,
                 buttons: [
-                  { name: '刷新', code: 'reload', icon: 'fa fa-refresh' },
-                  { code: 'query', buttonRender: { name: 'ToolbarButtonRefresh', events: { click: this.btnClickEvent } } }
+                  { name: '自定义1', code: 'custom1', icon: 'fa fa-bell' },
+                  { buttonRender: { name: 'ToolbarButtonDownload', events: { click: this.btnDownEvent } } }
                 ]
               },
               tableProxy: {
@@ -106,12 +110,8 @@ export default {
             }
           },
           methods: {
-            btnClickEvent (button) {
-              switch (button.code) {
-                case 'query':
-                  this.$refs.xGrid.commitProxy(button.code)
-                  break
-              }
+            btnDownEvent () {
+              this.$refs.xGrid.exportData()
             }
           }
         }
@@ -125,12 +125,8 @@ export default {
     })
   },
   methods: {
-    btnClickEvent (button) {
-      switch (button.code) {
-        case 'query':
-          this.$refs.xGrid.commitProxy(button.code)
-          break
-      }
+    btnDownEvent () {
+      this.$refs.xGrid.exportData()
     }
   }
 }

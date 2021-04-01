@@ -33,7 +33,7 @@
       <code class="javascript">{{ demoCodes[1] }}</code>
     </pre>
 
-    <p class="tip">工具栏和表格默认是上下相邻关系，渲染时会自动进行关联；如果位置不是相邻关系，也可以手动调用 connect() 方法关联</p>
+    <p class="tip">工具栏和表格默认是上下相邻关系，通过调用 <table-api-link prop="connect"/>() 方法与表格进行关联，就可以开启相关的功能</p>
 
     <div>
       <p>工具栏位置随意放</p>

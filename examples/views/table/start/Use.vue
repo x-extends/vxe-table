@@ -24,7 +24,6 @@
       </pre-code>
     </pre>
     <p class="tip">最后这样按需引入模块，就可以减小体积了</p>
-    <div>修改文件 src/plugins/table.js</div>
     <pre>
       <pre-code class="javascript">
         import Vue from 'vue'
@@ -104,13 +103,6 @@
         // Vue.prototype.$XPrint = VXETable.print
         // Vue.prototype.$XSaveFile = VXETable.saveFile
         // Vue.prototype.$XReadFile = VXETable.readFile
-      </pre-code>
-    </pre>
-    <div>修改文件 main.js</div>
-    <pre>
-      <pre-code class="javascript">
-        import 'xe-utils'
-        import './plugins/table'
       </pre-code>
     </pre>
   </div>

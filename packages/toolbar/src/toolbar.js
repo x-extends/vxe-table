@@ -315,7 +315,7 @@ export default {
       }]
     }, [
       h('div', {
-        class: 'vxe-button--wrapper'
+        class: 'vxe-buttons--wrapper'
       }, renderBtns(h, this)),
       h('div', {
         class: 'vxe-tools--wrapper'
