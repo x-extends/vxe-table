@@ -10,6 +10,7 @@ export default {
   props: {
     value: [String, Number, Boolean],
     disabled: Boolean,
+    className: String,
     size: { type: String, default: () => GlobalConfig.switch.size || GlobalConfig.size },
     openLabel: String,
     closeLabel: String,
@@ -47,9 +48,9 @@ export default {
     }
   },
   render (h) {
-    const { isChecked, vSize, disabled, openIcon, closeIcon } = this
+    const { isChecked, vSize, className, disabled, openIcon, closeIcon } = this
     return h('div', {
-      class: ['vxe-switch', isChecked ? 'is--on' : 'is--off', {
+      class: ['vxe-switch', className, isChecked ? 'is--on' : 'is--off', {
         [`size--${vSize}`]: vSize,
         'is--disabled': disabled,
         'is--animat': this.hasAnimat

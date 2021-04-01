@@ -591,6 +591,7 @@ export default {
     autocomplete: { type: String, default: 'off' },
     align: String,
     form: String,
+    className: String,
     size: { type: String, default: () => GlobalConfig.input.size || GlobalConfig.size },
 
     // number、integer、float
@@ -988,7 +989,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { controls, inputValue, isDatePicker, visiblePanel, isActivated, vSize, type, align, readonly, disabled, inpAttrs, inpEvents } = this
+    const { className, controls, inputValue, isDatePicker, visiblePanel, isActivated, vSize, type, align, readonly, disabled, inpAttrs, inpEvents } = this
     const childs = []
     const prefix = rendePrefixIcon(h, this)
     const suffix = renderSuffixIcon(h, this)
@@ -1019,7 +1020,7 @@ export default {
       childs.push(renderPanel(h, this))
     }
     return h('div', {
-      class: ['vxe-input', `type--${type}`, {
+      class: ['vxe-input', `type--${type}`, className, {
         [`size--${vSize}`]: vSize,
         [`is--${align}`]: align,
         'is--controls': controls,

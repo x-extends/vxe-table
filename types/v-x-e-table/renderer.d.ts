@@ -7,7 +7,7 @@ import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from '..
 import { ColumnEditRenderOptions, ColumnEditRenderParams } from '../edit'
 import { ColumnFooterRenderParams } from '../footer'
 import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from '../filter'
-import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams } from '../toolbar'
+import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams, ToolbarToolRenderOptions, ToolbarToolRenderParams } from '../toolbar'
 import { FormItemRenderOptions, FormItemRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 
 /**
@@ -45,6 +45,7 @@ export interface RendererMapOptions {
 
   // 工具栏-按钮渲染
   renderToolbarButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): VNode[] | string[];
+  renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): VNode[] | string[];
 
   // 表单-项渲染
   renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];

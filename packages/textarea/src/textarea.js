@@ -25,6 +25,7 @@ export default {
     autosize: [Boolean, Object],
     form: String,
     resize: { type: String, default: () => GlobalConfig.textarea.resize },
+    className: String,
     size: { type: String, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
   },
   data () {
@@ -69,7 +70,7 @@ export default {
     }
   },
   render (h) {
-    const { defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount } = this
+    const { className, defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount } = this
     const attrs = {
       name,
       form,
@@ -82,7 +83,7 @@ export default {
       attrs.placeholder = UtilTools.getFuncText(placeholder)
     }
     return h('div', {
-      class: ['vxe-textarea', {
+      class: ['vxe-textarea', className, {
         [`size--${vSize}`]: vSize,
         'is--autosize': autosize,
         'is--disabled': disabled

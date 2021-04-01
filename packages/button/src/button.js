@@ -19,6 +19,7 @@ export default {
     disabled: Boolean,
     loading: Boolean,
     destroyOnClose: Boolean,
+    className: String,
     transfer: { type: Boolean, default: () => GlobalConfig.button.transfer }
   },
   data () {
@@ -55,9 +56,9 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, $listeners, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, $listeners, className, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
-    return downsSlot ? h('div', {
+    return downsSlot ? h('div', className, {
       class: ['vxe-button--dropdown', {
         [`size--${vSize}`]: vSize,
         'is--active': showPanel
@@ -110,7 +111,7 @@ export default {
       ] : null)
     ]) : h('button', {
       ref: 'xBtn',
-      class: ['vxe-button', `type--${btnType}`, {
+      class: ['vxe-button', `type--${btnType}`, className, {
         [`size--${vSize}`]: vSize,
         [`theme--${status}`]: status,
         'is--round': this.round,

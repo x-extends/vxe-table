@@ -26,6 +26,15 @@ const apis = [
         list: []
       },
       {
+        name: 'className',
+        desc: '附加 className',
+        version: '3.2.9',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'loading',
         desc: '是否加载中',
         version: '',

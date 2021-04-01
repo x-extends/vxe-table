@@ -13,6 +13,7 @@ export default {
     height: [Number, String],
     maxHeight: [Number, String],
     loading: Boolean,
+    className: String,
     size: { type: String, default: () => GlobalConfig.list.size || GlobalConfig.size },
     autoResize: { type: Boolean, default: () => GlobalConfig.list.autoResize },
     syncResize: [Boolean, String, Number],
@@ -83,8 +84,8 @@ export default {
     GlobalEvent.off(this, 'resize')
   },
   render (h) {
-    const { $scopedSlots, styles, bodyHeight, topSpaceHeight, items, loading } = this
-    return h('div', {
+    const { $scopedSlots, styles, bodyHeight, topSpaceHeight, items, className, loading } = this
+    return h('div', className, {
       class: ['vxe-list', {
         'is--loading': loading
       }]

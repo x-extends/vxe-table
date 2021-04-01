@@ -206,6 +206,7 @@ export default {
     optionProps: Object,
     optionGroups: Array,
     optionGroupProps: Object,
+    className: String,
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
     emptyText: String,
     optionId: { type: String, default: () => GlobalConfig.select.optionId },
@@ -324,9 +325,9 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, inited, isActivated, disabled, visiblePanel } = this
+    const { vSize, className, inited, isActivated, disabled, visiblePanel } = this
     return h('div', {
-      class: ['vxe-select', {
+      class: ['vxe-select', className, {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,

@@ -5,7 +5,7 @@
       <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的数据都是自行生成的，该示例仅供参考）</span>
     </p>
 
-    <vxe-toolbar export>
+    <vxe-toolbar ref="xToolbar" export>
       <template #buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="removeEvent">删除</vxe-button>
@@ -57,7 +57,7 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar export>
+        <vxe-toolbar ref="xToolbar" export>
           <template #buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="removeEvent">删除</vxe-button>
@@ -101,6 +101,12 @@ export default {
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'vxe-table 从入门到放弃' }
               ]
             }
+          },
+          created () {
+            this.$nextTick(() => {
+              // 将表格和工具栏进行关联
+              this.$refs.xTable.connect(this.$refs.xToolbar)
+            })
           },
           methods: {
             footerCellClassName ({ $rowIndex, column, columnIndex }) {
@@ -167,6 +173,12 @@ export default {
         `
       ]
     }
+  },
+  created () {
+    this.$nextTick(() => {
+      // 将表格和工具栏进行关联
+      this.$refs.xTable.connect(this.$refs.xToolbar)
+    })
   },
   methods: {
     footerCellClassName ({ $rowIndex, columnIndex }) {

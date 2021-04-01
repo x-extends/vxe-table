@@ -5,7 +5,7 @@
       通过 <table-api-link prop="custom"/> 事件实现显示/隐藏列服务端保存，通过 <table-api-link prop="resizable-change"/> 事件实现列宽状态服务端保存
     </p>
 
-    <vxe-toolbar custom>
+    <vxe-toolbar ref="xToolbar1" custom>
       <template #buttons>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
@@ -15,6 +15,7 @@
     <vxe-table
       border
       resizable
+      ref="xTable1"
       id="toolbar_demo5"
       height="400"
       :custom-config="{storage: true, checkMethod: checkColumnMethod}"
@@ -51,7 +52,7 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar custom>
+        <vxe-toolbar ref="xToolbar1" custom>
           <template #buttons>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
@@ -61,6 +62,7 @@ export default {
         <vxe-table
           border
           resizable
+          ref="xTable1"
           id="toolbar_demo5"
           height="400"
           :custom-config="{storage: true, checkMethod: checkColumnMethod}"
@@ -88,6 +90,12 @@ export default {
               ]
             }
           },
+          created () {
+            this.$nextTick(() => {
+              // 手动将表格和工具栏进行关联
+              this.$refs.xTable1.connect(this.$refs.xToolbar1)
+            })
+          },
           methods: {
             checkColumnMethod ({ column }) {
               if (column.property === 'role') {
@@ -100,6 +108,12 @@ export default {
         `
       ]
     }
+  },
+  created () {
+    this.$nextTick(() => {
+      // 手动将表格和工具栏进行关联
+      this.$refs.xTable1.connect(this.$refs.xToolbar1)
+    })
   },
   methods: {
     checkColumnMethod ({ column }) {

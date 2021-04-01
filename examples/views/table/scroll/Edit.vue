@@ -2,7 +2,7 @@
   <div>
     <p class="tip">可编辑表格</p>
 
-    <vxe-toolbar export :refresh="{query: findList}">
+    <vxe-toolbar ref="xToolbar" export :refresh="{query: findList}">
       <template #buttons>
         <vxe-button>
           <template #default>新增操作</template>
@@ -76,7 +76,7 @@ export default {
       loading: false,
       demoCodes: [
         `
-        <vxe-toolbar export :refresh="{query: findList}">
+        <vxe-toolbar ref="xToolbar" export :refresh="{query: findList}">
           <template #buttons>
             <vxe-button>
               <template #default>新增操作</template>
@@ -108,7 +108,7 @@ export default {
           show-overflow
           keep-source
           ref="xTable"
-          height="300"
+          height="400"
           :export-config="{}"
           :loading="loading"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
@@ -142,6 +142,10 @@ export default {
             }
           },
           created () {
+            this.$nextTick(() => {
+              // 将表格和工具栏进行关联
+              this.$refs.xTable.connect(this.$refs.xToolbar)
+            })
             this.findList()
           },
           methods: {
@@ -202,6 +206,10 @@ export default {
     }
   },
   created () {
+    this.$nextTick(() => {
+      // 将表格和工具栏进行关联
+      this.$refs.xTable.connect(this.$refs.xToolbar)
+    })
     this.findList()
   },
   methods: {

@@ -718,6 +718,10 @@ export default {
       this.commitProxy(button, evnt)
       this.$emit('toolbar-button-click', { code: button.code, button, $grid: this, $event: evnt })
     },
+    triggerToolbarTolEvent (tool, evnt) {
+      this.commitProxy(tool, evnt)
+      this.$emit('toolbar-tool-click', { code: tool.code, tool, $grid: this, $event: evnt })
+    },
     triggerPendingEvent (code) {
       const { pendingRecords, isMsg } = this
       const selectRecords = this.getCheckboxRecords()

@@ -5,11 +5,12 @@
       支持显示/隐藏列、列宽拖动状态的保存功能，还可以配合 <table-api-link prop="custom"/> 事件实现显示/隐藏列的服务端保存
     </p>
 
-    <vxe-toolbar custom print></vxe-toolbar>
+    <vxe-toolbar ref="xToolbar1" custom print></vxe-toolbar>
 
     <vxe-table
       border
       height="300"
+      ref="xTable1"
       :print-config="{}"
       :data="tableData1">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -33,25 +34,11 @@
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
-    <p class="tip">工具栏和表格默认是上下相邻关系，渲染时会自动进行关联；如果位置不是相邻关系，也可以手动调用 connect() 方法关联</p>
-
-    <div>
-      <p>工具栏位置随意放</p>
-      <my-div>
-        <vxe-toolbar
-          custom
-          print
-          ref="xToolbar"
-          :buttons="toolbarButtons"
-          :refresh="{query: findList}">
-        </vxe-toolbar>
-      </my-div>
-      <p>工具栏位置随意放</p>
-    </div>
+    <p class="tip">工具栏和表格默认是上下相邻关系，通过调用 <table-api-link prop="connect"/>() 方法与表格进行关联，就可以开启相关的功能</p>
 
     <vxe-table
       border
-      ref="xTable"
+      ref="xTable2"
       height="300"
       :print-config="{}"
       :loading="loading"
@@ -64,6 +51,20 @@
       <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
+
+    <div>
+      <p>工具栏位置随意放</p>
+      <my-div>
+        <vxe-toolbar
+          custom
+          print
+          ref="xToolbar2"
+          :buttons="toolbarButtons"
+          :refresh="{query: findList}">
+        </vxe-toolbar>
+      </my-div>
+      <p>工具栏位置随意放</p>
+    </div>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -102,11 +103,12 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar custom print></vxe-toolbar>
+        <vxe-toolbar ref="xToolbar1" custom print></vxe-toolbar>
 
         <vxe-table
           border
           height="300"
+          ref="xTable1"
           :print-config="{}"
           :data="tableData1">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
@@ -138,13 +140,19 @@ export default {
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
             }
+          },
+          created () {
+            this.$nextTick(() => {
+              // 手动将表格和工具栏进行关联
+              this.$refs.xTable1.connect(this.$refs.xToolbar1)
+            })
           }
         }
         `,
         `
         <vxe-table
           border
-          ref="xTable"
+          ref="xTable2"
           height="300"
           :print-config="{}"
           :loading="loading"
@@ -164,7 +172,7 @@ export default {
             <vxe-toolbar
               custom
               print
-              ref="xToolbar"
+              ref="xToolbar2"
               :buttons="toolbarButtons"
               :refresh="{query: findList}">
             </vxe-toolbar>
@@ -193,7 +201,7 @@ export default {
           created () {
             this.$nextTick(() => {
               // 手动将表格和工具栏进行关联
-              this.$refs.xTable.connect(this.$refs.xToolbar)
+              this.$refs.xTable2.connect(this.$refs.xToolbar2)
             })
             this.findList()
           },
@@ -242,8 +250,10 @@ export default {
   },
   created () {
     this.$nextTick(() => {
-      // 手动将表格和工具栏进行关联
-      this.$refs.xTable.connect(this.$refs.xToolbar)
+      // 将表格和工具栏进行关联
+      this.$refs.xTable1.connect(this.$refs.xToolbar1)
+      // 将表格和工具栏进行关联
+      this.$refs.xTable2.connect(this.$refs.xToolbar2)
     })
     this.findList()
   },

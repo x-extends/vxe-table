@@ -210,7 +210,7 @@ export default {
         props: {
           value: this.pageSize,
           placement: 'top',
-          transfer: true,
+          transfer: this.transfer,
           options: this.sizeList
         },
         on: {

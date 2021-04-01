@@ -137,6 +137,7 @@ export interface ToolbarToolsSlotParams extends ToolbarButtonsSlotParams {}
  * 按钮渲染配置项
  */
 export interface ToolbarButtonRenderOptions extends RenderOptions {}
+export interface ToolbarToolRenderOptions extends RenderOptions {}
 
 /**
  * 按钮渲染渲染参数
@@ -146,6 +147,9 @@ export interface ToolbarButtonRenderParams extends GridRenderParams {
    * 按钮对象
    */
   button: ToolbarButtonConfig;
+}
+export interface ToolbarToolRenderParams extends GridRenderParams {
+  tool: ToolbarToolConfig;
 }
 
 export class ToolbarButtonConfig {
@@ -158,4 +162,16 @@ export class ToolbarButtonConfig {
   icon?: string;
   dropdowns?: string;
   buttonRender?: ToolbarButtonRenderOptions;
+}
+
+export class ToolbarToolConfig {
+  name?: string;
+  type?: string;
+  status?: string;
+  code?: string;
+  visible?: boolean;
+  disabled?: boolean;
+  icon?: string;
+  dropdowns?: string;
+  toolRender?: ToolbarToolRenderOptions;
 }
