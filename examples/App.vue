@@ -704,7 +704,7 @@ export default {
             {
               label: 'app.aside.nav.toolbar',
               locat: {
-                name: 'Toolbar'
+                name: 'TableToolbar'
               }
             },
             {

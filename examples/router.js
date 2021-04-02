@@ -86,7 +86,7 @@ import TableSearch from './views/table/advanced/Search.vue'
 import TableGroupBy from './views/table/advanced/GroupBy.vue'
 import TableDetails from './views/table/advanced/Details.vue'
 import TablePopupEdit from './views/table/advanced/PopupEdit.vue'
-import Toolbar from './views/table/advanced/Toolbar.vue'
+import TableToolbar from './views/table/advanced/Toolbar.vue'
 import TableCustom from './views/table/advanced/Custom.vue'
 import TableCustomStorage from './views/table/advanced/CustomStorage.vue'
 import TableCustomlWidthStorage from './views/table/advanced/CustomlWidthStorage.vue'
@@ -712,8 +712,8 @@ export default new Router({
     },
     {
       path: '/table/advanced/toolbar',
-      name: 'Toolbar',
-      component: Toolbar
+      name: 'TableToolbar',
+      component: TableToolbar
     },
     {
       path: '/table/advanced/custom',

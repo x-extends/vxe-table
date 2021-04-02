@@ -2,12 +2,7 @@
   <div>
     <p class="tip">反转表格，只需要将 <grid-api-link prop="columns"/> 和 <grid-api-link prop="data"/> 数据进行反转<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
-    <vxe-grid
-      border
-      class="reverse-table"
-      :show-header="false"
-      :columns="tableColumn"
-      :data="tableData"></vxe-grid>
+    <vxe-grid class="reverse-table" v-bind="gridOptions1"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -17,16 +12,9 @@
       <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
-    <p class="tip">更多配置<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">更多方式<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
-    <vxe-grid
-      border
-      show-overflow
-      class="reverse-table"
-      height="400"
-      :show-header="false"
-      :columns="tableColumn2"
-      :data="tableData2"></vxe-grid>
+    <vxe-grid class="reverse-table" v-bind="gridOptions2"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -42,26 +30,34 @@
 export default {
   data () {
     return {
-      tableColumn: [],
-      tableData: [],
-      tableColumn2: [],
-      tableData2: [],
+      gridOptions1: {
+        border: false,
+        showHeader: false,
+        columns: [],
+        data: []
+      },
+      gridOptions2: {
+        border: false,
+        showOverflow: false,
+        height: 400,
+        showHeader: false,
+        columns: [],
+        data: []
+      },
       demoCodes: [
         `
-        <vxe-grid
-          border
-          highlight-hover-row
-          class="reverse-table"
-          :show-header="false"
-          :columns="tableColumn"
-          :data="tableData"></vxe-grid>
+        <vxe-grid class="reverse-table" v-bind="gridOptions1"></vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              tableColumn: [],
-              tableData: []
+              gridOptions1: {
+                border: false,
+                showHeader: false,
+                columns: [],
+                data: []
+              }
             }
           },
           created () {
@@ -82,11 +78,11 @@ export default {
               { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
               { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
             ]
-            this.reverseTable(myColumns, myData)
+            this.reverseTable1(myColumns, myData)
           },
           methods: {
             // 反转函数
-            reverseTable (columns, list) {
+            reverseTable1 (columns, list) {
               const buildData = columns.map(column => {
                 const item = { col0: column.title }
                 list.forEach((row, index) => {
@@ -105,8 +101,8 @@ export default {
                   minWidth: 120
                 })
               })
-              this.tableData = buildData
-              this.tableColumn = buildColumns
+              this.gridOptions1.data = buildData
+              this.gridOptions1.columns = buildColumns
             }
           }
         }
@@ -117,22 +113,20 @@ export default {
         }
         `,
         `
-        <vxe-grid
-          border
-          show-overflow
-          highlight-hover-row
-          class="reverse-table"
-          height="400"
-          :show-header="false"
-          :columns="tableColumn2"
-          :data="tableData2"></vxe-grid>
+        <vxe-grid class="reverse-table" v-bind="gridOptions2"></vxe-grid>
         `,
         `
         export default {
           data () {
             return {
-              tableColumn2: [],
-              tableData2: []
+              gridOptions2: {
+                border: false,
+                showOverflow: false,
+                height: 400,
+                showHeader: false,
+                columns: [],
+                data: []
+              }
             }
           },
           created () {
@@ -183,8 +177,8 @@ export default {
                   minWidth: 120
                 })
               })
-              this.tableData2 = buildData
-              this.tableColumn2 = buildColumns
+              this.gridOptions2.data = buildData
+              this.gridOptions2.columns = buildColumns
             }
           }
         }
@@ -215,7 +209,7 @@ export default {
       { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'Shenzhen' },
       { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'Shenzhen' }
     ]
-    this.reverseTable(myColumns, myData)
+    this.reverseTable1(myColumns, myData)
 
     const myColumns2 = [
       { field: 'id', title: 'ID' },
@@ -245,7 +239,7 @@ export default {
   },
   methods: {
     // 将行与列进行反转
-    reverseTable (columns, list) {
+    reverseTable1 (columns, list) {
       const buildData = columns.map(column => {
         const item = { col0: column.title }
         list.forEach((row, index) => {
@@ -264,8 +258,8 @@ export default {
           minWidth: 120
         })
       })
-      this.tableData = buildData
-      this.tableColumn = buildColumns
+      this.gridOptions1.data = buildData
+      this.gridOptions1.columns = buildColumns
     },
     reverseTable2 (columns, list) {
       const buildData = columns.map(column => {
@@ -286,8 +280,8 @@ export default {
           minWidth: 120
         })
       })
-      this.tableData2 = buildData
-      this.tableColumn2 = buildColumns
+      this.gridOptions2.data = buildData
+      this.gridOptions2.columns = buildColumns
     }
   }
 }

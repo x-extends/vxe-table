@@ -54,7 +54,7 @@
 
     <div>
       <p>工具栏位置随意放</p>
-      <my-div>
+      <div>
         <vxe-toolbar
           custom
           print
@@ -62,7 +62,7 @@
           :buttons="toolbarButtons"
           :refresh="{query: findList}">
         </vxe-toolbar>
-      </my-div>
+      </div>
       <p>工具栏位置随意放</p>
     </div>
 
@@ -168,7 +168,7 @@ export default {
 
         <div>
           <p>工具栏位置随意放</p>
-          <my-div>
+          <div>
             <vxe-toolbar
               custom
               print
@@ -176,7 +176,7 @@ export default {
               :buttons="toolbarButtons"
               :refresh="{query: findList}">
             </vxe-toolbar>
-          </my-div>
+          </div>
           <p>工具栏位置随意放</p>
         </div>
         `,
@@ -226,7 +226,7 @@ export default {
               })
             },
             toolbarCustomEvent (params) {
-              const visibleColumn = this.$refs.xTable.getColumns()
+              const visibleColumn = this.$refs.xTable2.getColumns()
               switch (params.type) {
                 case 'confirm': {
                   this.$XModal.message({ message: \`点击了确认，显示为 \${visibleColumn.length} 列\`, status: 'info' })
@@ -278,7 +278,7 @@ export default {
       })
     },
     toolbarCustomEvent (params) {
-      const visibleColumn = this.$refs.xTable.getColumns()
+      const visibleColumn = this.$refs.xTable2.getColumns()
       switch (params.type) {
         case 'confirm': {
           this.$XModal.message({ message: `点击了确认，显示为 ${visibleColumn.length} 列`, status: 'info' })
