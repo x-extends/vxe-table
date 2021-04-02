@@ -39,6 +39,7 @@ export interface ButtonInternalData {
 export namespace VxeButtonPropTypes {
   export type Size = SizeType;
   export type Type = string;
+  export type ClassName = string;
   export type Name = string | number;
   export type Content = string;
   export type Placement = string;
@@ -58,6 +59,7 @@ export type VxeButtonProps = {
    * 按钮类型
    */
   type?: VxeButtonPropTypes.Type;
+  className?: VxeButtonPropTypes.ClassName;
   /**
    * 用来标识这一项
    */

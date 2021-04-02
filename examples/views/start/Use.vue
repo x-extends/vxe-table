@@ -24,7 +24,6 @@
       </pre-code>
     </pre>
     <p class="tip">最后这样按需引入模块，就可以减小体积了</p>
-    <div>修改文件 main.js</div>
     <pre>
       <pre-code class="typescript">
         import { createApp } = 'vue'

@@ -69,6 +69,7 @@ export type VxeGridEmits = [
   'form-reset',
   'form-toggle-collapse',
   'toolbar-button-click',
+  'toolbar-tool-click',
   'zoom'
 ]
 
@@ -127,6 +128,7 @@ export interface GridPrivateMethods {
   callSlot(slotFunc: Function | string | null, params: any): VNode[];
   extendTableMethods: <T>(methodKeys: T[]) => any;
   triggerToolbarBtnEvent(button: VxeToolbarPropTypes.ButtonConfig, evnt: Event): void;
+  triggerToolbarTolEvent(button: VxeToolbarPropTypes.ToolConfig, evnt: Event): void;
   triggerZoomEvent(evnt: Event): void;
   getParentHeight(): number;
   getExcludeHeight(): number;
@@ -307,8 +309,15 @@ export namespace VxeGridDefines {
 
   export interface ToolbarButtonClickParams {
     code: string;
+    button: VxeToolbarPropTypes.ButtonConfig;
   }
   export interface ToolbarButtonClickEventParams extends GridEventParams, ToolbarButtonClickParams { }
+
+  export interface ToolbarToolClickParams {
+    code: string;
+    tool: VxeToolbarPropTypes.ToolConfig;
+  }
+  export interface ToolbarToolClickEventParams extends GridEventParams, ToolbarToolClickParams { }
 
   export interface ZoomParams {
     type: 'max' | 'revert';
@@ -359,6 +368,7 @@ export interface VxeGridEventProps {
   onFormReset?: VxeGridEvents.FormReset;
   onFormToggleCollapse?: VxeGridEvents.FormToggleCollapse;
   onToolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
+  onToolbarToolClick?: VxeGridEvents.ToolbarToolClick;
   onZoom?: VxeGridEvents.Zoom;
 }
 
@@ -450,12 +460,6 @@ export namespace VxeGridEvents {
   export type FormReset = (params: VxeGridDefines.FormResetEventParams) => void;
   export type FormToggleCollapse = (params: VxeGridDefines.FormToggleCollapseEventParams) => void;
   export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickEventParams) => void;
+  export type ToolbarToolClick = (params: VxeGridDefines.ToolbarToolClickEventParams) => void;
   export type Zoom = (params: VxeGridDefines.ZoomEventParams) => void;
 }
-
-/**
- * 已删除，请使用 VxeGridProps
- * @deprecated
- */
- export interface VxeGridOptions extends VxeGridProps { }
- 

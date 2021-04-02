@@ -620,12 +620,12 @@ export default defineComponent({
                 name: 'TablePrint'
               }
             },
-            {
-              label: 'app.aside.nav.customPrint',
-              locat: {
-                name: 'TableCustomPrint'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.customPrint',
+            //   locat: {
+            //     name: 'TableCustomPrint'
+            //   }
+            // },
             {
               label: 'app.aside.nav.fixedType',
               locat: {
@@ -670,12 +670,12 @@ export default defineComponent({
             //     name: 'TableExpandAccordion'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.toolbar',
-            //   locat: {
-            //     name: 'Toolbar'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.toolbar',
+              locat: {
+                name: 'TableToolbar'
+              }
+            },
             // {
             //   label: 'app.aside.nav.customs',
             //   // demoUrl: 'https://jsrun.pro/PrXKp/edit',

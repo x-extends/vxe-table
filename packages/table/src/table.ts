@@ -1916,7 +1916,7 @@ export default defineComponent({
       const { mergeList } = reactData
       const { scrollYStore } = internalData
       const { startIndex, endIndex, visibleSize, offsetSize, rowHeight } = scrollYStore
-      const scrollBodyElem = evnt.target as HTMLDivElement
+      const scrollBodyElem = evnt.currentTarget as HTMLDivElement
       const scrollTop = scrollBodyElem.scrollTop
       const toVisibleIndex = Math.floor(scrollTop / rowHeight)
       const offsetItem = {
@@ -2979,6 +2979,7 @@ export default defineComponent({
               if (column.order !== order) {
                 column.order = order
               }
+              column.sortTime = Date.now()
             }
           })
           // 如果是服务端排序，则跳过本地排序处理

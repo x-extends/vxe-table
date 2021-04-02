@@ -3,10 +3,10 @@
     <p class="tip">
       表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderItemTitle (renderOpts: FormItemRenderOptions, <vxe-tooltip content="params: { data, item, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params: FormItemTitleRenderParams) 项标题<br>
-      renderItemContent (renderOpts: FormItemRenderOptions, <vxe-tooltip content="params: { data, item, property, $form }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params: FormItemContentRenderParams) 项内容<br>
-      itemVisibleMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params: FormItemVisibleParams) 项可视函数<br>
-      itemResetMethod (<vxe-tooltip content="params: { data, property }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params: FormItemResetParams) 项重置函数<br>
+      renderItemTitle (renderOpts: any, params: { data, item, property, $form }) 项标题<br>
+      renderItemContent (renderOpts: any, params: { data, item, property, $form }) 项内容<br>
+      itemVisibleMethod (params: { data, property }) 项可视函数<br>
+      itemResetMethod (params: { data, property }) 项重置函数<br>
     </p>
 
     <vxe-grid

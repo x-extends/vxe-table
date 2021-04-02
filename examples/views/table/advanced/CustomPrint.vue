@@ -7,7 +7,7 @@
       <span class="red">（注：打印的样式及模板自行实现，该示例仅供参考）</span>
     </p>
 
-    <vxe-toolbar print>
+    <vxe-toolbar ref="xToolbar1" print>
       <template #buttons>
         <vxe-button @click="printEvent1">打印出货单据</vxe-button>
       </template>
@@ -82,9 +82,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from '../../../../types/index'
 import QRCode from 'qrcode'
 import jsbarcode from 'jsbarcode'
 
@@ -147,6 +147,7 @@ export default defineComponent({
     `
 
     const xTable1 = ref({} as VxeTableInstance)
+    const xToolbar1 = ref({} as VxeToolbarInstance)
 
     const demo1 = reactive({
       tablePrint: {
@@ -166,6 +167,13 @@ export default defineComponent({
         { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
         { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
       ]
+    })
+
+    nextTick(() => {
+      // 将表格和工具栏进行关联
+      const $table = xTable1.value
+      const $toolbar = xToolbar1.value
+      $table.connect($toolbar)
     })
 
     const printEvent1 = () => {
@@ -395,6 +403,7 @@ export default defineComponent({
 
     return {
       xTable1,
+      xToolbar1,
       demo1,
       printEvent1,
       printEvent2,
@@ -423,8 +432,8 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref } from 'vue'
-        import { VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
+        import { defineComponent, reactive, ref, nextTick } from 'vue'
+        import { VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -485,6 +494,7 @@ export default defineComponent({
             \`
 
             const xTable1 = ref({} as VxeTableInstance)
+            const xToolbar1 = ref({} as VxeToolbarInstance)
 
             const demo1 = reactive({
               tablePrint: {
@@ -504,6 +514,13 @@ export default defineComponent({
                 { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
                 { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
+            })
+
+            nextTick(() => {
+              // 将表格和工具栏进行关联
+              const $table = xTable1.value
+              const $toolbar = xToolbar1.value
+              $table.connect($toolbar)
             })
 
             const printEvent1 = () => {

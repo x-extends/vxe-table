@@ -22,6 +22,7 @@ const gridComponentEmits: VxeGridEmits = [
   'form-reset',
   'form-toggle-collapse',
   'toolbar-button-click',
+  'toolbar-tool-click',
   'zoom'
 ]
 
@@ -206,11 +207,6 @@ export default defineComponent({
         tableProps.editConfig = Object.assign({}, editConfig, { activeMethod: handleActiveMethod })
       }
       return tableProps
-    })
-
-    const computePagerProps = computed(() => {
-      const pagerOpts = computePagerOpts.value
-      return Object.assign({}, pagerOpts, props.proxyConfig ? reactData.tablePage : {})
     })
 
     const initToolbar = () => {
@@ -565,7 +561,6 @@ export default defineComponent({
      */
     const renderPagers = () => {
       const { pagerConfig } = props
-      const pagerProps = computePagerProps.value
       const pagerOpts = computePagerOpts.value
       const restVNs = []
       if (isEnableConf(pagerConfig) || slots.pager) {
@@ -590,7 +585,8 @@ export default defineComponent({
           slotVNs.push(
             h(resolveComponent('vxe-pager') as ComponentOptions, {
               ref: refPager,
-              ...pagerProps,
+              ...pagerOpts,
+              ...(props.proxyConfig ? reactData.tablePage : {}),
               onPageChange: pageChangeEvent
             }, pagerSlots)
           )
@@ -969,6 +965,10 @@ export default defineComponent({
       triggerToolbarBtnEvent (button, evnt) {
         gridMethods.commitProxy(button, evnt)
         gridMethods.dispatchEvent('toolbar-button-click', { code: button.code, button }, evnt)
+      },
+      triggerToolbarTolEvent (tool, evnt) {
+        gridMethods.commitProxy(tool, evnt)
+        gridMethods.dispatchEvent('toolbar-tool-click', { code: tool.code, tool, $event: evnt })
       },
       triggerZoomEvent (evnt) {
         gridMethods.zoom()

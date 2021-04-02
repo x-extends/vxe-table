@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 
-const browse = XEUtils.browse()
+export const browse = XEUtils.browse()
 const reClsMap: { [key: string]: any } = {}
 
 function getClsRE (cls: any) {

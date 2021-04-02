@@ -35,6 +35,7 @@ interface DefineRendererOption<T> {
 
   // 工具栏-按钮渲染
   renderToolbarButton?(renderOpts: VxeGlobalRendererHandles.RenderButtonOptions, params: VxeGlobalRendererHandles.RenderButtonParams): T;
+  renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams): T;
 
   // 表单-项渲染
   renderItemTitle?(renderOpts: VxeGlobalRendererHandles.RenderItemTitleOptions, params: VxeGlobalRendererHandles.RenderItemTitleParams): T;
@@ -167,6 +168,13 @@ export namespace VxeGlobalRendererHandles {
     $grid: VxeGridConstructor | null;
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     button: VxeToolbarPropTypes.ButtonConfig;
+  }
+
+  export interface RenderToolOptions extends VxeGlobalRendererHandles.RenderOptions { }
+  export interface RenderToolParams {
+    $grid: VxeGridConstructor | null;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+    tool: VxeToolbarPropTypes.ToolConfig;
   }
 
   export type RenderItemTitleOptions = FormItemRenderOptions;

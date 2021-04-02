@@ -164,8 +164,8 @@ export default defineComponent({
       }
     }
     const festivalNoticeMethod: VxeInputPropTypes.FestivalMethod = (params) => {
-      const { date, type } = params
-      if (type === 'day') {
+      const { date, viewType } = params
+      if (viewType === 'day') {
         const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
         return noticeMaps[ymd] || { label: '无' }
       }
@@ -222,8 +222,8 @@ export default defineComponent({
       }
     }
     const festivalCalendarMethod: VxeInputPropTypes.FestivalMethod = (params) => {
-      const { date, type } = params
-      if (type === 'day') {
+      const { date, viewType } = params
+      if (viewType === 'day') {
         const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
         return calendarMaps[ymd] || { label: '无' }
       }
@@ -370,8 +370,8 @@ export default defineComponent({
               }
             }
             const festivalNoticeMethod: VxeInputPropTypes.FestivalMethod = (params) => {
-              const { date, type } = params
-              if (type === 'day') {
+              const { date, viewType } = params
+              if (viewType === 'day') {
                 const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
                 return noticeMaps[ymd] || { label: '无' }
               }
@@ -428,8 +428,8 @@ export default defineComponent({
               }
             }
             const festivalCalendarMethod: VxeInputPropTypes.FestivalMethod = (params) => {
-              const { date, type } = params
-              if (type === 'day') {
+              const { date, viewType } = params
+              if (viewType === 'day') {
                 const ymd = XEUtils.toDateString(date, 'yyyyMMdd')
                 return calendarMaps[ymd] || { label: '无' }
               }

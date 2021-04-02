@@ -173,7 +173,8 @@ export default defineComponent({
           //   custom: {
           //     isFooter: true
           //   },
-          //   buttons: []
+          //   buttons: [],
+          //   tools: []
           // },
           // button: {
           //   size: null,

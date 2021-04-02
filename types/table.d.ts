@@ -1945,6 +1945,7 @@ export namespace VxeTableDefines {
     halfChecked: boolean;
     disabled: boolean;
     order: VxeTablePropTypes.SortOrder;
+    sortTime: number;
     renderWidth: number;
     renderHeight: number;
     resizeWidth: number;

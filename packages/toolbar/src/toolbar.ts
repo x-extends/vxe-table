@@ -18,11 +18,13 @@ export default defineComponent({
     zoom: [Boolean, Object] as PropType< VxeToolbarPropTypes.Zoom>,
     custom: [Boolean, Object] as PropType<VxeToolbarPropTypes.Custom>,
     buttons: { type: Array as PropType<VxeToolbarPropTypes.Buttons>, default: () => GlobalConfig.toolbar.buttons },
+    tools: { type: Array as PropType<VxeToolbarPropTypes.Tools>, default: () => GlobalConfig.toolbar.tools },
     perfect: { type: Boolean as PropType<VxeToolbarPropTypes.Perfect>, default: () => GlobalConfig.toolbar.perfect },
     size: { type: String as PropType<VxeToolbarPropTypes.Size>, default: () => GlobalConfig.toolbar.size || GlobalConfig.size }
   },
   emits: [
-    'button-click'
+    'button-click',
+    'tool-click'
   ] as VxeToolbarEmits,
   setup (props, context) {
     const { slots, emit } = context
@@ -304,6 +306,22 @@ export default defineComponent({
       }
     }
 
+    const tolEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
+      const { code } = item
+      if (code) {
+        if ($xegrid) {
+          $xegrid.triggerToolbarTolEvent(item, evnt)
+        } else {
+          const commandMethod = VXETable.commands.get(code)
+          const params = { code, tool: item, $table: $xetable, $event: evnt }
+          if (commandMethod) {
+            commandMethod(params, evnt)
+          }
+          $xetoolbar.dispatchEvent('tool-click', params, evnt)
+        }
+      }
+    }
+
     const importEvent = () => {
       if (checkTable()) {
         $xetable.openImport()
@@ -322,27 +340,26 @@ export default defineComponent({
       }
     }
 
-    const renderDropdowns = (item: VxeToolbarPropTypes.ButtonConfig) => {
+    const renderDropdowns = (item: VxeToolbarPropTypes.ButtonConfig | VxeToolbarPropTypes.ToolConfig, isBtn: boolean) => {
       const { dropdowns } = item
       const downVNs: VNode[] = []
       if (dropdowns) {
-        dropdowns.forEach((child, index: number) => {
-          if (child.visible !== false) {
-            downVNs.push(
-              h(resolveComponent('vxe-button') as ComponentOptions, {
-                key: index,
-                disabled: child.disabled,
-                loading: child.loading,
-                type: child.type,
-                icon: child.icon,
-                circle: child.circle,
-                round: child.round,
-                status: child.status,
-                content: UtilTools.getFuncText(child.name),
-                onClick: (evnt: Event) => btnEvent(evnt, child)
-              })
-            )
+        return dropdowns.map((child: VxeToolbarPropTypes.ButtonConfig | VxeToolbarPropTypes.ToolConfig, index: number) => {
+          if (child.visible === false) {
+            return createCommentVNode()
           }
+          return h(resolveComponent('vxe-button') as ComponentOptions, {
+            key: index,
+            disabled: child.disabled,
+            loading: child.loading,
+            type: child.type,
+            icon: child.icon,
+            circle: child.circle,
+            round: child.round,
+            status: child.status,
+            content: UtilTools.getFuncText(child.name),
+            onClick: (evnt: Event) => isBtn ? btnEvent(evnt, child) : tolEvent(evnt, child)
+          })
         })
       }
       return downVNs
@@ -353,8 +370,9 @@ export default defineComponent({
      */
     const renderBtns = () => {
       const { buttons } = props
-      if (slots.buttons) {
-        return slots.buttons({ $grid: $xegrid, $table: $xetable })
+      const buttonsSlot = slots.buttons
+      if (buttonsSlot) {
+        return buttonsSlot({ $grid: $xegrid, $table: $xetable })
       }
       const btnVNs: VNode[] = []
       if (buttons) {
@@ -384,7 +402,7 @@ export default defineComponent({
                   transfer: item.transfer,
                   onClick: (evnt: Event) => btnEvent(evnt, item)
                 }, dropdowns && dropdowns.length ? {
-                  dropdowns: () => renderDropdowns(item)
+                  dropdowns: () => renderDropdowns(item, true)
                 } : {})
               )
             }
@@ -398,10 +416,47 @@ export default defineComponent({
      * 渲染右侧工具
      */
     const renderRightTools = () => {
-      if (slots.tools) {
-        return slots.tools({ $grid: $xegrid, $table: $xetable })
+      const { tools } = props
+      const toolsSlot = slots.tools
+      if (toolsSlot) {
+        return toolsSlot({ $grid: $xegrid, $table: $xetable })
       }
-      return []
+      const btnVNs: VNode[] = []
+      if (tools) {
+        tools.forEach((item) => {
+          const { dropdowns, toolRender } = item
+          if (item.visible !== false) {
+            const compConf = toolRender ? VXETable.renderer.get(toolRender.name) : null
+            if (toolRender && compConf && compConf.renderToolbarTool) {
+              btnVNs.push(
+                h('span', {
+                  class: 'vxe-tool--item'
+                }, compConf.renderToolbarTool(toolRender, { $grid: $xegrid, $table: $xetable, tool: item }))
+              )
+            } else {
+              btnVNs.push(
+                h(resolveComponent('vxe-button') as ComponentOptions, {
+                  disabled: item.disabled,
+                  loading: item.loading,
+                  type: item.type,
+                  icon: item.icon,
+                  circle: item.circle,
+                  round: item.round,
+                  status: item.status,
+                  content: UtilTools.getFuncText(item.name),
+                  destroyOnClose: item.destroyOnClose,
+                  placement: item.placement,
+                  transfer: item.transfer,
+                  onClick: (evnt: Event) => tolEvent(evnt, item)
+                }, dropdowns && dropdowns.length ? {
+                  dropdowns: () => renderDropdowns(item, false)
+                } : {})
+              )
+            }
+          }
+        })
+      }
+      return btnVNs
     }
 
     const renderCustoms = () => {
@@ -580,7 +635,7 @@ export default defineComponent({
         }]
       }, [
         h('div', {
-          class: 'vxe-button--wrapper'
+          class: 'vxe-buttons--wrapper'
         }, renderBtns()),
         h('div', {
           class: 'vxe-tools--wrapper'

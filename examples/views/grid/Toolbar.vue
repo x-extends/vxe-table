@@ -53,7 +53,7 @@ export default defineComponent({
             { field: 'role', title: 'Role', editRender: { name: 'input' } }
           ]
         },
-        { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+        { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
       ],
       toolbarConfig: {
         buttons: [
@@ -158,7 +158,7 @@ export default defineComponent({
                     { field: 'role', title: 'Role', editRender: { name: 'input' } }
                   ]
                 },
-                { field: 'describe', title: 'Describe', showOverflow: true, editRender: { name: 'input' } }
+                { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
               ],
               toolbarConfig: {
                 buttons: [

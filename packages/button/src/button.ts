@@ -13,6 +13,7 @@ export default defineComponent({
      * 按钮类型
      */
     type: String as PropType<VxeButtonPropTypes.Type>,
+    className: String as PropType<VxeButtonPropTypes.ClassName>,
     /**
      * 按钮尺寸
      */
@@ -339,7 +340,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { transfer, type, round, circle, destroyOnClose, status, name, disabled, loading } = props
+      const { className, transfer, type, round, circle, destroyOnClose, status, name, disabled, loading } = props
       const { inited, showPanel } = reactData
       const isFormBtn = computeIsFormBtn.value
       const btnType = computeBtnType.value
@@ -347,7 +348,7 @@ export default defineComponent({
       if (slots.dropdowns) {
         return h('div', {
           ref: refElem,
-          class: ['vxe-button--dropdown', {
+          class: ['vxe-button--dropdown', className, {
             [`size--${vSize}`]: vSize,
             'is--active': showPanel
           }]

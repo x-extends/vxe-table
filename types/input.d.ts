@@ -23,6 +23,8 @@ export interface InputPrivateRef {
 }
 export interface VxeInputPrivateRef extends InputPrivateRef { }
 
+type DatePanelType = 'year' | 'month' | 'week' | 'day';
+
 export interface InputReactData {
   inited: boolean;
   panelIndex: number;
@@ -36,7 +38,7 @@ export interface InputReactData {
   datetimePanelValue: any;
   datePanelValue: Date | null;
   datePanelLabel: string;
-  datePanelType: string;
+  datePanelType: DatePanelType;
   selectMonth: any;
   currentDate: any;
 }
@@ -44,6 +46,7 @@ export interface InputReactData {
 export namespace VxeInputPropTypes {
   export type Size = SizeType;
   export type ModelValue = string | number | Date | null;
+  export type ClassName = string;
   export type Immediate = boolean;
   export type Name = string;
   export type Type = 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'year';
@@ -77,6 +80,7 @@ export namespace VxeInputPropTypes {
 export type VxeInputProps = {
   size?: VxeInputPropTypes.Size;
   modelValue?: VxeInputPropTypes.ModelValue;
+  className?: VxeInputPropTypes.ClassName;
   immediate?: VxeInputPropTypes.Immediate;
   name?: VxeInputPropTypes.Name;
   type?: VxeInputPropTypes.Type;
@@ -184,12 +188,16 @@ export namespace VxeInputDefines {
   }
 
   export interface DateFestivalParams {
-    date: Date;
+    $input: VxeInputConstructor;
     type: string;
+    viewType: DatePanelType;
+    date: Date;
   }
 
   export interface DateDisabledParams {
-    type: VxeInputPropTypes.Type;
+    $input: VxeInputConstructor;
+    type: string;
+    viewType: DatePanelType;
     date: Date;
   }
 

@@ -36,15 +36,24 @@
       background-color: $vxe-loading-background-color;
     }
   }
-  .vxe-button--wrapper {
+  .vxe-buttons--wrapper {
     flex-grow: 1;
-    text-align: left;
     & > .vxe-button+.vxe-button--item,
     & > .vxe-button--item+.vxe-button,
     & > .vxe-button--item+.vxe-button--item {
       margin-left: 0.8em;
     }
     & > .vxe-button--item {
+      display: inline-block;
+    }
+  }
+  .vxe-tools--wrapper {
+    & > .vxe-button+.vxe-tool--item,
+    & > .vxe-tool--item+.vxe-button,
+    & > .vxe-tool--item+.vxe-tool--item {
+      margin-left: 0.8em;
+    }
+    & > .vxe-tool--item {
       display: inline-block;
     }
   }

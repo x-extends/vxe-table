@@ -12,7 +12,7 @@
       <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
-    <p class="tip">更多配置<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">更多方式<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-grid class="reverse-table" v-bind="gridOptions2"></vxe-grid>
 

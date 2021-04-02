@@ -29,6 +29,7 @@ export default defineComponent({
     optionProps: Object as PropType<VxeSelectPropTypes.OptionProps>,
     optionGroups: Array as PropType<VxeSelectPropTypes.OptionGroups>,
     optionGroupProps: Object as PropType<VxeSelectPropTypes.OptionGroupProps>,
+    className: String as PropType<VxeSelectPropTypes.ClassName>,
     size: { type: String as PropType<VxeSelectPropTypes.Size>, default: () => GlobalConfig.select.size || GlobalConfig.size },
     emptyText: String as PropType<VxeSelectPropTypes.EmptyText>,
     optionId: { type: String as PropType<VxeSelectPropTypes.OptionId>, default: () => GlobalConfig.select.optionId },
@@ -374,7 +375,8 @@ export default defineComponent({
         changeEvent(evnt, multipleValue)
       } else {
         changeEvent(evnt, selectValue)
-        hideOptionPanel()
+        // 显示效果
+        setTimeout(hideOptionPanel, 50)
       }
     }
 
@@ -569,7 +571,8 @@ export default defineComponent({
           // attrs
           optid: optid,
           // event
-          onClick: (evnt: Event) => {
+          onMousedown: (evnt: Event) => {
+            evnt.stopPropagation()
             if (!isDisabled) {
               changeOptionEvent(evnt, optionValue)
             }
@@ -718,13 +721,13 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { transfer, disabled } = props
+      const { className, transfer, disabled } = props
       const { inited, isActivated, visiblePanel } = reactData
       const vSize = computeSize.value
       const selectLabel = computeSelectLabel.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-select', {
+        class: ['vxe-select', className, {
           [`size--${vSize}`]: vSize,
           'is--visivle': visiblePanel,
           'is--disabled': disabled,

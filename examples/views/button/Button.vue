@@ -147,7 +147,7 @@
     </p>
 
     <p>
-      <vxe-button icon="fa fa-plus">默认图标颜色</vxe-button>
+      <vxe-button icon="fa fa-plus">使用第三方图标</vxe-button>
       <vxe-button status="primary" icon="fa fa-save">主要图标颜色</vxe-button>
       <vxe-button status="success" icon="fa fa-check">成功图标颜色</vxe-button>
       <vxe-button status="info" icon="fa fa-info">信息图标颜色</vxe-button>
@@ -195,7 +195,7 @@
     </p>
 
     <p>
-      <vxe-button type="text" icon="fa fa-plus">默认图标颜色</vxe-button>
+      <vxe-button type="text" icon="fa fa-plus">使用第三方图标</vxe-button>
       <vxe-button type="text" status="primary" icon="fa fa-save">主要图标颜色</vxe-button>
       <vxe-button type="text" status="success" icon="fa fa-check">成功图标颜色</vxe-button>
       <vxe-button type="text" status="info" icon="fa fa-info">信息图标颜色</vxe-button>
@@ -381,7 +381,7 @@ export default defineComponent({
         </p>
 
         <p>
-          <vxe-button icon="fa fa-plus">默认图标颜色</vxe-button>
+          <vxe-button icon="fa fa-plus">使用第三方图标</vxe-button>
           <vxe-button status="primary" icon="fa fa-save">主要图标颜色</vxe-button>
           <vxe-button status="success" icon="fa fa-check">成功图标颜色</vxe-button>
           <vxe-button status="info" icon="fa fa-info">信息图标颜色</vxe-button>
@@ -429,7 +429,7 @@ export default defineComponent({
         </p>
 
         <p>
-          <vxe-button type="text" icon="fa fa-plus">默认图标颜色</vxe-button>
+          <vxe-button type="text" icon="fa fa-plus">使用第三方图标</vxe-button>
           <vxe-button type="text" status="primary" icon="fa fa-save">主要图标颜色</vxe-button>
           <vxe-button type="text" status="success" icon="fa fa-check">成功图标颜色</vxe-button>
           <vxe-button type="text" status="info" icon="fa fa-info">信息图标颜色</vxe-button>

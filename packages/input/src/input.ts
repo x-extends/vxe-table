@@ -82,6 +82,7 @@ export default defineComponent({
     autocomplete: { type: String as PropType<VxeInputPropTypes.Autocomplete>, default: 'off' },
     align: String as PropType<VxeInputPropTypes.Align>,
     form: String as PropType<VxeInputPropTypes.Form>,
+    className: String as PropType<VxeInputPropTypes.ClassName>,
     size: { type: String as PropType<VxeInputPropTypes.Size>, default: () => GlobalConfig.input.size || GlobalConfig.size },
 
     // number、integer、float
@@ -1026,8 +1027,9 @@ export default defineComponent({
     }
 
     const isDateDisabled = (item: { date: Date }) => {
-      const { type, disabledMethod } = props
-      return disabledMethod && disabledMethod({ type, date: item.date })
+      const { disabledMethod } = props
+      const { datePanelType } = reactData
+      return disabledMethod && disabledMethod({ type: datePanelType, viewType: datePanelType, date: item.date, $input: $xeinput })
     }
 
     const dateSelectItem = (date: Date) => {
@@ -1208,7 +1210,7 @@ export default defineComponent({
       const isDateTimeType = computeIsDateTimeType.value
       const dateValue = computeDateValue.value
       if (['year', 'month', 'week'].indexOf(type) > -1) {
-        reactData.datePanelType = type
+        reactData.datePanelType = type as 'year' | 'month' | 'week'
       } else {
         reactData.datePanelType = 'day'
       }
@@ -1464,7 +1466,8 @@ export default defineComponent({
     const renderDateLabel = (item: DateYearItem | DateMonthItem | DateDayItem, label: string | number) => {
       const { festivalMethod } = props
       if (festivalMethod) {
-        const festivalRest = festivalMethod({ type: reactData.datePanelType, date: item.date })
+        const { datePanelType } = reactData
+        const festivalRest = festivalMethod({ type: datePanelType, viewType: datePanelType, date: item.date, $input: $xeinput })
         const festivalItem = festivalRest ? (XEUtils.isString(festivalRest) ? { label: festivalRest } : festivalRest) : {}
         const extraItem = festivalItem.extra ? (XEUtils.isString(festivalItem.extra) ? { label: festivalItem.extra } : festivalItem.extra) : null
         const labels = [
@@ -2019,7 +2022,7 @@ export default defineComponent({
     initValue()
 
     const renderVN = () => {
-      const { controls, type, align, name, disabled, autocomplete } = props
+      const { className, controls, type, align, name, disabled, autocomplete } = props
       const { inputValue, visiblePanel, isActivated } = reactData
       const vSize = computeSize.value
       const isDatePickerType = computeIsDatePickerType.value
@@ -2069,7 +2072,7 @@ export default defineComponent({
       }
       return h('div', {
         ref: refElem,
-        class: ['vxe-input', `type--${type}`, {
+        class: ['vxe-input', `type--${type}`, className, {
           [`size--${vSize}`]: vSize,
           [`is--${align}`]: align,
           'is--controls': controls,

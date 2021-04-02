@@ -15,6 +15,7 @@ export default defineComponent({
     height: [Number, String] as PropType<VxeListPropTypes.Height>,
     maxHeight: [Number, String] as PropType<VxeListPropTypes.MaxHeight>,
     loading: Boolean as PropType<VxeListPropTypes.Loading>,
+    className: String as PropType<VxeListPropTypes.ClassName>,
     size: { type: String as PropType<VxeListPropTypes.Size>, default: () => GlobalConfig.list.size || GlobalConfig.size },
     autoResize: { type: Boolean as PropType<VxeListPropTypes.AutoResize>, default: () => GlobalConfig.list.autoResize },
     syncResize: [Boolean, String, Number] as PropType<VxeListPropTypes.SyncResize>,
@@ -301,13 +302,13 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { loading } = props
+      const { className, loading } = props
       const { bodyHeight, topSpaceHeight, items } = reactData
       const vSize = computeSize.value
       const styles = computeStyles.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-list', {
+        class: ['vxe-list', className, {
           [`size--${vSize}`]: vSize,
           'is--loading': loading
         }]

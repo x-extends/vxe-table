@@ -80,14 +80,23 @@ export namespace VxeToolbarPropTypes {
   export type Custom = boolean | CustomConfig;
   export interface CustomOpts extends CustomConfig { }
 
-  export interface ButtonConfig extends VxeButtonProps {
+  interface ButtonAndToolConfig extends VxeButtonProps {
     code?: string;
     visible?: boolean;
-    dropdowns?: ButtonConfig[];
-    buttonRender?: VxeGlobalRendererHandles.RenderButtonOptions;
     params?: any;
   }
+
+  export interface ButtonConfig extends ButtonAndToolConfig {
+    dropdowns?: ButtonConfig[];
+    buttonRender?: VxeGlobalRendererHandles.RenderButtonOptions;
+  }
   export type Buttons = ButtonConfig[];
+
+  export interface ToolConfig extends ButtonAndToolConfig {
+    dropdowns?: ToolConfig[];
+    toolRender?: VxeGlobalRendererHandles.RenderToolOptions;
+  }
+  export type Tools = ToolConfig[];
 
   export type Perfect = boolean;
 }
@@ -127,7 +136,8 @@ export type VxeToolbarProps = {
   /**
    * 按钮列表
    */
-  buttons?: VxeToolbarPropTypes.ButtonConfig[];
+  buttons?: VxeToolbarPropTypes.Buttons;
+  tools?: VxeToolbarPropTypes.Tools;
   /**
    * 配套的样式
    */
@@ -152,7 +162,8 @@ export interface ToolbarPrivateMethods { }
 export interface VxeToolbarPrivateMethods extends ToolbarPrivateMethods { }
 
 export type VxeToolbarEmits = [
-  'button-click'
+  'button-click',
+  'tool-click'
 ]
 
 export namespace VxeToolbarDefines {

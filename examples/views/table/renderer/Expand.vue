@@ -3,7 +3,7 @@
     <p class="tip">
       内容渲染 <table-column-api-link prop="content-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderExpand (renderOpts, <vxe-tooltip content="params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 展开内容<br>
+      renderExpand (renderOpts, params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }) 展开内容<br>
     </p>
 
     <vxe-table

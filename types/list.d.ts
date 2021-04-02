@@ -93,6 +93,7 @@ export namespace VxeListPropTypes {
   export type MaxHeight = number | string;
   export type Loading = boolean;
   export type AutoResize = boolean;
+  export type ClassName = string;
   export type SyncResize = boolean | string | number;
   export interface ScrollY {
     /**
@@ -118,6 +119,7 @@ export type VxeListProps<D = any> = {
   loading?: VxeListPropTypes.Loading;
   autoResize?: VxeListPropTypes.AutoResize;
   syncResize?: VxeListPropTypes.SyncResize;
+  className?: VxeListPropTypes.ClassName;
   scrollY?: VxeListPropTypes.ScrollY;
 }
 

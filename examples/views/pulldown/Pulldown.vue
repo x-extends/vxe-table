@@ -65,7 +65,8 @@
               :pager-config="demo4.tablePage4"
               :data="demo4.tableData4"
               :columns="demo4.tableColumn4"
-              @cell-click="cellClickEvent4">
+              @cell-click="cellClickEvent4"
+              @page-change="pageChangeEvent4">
             </vxe-grid>
           </div>
         </template>
@@ -246,6 +247,11 @@ export default defineComponent({
       $pulldown4.hidePanel()
     }
 
+    const pageChangeEvent4: VxeGridEvents.PageChange = ({ currentPage, pageSize }) => {
+      demo4.tablePage4.currentPage = currentPage
+      demo4.tablePage4.pageSize = pageSize
+    }
+
     onMounted(() => {
       keyupEvent4()
     })
@@ -270,6 +276,7 @@ export default defineComponent({
       keyupEvent4,
       suffixClick4,
       cellClickEvent4,
+      pageChangeEvent4,
       demoCodes: [
         `
         <p>
@@ -334,7 +341,8 @@ export default defineComponent({
                   :pager-config="demo4.tablePage4"
                   :data="demo4.tableData4"
                   :columns="demo4.tableColumn4"
-                  @cell-click="cellClickEvent4">
+                  @cell-click="cellClickEvent4"
+                  @page-change="pageChangeEvent4">
                 </vxe-grid>
               </div>
             </template>
@@ -501,6 +509,11 @@ export default defineComponent({
               $pulldown4.hidePanel()
             }
 
+            const pageChangeEvent4: VxeGridEvents.PageChange = ({ currentPage, pageSize }) => {
+              demo4.tablePage4.currentPage = currentPage
+              demo4.tablePage4.pageSize = pageSize
+            }
+
             onMounted(() => {
               keyupEvent4()
             })
@@ -524,7 +537,8 @@ export default defineComponent({
               focusEvent4,
               keyupEvent4,
               suffixClick4,
-              cellClickEvent4
+              cellClickEvent4,
+              pageChangeEvent4
               }
             }
           }

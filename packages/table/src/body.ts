@@ -4,6 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { mergeBodyMethod, getRowid } from './util'
+// import { browse } from '../../tools/src/dom'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
 
@@ -477,6 +478,85 @@ export default defineComponent({
       $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX, isY }, evnt)
     }
 
+    // let smoothTime: any
+    // let smoothYSize = 0
+    // let smoothYTop = 0
+
+    // const handleWheel = (bodyElem: HTMLDivElement, deltaTop: number) => {
+    //   clearTimeout(smoothTime)
+    //   smoothYTop = deltaTop
+    //   smoothYSize = Math.abs(smoothYTop)
+    //   const smoothYSign = smoothYTop >= 0 ? 1 : -1
+    //   const wheelSmooth = () => {
+    //     if (smoothYSize > 0) {
+    //       smoothYSize -= 20
+    //       bodyElem.scrollTop += (smoothYSize * smoothYSign)
+    //       console.log(bodyElem.scrollTop)
+    //       smoothTime = setTimeout(wheelSmooth, 10)
+    //     }
+    //   }
+    //   wheelSmooth()
+    // }
+
+    /**
+     * 滚轮处理
+     */
+    // const wheelEvent = (evnt: WheelEvent) => {
+    //   const { deltaY, deltaX } = evnt
+    //   const { fixedType } = props
+    //   const { highlightHoverRow } = tableProps
+    //   const { scrollXLoad, scrollYLoad } = tableReactData
+    //   const { lastScrollTop, lastScrollLeft } = tableInternalData
+    //   // const tableHeader = refTableHeader.value
+    //   const tableBody = refTableBody.value
+    //   // const tableFooter = refTableFooter.value
+    //   const leftBody = refTableLeftBody.value
+    //   const rightBody = refTableRightBody.value
+    //   const validTip = refValidTooltip.value
+    //   const scrollBodyElem = refElem.value
+    //   // const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+    //   // const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+    //   const bodyElem = tableBody.$el as HTMLDivElement
+    //   const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
+    //   const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
+    //   const deltaTop = browse.firefox ? deltaY * 40 : deltaY
+    //   const deltaLeft = browse.firefox ? deltaX * 40 : deltaX
+    //   const scrollTop = scrollBodyElem.scrollTop + deltaTop
+    //   const scrollLeft = bodyElem.scrollLeft + deltaLeft
+    //   const isX = scrollLeft !== lastScrollLeft
+    //   const isY = scrollTop !== lastScrollTop
+    //   tableInternalData.lastScrollTop = scrollTop
+    //   tableInternalData.lastScrollLeft = scrollLeft
+    //   tableInternalData.lastScrollTime = Date.now()
+    //   if (highlightHoverRow) {
+    //     $xetable.clearHoverRow()
+    //   }
+    //   // if (leftElem) {
+    //   //   leftElem.scrollLeft = scrollLeft
+    //   //   leftElem.scrollTop = scrollTop
+    //   // }
+    //   // if (rightElem) {
+    //   //   rightElem.scrollLeft = scrollLeft
+    //   //   rightElem.scrollTop = scrollTop
+    //   // }
+    //   // bodyElem.scrollLeft = scrollLeft
+    //   // bodyElem.scrollTop = scrollTop
+    //   handleWheel(bodyElem, deltaTop)
+    //   evnt.preventDefault()
+    //   if (scrollXLoad && isX) {
+    //     console.log('x', scrollTop, scrollLeft)
+    //     $xetable.triggerScrollXEvent(evnt)
+    //   }
+    //   if (scrollYLoad && isY) {
+    //     console.log('y', scrollTop, scrollLeft)
+    //     $xetable.triggerScrollYEvent(evnt)
+    //   }
+    //   if (isX && validTip && validTip.reactData.visible) {
+    //     validTip.updatePlacement()
+    //   }
+    //   $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX, isY }, evnt)
+    // }
+
     nextTick(() => {
       const { fixedType } = props
       const { elemStore } = tableInternalData
@@ -529,6 +609,7 @@ export default defineComponent({
         ref: refElem,
         class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
         xid: xID
+        // onWheel: wheelEvent
       }, [
         fixedType ? createCommentVNode() : h('div', {
           ref: refBodyXSpace,

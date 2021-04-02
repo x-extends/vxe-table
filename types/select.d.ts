@@ -45,6 +45,7 @@ export type VxeSelectProps = {
   clearable?: VxeSelectPropTypes.Clearable;
   placeholder?: VxeSelectPropTypes.Placeholder;
   disabled?: VxeSelectPropTypes.Disabled;
+  className?: VxeSelectPropTypes.ClassName;
   multiple?: VxeSelectPropTypes.Multiple;
   multiCharOverflow?: VxeSelectPropTypes.MultiCharOverflow;
   prefixIcon?: VxeSelectPropTypes.PrefixIcon;
@@ -65,6 +66,7 @@ export namespace VxeSelectPropTypes {
   export type Clearable = boolean;
   export type Placeholder = string;
   export type Disabled = boolean;
+  export type ClassName = string;
   export type Multiple = boolean;
   export type MultiCharOverflow = number | string;
   export type PrefixIcon = string;

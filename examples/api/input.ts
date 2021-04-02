@@ -116,6 +116,15 @@ const apis = [
         list: []
       },
       {
+        name: 'className',
+        desc: '附加 className',
+        version: '4.0.7',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'prefix-icon',
         descKey: 'app.api.input.desc.prefixIcon',
         version: '',
@@ -247,7 +256,7 @@ const apis = [
         name: 'disabled-method',
         desc: '只对 type=date|datetime|week|month|year 有效，该方法的返回值用来决定该日期是否允许选中',
         version: '',
-        type: '({ date, type }) => boolean',
+        type: '({ date, viewType }) => boolean',
         enum: '',
         defVal: '',
         list: []
@@ -256,7 +265,7 @@ const apis = [
         name: 'festival-method',
         desc: '只对 type=date|datetime|week|month|year 有效，该方法用于返回对应日期显示的节日',
         version: '',
-        type: '({ date, type }) => any',
+        type: '({ date, viewType }) => any',
         enum: '',
         defVal: '',
         list: []

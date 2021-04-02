@@ -33,6 +33,7 @@ export type VxeTextareaProps = {
    * 绑定值
    */
   modelValue?: VxeTextareaPropTypes.ModelValue;
+  className?: VxeTextareaPropTypes.ClassName;
   immediate?: VxeTextareaPropTypes.Immediate;
   /**
    * 原生 name 属性
@@ -79,6 +80,7 @@ export type VxeTextareaProps = {
 export namespace VxeTextareaPropTypes {
   export type Size = SizeType;
   export type ModelValue = string | number;
+  export type ClassName = string;
   export type Immediate = boolean;
   export type Name = string;
   export type Readonly = boolean;

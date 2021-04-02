@@ -12,6 +12,7 @@ export default defineComponent({
   name: 'VxeTextarea',
   props: {
     modelValue: [String, Number] as PropType<VxeTextareaPropTypes.ModelValue>,
+    className: String as PropType<VxeTextareaPropTypes.ClassName>,
     immediate: { type: Boolean as PropType<VxeTextareaPropTypes.Immediate>, default: true },
     name: String as PropType<VxeTextareaPropTypes.Name>,
     readonly: Boolean as PropType<VxeTextareaPropTypes.Readonly>,
@@ -197,14 +198,14 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { resize, placeholder, disabled, maxlength, autosize, showWordCount } = props
+      const { className, resize, placeholder, disabled, maxlength, autosize, showWordCount } = props
       const { inputValue } = reactData
       const vSize = computeSize.value
       const isCountError = computeIsCountError.value
       const inputCount = computeInputCount.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-textarea', {
+        class: ['vxe-textarea', className, {
           [`size--${vSize}`]: vSize,
           'is--autosize': autosize,
           'is--disabled': disabled

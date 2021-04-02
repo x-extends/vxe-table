@@ -5,10 +5,10 @@
       配置参数：<br>
       className 自定义容器的 className<br>
       showFilterFooter 是否显示底部按钮<br>
-      renderFilter (renderOpts, <vxe-tooltip content="params: { column, columnIndex, columnIndex, $panel }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 内容<br>
-      filterMethod (<vxe-tooltip content="params: { option, row, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选数据函数<br>
-      filterResetMethod (<vxe-tooltip content="params: { options, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选重置函数<br>
-      filterRecoverMethod (<vxe-tooltip content="params: { option, column }" enterable><i class="fa fa-question-circle"></i></vxe-tooltip>params) 筛选复原函数<br>
+      renderFilter (params: { column, columnIndex, columnIndex, $panel }) 内容<br>
+      filterMethod (params: { option, row, column }) 筛选数据函数<br>
+      filterResetMethod (params: { options, column }) 筛选重置函数<br>
+      filterRecoverMethod (params: { option, column }) 筛选复原函数<br>
       $panel 对象:<br>
       &nbsp;&nbsp;<span class="orange">changeOption(event: Event | null, checked: boolean, option) 更新选项的状态</span><br>
       &nbsp;&nbsp;<span class="orange">confirmFilter(event?: Event) 确认筛选</span><br>

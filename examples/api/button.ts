@@ -89,6 +89,15 @@ const apis = [
         list: []
       },
       {
+        name: 'className',
+        desc: '附加 className',
+        version: '4.0.7',
+        type: 'string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'loading',
         descKey: 'app.api.button.desc.loading',
         version: '',
