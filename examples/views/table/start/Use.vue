@@ -2,7 +2,7 @@
   <div>
     <h2>{{ $t('app.aside.nav.use') }}</h2>
     <p class="tip">
-      使用 npm 的方式安装，借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。
+      如果您使用了 babel，借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。
     </p>
     <pre>
       <pre-code class="shell">

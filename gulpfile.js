@@ -15,6 +15,7 @@ const pack = require('./package.json')
 
 const components = [
   'v-x-e-table',
+  'vxe-table',
 
   'icon',
   'filter',

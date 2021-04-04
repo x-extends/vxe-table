@@ -466,11 +466,11 @@ export default {
 </script>
 
 <style scoped>
-.mytable-footer >>> .col-blue {
+.mytable-footer:deep() .col-blue {
   background-color: #2db7f5;
   color: #fff;
 }
-.mytable-footer >>> .col-red {
+.mytable-footer:deep() .col-red {
   background-color: red;
   color: #fff;
 }
