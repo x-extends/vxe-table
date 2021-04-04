@@ -65,6 +65,12 @@ body,
       margin: 2em 0;
       background-color: #f8f8f8;
     }
+    &.warn {
+      border-left: 4px solid red;
+      padding: 12px 24px 12px 30px;
+      margin: 2em 0;
+      background-color: #f8f8f8;
+    }
   }
 }
 
@@ -263,11 +269,6 @@ body,
       font-size: 17px;
       margin: 0;
       padding: 0;
-      & > li {
-        & > .nav-link {
-          color: #111;
-        }
-      }
       .nav-link {
         display: block;
         height: 40px;
@@ -275,6 +276,7 @@ body,
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        color: #111;
         &.active {
           font-weight: 700;
         }
@@ -325,6 +327,17 @@ body,
       color: #444;
       cursor: pointer;
       text-decoration: none;
+    }
+    .is-warn {
+      .nav-link {
+        font-size: 15px;
+        font-weight: 700;
+        color: red;
+        &.router-link-active {
+          font-size: 16px;
+          color: red;
+        }
+      }
     }
     .is-donation {
       .nav-link {

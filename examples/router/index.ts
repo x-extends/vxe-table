@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
+import StartUpgrade from '../views/start/Upgrade.vue'
 import StartInstall from '../views/start/Install.vue'
 import StartUse from '../views/start/Use.vue'
 import StartIcons from '../views/start/Icons.vue'
@@ -237,6 +238,7 @@ import TableEditTemplate from '../views/table/edit/Template.vue'
 // import TableBadEdit from '../views/table/bad/Edit.vue'
 // import TableBadNonsupport from '../views/table/bad/Nonsupport.vue'
 // import TableBadLineHeight from '../views/table/bad/LineHeight.vue'
+import TableBadChange from '../views/table/bad/Change.vue'
 
 import ModuleIcon from '../views/icon/Icon.vue'
 import ModuleButton from '../views/button/Button.vue'
@@ -297,6 +299,11 @@ const routes: Array<RouteRecordRaw> = [
     redirect: {
       name: 'StartInstall'
     }
+  },
+  {
+    path: '/table/start/upgrade',
+    name: 'StartUpgrade',
+    component: StartUpgrade
   },
   {
     path: '/table/start/install',
@@ -1430,11 +1437,11 @@ const routes: Array<RouteRecordRaw> = [
   //   name: 'TableBadNonsupport',
   //   component: TableBadNonsupport
   // },
-  // {
-  //   path: '/table/bad/lineHeight',
-  //   name: 'TableBadLineHeight',
-  //   component: TableBadLineHeight
-  // },
+  {
+    path: '/table/bad/change',
+    name: 'TableBadChange',
+    component: TableBadChange
+  },
   {
     path: '/table/module/icon',
     name: 'ModuleIcon',

@@ -2,7 +2,38 @@
   <div>
     <h2>{{ $t('app.aside.nav.use') }}</h2>
     <p class="tip">
-      使用 npm 的方式安装，借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。
+      方式1：如果您使用了 vite，借助插件 <a class="link" href="https://www.npmjs.com/package/vite-plugin-style-import" target="_blank">vite-plugin-style-import</a> 可以实现按需加载模块，减少文件体积。
+    </p>
+    <pre>
+      <pre-code class="shell">
+        npm install vite-plugin-style-import -D
+      </pre-code>
+      <div>修改文件 vite.config.ts</div>
+      <pre-code class="typescript">
+        import { defineConfig } from 'vite'
+        import vue from '@vitejs/plugin-vue'
+        import styleImport from 'vite-plugin-style-import'
+
+        export default defineConfig({
+          plugins: [
+            // ...,
+            styleImport({
+              libs: [
+                {
+                  libraryName: 'vxe-table',
+                  esModule: true,
+                  resolveComponent: (name) => `vxe-table/lib/${name}`,
+                  resolveStyle: (name) => `vxe-table/lib/${name}/style/style.css`
+                }
+              ]
+            })
+          ]
+        })
+      </pre-code>
+    </pre>
+
+    <p class="tip">
+      方式2：如果您使用了 babel，借助插件 <a class="link" href="https://www.npmjs.com/package/babel-plugin-import" target="_blank">babel-plugin-import</a> 可以实现按需加载模块，减少文件体积。
     </p>
     <pre>
       <pre-code class="shell">
@@ -23,6 +54,7 @@
         }
       </pre-code>
     </pre>
+
     <p class="tip">最后这样按需引入模块，就可以减小体积了</p>
     <pre>
       <pre-code class="typescript">

@@ -18,6 +18,7 @@ const time = Date.now()
 
 const components = [
   'v-x-e-table',
+  'vxe-table',
 
   'icon',
   'filter',

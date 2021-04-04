@@ -83,7 +83,7 @@ export interface VXETableProClipboard {
   [key: string]: any;
 }
 
-declare module '../v-x-e-table' {
+declare module '../vxe-table' {
   interface VXETableConfig {
     clipboard?: VXETableProClipboard;
   }
