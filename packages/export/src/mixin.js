@@ -3,6 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
 import { mergeBodyMethod } from '../../table/src/util'
+import { browse } from '../../tools/src/dom'
 
 const { formatText } = UtilTools
 
@@ -927,7 +928,7 @@ export function handlePrint ($xetable, opts, content) {
   }
   content = createHtmlPage(opts, content)
   const blob = getExportBlobByContent(content, opts)
-  if (DomTools.browse.msie) {
+  if (browse.msie) {
     if (printFrame) {
       try {
         printFrame.contentDocument.write('')

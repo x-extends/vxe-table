@@ -3,7 +3,7 @@ import UtilTools from './utils'
 
 const { getRowid } = UtilTools
 
-const browse = XEUtils.browse()
+export const browse = XEUtils.browse()
 const reClsMap = {}
 
 function getClsRE (cls) {
@@ -174,7 +174,7 @@ export const DomTools = {
     const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
     return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
   },
-  toView (elem) {
+  scrollToView (elem) {
     const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
     const scrollIntoView = 'scrollIntoView'
     if (elem) {

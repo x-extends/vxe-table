@@ -4,14 +4,14 @@ import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { clearTableAllStatus, handleFieldOrColumn } from './util'
-import { getPaddingTopBottomSize } from '../../tools/src/dom'
+import { browse, getPaddingTopBottomSize } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
-const { browse, calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
+const { calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
-const debounceScrollYDuration = browse.msie ? 40 : 20
+const debounceScrollYDuration = browse.msie ? 80 : 20
 
 const resizableStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_WIDTH'
 const visibleStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE'
@@ -3712,7 +3712,7 @@ const Methods = {
   loadScrollYData (evnt) {
     const { mergeList, scrollYStore } = this
     const { startIndex, endIndex, visibleSize, offsetSize, rowHeight } = scrollYStore
-    const scrollBodyElem = evnt.currentTarget
+    const scrollBodyElem = evnt.currentTarget || evnt.target
     const scrollTop = scrollBodyElem.scrollTop
     const toVisibleIndex = Math.floor(scrollTop / rowHeight)
     const offsetItem = {

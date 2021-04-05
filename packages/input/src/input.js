@@ -2,8 +2,8 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { browse } from '../../tools/src/dom'
 
-const browse = DomTools.browse
 const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 
 const yearSize = 20

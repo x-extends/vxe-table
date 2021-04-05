@@ -1,8 +1,7 @@
 import XEUtils from 'xe-utils'
-import DomTools from './dom'
+import { browse } from '../../tools/src/dom'
 
 // 监听全局事件
-const browse = DomTools.browse
 const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const eventStore = []
 

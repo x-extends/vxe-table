@@ -1,7 +1,6 @@
 import XEUtils from 'xe-utils'
 import { DomTools } from '../../tools'
-
-const browse = DomTools.browse
+import { browse } from '../../tools/src/dom'
 
 function getTargetOffset (target, container) {
   let offsetTop = 0

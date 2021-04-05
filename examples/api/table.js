@@ -2654,6 +2654,15 @@ const apis = [
             defVal: 'true',
             list: []
           },
+          // {
+          //   name: 'mode',
+          //   desc: '滚动模式',
+          //   version: '3.2.10',
+          //   type: 'string',
+          //   enum: 'default,wheel',
+          //   defVal: 'default',
+          //   list: []
+          // },
           {
             name: 'gt',
             desc: '指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用，如果为 -1 则关闭（注：启用纵向虚拟滚动之后将不能支持动态行高）',

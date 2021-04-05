@@ -1,8 +1,7 @@
 import { UtilTools, DomTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-
-const browse = DomTools.browse
+import { browse } from '../../tools/src/dom'
 
 export default {
   name: 'VxeSwitch',

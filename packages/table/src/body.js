@@ -3,8 +3,9 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { getOffsetSize, calcTreeLine, mergeBodyMethod } from './util'
+import { browse } from '../../tools/src/dom'
 
-const cellType = 'body'
+const renderType = 'body'
 
 // 滚动、拖动过程中不需要触发
 function isOperateMouse ($xetable) {
@@ -93,7 +94,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+  const params = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -302,7 +303,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       }
     }
     const rowid = UtilTools.getRowid($xetable, row)
-    const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: cellType, level: rowLevel, row, rowIndex, $rowIndex }
+    const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
     let isNewRow = false
     if (editConfig) {
       isNewRow = editStore.insertList.indexOf(row) > -1
@@ -336,7 +337,7 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       }
       const { showOverflow } = expandColumn
       const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-      const expandParams = { $table: $xetable, $seq, seq, column: expandColumn, fixed: fixedType, type: cellType, level: rowLevel, row, rowIndex, $rowIndex }
+      const expandParams = { $table: $xetable, $seq, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
       rows.push(
         h('tr', {
           class: 'vxe-body--expanded-row',
@@ -409,6 +410,14 @@ export default {
     size: String,
     fixedType: String
   },
+  data () {
+    return {
+      wheelTime: null,
+      wheelYSize: 0,
+      wheelYInterval: 0,
+      wheelYTotal: 0
+    }
+  },
   mounted () {
     const { $parent: $xetable, $el, $refs, fixedType } = this
     const { elemStore } = $xetable
@@ -424,12 +433,13 @@ export default {
     this.$el._onscroll = this.scrollEvent
   },
   beforeDestroy () {
+    clearTimeout(this.wheelTime)
     this.$el._onscroll = null
     this.$el.onscroll = null
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyRender, emptyOpts, mouseConfig, mouseOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyRender, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
       if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
@@ -451,7 +461,10 @@ export default {
       class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
         xid: tId
-      }
+      },
+      on: scrollYLoad && sYOpts.mode === 'wheel' ? {
+        wheel: this.wheelEvent
+      } : {}
     }, [
       fixedType ? _e() : h('div', {
         class: 'vxe-body--x-space',
@@ -504,7 +517,7 @@ export default {
             class: 'vxe-table--cell-main-area-btn',
             on: {
               mousedown (evnt) {
-                $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: cellType })
+                $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: renderType })
               }
             }
           })
@@ -539,7 +552,7 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt) {
-      const { $el, $parent: $xetable, fixedType } = this
+      const { $el: scrollBodyElem, $parent: $xetable, fixedType } = this
       const { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
       const { tableHeader, tableBody, leftBody, rightBody, tableFooter, validTip } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
@@ -547,10 +560,10 @@ export default {
       const bodyElem = tableBody.$el
       const leftElem = leftBody ? leftBody.$el : null
       const rightElem = rightBody ? rightBody.$el : null
-      let scrollTop = $el.scrollTop
+      let scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
-      const isX = scrollLeft !== lastScrollLeft
-      const isY = scrollTop !== lastScrollTop
+      const isRollX = scrollLeft !== lastScrollLeft
+      const isRollY = scrollTop !== lastScrollTop
       $xetable.lastScrollTop = scrollTop
       $xetable.lastScrollLeft = scrollLeft
       $xetable.lastScrollTime = Date.now()
@@ -564,7 +577,7 @@ export default {
         scrollTop = rightElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, leftElem)
       } else {
-        if (isX) {
+        if (isRollX) {
           if (headerElem) {
             headerElem.scrollLeft = bodyElem.scrollLeft
           }
@@ -574,21 +587,104 @@ export default {
         }
         if (leftElem || rightElem) {
           $xetable.checkScrolling()
-          if (isY) {
+          if (isRollY) {
             syncBodyScroll(scrollTop, leftElem, rightElem)
           }
         }
       }
-      if (scrollXLoad && isX) {
+      if (scrollXLoad && isRollX) {
         $xetable.triggerScrollXEvent(evnt)
       }
-      if (scrollYLoad && isY) {
+      if (scrollYLoad && isRollY) {
         $xetable.triggerScrollYEvent(evnt)
       }
-      if (isX && validTip && validTip.visible) {
+      if (isRollX && validTip && validTip.visible) {
         validTip.updatePlacement()
       }
-      $xetable.emitEvent('scroll', { type: cellType, fixed: fixedType, scrollTop, scrollLeft, isX, isY }, evnt)
+      $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX: isRollX, isY: isRollY }, evnt)
+    },
+    handleWheel (evnt, isTopWheel, deltaTop, isRollX, isRollY) {
+      const { $parent: $xetable } = this
+      const { $refs } = $xetable
+      const { tableBody, leftBody, rightBody } = $refs
+      const bodyElem = tableBody.$el
+      const leftElem = leftBody ? leftBody.$el : null
+      const rightElem = rightBody ? rightBody.$el : null
+      const remainSize = this.isPrevWheelTop === isTopWheel ? Math.max(0, this.wheelYSize - this.wheelYTotal) : 0
+      this.isPrevWheelTop = isTopWheel
+      this.wheelYSize = Math.abs(isTopWheel ? deltaTop - remainSize : deltaTop + remainSize)
+      this.wheelYInterval = 0
+      this.wheelYTotal = 0
+      clearTimeout(this.wheelTime)
+      const handleSmooth = () => {
+        let { fixedType, wheelYTotal, wheelYSize, wheelYInterval } = this
+        if (wheelYTotal < wheelYSize) {
+          wheelYInterval = Math.max(5, Math.floor(wheelYInterval * 1.5))
+          wheelYTotal = wheelYTotal + wheelYInterval
+          if (wheelYTotal > wheelYSize) {
+            wheelYInterval = wheelYInterval - (wheelYTotal - wheelYSize)
+          }
+          const { scrollTop, clientHeight, scrollHeight } = bodyElem
+          const targerTop = scrollTop + (wheelYInterval * (isTopWheel ? -1 : 1))
+          bodyElem.scrollTop = targerTop
+          if (leftElem) {
+            leftElem.scrollTop = targerTop
+          }
+          if (rightElem) {
+            rightElem.scrollTop = targerTop
+          }
+          if (isTopWheel ? targerTop < scrollHeight - clientHeight : targerTop >= 0) {
+            this.wheelTime = setTimeout(handleSmooth, 10)
+          }
+          this.wheelYTotal = wheelYTotal
+          this.wheelYInterval = wheelYInterval
+          $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft: bodyElem.scrollLeft, isX: isRollX, isY: isRollY }, evnt)
+        }
+      }
+      handleSmooth()
+    },
+    /**
+     * 滚轮处理
+     */
+    wheelEvent (evnt) {
+      const { deltaY, deltaX } = evnt
+      const { $el: scrollBodyElem, $parent: $xetable } = this
+      const { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
+      const { tableBody, validTip } = $refs
+      const bodyElem = tableBody.$el
+
+      const deltaTop = browse.firefox ? deltaY * 40 : deltaY
+      const deltaLeft = browse.firefox ? deltaX * 40 : deltaX
+      const isTopWheel = deltaTop < 0
+      // 如果滚动位置已经是顶部或底部，则不需要触发
+      if (isTopWheel ? scrollBodyElem.scrollTop <= 0 : scrollBodyElem.scrollTop >= scrollBodyElem.scrollHeight - scrollBodyElem.clientHeight) {
+        return
+      }
+
+      const scrollTop = scrollBodyElem.scrollTop + deltaTop
+      const scrollLeft = bodyElem.scrollLeft + deltaLeft
+      const isRollX = scrollLeft !== lastScrollLeft
+      const isRollY = scrollTop !== lastScrollTop
+
+      if (isRollY) {
+        evnt.preventDefault()
+        $xetable.lastScrollTop = scrollTop
+        $xetable.lastScrollLeft = scrollLeft
+        $xetable.lastScrollTime = Date.now()
+        if (highlightHoverRow) {
+          $xetable.clearHoverRow()
+        }
+        this.handleWheel(evnt, isTopWheel, deltaTop, isRollX, isRollY)
+        if (scrollXLoad && isRollX) {
+          $xetable.triggerScrollXEvent(evnt)
+        }
+        if (scrollYLoad && isRollY) {
+          $xetable.triggerScrollYEvent(evnt)
+        }
+        if (isRollX && validTip && validTip.visible) {
+          validTip.updatePlacement()
+        }
+      }
     }
   }
 }

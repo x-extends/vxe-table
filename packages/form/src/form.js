@@ -4,6 +4,7 @@ import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
+import { browse } from '../../tools/src/dom'
 
 class Rule {
   constructor (rule) {
@@ -612,7 +613,7 @@ export default {
           if (inputElem) {
             inputElem.focus()
             // 保持一致行为，光标移到末端
-            if (DomTools.browse.msie) {
+            if (browse.msie) {
               const textRange = inputElem.createTextRange()
               textRange.collapse(false)
               textRange.select()
