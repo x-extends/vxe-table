@@ -2,7 +2,7 @@ import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, Compu
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools, isEnableConf } from '../../tools'
+import { errLog, getFuncText, isEnableConf } from '../../tools/utils'
 import { createItem } from './util'
 import { useSize } from '../../hooks/size'
 
@@ -24,7 +24,7 @@ class Rule {
   }
 
   get message () {
-    return UtilTools.getFuncText(this.$options.message)
+    return getFuncText(this.$options.message)
   }
 
   [key: string]: any
@@ -147,7 +147,7 @@ export default defineComponent({
               XEUtils.each(item.slots, (func) => {
                 if (!XEUtils.isFunction(func)) {
                   if (!slots[func]) {
-                    UtilTools.error('vxe.error.notSlot', [func])
+                    errLog('vxe.error.notSlot', [func])
                   }
                 }
               })
@@ -497,7 +497,7 @@ export default defineComponent({
         tss.push(
           titlePrefix.message
             ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-              content: UtilTools.getFuncText(titlePrefix.message),
+              content: getFuncText(titlePrefix.message),
               enterable: titlePrefix.enterable,
               theme: titlePrefix.theme
             }, {
@@ -509,13 +509,13 @@ export default defineComponent({
       tss.push(
         h('span', {
           class: 'vxe-form--item-title-label'
-        }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (titleSlot ? callSlot(titleSlot, params) : UtilTools.getFuncText(item.title)))
+        }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (titleSlot ? callSlot(titleSlot, params) : getFuncText(item.title)))
       )
       if (titleSuffix) {
         tss.push(
           titleSuffix.message
             ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-              content: UtilTools.getFuncText(titleSuffix.message),
+              content: getFuncText(titleSuffix.message),
               enterable: titleSuffix.enterable,
               theme: titleSuffix.theme
             }, {
@@ -627,7 +627,7 @@ export default defineComponent({
               style: titleWidth ? {
                 width: isNaN(titleWidth as number) ? titleWidth : `${titleWidth}px`
               } : null,
-              title: showTitle ? UtilTools.getFuncText(title) : null,
+              title: showTitle ? getFuncText(title) : null,
               ...ons
             }, renderTitle(item)) : null,
             h('div', {

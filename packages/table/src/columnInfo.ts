@@ -1,11 +1,10 @@
 import XEUtils from 'xe-utils'
-import { UtilTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
+import { toFilters } from './util'
+import { warnLog, errLog, getFuncText } from '../../tools/utils'
 
 import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
-
-const { toFilters } = UtilTools
 
 export class ColumnInfo {
   title?: string
@@ -21,16 +20,16 @@ export class ColumnInfo {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
       if (_vm.type && types.indexOf(_vm.type) === -1) {
-        UtilTools.warn('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
+        warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
       }
       if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
-        UtilTools.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+        warnLog('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
       }
       if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
-        UtilTools.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+        warnLog('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
       }
       if (_vm.cellRender && _vm.editRender) {
-        UtilTools.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
+        warnLog('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }
       if (_vm.type === 'expand') {
         const { props: tableProps } = $xetable
@@ -38,19 +37,19 @@ export class ColumnInfo {
         const { computeTreeOpts } = $xetable.getComputeMaps()
         const treeOpts = computeTreeOpts.value
         if (treeConfig && treeOpts.line) {
-          UtilTools.error('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
+          errLog('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
         }
       }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const globalFunc = VXETable.formats.get(formatter) || XEUtils[formatter]
           if (!XEUtils.isFunction(globalFunc)) {
-            UtilTools.error('vxe.error.notFunc', [formatter])
+            errLog('vxe.error.notFunc', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
           const globalFunc = VXETable.formats.get(formatter[0]) || XEUtils[formatter[0]]
           if (!XEUtils.isFunction(globalFunc)) {
-            UtilTools.error('vxe.error.notFunc', [formatter[0]])
+            errLog('vxe.error.notFunc', [formatter[0]])
           }
         }
       }
@@ -131,7 +130,7 @@ export class ColumnInfo {
   }
 
   getTitle () {
-    return UtilTools.getFuncText(this.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
+    return getFuncText(this.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
   }
 
   getKey () {

@@ -1,5 +1,5 @@
 import { defineComponent, h, Teleport, inject, ref, Ref } from 'vue'
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import XEUtils from 'xe-utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeMenuPanelConstructor, VxeMenuPanelPrivateRef } from '../../../types/all'
@@ -71,7 +71,7 @@ export default defineComponent({
                 }),
                 h('span', {
                   class: 'vxe-context-menu--link-content'
-                }, UtilTools.getFuncText(item.name)),
+                }, getFuncText(item.name)),
                 h('i', {
                   class: ['vxe-context-menu--link-suffix', hasChildMenus ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
                 })
@@ -105,7 +105,7 @@ export default defineComponent({
                     }),
                     h('span', {
                       class: 'vxe-context-menu--link-content'
-                    }, UtilTools.getFuncText(child.name))
+                    }, getFuncText(child.name))
                   ])
                 ])
               })) : null

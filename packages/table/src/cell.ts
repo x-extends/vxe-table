@@ -2,7 +2,8 @@ import { h, VNode } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf, isEmptyValue } from '../../tools'
+import { getFuncText, isEnableConf, isEmptyValue, formatText } from '../../tools/utils'
+import { updateCellTitle } from '../../tools/dom'
 import { createColumn } from './util'
 
 import { VxeColumnProps, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
@@ -41,7 +42,7 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
         return
       }
       if (showTitle) {
-        DomTools.updateCellTitle(evnt.currentTarget, column)
+        updateCellTitle(evnt.currentTarget, column)
       } else if (showTooltip || showAllTip) {
         $table.triggerHeaderTooltipEvent(evnt, params)
       }
@@ -79,12 +80,12 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams) {
       return compConf.renderFooter(renderOpts, params)
     }
   }
-  return [UtilTools.formatText(items[_columnIndex], 1)]
+  return [formatText(items[_columnIndex], 1)]
 }
 
 function getDefaultCellLabel (params: VxeTableDefines.CellRenderBodyParams) {
   const { $table, row, column } = params
-  return UtilTools.formatText($table.getCellLabel(row, column), 1)
+  return formatText($table.getCellLabel(row, column), 1)
 }
 
 export const Cell = {
@@ -158,7 +159,7 @@ export const Cell = {
         return renderTitleContent(params, compConf.renderHeader(renderOpts, params))
       }
     }
-    return renderTitleContent(params, UtilTools.formatText(column.getTitle(), 1))
+    return renderTitleContent(params, formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams) {
     return renderHelpIcon(params).concat(Cell.renderHeaderTitle(params))
@@ -188,8 +189,8 @@ export const Cell = {
         // 如果设置占位符
         h('span', {
           class: 'vxe-cell--placeholder'
-        }, UtilTools.formatText(UtilTools.getFuncText(cellPlaceholder), 1))
-      ] : UtilTools.formatText(cellValue, 1))
+        }, formatText(getFuncText(cellPlaceholder), 1))
+      ] : formatText(cellValue, 1))
     ]
   },
   renderTreeCell (params: VxeTableDefines.CellRenderBodyParams) {
@@ -267,7 +268,7 @@ export const Cell = {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
-    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : UtilTools.formatText(column.getTitle(), 1))
+    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : formatText(column.getTitle(), 1))
   },
   renderIndexCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, column } = params
@@ -280,7 +281,7 @@ export const Cell = {
     }
     const { $seq, seq, level } = params
     const seqMethod = seqOpts.seqMethod
-    return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || 0) + seq, 1)]
+    return [formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || 0) + seq, 1)]
   },
   renderTreeIndexCell (params: VxeTableDefines.CellRenderBodyParams) {
     return Cell.renderTreeIcon(params, Cell.renderIndexCell(params) as VNode[])
@@ -296,7 +297,7 @@ export const Cell = {
     return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : [
       h('span', {
         class: 'vxe-radio--label'
-      }, UtilTools.formatText(column.getTitle(), 1))
+      }, formatText(column.getTitle(), 1))
     ])
   },
   renderRadioCell (params: VxeTableDefines.CellRenderBodyParams) {

@@ -1,6 +1,6 @@
 import { defineComponent, h, computed, inject, PropType } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
@@ -90,7 +90,7 @@ export default defineComponent({
         }),
         h('span', {
           class: 'vxe-checkbox--label'
-        }, slots.default ? slots.default({}) : UtilTools.getFuncText(props.content))
+        }, slots.default ? slots.default({}) : getFuncText(props.content))
       ])
     }
 

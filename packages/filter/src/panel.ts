@@ -1,7 +1,7 @@
 import { defineComponent, h, computed, inject, nextTick } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools } from '../../tools'
+import { formatText } from '../../tools/utils'
 
 import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/all'
 
@@ -214,7 +214,7 @@ export default defineComponent({
           ] : []).concat([
             h('span', {
               class: 'vxe-checkbox--label'
-            }, UtilTools.formatText(item.label, 1))
+            }, formatText(item.label, 1))
           ]))
         }))
       ]

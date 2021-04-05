@@ -1,8 +1,9 @@
 import { defineComponent, h, ref, Ref, nextTick, onBeforeUnmount, reactive, watch, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { UtilTools, DomTools } from '../../tools'
 import { useSize } from '../../hooks/size'
+import { getLastZIndex, nextZIndex, formatText } from '../../tools/utils'
+import { getAbsolutePos, getDomNode } from '../../tools/dom'
 
 import { VxeTooltipPropTypes, VxeTooltipConstructor, VxeTooltipEmits, TooltipReactData, TooltipMethods, TooltipPrivateRef } from '../../../types/all'
 
@@ -66,8 +67,8 @@ export default defineComponent({
     const updateTipStyle = () => {
       const { tipTarget, tipStore } = reactData
       if (tipTarget) {
-        const { scrollTop, scrollLeft, visibleWidth } = DomTools.getDomNode()
-        const { top, left } = DomTools.getAbsolutePos(tipTarget)
+        const { scrollTop, scrollLeft, visibleWidth } = getDomNode()
+        const { top, left } = getAbsolutePos(tipTarget)
         const el = refElem.value
         const marginSize = 6
         const offsetHeight = el.offsetHeight
@@ -97,8 +98,8 @@ export default defineComponent({
     }
 
     const updateZindex = () => {
-      if (reactData.tipZindex < UtilTools.getLastZIndex()) {
-        reactData.tipZindex = UtilTools.nextZIndex()
+      if (reactData.tipZindex < getLastZIndex()) {
+        reactData.tipZindex = nextZIndex()
       }
     }
 
@@ -220,7 +221,7 @@ export default defineComponent({
       const parentNode = wrapperElem.parentNode
       if (parentNode) {
         reactData.message = content
-        reactData.tipZindex = UtilTools.nextZIndex()
+        reactData.tipZindex = nextZIndex()
         XEUtils.arrayEach(wrapperElem.children, (elem, index) => {
           if (index > 1) {
             parentNode.insertBefore(elem, wrapperElem)
@@ -289,7 +290,7 @@ export default defineComponent({
       }, [
         h('div', {
           class: 'vxe-table--tooltip-content'
-        }, slots.content ? slots.content({}) : UtilTools.formatText(message)),
+        }, slots.content ? slots.content({}) : formatText(message)),
         h('div', {
           class: 'vxe-table--tooltip-arrow',
           style: tipStore.arrowStyle

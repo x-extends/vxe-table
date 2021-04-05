@@ -1,8 +1,8 @@
 import { defineComponent, h, ref, Ref, computed, reactive, nextTick, createCommentVNode, PropType } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
+import { getFuncText } from '../../tools/utils'
 
 import { VxeSwitchPropTypes, VxeSwitchConstructor, VxeSwitchEmits, SwitchReactData, SwitchMethods } from '../../../types/all'
 
@@ -50,11 +50,11 @@ export default defineComponent({
     let switchMethods = {} as SwitchMethods
 
     const computeOnShowLabel = computed(() => {
-      return UtilTools.getFuncText(props.openLabel)
+      return getFuncText(props.openLabel)
     })
 
     const computeOffShowLabel = computed(() => {
-      return UtilTools.getFuncText(props.closeLabel)
+      return getFuncText(props.closeLabel)
     })
 
     const computeIsChecked = computed(() => {

@@ -1,7 +1,7 @@
 import { defineComponent, h, ref, Ref, computed, nextTick, watch, PropType, reactive } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import { useSize } from '../../hooks/size'
 
 import { VxeTextareaPropTypes, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef } from '../../../types/all'
@@ -216,7 +216,7 @@ export default defineComponent({
           class: 'vxe-textarea--inner',
           value: inputValue,
           name: props.name,
-          placeholder: placeholder ? UtilTools.getFuncText(placeholder) : null,
+          placeholder: placeholder ? getFuncText(placeholder) : null,
           maxlength,
           readonly: props.readonly,
           disabled,

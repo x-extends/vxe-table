@@ -1,11 +1,11 @@
 import { h, resolveComponent, ComponentOptions } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from './conf'
-import { VNTools, UtilTools, isEmptyValue } from '../../tools'
+import { getCellValue, setCellValue } from '../../table/src/util'
+import { warnLog, getFuncText, formatText, isEmptyValue } from '../../tools/utils'
+import { getOnName } from '../../tools/vn'
 
 import { VxeGlobalRendererHandles, VxeGlobalRenderer, VxeColumnPropTypes } from '../../../types/all'
-
-const { getOnName } = VNTools
 
 const componentDefaultModelProp = 'modelValue'
 
@@ -104,8 +104,8 @@ function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any) {
     }, placeholder && isEmptyValue(cellLabel) ? [
       h('span', {
         class: 'vxe-cell--placeholder'
-      }, UtilTools.formatText(UtilTools.getFuncText(placeholder), 1))
-    ] : UtilTools.formatText(cellLabel, 1))
+      }, formatText(getFuncText(placeholder), 1))
+    ] : formatText(cellLabel, 1))
   ]
 }
 
@@ -195,7 +195,7 @@ function getEditOns (renderOpts: any, params: any) {
   return getComponentOns(renderOpts, params, (cellValue: any) => {
     // 处理 model 值双向绑定
     if (isImmediate) {
-      UtilTools.setCellValue(row, column, cellValue)
+      setCellValue(row, column, cellValue)
     } else {
       model.update = true
       model.value = cellValue
@@ -237,7 +237,7 @@ function getNativeEditOns (renderOpts: any, params: any) {
     // 处理 model 值双向绑定
     const cellValue = evnt.target.value
     if (isImmediateCell(renderOpts, params)) {
-      UtilTools.setCellValue(row, column, cellValue)
+      setCellValue(row, column, cellValue)
     } else {
       model.update = true
       model.value = cellValue
@@ -277,7 +277,7 @@ function getNativeItemOns (renderOpts: any, params: any) {
 function nativeEditRender (renderOpts: any, params: any) {
   const { row, column } = params
   const { name } = renderOpts
-  const cellValue = isImmediateCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = isImmediateCell(renderOpts, params) ? getCellValue(row, column) : column.model.value
   return [
     h(name, {
       class: `vxe-default-${name}`,
@@ -290,7 +290,7 @@ function nativeEditRender (renderOpts: any, params: any) {
 
 function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
   const { row, column } = params
-  const cellValue = UtilTools.getCellValue(row, column)
+  const cellValue = getCellValue(row, column)
   return [
     h(getDefaultComponent(renderOpts), {
       ...getCellEditProps(renderOpts, params, cellValue),
@@ -333,7 +333,7 @@ function renderNativeOptions (options: any, renderOpts: any, params: any) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const disabledProp = optionProps.disabled || 'disabled'
-  const cellValue = isImmediateCell(renderOpts, params) ? UtilTools.getCellValue(row, column) : column.model.value
+  const cellValue = isImmediateCell(renderOpts, params) ? getCellValue(row, column) : column.model.value
   return options.map((option: any, oIndex: any) => {
     return h('option', {
       key: oIndex,
@@ -393,7 +393,7 @@ function nativeSelectEditRender (renderOpts: any, params: any) {
 function defaultSelectEditRender (renderOpts: any, params: any) {
   const { row, column } = params
   const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
-  const cellValue = UtilTools.getCellValue(row, column)
+  const cellValue = getCellValue(row, column)
   return [
     h(getDefaultComponent(renderOpts), {
       ...getCellEditProps(renderOpts, params, cellValue, { options, optionProps, optionGroups, optionGroupProps }),
@@ -494,7 +494,7 @@ function renderNativeFormOptions (options: any, renderOpts: any, params: any) {
 
 function handleExportSelectMethod (params: any) {
   const { row, column, options } = params
-  return options.original ? UtilTools.getCellValue(row, column) : getSelectCellValue(column.editRender || column.cellRender, params)
+  return options.original ? getCellValue(row, column) : getSelectCellValue(column.editRender || column.cellRender, params)
 }
 
 /**
@@ -684,7 +684,7 @@ export const renderer: VxeGlobalRenderer = {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           XEUtils.each(options, (val, key) => {
             if (!XEUtils.eqNull(renders[key]) && renders[key] !== val) {
-              UtilTools.warn('vxe.error.coverProp', [`Renderer.${name}`, key])
+              warnLog('vxe.error.coverProp', [`Renderer.${name}`, key])
             }
           })
         }

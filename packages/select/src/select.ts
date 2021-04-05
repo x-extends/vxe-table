@@ -1,8 +1,10 @@
 import { defineComponent, h, Teleport, PropType, ref, Ref, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
+import { getEventTargetNode, getAbsolutePos } from '../../tools/dom'
+import { getLastZIndex, nextZIndex, getFuncText, formatText } from '../../tools/utils'
+import { GlobalEvent } from '../../tools/event'
 
 import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps } from '../../../types/all'
 
@@ -236,8 +238,8 @@ export default defineComponent({
     }
 
     const updateZindex = () => {
-      if (reactData.panelIndex < UtilTools.getLastZIndex()) {
-        reactData.panelIndex = UtilTools.nextZIndex()
+      if (reactData.panelIndex < getLastZIndex()) {
+        reactData.panelIndex = nextZIndex()
       }
     }
 
@@ -256,7 +258,7 @@ export default defineComponent({
           const panelStyle: { [key: string]: any } = {
             zIndex: panelIndex
           }
-          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(el)
+          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(el)
           let panelPlacement = 'bottom'
           if (transfer) {
             let left = boundingLeft
@@ -386,7 +388,7 @@ export default defineComponent({
       if (!disabled) {
         if (visiblePanel) {
           const panelElem = refOptionPanel.value
-          if (DomTools.getEventTargetNode(evnt, panelElem).flag) {
+          if (getEventTargetNode(evnt, panelElem).flag) {
             updatePlacement()
           } else {
             hideOptionPanel()
@@ -401,7 +403,7 @@ export default defineComponent({
       if (!disabled) {
         const el = refElem.value
         const panelElem = refOptionPanel.value
-        reactData.isActivated = DomTools.getEventTargetNode(evnt, el).flag || DomTools.getEventTargetNode(evnt, panelElem).flag
+        reactData.isActivated = getEventTargetNode(evnt, el).flag || getEventTargetNode(evnt, panelElem).flag
         if (visiblePanel && !reactData.isActivated) {
           hideOptionPanel()
         }
@@ -582,7 +584,7 @@ export default defineComponent({
               setCurrentOption(option)
             }
           }
-        }, UtilTools.formatText(UtilTools.getFuncText(option[labelField]))) : null
+        }, formatText(getFuncText(option[labelField]))) : null
       })
     }
 
@@ -604,7 +606,7 @@ export default defineComponent({
         }, [
           h('div', {
             class: 'vxe-optgroup--title'
-          }, UtilTools.getFuncText(group[groupLabelField])),
+          }, getFuncText(group[groupLabelField])),
           h('div', {
             class: 'vxe-optgroup--wrapper'
           }, renderOption(group[groupOptionsField], group))

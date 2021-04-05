@@ -80,6 +80,7 @@ gulp.task('build_modules', () => {
       target: 'esnext',
       lib: ['dom', 'esnext']
     }))
+    .pipe(gulp.dest('es'))
     .pipe(babel({
       presets: ['@babel/env']
     }))
@@ -138,11 +139,19 @@ gulp.task('build_i18n', () => {
 
 gulp.task('copy_ts', () => {
   return gulp.src('packages/**/*.d.ts')
+    .pipe(gulp.dest('es'))
     .pipe(gulp.dest('lib'))
 })
 
 gulp.task('build_lib', () => {
   return merge(
+    gulp.src('es/index.common.js')
+      .pipe(rename({
+        basename: 'index',
+        suffix: '.esm',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('es')),
     gulp.src('lib_temp/index.umd.js')
       .pipe(gulp.dest('lib')),
     gulp.src('lib_temp/index.umd.min.js')
@@ -162,7 +171,7 @@ gulp.task('build_lib', () => {
   )
 })
 
-gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
+gulp.task('build_style', () => {
   const rest = components.map(name => {
     return gulp.src(`styles/${name}.scss`)
       .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';\n`))
@@ -172,6 +181,11 @@ gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', (
         cascade: true,
         remove: true
       }))
+      .pipe(rename({
+        basename: 'style',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest(`es/${name}`))
       .pipe(rename({
         basename: 'style',
         extname: '.css'
@@ -186,18 +200,21 @@ gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', (
       .pipe(gulp.dest(`lib/${name}/style`))
   })
   return merge(...rest)
-}))
-
-gulp.task('build_clean', () => {
-  return del('lib')
 })
 
-gulp.task('build', gulp.series('build_clean', 'build_style', 'build_lib', () => {
+gulp.task('build_clean', () => {
+  return del(['lib', 'es'])
+})
+
+gulp.task('build', gulp.series('build_clean', 'build_modules', 'build_i18n', 'copy_ts', 'build_style', 'build_lib', () => {
   components.forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
   })
   return del([
-    'lib_temp'
+    'lib_temp',
+    'lib/index.esm.js',
+    'lib/index.esm.min.js',
+    'es/index.common.js'
   ])
 }))
 

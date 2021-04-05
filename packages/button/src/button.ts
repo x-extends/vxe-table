@@ -1,8 +1,10 @@
 import { defineComponent, h, ref, Ref, computed, Teleport, VNode, onBeforeMount, onUnmounted, reactive, nextTick, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
+import { getAbsolutePos, getEventTargetNode } from '../../tools/dom'
+import { getFuncText, getLastZIndex, nextZIndex } from '../../tools/utils'
+import { GlobalEvent } from '../../tools/event'
 
 import { VxeButtonConstructor, VxeButtonPropTypes, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef, ButtonInternalData } from '../../../types/all'
 
@@ -120,8 +122,8 @@ export default defineComponent({
     })
 
     const updateZindex = () => {
-      if (reactData.panelIndex < UtilTools.getLastZIndex()) {
-        reactData.panelIndex = UtilTools.nextZIndex()
+      if (reactData.panelIndex < getLastZIndex()) {
+        reactData.panelIndex = nextZIndex()
       }
     }
 
@@ -140,7 +142,7 @@ export default defineComponent({
           const panelStyle: { [key: string]: string | number } = {
             zIndex: panelIndex
           }
-          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(targetElem)
           let panelPlacement = 'bottom'
           if (transfer) {
             let left = boundingLeft + targetWidth - panelWidth
@@ -203,7 +205,7 @@ export default defineComponent({
     const clickDropdownEvent = (evnt: Event) => {
       const dropdownElem = evnt.currentTarget
       const panelElem = refBtnPanel.value
-      const { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
+      const { flag, targetElem } = getEventTargetNode(evnt, dropdownElem, 'vxe-button')
       if (flag) {
         if (panelElem) {
           panelElem.dataset.active = 'N'
@@ -302,7 +304,7 @@ export default defineComponent({
         contVNs.push(
           h('span', {
             class: 'vxe-button--content'
-          }, UtilTools.getFuncText(content))
+          }, getFuncText(content))
         )
       }
       return contVNs
@@ -329,7 +331,7 @@ export default defineComponent({
     onBeforeMount(() => {
       GlobalEvent.on($xebutton, 'mousewheel', (evnt: Event) => {
         const panelElem = refBtnPanel.value
-        if (reactData.showPanel && !DomTools.getEventTargetNode(evnt, panelElem).flag) {
+        if (reactData.showPanel && !getEventTargetNode(evnt, panelElem).flag) {
           closePanel()
         }
       })

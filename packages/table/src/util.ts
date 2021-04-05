@@ -59,6 +59,27 @@ function queryCellElement (cell: HTMLTableHeaderCellElement, selector: string) {
   return cell.querySelector('.vxe-cell' + selector) as HTMLElement | null
 }
 
+export function toFilters (filters: any) {
+  if (filters && XEUtils.isArray(filters)) {
+    return filters.map(({ label, value, data, resetValue, checked }) => {
+      return { label, value, data, resetValue, checked: !!checked, _checked: !!checked }
+    })
+  }
+  return filters
+}
+
+export function getCellValue (row: any, column: any) {
+  return XEUtils.get(row, column.property)
+}
+
+export function setCellValue (row: any, column: any, value: any) {
+  return XEUtils.set(row, column.property, value)
+}
+
+export function getPropClass (property: any, params: any) {
+  return property ? XEUtils.isFunction(property) ? property(params) : property : ''
+}
+
 export function getColMinWidth (params: {
   $table: VxeTableConstructor & VxeTablePrivateMethods;
   column: VxeTableDefines.ColumnInfo;

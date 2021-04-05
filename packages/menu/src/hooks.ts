@@ -1,7 +1,8 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
 import { VXETable } from '../../v-x-e-table'
+import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../tools/dom'
+import { hasChildrenList } from '../../tools/utils'
 
 import { VxeGlobalHooksHandles, TableMenuMethods, TableMenuPrivateMethods } from '../../../types/all'
 
@@ -35,7 +36,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
               $xetable.updateZindex()
-              const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = DomTools.getDomNode()
+              const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
               let top = evnt.clientY + scrollTop
               let left = evnt.clientX + scrollLeft
               const handleVisible = () => {
@@ -57,7 +58,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
                   const ctxElem = tableMenu.getRefMaps().refElem.value
                   const clientHeight = ctxElem.clientHeight
                   const clientWidth = ctxElem.clientWidth
-                  const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(ctxElem)
+                  const { boundingTop, boundingLeft } = getAbsolutePos(ctxElem)
                   const offsetTop = boundingTop + clientHeight - visibleHeight
                   const offsetLeft = boundingLeft + clientWidth - visibleWidth
                   if (offsetTop > -10) {
@@ -73,7 +74,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
                 $xetable.scrollToRow(row, column).then(() => {
                   const cell = $xetable.getCell(row, column)
                   if (cell) {
-                    const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(cell)
+                    const { boundingTop, boundingLeft } = getAbsolutePos(cell)
                     top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)
                     left = boundingLeft + scrollLeft + Math.floor(cell.offsetWidth / 2)
                   }
@@ -121,7 +122,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         let selectItem
         const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
         if (keyCode === operKey) {
-          if (operRest && UtilTools.hasChildrenList(ctxMenuStore.selected)) {
+          if (operRest && hasChildrenList(ctxMenuStore.selected)) {
             ctxMenuStore.showChild = true
           } else {
             ctxMenuStore.showChild = false
@@ -162,7 +163,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         const { selected } = editStore
         const layoutList = ['header', 'body', 'footer']
         if (menuConfig) {
-          if (ctxMenuStore.visible && tableMenu && DomTools.getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) {
+          if (ctxMenuStore.visible && tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) {
             evnt.preventDefault()
             return
           }
@@ -191,7 +192,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
           // 分别匹配表尾、内容、表尾的快捷菜单
           for (let index = 0; index < layoutList.length; index++) {
             const layout = layoutList[index] as 'header' | 'body' | 'footer'
-            const columnTargetNode = DomTools.getEventTargetNode(evnt, el, `vxe-${layout}--column`, (target: any) => {
+            const columnTargetNode = getEventTargetNode(evnt, el, `vxe-${layout}--column`, (target: any) => {
               // target=td|th，直接向上找 table 去匹配即可
               return target.parentNode.parentNode.parentNode.getAttribute('xid') === xID
             })
@@ -217,7 +218,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
               openContextMenu(evnt, layout, params)
               $xetable.dispatchEvent(eventType, params, evnt)
               return
-            } else if (DomTools.getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag) {
+            } else if (getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag) {
               if (menuOpts.trigger === 'cell') {
                 evnt.preventDefault()
               } else {
@@ -227,7 +228,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }
         }
-        if (tableFilter && !DomTools.getEventTargetNode(evnt, tableFilter.$el).flag) {
+        if (tableFilter && !getEventTargetNode(evnt, tableFilter.$el).flag) {
           $xetable.closeFilter()
         }
         menuMethods.closeMenu()
@@ -240,12 +241,12 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         ctxMenuStore.selected = item
         ctxMenuStore.selectChild = child
         if (!child) {
-          ctxMenuStore.showChild = UtilTools.hasChildrenList(item)
+          ctxMenuStore.showChild = hasChildrenList(item)
           if (ctxMenuStore.showChild) {
             nextTick(() => {
               const childWrapperElem = menuElem.nextElementSibling
               if (childWrapperElem) {
-                const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(menuElem)
+                const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(menuElem)
                 const posTop = boundingTop + menuElem.offsetHeight
                 const posLeft = boundingLeft + menuElem.offsetWidth
                 let left = ''

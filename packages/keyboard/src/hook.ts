@@ -1,14 +1,12 @@
 import XEUtils from 'xe-utils'
-import { DomTools } from '../../tools'
+import { browse, hasClass, getAbsolutePos, addClass, removeClass, getEventTargetNode } from '../../tools/dom'
 
 import { VxeGlobalHooksHandles, TableKeyboardPrivateMethods } from '../../../types/all'
-
-const browse = DomTools.browse
 
 function getTargetOffset (target: any, container: any) {
   let offsetTop = 0
   let offsetLeft = 0
-  const triggerCheckboxLabel = !browse.firefox && DomTools.hasClass(target, 'vxe-checkbox--label')
+  const triggerCheckboxLabel = !browse.firefox && hasClass(target, 'vxe-checkbox--label')
   if (triggerCheckboxLabel) {
     const checkboxLabelStyle = getComputedStyle(target)
     offsetTop -= XEUtils.toNumber(checkboxLabelStyle.paddingTop)
@@ -169,12 +167,12 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }, 50)
         }
-        DomTools.addClass(el, 'drag--range')
+        addClass(el, 'drag--range')
         document.onmousemove = evnt => {
           evnt.preventDefault()
           evnt.stopPropagation()
           const { clientY } = evnt
-          const { boundingTop } = DomTools.getAbsolutePos(bodyWrapperElem)
+          const { boundingTop } = getAbsolutePos(bodyWrapperElem)
           // 如果超过可视区，触发滚动
           if (clientY < boundingTop) {
             isMouseScrollDown = false
@@ -195,7 +193,7 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
         }
         document.onmouseup = (evnt) => {
           stopMouseScroll()
-          DomTools.removeClass(el, 'drag--range')
+          removeClass(el, 'drag--range')
           checkboxRangeElem.removeAttribute('style')
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
@@ -362,8 +360,8 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
         const mouseOpts = computeMouseOpts.value
         if (mouseConfig && mouseOpts.area && $xetable.handleHeaderCellAreaEvent) {
           const cell = evnt.currentTarget
-          const triggerSort = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
-          const triggerFilter = DomTools.getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
+          const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
+          const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
           $xetable.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
         }
         $xetable.focus()

@@ -1,6 +1,7 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
+import { getPropClass } from '../../table/src/util'
+import { updateCellTitle } from '../../tools/dom'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types/all'
 
@@ -164,7 +165,7 @@ export default defineComponent({
               if (showTitle || showTooltip || showAllTip) {
                 tfOns.onMouseenter = (evnt: MouseEvent) => {
                   if (showTitle) {
-                    DomTools.updateCellTitle(evnt.currentTarget, column)
+                    updateCellTitle(evnt.currentTarget, column)
                   } else if (showTooltip || showAllTip) {
                     $xetable.triggerFooterTooltipEvent(evnt, params)
                   }
@@ -219,7 +220,7 @@ export default defineComponent({
                   'fixed--hidden': fixedHiddenColumn,
                   'col--ellipsis': hasEllipsis,
                   'col--current': currentColumn === column
-                }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
+                }, getPropClass(footerClassName, params), getPropClass(footerCellClassName, params)],
                 ...attrs,
                 style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
                 ...tfOns,

@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import GlobalConfig from '../../v-x-e-table/src/conf'
+import GlobalConfig from '../v-x-e-table/src/conf'
 
 /**
  * 监听 resize 事件

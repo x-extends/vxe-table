@@ -1,7 +1,8 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
+import { browse } from '../../tools/dom'
+import { getLog, parseFile } from '../../tools/utils'
 
 import { VxeTablePropTypes, SaveFileFunction, ReadFileFunction, VxeTableConstructor } from '../../../types/all'
 
@@ -70,7 +71,7 @@ export const readLocalFile: ReadFileFunction = (options) => {
       // 校验类型
       if (!isAllType) {
         for (let fIndex = 0; fIndex < files.length; fIndex++) {
-          const { type } = UtilTools.parseFile(files[fIndex])
+          const { type } = parseFile(files[fIndex])
           if (!XEUtils.includes(types, type)) {
             errType = type
             break
@@ -99,7 +100,7 @@ export function handlePrint ($xetable: VxeTableConstructor | null, opts: VxeTabl
   }
   content = createHtmlPage(opts, content)
   const blob = getExportBlobByContent(content, opts)
-  if (DomTools.browse.msie) {
+  if (browse.msie) {
     if (printFrame) {
       try {
         printFrame.contentDocument.write('')
@@ -147,5 +148,5 @@ export const saveLocalFile: SaveFileFunction = (options) => {
     }
     return Promise.resolve()
   }
-  return Promise.reject(new Error(UtilTools.getLog('vxe.error.notExp')))
+  return Promise.reject(new Error(getLog('vxe.error.notExp')))
 }

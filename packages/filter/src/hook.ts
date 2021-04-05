@@ -1,11 +1,10 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
 import { VXETable } from '../../v-x-e-table'
+import { toFilters } from '../../table/src/util'
+import { getDomNode } from '../../tools/dom'
 
 import { VxeGlobalHooksHandles, TableFilterMethods, TableFilterPrivateMethods } from '../../../types/all'
-
-const { toFilters } = UtilTools
 
 const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['setFilter', 'clearFilter', 'getCheckedFilters']
 
@@ -36,7 +35,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
           filterStore.visible = false
         } else {
           const { target: targetElem, pageX } = evnt
-          const { visibleWidth } = DomTools.getDomNode()
+          const { visibleWidth } = getDomNode()
           const { filters, filterMultiple, filterRender } = column
           const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
           const filterRecoverMethod = column.filterRecoverMethod || (compConf ? compConf.filterRecoverMethod : null)

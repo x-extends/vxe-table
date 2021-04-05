@@ -22,8 +22,8 @@
                 {
                   libraryName: 'vxe-table',
                   esModule: true,
-                  resolveComponent: (name) => `vxe-table/lib/${name}`,
-                  resolveStyle: (name) => `vxe-table/lib/${name}/style/style.css`
+                  resolveComponent: (name) => `vxe-table/es/${name}`,
+                  resolveStyle: (name) => `vxe-table/es/${name}/style.css`
                 }
               ]
             })

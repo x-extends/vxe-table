@@ -1,8 +1,8 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch } from 'vue'
 import XEUtils from 'xe-utils'
-import { DomTools } from '../../tools'
 import { convertToRows } from './util'
 import { getColMinWidth } from '../../table/src/util'
+import { hasClass, getOffsetPos, addClass, removeClass } from '../../tools/dom'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types/all'
 
@@ -50,7 +50,7 @@ export default defineComponent({
       const cell = params.cell = dragBtnElem.parentNode as HTMLTableHeaderCellElement
       let dragLeft = 0
       const tableBodyElem = tableBody.$el as HTMLDivElement
-      const pos = DomTools.getOffsetPos(dragBtnElem, wrapperElem)
+      const pos = getOffsetPos(dragBtnElem, wrapperElem)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
       const minInterval = getColMinWidth(params) - dragBtnOffsetWidth // 列之间的最小间距
@@ -68,9 +68,9 @@ export default defineComponent({
         const siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
         let tempCellElem = cell[siblingProp] as HTMLTableHeaderCellElement
         while (tempCellElem) {
-          if (DomTools.hasClass(tempCellElem, 'fixed--hidden')) {
+          if (hasClass(tempCellElem, 'fixed--hidden')) {
             break
-          } else if (!DomTools.hasClass(tempCellElem, 'col--group')) {
+          } else if (!hasClass(tempCellElem, 'col--group')) {
             fixedOffsetWidth += tempCellElem.offsetWidth
           }
           tempCellElem = tempCellElem[siblingProp] as HTMLTableHeaderCellElement
@@ -103,7 +103,7 @@ export default defineComponent({
       }
 
       tableInternalData._isResize = true
-      DomTools.addClass(tableEl, 'drag--resize')
+      addClass(tableEl, 'drag--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
       document.onmouseup = function (evnt) {
@@ -119,7 +119,7 @@ export default defineComponent({
           $xetable.updateCellAreas()
           $xetable.dispatchEvent('resizable-change', params, evnt)
         })
-        DomTools.removeClass(tableEl, 'drag--resize')
+        removeClass(tableEl, 'drag--resize')
       }
       updateEvent(evnt)
       if ($xetable.closeMenu) {

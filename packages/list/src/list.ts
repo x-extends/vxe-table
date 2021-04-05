@@ -1,12 +1,13 @@
 import { defineComponent, h, PropType, ref, Ref, computed, onUnmounted, watch, reactive, nextTick } from 'vue'
-import { DomTools, GlobalEvent, createResizeEvent, XEResizeObserver, UtilTools } from '../../tools'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
+import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
+import { browse } from '../../tools/dom'
+import { isNumVal } from '../../tools/utils'
+import { GlobalEvent } from '../../tools/event'
 
 import { VxeListConstructor, VxeListPropTypes, VxeListEmits, ListReactData, ListInternalData, ListMethods, ListPrivateRef, VxeListMethods } from '../../../types/all'
-
-const { browse } = DomTools
 
 export default defineComponent({
   name: 'VxeList',
@@ -80,10 +81,10 @@ export default defineComponent({
       const { height, maxHeight } = props
       const style: { [key: string]: string | number } = {}
       if (height) {
-        style.height = UtilTools.isNumVal(height) ? `${height}px` : height
+        style.height = isNumVal(height) ? `${height}px` : height
       } else if (maxHeight) {
         style.height = 'auto'
-        style.maxHeight = UtilTools.isNumVal(maxHeight) ? `${maxHeight}px` : maxHeight
+        style.maxHeight = isNumVal(maxHeight) ? `${maxHeight}px` : maxHeight
       }
       return style
     })

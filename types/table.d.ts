@@ -882,9 +882,21 @@ export interface TableInternalData {
   tZindex: number;
   elemStore: any;
   // 存放横向 X 虚拟滚动相关的信息
-  scrollXStore: any;
+  scrollXStore: {
+    offsetSize: number;
+    visibleSize: number;
+    startIndex: number;
+    endIndex: number;
+  };
   // 存放纵向 Y 虚拟滚动相关信息
-  scrollYStore: any;
+  scrollYStore: {
+    adaptive?: boolean;
+    rowHeight: number;
+    offsetSize: number;
+    visibleSize: number;
+    startIndex: number;
+    endIndex: number;
+  };
   // 存放 tooltip 相关信息
   tooltipStore: any;
   // 表格宽度
@@ -1729,6 +1741,7 @@ export namespace VxeTablePropTypes {
   }
 
   export interface ScrollY {
+    mode?: 'default' | 'wheel';
     gt?: number;
     oSize?: number;
     [key: string]: any;

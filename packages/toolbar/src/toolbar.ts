@@ -2,8 +2,10 @@ import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, res
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
+import { getEventTargetNode } from '../../tools/dom'
+import { warnLog, errLog, getFuncText, formatText } from '../../tools/utils'
+import { GlobalEvent } from '../../tools/event'
 
 import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines } from '../../../types/all'
 
@@ -94,7 +96,7 @@ export default defineComponent({
       if ($xetable) {
         return true
       }
-      UtilTools.error('vxe.error.barUnableLink')
+      errLog('vxe.error.barUnableLink')
     }
 
     const checkCustomStatus = () => {
@@ -216,7 +218,7 @@ export default defineComponent({
 
     const handleGlobalMousedownEvent = (evnt: MouseEvent) => {
       const customWrapperElem = refCustomWrapper.value
-      if (!DomTools.getEventTargetNode(evnt, customWrapperElem).flag) {
+      if (!getEventTargetNode(evnt, customWrapperElem).flag) {
         customColseEvent(evnt)
       }
     }
@@ -357,7 +359,7 @@ export default defineComponent({
             circle: child.circle,
             round: child.round,
             status: child.status,
-            content: UtilTools.getFuncText(child.name),
+            content: getFuncText(child.name),
             onClick: (evnt: Event) => isBtn ? btnEvent(evnt, child) : tolEvent(evnt, child)
           })
         })
@@ -396,7 +398,7 @@ export default defineComponent({
                   circle: item.circle,
                   round: item.round,
                   status: item.status,
-                  content: UtilTools.getFuncText(item.name),
+                  content: getFuncText(item.name),
                   destroyOnClose: item.destroyOnClose,
                   placement: item.placement,
                   transfer: item.transfer,
@@ -443,7 +445,7 @@ export default defineComponent({
                   circle: item.circle,
                   round: item.round,
                   status: item.status,
-                  content: UtilTools.getFuncText(item.name),
+                  content: getFuncText(item.name),
                   destroyOnClose: item.destroyOnClose,
                   placement: item.placement,
                   transfer: item.transfer,
@@ -491,7 +493,7 @@ export default defineComponent({
         customBtnOns.onClick = handleClickSettingEvent
       }
       XEUtils.eachTree(columns, (column) => {
-        const colTitle = UtilTools.formatText(column.getTitle(), 1)
+        const colTitle = formatText(column.getTitle(), 1)
         const colKey = column.getKey()
         const isColGroup = column.children && column.children.length
         const isDisabled = checkMethod ? !checkMethod({ column }) : false
@@ -614,7 +616,7 @@ export default defineComponent({
       const { refresh } = props
       const refreshOpts = computeRefreshOpts.value
       if (refresh && !$xegrid && !refreshOpts.query) {
-        UtilTools.warn('vxe.error.notFunc', ['query'])
+        warnLog('vxe.error.notFunc', ['query'])
       }
     })
 

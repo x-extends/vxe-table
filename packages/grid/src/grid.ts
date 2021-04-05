@@ -1,12 +1,13 @@
 import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
-import { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/src/dom'
+import { errLog, getLastZIndex, nextZIndex, isEnableConf } from '../../tools/utils'
+import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../tools/dom'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
+import { GlobalEvent } from '../../tools/event'
 
 import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps } from '../../../types/all'
 
@@ -366,8 +367,8 @@ export default defineComponent({
       const { isZMax } = reactData
       if (isMax ? !isZMax : isZMax) {
         reactData.isZMax = !isZMax
-        if (reactData.tZindex < UtilTools.getLastZIndex()) {
-          reactData.tZindex = UtilTools.nextZIndex()
+        if (reactData.tZindex < getLastZIndex()) {
+          reactData.tZindex = nextZIndex()
         }
       }
       return nextTick().then(() => gridExtendTableMethods.recalculate(true)).then(() => reactData.isZMax)
@@ -381,7 +382,7 @@ export default defineComponent({
             return slots[funcSlot]
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              UtilTools.error('vxe.error.notSlot', [funcSlot])
+              errLog('vxe.error.notSlot', [funcSlot])
             }
           }
         } else {
@@ -762,7 +763,7 @@ export default defineComponent({
                   }
                 })
             } else {
-              UtilTools.error('vxe.error.notFunc', ['query'])
+              errLog('vxe.error.notFunc', ['query'])
             }
             break
           }
@@ -801,7 +802,7 @@ export default defineComponent({
                 }
               }
             } else {
-              UtilTools.error('vxe.error.notFunc', [code])
+              errLog('vxe.error.notFunc', [code])
             }
             break
           }
@@ -849,7 +850,7 @@ export default defineComponent({
                 }
               }).catch((errMap: any) => errMap)
             } else {
-              UtilTools.error('vxe.error.notFunc', [code])
+              errLog('vxe.error.notFunc', [code])
             }
             break
           }
@@ -916,7 +917,7 @@ export default defineComponent({
             XEUtils.each(column.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!slots[func]) {
-                  UtilTools.error('vxe.error.notSlot', [func])
+                  errLog('vxe.error.notSlot', [func])
                 }
               }
             })
@@ -960,7 +961,7 @@ export default defineComponent({
       },
       getParentHeight () {
         const el = refElem.value
-        return (reactData.isZMax ? DomTools.getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - gridPrivateMethods.getExcludeHeight()
+        return (reactData.isZMax ? getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - gridPrivateMethods.getExcludeHeight()
       },
       triggerToolbarBtnEvent (button, evnt) {
         gridMethods.commitProxy(button, evnt)
@@ -1019,7 +1020,7 @@ export default defineComponent({
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
       if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-        UtilTools.error('errConflicts', ['grid.data', 'grid.proxy-config'])
+        errLog('errConflicts', ['grid.data', 'grid.proxy-config'])
       }
       if (columns && columns.length) {
         $xegrid.loadColumn(columns)

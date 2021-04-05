@@ -1,10 +1,9 @@
 import XEUtils from 'xe-utils'
-import DomTools from './dom'
+import { browse } from './dom'
 
-import { VxeComponentBase } from '../../../types/all'
+import { VxeComponentBase } from '../../types/all'
 
 // 监听全局事件
-const browse = DomTools.browse
 const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const eventStore: {
   comp: VxeComponentBase;
@@ -53,5 +52,3 @@ if (browse.isDoc) {
   window.addEventListener('resize', triggerEvent, false)
   window.addEventListener(wheelName, XEUtils.throttle(triggerEvent, 100, { leading: true, trailing: false }), { passive: true, capture: false })
 }
-
-export default GlobalEvent

@@ -2,9 +2,9 @@ import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nex
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { mergeBodyMethod, getRowid } from './util'
-// import { browse } from '../../tools/src/dom'
+import { mergeBodyMethod, getRowid, getPropClass } from './util'
+import { browse, updateCellTitle } from '../../tools/dom'
+import { isEnableConf } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
 
@@ -35,7 +35,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts } = $xetable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -150,7 +150,7 @@ export default defineComponent({
             return
           }
           if (showTitle) {
-            DomTools.updateCellTitle(evnt.currentTarget, column)
+            updateCellTitle(evnt.currentTarget, column)
           } else if (showTooltip || showAllTip) {
             // 如果配置了显示 tooltip
             $xetable.triggerBodyTooltipEvent(evnt, params)
@@ -275,7 +275,7 @@ export default defineComponent({
           'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
           'col--valid-error': hasValidError,
           'col--current': currentColumn === column
-        }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
+        }, getPropClass(className, params), getPropClass(cellClassName, params)],
         key: columnKey ? column.id : $columnIndex,
         ...attrs,
         style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
@@ -436,8 +436,8 @@ export default defineComponent({
       const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
       let scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
-      const isX = scrollLeft !== lastScrollLeft
-      const isY = scrollTop !== lastScrollTop
+      const isRollX = scrollLeft !== lastScrollLeft
+      const isRollY = scrollTop !== lastScrollTop
       tableInternalData.lastScrollTop = scrollTop
       tableInternalData.lastScrollLeft = scrollLeft
       tableInternalData.lastScrollTime = Date.now()
@@ -451,7 +451,7 @@ export default defineComponent({
         scrollTop = rightElem.scrollTop
         syncBodyScroll(scrollTop, bodyElem, leftElem)
       } else {
-        if (isX) {
+        if (isRollX) {
           if (headerElem) {
             headerElem.scrollLeft = bodyElem.scrollLeft
           }
@@ -461,101 +461,114 @@ export default defineComponent({
         }
         if (leftElem || rightElem) {
           $xetable.checkScrolling()
-          if (isY) {
+          if (isRollY) {
             syncBodyScroll(scrollTop, leftElem, rightElem)
           }
         }
       }
-      if (scrollXLoad && isX) {
+      if (scrollXLoad && isRollX) {
         $xetable.triggerScrollXEvent(evnt)
       }
-      if (scrollYLoad && isY) {
+      if (scrollYLoad && isRollY) {
         $xetable.triggerScrollYEvent(evnt)
       }
-      if (isX && validTip && validTip.reactData.visible) {
+      if (isRollX && validTip && validTip.reactData.visible) {
         validTip.updatePlacement()
       }
-      $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX, isY }, evnt)
+      $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX: isRollX, isY: isRollY }, evnt)
     }
 
-    // let smoothTime: any
-    // let smoothYSize = 0
-    // let smoothYTop = 0
+    let wheelTime: any
+    let wheelYSize = 0
+    let wheelYInterval = 0
+    let wheelYTotal = 0
+    let isPrevWheelTop = false
 
-    // const handleWheel = (bodyElem: HTMLDivElement, deltaTop: number) => {
-    //   clearTimeout(smoothTime)
-    //   smoothYTop = deltaTop
-    //   smoothYSize = Math.abs(smoothYTop)
-    //   const smoothYSign = smoothYTop >= 0 ? 1 : -1
-    //   const wheelSmooth = () => {
-    //     if (smoothYSize > 0) {
-    //       smoothYSize -= 20
-    //       bodyElem.scrollTop += (smoothYSize * smoothYSign)
-    //       console.log(bodyElem.scrollTop)
-    //       smoothTime = setTimeout(wheelSmooth, 10)
-    //     }
-    //   }
-    //   wheelSmooth()
-    // }
+    const handleWheel = (evnt: WheelEvent, isTopWheel: boolean, deltaTop: number, isRollX: boolean, isRollY: boolean) => {
+      const tableBody = refTableBody.value
+      const leftBody = refTableLeftBody.value
+      const rightBody = refTableRightBody.value
+      const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
+      const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
+      const bodyElem = tableBody.$el as HTMLDivElement
+      const remainSize = isPrevWheelTop === isTopWheel ? Math.max(0, wheelYSize - wheelYTotal) : 0
+      isPrevWheelTop = isTopWheel
+      wheelYSize = Math.abs(isTopWheel ? deltaTop - remainSize : deltaTop + remainSize)
+      wheelYInterval = 0
+      wheelYTotal = 0
+      clearTimeout(wheelTime)
+      const handleSmooth = () => {
+        if (wheelYTotal < wheelYSize) {
+          const { fixedType } = props
+          wheelYInterval = Math.max(5, Math.floor(wheelYInterval * 1.5))
+          wheelYTotal = wheelYTotal + wheelYInterval
+          if (wheelYTotal > wheelYSize) {
+            wheelYInterval = wheelYInterval - (wheelYTotal - wheelYSize)
+          }
+          const { scrollTop, clientHeight, scrollHeight } = bodyElem
+          const targerTop = scrollTop + (wheelYInterval * (isTopWheel ? -1 : 1))
+          bodyElem.scrollTop = targerTop
+          if (leftElem) {
+            leftElem.scrollTop = targerTop
+          }
+          if (rightElem) {
+            rightElem.scrollTop = targerTop
+          }
+          if (isTopWheel ? targerTop < scrollHeight - clientHeight : targerTop >= 0) {
+            wheelTime = setTimeout(handleSmooth, 10)
+          }
+          $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft: bodyElem.scrollLeft, isX: isRollX, isY: isRollY }, evnt)
+        }
+      }
+      handleSmooth()
+    }
 
     /**
      * 滚轮处理
      */
-    // const wheelEvent = (evnt: WheelEvent) => {
-    //   const { deltaY, deltaX } = evnt
-    //   const { fixedType } = props
-    //   const { highlightHoverRow } = tableProps
-    //   const { scrollXLoad, scrollYLoad } = tableReactData
-    //   const { lastScrollTop, lastScrollLeft } = tableInternalData
-    //   // const tableHeader = refTableHeader.value
-    //   const tableBody = refTableBody.value
-    //   // const tableFooter = refTableFooter.value
-    //   const leftBody = refTableLeftBody.value
-    //   const rightBody = refTableRightBody.value
-    //   const validTip = refValidTooltip.value
-    //   const scrollBodyElem = refElem.value
-    //   // const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-    //   // const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-    //   const bodyElem = tableBody.$el as HTMLDivElement
-    //   const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
-    //   const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
-    //   const deltaTop = browse.firefox ? deltaY * 40 : deltaY
-    //   const deltaLeft = browse.firefox ? deltaX * 40 : deltaX
-    //   const scrollTop = scrollBodyElem.scrollTop + deltaTop
-    //   const scrollLeft = bodyElem.scrollLeft + deltaLeft
-    //   const isX = scrollLeft !== lastScrollLeft
-    //   const isY = scrollTop !== lastScrollTop
-    //   tableInternalData.lastScrollTop = scrollTop
-    //   tableInternalData.lastScrollLeft = scrollLeft
-    //   tableInternalData.lastScrollTime = Date.now()
-    //   if (highlightHoverRow) {
-    //     $xetable.clearHoverRow()
-    //   }
-    //   // if (leftElem) {
-    //   //   leftElem.scrollLeft = scrollLeft
-    //   //   leftElem.scrollTop = scrollTop
-    //   // }
-    //   // if (rightElem) {
-    //   //   rightElem.scrollLeft = scrollLeft
-    //   //   rightElem.scrollTop = scrollTop
-    //   // }
-    //   // bodyElem.scrollLeft = scrollLeft
-    //   // bodyElem.scrollTop = scrollTop
-    //   handleWheel(bodyElem, deltaTop)
-    //   evnt.preventDefault()
-    //   if (scrollXLoad && isX) {
-    //     console.log('x', scrollTop, scrollLeft)
-    //     $xetable.triggerScrollXEvent(evnt)
-    //   }
-    //   if (scrollYLoad && isY) {
-    //     console.log('y', scrollTop, scrollLeft)
-    //     $xetable.triggerScrollYEvent(evnt)
-    //   }
-    //   if (isX && validTip && validTip.reactData.visible) {
-    //     validTip.updatePlacement()
-    //   }
-    //   $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX, isY }, evnt)
-    // }
+    const wheelEvent = (evnt: WheelEvent) => {
+      const { deltaY, deltaX } = evnt
+      const { highlightHoverRow } = tableProps
+      const { scrollXLoad, scrollYLoad } = tableReactData
+      const { lastScrollTop, lastScrollLeft } = tableInternalData
+      const tableBody = refTableBody.value
+      const validTip = refValidTooltip.value
+      const scrollBodyElem = refElem.value
+      const bodyElem = tableBody.$el as HTMLDivElement
+
+      const deltaTop = browse.firefox ? deltaY * 40 : deltaY
+      const deltaLeft = browse.firefox ? deltaX * 40 : deltaX
+      const isTopWheel = deltaTop < 0
+      // 如果滚动位置已经是顶部或底部，则不需要触发
+      if (isTopWheel ? scrollBodyElem.scrollTop <= 0 : scrollBodyElem.scrollTop >= scrollBodyElem.scrollHeight - scrollBodyElem.clientHeight) {
+        return
+      }
+
+      const scrollTop = scrollBodyElem.scrollTop + deltaTop
+      const scrollLeft = bodyElem.scrollLeft + deltaLeft
+      const isRollX = scrollLeft !== lastScrollLeft
+      const isRollY = scrollTop !== lastScrollTop
+
+      if (isRollY) {
+        evnt.preventDefault()
+        tableInternalData.lastScrollTop = scrollTop
+        tableInternalData.lastScrollLeft = scrollLeft
+        tableInternalData.lastScrollTime = Date.now()
+        if (highlightHoverRow) {
+          $xetable.clearHoverRow()
+        }
+        handleWheel(evnt, isTopWheel, deltaTop, isRollX, isRollY)
+        if (scrollXLoad && isRollX) {
+          $xetable.triggerScrollXEvent(evnt)
+        }
+        if (scrollYLoad && isRollY) {
+          $xetable.triggerScrollYEvent(evnt)
+        }
+        if (isRollX && validTip && validTip.reactData.visible) {
+          validTip.updatePlacement()
+        }
+      }
+    }
 
     nextTick(() => {
       const { fixedType } = props
@@ -575,6 +588,7 @@ export default defineComponent({
 
     onBeforeUnmount(() => {
       const el = refElem.value
+      clearTimeout(wheelTime)
       el._onscroll = null
       el.onscroll = null
     })
@@ -584,6 +598,7 @@ export default defineComponent({
       const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig, emptyRender } = tableProps
       const { tableData, mergeList, scrollXLoad, scrollYLoad, isAllOverflow } = tableReactData
       const { slots } = tableContext
+      const sYOpts = computeSYOpts.value
       const emptyOpts = computeEmptyOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const mouseOpts = computeMouseOpts.value
@@ -608,8 +623,8 @@ export default defineComponent({
       return h('div', {
         ref: refElem,
         class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
-        xid: xID
-        // onWheel: wheelEvent
+        xid: xID,
+        ...(scrollYLoad && sYOpts.mode === 'wheel' ? { onWheel: wheelEvent } : {})
       }, [
         fixedType ? createCommentVNode() : h('div', {
           ref: refBodyXSpace,

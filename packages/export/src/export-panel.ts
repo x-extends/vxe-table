@@ -1,12 +1,12 @@
 import { defineComponent, h, createCommentVNode, ref, Ref, computed, reactive, inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
+import { formatText } from '../../tools/utils'
 import VxeModalConstructor from '../../modal/src/modal'
 import VxeInputConstructor from '../../input/src/input'
 import VxeCheckboxConstructor from '../../checkbox/src/checkbox'
 import VxeSelectConstructor from '../../select/src/select'
 import VxeButtonConstructor from '../../button/src/button'
-import { UtilTools } from '../../tools'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
 
@@ -162,7 +162,7 @@ export default defineComponent({
       const supportMerge = computeSupportMerge.value
       const supportStyle = computeSupportStyle.value
       XEUtils.eachTree(storeData.columns, (column: any) => {
-        const colTitle = UtilTools.formatText(column.getTitle(), 1)
+        const colTitle = formatText(column.getTitle(), 1)
         const isColGroup = column.children && column.children.length
         cols.push(
           h('li', {

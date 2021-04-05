@@ -1,8 +1,10 @@
 import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, watch, onUnmounted, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
+import { getFuncText, getLastZIndex, nextZIndex } from '../../tools/utils'
+import { hasClass, getAbsolutePos, getEventTargetNode } from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
 
 import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef } from '../../../types/all'
 
@@ -522,7 +524,7 @@ export default defineComponent({
     const computeInpPlaceholder = computed(() => {
       const { placeholder } = props
       if (placeholder) {
-        return UtilTools.getFuncText(placeholder)
+        return getFuncText(placeholder)
       }
       return ''
     })
@@ -625,7 +627,7 @@ export default defineComponent({
     const clickSuffixEvent = (evnt: Event) => {
       const { disabled } = props
       if (!disabled) {
-        if (DomTools.hasClass(evnt.currentTarget, 'is--clear')) {
+        if (hasClass(evnt.currentTarget, 'is--clear')) {
           emitModel('', evnt)
           clearValueEvent(evnt, '')
         } else {
@@ -911,7 +913,7 @@ export default defineComponent({
     const numberMousedownEvent = (evnt: MouseEvent) => {
       numberStopDown()
       if (evnt.button === 0) {
-        const isPrevNumber = DomTools.hasClass(evnt.currentTarget, 'is--prev')
+        const isPrevNumber = hasClass(evnt.currentTarget, 'is--prev')
         if (isPrevNumber) {
           numberPrevEvent(evnt)
         } else {
@@ -1234,8 +1236,8 @@ export default defineComponent({
 
     // 弹出面板
     const updateZindex = () => {
-      if (reactData.panelIndex < UtilTools.getLastZIndex()) {
-        reactData.panelIndex = UtilTools.nextZIndex()
+      if (reactData.panelIndex < getLastZIndex()) {
+        reactData.panelIndex = nextZIndex()
       }
     }
 
@@ -1254,7 +1256,7 @@ export default defineComponent({
           const panelStyle: VNodeStyle = {
             zIndex: panelIndex
           }
-          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = getAbsolutePos(targetElem)
           let panelPlacement: VxeInputPropTypes.Placement = 'bottom'
           if (transfer) {
             let left = boundingLeft
@@ -1357,7 +1359,7 @@ export default defineComponent({
       const el = refElem.value
       const panelElem = refInputPanel.value
       if (!disabled && isActivated) {
-        reactData.isActivated = DomTools.getEventTargetNode(evnt, el).flag || DomTools.getEventTargetNode(evnt, panelElem).flag
+        reactData.isActivated = getEventTargetNode(evnt, el).flag || getEventTargetNode(evnt, panelElem).flag
         if (!reactData.isActivated) {
           // 如果是日期类型
           if (isDatePickerType) {
@@ -1443,7 +1445,7 @@ export default defineComponent({
       if (!disabled) {
         if (visiblePanel) {
           const panelElem = refInputPanel.value
-          if (DomTools.getEventTargetNode(evnt, panelElem).flag) {
+          if (getEventTargetNode(evnt, panelElem).flag) {
             updatePlacement()
           } else {
             hidePanel()

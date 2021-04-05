@@ -4,6 +4,7 @@
       虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
       大数据不建议使用双向绑定的 data 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
+      但使用较复杂的渲染时，可以设置滚动模式 scroll-y.mode='wheel' 来开启模拟滚动，降低缓冲效果<br>
       <span class="red">（注：启用纵向虚拟滚的后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 
@@ -32,7 +33,8 @@
       :export-config="{}"
       :loading="demo1.loading"
       :sort-config="{trigger: 'cell'}"
-      :checkbox-config="{checkField: 'checked'}">
+      :checkbox-config="{checkField: 'checked'}"
+      :scroll-y="{mode: 'wheel'}">
       <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
       <vxe-table-column field="attr0" title="Attr0" width="200" sortable></vxe-table-column>
       <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
@@ -186,7 +188,8 @@ export default defineComponent({
           :export-config="{}"
           :loading="demo1.loading"
           :sort-config="{trigger: 'cell'}"
-          :checkbox-config="{checkField: 'checked'}">
+          :checkbox-config="{checkField: 'checked'}"
+          :scroll-y="{mode: 'wheel'}">
           <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
           <vxe-table-column field="attr0" title="Attr0" width="200" sortable></vxe-table-column>
           <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>

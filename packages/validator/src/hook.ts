@@ -1,6 +1,7 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
+import { scrollToView } from '../../tools/dom'
 
 import { VxeGlobalHooksHandles, TableValidatorMethods, TableValidatorPrivateMethods } from '../../../types/all'
 
@@ -27,7 +28,7 @@ class Rule {
    * 支持国际化翻译
    */
   get message () {
-    return UtilTools.getFuncText(this.$options.message)
+    return getFuncText(this.$options.message)
   }
 
   [key: string]: any
@@ -164,7 +165,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             }
             const posAndFinish = () => {
               firstErrParams.cell = $xetable.getCell(firstErrParams.row, firstErrParams.column)
-              DomTools.toView(firstErrParams.cell)
+              scrollToView(firstErrParams.cell)
               handleValidError(firstErrParams).then(finish)
             }
             /**

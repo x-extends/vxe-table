@@ -1,7 +1,9 @@
 import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, onBeforeMount, watch, PropType, VNode } from 'vue'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 import { useSize } from '../../hooks/size'
+import { getDomNode, getEventTargetNode } from '../../tools/dom'
+import { errLog, getLastZIndex, nextZIndex, isNumVal, getFuncText } from '../../tools/utils'
+import { GlobalEvent } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeButtonConstructor from '../../button/src/button'
 
@@ -112,8 +114,8 @@ export default defineComponent({
     const recalculate = () => {
       const { width, height } = props
       const boxElem = getBox()
-      boxElem.style.width = width ? (UtilTools.isNumVal(width) ? `${width}px` : width) : ''
-      boxElem.style.height = height ? (UtilTools.isNumVal(height) ? `${height}px` : height) : ''
+      boxElem.style.width = width ? (isNumVal(width) ? `${width}px` : width) : ''
+      boxElem.style.height = height ? (isNumVal(height) ? `${height}px` : height) : ''
       return nextTick()
     }
 
@@ -122,8 +124,8 @@ export default defineComponent({
       const { modalZindex } = reactData
       if (zIndex) {
         reactData.modalZindex = zIndex
-      } else if (modalZindex < UtilTools.getLastZIndex()) {
-        reactData.modalZindex = UtilTools.nextZIndex()
+      } else if (modalZindex < getLastZIndex()) {
+        reactData.modalZindex = nextZIndex()
       }
     }
 
@@ -294,7 +296,7 @@ export default defineComponent({
         if (!reactData.zoomLocat) {
           const marginSize = XEUtils.toNumber(props.marginSize)
           const boxElem = getBox()
-          const { visibleHeight, visibleWidth } = DomTools.getDomNode()
+          const { visibleHeight, visibleWidth } = getDomNode()
           reactData.zoomLocat = {
             top: boxElem.offsetTop,
             left: boxElem.offsetLeft,
@@ -470,13 +472,13 @@ export default defineComponent({
       const { zoomLocat } = reactData
       const marginSize = XEUtils.toNumber(props.marginSize)
       const boxElem = getBox()
-      if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, boxElem, 'trigger--btn').flag) {
+      if (!zoomLocat && evnt.button === 0 && !getEventTargetNode(evnt, boxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
         const disX = evnt.clientX - boxElem.offsetLeft
         const disY = evnt.clientY - boxElem.offsetTop
-        const { visibleHeight, visibleWidth } = DomTools.getDomNode()
+        const { visibleHeight, visibleWidth } = getDomNode()
         document.onmousemove = evnt => {
           evnt.preventDefault()
           const offsetWidth = boxElem.offsetWidth
@@ -517,7 +519,7 @@ export default defineComponent({
     const dragEvent = (evnt: MouseEvent) => {
       evnt.preventDefault()
       const { remember, storage } = props
-      const { visibleHeight, visibleWidth } = DomTools.getDomNode()
+      const { visibleHeight, visibleWidth } = getDomNode()
       const marginSize = XEUtils.toNumber(props.marginSize)
       const targetElem = evnt.target as HTMLSpanElement
       const type = targetElem.getAttribute('type')
@@ -672,7 +674,7 @@ export default defineComponent({
       const titVNs: VNode[] = titleSlot ? titleSlot({ $modal: $xemodal }) as VNode[] : [
         h('span', {
           class: 'vxe-modal--title'
-        }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))
+        }, title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))
       ]
       if (showZoom) {
         titVNs.push(
@@ -735,7 +737,7 @@ export default defineComponent({
       contVNs.push(
         h('div', {
           class: 'vxe-modal--content'
-        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : (XEUtils.isFunction(message) ? message({ $modal: $xemodal }) as VNode[] : UtilTools.getFuncText(message)))
+        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : (XEUtils.isFunction(message) ? message({ $modal: $xemodal }) as VNode[] : getFuncText(message)))
       )
       if (!isMsg) {
         contVNs.push(
@@ -840,7 +842,7 @@ export default defineComponent({
 
     nextTick(() => {
       if (props.storage && !props.id) {
-        UtilTools.error('vxe.error.reqProp', ['modal.id'])
+        errLog('vxe.error.reqProp', ['modal.id'])
       }
       if (props.modelValue) {
         openModal()

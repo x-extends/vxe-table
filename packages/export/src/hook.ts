@@ -2,13 +2,11 @@ import { inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { UtilTools } from '../../tools'
-import { isColumnInfo, mergeBodyMethod } from '../../table/src/util'
+import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../table/src/util'
+import { errLog, parseFile, formatText } from '../../tools/utils'
 import { readLocalFile, handlePrint, saveLocalFile, createHtmlPage, getExportBlobByContent } from './util'
 
 import { VxeGlobalHooksHandles, VxeGridConstructor, VxeGridPrivateMethods, TableExportMethods } from '../../../types/all'
-
-const { formatText } = UtilTools
 
 let htmlCellElem: any
 
@@ -356,7 +354,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                     break
                   default:
                     if (opts.original) {
-                      cellValue = UtilTools.getCellValue(row, column)
+                      cellValue = getCellValue(row, column)
                     } else {
                       cellValue = $xetable.getCellLabel(row, column)
                       if (column.type === 'html') {
@@ -411,7 +409,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                 break
               default:
                 if (opts.original) {
-                  cellValue = UtilTools.getCellValue(row, column)
+                  cellValue = getCellValue(row, column)
                 } else {
                   cellValue = $xetable.getCellLabel(row, column)
                   if (column.type === 'html') {
@@ -819,7 +817,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
 
     const handleFileImport = (file: File, opts: any) => {
       const { importMethod, afterImportMethod } = opts
-      const { type, filename } = UtilTools.parseFile(file)
+      const { type, filename } = parseFile(file)
 
       // 检查类型，如果为自定义导出，则不需要校验类型
       if (!importMethod && !XEUtils.includes(VXETable.config.importTypes, type)) {
@@ -860,7 +858,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
             $xetable.preventEvent(null, 'event.import', { file, options, columns: tableFullColumn }, () => {
               const reader = new FileReader()
               reader.onerror = () => {
-                UtilTools.error('vxe.error.notType', [type])
+                errLog('vxe.error.notType', [type])
                 _importReject({ status: false })
               }
               reader.onload = (e: any) => {
@@ -872,7 +870,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         } else {
           // 不支持的浏览器
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            UtilTools.error('vxe.error.notExp')
+            errLog('vxe.error.notExp')
           }
           _importResolve({ status: true })
         }
@@ -1079,7 +1077,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         // 检查类型，如果为自定义导出，则不需要校验类型
         if (!opts.exportMethod && !XEUtils.includes(VXETable.config.exportTypes, type)) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            UtilTools.error('vxe.error.notType', [type])
+            errLog('vxe.error.notType', [type])
           }
           const params = { status: false }
           return Promise.reject(params)
@@ -1207,7 +1205,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           return
         }
         if (!importConfig) {
-          UtilTools.error('vxe.error.reqProp', ['import-config'])
+          errLog('vxe.error.reqProp', ['import-config'])
         }
         // 处理类型
         const typeList = types.map((value: any) => {
@@ -1237,7 +1235,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         const exportOpts = computeExportOpts.value
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (!props.exportConfig) {
-            UtilTools.error('vxe.error.reqProp', ['export-config'])
+            errLog('vxe.error.reqProp', ['export-config'])
           }
         }
         handleExportAndPrint(Object.assign({}, exportOpts, options))
@@ -1246,7 +1244,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         const printOpts = computePrintOpts.value
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (!props.printConfig) {
-            UtilTools.error('vxe.error.reqProp', ['print-config'])
+            errLog('vxe.error.reqProp', ['print-config'])
           }
         }
         handleExportAndPrint(Object.assign({}, printOpts, options), true)

@@ -5,7 +5,7 @@ import VxeModalConstructor from '../../modal/src/modal'
 import VxeRadioGroupConstructor from '../../radio/src/group'
 import VxeRadioConstructor from '../../radio/src/radio'
 import VxeButtonConstructor from '../../button/src/button'
-import { UtilTools } from '../../tools'
+import { parseFile } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
 
@@ -58,7 +58,7 @@ export default defineComponent({
       const { storeData, defaultOptions } = props
       $xetable.readFile(defaultOptions).then((params: any) => {
         const { file } = params
-        Object.assign(storeData, UtilTools.parseFile(file), { file })
+        Object.assign(storeData, parseFile(file), { file })
       }).catch((e: any) => e)
     }
 

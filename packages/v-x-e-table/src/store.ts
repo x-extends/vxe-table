@@ -1,4 +1,4 @@
-import { UtilTools } from '../../tools'
+import { warnLog } from '../../tools/utils'
 import XEUtils from 'xe-utils'
 
 /**
@@ -24,7 +24,7 @@ export class Store {
     // 检测是否覆盖
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (!XEUtils.eqNull(this.store[name]) && this.store[name] !== render) {
-        UtilTools.warn('vxe.error.coverProp', [(this as any)._name, name])
+        warnLog('vxe.error.coverProp', [(this as any)._name, name])
       }
     }
     this.store[name] = render
