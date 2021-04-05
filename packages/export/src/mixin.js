@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
+import { UtilTools } from '../../tools'
 import { mergeBodyMethod } from '../../table/src/util'
 import { browse } from '../../tools/src/dom'
 

@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { UtilTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
 import { browse } from '../../tools/src/dom'
 

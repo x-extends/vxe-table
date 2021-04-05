@@ -1,4 +1,4 @@
-import { UtilTools, DomTools } from '../../tools'
+import { UtilTools } from '../../tools'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import { browse } from '../../tools/src/dom'
