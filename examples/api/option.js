@@ -35,6 +35,15 @@ const apis = [
         list: []
       },
       {
+        name: 'className',
+        desc: '附加 className',
+        version: '3.3.0',
+        type: 'string | (({ option }) => string)',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'disabled',
         descKey: 'app.api.option.desc.disabled',
         version: '',

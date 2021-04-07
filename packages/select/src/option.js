@@ -4,6 +4,7 @@ const props = {
   value: null,
   label: { type: [String, Number, Boolean], default: '' },
   visible: { type: Boolean, default: null },
+  className: [String, Function],
   disabled: Boolean
 }
 

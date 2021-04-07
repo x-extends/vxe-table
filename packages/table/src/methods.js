@@ -361,6 +361,10 @@ const Methods = {
         }
       }
     }
+    if (this.clearCellAreas && this.mouseConfig) {
+      this.clearCellAreas()
+      this.clearCopyCellArea()
+    }
     this.clearMergeCells()
     this.clearMergeFooterItems()
     this.handleTableData(true)

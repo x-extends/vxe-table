@@ -65,7 +65,7 @@ const apis = [
         name: 'className',
         desc: '附加 className',
         version: '3.2.9',
-        type: 'string',
+        type: 'string | (({}) => string)',
         enum: '',
         defVal: '',
         list: []

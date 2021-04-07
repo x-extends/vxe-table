@@ -2,9 +2,6 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
-import { browse } from '../../tools/src/dom'
-
-const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 
 const yearSize = 20
 const monthSize = 20
@@ -378,9 +375,9 @@ function renderTimePanel (h, _vm) {
 }
 
 function renderPanel (h, _vm) {
-  const { type, vSize, isDatePicker, transfer, animatVisible, visiblePanel, panelPlacement, panelStyle } = _vm
+  const { type, vSize, isDatePickerType, transfer, animatVisible, visiblePanel, panelPlacement, panelStyle } = _vm
   const renders = []
-  if (isDatePicker) {
+  if (isDatePickerType) {
     if (type === 'datetime') {
       renders.push(
         h('div', {
@@ -553,15 +550,15 @@ function renderSuffixIcon (h, _vm) {
 }
 
 function renderExtraSuffixIcon (h, _vm) {
-  const { controls, isPassword, isNumber, isDatePicker, isSearch } = _vm
+  const { controls, isPawdType, isNumType, isDatePickerType, isSearch } = _vm
   let icons
-  if (isPassword) {
+  if (isPawdType) {
     icons = renderPasswordIcon(h, _vm)
-  } else if (isNumber) {
+  } else if (isNumType) {
     if (controls) {
       icons = renderNumberIcon(h, _vm)
     }
-  } else if (isDatePicker) {
+  } else if (isDatePickerType) {
     icons = renderDatePickerIcon(h, _vm)
   } else if (isSearch) {
     icons = renderSearchIcon(h, _vm)
@@ -640,17 +637,17 @@ export default {
     }
   },
   computed: {
-    isNumber () {
+    isNumType () {
       return ['number', 'integer', 'float'].indexOf(this.type) > -1
     },
-    isDatePicker () {
+    isDatePickerType () {
       return this.hasTime || ['date', 'week', 'month', 'year'].indexOf(this.type) > -1
     },
     hasTime () {
       const { type } = this
       return type === 'time' || type === 'datetime'
     },
-    isPassword () {
+    isPawdType () {
       return this.type === 'password'
     },
     isSearch () {
@@ -669,7 +666,7 @@ export default {
       return XEUtils.toInteger(this.digits) || 1
     },
     isClearable () {
-      return this.clearable && (this.isPassword || this.isNumber || this.isDatePicker || this.type === 'text' || this.type === 'search')
+      return this.clearable && (this.isPawdType || this.isNumType || this.isDatePickerType || this.type === 'text' || this.type === 'search')
     },
     isDisabledPrevDateBtn () {
       const { selectMonth, dateMinTime } = this
@@ -692,9 +689,9 @@ export default {
       return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
     dateValue () {
-      const { inputValue, value, isDatePicker, type, dateValueFormat } = this
+      const { inputValue, value, isDatePickerType, type, dateValueFormat } = this
       let val = null
-      if (inputValue && isDatePicker) {
+      if (inputValue && isDatePickerType) {
         let date
         if (type === 'time') {
           date = toStringTimeDate(inputValue)
@@ -719,7 +716,7 @@ export default {
       return dateValue && (this.hasTime) ? (dateValue.getHours() * 3600 + dateValue.getMinutes() * 60 + dateValue.getSeconds()) * 1000 : 0
     },
     dateLabelFormat () {
-      if (this.isDatePicker) {
+      if (this.isDatePickerType) {
         return this.labelFormat || GlobalConfig.i18n(`vxe.input.date.labelFormat.${this.type}`)
       }
       return null
@@ -729,7 +726,7 @@ export default {
       return type === 'time' ? 'HH:mm:ss' : (this.valueFormat || (type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'))
     },
     selectDatePanelLabel () {
-      if (this.isDatePicker) {
+      if (this.isDatePickerType) {
         const { datePanelType, selectMonth, yearList } = this
         let year = ''
         let month
@@ -748,7 +745,7 @@ export default {
     },
     weekDatas () {
       const weeks = []
-      if (this.isDatePicker) {
+      if (this.isDatePickerType) {
         let sWeek = XEUtils.toNumber(this.startWeek)
         weeks.push(sWeek)
         for (let index = 0; index < 6; index++) {
@@ -763,7 +760,7 @@ export default {
       return weeks
     },
     dateHeaders () {
-      if (this.isDatePicker) {
+      if (this.isDatePickerType) {
         return this.weekDatas.map(day => {
           return {
             value: day,
@@ -774,7 +771,7 @@ export default {
       return []
     },
     weekHeaders () {
-      if (this.isDatePicker) {
+      if (this.isDatePickerType) {
         return [{ label: GlobalConfig.i18n('vxe.input.date.weeks.w') }].concat(this.dateHeaders)
       }
       return []
@@ -907,45 +904,28 @@ export default {
       const { type, immediate } = this
       return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
     },
-    inpAttrs () {
-      const { isDatePicker, isNumber, isPassword, type, name, placeholder, readonly, disabled, maxlength, form, autocomplete, showPwd, editable } = this
-      let inputType = type
-      if (isDatePicker || isNumber || (isPassword && showPwd) || type === 'number') {
-        inputType = 'text'
-      }
-      const attrs = {
-        name,
-        form,
-        type: inputType,
-        placeholder,
-        maxlength: isNumber && !XEUtils.toNumber(maxlength) ? 16 : maxlength, // 数值最大长度限制 16 位，包含小数
-        readonly: readonly || type === 'week' || !editable,
-        disabled,
-        autocomplete
-      }
+    inpPlaceholder () {
+      const { placeholder } = this
       if (placeholder) {
-        attrs.placeholder = UtilTools.getFuncText(placeholder)
+        return UtilTools.getFuncText(placeholder)
       }
-      return attrs
+      return ''
     },
-    inpEvents () {
-      const evnts = {}
-      XEUtils.each(this.$listeners, (cb, name) => {
-        if (['input', 'change', 'blur', 'clear', 'prefix-click', 'suffix-click'].indexOf(name) === -1) {
-          evnts[name] = this.triggerEvent
-        }
-      })
-      if (this.isNumber) {
-        evnts.keydown = this.keydownEvent
-        evnts[wheelName] = this.mousewheelEvent
-      } else if (this.isDatePicker) {
-        evnts.click = this.clickEvent
+    inputType () {
+      const { isDatePickerType, isNumType, isPawdType, type, showPwd } = this
+      if (isDatePickerType || isNumType || (isPawdType && showPwd) || type === 'number') {
+        return 'text'
       }
-      evnts.input = this.inputEvent
-      evnts.change = this.changeEvent
-      evnts.focus = this.focusEvent
-      evnts.blur = this.blurEvent
-      return evnts
+      return type
+    },
+    inpMaxlength () {
+      const { isNumType, maxlength } = this
+      // 数值最大长度限制 16 位，包含小数
+      return isNumType && !XEUtils.toNumber(maxlength) ? 16 : maxlength
+    },
+    inpReadonly () {
+      const { type, readonly, editable } = this
+      return readonly || type === 'week' || !editable
     }
   },
   watch: {
@@ -969,7 +949,7 @@ export default {
     if (this.dateConfig) {
       UtilTools.warn('vxe.error.removeProp', ['date-config'])
     }
-    if (this.isDatePicker) {
+    if (this.isDatePickerType) {
       if (this.transfer) {
         document.body.appendChild(this.$refs.panel)
       }
@@ -989,7 +969,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { className, controls, inputValue, isDatePicker, visiblePanel, isActivated, vSize, type, align, readonly, disabled, inpAttrs, inpEvents } = this
+    const { name, form, inputType, inpPlaceholder, inpMaxlength, inpReadonly, className, controls, inputValue, isDatePickerType, visiblePanel, isActivated, vSize, type, align, readonly, disabled, autocomplete } = this
     const childs = []
     const prefix = rendePrefixIcon(h, this)
     const suffix = renderSuffixIcon(h, this)
@@ -1005,8 +985,26 @@ export default {
         domProps: {
           value: inputValue
         },
-        attrs: inpAttrs,
-        on: inpEvents
+        attrs: {
+          name,
+          form,
+          type: inputType,
+          placeholder: inpPlaceholder,
+          maxlength: inpMaxlength,
+          readonly: inpReadonly,
+          disabled,
+          autocomplete
+        },
+        on: {
+          keydown: this.keydownEvent,
+          keyup: this.triggerEvent,
+          wheel: this.wheelEvent,
+          click: this.clickEvent,
+          input: this.inputEvent,
+          change: this.changeEvent,
+          focus: this.focusEvent,
+          blu: this.blurEvent
+        }
       })
     )
     // 后缀图标
@@ -1016,7 +1014,7 @@ export default {
     // 特殊功能图标
     childs.push(renderExtraSuffixIcon(h, this))
     // 面板容器
-    if (isDatePicker) {
+    if (isDatePickerType) {
       childs.push(renderPanel(h, this))
     }
     return h('div', {
@@ -1057,9 +1055,9 @@ export default {
       }
     },
     emitInputEvent (value, evnt) {
-      const { inpImmediate, isDatePicker } = this
+      const { inpImmediate, isDatePickerType } = this
       this.inputValue = value
-      if (!isDatePicker) {
+      if (!isDatePickerType) {
         if (inpImmediate) {
           this.emitModel(value, evnt)
         } else {
@@ -1073,10 +1071,8 @@ export default {
     },
     changeEvent (evnt) {
       const { inpImmediate } = this
-      if (inpImmediate) {
+      if (!inpImmediate) {
         this.triggerEvent(evnt)
-      } else {
-        this.emitModel(this.inputValue, evnt)
       }
     },
     focusEvent (evnt) {
@@ -1096,7 +1092,7 @@ export default {
       this.$emit('blur', { value, $event: evnt })
     },
     keydownEvent (evnt) {
-      if (this.isNumber) {
+      if (this.isNumType) {
         const isCtrlKey = evnt.ctrlKey
         const isShiftKey = evnt.shiftKey
         const isAltKey = evnt.altKey
@@ -1108,10 +1104,10 @@ export default {
       }
       this.triggerEvent(evnt)
     },
-    mousewheelEvent (evnt) {
-      if (this.isNumber && this.controls) {
+    wheelEvent (evnt) {
+      if (this.isNumType && this.controls) {
         if (this.isActivated) {
-          const delta = -evnt.wheelDelta || evnt.detail
+          const delta = evnt.deltaY
           if (delta > 0) {
             this.numberNextEvent(evnt)
           } else if (delta < 0) {
@@ -1120,10 +1116,11 @@ export default {
           evnt.preventDefault()
         }
       }
+      this.triggerEvent(evnt)
     },
     clickEvent (evnt) {
-      const { isDatePicker } = this
-      if (isDatePicker) {
+      const { isDatePickerType } = this
+      if (isDatePickerType) {
         this.datePickerOpenEvent(evnt)
       }
       this.triggerEvent(evnt)
@@ -1146,11 +1143,11 @@ export default {
       }
     },
     clearValueEvent (evnt, value) {
-      const { $refs, type, isNumber } = this
-      if (this.isDatePicker) {
+      const { $refs, type, isNumType } = this
+      if (this.isDatePickerType) {
         this.hidePanel()
       }
-      if (isNumber || ['text', 'search', 'password'].indexOf(type) > -1) {
+      if (isNumType || ['text', 'search', 'password'].indexOf(type) > -1) {
         this.focus()
       }
       this.$emit('clear', { $panel: $refs.panel, value, $event: evnt })
@@ -1159,8 +1156,8 @@ export default {
      * 检查初始值
      */
     initValue () {
-      const { type, isDatePicker, inputValue, digitsValue } = this
-      if (isDatePicker) {
+      const { type, isDatePickerType, inputValue, digitsValue } = this
+      if (isDatePickerType) {
         this.changeValue()
       } else if (type === 'float') {
         if (inputValue) {
@@ -1175,15 +1172,15 @@ export default {
      * 值变化时处理
      */
     changeValue () {
-      if (this.isDatePicker) {
+      if (this.isDatePickerType) {
         this.dateParseValue(this.inputValue)
         this.inputValue = this.datePanelLabel
       }
     },
     afterCheckValue () {
-      const { type, inpAttrs, inputValue, isDatePicker, isNumber, datetimePanelValue, dateLabelFormat, min, max } = this
-      if (!inpAttrs.readonly) {
-        if (isNumber) {
+      const { type, inpReadonly, inputValue, isDatePickerType, isNumType, datetimePanelValue, dateLabelFormat, min, max } = this
+      if (!inpReadonly) {
+        if (isNumType) {
           if (inputValue) {
             let inpVal = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
             if (!this.vaildMinNum(inpVal)) {
@@ -1193,7 +1190,7 @@ export default {
             }
             this.emitModel(getNumberValue(this, inpVal), { type: 'check' })
           }
-        } else if (isDatePicker) {
+        } else if (isDatePickerType) {
           let inpVal = inputValue
           if (inpVal) {
             if (type === 'time') {
@@ -1639,12 +1636,12 @@ export default {
       }
     },
     showPanel () {
-      const { disabled, visiblePanel, isDatePicker } = this
+      const { disabled, visiblePanel, isDatePickerType } = this
       if (!disabled && !visiblePanel) {
         clearTimeout(this.hidePanelTimeout)
         this.isActivated = true
         this.animatVisible = true
-        if (isDatePicker) {
+        if (isDatePickerType) {
           this.dateOpenPanel()
         }
         setTimeout(() => {
@@ -1737,7 +1734,7 @@ export default {
         this.isActivated = DomTools.getEventTargetNode(evnt, $el).flag || DomTools.getEventTargetNode(evnt, $refs.panel).flag
         if (!this.isActivated) {
           // 如果是日期类型
-          if (this.isDatePicker) {
+          if (this.isDatePickerType) {
             if (visiblePanel) {
               this.hidePanel()
               this.afterCheckValue()
@@ -1749,7 +1746,7 @@ export default {
       }
     },
     handleGlobalKeydownEvent (evnt) {
-      const { isDatePicker, visiblePanel, clearable, disabled } = this
+      const { isDatePickerType, visiblePanel, clearable, disabled } = this
       if (!disabled) {
         const keyCode = evnt.keyCode
         const isTab = keyCode === 9
@@ -1771,7 +1768,7 @@ export default {
           isActivated = false
           this.isActivated = isActivated
         } else if (operArrow) {
-          if (isDatePicker) {
+          if (isDatePickerType) {
             if (isActivated) {
               if (visiblePanel) {
                 this.dateOffsetEvent(evnt)
@@ -1781,7 +1778,7 @@ export default {
             }
           }
         } else if (isEnter) {
-          if (isDatePicker) {
+          if (isDatePickerType) {
             if (visiblePanel) {
               if (this.datePanelValue) {
                 this.dateSelectItem(this.datePanelValue)
@@ -1793,7 +1790,7 @@ export default {
             }
           }
         } else if (isPgUp || isPgDn) {
-          if (isDatePicker) {
+          if (isDatePickerType) {
             if (isActivated) {
               this.datePgOffsetEvent(evnt)
             }

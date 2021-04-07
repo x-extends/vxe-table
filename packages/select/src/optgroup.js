@@ -3,6 +3,7 @@ import { createOption, destroyOption, assemOption } from './util'
 const props = {
   label: { type: [String, Number, Boolean], default: '' },
   visible: { type: Boolean, default: null },
+  className: [String, Function],
   disabled: Boolean
 }
 

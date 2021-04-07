@@ -6,6 +6,7 @@ class OptionConfig {
       value: _vm.value,
       label: _vm.label,
       visible: _vm.visible,
+      className: _vm.className,
       disabled: _vm.disabled
     })
   }

@@ -25,8 +25,15 @@
       <vxe-select v-model="value21" placeholder="可清除" clearable>
         <vxe-option v-for="num in 5" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value22" placeholder="请选择" clearable>
-        <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
+      <vxe-select v-model="value22" placeholder="自定义选项样式" clearable>
+        <vxe-option value="1" label="选项1"></vxe-option>
+        <vxe-option value="2" label="选项2" class-name="red"></vxe-option>
+        <vxe-option value="3" label="选项3" class-name="green"></vxe-option>
+        <vxe-option value="4" label="选项4"></vxe-option>
+        <vxe-option value="5" label="选项5" class-name="red"></vxe-option>
+        <vxe-option value="6" label="选项6"></vxe-option>
+        <vxe-option value="7" label="选项7"></vxe-option>
+        <vxe-option value="8" label="选项8"></vxe-option>
       </vxe-select>
       <vxe-select v-model="value23" placeholder="分组" clearable transfer>
         <vxe-optgroup label="选项2">
@@ -124,6 +131,7 @@
     <pre>
       <pre-code class="html">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -138,7 +146,7 @@ export default {
       value13: null,
       value20: null,
       value21: null,
-      value22: 2,
+      value22: null,
       value23: null,
       value30: null,
       value31: null,
@@ -243,8 +251,15 @@ export default {
           <vxe-select v-model="value21" placeholder="可清除" clearable>
             <vxe-option v-for="num in 5" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
           </vxe-select>
-          <vxe-select v-model="value22" placeholder="请选择" clearable>
-            <vxe-option v-for="num in 10" :key="num" :value="num" :label="\`选项\${num}\`"></vxe-option>
+          <vxe-select v-model="value22" placeholder="自定义选项样式" clearable>
+            <vxe-option value="1" label="选项1"></vxe-option>
+            <vxe-option value="2" label="选项2" class-name="red"></vxe-option>
+            <vxe-option value="3" label="选项3" class-name="green"></vxe-option>
+            <vxe-option value="4" label="选项4"></vxe-option>
+            <vxe-option value="5" label="选项5" class-name="red"></vxe-option>
+            <vxe-option value="6" label="选项6"></vxe-option>
+            <vxe-option value="7" label="选项7"></vxe-option>
+            <vxe-option value="8" label="选项8"></vxe-option>
           </vxe-select>
           <vxe-select v-model="value23" placeholder="分组" clearable transfer>
             <vxe-optgroup label="选项2">
@@ -336,7 +351,7 @@ export default {
               value13: null,
               value20: null,
               value21: null,
-              value22: 2,
+              value21: null,
               value23: null,
               value30: null,
               value31: null,
@@ -419,6 +434,14 @@ export default {
               ]
             }
           }
+        }
+        `,
+        `
+        .red {
+          color: red;
+        }
+        .green {
+          color: green;
         }
         `
       ]

@@ -124,6 +124,7 @@ export default {
 
         scroll: '虚拟滚动',
         bigData: '虚拟滚动',
+        scrollMode: '滚动模式',
         scrollRows: '纵向',
         scrollFullRows: '纵向 + 复杂渲染',
         scrollCols: '横向&纵向',
@@ -314,9 +315,9 @@ export default {
         copyToClipboard: '已複製到剪貼板！'
       },
       other: {
-        v1: '1.0+ (停止维护)',
-        v2: '2.0+ (vue 2.6+ 旧版本)',
-        v3: '3.0+ (vue 2.6+ 最新版)',
+        v1: '1.0+ (vue 2.6+ 停止维护) ~ 2020-04 停止',
+        v2: '2.0+ (vue 2.6+ 旧版本) ~ 2021-12 停止',
+        v3: '3.0+ (vue 2.6+ 稳定版)',
         v3d5: '3.5+ (vue 2.6+ 粘性表格)',
         v4: '4.0+ (vue 3.0+ 粘性表格)',
         v4d5: '4.5+ (vue 3.0+ 粘性表格)',

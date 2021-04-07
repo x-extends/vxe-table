@@ -163,6 +163,7 @@ import TableTreeEditForceRowValid from './views/table/tree/ForceRowValid.vue'
 import TableTreeTemplate from './views/table/tree/Template.vue'
 
 import TableScroll from './views/table/scroll/Scroll.vue'
+import TableScrollMode from './views/table/scroll/Mode.vue'
 import TableScrollRows from './views/table/scroll/ScrollRows.vue'
 import TableScrollFullRows from './views/table/scroll/ScrollFullRows.vue'
 import TableScrollCols from './views/table/scroll/ScrollCols.vue'
@@ -1145,6 +1146,11 @@ export default new Router({
       path: '/table/scroll/scroll',
       name: 'TableScroll',
       component: TableScroll
+    },
+    {
+      path: '/table/scroll/mode',
+      name: 'TableScrollMode',
+      component: TableScrollMode
     },
     {
       path: '/table/scroll/rows',

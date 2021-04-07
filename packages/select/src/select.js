@@ -123,7 +123,7 @@ export function renderOption (h, _vm, list, group) {
     const optid = getOptid(_vm, option)
     return isVisible ? h('div', {
       key: optionKey ? optid : cIndex,
-      class: ['vxe-select-option', {
+      class: ['vxe-select-option', option.className, {
         'is--disabled': isDisabled,
         'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
         'is--hover': currentValue === optionValue
@@ -155,7 +155,7 @@ export function renderOptgroup (h, _vm) {
     const isGroupDisabled = group.disabled
     return h('div', {
       key: optionKey ? optid : gIndex,
-      class: ['vxe-optgroup', {
+      class: ['vxe-optgroup', group.className, {
         'is--disabled': isGroupDisabled
       }],
       attrs: {
@@ -206,7 +206,7 @@ export default {
     optionProps: Object,
     optionGroups: Array,
     optionGroupProps: Object,
-    className: String,
+    className: [String, Function],
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
     emptyText: String,
     optionId: { type: String, default: () => GlobalConfig.select.optionId },
