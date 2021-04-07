@@ -1,20 +1,22 @@
 <template>
   <div>
     <p class="tip">
-      虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
+      虚拟滚动渲染，左右固定列<br>
       大数据不建议使用双向绑定的 data 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="reloadData"/> 函数<br>
       对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
-      但使用较复杂的渲染时，可以设置滚动模式 scroll-y.mode='wheel' 来开启模拟滚动，降低缓冲效果<br>
       <span class="red">（注：启用纵向虚拟滚的后不支持动态行高；如果需要支持，将虚拟滚动关闭即可）</span>
     </p>
 
     <vxe-toolbar>
       <template #buttons>
+        <vxe-button @click="loadList(50)">50条</vxe-button>
+        <vxe-button @click="loadList(100)">100条</vxe-button>
         <vxe-button @click="loadList(1000)">1k条</vxe-button>
         <vxe-button @click="loadList(5000)">5k条</vxe-button>
         <vxe-button @click="loadList(10000)">1w条</vxe-button>
         <vxe-button @click="loadList(50000)">5w条</vxe-button>
         <vxe-button @click="loadList(100000)">10w条</vxe-button>
+        <vxe-button @click="loadList(200000)">20w条</vxe-button>
         <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
         <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
@@ -25,6 +27,7 @@
       border
       resizable
       show-overflow
+      row-key
       show-header-overflow
       highlight-hover-row
       highlight-current-row
@@ -33,9 +36,9 @@
       :export-config="{}"
       :loading="demo1.loading"
       :sort-config="{trigger: 'cell'}"
-      :checkbox-config="{checkField: 'checked'}"
-      :scroll-y="{mode: 'wheel'}">
+      :checkbox-config="{checkField: 'checked'}">
       <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
+      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="attr0" title="Attr0" width="200" sortable></vxe-table-column>
       <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
       <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
@@ -165,11 +168,14 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
+            <vxe-button @click="loadList(50)">50条</vxe-button>
+            <vxe-button @click="loadList(100)">100条</vxe-button>
             <vxe-button @click="loadList(1000)">1k条</vxe-button>
             <vxe-button @click="loadList(5000)">5k条</vxe-button>
             <vxe-button @click="loadList(10000)">1w条</vxe-button>
             <vxe-button @click="loadList(50000)">5w条</vxe-button>
             <vxe-button @click="loadList(100000)">10w条</vxe-button>
+            <vxe-button @click="loadList(200000)">20w条</vxe-button>
             <vxe-button @click="$refs.xTable.setAllCheckboxRow(true)">所有选中</vxe-button>
             <vxe-button @click="$refs.xTable.clearCheckboxRow()">清除选中</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
@@ -180,6 +186,7 @@ export default defineComponent({
           border
           resizable
           show-overflow
+          row-key
           show-header-overflow
           highlight-hover-row
           highlight-current-row
@@ -188,9 +195,9 @@ export default defineComponent({
           :export-config="{}"
           :loading="demo1.loading"
           :sort-config="{trigger: 'cell'}"
-          :checkbox-config="{checkField: 'checked'}"
-          :scroll-y="{mode: 'wheel'}">
+          :checkbox-config="{checkField: 'checked'}">
           <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
+          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="attr0" title="Attr0" width="200" sortable></vxe-table-column>
           <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
           <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>

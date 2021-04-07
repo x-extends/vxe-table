@@ -112,13 +112,15 @@ export default defineComponent({
     const toggleFixedColumn = (field: string, type: VxeColumnPropTypes.Fixed) => {
       const $table = xTable2.value
       const column = $table.getColumnByField(field)
-      const groupFixed = column.fixed ? null : type
-      // 将分组整体设置固定列
-      XEUtils.eachTree([column], column => {
-        column.fixed = groupFixed
-      })
-      // 刷新列
-      $table.refreshColumn()
+      if (column) {
+        const groupFixed = column.fixed ? null : type
+        // 将分组整体设置固定列
+        XEUtils.eachTree([column], column => {
+          column.fixed = groupFixed
+        })
+        // 刷新列
+        $table.refreshColumn()
+      }
     }
 
     return {
@@ -233,13 +235,15 @@ export default defineComponent({
             const toggleFixedColumn = (field: string, type: VxeColumnPropTypes.Fixed) => {
               const $table = xTable2.value
               const column = $table.getColumnByField(field)
-              const groupFixed = column.fixed ? null : type
-              // 将分组整体设置固定列
-              XEUtils.eachTree([column], column => {
-                column.fixed = groupFixed
-              })
-              // 刷新列
-              $table.refreshColumn()
+              if (column) {
+                const groupFixed = column.fixed ? null : type
+                // 将分组整体设置固定列
+                XEUtils.eachTree([column], column => {
+                  column.fixed = groupFixed
+                })
+                // 刷新列
+                $table.refreshColumn()
+              }
             }
 
             return {

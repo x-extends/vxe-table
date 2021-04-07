@@ -84,13 +84,15 @@ export default defineComponent({
     const updateSexFilter = async () => {
       const $table = xTable.value
       const column = $table.getColumnByField('sex')
-      // 修改筛选列表，并默认设置为选中状态
-      await $table.setFilter(column, [
-        { value: '1', label: '男' },
-        { value: '0', label: '女', checked: true }
-      ])
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      await $table.updateData()
+      if (column) {
+        // 修改筛选列表，并默认设置为选中状态
+        await $table.setFilter(column, [
+          { value: '1', label: '男' },
+          { value: '0', label: '女', checked: true }
+        ])
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        await $table.updateData()
+      }
     }
 
     const toggleFixedColumn = async (index: number, value: string) => {
@@ -190,13 +192,15 @@ export default defineComponent({
             const updateSexFilter = async () => {
               const $table = xTable.value
               const column = $table.getColumnByField('sex')
-              // 修改筛选列表，并默认设置为选中状态
-              await $table.setFilter(column, [
-                { value: '1', label: '男' },
-                { value: '0', label: '女', checked: true }
-              ])
-              // 修改条件之后，需要手动调用 updateData 处理表格数据
-              await $table.updateData()
+              if (column) {
+                // 修改筛选列表，并默认设置为选中状态
+                await $table.setFilter(column, [
+                  { value: '1', label: '男' },
+                  { value: '0', label: '女', checked: true }
+                ])
+                // 修改条件之后，需要手动调用 updateData 处理表格数据
+                await $table.updateData()
+              }
             }
 
             const toggleFixedColumn = async (index: number, value: string) => {

@@ -334,15 +334,15 @@ const apis = [
         defVal: '{ value, $event }',
         list: []
       },
-      {
-        name: 'mousewheel',
-        desc: '在鼠标在输入框内滚动时触发该事件',
-        version: '',
-        type: '',
-        enum: '',
-        defVal: '{ value, $event }',
-        list: []
-      },
+      // {
+      //   name: 'wheel',
+      //   desc: '在鼠标在输入框内滚动时触发该事件',
+      //   version: '',
+      //   type: '',
+      //   enum: '',
+      //   defVal: '{ value, $event }',
+      //   list: []
+      // },
       {
         name: 'click',
         desc: '在点击输入框时触发该事件',

@@ -115,9 +115,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         editStore.insertList.unshift(...newRecords)
         reactData.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
-        $xetable.handleTableData()
         $xetable.updateFooter()
         $xetable.updateCache()
+        $xetable.handleTableData()
         $xetable.checkSelectionStatus()
         if (scrollYLoad) {
           $xetable.updateScrollYSpace()
@@ -207,9 +207,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           }
         })
         reactData.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
-        $xetable.handleTableData()
         $xetable.updateFooter()
         $xetable.updateCache()
+        $xetable.handleTableData()
         $xetable.checkSelectionStatus()
         if (scrollYLoad) {
           $xetable.updateScrollYSpace()

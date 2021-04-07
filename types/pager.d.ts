@@ -72,6 +72,7 @@ export type VxePagerProps = {
    */
   autoHidden?: VxePagerPropTypes.AutoHidden;
   transfer?: VxePagerPropTypes.Transfer;
+  className?: VxePagerPropTypes.ClassName;
   /**
    * 自定义图标
    */
@@ -97,6 +98,9 @@ export namespace VxePagerPropTypes {
   export type Perfect = boolean;
   export type AutoHidden = boolean;
   export type Transfer = boolean;
+  export type ClassName = string | ((params: {
+    $pager: VxePagerConstructor
+  }) => string);
   export type IconPrevPage = string;
   export type IconJumpPrev = string;
   export type IconJumpNext = string;

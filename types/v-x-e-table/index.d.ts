@@ -12,6 +12,10 @@ import { VxeGlobalHooks } from './hooks'
 import { VxeGlobalSetup } from './setup'
 
 export class VXETableConfig {
+  clipboard: {
+    text: string;
+    html: string;
+  }
   get zIndex(): number;
   get nextZIndex(): number;
   /**

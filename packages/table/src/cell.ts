@@ -29,7 +29,7 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
   const { props, internalData } = $table
   const { computeTooltipOpts } = $table.getComputeMaps()
   const { showHeaderOverflow: allColumnHeaderOverflow } = props
-  const { showHeaderOverflow } = column
+  const { type, showHeaderOverflow } = column
   const tooltipOpts = computeTooltipOpts.value
   const showAllTip = tooltipOpts.showAll
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -59,7 +59,11 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
     }
   }
   return [
-    h('span', {
+    type === 'html' && XEUtils.isString(content) ? h('span', {
+      class: 'vxe-cell--title',
+      innerHTML: content,
+      ...ons
+    }) : h('span', {
       class: 'vxe-cell--title',
       ...ons
     }, content)

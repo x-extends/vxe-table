@@ -35,7 +35,7 @@ export default defineComponent({
   setup () {
     const tableData1 = ref([
       { id: 10001, name: '', nickname: 'T1', role: 'Develop', sex: '', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
-      { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 'Women', age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+      { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 44, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
       { id: 10003, name: '', nickname: 'T3', role: '', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
       { id: 10004, name: 'Test4', nickname: 'T4', role: '', sex: '', sex2: [], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' },
       { id: 10005, name: 'Test5', nickname: '', role: 'Develop', sex: '0', sex2: ['1', '0'], num1: 20, age: 30, address: 'Shanghai', date12: '2020-09-20', date13: '' },
@@ -78,7 +78,7 @@ export default defineComponent({
           setup () {
             const tableData1 = ref([
               { id: 10001, name: '', nickname: 'T1', role: 'Develop', sex: '', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
-              { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 'Women', age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+              { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 44, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
               { id: 10003, name: '', nickname: 'T3', role: '', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
               { id: 10004, name: 'Test4', nickname: 'T4', role: '', sex: '', sex2: [], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' },
               { id: 10005, name: 'Test5', nickname: '', role: 'Develop', sex: '0', sex2: ['1', '0'], num1: 20, age: 30, address: 'Shanghai', date12: '2020-09-20', date13: '' },

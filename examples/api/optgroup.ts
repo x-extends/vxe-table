@@ -26,6 +26,15 @@ const apis = [
         list: []
       },
       {
+        name: 'class-name',
+        desc: '附加 className',
+        version: '4.1.0',
+        type: 'string | ((params: { option }) => string)',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'disabled',
         descKey: 'app.api.optgroup.desc.disabled',
         version: '',

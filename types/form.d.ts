@@ -57,6 +57,14 @@ export namespace VxeFormPropTypes {
   export type TitleColon = boolean;
   export type TitleAsterisk = boolean;
   export type TitleOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null;
+
+  interface ClassNameParams {
+    $form: VxeFormConstructor;
+    data: any;
+    items: VxeFormDefines.ItemInfo[];
+  }
+  export type ClassName = string | ((params: ClassNameParams) => string);
+
   export type Items = VxeFormItemProps[];
 
   /**
@@ -95,6 +103,7 @@ export type VxeFormProps<D = any> = {
   titleColon?: VxeFormPropTypes.TitleColon;
   titleAsterisk?: VxeFormPropTypes.TitleAsterisk;
   titleOverflow?: VxeFormPropTypes.TitleOverflow;
+  className?: VxeFormPropTypes.ClassName;
   items?: VxeFormPropTypes.Items;
   rules?: VxeFormPropTypes.Rules;
   preventSubmit?: VxeFormPropTypes.PreventSubmit;

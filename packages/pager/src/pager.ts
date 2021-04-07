@@ -34,6 +34,7 @@ export default defineComponent({
     // 当只有一页时隐藏
     autoHidden: { type: Boolean as PropType<VxePagerPropTypes.AutoHidden>, default: () => GlobalConfig.pager.autoHidden },
     transfer: { type: Boolean as PropType<VxePagerPropTypes.Transfer>, default: () => GlobalConfig.pager.transfer },
+    className: [String, Function] as PropType<VxePagerPropTypes.ClassName>,
     // 自定义图标
     iconPrevPage: String as PropType<VxePagerPropTypes.IconPrevPage>,
     iconJumpPrev: String as PropType<VxePagerPropTypes.IconJumpPrev>,
@@ -397,7 +398,7 @@ export default defineComponent({
     Object.assign($xepager, pagerMethods, pagerPrivateMethods)
 
     const renderVN = () => {
-      const { align, layouts } = props
+      const { align, layouts, className } = props
       const childNodes = []
       const vSize = computeSize.value
       const pageCount = computePageCount.value
@@ -455,7 +456,7 @@ export default defineComponent({
       }
       return h('div', {
         ref: refElem,
-        class: ['vxe-pager', {
+        class: ['vxe-pager', className ? (XEUtils.isFunction(className) ? className({ $pager: $xepager }) : className) : '', {
           [`size--${vSize}`]: vSize,
           [`align--${align}`]: align,
           'is--border': props.border,

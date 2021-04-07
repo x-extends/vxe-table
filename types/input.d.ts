@@ -142,7 +142,7 @@ export type VxeInputEmits = [
   'change',
   'keydown',
   'keyup',
-  'mousewheel',
+  'wheel',
   'click',
   'focus',
   'blur',

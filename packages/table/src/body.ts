@@ -619,7 +619,6 @@ export default defineComponent({
           emptyContent = tableProps.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
         }
       }
-
       return h('div', {
         ref: refElem,
         class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],

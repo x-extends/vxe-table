@@ -99,6 +99,10 @@ export namespace VxeToolbarPropTypes {
   export type Tools = ToolConfig[];
 
   export type Perfect = boolean;
+
+  export type ClassName = string | ((params: {
+    $toolbar: VxeToolbarConstructor;
+  }) => string);
 }
 
 export type VxeToolbarProps = {
@@ -142,6 +146,7 @@ export type VxeToolbarProps = {
    * 配套的样式
    */
   perfect?: VxeToolbarPropTypes.Perfect;
+  className?: VxeToolbarPropTypes.ClassName;
 }
 
 export interface ToolbarReactData {

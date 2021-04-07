@@ -44,10 +44,12 @@ export default defineComponent({
 
         const tableData = ref([])
 
-        // 将不会被响应 push、splice 等所有方法都将无效
+        // 错误：将不会被响应 push、splice、unshift ...等所有方法都将无效
         tableData.value.push({ name: 'test1' })
-        // 可以改为
+        // 正确：
         tableData.value = [...tableData.value, { name: 'test1' }]
+        // 正确：
+        tableData.value = tableData.value.concat([{ name: 'test1' }])
         `,
         `
         import { defineComponent, reactive } from 'vue'
@@ -56,10 +58,12 @@ export default defineComponent({
           tableData: []
         })
 
-        // 将不会被响应 push、splice 等所有方法都将无效
-        state.tableData.push({ name: 'test1' })
-        // 可以改为
-        state.tableData = [...state.tableData, { name: 'test1' }]
+        // 错误：将不会被响应 push、splice、unshift ...等所有方法都将无效
+        state.tableData.unshift({ name: 'test1' })
+        // 正确：
+        state.tableData = [{ name: 'test1' }, ...state.tableData]
+        // 正确：
+        state.tableData = [{ name: 'test1' }].concat(state.tableData)
         `
       ]
     }

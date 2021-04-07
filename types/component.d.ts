@@ -24,6 +24,6 @@ export interface VxeEvent {
   [key: string]: any;
 }
 
-export interface VNodeStyle {
+export type VNodeStyle = {
   [key: string]: string | number
 }

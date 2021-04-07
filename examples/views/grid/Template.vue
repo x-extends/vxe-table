@@ -95,7 +95,7 @@
         <span>￥{{ row.num1 }}元</span>
       </template>
 
-      <template #num1_height="{ column }">
+      <template #num1_header="{ column }">
         <span>
           <i>@</i>
           <span style="color: red;" @click="headerClickEvent">{{ column.title }}</span>
@@ -266,7 +266,7 @@ export default defineComponent({
           slots: {
             // 使用插槽模板渲染
             default: 'num1_default',
-            header: 'num1_height',
+            header: 'num1_header',
             footer: 'num1_footer',
             filter: 'num1_filter',
             edit: 'num1_edit'
@@ -429,7 +429,7 @@ export default defineComponent({
             <span>￥{{ row.num1 }}元</span>
           </template>
 
-          <template #num1_height="{ column }">
+          <template #num1_header="{ column }">
             <span>
               <i>@</i>
               <span style="color: red;" @click="headerClickEvent">{{ column.title }}</span>
@@ -589,7 +589,7 @@ export default defineComponent({
                   slots: {
                     // 使用插槽模板渲染
                     default: 'num1_default',
-                    header: 'num1_height',
+                    header: 'num1_header',
                     footer: 'num1_footer',
                     filter: 'num1_filter',
                     edit: 'num1_edit'

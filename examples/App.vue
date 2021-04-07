@@ -28,12 +28,12 @@
           </vxe-select>
           <span>{{ $t('app.body.label.version') }}: </span>
           <vxe-select class="version-switch" size="mini" v-model="appData.version" @change="vChangeEvent">
-            <vxe-option value="1" :label="$t('app.body.other.v1')"></vxe-option>
-            <vxe-option value="2" :label="$t('app.body.other.v2')"></vxe-option>
-            <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
-            <!-- <vxe-option value="3.5" :label="$t('app.body.other.v3d5')" disabled></vxe-option> -->
-            <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
             <!-- <vxe-option value="4.5" :label="$t('app.body.other.v4d5')" disabled></vxe-option> -->
+            <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
+            <!-- <vxe-option value="3.5" :label="$t('app.body.other.v3d5')" disabled></vxe-option> -->
+            <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
+            <vxe-option value="2" :label="$t('app.body.other.v2')" class-name="red"></vxe-option>
+            <vxe-option value="1" :label="$t('app.body.other.v1')" class-name="end-of-life"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
           <a v-if="appData.showPlugin" class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡扩展与支持</a>
@@ -1491,6 +1491,12 @@ export default defineComponent({
               label: 'app.aside.nav.keepAlives',
               locat: {
                 name: 'TableScrollKeepAliveTable1'
+              }
+            },
+            {
+              label: 'app.aside.nav.scrollMode',
+              locat: {
+                name: 'TableScrollMode'
               }
             },
             {

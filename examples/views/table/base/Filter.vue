@@ -120,7 +120,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeColumnPropTypes } from 'vxe-table'
+        import { VxeColumnPropTypes } from '../../../../types/index'
 
         export default defineComponent({
           setup () {
@@ -173,10 +173,11 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
+        import { VxeColumnPropTypes } from 'vxe-table'
 
         export default defineComponent({
           setup () {
-            const demo2 = reactive({
+            const demo1 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -185,16 +186,16 @@ export default defineComponent({
               ]
             })
 
-            const filterNameMethod = ({ value, row }: any) => {
+            const filterNameMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
               return row.id >= value
             }
 
-            const filterAgeMethod = ({ option, row }: any) => {
+            const filterAgeMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
               return row.age === Number(option.data)
             }
 
             return {
-              demo2,
+              demo1,
               filterNameMethod,
               filterAgeMethod
             }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      虚拟滚动渲染，左右固定列<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
+      虚拟滚动渲染，左右固定列<br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
       对于多选 type=<table-column-api-link prop="checkbox"/> 当数据量海量时应该绑定 <table-api-link prop="checkField"/> 属性渲染速度更快<br>
       <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头)</span>
@@ -9,12 +9,14 @@
 
     <vxe-grid ref="xGrid" v-bind="gridOptions">
       <template #toolbar_buttons>
+        <vxe-button @click="loadColumnAndData(50, 1000)">50列1k条</vxe-button>
+        <vxe-button @click="loadColumnAndData(1000, 50)">1k列50条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
         <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 5000)">1w列5k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(100000, 50000)">10w列5w条</vxe-button>
         <vxe-button @click="$refs.xGrid.setAllCheckboxRow(true)">所有选中</vxe-button>
         <vxe-button @click="$refs.xGrid.clearCheckboxRow()">清除选中</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
@@ -58,6 +60,7 @@ export default defineComponent({
     const gridOptions = reactive({
       border: true,
       showOverflow: true,
+      rowKey: true,
       showHeaderOverflow: true,
       highlightHoverRow: true,
       highlightCurrentRow: true,
@@ -84,8 +87,9 @@ export default defineComponent({
             for (let i = currSize; i < colSize; i++) {
               columnList.push({
                 field: 'attr' + i,
-                title: 'Attr' + i,
-                width: 140,
+                title: i === 0 ? '' : 'Attr' + i,
+                width: i === 0 ? 60 : 140,
+                type: i === 0 ? 'checkbox' : null,
                 fixed: i < 1 ? 'left' : null
               })
             }
@@ -143,7 +147,13 @@ export default defineComponent({
                 attr1004: 'attr1004_row_' + i,
                 attr1005: 'attr1005_row_' + i,
                 attr1006: 'attr1005_row_' + i,
-                attr1007: 'attr1005_row_' + i
+                attr1007: 'attr1005_row_' + i,
+                attr10005: 'attr10005_row_' + i,
+                attr10006: 'attr10005_row_' + i,
+                attr10007: 'attr10005_row_' + i,
+                attr150005: 'attr100005_row_' + i,
+                attr150006: 'attr100005_row_' + i,
+                attr150007: 'attr100005_row_' + i
               })
             }
           }
@@ -197,12 +207,14 @@ export default defineComponent({
         `
         <vxe-grid ref="xGrid" v-bind="gridOptions">
           <template #toolbar_buttons>
+            <vxe-button @click="loadColumnAndData(50, 1000)">50列1k条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 50)">1k列50条</vxe-button>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
             <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 5000)">1w列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(100000, 50000)">10w列5w条</vxe-button>
             <vxe-button @click="$refs.xGrid.setAllCheckboxRow(true)">所有选中</vxe-button>
             <vxe-button @click="$refs.xGrid.clearCheckboxRow()">清除选中</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
@@ -222,6 +234,7 @@ export default defineComponent({
             const gridOptions = reactive({
               border: true,
               showOverflow: true,
+              rowKey: true,
               showHeaderOverflow: true,
               highlightHoverRow: true,
               highlightCurrentRow: true,
@@ -248,8 +261,9 @@ export default defineComponent({
                     for (let i = currSize; i < colSize; i++) {
                       columnList.push({
                         field: 'attr' + i,
-                        title: 'Attr' + i,
-                        width: 140,
+                        title: i === 0 ? '' : 'Attr' + i,
+                        width: i === 0 ? 60 : 140,
+                        type: i === 0 ? 'checkbox' : null,
                         fixed: i < 1 ? 'left' : null
                       })
                     }
@@ -307,7 +321,13 @@ export default defineComponent({
                         attr1004: 'attr1004_row_' + i,
                         attr1005: 'attr1005_row_' + i,
                         attr1006: 'attr1005_row_' + i,
-                        attr1007: 'attr1005_row_' + i
+                        attr1007: 'attr1005_row_' + i,
+                        attr10005: 'attr10005_row_' + i,
+                        attr10006: 'attr10005_row_' + i,
+                        attr10007: 'attr10005_row_' + i,
+                        attr150005: 'attr100005_row_' + i,
+                        attr150006: 'attr100005_row_' + i,
+                        attr150007: 'attr100005_row_' + i
                       })
                     }
                   }

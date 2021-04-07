@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      虚拟滚动渲染<span class="orange">（最大可以支撑 5w 列、30w 行）</span><br>
+      虚拟滚动渲染<br>
       大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性，建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
       <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头)</span>
     </p>
@@ -10,10 +10,10 @@
       <template #toolbar_buttons>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
         <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 5000)">1w列5k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(100000, 300000)">10w列30w条</vxe-button>
       </template>
     </vxe-grid>
 
@@ -106,14 +106,31 @@ export default defineComponent({
                 attr104: 'attr104_row_' + i,
                 attr106: 'attr106_row_' + i,
                 attr107: 'attr107_row_' + i,
-                attr400: 'attr100_row_' + i,
+                attr200: 'attr200_row_' + i,
+                attr201: 'attr201_row_' + i,
+                attr202: 'attr202_row_' + i,
+                attr203: 'attr203_row_' + i,
+                attr204: 'attr204_row_' + i,
+                attr205: 'attr205_row_' + i,
+                attr300: 'attr300_row_' + i,
+                attr301: 'attr301_row_' + i,
+                attr302: 'attr302_row_' + i,
+                attr303: 'attr303_row_' + i,
+                attr304: 'attr304_row_' + i,
+                attr305: 'attr305_row_' + i,
+                attr400: 'attr400_row_' + i,
                 attr401: 'attr401_row_' + i,
                 attr402: 'attr402_row_' + i,
                 attr403: 'attr403_row_' + i,
                 attr404: 'attr404_row_' + i,
                 attr405: 'attr405_row_' + i,
                 attr406: 'attr405_row_' + i,
-                attr407: 'attr405_row_' + i,
+                attr407: 'attr407_row_' + i,
+                attr595: 'attr495_row_' + i,
+                attr596: 'attr496_row_' + i,
+                attr597: 'attr497_row_' + i,
+                attr598: 'attr498_row_' + i,
+                attr599: 'attr499_row_' + i,
                 attr1000: 'attr100_row_' + i,
                 attr1001: 'attr1001_row_' + i,
                 attr1002: 'attr1002_row_' + i,
@@ -121,7 +138,13 @@ export default defineComponent({
                 attr1004: 'attr1004_row_' + i,
                 attr1005: 'attr1005_row_' + i,
                 attr1006: 'attr1005_row_' + i,
-                attr1007: 'attr1005_row_' + i
+                attr1007: 'attr1005_row_' + i,
+                attr10005: 'attr10005_row_' + i,
+                attr10006: 'attr10005_row_' + i,
+                attr10007: 'attr10005_row_' + i,
+                attr150005: 'attr100005_row_' + i,
+                attr150006: 'attr100005_row_' + i,
+                attr150007: 'attr100005_row_' + i
               })
             }
           }
@@ -170,10 +193,10 @@ export default defineComponent({
           <template #toolbar_buttons>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
             <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
             <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 5000)">1w列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(100000, 300000)">10w列30w条</vxe-button>
           </template>
         </vxe-grid>
         `,
@@ -256,14 +279,31 @@ export default defineComponent({
                         attr104: 'attr104_row_' + i,
                         attr106: 'attr106_row_' + i,
                         attr107: 'attr107_row_' + i,
-                        attr400: 'attr100_row_' + i,
+                        attr200: 'attr200_row_' + i,
+                        attr201: 'attr201_row_' + i,
+                        attr202: 'attr202_row_' + i,
+                        attr203: 'attr203_row_' + i,
+                        attr204: 'attr204_row_' + i,
+                        attr205: 'attr205_row_' + i,
+                        attr300: 'attr300_row_' + i,
+                        attr301: 'attr301_row_' + i,
+                        attr302: 'attr302_row_' + i,
+                        attr303: 'attr303_row_' + i,
+                        attr304: 'attr304_row_' + i,
+                        attr305: 'attr305_row_' + i,
+                        attr400: 'attr400_row_' + i,
                         attr401: 'attr401_row_' + i,
                         attr402: 'attr402_row_' + i,
                         attr403: 'attr403_row_' + i,
                         attr404: 'attr404_row_' + i,
                         attr405: 'attr405_row_' + i,
                         attr406: 'attr405_row_' + i,
-                        attr407: 'attr405_row_' + i,
+                        attr407: 'attr407_row_' + i,
+                        attr595: 'attr495_row_' + i,
+                        attr596: 'attr496_row_' + i,
+                        attr597: 'attr497_row_' + i,
+                        attr598: 'attr498_row_' + i,
+                        attr599: 'attr499_row_' + i,
                         attr1000: 'attr100_row_' + i,
                         attr1001: 'attr1001_row_' + i,
                         attr1002: 'attr1002_row_' + i,
@@ -271,7 +311,13 @@ export default defineComponent({
                         attr1004: 'attr1004_row_' + i,
                         attr1005: 'attr1005_row_' + i,
                         attr1006: 'attr1005_row_' + i,
-                        attr1007: 'attr1005_row_' + i
+                        attr1007: 'attr1005_row_' + i,
+                        attr10005: 'attr10005_row_' + i,
+                        attr10006: 'attr10005_row_' + i,
+                        attr10007: 'attr10005_row_' + i,
+                        attr150005: 'attr100005_row_' + i,
+                        attr150006: 'attr100005_row_' + i,
+                        attr150007: 'attr100005_row_' + i
                       })
                     }
                   }

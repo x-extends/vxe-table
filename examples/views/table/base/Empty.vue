@@ -1,10 +1,10 @@
 <template>
   <div>
-    <p class="tip">当数据为空时，通过 <table-column-api-link prop="empty-text"/> 设置空数据提示文本，可以使用 <router-link class="link" :to="{name: 'RendererEmpty'}">渲染器</router-link> 实现全局复用</p>
+    <p class="tip">当数据为空时，通过 <table-api-link prop="empty-text"/> 设置空数据提示文本，可以使用 <router-link class="link" :to="{name: 'RendererEmpty'}">渲染器</router-link> 实现全局复用</p>
 
     <vxe-table
       empty-text="没有更多数据了！"
-      :data="demo1.tableData">
+      :data="tableData1">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -75,13 +75,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 
 export default defineComponent({
   setup () {
-    const demo1 = reactive({
-      tableData: []
-    })
+    const tableData1 = ref([])
 
     const demo2 = reactive({
       loading: false,
@@ -106,14 +104,14 @@ export default defineComponent({
     }, 1000)
 
     return {
-      demo1,
+      tableData1,
       demo2,
       demo3,
       demoCodes: [
         `
         <vxe-table
           empty-text="没有更多数据了！"
-          :data="demo1.tableData">
+          :data="tableData1">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -121,16 +119,14 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, ref } from 'vue'
 
         export default defineComponent({
           setup () {
-            const demo1 = reactive({
-              tableData: []
-            })
+            const tableData1 = ref([])
 
             return {
-              demo1
+              tableData1
             }
           }
         })

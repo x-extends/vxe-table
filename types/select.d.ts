@@ -1,6 +1,8 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
+import { VxeOptgroupProps } from './optgroup'
+import { VxeOptionProps, VxeOptionPropTypes } from './option'
 
 /**
  * 组件 - 下拉框
@@ -25,11 +27,11 @@ export interface VxeSelectPrivateRef extends SelectPrivateRef { }
 
 export interface SelectReactData {
   inited: boolean;
-  staticOptions: any[];
-  fullGroupList: any[];
-  fullOptionList: any[];
-  visibleGroupList: any[];
-  visibleOptionList: any[];
+  staticOptions: VxeSelectDefines.OptionInfo[];
+  fullGroupList: VxeOptgroupProps[];
+  fullOptionList: VxeOptionProps[];
+  visibleGroupList: VxeOptgroupProps[];
+  visibleOptionList: VxeOptionProps[];
   panelIndex: number;
   panelStyle: VNodeStyle;
   panelPlacement: any;
@@ -66,14 +68,14 @@ export namespace VxeSelectPropTypes {
   export type Clearable = boolean;
   export type Placeholder = string;
   export type Disabled = boolean;
-  export type ClassName = string;
+  export type ClassName = string | ((params: { $select: VxeSelectConstructor }) => string);
   export type Multiple = boolean;
   export type MultiCharOverflow = number | string;
   export type PrefixIcon = string;
   export type Placement = string;
   export type Options = any[];
   export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps;
-  export type OptionGroups = any[];
+  export type OptionGroups = VxeOptgroupProps[];
   export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps;
   export type EmptyText = string;
   export type OptionId = string;
@@ -124,6 +126,18 @@ export type VxeSelectEmits = [
 ]
 
 export namespace VxeSelectDefines {
+  export class OptionInfo {
+    id: string;
+
+    value: any;
+    label: VxeOptionPropTypes.Label;
+    visible: VxeOptionPropTypes.Visible;
+    className: VxeOptionPropTypes.ClassName;
+    disabled: VxeOptionPropTypes.Disabled;
+
+    options: OptionInfo[];
+  }
+
   interface SelectEventParams extends VxeEvent {
     $select: VxeSelectConstructor;
   }

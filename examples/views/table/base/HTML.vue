@@ -12,13 +12,13 @@
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column
         field="describeHtml"
-        title="HTML 标签与筛选"
+        title="<span class=red>HTML 标签与筛选</span>"
         type="html"
         sortable
         :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
         :filter-method="filterDescribeMethod"
         :sort-by="sortDescribeMethod"></vxe-table-column>
-      <vxe-table-column field="role" type="html" title="HTML 标签与格式化" :formatter="formatRole"></vxe-table-column>
+      <vxe-table-column field="role" type="html" title="<span class=green>HTML 标签与格式化</span>" :formatter="formatRole"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -71,16 +71,15 @@ export default defineComponent({
           :data="demo1.tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="describeHtml" type="html" title="HTML 标签"></vxe-table-column>
           <vxe-table-column
             field="describeHtml"
-            title="HTML 标签与筛选"
+            title="<span class=red>HTML 标签与筛选</span>"
             type="html"
             sortable
             :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
             :filter-method="filterDescribeMethod"
             :sort-by="sortDescribeMethod"></vxe-table-column>
-          <vxe-table-column field="role" type="html" title="HTML 标签与格式化" :formatter="formatRole"></vxe-table-column>
+          <vxe-table-column field="role" type="html" title="<span class=green>HTML 标签与格式化</span>" :formatter="formatRole"></vxe-table-column>
         </vxe-table>
         `,
         `

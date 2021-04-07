@@ -9,6 +9,7 @@ export default defineComponent({
     value: null,
     label: { type: [String, Number, Boolean] as PropType<VxeOptionPropTypes.Label>, default: '' },
     visible: { type: Boolean as PropType<VxeOptionPropTypes.Visible>, default: null },
+    className: [String, Function] as PropType<VxeOptionPropTypes.ClassName>,
     disabled: Boolean as PropType<VxeOptionPropTypes.Disabled>
   },
   setup (props, { slots }) {

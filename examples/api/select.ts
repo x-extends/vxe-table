@@ -62,10 +62,10 @@ const apis = [
         list: []
       },
       {
-        name: 'className',
-        desc: '附加 className',
+        name: 'class-name',
+        desc: '给下拉框附加 className',
         version: '4.0.7',
-        type: 'string',
+        type: 'string | ((params: {}) => string)',
         enum: '',
         defVal: '',
         list: []

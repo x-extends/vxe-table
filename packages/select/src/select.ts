@@ -6,7 +6,7 @@ import { getEventTargetNode, getAbsolutePos } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, getFuncText, formatText } from '../../tools/utils'
 import { GlobalEvent } from '../../tools/event'
 
-import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps } from '../../../types/all'
+import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps, VxeOptionProps } from '../../../types/all'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -31,7 +31,7 @@ export default defineComponent({
     optionProps: Object as PropType<VxeSelectPropTypes.OptionProps>,
     optionGroups: Array as PropType<VxeSelectPropTypes.OptionGroups>,
     optionGroupProps: Object as PropType<VxeSelectPropTypes.OptionGroupProps>,
-    className: String as PropType<VxeSelectPropTypes.ClassName>,
+    className: [String, Function] as PropType<VxeSelectPropTypes.ClassName>,
     size: { type: String as PropType<VxeSelectPropTypes.Size>, default: () => GlobalConfig.select.size || GlobalConfig.size },
     emptyText: String as PropType<VxeSelectPropTypes.EmptyText>,
     optionId: { type: String as PropType<VxeSelectPropTypes.OptionId>, default: () => GlobalConfig.select.optionId },
@@ -124,7 +124,7 @@ export default defineComponent({
     const findOption = (optionValue: any) => {
       const { fullOptionList, fullGroupList } = reactData
       const isGroup = computeIsGroup.value
-      const valueField = computeValueField.value
+      const valueField = computeValueField.value as 'value'
       if (isGroup) {
         for (let gIndex = 0; gIndex < fullGroupList.length; gIndex++) {
           const group = fullGroupList[gIndex]
@@ -144,7 +144,7 @@ export default defineComponent({
     const getSelectLabel = (value: any) => {
       const labelField = computeLabelField.value
       const item = findOption(value)
-      return XEUtils.toValueString(item ? item[labelField] : value)
+      return XEUtils.toValueString(item ? item[labelField as 'label'] : value)
     }
 
     const computeSelectLabel = computed(() => {
@@ -413,8 +413,8 @@ export default defineComponent({
     const findOffsetOption = (optionValue: any, isUpArrow: boolean) => {
       const { visibleOptionList, visibleGroupList } = reactData
       const isGroup = computeIsGroup.value
-      const valueField = computeValueField.value
-      const groupOptionsField = computeGroupOptionsField.value
+      const valueField = computeValueField.value as 'value'
+      const groupOptionsField = computeGroupOptionsField.value as 'options'
       let firstOption
       let prevOption
       let nextOption
@@ -552,20 +552,21 @@ export default defineComponent({
       }
     }
 
-    const renderOption = (list: any[], group?: VxeOptgroupProps) => {
+    const renderOption = (list: VxeOptionProps[], group?: VxeOptgroupProps) => {
       const { optionKey, modelValue, multiple } = props
       const { currentValue } = reactData
       const labelField = computeLabelField.value
       const valueField = computeValueField.value
       const isGroup = computeIsGroup.value
       return list.map((option, cIndex) => {
+        const { className } = option
         const isVisible = !isGroup || isOptionVisible(option)
         const isDisabled = (group && group.disabled) || option.disabled
-        const optionValue = option[valueField]
+        const optionValue = option[valueField as 'value']
         const optid = getOptid(option)
         return isVisible ? h('div', {
           key: optionKey ? optid : cIndex,
-          class: ['vxe-select-option', {
+          class: ['vxe-select-option', className ? (XEUtils.isFunction(className) ? className({ option, $select: $xeselect }) : className) : '', {
             'is--disabled': isDisabled,
             'is--selected': multiple ? (modelValue && modelValue.indexOf(optionValue) > -1) : modelValue === optionValue,
             'is--hover': currentValue === optionValue
@@ -584,7 +585,7 @@ export default defineComponent({
               setCurrentOption(option)
             }
           }
-        }, formatText(getFuncText(option[labelField]))) : null
+        }, formatText(getFuncText(option[labelField as 'label']))) : null
       })
     }
 
@@ -594,11 +595,12 @@ export default defineComponent({
       const groupLabelField = computeGroupLabelField.value
       const groupOptionsField = computeGroupOptionsField.value
       return visibleGroupList.map((group, gIndex) => {
+        const { className } = group
         const optid = getOptid(group)
         const isGroupDisabled = group.disabled
         return h('div', {
           key: optionKey ? optid : gIndex,
-          class: ['vxe-optgroup', {
+          class: ['vxe-optgroup', className ? (XEUtils.isFunction(className) ? className({ option: group, $select: $xeselect }) : className) : '', {
             'is--disabled': isGroupDisabled
           }],
           // attrs
@@ -606,10 +608,10 @@ export default defineComponent({
         }, [
           h('div', {
             class: 'vxe-optgroup--title'
-          }, getFuncText(group[groupLabelField])),
+          }, getFuncText(group[groupLabelField as 'label'])),
           h('div', {
             class: 'vxe-optgroup--wrapper'
-          }, renderOption(group[groupOptionsField], group))
+          }, renderOption(group[groupOptionsField as 'options'], group))
         ])
       })
     }
@@ -729,7 +731,7 @@ export default defineComponent({
       const selectLabel = computeSelectLabel.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-select', className, {
+        class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: $xeselect }) : className) : '', {
           [`size--${vSize}`]: vSize,
           'is--visivle': visiblePanel,
           'is--disabled': disabled,

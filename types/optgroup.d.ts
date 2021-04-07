@@ -1,5 +1,5 @@
 import { VXEComponent } from './component'
-import { VxeOptionPropTypes } from './option'
+import { VxeOptionProps, VxeOptionPropTypes } from './option'
 
 /**
  * 组件 - 下拉框选项分组
@@ -16,8 +16,10 @@ export type VxeOptgroupProps = {
    * 是否禁用
    */
   visible?: VxeOptionPropTypes.Visible;
+  className?: VxeOptionPropTypes.ClassName;
   /**
    * 是否禁用
    */
   disabled?: VxeOptionPropTypes.Disabled;
+  options: VxeOptionProps[];
 }

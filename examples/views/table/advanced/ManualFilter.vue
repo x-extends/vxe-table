@@ -123,37 +123,43 @@ export default defineComponent({
     const updateNameFilterEvent: VxeButtonEvents.Click = () => {
       const $table = xTable.value
       const column = $table.getColumnByField('name')
-      // 修改筛选列表，并默认设置为选中状态
-      $table.setFilter(column, [
-        { label: '包含 0', value: '0' },
-        { label: '包含 1', value: '1' },
-        { label: '包含 2', value: '2', checked: true },
-        { label: '包含 3', value: '3' },
-        { label: '包含 4', value: '4' }
-      ])
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      $table.updateData()
+      if (column) {
+        // 修改筛选列表，并默认设置为选中状态
+        $table.setFilter(column, [
+          { label: '包含 0', value: '0' },
+          { label: '包含 1', value: '1' },
+          { label: '包含 2', value: '2', checked: true },
+          { label: '包含 3', value: '3' },
+          { label: '包含 4', value: '4' }
+        ])
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        $table.updateData()
+      }
     }
 
     const filterNameEvent: VxeButtonEvents.Click = () => {
       const $table = xTable.value
       const column = $table.getColumnByField('name')
-      // 修改第二个选项为勾选状态
-      const option = column.filters[1]
-      option.checked = true
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      $table.updateData()
+      if (column) {
+        // 修改第二个选项为勾选状态
+        const option = column.filters[1]
+        option.checked = true
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        $table.updateData()
+      }
     }
 
     const filterAgeEvent: VxeButtonEvents.Click = () => {
       const $table = xTable.value
       const column = $table.getColumnByField('age')
-      // 修改第一个选项为勾选状态
-      const option = column.filters[0]
-      option.data = '32'
-      option.checked = true
-      // 修改条件之后，需要手动调用 updateData 处理表格数据
-      $table.updateData()
+      if (column) {
+        // 修改第一个选项为勾选状态
+        const option = column.filters[0]
+        option.data = '32'
+        option.checked = true
+        // 修改条件之后，需要手动调用 updateData 处理表格数据
+        $table.updateData()
+      }
     }
 
     findList()
@@ -277,37 +283,43 @@ export default defineComponent({
             const updateNameFilterEvent: VxeButtonEvents.Click = () => {
               const $table = xTable.value
               const column = $table.getColumnByField('name')
-              // 修改筛选列表，并默认设置为选中状态
-              $table.setFilter(column, [
-                { label: '包含 0', value: '0' },
-                { label: '包含 1', value: '1' },
-                { label: '包含 2', value: '2', checked: true },
-                { label: '包含 3', value: '3' },
-                { label: '包含 4', value: '4' }
-              ])
-              // 修改条件之后，需要手动调用 updateData 处理表格数据
-              $table.updateData()
+              if (column) {
+                // 修改筛选列表，并默认设置为选中状态
+                $table.setFilter(column, [
+                  { label: '包含 0', value: '0' },
+                  { label: '包含 1', value: '1' },
+                  { label: '包含 2', value: '2', checked: true },
+                  { label: '包含 3', value: '3' },
+                  { label: '包含 4', value: '4' }
+                ])
+                // 修改条件之后，需要手动调用 updateData 处理表格数据
+                $table.updateData()
+              }
             }
 
             const filterNameEvent: VxeButtonEvents.Click = () => {
               const $table = xTable.value
               const column = $table.getColumnByField('name')
-              // 修改第二个选项为勾选状态
-              const option = column.filters[1]
-              option.checked = true
-              // 修改条件之后，需要手动调用 updateData 处理表格数据
-              $table.updateData()
+              if (column) {
+                // 修改第二个选项为勾选状态
+                const option = column.filters[1]
+                option.checked = true
+                // 修改条件之后，需要手动调用 updateData 处理表格数据
+                $table.updateData()
+              }
             }
 
             const filterAgeEvent: VxeButtonEvents.Click = () => {
               const $table = xTable.value
               const column = $table.getColumnByField('age')
-              // 修改第一个选项为勾选状态
-              const option = column.filters[0]
-              option.data = '32'
-              option.checked = true
-              // 修改条件之后，需要手动调用 updateData 处理表格数据
-              $table.updateData()
+              if (column) {
+                // 修改第一个选项为勾选状态
+                const option = column.filters[0]
+                option.data = '32'
+                option.checked = true
+                // 修改条件之后，需要手动调用 updateData 处理表格数据
+                $table.updateData()
+              }
             }
 
             findList()

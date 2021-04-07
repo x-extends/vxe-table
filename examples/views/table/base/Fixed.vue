@@ -8,7 +8,7 @@
     <vxe-table
       border="inner"
       show-overflow
-      :data="demo1.tableData">
+      :data="tableData1">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
       <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
@@ -29,7 +29,7 @@
     <vxe-table
       border
       show-overflow
-      :data="demo2.tableData">
+      :data="tableData2">
       <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -48,35 +48,31 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup () {
-    const demo1 = reactive({
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-      ]
-    })
-    const demo2 = reactive({
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-      ]
-    })
+    const tableData1 = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+    ])
+    const tableData2 = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+    ])
     return {
-      demo1,
-      demo2,
+      tableData1,
+      tableData2,
       demoCodes: [
         `
         <vxe-table
           border="inner"
           show-overflow
-          :data="demo1.tableData">
+          :data="tableData1">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
           <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
@@ -90,16 +86,14 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const demo1 = reactive({
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-              ]
-            })
+            const tableData1 = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+            ])
             return {
-              demo1
+              tableData1
             }
           }
         })
@@ -108,7 +102,7 @@ export default defineComponent({
         <vxe-table
           border
           show-overflow
-          :data="demo2.tableData">
+          :data="tableData2">
           <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -122,16 +116,14 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const demo1 = reactive({
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
-              ]
-            })
+            const tableData2 = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+            ])
             return {
-              demo2
+              tableData2
             }
           }
         })

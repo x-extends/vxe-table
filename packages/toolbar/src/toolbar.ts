@@ -22,7 +22,8 @@ export default defineComponent({
     buttons: { type: Array as PropType<VxeToolbarPropTypes.Buttons>, default: () => GlobalConfig.toolbar.buttons },
     tools: { type: Array as PropType<VxeToolbarPropTypes.Tools>, default: () => GlobalConfig.toolbar.tools },
     perfect: { type: Boolean as PropType<VxeToolbarPropTypes.Perfect>, default: () => GlobalConfig.toolbar.perfect },
-    size: { type: String as PropType<VxeToolbarPropTypes.Size>, default: () => GlobalConfig.toolbar.size || GlobalConfig.size }
+    size: { type: String as PropType<VxeToolbarPropTypes.Size>, default: () => GlobalConfig.toolbar.size || GlobalConfig.size },
+    className: [String, Function] as PropType<VxeToolbarPropTypes.ClassName>
   },
   emits: [
     'button-click',
@@ -621,7 +622,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { perfect, loading, refresh, zoom, custom } = props
+      const { perfect, loading, refresh, zoom, custom, className } = props
       const vSize = computeSize.value
       const refreshOpts = computeRefreshOpts.value
       const importOpts = computeImportOpts.value
@@ -630,7 +631,7 @@ export default defineComponent({
       const zoomOpts = computeZoomOpts.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-toolbar', {
+        class: ['vxe-toolbar', className ? (XEUtils.isFunction(className) ? className({ $toolbar: $xetoolbar }) : className) : '', {
           [`size--${vSize}`]: vSize,
           'is--perfect': perfect,
           'is--loading': loading

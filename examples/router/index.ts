@@ -162,6 +162,7 @@ import TableTreeEdit from '../views/table/tree/Edit.vue'
 import TableTreeTemplate from '../views/table/tree/Template.vue'
 
 import TableScroll from '../views/table/scroll/Scroll.vue'
+import TableScrollMode from '../views/table/scroll/Mode.vue'
 import TableScrollRows from '../views/table/scroll/ScrollRows.vue'
 import TableScrollFullRows from '../views/table/scroll/ScrollFullRows.vue'
 import TableScrollCols from '../views/table/scroll/ScrollCols.vue'
@@ -1140,6 +1141,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/scroll/scroll',
     name: 'TableScroll',
     component: TableScroll
+  },
+  {
+    path: '/table/scroll/mode',
+    name: 'TableScrollMode',
+    component: TableScrollMode
   },
   {
     path: '/table/scroll/rows',

@@ -235,12 +235,12 @@ export interface TablePublicMethods {
    * 根据列的唯一主键获取列
    * @param colid 列主键
    */
-  getColumnById(colid: string): VxeTableDefines.ColumnInfo;
+  getColumnById(colid: string): VxeTableDefines.ColumnInfo | null;
   /**
    * 根据列的字段名获取列
    * @param field 字段名
    */
-  getColumnByField(field: string): VxeTableDefines.ColumnInfo;
+  getColumnByField(field: string): VxeTableDefines.ColumnInfo | null;
   /**
    * 获取当前表格的列
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
@@ -264,7 +264,7 @@ export interface TablePublicMethods {
    * 根据行的唯一主键获取行
    * @param rowid 行主键
    */
-  getRowById(rowid: string | number): any;
+  getRowById(rowid: string | number): any | null;
   /**
    * 根据行获取行的唯一主键
    * @param row 行对象
@@ -644,7 +644,7 @@ export interface TablePublicMethods {
 export interface VxeTableMethods extends TableMethods { }
 
 export interface TablePrivateMethods {
-  handleFieldOrColumn(fieldOrColumn: any): VxeTableDefines.ColumnInfo | null;
+  updateAfterDataIndex(): void;
   callSlot(slotFunc: Function | string | null, params: any): VNode[];
   getParentElem(): Element;
   getParentHeight(): number;
@@ -935,13 +935,56 @@ export interface TableInternalData {
   // 渲染所有列
   visibleColumn: VxeTableDefines.ColumnInfo[];
   // 缓存数据集
-  fullAllDataRowMap: Map<any, any>;
-  fullAllDataRowIdData: { [key: string]: any };
-  fullDataRowMap: Map<any, any>;
-  fullDataRowIdData: { [key: string]: any };
-  fullColumnMap: Map<any, any>;
-  fullColumnIdData: { [key: string]: any };
-  fullColumnFieldData: { [key: string]: any };
+  fullAllDataRowIdData: {
+    [key: string]: {
+      row: any;
+      rowid: string;
+      index: number;
+      $index: number;
+      _index: number;
+      items: any[];
+      parent: any;
+      treeLoaded?: boolean;
+      expandLoaded?: boolean;
+      formatData?: {
+        [key: string]: {
+          value: any;
+          label: any;
+        }
+      };
+    }
+  };
+  fullDataRowIdData: {
+    [key: string]: {
+      row: any;
+      rowid: string;
+      index: number;
+      $index: number;
+      _index: number;
+      items: any[];
+      parent: any;
+    }
+  };
+  fullColumnIdData: {
+    [key: string]: {
+      column: VxeTableDefines.ColumnInfo;
+      colid: string;
+      index: number;
+      $index: number;
+      _index: number;
+      items: VxeTableDefines.ColumnInfo[];
+      parent: VxeTableDefines.ColumnInfo;
+    }
+  };
+  fullColumnFieldData: {
+    [key: string]: {
+      column: VxeTableDefines.ColumnInfo;
+      colid: string;
+      index: number;
+      items: VxeTableDefines.ColumnInfo[];
+      parent: VxeTableDefines.ColumnInfo;
+    }
+  };
 
   // 特殊标识
   inited: boolean;
@@ -1041,7 +1084,7 @@ export namespace VxeTablePropTypes {
     _columnIndex: number;
   }) => void | null | string | { [key: string]: boolean });
 
-  export type CellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+  export type CellStyle = VNodeStyle | ((params: {
     row: any;
     rowIndex: number;
     $rowIndex: number;
@@ -1050,42 +1093,45 @@ export namespace VxeTablePropTypes {
     columnIndex: number;
     $columnIndex: number;
     _columnIndex: number;
-  }) => void | null | string | { [key: string]: boolean });
+  }) => void | null | VNodeStyle);
 
-  export type HeaderCellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+  export type HeaderCellStyle = VNodeStyle | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
-  }) => void | null | string | { [key: string]: boolean });
+    column: VxeTableDefines.ColumnInfo;
+    columnIndex: number;
+    _columnIndex: number;
+  }) => void | null | VNodeStyle);
 
-  export type FooterCellStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+  export type FooterCellStyle = VNodeStyle | ((params: {
     $rowIndex: number;
     column: VxeTableDefines.ColumnInfo;
     columnIndex: number;
     $columnIndex: number;
     _columnIndex: number;
-  }) => void | null | string | { [key: string]: boolean });
+  }) => void | null | VNodeStyle);
 
-  export type RowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+  export type RowStyle = VNodeStyle | ((params: {
     row: any;
     rowIndex: number;
     $rowIndex: number;
     _rowIndex: number;
-  }) => void | null | string | { [key: string]: boolean });
+  }) => void | null | VNodeStyle);
 
-  export type HeaderRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+  export type HeaderRowStyle = VNodeStyle | ((params: {
     $table: & VxeTablePrivateMethods;
     $rowIndex: number;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => void | null | string | { [key: string]: boolean });
+  }) => void | null | VNodeStyle);
 
-  export type FooterRowStyle = VNodeStyle | Array<string | number | boolean | VNodeStyle> | ((params: {
+  export type FooterRowStyle = VNodeStyle | ((params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     _rowIndex: number;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
-  }) => void | null | string | { [key: string]: boolean });
+  }) => void | null | VNodeStyle);
 
   export type MergeCell = VxeTableDefines.MergeOptions;
   export type MergeCells = MergeCell[];

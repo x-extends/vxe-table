@@ -30,6 +30,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
+import { VxeTablePropTypes } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -42,7 +43,7 @@ export default defineComponent({
       ]
     })
 
-    const headerCellStyle = ({ column }: any) => {
+    const headerCellStyle: VxeTablePropTypes.HeaderCellStyle = ({ column }) => {
       if (column.property === 'name') {
         return {
           backgroundColor: '#f60',
@@ -51,7 +52,7 @@ export default defineComponent({
       }
     }
 
-    const rowStyle = ({ rowIndex }: any) => {
+    const rowStyle: VxeTablePropTypes.RowStyle = ({ rowIndex }) => {
       if ([2, 3, 5].includes(rowIndex)) {
         return {
           backgroundColor: 'red',
@@ -60,7 +61,7 @@ export default defineComponent({
       }
     }
 
-    const cellStyle = ({ row, column }: any) => {
+    const cellStyle: VxeTablePropTypes.CellStyle = ({ row, column }) => {
       if (column.property === 'sex') {
         if (row.sex >= '1') {
           return {
@@ -97,6 +98,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
+        import { VxeTablePropTypes } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -109,7 +111,7 @@ export default defineComponent({
               ]
             })
 
-            const headerCellStyle = ({ column }: any) => {
+            const headerCellStyle: VxeTablePropTypes.HeaderCellStyle = ({ column }) => {
               if (column.property === 'name') {
                 return {
                   backgroundColor: '#f60',
@@ -118,7 +120,7 @@ export default defineComponent({
               }
             }
 
-            const rowStyle = ({ rowIndex }: any) => {
+            const rowStyle: VxeTablePropTypes.RowStyle = ({ rowIndex }) => {
               if ([2, 3, 5].includes(rowIndex)) {
                 return {
                   backgroundColor: 'red',
@@ -127,7 +129,7 @@ export default defineComponent({
               }
             }
 
-            const cellStyle = ({ row, column }: any) => {
+            const cellStyle: VxeTablePropTypes.CellStyle = ({ row, column }) => {
               if (column.property === 'sex') {
                 if (row.sex >= '1') {
                   return {

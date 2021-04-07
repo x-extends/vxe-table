@@ -1,4 +1,5 @@
 import { VXEComponent } from './component'
+import { VxeSelectConstructor } from './select'
 
 /**
  * 组件 - 下拉框选项
@@ -19,6 +20,7 @@ export type VxeOptionProps = {
    * 是否显示
    */
   visible?: VxeOptionPropTypes.Visible;
+  className?: VxeOptionPropTypes.ClassName;
   /**
    * 是否禁用
    */
@@ -29,5 +31,6 @@ export namespace VxeOptionPropTypes {
   export type Value = any;
   export type Label = string | number | boolean;
   export type Visible = boolean;
+  export type ClassName = string | ((params: { option: any, $select: VxeSelectConstructor }) => string);
   export type Disabled = boolean;
 }

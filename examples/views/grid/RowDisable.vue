@@ -100,13 +100,13 @@ export default defineComponent({
       // sex 值编辑为 1 的列禁止编辑
       const isSexDisabled = row.sex === '1'
 
-      if (nameColumn.editRender.attrs) {
+      if (nameColumn && nameColumn.editRender.attrs) {
         nameColumn.editRender.attrs.disabled = isNameDisabled
       }
-      if (ageColumn.editRender.attrs) {
+      if (ageColumn && ageColumn.editRender.attrs) {
         ageColumn.editRender.attrs.disabled = isAgeDisabled
       }
-      if (sexColumn.editRender.attrs) {
+      if (sexColumn && sexColumn.editRender.attrs) {
         sexColumn.editRender.attrs.disabled = isSexDisabled
       }
     }
@@ -213,13 +213,13 @@ export default defineComponent({
               // sex 值编辑为 1 的列禁止编辑
               const isSexDisabled = row.sex === '1'
 
-              if (nameColumn.editRender.attrs) {
+              if (nameColumn && nameColumn.editRender.attrs) {
                 nameColumn.editRender.attrs.disabled = isNameDisabled
               }
-              if (ageColumn.editRender.attrs) {
+              if (ageColumn && ageColumn.editRender.attrs) {
                 ageColumn.editRender.attrs.disabled = isAgeDisabled
               }
-              if (sexColumn.editRender.attrs) {
+              if (sexColumn && sexColumn.editRender.attrs) {
                 sexColumn.editRender.attrs.disabled = isSexDisabled
               }
             }

@@ -35,6 +35,13 @@ export interface XEColumnInstance {
   column: ColumnInfo;
 }
 
+export const handleFieldOrColumn = ($xetable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo) => {
+  if (fieldOrColumn) {
+    return XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+  }
+  return null
+}
+
 function getPaddingLeftRightSize (elem: HTMLElement | null) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)

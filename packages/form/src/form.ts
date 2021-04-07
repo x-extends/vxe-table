@@ -50,6 +50,7 @@ export default defineComponent({
     titleColon: { type: Boolean as PropType<VxeFormPropTypes.TitleColon>, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean as PropType<VxeFormPropTypes.TitleAsterisk>, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String] as PropType<VxeFormPropTypes.TitleOverflow>, default: null },
+    className: [String, Function] as PropType<VxeFormPropTypes.ClassName>,
     items: Array as PropType<VxeFormPropTypes.Items>,
     rules: Object as PropType<VxeFormPropTypes.Rules>,
     preventSubmit: { type: Boolean as PropType<VxeFormPropTypes.PreventSubmit>, default: () => GlobalConfig.form.preventSubmit },
@@ -666,13 +667,13 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { loading } = props
+      const { loading, className, data } = props
       const { formItems } = reactData
       const vSize = computeSize.value
       const tooltipOpts = computeTooltipOpts.value
       return h('form', {
         ref: refElem,
-        class: ['vxe-form', {
+        class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: $xeform }) : className) : '', {
           [`size--${vSize}`]: vSize,
           'is--colon': props.titleColon,
           'is--asterisk': props.titleAsterisk,

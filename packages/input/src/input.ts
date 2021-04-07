@@ -119,7 +119,7 @@ export default defineComponent({
     'change',
     'keydown',
     'keyup',
-    'mousewheel',
+    'wheel',
     'click',
     'focus',
     'blur',
@@ -504,7 +504,7 @@ export default defineComponent({
       return minuteList
     })
 
-    const computeIsReadonly = computed(() => {
+    const computeInpReadonly = computed(() => {
       const { type, readonly, editable } = props
       return readonly || type === 'week' || !editable
     })
@@ -547,7 +547,7 @@ export default defineComponent({
       return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val)
     }
 
-    const triggerEvent = (evnt: Event & { type: 'input' | 'change' | 'keydown' | 'keyup' | 'mousewheel' | 'click' | 'focus' | 'blur' }) => {
+    const triggerEvent = (evnt: Event & { type: 'input' | 'change' | 'keydown' | 'keyup' | 'wheel' | 'click' | 'focus' | 'blur' }) => {
       const { inputValue } = reactData
       inputMethods.dispatchEvent(evnt.type, { value: inputValue }, evnt)
     }
@@ -582,10 +582,8 @@ export default defineComponent({
 
     const changeEvent = (evnt: Event & { type: 'change' }) => {
       const inpImmediate = computeInpImmediate.value
-      if (inpImmediate) {
+      if (!inpImmediate) {
         triggerEvent(evnt)
-      } else {
-        emitModel(reactData.inputValue, evnt)
       }
     }
 
@@ -736,9 +734,9 @@ export default defineComponent({
       const isNumType = computeIsNumType.value
       const isDatePickerType = computeIsDatePickerType.value
       const dateLabelFormat = computeDateLabelFormat.value
-      const isReadonly = computeIsReadonly.value
+      const inpReadonly = computeInpReadonly.value
       let inpVal: VxeInputPropTypes.ModelValue
-      if (!isReadonly) {
+      if (!inpReadonly) {
         if (isNumType) {
           if (inputValue) {
             inpVal = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
@@ -801,10 +799,9 @@ export default defineComponent({
 
     // 密码
     const passwordToggleEvent = (evnt: Event) => {
-      const { disabled } = props
+      const { readonly, disabled } = props
       const { showPwd } = reactData
-      const isReadonly = computeIsReadonly.value
-      if (!disabled && !isReadonly) {
+      if (!disabled && !readonly) {
         reactData.showPwd = !showPwd
       }
       inputMethods.dispatchEvent('toggle-visible', { visible: reactData.showPwd }, evnt)
@@ -838,10 +835,9 @@ export default defineComponent({
     let downbumTimeout: number
 
     const numberNextEvent = (evnt: Event) => {
-      const { disabled } = props
-      const isReadonly = computeIsReadonly.value
+      const { readonly, disabled } = props
       clearTimeout(downbumTimeout)
-      if (!disabled && !isReadonly) {
+      if (!disabled && !readonly) {
         numberChange(false, evnt)
       }
       inputMethods.dispatchEvent('next-number', {}, evnt)
@@ -855,10 +851,9 @@ export default defineComponent({
     }
 
     const numberPrevEvent = (evnt: Event) => {
-      const { disabled } = props
-      const isReadonly = computeIsReadonly.value
+      const { readonly, disabled } = props
       clearTimeout(downbumTimeout)
-      if (!disabled && !isReadonly) {
+      if (!disabled && !readonly) {
         numberChange(true, evnt)
       }
       inputMethods.dispatchEvent('prev-number', {}, evnt)
@@ -929,14 +924,14 @@ export default defineComponent({
       }
     }
 
-    const mousewheelEvent = (evnt: MouseEvent & {
-      type: 'mousewheel';
+    const wheelEvent = (evnt: WheelEvent & {
+      type: 'wheel';
       wheelDelta: number;
     }) => {
       const isNumType = computeIsNumType.value
       if (isNumType && props.controls) {
         if (reactData.isActivated) {
-          const delta = -evnt.wheelDelta || evnt.detail
+          const delta = evnt.deltaY
           if (delta > 0) {
             numberNextEvent(evnt)
           } else if (delta < 0) {
@@ -2024,11 +2019,11 @@ export default defineComponent({
     initValue()
 
     const renderVN = () => {
-      const { className, controls, type, align, name, disabled, autocomplete } = props
+      const { className, controls, type, align, name, disabled, readonly, autocomplete } = props
       const { inputValue, visiblePanel, isActivated } = reactData
       const vSize = computeSize.value
       const isDatePickerType = computeIsDatePickerType.value
-      const isReadonly = computeIsReadonly.value
+      const inpReadonly = computeInpReadonly.value
       const inpMaxlength = computeInpMaxlength.value
       const inputType = computeInputType.value
       const inpPlaceholder = computeInpPlaceholder.value
@@ -2049,12 +2044,12 @@ export default defineComponent({
           type: inputType,
           placeholder: inpPlaceholder,
           maxlength: inpMaxlength,
-          readonly: isReadonly,
+          readonly: inpReadonly,
           disabled,
           autocomplete,
           onKeydown: keydownEvent,
           onKeyup: keyupEvent,
-          onMousewheel: mousewheelEvent,
+          onWheel: wheelEvent,
           onClick: clickEvent,
           onInput: inputEvent,
           onChange: changeEvent,
@@ -2080,7 +2075,7 @@ export default defineComponent({
           'is--controls': controls,
           'is--prefix': !!prefix,
           'is--suffix': !!suffix,
-          'is--readonly': isReadonly,
+          'is--readonly': readonly,
           'is--visivle': visiblePanel,
           'is--disabled': disabled,
           'is--active': isActivated

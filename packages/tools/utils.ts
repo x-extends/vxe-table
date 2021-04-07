@@ -52,7 +52,7 @@ export function hasChildrenList (item: any) {
   return item && item.children && item.children.length > 0
 }
 
-export function getFuncText (content?: string | number | null) {
+export function getFuncText (content?: string | number | boolean | null) {
   return content ? XEUtils.toValueString(GlobalConfig.translate ? GlobalConfig.translate('' + content) : content) : ''
 }
 

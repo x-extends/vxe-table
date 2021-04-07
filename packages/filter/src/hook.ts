@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VXETable } from '../../v-x-e-table'
-import { toFilters } from '../../table/src/util'
+import { toFilters, handleFieldOrColumn } from '../../table/src/util'
 import { getDomNode } from '../../tools/dom'
 
 import { VxeGlobalHooksHandles, TableFilterMethods, TableFilterPrivateMethods } from '../../../types/all'
@@ -124,7 +124,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
        * @param {Array} options 选项
        */
       setFilter (fieldOrColumn, options) {
-        const column = $xetable.handleFieldOrColumn(fieldOrColumn)
+        const column = handleFieldOrColumn($xetable, fieldOrColumn)
         if (column && column.filters && options) {
           column.filters = toFilters(options)
         }
@@ -141,7 +141,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         const filterOpts = computeFilterOpts.value
         let column
         if (fieldOrColumn) {
-          column = $xetable.handleFieldOrColumn(fieldOrColumn)
+          column = handleFieldOrColumn($xetable, fieldOrColumn)
           if (column) {
             filterPrivateMethods.handleClearFilter(column)
           }
