@@ -143,12 +143,6 @@ export default {
 👉 [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic) [👀备用地址](https://x-extends.github.io/vxe-table/#/table/base/basic)  
 👉 [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api) [👀备用地址](https://x-extends.github.io/vxe-table/#/table/api)
 
-## 支持作者
-
-如果该开源软件对您有所帮助，可以扫下方二维码支持我们。☕  
-
-👉 [支持作者💰](https://xuliangzhan_admin.gitee.io/vxe-table/#/donation/api)  
-
 ## License
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan

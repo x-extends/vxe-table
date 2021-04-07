@@ -3979,11 +3979,7 @@ const Methods = {
       tableBodyElem.scrollTop = 0
       tableBodyElem.scrollLeft = 0
     }
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve(this.$nextTick())
-      })
-    })
+    return this.$nextTick()
   },
   /**
    * 更新表尾合计

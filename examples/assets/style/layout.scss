@@ -27,6 +27,13 @@ body {
     font-size: 14px;
   }
 }
+.due-to-stop {
+  color: red;
+}
+.end-of-life {
+  color: red;
+  text-decoration: line-through;
+}
 .red {
   color: red;
 }
