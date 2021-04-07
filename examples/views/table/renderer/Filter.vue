@@ -6,7 +6,7 @@
       className 自定义容器的 className<br>
       showFilterFooter 是否显示底部按钮<br>
       renderFilter (h, renderOpts, params: { column, columnIndex, columnIndex, $panel }) 内容<br>
-      filterMethod (params: { option, row, column }) 筛选数据函数<br>
+      filterMethod (params: { value, option, cellValue, row, column, $table }) 筛选数据函数<br>
       filterResetMethod (params: { options, column }) 筛选重置函数<br>
       filterRecoverMethod (params: { option, column }) 筛选复原函数<br>
       $panel 对象:<br>

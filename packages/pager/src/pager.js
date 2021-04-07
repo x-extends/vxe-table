@@ -32,6 +32,7 @@ export default {
     // 当只有一页时隐藏
     autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
     transfer: { type: Boolean, default: () => GlobalConfig.pager.transfer },
+    className: [String, Function],
     // 自定义图标
     iconPrevPage: String,
     iconJumpPrev: String,
@@ -75,7 +76,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $xegrid, vSize, align } = this
+    const { $scopedSlots, $xegrid, vSize, align, className } = this
     const childNodes = []
     if ($scopedSlots.left) {
       childNodes.push(
@@ -95,7 +96,7 @@ export default {
       )
     }
     return h('div', {
-      class: ['vxe-pager', {
+      class: ['vxe-pager', className ? (XEUtils.isFunction(className) ? className({ $pager: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         [`align--${align}`]: align,
         'is--border': this.border,

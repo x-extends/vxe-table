@@ -28,27 +28,33 @@
       :loading="loading"
       :checkbox-config="{checkField: 'checked'}"
       :scroll-y="{mode: 'wheel'}">
-      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
       <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-      <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300"></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-table-column field="attr0" title="Attr0" width="200" fixed="left" sortable></vxe-table-column>
       <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
       <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
       <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
-      <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
+      <vxe-table-column field="attr4" title="Attr4" width="120"></vxe-table-column>
       <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
-      <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
-      <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
-      <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
+      <vxe-table-column field="attr6" title="Attr6" width="300" sortable></vxe-table-column>
+      <vxe-table-column field="attr7" title="Attr7" width="200" sortable></vxe-table-column>
+      <vxe-table-column field="attr8" title="Attr8" width="220"></vxe-table-column>
       <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-      <vxe-table-column field="attr10" title="Attr10" width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200" fixed="right"></vxe-table-column>
+      <vxe-table-column field="attr10" title="Attr10" width="130"></vxe-table-column>
+      <vxe-table-column field="attr11" title="Attr11" width="200"></vxe-table-column>
+      <vxe-table-column field="attr12" title="Attr12" width="100"></vxe-table-column>
+      <vxe-table-column field="attr13" title="Attr14" width="200"></vxe-table-column>
+      <vxe-table-column field="attr14" title="Attr14" width="300"></vxe-table-column>
+      <vxe-table-column field="attr15" title="Attr15" width="200"></vxe-table-column>
+      <vxe-table-column field="attr16" title="Attr16" width="200"></vxe-table-column>
+      <vxe-table-column field="attr17" title="Attr17" width="80"></vxe-table-column>
+      <vxe-table-column field="attr18" title="Attr18" width="200"></vxe-table-column>
+      <vxe-table-column field="attr19" title="Attr19" width="140"></vxe-table-column>
+      <vxe-table-column field="attr20" title="Attr20" width="200"></vxe-table-column>
+      <vxe-table-column field="attr21" title="Attr21" width="160"></vxe-table-column>
+      <vxe-table-column field="attr22" title="Attr22" width="200"></vxe-table-column>
+      <vxe-table-column field="attr23" title="Attr23" width="200"></vxe-table-column>
+      <vxe-table-column field="attr24" title="Attr24" width="100" fixed="right"></vxe-table-column>
+      <vxe-table-column field="attr25" title="Attr25" width="200" fixed="right"></vxe-table-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -89,27 +95,33 @@ export default {
           :loading="loading"
           :checkbox-config="{checkField: 'checked'}"
           :scroll-y="{mode: 'wheel'}">
-          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
           <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-          <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300"></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-table-column field="attr0" title="Attr0" width="200" fixed="left" sortable></vxe-table-column>
           <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
           <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
           <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
-          <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
+          <vxe-table-column field="attr4" title="Attr4" width="120"></vxe-table-column>
           <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
-          <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
-          <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
-          <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
+          <vxe-table-column field="attr6" title="Attr6" width="300" sortable></vxe-table-column>
+          <vxe-table-column field="attr7" title="Attr7" width="200" sortable></vxe-table-column>
+          <vxe-table-column field="attr8" title="Attr8" width="220"></vxe-table-column>
           <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-          <vxe-table-column field="attr10" title="Attr10" width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200" fixed="right"></vxe-table-column>
+          <vxe-table-column field="attr10" title="Attr10" width="130"></vxe-table-column>
+          <vxe-table-column field="attr11" title="Attr11" width="200"></vxe-table-column>
+          <vxe-table-column field="attr12" title="Attr12" width="100"></vxe-table-column>
+          <vxe-table-column field="attr13" title="Attr14" width="200"></vxe-table-column>
+          <vxe-table-column field="attr14" title="Attr14" width="300"></vxe-table-column>
+          <vxe-table-column field="attr15" title="Attr15" width="200"></vxe-table-column>
+          <vxe-table-column field="attr16" title="Attr16" width="200"></vxe-table-column>
+          <vxe-table-column field="attr17" title="Attr17" width="80"></vxe-table-column>
+          <vxe-table-column field="attr18" title="Attr18" width="200"></vxe-table-column>
+          <vxe-table-column field="attr19" title="Attr19" width="140"></vxe-table-column>
+          <vxe-table-column field="attr20" title="Attr20" width="200"></vxe-table-column>
+          <vxe-table-column field="attr21" title="Attr21" width="160"></vxe-table-column>
+          <vxe-table-column field="attr22" title="Attr22" width="200"></vxe-table-column>
+          <vxe-table-column field="attr23" title="Attr23" width="200"></vxe-table-column>
+          <vxe-table-column field="attr24" title="Attr24" width="100" fixed="right"></vxe-table-column>
+          <vxe-table-column field="attr25" title="Attr25" width="200" fixed="right"></vxe-table-column>
         </vxe-table>
         `,
         `
@@ -140,16 +152,30 @@ export default {
             mockList (size) {
               return new Promise(resolve => {
                 const list = []
-                for (let index = 0; index < size; index++) {
+                for (let i = 0; i < size; i++) {
                   list.push({
-                    name: \`名称\${index}\`,
                     checked: false,
-                    sex: '0',
-                    num: 123,
-                    age: 18,
-                    num2: 234,
-                    rate: 3,
-                    address: 'shenzhen'
+                    attr0: 'attr0_row_' + i,
+                    attr1: 'attr1_row_' + i,
+                    attr2: 'attr2_row_' + i,
+                    attr3: 'attr3_row_' + i,
+                    attr4: 'attr4_row_' + i,
+                    attr5: 'attr5_row_' + i,
+                    attr6: i,
+                    attr7: '' + i,
+                    attr8: 'attr8_row_' + i,
+                    attr9: 'attr9_row_' + i,
+                    attr10: 'attr10_row_' + i,
+                    attr11: 'attr11_row_' + i,
+                    attr12: 'attr12_row_' + i,
+                    attr13: 'attr13_row_' + i,
+                    attr14: 'attr14_row_' + i,
+                    attr15: 'attr15_row_' + i,
+                    attr16: 'attr16_row_' + i,
+                    attr19: 'attr19_row_' + i,
+                    attr20: 'attr20_row_' + i,
+                    attr24: 'attr24_row_' + i,
+                    attr25: 'attr25_row_' + i
                   })
                 }
                 resolve(list)
@@ -182,16 +208,30 @@ export default {
     mockList (size) {
       return new Promise(resolve => {
         const list = []
-        for (let index = 0; index < size; index++) {
+        for (let i = 0; i < size; i++) {
           list.push({
-            name: `名称${index}`,
             checked: false,
-            sex: '0',
-            num: 123,
-            age: 18,
-            num2: 234,
-            rate: 3,
-            address: 'shenzhen'
+            attr0: 'attr0_row_' + i,
+            attr1: 'attr1_row_' + i,
+            attr2: 'attr2_row_' + i,
+            attr3: 'attr3_row_' + i,
+            attr4: 'attr4_row_' + i,
+            attr5: 'attr5_row_' + i,
+            attr6: i,
+            attr7: '' + i,
+            attr8: 'attr8_row_' + i,
+            attr9: 'attr9_row_' + i,
+            attr10: 'attr10_row_' + i,
+            attr11: 'attr11_row_' + i,
+            attr12: 'attr12_row_' + i,
+            attr13: 'attr13_row_' + i,
+            attr14: 'attr14_row_' + i,
+            attr15: 'attr15_row_' + i,
+            attr16: 'attr16_row_' + i,
+            attr19: 'attr19_row_' + i,
+            attr20: 'attr20_row_' + i,
+            attr24: 'attr24_row_' + i,
+            attr25: 'attr25_row_' + i
           })
         }
         resolve(list)

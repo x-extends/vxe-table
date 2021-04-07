@@ -35,10 +35,10 @@ const apis = [
         list: []
       },
       {
-        name: 'className',
+        name: 'class-name',
         desc: '附加 className',
         version: '3.3.0',
-        type: 'string | (({ option }) => string)',
+        type: 'string | ((params: { option }) => string)',
         enum: '',
         defVal: '',
         list: []

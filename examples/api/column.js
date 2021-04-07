@@ -310,7 +310,7 @@ const apis = [
         name: 'filter-method',
         descKey: 'app.api.tableColumn.desc.filterMethod',
         version: '',
-        type: '({ value, cellValue, row, column }) => boolean',
+        type: '({ value, option, cellValue, row, column }) => boolean',
         enum: '',
         defVal: '',
         list: []

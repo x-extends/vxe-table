@@ -35,6 +35,15 @@ const apis = [
         list: []
       },
       {
+        name: 'class-name',
+        desc: '给工具栏附加 className',
+        version: '3.2.11',
+        type: 'string, (params: {}) => string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'import',
         descKey: 'app.api.toolbar.desc.import',
         version: '',

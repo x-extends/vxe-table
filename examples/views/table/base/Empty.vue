@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">当数据为空时，通过 <table-column-api-link prop="empty-text"/> 设置空数据提示文本，可以使用 <router-link class="link" :to="{name: 'RendererEmpty'}">渲染器</router-link> 实现全局复用</p>
+    <p class="tip">当数据为空时，通过 <table-api-link prop="empty-text"/> 设置空数据提示文本，可以使用 <router-link class="link" :to="{name: 'RendererEmpty'}">渲染器</router-link> 实现全局复用</p>
 
     <vxe-table
       empty-text="没有更多数据了！"

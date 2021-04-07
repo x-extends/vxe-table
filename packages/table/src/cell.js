@@ -23,7 +23,7 @@ function renderHelpIcon (h, params) {
 
 function renderTitleContent (h, params, content) {
   const { $table, column } = params
-  const { showHeaderOverflow } = column
+  const { type, showHeaderOverflow } = column
   const { showHeaderOverflow: allColumnHeaderOverflow, tooltipOpts } = $table
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -53,7 +53,13 @@ function renderTitleContent (h, params, content) {
     }
   }
   return [
-    h('span', {
+    type === 'html' && XEUtils.isString(content) ? h('span', {
+      class: 'vxe-cell--title',
+      domProps: {
+        innerHTML: content
+      },
+      on: ons
+    }) : h('span', {
       class: 'vxe-cell--title',
       on: ons
     }, content)

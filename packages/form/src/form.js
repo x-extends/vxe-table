@@ -232,6 +232,7 @@ export default {
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String], default: null },
+    className: [String, Function],
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
@@ -285,10 +286,10 @@ export default {
     }
   },
   render (h) {
-    const { _e, loading, vSize, tooltipOpts, formItems } = this
+    const { _e, loading, className, data, vSize, tooltipOpts, formItems } = this
     const hasUseTooltip = VXETable._tooltip
     return h('form', {
-      class: ['vxe-form', {
+      class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         'is--colon': this.titleColon,
         'is--asterisk': this.titleAsterisk,

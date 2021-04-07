@@ -268,7 +268,8 @@ export default {
     buttons: { type: Array, default: () => GlobalConfig.toolbar.buttons },
     tools: { type: Array, default: () => GlobalConfig.toolbar.tools },
     perfect: { type: Boolean, default: () => GlobalConfig.toolbar.perfect },
-    size: { type: String, default: () => GlobalConfig.toolbar.size || GlobalConfig.size }
+    size: { type: String, default: () => GlobalConfig.toolbar.size || GlobalConfig.size },
+    className: [String, Function]
   },
   inject: {
     $xegrid: {
@@ -337,9 +338,9 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { _e, $xegrid, perfect, loading, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, vSize } = this
+    const { _e, $xegrid, perfect, loading, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, vSize, className } = this
     return h('div', {
-      class: ['vxe-toolbar', {
+      class: ['vxe-toolbar', className ? (XEUtils.isFunction(className) ? className({ $toolbar: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         'is--perfect': perfect,
         'is--loading': loading

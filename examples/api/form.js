@@ -105,6 +105,15 @@ const apis = [
         list: []
       },
       {
+        name: 'class-name',
+        desc: '给表单附加 className',
+        version: '3.2.11',
+        type: 'string, (params: { data }) => string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'items',
         desc: '项列表',
         version: '',

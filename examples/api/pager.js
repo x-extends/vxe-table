@@ -116,6 +116,15 @@ const apis = [
         list: []
       },
       {
+        name: 'class-name',
+        desc: '给分页附加 className',
+        version: '3.2.11',
+        type: 'string, (params: {}) => string',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'auto-hidden',
         desc: '当只有一页时自动隐藏',
         version: '',
