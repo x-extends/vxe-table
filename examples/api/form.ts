@@ -1,9 +1,9 @@
 import XEUtils from 'xe-utils'
 import itemAPI from './form-item'
-import gatherAPI from './form-gather'
+// import gatherAPI from './form-gather'
 
 const itemProps: any = itemAPI.find(item => item.name === 'Props')
-const gatherProps: any = gatherAPI.find(item => item.name === 'Props')
+// const gatherProps: any = gatherAPI.find(item => item.name === 'Props')
 
 const apis = [
   {
@@ -108,7 +108,7 @@ const apis = [
         name: 'class-name',
         desc: '给表单附加 className',
         version: '4.0.9',
-        type: 'string, (params: { data }) => string',
+        type: 'string, ({ data }) => string',
         enum: '',
         defVal: '',
         list: []
@@ -124,11 +124,11 @@ const apis = [
           {
             name: 'children',
             desc: '项集合',
-            version: '4.0.6',
+            version: '4.0.7',
             type: 'any[]',
             enum: '',
             defVal: '',
-            list: XEUtils.clone(gatherProps.list, true)
+            list: []
           }
         ])
       },

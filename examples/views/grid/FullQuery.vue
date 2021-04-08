@@ -98,9 +98,10 @@ export default defineComponent({
         highlight: true
       },
       proxyConfig: {
-        seq: true, // 启用动态序号代理
-        sort: true, // 启用排序代理
-        filter: true, // 启用筛选代理
+        seq: true, // 启用动态序号代理，每一页的序号会根据当前页数变化
+        sort: true, // 启用排序代理，当点击排序时会自动触发 query 行为
+        filter: true, // 启用筛选代理，当点击筛选时会自动触发 query 行为
+        // 对应响应结果 { result: [], page: { total: 100 } }
         props: {
           result: 'result', // 配置响应结果列表字段
           total: 'page.total' // 配置响应结果总页数字段
@@ -274,9 +275,10 @@ export default defineComponent({
                 highlight: true
               },
               proxyConfig: {
-                seq: true, // 启用动态序号代理
-                sort: true, // 启用排序代理
-                filter: true, // 启用筛选代理
+                seq: true, // 启用动态序号代理，每一页的序号会根据当前页数变化
+                sort: true, // 启用排序代理，当点击排序时会自动触发 query 行为
+                filter: true, // 启用筛选代理，当点击筛选时会自动触发 query 行为
+                // 对应响应结果 { result: [], page: { total: 100 } }
                 props: {
                   result: 'result', // 配置响应结果列表字段
                   total: 'page.total' // 配置响应结果总页数字段

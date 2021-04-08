@@ -2946,7 +2946,9 @@ export default defineComponent({
         tableMethods.clearCurrentColumn()
         reactData.currentRow = row
         if (props.highlightCurrentRow) {
-          XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xetable, row)}"]`), elem => addClass(elem, 'row--current'))
+          if (el) {
+            XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xetable, row)}"]`), elem => addClass(elem, 'row--current'))
+          }
         }
         return nextTick()
       },
@@ -2973,7 +2975,9 @@ export default defineComponent({
         const el = refElem.value
         reactData.currentRow = null
         internalData.hoverRow = null
-        XEUtils.arrayEach(el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
+        if (el) {
+          XEUtils.arrayEach(el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
+        }
         return nextTick()
       },
       /**
@@ -4934,12 +4938,16 @@ export default defineComponent({
         const rowid = getRowid($xetable, row)
         const el = refElem.value
         tablePrivateMethods.clearHoverRow()
-        XEUtils.arrayEach(el.querySelectorAll(`[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+        if (el) {
+          XEUtils.arrayEach(el.querySelectorAll(`[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+        }
         internalData.hoverRow = row
       },
       clearHoverRow () {
         const el = refElem.value
-        XEUtils.arrayEach(el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
+        if (el) {
+          XEUtils.arrayEach(el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
+        }
         internalData.hoverRow = null
       },
       getCell (row, column) {

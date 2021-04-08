@@ -155,7 +155,7 @@ export default defineComponent({
             }
           })
         }
-        reactData.staticItems = list.map((item) => createItem($xeform, item))
+        reactData.staticItems = XEUtils.mapTree(list, item => createItem($xeform, item), { children: 'children' })
       }
       return nextTick()
     }

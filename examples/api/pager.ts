@@ -119,7 +119,7 @@ const apis = [
         name: 'class-name',
         desc: '给分页附加 className',
         version: '4.0.9',
-        type: 'string, (params: {}) => string',
+        type: 'string, ({}) => string',
         enum: '',
         defVal: '',
         list: []

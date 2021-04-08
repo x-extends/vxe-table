@@ -325,7 +325,7 @@ export default {
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',
           v2: 'v2 Based on vue2.6+, Support for all major browsers',
-          v3: 'v3 Based on vue2.6+, Only supports modern browsers, improving rendering performance',
+          v3: 'v3 Support for modern browsers and partial compatibility with IE11 to improve rendering performance',
           v4: 'v4 Based on vue3.0+, Only supports modern browsers, not IE'
         },
         compatibility: 'Compatibility',
@@ -413,10 +413,10 @@ export default {
           footerRowStyle: 'Attach a style to the end of a table',
           showFooter: 'Whether to display table footer',
           footerMethod: 'The data method at table footer, return a two-dimensional array',
-          mergeCells: 'Temporary merge of specified cells (cannot be used to expand rows, tree structures, not recommended for fixed columns)',
-          mergeFooterItems: 'Temporary consolidated suffix (cannot be used to expand rows, tree structures, not recommended for fixed columns)',
-          spanMethod: 'User defined merge function. returns the calculated value (cannot be used for virtual scrolling and expanding rows, not recommended for fixed columns and tree structures)',
-          footerSpanMethod: 'Footer merge rows or columns (cannot be used for virtual scrolling and expanding rows, not recommended for fixed columns and tree structures)',
+          mergeCells: '临时合并指定的单元格 (不能用于展开行，不建议用于固定列、树形结构)',
+          mergeFooterItems: '临时合并表尾 (不能用于展开行，不建议用于固定列、树形结构)',
+          spanMethod: '自定义合并函数，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)',
+          footerSpanMethod: '表尾合并行或列，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)',
           showOverflow: 'Sets all content to appear as ellipses if it is too long',
           showHeaderOverflow: 'Sets the header to show ellipsis when all content is too long',
           showAllOverflow: 'It is about to be abandoned, please use "show-overflow"',

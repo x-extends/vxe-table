@@ -378,7 +378,7 @@ export default defineComponent({
       } else {
         changeEvent(evnt, selectValue)
         // 显示效果
-        setTimeout(hideOptionPanel, 50)
+        setTimeout(hideOptionPanel, 100)
       }
     }
 
@@ -574,10 +574,13 @@ export default defineComponent({
           // attrs
           optid: optid,
           // event
-          onMousedown: (evnt: Event) => {
-            evnt.stopPropagation()
-            if (!isDisabled) {
-              changeOptionEvent(evnt, optionValue)
+          onMousedown: (evnt: MouseEvent) => {
+            const isLeftBtn = evnt.button === 0
+            if (isLeftBtn) {
+              evnt.stopPropagation()
+              if (!isDisabled) {
+                changeOptionEvent(evnt, optionValue)
+              }
             }
           },
           onMouseenter: () => {

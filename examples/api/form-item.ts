@@ -115,7 +115,7 @@ const apis = [
         name: 'class-name',
         desc: '给表单项附加 className',
         version: '',
-        type: 'string, (params: { field, data }) => string',
+        type: 'string, ({ field, data }) => string',
         enum: '',
         defVal: '',
         list: []

@@ -93,7 +93,7 @@ export namespace VxeListPropTypes {
   export type MaxHeight = number | string;
   export type Loading = boolean;
   export type AutoResize = boolean;
-  export type ClassName = string;
+  export type ClassName = string | ((params: { $list: VxeListConstructor }) => string);
   export type SyncResize = boolean | string | number;
   export interface ScrollY {
     /**

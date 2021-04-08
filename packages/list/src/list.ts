@@ -16,7 +16,7 @@ export default defineComponent({
     height: [Number, String] as PropType<VxeListPropTypes.Height>,
     maxHeight: [Number, String] as PropType<VxeListPropTypes.MaxHeight>,
     loading: Boolean as PropType<VxeListPropTypes.Loading>,
-    className: String as PropType<VxeListPropTypes.ClassName>,
+    className: [String, Function] as PropType<VxeListPropTypes.ClassName>,
     size: { type: String as PropType<VxeListPropTypes.Size>, default: () => GlobalConfig.list.size || GlobalConfig.size },
     autoResize: { type: Boolean as PropType<VxeListPropTypes.AutoResize>, default: () => GlobalConfig.list.autoResize },
     syncResize: [Boolean, String, Number] as PropType<VxeListPropTypes.SyncResize>,
@@ -116,11 +116,13 @@ export default defineComponent({
         const sYOpts = computeSYOpts.value
         let rowHeight = 0
         let firstItemElem
-        if (sYOpts.sItem) {
-          firstItemElem = virtualBodyElem.querySelector(sYOpts.sItem)
-        }
-        if (!firstItemElem) {
-          firstItemElem = virtualBodyElem.children[0]
+        if (virtualBodyElem) {
+          if (sYOpts.sItem) {
+            firstItemElem = virtualBodyElem.querySelector(sYOpts.sItem)
+          }
+          if (!firstItemElem) {
+            firstItemElem = virtualBodyElem.children[0]
+          }
         }
         if (firstItemElem) {
           rowHeight = firstItemElem.offsetHeight
@@ -151,11 +153,7 @@ export default defineComponent({
       if (scrollBodyElem) {
         scrollBodyElem.scrollTop = 0
       }
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(nextTick())
-        })
-      })
+      return nextTick()
     }
 
     /**
@@ -309,7 +307,7 @@ export default defineComponent({
       const styles = computeStyles.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-list', className, {
+        class: ['vxe-list', className ? (XEUtils.isFunction(className) ? className({ $list: $xelist }) : className) : '', {
           [`size--${vSize}`]: vSize,
           'is--loading': loading
         }]
