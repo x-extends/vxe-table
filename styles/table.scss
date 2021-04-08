@@ -930,7 +930,7 @@
     bottom: -0.9em;
     width: 0.8em;
     border-width: 0 0 1px 1px;
-    border-style: dotted;
+    border-style: $vxe-table-tree-node-line-style;
     border-color: $vxe-table-tree-node-line-color;
     pointer-events: none;
   }

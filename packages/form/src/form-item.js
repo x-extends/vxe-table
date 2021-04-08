@@ -159,6 +159,8 @@ export default {
     if (compConf && compConf.renderItemContent) {
       contentVNs = compConf.renderItemContent.call(this, h, itemRender, params)
     } else if (compConf && compConf.renderItem) {
+      // 在 v4 中废弃 renderItem
+      UtilTools.warn('vxe.error.delFunc', ['renderItem', 'renderItemContent'])
       contentVNs = compConf.renderItem.call(this, h, itemRender, params)
     } else if ($scopedSlots && $scopedSlots.default) {
       contentVNs = $scopedSlots.default.call(this, params, h)

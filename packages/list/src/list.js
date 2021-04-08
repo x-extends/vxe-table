@@ -104,7 +104,7 @@ export default {
           }
         }),
         h('div', {
-          ref: 'body',
+          ref: 'virtualBody',
           class: 'vxe-list--body',
           style: {
             marginTop: topSpaceHeight ? `${topSpaceHeight}px` : ''
@@ -173,6 +173,7 @@ export default {
       if (scrollBodyElem) {
         scrollBodyElem.scrollTop = 0
       }
+      return this.$nextTick()
     },
     /**
      * 刷新滚动条
@@ -216,11 +217,13 @@ export default {
             rHeight = sYOpts.rHeight
           } else {
             let firstItemElem
-            if (sYOpts.sItem) {
-              firstItemElem = $refs.body.querySelector(sYOpts.sItem)
-            }
-            if (!firstItemElem) {
-              firstItemElem = $refs.body.children[0]
+            if ($refs.virtualBody) {
+              if (sYOpts.sItem) {
+                firstItemElem = $refs.virtualBody.querySelector(sYOpts.sItem)
+              }
+              if (!firstItemElem) {
+                firstItemElem = $refs.virtualBody.children[0]
+              }
             }
             if (firstItemElem) {
               rHeight = firstItemElem.offsetHeight
