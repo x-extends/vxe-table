@@ -12,7 +12,7 @@ export default {
     height: [Number, String],
     maxHeight: [Number, String],
     loading: Boolean,
-    className: String,
+    className: [String, Function],
     size: { type: String, default: () => GlobalConfig.list.size || GlobalConfig.size },
     autoResize: { type: Boolean, default: () => GlobalConfig.list.autoResize },
     syncResize: [Boolean, String, Number],
@@ -84,8 +84,8 @@ export default {
   },
   render (h) {
     const { $scopedSlots, styles, bodyHeight, topSpaceHeight, items, className, loading } = this
-    return h('div', className, {
-      class: ['vxe-list', {
+    return h('div', {
+      class: ['vxe-list', className ? (XEUtils.isFunction(className) ? className({ $list: this }) : className) : '', {
         'is--loading': loading
       }]
     }, [
@@ -105,7 +105,7 @@ export default {
           }
         }),
         h('div', {
-          ref: 'body',
+          ref: 'virtualBody',
           class: 'vxe-list--body',
           style: {
             marginTop: topSpaceHeight ? `${topSpaceHeight}px` : ''
@@ -174,11 +174,7 @@ export default {
       if (scrollBodyElem) {
         scrollBodyElem.scrollTop = 0
       }
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve(this.$nextTick())
-        })
-      })
+      return this.$nextTick()
     },
     /**
      * 刷新滚动条
@@ -214,13 +210,16 @@ export default {
     computeScrollLoad () {
       return this.$nextTick().then(() => {
         const { $refs, sYOpts, scrollYLoad, scrollYStore } = this
+        const { virtualWrapper: virtualWrapperElem, virtualBody: virtualBodyElem } = $refs
         let rowHeight = 0
         let firstItemElem
-        if (sYOpts.sItem) {
-          firstItemElem = $refs.body.querySelector(sYOpts.sItem)
-        }
-        if (!firstItemElem) {
-          firstItemElem = $refs.body.children[0]
+        if (virtualBodyElem) {
+          if (sYOpts.sItem) {
+            firstItemElem = virtualBodyElem.querySelector(sYOpts.sItem)
+          }
+          if (!firstItemElem) {
+            firstItemElem = virtualBodyElem.children[0]
+          }
         }
         if (firstItemElem) {
           rowHeight = firstItemElem.offsetHeight
@@ -229,7 +228,7 @@ export default {
         scrollYStore.rowHeight = rowHeight
         // 计算 Y 逻辑
         if (scrollYLoad) {
-          const visibleYSize = Math.max(8, Math.ceil($refs.virtualWrapper.clientHeight / rowHeight))
+          const visibleYSize = Math.max(8, Math.ceil(virtualWrapperElem.clientHeight / rowHeight))
           const offsetYSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
           scrollYStore.offsetSize = offsetYSize
           scrollYStore.visibleSize = visibleYSize

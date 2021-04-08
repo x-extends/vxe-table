@@ -5,8 +5,7 @@
       还可以通过配置 <grid-api-link prop="form-config"/> 实现动态表单，还可以通过 <grid-api-link prop="titlePrefix"/> 或 <grid-api-link prop="titleSuffix"/> 设置标题提示信息<br>
       对于分页场景下，如果想要保留选中状态，可以通过设置 <table-api-link prop="checkbox-config"/> 的 <table-api-link prop="reserve"/> 属性<br>
       还可以通过 <table-api-link prop="checkMethod"/> 设置个性化列禁止勾选<br>
-      由 <grid-api-link name="vxe-grid"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格，从重复写冗余的代码中解放出来<br>
-      <span class="red">（注：使用后端导出才是最优的做法）</span>
+      由 <grid-api-link name="vxe-grid"/> 代理数据转换，只需要配置好数据源即可；非常简单就可以渲染一个表格，从重复写冗余的代码中解放出来
     </p>
 
     <vxe-grid ref='xGrid' v-bind="gridOptions"></vxe-grid>
@@ -88,13 +87,14 @@ export default {
           custom: true
         },
         proxyConfig: {
-          seq: true, // 启用动态序号代理
-          sort: true, // 启用排序代理
-          filter: true, // 启用筛选代理
-          form: true, // 启用表单代理
+          seq: true, // 启用动态序号代理，每一页的序号会根据当前页数变化
+          sort: true, // 启用排序代理，当点击排序时会自动触发 query 行为
+          filter: true, // 启用筛选代理，当点击筛选时会自动触发 query 行为
+          form: true, // 启用表单代理，当点击表单提交按钮时会自动触发 reload 行为
+          // 对应响应结果 { result: [], page: { total: 100 } }
           props: {
-            result: 'result',
-            total: 'page.total'
+            result: 'result', // 配置响应结果列表字段
+            total: 'page.total' // 配置响应结果总页数字段
           },
           ajax: {
             // 接收 Promise 对象
@@ -247,13 +247,14 @@ export default {
                   custom: true
                 },
                 proxyConfig: {
-                  seq: true, // 启用动态序号代理
-                  sort: true, // 启用排序代理
-                  filter: true, // 启用筛选代理
-                  form: true, // 启用表单代理
+                  seq: true, // 启用动态序号代理，每一页的序号会根据当前页数变化
+                  sort: true, // 启用排序代理，当点击排序时会自动触发 query 行为
+                  filter: true, // 启用筛选代理，当点击筛选时会自动触发 query 行为
+                  form: true, // 启用表单代理，当点击表单提交按钮时会自动触发 reload 行为
+                  // 对应响应结果 { result: [], page: { total: 100 } }
                   props: {
-                    result: 'result',
-                    total: 'page.total'
+                    result: 'result', // 配置响应结果列表字段
+                    total: 'page.total' // 配置响应结果总页数字段
                   },
                   ajax: {
                     // 接收 Promise 对象

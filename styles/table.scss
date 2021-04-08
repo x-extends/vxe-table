@@ -375,55 +375,55 @@
       }
     }
   }
-  &.is--tree-line {
-    .vxe-body--row {
-      &.row--stripe {
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-striped-background-color;
-        }
-      }
-      &.row--radio {
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-radio-background-color;
-        }
-      }
-      &.row--checked {
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-checked-background-color;
-        }
-      }
-      &.row--current {
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-current-background-color;
-        }
-      }
-      &.row--hover {
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-hover-background-color;
-        }
-        &.row--stripe {
-          .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-striped-background-color;
-          }
-        }
-        &.row--radio {
-          .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-radio-background-color;
-          }
-        }
-        &.row--checked {
-          .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-checked-background-color;
-          }
-        }
-        &.row--current {
-          .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-current-background-color;
-          }
-        }
-      }
-    }
-  }
+  // &.is--tree-line {
+  //   .vxe-body--row {
+  //     &.row--stripe {
+  //       .vxe-tree--btn-wrapper {
+  //         background-color: $vxe-table-row-striped-background-color;
+  //       }
+  //     }
+  //     &.row--radio {
+  //       .vxe-tree--btn-wrapper {
+  //         background-color: $vxe-table-row-radio-background-color;
+  //       }
+  //     }
+  //     &.row--checked {
+  //       .vxe-tree--btn-wrapper {
+  //         background-color: $vxe-table-row-checked-background-color;
+  //       }
+  //     }
+  //     &.row--current {
+  //       .vxe-tree--btn-wrapper {
+  //         background-color: $vxe-table-row-current-background-color;
+  //       }
+  //     }
+  //     &.row--hover {
+  //       .vxe-tree--btn-wrapper {
+  //         background-color: $vxe-table-row-hover-background-color;
+  //       }
+  //       &.row--stripe {
+  //         .vxe-tree--btn-wrapper {
+  //           background-color: $vxe-table-row-hover-striped-background-color;
+  //         }
+  //       }
+  //       &.row--radio {
+  //         .vxe-tree--btn-wrapper {
+  //           background-color: $vxe-table-row-hover-radio-background-color;
+  //         }
+  //       }
+  //       &.row--checked {
+  //         .vxe-tree--btn-wrapper {
+  //           background-color: $vxe-table-row-hover-checked-background-color;
+  //         }
+  //       }
+  //       &.row--current {
+  //         .vxe-tree--btn-wrapper {
+  //           background-color: $vxe-table-row-hover-current-background-color;
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
   &.drag--resize {
     .vxe-table--main-wrapper,
     .vxe-table--fixed-left-wrapper,
@@ -477,9 +477,9 @@
     }
     &.col--current {
       background-color: $vxe-table-column-current-background-color;
-      .vxe-tree--btn-wrapper {
-        background-color: $vxe-table-column-current-background-color;
-      }
+      // .vxe-tree--btn-wrapper {
+      //   background-color: $vxe-table-column-current-background-color;
+      // }
     }
     &.col--center {
       text-align: center;
@@ -488,17 +488,17 @@
       text-align: right;
     }
   }
-  &.is--tree-line {
-    .vxe-header--column,
-    .vxe-body--column,
-    .vxe-footer--column {
-      &.col--current {
-        .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-column-current-background-color;
-        }
-      }
-    }
-  }
+  // &.is--tree-line {
+  //   .vxe-header--column,
+  //   .vxe-body--column,
+  //   .vxe-footer--column {
+  //     &.col--current {
+  //       .vxe-tree--btn-wrapper {
+  //         background-color: $vxe-table-column-current-background-color;
+  //       }
+  //     }
+  //   }
+  // }
   .vxe-header--column,
   .vxe-footer--column {
     &.col--ellipsis {
@@ -827,9 +827,9 @@
         background-image: none;
       }
     }
-    .vxe-tree--btn-wrapper {
-      background-color: $vxe-table-background-color;
-    }
+    // .vxe-tree--btn-wrapper {
+    //   background-color: $vxe-table-background-color;
+    // }
   }
   .vxe-tree--line-wrapper {
     position: relative;
@@ -842,7 +842,7 @@
     bottom: -0.9em;
     width: 0.8em;
     border-width: 0 0 1px 1px;
-    border-style: dotted;
+    border-style: $vxe-table-tree-node-line-style;
     border-color: $vxe-table-tree-node-line-color;
     pointer-events: none;
   }

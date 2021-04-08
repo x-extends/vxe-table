@@ -38,7 +38,7 @@ const apis = [
         name: 'class-name',
         desc: '给工具栏附加 className',
         version: '3.2.11',
-        type: 'string, (params: {}) => string',
+        type: 'string, ({}) => string',
         enum: '',
         defVal: '',
         list: []
@@ -166,7 +166,7 @@ const apis = [
         name: 'print',
         descKey: 'app.api.toolbar.desc.print',
         version: '',
-        type: 'any',
+        type: 'boolean | object',
         enum: '',
         defVal: '默认继承 setup.toolbar.print',
         list: [
@@ -185,7 +185,7 @@ const apis = [
         name: 'refresh',
         descKey: 'app.api.toolbar.desc.refresh',
         version: '',
-        type: 'any',
+        type: 'boolean | object',
         enum: '',
         defVal: '默认继承 setup.toolbar.refresh',
         list: [
@@ -222,7 +222,7 @@ const apis = [
         name: 'custom',
         descKey: 'app.api.toolbar.desc.custom',
         version: '',
-        type: 'any',
+        type: 'boolean | object',
         enum: '',
         defVal: '默认继承 setup.toolbar.custom',
         list: [

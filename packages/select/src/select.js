@@ -133,9 +133,12 @@ export function renderOption (h, _vm, list, group) {
       },
       on: {
         mousedown: (evnt) => {
-          evnt.stopPropagation()
-          if (!isDisabled) {
-            _vm.changeOptionEvent(evnt, optionValue)
+          const isLeftBtn = evnt.button === 0
+          if (isLeftBtn) {
+            evnt.stopPropagation()
+            if (!isDisabled) {
+              _vm.changeOptionEvent(evnt, optionValue)
+            }
           }
         },
         mouseenter: () => {
@@ -327,7 +330,7 @@ export default {
   render (h) {
     const { vSize, className, inited, isActivated, disabled, visiblePanel } = this
     return h('div', {
-      class: ['vxe-select', className, {
+      class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
@@ -471,7 +474,7 @@ export default {
         // 显示效果
         setTimeout(() => {
           this.hideOptionPanel()
-        }, 50)
+        }, 100)
       }
     },
     handleGlobalMousewheelEvent (evnt) {

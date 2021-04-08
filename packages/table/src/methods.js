@@ -462,7 +462,7 @@ const Methods = {
    * @param {ColumnInfo} columns 列配置
    */
   loadColumn (columns) {
-    const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column))
+    const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), { children: 'children' })
     this.handleColumn(collectColumn)
     return this.$nextTick()
   },
@@ -2879,11 +2879,14 @@ const Methods = {
    * @param {Row} row 行对象
    */
   setCurrentRow (row) {
+    const { $el } = this
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.currentRow = row
     if (this.highlightCurrentRow) {
-      XEUtils.arrayEach(this.$el.querySelectorAll(`[rowid="${getRowid(this, row)}"]`), elem => addClass(elem, 'row--current'))
+      if ($el) {
+        XEUtils.arrayEach($el.querySelectorAll(`[rowid="${getRowid(this, row)}"]`), elem => addClass(elem, 'row--current'))
+      }
     }
     return this.$nextTick()
   },
@@ -2907,9 +2910,12 @@ const Methods = {
    * 用于当前行，手动清空当前高亮的状态
    */
   clearCurrentRow () {
+    const { $el } = this
     this.currentRow = null
     this.hoverRow = null
-    XEUtils.arrayEach(this.$el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
+    if ($el) {
+      XEUtils.arrayEach($el.querySelectorAll('.row--current'), elem => removeClass(elem, 'row--current'))
+    }
     return this.$nextTick()
   },
   /**
@@ -2938,13 +2944,19 @@ const Methods = {
     this.setHoverRow(row)
   },
   setHoverRow (row) {
+    const { $el } = this
     const rowid = getRowid(this, row)
     this.clearHoverRow()
-    XEUtils.arrayEach(this.$el.querySelectorAll(`[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+    if ($el) {
+      XEUtils.arrayEach($el.querySelectorAll(`[rowid="${rowid}"]`), elem => addClass(elem, 'row--hover'))
+    }
     this.hoverRow = row
   },
   clearHoverRow () {
-    XEUtils.arrayEach(this.$el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
+    const { $el } = this
+    if ($el) {
+      XEUtils.arrayEach($el.querySelectorAll('.vxe-body--row.row--hover'), elem => removeClass(elem, 'row--hover'))
+    }
     this.hoverRow = null
   },
   triggerHeaderCellClickEvent (evnt, params) {

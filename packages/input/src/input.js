@@ -1094,10 +1094,9 @@ export default {
     keydownEvent (evnt) {
       if (this.isNumType) {
         const isCtrlKey = evnt.ctrlKey
-        const isShiftKey = evnt.shiftKey
         const isAltKey = evnt.altKey
         const keyCode = evnt.keyCode
-        if (!isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
+        if (!isCtrlKey && !isAltKey && (keyCode >= 223 || keyCode === 32 || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
           evnt.preventDefault()
         }
         this.numberKeydownEvent(evnt)

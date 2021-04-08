@@ -38,7 +38,7 @@ const apis = [
         name: 'class-name',
         desc: '附加 className',
         version: '3.3.0',
-        type: 'string | ((params: { option }) => string)',
+        type: 'string | (({ option }) => string)',
         enum: '',
         defVal: '',
         list: []

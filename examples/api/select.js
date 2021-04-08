@@ -65,7 +65,7 @@ const apis = [
         name: 'class-name',
         desc: '给下拉框附加 className',
         version: '3.2.9',
-        type: 'string | ((params: {}) => string)',
+        type: 'string | (({}) => string)',
         enum: '',
         defVal: '',
         list: []

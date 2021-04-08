@@ -71,4 +71,4 @@ export interface VXETableGlobalConfig extends VXETableSetupOptions {
   i18n(key: string, args?: any): string;
 }
 
-export type VxeGlobalSetup = (options: VXETableSetupOptions) => VXETableGlobalConfig;
+export type VxeGlobalSetup = (options?: VXETableSetupOptions) => VXETableGlobalConfig;

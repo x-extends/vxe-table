@@ -314,12 +314,24 @@ export default {
         age: 22
       },
       formItems4: [
-        { field: 'name', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-        { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
-        { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
-        { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
-        { field: 'age', title: '年龄', span: 8, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
-        { field: 'region', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+        {
+          title: '左侧',
+          span: 12,
+          children: [
+            { field: 'name', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+            { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
+            { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+            { field: 'age', title: '年龄', span: 24, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+            { field: 'region', title: '名称', span: 24, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } }
+          ]
+        },
+        {
+          title: '右侧',
+          span: 12,
+          children: [
+            { field: 'nickname', title: '昵称', span: 24, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } }
+          ]
+        },
         { align: 'center', span: 24, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '配置式表单', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
       ],
       demoCodes: [
@@ -551,6 +563,10 @@ export default {
             </vxe-form-item>
           </vxe-form>
         </p>
+
+        <p>
+          <vxe-form :data="formData4" :items="formItems4"></vxe-form>
+        </p>
         `,
         `
         export default {
@@ -611,12 +627,24 @@ export default {
                 age: 22
               },
               formItems4: [
-                { field: 'name', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-                { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
-                { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
-                { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
-                { field: 'age', title: '年龄', span: 8, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
-                { field: 'region', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+                {
+                  title: '左侧',
+                  span: 12,
+                  children: [
+                    { field: 'name', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+                    { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
+                    { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+                    { field: 'age', title: '年龄', span: 24, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+                    { field: 'region', title: '名称', span: 24, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } }
+                  ]
+                },
+                {
+                  title: '右侧',
+                  span: 12,
+                  children: [
+                    { field: 'nickname', title: '昵称', span: 24, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } }
+                  ]
+                },
                 { align: 'center', span: 24, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '配置式表单', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
               ]
             }

@@ -341,7 +341,7 @@ export default {
           }
         })
       }
-      this.staticItems = list.map(item => createItem(this, item))
+      this.staticItems = XEUtils.mapTree(list, item => createItem(this, item), { children: 'children' })
       return this.$nextTick()
     },
     getItems () {

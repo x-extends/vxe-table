@@ -8,6 +8,7 @@
     <vxe-virtual-tree
       resizable
       show-overflow
+      highlight-current-row
       row-key
       ref="xVTree"
       height="500"
@@ -48,6 +49,7 @@ export default {
       loading: false,
       tableColumn: [
         { type: 'seq', title: '序号', width: 100 },
+        { type: 'radio', title: '单选', width: 100 },
         { type: 'checkbox', title: 'A', treeNode: true, width: 300 },
         { field: 'b', title: 'B', width: 100, slots: { default: 'tmplB' } },
         { field: 'c', title: 'C', width: 100 },
