@@ -27,6 +27,13 @@ body {
     font-size: 14px;
   }
 }
+.due-to-stop {
+  color: red;
+}
+.end-of-life {
+  color: #c0c4cc;
+  text-decoration: line-through;
+}
 .red {
   color: red;
 }
@@ -152,7 +159,7 @@ body,
     width: 70px;
   }
   .version-switch {
-    width: 56px;
+    width: 160px;
   }
   .donation,
   .support {

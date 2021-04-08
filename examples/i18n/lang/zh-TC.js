@@ -124,6 +124,7 @@ export default {
 
         scroll: '虚拟滚动',
         bigData: '虚拟滚动',
+        scrollMode: '滚动模式',
         scrollRows: '纵向',
         scrollFullRows: '纵向 + 复杂渲染',
         scrollCols: '横向&纵向',
@@ -260,6 +261,7 @@ export default {
         vxeModal: 'vxe-modal',
         vxeForm: 'vxe-form',
         vxeFormItem: 'vxe-form-item',
+        vxeFormGather: 'vxe-form-gather',
         vxeSwitch: 'vxe-switch',
         vxeList: 'vxe-list',
         vxePulldown: 'vxe-pulldown'
@@ -313,16 +315,16 @@ export default {
         copyToClipboard: '已複製到剪貼板！'
       },
       other: {
-        v1: '1.0+ (停止维护)',
-        v2: '2.0+ (vue 2.6+ 旧版本)',
-        v3: '3.0+ (vue 2.6+ 最新版)',
+        v1: '1.0+ (vue 2.6+ 停止维护) ~ 2020-04 停止更新',
+        v2: '2.0+ (vue 2.6+ 旧版本) ~ 2021-12 停止更新',
+        v3: '3.0+ (vue 2.6+ 稳定版)',
         v3d5: '3.5+ (vue 2.6+ 粘性表格)',
         v4: '4.0+ (vue 3.0+ 粘性表格)',
         v4d5: '4.5+ (vue 3.0+ 粘性表格)',
         plan: {
           v1: 'v1 基於 vue2.6+，支持所有主流的瀏覽器，實現表格的一切實用的功能',
           v2: 'v2 基於 vue2.6+，支持所有主流的瀏覽器，同時兼具功能與效能',
-          v3: 'v3 基於 vue2.6+，只支持現代瀏覽器，提升渲染效能',
+          v3: 'v3 基於 vue2.6+，支持現代瀏覽器並部分相容IE11，提升渲染效能',
           v4: 'v4 基於 vue3.0+，只支持現代瀏覽器，不支持IE'
         },
         compatibility: '相容性變動',
@@ -410,8 +412,8 @@ export default {
           footerRowStyle: '给表尾行附加样式',
           showFooter: '是否显示表尾',
           footerMethod: '表尾的数据获取方法，返回一个二维数组',
-          mergeCells: '临时合并指定的单元格 (不能用于展开行、树形结构，不建议用于固定列)',
-          mergeFooterItems: '临时合并表尾 (不能用于展开行、树形结构，不建议用于固定列)',
+          mergeCells: '临时合并指定的单元格 (不能用于展开行，不建议用于固定列、树形结构)',
+          mergeFooterItems: '临时合并表尾 (不能用于展开行，不建议用于固定列、树形结构)',
           spanMethod: '自定义合并函数，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)',
           footerSpanMethod: '表尾合并行或列，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)',
           showOverflow: '设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）',
@@ -528,7 +530,7 @@ export default {
           indexMethod: '即将废弃，请使用 seqMethod',
           seqMethod: '只对 type=seq 有效，自定义索引方法',
           sortable: '是否允许列排序',
-          sortBy: '只对 sortable 有效，自定义排序的属性',
+          sortBy: '只对 sortable 有效，指定排序的字段（当值 formatter 格式化后，可以设置该字段，使用值进行排序）',
           sortType: '排序的字段类型，比如字符串转数值等',
           sortMethod: '只对 sortable 有效，列的排序方法，该方法的返回值用来决定该行的排序规则',
           remoteSort: '是否使用服务端排序，如果设置为 true 则不会对数据进行处理',
@@ -607,7 +609,7 @@ export default {
       },
       radio: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           label: '值',
           size: '尺寸',
           disabled: '是否禁用',
@@ -616,7 +618,7 @@ export default {
       },
       checkbox: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           disabled: '是否禁用',
           label: '只对 checkbox-group 有效，值',
@@ -626,7 +628,7 @@ export default {
       },
       input: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           immediate: '默认情况下输入会实时同步值，当在复杂渲染时会导致卡顿，可以设置为 false 在 change 之后才同步值',
           size: '尺寸',
           disabled: '是否禁用',
@@ -650,7 +652,7 @@ export default {
       },
       modal: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           loading: '是否加载中',
           id: '设置唯一的 id（对于 Message 防止重复弹出 或 Storage 拖动状态保存等场景可能会用到）',
           title: '窗口的标题（支持开启国际化）',
@@ -720,7 +722,7 @@ export default {
       },
       select: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           multiple: '是否多选',
           placeholder: '空值显示的占位符',
@@ -740,7 +742,7 @@ export default {
       },
       option: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           label: '显示内容',
           disabled: '是否禁用',
           size: '尺寸'
@@ -748,7 +750,7 @@ export default {
       },
       switch: {
         desc: {
-          value: '绑定值',
+          value: 'v-model 绑定值',
           size: '尺寸',
           disabled: '是否禁用',
           onLabel: '打开时显示的文字',
