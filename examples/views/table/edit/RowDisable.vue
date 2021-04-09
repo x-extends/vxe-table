@@ -111,7 +111,7 @@ export default {
               return rowIndex !== 1
             },
             editDisabledEvent ({ row, column }) {
-              this.$XModal.message({ message: '禁止编辑', status: 'error' })
+              this.$XModal.message({ content: '禁止编辑', status: 'error' })
             }
           }
         }
@@ -173,7 +173,7 @@ export default {
       return rowIndex !== 1
     },
     editDisabledEvent () {
-      this.$XModal.message({ message: '禁止编辑', status: 'error' })
+      this.$XModal.message({ content: '禁止编辑', status: 'error' })
     },
     editActivedEvent ({ row, rowIndex }) {
       this.nameDisabled = rowIndex === 1

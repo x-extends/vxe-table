@@ -116,7 +116,7 @@ export default {
                   }
                 })
               } else {
-                this.$XModal.message({ message: '请至少选择一条数据', status: 'error' })
+                this.$XModal.message({ content: '请至少选择一条数据', status: 'error' })
               }
             },
             revertEvent () {
@@ -154,7 +154,7 @@ export default {
           }
         })
       } else {
-        this.$XModal.message({ message: '请至少选择一条数据', status: 'error' })
+        this.$XModal.message({ content: '请至少选择一条数据', status: 'error' })
       }
     },
     revertEvent () {

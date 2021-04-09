@@ -87,7 +87,7 @@ export default {
                     xGrid.reloadColumn(columns),
                     xGrid.reloadData(data)
                   ]).then(() => {
-                    this.$XModal.message({ message: \`渲染 \${colSize} 列 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                    this.$XModal.message({ content: \`渲染 \${colSize} 列 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
                     this.loading = false
                   })
                 }
@@ -160,7 +160,7 @@ export default {
             })),
             xGrid.reloadData(data)
           ]).then(() => {
-            this.$XModal.message({ message: `渲染 ${colSize} 列 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+            this.$XModal.message({ content: `渲染 ${colSize} 列 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
             this.loading = false
           })
         }

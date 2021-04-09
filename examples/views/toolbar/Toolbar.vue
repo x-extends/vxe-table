@@ -236,7 +236,7 @@ export default {
           },
           methods: {
             funnelEvent () {
-              this.$XModal.alert({ message: '点击事件' })
+              this.$XModal.alert({ content: '点击事件' })
             }
           }
         }
@@ -262,7 +262,7 @@ export default {
   },
   methods: {
     funnelEvent () {
-      this.$XModal.alert({ message: '点击事件' })
+      this.$XModal.alert({ content: '点击事件' })
     }
   }
 }

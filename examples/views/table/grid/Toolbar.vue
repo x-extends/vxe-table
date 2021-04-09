@@ -156,7 +156,7 @@ export default {
                 case 'mySave':
                   setTimeout(() => {
                     const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
-                    this.$XModal.message({ message: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
+                    this.$XModal.message({ content: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
                     this.loadData()
                   }, 100)
                   break
@@ -201,7 +201,7 @@ export default {
         case 'mySave':
           setTimeout(() => {
             const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
-            this.$XModal.message({ message: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
+            this.$XModal.message({ content: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
             this.loadData()
           }, 100)
           break

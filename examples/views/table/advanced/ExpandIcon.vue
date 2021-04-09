@@ -312,12 +312,12 @@ export default {
             toggleExpandMethod ({ expanded, row }) {
               if (expanded) {
                 if (row.sex === '1') {
-                  this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+                  this.$XModal.message({ id: 'openErr', content: '不允许展开', status: 'error' })
                   return false
                 }
               } else {
                 if (row.sex === '0') {
-                  this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+                  this.$XModal.message({ id: 'closeErr', content: '不允许关闭', status: 'error' })
                   return false
                 }
               }
@@ -402,12 +402,12 @@ export default {
     toggleExpandMethod ({ expanded, row }) {
       if (expanded) {
         if (row.sex === '1') {
-          this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+          this.$XModal.message({ id: 'openErr', content: '不允许展开', status: 'error' })
           return false
         }
       } else {
         if (row.sex === '0') {
-          this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+          this.$XModal.message({ id: 'closeErr', content: '不允许关闭', status: 'error' })
           return false
         }
       }

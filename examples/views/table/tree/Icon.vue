@@ -299,12 +299,12 @@ export default {
             toggleTreeMethod ({ expanded, row }) {
               if (expanded) {
                 if (row.date === '2019-10-22') {
-                  this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+                  this.$XModal.message({ id: 'openErr', content: '不允许展开', status: 'error' })
                   return false
                 }
               } else {
                 if (row.date === '2019-03-04') {
-                  this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+                  this.$XModal.message({ id: 'closeErr', content: '不允许关闭', status: 'error' })
                   return false
                 }
               }
@@ -324,12 +324,12 @@ export default {
     toggleTreeMethod ({ expanded, row }) {
       if (expanded) {
         if (row.date === '2019-10-22') {
-          this.$XModal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+          this.$XModal.message({ id: 'openErr', content: '不允许展开', status: 'error' })
           return false
         }
       } else {
         if (row.date === '2019-03-04') {
-          this.$XModal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+          this.$XModal.message({ id: 'closeErr', content: '不允许关闭', status: 'error' })
           return false
         }
       }

@@ -171,7 +171,7 @@ export default {
                   break
                 case 'copy':
                   if (XEClipboard.copy(row[column.property])) {
-                    this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
+                    this.$XModal.message({ content: '已复制到剪贴板！', status: 'success' })
                   }
                   break
                 case 'reload':
@@ -184,7 +184,7 @@ export default {
                   xTable.remove(row)
                   break
                 case 'save':
-                  this.$XModal.message({ message: '保存成功', status: 'success' })
+                  this.$XModal.message({ content: '保存成功', status: 'success' })
                   this.findList()
                   break
               }
@@ -253,7 +253,7 @@ export default {
           break
         case 'copy':
           if (XEClipboard.copy(row[column.property])) {
-            this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
+            this.$XModal.message({ content: '已复制到剪贴板！', status: 'success' })
           }
           break
         case 'reload':
@@ -266,7 +266,7 @@ export default {
           xTable.remove(row)
           break
         case 'save':
-          this.$XModal.message({ message: '保存成功', status: 'success' })
+          this.$XModal.message({ content: '保存成功', status: 'success' })
           this.findList()
           break
       }

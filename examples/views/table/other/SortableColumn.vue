@@ -136,7 +136,7 @@ export default {
                       } else {
                         wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
                       }
-                      return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
+                      return this.$XModal.message({ content: '固定列不允许拖动！', status: 'error' })
                     }
                     // 转换真实索引
                     const oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
@@ -246,7 +246,7 @@ export default {
                       } else {
                         wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
                       }
-                      return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
+                      return this.$XModal.message({ content: '固定列不允许拖动！', status: 'error' })
                     }
                     // 转换真实索引
                     const oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
@@ -326,7 +326,7 @@ export default {
               } else {
                 wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
               }
-              return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
+              return this.$XModal.message({ content: '固定列不允许拖动！', status: 'error' })
             }
             // 转换真实索引
             const oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])
@@ -356,7 +356,7 @@ export default {
               } else {
                 wrapperElem.insertBefore(wrapperElem.children[oldIndex], targetThElem)
               }
-              return this.$XModal.message({ message: '固定列不允许拖动！', status: 'error' })
+              return this.$XModal.message({ content: '固定列不允许拖动！', status: 'error' })
             }
             // 转换真实索引
             const oldColumnIndex = xTable.getColumnIndex(tableColumn[oldIndex])

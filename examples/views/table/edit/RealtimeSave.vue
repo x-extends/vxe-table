@@ -94,7 +94,7 @@ export default {
               if (xTable.isUpdateByRow(row, field)) {
                 setTimeout(() => {
                   this.$XModal.message({
-                    message: \`局部保存成功！ \${field}=\${cellValue}\`,
+                    content: \`局部保存成功！ \${field}=\${cellValue}\`,
                     status: 'success'
                   })
                   // 局部更新单元格为已保存状态
@@ -117,7 +117,7 @@ export default {
       if (xTable.isUpdateByRow(row, field)) {
         setTimeout(() => {
           this.$XModal.message({
-            message: `局部保存成功！ ${field}=${cellValue}`,
+            content: `局部保存成功！ ${field}=${cellValue}`,
             status: 'success'
           })
           // 局部更新单元格为已保存状态

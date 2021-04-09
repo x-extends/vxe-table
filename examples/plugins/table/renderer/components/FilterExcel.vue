@@ -127,7 +127,7 @@ export default {
       $panel.resetFilter()
     },
     childMenuClickEvent (cItem) {
-      this.$XModal.alert({ message: cItem.label })
+      this.$XModal.alert({ content: cItem.label })
     }
   }
 }

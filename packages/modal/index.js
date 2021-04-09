@@ -8,6 +8,11 @@ let ModalClass = null
 
 function openModal (opts) {
   const options = Object.assign({}, opts, { transfer: true })
+  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (options.content) {
+
+    }
+  }
   return new Promise(resolve => {
     if (options && options.id && allActivedModals.some(comp => comp.id === options.id)) {
       resolve('exist')

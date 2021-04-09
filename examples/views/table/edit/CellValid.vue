@@ -190,9 +190,9 @@ export default {
             async validEvent () {
               const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
               if (errMap) {
-                this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                this.$XModal.message({ status: 'error', content: '校验不通过！' })
               } else {
-                this.$XModal.message({ status: 'success', message: '校验成功！' })
+                this.$XModal.message({ status: 'success', content: '校验成功！' })
               }
             },
             async fullValidEvent () {
@@ -221,15 +221,15 @@ export default {
                     }
                   }
               } else {
-                this.$XModal.message({ status: 'success', message: '校验成功！' })
+                this.$XModal.message({ status: 'success', content: '校验成功！' })
               }
             },
             async validAllEvent () {
               const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
               if (errMap) {
-                this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                this.$XModal.message({ status: 'error', content: '校验不通过！' })
               } else {
-                this.$XModal.message({ status: 'success', message: '校验成功！' })
+                this.$XModal.message({ status: 'success', content: '校验成功！' })
               }
             },
             async selectValidEvent () {
@@ -237,12 +237,12 @@ export default {
               if (selectRecords.length > 0) {
                 const errMap = await this.$refs.xTable.validate(selectRecords).catch(errMap => errMap)
                 if (errMap) {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  this.$XModal.message({ status: 'error', content: '校验不通过！' })
                 } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                  this.$XModal.message({ status: 'success', content: '校验成功！' })
                 }
               } else {
-                this.$XModal.message({ status: 'warning', message: '未选中数据！' })
+                this.$XModal.message({ status: 'warning', content: '未选中数据！' })
               }
             },
             async insertEvent () {
@@ -279,9 +279,9 @@ export default {
     async validEvent () {
       const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
       if (errMap) {
-        this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        this.$XModal.message({ status: 'error', content: '校验不通过！' })
       } else {
-        this.$XModal.message({ status: 'success', message: '校验成功！' })
+        this.$XModal.message({ status: 'success', content: '校验成功！' })
       }
     },
     async fullValidEvent () {
@@ -311,15 +311,15 @@ export default {
           }
         })
       } else {
-        this.$XModal.message({ status: 'success', message: '校验成功！' })
+        this.$XModal.message({ status: 'success', content: '校验成功！' })
       }
     },
     async validAllEvent () {
       const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
       if (errMap) {
-        this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        this.$XModal.message({ status: 'error', content: '校验不通过！' })
       } else {
-        this.$XModal.message({ status: 'success', message: '校验成功！' })
+        this.$XModal.message({ status: 'success', content: '校验成功！' })
       }
     },
     async selectValidEvent () {
@@ -327,12 +327,12 @@ export default {
       if (selectRecords.length > 0) {
         const errMap = await this.$refs.xTable.validate(selectRecords).catch(errMap => errMap)
         if (errMap) {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          this.$XModal.message({ status: 'error', content: '校验不通过！' })
         } else {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
+          this.$XModal.message({ status: 'success', content: '校验成功！' })
         }
       } else {
-        this.$XModal.message({ status: 'warning', message: '未选中数据！' })
+        this.$XModal.message({ status: 'warning', content: '未选中数据！' })
       }
     },
     async insertEvent () {

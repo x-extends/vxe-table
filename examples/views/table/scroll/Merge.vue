@@ -134,7 +134,7 @@ export default {
                 const startTime = Date.now()
                 if (xTable) {
                   this.$refs.xTable.reloadData(data).then(() => {
-                    this.$XModal.message({ message: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                    this.$XModal.message({ content: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
                     this.loading = false
                   })
                 } else {
@@ -182,7 +182,7 @@ export default {
         const startTime = Date.now()
         if (xTable) {
           this.$refs.xTable.reloadData(data).then(() => {
-            this.$XModal.message({ message: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+            this.$XModal.message({ content: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
             this.loading = false
           })
         } else {

@@ -256,10 +256,10 @@ export default {
                 this.submitLoading = false
                 this.showEdit = false
                 if (this.selectRow) {
-                  this.$XModal.message({ message: '保存成功', status: 'success' })
+                  this.$XModal.message({ content: '保存成功', status: 'success' })
                   Object.assign(this.selectRow, this.formData)
                 } else {
-                  this.$XModal.message({ message: '新增成功', status: 'success' })
+                  this.$XModal.message({ content: '新增成功', status: 'success' })
                   this.$refs.xTable.insert(this.formData)
                 }
               }, 500)
@@ -329,10 +329,10 @@ export default {
         this.submitLoading = false
         this.showEdit = false
         if (this.selectRow) {
-          this.$XModal.message({ message: '保存成功', status: 'success' })
+          this.$XModal.message({ content: '保存成功', status: 'success' })
           Object.assign(this.selectRow, this.formData)
         } else {
-          this.$XModal.message({ message: '新增成功', status: 'success' })
+          this.$XModal.message({ content: '新增成功', status: 'success' })
           this.$refs.xTable.insert(this.formData)
         }
       }, 500)

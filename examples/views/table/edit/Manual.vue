@@ -126,7 +126,7 @@ export default {
                 this.loading = true
                 setTimeout(() => {
                   this.loading = false
-                  this.$XModal.message({ message: '保存成功！', status: 'success' })
+                  this.$XModal.message({ content: '保存成功！', status: 'success' })
                 }, 300)
               })
             },
@@ -152,7 +152,7 @@ export default {
         this.loading = true
         setTimeout(() => {
           this.loading = false
-          this.$XModal.message({ message: '保存成功！', status: 'success' })
+          this.$XModal.message({ content: '保存成功！', status: 'success' })
         }, 300)
       })
     },

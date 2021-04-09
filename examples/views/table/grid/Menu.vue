@@ -186,7 +186,7 @@ export default {
                 case 'copy':
                   if (row && column) {
                     if (XEClipboard.copy(row[column.property])) {
-                      this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
+                      this.$XModal.message({ content: '已复制到剪贴板！', status: 'success' })
                     }
                   }
                   break
@@ -244,7 +244,7 @@ export default {
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
+              this.$XModal.message({ content: '已复制到剪贴板！', status: 'success' })
             }
           }
           break

@@ -162,9 +162,9 @@ export default {
             validEvent () {
               this.$refs.xTree.validate((errMap) => {
                 if (errMap) {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  this.$XModal.message({ status: 'error', content: '校验不通过！' })
                 } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                  this.$XModal.message({ status: 'success', content: '校验成功！' })
                 }
               })
             },
@@ -199,7 +199,7 @@ export default {
                     }
                   })
                 } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                  this.$XModal.message({ status: 'success', content: '校验成功！' })
                 }
               })
             },
@@ -208,13 +208,13 @@ export default {
               if (selectRecords.length > 0) {
                 this.$refs.xTree.validate(selectRecords, (errMap) => {
                   if (errMap) {
-                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                    this.$XModal.message({ status: 'error', content: '校验不通过！' })
                   } else {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
+                    this.$XModal.message({ status: 'success', content: '校验成功！' })
                   }
                 })
               } else {
-                this.$XModal.message({ status: 'warning', message: '未选中数据！' })
+                this.$XModal.message({ status: 'warning', content: '未选中数据！' })
               }
             },
             getSelectEvent () {
@@ -235,9 +235,9 @@ export default {
     validEvent () {
       this.$refs.xTree.validate((errMap) => {
         if (errMap) {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+          this.$XModal.message({ status: 'error', content: '校验不通过！' })
         } else {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
+          this.$XModal.message({ status: 'success', content: '校验成功！' })
         }
       })
     },
@@ -272,7 +272,7 @@ export default {
             }
           })
         } else {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
+          this.$XModal.message({ status: 'success', content: '校验成功！' })
         }
       })
     },
@@ -281,13 +281,13 @@ export default {
       if (selectRecords.length > 0) {
         this.$refs.xTree.validate(selectRecords, (errMap) => {
           if (errMap) {
-            this.$XModal.message({ status: 'error', message: '校验不通过！' })
+            this.$XModal.message({ status: 'error', content: '校验不通过！' })
           } else {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
+            this.$XModal.message({ status: 'success', content: '校验成功！' })
           }
         })
       } else {
-        this.$XModal.message({ status: 'warning', message: '未选中数据！' })
+        this.$XModal.message({ status: 'warning', content: '未选中数据！' })
       }
     },
     getSelectEvent () {

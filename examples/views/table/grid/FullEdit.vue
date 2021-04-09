@@ -379,11 +379,11 @@ export default {
               formBody.append('file', file)
               // 上传文件
               return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
-                this.$XModal.message({ message: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
+                this.$XModal.message({ content: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                 // 导入完成，刷新表格
                 this.$refs.xGrid.commitProxy('query')
               }).catch(() => {
-                this.$XModal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
+                this.$XModal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
               })
             },
             // 自定义服务端导出
@@ -408,7 +408,7 @@ export default {
               // 开始服务端导出
               return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
                 if (data.id) {
-                  this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
+                  this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
                   // 读取路径，请求文件
                   XEAjax.fetch(\`https://api.xuliangzhan.com:10443/api/pub/export/download/\${data.id}\`).then(response => {
                     response.blob().then(blob => {
@@ -418,7 +418,7 @@ export default {
                   })
                 }
               }).catch(() => {
-                this.$XModal.message({ message: '导出失败！', status: 'error' })
+                this.$XModal.message({ content: '导出失败！', status: 'error' })
               })
             }
           }
@@ -468,11 +468,11 @@ export default {
       formBody.append('file', file)
       // 上传文件
       return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
-        this.$XModal.message({ message: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
+        this.$XModal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
         // 导入完成，刷新表格
         this.$refs.xGrid.commitProxy('query')
       }).catch(() => {
-        this.$XModal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
+        this.$XModal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
       })
     },
     // 自定义服务端导出
@@ -497,7 +497,7 @@ export default {
       // 开始服务端导出
       return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
         if (data.id) {
-          this.$XModal.message({ message: '导出成功，开始下载', status: 'success' })
+          this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
           // 读取路径，请求文件
           XEAjax.fetch(`https://api.xuliangzhan.com:10443/api/pub/export/download/${data.id}`).then(response => {
             response.blob().then(blob => {
@@ -507,7 +507,7 @@ export default {
           })
         }
       }).catch(() => {
-        this.$XModal.message({ message: '导出失败！', status: 'error' })
+        this.$XModal.message({ content: '导出失败！', status: 'error' })
       })
     }
   }

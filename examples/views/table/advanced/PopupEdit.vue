@@ -196,7 +196,7 @@ export default {
             },
             submitEvent () {
               this.showEdit = false
-              this.$XModal.message({ message: '保存成功', status: 'success' })
+              this.$XModal.message({ content: '保存成功', status: 'success' })
               Object.assign(this.selectRow, this.formData)
             }
           }
@@ -226,7 +226,7 @@ export default {
     },
     submitEvent () {
       this.showEdit = false
-      this.$XModal.message({ message: '保存成功', status: 'success' })
+      this.$XModal.message({ content: '保存成功', status: 'success' })
       Object.assign(this.selectRow, this.formData)
     }
   }

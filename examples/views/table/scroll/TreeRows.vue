@@ -96,7 +96,7 @@ export default {
                 this.tableData = data
                 this.loading = false
                 this.$nextTick(() => {
-                  this.$XModal.message({ message: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                  this.$XModal.message({ content: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
                 })
               })
             },
@@ -192,7 +192,7 @@ export default {
         this.tableData = data
         this.loading = false
         this.$nextTick(() => {
-          this.$XModal.message({ message: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+          this.$XModal.message({ content: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
         })
       })
     },

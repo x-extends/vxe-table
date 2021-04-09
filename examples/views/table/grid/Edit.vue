@@ -163,7 +163,7 @@ export default {
                 this.gridOptions.loading = true
                 setTimeout(() => {
                   this.gridOptions.loading = false
-                  this.$XModal.message({ message: '保存成功！', status: 'success' })
+                  this.$XModal.message({ content: '保存成功！', status: 'success' })
                 }, 300)
               })
             },
@@ -230,7 +230,7 @@ export default {
         this.gridOptions.loading = true
         setTimeout(() => {
           this.gridOptions.loading = false
-          this.$XModal.message({ message: '保存成功！', status: 'success' })
+          this.$XModal.message({ content: '保存成功！', status: 'success' })
         }, 300)
       })
     },

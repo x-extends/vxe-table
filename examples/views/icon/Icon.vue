@@ -147,7 +147,7 @@ export default {
   methods: {
     copyEvent ({ icon }) {
       if (XEClipboard.copy(icon)) {
-        this.$XModal.message({ message: '已复制到剪贴板！', status: 'success' })
+        this.$XModal.message({ content: '已复制到剪贴板！', status: 'success' })
       }
     }
   }

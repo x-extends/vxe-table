@@ -133,9 +133,9 @@ export default {
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
                 this.$refs.xTable.validate((errMap) => {
                   if (errMap) {
-                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                    this.$XModal.message({ status: 'error', content: '校验不通过！' })
                   } else {
-                    this.$XModal.message({ message: '保存成功！', status: 'success' })
+                    this.$XModal.message({ content: '保存成功！', status: 'success' })
                   }
                 })
               } else {
@@ -180,9 +180,9 @@ export default {
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         this.$refs.xTable.validate((errMap) => {
           if (errMap) {
-            this.$XModal.message({ status: 'error', message: '校验不通过！' })
+            this.$XModal.message({ status: 'error', content: '校验不通过！' })
           } else {
-            this.$XModal.message({ message: '保存成功！', status: 'success' })
+            this.$XModal.message({ content: '保存成功！', status: 'success' })
           }
         })
       } else {
