@@ -1003,7 +1003,7 @@ export default {
           input: this.inputEvent,
           change: this.changeEvent,
           focus: this.focusEvent,
-          blu: this.blurEvent
+          blur: this.blurEvent
         }
       })
     )
