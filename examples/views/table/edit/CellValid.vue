@@ -200,14 +200,16 @@ export default {
                 })
                 this.$XModal.message({
                   status: 'error',
-                  message: () => {
-                    return [
-                      <div class="red" style="max-height: 400px;overflow: auto;">
-                        {
-                          msgList.map(msg => <div>{ msg }</div>)
-                        }
-                      </div>
-                    ]
+                  slots: {
+                    default () {
+                      return [
+                        <div class="red" style="max-height: 400px;overflow: auto;">
+                          {
+                            msgList.map(msg => <div>{ msg }</div>)
+                          }
+                        </div>
+                      ]
+                    }
                   }
                 })
               } else {
@@ -296,14 +298,16 @@ export default {
         })
         this.$XModal.message({
           status: 'error',
-          message: () => {
-            return [
-              <div class="red" style="max-height: 400px;overflow: auto;">
-                {
-                  msgList.map(msg => <div>{ msg }</div>)
-                }
-              </div>
-            ]
+          slots: {
+            default () {
+              return [
+                <div class="red" style="max-height: 400px;overflow: auto;">
+                  {
+                    msgList.map(msg => <div>{ msg }</div>)
+                  }
+                </div>
+              ]
+            }
           }
         })
       } else {

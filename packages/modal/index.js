@@ -57,16 +57,17 @@ export function ModalController (options) {
   if (index === 1) {
     defOpts.status = 'question'
   }
-  ModalController[type] = function (message, title, options) {
+  ModalController[type] = function (content, title, options) {
     let opts
-    if (XEUtils.isObject(message)) {
-      opts = message
+    if (XEUtils.isObject(content)) {
+      opts = content
     } else {
       if (title) {
         opts = index === 2 ? { status: title } : { title }
       }
+      opts.content = XEUtils.toString(content)
     }
-    return openModal(Object.assign({ message: XEUtils.toString(message), type }, defOpts, opts, options))
+    return openModal(Object.assign({ type }, defOpts, opts, options))
   }
 })
 

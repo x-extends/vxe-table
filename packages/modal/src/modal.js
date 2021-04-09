@@ -20,7 +20,9 @@ export default {
     position: [String, Object],
     title: String,
     duration: { type: [Number, String], default: () => GlobalConfig.modal.duration },
+    // 请使用 content
     message: [String, Function],
+    content: [String, Function],
     cancelButtonText: { type: String, default: () => GlobalConfig.modal.cancelButtonText },
     confirmButtonText: { type: String, default: () => GlobalConfig.modal.confirmButtonText },
     lockView: { type: Boolean, default: () => GlobalConfig.modal.lockView },
@@ -116,7 +118,8 @@ export default {
     XEUtils.remove(activeModals, $modal => $modal === this)
   },
   render (h) {
-    const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, showZoom, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, message, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, showZoom, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const content = this.content || this.message
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
@@ -194,7 +197,7 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : UtilTools.getFuncText(message)),
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : UtilTools.getFuncText(content)),
           !isMsg ? h('div', {
             class: ['vxe-loading', {
               'is--visible': loading
