@@ -58,7 +58,7 @@ export function ModalController (options) {
     defOpts.status = 'question'
   }
   ModalController[type] = function (content, title, options) {
-    let opts
+    let opts = {}
     if (XEUtils.isObject(content)) {
       opts = content
     } else {
