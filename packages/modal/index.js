@@ -86,7 +86,7 @@ shortcutTypes.forEach((type, index) => {
     defOpts.status = 'question'
   }
   ModalController[type] = function (content, title, options) {
-    let opts
+    let opts = {}
     if (XEUtils.isObject(content)) {
       opts = content
     } else {
