@@ -140,7 +140,7 @@ export default defineComponent({
         // 使用函数式加载
         if ($table) {
           $table.reloadData(data).then(() => {
-            VXETable.modal.message({ message: `渲染 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+            VXETable.modal.message({ content: `渲染 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
             demo1.loading = false
           })
         } else {
@@ -275,7 +275,7 @@ export default defineComponent({
                 // 使用函数式加载
                 if ($table) {
                   $table.reloadData(data).then(() => {
-                    VXETable.modal.message({ message: \`渲染 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                    VXETable.modal.message({ content: \`渲染 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
                     demo1.loading = false
                   })
                 } else {

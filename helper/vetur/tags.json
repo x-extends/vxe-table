@@ -143,7 +143,6 @@
       "header-class-name",
       "footer-class-name",
       "formatter",
-      "seq-method",
       "sortable",
       "sort-by",
       "sort-type",
@@ -186,7 +185,6 @@
       "header-class-name",
       "footer-class-name",
       "formatter",
-      "seq-method",
       "sortable",
       "sort-by",
       "sort-type",
@@ -298,12 +296,14 @@
       "size",
       "loading",
       "perfect",
+      "class-name",
       "import",
       "export",
       "print",
       "refresh",
       "custom",
-      "buttons"
+      "buttons",
+      "tools"
     ],
     "description": "工具栏"
   },
@@ -321,6 +321,7 @@
       "border",
       "background",
       "perfect",
+      "class-name",
       "auto-hidden",
       "icon-prev-page",
       "icon-jump-prev",
@@ -332,7 +333,7 @@
   },
   "vxe-radio": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "label",
       "content",
       "size",
@@ -343,7 +344,7 @@
   },
   "vxe-radio-group": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "size",
       "disabled"
     ],
@@ -355,7 +356,7 @@
   },
   "vxe-radio-button": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "label",
       "content",
       "disabled"
@@ -364,7 +365,7 @@
   },
   "vxe-checkbox": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "label",
       "content",
       "size",
@@ -376,7 +377,7 @@
   },
   "vxe-checkbox-group": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "size",
       "disabled"
     ],
@@ -387,7 +388,7 @@
   },
   "vxe-switch": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "disabled",
       "size",
       "open-label",
@@ -401,7 +402,7 @@
   },
   "vxe-input": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "size",
       "type",
       "name",
@@ -412,6 +413,7 @@
       "maxlength",
       "readonly",
       "disabled",
+      "class-name",
       "prefix-icon",
       "suffix-icon",
       "min",
@@ -434,12 +436,13 @@
   },
   "vxe-select": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "size",
       "multiple",
       "multi-char-overflow",
       "clearable",
       "placeholder",
+      "class-name",
       "visible",
       "disabled",
       "prefix-icon",
@@ -462,6 +465,7 @@
     "attributes": [
       "label",
       "visible",
+      "class-name",
       "disabled"
     ],
     "subtags": [
@@ -474,6 +478,7 @@
       "value",
       "label",
       "visible",
+      "class-name",
       "disabled"
     ],
     "description": "下拉框 - 选项"
@@ -489,6 +494,7 @@
       "circle",
       "status",
       "disabled",
+      "class-name",
       "loading",
       "placement",
       "destroy-on-close",
@@ -498,7 +504,7 @@
   },
   "vxe-tooltip": {
     "attributes": [
-      "v-model",
+      "model-value",
       "content",
       "trigger",
       "theme",
@@ -511,7 +517,7 @@
   },
   "vxe-modal": {
     "attributes": [
-      "v-model / model-value",
+      "model-value",
       "size",
       "loading",
       "id",
@@ -520,6 +526,7 @@
       "status",
       "class-name",
       "icon-status",
+      "content",
       "message",
       "cancel-button-text",
       "confirm-button-text",
@@ -563,6 +570,7 @@
       "title-colon",
       "title-asterisk",
       "title-overflow",
+      "class-name",
       "items",
       "rules",
       "prevent-submit",
@@ -594,12 +602,20 @@
     ],
     "description": "表单 - 项"
   },
+  "vxe-form-gather": {
+    "attributes": [
+      "span",
+      "class-name"
+    ],
+    "description": "表单 - 项集合"
+  },
   "vxe-list": {
     "attributes": [
       "data",
       "size",
       "loading",
       "height",
+      "class-name",
       "auto-resize",
       "sync-resize",
       "scroll-y"

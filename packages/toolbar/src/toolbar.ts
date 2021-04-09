@@ -4,7 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { useSize } from '../../hooks/size'
 import { getEventTargetNode } from '../../tools/dom'
-import { warnLog, errLog, getFuncText, formatText } from '../../tools/utils'
+import { warnLog, errLog, formatText } from '../../tools/utils'
 import { GlobalEvent } from '../../tools/event'
 
 import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines } from '../../../types/all'
@@ -360,7 +360,7 @@ export default defineComponent({
             circle: child.circle,
             round: child.round,
             status: child.status,
-            content: getFuncText(child.name),
+            content: child.name,
             onClick: (evnt: Event) => isBtn ? btnEvent(evnt, child) : tolEvent(evnt, child)
           })
         })
@@ -399,7 +399,7 @@ export default defineComponent({
                   circle: item.circle,
                   round: item.round,
                   status: item.status,
-                  content: getFuncText(item.name),
+                  content: item.name,
                   destroyOnClose: item.destroyOnClose,
                   placement: item.placement,
                   transfer: item.transfer,
@@ -446,7 +446,7 @@ export default defineComponent({
                   circle: item.circle,
                   round: item.round,
                   status: item.status,
-                  content: getFuncText(item.name),
+                  content: item.name,
                   destroyOnClose: item.destroyOnClose,
                   placement: item.placement,
                   transfer: item.transfer,

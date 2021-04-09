@@ -148,15 +148,15 @@ export default defineComponent({
       const visibleColumn = $table.getColumns()
       switch (params.type) {
         case 'confirm': {
-          VXETable.modal.message({ message: `点击了确认，显示为 ${visibleColumn.length} 列`, status: 'info' })
+          VXETable.modal.message({ content: `点击了确认，显示为 ${visibleColumn.length} 列`, status: 'info' })
           break
         }
         case 'reset': {
-          VXETable.modal.message({ message: `点击了重置，显示为 ${visibleColumn.length} 列`, status: 'info' })
+          VXETable.modal.message({ content: `点击了重置，显示为 ${visibleColumn.length} 列`, status: 'info' })
           break
         }
         case 'close': {
-          VXETable.modal.message({ message: `关闭了面板，显示为 ${visibleColumn.length} 列`, status: 'info' })
+          VXETable.modal.message({ content: `关闭了面板，显示为 ${visibleColumn.length} 列`, status: 'info' })
           break
         }
       }
@@ -321,15 +321,15 @@ export default defineComponent({
               const visibleColumn = $table.getColumns()
               switch (params.type) {
                 case 'confirm': {
-                  VXETable.modal.message({ message: \`点击了确认，显示为 \${visibleColumn.length} 列\`, status: 'info' })
+                  VXETable.modal.message({ content: \`点击了确认，显示为 \${visibleColumn.length} 列\`, status: 'info' })
                   break
                 }
                 case 'reset': {
-                  VXETable.modal.message({ message: \`点击了重置，显示为 \${visibleColumn.length} 列\`, status: 'info' })
+                  VXETable.modal.message({ content: \`点击了重置，显示为 \${visibleColumn.length} 列\`, status: 'info' })
                   break
                 }
                 case 'close': {
-                  VXETable.modal.message({ message: \`关闭了面板，显示为 \${visibleColumn.length} 列\`, status: 'info' })
+                  VXETable.modal.message({ content: \`关闭了面板，显示为 \${visibleColumn.length} 列\`, status: 'info' })
                   break
                 }
               }

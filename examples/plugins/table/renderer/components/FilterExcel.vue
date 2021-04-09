@@ -151,7 +151,7 @@ export default defineComponent({
     }
 
     const childMenuClickEvent = (cItem: CaseItem) => {
-      VXETable.modal.alert({ message: cItem.label })
+      VXETable.modal.alert({ content: cItem.label })
     }
 
     load()

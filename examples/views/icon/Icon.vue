@@ -31,7 +31,7 @@ export default defineComponent({
   setup () {
     const copyEvent = ({ icon }: ItemVO) => {
       if (XEClipboard.copy(icon)) {
-        VXETable.modal.message({ message: '已复制到剪贴板！', status: 'success' })
+        VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
       }
     }
     return {

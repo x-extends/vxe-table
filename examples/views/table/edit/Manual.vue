@@ -87,7 +87,7 @@ export default defineComponent({
         demo1.loading1 = true
         setTimeout(() => {
           demo1.loading1 = false
-          VXETable.modal.message({ message: '保存成功！', status: 'success' })
+          VXETable.modal.message({ content: '保存成功！', status: 'success' })
         }, 300)
       })
     }
@@ -177,7 +177,7 @@ export default defineComponent({
                 demo1.loading1 = true
                 setTimeout(() => {
                   demo1.loading1 = false
-                  VXETable.modal.message({ message: '保存成功！', status: 'success' })
+                  VXETable.modal.message({ content: '保存成功！', status: 'success' })
                 }, 300)
               })
             }

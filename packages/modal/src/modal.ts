@@ -26,7 +26,8 @@ export default defineComponent({
     position: [String, Object] as PropType<VxeModalPropTypes.Position>,
     title: String as PropType<VxeModalPropTypes.Title>,
     duration: { type: [Number, String] as PropType<VxeModalPropTypes.Duration>, default: () => GlobalConfig.modal.duration },
-    message: [Number, String, Function] as PropType<VxeModalPropTypes.Message>,
+    message: [Number, String] as PropType<VxeModalPropTypes.Message>,
+    content: [Number, String] as PropType<VxeModalPropTypes.Content>,
     cancelButtonText: { type: String as PropType<VxeModalPropTypes.CancelButtonText>, default: () => GlobalConfig.modal.cancelButtonText },
     confirmButtonText: { type: String as PropType<VxeModalPropTypes.ConfirmButtonText>, default: () => GlobalConfig.modal.confirmButtonText },
     lockView: { type: Boolean as PropType<VxeModalPropTypes.LockView>, default: () => GlobalConfig.modal.lockView },
@@ -720,6 +721,7 @@ export default defineComponent({
 
     const renderBodys = () => {
       const { slots: propSlots = {}, status, message } = props
+      const content = props.content || message
       const isMsg = computeIsMsg.value
       const defaultSlot = slots.default || propSlots.default
       const contVNs: VNode[] = []
@@ -737,7 +739,7 @@ export default defineComponent({
       contVNs.push(
         h('div', {
           class: 'vxe-modal--content'
-        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : (XEUtils.isFunction(message) ? message({ $modal: $xemodal }) as VNode[] : getFuncText(message)))
+        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : getFuncText(content))
       )
       if (!isMsg) {
         contVNs.push(

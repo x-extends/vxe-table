@@ -347,16 +347,16 @@ export default defineComponent({
       demo2.loading2 = true
       setTimeout(() => {
         demo2.loading2 = false
-        VXETable.modal.message({ message: '保存成功', status: 'success' })
+        VXETable.modal.message({ content: '保存成功', status: 'success' })
       }, 1000)
     }
 
     const searchEvent: VxeFormEvents.Submit = () => {
-      VXETable.modal.message({ message: '查询事件', status: 'info' })
+      VXETable.modal.message({ content: '查询事件', status: 'info' })
     }
 
     const resetEvent: VxeFormEvents.Reset = () => {
-      VXETable.modal.message({ message: '重置事件', status: 'info' })
+      VXETable.modal.message({ content: '重置事件', status: 'info' })
     }
 
     return {
@@ -692,16 +692,16 @@ export default defineComponent({
               demo2.loading2 = true
               setTimeout(() => {
                 demo2.loading2 = false
-                VXETable.modal.message({ message: '保存成功', status: 'success' })
+                VXETable.modal.message({ content: '保存成功', status: 'success' })
               }, 1000)
             }
 
             const searchEvent: VxeFormEvents.Submit = () => {
-              VXETable.modal.message({ message: '查询事件', status: 'info' })
+              VXETable.modal.message({ content: '查询事件', status: 'info' })
             }
 
             const resetEvent: VxeFormEvents.Reset = () => {
-              VXETable.modal.message({ message: '重置事件', status: 'info' })
+              VXETable.modal.message({ content: '重置事件', status: 'info' })
             }
 
             return {

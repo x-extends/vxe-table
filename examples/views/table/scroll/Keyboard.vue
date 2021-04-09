@@ -158,9 +158,9 @@ export default defineComponent({
       const $table = xTable.value
       $table.validate((errMap) => {
         if (errMap) {
-          VXETable.modal.message({ status: 'error', message: '校验不通过！' })
+          VXETable.modal.message({ status: 'error', content: '校验不通过！' })
         } else {
-          VXETable.modal.message({ status: 'success', message: '校验成功！' })
+          VXETable.modal.message({ status: 'success', content: '校验成功！' })
         }
       })
     }
@@ -180,20 +180,22 @@ export default defineComponent({
           })
           VXETable.modal.message({
             status: 'error',
-            message: () => {
-              return [
-                <div class="red" style="max-height: 400px;overflow: auto;">
-                  {
-                    msgList.map(msg => {
-                      return <div>{ msg }</div>
-                    })
-                  }
-                </div>
-              ]
+            slots: {
+              default () {
+                return [
+                  <div class="red" style="max-height: 400px;overflow: auto;">
+                    {
+                      msgList.map(msg => {
+                        return <div>{ msg }</div>
+                      })
+                    }
+                  </div>
+                ]
+              }
             }
           })
         } else {
-          VXETable.modal.message({ status: 'success', message: '校验成功！' })
+          VXETable.modal.message({ status: 'success', content: '校验成功！' })
         }
       })
     }
@@ -204,13 +206,13 @@ export default defineComponent({
       if (selectRecords.length > 0) {
         $table.validate(selectRecords, (errMap) => {
           if (errMap) {
-            VXETable.modal.message({ status: 'error', message: '校验不通过！' })
+            VXETable.modal.message({ status: 'error', content: '校验不通过！' })
           } else {
-            VXETable.modal.message({ status: 'success', message: '校验成功！' })
+            VXETable.modal.message({ status: 'success', content: '校验成功！' })
           }
         })
       } else {
-        VXETable.modal.message({ status: 'warning', message: '未选中数据！' })
+        VXETable.modal.message({ status: 'warning', content: '未选中数据！' })
       }
     }
 
@@ -377,9 +379,9 @@ export default defineComponent({
             validEvent () {
               this.$refs.xTable.validate((errMap) => {
                 if (errMap) {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                  this.$XModal.message({ status: 'error', content: '校验不通过！' })
                 } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                  this.$XModal.message({ status: 'success', content: '校验成功！' })
                 }
               })
             },
@@ -395,22 +397,24 @@ export default defineComponent({
                       })
                     })
                   })
-                  this.$XModal.message({
+                  VXETable.modal.message({
                     status: 'error',
-                    message: () => {
-                      return [
-                        <div class="red" style="max-height: 400px;overflow: auto;">
-                          {
-                            msgList.map(msg => {
-                              return <div>{ msg }</div>
-                            })
-                          }
-                        </div>
-                      ]
+                    slots: {
+                      default () {
+                        return [
+                          <div class="red" style="max-height: 400px;overflow: auto;">
+                            {
+                              msgList.map(msg => {
+                                return <div>{ msg }</div>
+                              })
+                            }
+                          </div>
+                        ]
+                      }
                     }
                   })
                 } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                  this.$XModal.message({ status: 'success', content: '校验成功！' })
                 }
               })
             },
@@ -419,13 +423,13 @@ export default defineComponent({
               if (selectRecords.length > 0) {
                 this.$refs.xTable.validate(selectRecords, (errMap) => {
                   if (errMap) {
-                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                    this.$XModal.message({ status: 'error', content: '校验不通过！' })
                   } else {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
+                    this.$XModal.message({ status: 'success', content: '校验成功！' })
                   }
                 })
               } else {
-                this.$XModal.message({ status: 'warning', message: '未选中数据！' })
+                this.$XModal.message({ status: 'warning', content: '未选中数据！' })
               }
             },
             insertEvent (row) {

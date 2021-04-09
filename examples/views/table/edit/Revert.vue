@@ -81,7 +81,7 @@ export default defineComponent({
           }
         })
       } else {
-        VXETable.modal.message({ message: '请至少选择一条数据', status: 'error' })
+        VXETable.modal.message({ content: '请至少选择一条数据', status: 'error' })
       }
     }
 
@@ -175,7 +175,7 @@ export default defineComponent({
                   }
                 })
               } else {
-                VXETable.modal.message({ message: '请至少选择一条数据', status: 'error' })
+                VXETable.modal.message({ content: '请至少选择一条数据', status: 'error' })
               }
             }
 

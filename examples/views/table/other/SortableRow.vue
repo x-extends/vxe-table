@@ -189,7 +189,7 @@ export default defineComponent({
               // 错误的移动
               const oldTrElem = wrapperElem.children[oldIndex]
               wrapperElem.insertBefore(targetTrElem, oldTrElem)
-              return VXETable.modal.message({ message: '不允许自己给自己拖动！', status: 'error' })
+              return VXETable.modal.message({ content: '不允许自己给自己拖动！', status: 'error' })
             }
             const currRow = selfNode.items.splice(selfNode.index, 1)[0]
             if ($grid.isTreeExpandByRow(prevRow)) {
@@ -439,7 +439,7 @@ export default defineComponent({
                       // 错误的移动
                       const oldTrElem = wrapperElem.children[oldIndex]
                       wrapperElem.insertBefore(targetTrElem, oldTrElem)
-                      return VXETable.modal.message({ message: '不允许自己给自己拖动！', status: 'error' })
+                      return VXETable.modal.message({ content: '不允许自己给自己拖动！', status: 'error' })
                     }
                     const currRow = selfNode.items.splice(selfNode.index, 1)[0]
                     if ($grid.isTreeExpandByRow(prevRow)) {

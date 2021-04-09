@@ -2054,7 +2054,7 @@ export default defineComponent({
           onInput: inputEvent,
           onChange: changeEvent,
           onFocus: focusEvent,
-          onBlu: blurEvent
+          onBlur: blurEvent
         })
       )
       // 后缀图标

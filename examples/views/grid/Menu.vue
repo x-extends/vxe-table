@@ -133,7 +133,7 @@ export default defineComponent({
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              VXETable.modal.message({ message: '已复制到剪贴板！', status: 'success' })
+              VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
             }
           }
           break
@@ -265,7 +265,7 @@ export default defineComponent({
                 case 'copy':
                   if (row && column) {
                     if (XEClipboard.copy(row[column.property])) {
-                      VXETable.modal.message({ message: '已复制到剪贴板！', status: 'success' })
+                      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
                     }
                   }
                   break

@@ -110,7 +110,7 @@ export default defineComponent({
       // 模拟异步保存
       setTimeout(() => {
         gridOptions.loading = false
-        VXETable.modal.message({ message: '保存成功！', status: 'success' })
+        VXETable.modal.message({ content: '保存成功！', status: 'success' })
       }, 300)
     }
 
@@ -245,7 +245,7 @@ export default defineComponent({
               // 模拟异步保存
               setTimeout(() => {
                 gridOptions.loading = false
-                VXETable.modal.message({ message: '保存成功！', status: 'success' })
+                VXETable.modal.message({ content: '保存成功！', status: 'success' })
               }, 300)
             }
 

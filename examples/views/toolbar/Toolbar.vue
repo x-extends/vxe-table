@@ -127,7 +127,7 @@ export default defineComponent({
     const xToolbar = ref({} as VxeToolbarInstance)
 
     const funnelEvent = () => {
-      VXETable.modal.alert({ message: '点击事件' })
+      VXETable.modal.alert({ content: '点击事件' })
     }
 
     nextTick(() => {
@@ -257,7 +257,7 @@ export default defineComponent({
             const xToolbar = ref({} as VxeToolbarInstance)
 
             const funnelEvent = () => {
-              VXETable.modal.alert({ message: '点击事件' })
+              VXETable.modal.alert({ content: '点击事件' })
             }
 
             nextTick(() => {

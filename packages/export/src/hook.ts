@@ -325,7 +325,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               _hasChild: hasRowChild,
               _expand: hasRowChild && $xetable.isTreeExpandByRow(row)
             }
-            columns.forEach((column: any, columnIndex: any) => {
+            columns.forEach((column, columnIndex) => {
               let cellValue: string | boolean = ''
               const renderOpts = column.editRender || column.cellRender
               let exportLabelMethod = column.exportMethod
@@ -376,7 +376,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         }, treeOpts)
         return rest
       }
-      return datas.map((row: any, rowIndex: any) => {
+      return datas.map((row, rowIndex) => {
         const item: any = {
           _row: row
         }
@@ -728,7 +728,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       }
       saveLocalFile({ filename, type, content }).then(() => {
         if (opts.message !== false) {
-          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
+          VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
         }
       })
     }
@@ -799,7 +799,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               loadRest = $xetable.reloadData(data)
             }
             if (opts.message !== false) {
-              VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
+              VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
             }
             return loadRest.then(() => {
               if (_importResolve) {
@@ -808,7 +808,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
             })
           })
       } else if (opts.message !== false) {
-        VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
+        VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
         if (_importReject) {
           _importReject({ status: false })
         }
@@ -822,7 +822,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       // 检查类型，如果为自定义导出，则不需要校验类型
       if (!importMethod && !XEUtils.includes(VXETable.config.importTypes, type)) {
         if (opts.message !== false) {
-          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
+          VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
         }
         const params = { status: false }
         return Promise.reject(params)
@@ -1200,7 +1200,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         const isTree = !!treeConfig
         if (isTree) {
           if (defOpts.message) {
-            VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
+            VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
           }
           return
         }
@@ -1208,13 +1208,13 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           errLog('vxe.error.reqProp', ['import-config'])
         }
         // 处理类型
-        const typeList = types.map((value: any) => {
+        const typeList = types.map((value) => {
           return {
             value,
             label: `vxe.export.types.${value}`
           }
         })
-        const modeList = defOpts.modes.map((value: any) => {
+        const modeList = defOpts.modes.map((value) => {
           return {
             value,
             label: `vxe.import.modes.${value}`

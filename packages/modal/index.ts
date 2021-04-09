@@ -51,38 +51,38 @@ function closeModal (id?: VxeModalPropTypes.ID) {
   return Promise.all(restPromises)
 }
 
-function handleOpen (defOpts: VxeModalDefines.ModalOptions, message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
+function handleOpen (defOpts: VxeModalDefines.ModalOptions, content: VxeModalPropTypes.Content | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
   let opts
-  if (XEUtils.isObject(message)) {
-    opts = message
+  if (XEUtils.isObject(content)) {
+    opts = content
   } else {
-    opts = { message: XEUtils.toValueString(message), title }
+    opts = { content: XEUtils.toValueString(content), title }
   }
   return openModal({ ...defOpts, ...options, ...opts })
 }
 
-function openAlert (message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
+function openAlert (content: VxeModalPropTypes.Content | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
   return handleOpen({
     type: 'alert',
     showFooter: true
-  }, message, title, options)
+  }, content, title, options)
 }
 
-function openConfirm (message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
+function openConfirm (content: VxeModalPropTypes.Content | VxeModalDefines.ModalOptions, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions) {
   return handleOpen({
     type: 'confirm',
     status: 'question',
     showFooter: true
-  }, message, title, options)
+  }, content, title, options)
 }
 
-function openMessage (message: VxeModalPropTypes.Message | VxeModalDefines.ModalOptions, options?: VxeModalDefines.ModalOptions) {
+function openMessage (content: VxeModalPropTypes.Content | VxeModalDefines.ModalOptions, options?: VxeModalDefines.ModalOptions) {
   return handleOpen({
     type: 'message',
     mask: false,
     lockView: false,
     showHeader: false
-  }, message, '', options)
+  }, content, '', options)
 }
 
 const ModalController = {

@@ -61,7 +61,7 @@ export default defineComponent({
       if ($table.isUpdateByRow(row, field)) {
         setTimeout(() => {
           VXETable.modal.message({
-            message: `局部保存成功！ ${field}=${cellValue}`,
+            content: `局部保存成功！ ${field}=${cellValue}`,
             status: 'success'
           })
           // 局部更新单元格为已保存状态
@@ -126,7 +126,7 @@ export default defineComponent({
               if ($table.isUpdateByRow(row, field)) {
                 setTimeout(() => {
                   VXETable.modal.message({
-                    message: \`局部保存成功！ \${field}=\${cellValue}\`,
+                    content: \`局部保存成功！ \${field}=\${cellValue}\`,
                     status: 'success'
                   })
                   // 局部更新单元格为已保存状态

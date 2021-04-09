@@ -138,7 +138,7 @@ export default defineComponent({
       demo1.loading = false
       const startTime = Date.now()
       await nextTick()
-      await VXETable.modal.message({ message: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+      await VXETable.modal.message({ content: `渲染 ${size} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
     }
 
     // 初始化
@@ -263,7 +263,7 @@ export default defineComponent({
               demo1.loading = false
               const startTime = Date.now()
               await nextTick()
-              await VXETable.modal.message({ message: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+              await VXETable.modal.message({ content: \`渲染 \${size} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
             }
 
             // 初始化

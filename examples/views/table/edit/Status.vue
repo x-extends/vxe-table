@@ -113,10 +113,10 @@ export default defineComponent({
         await submitSave(row)
         // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
         await $table.reloadRow(row, null, field)
-        VXETable.modal.message({ message: '保存成功！', status: 'success' })
+        VXETable.modal.message({ content: '保存成功！', status: 'success' })
         row.loading = false
       } else {
-        VXETable.modal.message({ message: '数据未改动！', status: 'info' })
+        VXETable.modal.message({ content: '数据未改动！', status: 'info' })
       }
     }
 
@@ -127,10 +127,10 @@ export default defineComponent({
         const data = await submitSave(row)
         // 局部保存，并更新本地数据
         await $table.reloadRow(row, data, field)
-        VXETable.modal.message({ message: '保存成功！', status: 'success' })
+        VXETable.modal.message({ content: '保存成功！', status: 'success' })
         row.loading = false
       } else {
-        VXETable.modal.message({ message: '数据未改动！', status: 'info' })
+        VXETable.modal.message({ content: '数据未改动！', status: 'info' })
       }
     }
 
@@ -261,10 +261,10 @@ export default defineComponent({
                 await submitSave(row)
                 // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
                 await $table.reloadRow(row, null, field)
-                VXETable.modal.message({ message: '保存成功！', status: 'success' })
+                VXETable.modal.message({ content: '保存成功！', status: 'success' })
                 row.loading = false
               } else {
-                VXETable.modal.message({ message: '数据未改动！', status: 'info' })
+                VXETable.modal.message({ content: '数据未改动！', status: 'info' })
               }
             }
 
@@ -275,10 +275,10 @@ export default defineComponent({
                 const data = await submitSave(row)
                 // 局部保存，并更新本地数据
                 await $table.reloadRow(row, data, field)
-                VXETable.modal.message({ message: '保存成功！', status: 'success' })
+                VXETable.modal.message({ content: '保存成功！', status: 'success' })
                 row.loading = false
               } else {
-                VXETable.modal.message({ message: '数据未改动！', status: 'info' })
+                VXETable.modal.message({ content: '数据未改动！', status: 'info' })
               }
             }
 

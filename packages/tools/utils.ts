@@ -24,7 +24,7 @@ export function isEmptyValue (cellValue: any) {
   return cellValue === null || cellValue === undefined || cellValue === ''
 }
 
-export function parseFile (file: any) {
+export function parseFile (file: File) {
   const name = file.name
   const tIndex = XEUtils.lastIndexOf(name, '.')
   const type = name.substring(tIndex + 1, name.length)

@@ -208,12 +208,12 @@ export default defineComponent({
         toggleMethod ({ expanded, row }) {
           if (expanded) {
             if (row.date === '2019-10-22') {
-              VXETable.modal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+              VXETable.modal.message({ id: 'openErr', content: '不允许展开', status: 'error' })
               return false
             }
           } else {
             if (row.date === '2019-03-04') {
-              VXETable.modal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+              VXETable.modal.message({ id: 'closeErr', content: '不允许关闭', status: 'error' })
               return false
             }
           }
@@ -438,12 +438,12 @@ export default defineComponent({
                 toggleMethod ({ expanded, row }) {
                   if (expanded) {
                     if (row.date === '2019-10-22') {
-                      VXETable.modal.message({ id: 'openErr', message: '不允许展开', status: 'error' })
+                      VXETable.modal.message({ id: 'openErr', content: '不允许展开', status: 'error' })
                       return false
                     }
                   } else {
                     if (row.date === '2019-03-04') {
-                      VXETable.modal.message({ id: 'closeErr', message: '不允许关闭', status: 'error' })
+                      VXETable.modal.message({ id: 'closeErr', content: '不允许关闭', status: 'error' })
                       return false
                     }
                   }

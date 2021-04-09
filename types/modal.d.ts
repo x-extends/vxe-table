@@ -116,7 +116,12 @@ export namespace VxeModalPropTypes {
   export type Position = 'center' | ModalPosition;
   export type Title = string | number;
   export type Duration = number | string;
-  export type Message = number | string | ((params: { $modal: VxeModalConstructor & VxeModalMethods }) => VNode[] | string[] | JSX.Element[]);
+  export type Content = number | string;
+  /**
+   * 请使用 content
+   * @deprecated
+   */
+  export type Message = Content;
   export type CancelButtonText = string;
   export type ConfirmButtonText = string;
   export type LockView = boolean;
@@ -160,7 +165,12 @@ export type VxeModalProps = {
   position?: VxeModalPropTypes.Position;
   title?: VxeModalPropTypes.Title;
   duration?: VxeModalPropTypes.Duration;
-  message?: VxeModalPropTypes.Message;
+  /**
+   * 请使用 content
+   * @deprecated
+   */
+  message?: VxeModalPropTypes.Content;
+  content?: VxeModalPropTypes.Content;
   cancelButtonText?: VxeModalPropTypes.CancelButtonText;
   confirmButtonText?: VxeModalPropTypes.ConfirmButtonText;
   lockView?: VxeModalPropTypes.LockView;
@@ -223,7 +233,7 @@ export interface ModalController {
    * @param title 标题
    * @param options 参数
    */
-  alert(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
+  alert(message: VxeModalPropTypes.Content, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建提示框
    * @param options 参数
@@ -235,7 +245,7 @@ export interface ModalController {
    * @param title 标题
    * @param options 参数
    */
-  confirm(message: VxeModalPropTypes.Message, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
+  confirm(message: VxeModalPropTypes.Content, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建确认框
    * @param options 参数
@@ -247,7 +257,7 @@ export interface ModalController {
    * @param title 标题
    * @param options 参数
    */
-  message(message: VxeModalPropTypes.Message, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
+  message(message: VxeModalPropTypes.Content, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建消息提示
    * @param options 参数

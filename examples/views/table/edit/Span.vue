@@ -87,13 +87,13 @@ export default defineComponent({
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
         $table.validate((errMap) => {
           if (errMap) {
-            VXETable.modal.message({ status: 'error', message: '校验不通过！' })
+            VXETable.modal.message({ status: 'error', content: '校验不通过！' })
           } else {
-            VXETable.modal.message({ message: '保存成功！', status: 'success' })
+            VXETable.modal.message({ content: '保存成功！', status: 'success' })
           }
         })
       } else {
-        VXETable.modal.message({ message: '数据未改动！', status: 'warning' })
+        VXETable.modal.message({ content: '数据未改动！', status: 'warning' })
       }
     }
 
@@ -202,13 +202,13 @@ export default defineComponent({
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
                 $table.validate((errMap) => {
                   if (errMap) {
-                    VXETable.modal.message({ status: 'error', message: '校验不通过！' })
+                    VXETable.modal.message({ status: 'error', content: '校验不通过！' })
                   } else {
-                    VXETable.modal.message({ message: '保存成功！', status: 'success' })
+                    VXETable.modal.message({ content: '保存成功！', status: 'success' })
                   }
                 })
               } else {
-                VXETable.modal.message({ message: '数据未改动！', status: 'warning' })
+                VXETable.modal.message({ content: '数据未改动！', status: 'warning' })
               }
             }
 

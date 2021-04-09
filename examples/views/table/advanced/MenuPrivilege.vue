@@ -158,12 +158,12 @@ export default defineComponent({
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              VXETable.modal.message({ message: '已复制到剪贴板！', status: 'success' })
+              VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
             }
           }
           break
         default:
-          VXETable.modal.message({ message: `点击了 "${menu.name}"`, status: 'info' })
+          VXETable.modal.message({ content: `点击了 "${menu.name}"`, status: 'info' })
       }
     }
 
@@ -332,12 +332,12 @@ export default defineComponent({
                 case 'copy':
                   if (row && column) {
                     if (XEClipboard.copy(row[column.property])) {
-                      VXETable.modal.message({ message: '已复制到剪贴板！', status: 'success' })
+                      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
                     }
                   }
                   break
                 default:
-                  VXETable.modal.message({ message: \`点击了 "\${menu.name}"\`, status: 'info' })
+                  VXETable.modal.message({ content: \`点击了 "\${menu.name}"\`, status: 'info' })
               }
             }
 

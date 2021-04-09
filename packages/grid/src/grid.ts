@@ -258,7 +258,7 @@ export default defineComponent({
         gridExtendTableMethods.clearCheckboxRow()
       } else {
         if (isMsg) {
-          VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       }
     }
@@ -278,13 +278,13 @@ export default defineComponent({
       const selectRecords = gridExtendTableMethods.getCheckboxRecords()
       if (isMsg) {
         if (selectRecords.length) {
-          return VXETable.modal.confirm({ id: `cfm_${code}`, message: GlobalConfig.i18n(alertKey), escClosable: true }).then((type) => {
+          return VXETable.modal.confirm({ id: `cfm_${code}`, content: GlobalConfig.i18n(alertKey), escClosable: true }).then((type) => {
             if (type === 'confirm') {
               callback()
             }
           })
         } else {
-          VXETable.modal.message({ id: `msg_${code}`, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          VXETable.modal.message({ id: `msg_${code}`, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       } else {
         if (selectRecords.length) {
@@ -781,7 +781,7 @@ export default defineComponent({
                       reactData.tableLoading = false
                       reactData.pendingRecords = reactData.pendingRecords.filter((row) => $xetable.findRowIndexOf(removeRecords, row) === -1)
                       if (isMsg) {
-                        VXETable.modal.message({ message: getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
+                        VXETable.modal.message({ content: getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                       }
                       if (afterDelete) {
                         afterDelete(...applyArgs)
@@ -792,13 +792,13 @@ export default defineComponent({
                     .catch(rest => {
                       reactData.tableLoading = false
                       if (isMsg) {
-                        VXETable.modal.message({ id: code, message: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                        VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
                     })
                 })
               } else {
                 if (isMsg) {
-                  VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+                  VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
                 }
               }
             } else {
@@ -829,7 +829,7 @@ export default defineComponent({
                       reactData.tableLoading = false
                       reactData.pendingRecords = []
                       if (isMsg) {
-                        VXETable.modal.message({ message: getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
+                        VXETable.modal.message({ content: getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                       }
                       if (afterSave) {
                         afterSave(...applyArgs)
@@ -840,12 +840,12 @@ export default defineComponent({
                     .catch(rest => {
                       reactData.tableLoading = false
                       if (isMsg) {
-                        VXETable.modal.message({ id: code, message: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                        VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
                     })
                 } else {
                   if (isMsg) {
-                    VXETable.modal.message({ id: code, message: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
+                    VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                   }
                 }
               }).catch((errMap: any) => errMap)

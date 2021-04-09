@@ -114,7 +114,7 @@ export default defineComponent({
           break
         case 'copy':
           if (XEClipboard.copy(row[column.property])) {
-            VXETable.modal.message({ message: '已复制到剪贴板！', status: 'success' })
+            VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
           }
           break
         case 'reload':
@@ -129,7 +129,7 @@ export default defineComponent({
           $table.remove(row)
           break
         case 'save':
-          VXETable.modal.message({ message: '保存成功', status: 'success' })
+          VXETable.modal.message({ content: '保存成功', status: 'success' })
           findList()
           break
       }
@@ -266,7 +266,7 @@ export default defineComponent({
                   break
                 case 'copy':
                   if (XEClipboard.copy(row[column.property])) {
-                    VXETable.modal.message({ message: '已复制到剪贴板！', status: 'success' })
+                    VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
                   }
                   break
                 case 'reload':
@@ -281,7 +281,7 @@ export default defineComponent({
                   $table.remove(row)
                   break
                 case 'save':
-                  VXETable.modal.message({ message: '保存成功', status: 'success' })
+                  VXETable.modal.message({ content: '保存成功', status: 'success' })
                   findList()
                   break
               }

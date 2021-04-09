@@ -99,7 +99,7 @@ export default defineComponent({
         }
         case 'mySave': {
           const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
-          VXETable.modal.message({ message: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
+          VXETable.modal.message({ content: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
           break
         }
         case 'myExport': {
@@ -204,7 +204,7 @@ export default defineComponent({
                 }
                 case 'mySave': {
                   const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
-                  VXETable.modal.message({ message: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
+                  VXETable.modal.message({ content: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
                   break
                 }
                 case 'myExport': {

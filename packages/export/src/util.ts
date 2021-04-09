@@ -67,7 +67,7 @@ export const readLocalFile: ReadFileFunction = (options) => {
     fileInput.onchange = (evnt: any) => {
       const { files } = evnt.target
       const file = files[0]
-      let errType
+      let errType = ''
       // 校验类型
       if (!isAllType) {
         for (let fIndex = 0; fIndex < files.length; fIndex++) {
@@ -82,7 +82,7 @@ export const readLocalFile: ReadFileFunction = (options) => {
         resolve({ status: true, files, file })
       } else {
         if (opts.message !== false) {
-          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
+          VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
         }
         const params = { status: false, files, file }
         reject(params)

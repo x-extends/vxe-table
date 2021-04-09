@@ -85,7 +85,7 @@ export default defineComponent({
             } else {
               wrapperElem.insertBefore(oldTrElement, targetThElem)
             }
-            return VXETable.modal.message({ message: '固定列不允许拖动！', status: 'error' })
+            return VXETable.modal.message({ content: '固定列不允许拖动！', status: 'error' })
           }
           // 转换真实索引
           const oldColumnIndex = $table.getColumnIndex(tableColumn[oldIndex])
@@ -187,7 +187,7 @@ export default defineComponent({
             } else {
               wrapperElem.insertBefore(oldTrElement, targetThElem)
             }
-            return VXETable.modal.message({ message: '固定列不允许拖动！', status: 'error' })
+            return VXETable.modal.message({ content: '固定列不允许拖动！', status: 'error' })
           }
           // 转换真实索引
           const oldColumnIndex = $grid.getColumnIndex(tableColumn[oldIndex])
@@ -281,7 +281,7 @@ export default defineComponent({
                     } else {
                       wrapperElem.insertBefore(oldTrElement, targetThElem)
                     }
-                    return VXETable.modal.message({ message: '固定列不允许拖动！', status: 'error' })
+                    return VXETable.modal.message({ content: '固定列不允许拖动！', status: 'error' })
                   }
                   // 转换真实索引
                   const oldColumnIndex = $table.getColumnIndex(tableColumn[oldIndex])
@@ -422,7 +422,7 @@ export default defineComponent({
                     } else {
                       wrapperElem.insertBefore(oldTrElement, targetThElem)
                     }
-                    return VXETable.modal.message({ message: '固定列不允许拖动！', status: 'error' })
+                    return VXETable.modal.message({ content: '固定列不允许拖动！', status: 'error' })
                   }
                   // 转换真实索引
                   const oldColumnIndex = $grid.getColumnIndex(tableColumn[oldIndex])

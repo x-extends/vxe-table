@@ -110,10 +110,10 @@ import pulldownAPI from '../../api/pulldown'
 
 // const tagMaps = [
 //   ['vxe-table', tableAPI, { subtags: ['vxe-colgroup', 'vxe-table-colgroup', 'vxe-column', 'vxe-table-column'], description: '基础表格' }],
-//   ['vxe-colgroup', tableColgroupAPI, { subtags: ['vxe-column'], description: '基础表格 - 分组列' }],
-//   ['vxe-table-colgroup', tableColgroupAPI, { subtags: ['vxe-table-column'], description: '基础表格 - 分组列' }],
-//   ['vxe-column', tableColumnAPI, { description: '基础表格 - 列' }],
-//   ['vxe-table-column', tableColumnAPI, { description: '基础表格 - 列' }],
+//   ['vxe-colgroup', colgroupAPI, { subtags: ['vxe-column'], description: '基础表格 - 分组列' }],
+//   ['vxe-table-colgroup', colgroupAPI, { subtags: ['vxe-table-column'], description: '基础表格 - 分组列' }],
+//   ['vxe-column', columnAPI, { description: '基础表格 - 列' }],
+//   ['vxe-table-column', columnAPI, { description: '基础表格 - 列' }],
 //   ['vxe-grid', gridAPI, { description: '高级表格' }],
 //   ['vxe-toolbar', toolbarAPI, { description: '工具栏' }],
 //   ['vxe-pager', pagerAPI, { description: '分页' }],
@@ -453,7 +453,7 @@ export default defineComponent({
         case 'copy':
           if (row && column) {
             if (XEClipboard.copy(row[column.property])) {
-              VXETable.modal.message({ message: i18n.global.t('app.body.msg.copyToClipboard'), status: 'success' })
+              VXETable.modal.message({ content: i18n.global.t('app.body.msg.copyToClipboard'), status: 'success' })
             }
           }
           break

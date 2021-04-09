@@ -186,11 +186,11 @@ export default defineComponent({
           const formBody = new FormData()
           formBody.append('file', file)
           return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
-            VXETable.modal.message({ message: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
+            VXETable.modal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
             // 导入完成，刷新表格
             $grid.commitProxy('query')
           }).catch(() => {
-            VXETable.modal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
+            VXETable.modal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
           })
         }
       },
@@ -221,7 +221,7 @@ export default defineComponent({
           // 开始服务端导出
           return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
             if (data.id) {
-              VXETable.modal.message({ message: '导出成功，开始下载', status: 'success' })
+              VXETable.modal.message({ content: '导出成功，开始下载', status: 'success' })
               // 读取路径，请求文件
               XEAjax.fetch(`https://api.xuliangzhan.com:10443/api/pub/export/download/${data.id}`).then(response => {
                 response.blob().then(blob => {
@@ -231,7 +231,7 @@ export default defineComponent({
               })
             }
           }).catch(() => {
-            VXETable.modal.message({ message: '导出失败！', status: 'error' })
+            VXETable.modal.message({ content: '导出失败！', status: 'error' })
           })
         }
       },
@@ -453,11 +453,11 @@ export default defineComponent({
                   const formBody = new FormData()
                   formBody.append('file', file)
                   return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
-                    VXETable.modal.message({ message: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
+                    VXETable.modal.message({ content: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                     // 导入完成，刷新表格
                     $grid.commitProxy('query')
                   }).catch(() => {
-                    VXETable.modal.message({ message: '导入失败，请检查数据是否正确！', status: 'error' })
+                    VXETable.modal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
                   })
                 }
               },
@@ -488,7 +488,7 @@ export default defineComponent({
                   // 开始服务端导出
                   return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/export', body).then(data => {
                     if (data.id) {
-                      VXETable.modal.message({ message: '导出成功，开始下载', status: 'success' })
+                      VXETable.modal.message({ content: '导出成功，开始下载', status: 'success' })
                       // 读取路径，请求文件
                       XEAjax.fetch(\`https://api.xuliangzhan.com:10443/api/pub/export/download/\${data.id}\`).then(response => {
                         response.blob().then(blob => {
@@ -498,7 +498,7 @@ export default defineComponent({
                       })
                     }
                   }).catch(() => {
-                    VXETable.modal.message({ message: '导出失败！', status: 'error' })
+                    VXETable.modal.message({ content: '导出失败！', status: 'error' })
                   })
                 }
               },

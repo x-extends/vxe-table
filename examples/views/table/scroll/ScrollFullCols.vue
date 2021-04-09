@@ -179,7 +179,7 @@ export default defineComponent({
             $grid.reloadColumn(columns),
             $grid.reloadData(data)
           ]).then(() => {
-            VXETable.modal.message({ message: `渲染 ${colSize} 列 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
+            VXETable.modal.message({ content: `渲染 ${colSize} 列 ${rowSize} 行，用时 ${Date.now() - startTime}毫秒`, status: 'info' })
             gridOptions.loading = false
           })
         } else {
@@ -353,7 +353,7 @@ export default defineComponent({
                     $grid.reloadColumn(columns),
                     $grid.reloadData(data)
                   ]).then(() => {
-                    VXETable.modal.message({ message: \`渲染 \${colSize} 列 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
+                    VXETable.modal.message({ content: \`渲染 \${colSize} 列 \${rowSize} 行，用时 \${Date.now() - startTime}毫秒\`, status: 'info' })
                     gridOptions.loading = false
                   })
                 } else {
