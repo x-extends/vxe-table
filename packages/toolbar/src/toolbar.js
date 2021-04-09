@@ -21,7 +21,7 @@ const renderDropdowns = (h, _vm, item, isBtn) => {
           circle: child.circle,
           round: child.round,
           status: child.status,
-          content: UtilTools.getFuncText(child.name)
+          content: child.name
         }
       })
     })
@@ -64,7 +64,7 @@ function renderBtns (h, _vm) {
         circle: item.circle,
         round: item.round,
         status: item.status,
-        content: UtilTools.getFuncText(item.name),
+        content: item.name,
         destroyOnClose: item.destroyOnClose,
         placement: item.placement,
         transfer: item.transfer
@@ -111,7 +111,7 @@ function renderRightTools (h, _vm) {
         circle: item.circle,
         round: item.round,
         status: item.status,
-        content: UtilTools.getFuncText(item.name),
+        content: item.name,
         destroyOnClose: item.destroyOnClose,
         placement: item.placement,
         transfer: item.transfer

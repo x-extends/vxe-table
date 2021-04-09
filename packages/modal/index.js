@@ -80,16 +80,17 @@ shortcutTypes.forEach((type, index) => {
   if (index === 1) {
     defOpts.status = 'question'
   }
-  ModalController[type] = function (message, title, options) {
+  ModalController[type] = function (content, title, options) {
     let opts
-    if (XEUtils.isObject(message)) {
-      opts = message
+    if (XEUtils.isObject(content)) {
+      opts = content
     } else {
       if (title) {
         opts = index === 2 ? { status: title } : { title }
       }
+      opts.content = XEUtils.toValueString(content)
     }
-    return openModal(Object.assign({ message: XEUtils.toValueString(message), type }, defOpts, opts, options))
+    return openModal(Object.assign({ type }, defOpts, opts, options))
   }
 })
 

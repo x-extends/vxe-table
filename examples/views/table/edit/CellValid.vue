@@ -209,16 +209,17 @@ export default {
                 })
                 this.$XModal.message({
                   status: 'error',
-                  message: () => {
-                    return [
-                      <div class="red" style="max-height: 400px;overflow: auto;">
-                        {
-                          msgList.map(msg => <div>{ msg }</div>)
-                        }
-                      </div>
-                    ]
+                  slots: {
+                    default () {
+                      return [
+                        <div class="red" style="max-height: 400px;overflow: auto;">
+                          {
+                            msgList.map(msg => <div>{ msg }</div>)
+                          }
+                        </div>
+                      ]
+                    }
                   }
-                })
               } else {
                 this.$XModal.message({ status: 'success', message: '校验成功！' })
               }
@@ -297,14 +298,16 @@ export default {
         })
         this.$XModal.message({
           status: 'error',
-          message: () => {
-            return [
-              <div class="red" style="max-height: 400px;overflow: auto;">
-                {
-                  msgList.map(msg => <div>{ msg }</div>)
-                }
-              </div>
-            ]
+          slots: {
+            default () {
+              return [
+                <div class="red" style="max-height: 400px;overflow: auto;">
+                  {
+                    msgList.map(msg => <div>{ msg }</div>)
+                  }
+                </div>
+              ]
+            }
           }
         })
       } else {

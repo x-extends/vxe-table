@@ -564,7 +564,7 @@ function downloadFile ($xetable, opts, content) {
   }
   saveLocalFile({ filename, type, content }).then(() => {
     if (opts.message !== false) {
-      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
+      VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
     }
   })
 }
@@ -785,7 +785,7 @@ function handleImport ($xetable, content, opts) {
           loadRest = $xetable.reloadData(data)
         }
         if (opts.message !== false) {
-          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
+          VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
         }
         return loadRest.then(() => {
           if (_importResolve) {
@@ -794,7 +794,7 @@ function handleImport ($xetable, content, opts) {
         })
       })
   } else if (opts.message !== false) {
-    VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
+    VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
     if (_importReject) {
       _importReject({ status: false })
     }
@@ -808,7 +808,7 @@ function handleFileImport ($xetable, file, opts) {
   // 检查类型，如果为自定义导出，则不需要校验类型
   if (!importMethod && !XEUtils.includes(VXETable.config.importTypes, type)) {
     if (opts.message !== false) {
-      VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
+      VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
     }
     const params = { status: false }
     return Promise.reject(params)
@@ -910,7 +910,7 @@ export function readLocalFile (options = {}) {
         resolve({ status: true, files, file })
       } else {
         if (options.message !== false) {
-          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
+          VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
         }
         const params = { status: false, files, file }
         reject(params)
@@ -1310,7 +1310,7 @@ export default {
       const isTree = !!this.getTreeStatus()
       if (isTree) {
         if (defOpts.message) {
-          VXETable.modal.message({ message: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
+          VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.treeNotImp'), status: 'error' })
         }
         return
       }

@@ -89,7 +89,17 @@ const apis = [
         list: []
       },
       {
+        name: 'content',
+        descKey: 'app.api.modal.desc.content',
+        version: '3.2.12',
+        type: 'String',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
         name: 'message',
+        abandoned: true,
         descKey: 'app.api.modal.desc.message',
         version: '',
         type: 'string',
