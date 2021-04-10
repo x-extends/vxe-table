@@ -428,7 +428,7 @@ export default {
           top: 10px;
           width: 170px;
           height: 1px;
-          transform: rotate(20deg);
+          transform: rotate(18deg);
           background-color: #e8eaec;
         }
         .first-col .first-col-top {
@@ -514,7 +514,7 @@ export default {
   top: 10px;
   width: 170px;
   height: 1px;
-  transform: rotate(20deg);
+  transform: rotate(18deg);
   background-color: #e8eaec;
 }
 .first-col .first-col-top {

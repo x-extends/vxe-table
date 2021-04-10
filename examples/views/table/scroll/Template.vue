@@ -8,17 +8,29 @@
       border
       resizable
       show-overflow
+      class="my-grid88"
       ref="xGrid"
       height="400"
       :loading="loading"
       :toolbar-config="tableToolbar"
       :columns="tableColumn"
       :edit-config="{trigger: 'click', mode: 'cell'}">
+      <template #name_header>
+        <div class="first-col">
+          <div class="first-col-top">名称</div>
+          <div class="first-col-bottom">类型</div>
+        </div>
+      </template>
+
+      <template #default_name="{ row, column }">
+        <span style="color: red;">{{ row.name }}</span>,
+        <button @click="showDetailEvent(row, column)">弹框</button>
+      </template>
     </vxe-grid>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
       <template #default>
-        <div v-if="selectRow" v-html="selectRow.html3"></div>
+        <div v-if="selectRow" v-html="selectRow.address"></div>
       </template>
     </vxe-modal>
 
@@ -26,7 +38,8 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="vue">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -40,18 +53,7 @@ export default {
       selectRow: null,
       tableColumn: [
         { type: 'seq', width: 50 },
-        {
-          field: 'name',
-          title: 'Name',
-          slots: {
-            default: ({ row, column }) => {
-              return [
-                <span style="color: red;">{ row.name }</span>,
-                <button onClick={ () => this.showDetailEvent(row, column) }>弹框</button>
-              ]
-            }
-          }
-        },
+        { field: 'name', title: 'Name', width: 200, resizable: false, slots: { header: 'name_header', default: 'default_name' } },
         {
           field: 'sex',
           title: 'Sex',
@@ -145,17 +147,29 @@ export default {
           border
           resizable
           show-overflow
+          class="my-grid88"
           ref="xGrid"
           height="400"
           :loading="loading"
           :toolbar-config="tableToolbar"
           :columns="tableColumn"
           :edit-config="{trigger: 'click', mode: 'cell'}">
+          <template #name_header>
+            <div class="first-col">
+              <div class="first-col-top">名称</div>
+              <div class="first-col-bottom">类型</div>
+            </div>
+          </template>
+
+          <template #default_name="{ row, column }">
+            <span style="color: red;">{{ row.name }}</span>,
+            <button @click="showDetailEvent(row, column)">弹框</button>
+          </template>
         </vxe-grid>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="800" height="400" resize>
           <template #default>
-            <div v-if="selectRow" v-html="selectRow.html3"></div>
+            <div v-if="selectRow" v-html="selectRow.address"></div>
           </template>
         </vxe-modal>
         `,
@@ -168,18 +182,7 @@ export default {
               selectRow: null,
               tableColumn: [
                 { type: 'seq', width: 50 },
-                {
-                  field: 'name',
-                  title: 'Name',
-                  slots: {
-                    default: ({ row, column }) => {
-                      return [
-                        <span style="color: red;">{ row.name }</span>,
-                        <button onClick={ () => this.showDetailEvent(row, column) }>弹框</button>
-                      ]
-                    }
-                  }
-                },
+                { field: 'name', title: 'Name', width: 200, resizable: false, slots: { header: 'name_header', default: 'default_name' } },
                 {
                   field: 'sex',
                   title: 'Sex',
@@ -320,6 +323,32 @@ export default {
             }
           }
         }
+        `,
+        `
+        .my-grid88 .first-col {
+          position: relative;
+          height: 20px;
+        }
+        .my-grid88 .first-col:before {
+          content: "";
+          position: absolute;
+          left: -14px;
+          top: 10px;
+          width: 204px;
+          height: 1px;
+          transform: rotate(13deg);
+          background-color: #e8eaec;
+        }
+        .my-grid88 .first-col .first-col-top {
+          position: absolute;
+          right: 4px;
+          top: -10px;
+        }
+        .my-grid88 .first-col .first-col-bottom {
+          position: absolute;
+          left: 4px;
+          bottom: -10px;
+        }
         `
       ]
     }
@@ -375,3 +404,30 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.my-grid88 .first-col {
+  position: relative;
+  height: 20px;
+}
+.my-grid88 .first-col:before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 10px;
+  width: 204px;
+  height: 1px;
+  transform: rotate(13deg);
+  background-color: #e8eaec;
+}
+.my-grid88 .first-col .first-col-top {
+  position: absolute;
+  right: 4px;
+  top: -10px;
+}
+.my-grid88 .first-col .first-col-bottom {
+  position: absolute;
+  left: 4px;
+  bottom: -10px;
+}
+</style>

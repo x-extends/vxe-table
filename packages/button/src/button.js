@@ -58,8 +58,8 @@ export default {
   render (h) {
     const { $scopedSlots, $listeners, className, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
-    return downsSlot ? h('div', className, {
-      class: ['vxe-button--dropdown', {
+    return downsSlot ? h('div', {
+      class: ['vxe-button--dropdown', className, {
         [`size--${vSize}`]: vSize,
         'is--active': showPanel
       }]
@@ -103,6 +103,7 @@ export default {
         h('div', {
           class: 'vxe-button--dropdown-wrapper',
           on: {
+            mousedown: this.mousedownDropdownEvent,
             click: this.clickDropdownEvent,
             mouseenter: this.mouseenterEvent,
             mouseleave: this.mouseleaveEvent
@@ -167,6 +168,12 @@ export default {
     updateZindex () {
       if (this.panelIndex < UtilTools.getLastZIndex()) {
         this.panelIndex = UtilTools.nextZIndex()
+      }
+    },
+    mousedownDropdownEvent (evnt) {
+      const isLeftBtn = evnt.button === 0
+      if (isLeftBtn) {
+        evnt.stopPropagation()
       }
     },
     clickDropdownEvent (evnt) {

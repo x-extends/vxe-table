@@ -921,6 +921,12 @@ export function readLocalFile (options = {}) {
   })
 }
 
+function afterPrintEvent () {
+  if (printFrame && printFrame.parentNode) {
+    printFrame.parentNode.removeChild(printFrame)
+  }
+}
+
 export function handlePrint ($xetable, opts, content) {
   const { beforePrintMethod } = opts
   if (beforePrintMethod) {
@@ -943,11 +949,14 @@ export function handlePrint ($xetable, opts, content) {
   } else {
     if (!printFrame) {
       printFrame = createFrame()
-      printFrame.onload = evnt => {
+      printFrame.onload = (evnt) => {
         if (evnt.target.src) {
+          evnt.target.contentWindow.onafterprint = afterPrintEvent
           evnt.target.contentWindow.print()
         }
       }
+    }
+    if (!printFrame.parentNode) {
       document.body.appendChild(printFrame)
     }
     printFrame.src = URL.createObjectURL(blob)

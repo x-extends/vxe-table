@@ -86,7 +86,7 @@ export interface TableExportConfig {
    */
   exportMethod?(params: { $table: Table, $grid?: Grid, options: ExportParams }): Promise<any>;
   useStyle?:boolean;
-  sheetMethod?(params: { $table: Table, $grid?: Grid, options: ExportParams, workbook: any, worksheet: any }): void;
+  sheetMethod?(params: { $table: Table, $grid?: Grid, options: ExportParams, columns: ColumnOption[], workbook: any, worksheet: any }): void;
 
   [name: string]: any;
 }

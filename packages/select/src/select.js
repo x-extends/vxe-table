@@ -132,13 +132,10 @@ export function renderOption (h, _vm, list, group) {
         optid: optid
       },
       on: {
-        mousedown: (evnt) => {
-          const isLeftBtn = evnt.button === 0
-          if (isLeftBtn) {
-            evnt.stopPropagation()
-            if (!isDisabled) {
-              _vm.changeOptionEvent(evnt, optionValue)
-            }
+        mousedown: _vm.mousedownOptionEvent,
+        click: (evnt) => {
+          if (!isDisabled) {
+            _vm.changeOptionEvent(evnt, optionValue)
           }
         },
         mouseenter: () => {
@@ -455,6 +452,12 @@ export default {
         this.$emit('change', { value: selectValue, $event: evnt })
       }
     },
+    mousedownOptionEvent (evnt) {
+      const isLeftBtn = evnt.button === 0
+      if (isLeftBtn) {
+        evnt.stopPropagation()
+      }
+    },
     changeOptionEvent (evnt, selectValue) {
       const { value, multiple } = this
       if (multiple) {
@@ -471,10 +474,7 @@ export default {
         this.changeEvent(evnt, multipleValue)
       } else {
         this.changeEvent(evnt, selectValue)
-        // 显示效果
-        setTimeout(() => {
-          this.hideOptionPanel()
-        }, 100)
+        this.hideOptionPanel()
       }
     },
     handleGlobalMousewheelEvent (evnt) {

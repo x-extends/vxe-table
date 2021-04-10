@@ -48,11 +48,11 @@ export declare class Modal extends VXETableComponent {
    * 只对 type=message 有效，自动关闭的延时
    */
   duration?: number | string;
-  message?: string | Function;
+  message?: string | number;
   /**
    * 窗口的内容
    */
-  content?: string | Function;
+  content?: string | number;
   /**
    * 是否锁住页面，不允许窗口之外的任何操作
    */
@@ -210,8 +210,8 @@ export interface ModalOptions {
   };
   title?: string;
   duration?: number | string;
-  message?: string | Function;
-  content?: string | Function;
+  message?: string | number;
+  content?: string | number;
   lockView?: boolean;
   lockScroll?: boolean;
   mask?: boolean;

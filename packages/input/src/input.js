@@ -1099,7 +1099,9 @@ export default {
         if (!isCtrlKey && !isAltKey && (keyCode >= 223 || keyCode === 32 || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
           evnt.preventDefault()
         }
-        this.numberKeydownEvent(evnt)
+        if (this.controls) {
+          this.numberKeydownEvent(evnt)
+        }
       }
       this.triggerEvent(evnt)
     },
