@@ -48,10 +48,11 @@ export declare class Modal extends VXETableComponent {
    * 只对 type=message 有效，自动关闭的延时
    */
   duration?: number | string;
+  message?: string | number;
   /**
    * 窗口的内容
    */
-  message?: string | Function;
+  content?: string | number;
   /**
    * 是否锁住页面，不允许窗口之外的任何操作
    */
@@ -209,7 +210,8 @@ export interface ModalOptions {
   };
   title?: string;
   duration?: number | string;
-  message?: string | Function;
+  message?: string | number;
+  content?: string | number;
   lockView?: boolean;
   lockScroll?: boolean;
   mask?: boolean;
@@ -275,11 +277,11 @@ export interface ModalController {
   open (options: ModalOptions): Promise<string>;
   /**
    * 创建提示框
-   * @param message 消息内容
+   * @param content 消息内容
    * @param title 标题
    * @param options 参数
    */
-  alert (message: string, title?: string, options?: ModalOptions): Promise<string>;
+  alert (content: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
    * 创建提示框
    * @param options 参数
@@ -287,11 +289,11 @@ export interface ModalController {
   alert (options: ModalOptions): Promise<string>;
   /**
    * 创建确认框
-   * @param message 消息内容
+   * @param content 消息内容
    * @param title 标题
    * @param options 参数
    */
-  confirm (message: string, title?: string, options?: ModalOptions): Promise<string>;
+  confirm (content: string, title?: string, options?: ModalOptions): Promise<string>;
   /**
    * 创建确认框
    * @param options 参数
@@ -299,11 +301,11 @@ export interface ModalController {
   confirm (options: ModalOptions): Promise<string>;
   /**
    * 创建消息提示
-   * @param message 消息内容
+   * @param content 消息内容
    * @param title 标题
    * @param options 参数
    */
-  message (message: string, options?: ModalOptions): Promise<string>;
+  message (content: string, options?: ModalOptions): Promise<string>;
   /**
    * 创建消息提示
    * @param options 参数

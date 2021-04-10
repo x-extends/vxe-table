@@ -132,7 +132,12 @@ export function renderOption (h, _vm, list, group) {
       },
       on: {
         mousedown: (evnt) => {
-          evnt.stopPropagation()
+          const isLeftBtn = evnt.button === 0
+          if (isLeftBtn) {
+            evnt.stopPropagation()
+          }
+        },
+        click: (evnt) => {
           if (!isDisabled) {
             _vm.changeOptionEvent(evnt, optionValue)
           }
