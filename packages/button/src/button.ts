@@ -202,6 +202,13 @@ export default defineComponent({
       buttonMethods.dispatchEvent('click', { $event: evnt }, evnt)
     }
 
+    const mousedownDropdownEvent = (evnt: MouseEvent) => {
+      const isLeftBtn = evnt.button === 0
+      if (isLeftBtn) {
+        evnt.stopPropagation()
+      }
+    }
+
     const clickDropdownEvent = (evnt: Event) => {
       const dropdownElem = evnt.currentTarget
       const panelElem = refBtnPanel.value
@@ -392,6 +399,7 @@ export default defineComponent({
             }, inited ? [
               h('div', {
                 class: 'vxe-button--dropdown-wrapper',
+                onMousedown: mousedownDropdownEvent,
                 onClick: clickDropdownEvent,
                 onMouseenter: mouseenterEvent,
                 onMouseleave: mouseleaveEvent

@@ -172,41 +172,39 @@ $iconWidth: 1.6em;
     }
   }
   &:not(.is--disabled) {
-    &:not(.is--readonly) {
-      .vxe-input--suffix {
-        &:hover {
-          .vxe-input--clear-icon {
-            color: $vxe-font-color;
-          }
-        }
-        &:active {
-          .vxe-input--clear-icon {
-            color: $vxe-primary-color;
-          }
-        }
-      }
-      .vxe-input--extra-suffix {
-        &:hover {
-          .vxe-input--search-suffix,
-          .vxe-input--password-suffix {
-            color: $vxe-font-color;
-          }
-        }
-        &:active {
-          .vxe-input--search-suffix,
-          .vxe-input--password-suffix {
-            color: $vxe-primary-color;
-          }
-        }
-      }
-      .vxe-input--number-prev,
-      .vxe-input--number-next {
-        &:hover {
+    .vxe-input--suffix {
+      &:hover {
+        .vxe-input--clear-icon {
           color: $vxe-font-color;
         }
-        &:active {
+      }
+      &:active {
+        .vxe-input--clear-icon {
           color: $vxe-primary-color;
         }
+      }
+    }
+    .vxe-input--extra-suffix {
+      &:hover {
+        .vxe-input--search-suffix,
+        .vxe-input--password-suffix {
+          color: $vxe-font-color;
+        }
+      }
+      &:active {
+        .vxe-input--search-suffix,
+        .vxe-input--password-suffix {
+          color: $vxe-primary-color;
+        }
+      }
+    }
+    .vxe-input--number-prev,
+    .vxe-input--number-next {
+      &:hover {
+        color: $vxe-font-color;
+      }
+      &:active {
+        color: $vxe-primary-color;
       }
     }
   }

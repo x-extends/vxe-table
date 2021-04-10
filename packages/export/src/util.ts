@@ -93,6 +93,12 @@ export const readLocalFile: ReadFileFunction = (options) => {
   })
 }
 
+function afterPrintEvent () {
+  if (printFrame && printFrame.parentNode) {
+    printFrame.parentNode.removeChild(printFrame)
+  }
+}
+
 export function handlePrint ($xetable: VxeTableConstructor | null, opts: VxeTablePropTypes.PrintConfig, content = '') {
   const { beforePrintMethod } = opts
   if (beforePrintMethod) {
@@ -117,9 +123,12 @@ export function handlePrint ($xetable: VxeTableConstructor | null, opts: VxeTabl
       printFrame = createFrame()
       printFrame.onload = (evnt: any) => {
         if (evnt.target.src) {
+          evnt.target.contentWindow.onafterprint = afterPrintEvent
           evnt.target.contentWindow.print()
         }
       }
+    }
+    if (!printFrame.parentNode) {
       document.body.appendChild(printFrame)
     }
     printFrame.src = URL.createObjectURL(blob)

@@ -343,11 +343,11 @@ export default defineComponent({
       }
     }
 
-    const renderDropdowns = (item: VxeToolbarPropTypes.ButtonConfig | VxeToolbarPropTypes.ToolConfig, isBtn: boolean) => {
+    const renderDropdowns = (item: VxeToolbarPropTypes.ButtonConfig, isBtn: boolean) => {
       const { dropdowns } = item
       const downVNs: VNode[] = []
       if (dropdowns) {
-        return dropdowns.map((child: VxeToolbarPropTypes.ButtonConfig | VxeToolbarPropTypes.ToolConfig, index: number) => {
+        return dropdowns.map((child, index) => {
           if (child.visible === false) {
             return createCommentVNode()
           }
@@ -475,7 +475,7 @@ export default defineComponent({
         onMouseenter?: typeof handleWrapperMouseenterEvent;
         onMouseleave?: typeof handleWrapperMouseleaveEvent;
       } = {}
-      let checkMethod: Function | undefined
+      let checkMethod: ((params: { column: VxeTableDefines.ColumnInfo }) => boolean) | undefined
       if ($xetable) {
         const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
         const tableCustomOpts = computeTableCustomOpts.value

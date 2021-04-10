@@ -4,12 +4,19 @@
       使用自定义模板渲染，通过 <table-column-api-link prop="slots"/> 属性编写 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#JSX" target="_blank">JSX</a> 模板或 <a class="link" href="https://cn.vuejs.org/v2/guide/render-function.html#%E8%99%9A%E6%8B%9F-DOM" target="_blank">VNode</a><br>
     </p>
 
-    <vxe-grid ref="xGrid" v-bind="gridOptions">
+    <vxe-grid ref="xGrid" class="my-grid88" v-bind="gridOptions">
       <template #toolbar_buttons>
         <button>按钮</button>
         <input type="text"/>
         <vxe-button>按钮1</vxe-button>
         <vxe-button>按钮2</vxe-button>
+      </template>
+
+      <template #name_header>
+        <div class="first-col">
+          <div class="first-col-top">名称</div>
+          <div class="first-col-bottom">类型</div>
+        </div>
       </template>
 
       <template #default_name="{ row, column }">
@@ -62,7 +69,8 @@
 
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
-      <pre-code class="vue">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -99,7 +107,7 @@ export default defineComponent({
       },
       columns: [
         { type: 'seq', width: 50 },
-        { field: 'name', title: 'Name', slots: { default: 'default_name' } },
+        { field: 'name', title: 'Name', width: 200, resizable: false, slots: { header: 'name_header', default: 'default_name' } },
         {
           field: 'sex',
           title: 'Sex',
@@ -181,12 +189,19 @@ export default defineComponent({
       changeFilterEvent,
       demoCodes: [
         `
-        <vxe-grid ref="xGrid" v-bind="gridOptions">
+        <vxe-grid ref="xGrid" class="my-grid88" v-bind="gridOptions">
           <template #toolbar_buttons>
             <button>按钮</button>
             <input type="text"/>
             <vxe-button>按钮1</vxe-button>
             <vxe-button>按钮2</vxe-button>
+          </template>
+
+          <template #name_header>
+            <div class="first-col">
+              <div class="first-col-top">名称</div>
+              <div class="first-col-bottom">类型</div>
+            </div>
           </template>
 
           <template #default_name="{ row, column }">
@@ -266,7 +281,7 @@ export default defineComponent({
               },
               columns: [
                 { type: 'seq', width: 50 },
-                { field: 'name', title: 'Name', slots: { default: 'default_name' } },
+                { field: 'name', title: 'Name', width: 200, resizable: false, slots: { header: 'name_header', default: 'default_name' } },
                 {
                   field: 'sex',
                   title: 'Sex',
@@ -349,9 +364,62 @@ export default defineComponent({
             }
           }
         })
+        `,
+        `
+        .my-grid88 .first-col {
+          position: relative;
+          height: 20px;
+        }
+        .my-grid88 .first-col:before {
+          content: "";
+          position: absolute;
+          left: -14px;
+          top: 10px;
+          width: 204px;
+          height: 1px;
+          transform: rotate(13deg);
+          background-color: #e8eaec;
+        }
+        .my-grid88 .first-col .first-col-top {
+          position: absolute;
+          right: 4px;
+          top: -10px;
+        }
+        .my-grid88 .first-col .first-col-bottom {
+          position: absolute;
+          left: 4px;
+          bottom: -10px;
+        }
         `
       ]
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.my-grid88 .first-col {
+  position: relative;
+  height: 20px;
+}
+.my-grid88 .first-col:before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 10px;
+  width: 204px;
+  height: 1px;
+  transform: rotate(13deg);
+  background-color: #e8eaec;
+}
+.my-grid88 .first-col .first-col-top {
+  position: absolute;
+  right: 4px;
+  top: -10px;
+}
+.my-grid88 .first-col .first-col-bottom {
+  position: absolute;
+  left: 4px;
+  bottom: -10px;
+}
+</style>

@@ -377,8 +377,7 @@ export default defineComponent({
         changeEvent(evnt, multipleValue)
       } else {
         changeEvent(evnt, selectValue)
-        // 显示效果
-        setTimeout(hideOptionPanel, 100)
+        hideOptionPanel()
       }
     }
 
@@ -578,9 +577,11 @@ export default defineComponent({
             const isLeftBtn = evnt.button === 0
             if (isLeftBtn) {
               evnt.stopPropagation()
-              if (!isDisabled) {
-                changeOptionEvent(evnt, optionValue)
-              }
+            }
+          },
+          onClick: (evnt: MouseEvent) => {
+            if (!isDisabled) {
+              changeOptionEvent(evnt, optionValue)
             }
           },
           onMouseenter: () => {

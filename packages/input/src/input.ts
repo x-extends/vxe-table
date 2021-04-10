@@ -874,6 +874,7 @@ export default defineComponent({
     }
 
     const keydownEvent = (evnt: KeyboardEvent & { type: 'keydown' }) => {
+      const { controls } = props
       const isNumType = computeIsNumType.value
       if (isNumType) {
         const isCtrlKey = evnt.ctrlKey
@@ -883,7 +884,9 @@ export default defineComponent({
         if (!isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
           evnt.preventDefault()
         }
-        numberKeydownEvent(evnt)
+        if (controls) {
+          numberKeydownEvent(evnt)
+        }
       }
       triggerEvent(evnt)
     }

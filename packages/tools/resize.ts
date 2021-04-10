@@ -6,6 +6,7 @@ import GlobalConfig from '../v-x-e-table/src/conf'
  * 如果项目中已使用了 resize-observer-polyfill，那么只需要将方法定义全局，该组件就会自动使用
  */
 let resizeTimeout: any
+/* eslint-disable no-use-before-define */
 const eventStore: XEResizeObserver[] = []
 const defaultInterval = 500
 
@@ -48,7 +49,7 @@ export class XEResizeObserver {
     this.callback = callback
   }
 
-  observe (target: Element) {
+  observe (target: Element): void {
     if (target) {
       const { tarList } = this
       if (!tarList.some(observer => observer.target === target)) {
@@ -67,11 +68,11 @@ export class XEResizeObserver {
     }
   }
 
-  unobserve (target: Element) {
+  unobserve (target: Element): void {
     XEUtils.remove(eventStore, item => item.tarList.some(observer => observer.target === target))
   }
 
-  disconnect () {
+  disconnect (): void {
     XEUtils.remove(eventStore, item => item === this)
   }
 }

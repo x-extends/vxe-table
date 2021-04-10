@@ -75,7 +75,14 @@
         </div>
       </template>
 
-      <!--自定义插槽 Number-->
+      <!--自定义插槽-->
+      <template #name_header>
+        <div class="first-col">
+          <div class="first-col-top">名称</div>
+          <div class="first-col-bottom">类型</div>
+        </div>
+      </template>
+
       <template #num_default="{ row, rowIndex }">
         <template v-if="rowIndex === 2">
           <vxe-switch v-model="row.flag"></vxe-switch>
@@ -252,7 +259,7 @@ export default defineComponent({
       },
       columns: [
         { type: 'checkbox', width: 60 },
-        { field: 'name', title: 'Name' },
+        { field: 'name', title: 'Name', width: 200, resizable: false, slots: { header: 'name_header' } },
         { field: 'age', title: 'Age', width: 100 },
         {
           field: 'num1',
@@ -409,7 +416,14 @@ export default defineComponent({
             </div>
           </template>
 
-          <!--自定义插槽 Number-->
+          <!--自定义插槽-->
+          <template #name_header>
+            <div class="first-col">
+              <div class="first-col-top">名称</div>
+              <div class="first-col-bottom">类型</div>
+            </div>
+          </template>
+
           <template #num_default="{ row, rowIndex }">
             <template v-if="rowIndex === 2">
               <vxe-switch v-model="row.flag"></vxe-switch>
@@ -575,7 +589,7 @@ export default defineComponent({
               },
               columns: [
                 { type: 'checkbox', width: 60 },
-                { field: 'name', title: 'Name' },
+                { field: 'name', title: 'Name', width: 200, resizable: false, slots: { header: 'name_header' } },
                 { field: 'age', title: 'Age', width: 100 },
                 {
                   field: 'num1',
@@ -709,11 +723,11 @@ export default defineComponent({
         .my-grid66 .first-col:before {
           content: "";
           position: absolute;
-          left: -15px;
+          left: -14px;
           top: 10px;
-          width: 110px;
+          width: 204px;
           height: 1px;
-          transform: rotate(28deg);
+          transform: rotate(13deg);
           background-color: #e8eaec;
         }
         .my-grid66 .first-col .first-col-top {
@@ -774,11 +788,11 @@ export default defineComponent({
 .my-grid66 .first-col:before {
   content: "";
   position: absolute;
-  left: -15px;
+  left: -14px;
   top: 10px;
-  width: 110px;
+  width: 204px;
   height: 1px;
-  transform: rotate(28deg);
+  transform: rotate(13deg);
   background-color: #e8eaec;
 }
 .my-grid66 .first-col .first-col-top {

@@ -15,9 +15,9 @@ import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
 import 'vxe-table-plugin-renderer/dist/style.css'
 
-VXETable.use(VXETablePluginMenus)
-VXETable.use(VXETablePluginExportXLSX)
-VXETable.use(VXETablePluginExportPDF)
-VXETable.use(VXETablePluginElement)
-VXETable.use(VXETablePluginAntd)
-VXETable.use(VXETablePluginRenderer)
+VXETable.use(VXETablePluginMenus as any)
+VXETable.use(VXETablePluginExportXLSX as any)
+VXETable.use(VXETablePluginExportPDF as any)
+VXETable.use(VXETablePluginElement as any)
+VXETable.use(VXETablePluginAntd as any)
+VXETable.use(VXETablePluginRenderer as any)
