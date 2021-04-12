@@ -3091,8 +3091,8 @@ export default defineComponent({
       },
       getSortColumns () {
         const sortList: any[] = []
-        const { visibleColumn } = internalData
-        visibleColumn.forEach((column) => {
+        const { tableFullColumn } = internalData
+        tableFullColumn.forEach((column) => {
           const { order } = column
           if (column.sortable && order) {
             sortList.push({ column, property: column.property, order })
