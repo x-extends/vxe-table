@@ -866,12 +866,12 @@ const Methods = {
    * 如果存在筛选条件，继续处理
    */
   updateAfterFullData () {
-    const { visibleColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
+    const { tableFullColumn, tableFullData, remoteSort, remoteFilter, filterOpts, sortOpts } = this
     let tableData = tableFullData.slice(0)
-    const column = XEUtils.find(visibleColumn, column => column.order)
+    const column = XEUtils.find(tableFullColumn, column => column.order)
     const filterColumns = []
     const orderColumns = []
-    visibleColumn.forEach(column => {
+    tableFullColumn.forEach(column => {
       if (column.filters && column.filters.length) {
         const valueList = []
         const itemList = []

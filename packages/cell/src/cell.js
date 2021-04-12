@@ -174,7 +174,7 @@ export const Cell = {
     return [
       h('span', {
         class: 'vxe-cell--label'
-      }, editRender && !cellValue ? [
+      }, editRender && (cellValue === '' || XEUtils.eqNull(cellValue)) ? [
         // 如果设置占位符
         h('span', {
           class: 'vxe-cell--placeholder'
