@@ -3063,7 +3063,7 @@ const Methods = {
     if (defaultSort) {
       const { field, order } = defaultSort
       if (field && order) {
-        const column = XEUtils.find(this.visibleColumn, item => item.property === field)
+        const column = XEUtils.find(this.tableFullColumn, item => item.property === field)
         if (column && !column.order) {
           this.sort(field, order)
         }
@@ -3121,7 +3121,7 @@ const Methods = {
   // 在 v3 中废弃
   getSortColumn () {
     // UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
-    return XEUtils.find(this.visibleColumn, column => (column.sortable || column.remoteSort) && column.order)
+    return XEUtils.find(this.tableFullColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
   isSort (field) {
     if (field) {
@@ -3132,7 +3132,7 @@ const Methods = {
   },
   getSortColumns () {
     const sortList = []
-    this.visibleColumn.forEach((column) => {
+    this.tableFullColumn.forEach((column) => {
       const { order } = column
       if ((column.sortable || column.remoteSort) && order) {
         sortList.push({ column, sortBy: column.sortBy, property: column.property, order })
