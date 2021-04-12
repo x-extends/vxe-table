@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { eqCellNull } from './util'
 
 function renderHelpIcon (h, params) {
   const { $table, column } = params
@@ -177,7 +178,7 @@ export const Cell = {
     return [
       h('span', {
         class: 'vxe-cell--label'
-      }, editRender && !cellValue ? [
+      }, editRender && eqCellNull(cellValue) ? [
         // 如果设置占位符
         h('span', {
           class: 'vxe-cell--placeholder'

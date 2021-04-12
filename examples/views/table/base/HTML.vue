@@ -14,10 +14,11 @@
         field="describeHtml"
         title="<span class=red>HTML 标签与筛选</span>"
         type="html"
+        sort-by="describe"
         sortable
         :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
-        :filter-method="filterDescribeMethod"
-        :sort-by="sortDescribeMethod"></vxe-table-column>
+        :filter-method="filterDescribeMethod">
+      </vxe-table-column>
       <vxe-table-column field="role" type="html" title="<span class=green>HTML 标签与格式化</span>" :formatter="formatRole"></vxe-table-column>
     </vxe-table>
 
@@ -53,10 +54,11 @@ export default {
             field="describeHtml"
             title="<span class=red>HTML 标签与筛选</span>"
             type="html"
+            sort-by="describe"
             sortable
             :filters="[{label:'包含 aa', value: 'aa'}, {label:'包含 bb', value: 'bb'}]"
-            :filter-method="filterDescribeMethod"
-            :sort-by="sortDescribeMethod"></vxe-table-column>
+            :filter-method="filterDescribeMethod">
+          </vxe-table-column>
           <vxe-table-column field="role" type="html" title="<span class=green>HTML 标签与格式化</span>" :formatter="formatRole"></vxe-table-column>
         </vxe-table>
         `,
@@ -78,10 +80,6 @@ export default {
             formatRole ({ cellValue }) {
               return \`<a href="https://github.com/x-extends/vxe-table" class="link" target="_black" style="color: orange">链接 \${cellValue}</a>\`
             },
-            sortDescribeMethod (row) {
-              // 自定义其他字段值进行排序
-              return row.describe
-            },
             filterDescribeMethod ({ value, row, column }) {
               return XEUtils.toValueString(row.html1).indexOf(value) > -1
             }
@@ -94,10 +92,6 @@ export default {
   methods: {
     formatRole ({ cellValue }) {
       return `<a href="https://github.com/x-extends/vxe-table" class="link" target="_black" style="color: orange">链接 ${cellValue}</a>`
-    },
-    sortDescribeMethod (row) {
-      // 自定义其他字段值进行排序
-      return row.describe
     },
     filterDescribeMethod ({ value, row }) {
       return XEUtils.toValueString(row.html1).indexOf(value) > -1

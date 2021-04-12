@@ -1,6 +1,13 @@
 import VXETable from '../../v-x-e-table'
 import XEUtils from 'xe-utils'
 
+/**
+ * 单元格的值为：'' | null | undefined 时都属于空值
+ */
+export function eqCellNull (cellValue) {
+  return cellValue === '' || XEUtils.eqNull(cellValue)
+}
+
 const lineOffsetSizes = {
   mini: 3,
   small: 2,

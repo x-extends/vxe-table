@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { clearTableAllStatus, handleFieldOrColumn } from './util'
+import { clearTableAllStatus, handleFieldOrColumn, eqCellNull } from './util'
 import { browse, getPaddingTopBottomSize } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
 
@@ -21,13 +21,6 @@ const visibleStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE'
  */
 function getRowUniqueId () {
   return XEUtils.uniqueId('row_')
-}
-
-/**
- * 单元格的值为：'' | null | undefined 时都属于空值
- */
-function eqCellNull (cellValue) {
-  return cellValue === '' || XEUtils.eqNull(cellValue)
 }
 
 function eqCellValue (row1, row2, field) {
@@ -1011,13 +1004,13 @@ const Methods = {
    * 如果存在筛选条件，继续处理
    */
   updateAfterFullData () {
-    const { visibleColumn, tableFullData, filterOpts, sortOpts } = this
+    const { tableFullColumn, tableFullData, filterOpts, sortOpts } = this
     const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
     const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple } = sortOpts
     let tableData = tableFullData.slice(0)
     const filterColumns = []
     const orderColumns = []
-    visibleColumn.forEach(column => {
+    tableFullColumn.forEach(column => {
       const { sortable, order, filters } = column
       if (!allRemoteFilter && filters && filters.length) {
         const valueList = []

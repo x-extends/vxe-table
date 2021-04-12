@@ -309,7 +309,7 @@ export default {
             formatterNum2 ({ cellValue }) {
               return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
             },
-            sortNameMethod2 (row) {
+            sortNameMethod2 ({ row }) {
               // 按名称长度进行排序
               return row.name.length
             }
@@ -493,7 +493,7 @@ export default {
     formatterNum2 ({ cellValue }) {
       return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
     },
-    sortNameMethod2 (row) {
+    sortNameMethod2 ({ row }) {
       // 按名称长度进行排序
       return row.name.length
     },
