@@ -21,6 +21,7 @@ const GlobalConfig = {
     // stripe: false,
     // border: false,
     // round: false,
+    // emptyText: '暂无数据',
     // emptyRender: {
     //   name: ''
     // },

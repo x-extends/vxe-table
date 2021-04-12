@@ -921,10 +921,27 @@ export function readLocalFile (options = {}) {
   })
 }
 
-function afterPrintEvent () {
-  if (printFrame && printFrame.parentNode) {
-    printFrame.parentNode.removeChild(printFrame)
+function removePrintFrame () {
+  if (printFrame) {
+    if (printFrame.parentNode) {
+      try {
+        printFrame.contentDocument.write('')
+        printFrame.contentDocument.clear()
+      } catch (e) { }
+      printFrame.parentNode.removeChild(printFrame)
+    }
+    printFrame = null
   }
+}
+
+function appendPrintFrame () {
+  if (!printFrame.parentNode) {
+    document.body.appendChild(printFrame)
+  }
+}
+
+function afterPrintEvent () {
+  removePrintFrame()
 }
 
 export function handlePrint ($xetable, opts, content) {
@@ -935,15 +952,9 @@ export function handlePrint ($xetable, opts, content) {
   content = createHtmlPage(opts, content)
   const blob = getExportBlobByContent(content, opts)
   if (browse.msie) {
-    if (printFrame) {
-      try {
-        printFrame.contentDocument.write('')
-        printFrame.contentDocument.clear()
-      } catch (e) { }
-      document.body.removeChild(printFrame)
-    }
+    removePrintFrame()
     printFrame = createFrame()
-    document.body.appendChild(printFrame)
+    appendPrintFrame()
     printFrame.contentDocument.write(content)
     printFrame.contentDocument.execCommand('print')
   } else {
@@ -956,9 +967,7 @@ export function handlePrint ($xetable, opts, content) {
         }
       }
     }
-    if (!printFrame.parentNode) {
-      document.body.appendChild(printFrame)
-    }
+    appendPrintFrame()
     printFrame.src = URL.createObjectURL(blob)
   }
 }

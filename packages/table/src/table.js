@@ -66,7 +66,7 @@ function renderEmptyContenet (h, _vm) {
     if (compConf) {
       emptyContent = compConf.renderEmpty.call(_vm, h, emptyOpts, params)
     } else {
-      emptyContent = _vm.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
+      emptyContent = UtilTools.getFuncText(_vm.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
     }
   }
   return emptyContent
@@ -172,7 +172,7 @@ export default {
     rowKey: Boolean,
     rowId: { type: String, default: () => GlobalConfig.table.rowId },
     zIndex: Number,
-    emptyText: String,
+    emptyText: { type: String, default: () => GlobalConfig.table.emptyText },
     keepSource: { type: Boolean, default: () => GlobalConfig.table.keepSource },
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
@@ -796,7 +796,7 @@ export default {
       if (this.editRules && !this._validate) {
         UtilTools.error('vxe.error.reqModule', ['Validator'])
       }
-      if ((this.keyboardConfig || this.mouseConfig) && !this.triggerCellMousedownEvent) {
+      if ((this.checkboxOpts.range || this.keyboardConfig || this.mouseConfig) && !this.triggerCellMousedownEvent) {
         UtilTools.error('vxe.error.reqModule', ['Keyboard'])
       }
       if ((this.printConfig || this.importConfig || this.exportConfig) && !this._exportData) {
