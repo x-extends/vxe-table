@@ -165,7 +165,7 @@ export default {
     rowKey: Boolean,
     rowId: { type: String, default: () => GlobalConfig.table.rowId },
     zIndex: Number,
-    emptyText: String,
+    emptyText: { type: String, default: () => GlobalConfig.table.emptyText },
     keepSource: { type: Boolean, default: () => GlobalConfig.table.keepSource },
     // 是否自动监听父容器变化去更新响应式表格宽高
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
@@ -877,7 +877,7 @@ export default {
       errorModuleName = 'Edit'
     } else if (!VXETable._valid && this.editRules) {
       errorModuleName = 'Validator'
-    } else if (!VXETable._keyboard && (this.keyboardConfig || this.mouseConfig)) {
+    } else if (!VXETable._keyboard && (this.checkboxOpts.range || this.keyboardConfig || this.mouseConfig)) {
       errorModuleName = 'Keyboard'
     } else if (!VXETable._export && (this.importConfig || this.exportConfig)) {
       errorModuleName = 'Export'
