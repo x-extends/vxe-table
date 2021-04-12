@@ -50,7 +50,8 @@ export default {
           ]
         },
         sortConfig: {
-          trigger: 'cell'
+          trigger: 'cell',
+          remote: true
         },
         filterConfig: {
           remote: true
@@ -210,7 +211,8 @@ export default {
                   ]
                 },
                 sortConfig: {
-                  trigger: 'cell'
+                  trigger: 'cell',
+                  remote: true
                 },
                 filterConfig: {
                   remote: true

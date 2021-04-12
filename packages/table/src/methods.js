@@ -3216,7 +3216,7 @@ const Methods = {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     }
-    return XEUtils.find(this.visibleColumn, column => (column.sortable || column.remoteSort) && column.order)
+    return XEUtils.find(this.tableFullColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
   isSort (fieldOrColumn) {
     if (fieldOrColumn) {
@@ -3227,7 +3227,7 @@ const Methods = {
   },
   getSortColumns () {
     const sortList = []
-    this.visibleColumn.forEach((column) => {
+    this.tableFullColumn.forEach((column) => {
       const { order } = column
       if ((column.sortable || column.remoteSort) && order) {
         sortList.push({ column, property: column.property, order })
