@@ -777,7 +777,7 @@ export default defineComponent({
         h(VxeButtonConstructor, {
           ref: refConfirmBtn,
           status: 'primary',
-          content: props.cancelButtonText || GlobalConfig.i18n('vxe.button.confirm'),
+          content: props.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm'),
           onClick: confirmEvent
         })
       )

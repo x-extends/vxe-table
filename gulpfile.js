@@ -96,6 +96,7 @@ gulp.task('build_modules', () => {
 gulp.task('build_i18n', () => {
   languages.forEach(code => {
     fs.writeFileSync(`lib/locale/lang/${code}.d.ts`, `declare const langMsgs: { [key: string]: any }\nexport default langMsgs`)
+    fs.writeFileSync(`es/locale/lang/${code}.d.ts`, `declare const langMsgs: { [key: string]: any }\nexport default langMsgs`)
   })
   const rest = languages.map(code => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
@@ -161,12 +162,14 @@ gulp.task('build_lib', () => {
         basename: 'style',
         extname: '.css'
       }))
+      .pipe(gulp.dest('es'))
       .pipe(gulp.dest('lib'))
       .pipe(rename({
         basename: 'style',
         suffix: '.min',
         extname: '.css'
       }))
+      .pipe(gulp.dest('es'))
       .pipe(gulp.dest('lib'))
   )
 })

@@ -1152,7 +1152,7 @@ export default defineComponent({
      * 如果存在筛选条件，继续处理
      */
     const updateAfterFullData = () => {
-      const { visibleColumn, tableFullData } = internalData
+      const { tableFullColumn, tableFullData } = internalData
       const filterOpts = computeFilterOpts.value
       const sortOpts = computeSortOpts.value
       const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
@@ -1161,7 +1161,7 @@ export default defineComponent({
       if (!allRemoteFilter || !allRemoteSort) {
         const filterColumns: any[] = []
         const orderColumns: any[] = []
-        visibleColumn.forEach((column: any) => {
+        tableFullColumn.forEach((column: any) => {
           const { sortable, order, filters } = column
           if (!allRemoteFilter && filters && filters.length) {
             const valueList: any[] = []
@@ -5079,7 +5079,7 @@ export default defineComponent({
           return compConf.renderEmpty(emptyOpts, params)
         }
       }
-      return props.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
+      return getFuncText(props.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
     }
 
     function handleUupdateResize () {
@@ -5254,7 +5254,7 @@ export default defineComponent({
         if (props.editRules && !$xetable.validate) {
           errLog('vxe.error.reqModule', ['Validator'])
         }
-        if ((props.keyboardConfig || props.mouseConfig) && !$xetable.triggerCellMousedownEvent) {
+        if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xetable.triggerCellMousedownEvent) {
           errLog('vxe.error.reqModule', ['Keyboard'])
         }
         if ((props.printConfig || props.importConfig || props.exportConfig) && !$xetable.exportData) {

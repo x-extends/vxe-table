@@ -69,12 +69,11 @@
         :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
         :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
         <template #left>
-          <vxe-button size="small">
-            <template #default>更多操作</template>
+          <vxe-button content="更多操作" size="small">
             <template #dropdowns>
-              <vxe-button type="text">批量修改</vxe-button>
-              <vxe-button type="text">批量管理</vxe-button>
-              <vxe-button type="text">批量删除</vxe-button>
+              <vxe-button content="批量修改" type="text"></vxe-button>
+              <vxe-button content="批量管理" type="text"></vxe-button>
+              <vxe-button content="批量删除" type="text"></vxe-button>
             </template>
           </vxe-button>
         </template>
@@ -232,12 +231,11 @@ export default defineComponent({
             :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
             :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
             <template #left>
-              <vxe-button size="small">
-                <template #default>更多操作</template>
+              <vxe-button content="更多操作" size="small">
                 <template #dropdowns>
-                  <vxe-button type="text">批量修改</vxe-button>
-                  <vxe-button type="text">批量管理</vxe-button>
-                  <vxe-button type="text">批量删除</vxe-button>
+                  <vxe-button content="批量修改" type="text"></vxe-button>
+                  <vxe-button content="批量管理" type="text"></vxe-button>
+                  <vxe-button content="批量删除" type="text"></vxe-button>
                 </template>
               </vxe-button>
             </template>

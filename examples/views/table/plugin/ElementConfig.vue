@@ -71,7 +71,7 @@ export default defineComponent({
           editRender: {
             name: 'ElAutocomplete',
             props: {
-              fetchSuggestions (queryString: any, cb: Function) {
+              fetchSuggestions (queryString: any, cb: (params: any) => void) {
                 const results = queryString ? restaurants.filter(item => (item.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)) : restaurants
                 setTimeout(() => {
                   cb(results)
@@ -290,7 +290,7 @@ export default defineComponent({
                   editRender: {
                     name: 'ElAutocomplete',
                     props: {
-                      fetchSuggestions (queryString: any, cb: Function) {
+                      fetchSuggestions (queryString: any, cb: (params: any) => void) {
                         const results = queryString ? restaurants.filter(item => (item.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)) : restaurants
                         setTimeout(() => {
                           cb(results)

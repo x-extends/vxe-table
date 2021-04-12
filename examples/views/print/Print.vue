@@ -8,8 +8,8 @@
 
     <vxe-toolbar ref="xToolbar" print>
       <template #buttons>
-        <vxe-button @click="printEvent1">打印表格</vxe-button>
-        <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
+        <vxe-button content="打印表格" @click="printEvent1"></vxe-button>
+        <vxe-button content="打印勾选行" @click="printSelectEvent1"></vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -38,7 +38,7 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="printEvent5">打印下面的区域</vxe-button>
+        <vxe-button content="打印下面的区域" @click="printEvent5"></vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -60,7 +60,7 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="printEvent2">打印条形码</vxe-button>
+        <vxe-button content="打印条形码" @click="printEvent2"></vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -75,7 +75,7 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="printEvent3">打印二维码</vxe-button>
+        <vxe-button content="打印二维码" @click="printEvent3"></vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -90,7 +90,7 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="printEvent4">打印自定义模板</vxe-button>
+        <vxe-button content="打印自定义模板" @click="printEvent4"></vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -105,7 +105,7 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="printEvent6">打印图片</vxe-button>
+        <vxe-button content="打印图片" @click="printEvent6"></vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -490,8 +490,8 @@ export default defineComponent({
         `
         <vxe-toolbar ref="xToolbar" print>
           <template #buttons>
-            <vxe-button @click="printEvent1">打印表格</vxe-button>
-            <vxe-button @click="printSelectEvent1">打印勾选行</vxe-button>
+            <vxe-button content="打印表格" @click="printEvent1"></vxe-button>
+            <vxe-button content="打印勾选行" @click="printSelectEvent1"></vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -644,7 +644,7 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="printEvent5">打印下面的区域</vxe-button>
+            <vxe-button content="打印下面的区域" @click="printEvent5"></vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -676,7 +676,7 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="printEvent2">打印条形码</vxe-button>
+            <vxe-button content="打印条形码" @click="printEvent2"></vxe-button>
           </template>
         </vxe-toolbar>
         `,
@@ -745,7 +745,7 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="printEvent3">打印二维码</vxe-button>
+            <vxe-button content="打印二维码" @click="printEvent3"></vxe-button>
           </template>
         </vxe-toolbar>
         `,
@@ -791,7 +791,7 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="printEvent4">打印自定义模板</vxe-button>
+            <vxe-button content="打印自定义模板" @click="printEvent4"></vxe-button>
           </template>
         </vxe-toolbar>
         `,
@@ -943,7 +943,7 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="printEvent6">打印图片</vxe-button>
+            <vxe-button content="打印图片" @click="printEvent6"></vxe-button>
           </template>
         </vxe-toolbar>
 

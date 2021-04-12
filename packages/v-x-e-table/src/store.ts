@@ -7,20 +7,20 @@ import XEUtils from 'xe-utils'
 export class Store {
   private store: any = {}
 
-  mixin (options: any) {
+  mixin (options: any): Store {
     Object.assign(this.store, options)
     return this
   }
 
-  has (name: string) {
+  has (name: string): boolean {
     return !!this.get(name)
   }
 
-  get (name: string) {
+  get (name: string): any {
     return this.store[name]
   }
 
-  add (name: string, render: any) {
+  add (name: string, render: any): Store {
     // 检测是否覆盖
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (!XEUtils.eqNull(this.store[name]) && this.store[name] !== render) {
@@ -31,11 +31,11 @@ export class Store {
     return this
   }
 
-  delete (name: string) {
+  delete (name: string): void {
     delete this.store[name]
   }
 
-  forEach (callback: any) {
+  forEach (callback: any): void {
     XEUtils.objectEach(this.store, callback)
   }
 }

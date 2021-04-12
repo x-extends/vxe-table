@@ -36,7 +36,10 @@ export namespace VxeColumnPropTypes {
   }) => string | number) | any[] | string;
 
   export type Sortable = boolean;
-  export type SortBy = string | ((row: any) => string | number);
+  export type SortBy = string | ((params: {
+    row: any;
+    column: VxeTableDefines.ColumnInfo;
+  }) => string | number);
   export type SortType = 'string' | 'number' | null;
 
   export interface Filter {

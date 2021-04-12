@@ -74,7 +74,7 @@ export default defineComponent({
       return cellValue ? cellValue.map((value: any) => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
     }
 
-    const roleSearchEvent = (queryString: any, cb: Function) => {
+    const roleSearchEvent = (queryString: any, cb: (params: any) => void) => {
       const results = queryString ? restaurants.filter(item => (item.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)) : restaurants
       setTimeout(() => {
         cb(results)
@@ -150,7 +150,7 @@ export default defineComponent({
               return cellValue ? cellValue.map((value: any) => value === '1' ? '男' : value === '0' ? '女' : '').join(';') : ''
             }
 
-            const roleSearchEvent = (queryString: any, cb: Function) => {
+            const roleSearchEvent = (queryString: any, cb: (params: any) => void) => {
               const results = queryString ? restaurants.filter(item => (item.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)) : restaurants
               setTimeout(() => {
                 cb(results)

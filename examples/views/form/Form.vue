@@ -28,7 +28,7 @@
         </vxe-form-item>
         <vxe-form-item>
           <template #default>
-            <vxe-button type="submit" status="primary">默认尺寸</vxe-button>
+            <vxe-button type="submit" status="primary" content="默认尺寸"></vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
@@ -54,7 +54,7 @@
         </vxe-form-item>
         <vxe-form-item>
           <template #default>
-            <vxe-button type="submit" status="primary">中等尺寸</vxe-button>
+            <vxe-button type="submit" status="primary" content="中等尺寸"></vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
@@ -80,7 +80,7 @@
         </vxe-form-item>
         <vxe-form-item>
           <template #default>
-            <vxe-button type="submit" status="primary">小型尺寸</vxe-button>
+            <vxe-button type="submit" status="primary" content="小型尺寸"></vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
@@ -106,7 +106,7 @@
         </vxe-form-item>
         <vxe-form-item>
           <template #default>
-            <vxe-button type="submit" status="primary">超小尺寸</vxe-button>
+            <vxe-button type="submit" status="primary" content="超小尺寸"></vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
@@ -156,8 +156,8 @@
         </vxe-form-gather>
         <vxe-form-item align="center" span="24">
           <template #default>
-            <vxe-button type="submit" status="primary">基本表单</vxe-button>
-            <vxe-button type="reset">重置</vxe-button>
+            <vxe-button type="submit" status="primary" content="基本表单"></vxe-button>
+            <vxe-button type="reset" content="重置"></vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
@@ -214,24 +214,24 @@
         <vxe-form-item title="是否单身" field="single" :item-render="{}" span="8" folding>
           <template #default>
             <vxe-radio-group v-model="demo3.formData3.single">
-              <vxe-radio label="1">是</vxe-radio>
-              <vxe-radio label="0">否</vxe-radio>
+              <vxe-radio label="1" content="是"></vxe-radio>
+              <vxe-radio label="0" content="否"></vxe-radio>
             </vxe-radio-group>
           </template>
         </vxe-form-item>
         <vxe-form-item title="兴趣爱好" field="flagList" :item-render="{}" span="8" folding>
           <template #default>
             <vxe-checkbox-group v-model="demo3.formData3.flagList">
-              <vxe-checkbox label="1">爬山</vxe-checkbox>
-              <vxe-checkbox label="2">跑步</vxe-checkbox>
-              <vxe-checkbox label="3">听歌</vxe-checkbox>
+              <vxe-checkbox label="1" content="爬山"></vxe-checkbox>
+              <vxe-checkbox label="2" content="跑步"></vxe-checkbox>
+              <vxe-checkbox label="3" content="听歌"></vxe-checkbox>
             </vxe-checkbox-group>
           </template>
         </vxe-form-item>
         <vxe-form-item align="center" span="24" collapse-node>
           <template #default>
-            <vxe-button status="primary" @click="searchEvent">手动提交方式</vxe-button>
-            <vxe-button @click="resetEvent">重置</vxe-button>
+            <vxe-button status="primary" content="手动提交方式" @click="searchEvent"></vxe-button>
+            <vxe-button content="重置" @click="resetEvent"></vxe-button>
           </template>
         </vxe-form-item>
       </vxe-form>
@@ -391,7 +391,7 @@ export default defineComponent({
             </vxe-form-item>
             <vxe-form-item>
               <template #default>
-                <vxe-button type="submit" status="primary">默认尺寸</vxe-button>
+                <vxe-button type="submit" status="primary" content="默认尺寸"></vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
@@ -417,7 +417,7 @@ export default defineComponent({
             </vxe-form-item>
             <vxe-form-item>
               <template #default>
-                <vxe-button type="submit" status="primary">中等尺寸</vxe-button>
+                <vxe-button type="submit" status="primary" content="中等尺寸"></vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
@@ -443,7 +443,7 @@ export default defineComponent({
             </vxe-form-item>
             <vxe-form-item>
               <template #default>
-                <vxe-button type="submit" status="primary">小型尺寸</vxe-button>
+                <vxe-button type="submit" status="primary" content="小型尺寸"></vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
@@ -469,7 +469,7 @@ export default defineComponent({
             </vxe-form-item>
             <vxe-form-item>
               <template #default>
-                <vxe-button type="submit" status="primary">超小尺寸</vxe-button>
+                <vxe-button type="submit" status="primary" content="超小尺寸"></vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
@@ -519,8 +519,8 @@ export default defineComponent({
             </vxe-form-gather>
             <vxe-form-item align="center" span="24">
               <template #default>
-                <vxe-button type="submit" status="primary">基本表单</vxe-button>
-                <vxe-button type="reset">重置</vxe-button>
+                <vxe-button type="submit" status="primary" content="基本表单"></vxe-button>
+                <vxe-button type="reset" content="重置"></vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>
@@ -577,24 +577,24 @@ export default defineComponent({
             <vxe-form-item title="是否单身" field="single" :item-render="{}" span="8" folding>
               <template #default>
                 <vxe-radio-group v-model="demo3.formData3.single">
-                  <vxe-radio label="1">是</vxe-radio>
-                  <vxe-radio label="0">否</vxe-radio>
+                  <vxe-radio label="1" content="是"></vxe-radio>
+                  <vxe-radio label="0" content="否"></vxe-radio>
                 </vxe-radio-group>
               </template>
             </vxe-form-item>
             <vxe-form-item title="兴趣爱好" field="flagList" :item-render="{}" span="8" folding>
               <template #default>
                 <vxe-checkbox-group v-model="demo3.formData3.flagList">
-                  <vxe-checkbox label="1">爬山</vxe-checkbox>
-                  <vxe-checkbox label="2">跑步</vxe-checkbox>
-                  <vxe-checkbox label="3">听歌</vxe-checkbox>
+                  <vxe-checkbox label="1" content="爬山"></vxe-checkbox>
+                  <vxe-checkbox label="2" content="跑步"></vxe-checkbox>
+                  <vxe-checkbox label="3" content="听歌"></vxe-checkbox>
                 </vxe-checkbox-group>
               </template>
             </vxe-form-item>
             <vxe-form-item align="center" span="24" collapse-node>
               <template #default>
-                <vxe-button status="primary" @click="searchEvent">手动提交方式</vxe-button>
-                <vxe-button @click="resetEvent">重置</vxe-button>
+                <vxe-button status="primary" content="手动提交方式" @click="searchEvent"></vxe-button>
+                <vxe-button content="重置" @click="resetEvent"></vxe-button>
               </template>
             </vxe-form-item>
           </vxe-form>

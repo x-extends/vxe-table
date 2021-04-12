@@ -8,7 +8,7 @@ const wheelName = browse.firefox ? 'DOMMouseScroll' : 'mousewheel'
 const eventStore: {
   comp: VxeComponentBase;
   type: string;
-  cb: Function;
+  cb: (evnt: Event) => void;
 }[] = []
 
 function triggerEvent (evnt: Event) {
@@ -21,10 +21,8 @@ function triggerEvent (evnt: Event) {
 }
 
 export const GlobalEvent = {
-  on (comp: VxeComponentBase, type: string, cb: Function) {
-    if (cb) {
-      eventStore.push({ comp, type, cb })
-    }
+  on (comp: VxeComponentBase, type: string, cb: (evnt: any) => void) {
+    eventStore.push({ comp, type, cb })
   },
   off (comp: VxeComponentBase, type: string) {
     XEUtils.remove(eventStore, item => item.comp === comp && item.type === type)

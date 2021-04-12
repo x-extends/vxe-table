@@ -12,7 +12,6 @@ const languageList = ['zh_CN', 'zh_TC', 'en_US']
 const customLanguage = localStorage.getItem('language')
 
 const i18n = createI18n({
-  /* eslint-disable @typescript-eslint/camelcase */
   warnHtmlMessage: false,
   locale: customLanguage && languageList.includes(customLanguage) ? customLanguage : ['zh-CN', 'zh-HK', 'zh-MO', 'zh-TW'].includes(navigator.language) ? 'zh_CN' : 'en_US',
   messages: {

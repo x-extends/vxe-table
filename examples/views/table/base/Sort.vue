@@ -179,7 +179,7 @@ export default defineComponent({
       return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
     }
 
-    const sortNameMethod2: VxeColumnPropTypes.SortBy = (row) => {
+    const sortNameMethod2: VxeColumnPropTypes.SortBy = ({ row }) => {
       // 按名称长度进行排序
       return row.name.length
     }
@@ -383,7 +383,7 @@ export default defineComponent({
               return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
             }
 
-            const sortNameMethod2: VxeColumnPropTypes.SortBy = (row) => {
+            const sortNameMethod2: VxeColumnPropTypes.SortBy = ({ row }) => {
               // 按名称长度进行排序
               return row.name.length
             }

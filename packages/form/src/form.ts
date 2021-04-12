@@ -128,7 +128,7 @@ export default defineComponent({
       return opts
     })
 
-    const callSlot = (slotFunc: Function | string | null, params: any): VNode[] => {
+    const callSlot = (slotFunc: ((params: any) => any) | string | null, params: any): VNode[] => {
       if (slotFunc) {
         if (XEUtils.isString(slotFunc)) {
           slotFunc = slots[slotFunc] || null

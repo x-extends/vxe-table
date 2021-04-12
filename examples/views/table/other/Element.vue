@@ -194,7 +194,7 @@ export default defineComponent({
       return labels.join(' / ')
     }
 
-    const roleSearchEvent = (queryString: string, cb: Function) => {
+    const roleSearchEvent = (queryString: string, cb: (params: any) => void) => {
       const results = queryString ? restaurants.filter(item => (item.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)) : restaurants
       setTimeout(() => {
         cb(results)
@@ -431,7 +431,7 @@ export default defineComponent({
               return labels.join(' / ')
             }
 
-            const roleSearchEvent = (queryString: string, cb: Function) => {
+            const roleSearchEvent = (queryString: string, cb: (params: any) => void) => {
               const results = queryString ? restaurants.filter(item => (item.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)) : restaurants
               setTimeout(() => {
                 cb(results)

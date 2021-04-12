@@ -273,7 +273,7 @@ export default defineComponent({
       return msg || GlobalConfig.i18n(defaultMsg)
     }
 
-    const handleDeleteRow = (code: string, alertKey: string, callback: Function) => {
+    const handleDeleteRow = (code: string, alertKey: string, callback: () => void): Promise<void> => {
       const isMsg = computeIsMsg.value
       const selectRecords = gridExtendTableMethods.getCheckboxRecords()
       if (isMsg) {

@@ -93,7 +93,7 @@ export default {
   rowKey: Boolean as PropType<VxeTablePropTypes.RowKey>,
   rowId: { type: String as PropType<VxeTablePropTypes.RowId>, default: () => GlobalConfig.table.rowId },
   zIndex: Number as PropType<VxeTablePropTypes.ZIndex>,
-  emptyText: String as PropType<VxeTablePropTypes.EmptyText>,
+  emptyText: { type: String as PropType<VxeTablePropTypes.EmptyText>, default: () => GlobalConfig.table.emptyText },
   keepSource: { type: Boolean as PropType<VxeTablePropTypes.KeepSource>, default: () => GlobalConfig.table.keepSource },
   // 是否自动监听父容器变化去更新响应式表格宽高
   autoResize: { type: Boolean as PropType<VxeTablePropTypes.AutoResize>, default: () => GlobalConfig.table.autoResize },
