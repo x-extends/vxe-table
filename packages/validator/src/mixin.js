@@ -258,7 +258,7 @@ export default {
                     syncVailds.push(
                       customValid.catch(e => {
                         this.validRuleErr = true
-                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
                       })
                     )
                   }

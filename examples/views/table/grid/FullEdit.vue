@@ -136,7 +136,15 @@ export default {
           },
           { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
           { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-          { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+          {
+            field: 'sex',
+            title: 'Sex',
+            filters: [
+              { label: '男', value: '1' },
+              { label: '女', value: '0' }
+            ],
+            editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
+          },
           { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
           { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
           { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
@@ -294,7 +302,15 @@ export default {
                   },
                   { field: 'email', title: 'Email', width: 160, editRender: { name: 'input' } },
                   { field: 'nickname', title: 'Nickname', editRender: { name: 'input' } },
-                  { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [] } },
+                  {
+                    field: 'sex',
+                    title: 'Sex',
+                    filters: [
+                      { label: '男', value: '1' },
+                      { label: '女', value: '0' }
+                    ],
+                    editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
+                  },
                   { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                   { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2 } } },
                   { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },

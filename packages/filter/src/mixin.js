@@ -117,9 +117,9 @@ export default {
       }
     },
     _getCheckedFilters () {
-      const { visibleColumn } = this
+      const { tableFullColumn } = this
       const filterList = []
-      visibleColumn.filter(column => {
+      tableFullColumn.filter(column => {
         const { property, filters } = column
         const valueList = []
         const dataList = []
