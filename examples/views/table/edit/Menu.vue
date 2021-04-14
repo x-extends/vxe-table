@@ -147,12 +147,13 @@ export default {
               }, 500)
             },
             insertEvent (row, column) {
-              let xTable = this.$refs.xTable
-              xTable.insertAt(null, row)
-                .then(({ row }) => xTable.setActiveCell(row, column.property))
+              const $table = this.$refs.xTable
+              $table.insertAt(null, row || -1).then(({ row }) => {
+                $table.setActiveCell(row, column ? column.property : 'name')
+              })
             },
             visibleMethod ({ options, column }) {
-              let isDisabled = !column
+              const isDisabled = !column
               options.forEach(list => {
                 list.forEach(item => {
                   item.disabled = isDisabled
@@ -161,13 +162,13 @@ export default {
               return true
             },
             contextMenuClickEvent ({ menu, row, column }) {
-              let xTable = this.$refs.xTable
+              const $table = this.$refs.xTable
               switch (menu.code) {
                 case 'hideColumn':
-                  xTable.hideColumn(column)
+                  $table.hideColumn(column)
                   break
                 case 'showAllColumn':
-                  xTable.resetColumn()
+                  $table.resetColumn()
                   break
                 case 'copy':
                   if (XEClipboard.copy(row[column.property])) {
@@ -181,7 +182,7 @@ export default {
                   this.insertEvent(row, column)
                   break
                 case 'remove':
-                  xTable.remove(row)
+                  $table.remove(row)
                   break
                 case 'save':
                   this.$XModal.message({ content: '保存成功', status: 'success' })
@@ -190,15 +191,18 @@ export default {
               }
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTable.getInsertRecords()
+              const $table = this.$refs.xTable
+              const insertRecords = $table.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
-              let removeRecords = this.$refs.xTable.getRemoveRecords()
+              const $table = this.$refs.xTable
+              const removeRecords = $table.getRemoveRecords()
               this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
-              let updateRecords = this.$refs.xTable.getUpdateRecords()
+              const $table = this.$refs.xTable
+              const updateRecords = $table.getUpdateRecords()
               this.$XModal.alert(updateRecords.length)
             }
           }
@@ -229,9 +233,10 @@ export default {
       }, 500)
     },
     insertEvent (row, column) {
-      const xTable = this.$refs.xTable
-      xTable.insertAt(null, row || -1)
-        .then(({ row }) => xTable.setActiveCell(row, column ? column.property : 'name'))
+      const $table = this.$refs.xTable
+      $table.insertAt(null, row || -1).then(({ row }) => {
+        $table.setActiveCell(row, column ? column.property : 'name')
+      })
     },
     visibleMethod ({ options, column }) {
       const isDisabled = !column
@@ -243,13 +248,13 @@ export default {
       return true
     },
     contextMenuClickEvent ({ menu, row, column }) {
-      const xTable = this.$refs.xTable
+      const $table = this.$refs.xTable
       switch (menu.code) {
         case 'hideColumn':
-          xTable.hideColumn(column)
+          $table.hideColumn(column)
           break
         case 'showAllColumn':
-          xTable.resetColumn()
+          $table.resetColumn()
           break
         case 'copy':
           if (XEClipboard.copy(row[column.property])) {
@@ -263,7 +268,7 @@ export default {
           this.insertEvent(row, column)
           break
         case 'remove':
-          xTable.remove(row)
+          $table.remove(row)
           break
         case 'save':
           this.$XModal.message({ content: '保存成功', status: 'success' })
@@ -272,15 +277,18 @@ export default {
       }
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTable.getInsertRecords()
+      const $table = this.$refs.xTable
+      const insertRecords = $table.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      const removeRecords = this.$refs.xTable.getRemoveRecords()
+      const $table = this.$refs.xTable
+      const removeRecords = $table.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      const updateRecords = this.$refs.xTable.getUpdateRecords()
+      const $table = this.$refs.xTable
+      const updateRecords = $table.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

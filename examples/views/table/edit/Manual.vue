@@ -119,10 +119,12 @@ export default {
           },
           methods: {
             editRowEvent (row) {
-              this.$refs.xTable.setActiveRow(row)
+              const $table = this.$refs.xTable
+              $table.setActiveRow(row)
             },
-            saveRowEvent (row) {
-              this.$refs.xTable.clearActived().then(() => {
+            saveRowEvent () {
+              const $table = this.$refs.xTable
+              $table.clearActived().then(() => {
                 this.loading = true
                 setTimeout(() => {
                   this.loading = false
@@ -131,10 +133,10 @@ export default {
               })
             },
             cancelRowEvent (row) {
-              const xTable = this.$refs.xTable
-              xTable.clearActived().then(() => {
+              const $table = this.$refs.xTable
+              $table.clearActived().then(() => {
                 // 还原行数据
-                xTable.revertData(row)
+                $table.revertData(row)
               })
             }
           }
@@ -145,10 +147,12 @@ export default {
   },
   methods: {
     editRowEvent (row) {
-      this.$refs.xTable.setActiveRow(row)
+      const $table = this.$refs.xTable
+      $table.setActiveRow(row)
     },
     saveRowEvent () {
-      this.$refs.xTable.clearActived().then(() => {
+      const $table = this.$refs.xTable
+      $table.clearActived().then(() => {
         this.loading = true
         setTimeout(() => {
           this.loading = false
@@ -157,10 +161,10 @@ export default {
       })
     },
     cancelRowEvent (row) {
-      const xTable = this.$refs.xTable
-      xTable.clearActived().then(() => {
+      const $table = this.$refs.xTable
+      $table.clearActived().then(() => {
         // 还原行数据
-        xTable.revertData(row)
+        $table.revertData(row)
       })
     }
   }

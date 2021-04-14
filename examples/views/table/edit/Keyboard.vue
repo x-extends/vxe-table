@@ -163,18 +163,21 @@ export default {
           },
           methods: {
             async insertEvent () {
+              const $table = this.$refs.xTable
               const record = {
                 sex: '1'
               }
-              const { row: newRow } = await this.$refs.xTable.insertAt(record)
-              await this.$refs.xTable.setActiveCell(newRow, 'name')
+              const { row: newRow } = await $table.insertAt(record)
+              await $table.setActiveCell(newRow, 'name')
             },
             getInsertEvent () {
-              const insertRecords = this.$refs.xTable.getInsertRecords()
+              const $table = this.$refs.xTable
+              const insertRecords = $table.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             },
             getSelectionEvent () {
-              const selectRecords = this.$refs.xTable.getCheckboxRecords()
+              const $table = this.$refs.xTable
+              const selectRecords = $table.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             }
           }
@@ -185,18 +188,21 @@ export default {
   },
   methods: {
     async insertEvent () {
+      const $table = this.$refs.xTable
       const record = {
         sex: '1'
       }
-      const { row: newRow } = await this.$refs.xTable.insertAt(record)
-      await this.$refs.xTable.setActiveCell(newRow, 'name')
+      const { row: newRow } = await $table.insertAt(record)
+      await $table.setActiveCell(newRow, 'name')
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTable.getInsertRecords()
+      const $table = this.$refs.xTable
+      const insertRecords = $table.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getSelectionEvent () {
-      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const $table = this.$refs.xTable
+      const selectRecords = $table.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     }
   }

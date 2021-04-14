@@ -135,12 +135,14 @@ export default {
           },
           methods: {
             insertEvent () {
-              let record = {}
-              this.$refs.xTable.insert(record)
+              const $table = this.$refs.xTable
+              const record = {}
+              $table.insert(record)
             },
             updateRoleList () {
+              const $table = this.$refs.xTable
               // 获取表格中的全量数据
-              let { fullData } = this.$refs.xTable.getTableData()
+              const { fullData } = $table.getTableData()
               this.roleList.forEach(item => {
                 if (item.value) {
                   // 如果当前选项已经被选过，则禁用
@@ -168,12 +170,14 @@ export default {
   },
   methods: {
     insertEvent () {
+      const $table = this.$refs.xTable
       const record = {}
-      this.$refs.xTable.insert(record)
+      $table.insert(record)
     },
     updateRoleList () {
+      const $table = this.$refs.xTable
       // 获取表格中的全量数据
-      const { fullData } = this.$refs.xTable.getTableData()
+      const { fullData } = $table.getTableData()
       this.roleList.forEach(item => {
         if (item.value) {
           // 如果当前选项已经被选过，则禁用

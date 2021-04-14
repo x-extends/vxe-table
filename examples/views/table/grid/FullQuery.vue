@@ -282,10 +282,12 @@ export default {
           },
           methods: {
             searchEvent () {
-              this.$refs.xGrid.commitProxy('query')
+              const $grid = this.$refs.xGrid
+              $grid.commitProxy('query')
             },
             resetEvent () {
-              this.$refs.xGrid.commitProxy('reload')
+              const $grid = this.$refs.xGrid
+              $grid.commitProxy('reload')
             },
             formatAmount ({ cellValue }) {
               return cellValue ? \`￥\${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}\` : ''
@@ -301,10 +303,12 @@ export default {
   },
   methods: {
     searchEvent () {
-      this.$refs.xGrid.commitProxy('query')
+      const $grid = this.$refs.xGrid
+      $grid.commitProxy('query')
     },
     resetEvent () {
-      this.$refs.xGrid.commitProxy('reload')
+      const $grid = this.$refs.xGrid
+      $grid.commitProxy('reload')
     },
     formatAmount ({ cellValue }) {
       return cellValue ? `￥${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''

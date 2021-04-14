@@ -183,19 +183,20 @@ export default {
           },
           methods: {
             getUpdateEvent () {
-              let updateRecords = this.$refs.xGrid.getUpdateRecords()
+              const $grid = this.$refs.xGrid
+              const updateRecords = $grid.getUpdateRecords()
               this.$XModal.alert(updateRecords.length)
             },
             visibleMethod  ({ row, type }) {
-              let xGrid = this.$refs.xGrid
+              const $grid = this.$refs.xGrid
               if (type === 'body') {
                 this.bodyMenus.forEach(list => {
                   list.forEach(item => {
                     if (['clearLoaded', 'reloadNodes'].includes(item.code)) {
-                      item.disabled = !row.hasChild || !xGrid.isTreeExpandLoaded(row)
+                      item.disabled = !row.hasChild || !$grid.isTreeExpandLoaded(row)
                     } else if (['expand', 'contract'].includes(item.code)) {
                       if (row.hasChild) {
-                        let isExpand = xGrid.isTreeExpandByRow(row)
+                        const isExpand = $grid.isTreeExpandByRow(row)
                         item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
                       } else {
                         item.disabled = true
@@ -206,20 +207,20 @@ export default {
               }
               return true
             },
-            contextMenuClickEvent ({ menu, row, column }) {
-              let xGrid = this.$refs.xGrid
+            contextMenuClickEvent ({ menu, row }) {
+              const $grid = this.$refs.xGrid
               switch (menu.code) {
                 case 'clearLoaded':
-                  xGrid.clearTreeExpandLoaded(row)
+                  $grid.clearTreeExpandLoaded(row)
                   break
                 case 'reloadNodes':
-                  xGrid.reloadTreeChilds(row)
+                  $grid.reloadTreeChilds(row)
                   break
                 case 'expand':
-                  xGrid.setTreeExpand(row, true)
+                  $grid.setTreeExpand(row, true)
                   break
                 case 'contract':
-                  xGrid.setTreeExpand(row, false)
+                  $grid.setTreeExpand(row, false)
                   break
               }
             }
@@ -231,19 +232,20 @@ export default {
   },
   methods: {
     getUpdateEvent () {
-      const updateRecords = this.$refs.xGrid.getUpdateRecords()
+      const $grid = this.$refs.xGrid
+      const updateRecords = $grid.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     },
     visibleMethod  ({ row, type }) {
-      const xGrid = this.$refs.xGrid
+      const $grid = this.$refs.xGrid
       if (type === 'body') {
         this.bodyMenus.forEach(list => {
           list.forEach(item => {
             if (['clearLoaded', 'reloadNodes'].includes(item.code)) {
-              item.disabled = !row.hasChild || !xGrid.isTreeExpandLoaded(row)
+              item.disabled = !row.hasChild || !$grid.isTreeExpandLoaded(row)
             } else if (['expand', 'contract'].includes(item.code)) {
               if (row.hasChild) {
-                const isExpand = xGrid.isTreeExpandByRow(row)
+                const isExpand = $grid.isTreeExpandByRow(row)
                 item.disabled = ['expand'].includes(item.code) ? isExpand : !isExpand
               } else {
                 item.disabled = true
@@ -255,19 +257,19 @@ export default {
       return true
     },
     contextMenuClickEvent ({ menu, row }) {
-      const xGrid = this.$refs.xGrid
+      const $grid = this.$refs.xGrid
       switch (menu.code) {
         case 'clearLoaded':
-          xGrid.clearTreeExpandLoaded(row)
+          $grid.clearTreeExpandLoaded(row)
           break
         case 'reloadNodes':
-          xGrid.reloadTreeChilds(row)
+          $grid.reloadTreeChilds(row)
           break
         case 'expand':
-          xGrid.setTreeExpand(row, true)
+          $grid.setTreeExpand(row, true)
           break
         case 'contract':
-          xGrid.setTreeExpand(row, false)
+          $grid.setTreeExpand(row, false)
           break
       }
     }

@@ -121,9 +121,9 @@ export default {
               }
             },
             // 在值发生改变时更新表尾合计
-            updateFooterEvent (params) {
-              let xTable = this.$refs.xTable
-              xTable.updateFooter()
+            updateFooterEvent () {
+              const $table = this.$refs.xTable
+              $table.updateFooter()
             },
             meanNum (list, field) {
               let count = 0
@@ -164,17 +164,21 @@ export default {
               ]
             },
             insertEvent () {
-              let record = {
+              const $table = this.$refs.xTable
+              const record = {
                 name: 'New name'
               }
-              this.$refs.xTable.insert(record)
-                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'age'))
+              $table.insert(record).then(({ row }) => {
+                $table.setActiveCell(row, 'age')
+              })
             },
             removeEvent () {
-              this.$refs.xTable.removeCheckboxRow()
+              const $table = this.$refs.xTable
+              $table.removeCheckboxRow()
             },
             saveEvent () {
-              const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+              const $table = this.$refs.xTable
+              const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
               this.$XModal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
@@ -198,8 +202,8 @@ export default {
     },
     // 在值发生改变时更新表尾合计
     updateFooterEvent () {
-      const xTable = this.$refs.xTable
-      xTable.updateFooter()
+      const $table = this.$refs.xTable
+      $table.updateFooter()
     },
     meanNum (list, field) {
       let count = 0
@@ -240,17 +244,21 @@ export default {
       ]
     },
     insertEvent () {
+      const $table = this.$refs.xTable
       const record = {
         name: 'New name'
       }
-      this.$refs.xTable.insert(record)
-        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'age'))
+      $table.insert(record).then(({ row }) => {
+        $table.setActiveCell(row, 'age')
+      })
     },
     removeEvent () {
-      this.$refs.xTable.removeCheckboxRow()
+      const $table = this.$refs.xTable
+      $table.removeCheckboxRow()
     },
     saveEvent () {
-      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      const $table = this.$refs.xTable
+      const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
       this.$XModal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
   }

@@ -109,17 +109,19 @@ export default {
           methods: {
             // 读取附件
             uploadFileEvent (row) {
-              this.$refs.xGrid.readFile({
+              const $grid = this.$refs.xGrid
+              // 读取附件
+              $grid.readFile({
                 multiple: true,
                 types: ['xlsx', 'csv', 'html']
               }).then(params => {
                 const { files } = params
                 // 解析数据并显示
                 Array.from(files).forEach(file => {
-                  let ns = file.name.split('.')
-                  let name = ns.slice(0, ns.length - 1).join('')
-                  let type = ns[ns.length - 1]
-                  let record = {
+                  const ns = file.name.split('.')
+                  const name = ns.slice(0, ns.length - 1).join('')
+                  const type = ns[ns.length - 1]
+                  const record = {
                     name: name,
                     size: file.size,
                     type: type,
@@ -128,7 +130,7 @@ export default {
                   row.fileList.push(record)
                 })
                 // 加载完成后展开行
-                this.$refs.xGrid.setRowExpand(row, true)
+                $grid.setRowExpand(row, true)
               })
             }
           }
@@ -148,8 +150,9 @@ export default {
   },
   methods: {
     uploadFileEvent (row) {
+      const $grid = this.$refs.xGrid
       // 读取附件
-      this.$refs.xGrid.readFile({
+      $grid.readFile({
         multiple: true,
         types: ['xlsx', 'csv', 'html']
       }).then(params => {
@@ -168,7 +171,7 @@ export default {
           row.fileList.push(record)
         })
         // 加载完成后展开行
-        this.$refs.xGrid.setRowExpand(row, true)
+        $grid.setRowExpand(row, true)
       })
     }
   }

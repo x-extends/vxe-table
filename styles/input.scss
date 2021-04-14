@@ -63,20 +63,19 @@ $iconWidth: 1.6em;
       }
     }
   }
-}
-
-.vxe-input--prefix,
-.vxe-input--suffix,
-.vxe-input--extra-suffix {
-  display: flex;
-  position: absolute;
-  top: 0;
-  width: $iconWidth;
-  height: 100%;
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-  color: $vxe-table-column-icon-border-color;
+  .vxe-input--prefix,
+  .vxe-input--suffix,
+  .vxe-input--extra-suffix {
+    display: flex;
+    position: absolute;
+    top: 0;
+    width: $iconWidth;
+    height: 100%;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+    color: $vxe-table-column-icon-border-color;
+  }
 }
 
 // 前缀图标
@@ -210,52 +209,54 @@ $iconWidth: 1.6em;
   }
 }
 
-.vxe-input--password-suffix,
-.vxe-input--number-suffix,
-.vxe-input--date-picker-suffix,
-.vxe-input--search-suffix {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.vxe-input--date-picker-icon,
-.vxe-input--search-icon,
-.vxe-input--password-icon {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.vxe-input--date-picker-suffix {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .vxe-input--panel-icon {
-    @include animatTransition(transform, .2s);
+.vxe-input {
+  .vxe-input--password-suffix,
+  .vxe-input--number-suffix,
+  .vxe-input--date-picker-suffix,
+  .vxe-input--search-suffix {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
-}
 
-.vxe-input--number-prev,
-.vxe-input--number-next {
-  position: relative;
-  display: block;
-  height: 50%;
-  width: 100%;
-  text-align: center;
-}
-.vxe-input--number-prev-icon,
-.vxe-input--number-next-icon {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-.vxe-input--number-prev-icon {
-  bottom: 0;
-}
-.vxe-input--number-next-icon {
-  top: 0;
+  .vxe-input--date-picker-icon,
+  .vxe-input--search-icon,
+  .vxe-input--password-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .vxe-input--date-picker-suffix {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .vxe-input--panel-icon {
+      @include animatTransition(transform, .2s);
+    }
+  }
+
+  .vxe-input--number-prev,
+  .vxe-input--number-next {
+    position: relative;
+    display: block;
+    height: 50%;
+    width: 100%;
+    text-align: center;
+  }
+  .vxe-input--number-prev-icon,
+  .vxe-input--number-next-icon {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .vxe-input--number-prev-icon {
+    bottom: 0;
+  }
+  .vxe-input--number-next-icon {
+    top: 0;
+  }
 }
 
 .vxe-input--panel {

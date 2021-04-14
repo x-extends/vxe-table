@@ -123,15 +123,18 @@ export default {
           },
           methods: {
             insertEvent () {
-              let record = {}
-              this.$refs.xTable.insert(record)
-                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'role'))
+              const $table = this.$refs.xTable
+              const record = {}
+              $table.insert(record).then(({ row }) => {
+                $table.setActiveCell(row, 'role')
+              })
             },
             saveEvent () {
-              let body = this.$refs.xTable.getRecordset()
-              let { insertRecords, removeRecords, updateRecords } = body
+              const $table = this.$refs.xTable
+              const body = $table.getRecordset()
+              const { insertRecords, removeRecords, updateRecords } = body
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
-                this.$refs.xTable.validate((errMap) => {
+                $table.validate((errMap) => {
                   if (errMap) {
                     this.$XModal.message({ status: 'error', content: '校验不通过！' })
                   } else {
@@ -170,15 +173,18 @@ export default {
   },
   methods: {
     insertEvent () {
+      const $table = this.$refs.xTable
       const record = {}
-      this.$refs.xTable.insert(record)
-        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'role'))
+      $table.insert(record).then(({ row }) => {
+        $table.setActiveCell(row, 'role')
+      })
     },
     saveEvent () {
-      const body = this.$refs.xTable.getRecordset()
+      const $table = this.$refs.xTable
+      const body = $table.getRecordset()
       const { insertRecords, removeRecords, updateRecords } = body
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
-        this.$refs.xTable.validate((errMap) => {
+        $table.validate((errMap) => {
           if (errMap) {
             this.$XModal.message({ status: 'error', content: '校验不通过！' })
           } else {

@@ -89,29 +89,34 @@ export default {
           },
           methods: {
             async insertEvent (row) {
-              let record = {
+              const $table = this.$refs.xTable
+              const record = {
                 sex: '1'
               }
-              const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
-              await this.$refs.xTable.setActiveCell(newRow, 'sex')
+              const { row: newRow } = await $table.insertAt(record, row)
+              await $table.setActiveCell(newRow, 'sex')
             },
             removeEvent (row) {
               this.$XModal.confirm('您确定要删除该数据?').then(type => {
+                const $table = this.$refs.xTable
                 if (type === 'confirm') {
-                  this.$refs.xTable.remove(row)
+                  $table.remove(row)
                 }
               })
             },
             getRemoveEvent () {
-              let removeRecords = this.$refs.xTable.getRemoveRecords()
+              const $table = this.$refs.xTable
+              const removeRecords = $table.getRemoveRecords()
               this.$XModal.alert(removeRecords.length)
             },
             getSelectionEvent () {
-              let selectRecords = this.$refs.xTable.getCheckboxRecords()
+              const $table = this.$refs.xTable
+              const selectRecords = $table.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             },
             saveEvent () {
-              const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+              const $table = this.$refs.xTable
+              const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
               this.$XModal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
@@ -122,29 +127,34 @@ export default {
   },
   methods: {
     async insertEvent (row) {
+      const $table = this.$refs.xTable
       const record = {
         sex: '1'
       }
-      const { row: newRow } = await this.$refs.xTable.insertAt(record, row)
-      await this.$refs.xTable.setActiveCell(newRow, 'sex')
+      const { row: newRow } = await $table.insertAt(record, row)
+      await $table.setActiveCell(newRow, 'sex')
     },
     removeEvent (row) {
       this.$XModal.confirm('您确定要删除该数据?').then(type => {
+        const $table = this.$refs.xTable
         if (type === 'confirm') {
-          this.$refs.xTable.remove(row)
+          $table.remove(row)
         }
       })
     },
     getRemoveEvent () {
-      const removeRecords = this.$refs.xTable.getRemoveRecords()
+      const $table = this.$refs.xTable
+      const removeRecords = $table.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getSelectionEvent () {
-      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const $table = this.$refs.xTable
+      const selectRecords = $table.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     },
     saveEvent () {
-      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      const $table = this.$refs.xTable
+      const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
       this.$XModal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
   }

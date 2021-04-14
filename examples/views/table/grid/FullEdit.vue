@@ -135,7 +135,15 @@ export default {
           },
           { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
           { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-          { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
+          {
+            field: 'sex',
+            title: 'Sex',
+            filters: [
+              { label: '男', value: '1' },
+              { label: '女', value: '0' }
+            ],
+            editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
+          },
           { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
           { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } } },
           { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
@@ -296,7 +304,15 @@ export default {
                   },
                   { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
                   { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-                  { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
+                  {
+                    field: 'sex',
+                    title: 'Sex',
+                    filters: [
+                      { label: '男', value: '1' },
+                      { label: '女', value: '0' }
+                    ],
+                    editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
+                  },
                   { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                   { field: 'amount', title: 'Amount', formatter: this.formatAmount, editRender: { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } } },
                   { field: 'updateDate', title: 'Update Date', width: 160, visible: false, sortable: true, formatter: this.formatDate },
@@ -353,11 +369,11 @@ export default {
                 ]
                 // 异步更新下拉选项
                 this.sexList = sexList
-                const xGrid = this.$refs.xGrid
-                if (xGrid) {
-                  const sexColumn = xGrid.getColumnByField('sex')
+                const $grid = this.$refs.xGrid
+                if ($grid) {
+                  const sexColumn = $grid.getColumnByField('sex')
                   sexColumn.editRender.options = sexList
-                  const sexItem = xGrid.getFormItems(4)
+                  const sexItem = $grid.getFormItems(4)
                   sexItem.itemRender.options = sexList
                 }
               }, 100)
@@ -381,16 +397,18 @@ export default {
               formBody.append('file', file)
               // 上传文件
               return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
+                const $grid = this.$refs.xGrid
                 this.$XModal.message({ content: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                 // 导入完成，刷新表格
-                this.$refs.xGrid.commitProxy('query')
+                $grid.commitProxy('query')
               }).catch(() => {
                 this.$XModal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
               })
             },
             // 自定义服务端导出
             exportMethod ({ options }) {
-              const proxyInfo = this.$refs.xGrid.getProxyInfo()
+              const $grid = this.$refs.xGrid
+              const proxyInfo = $grid.getProxyInfo()
               // 传给服务端的参数
               const body = {
                 filename: options.filename,
@@ -442,11 +460,11 @@ export default {
         ]
         // 异步更新下拉选项
         this.sexList = sexList
-        const xGrid = this.$refs.xGrid
-        if (xGrid) {
-          const sexColumn = xGrid.getColumnByField('sex')
+        const $grid = this.$refs.xGrid
+        if ($grid) {
+          const sexColumn = $grid.getColumnByField('sex')
           sexColumn.editRender.options = sexList
-          const sexItem = xGrid.getFormItems(4)
+          const sexItem = $grid.getFormItems(4)
           sexItem.itemRender.options = sexList
         }
       }, 100)
@@ -470,16 +488,18 @@ export default {
       formBody.append('file', file)
       // 上传文件
       return XEAjax.post('https://api.xuliangzhan.com:10443/api/pub/import', formBody).then(data => {
+        const $grid = this.$refs.xGrid
         this.$XModal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
         // 导入完成，刷新表格
-        this.$refs.xGrid.commitProxy('query')
+        $grid.commitProxy('query')
       }).catch(() => {
         this.$XModal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
       })
     },
     // 自定义服务端导出
     exportMethod ({ options }) {
-      const proxyInfo = this.$refs.xGrid.getProxyInfo()
+      const $grid = this.$refs.xGrid
+      const proxyInfo = $grid.getProxyInfo()
       // 传给服务端的参数
       const body = {
         filename: options.filename,

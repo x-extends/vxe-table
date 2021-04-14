@@ -28,7 +28,7 @@
       </vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
         <template #edit="{ row }">
-          <vxe-pulldown ref="xDown1" transfer>
+          <vxe-pulldown ref="xPulldown1" transfer>
             <template #default>
               <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
             </template>
@@ -166,7 +166,7 @@ export default {
           </vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
             <template #edit="{ row }">
-              <vxe-pulldown ref="xDown1" transfer>
+              <vxe-pulldown ref="xPulldown1" transfer>
                 <template #default>
                   <vxe-input v-model="row.name" placeholder="下拉容器" @click="clickDownEvent"></vxe-input>
                 </template>
@@ -279,23 +279,27 @@ export default {
           },
           methods: {
             checkboxChangeEvent ({ records }) {
-              this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
-              this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
+              const $table = this.$refs.xTable
+              this.isAllChecked = $table.isAllCheckboxChecked()
+              this.isIndeterminate = $table.isCheckboxIndeterminate()
               this.selectRecords = records
             },
             changeAllEvent () {
-              this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
-              this.selectRecords = this.$refs.xTable.getCheckboxRecords()
+              const $table = this.$refs.xTable
+              $table.setAllCheckboxRow(this.isAllChecked)
+              this.selectRecords = $table.getCheckboxRecords()
             },
             clickDownEvent () {
-              if (this.$refs.xDown1) {
-                this.$refs.xDown1.showPanel()
+              const $pulldown = this.$refs.xPulldown1
+              if ($pulldown) {
+                $pulldown.showPanel()
               }
             },
             changeNameEvent (item, row) {
+              const $pulldown = this.$refs.xPulldown1
               row.name = item.label
-              if (this.$refs.xDown1) {
-                this.$refs.xDown1.hidePanel()
+              if ($pulldown) {
+                $pulldown.hidePanel()
               }
             }
           }
@@ -319,23 +323,27 @@ export default {
   },
   methods: {
     checkboxChangeEvent ({ records }) {
-      this.isAllChecked = this.$refs.xTable.isAllCheckboxChecked()
-      this.isIndeterminate = this.$refs.xTable.isCheckboxIndeterminate()
+      const $table = this.$refs.xTable
+      this.isAllChecked = $table.isAllCheckboxChecked()
+      this.isIndeterminate = $table.isCheckboxIndeterminate()
       this.selectRecords = records
     },
     changeAllEvent () {
-      this.$refs.xTable.setAllCheckboxRow(this.isAllChecked)
-      this.selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const $table = this.$refs.xTable
+      $table.setAllCheckboxRow(this.isAllChecked)
+      this.selectRecords = $table.getCheckboxRecords()
     },
     clickDownEvent () {
-      if (this.$refs.xDown1) {
-        this.$refs.xDown1.showPanel()
+      const $pulldown = this.$refs.xPulldown1
+      if ($pulldown) {
+        $pulldown.showPanel()
       }
     },
     changeNameEvent (item, row) {
+      const $pulldown = this.$refs.xPulldown1
       row.name = item.label
-      if (this.$refs.xDown1) {
-        this.$refs.xDown1.hidePanel()
+      if ($pulldown) {
+        $pulldown.hidePanel()
       }
     }
   }

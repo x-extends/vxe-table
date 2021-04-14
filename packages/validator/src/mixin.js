@@ -220,13 +220,13 @@ export default {
                 if (customValid) {
                   if (XEUtils.isError(customValid)) {
                     this.validRuleErr = true
-                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, content: customValid.message, rule: new Rule(rule) }))
+                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
                   } else if (customValid.catch) {
                     // 如果为异步校验（注：异步校验是并发无序的）
                     syncVailds.push(
                       customValid.catch(e => {
                         this.validRuleErr = true
-                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, content: e ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
                       })
                     )
                   }
@@ -235,10 +235,7 @@ export default {
                 const isNumType = rule.type === 'number'
                 const isArrType = rule.type === 'array'
                 const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
-                if (rule.required && (isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : (cellValue === null || cellValue === undefined || cellValue === ''))) {
-                  this.validRuleErr = true
-                  errorRules.push(new Rule(rule))
-                } else if (
+                if ((rule.required && (isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : (cellValue === null || cellValue === undefined || cellValue === ''))) ||
                   (isNumType && isNaN(cellValue)) ||
                   (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
                   (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||

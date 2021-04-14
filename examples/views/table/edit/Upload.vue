@@ -79,12 +79,13 @@ export default {
           },
           methods: {
             insertEvent (opts) {
-              this.$refs.xTable.readFile(opts).then(params => {
+              const $table = this.$refs.xTable
+              $table.readFile(opts).then(params => {
                 const { files } = params
                 const records = Array.from(files).map(file => {
-                  let ns = file.name.split('.')
-                  let name = ns.slice(0, ns.length - 1).join('')
-                  let type = ns[ns.length - 1]
+                  const ns = file.name.split('.')
+                  const name = ns.slice(0, ns.length - 1).join('')
+                  const type = ns[ns.length - 1]
                   return {
                     name: name,
                     size: file.size,
@@ -92,11 +93,12 @@ export default {
                     date: XEUtils.toDateString(new Date())
                   }
                 })
-                this.$refs.xTable.insert(records)
+                $table.insert(records)
               })
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTable.getInsertRecords()
+              const $table = this.$refs.xTable
+              const insertRecords = $table.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             }
           }
@@ -107,7 +109,8 @@ export default {
   },
   methods: {
     insertEvent (opts) {
-      this.$refs.xTable.readFile(opts).then(params => {
+      const $table = this.$refs.xTable
+      $table.readFile(opts).then(params => {
         const { files } = params
         const records = Array.from(files).map(file => {
           const ns = file.name.split('.')
@@ -120,11 +123,12 @@ export default {
             date: XEUtils.toDateString(new Date())
           }
         })
-        this.$refs.xTable.insert(records)
+        $table.insert(records)
       })
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTable.getInsertRecords()
+      const $table = this.$refs.xTable
+      const insertRecords = $table.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     }
   }

@@ -147,21 +147,22 @@ export default {
               ]
             },
             toolbarButtonClickEvent ({ code }) {
+              const $grid = this.$refs.xGrid
               switch (code) {
                 case 'myInsert':
-                  this.$refs.xGrid.insert({
+                  $grid.insert({
                     name: 'xxx'
                   })
                   break
                 case 'mySave':
                   setTimeout(() => {
-                    const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+                    const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
                     this.$XModal.message({ content: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
                     this.loadData()
                   }, 100)
                   break
                 case 'myExport':
-                  this.$refs.xGrid.exportData({
+                  $grid.exportData({
                     type: 'csv'
                   })
                   break
@@ -192,21 +193,22 @@ export default {
       ]
     },
     toolbarButtonClickEvent ({ code }) {
+      const $grid = this.$refs.xGrid
       switch (code) {
         case 'myInsert':
-          this.$refs.xGrid.insert({
+          $grid.insert({
             name: 'xxx'
           })
           break
         case 'mySave':
           setTimeout(() => {
-            const { insertRecords, removeRecords, updateRecords } = this.$refs.xGrid.getRecordset()
+            const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
             this.$XModal.message({ content: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
             this.loadData()
           }, 100)
           break
         case 'myExport':
-          this.$refs.xGrid.exportData({
+          $grid.exportData({
             type: 'csv'
           })
           break

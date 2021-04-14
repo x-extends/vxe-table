@@ -114,8 +114,9 @@ export default {
           },
           methods: {
             insertEvent () {
-              let record = {}
-              this.$refs.xTable.insert(record)
+              const $table = this.$refs.xTable
+              const record = {}
+              $table.insert(record)
             },
             // 格式化显示名称
             formatPanmeLabel ({ cellValue, row }) {
@@ -166,8 +167,9 @@ export default {
   },
   methods: {
     insertEvent () {
+      const $table = this.$refs.xTable
       const record = {}
-      this.$refs.xTable.insert(record)
+      $table.insert(record)
     },
     // 格式化显示名称
     formatPanmeLabel ({ cellValue, row }) {

@@ -245,14 +245,16 @@ export default {
             },
             removeEvent (row) {
               this.$XModal.confirm('您确定要删除该数据?').then(type => {
+                const $table = this.$refs.xTable
                 if (type === 'confirm') {
-                  this.$refs.xTable.remove(row)
+                  $table.remove(row)
                 }
               })
             },
             submitEvent () {
               this.submitLoading = true
               setTimeout(() => {
+                const $table = this.$refs.xTable
                 this.submitLoading = false
                 this.showEdit = false
                 if (this.selectRow) {
@@ -260,7 +262,7 @@ export default {
                   Object.assign(this.selectRow, this.formData)
                 } else {
                   this.$XModal.message({ content: '新增成功', status: 'success' })
-                  this.$refs.xTable.insert(this.formData)
+                  $table.insert(this.formData)
                 }
               }, 500)
             }
@@ -318,14 +320,16 @@ export default {
     },
     removeEvent (row) {
       this.$XModal.confirm('您确定要删除该数据?').then(type => {
+        const $table = this.$refs.xTable
         if (type === 'confirm') {
-          this.$refs.xTable.remove(row)
+          $table.remove(row)
         }
       })
     },
     submitEvent () {
       this.submitLoading = true
       setTimeout(() => {
+        const $table = this.$refs.xTable
         this.submitLoading = false
         this.showEdit = false
         if (this.selectRow) {
@@ -333,7 +337,7 @@ export default {
           Object.assign(this.selectRow, this.formData)
         } else {
           this.$XModal.message({ content: '新增成功', status: 'success' })
-          this.$refs.xTable.insert(this.formData)
+          $table.insert(this.formData)
         }
       }, 500)
     }

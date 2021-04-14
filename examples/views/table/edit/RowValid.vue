@@ -138,7 +138,8 @@ export default {
           },
           methods: {
             async validEvent () {
-              const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
+              const $table = this.$refs.xTable
+              const errMap = await $table.validate().catch(errMap => errMap)
               if (errMap) {
                 this.$XModal.message({ status: 'error', message: '校验不通过！' })
               } else {
@@ -146,14 +147,15 @@ export default {
               }
             },
             async fullValidEvent () {
-              const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
+              const $table = this.$refs.xTable
+              const errMap = await $table.fullValidate().catch(errMap => errMap)
               if (errMap) {
-                let msgList = []
+                const msgList = []
                 Object.values(errMap).forEach(errList => {
                   errList.forEach(params => {
-                    let { rowIndex, column, rules } = params
+                    const { rowIndex, column, rules } = params
                     rules.forEach(rule => {
-                      msgList.push(\`第 \${rowIndex} 行 \${column.title} 校验错误：\${rule.message}\`)
+                      msgList.push(\`第 \${rowIndex + 1} 行 \${column.title} 校验错误：\${rule.message}\`)
                     })
                   })
                 })
@@ -176,7 +178,8 @@ export default {
               }
             },
             async validAllEvent () {
-              const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
+              const $table = this.$refs.xTable
+              const errMap = await $table.validate(true).catch(errMap => errMap)
               if (errMap) {
                 this.$XModal.message({ status: 'error', message: '校验不通过！' })
               } else {
@@ -184,9 +187,10 @@ export default {
               }
             },
             async selectValidEvent () {
-              let selectRecords = this.$refs.xTable.getCheckboxRecords()
+              const $table = this.$refs.xTable
+              const selectRecords = $table.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                const errMap = await this.$refs.xTable.validate(selectRecords).catch(errMap => errMap)
+                const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
                 if (errMap) {
                   this.$XModal.message({ status: 'error', message: '校验不通过！' })
                 } else {
@@ -197,27 +201,32 @@ export default {
               }
             },
             async insertEvent () {
-              const { row: newRow } = await this.$refs.xTable.insert()
+              const $table = this.$refs.xTable
+              const { row: newRow } = await $table.insert()
               // 插入一条数据并触发校验
-              const errMap = await this.$refs.xTable.validate(newRow).catch(errMap => errMap)
+              const errMap = await $table.validate(newRow).catch(errMap => errMap)
               if (errMap) {
 
               }
             },
             getSelectEvent () {
-              let selectRecords = this.$refs.xTable.getCheckboxRecords()
+              const $table = this.$refs.xTable
+              const selectRecords = $table.getCheckboxRecords()
               this.$XModal.alert(selectRecords.length)
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTable.getInsertRecords()
+              const $table = this.$refs.xTable
+              const insertRecords = $table.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
-              let removeRecords = this.$refs.xTable.getRemoveRecords()
+              const $table = this.$refs.xTable
+              const removeRecords = $table.getRemoveRecords()
               this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
-              let updateRecords = this.$refs.xTable.getUpdateRecords()
+              const $table = this.$refs.xTable
+              const updateRecords = $table.getUpdateRecords()
               this.$XModal.alert(updateRecords.length)
             }
           }
@@ -228,7 +237,8 @@ export default {
   },
   methods: {
     async validEvent () {
-      const errMap = await this.$refs.xTable.validate().catch(errMap => errMap)
+      const $table = this.$refs.xTable
+      const errMap = await $table.validate().catch(errMap => errMap)
       if (errMap) {
         this.$XModal.message({ status: 'error', message: '校验不通过！' })
       } else {
@@ -236,7 +246,8 @@ export default {
       }
     },
     async fullValidEvent () {
-      const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
+      const $table = this.$refs.xTable
+      const errMap = await $table.fullValidate().catch(errMap => errMap)
       if (errMap) {
         const msgList = []
         Object.values(errMap).forEach(errList => {
@@ -266,7 +277,8 @@ export default {
       }
     },
     async validAllEvent () {
-      const errMap = await this.$refs.xTable.validate(true).catch(errMap => errMap)
+      const $table = this.$refs.xTable
+      const errMap = await $table.validate(true).catch(errMap => errMap)
       if (errMap) {
         this.$XModal.message({ status: 'error', message: '校验不通过！' })
       } else {
@@ -274,9 +286,10 @@ export default {
       }
     },
     async selectValidEvent () {
-      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const $table = this.$refs.xTable
+      const selectRecords = $table.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        const errMap = await this.$refs.xTable.validate(selectRecords).catch(errMap => errMap)
+        const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
         if (errMap) {
           this.$XModal.message({ status: 'error', message: '校验不通过！' })
         } else {
@@ -287,27 +300,32 @@ export default {
       }
     },
     async insertEvent () {
-      const { row: newRow } = await this.$refs.xTable.insert()
+      const $table = this.$refs.xTable
+      const { row: newRow } = await $table.insert()
       // 插入一条数据并触发校验
-      const errMap = await this.$refs.xTable.validate(newRow).catch(errMap => errMap)
+      const errMap = await $table.validate(newRow).catch(errMap => errMap)
       if (errMap) {
 
       }
     },
     getSelectEvent () {
-      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const $table = this.$refs.xTable
+      const selectRecords = $table.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTable.getInsertRecords()
+      const $table = this.$refs.xTable
+      const insertRecords = $table.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      const removeRecords = this.$refs.xTable.getRemoveRecords()
+      const $table = this.$refs.xTable
+      const removeRecords = $table.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      const updateRecords = this.$refs.xTable.getUpdateRecords()
+      const $table = this.$refs.xTable
+      const updateRecords = $table.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

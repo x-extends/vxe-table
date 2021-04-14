@@ -84,8 +84,9 @@ export default {
           },
           methods: {
             editMethod ({ row, column }) {
+              const $table = this.$refs.xTable
               // 重写默认的覆盖式，改为追加式
-              this.$refs.xTable.setActiveCell(row, column.property)
+              $table.setActiveCell(row, column.property)
             }
           }
         }
@@ -95,8 +96,9 @@ export default {
   },
   methods: {
     editMethod ({ row, column }) {
+      const $table = this.$refs.xTable
       // 重写默认的覆盖式，改为追加式
-      this.$refs.xTable.setActiveCell(row, column.property)
+      $table.setActiveCell(row, column.property)
     }
   }
 }

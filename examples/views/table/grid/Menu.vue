@@ -178,10 +178,11 @@ export default {
               return true
             },
             cellContextMenuEvent ({ row }) {
-              this.$refs.xGrid.setCurrentRow(row)
+              const $grid = this.$refs.xGrid
+              $grid.setCurrentRow(row)
             },
             contextMenuClickEvent ({ menu, row, column }) {
-              let xGrid = this.$refs.xGrid
+              const $grid = this.$refs.xGrid
               switch (menu.code) {
                 case 'copy':
                   if (row && column) {
@@ -191,13 +192,13 @@ export default {
                   }
                   break
                 case 'clear':
-                  xGrid.clearData(row, column.property)
+                  $grid.clearData(row, column.property)
                   break
                 case 'myPrint':
-                  xGrid.print()
+                  $grid.print()
                   break
                 case 'myExport':
-                  xGrid.exportData()
+                  $grid.exportData()
                   break
               }
             },
@@ -236,10 +237,11 @@ export default {
       return true
     },
     cellContextMenuEvent ({ row }) {
-      this.$refs.xGrid.setCurrentRow(row)
+      const $grid = this.$refs.xGrid
+      $grid.setCurrentRow(row)
     },
     contextMenuClickEvent ({ menu, row, column }) {
-      const xGrid = this.$refs.xGrid
+      const $grid = this.$refs.xGrid
       switch (menu.code) {
         case 'copy':
           if (row && column) {
@@ -249,13 +251,13 @@ export default {
           }
           break
         case 'clear':
-          xGrid.clearData(row, column.property)
+          $grid.clearData(row, column.property)
           break
         case 'myPrint':
-          xGrid.print()
+          $grid.print()
           break
         case 'myExport':
-          xGrid.exportData()
+          $grid.exportData()
           break
       }
     },

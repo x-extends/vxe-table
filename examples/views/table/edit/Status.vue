@@ -125,16 +125,18 @@ export default {
           },
           methods: {
             insertEvent () {
-              this.$refs.xTable.insert()
-                .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'name'))
+              const $table = this.$refs.xTable
+              $table.insert().then(({ row }) => {
+                $table.setActiveCell(row, 'name')
+              })
             },
             saveEvent (row, field) {
-              let xTable = this.$refs.xTable
-              if (xTable.isUpdateByRow(row)) {
+              const $table = this.$refs.xTable
+              if ($table.isUpdateByRow(row)) {
                 row.loading = true
-                this.submitSave(row).then(data => {
+                this.submitSave(row).then(() => {
                   // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
-                  xTable.reloadRow(row, null, field)
+                  $table.reloadRow(row, null, field)
                   this.$XModal.message({ content: '保存成功！', status: 'success' })
                   row.loading = false
                 })
@@ -143,12 +145,12 @@ export default {
               }
             },
             saveEvent2 (row, field) {
-              let xTable = this.$refs.xTable
-              if (xTable.isUpdateByRow(row)) {
+              const $table = this.$refs.xTable
+              if ($table.isUpdateByRow(row)) {
                 row.loading = true
                 this.submitSave(row).then(data => {
                   // 局部保存，并更新本地数据
-                  xTable.reloadRow(row, data, field)
+                  $table.reloadRow(row, data, field)
                   this.$XModal.message({ content: '保存成功！', status: 'success' })
                   row.loading = false
                 })
@@ -158,7 +160,7 @@ export default {
             },
             submitSave (row) {
               return new Promise(resolve => {
-                let rest = {
+                const rest = {
                   date3: XEUtils.toDateString(new Date())
                 }
                 if (row.name) {
@@ -171,15 +173,18 @@ export default {
               })
             },
             getInsertEvent () {
-              let insertRecords = this.$refs.xTable.getInsertRecords()
+              const $table = this.$refs.xTable
+              const insertRecords = $table.getInsertRecords()
               this.$XModal.alert(insertRecords.length)
             },
             getRemoveEvent () {
-              let removeRecords = this.$refs.xTable.getRemoveRecords()
+              const $table = this.$refs.xTable
+              const removeRecords = $table.getRemoveRecords()
               this.$XModal.alert(removeRecords.length)
             },
             getUpdateEvent () {
-              let updateRecords = this.$refs.xTable.getUpdateRecords()
+              const $table = this.$refs.xTable
+              const updateRecords = $table.getUpdateRecords()
               this.$XModal.alert(updateRecords.length)
             }
           }
@@ -190,16 +195,18 @@ export default {
   },
   methods: {
     insertEvent () {
-      this.$refs.xTable.insert()
-        .then(({ row }) => this.$refs.xTable.setActiveCell(row, 'name'))
+      const $table = this.$refs.xTable
+      $table.insert().then(({ row }) => {
+        $table.setActiveCell(row, 'name')
+      })
     },
     saveEvent (row, field) {
-      const xTable = this.$refs.xTable
-      if (xTable.isUpdateByRow(row)) {
+      const $table = this.$refs.xTable
+      if ($table.isUpdateByRow(row)) {
         row.loading = true
         this.submitSave(row).then(() => {
           // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
-          xTable.reloadRow(row, null, field)
+          $table.reloadRow(row, null, field)
           this.$XModal.message({ content: '保存成功！', status: 'success' })
           row.loading = false
         })
@@ -208,12 +215,12 @@ export default {
       }
     },
     saveEvent2 (row, field) {
-      const xTable = this.$refs.xTable
-      if (xTable.isUpdateByRow(row)) {
+      const $table = this.$refs.xTable
+      if ($table.isUpdateByRow(row)) {
         row.loading = true
         this.submitSave(row).then(data => {
           // 局部保存，并更新本地数据
-          xTable.reloadRow(row, data, field)
+          $table.reloadRow(row, data, field)
           this.$XModal.message({ content: '保存成功！', status: 'success' })
           row.loading = false
         })
@@ -236,15 +243,18 @@ export default {
       })
     },
     getInsertEvent () {
-      const insertRecords = this.$refs.xTable.getInsertRecords()
+      const $table = this.$refs.xTable
+      const insertRecords = $table.getInsertRecords()
       this.$XModal.alert(insertRecords.length)
     },
     getRemoveEvent () {
-      const removeRecords = this.$refs.xTable.getRemoveRecords()
+      const $table = this.$refs.xTable
+      const removeRecords = $table.getRemoveRecords()
       this.$XModal.alert(removeRecords.length)
     },
     getUpdateEvent () {
-      const updateRecords = this.$refs.xTable.getUpdateRecords()
+      const $table = this.$refs.xTable
+      const updateRecords = $table.getUpdateRecords()
       this.$XModal.alert(updateRecords.length)
     }
   }

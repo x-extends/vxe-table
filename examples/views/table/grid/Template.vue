@@ -555,13 +555,15 @@ export default {
               $panel.changeOption(evnt, !!option.data, option)
             },
             checkboxChangeEvent ({ records }) {
-              this.isAllChecked = this.$refs.xGrid.isAllCheckboxChecked()
-              this.isIndeterminate = this.$refs.xGrid.isCheckboxIndeterminate()
+              const $grid = this.$refs.xGrid
+              this.isAllChecked = $grid.isAllCheckboxChecked()
+              this.isIndeterminate = $grid.isCheckboxIndeterminate()
               this.selectRecords = records
             },
             changeAllEvent () {
-              this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
-              this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
+              const $grid = this.$refs.xGrid
+              $grid.setAllCheckboxRow(this.isAllChecked)
+              this.selectRecords = $grid.getCheckboxRecords()
             },
             sumNum (list, field) {
               let count = 0
@@ -665,13 +667,15 @@ export default {
       $panel.changeOption(evnt, !!option.data, option)
     },
     checkboxChangeEvent ({ records }) {
-      this.isAllChecked = this.$refs.xGrid.isAllCheckboxChecked()
-      this.isIndeterminate = this.$refs.xGrid.isCheckboxIndeterminate()
+      const $grid = this.$refs.xGrid
+      this.isAllChecked = $grid.isAllCheckboxChecked()
+      this.isIndeterminate = $grid.isCheckboxIndeterminate()
       this.selectRecords = records
     },
     changeAllEvent () {
-      this.$refs.xGrid.setAllCheckboxRow(this.isAllChecked)
-      this.selectRecords = this.$refs.xGrid.getCheckboxRecords()
+      const $grid = this.$refs.xGrid
+      $grid.setAllCheckboxRow(this.isAllChecked)
+      this.selectRecords = $grid.getCheckboxRecords()
     },
     sumNum (list, field) {
       let count = 0

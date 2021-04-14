@@ -649,8 +649,8 @@ export default {
     wheelEvent (evnt) {
       const { deltaY, deltaX } = evnt
       const { $el: scrollBodyElem, $parent: $xetable } = this
-      const { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
-      const { tableBody, validTip } = $refs
+      const { $refs, highlightHoverRow, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
+      const { tableBody } = $refs
       const bodyElem = tableBody.$el
 
       const deltaTop = browse.firefox ? deltaY * 40 : deltaY
@@ -666,6 +666,7 @@ export default {
       const isRollX = scrollLeft !== lastScrollLeft
       const isRollY = scrollTop !== lastScrollTop
 
+      // 用于鼠标纵向滚轮处理
       if (isRollY) {
         evnt.preventDefault()
         $xetable.lastScrollTop = scrollTop
@@ -675,14 +676,8 @@ export default {
           $xetable.clearHoverRow()
         }
         this.handleWheel(evnt, isTopWheel, deltaTop, isRollX, isRollY)
-        if (scrollXLoad && isRollX) {
-          $xetable.triggerScrollXEvent(evnt)
-        }
-        if (scrollYLoad && isRollY) {
+        if (scrollYLoad) {
           $xetable.triggerScrollYEvent(evnt)
-        }
-        if (isRollX && validTip && validTip.visible) {
-          validTip.updatePlacement()
         }
       }
     }

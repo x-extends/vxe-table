@@ -152,10 +152,10 @@ export default {
           },
           methods: {
             editActivedEvent ({ row }) {
-              let xGrid2 = this.$refs.xGrid2
-              let nameColumn = xGrid2.getColumnByField('name')
-              let ageColumn = xGrid2.getColumnByField('age')
-              let sexColumn = xGrid2.getColumnByField('sex')
+              const $grid = this.$refs.xGrid2
+              const nameColumn = $grid.getColumnByField('name')
+              const ageColumn = $grid.getColumnByField('age')
+              const sexColumn = $grid.getColumnByField('sex')
               // name 为 'x' 开头的列禁止编辑
               let isNameDisabled = (row.name || '').indexOf('x') === 0
               // age 小于 27 的列禁止编辑
@@ -181,10 +181,10 @@ export default {
       return true
     },
     editActivedEvent ({ row }) {
-      const xGrid2 = this.$refs.xGrid2
-      const nameColumn = xGrid2.getColumnByField('name')
-      const ageColumn = xGrid2.getColumnByField('age')
-      const sexColumn = xGrid2.getColumnByField('sex')
+      const $grid = this.$refs.xGrid2
+      const nameColumn = $grid.getColumnByField('name')
+      const ageColumn = $grid.getColumnByField('age')
+      const sexColumn = $grid.getColumnByField('sex')
       // name 为 'x' 开头的列禁止编辑
       const isNameDisabled = (row.name || '').indexOf('x') === 0
       // age 小于 27 的列禁止编辑

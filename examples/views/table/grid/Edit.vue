@@ -115,9 +115,10 @@ export default {
           },
           created () {
             setTimeout(() => {
+              const $grid = this.$refs.xGrid
               // 异步更新下拉选项
-              if (this.$refs.xGrid) {
-                const column = this.$refs.xGrid.getColumnByField('sex')
+              if ($grid) {
+                const column = $grid.getColumnByField('sex')
                 column.editRender.options = [
                   { value: '1', label: '男' },
                   { value: '0', label: '女' }
@@ -156,10 +157,12 @@ export default {
               this.findList()
             },
             editRowEvent (row) {
-              this.$refs.xGrid.setActiveRow(row)
+              const $grid = this.$refs.xGrid
+              $grid.setActiveRow(row)
             },
             saveRowEvent () {
-              this.$refs.xGrid.clearActived().then(() => {
+              const $grid = this.$refs.xGrid
+              $grid.clearActived().then(() => {
                 this.gridOptions.loading = true
                 setTimeout(() => {
                   this.gridOptions.loading = false
@@ -169,8 +172,9 @@ export default {
             },
             removeRowEvent (row) {
               this.$XModal.confirm('您确定要删除该数据?').then(type => {
+                const $grid = this.$refs.xGrid
                 if (type === 'confirm') {
-                  this.$refs.xGrid.remove(row)
+                  $grid.remove(row)
                 }
               })
             }
@@ -182,9 +186,10 @@ export default {
   },
   created () {
     setTimeout(() => {
+      const $grid = this.$refs.xGrid
       // 异步更新下拉选项
-      if (this.$refs.xGrid) {
-        const column = this.$refs.xGrid.getColumnByField('sex')
+      if ($grid) {
+        const column = $grid.getColumnByField('sex')
         column.editRender.options = [
           { value: '1', label: '男' },
           { value: '0', label: '女' }
@@ -223,10 +228,12 @@ export default {
       this.findList()
     },
     editRowEvent (row) {
-      this.$refs.xGrid.setActiveRow(row)
+      const $grid = this.$refs.xGrid
+      $grid.setActiveRow(row)
     },
     saveRowEvent () {
-      this.$refs.xGrid.clearActived().then(() => {
+      const $grid = this.$refs.xGrid
+      $grid.clearActived().then(() => {
         this.gridOptions.loading = true
         setTimeout(() => {
           this.gridOptions.loading = false
@@ -236,8 +243,9 @@ export default {
     },
     removeRowEvent (row) {
       this.$XModal.confirm('您确定要删除该数据?').then(type => {
+        const $grid = this.$refs.xGrid
         if (type === 'confirm') {
-          this.$refs.xGrid.remove(row)
+          $grid.remove(row)
         }
       })
     }

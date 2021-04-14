@@ -100,19 +100,21 @@ export default {
           },
           methods: {
             insertEvent () {
+              const $table = this.$refs.xTable
               const record = {
                 sex: '1'
               }
-              this.$refs.xTable.insert(record).then(({ row }) => {
-                this.$refs.xTable.setActiveCell(row, 'sex')
+              $table.insert(record).then(({ row }) => {
+                $table.setActiveCell(row, 'sex')
               })
             },
             removeEvent () {
-              const selectRecords = this.$refs.xTable.getCheckboxRecords()
+              const $table = this.$refs.xTable
+              const selectRecords = $table.getCheckboxRecords()
               if (selectRecords.length) {
                 this.$XModal.confirm('您确定要删除选中的数据吗?').then(type => {
                   if (type === 'confirm') {
-                    this.$refs.xTable.removeCheckboxRow()
+                    $table.removeCheckboxRow()
                   }
                 })
               } else {
@@ -121,13 +123,15 @@ export default {
             },
             revertEvent () {
               this.$XModal.confirm('您确定要还原数据吗?').then(type => {
+                const $table = this.$refs.xTable
                 if (type === 'confirm') {
-                  this.$refs.xTable.revertData()
+                  $table.revertData()
                 }
               })
             },
             saveEvent () {
-              const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+              const $table = this.$refs.xTable
+              const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
               this.$XModal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
           }
@@ -138,19 +142,21 @@ export default {
   },
   methods: {
     insertEvent () {
+      const $table = this.$refs.xTable
       const record = {
         sex: '1'
       }
-      this.$refs.xTable.insert(record).then(({ row }) => {
-        this.$refs.xTable.setActiveCell(row, 'sex')
+      $table.insert(record).then(({ row }) => {
+        $table.setActiveCell(row, 'sex')
       })
     },
     removeEvent () {
-      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+      const $table = this.$refs.xTable
+      const selectRecords = $table.getCheckboxRecords()
       if (selectRecords.length) {
         this.$XModal.confirm('您确定要删除选中的数据吗?').then(type => {
           if (type === 'confirm') {
-            this.$refs.xTable.removeCheckboxRow()
+            $table.removeCheckboxRow()
           }
         })
       } else {
@@ -159,13 +165,15 @@ export default {
     },
     revertEvent () {
       this.$XModal.confirm('您确定要还原数据吗?').then(type => {
+        const $table = this.$refs.xTable
         if (type === 'confirm') {
-          this.$refs.xTable.revertData()
+          $table.revertData()
         }
       })
     },
     saveEvent () {
-      const { insertRecords, removeRecords, updateRecords } = this.$refs.xTable.getRecordset()
+      const $table = this.$refs.xTable
+      const { insertRecords, removeRecords, updateRecords } = $table.getRecordset()
       this.$XModal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
   }
