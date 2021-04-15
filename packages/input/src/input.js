@@ -1053,8 +1053,8 @@ export default {
       this.$emit(evnt.type, { $panel: $refs.panel, value, $event: evnt }, evnt)
     },
     emitUpdate (value, evnt) {
+      this.$emit('input', value)
       if (XEUtils.toString(this.value) !== value) {
-        this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
       }
     },
