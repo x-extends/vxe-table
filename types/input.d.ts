@@ -5,7 +5,7 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, VNodeStyle, ValueOf
  * 组件 - 输入框
  * @example import { Input as VxeInput } from 'vxe-table'
  */
-export const Input: VXEComponent<VxeInputProps & VxeInputEventProps>;
+export const Input: VXEComponent<VxeInputProps, VxeInputEventProps>;
 
 export type VxeInputInstance = ComponentPublicInstance<VxeInputProps, VxeInputConstructor>;
 

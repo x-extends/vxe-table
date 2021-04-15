@@ -5,7 +5,7 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle
  * 组件 - 按钮
  * @example import { Button as VxeButton } from 'vxe-table'
  */
-export const Button: VXEComponent<VxeButtonProps>;
+export const Button: VXEComponent<VxeButtonProps, VxeButtonEventProps>;
 
 export type VxeButtonInstance = ComponentPublicInstance<VxeButtonProps, VxeButtonConstructor>;
 
@@ -139,11 +139,13 @@ export namespace VxeButtonDefines {
   export interface DropdownClickEventParams extends ButtonEventParams, ClickParams { }
 }
 
-export interface VxeButtonListeners {
+export type VxeButtonEventProps = {
   onClick?: VxeButtonEvents.Click;
-  click?: VxeButtonEvents.Click;
-
   onDropdownClick?: VxeButtonEvents.DropdownClick;
+}
+
+export interface VxeButtonListeners {
+  click?: VxeButtonEvents.Click;
   dropdownClick?: VxeButtonEvents.DropdownClick;
 }
 
