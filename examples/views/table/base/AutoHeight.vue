@@ -5,7 +5,7 @@
       还可以根据不同场景添加 <table-api-link prop="sync-resize"/>（属性监听） 或 <table-api-link prop="auto-resize"/>（父元素监听），这样就只需要通过样式控制父容器高度就可以实现响应式表格
     </p>
 
-    <div style="width: 100%; height: 300px">
+    <div style="overflow: hidden; width: 100%; height: 300px">
       <vxe-table
         border
         height="auto"
@@ -27,7 +27,7 @@
 
     <p class="tip">也可以设置相对于父容器的百分比</p>
 
-    <div style="height: 500px">
+    <div style="overflow: hidden; height: 500px">
       <vxe-table
         border
         height="40%"
@@ -71,7 +71,7 @@
       </template>
     </vxe-toolbar>
 
-    <div :style="{width: tableWidth, height: tableHeight}">
+    <div style="overflow: hidden;" :style="{width: tableWidth, height: tableHeight}">
       <vxe-table
         border
         auto-resize
@@ -117,7 +117,7 @@ export default {
       ],
       demoCodes: [
         `
-        <div style="width: 100%; height: 300px">
+        <div style="overflow: hidden; width: 100%; height: 300px">
           <vxe-table
             border
             height="auto"
@@ -149,7 +149,7 @@ export default {
         }
         `,
         `
-        <div style="height: 500px">
+        <div style="overflow: hidden; height: 500px">
           <vxe-table
             border
             height="40%"
@@ -203,7 +203,7 @@ export default {
           </template>
         </vxe-toolbar>
 
-        <div :style="{width: tableWidth, height: tableHeight}">
+        <div style="overflow: hidden;" :style="{width: tableWidth, height: tableHeight}">
           <vxe-table
             border
             auto-resize

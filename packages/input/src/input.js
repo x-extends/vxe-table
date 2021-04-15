@@ -1213,9 +1213,8 @@ export default {
                     datetimePanelValue.setMinutes(inpVal.getMinutes())
                     datetimePanelValue.setSeconds(inpVal.getSeconds())
                   }
-                } else {
-                  this.inputValue = XEUtils.toDateString(inpVal, dateLabelFormat)
                 }
+                this.inputValue = XEUtils.toDateString(inpVal, dateLabelFormat)
                 this.dateChange(inpVal)
               }
             } else {

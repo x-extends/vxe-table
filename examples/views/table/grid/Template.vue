@@ -155,8 +155,8 @@
       <template #pager>
         <vxe-pager
           perfect
-          :current-page="tablePage.currentPage"
-          :page-size="tablePage.pageSize"
+          :current-page.sync="tablePage.currentPage"
+          :page-size.sync="tablePage.pageSize"
           :total="tablePage.totalResult">
           <template #left>
             <span class="page-left">
@@ -221,7 +221,7 @@ export default {
         sex: ''
       },
       tablePage: {
-        total: 0,
+        totalResult: 8,
         currentPage: 1,
         pageSize: 10
       },
@@ -424,8 +424,8 @@ export default {
           <template #pager>
             <vxe-pager
               perfect
-              :current-page="tablePage.currentPage"
-              :page-size="tablePage.pageSize"
+              :current-page.sync="tablePage.currentPage"
+              :page-size.sync="tablePage.pageSize"
               :total="tablePage.totalResult">
               <template #left>
                 <span class="page-left">
@@ -480,7 +480,7 @@ export default {
                 sex: ''
               },
               tablePage: {
-                total: 0,
+                totalResult: 8,
                 currentPage: 1,
                 pageSize: 10
               },
