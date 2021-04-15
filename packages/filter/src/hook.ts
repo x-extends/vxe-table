@@ -165,9 +165,9 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         return nextTick()
       },
       getCheckedFilters () {
-        const { visibleColumn } = internalData
+        const { tableFullColumn } = internalData
         const filterList: any[] = []
-        visibleColumn.filter((column: any) => {
+        tableFullColumn.filter((column: any) => {
           const { property, filters } = column
           const valueList: any[] = []
           const dataList: any[] = []

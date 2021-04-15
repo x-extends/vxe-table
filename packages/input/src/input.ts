@@ -554,8 +554,8 @@ export default defineComponent({
 
     const emitModel = (value: VxeInputPropTypes.ModelValue, evnt: Event | { type: string }) => {
       reactData.inputValue = value
-      inputMethods.dispatchEvent('input', { value }, evnt)
       emit('update:modelValue', value)
+      inputMethods.dispatchEvent('input', { value }, evnt)
       if (XEUtils.toValueString(props.modelValue) !== value) {
         inputMethods.dispatchEvent('change', { value }, evnt)
       }
@@ -769,9 +769,8 @@ export default defineComponent({
                     datetimePanelValue.setMinutes(inpVal.getMinutes())
                     datetimePanelValue.setSeconds(inpVal.getSeconds())
                   }
-                } else {
-                  reactData.inputValue = XEUtils.toDateString(inpVal, dateLabelFormat)
                 }
+                reactData.inputValue = XEUtils.toDateString(inpVal, dateLabelFormat)
                 dateChange(inpVal)
               }
             } else {

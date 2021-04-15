@@ -66,9 +66,7 @@ declare module './table' {
        * 使用自定义校验函数，接收一个 Promise
        * @param params 参数
        */
-      validator?(params: VxeTableDefines.ValidatorErrorParams): void;
-      validator?(params: VxeTableDefines.ValidatorErrorParams): Error;
-      validator?(params: VxeTableDefines.ValidatorErrorParams): Promise<any>;
+      validator?(params: VxeTableDefines.ValidatorErrorParams): void | Error | Promise<void>;
       /**
        * 提示消息
        */

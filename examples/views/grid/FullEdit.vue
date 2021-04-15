@@ -144,7 +144,15 @@ export default defineComponent({
         },
         { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
         { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-        { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
+        {
+          field: 'sex',
+          title: 'Sex',
+          filters: [
+            { label: '男', value: '1' },
+            { label: '女', value: '0' }
+          ],
+          editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
+        },
         { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
         {
           field: 'amount',
@@ -411,7 +419,15 @@ export default defineComponent({
                 },
                 { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
                 { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
-                { field: 'sex', title: 'Sex', editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } } },
+                {
+                  field: 'sex',
+                  title: 'Sex',
+                  filters: [
+                    { label: '男', value: '1' },
+                    { label: '女', value: '0' }
+                  ],
+                  editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
+                },
                 { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
                 {
                   field: 'amount',

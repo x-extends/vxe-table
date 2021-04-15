@@ -1056,20 +1056,20 @@ export default defineComponent({
             //     name: 'TableEditRowDisable'
             //   }
             // },
-            // {
-            //   label: 'app.aside.nav.cellValid',
-            //   demoUrl: 'https://jsrun.pro/IcWKp/edit',
-            //   locat: {
-            //     name: 'TableEditCellValid'
-            //   }
-            // },
-            // {
-            //   label: 'app.aside.nav.rowValid',
-            //   demoUrl: 'https://jsrun.pro/wcWKp/edit',
-            //   locat: {
-            //     name: 'TableEditRowValid'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.cellValid',
+              // demoUrl: 'https://jsrun.pro/IcWKp/edit',
+              locat: {
+                name: 'TableEditCellValid'
+              }
+            },
+            {
+              label: 'app.aside.nav.rowValid',
+              // demoUrl: 'https://jsrun.pro/wcWKp/edit',
+              locat: {
+                name: 'TableEditRowValid'
+              }
+            },
             // {
             //   label: 'app.aside.nav.forceCellValid',
             //   disabled: true,

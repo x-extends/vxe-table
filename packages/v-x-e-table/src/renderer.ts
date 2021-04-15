@@ -203,7 +203,10 @@ function getEditOns (renderOpts: any, params: any) {
   }, (eventParams: any) => {
     // 处理 change 事件相关逻辑
     if (!isImmediate && (name === '$input' || name === '$textarea')) {
-      $table.updateStatus(params, eventParams.value)
+      const cellValue = eventParams.value
+      model.update = true
+      model.value = cellValue
+      $table.updateStatus(params, cellValue)
     } else {
       $table.updateStatus(params)
     }

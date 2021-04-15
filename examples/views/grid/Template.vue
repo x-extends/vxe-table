@@ -147,8 +147,8 @@
       <template #pager>
         <vxe-pager
           perfect
-          :current-page="demo1.tablePage.currentPage"
-          :page-size="demo1.tablePage.pageSize"
+          v-model:current-page="demo1.tablePage.currentPage"
+          v-model:page-size="demo1.tablePage.pageSize"
           :total="demo1.tablePage.totalResult">
           <template #left>
             <span class="page-left">
@@ -224,7 +224,7 @@ export default defineComponent({
         sex: ''
       },
       tablePage: {
-        total: 0,
+        totalResult: 8,
         currentPage: 1,
         pageSize: 10
       }
@@ -488,8 +488,8 @@ export default defineComponent({
           <template #pager>
             <vxe-pager
               perfect
-              :current-page="demo1.tablePage.currentPage"
-              :page-size="demo1.tablePage.pageSize"
+              v-model:current-page="demo1.tablePage.currentPage"
+              v-model:page-size="demo1.tablePage.pageSize"
               :total="demo1.tablePage.totalResult">
               <template #left>
                 <span class="page-left">
@@ -554,7 +554,7 @@ export default defineComponent({
                 sex: ''
               },
               tablePage: {
-                total: 0,
+                totalResult: 8,
                 currentPage: 1,
                 pageSize: 10
               }

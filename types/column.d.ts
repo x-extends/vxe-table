@@ -55,6 +55,7 @@ export namespace VxeColumnPropTypes {
   interface FilterMethodParams {
     value: any;
     option: VxeTableDefines.FilterOption;
+    cellValue: any;
     row: any;
     column: VxeTableDefines.ColumnInfo;
   }

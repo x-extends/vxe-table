@@ -1007,7 +1007,7 @@ export interface TableInternalData {
 export namespace VxeTablePropTypes {
   export type Size = SizeType;
   export type ID = string;
-  export type Data = any[];
+  export type Data<T = any> = T[];
   export type Height = number | string;
   export type MaxHeight = number | string;
   export type Resizable = boolean;
@@ -1803,7 +1803,7 @@ export namespace VxeTablePropTypes {
 export type VxeTableProps<D = any> = {
   size?: VxeTablePropTypes.Size;
   id?: VxeTablePropTypes.ID;
-  data?: D[];
+  data?: VxeTablePropTypes.Data<D>;
   height?: VxeTablePropTypes.Height;
   maxHeight?: VxeTablePropTypes.MaxHeight;
   resizable?: VxeTablePropTypes.Resizable;

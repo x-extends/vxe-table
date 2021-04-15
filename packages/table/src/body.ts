@@ -529,10 +529,9 @@ export default defineComponent({
     const wheelEvent = (evnt: WheelEvent) => {
       const { deltaY, deltaX } = evnt
       const { highlightHoverRow } = tableProps
-      const { scrollXLoad, scrollYLoad } = tableReactData
+      const { scrollYLoad } = tableReactData
       const { lastScrollTop, lastScrollLeft } = tableInternalData
       const tableBody = refTableBody.value
-      const validTip = refValidTooltip.value
       const scrollBodyElem = refElem.value
       const bodyElem = tableBody.$el as HTMLDivElement
 
@@ -549,6 +548,7 @@ export default defineComponent({
       const isRollX = scrollLeft !== lastScrollLeft
       const isRollY = scrollTop !== lastScrollTop
 
+      // 用于鼠标纵向滚轮处理
       if (isRollY) {
         evnt.preventDefault()
         tableInternalData.lastScrollTop = scrollTop
@@ -558,14 +558,8 @@ export default defineComponent({
           $xetable.clearHoverRow()
         }
         handleWheel(evnt, isTopWheel, deltaTop, isRollX, isRollY)
-        if (scrollXLoad && isRollX) {
-          $xetable.triggerScrollXEvent(evnt)
-        }
-        if (scrollYLoad && isRollY) {
+        if (scrollYLoad) {
           $xetable.triggerScrollYEvent(evnt)
-        }
-        if (isRollX && validTip && validTip.reactData.visible) {
-          validTip.updatePlacement()
         }
       }
     }
