@@ -68,6 +68,18 @@ export function getPaddingTopBottomSize (elem) {
   return 0
 }
 
+export function setScrollTop (elem, scrollTop) {
+  if (elem) {
+    elem.scrollTop = scrollTop
+  }
+}
+
+export function setScrollLeft (elem, scrollLeft) {
+  if (elem) {
+    elem.scrollLeft = scrollLeft
+  }
+}
+
 export const DomTools = {
   browse,
   isPx (val) {

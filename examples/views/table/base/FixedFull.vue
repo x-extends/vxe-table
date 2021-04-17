@@ -211,8 +211,9 @@ export default {
           methods: {
             toggleFixedColumn (index, type) {
               const xTable = this.$refs.xTable2
-              const column = xTable.getColumns(index)
-              column.fixed = column.fixed ? null : type
+              const tableColumns = xTable.getColumns()
+              const fxColumn = tableColumns[index]
+              fxColumn.fixed = fxColumn.fixed ? null : type
               // 刷新列
               xTable.refreshColumn()
             }
@@ -264,8 +265,9 @@ export default {
   methods: {
     toggleFixedColumn (index, type) {
       const xTable = this.$refs.xTable2
-      const column = xTable.getColumns(index)
-      column.fixed = column.fixed ? null : type
+      const tableColumns = xTable.getColumns()
+      const fxColumn = tableColumns[index]
+      fxColumn.fixed = fxColumn.fixed ? null : type
       // 刷新列
       xTable.refreshColumn()
     }

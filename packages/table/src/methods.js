@@ -4,7 +4,7 @@ import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { clearTableAllStatus, handleFieldOrColumn, eqCellNull } from './util'
-import { browse, getPaddingTopBottomSize } from '../../tools/src/dom'
+import { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
@@ -475,7 +475,7 @@ const Methods = {
     this.tableFullColumn = tableFullColumn
     this.cacheColumnMap()
     this.restoreCustomStorage()
-    this.refreshColumn().then(() => {
+    this.parseColumns().then(() => {
       if (this.scrollXLoad) {
         this.loadScrollXData(true)
       }
@@ -1309,10 +1309,20 @@ const Methods = {
     }
   },
   /**
+   * 刷新列配置
+   */
+  refreshColumn () {
+    return this.parseColumns().then(() => {
+      return this.refreshScroll()
+    }).then(() => {
+      return this.recalculate()
+    })
+  },
+  /**
    * 刷新列信息
    * 将固定的列左边、右边分别靠边
    */
-  refreshColumn () {
+  parseColumns () {
     const leftList = []
     const centerList = []
     const rightList = []
@@ -1408,12 +1418,11 @@ const Methods = {
     this.scrollXLoad = scrollXLoad
     this.visibleColumn = visibleColumn
     this.handleTableColumn()
-    return this.$nextTick().then(() => {
-      this.updateFooter()
-      return this.recalculate(true)
+    return this.updateFooter().then(() => {
+      return this.recalculate()
     }).then(() => {
       this.updateCellAreas()
-      return this.$nextTick().then(() => this.recalculate())
+      return this.recalculate()
     })
   },
   /**
@@ -1458,7 +1467,21 @@ const Methods = {
    */
   refreshScroll () {
     const { lastScrollLeft, lastScrollTop } = this
-    return restoreScroll(this, lastScrollLeft, lastScrollTop)
+    const { $refs } = this
+    const { tableBody, leftBody, rightBody, tableFooter } = $refs
+    const tableBodyElem = tableBody ? tableBody.$el : null
+    const leftBodyElem = leftBody ? leftBody.$el : null
+    const rightBodyElem = rightBody ? rightBody.$el : null
+    const tableFooterElem = tableFooter ? tableFooter.$el : null
+    // 还原滚动条位置
+    if (lastScrollLeft || lastScrollTop) {
+      return restoreScroll(this, lastScrollLeft, lastScrollTop)
+    }
+    // 重置
+    setScrollTop(tableBodyElem, lastScrollTop)
+    setScrollTop(leftBodyElem, lastScrollTop)
+    setScrollTop(rightBodyElem, lastScrollTop)
+    setScrollLeft(tableFooterElem, lastScrollLeft)
   },
   /**
    * 计算单元格列宽，动态分配可用剩余空间
@@ -2259,7 +2282,8 @@ const Methods = {
     this.tooltipActive = false
     if (tooltipOpts.enterable) {
       this.tooltipTimeout = setTimeout(() => {
-        if (!this.$refs.tooltip.isHover) {
+        const tooltip = this.$refs.tooltip
+        if (tooltip && !tooltip.isHover) {
           this.closeTooltip()
         }
       }, tooltipOpts.leaveDelay)
@@ -2343,13 +2367,13 @@ const Methods = {
     params.cell = cell
     const { $refs, tooltipOpts, tooltipStore } = this
     const { column, row } = params
-    const { enabled, contentMethod } = tooltipOpts
+    const { showAll, enabled, contentMethod } = tooltipOpts
     const tooltip = $refs.tooltip
     const customContent = contentMethod ? contentMethod(params) : null
     const useCustom = contentMethod && !XEUtils.eqNull(customContent)
     const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
     const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
-    if (content && (enabled || useCustom || isCellOverflow)) {
+    if (content && (showAll || enabled || useCustom || isCellOverflow)) {
       Object.assign(tooltipStore, {
         row,
         column,
@@ -3855,14 +3879,12 @@ const Methods = {
     const { tableBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
     const rightBodyElem = rightBody ? rightBody.$el : null
-    const bodyTargetElem = rightBodyElem || tableBodyElem
     const tableFooterElem = tableFooter ? tableFooter.$el : null
-    const footerTargetElem = tableFooterElem || tableBodyElem
-    if (footerTargetElem && XEUtils.isNumber(scrollLeft)) {
-      footerTargetElem.scrollLeft = scrollLeft
+    if (XEUtils.isNumber(scrollLeft)) {
+      setScrollLeft(tableFooterElem || tableBodyElem, scrollLeft)
     }
-    if (bodyTargetElem && XEUtils.isNumber(scrollTop)) {
-      bodyTargetElem.scrollTop = scrollTop
+    if (XEUtils.isNumber(scrollTop)) {
+      setScrollTop(rightBodyElem || tableBodyElem, scrollTop)
     }
     if (this.scrollXLoad || this.scrollYLoad) {
       return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))

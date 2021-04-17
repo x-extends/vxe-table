@@ -11,7 +11,6 @@
     <vxe-table
       border
       resizable
-      row-key
       show-overflow
       highlight-hover-row
       ref="xTable"
@@ -113,7 +112,6 @@ export default {
         <vxe-table
           border
           resizable
-          row-key
           show-overflow
           highlight-hover-row
           ref="xTable"

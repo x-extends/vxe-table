@@ -428,7 +428,7 @@ export default {
     fintTable () {
       const { $children } = this.$parent
       const selfIndex = $children.indexOf(this)
-      return XEUtils.find($children, (comp, index) => comp && comp.refreshColumn && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
+      return XEUtils.find($children, (comp, index) => comp && comp.loadData && index > selfIndex && comp.$vnode.componentOptions.tag === 'vxe-table')
     },
     checkTable () {
       if (this.$xetable) {
@@ -445,7 +445,7 @@ export default {
       if (customStore.visible) {
         customStore.visible = false
         if (custom && !customStore.immediate) {
-          this.handleCustoms()
+          this.handleTableCustom()
         }
       }
     },
@@ -496,7 +496,7 @@ export default {
       })
       this.handleOptionCheck(column)
       if (this.custom && this.customOpts.immediate) {
-        this.handleCustoms()
+        this.handleTableCustom()
       }
       this.checkCustomStatus()
     },
@@ -511,11 +511,9 @@ export default {
         }
       }
     },
-    handleCustoms () {
+    handleTableCustom () {
       const { $xetable } = this
-      $xetable.saveCustomVisible()
-      $xetable.analyColumnWidth()
-      $xetable.refreshColumn()
+      $xetable.handleCustom()
     },
     checkCustomStatus () {
       const { $xetable, columns } = this
