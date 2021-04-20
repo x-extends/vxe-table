@@ -11,7 +11,7 @@
     <vxe-table
       border
       resizable
-      row-key
+      show-overflow
       highlight-hover-row
       ref="xTable"
       height="300"
@@ -151,7 +151,7 @@ export default defineComponent({
       demo1.showEdit = true
     }
 
-    const cellDBLClickEvent: VxeTableEvents.CellDBLClick = ({ row }) => {
+    const cellDBLClickEvent: VxeTableEvents.CellDblclick = ({ row }) => {
       editEvent(row)
     }
 
@@ -216,7 +216,7 @@ export default defineComponent({
         <vxe-table
           border
           resizable
-          row-key
+          show-overflow
           highlight-hover-row
           ref="xTable"
           height="300"
@@ -346,7 +346,7 @@ export default defineComponent({
               demo1.showEdit = true
             }
 
-            const cellDBLClickEvent: VxeTableEvents.CellDBLClick = ({ row }) => {
+            const cellDBLClickEvent: VxeTableEvents.CellDblclick = ({ row }) => {
               editEvent(row)
             }
 

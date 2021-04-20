@@ -10,9 +10,6 @@ export namespace VxeGlobalHooksHandles {
   }
 }
 
-/**
- * 全局格式化
- */
 export interface VxeGlobalHooks {
   mixin(options: {
     [type: string]: VxeGlobalHooksHandles.HookOptions;

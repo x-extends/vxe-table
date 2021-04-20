@@ -214,7 +214,7 @@ export default defineComponent({
               const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
               const thOns: any = {
                 onClick: (evnt: MouseEvent) => $xetable.triggerHeaderCellClickEvent(evnt, params),
-                onDblclick: (evnt: MouseEvent) => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
+                onDblclick: (evnt: MouseEvent) => $xetable.triggerHeaderCellDblclickEvent(evnt, params)
               }
               // 虚拟滚动不支持动态高度
               if (scrollXLoad && !hasEllipsis) {

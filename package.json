@@ -87,7 +87,7 @@
     "vxe-table-plugin-shortcut-key": "^3.0.1",
     "xe-ajax": "^4.0.5",
     "xe-clipboard": "^1.10.1",
-    "xe-utils": "^3.1.13",
+    "xe-utils": "^3.1.14",
     "xlsx": "^0.16.9"
   },
   "peerDependencies": {

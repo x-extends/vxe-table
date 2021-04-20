@@ -277,7 +277,7 @@ export namespace VxeGridDefines {
   export interface CheckboxRangeChangeEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeChangeEventParams { }
   export interface CheckboxRangeEndEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeEndEventParams { }
   export interface CellClickEventParams extends GridEventParams, VxeTableDefines.CellClickEventParams { }
-  export interface CellDBLClickEventParams extends GridEventParams, VxeTableDefines.CellDBLClickEventParams { }
+  export interface CellDblclickEventParams extends GridEventParams, VxeTableDefines.CellDblclickEventParams { }
   export interface CellMenuEventParams extends GridEventParams, VxeTableDefines.CellMenuEventParams { }
   export interface CellMouseenterEventParams extends GridEventParams, VxeTableDefines.CellMouseenterEventParams { }
   export interface CellMouseleaveEventParams extends GridEventParams, VxeTableDefines.CellMouseleaveEventParams { }
@@ -338,7 +338,7 @@ export interface VxeGridEventProps {
   onCheckboxRangeChange?: VxeGridEvents.CheckboxRangeChange;
   onCheckboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd;
   onCellClick?: VxeGridEvents.CellClick;
-  onCellDBLClick?: VxeGridEvents.CellDBLClick;
+  onCellDblclick?: VxeGridEvents.CellDblclick;
   onCellMenu?: VxeGridEvents.CellMenu;
   onCellMouseenter?: VxeGridEvents.CellMouseenter;
   onCellMouseleave?: VxeGridEvents.CellMouseleave;
@@ -385,7 +385,7 @@ export interface VxeGridListeners {
   checkboxRangeChange?: VxeGridEvents.CheckboxRangeChange;
   checkboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd;
   cellClick?: VxeGridEvents.CellClick
-  cellDBLClick?: VxeGridEvents.CellDBLClick;
+  cellDBLClick?: VxeGridEvents.CellDblclick;
   cellMenu?: VxeGridEvents.CellMenu;
   cellMouseenter?: VxeGridEvents.CellMouseenter;
   cellMouseleave?: VxeGridEvents.CellMouseleave;
@@ -431,7 +431,7 @@ export namespace VxeGridEvents {
   export type CheckboxRangeChange = (params: VxeGridDefines.CheckboxRangeChangeEventParams) => void;
   export type CheckboxRangeEnd = (params: VxeGridDefines.CheckboxRangeEndEventParams) => void;
   export type CellClick = (params: VxeGridDefines.CellClickEventParams) => void;
-  export type CellDBLClick = (params: VxeGridDefines.CellDBLClickEventParams) => void;
+  export type CellDblclick = (params: VxeGridDefines.CellDblclickEventParams) => void;
   export type CellMenu = (params: VxeGridDefines.CellMenuEventParams) => void;
   export type CellMouseenter = (params: VxeGridDefines.CellMouseenterEventParams) => void;
   export type CellMouseleave = (params: VxeGridDefines.CellMouseleaveEventParams) => void;

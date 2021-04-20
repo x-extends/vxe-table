@@ -182,7 +182,7 @@ export default defineComponent({
       }
       // 双击事件处理
       tdOns.onDblclick = (evnt: MouseEvent) => {
-        $xetable.triggerCellDBLClickEvent(evnt, params)
+        $xetable.triggerCellDblclickEvent(evnt, params)
       }
       // 合并行或列
       if (mergeList.length) {

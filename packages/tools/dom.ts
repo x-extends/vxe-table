@@ -77,6 +77,18 @@ export function getPaddingTopBottomSize (elem: HTMLElement) {
   return 0
 }
 
+export function setScrollTop (elem: HTMLElement | null, scrollTop: number) {
+  if (elem) {
+    elem.scrollTop = scrollTop
+  }
+}
+
+export function setScrollLeft (elem: HTMLElement | null, scrollLeft: number) {
+  if (elem) {
+    elem.scrollLeft = scrollLeft
+  }
+}
+
 export function updateCellTitle (overflowElem: any, column: any) {
   const content = column.type === 'html' ? overflowElem.innerText : overflowElem.textContent
   if (overflowElem.getAttribute('title') !== content) {

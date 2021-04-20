@@ -114,10 +114,8 @@ export default defineComponent({
       checkCustomStatus()
     }
 
-    const handleCustoms = () => {
-      $xetable.saveCustomVisible()
-      $xetable.analyColumnWidth()
-      $xetable.refreshColumn()
+    const handleTableCustom = () => {
+      $xetable.handleCustom()
     }
 
     const closeCustom = () => {
@@ -126,7 +124,7 @@ export default defineComponent({
       if (customStore.visible) {
         customStore.visible = false
         if (custom && !customOpts.immediate) {
-          handleCustoms()
+          handleTableCustom()
         }
       }
     }
@@ -196,7 +194,7 @@ export default defineComponent({
       })
       handleOptionCheck(column)
       if (props.custom && customOpts.immediate) {
-        handleCustoms()
+        handleTableCustom()
       }
       checkCustomStatus()
     }

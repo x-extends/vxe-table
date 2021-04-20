@@ -657,6 +657,7 @@ export interface TablePrivateMethods {
   analyColumnWidth(): void;
   checkSelectionStatus(): void;
   handleSelectRow(params: any, value: any): void;
+  handleCustom(): Promise<any>;
   preventEvent(evnt: any, type: any, args?: any, next?: any, end?: any): any;
   triggerHeaderHelpEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
   triggerHeaderTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
@@ -664,9 +665,9 @@ export interface TablePrivateMethods {
   triggerFooterTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderFooterParams): void;
   handleTargetLeaveEvent(evnt: MouseEvent): void;
   triggerHeaderCellClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
-  triggerHeaderCellDBLClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
+  triggerHeaderCellDblclickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void;
   triggerCellClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
-  triggerCellDBLClickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
+  triggerCellDblclickEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams): void;
   handleToggleCheckRowEvent(evnt: Event | null, params: { row: any }): void;
   triggerCheckRowEvent(evnt: Event, params: { row: any }, value: boolean): void;
   triggerCheckAllEvent(evnt: MouseEvent | null, value: boolean): void;
@@ -1464,7 +1465,7 @@ export namespace VxeTablePropTypes {
      */
     extendCalcMethod?(params: VxeTableProDefines.ExtendCellAreaCalcBaseParams): any[][];
     /**
-     * 只对 extendByCopy 启用后有效，重写单元格扩展区域赋值的方法
+     * 只对 extendByCopy | extendByCalc 启用后有效，重写单元格扩展区域赋值的方法
      * @param params
      */
     extendSetMethod?(params: {
@@ -1473,10 +1474,17 @@ export namespace VxeTablePropTypes {
       column: VxeTableDefines.ColumnInfo;
     } & VxeTableProDefines.ExtendCellAreaCalcBaseParams): void;
     /**
-     * 只对 extendByCopy 启用后有效，自定义单元格扩展区域赋值之前的方法，可以通过返回 false 阻止扩展行为
+     * 只对 extendByCopy | extendByCalc 启用后有效，自定义单元格扩展区域赋值之前的方法，可以通过返回 false 阻止扩展行为
      * @param params
      */
     beforeExtendSetMethod?(params: VxeTableProDefines.ExtendCellAreaCalcBaseParams): boolean;
+    /**
+     * 只对 extendByCopy | extendByCalc 启用后有效，自定义单元格扩展区域赋值之后的方法
+     * @param params
+     */
+     afterExtendSetMethod?(params: {
+      extendValues: any[][];
+     } & VxeTableProDefines.ExtendCellAreaCalcBaseParams): boolean;
   }
   export interface AreaOpts extends AreaConfig { }
 
@@ -2155,8 +2163,8 @@ export namespace VxeTableDefines {
   }
   export interface CellClickEventParams extends TableEventParams, CellClickParams { }
 
-  export interface CellDBLClickParams extends CellClickParams, CellClickParams { }
-  export interface CellDBLClickEventParams extends TableEventParams, CellDBLClickParams { }
+  export interface CellDblclickParams extends CellClickParams, CellClickParams { }
+  export interface CellDblclickEventParams extends TableEventParams, CellDblclickParams { }
 
   export interface CellMenuParams extends TableBaseCellParams { }
   export interface CellMenuEventParams extends TableEventParams, CellMenuParams { }
@@ -2269,7 +2277,7 @@ export interface VxeTableEventProps {
   onCheckboxRangeChange?: VxeTableEvents.CheckboxRangeChange;
   onCheckboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd;
   onCellClick?: VxeTableEvents.CellClick;
-  onCellDBLClick?: VxeTableEvents.CellDBLClick;
+  onCellDblclick?: VxeTableEvents.CellDblclick;
   onCellMenu?: VxeTableEvents.CellMenu;
   onCellMouseenter?: VxeTableEvents.CellMouseenter;
   onCellMouseleave?: VxeTableEvents.CellMouseleave;
@@ -2306,7 +2314,7 @@ export interface VxeTableListeners {
   checkboxRangeChange?: VxeTableEvents.CheckboxRangeChange;
   checkboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd;
   cellClick?: VxeTableEvents.CellClick;
-  cellDBLClick?: VxeTableEvents.CellDBLClick;
+  cellDBLClick?: VxeTableEvents.CellDblclick;
   cellMenu?: VxeTableEvents.CellMenu;
   cellMouseenter?: VxeTableEvents.CellMouseenter;
   cellMouseleave?: VxeTableEvents.CellMouseleave;
@@ -2343,7 +2351,7 @@ export namespace VxeTableEvents {
   export type CheckboxRangeChange = (params: VxeTableDefines.CheckboxRangeChangeEventParams) => void;
   export type CheckboxRangeEnd = (params: VxeTableDefines.CheckboxRangeEndEventParams) => void;
   export type CellClick = (params: VxeTableDefines.CellClickEventParams) => void;
-  export type CellDBLClick = (params: VxeTableDefines.CellDBLClickEventParams) => void;
+  export type CellDblclick = (params: VxeTableDefines.CellDblclickEventParams) => void;
   export type CellMenu = (params: VxeTableDefines.CellMenuEventParams) => void;
   export type CellMouseenter = (params: VxeTableDefines.CellMouseenterEventParams) => void;
   export type CellMouseleave = (params: VxeTableDefines.CellMouseleaveEventParams) => void;

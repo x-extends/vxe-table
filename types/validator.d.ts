@@ -49,11 +49,11 @@ declare module './table' {
       /**
        * 最小长度/值
        */
-      min?: number;
+      min?: number | string;
       /**
        * 最大长度/值
        */
-      max?: number;
+      max?: number | string;
       /**
        * 数据类型
        */

@@ -129,7 +129,8 @@ $iconWidth: 1.6em;
     &.type--datetime,
     &.type--week,
     &.type--month,
-    &.type--year {
+    &.type--year,
+    &.type--time {
       .vxe-input--inner {
         padding-right: #{$iconWidth + 0.2em};
       }
@@ -149,7 +150,8 @@ $iconWidth: 1.6em;
       &.type--datetime,
       &.type--week,
       &.type--month,
-      &.type--year {
+      &.type--year,
+      &.type--time {
         .vxe-input--inner {
           padding-right: #{$iconWidth * 2};
         }

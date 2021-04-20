@@ -145,9 +145,10 @@ export default defineComponent({
 
     const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
       const $table = xTable2.value
-      const column = $table.getColumns(index)
-      if (column) {
-        column.fixed = column.fixed ? null : type
+      const tableColumns = $table.getColumns()
+      const fxColumn = tableColumns[index]
+      if (fxColumn) {
+        fxColumn.fixed = fxColumn.fixed ? null : type
       }
       // 刷新列
       $table.refreshColumn()
@@ -276,9 +277,10 @@ export default defineComponent({
 
             const toggleFixedColumn = (index: number, type: 'left' | 'right') => {
               const $table = xTable2.value
-              const column = $table.getColumns(index)
-              if (column) {
-                column.fixed = column.fixed ? null : type
+              const tableColumns = $table.getColumns()
+              const fxColumn = tableColumns[index]
+              if (fxColumn) {
+                fxColumn.fixed = fxColumn.fixed ? null : type
               }
               // 刷新列
               $table.refreshColumn()

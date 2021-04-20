@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
 import XEUtils from 'xe-utils'
-import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize } from '../../tools/dom'
+import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { warnLog, errLog, getLog, getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText } from '../../tools/utils'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
 import { GlobalEvent } from '../../tools/event'
@@ -1918,13 +1918,126 @@ export default defineComponent({
       return result
     }
 
+    const parseColumns = () => {
+      const leftList: any[] = []
+      const centerList: any[] = []
+      const rightList: any[] = []
+      const { isGroup, columnStore } = reactData
+      const sXOpts = computeSXOpts.value
+      const { collectColumn, tableFullColumn, scrollXStore, fullColumnIdData } = internalData
+      // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
+      if (isGroup) {
+        const leftGroupList: any[] = []
+        const centerGroupList: any[] = []
+        const rightGroupList: any[] = []
+        XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+          const isColGroup = hasChildrenList(column)
+          // 如果是分组，必须按组设置固定列，不允许给子列设置固定
+          if (parent && parent.fixed) {
+            column.fixed = parent.fixed
+          }
+          if (parent && column.fixed !== parent.fixed) {
+            errLog('vxe.error.groupFixed')
+          }
+          if (isColGroup) {
+            column.visible = !!XEUtils.findTree(column.children, (subColumn) => hasChildrenList(subColumn) ? false : subColumn.visible)
+          } else if (column.visible) {
+            if (column.fixed === 'left') {
+              leftList.push(column)
+            } else if (column.fixed === 'right') {
+              rightList.push(column)
+            } else {
+              centerList.push(column)
+            }
+          }
+        })
+        collectColumn.forEach((column) => {
+          if (column.visible) {
+            if (column.fixed === 'left') {
+              leftGroupList.push(column)
+            } else if (column.fixed === 'right') {
+              rightGroupList.push(column)
+            } else {
+              centerGroupList.push(column)
+            }
+          }
+        })
+        reactData.tableGroupColumn = leftGroupList.concat(centerGroupList).concat(rightGroupList)
+      } else {
+        // 重新分配列
+        tableFullColumn.forEach((column) => {
+          if (column.visible) {
+            if (column.fixed === 'left') {
+              leftList.push(column)
+            } else if (column.fixed === 'right') {
+              rightList.push(column)
+            } else {
+              centerList.push(column)
+            }
+          }
+        })
+      }
+      const visibleColumn = leftList.concat(centerList).concat(rightList)
+      let scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+      reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
+      Object.assign(columnStore, { leftList, centerList, rightList })
+      if (scrollXLoad && isGroup) {
+        scrollXLoad = false
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          warnLog('vxe.error.scrollXNotGroup')
+        }
+      }
+      if (scrollXLoad) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (props.showHeader && !props.showHeaderOverflow) {
+            warnLog('vxe.error.reqProp', ['show-header-overflow'])
+          }
+          if (props.showFooter && !props.showFooterOverflow) {
+            warnLog('vxe.error.reqProp', ['show-footer-overflow'])
+          }
+          if (props.spanMethod) {
+            warnLog('vxe.error.scrollErrProp', ['span-method'])
+          }
+          if (props.footerSpanMethod) {
+            warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
+          }
+        }
+        const { visibleSize } = computeVirtualX()
+        scrollXStore.startIndex = 0
+        scrollXStore.endIndex = visibleSize
+        scrollXStore.visibleSize = visibleSize
+      }
+      // 如果列被显示/隐藏，则清除合并状态
+      // 如果列被设置为固定，则清除合并状态
+      if (visibleColumn.length !== internalData.visibleColumn.length || !internalData.visibleColumn.every((column, index) => column === visibleColumn[index])) {
+        tableMethods.clearMergeCells()
+        tableMethods.clearMergeFooterItems()
+      }
+      reactData.scrollXLoad = scrollXLoad
+      visibleColumn.forEach((column, _index) => {
+        const colid = column.id
+        const rest = fullColumnIdData[colid]
+        if (rest) {
+          rest._index = _index
+        }
+      })
+      internalData.visibleColumn = visibleColumn
+      handleTableColumn()
+      return tableMethods.updateFooter().then(() => {
+        return tableMethods.recalculate()
+      }).then(() => {
+        tablePrivateMethods.updateCellAreas()
+        return tableMethods.recalculate()
+      })
+    }
+
     const handleColumn = (collectColumn: any) => {
       internalData.collectColumn = collectColumn
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
       cacheColumnMap()
       restoreCustomStorage()
-      tableMethods.refreshColumn().then(() => {
+      parseColumns().then(() => {
         if (reactData.scrollXLoad) {
           loadScrollXData()
         }
@@ -1972,12 +2085,6 @@ export default defineComponent({
     const debounceScrollY = XEUtils.debounce(function (evnt: Event) {
       loadScrollYData(evnt)
     }, 20, { leading: false, trailing: true })
-
-    const handleCustom = () => {
-      tablePrivateMethods.saveCustomVisible()
-      tablePrivateMethods.analyColumnWidth()
-      return tableMethods.refreshColumn()
-    }
 
     let keyCtxTimeout: any
 
@@ -2499,7 +2606,7 @@ export default defineComponent({
         if (column) {
           column.visible = false
         }
-        return handleCustom()
+        return tablePrivateMethods.handleCustom()
       },
       /**
        * 显示指定列
@@ -2509,7 +2616,7 @@ export default defineComponent({
         if (column) {
           column.visible = true
         }
-        return handleCustom()
+        return tablePrivateMethods.handleCustom()
       },
       /**
        * 手动重置列的显示隐藏、列宽拖动的状态；
@@ -2532,123 +2639,17 @@ export default defineComponent({
         if (opts.resizable) {
           tablePrivateMethods.saveCustomResizable(true)
         }
-        return handleCustom()
+        return tablePrivateMethods.handleCustom()
       },
       /**
        * 刷新列信息
        * 将固定的列左边、右边分别靠边
        */
       refreshColumn () {
-        const leftList: any[] = []
-        const centerList: any[] = []
-        const rightList: any[] = []
-        const { isGroup, columnStore } = reactData
-        const sXOpts = computeSXOpts.value
-        const { collectColumn, tableFullColumn, scrollXStore, fullColumnIdData } = internalData
-        // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
-        if (isGroup) {
-          const leftGroupList: any[] = []
-          const centerGroupList: any[] = []
-          const rightGroupList: any[] = []
-          XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
-            const isColGroup = hasChildrenList(column)
-            // 如果是分组，必须按组设置固定列，不允许给子列设置固定
-            if (parent && parent.fixed) {
-              column.fixed = parent.fixed
-            }
-            if (parent && column.fixed !== parent.fixed) {
-              errLog('vxe.error.groupFixed')
-            }
-            if (isColGroup) {
-              column.visible = !!XEUtils.findTree(column.children, (subColumn) => hasChildrenList(subColumn) ? false : subColumn.visible)
-            } else if (column.visible) {
-              if (column.fixed === 'left') {
-                leftList.push(column)
-              } else if (column.fixed === 'right') {
-                rightList.push(column)
-              } else {
-                centerList.push(column)
-              }
-            }
-          })
-          collectColumn.forEach((column) => {
-            if (column.visible) {
-              if (column.fixed === 'left') {
-                leftGroupList.push(column)
-              } else if (column.fixed === 'right') {
-                rightGroupList.push(column)
-              } else {
-                centerGroupList.push(column)
-              }
-            }
-          })
-          reactData.tableGroupColumn = leftGroupList.concat(centerGroupList).concat(rightGroupList)
-        } else {
-          // 重新分配列
-          tableFullColumn.forEach((column) => {
-            if (column.visible) {
-              if (column.fixed === 'left') {
-                leftList.push(column)
-              } else if (column.fixed === 'right') {
-                rightList.push(column)
-              } else {
-                centerList.push(column)
-              }
-            }
-          })
-        }
-        const visibleColumn = leftList.concat(centerList).concat(rightList)
-        let scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
-        reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
-        Object.assign(columnStore, { leftList, centerList, rightList })
-        if (scrollXLoad && isGroup) {
-          scrollXLoad = false
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            warnLog('vxe.error.scrollXNotGroup')
-          }
-        }
-        if (scrollXLoad) {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            if (props.showHeader && !props.showHeaderOverflow) {
-              warnLog('vxe.error.reqProp', ['show-header-overflow'])
-            }
-            if (props.showFooter && !props.showFooterOverflow) {
-              warnLog('vxe.error.reqProp', ['show-footer-overflow'])
-            }
-            if (props.spanMethod) {
-              warnLog('vxe.error.scrollErrProp', ['span-method'])
-            }
-            if (props.footerSpanMethod) {
-              warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
-            }
-          }
-          const { visibleSize } = computeVirtualX()
-          scrollXStore.startIndex = 0
-          scrollXStore.endIndex = visibleSize
-          scrollXStore.visibleSize = visibleSize
-        }
-        // 如果列被显示/隐藏，则清除合并状态
-        // 如果列被设置为固定，则清除合并状态
-        if (visibleColumn.length !== internalData.visibleColumn.length || !internalData.visibleColumn.every((column, index) => column === visibleColumn[index])) {
-          tableMethods.clearMergeCells()
-          tableMethods.clearMergeFooterItems()
-        }
-        reactData.scrollXLoad = scrollXLoad
-        visibleColumn.forEach((column, _index) => {
-          const colid = column.id
-          const rest = fullColumnIdData[colid]
-          if (rest) {
-            rest._index = _index
-          }
-        })
-        internalData.visibleColumn = visibleColumn
-        handleTableColumn()
-        return nextTick().then(() => {
-          tableMethods.updateFooter()
-          return tableMethods.recalculate(true)
+        return parseColumns().then(() => {
+          return tableMethods.refreshScroll()
         }).then(() => {
-          tablePrivateMethods.updateCellAreas()
-          return nextTick().then(() => tableMethods.recalculate())
+          return tableMethods.recalculate()
         })
       },
       /**
@@ -2656,7 +2657,24 @@ export default defineComponent({
        */
       refreshScroll () {
         const { lastScrollLeft, lastScrollTop } = internalData
-        return restoreScroll(lastScrollLeft, lastScrollTop)
+        const tableBody = refTableBody.value
+        const tableFooter = refTableFooter.value
+        const leftBody = refTableLeftBody.value
+        const rightBody = refTableRightBody.value
+        const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+        const leftBodyElem = leftBody ? leftBody.$el as HTMLDivElement : null
+        const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
+        const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+        // 还原滚动条位置
+        if (lastScrollLeft || lastScrollTop) {
+          return restoreScroll(lastScrollLeft, lastScrollTop)
+        }
+        // 重置
+        setScrollTop(tableBodyElem, lastScrollTop)
+        setScrollTop(leftBodyElem, lastScrollTop)
+        setScrollTop(rightBodyElem, lastScrollTop)
+        setScrollLeft(tableFooterElem, lastScrollLeft)
+        return nextTick()
       },
       /**
        * 计算单元格列宽，动态分配可用剩余空间
@@ -3429,14 +3447,12 @@ export default defineComponent({
         const rightBody = refTableRightBody.value
         const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
         const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
-        const bodyTargetElem = rightBodyElem || tableBodyElem
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-        const footerTargetElem = tableFooterElem || tableBodyElem
-        if (footerTargetElem && XEUtils.isNumber(scrollLeft)) {
-          footerTargetElem.scrollLeft = scrollLeft
+        if (XEUtils.isNumber(scrollLeft)) {
+          setScrollLeft(tableFooterElem || tableBodyElem, scrollLeft)
         }
-        if (bodyTargetElem && XEUtils.isNumber(scrollTop)) {
-          bodyTargetElem.scrollTop = scrollTop
+        if (XEUtils.isNumber(scrollTop)) {
+          setScrollTop(rightBodyElem || tableBodyElem, scrollTop)
         }
         if (reactData.scrollXLoad || reactData.scrollYLoad) {
           return new Promise(resolve => setTimeout(() => resolve(nextTick()), 50))
@@ -4301,6 +4317,11 @@ export default defineComponent({
           localStorage.setItem(visibleStorageKey, XEUtils.toJSONString(columnVisibleStorageMap))
         }
       },
+      handleCustom () {
+        tablePrivateMethods.saveCustomVisible()
+        tablePrivateMethods.analyColumnWidth()
+        return tableMethods.refreshColumn()
+      },
       preventEvent (evnt, type, args, next, end) {
         const evntList = VXETable.interceptor.get(type)
         let rest
@@ -4555,7 +4576,7 @@ export default defineComponent({
           tableMethods.setCurrentColumn(column)
         }
       },
-      triggerHeaderCellDBLClickEvent (evnt, params) {
+      triggerHeaderCellDblclickEvent (evnt, params) {
         tableMethods.dispatchEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
       },
       /**
@@ -4634,7 +4655,7 @@ export default defineComponent({
        * 列双击点击事件
        * 如果是双击模式，则激活为编辑状态
        */
-      triggerCellDBLClickEvent (evnt, params) {
+      triggerCellDblclickEvent (evnt, params) {
         const { editConfig } = props
         const { editStore } = reactData
         const editOpts = computeEditOpts.value

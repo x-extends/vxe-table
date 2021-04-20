@@ -14,7 +14,7 @@
       :menu-config="{}"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
-      @header-cell-dblclick="headerCellDBLClickEvent"
+      @header-cell-dblclick="headerCellDblclickEvent"
       @header-cell-menu="headerCellContextMenuEvent"
       @cell-click="cellClickEvent"
       @cell-dblclick="cellDBLClickEvent"
@@ -22,7 +22,7 @@
       @cell-mouseleave="cellMouseleaveEvent"
       @cell-menu="cellContextMenuEvent"
       @footer-cell-click="footerCellClickEvent"
-      @footer-cell-dblclick="footerCellDBLClickEvent"
+      @footer-cell-dblclick="footerCellDblclickEvent"
       @footer-cell-menu="footerCellContextMenuEvent"
       @scroll="scrollEvent">
       <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
@@ -65,7 +65,7 @@ export default defineComponent({
       console.log(`表头单元格点击${column.title}`)
     }
 
-    const headerCellDBLClickEvent: VxeTableEvents.HeaderCellDblclick = ({ column }) => {
+    const headerCellDblclickEvent: VxeTableEvents.HeaderCellDblclick = ({ column }) => {
       console.log(`表头单元格双击${column.title}`)
     }
 
@@ -77,7 +77,7 @@ export default defineComponent({
       console.log(`单元格点击${column.title}`)
     }
 
-    const cellDBLClickEvent: VxeTableEvents.CellDBLClick = ({ column }) => {
+    const cellDBLClickEvent: VxeTableEvents.CellDblclick = ({ column }) => {
       console.log(`单元格双击${column.title}`)
     }
 
@@ -97,7 +97,7 @@ export default defineComponent({
       console.log(`表尾单元格点击${column.title}`)
     }
 
-    const footerCellDBLClickEvent: VxeTableEvents.FooterCellDblclick = ({ column }) => {
+    const footerCellDblclickEvent: VxeTableEvents.FooterCellDblclick = ({ column }) => {
       console.log(`表尾单元格双击${column.title}`)
     }
 
@@ -112,7 +112,7 @@ export default defineComponent({
     return {
       tableData,
       headerCellClickEvent,
-      headerCellDBLClickEvent,
+      headerCellDblclickEvent,
       headerCellContextMenuEvent,
       cellClickEvent,
       cellDBLClickEvent,
@@ -120,7 +120,7 @@ export default defineComponent({
       cellMouseleaveEvent,
       cellContextMenuEvent,
       footerCellClickEvent,
-      footerCellDBLClickEvent,
+      footerCellDblclickEvent,
       footerCellContextMenuEvent,
       scrollEvent,
       demoCodes: [
@@ -134,7 +134,7 @@ export default defineComponent({
           :menu-config="{}"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
-          @header-cell-dblclick="headerCellDBLClickEvent"
+          @header-cell-dblclick="headerCellDblclickEvent"
           @header-cell-menu="headerCellContextMenuEvent"
           @cell-click="cellClickEvent"
           @cell-dblclick="cellDBLClickEvent"
@@ -142,7 +142,7 @@ export default defineComponent({
           @cell-mouseleave="cellMouseleaveEvent"
           @cell-menu="cellContextMenuEvent"
           @footer-cell-click="footerCellClickEvent"
-          @footer-cell-dblclick="footerCellDBLClickEvent"
+          @footer-cell-dblclick="footerCellDblclickEvent"
           @footer-cell-menu="footerCellContextMenuEvent"
           @scroll="scrollEvent">
           <vxe-table-column type="seq" title="序号" width="60" fixed="left"></vxe-table-column>
@@ -176,7 +176,7 @@ export default defineComponent({
               console.log(\`表头单元格点击\${column.title}\`)
             }
 
-            const headerCellDBLClickEvent: VxeTableEvents.HeaderCellDblclick = ({ column }) => {
+            const headerCellDblclickEvent: VxeTableEvents.HeaderCellDblclick = ({ column }) => {
               console.log(\`表头单元格双击\${column.title}\`)
             }
 
@@ -188,7 +188,7 @@ export default defineComponent({
               console.log(\`单元格点击\${column.title}\`)
             }
 
-            const cellDBLClickEvent: VxeTableEvents.CellDBLClick = ({ column }) => {
+            const cellDBLClickEvent: VxeTableEvents.CellDblclick = ({ column }) => {
               console.log(\`单元格双击\${column.title}\`)
             }
 
@@ -208,7 +208,7 @@ export default defineComponent({
               console.log(\`表尾单元格点击\${column.title}\`)
             }
 
-            const footerCellDBLClickEvent: VxeTableEvents.FooterCellDblclick = ({ column }) => {
+            const footerCellDblclickEvent: VxeTableEvents.FooterCellDblclick = ({ column }) => {
               console.log(\`表尾单元格双击\${column.title}\`)
             }
 
@@ -223,7 +223,7 @@ export default defineComponent({
             return {
               tableData,
               headerCellClickEvent,
-              headerCellDBLClickEvent,
+              headerCellDblclickEvent,
               headerCellContextMenuEvent,
               cellClickEvent,
               cellDBLClickEvent,
@@ -231,7 +231,7 @@ export default defineComponent({
               cellMouseleaveEvent,
               cellContextMenuEvent,
               footerCellClickEvent,
-              footerCellDBLClickEvent,
+              footerCellDblclickEvent,
               footerCellContextMenuEvent,
               scrollEvent
             }

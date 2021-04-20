@@ -1,9 +1,10 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
+import { eqCellNull } from '../../table/src/util'
 import { getFuncText } from '../../tools/utils'
 import { scrollToView } from '../../tools/dom'
 
-import { VxeGlobalHooksHandles, TableValidatorMethods, TableValidatorPrivateMethods } from '../../../types/all'
+import { VxeGlobalHooksHandles, TableValidatorMethods, TableValidatorPrivateMethods, VxeTableDefines } from '../../../types/all'
 
 /**
  * 校验规则
@@ -225,6 +226,29 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       }
     }
 
+    const validErrorCellValue = (rule: VxeTableDefines.ValidatorRule, cellValue: any) => {
+      const { type, min, max, pattern } = rule
+      const isNumType = type === 'number'
+      const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+      // 判断数值
+      if (isNumType) {
+        return isNaN(cellValue)
+      }
+      // 如果存在 min，判断最小值
+      if (!XEUtils.eqNull(min)) {
+        return numVal < XEUtils.toNumber(min)
+      }
+      // 如果存在 max，判断最大值
+      if (!XEUtils.eqNull(max)) {
+        return numVal > XEUtils.toNumber(max)
+      }
+      // 如果存在 pattern，正则校验
+      if (pattern) {
+        return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(cellValue)
+      }
+      return false
+    }
+
     validatorPrivateMethods = {
       /**
        * 校验数据
@@ -240,7 +264,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
        *  validator=Function({ cellValue, rule, rules, row, column, rowIndex, columnIndex }) 自定义校验，接收一个 Promise
        *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
        */
-      validCellRules (type, row, column, val) {
+      validCellRules (validType, row, column, val) {
         const { editRules } = props
         const { property } = column
         const errorRules: any[] = []
@@ -250,7 +274,8 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           if (rules) {
             const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
             rules.forEach((rule: any) => {
-              if (type === 'all' || !rule.trigger || type === rule.trigger) {
+              const { type, trigger, required } = rule
+              if (validType === 'all' || !trigger || validType === trigger) {
                 if (XEUtils.isFunction(rule.validator)) {
                   const customValid = rule.validator({
                     cellValue,
@@ -265,27 +290,21 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                   if (customValid) {
                     if (XEUtils.isError(customValid)) {
                       validRuleErr = true
-                      errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
+                      errorRules.push(new Rule({ type: 'custom', trigger, message: customValid.message, rule: new Rule(rule) }))
                     } else if (customValid.catch) {
                       // 如果为异步校验（注：异步校验是并发无序的）
                       syncVailds.push(
                         customValid.catch((e: any) => {
                           validRuleErr = true
-                          errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
+                          errorRules.push(new Rule({ type: 'custom', trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
                         })
                       )
                     }
                   }
                 } else {
-                  const isNumType = rule.type === 'number'
-                  const isArrType = rule.type === 'array'
-                  const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
-                  if ((rule.required && (isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : (cellValue === null || cellValue === undefined || cellValue === ''))) ||
-                    (isNumType && isNaN(cellValue)) ||
-                    (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
-                    (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
-                    (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue))
-                  ) {
+                  const isArrType = type === 'array'
+                  const hasEmpty = isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqCellNull(cellValue)
+                  if (required ? (hasEmpty || validErrorCellValue(rule, cellValue)) : (!hasEmpty && validErrorCellValue(rule, cellValue))) {
                     validRuleErr = true
                     errorRules.push(new Rule(rule))
                   }
