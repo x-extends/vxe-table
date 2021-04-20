@@ -2162,7 +2162,8 @@ const Methods = {
     this.tooltipActive = false
     if (tooltipOpts.enterable) {
       this.tooltipTimeout = setTimeout(() => {
-        if (!this.$refs.tooltip.isHover) {
+        const tooltip = this.$refs.tooltip
+        if (tooltip && !tooltip.isHover) {
           this.closeTooltip()
         }
       }, tooltipOpts.leaveDelay)
@@ -2246,13 +2247,13 @@ const Methods = {
     params.cell = cell
     const { $refs, tooltipOpts, tooltipStore } = this
     const { column, row } = params
-    const { enabled, contentMethod } = tooltipOpts
+    const { showAll, enabled, contentMethod } = tooltipOpts
     const tooltip = $refs.tooltip
     const customContent = contentMethod ? contentMethod(params) : null
     const useCustom = contentMethod && !XEUtils.eqNull(customContent)
     const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
     const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
-    if (content && (enabled || useCustom || isCellOverflow)) {
+    if (content && (showAll || enabled || useCustom || isCellOverflow)) {
       Object.assign(tooltipStore, {
         row,
         column,

@@ -145,17 +145,17 @@
         cursor: move;
       }
     }
-  }
-
-  &.type--modal {
-    .vxe-modal--header {
-      padding: 0.6em 4.6em 0.6em 1em;
-    }
     .vxe-modal--body {
       overflow: auto;
       .vxe-modal--content {
         overflow: auto;
       }
+    }
+  }
+
+  &.type--modal {
+    .vxe-modal--header {
+      padding: 0.6em 4.6em 0.6em 1em;
     }
   }
   &.type--alert,
