@@ -32,7 +32,7 @@
       <vxe-input v-model="value401" placeholder="周选择" type="week" clearable></vxe-input>
       <vxe-input v-model="value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
       <vxe-input v-model="value403" placeholder="年选择" type="year" clearable></vxe-input>
-      <vxe-input v-model="value404" placeholder="时间选择" type="time"></vxe-input>
+      <vxe-input v-model="value404" placeholder="时间选择" type="time" clearable></vxe-input>
       <vxe-input v-model="value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
       <vxe-input v-model="value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
       <vxe-input v-model="value407" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>
@@ -229,7 +229,7 @@ export default {
           <vxe-input v-model="value401" placeholder="周选择" type="week" clearable></vxe-input>
           <vxe-input v-model="value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
           <vxe-input v-model="value403" placeholder="年选择" type="year" clearable></vxe-input>
-          <vxe-input v-model="value404" placeholder="时间选择" type="time"></vxe-input>
+          <vxe-input v-model="value404" placeholder="时间选择" type="time" clearable></vxe-input>
           <vxe-input v-model="value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
           <vxe-input v-model="value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
           <vxe-input v-model="value407" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>

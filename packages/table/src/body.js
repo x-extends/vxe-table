@@ -151,7 +151,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = evnt => {
-      $xetable.triggerCellDBLClickEvent(evnt, params)
+      $xetable.triggerCellDblclickEvent(evnt, params)
     }
   }
   // 合并行或列

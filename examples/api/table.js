@@ -2083,7 +2083,7 @@ const apis = [
           },
           {
             name: 'extendSetMethod',
-            desc: '只对 extendByCopy 启用后有效，重写单元格扩展区域赋值的方法',
+            desc: '只对 extendByCopy | extendByCalc 启用后有效，重写单元格扩展区域赋值的方法',
             version: 'pro',
             type: '({ cellValue, row, column, rows, cols, targetValues, targetRows, targetCols, extendRows, extendCols, direction }) => void',
             enum: '',
@@ -2092,9 +2092,18 @@ const apis = [
           },
           {
             name: 'beforeExtendSetMethod',
-            desc: '只对 extendByCopy 启用后有效，自定义单元格扩展区域赋值之前的方法，可以通过返回 false 阻止扩展行为',
+            desc: '只对 extendByCopy | extendByCalc 启用后有效，自定义单元格扩展区域赋值之前的方法，可以通过返回 false 阻止扩展区域赋值行为',
             version: 'pro',
             type: '({ rows, cols, targetValues, targetRows, targetCols, extendRows, extendCols, direction }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'afterExtendSetMethod',
+            desc: '只对 extendByCopy | extendByCalc 启用后有效，自定义单元格扩展区域赋值之后的方法',
+            version: 'pro',
+            type: '(params: { rows, cols, targetValues, targetRows, targetCols, extendValues, extendRows, extendCols, direction }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -3160,7 +3169,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, $event}',
+        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, cell, targetRows, targetCols, $event}',
         list: []
       },
       {
@@ -3169,7 +3178,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ rows, cols, $event}',
+        defVal: '{ rows, cols, targetRows, targetCols, returnValue, $event}',
         list: []
       }
     ]

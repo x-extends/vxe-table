@@ -125,7 +125,7 @@ export default {
               thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, params)
             }
             if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = evnt => $xetable.triggerHeaderCellDBLClickEvent(evnt, params)
+              thOns.dblclick = evnt => $xetable.triggerHeaderCellDblclickEvent(evnt, params)
             }
             // 按下事件处理
             if (mouseConfig) {

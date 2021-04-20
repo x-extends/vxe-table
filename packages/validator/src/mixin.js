@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import { eqCellNull } from '../../table/src/util'
 import { UtilTools, DomTools } from '../../tools'
 
 /**
@@ -26,6 +27,29 @@ class Rule {
   get message () {
     return UtilTools.getFuncText(this.$options.message)
   }
+}
+
+function validErrorCellValue (rule, cellValue) {
+  const { type, min, max, pattern } = rule
+  const isNumType = type === 'number'
+  const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+  // 判断数值
+  if (isNumType) {
+    return isNaN(cellValue)
+  }
+  // 如果存在 min，判断最小值
+  if (!XEUtils.eqNull(min)) {
+    return numVal < XEUtils.toNumber(min)
+  }
+  // 如果存在 max，判断最大值
+  if (!XEUtils.eqNull(max)) {
+    return numVal > XEUtils.toNumber(max)
+  }
+  // 如果存在 pattern，正则校验
+  if (pattern) {
+    return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(cellValue)
+  }
+  return false
 }
 
 export default {
@@ -195,7 +219,7 @@ export default {
      *  validator=Function({ cellValue, rule, rules, row, column, rowIndex, columnIndex }) 自定义校验，接收一个 Promise
      *  trigger=blur|change 触发方式（除非特殊场景，否则默认为空就行）
      */
-    validCellRules (type, row, column, val) {
+    validCellRules (validType, row, column, val) {
       const { editRules } = this
       const { property } = column
       const errorRules = []
@@ -205,7 +229,8 @@ export default {
         if (rules) {
           const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
           rules.forEach(rule => {
-            if (type === 'all' || !rule.trigger || type === rule.trigger) {
+            const { type, trigger, required } = rule
+            if (validType === 'all' || !trigger || validType === trigger) {
               if (XEUtils.isFunction(rule.validator)) {
                 const customValid = rule.validator({
                   cellValue,
@@ -220,27 +245,21 @@ export default {
                 if (customValid) {
                   if (XEUtils.isError(customValid)) {
                     this.validRuleErr = true
-                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
+                    errorRules.push(new Rule({ type: 'custom', trigger, message: customValid.message, rule: new Rule(rule) }))
                   } else if (customValid.catch) {
                     // 如果为异步校验（注：异步校验是并发无序的）
                     syncVailds.push(
                       customValid.catch(e => {
                         this.validRuleErr = true
-                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
                       })
                     )
                   }
                 }
               } else {
-                const isNumType = rule.type === 'number'
-                const isArrType = rule.type === 'array'
-                const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
-                if ((rule.required && (isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : (cellValue === null || cellValue === undefined || cellValue === ''))) ||
-                  (isNumType && isNaN(cellValue)) ||
-                  (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
-                  (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
-                  (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(cellValue))
-                ) {
+                const isArrType = type === 'array'
+                const hasEmpty = isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqCellNull(cellValue)
+                if (required ? (hasEmpty || validErrorCellValue(rule, cellValue)) : (!hasEmpty && validErrorCellValue(rule, cellValue))) {
                   this.validRuleErr = true
                   errorRules.push(new Rule(rule))
                 }

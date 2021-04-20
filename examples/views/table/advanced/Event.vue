@@ -11,7 +11,7 @@
       :menu-config="{}"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
-      @header-cell-dblclick="headerCellDBLClickEvent"
+      @header-cell-dblclick="headerCellDblclickEvent"
       @header-cell-menu="headerCellContextMenuEvent"
       @cell-click="cellClickEvent"
       @cell-dblclick="cellDBLClickEvent"
@@ -61,7 +61,7 @@ export default {
           :menu-config="{}"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
-          @header-cell-dblclick="headerCellDBLClickEvent"
+          @header-cell-dblclick="headerCellDblclickEvent"
           @header-cell-menu="headerCellContextMenuEvent"
           @cell-click="cellClickEvent"
           @cell-dblclick="cellDBLClickEvent"
@@ -97,7 +97,7 @@ export default {
             headerCellClickEvent ({ column }) {
               console.log(\`表头单元格点击\${column.title}\`)
             },
-            headerCellDBLClickEvent ({ column }) {
+            headerCellDblclickEvent ({ column }) {
               console.log(\`表头单元格双击\${column.title}\`)
             },
             headerCellContextMenuEvent ({ column }) {
@@ -131,7 +131,7 @@ export default {
     headerCellClickEvent ({ column }) {
       console.log(`表头单元格点击${column.title}`)
     },
-    headerCellDBLClickEvent ({ column }) {
+    headerCellDblclickEvent ({ column }) {
       console.log(`表头单元格双击${column.title}`)
     },
     headerCellContextMenuEvent ({ column }) {

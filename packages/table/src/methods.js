@@ -2992,7 +2992,7 @@ const Methods = {
     }
     return this.$nextTick()
   },
-  triggerHeaderCellDBLClickEvent (evnt, params) {
+  triggerHeaderCellDblclickEvent (evnt, params) {
     this.emitEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
   },
   getCurrentColumn () {
@@ -3107,7 +3107,7 @@ const Methods = {
    * 列双击点击事件
    * 如果是双击模式，则激活为编辑状态
    */
-  triggerCellDBLClickEvent (evnt, params) {
+  triggerCellDblclickEvent (evnt, params) {
     const { editStore, editConfig, editOpts } = this
     const { actived } = editStore
     const cell = evnt.currentTarget

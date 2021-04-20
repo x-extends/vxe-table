@@ -94,8 +94,8 @@
         <template #default>
           <vxe-table
             show-overflow
+            auto-resize
             height="300"
-            :sync-resize="value5"
             :data="tableData">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -110,8 +110,8 @@
         <template #default>
           <vxe-table
             show-overflow
+            auto-resize
             height="300"
-            :sync-resize="value6"
             :data="tableData">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -176,7 +176,6 @@
             show-overflow
             auto-resize
             height="auto"
-            :sync-resize="value10"
             :data="tableData">
             <vxe-table-column type="seq" width="60"></vxe-table-column>
             <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -199,7 +198,6 @@
             show-overflow
             auto-resize
             height="auto"
-            :sync-resize="value11"
             :pager-config="tablePage"
             :proxy-config="tableProxy"
             :columns="tableColumn"
@@ -404,8 +402,8 @@ export default {
             <template #default>
               <vxe-table
                 show-overflow
+                auto-resize
                 height="300"
-                :sync-resize="value5"
                 :data="tableData">
                 <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -420,8 +418,8 @@ export default {
             <template #default>
               <vxe-table
                 show-overflow
+                auto-resize
                 height="300"
-                :sync-resize="value6"
                 :data="tableData">
                 <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -486,7 +484,6 @@ export default {
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value10"
                 :data="tableData">
                 <vxe-table-column type="seq" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
@@ -509,7 +506,6 @@ export default {
                 show-overflow
                 auto-resize
                 height="auto"
-                :sync-resize="value11"
                 :pager-config="tablePage"
                 :proxy-config="tableProxy"
                 :columns="tableColumn"
