@@ -2,8 +2,9 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { clearTableAllStatus, handleFieldOrColumn, eqCellNull } from './util'
+import { UtilTools, DomTools } from '../../tools'
+import { clearTableAllStatus, handleFieldOrColumn } from './util'
+import { eqEmptyValue, isEnableConf } from '../../tools/src/utils'
 import { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
 
@@ -26,7 +27,7 @@ function getRowUniqueId () {
 function eqCellValue (row1, row2, field) {
   const val1 = XEUtils.get(row1, field)
   const val2 = XEUtils.get(row2, field)
-  if (eqCellNull(val1) && eqCellNull(val2)) {
+  if (eqEmptyValue(val1) && eqEmptyValue(val2)) {
     return true
   }
   if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {

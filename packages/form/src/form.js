@@ -4,6 +4,7 @@ import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
+import { eqEmptyValue } from '../../tools/src/utils'
 import { browse } from '../../tools/src/dom'
 
 class Rule {
@@ -24,6 +25,29 @@ class Rule {
   get message () {
     return UtilTools.getFuncText(this.$options.message)
   }
+}
+
+function validErrorRuleValue (rule, val) {
+  const { type, min, max, pattern } = rule
+  const isNumType = type === 'number'
+  const numVal = isNumType ? XEUtils.toNumber(val) : XEUtils.getSize(val)
+  // 判断数值
+  if (isNumType) {
+    return isNaN(val)
+  }
+  // 如果存在 min，判断最小值
+  if (!XEUtils.eqNull(min)) {
+    return numVal < XEUtils.toNumber(min)
+  }
+  // 如果存在 max，判断最大值
+  if (!XEUtils.eqNull(max)) {
+    return numVal > XEUtils.toNumber(max)
+  }
+  // 如果存在 pattern，正则校验
+  if (pattern) {
+    return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)
+  }
+  return false
 }
 
 function getResetValue (value, resetValue) {
@@ -499,22 +523,26 @@ export default {
             callback()
           }
         }).catch(() => {
-          this.showErrTime = setTimeout(() => {
-            itemList.forEach(item => {
-              if (item.errRule) {
-                item.showError = true
-              }
-            })
-          }, 20)
-          if (callback) {
-            callback(validRest)
-          }
-          if (validOpts.autoPos) {
-            this.$nextTick(() => {
-              this.handleFocus(validFields)
-            })
-          }
-          return Promise.reject(validRest)
+          return new Promise((resolve, reject) => {
+            this.showErrTime = setTimeout(() => {
+              itemList.forEach(item => {
+                if (item.errRule) {
+                  item.showError = true
+                }
+              })
+            }, 20)
+            if (validOpts.autoPos) {
+              this.$nextTick(() => {
+                this.handleFocus(validFields)
+              })
+            }
+            if (callback) {
+              callback(validRest)
+              resolve()
+            } else {
+              reject(validRest)
+            }
+          })
         })
       }
       if (callback) {
@@ -536,7 +564,7 @@ export default {
      *  validator=Function({ itemValue, rule, rules, data, property }) 自定义校验，接收一个 Promise
      *  trigger=change 触发方式
      */
-    validItemRules (type, property, val) {
+    validItemRules (validType, property, val) {
       const { data, rules: formRules } = this
       const errorRules = []
       const syncVailds = []
@@ -545,7 +573,8 @@ export default {
         if (rules) {
           const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
           rules.forEach(rule => {
-            if (type === 'all' || !rule.trigger || type === rule.trigger) {
+            const { type, trigger, required } = rule
+            if (validType === 'all' || !trigger || validType === rule.trigger) {
               if (XEUtils.isFunction(rule.validator)) {
                 const customValid = rule.validator({
                   itemValue,
@@ -557,29 +586,20 @@ export default {
                 })
                 if (customValid) {
                   if (XEUtils.isError(customValid)) {
-                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
+                    errorRules.push(new Rule({ type: 'custom', trigger, message: customValid.message, rule: new Rule(rule) }))
                   } else if (customValid.catch) {
                     // 如果为异步校验（注：异步校验是并发无序的）
                     syncVailds.push(
                       customValid.catch(e => {
-                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
                       })
                     )
                   }
                 }
               } else {
-                const isNumber = rule.type === 'number'
-                const numVal = isNumber ? XEUtils.toNumber(itemValue) : XEUtils.getSize(itemValue)
-                if (itemValue === null || itemValue === undefined || itemValue === '') {
-                  if (rule.required) {
-                    errorRules.push(new Rule(rule))
-                  }
-                } else if (
-                  (isNumber && isNaN(itemValue)) ||
-                  (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
-                  (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
-                  (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(itemValue))
-                ) {
+                const isArrType = type === 'array'
+                const hasEmpty = isArrType ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
+                if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
                   errorRules.push(new Rule(rule))
                 }
               }

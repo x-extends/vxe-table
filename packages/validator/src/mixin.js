@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
-import { eqCellNull } from '../../table/src/util'
 import { UtilTools, DomTools } from '../../tools'
+import { eqEmptyValue } from '../../tools/src/utils'
 
 /**
  * 校验规则
@@ -29,13 +29,13 @@ class Rule {
   }
 }
 
-function validErrorCellValue (rule, cellValue) {
+function validErrorRuleValue (rule, val) {
   const { type, min, max, pattern } = rule
   const isNumType = type === 'number'
-  const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+  const numVal = isNumType ? XEUtils.toNumber(val) : XEUtils.getSize(val)
   // 判断数值
   if (isNumType) {
-    return isNaN(cellValue)
+    return isNaN(val)
   }
   // 如果存在 min，判断最小值
   if (!XEUtils.eqNull(min)) {
@@ -47,7 +47,7 @@ function validErrorCellValue (rule, cellValue) {
   }
   // 如果存在 pattern，正则校验
   if (pattern) {
-    return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(cellValue)
+    return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)
   }
   return false
 }
@@ -258,8 +258,8 @@ export default {
                 }
               } else {
                 const isArrType = type === 'array'
-                const hasEmpty = isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqCellNull(cellValue)
-                if (required ? (hasEmpty || validErrorCellValue(rule, cellValue)) : (!hasEmpty && validErrorCellValue(rule, cellValue))) {
+                const hasEmpty = isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqEmptyValue(cellValue)
+                if (required ? (hasEmpty || validErrorRuleValue(rule, cellValue)) : (!hasEmpty && validErrorRuleValue(rule, cellValue))) {
                   this.validRuleErr = true
                   errorRules.push(new Rule(rule))
                 }

@@ -157,6 +157,13 @@ function outLog (type) {
   }
 }
 
+/**
+ * 判断值为：'' | null | undefined 时都属于空值
+ */
+export function eqEmptyValue (cellValue) {
+  return cellValue === '' || XEUtils.eqNull(cellValue)
+}
+
 export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),
