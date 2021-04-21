@@ -2269,7 +2269,7 @@ export default {
       setTimeout(() => this.defaultExpand(), 1500)
     },
     loadSponsors () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/sponsors').then(data => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/pub/sponsors').then(data => {
         this.sponsorList = data
       })
     },
@@ -2287,7 +2287,7 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ time, tags, versions }) => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ time, tags, versions }) => {
         const stableVersionList = []
         const betaVersionList = []
         if (versions) {
