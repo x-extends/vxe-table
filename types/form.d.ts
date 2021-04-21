@@ -194,7 +194,7 @@ export namespace VxeFormDefines {
     /**
      * 数据类型
      */
-    type?: 'number' | 'string';
+    type?: 'number' | 'string' | 'array';
     /**
      * 使用正则表达式校验
      */

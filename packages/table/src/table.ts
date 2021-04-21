@@ -1,7 +1,7 @@
 import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
-import { warnLog, errLog, getLog, getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText } from '../../tools/utils'
+import { warnLog, errLog, getLog, getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
 import { GlobalEvent } from '../../tools/event'
 import { useSize } from '../../hooks/size'
@@ -11,7 +11,7 @@ import Cell from './cell'
 import TableBodyComponent from './body'
 import tableProps from './props'
 import tableEmits from './emits'
-import { eqCellNull, getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn } from './util'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines } from '../../../types/all'
 
@@ -582,7 +582,7 @@ export default defineComponent({
     const eqCellValue = (row1: any, row2: any, field: string) => {
       const val1 = XEUtils.get(row1, field)
       const val2 = XEUtils.get(row2, field)
-      if (eqCellNull(val1) && eqCellNull(val2)) {
+      if (eqEmptyValue(val1) && eqEmptyValue(val2)) {
         return true
       }
       if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {

@@ -2,7 +2,7 @@ import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, Compu
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { errLog, getFuncText, isEnableConf } from '../../tools/utils'
+import { errLog, getFuncText, isEnableConf, eqEmptyValue } from '../../tools/utils'
 import { createItem } from './util'
 import { useSize } from '../../hooks/size'
 
@@ -28,6 +28,29 @@ class Rule {
   }
 
   [key: string]: any
+}
+
+const validErrorRuleValue = (rule: VxeFormDefines.FormRule, val: any) => {
+  const { type, min, max, pattern } = rule
+  const isNumType = type === 'number'
+  const numVal = isNumType ? XEUtils.toNumber(val) : XEUtils.getSize(val)
+  // 判断数值
+  if (isNumType) {
+    return isNaN(val)
+  }
+  // 如果存在 min，判断最小值
+  if (!XEUtils.eqNull(min)) {
+    return numVal < XEUtils.toNumber(min)
+  }
+  // 如果存在 max，判断最大值
+  if (!XEUtils.eqNull(max)) {
+    return numVal > XEUtils.toNumber(max)
+  }
+  // 如果存在 pattern，正则校验
+  if (pattern) {
+    return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)
+  }
+  return false
 }
 
 function getResetValue (value: any, resetValue: any) {
@@ -257,16 +280,17 @@ export default defineComponent({
      *  validator=Function({ itemValue, rule, rules, data, property }) 自定义校验，接收一个 Promise
      *  trigger=change 触发方式
      */
-    const validItemRules = (type: string, property: string, val?: any) => {
+    const validItemRules = (validType: string, property: string, val?: any) => {
       const { data, rules: formRules } = props
-      const errorRules: any[] = []
-      const syncVailds: any[] = []
+      const errorRules: Rule[] = []
+      const syncVailds: Promise<any>[] = []
       if (property && formRules) {
         const rules = XEUtils.get(formRules, property)
         if (rules) {
           const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
-          rules.forEach((rule: any) => {
-            if (type === 'all' || !rule.trigger || type === rule.trigger) {
+          rules.forEach((rule) => {
+            const { type, trigger, required } = rule
+            if (validType === 'all' || !trigger || validType === trigger) {
               if (XEUtils.isFunction(rule.validator)) {
                 const customValid = rule.validator({
                   itemValue,
@@ -278,29 +302,20 @@ export default defineComponent({
                 })
                 if (customValid) {
                   if (XEUtils.isError(customValid)) {
-                    errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: customValid.message, rule: new Rule(rule) }))
+                    errorRules.push(new Rule({ type: 'custom', trigger, message: customValid.message, rule: new Rule(rule) }))
                   } else if (customValid.catch) {
                     // 如果为异步校验（注：异步校验是并发无序的）
                     syncVailds.push(
                       customValid.catch((e: any) => {
-                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
                       })
                     )
                   }
                 }
               } else {
-                const isNumber = rule.type === 'number'
-                const numVal = isNumber ? XEUtils.toNumber(itemValue) : XEUtils.getSize(itemValue)
-                if (itemValue === null || itemValue === undefined || itemValue === '') {
-                  if (rule.required) {
-                    errorRules.push(new Rule(rule))
-                  }
-                } else if (
-                  (isNumber && isNaN(itemValue)) ||
-                  (!isNaN(rule.min) && numVal < parseFloat(rule.min)) ||
-                  (!isNaN(rule.max) && numVal > parseFloat(rule.max)) ||
-                  (rule.pattern && !(rule.pattern.test ? rule.pattern : new RegExp(rule.pattern)).test(itemValue))
-                ) {
+                const isArrType = type === 'array'
+                const hasEmpty = isArrType ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
+                if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
                   errorRules.push(new Rule(rule))
                 }
               }
@@ -352,22 +367,26 @@ export default defineComponent({
             callback()
           }
         }).catch(() => {
-          showErrTime = window.setTimeout(() => {
-            itemList.forEach((item) => {
-              if (item.errRule) {
-                item.showError = true
-              }
-            })
-          }, 20)
-          if (callback) {
-            callback(validRest)
-          }
-          if (validOpts.autoPos !== false) {
-            nextTick(() => {
-              handleFocus(validFields)
-            })
-          }
-          return Promise.reject(validRest)
+          return new Promise<void>((resolve, reject) => {
+            showErrTime = window.setTimeout(() => {
+              itemList.forEach((item) => {
+                if (item.errRule) {
+                  item.showError = true
+                }
+              })
+            }, 20)
+            if (validOpts.autoPos !== false) {
+              nextTick(() => {
+                handleFocus(validFields)
+              })
+            }
+            if (callback) {
+              callback(validRest)
+              resolve()
+            } else {
+              reject(validRest)
+            }
+          })
         })
       }
       if (callback) {

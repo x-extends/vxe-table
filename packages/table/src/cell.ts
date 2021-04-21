@@ -2,9 +2,9 @@ import { h, VNode } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { getFuncText, isEnableConf, formatText } from '../../tools/utils'
+import { getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
 import { updateCellTitle } from '../../tools/dom'
-import { createColumn, eqCellNull } from './util'
+import { createColumn } from './util'
 
 import { VxeColumnProps, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
 
@@ -189,7 +189,7 @@ export const Cell = {
     return [
       h('span', {
         class: 'vxe-cell--label'
-      }, editRender && eqCellNull(cellValue) ? [
+      }, editRender && eqEmptyValue(cellValue) ? [
         // 如果设置占位符
         h('span', {
           class: 'vxe-cell--placeholder'

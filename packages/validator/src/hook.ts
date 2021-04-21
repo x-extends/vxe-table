@@ -1,7 +1,6 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { eqCellNull } from '../../table/src/util'
-import { getFuncText } from '../../tools/utils'
+import { getFuncText, eqEmptyValue } from '../../tools/utils'
 import { scrollToView } from '../../tools/dom'
 
 import { VxeGlobalHooksHandles, TableValidatorMethods, TableValidatorPrivateMethods, VxeTableDefines } from '../../../types/all'
@@ -153,12 +152,12 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             }
           })
         }).catch(firstErrParams => {
-          return new Promise((resolve, reject) => {
+          return new Promise<void>((resolve, reject) => {
             const finish = () => {
               nextTick(() => {
                 if (cb) {
                   cb(validRest)
-                  resolve(null)
+                  resolve()
                 } else {
                   reject(validRest)
                 }
@@ -226,13 +225,13 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       }
     }
 
-    const validErrorCellValue = (rule: VxeTableDefines.ValidatorRule, cellValue: any) => {
+    const validErrorRuleValue = (rule: VxeTableDefines.ValidatorRule, val: any) => {
       const { type, min, max, pattern } = rule
       const isNumType = type === 'number'
-      const numVal = isNumType ? XEUtils.toNumber(cellValue) : XEUtils.getSize(cellValue)
+      const numVal = isNumType ? XEUtils.toNumber(val) : XEUtils.getSize(val)
       // 判断数值
       if (isNumType) {
-        return isNaN(cellValue)
+        return isNaN(val)
       }
       // 如果存在 min，判断最小值
       if (!XEUtils.eqNull(min)) {
@@ -244,7 +243,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       }
       // 如果存在 pattern，正则校验
       if (pattern) {
-        return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(cellValue)
+        return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)
       }
       return false
     }
@@ -267,8 +266,8 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       validCellRules (validType, row, column, val) {
         const { editRules } = props
         const { property } = column
-        const errorRules: any[] = []
-        const syncVailds: any[] = []
+        const errorRules: Rule[] = []
+        const syncVailds: Promise<any>[] = []
         if (property && editRules) {
           const rules = XEUtils.get(editRules, property)
           if (rules) {
@@ -303,8 +302,8 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                   }
                 } else {
                   const isArrType = type === 'array'
-                  const hasEmpty = isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqCellNull(cellValue)
-                  if (required ? (hasEmpty || validErrorCellValue(rule, cellValue)) : (!hasEmpty && validErrorCellValue(rule, cellValue))) {
+                  const hasEmpty = isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqEmptyValue(cellValue)
+                  if (required ? (hasEmpty || validErrorRuleValue(rule, cellValue)) : (!hasEmpty && validErrorRuleValue(rule, cellValue))) {
                     validRuleErr = true
                     errorRules.push(new Rule(rule))
                   }

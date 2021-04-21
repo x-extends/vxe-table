@@ -24,13 +24,6 @@ export function getRowid ($xetable: VxeTableConstructor, row: any) {
   return rowId ? encodeURIComponent(rowId) : ''
 }
 
-/**
- * 单元格的值为：'' | null | undefined 时都属于空值
- */
-export function eqCellNull (cellValue: any) {
-  return cellValue === '' || XEUtils.eqNull(cellValue)
-}
-
 export interface XEColumnInstance {
   column: ColumnInfo;
 }

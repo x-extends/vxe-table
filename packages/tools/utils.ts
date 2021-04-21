@@ -59,3 +59,10 @@ export function getFuncText (content?: string | number | boolean | null) {
 export function formatText (value: any, placeholder?: any) {
   return '' + (isEmptyValue(value) ? (placeholder ? GlobalConfig.emptyCell : '') : value)
 }
+
+/**
+ * 判断值为：'' | null | undefined 时都属于空值
+ */
+export function eqEmptyValue (cellValue: any) {
+  return cellValue === '' || XEUtils.eqNull(cellValue)
+}
