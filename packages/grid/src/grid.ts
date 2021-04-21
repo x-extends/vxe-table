@@ -523,6 +523,7 @@ export default defineComponent({
       const tableProps = computeTableProps.value
       const proxyOpts = computeProxyOpts.value
       const tableOns = Object.assign({}, tableCompEvents)
+      const emptySlot = slots.empty
       if (proxyConfig) {
         if (proxyOpts.sort) {
           tableOns.onSortChange = sortChangeEvent
@@ -536,9 +537,9 @@ export default defineComponent({
           ref: refTable,
           ...tableProps,
           ...tableOns
-        }, {
-          empty: () => slots.empty ? slots.empty({}) : []
-        })
+        }, emptySlot ? {
+          empty: () => emptySlot({})
+        } : {})
       ]
     }
 
