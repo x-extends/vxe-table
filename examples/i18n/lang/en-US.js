@@ -320,7 +320,7 @@ export default {
         v2: '2.0+ (vue 2.6+ Old) ~ 2021-12 Stop',
         v3: '3.0+ (vue 2.6+ Stable)',
         v3d5: '3.5+ (vue 2.6+ Sticky)',
-        v4: '4.0+ (vue 3.0+ next)',
+        v4: '4.0+ (vue 3.0+ Latest)',
         v4d5: '4.5+ (vue 3.0+ Sticky)',
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',
@@ -660,7 +660,8 @@ export default {
           type: 'Message type',
           status: 'Only valid for type=alert | confirm | message, message status',
           iconStatus: 'Custom status icon',
-          message: 'Displayed text',
+          message: 'Please use the "content"',
+          content: 'Displayed text',
           showHeader: 'Whether to display the head',
           showFooter: 'Whether to show bottom',
           lockView: 'Whether or not the page is locked does not allow any action outside the modal',

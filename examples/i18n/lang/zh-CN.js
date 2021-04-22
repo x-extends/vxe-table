@@ -319,7 +319,7 @@ export default {
         v2: '2.0+ (vue 2.6+ 旧版本) ~ 2021-12 停止更新',
         v3: '3.0+ (vue 2.6+ 稳定版)',
         v3d5: '3.5+ (vue 2.6+ 粘性表格)',
-        v4: '4.0+ (vue 3.0+ next)',
+        v4: '4.0+ (vue 3.0+ 最新版)',
         v4d5: '4.5+ (vue 3.0+ 粘性表格)',
         plan: {
           v1: 'v1 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能',
@@ -659,7 +659,8 @@ export default {
           type: '窗口类型',
           status: '只对 type=alert | confirm | message 有效，消息状态',
           iconStatus: '自定义状态图标',
-          message: '显示的文本（支持开启国际化）',
+          message: '请使用 content',
+          content: '显示的文本（支持开启国际化）',
           showHeader: '是否显示头部',
           showFooter: '是否显示底部',
           lockView: '是否锁住页面，不允许窗口之外的任何操作',
