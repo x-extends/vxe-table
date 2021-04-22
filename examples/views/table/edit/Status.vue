@@ -144,13 +144,13 @@ export default {
                 this.$XModal.message({ content: '数据未改动！', status: 'info' })
               }
             },
-            saveEvent2 (row, field) {
+            saveEvent2 (row) {
               const $table = this.$refs.xTable
               if ($table.isUpdateByRow(row)) {
                 row.loading = true
                 this.submitSave(row).then(data => {
                   // 局部保存，并更新本地数据
-                  $table.reloadRow(row, data, field)
+                  $table.reloadRow(row, data)
                   this.$XModal.message({ content: '保存成功！', status: 'success' })
                   row.loading = false
                 })
@@ -214,13 +214,13 @@ export default {
         this.$XModal.message({ content: '数据未改动！', status: 'info' })
       }
     },
-    saveEvent2 (row, field) {
+    saveEvent2 (row) {
       const $table = this.$refs.xTable
       if ($table.isUpdateByRow(row)) {
         row.loading = true
         this.submitSave(row).then(data => {
           // 局部保存，并更新本地数据
-          $table.reloadRow(row, data, field)
+          $table.reloadRow(row, data)
           this.$XModal.message({ content: '保存成功！', status: 'success' })
           row.loading = false
         })

@@ -19,6 +19,10 @@
   * 模組化表格、按需加載、擴展介面
   * 為單行編輯表格而設計，支持增删改查及更多擴展，强大的功能的同時兼具效能
 
+## QQ 交流群
+
+![qq](https://gitee.com/xuliangzhan_admin/vxe-table/raw/master/public/static/donation/qq.png)
+
 ## 瀏覽器支持
 
 ![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
