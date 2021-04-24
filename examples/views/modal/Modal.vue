@@ -6,9 +6,9 @@
       轻提示框、提示框、弹出窗口，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'modal'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数<br>
       对于某些场景如果需要动态创建的窗口，可以通过以下 API 全局调用：<br>
       open(options: ModalOptions) 打开窗口<br>
-      message(message: string | ModalOptions, title?: string, options?: ModalOptions) 打开消息框<br>
-      alert(message: string | ModalOptions, title?: string, options?: ModalOptions) 打开提示框<br>
-      confirm(message: string | ModalOptions, title?: string, options?: ModalOptions) 打开确认框<br>
+      message(content: string | ModalOptions, title?: string, options?: ModalOptions) 打开消息框<br>
+      alert(content: string | ModalOptions, title?: string, options?: ModalOptions) 打开提示框<br>
+      confirm(content: string | ModalOptions, title?: string, options?: ModalOptions) 打开确认框<br>
       close(id?: string) 手动关闭当前活动的窗口<br>
       给 vue 实例挂载属性：<br>
       Vue.prototype.$XModal = VXETable.modal
