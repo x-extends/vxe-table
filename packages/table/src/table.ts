@@ -732,7 +732,7 @@ export default defineComponent({
             rowspan = XEUtils.toNumber(rowspan) || 1
             colspan = XEUtils.toNumber(colspan) || 1
             if (rowspan > 1 || colspan > 1) {
-              const mcIndex = XEUtils.findIndexOf(mList, item => item._row === row && item._col === col)
+              const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && (item._col.id === col || item._col.id === col.id))
               const mergeItem = mList[mcIndex]
               if (mergeItem) {
                 mergeItem.rowspan = rowspan
@@ -741,7 +741,7 @@ export default defineComponent({
                 mergeItem._colspan = colspan
               } else {
                 const mergeRowIndex = rowList ? $xetable.findRowIndexOf(rowList, row) : row
-                const mergeColIndex = visibleColumn.indexOf(col)
+                const mergeColIndex = tableMethods.getVTColumnIndex(col)
                 mList.push({
                   row: mergeRowIndex,
                   col: mergeColIndex,
@@ -778,7 +778,7 @@ export default defineComponent({
           if (XEUtils.isNumber(col)) {
             col = visibleColumn[col]
           }
-          const mcIndex = XEUtils.findIndexOf(mList, item => item._row === row && item._col === col)
+          const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && (item._col.id === col || item._col.id === col.id))
           if (mcIndex > -1) {
             const rItems = mList.splice(mcIndex, 1)
             rest.push(rItems[0])

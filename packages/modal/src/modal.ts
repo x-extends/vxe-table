@@ -39,6 +39,7 @@ export default defineComponent({
     showHeader: { type: Boolean as PropType<VxeModalPropTypes.ShowHeader>, default: () => GlobalConfig.modal.showHeader },
     showFooter: { type: Boolean as PropType<VxeModalPropTypes.ShowFooter>, default: () => GlobalConfig.modal.showFooter },
     showZoom: Boolean as PropType<VxeModalPropTypes.ShowZoom>,
+    showClose: { type: Boolean as PropType<VxeModalPropTypes.ShowClose>, default: () => GlobalConfig.modal.showClose },
     dblclickZoom: { type: Boolean as PropType<VxeModalPropTypes.DblclickZoom>, default: () => GlobalConfig.modal.dblclickZoom },
     width: [Number, String] as PropType<VxeModalPropTypes.Width>,
     height: [Number, String] as PropType<VxeModalPropTypes.Height>,
@@ -669,7 +670,7 @@ export default defineComponent({
     }
 
     const renderTitles = () => {
-      const { slots: propSlots = {}, showZoom, title } = props
+      const { slots: propSlots = {}, showClose, showZoom, title } = props
       const { zoomLocat } = reactData
       const titleSlot = slots.title || propSlots.title
       const titVNs: VNode[] = titleSlot ? titleSlot({ $modal: $xemodal }) as VNode[] : [
@@ -686,13 +687,15 @@ export default defineComponent({
           })
         )
       }
-      titVNs.push(
-        h('i', {
-          class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
-          title: GlobalConfig.i18n('vxe.modal.close'),
-          onClick: closeEvent
-        })
-      )
+      if (showClose) {
+        titVNs.push(
+          h('i', {
+            class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
+            title: GlobalConfig.i18n('vxe.modal.close'),
+            onClick: closeEvent
+          })
+        )
+      }
       return titVNs
     }
 

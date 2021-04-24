@@ -288,7 +288,26 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'prefix',
+        desc: '前缀图标模板',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'suffix',
+        desc: '后缀图标模板',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',

@@ -120,13 +120,13 @@ export default defineComponent({
       }
     }
 
-    const saveEvent2 = async (row: any, field?: string) => {
+    const saveEvent2 = async (row: any) => {
       const $table = xTable.value
       if ($table.isUpdateByRow(row)) {
         row.loading = true
         const data = await submitSave(row)
         // 局部保存，并更新本地数据
-        await $table.reloadRow(row, data, field)
+        await $table.reloadRow(row, data)
         VXETable.modal.message({ content: '保存成功！', status: 'success' })
         row.loading = false
       } else {
@@ -268,13 +268,13 @@ export default defineComponent({
               }
             }
 
-            const saveEvent2 = async (row: any, field?: string) => {
+            const saveEvent2 = async (row: any) => {
               const $table = xTable.value
               if ($table.isUpdateByRow(row)) {
                 row.loading = true
                 const data = await submitSave(row)
                 // 局部保存，并更新本地数据
-                await $table.reloadRow(row, data, field)
+                await $table.reloadRow(row, data)
                 VXETable.modal.message({ content: '保存成功！', status: 'success' })
                 row.loading = false
               } else {

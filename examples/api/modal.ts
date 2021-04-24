@@ -198,6 +198,15 @@ const apis = [
         list: []
       },
       {
+        name: 'show-close',
+        desc: '是否显示关闭按钮',
+        version: '4.0.14',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'resize',
         descKey: 'app.api.modal.desc.resize',
         version: '',

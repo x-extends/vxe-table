@@ -1896,12 +1896,13 @@ export default defineComponent({
 
     const rendePrefixIcon = () => {
       const { prefixIcon } = props
+      const prefixSlot = slots.prefix
       const icons = []
-      if (slots.prefix) {
+      if (prefixSlot) {
         icons.push(
           h('span', {
             class: 'vxe-input--prefix-icon'
-          }, slots.prefix({}))
+          }, prefixSlot({}))
         )
       } else if (prefixIcon) {
         icons.push(
@@ -1919,13 +1920,14 @@ export default defineComponent({
     const renderSuffixIcon = () => {
       const { disabled, suffixIcon } = props
       const { inputValue } = reactData
+      const suffixSlot = slots.suffix
       const isClearable = computeIsClearable.value
       const icons = []
-      if (slots.suffix) {
+      if (suffixSlot) {
         icons.push(
           h('span', {
             class: 'vxe-input--suffix-icon'
-          }, slots.suffix({}))
+          }, suffixSlot({}))
         )
       } else if (suffixIcon) {
         icons.push(

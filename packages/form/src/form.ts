@@ -48,7 +48,7 @@ const validErrorRuleValue = (rule: VxeFormDefines.FormRule, val: any) => {
   }
   // 如果存在 pattern，正则校验
   if (pattern) {
-    return (XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)
+    return !(XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)
   }
   return false
 }

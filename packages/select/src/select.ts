@@ -733,6 +733,7 @@ export default defineComponent({
       const { inited, isActivated, visiblePanel } = reactData
       const vSize = computeSize.value
       const selectLabel = computeSelectLabel.value
+      const prefixSlot = slots.prefix
       return h('div', {
         ref: refElem,
         class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: $xeselect }) : className) : '', {
@@ -761,7 +762,9 @@ export default defineComponent({
           onFocus: focusEvent,
           onBlur: blurEvent,
           onSuffixClick: togglePanelEvent
-        }),
+        }, prefixSlot ? {
+          prefix: () => prefixSlot({})
+        } : {}),
         h(Teleport, {
           to: 'body',
           disabled: transfer ? !inited : true
