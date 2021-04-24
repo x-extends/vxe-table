@@ -178,7 +178,17 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'prefix',
+        desc: '前缀图标模板',
+        version: '3.2.20',
+        type: '',
+        enum: '',
+        defVal: '',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',

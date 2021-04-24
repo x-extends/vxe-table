@@ -325,7 +325,8 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { vSize, className, inited, isActivated, disabled, visiblePanel } = this
+    const { $scopedSlots, vSize, className, inited, isActivated, disabled, visiblePanel } = this
+    const prefixSlot = $scopedSlots.prefix
     return h('div', {
       class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
@@ -356,7 +357,10 @@ export default {
           focus: this.focusEvent,
           blur: this.blurEvent,
           'suffix-click': this.togglePanelEvent
-        }
+        },
+        scopedSlots: prefixSlot ? {
+          prefix: () => prefixSlot({})
+        } : {}
       }),
       h('div', {
         ref: 'panel',

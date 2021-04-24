@@ -35,6 +35,7 @@ export default {
     showHeader: { type: Boolean, default: () => GlobalConfig.modal.showHeader },
     showFooter: { type: Boolean, default: () => GlobalConfig.modal.showFooter },
     showZoom: { type: Boolean, default: null },
+    showClose: { type: Boolean, default: () => GlobalConfig.modal.showClose },
     dblclickZoom: { type: Boolean, default: () => GlobalConfig.modal.dblclickZoom },
     width: [Number, String],
     height: [Number, String],
@@ -114,7 +115,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, slots = {}, inited, vSize, className, type, resize, showZoom, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
     const content = this.content || this.message
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
@@ -170,8 +171,8 @@ export default {
             on: {
               click: this.toggleZoomEvent
             }
-          }) : null,
-          h('i', {
+          }) : _e(),
+          showClose ? h('i', {
             class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
             attrs: {
               title: GlobalConfig.i18n('vxe.modal.close')
@@ -179,7 +180,7 @@ export default {
             on: {
               click: this.closeEvent
             }
-          })
+          }) : _e()
         ]) : null,
         h('div', {
           class: 'vxe-modal--body'

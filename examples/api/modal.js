@@ -207,6 +207,15 @@ const apis = [
         list: []
       },
       {
+        name: 'show-close',
+        desc: '是否显示关闭按钮',
+        version: '3.2.20',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
         name: 'duration',
         descKey: 'app.api.modal.desc.duration',
         version: '',
