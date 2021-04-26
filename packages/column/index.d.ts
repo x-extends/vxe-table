@@ -1,4 +1,4 @@
-import { Colgroup } from '../../types/colgroup'
+import { Column } from '../../types/column'
 
-export * from '../../types/colgroup'
-export default Colgroup
+export * from '../../types/column'
+export default Column
