@@ -589,7 +589,7 @@ export default defineComponent({
 
     const renderVN = () => {
       let { fixedColumn, fixedType, tableColumn } = props
-      const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig, emptyRender } = tableProps
+      const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig } = tableProps
       const { tableData, mergeList, scrollXLoad, scrollYLoad, isAllOverflow } = tableReactData
       const { slots } = tableContext
       const sYOpts = computeSYOpts.value
@@ -606,9 +606,10 @@ export default defineComponent({
       if (slots.empty) {
         emptyContent = $xetable.callSlot(slots.empty, { $table: $xetable })
       } else {
-        const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
-        if (compConf && compConf.renderEmpty) {
-          emptyContent = compConf.renderEmpty(emptyOpts, { $table: $xetable })
+        const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
+        const renderEmpty = compConf ? compConf.renderEmpty : null
+        if (renderEmpty) {
+          emptyContent = renderEmpty(emptyOpts, { $table: $xetable })
         } else {
           emptyContent = tableProps.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
         }

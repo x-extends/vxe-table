@@ -14,8 +14,11 @@ const eventStore: {
 function triggerEvent (evnt: Event) {
   const isWheel = evnt.type === wheelName
   eventStore.forEach(({ type, cb }) => {
-    if (type === evnt.type || (isWheel && type === 'mousewheel')) {
-      cb(evnt)
+    // 如果被取消冒泡，不再执行
+    if (!evnt.cancelBubble) {
+      if (type === evnt.type || (isWheel && type === 'mousewheel')) {
+        cb(evnt)
+      }
     }
   })
 }

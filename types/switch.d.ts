@@ -73,10 +73,26 @@ export namespace VxeSwitchDefines {
   interface SwitchEventParams extends VxeEvent {
     $switch: VxeSwitchConstructor;
   }
+
+  export interface ChangeEventParams extends SwitchEventParams { }
+  export interface FocusEventParams extends SwitchEventParams { }
+  export interface BlurEventParams extends SwitchEventParams { }
 }
 
-export type VxeSwitchEventProps = {}
+export type VxeSwitchEventProps = {
+  onChange?: VxeSwitchEvents.Change;
+  onFocus?: VxeSwitchEvents.Focus;
+  onBlur?: VxeSwitchEvents.Blur;
+}
 
-export interface VxeSwitchListeners { }
+export interface VxeSwitchListeners {
+  change?: VxeSwitchEvents.Change;
+  focus?: VxeSwitchEvents.Focus;
+  blur?: VxeSwitchEvents.Blur;
+}
 
-export namespace VxeSwitchEvents { }
+export namespace VxeSwitchEvents {
+  export type Change = (params: VxeSwitchDefines.ChangeEventParams) => void;
+  export type Focus = (params: VxeSwitchDefines.FocusEventParams) => void;
+  export type Blur = (params: VxeSwitchDefines.BlurEventParams) => void;
+}

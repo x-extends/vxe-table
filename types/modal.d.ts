@@ -101,7 +101,7 @@ export type ModalPosition = {
 /**
  * 窗口事件类型
  */
-export type ModalEventTypes = 'default' | 'mask' | 'close' | 'confirm' | 'cancel' | 'keydown' | 'exist'
+export type ModalEventTypes = 'model' | 'mask' | 'close' | 'confirm' | 'cancel' | 'exit' | 'exist'
 
 export namespace VxeModalPropTypes {
   export type Size = SizeType;
@@ -214,6 +214,7 @@ export type VxeModalEmits = [
   'update:modelValue',
   'show',
   'hide',
+  'before-hide',
   'close',
   'confirm',
   'cancel',
@@ -231,11 +232,11 @@ export interface ModalController {
   open(options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建提示框
-   * @param message 消息内容
+   * @param content 消息内容
    * @param title 标题
    * @param options 参数
    */
-  alert(message: VxeModalPropTypes.Content, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
+  alert(content: VxeModalPropTypes.Content, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建提示框
    * @param options 参数
@@ -243,11 +244,11 @@ export interface ModalController {
   alert(options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建确认框
-   * @param message 消息内容
+   * @param content 消息内容
    * @param title 标题
    * @param options 参数
    */
-  confirm(message: VxeModalPropTypes.Content, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
+  confirm(content: VxeModalPropTypes.Content, title?: VxeModalPropTypes.Title, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建确认框
    * @param options 参数
@@ -255,11 +256,11 @@ export interface ModalController {
   confirm(options: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建消息提示
-   * @param message 消息内容
+   * @param content 消息内容
    * @param title 标题
    * @param options 参数
    */
-  message(message: VxeModalPropTypes.Content, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
+  message(content: VxeModalPropTypes.Content, options?: VxeModalDefines.ModalOptions): Promise<ModalEventTypes>;
   /**
    * 创建消息提示
    * @param options 参数
@@ -306,6 +307,9 @@ export namespace VxeModalDefines {
   export interface HideParams extends ModalBaseParams { }
   export interface HideEventParams extends ModalEventParams, HideParams { }
 
+  export interface BeforeHideParams extends ModalBaseParams { }
+  export interface BeforeHideEventParams extends ModalEventParams, BeforeHideParams { }
+
   export interface ConfirmParams extends ModalBaseParams { }
   export interface ConfirmEventParams extends ModalEventParams, ConfirmParams { }
 
@@ -322,6 +326,7 @@ export namespace VxeModalDefines {
 export type VxeModalEventProps = {
   onShow?: VxeModalEvents.Show;
   onHide?: VxeModalEvents.Hide;
+  onBeforeHide?: VxeModalEvents.BeforeHide;
   onConfirm?: VxeModalEvents.Confirm;
   onCancel?: VxeModalEvents.Cancel;
   onClose?: VxeModalEvents.Close;
@@ -331,6 +336,7 @@ export type VxeModalEventProps = {
 export interface VxeModalListeners {
   show?: VxeModalEvents.Show;
   hide?: VxeModalEvents.Hide;
+  beforeHide?: VxeModalEvents.BeforeHide;
   confirm?: VxeModalEvents.Confirm;
   cancel?: VxeModalEvents.Cancel;
   close?: VxeModalEvents.Close;
@@ -340,6 +346,7 @@ export interface VxeModalListeners {
 export namespace VxeModalEvents {
   export type Show = (params: VxeModalDefines.ShowEventParams) => void;
   export type Hide = (params: VxeModalDefines.HideEventParams) => void;
+  export type BeforeHide = (params: VxeModalDefines.BeforeHideEventParams) => void;
   export type Confirm = (params: VxeModalDefines.ConfirmEventParams) => void;
   export type Cancel = (params: VxeModalDefines.CancelEventParams) => void;
   export type Close = (params: VxeModalDefines.CloseEventParams) => void;

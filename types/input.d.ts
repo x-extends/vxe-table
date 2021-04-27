@@ -23,7 +23,7 @@ export interface InputPrivateRef {
 }
 export interface VxeInputPrivateRef extends InputPrivateRef { }
 
-type DatePanelType = 'year' | 'month' | 'week' | 'day';
+type DatePanelType = 'year' | 'quarter' | 'month' | 'week' | 'day';
 
 export interface InputReactData {
   inited: boolean;
@@ -49,7 +49,7 @@ export namespace VxeInputPropTypes {
   export type ClassName = string;
   export type Immediate = boolean;
   export type Name = string;
-  export type Type = 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'year';
+  export type Type = 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'quarter' | 'year';
   export type Clearable = boolean;
   export type Readonly = boolean;
   export type Disabled = boolean;

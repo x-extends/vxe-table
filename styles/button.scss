@@ -47,6 +47,7 @@ $btnThemeList: (
   outline: 0;
   font-size: $vxe-font-size;
   max-width: $vxe-button-max-width;
+  line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -118,7 +119,9 @@ $btnThemeList: (
   }
   &.type--button {
     font-family: inherit;
-    line-height: inherit;
+    height: $vxe-button-height-default;
+    line-height: 1;
+    border: 1px solid $vxe-input-border-color;
     &.is--round {
       border-radius: $vxe-button-height-default / 2;
     }
@@ -133,9 +136,6 @@ $btnThemeList: (
     &:not(.is--circle) {
       padding: 0 1em;
     }
-    height: $vxe-button-height-default;
-    line-height: 1;
-    border: 1px solid $vxe-input-border-color;
     &:not(.is--disabled) {
       &:hover {
         color: lighten($vxe-primary-color, 6%);
@@ -371,7 +371,8 @@ $btnThemeList: (
   border: 1px solid $vxe-input-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   & > .vxe-button {
-    margin: 2px 0;
+    margin-left: 0;
+    margin-top: 0.4em;
     display: block;
     width: 100%;
     border: 0;

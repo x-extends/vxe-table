@@ -65,7 +65,7 @@ export default defineComponent({
         editMethod ({ row, column }) {
           const $table = xTable.value
           // 重写默认的覆盖式，改为追加式
-          $table.setActiveCell(row, column.property)
+          $table.setActiveCell(row, column)
         }
       } as VxeTablePropTypes.KeyboardConfig
     })
@@ -126,7 +126,7 @@ export default defineComponent({
                 editMethod ({ row, column }) {
                   const $table = xTable.value
                   // 重写默认的覆盖式，改为追加式
-                  $table.setActiveCell(row, column.property)
+                  $table.setActiveCell(row, column)
                 }
               } as VxeTablePropTypes.KeyboardConfig
             })

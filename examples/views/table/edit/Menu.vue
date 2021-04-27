@@ -122,7 +122,7 @@ export default defineComponent({
           break
         case 'insertAt':
           $table.insertAt({}, row || -1).then(({ row }) => {
-            $table.setActiveCell(row, column ? column.property : 'name')
+            $table.setActiveCell(row, column || 'name')
           })
           break
         case 'remove':
@@ -274,7 +274,7 @@ export default defineComponent({
                   break
                 case 'insertAt':
                   $table.insertAt({}, row || -1).then(({ row }) => {
-                    $table.setActiveCell(row, column ? column.property : 'name')
+                    $table.setActiveCell(row, column || 'name')
                   })
                   break
                 case 'remove':

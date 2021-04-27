@@ -3,7 +3,7 @@
     <header class="page-header">
       <div class="left">
         <a href="/vxe-table/">
-          <img src="logo.png" width="18">
+          <img src="/vxe-table/logo.png" width="18">
           <span class="title">vxe-table</span>
         </a>
         <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
@@ -2166,7 +2166,7 @@ export default defineComponent({
     })
 
     const getVersion = () => {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/npm/versions/vxe-table').then(({ time, tags, versions }) => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ time, tags, versions }) => {
         appData.showPlugin = true
         const stableVersionList: any = []
         const betaVersionList: any = []
@@ -2364,7 +2364,7 @@ export default defineComponent({
     }
 
     const loadSponsors = () => {
-      XEAjax.get('https://api.xuliangzhan.com:10443/api/pub/sponsors').then(data => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/pub/sponsors').then(data => {
         appData.sponsorList = data
       })
     }

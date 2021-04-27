@@ -31,12 +31,13 @@
       <vxe-input v-model="demo1.value400" placeholder="日期选择" type="date" parse-format="yyyy-dd-MM"></vxe-input>
       <vxe-input v-model="demo1.value401" placeholder="周选择" type="week" clearable></vxe-input>
       <vxe-input v-model="demo1.value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-      <vxe-input v-model="demo1.value403" placeholder="年选择" type="year" clearable></vxe-input>
-      <vxe-input v-model="demo1.value404" placeholder="时间选择" type="time" clearable></vxe-input>
-      <vxe-input v-model="demo1.value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
-      <vxe-input v-model="demo1.value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
-      <vxe-input v-model="demo1.value407" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>
-      <vxe-input v-model="demo1.value408" placeholder="农历节日" type="date" :festival-method="festivalCalendarMethod" transfer></vxe-input>
+      <vxe-input v-model="demo1.value403" placeholder="季选择" type="quarter" clearable></vxe-input>
+      <vxe-input v-model="demo1.value404" placeholder="年选择" type="year" clearable></vxe-input>
+      <vxe-input v-model="demo1.value405" placeholder="时间选择" type="time" clearable></vxe-input>
+      <vxe-input v-model="demo1.value406" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
+      <vxe-input v-model="demo1.value407" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+      <vxe-input v-model="demo1.value408" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>
+      <vxe-input v-model="demo1.value409" placeholder="农历节日" type="date" :festival-method="festivalCalendarMethod" transfer></vxe-input>
     </p>
 
     <p>
@@ -118,15 +119,16 @@ export default defineComponent({
       value301: '',
       value302: '',
       value303: '',
-      value400: '2018-09-01',
+      value400: '',
       value401: '',
       value402: '',
       value403: '',
       value404: '',
       value405: '',
       value406: '',
-      value407: '2020-10-01',
+      value407: '',
       value408: '2020-10-01',
+      value409: '2020-10-01',
       value500: '22',
       value501: '',
       value502: '',
@@ -151,16 +153,22 @@ export default defineComponent({
     // 渲染日期小圆点
     const noticeMaps: { [key: string]: VxeInputDefines.DateFestivalInfo } = {
       20200910: {
-        notice: true // 显示小圆点事件通知
+        notice: true, // 显示小圆点事件通知
+        important: true, // 是否标记为重要节日
+        label: '活动'
       },
       20201015: {
-        notice: true
+        notice: true,
+        important: true,
+        label: '聚餐'
       },
       20201108: {
-        notice: true
+        notice: true,
+        label: '爬山'
       },
       20201222: {
-        notice: true
+        notice: true,
+        label: '游泳'
       }
     }
     const festivalNoticeMethod: VxeInputPropTypes.FestivalMethod = (params) => {
@@ -179,7 +187,7 @@ export default defineComponent({
       20201001: {
         label: '国庆节,中秋节', // 如果同一天拥有多个节日重叠，用逗号分开
         important: true, // 是否标记为重要节日
-        extra: '休' // 右上角额外显示的事件名称
+        extra: '休' // 右上角额外显示的名称
       },
       20201002: {
         label: '十六',
@@ -217,7 +225,7 @@ export default defineComponent({
         label: '廿四',
         extra: {
           label: '班',
-          important: true // 是否标记为重要事件
+          important: true // 是否标记为重要节日
         }
       }
     }
@@ -258,15 +266,16 @@ export default defineComponent({
         </p>
 
         <p>
-          <vxe-input v-model="demo1.value400" placeholder="日期选择" type="date"></vxe-input>
+          <vxe-input v-model="demo1.value400" placeholder="日期选择" type="date" parse-format="yyyy-dd-MM"></vxe-input>
           <vxe-input v-model="demo1.value401" placeholder="周选择" type="week" clearable></vxe-input>
           <vxe-input v-model="demo1.value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
-          <vxe-input v-model="demo1.value403" placeholder="年选择" type="year" clearable></vxe-input>
-          <vxe-input v-model="demo1.value404" placeholder="时间选择" type="time" clearable></vxe-input>
-          <vxe-input v-model="demo1.value405" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
-          <vxe-input v-model="demo1.value406" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
-          <vxe-input v-model="demo1.value407" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>
-          <vxe-input v-model="demo1.value408" placeholder="农历节日" type="date" :festival-method="festivalCalendarMethod" transfer></vxe-input>
+          <vxe-input v-model="demo1.value403" placeholder="季选择" type="quarter" clearable></vxe-input>
+          <vxe-input v-model="demo1.value404" placeholder="年选择" type="year" clearable></vxe-input>
+          <vxe-input v-model="demo1.value405" placeholder="时间选择" type="time" clearable></vxe-input>
+          <vxe-input v-model="demo1.value406" placeholder="日期和时间选择" type="datetime" transfer></vxe-input>
+          <vxe-input v-model="demo1.value407" placeholder="禁用日期" type="date" :disabled-method="disabledDateMethod" transfer></vxe-input>
+          <vxe-input v-model="demo1.value408" placeholder="小圆点" type="date" :festival-method="festivalNoticeMethod" transfer></vxe-input>
+          <vxe-input v-model="demo1.value409" placeholder="农历节日" type="date" :festival-method="festivalCalendarMethod" transfer></vxe-input>
         </p>
 
         <p>
@@ -324,15 +333,16 @@ export default defineComponent({
               value301: '',
               value302: '',
               value303: '',
-              value400: '2018-01-09',
+              value400: '',
               value401: '',
               value402: '',
               value403: '',
               value404: '',
               value405: '',
               value406: '',
-              value407: '2020-10-01',
+              value407: '',
               value408: '2020-10-01',
+              value409: '2020-10-01',
               value500: '22',
               value501: '',
               value502: '',
@@ -348,7 +358,7 @@ export default defineComponent({
               value603: ''
             })
 
-            const disabledDateMethod: VxeInputPropTypes.FestivalMethod = (params) => {
+            const disabledDateMethod: VxeInputPropTypes.DisabledMethod = (params) => {
               const { date } = params
               const dd = date.getDate()
               return dd > 15
@@ -357,16 +367,22 @@ export default defineComponent({
             // 渲染日期小圆点
             const noticeMaps: { [key: string]: VxeInputDefines.DateFestivalInfo } = {
               20200910: {
-                notice: true // 显示小圆点事件通知
+                notice: true, // 显示小圆点事件通知
+                important: true, // 是否标记为重要节日
+                label: '活动'
               },
               20201015: {
-                notice: true
+                notice: true,
+                important: true,
+                label: '聚餐'
               },
               20201108: {
-                notice: true
+                notice: true,
+                label: '爬山'
               },
               20201222: {
-                notice: true
+                notice: true,
+                label: '游泳'
               }
             }
             const festivalNoticeMethod: VxeInputPropTypes.FestivalMethod = (params) => {
@@ -385,7 +401,7 @@ export default defineComponent({
               20201001: {
                 label: '国庆节,中秋节', // 如果同一天拥有多个节日重叠，用逗号分开
                 important: true, // 是否标记为重要节日
-                extra: '休' // 右上角额外显示的事件名称
+                extra: '休' // 右上角额外显示的名称
               },
               20201002: {
                 label: '十六',
@@ -423,7 +439,7 @@ export default defineComponent({
                 label: '廿四',
                 extra: {
                   label: '班',
-                  important: true // 是否标记为重要事件
+                  important: true // 是否标记为重要节日
                 }
               }
             }

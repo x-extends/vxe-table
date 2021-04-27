@@ -227,6 +227,7 @@ export default defineComponent({
 
     const handleGlobalBlurEvent = (evnt: Event) => {
       if (reactData.visiblePanel) {
+        reactData.isActivated = false
         hidePanel()
         pulldownMethods.dispatchEvent('hide-panel', {}, evnt)
       }
@@ -287,7 +288,11 @@ export default defineComponent({
             }],
             placement: panelPlacement,
             style: panelStyle
-          }, slots.dropdown ? (!inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : slots.dropdown({ $pulldown: $xepulldown })) : [])
+          }, slots.dropdown ? [
+            h('div', {
+              class: 'vxe-pulldown--wrapper'
+            }, !inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : slots.dropdown({ $pulldown: $xepulldown }))
+          ] : [])
         ])
       ])
     }

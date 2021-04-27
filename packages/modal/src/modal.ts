@@ -63,6 +63,7 @@ export default defineComponent({
     'update:modelValue',
     'show',
     'hide',
+    'before-hide',
     'close',
     'confirm',
     'cancel',
@@ -194,6 +195,7 @@ export default defineComponent({
               reactData.zoomLocat = null
             }
             XEUtils.remove(allActivedModals, item => item === $xemodal)
+            modalMethods.dispatchEvent('before-hide', params)
             setTimeout(() => {
               reactData.visible = false
               emit('update:modelValue', false)
@@ -385,13 +387,14 @@ export default defineComponent({
     }
 
     const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
-      if (evnt.keyCode === 27) {
+      const isEsc = evnt.keyCode === 27
+      if (isEsc) {
         const lastModal = XEUtils.max(allActivedModals, (item) => item.reactData.modalZindex)
         // 多个时，只关掉最上层的窗口
         if (lastModal) {
           setTimeout(() => {
             if (lastModal === $xemodal && lastModal.props.escClosable) {
-              closeModal('keydown')
+              closeModal('exit')
             }
           }, 10)
         }
@@ -841,7 +844,7 @@ export default defineComponent({
       if (value) {
         openModal()
       } else {
-        closeModal('default')
+        closeModal('model')
       }
     })
 

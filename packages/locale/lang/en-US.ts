@@ -256,6 +256,7 @@ export default {
         m10: 'October',
         m11: 'November',
         m12: 'December',
+        quarterLabel: '{0}',
         monthLabel: '{0}',
         dayLabel: '{1} {0}',
         labelFormat: {
@@ -264,6 +265,7 @@ export default {
           datetime: 'yyyy-MM-dd HH:mm:ss',
           week: '[Week] WW, yyyy',
           month: 'MM/yyyy',
+          quarter: '[Quarter] q, yyyy',
           year: 'yyyy'
         },
         weeks: {
@@ -289,6 +291,12 @@ export default {
           m9: 'Oct',
           m10: 'Nov',
           m11: 'Dec'
+        },
+        quarters: {
+          q1: 'First quarter',
+          q2: 'Second quarter',
+          q3: 'Third quarter',
+          q4: 'Fourth quarter'
         }
       }
     }

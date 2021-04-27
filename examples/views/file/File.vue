@@ -33,7 +33,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { VXETable } from '../../../packages/all'
-import XEAjax from 'xe-ajax'
 
 export default defineComponent({
   setup () {
@@ -80,12 +79,12 @@ export default defineComponent({
 
     const clickEvent10 = () => {
       // 请求文件
-      XEAjax.fetch('/vxe-table/static/other/img2.gif').then(response => {
-        response.blob().then(blob => {
+      fetch('/vxe-table/static/other/img2.gif')
+        .then(response => response.blob())
+        .then(blob => {
           // 下载到本地
           VXETable.saveFile({ filename: '图片', type: 'gif', content: blob })
         })
-      })
     }
 
     return {
@@ -161,12 +160,12 @@ export default defineComponent({
 
             const clickEvent10 = () => {
               // 请求文件
-              XEAjax.fetch('/vxe-table/static/other/img2.gif').then(response => {
-                response.blob().then(blob => {
+              fetch('/vxe-table/static/other/img2.gif')
+                .then(response => response.blob())
+                .then(blob => {
                   // 下载到本地
                   VXETable.saveFile({ filename: '图片', type: 'gif', content: blob })
                 })
-              })
             }
 
             return {

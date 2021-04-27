@@ -16,7 +16,6 @@
   padding: 4px 0;
   color: $vxe-font-color;
   text-align: left;
-  background-color: $vxe-pulldown-panel-background-color;
   &:not(.is--transfer) {
     min-width: 100%;
   }
@@ -39,6 +38,9 @@
     opacity: 1;
     transform: scaleY(1);
   }
+}
+.vxe-pulldown--wrapper {
+  background-color: $vxe-pulldown-panel-background-color;
 }
 
 .vxe-pulldown,

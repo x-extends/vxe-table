@@ -32,7 +32,7 @@
       </pre-code>
       <div>最后这样按需引入模块，就可以减小体积了</div>
       <pre-code class="typescript">
-        import { createApp } = 'vue'
+        import { App, createApp } = 'vue'
         import 'xe-utils'
         import {
           // 核心
@@ -85,55 +85,55 @@
           i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
         })
 
-        const app = createApp(App)
+        function useTable (app: App) {
+          // 表格功能
+          app.use(Header)
+          // .use(Footer)
+          // .use(Icon)
+          // .use(Filter)
+          // .use(Edit)
+          // .use(Menu)
+          // .use(Export)
+          // .use(Keyboard)
+          // .use(Validator)
 
-        // 表格功能
-        app.use(Header)
-        // .use(Footer)
-        // .use(Icon)
-        // .use(Filter)
-        // .use(Edit)
-        // .use(Menu)
-        // .use(Export)
-        // .use(Keyboard)
-        // .use(Validator)
+          // 可选组件
+          .use(Column)
+          // .use(Colgroup)
+          // .use(Grid)
+          // .use(Tooltip)
+          // .use(Toolbar)
+          // .use(Pager)
+          // .use(Form)
+          // .use(FormItem)
+          // .use(FormGather)
+          // .use(Checkbox)
+          // .use(CheckboxGroup)
+          // .use(Radio)
+          // .use(RadioGroup)
+          // .use(RadioButton)
+          // .use(Switch)
+          // .use(Input)
+          // .use(Select)
+          // .use(Optgroup)
+          // .use(Option)
+          // .use(Textarea)
+          // .use(Button)
+          // .use(Modal)
+          // .use(List)
+          // .use(Pulldown)
 
-        // 可选组件
-        .use(Column)
-        // .use(Colgroup)
-        // .use(Grid)
-        // .use(Tooltip)
-        // .use(Toolbar)
-        // .use(Pager)
-        // .use(Form)
-        // .use(FormItem)
-        // .use(FormGather)
-        // .use(Checkbox)
-        // .use(CheckboxGroup)
-        // .use(Radio)
-        // .use(RadioGroup)
-        // .use(RadioButton)
-        // .use(Switch)
-        // .use(Input)
-        // .use(Select)
-        // .use(Optgroup)
-        // .use(Option)
-        // .use(Textarea)
-        // .use(Button)
-        // .use(Modal)
-        // .use(List)
-        // .use(Pulldown)
+          // 安装表格
+          .use(Table)
 
-        // 安装表格
-        .use(Table)
+          // 给 vue 实例挂载内部对象，例如：
+          // app.config.globalProperties.$XModal = VXETable.modal
+          // app.config.globalProperties.$XPrint = VXETable.print
+          // app.config.globalProperties.$XSaveFile = VXETable.saveFile
+          // app.config.globalProperties.$XReadFile = VXETable.readFile
+        }
 
-        // 给 vue 实例挂载内部对象，例如：
-        // app.config.globalProperties.$XModal = VXETable.modal
-        // app.config.globalProperties.$XPrint = VXETable.print
-        // app.config.globalProperties.$XSaveFile = VXETable.saveFile
-        // app.config.globalProperties.$XReadFile = VXETable.readFile
-
-        app.mount('#app')
+        createApp(App).use(useTable).mount('#app')
       </pre-code>
     </pre>
 
@@ -160,7 +160,7 @@
       </pre-code>
       <div>最后这样按需引入模块，就可以减小体积了</div>
       <pre-code class="typescript">
-        import { createApp } = 'vue'
+        import { App, createApp } = 'vue'
         import 'xe-utils'
         import {
           // 核心
@@ -213,55 +213,55 @@
           i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
         })
 
-        const app = createApp(App)
+        function useTable (app: App) {
+          // 表格功能
+          app.use(Header)
+          // .use(Footer)
+          // .use(Icon)
+          // .use(Filter)
+          // .use(Edit)
+          // .use(Menu)
+          // .use(Export)
+          // .use(Keyboard)
+          // .use(Validator)
 
-        // 表格功能
-        app.use(Header)
-        // .use(Footer)
-        // .use(Icon)
-        // .use(Filter)
-        // .use(Edit)
-        // .use(Menu)
-        // .use(Export)
-        // .use(Keyboard)
-        // .use(Validator)
+          // 可选组件
+          .use(Column)
+          // .use(Colgroup)
+          // .use(Grid)
+          // .use(Tooltip)
+          // .use(Toolbar)
+          // .use(Pager)
+          // .use(Form)
+          // .use(FormItem)
+          // .use(FormGather)
+          // .use(Checkbox)
+          // .use(CheckboxGroup)
+          // .use(Radio)
+          // .use(RadioGroup)
+          // .use(RadioButton)
+          // .use(Switch)
+          // .use(Input)
+          // .use(Select)
+          // .use(Optgroup)
+          // .use(Option)
+          // .use(Textarea)
+          // .use(Button)
+          // .use(Modal)
+          // .use(List)
+          // .use(Pulldown)
 
-        // 可选组件
-        .use(Column)
-        // .use(Colgroup)
-        // .use(Grid)
-        // .use(Tooltip)
-        // .use(Toolbar)
-        // .use(Pager)
-        // .use(Form)
-        // .use(FormItem)
-        // .use(FormGather)
-        // .use(Checkbox)
-        // .use(CheckboxGroup)
-        // .use(Radio)
-        // .use(RadioGroup)
-        // .use(RadioButton)
-        // .use(Switch)
-        // .use(Input)
-        // .use(Select)
-        // .use(Optgroup)
-        // .use(Option)
-        // .use(Textarea)
-        // .use(Button)
-        // .use(Modal)
-        // .use(List)
-        // .use(Pulldown)
+          // 安装表格
+          .use(Table)
 
-        // 安装表格
-        .use(Table)
+          // 给 vue 实例挂载内部对象，例如：
+          // app.config.globalProperties.$XModal = VXETable.modal
+          // app.config.globalProperties.$XPrint = VXETable.print
+          // app.config.globalProperties.$XSaveFile = VXETable.saveFile
+          // app.config.globalProperties.$XReadFile = VXETable.readFile
+        }
 
-        // 给 vue 实例挂载内部对象，例如：
-        // app.config.globalProperties.$XModal = VXETable.modal
-        // app.config.globalProperties.$XPrint = VXETable.print
-        // app.config.globalProperties.$XSaveFile = VXETable.saveFile
-        // app.config.globalProperties.$XReadFile = VXETable.readFile
-
-        app.mount('#app')
+        createApp(App).use(useTable).mount('#app')
       </pre-code>
     </pre>
   </div>

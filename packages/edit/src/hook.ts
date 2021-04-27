@@ -118,6 +118,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         $xetable.updateFooter()
         $xetable.updateCache()
         $xetable.handleTableData()
+        $xetable.updateAfterDataIndex()
         $xetable.checkSelectionStatus()
         if (scrollYLoad) {
           $xetable.updateScrollYSpace()
@@ -210,6 +211,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         $xetable.updateFooter()
         $xetable.updateCache()
         $xetable.handleTableData()
+        $xetable.updateAfterDataIndex()
         $xetable.checkSelectionStatus()
         if (scrollYLoad) {
           $xetable.updateScrollYSpace()

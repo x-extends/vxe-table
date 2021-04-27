@@ -1794,7 +1794,7 @@ export default defineComponent({
      */
     const loadTableData = (datas: any[]) => {
       const { keepSource, treeConfig } = props
-      const { editStore } = reactData
+      const { editStore, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const sYOpts = computeSYOpts.value
       const tableFullData = datas ? datas.slice(0) : []
@@ -1848,7 +1848,18 @@ export default defineComponent({
         }
         handleReserveStatus()
         tablePrivateMethods.checkSelectionStatus()
-        return nextTick().then(() => tableMethods.recalculate()).then(() => restoreScroll(lastScrollLeft, lastScrollTop))
+        return new Promise(resolve => {
+          nextTick()
+            .then(() => tableMethods.recalculate())
+            .then(() => {
+              // 是否变更虚拟滚动
+              if (oldScrollYLoad === scrollYLoad) {
+                restoreScroll(lastScrollLeft, lastScrollTop).then(resolve)
+              } else {
+                setTimeout(() => restoreScroll(lastScrollLeft, lastScrollTop).then(resolve))
+              }
+            })
+        })
       })
     }
 
@@ -3767,6 +3778,40 @@ export default defineComponent({
     }
 
     /**
+     * 表格键盘事件
+     */
+    const keydownEvent = (evnt: KeyboardEvent) => {
+      const { mouseConfig, keyboardConfig } = props
+      const { filterStore, ctxMenuStore, editStore } = reactData
+      const mouseOpts = computeMouseOpts.value
+      const { actived } = editStore
+      const keyCode = evnt.keyCode
+      const isEsc = keyCode === 27
+      if (isEsc) {
+        tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
+          if (keyboardConfig && mouseConfig && mouseOpts.area && $xetable.handleKeyboardEvent) {
+            $xetable.handleKeyboardEvent(evnt)
+          } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
+            evnt.stopPropagation()
+            // 如果按下了 Esc 键，关闭快捷菜单、筛选
+            $xetable.closeMenu()
+            tableMethods.closeFilter()
+            // 如果是激活编辑状态，则取消编辑
+            if (actived.row) {
+              const params = actived.args
+              $xetable.clearActived(evnt)
+              // 如果配置了选中功能，则为选中状态
+              if (mouseOpts.selected) {
+                nextTick(() => $xetable.handleSelected(params, evnt))
+              }
+            }
+          }
+          tableMethods.dispatchEvent('keydown', {}, evnt)
+        })
+      }
+    }
+
+    /**
      * 全局键盘事件
      */
     const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
@@ -3774,7 +3819,7 @@ export default defineComponent({
       if (internalData.isActivated) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
           const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow } = props
-          const { filterStore, ctxMenuStore, editStore, currentRow } = reactData
+          const { ctxMenuStore, editStore, currentRow } = reactData
           const isMenu = computeIsMenu.value
           const bodyMenu = computeBodyMenu.value
           const keyboardOpts = computeKeyboardOpts.value
@@ -3787,7 +3832,6 @@ export default defineComponent({
           const isBack = keyCode === 8
           const isTab = keyCode === 9
           const isEnter = keyCode === 13
-          const isEsc = keyCode === 27
           const isSpacebar = keyCode === 32
           const isLeftArrow = keyCode === 37
           const isUpArrow = keyCode === 38
@@ -3804,12 +3848,6 @@ export default defineComponent({
           const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = editConfig && actived.column && actived.row
           let params: any
-          if (filterStore.visible) {
-            if (isEsc) {
-              tableMethods.closeFilter()
-            }
-            return
-          }
           if (operCtxMenu) {
             // 如果配置了右键菜单; 支持方向键操作、回车
             evnt.preventDefault()
@@ -3827,21 +3865,6 @@ export default defineComponent({
               tablePrivateMethods.handleToggleCheckRowEvent(evnt, selected.args)
             } else {
               tablePrivateMethods.triggerRadioRowEvent(evnt, selected.args)
-            }
-          } else if (isEsc) {
-            // 如果按下了 Esc 键，关闭快捷菜单、筛选
-            if ($xetable.closeMenu) {
-              $xetable.closeMenu()
-            }
-            tableMethods.closeFilter()
-            // 如果是激活编辑状态，则取消编辑
-            if (actived.row) {
-              params = actived.args
-              $xetable.clearActived(evnt)
-              // 如果配置了选中功能，则为选中状态
-              if (mouseOpts.selected) {
-                nextTick(() => $xetable.handleSelected(params, evnt))
-              }
             }
           } else if (isF2) {
             if (!isEditStatus) {
@@ -5095,9 +5118,10 @@ export default defineComponent({
       if (slots.empty) {
         return slots.empty(params)
       } else {
-        const compConf = props.emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
-        if (compConf && compConf.renderEmpty) {
-          return compConf.renderEmpty(emptyOpts, params)
+        const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
+        const renderEmpty = compConf ? compConf.renderEmpty : null
+        if (renderEmpty) {
+          return renderEmpty(emptyOpts, params)
         }
       }
       return getFuncText(props.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
@@ -5402,7 +5426,8 @@ export default defineComponent({
           'is--scroll-x': overflowX,
           'is--virtual-x': scrollXLoad,
           'is--virtual-y': scrollYLoad
-        }]
+        }],
+        onKeydown: keydownEvent
       }, [
         /**
          * 隐藏列

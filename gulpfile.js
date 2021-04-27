@@ -232,6 +232,7 @@ gulp.task('move_docs_root', () => {
   return gulp.src([
     'docs/favicon.ico',
     'docs/index.html',
+    'docs/issues.html',
     'docs/logo.png'
   ])
     .pipe(gulp.dest('docs/v4'))
@@ -240,73 +241,20 @@ gulp.task('move_docs_root', () => {
 gulp.task('clear_docs_temp', () => {
   return del([
     'docs/static',
-    'docs/favicon.ico',
-    'docs/index.html',
-    'docs/logo.png',
     '../branches/docs/vxe-table/docs'
   ], { force: true })
 })
 
 gulp.task('move_docs_latest', gulp.series('clear_docs_temp', () => {
   return gulp.src([
-    'docs/v3/**'
+    'docs/v3/index.html',
+    'docs/v4/404.html'
   ])
     .pipe(gulp.dest('docs'))
 }))
 
 gulp.task('build_docs_v4', gulp.parallel('move_docs_static', 'move_docs_root'))
 
-// gulp.task('build_html_docs', () => {
-//   return gulp.src([
-//     '../branches/docs/vxe-table/plugins/_index.html'
-//   ])
-//     .pipe(replace('href="./_index.css"', `href="./${time}.css"`))
-//     .pipe(replace('src="./_index.js"', `src="./${time}.js"`))
-//     .pipe(rename({
-//       basename: 'index',
-//       extname: '.html'
-//     }))
-//     .pipe(gulp.dest('../branches/docs/vxe-table/docs/plugins'))
-//     .pipe(rename({
-//       basename: '404',
-//       extname: '.html'
-//     }))
-//     .pipe(gulp.dest('../branches/docs/vxe-table/docs/plugins'))
-// })
-
-// gulp.task('build_js_docs', () => {
-//   return gulp.src([
-//     '../branches/docs/vxe-table/plugins/_index.js'
-//   ])
-//     .pipe(rename({
-//       basename: time,
-//       extname: '.js'
-//     }))
-//     .pipe(gulp.dest('../branches/docs/vxe-table/docs/plugins'))
-// })
-
-// gulp.task('build_css_docs', () => {
-//   return gulp.src([
-//     '../branches/docs/vxe-table/plugins/_index.css'
-//   ])
-//     .pipe(prefixer({
-//       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
-//       cascade: true,
-//       remove: true
-//     }))
-//     .pipe(cleanCSS())
-//     .pipe(rename({
-//       basename: time,
-//       extname: '.css'
-//     }))
-//     .pipe(gulp.dest('../branches/docs/vxe-table/docs/plugins'))
-// })
-
-// gulp.task('update_plugin_docs', gulp.series('build_html_docs', 'build_css_docs', 'build_css_docs', 'build_js_docs', () => {
-//   return gulp.src([
-//     '../branches/docs/vxe-table/plugins/**'
-//   ]).pipe(gulp.dest('../branches/docs/vxe-table/docs/plugins'))
-// }))
 gulp.task('update_plugin_docs', () => {
   return gulp.src([
     '../branches/docs/vxe-table/plugins/**'
@@ -346,7 +294,7 @@ gulp.task('copy_docs_v3d5', () => {
 })
 
 gulp.task('copy_docs_index', gulp.parallel('copy_docs_v1', 'copy_docs_v2', 'copy_docs_v3', () => {
-  return gulp.src('docs/index.html')
+  return gulp.src('docs/v4/index.html')
     .pipe(rename({
       basename: '404'
     }))

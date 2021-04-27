@@ -37,35 +37,35 @@ export default defineComponent({
     return {
       demoCodes: [
         `
-        import { createApp } = 'vue'
+        import { App, createApp } = 'vue'
         import 'xe-utils'
         import VXETable from 'vxe-table'
         import 'vxe-table/lib/style.css'
 
-        const app = createApp(App)
+        function useTable (app: App) {
+          app.use(VXETable)
 
-        app.use(VXETable)
+          // 给 vue 实例挂载内部对象，例如：
+          // app.config.globalProperties.$XModal = VXETable.modal
+          // app.config.globalProperties.$XPrint = VXETable.print
+          // app.config.globalProperties.$XSaveFile = VXETable.saveFile
+          // app.config.globalProperties.$XReadFile = VXETable.readFile
+        }
 
-        // 给 vue 实例挂载内部对象，例如：
-        // app.config.globalProperties.$XModal = VXETable.modal
-        // app.config.globalProperties.$XPrint = VXETable.print
-        // app.config.globalProperties.$XSaveFile = VXETable.saveFile
-        // app.config.globalProperties.$XReadFile = VXETable.readFile
-
-        app.mount('#app')
+        createApp(App).use(useTable).mount('#app')
         `,
         `
-        const app = Vue.createApp(App)
+        function useTable (app) {
+          app.use(VXETable)
 
-        app.use(VXETable)
+          // 给 vue 实例挂载内部对象，例如：
+          // app.config.globalProperties.$XModal = VXETable.modal
+          // app.config.globalProperties.$XPrint = VXETable.print
+          // app.config.globalProperties.$XSaveFile = VXETable.saveFile
+          // app.config.globalProperties.$XReadFile = VXETable.readFile
+        }
 
-        // 给 vue 实例挂载内部对象，例如：
-        // app.config.globalProperties.$XModal = VXETable.modal
-        // app.config.globalProperties.$XPrint = VXETable.print
-        // app.config.globalProperties.$XSaveFile = VXETable.saveFile
-        // app.config.globalProperties.$XReadFile = VXETable.readFile
-
-        app.mount('#app')
+        createApp(App).use(useTable).mount('#app')
         `
       ]
     }
