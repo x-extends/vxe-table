@@ -3411,7 +3411,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ rows, cols, targetRows, targetCols, returnValue, $event}',
+        defVal: '{ rows, cols, targetRows, targetCols, $event}',
         list: []
       }
     ]

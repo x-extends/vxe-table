@@ -448,7 +448,7 @@ const Methods = {
       const rest = { column, colid, index, items, parent }
       if (property) {
         if (fullColumnFieldData[property]) {
-          UtilTools.error('vxe.error.colRepet', ['field', property])
+          UtilTools.warn('vxe.error.colRepet', ['field', property])
         }
         fullColumnFieldData[property] = rest
       }
