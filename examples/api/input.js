@@ -205,15 +205,15 @@ const apis = [
             defVal: '',
             list: []
           },
-          {
-            name: 'parseFormat',
-            desc: '即将废弃，请使用 parse-format',
-            version: '',
-            type: 'String',
-            enum: '',
-            defVal: '',
-            list: []
-          },
+          // {
+          //   name: 'parseFormat',
+          //   desc: '即将废弃，请使用 parse-format',
+          //   version: '',
+          //   type: 'String',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
           {
             name: 'valueFormat',
             desc: '即将废弃，请使用 value-format',
@@ -281,15 +281,15 @@ const apis = [
         defVal: '继承 setup.input.labelFormat',
         list: []
       },
-      {
-        name: 'parse-format',
-        desc: '只对 type=date|datetime|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
-        version: '2.8.32',
-        type: 'String',
-        enum: '',
-        defVal: '继承 setup.input.parseFormat',
-        list: []
-      },
+      // {
+      //   name: 'parse-format',
+      //   desc: '只对 type=date|datetime|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到',
+      //   version: '2.8.32',
+      //   type: 'String',
+      //   enum: '',
+      //   defVal: '继承 setup.input.parseFormat',
+      //   list: []
+      // },
       {
         name: 'value-format',
         desc: '只对 type=date|datetime|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串',

@@ -38,13 +38,22 @@
   }
   .vxe-buttons--wrapper {
     flex-grow: 1;
-    text-align: left;
     & > .vxe-button+.vxe-button--item,
     & > .vxe-button--item+.vxe-button,
     & > .vxe-button--item+.vxe-button--item {
       margin-left: 0.8em;
     }
     & > .vxe-button--item {
+      display: inline-block;
+    }
+  }
+  .vxe-tools--wrapper {
+    & > .vxe-button+.vxe-tool--item,
+    & > .vxe-tool--item+.vxe-button,
+    & > .vxe-tool--item+.vxe-tool--item {
+      margin-left: 0.8em;
+    }
+    & > .vxe-tool--item {
       display: inline-block;
     }
   }
@@ -84,10 +93,13 @@
     border-radius: $vxe-border-radius;
     box-shadow: 0 1px 6px rgba(0,0,0,.2);
     .vxe-custom--header {
+      padding: 0.28em 0;
       font-weight: 700;
       border-bottom: 1px solid $vxe-table-popup-border-color;
     }
     .vxe-custom--body {
+      padding: 0.2em 0;
+      max-height: 17.6em;
       .vxe-custom--option {
         &:hover {
           background-color: $vxe-table-row-hover-background-color;
@@ -96,11 +108,9 @@
     }
     .vxe-custom--header,
     .vxe-custom--body {
-      padding: 0.2em 0;
-      max-height: 17.6em;
       & > li {
         max-width: 16em;
-        min-width: 10em;
+        min-width: 12.5em;
         padding: 0.2em 1em 0.2em 2.3em;
         @for $i from 2 through 8 {
           $interval: $i - 1 + 0.2;
@@ -115,11 +125,11 @@
     }
     .vxe-custom--footer {
       border-top: 1px solid $vxe-table-popup-border-color;
-      padding: 0.45em 0.4em;
       text-align: right;
       button {
         background-color: transparent;
         width: 50%;
+        height: 2.5em;
         border: 0;
         color: $vxe-font-color;
         text-align: center;
