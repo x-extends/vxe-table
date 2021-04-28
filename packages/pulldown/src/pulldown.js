@@ -68,7 +68,11 @@ export default {
           placement: panelPlacement
         },
         style: panelStyle
-      }, downSlot ? (!inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : downSlot.call(this, { $pulldown: this }, h)) : [])
+      }, downSlot ? [
+        h('div', {
+          class: 'vxe-pulldown--wrapper'
+        }, !inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : downSlot.call(this, { $pulldown: this }, h))
+      ] : [])
     ])
   },
   methods: {
@@ -97,6 +101,7 @@ export default {
     },
     handleGlobalBlurEvent (evnt) {
       if (this.visiblePanel) {
+        this.isActivated = false
         this.hidePanel()
         this.$emit('hide-panel', { $event: evnt })
       }

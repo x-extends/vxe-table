@@ -7,9 +7,9 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="validEvent">校验</vxe-button>
-        <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-        <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+        <vxe-button @click="validEvent">快速校验</vxe-button>
+        <vxe-button @click="fullValidEvent">完整快速校验</vxe-button>
+        <vxe-button @click="selectValidEvent">选中行校验</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
@@ -88,9 +88,9 @@ export default {
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="validEvent">校验</vxe-button>
-            <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-            <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+            <vxe-button @click="validEvent">快速校验</vxe-button>
+            <vxe-button @click="fullValidEvent">完整快速校验</vxe-button>
+            <vxe-button @click="selectValidEvent">选中行校验</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>

@@ -455,7 +455,7 @@ export default {
           validConfig: '校验配置项',
           editRules: '校验规则配置项',
           emptyText: '空数据时显示的内容',
-          emptyRender: '空内容渲染配置项',
+          emptyRender: '空内容渲染配置项，empty-render 的优先级大于 empty-text',
           customConfig: '自定义列配置项',
           optimization: '即将废弃',
 

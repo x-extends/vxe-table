@@ -323,7 +323,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = this
+    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad } = this
     const tableFullData = datas ? datas.slice(0) : []
     const scrollYLoad = !treeConfig && sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
@@ -375,7 +375,18 @@ const Methods = {
       }
       this.handleReserveStatus()
       this.checkSelectionStatus()
-      return this.$nextTick().then(() => this.recalculate()).then(() => restoreScroll(this, lastScrollLeft, lastScrollTop))
+      return new Promise(resolve => {
+        this.$nextTick()
+          .then(() => this.recalculate())
+          .then(() => {
+            // 是否变更虚拟滚动
+            if (oldScrollYLoad === scrollYLoad) {
+              restoreScroll(this, lastScrollLeft, lastScrollTop).then(resolve)
+            } else {
+              setTimeout(() => restoreScroll(this, lastScrollLeft, lastScrollTop).then(resolve))
+            }
+          })
+      })
     })
   },
   /**
@@ -577,7 +588,7 @@ const Methods = {
       if (property) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (fullColumnFieldData[property]) {
-            UtilTools.error('vxe.error.colRepet', ['field', property])
+            UtilTools.warn('vxe.error.colRepet', ['field', property])
           }
         }
         fullColumnFieldData[property] = rest
@@ -2014,6 +2025,37 @@ const Methods = {
     this.closeMenu()
   },
   /**
+   * 表格键盘事件
+   */
+  keydownEvent (evnt) {
+    const { filterStore, ctxMenuStore, editStore, keyboardConfig, mouseConfig, mouseOpts } = this
+    const { actived } = editStore
+    const { keyCode } = evnt
+    const isEsc = keyCode === 27
+    if (isEsc) {
+      this.preventEvent(evnt, 'event.keydown', null, () => {
+        if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardEvent) {
+          this.handleKeyboardEvent(evnt)
+        } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
+          evnt.stopPropagation()
+          // 如果按下了 Esc 键，关闭快捷菜单、筛选
+          this.closeFilter()
+          this.closeMenu()
+          // 如果是激活编辑状态，则取消编辑
+          if (actived.row) {
+            const params = actived.args
+            this.clearActived(evnt)
+            // 如果配置了选中功能，则为选中状态
+            if (mouseConfig && mouseOpts.selected) {
+              this.$nextTick(() => this.handleSelected(params, evnt))
+            }
+          }
+        }
+        this.emitEvent('keydown', {}, evnt)
+      })
+    }
+  },
+  /**
    * 全局键盘事件
    */
   handleGlobalKeydownEvent (evnt) {
@@ -2067,23 +2109,11 @@ const Methods = {
           } else {
             this.triggerRadioRowEvent(evnt, selected.args)
           }
-        } else if (isEsc) {
-          // 如果按下了 Esc 键，关闭快捷菜单、筛选
-          this.closeMenu()
-          this.closeFilter()
-          // 如果是激活编辑状态，则取消编辑
-          if (actived.row) {
-            params = actived.args
-            this.clearActived(evnt)
-            // 如果配置了选中功能，则为选中状态
-            if (mouseConfig && mouseOpts.selected) {
-              this.$nextTick(() => this.handleSelected(params, evnt))
-            }
-          }
         } else if (isF2) {
           if (!isEditStatus) {
             // 如果按下了 F2 键
             if (selected.row && selected.column) {
+              evnt.stopPropagation()
               evnt.preventDefault()
               this.handleActived(selected.args, evnt)
             }

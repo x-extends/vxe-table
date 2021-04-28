@@ -927,7 +927,7 @@ const apis = [
             name: 'width',
             desc: '列的默认宽度',
             version: '',
-            type: 'Number, String',
+            type: 'number, string',
             enum: 'auto, px, %',
             defVal: '',
             list: []
@@ -936,7 +936,7 @@ const apis = [
             name: 'minWidth',
             desc: '列的默认最小宽度',
             version: '',
-            type: 'Number, String',
+            type: 'number, string',
             enum: 'auto, px, %',
             defVal: '',
             list: []
@@ -3178,7 +3178,7 @@ const apis = [
         version: 'pro',
         type: '',
         enum: '',
-        defVal: '{ rows, cols, targetRows, targetCols, returnValue, $event}',
+        defVal: '{ rows, cols, targetRows, targetCols, $event}',
         list: []
       }
     ]

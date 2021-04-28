@@ -80,7 +80,7 @@ export default {
       this.recalculate()
     },
     value (visible) {
-      this[visible ? 'open' : 'close']()
+      this[visible ? 'open' : 'close']('model')
     }
   },
   created () {
@@ -315,7 +315,7 @@ export default {
         if (isMsg) {
           this.addMsgQueue()
           if (duration !== -1) {
-            setTimeout(this.close, XEUtils.toNumber(duration))
+            setTimeout(() => this.close('close'), XEUtils.toNumber(duration))
           }
         } else {
           this.$nextTick(() => {
@@ -399,6 +399,7 @@ export default {
               this.zoomLocat = null
             }
             XEUtils.remove(allActivedModals, item => item === this)
+            this.$emit('before-hide', params)
             setTimeout(() => {
               this.visible = false
               if (events.hide) {
@@ -413,13 +414,14 @@ export default {
       }
     },
     handleGlobalKeydownEvent (evnt) {
-      if (evnt.keyCode === 27) {
+      const isEsc = evnt.keyCode === 27
+      if (isEsc) {
         const lastModal = XEUtils.max(allActivedModals, item => item.modalZindex)
         // 多个时，只关掉最上层的窗口
         if (lastModal) {
           setTimeout(() => {
             if (lastModal === this && lastModal.escClosable) {
-              this.close()
+              this.close('exit')
             }
           }, 10)
         }

@@ -9,10 +9,10 @@
       <template #buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
-        <vxe-button @click="validEvent">校验</vxe-button>
-        <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-        <vxe-button @click="validAllEvent">全量校验</vxe-button>
-        <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+        <vxe-button @click="validEvent">快速校验</vxe-button>
+        <vxe-button @click="fullValidEvent">完整快速校验</vxe-button>
+        <vxe-button @click="validAllEvent">全量数据校验</vxe-button>
+        <vxe-button @click="selectValidEvent">选中行校验</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -69,6 +69,9 @@ export default {
         sex2: [
           { required: true, message: '性别必须填写' }
         ],
+        age: [
+          { type: 'number', min: 10, max: 100000, message: '输入 10 ~ 100000 范围' }
+        ],
         date: [
           { required: true, message: '日期必须填写' }
         ]
@@ -79,10 +82,10 @@ export default {
           <template #buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
-            <vxe-button @click="validEvent">校验</vxe-button>
-            <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-            <vxe-button @click="validAllEvent">全量校验</vxe-button>
-            <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+            <vxe-button @click="validEvent">快速校验</vxe-button>
+            <vxe-button @click="fullValidEvent">完整快速校验</vxe-button>
+            <vxe-button @click="validAllEvent">全量数据校验</vxe-button>
+            <vxe-button @click="selectValidEvent">选中行校验</vxe-button>
             <vxe-button @click="getSelectEvent">获取选中</vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
@@ -129,6 +132,9 @@ export default {
                 ],
                 sex2: [
                   { required: true, message: '性别必须填写' }
+                ],
+                age: [
+                  { type: 'number', min: 10, max: 100000, message: '输入 10 ~ 100000 范围' }
                 ],
                 date: [
                   { required: true, message: '日期必须填写' }

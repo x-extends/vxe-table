@@ -28,9 +28,9 @@
         <vxe-button>
           <template #default>校验操作</template>
           <template #dropdowns>
-            <vxe-button type="text" @click="validEvent">基本校验</vxe-button>
-            <vxe-button type="text" @click="fullValidEvent">完整校验</vxe-button>
-            <vxe-button type="text" @click="selectValidEvent">选中校验</vxe-button>
+            <vxe-button type="text" @click="validEvent">快速校验</vxe-button>
+            <vxe-button type="text" @click="fullValidEvent">完整快速校验</vxe-button>
+            <vxe-button type="text" @click="selectValidEvent">选中行校验</vxe-button>
           </template>
         </vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -110,9 +110,9 @@ export default {
             <vxe-button>
               <template #default校验操作</template>
               <template #dropdowns>
-                <vxe-button @click="validEvent">基本校验</vxe-button>
-                <vxe-button @click="fullValidEvent">完整校验</vxe-button>
-                <vxe-button @click="selectValidEvent">选中校验</vxe-button>
+                <vxe-button @click="validEvent">快速校验</vxe-button>
+                <vxe-button @click="fullValidEvent">完整快速校验</vxe-button>
+                <vxe-button @click="selectValidEvent">选中行校验</vxe-button>
               </template>
             </vxe-button>
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>

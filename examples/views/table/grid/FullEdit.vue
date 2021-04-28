@@ -430,12 +430,12 @@ export default {
                 if (data.id) {
                   this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
                   // 读取路径，请求文件
-                  XEAjax.fetch(\`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/\${data.id}\`).then(response => {
-                    response.blob().then(blob => {
+                  fetch(\`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/\${data.id}\`)
+                    .then(response => response.blob())
+                    .then(blob => {
                       // 开始下载
                       this.$XSaveFile({ filename: '导出数据', type: 'xlsx', content: blob })
                     })
-                  })
                 }
               }).catch(() => {
                 this.$XModal.message({ content: '导出失败！', status: 'error' })
@@ -521,12 +521,12 @@ export default {
         if (data.id) {
           this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
           // 读取路径，请求文件
-          XEAjax.fetch(`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/${data.id}`).then(response => {
-            response.blob().then(blob => {
+          fetch(`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/${data.id}`)
+            .then(response => response.blob())
+            .then(blob => {
               // 开始下载
               this.$XSaveFile({ filename: '导出数据', type: 'xlsx', content: blob })
             })
-          })
         }
       }).catch(() => {
         this.$XModal.message({ content: '导出失败！', status: 'error' })

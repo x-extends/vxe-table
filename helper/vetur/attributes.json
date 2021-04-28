@@ -273,7 +273,7 @@
   },
   "vxe-table/empty-render": {
     "type": "any",
-    "description": "空内容渲染配置项"
+    "description": "空内容渲染配置项，empty-render 的优先级大于 empty-text"
   },
   "vxe-table/custom-config": {
     "type": "any",
@@ -961,7 +961,7 @@
   },
   "vxe-grid/empty-render": {
     "type": "any",
-    "description": "空内容渲染配置项"
+    "description": "空内容渲染配置项，empty-render 的优先级大于 empty-text"
   },
   "vxe-grid/custom-config": {
     "type": "any",
@@ -1329,11 +1329,11 @@
   },
   "vxe-input/min-date": {
     "type": "number | string | date",
-    "description": "只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最小值"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，设置日期可选范围的最小值"
   },
   "vxe-input/max-date": {
     "type": "number | string | date",
-    "description": "只对 type=date|datetime|week|month|year 有效，设置日期可选范围的最大值"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，设置日期可选范围的最大值"
   },
   "vxe-input/start-week": {
     "type": "number | string",
@@ -1341,31 +1341,27 @@
   },
   "vxe-input/label-format": {
     "type": "string",
-    "description": "只对 type=date|datetime|week|month|year 有效，输入框中显示的日期格式"
-  },
-  "vxe-input/parse-format": {
-    "type": "string",
-    "description": "只对 type=date|datetime|week|month|year 有效，绑定值的解析格式，如果是值为字符串时可能会用到"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，输入框中显示的日期格式"
   },
   "vxe-input/value-format": {
     "type": "string",
-    "description": "只对 type=date|datetime|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串"
   },
   "vxe-input/editable": {
     "type": "boolean",
-    "description": "只对 type=date|time|datetime|week|month|year 有效，文本框是否允许输入"
+    "description": "只对 type=date|time|datetime|week|month|quarter|year 有效，文本框是否允许输入"
   },
   "vxe-input/disabled-method": {
     "type": "function",
-    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, viewType }) 的返回值用来决定该日期是否允许选中"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，该方法 Function({ date, viewType }) 的返回值用来决定该日期是否允许选中"
   },
   "vxe-input/festival-method": {
     "type": "function",
-    "description": "只对 type=date|datetime|week|month|year 有效，该方法 Function({ date, viewType }) 用于返回对应日期显示的节日"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，该方法 Function({ date, viewType }) 用于返回对应日期显示的节日"
   },
   "vxe-input/transfer": {
     "type": "boolean",
-    "description": "只对 type=date|time|datetime|week|month|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
+    "description": "只对 type=date|time|datetime|week|month|quarter|year 有效，是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
   },
   "vxe-select/value": {
     "type": "any",
@@ -1650,6 +1646,10 @@
   "vxe-modal/resize": {
     "type": "boolean",
     "description": "是否允许窗口边缘拖动调整窗口大小"
+  },
+  "vxe-modal/show-close": {
+    "type": "boolean",
+    "description": "是否显示关闭按钮"
   },
   "vxe-modal/duration": {
     "type": "number | string",

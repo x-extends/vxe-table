@@ -17,8 +17,11 @@ export const GlobalEvent = {
   trigger (evnt) {
     const isWheel = evnt.type === wheelName
     eventStore.forEach(({ comp, type, cb }) => {
-      if (type === evnt.type || (isWheel && type === 'mousewheel')) {
-        cb.call(comp, evnt)
+      // 如果被取消冒泡，不再执行
+      if (!evnt.cancelBubble) {
+        if (type === evnt.type || (isWheel && type === 'mousewheel')) {
+          cb.call(comp, evnt)
+        }
       }
     })
   },

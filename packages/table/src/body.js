@@ -439,7 +439,7 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyRender, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
       if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
@@ -450,9 +450,10 @@ export default {
     if ($scopedSlots.empty) {
       emptyContent = $scopedSlots.empty.call(this, { $table: $xetable }, h)
     } else {
-      const compConf = emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
-      if (compConf && compConf.renderEmpty) {
-        emptyContent = compConf.renderEmpty.call(this, h, emptyOpts, { $table: $xetable })
+      const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
+      const renderEmpty = compConf ? compConf.renderEmpty : null
+      if (renderEmpty) {
+        emptyContent = renderEmpty.call(this, h, emptyOpts, { $table: $xetable })
       } else {
         emptyContent = $xetable.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
       }

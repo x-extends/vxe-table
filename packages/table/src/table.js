@@ -62,9 +62,10 @@ function renderEmptyContenet (h, _vm) {
   if ($scopedSlots.empty) {
     emptyContent = $scopedSlots.empty.call(_vm, params, h)
   } else {
-    const compConf = _vm.emptyRender ? VXETable.renderer.get(emptyOpts.name) : null
-    if (compConf) {
-      emptyContent = compConf.renderEmpty.call(_vm, h, emptyOpts, params)
+    const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
+    const renderEmpty = compConf ? compConf.renderEmpty : null
+    if (renderEmpty) {
+      emptyContent = renderEmpty.call(_vm, h, emptyOpts, params)
     } else {
       emptyContent = UtilTools.getFuncText(_vm.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
     }
@@ -934,7 +935,10 @@ export default {
         'is--scroll-x': overflowX,
         'is--virtual-x': scrollXLoad,
         'is--virtual-y': scrollYLoad
-      }]
+      }],
+      on: {
+        keydown: this.keydownEvent
+      }
     }, [
       /**
        * 隐藏列

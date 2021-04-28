@@ -129,6 +129,7 @@ $iconWidth: 1.6em;
     &.type--datetime,
     &.type--week,
     &.type--month,
+    &.type--quarter,
     &.type--year,
     &.type--time {
       .vxe-input--inner {
@@ -150,6 +151,7 @@ $iconWidth: 1.6em;
       &.type--datetime,
       &.type--week,
       &.type--month,
+      &.type--quarter,
       &.type--year,
       &.type--time {
         .vxe-input--inner {
@@ -315,6 +317,7 @@ $iconWidth: 1.6em;
   &.type--date,
   &.type--week,
   &.type--month,
+  &.type--quarter,
   &.type--year {
     user-select: none;
   }
@@ -341,6 +344,15 @@ $iconWidth: 1.6em;
           &:first-child {
             width: 14%;
           }
+        }
+      }
+    }
+  }
+  &.type--quarter {
+    .vxe-input--date-picker-body {
+      table {
+        th {
+          width: 50%;
         }
       }
     }
@@ -529,7 +541,6 @@ $iconWidth: 1.6em;
 
 .vxe-input--date-label {
   position: relative;
-  padding-top: 8%;
   &.is-notice {
     &:before {
       content: "";
@@ -537,7 +548,7 @@ $iconWidth: 1.6em;
       width: 4px;
       height: 4px;
       left: 0.8em;
-      top: 0.3em;
+      top: 0.1em;
       transform: translateX(-50%);
       border-radius: 100%;
       background-color: $vxe-input-date-notice-background-color;
@@ -547,7 +558,7 @@ $iconWidth: 1.6em;
 .vxe-input--date-label--extra {
   position: absolute;
   right: 0.1em;
-  top: 0;
+  top: -0.2em;
   font-size: 12px;
   line-height: 12px;
   transform: scale(0.7);
@@ -569,7 +580,7 @@ $iconWidth: 1.6em;
 .vxe-input--date-festival--label {
   display: block;
   font-size: 12px;
-  transform: scale(0.9);
+  transform: scale(0.8);
 }
 
 @keyframes festivalOverlap2 {
@@ -605,7 +616,7 @@ $iconWidth: 1.6em;
   & > span {
     height: 14px;
     display: block;
-    transform: scale(0.9);
+    transform: scale(0.8);
   }
 }
 
@@ -655,8 +666,8 @@ $iconWidth: 1.6em;
   height: $vxe-input-height-default;
   .vxe-input--inner {
     &[type="date"]::-webkit-inner-spin-button,
-      &[type="month"]::-webkit-inner-spin-button,
-      &[type="week"]::-webkit-inner-spin-button {
+    &[type="month"]::-webkit-inner-spin-button,
+    &[type="week"]::-webkit-inner-spin-button {
       margin-top: 6px;
     }
     &[type="date"]::-webkit-inner-spin-button,
@@ -705,6 +716,7 @@ $iconWidth: 1.6em;
   $fontSizeList: $vxe-font-size, $vxe-font-size-medium, $vxe-font-size-small, $vxe-font-size-mini;
   $timeWeekRowHeightList: $vxe-input-date-time-week-row-height-default, $vxe-input-date-time-week-row-height-medium, $vxe-input-date-time-week-row-height-small, $vxe-input-date-time-week-row-height-mini;
   $monthYearRowHeightList: $vxe-input-date-month-year-row-height-default, $vxe-input-date-month-year-row-height-medium, $vxe-input-date-month-year-row-height-small, $vxe-input-date-month-year-row-height-mini;
+  $quarterRowHeightList: $vxe-input-date-quarter-row-height-default, $vxe-input-date-quarter-row-height-medium, $vxe-input-date-quarter-row-height-small, $vxe-input-date-quarter-row-height-mini;
   $titleRowHeightList: $vxe-input-date-title-height-default, $vxe-input-date-title-height-medium, $vxe-input-date-title-height-small, $vxe-input-date-title-height-mini;
   
   font-size: nth($fontSizeList, $sizeIndex);
@@ -715,6 +727,7 @@ $iconWidth: 1.6em;
   &.type--time,
   &.type--week,
   &.type--month,
+  &.type--quarter,
   &.type--year {
     .vxe-input--panel-wrapper {
       padding: 12px - $sizeIndex;
@@ -722,6 +735,7 @@ $iconWidth: 1.6em;
   }
   &.type--date,
   &.type--month,
+  &.type--quarter,
   &.type--year {
     .vxe-input--panel-wrapper {
       $widthList: 336px, 336px, 312px, 288px;
@@ -806,6 +820,11 @@ $iconWidth: 1.6em;
   .vxe-input--date-week-view {
     td {
       height: nth($timeWeekRowHeightList, $sizeIndex);
+    }
+  }
+  .vxe-input--date-quarter-view {
+    td {
+      height: nth($quarterRowHeightList, $sizeIndex);
     }
   }
   .vxe-input--date-month-view,

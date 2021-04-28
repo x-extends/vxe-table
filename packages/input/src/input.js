@@ -5,6 +5,7 @@ import { UtilTools, DomTools, GlobalEvent } from '../../tools'
 
 const yearSize = 20
 const monthSize = 20
+const quarterSize = 8
 
 function toStringTimeDate (str) {
   if (str) {
@@ -29,6 +30,18 @@ function toStringTimeDate (str) {
     return rest
   }
   return new Date('')
+}
+
+function getDateQuarter (date) {
+  const month = date.getMonth()
+  if (month < 3) {
+    return 1
+  } else if (month < 6) {
+    return 2
+  } else if (month < 9) {
+    return 3
+  }
+  return 4
 }
 
 function getNumberValue (_vm, val) {
@@ -124,7 +137,7 @@ function renderDateDayTable (h, _vm) {
 
 function renderDateWeekTable (h, _vm) {
   const { datePanelType, dateValue, datePanelValue, weekHeaders, weekDates } = _vm
-  const matchFormat = 'yyyy-MM-dd'
+  const matchFormat = 'yyyyMMdd'
   return [
     h('table', {
       class: `vxe-input--date-${datePanelType}-view`,
@@ -166,7 +179,7 @@ function renderDateWeekTable (h, _vm) {
 
 function renderDateMonthTable (h, _vm) {
   const { dateValue, datePanelType, monthDatas, datePanelValue } = _vm
-  const matchFormat = 'yyyy-MM'
+  const matchFormat = 'yyyyMM'
   return [
     h('table', {
       class: `vxe-input--date-${datePanelType}-view`,
@@ -193,6 +206,41 @@ function renderDateMonthTable (h, _vm) {
               mouseenter: () => _vm.dateMouseenterEvent(item)
             }
           }, renderDateLabel(h, _vm, item, GlobalConfig.i18n(`vxe.input.date.months.m${item.month}`)))
+        }))
+      }))
+    ])
+  ]
+}
+
+function renderDateQuarterTable (h, _vm) {
+  const { dateValue, datePanelType, quarterDatas, datePanelValue } = _vm
+  const matchFormat = 'yyyyq'
+  return [
+    h('table', {
+      class: `vxe-input--date-${datePanelType}-view`,
+      attrs: {
+        cellspacing: 0,
+        cellpadding: 0,
+        border: 0
+      }
+    }, [
+      h('tbody', quarterDatas.map(rows => {
+        return h('tr', rows.map(item => {
+          return h('td', {
+            class: {
+              'is--prev': item.isPrev,
+              'is--current': item.isCurrent,
+              'is--now': item.isNow,
+              'is--next': item.isNext,
+              'is--disabled': isDateDisabled(_vm, item),
+              'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+              'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
+            },
+            on: {
+              click: () => _vm.dateSelectEvent(item),
+              mouseenter: () => _vm.dateMouseenterEvent(item)
+            }
+          }, renderDateLabel(h, _vm, item, GlobalConfig.i18n(`vxe.input.date.quarters.q${item.quarter}`)))
         }))
       }))
     ])
@@ -239,6 +287,8 @@ function renderDateTable (h, _vm) {
       return renderDateWeekTable(h, _vm)
     case 'month' :
       return renderDateMonthTable(h, _vm)
+    case 'quarter' :
+      return renderDateQuarterTable(h, _vm)
     case 'year' :
       return renderDateYearTable(h, _vm)
   }
@@ -641,7 +691,7 @@ export default {
       return ['number', 'integer', 'float'].indexOf(this.type) > -1
     },
     isDatePickerType () {
-      return this.hasTime || ['date', 'week', 'month', 'year'].indexOf(this.type) > -1
+      return this.hasTime || ['date', 'week', 'month', 'quarter', 'year'].indexOf(this.type) > -1
     },
     hasTime () {
       const { type } = this
@@ -689,14 +739,14 @@ export default {
       return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
     dateValue () {
-      const { inputValue, value, isDatePickerType, type, dateValueFormat } = this
+      const { value, isDatePickerType, type, dateValueFormat } = this
       let val = null
-      if (inputValue && isDatePickerType) {
+      if (value && isDatePickerType) {
         let date
         if (type === 'time') {
-          date = toStringTimeDate(inputValue)
+          date = toStringTimeDate(value)
         } else {
-          date = XEUtils.toStringDate(type === 'week' ? value : inputValue, dateValueFormat)
+          date = XEUtils.toStringDate(value, dateValueFormat)
         }
         if (XEUtils.isValidDate(date)) {
           val = date
@@ -734,7 +784,9 @@ export default {
           year = selectMonth.getFullYear()
           month = selectMonth.getMonth() + 1
         }
-        if (datePanelType === 'month') {
+        if (datePanelType === 'quarter') {
+          return GlobalConfig.i18n('vxe.input.date.quarterLabel', [year])
+        } else if (datePanelType === 'month') {
           return GlobalConfig.i18n('vxe.input.date.monthLabel', [year])
         } else if (datePanelType === 'year') {
           return yearList.length ? `${yearList[0].year} - ${yearList[yearList.length - 1].year}` : ''
@@ -797,6 +849,34 @@ export default {
     },
     yearDatas () {
       return XEUtils.chunk(this.yearList, 4)
+    },
+    quarterList () {
+      const { selectMonth, currentDate } = this
+      const quarters = []
+      if (selectMonth && currentDate) {
+        const currFullYear = currentDate.getFullYear()
+        const currQuarter = getDateQuarter(currentDate)
+        const firstYear = XEUtils.getWhatYear(selectMonth, 0, 'first')
+        const selFullYear = firstYear.getFullYear()
+        for (let index = -2; index < quarterSize - 2; index++) {
+          const date = XEUtils.getWhatQuarter(firstYear, index)
+          const itemFullYear = date.getFullYear()
+          const itemQuarter = getDateQuarter(date)
+          const isPrev = itemFullYear < selFullYear
+          quarters.push({
+            date,
+            isPrev,
+            isCurrent: itemFullYear === selFullYear,
+            isNow: itemFullYear === currFullYear && itemQuarter === currQuarter,
+            isNext: !isPrev && itemFullYear > selFullYear,
+            quarter: itemQuarter
+          })
+        }
+      }
+      return quarters
+    },
+    quarterDatas () {
+      return XEUtils.chunk(this.quarterList, 2)
     },
     monthList () {
       const { selectMonth, currentDate } = this
@@ -925,7 +1005,7 @@ export default {
     },
     inpReadonly () {
       const { type, readonly, editable } = this
-      return readonly || type === 'week' || !editable
+      return readonly || !editable || (type === 'week' || type === 'quarter')
     }
   },
   watch: {
@@ -1183,42 +1263,46 @@ export default {
       if (!inpReadonly) {
         if (isNumType) {
           if (inputValue) {
-            let inpVal = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
-            if (!this.vaildMinNum(inpVal)) {
-              inpVal = min
-            } else if (!this.vaildMaxNum(inpVal)) {
-              inpVal = max
+            let inpNumVal = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+            if (!this.vaildMinNum(inpNumVal)) {
+              inpNumVal = min
+            } else if (!this.vaildMaxNum(inpNumVal)) {
+              inpNumVal = max
             }
-            this.emitModel(getNumberValue(this, inpVal), { type: 'check' })
+            this.emitModel(getNumberValue(this, inpNumVal), { type: 'check' })
           }
         } else if (isDatePickerType) {
-          let inpVal = inputValue
-          if (inpVal) {
-            if (type === 'time') {
-              inpVal = toStringTimeDate(inpVal)
+          if (inputValue) {
+            if (type === 'week' || type === 'quarter') {
+              // 周和季度选择器不支持解析，无需处理
             } else {
-              inpVal = XEUtils.toStringDate(inpVal, dateLabelFormat)
-            }
-            if (XEUtils.isValidDate(inpVal)) {
+              let inpDateVal
               if (type === 'time') {
-                inpVal = XEUtils.toDateString(inpVal, dateLabelFormat)
-                if (inputValue !== inpVal) {
-                  this.emitModel(inpVal, { type: 'check' })
-                }
-                this.inputValue = inpVal
+                inpDateVal = toStringTimeDate(inputValue)
               } else {
-                if (!XEUtils.isDateSame(inputValue, inpVal, dateLabelFormat)) {
-                  if (type === 'datetime') {
-                    datetimePanelValue.setHours(inpVal.getHours())
-                    datetimePanelValue.setMinutes(inpVal.getMinutes())
-                    datetimePanelValue.setSeconds(inpVal.getSeconds())
-                  }
-                }
-                this.inputValue = XEUtils.toDateString(inpVal, dateLabelFormat)
-                this.dateChange(inpVal)
+                inpDateVal = XEUtils.toStringDate(inputValue, dateLabelFormat)
               }
-            } else {
-              this.dateRevert()
+              if (XEUtils.isValidDate(inpDateVal)) {
+                if (type === 'time') {
+                  inpDateVal = toStringTimeDate(inpDateVal)
+                  if (inputValue !== inpDateVal) {
+                    this.emitModel(inpDateVal, { type: 'check' })
+                  }
+                  this.inputValue = inpDateVal
+                } else {
+                  if (type === 'datetime') {
+                    if (!XEUtils.isDateSame(inputValue, inpDateVal, dateLabelFormat)) {
+                      datetimePanelValue.setHours(inpDateVal.getHours())
+                      datetimePanelValue.setMinutes(inpDateVal.getMinutes())
+                      datetimePanelValue.setSeconds(inpDateVal.getSeconds())
+                    }
+                  }
+                  this.inputValue = XEUtils.toDateString(inpDateVal, dateLabelFormat)
+                  this.dateChange(inpDateVal)
+                }
+              } else {
+                this.dateRevert()
+              }
             }
           } else {
             this.emitModel('', { type: 'check' })
@@ -1346,7 +1430,7 @@ export default {
     },
     dateToggleTypeEvent () {
       let { datePanelType } = this
-      if (datePanelType === 'month') {
+      if (datePanelType === 'month' || datePanelType === 'quarter') {
         datePanelType = 'year'
       } else {
         datePanelType = 'month'
@@ -1358,7 +1442,7 @@ export default {
       if (!isDisabledPrevDateBtn) {
         if (type === 'year') {
           this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
-        } else if (type === 'month') {
+        } else if (type === 'month' || type === 'quarter') {
           if (datePanelType === 'year') {
             this.selectMonth = XEUtils.getWhatYear(this.selectMonth, -yearSize, 'first')
           } else {
@@ -1387,7 +1471,7 @@ export default {
       if (!isDisabledNextDateBtn) {
         if (type === 'year') {
           this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
-        } else if (type === 'month') {
+        } else if (type === 'month' || type === 'quarter') {
           if (datePanelType === 'year') {
             this.selectMonth = XEUtils.getWhatYear(this.selectMonth, yearSize, 'first')
           } else {
@@ -1424,6 +1508,14 @@ export default {
       } else if (type === 'year') {
         this.hidePanel()
         this.dateChange(date)
+      } else if (type === 'quarter') {
+        if (datePanelType === 'year') {
+          this.datePanelType = 'quarter'
+          this.dateCheckMonth(date)
+        } else {
+          this.dateChange(date)
+          this.hidePanel()
+        }
       } else {
         if (datePanelType === 'month') {
           this.datePanelType = type === 'week' ? type : 'day'
@@ -1445,6 +1537,8 @@ export default {
         const { datePanelType } = this
         if (datePanelType === 'month') {
           this.dateMoveMonth(item.date)
+        } else if (datePanelType === 'quarter') {
+          this.dateMoveQuarter(item.date)
         } else if (datePanelType === 'year') {
           this.dateMoveYear(item.date)
         } else {
@@ -1480,7 +1574,7 @@ export default {
     },
     dateMoveDay (offsetDay) {
       if (!isDateDisabled(this, { date: offsetDay })) {
-        if (!this.dayList.some(item => XEUtils.isDateSame(item.date, offsetDay, 'yyyy-MM-dd'))) {
+        if (!this.dayList.some(item => XEUtils.isDateSame(item.date, offsetDay, 'yyyyMMdd'))) {
           this.dateCheckMonth(offsetDay)
         }
         this.dateParseValue(offsetDay)
@@ -1488,10 +1582,18 @@ export default {
     },
     dateMoveMonth (offsetMonth) {
       if (!isDateDisabled(this, { date: offsetMonth })) {
-        if (!this.monthList.some(item => XEUtils.isDateSame(item.date, offsetMonth, 'yyyy-MM'))) {
+        if (!this.monthList.some(item => XEUtils.isDateSame(item.date, offsetMonth, 'yyyyMM'))) {
           this.dateCheckMonth(offsetMonth)
         }
         this.dateParseValue(offsetMonth)
+      }
+    },
+    dateMoveQuarter (offsetQuarter) {
+      if (!isDateDisabled(this, { date: offsetQuarter })) {
+        if (!this.quarterList.some(item => XEUtils.isDateSame(item.date, offsetQuarter, 'yyyyq'))) {
+          this.dateCheckMonth(offsetQuarter)
+        }
+        this.dateParseValue(offsetQuarter)
       }
     },
     dateMoveYear (offsetYear) {
@@ -1542,6 +1644,18 @@ export default {
             offsetYear = XEUtils.getWhatYear(offsetYear, 4)
           }
           this.dateMoveYear(offsetYear)
+        } else if (datePanelType === 'quarter') {
+          let offsetQuarter = XEUtils.getWhatQuarter(datePanelValue || Date.now(), 0, 'first')
+          if (isLeftArrow) {
+            offsetQuarter = XEUtils.getWhatQuarter(offsetQuarter, -1)
+          } else if (isUpArrow) {
+            offsetQuarter = XEUtils.getWhatQuarter(offsetQuarter, -2)
+          } else if (isRightArrow) {
+            offsetQuarter = XEUtils.getWhatQuarter(offsetQuarter, 1)
+          } else if (isDwArrow) {
+            offsetQuarter = XEUtils.getWhatQuarter(offsetQuarter, 2)
+          }
+          this.dateMoveQuarter(offsetQuarter)
         } else if (datePanelType === 'month') {
           let offsetMonth = XEUtils.getWhatMonth(datePanelValue || Date.now(), 0, 'first')
           if (isLeftArrow) {
@@ -1605,7 +1719,7 @@ export default {
     },
     dateOpenPanel () {
       const { type, dateValue } = this
-      if (['year', 'month', 'week'].indexOf(type) > -1) {
+      if (['year', 'quarter', 'month', 'week'].indexOf(type) > -1) {
         this.datePanelType = type
       } else {
         this.datePanelType = 'day'

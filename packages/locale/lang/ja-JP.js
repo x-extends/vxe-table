@@ -256,6 +256,7 @@ export default {
         m10: '10月',
         m11: '11月',
         m12: '12月',
+        quarterLabel: '{0} 年',
         monthLabel: '{0} 年',
         dayLabel: '{0} 年 {1}',
         labelFormat: {
@@ -264,6 +265,7 @@ export default {
           datetime: 'yyyy-MM-dd HH:mm:ss',
           week: 'yyyy 年 WW',
           month: 'yyyy-MM',
+          quarter: 'yyyy 年第 q 季度',
           year: 'yyyy'
         },
         weeks: {
@@ -289,6 +291,12 @@ export default {
           m9: '10月',
           m10: '11月',
           m11: '12月'
+        },
+        quarters: {
+          q1: '第一季度',
+          q2: '第二季度',
+          q3: '第三季度',
+          q4: '第四季度'
         }
       }
     }

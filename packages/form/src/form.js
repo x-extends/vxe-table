@@ -32,20 +32,20 @@ function validErrorRuleValue (rule, val) {
   const isNumType = type === 'number'
   const numVal = isNumType ? XEUtils.toNumber(val) : XEUtils.getSize(val)
   // 判断数值
-  if (isNumType) {
-    return isNaN(val)
+  if (isNumType && isNaN(val)) {
+    return true
   }
   // 如果存在 min，判断最小值
-  if (!XEUtils.eqNull(min)) {
-    return numVal < XEUtils.toNumber(min)
+  if (!XEUtils.eqNull(min) && numVal < XEUtils.toNumber(min)) {
+    return true
   }
   // 如果存在 max，判断最大值
-  if (!XEUtils.eqNull(max)) {
-    return numVal > XEUtils.toNumber(max)
+  if (!XEUtils.eqNull(max) && numVal > XEUtils.toNumber(max)) {
+    return true
   }
   // 如果存在 pattern，正则校验
-  if (pattern) {
-    return !(XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)
+  if (pattern && !(XEUtils.isRegExp(pattern) ? pattern : new RegExp(pattern)).test(val)) {
+    return true
   }
   return false
 }

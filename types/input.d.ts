@@ -15,7 +15,7 @@ export declare class Input extends VXETableComponent {
   /**
    * 渲染类型
    */
-  type?: 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'year';
+  type?: 'text' | 'search' | 'number' | 'integer' | 'float' | 'password' | 'date' | 'time' | 'datetime' | 'week' | 'month' | 'quarter' | 'year';
   /**
    * 当有值时，是否在右侧显示清除按钮
    */
@@ -45,11 +45,11 @@ export declare class Input extends VXETableComponent {
    */
   form?: string;
   /**
-   * 只对 type=date|week|month|year 有效，有效，设置日期可选范围的最小值
+   * 只对 type=date|week|month|quarter|year 有效，有效，设置日期可选范围的最小值
    */
   minDate?: string | number | Date;
   /**
-   * 只对 type=date|week|month|year 有效，有效，设置日期可选范围的最大值
+   * 只对 type=date|week|month|quarter|year 有效，有效，设置日期可选范围的最大值
    */
   maxDate?: string | number | Date;
   /**
@@ -57,23 +57,23 @@ export declare class Input extends VXETableComponent {
    */
   startWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   /**
-   * 只对 type=date|week|month|year 有效，输入框中显示的日期格式
+   * 只对 type=date|week|month|quarter|year 有效，输入框中显示的日期格式
    */
   labelFormat?: string;
   /**
-   * 只对 type=date|week|month|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串
+   * 只对 type=date|week|month|quarter|year 有效，绑定值的返回格式，默认返回 Date 类型，如果指定格式则返回字符串
    */
   valueFormat?: string;
   /**
-   * 只对 type=date|week|month|year 有效，文本框是否允许输入
+   * 只对 type=date|week|month|quarter|year 有效，文本框是否允许输入
    */
   editable?: string;
   /**
-   * 只对 type=date|week|month|year 有效，该方法 Function({ date, type }) 用于返回对应日期显示的节日
+   * 只对 type=date|week|month|quarter|year 有效，该方法 Function({ date, type }) 用于返回对应日期显示的节日
    */
   festivalMethod?(params: InputDateFestivalParams): InputDateFestivalInfo | void;
   /**
-   * 只对 type=date|week|month|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中
+   * 只对 type=date|week|month|quarter|year 有效，该方法 Function({date}) 的返回值用来决定该日期是否允许选中
    */
   disabledMethod?(params: InputDateDisabledParams): boolean;
   /**
@@ -101,11 +101,11 @@ export declare class Input extends VXETableComponent {
    */
   suffixIcon?: string;
   /**
-   * 只对 type=date|week|month|year 有效，固定显示弹框容器的方向
+   * 只对 type=date|week|month|quarter|year 有效，固定显示弹框容器的方向
    */
   placement?: string;
   /**
-   * 只对 type=date|week|month|year 有效，是否将弹框容器插入于 body 内
+   * 只对 type=date|week|month|quarter|year 有效，是否将弹框容器插入于 body 内
    */
   transfer?: boolean;
 
