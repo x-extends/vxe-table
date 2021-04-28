@@ -50,7 +50,7 @@ interface DateHourMinuteSecondItem {
 
 const yearSize = 20
 const monthSize = 20
-const quarterSize = 12
+const quarterSize = 8
 
 function toStringTimeDate (str: VxeInputPropTypes.ModelValue) {
   if (str) {
@@ -417,7 +417,7 @@ export default defineComponent({
         const currQuarter = getDateQuarter(currentDate)
         const firstYear = XEUtils.getWhatYear(selectMonth, 0, 'first')
         const selFullYear = firstYear.getFullYear()
-        for (let index = -4; index < quarterSize - 4; index++) {
+        for (let index = -2; index < quarterSize - 2; index++) {
           const date = XEUtils.getWhatQuarter(firstYear, index)
           const itemFullYear = date.getFullYear()
           const itemQuarter = getDateQuarter(date)

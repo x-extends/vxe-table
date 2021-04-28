@@ -76,6 +76,9 @@ export default defineComponent({
       sex2: [
         { required: true, message: '性别必须填写' }
       ],
+      age: [
+        { type: 'number', min: 10, max: 100000, message: '输入 10 ~ 100000 范围' }
+      ],
       date: [
         { required: true, message: '日期必须填写' }
       ]
@@ -257,6 +260,9 @@ export default defineComponent({
               ],
               sex2: [
                 { required: true, message: '性别必须填写' }
+              ],
+              age: [
+                { type: 'number', min: 10, max: 100000, message: '输入 10 ~ 100000 范围' }
               ],
               date: [
                 { required: true, message: '日期必须填写' }

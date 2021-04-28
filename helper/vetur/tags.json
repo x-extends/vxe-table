@@ -538,6 +538,7 @@
       "mask-closable",
       "esc-closable",
       "show-zoom",
+      "show-close",
       "resize",
       "duration",
       "width",

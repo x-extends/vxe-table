@@ -240,7 +240,6 @@ gulp.task('move_docs_root', () => {
 
 gulp.task('clear_docs_temp', () => {
   return del([
-    'docs/static',
     '../branches/docs/vxe-table/docs'
   ], { force: true })
 })
