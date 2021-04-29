@@ -51,6 +51,8 @@ export default {
         events: 'Event',
         template: 'Template',
         dynamic: 'Use v-for dynamic implementation',
+        customCheckbox: 'Custom checkbox',
+        customRadio: 'Custom radio',
         sortIcon: 'Custom sort icon',
         customSort: 'Custom header sort',
         multiSort: 'Multi-field sort',

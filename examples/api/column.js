@@ -866,6 +866,33 @@ const apis = [
         list: []
       },
       {
+        name: 'title',
+        desc: '只对 type=checkbox,radio 有效，自定义标题模板',
+        version: '3.3.1',
+        type: '',
+        enum: '',
+        defVal: '{column, columnIndex, $columnIndex, _columnIndex, $rowIndex}',
+        list: []
+      },
+      {
+        name: 'checkbox',
+        desc: '只对 type=checkbox 有效，自定义复选框模板',
+        version: '3.3.1',
+        type: '',
+        enum: '',
+        defVal: '{row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, checked, disabled, indeterminate}',
+        list: []
+      },
+      {
+        name: 'radio',
+        desc: '只对 type=radio 有效，自定义单选框模板',
+        version: '3.3.1',
+        type: '',
+        enum: '',
+        defVal: '{row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, checked, disabled}',
+        list: []
+      },
+      {
         name: 'content',
         desc: '只对 type=expand 有效，自定义展开后的内容模板',
         version: '',

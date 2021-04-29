@@ -558,6 +558,18 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.customCheckbox',
+              locat: {
+                name: 'TableCustomCheckbox'
+              }
+            },
+            {
+              label: 'app.aside.nav.customRadio',
+              locat: {
+                name: 'TableCustomRadio'
+              }
+            },
+            {
               label: 'app.aside.nav.sortIcon',
               locat: {
                 name: 'TableSortIcon'

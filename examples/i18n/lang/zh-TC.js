@@ -50,6 +50,8 @@ export default {
         events: '事件绑定',
         template: '自定义模板',
         dynamic: '使用 v-for 动态实现',
+        customCheckbox: '自定义复选框',
+        customRadio: '自定义单选框',
         sortIcon: '自定义排序图标',
         customSort: '自定义列头排序',
         multiSort: '多字段组合排序',

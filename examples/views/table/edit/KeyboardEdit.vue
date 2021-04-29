@@ -8,9 +8,11 @@
     <vxe-table
       border
       show-overflow
+      show-footer
       ref="xTable"
       height="500"
       :data="tableData"
+      :footer-method="footerMethod"
       :mouse-config="{selected: true}"
       :checkbox-config="{range: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, editMethod}"
@@ -18,7 +20,7 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input'}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: '$input'}"></vxe-table-column>
     </vxe-table>
@@ -51,9 +53,11 @@ export default {
         <vxe-table
           border
           show-overflow
+          show-footer
           ref="xTable"
           height="500"
           :data="tableData"
+          :footer-method="footerMethod"
           :mouse-config="{selected: true}"
           :checkbox-config="{range: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, editMethod}"
@@ -61,7 +65,7 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input'}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: '$input'}"></vxe-table-column>
         </vxe-table>
@@ -87,6 +91,26 @@ export default {
               const $table = this.$refs.xTable
               // 重写默认的覆盖式，改为追加式
               $table.setActiveCell(row, column)
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
+            footerMethod ({ columns, data }) {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '和值'
+                  }
+                  if (['age'].includes(column.property)) {
+                    return this.sumNum(data, column.property)
+                  }
+                  return null
+                })
+              ]
             }
           }
         }
@@ -99,6 +123,26 @@ export default {
       const $table = this.$refs.xTable
       // 重写默认的覆盖式，改为追加式
       $table.setActiveCell(row, column)
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
+    footerMethod ({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (['age'].includes(column.property)) {
+            return this.sumNum(data, column.property)
+          }
+          return null
+        })
+      ]
     }
   }
 }

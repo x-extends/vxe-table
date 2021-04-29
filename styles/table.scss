@@ -522,7 +522,7 @@
   
   /*边框*/
   .vxe-table--footer-wrapper {
-    border-top: 1px solid $vxe-table-border-color;
+    border-top: $vxe-table-border-width solid $vxe-table-border-color;
   }
   &.border--default,
   &.border--full,
@@ -538,7 +538,7 @@
     .vxe-footer--column {
       background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
       background-repeat: no-repeat;
-      background-size: 100% 1px;
+      background-size: 100% $vxe-table-border-width;
       background-position: right bottom;
     }
   }
@@ -548,11 +548,11 @@
     .vxe-footer--column {
       background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color), linear-gradient($vxe-table-border-color, $vxe-table-border-color);
       background-repeat: no-repeat;
-      background-size: 1px 100%, 100% 1px;
+      background-size: $vxe-table-border-width 100%, 100% $vxe-table-border-width;
       background-position: right top, right bottom;
     }
     .vxe-table--fixed-left-wrapper {
-      // border-right: 1px solid $vxe-table-border-color;
+      // border-right: $vxe-table-border-width solid $vxe-table-border-color;
       .vxe-body--column{
         border-right-color: $vxe-table-border-color;
       }
@@ -568,7 +568,7 @@
           .vxe-header--gutter {
             background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
             background-repeat: no-repeat;
-            background-size: 100% 1px;
+            background-size: 100% $vxe-table-border-width;
             background-position: right bottom;
           }
         }
@@ -810,7 +810,7 @@
     height: 100%;
     z-index: 10;
     pointer-events: none;
-    border: 1px solid $vxe-table-border-color;
+    border: $vxe-table-border-width solid $vxe-table-border-color;
   }
 
   /*树形节点*/
@@ -901,7 +901,7 @@
     }
   }
   .vxe-body--expanded-column {
-    border-bottom: 1px solid $vxe-table-border-color;
+    border-bottom: $vxe-table-border-width solid $vxe-table-border-color;
     &.col--ellipsis {
       & > .vxe-body--expanded-cell {
         overflow: hidden;
