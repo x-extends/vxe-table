@@ -31,7 +31,7 @@ export default {
   methods: {
     renderOptions (h, filterRender, compConf) {
       const { $parent: $xetable, filterStore } = this
-      const { args, column, multiple } = filterStore
+      const { args, column, multiple, maxHeight } = filterStore
       const { slots } = column
       if (slots && slots.filter) {
         return [
@@ -80,7 +80,10 @@ export default {
           ]))
         ]),
         h('ul', {
-          class: 'vxe-table--filter-body'
+          class: 'vxe-table--filter-body',
+          style: maxHeight ? {
+            maxHeight: `${maxHeight}px`
+          } : {}
         }, filterStore.options.map(item => {
           return h('li', {
             class: ['vxe-table--filter-option', {

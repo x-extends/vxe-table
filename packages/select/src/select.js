@@ -197,6 +197,7 @@ export default {
     value: null,
     clearable: Boolean,
     placeholder: String,
+    loading: Boolean,
     disabled: Boolean,
     multiple: Boolean,
     multiCharOverflow: { type: [Number, String], default: () => GlobalConfig.select.multiCharOverflow },
@@ -325,7 +326,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $scopedSlots, vSize, className, inited, isActivated, disabled, visiblePanel } = this
+    const { $scopedSlots, vSize, className, inited, isActivated, loading, disabled, visiblePanel } = this
     const prefixSlot = $scopedSlots.prefix
     return h('div', {
       class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: this }) : className) : '', {
@@ -348,7 +349,7 @@ export default {
           disabled: disabled,
           type: 'text',
           prefixIcon: this.prefixIcon,
-          suffixIcon: visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE,
+          suffixIcon: loading ? GlobalConfig.icon.SELECT_LOADED : (visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE),
           value: this.selectLabel
         },
         on: {
@@ -367,8 +368,8 @@ export default {
         class: ['vxe-table--ignore-clear vxe-select--panel', {
           [`size--${vSize}`]: vSize,
           'is--transfer': this.transfer,
-          'animat--leave': this.animatVisible,
-          'animat--enter': visiblePanel
+          'animat--leave': !loading && this.animatVisible,
+          'animat--enter': !loading && visiblePanel
         }],
         attrs: {
           placement: this.panelPlacement
@@ -594,7 +595,8 @@ export default {
       }
     },
     showOptionPanel () {
-      if (!this.disabled) {
+      const { loading, disabled } = this
+      if (!loading && !disabled) {
         clearTimeout(this.hidePanelTimeout)
         if (!this.inited) {
           this.inited = true

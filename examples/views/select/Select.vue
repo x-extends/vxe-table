@@ -108,6 +108,7 @@
     </p>
 
     <p>
+      <vxe-select v-model="value45" placeholder="加载中" :options="list45" loading></vxe-select>
       <vxe-select v-model="value40" placeholder="空数据" :options="list40"></vxe-select>
       <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
       <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
@@ -227,6 +228,8 @@ export default {
         { label: '1010', value: '10', disabled: false },
         { label: '1111', value: '11', disabled: false }
       ],
+      value45: null,
+      list45: [],
       demoCodes: [
         `
         <p>
@@ -334,6 +337,7 @@ export default {
         </p>
 
         <p>
+          <vxe-select v-model="value45" placeholder="加载中" :options="list45" loading></vxe-select>
           <vxe-select v-model="value40" placeholder="空数据" :options="list40"></vxe-select>
           <vxe-select v-model="value41" placeholder="分组配置式" :option-groups="list41"></vxe-select>
           <vxe-select v-model="value42" placeholder="禁用选项" :options="list42"></vxe-select>
@@ -432,6 +436,8 @@ export default {
                 { label: '1010', value: '10', disabled: false },
                 { label: '1111', value: '11', disabled: false }
               ]
+              value45: null,
+              list45: []
             }
           }
         }

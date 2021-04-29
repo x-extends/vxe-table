@@ -134,6 +134,7 @@ export default {
     BUTTON_LOADING: iconPrefix + 'refresh roll',
 
     // select
+    SELECT_LOADED: iconPrefix + 'refresh roll',
     SELECT_OPEN: iconPrefix + 'caret-bottom rotate180',
     SELECT_CLOSE: iconPrefix + 'caret-bottom',
 

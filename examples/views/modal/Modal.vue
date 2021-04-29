@@ -308,14 +308,14 @@ export default {
           field: 'role',
           title: 'Role',
           filters: [
-            {
-              label: '前端',
-              value: '前端'
-            },
-            {
-              label: '后端',
-              value: '后端'
-            }
+            { label: '前端', value: '前端' },
+            { label: '后端', value: '后端' },
+            { label: '设计师', value: '设计师' },
+            { label: '管理员', value: '管理员' },
+            { label: '项目经理', value: '项目经理' },
+            { label: '测试', value: '测试' },
+            { label: '美工', value: '美工' },
+            { label: '数据库', value: '数据库' }
           ]
         },
         { field: 'describe', title: 'Describe' }
@@ -601,14 +601,14 @@ export default {
                   field: 'role',
                   title: 'Role',
                   filters: [
-                    {
-                      label: '前端',
-                      value: '前端'
-                    },
-                    {
-                      label: '后端',
-                      value: '后端'
-                    }
+                    { label: '前端', value: '前端' },
+                    { label: '后端', value: '后端' },
+                    { label: '设计师', value: '设计师' },
+                    { label: '管理员', value: '管理员' },
+                    { label: '项目经理', value: '项目经理' },
+                    { label: '测试', value: '测试' },
+                    { label: '美工', value: '美工' },
+                    { label: '数据库', value: '数据库' }
                   ]
                 },
                 { field: 'describe', title: 'Describe' }

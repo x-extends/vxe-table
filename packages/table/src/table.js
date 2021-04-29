@@ -329,7 +329,8 @@ export default {
         options: [],
         column: null,
         multiple: false,
-        visible: false
+        visible: false,
+        maxHeight: null
       },
       // 存放列相关的信息
       columnStore: {
