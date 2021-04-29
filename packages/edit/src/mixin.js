@@ -250,7 +250,7 @@ export default {
         const { actived } = editStore
         const { row, column } = actived
         if (row || column) {
-          this.clearActived()
+          this._syncActivedCell()
         }
         if (treeConfig) {
           return XEUtils.filterTree(tableFullData, row => isUpdateByRow(row), treeOpts)
@@ -347,19 +347,27 @@ export default {
         model.value = null
       }
     },
-    /**
-     * 清除激活的编辑
-     */
-    _clearActived (evnt) {
+    _syncActivedCell () {
       const { tableColumn, editStore, editOpts } = this
       const { actived } = editStore
-      const { args, row, column } = actived
+      const { row, column } = actived
       if (row || column) {
         if (editOpts.mode === 'row') {
           tableColumn.forEach(column => this._setColumnModel(row, column))
         } else {
           this._setColumnModel(row, column)
         }
+      }
+    },
+    /**
+     * 清除激活的编辑
+     */
+    _clearActived (evnt) {
+      const { editStore } = this
+      const { actived } = editStore
+      const { args, row, column } = actived
+      if (row || column) {
+        this._syncActivedCell()
         actived.args = null
         actived.row = null
         actived.column = null
