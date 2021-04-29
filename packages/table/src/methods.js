@@ -2049,6 +2049,9 @@ const Methods = {
                 } else {
                   this.handleActived(selected.args, evnt)
                 }
+              } else if (isDel) {
+                // 如果按下 del 键，更新表尾数据
+                this.updateFooter()
               }
             } else if (isBack && keyboardOpts.isArrow && treeConfig && highlightCurrentRow && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
