@@ -1,3 +1,4 @@
+import XEAjax from 'xe-ajax'
 import * as VXETableExport from './packages/all'
 import './styles/index.scss'
 

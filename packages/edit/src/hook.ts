@@ -45,6 +45,20 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       }
     }
 
+    function syncActivedCell () {
+      const { editStore, tableColumn } = reactData
+      const editOpts = computeEditOpts.value
+      const { actived } = editStore
+      const { row, column } = actived
+      if (row || column) {
+        if (editOpts.mode === 'row') {
+          tableColumn.forEach((column: any) => setEditColumnModel(row, column))
+        } else {
+          setEditColumnModel(row, column)
+        }
+      }
+    }
+
     editMethods = {
       /**
        * 往表格中插入临时数据
@@ -293,15 +307,10 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       getUpdateRecords () {
         const { keepSource, treeConfig } = props
-        const { editStore } = reactData
         const { tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
         if (keepSource) {
-          const { actived } = editStore
-          const { row, column } = actived
-          if (row || column) {
-            this.clearActived()
-          }
+          syncActivedCell()
           if (treeConfig) {
             return XEUtils.filterTree(tableFullData, row => $xetable.isUpdateByRow(row), treeOpts)
           }
@@ -334,16 +343,11 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        * 清除激活的编辑
        */
       clearActived (evnt) {
-        const { editStore, tableColumn } = reactData
-        const editOpts = computeEditOpts.value
+        const { editStore } = reactData
         const { actived } = editStore
         const { row, column } = actived
         if (row || column) {
-          if (editOpts.mode === 'row') {
-            tableColumn.forEach((column: any) => setEditColumnModel(row, column))
-          } else {
-            setEditColumnModel(row, column)
-          }
+          syncActivedCell()
           actived.args = null
           actived.row = null
           actived.column = null

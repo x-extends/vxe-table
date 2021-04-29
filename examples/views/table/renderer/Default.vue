@@ -3,9 +3,9 @@
     <p class="tip">
       默认的渲染 <table-column-api-link prop="cell-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderHeader (renderOpts, params: { column, columnIndex, columnIndex, $rowIndex, $table }) 表头<br>
-      renderDefault (renderOpts, params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }) 表内容<br>
-      renderFooter (renderOpts, params: { column, columnIndex, $columnIndex, $rowIndex, _columnIndex, items, $table }) 表尾<br>
+      renderHeader (renderOpts, params: { column, columnIndex, columnIndex, $rowIndex, $table }) 表头单元格显示内容<br>
+      renderDefault (renderOpts, params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }) 单元格默认显示内容<br>
+      renderFooter (renderOpts, params: { column, columnIndex, $columnIndex, $rowIndex, _columnIndex, items, $table }) 表尾单元格显示内容<br>
       exportMethod (params: { row, column }) 单元格导出函数<br>
       footerExportMethod (params: { items, _columnIndex }) 表尾单元格导出函数<br>
     </p>

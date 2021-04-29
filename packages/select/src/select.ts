@@ -22,6 +22,7 @@ export default defineComponent({
     modelValue: null,
     clearable: Boolean as PropType<VxeSelectPropTypes.Clearable>,
     placeholder: String as PropType<VxeSelectPropTypes.Placeholder>,
+    loading: Boolean as PropType<VxeSelectPropTypes.Loading>,
     disabled: Boolean as PropType<VxeSelectPropTypes.Disabled>,
     multiple: Boolean as PropType<VxeSelectPropTypes.Multiple>,
     multiCharOverflow: { type: [Number, String] as PropType<VxeSelectPropTypes.MultiCharOverflow>, default: () => GlobalConfig.select.multiCharOverflow },
@@ -316,7 +317,8 @@ export default defineComponent({
     let hidePanelTimeout: number
 
     const showOptionPanel = () => {
-      if (!props.disabled) {
+      const { loading, disabled } = props
+      if (!loading && !disabled) {
         clearTimeout(hidePanelTimeout)
         if (!reactData.inited) {
           reactData.inited = true
@@ -729,7 +731,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { className, transfer, disabled } = props
+      const { className, transfer, disabled, loading } = props
       const { inited, isActivated, visiblePanel } = reactData
       const vSize = computeSize.value
       const selectLabel = computeSelectLabel.value
@@ -755,7 +757,7 @@ export default defineComponent({
           disabled: disabled,
           type: 'text',
           prefixIcon: props.prefixIcon,
-          suffixIcon: visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE,
+          suffixIcon: loading ? GlobalConfig.icon.SELECT_LOADED : (visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE),
           modelValue: selectLabel,
           onClear: clearEvent,
           onClick: togglePanelEvent,
@@ -774,8 +776,8 @@ export default defineComponent({
             class: ['vxe-table--ignore-clear vxe-select--panel', {
               [`size--${vSize}`]: vSize,
               'is--transfer': transfer,
-              'animat--leave': reactData.animatVisible,
-              'animat--enter': visiblePanel
+              'animat--leave': !loading && reactData.animatVisible,
+              'animat--enter': !loading && visiblePanel
             }],
             placement: reactData.panelPlacement,
             style: reactData.panelStyle

@@ -8,9 +8,11 @@
     <vxe-table
       border
       show-overflow
+      show-footer
       ref="xTable"
       height="500"
       :data="demo1.tableData"
+      :footer-method="footerMethod"
       :mouse-config="{selected: true}"
       :checkbox-config="{range: true}"
       :keyboard-config="demo1.tableKeyboardConfig"
@@ -18,7 +20,7 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
       <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input'}"></vxe-table-column>
       <vxe-table-column field="address" title="Address" :edit-render="{name: '$input'}"></vxe-table-column>
     </vxe-table>
@@ -70,17 +72,42 @@ export default defineComponent({
       } as VxeTablePropTypes.KeyboardConfig
     })
 
+    const sumNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    }
+
+    const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
+          }
+          if (['age'].includes(column.property)) {
+            return sumNum(data, column.property)
+          }
+          return null
+        })
+      ]
+    }
+
     return {
       xTable,
       demo1,
+      footerMethod,
       demoCodes: [
         `
         <vxe-table
           border
           show-overflow
+          show-footer
           ref="xTable"
           height="500"
           :data="demo1.tableData"
+          :footer-method="footerMethod"
           :mouse-config="{selected: true}"
           :checkbox-config="{range: true}"
           :keyboard-config="demo1.tableKeyboardConfig"
@@ -88,7 +115,7 @@ export default defineComponent({
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input'}"></vxe-table-column>
           <vxe-table-column field="address" title="Address" :edit-render="{name: '$input'}"></vxe-table-column>
         </vxe-table>
@@ -131,9 +158,32 @@ export default defineComponent({
               } as VxeTablePropTypes.KeyboardConfig
             })
 
+            const sumNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            }
+
+            const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
+              return [
+                columns.map((column, columnIndex) => {
+                  if (columnIndex === 0) {
+                    return '和值'
+                  }
+                  if (['age'].includes(column.property)) {
+                    return sumNum(data, column.property)
+                  }
+                  return null
+                })
+              ]
+            }
+
             return {
               xTable,
-              demo1
+              demo1,
+              footerMethod
             }
           }
         })

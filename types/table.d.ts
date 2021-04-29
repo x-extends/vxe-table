@@ -773,6 +773,7 @@ export interface TableReactData {
     column: any;
     multiple: boolean;
     visible: boolean;
+    maxHeight: number | null;
     [key: string]: any;
   },
   // 存放列相关的信息

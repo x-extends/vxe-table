@@ -46,6 +46,7 @@ export type VxeSelectProps = {
   modelValue?: VxeSelectPropTypes.ModelValue;
   clearable?: VxeSelectPropTypes.Clearable;
   placeholder?: VxeSelectPropTypes.Placeholder;
+  loading?: VxeSelectPropTypes.Loading;
   disabled?: VxeSelectPropTypes.Disabled;
   className?: VxeSelectPropTypes.ClassName;
   multiple?: VxeSelectPropTypes.Multiple;
@@ -67,6 +68,7 @@ export namespace VxeSelectPropTypes {
   export type ModelValue = any;
   export type Clearable = boolean;
   export type Placeholder = string;
+  export type Loading = boolean;
   export type Disabled = boolean;
   export type ClassName = string | ((params: { $select: VxeSelectConstructor }) => string);
   export type Multiple = boolean;

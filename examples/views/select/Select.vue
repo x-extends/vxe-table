@@ -108,6 +108,7 @@
     </p>
 
     <p>
+      <vxe-select v-model="demo1.value45" placeholder="加载中" :options="demo1.list45" loading></vxe-select>
       <vxe-select v-model="demo1.value40" placeholder="空数据" :options="demo1.list40"></vxe-select>
       <vxe-select v-model="demo1.value41" placeholder="分组配置式" :option-groups="demo1.list41"></vxe-select>
       <vxe-select v-model="demo1.value42" placeholder="禁用选项" :options="demo1.list42"></vxe-select>
@@ -227,7 +228,9 @@ export default defineComponent({
         { label: '9999', value: '9', disabled: false },
         { label: '1010', value: '10', disabled: false },
         { label: '1111', value: '11', disabled: false }
-      ]
+      ],
+      value45: null,
+      list45: []
     })
     return {
       demo1,
@@ -338,6 +341,7 @@ export default defineComponent({
         </p>
 
         <p>
+          <vxe-select v-model="demo1.value45" placeholder="加载中" :options="demo1.list45" loading></vxe-select>
           <vxe-select v-model="demo1.value40" placeholder="空数据" :options="demo1.list40"></vxe-select>
           <vxe-select v-model="demo1.value41" placeholder="分组配置式" :option-groups="demo1.list41"></vxe-select>
           <vxe-select v-model="demo1.value42" placeholder="禁用选项" :options="demo1.list42"></vxe-select>
@@ -437,7 +441,9 @@ export default defineComponent({
                 { label: '9999', value: '9', disabled: false },
                 { label: '1010', value: '10', disabled: false },
                 { label: '1111', value: '11', disabled: false }
-              ]
+              ],
+              value45: null,
+              list45: []
             })
             return {
               demo1

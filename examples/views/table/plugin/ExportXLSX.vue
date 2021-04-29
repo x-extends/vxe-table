@@ -19,7 +19,7 @@
       border
       show-footer
       ref="xTable"
-      height="400"
+      height="500"
       :align="demo1.align"
       :loading="demo1.loading"
       :import-config="demo1.tableImport"
@@ -31,16 +31,16 @@
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-        <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+        <vxe-table-column field="name" title="名称"></vxe-table-column>
+        <vxe-table-column field="date1" title="日期"></vxe-table-column>
         <vxe-table-colgroup title="Group2">
-          <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="num" title="Num"></vxe-table-column>
+          <vxe-table-column field="sex" title="格式化" :formatter="formatterSex"></vxe-table-column>
+          <vxe-table-column field="num" title="数值-默认"></vxe-table-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="num1" title="数值类型" cell-type="number"></vxe-table-column>
-        <vxe-table-column field="num2" title="字符串类型" cell-type="string"></vxe-table-column>
+        <vxe-table-column field="num1" title="数值-数值" cell-type="number"></vxe-table-column>
+        <vxe-table-column field="num2" title="数值-字符串" cell-type="string"></vxe-table-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -145,15 +145,15 @@ export default defineComponent({
     demo1.loading = true
     setTimeout(() => {
       demo1.tableData = [
-        { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
-        { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
-        { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
-        { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
-        { name: 'name5', role: 'role5', rate: 1, sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
-        { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
-        { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
-        { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
-        { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
+        { name: 'name1', role: 'role1', rate: 1, date1: '2021-06-02 10:05:20', sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
+        { name: 'name2', role: 'role2', rate: 1, date1: '2021-01-28 16:05:28', sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
+        { name: 'name3', role: 'role3', rate: 6, date1: '2021-05-04 11:05:48', sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
+        { name: 'name4', role: 'role4', rate: 3, date1: '2021-07-02 08:05:23', sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
+        { name: 'name5', role: 'role5', rate: 1, date1: '2021-02-15 05:05:20', sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
+        { name: 'name6', role: 'role6', rate: 4, date1: '2021-12-02 01:05:33', sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
+        { name: 'name7', role: 'role7', rate: 1, date1: '2021-09-22 23:22:41', sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
+        { name: 'name8', role: 'role8', rate: 5, date1: '2021-11-02 22:08:27', sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
+        { name: 'name9', role: 'role9', rate: 8, date1: '2021-01-02 14:05:52', sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
       ]
       demo1.mergeCells = [
         { row: 1, col: 1, rowspan: 2, colspan: 2 },
@@ -189,7 +189,7 @@ export default defineComponent({
           border
           show-footer
           ref="xTable"
-          height="400"
+          height="500"
           :align="demo1.align"
           :loading="demo1.loading"
           :import-config="demo1.tableImport"
@@ -201,16 +201,16 @@ export default defineComponent({
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-            <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+            <vxe-table-column field="name" title="名称"></vxe-table-column>
+            <vxe-table-column field="date1" title="日期"></vxe-table-column>
             <vxe-table-colgroup title="Group2">
-              <vxe-table-column field="sex" title="app.body.label.sex" width="80" :formatter="formatterSex"></vxe-table-column>
-              <vxe-table-column field="num" title="Num"></vxe-table-column>
+              <vxe-table-column field="sex" title="格式化" :formatter="formatterSex"></vxe-table-column>
+              <vxe-table-column field="num" title="数值-默认"></vxe-table-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="num1" title="数值类型" cell-type="number"></vxe-table-column>
-            <vxe-table-column field="num2" title="字符串类型" cell-type="string"></vxe-table-column>
+            <vxe-table-column field="num1" title="数值-数值" cell-type="number"></vxe-table-column>
+            <vxe-table-column field="num2" title="数值-字符串" cell-type="string"></vxe-table-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -303,15 +303,15 @@ export default defineComponent({
             demo1.loading = true
             setTimeout(() => {
               demo1.tableData = [
-                { name: 'name1', role: 'role1', rate: 1, sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
-                { name: 'name2', role: 'role2', rate: 1, sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
-                { name: 'name3', role: 'role3', rate: 6, sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
-                { name: 'name4', role: 'role4', rate: 3, sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
-                { name: 'name5', role: 'role5', rate: 1, sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
-                { name: 'name6', role: 'role6', rate: 4, sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
-                { name: 'name7', role: 'role7', rate: 1, sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
-                { name: 'name8', role: 'role8', rate: 5, sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
-                { name: 'name9', role: 'role9', rate: 8, sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
+                { name: 'name1', role: 'role1', rate: 1, date1: '2021-06-02 10:05:20', sex: '0', num: '22', num1: '22', num2: '22', cardNo: '998' },
+                { name: 'name2', role: 'role2', rate: 1, date1: '2021-01-28 16:05:28', sex: '1', num: 32, num1: 32, num2: 32, cardNo: 10000 },
+                { name: 'name3', role: 'role3', rate: 6, date1: '2021-05-04 11:05:48', sex: '1', num: 99999999999999, num1: 99999999999999, num2: 99999999999999, cardNo: '62221234219637458563' },
+                { name: 'name4', role: 'role4', rate: 3, date1: '2021-07-02 08:05:23', sex: '0', num: '999.99', num1: '999.99', num2: '999.99', cardNo: '62227412123789459631' },
+                { name: 'name5', role: 'role5', rate: 1, date1: '2021-02-15 05:05:20', sex: '1', num: -1, num1: -1, num2: -1, cardNo: '62221234214752459631' },
+                { name: 'name6', role: 'role6', rate: 4, date1: '2021-12-02 01:05:33', sex: '1', num: '10000', num1: '10000', num2: '10000', cardNo: '62221267214853659622' },
+                { name: 'name7', role: 'role7', rate: 1, date1: '2021-09-22 23:22:41', sex: '1', num: 10000000000000.001, num1: 10000000000000.001, num2: 10000000000000.001, cardNo: '62221237123480359633' },
+                { name: 'name8', role: 'role8', rate: 5, date1: '2021-11-02 22:08:27', sex: '2', num: 9998, num1: 9998, num2: 9998, cardNo: '62221234018523736237' },
+                { name: 'name9', role: 'role9', rate: 8, date1: '2021-01-02 14:05:52', sex: '1', num: 70000, num1: 70000, num2: 70000, cardNo: '62221230283686397412' }
               ]
               demo1.mergeCells = [
                 { row: 1, col: 1, rowspan: 2, colspan: 2 },

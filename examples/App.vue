@@ -36,7 +36,7 @@
             <vxe-option value="1" :label="$t('app.body.other.v1')" class-name="end-of-life"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <a v-if="appData.showPlugin" class="link support" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins" target="_blank">💡插件</a>
+          <a v-if="appData.showPlugin" class="link support" href="/vxe-table/plugins" target="_blank">💡插件</a>
         </div>
       </div>
     </header>
@@ -535,6 +535,18 @@ export default defineComponent({
               // demoUrl: 'https://jsrun.pro/SIWKp/edit',
               locat: {
                 name: 'TableDynamic'
+              }
+            },
+            {
+              label: 'app.aside.nav.customCheckbox',
+              locat: {
+                name: 'TableCustomCheckbox'
+              }
+            },
+            {
+              label: 'app.aside.nav.customRadio',
+              locat: {
+                name: 'TableCustomRadio'
               }
             },
             {

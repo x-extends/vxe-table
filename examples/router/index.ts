@@ -59,6 +59,8 @@ import TableFull from '../views/table/base/Full.vue'
 import TableEvent from '../views/table/advanced/Event.vue'
 import TableTemplate from '../views/table/advanced/Template.vue'
 import TableDynamic from '../views/table/advanced/Dynamic.vue'
+import TableCustomCheckbox from '../views/table/advanced/CustomCheckbox.vue'
+import TableCustomRadio from '../views/table/advanced/CustomRadio.vue'
 import TableSortIcon from '../views/table/advanced/SortIcon.vue'
 import TableCustomSort from '../views/table/advanced/CustomSort.vue'
 import TableMultiSort from '../views/table/advanced/MultiSort.vue'
@@ -575,6 +577,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/advanced/dynamic',
     name: 'TableDynamic',
     component: TableDynamic
+  },
+  {
+    path: '/table/advanced/customCheckbox',
+    name: 'TableCustomCheckbox',
+    component: TableCustomCheckbox
+  },
+  {
+    path: '/table/advanced/customRadio',
+    name: 'TableCustomRadio',
+    component: TableCustomRadio
   },
   {
     path: '/table/advanced/sortIcon',

@@ -144,7 +144,7 @@ export default defineComponent({
 
     const renderOptions = (filterRender: any, compConf: any) => {
       const { filterStore } = props
-      const { column, multiple } = filterStore
+      const { column, multiple, maxHeight } = filterStore
       const { slots } = column
       const filterSlot = slots ? slots.filter : null
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xetable })
@@ -191,7 +191,10 @@ export default defineComponent({
           ]))
         ]),
         h('ul', {
-          class: 'vxe-table--filter-body'
+          class: 'vxe-table--filter-body',
+          style: maxHeight ? {
+            maxHeight: `${maxHeight}px`
+          } : {}
         }, filterStore.options.map((item: any) => {
           return h('li', {
             class: ['vxe-table--filter-option', {

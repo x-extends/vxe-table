@@ -122,8 +122,8 @@ export default defineComponent({
             })
             return XEAjax.get(`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           },
-          delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body).then(response => response.json()),
-          save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body).then(response => response.json())
+          delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body),
+          save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
         }
       },
       columns: [

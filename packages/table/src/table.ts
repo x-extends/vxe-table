@@ -110,7 +110,8 @@ export default defineComponent({
         options: [],
         column: null,
         multiple: false,
-        visible: false
+        visible: false,
+        maxHeight: null
       },
       // 存放列相关的信息
       columnStore: {
@@ -3973,6 +3974,9 @@ export default defineComponent({
                   } else {
                     $xetable.handleActived(selected.args, evnt)
                   }
+                } else if (isDel) {
+                  // 如果按下 del 键，更新表尾数据
+                  tableMethods.updateFooter()
                 }
               } else if (isBack && keyboardOpts.isArrow && treeConfig && highlightCurrentRow && currentRow) {
                 // 如果树形表格回退键关闭当前行返回父节点

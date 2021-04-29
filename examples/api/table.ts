@@ -927,7 +927,7 @@ const apis = [
             name: 'width',
             desc: '列的默认宽度',
             version: '',
-            type: 'Number, String',
+            type: 'number, string',
             enum: 'auto, px, %',
             defVal: '',
             list: []
@@ -936,7 +936,7 @@ const apis = [
             name: 'minWidth',
             desc: '列的默认最小宽度',
             version: '',
-            type: 'Number, String',
+            type: 'number, string',
             enum: 'auto, px, %',
             defVal: '',
             list: []
@@ -3994,7 +3994,7 @@ const apis = [
       },
       {
         name: 'setRadioRow(row)',
-        desc: '用于 type=radio，设置某一行为选中状态',
+        desc: '用于 type=radio 单选框，设置某一行为选中状态',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -4003,7 +4003,7 @@ const apis = [
       },
       {
         name: 'setCheckboxRow(rows, checked)',
-        desc: '用于 type=checkbox，设置行为选中状态，第二个参数为选中与否',
+        desc: '用于 type=checkbox 复选框，设置行为选中状态，第二个参数为选中与否',
         version: '',
         type: 'Promise<any>',
         enum: '',
