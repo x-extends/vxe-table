@@ -144,6 +144,7 @@ class ColumnInfo {
       id: _vm.colId || XEUtils.uniqueId('col_'),
       parentId: null,
       visible,
+      // 内部属性（一旦被使用，将导致不可升级版本）
       halfVisible: false,
       defaultVisible: visible,
       checked: false,
@@ -166,11 +167,16 @@ class ColumnInfo {
       renderData: renderData,
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots,
-      own: _vm
+      _own: _vm
     })
     if (proxyOpts && proxyOpts.beforeColumn) {
       proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
     }
+  }
+
+  get own () {
+    console.warn('[vxe-table] This is an internal attribute "column.own". Please pay attention to locking the version number to avoid errors caused by upgrade.')
+    return this._own
   }
 
   getTitle () {

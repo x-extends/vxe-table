@@ -114,7 +114,7 @@ import pulldownAPI from '../../api/pulldown'
 //   ['vxe-option', optionAPI, { description: '下拉框 - 选项' }],
 //   ['vxe-button', buttonAPI, { description: '按钮' }],
 //   ['vxe-tooltip', tooltipAPI, { description: '工具提示' }],
-//   ['vxe-modal', modalAPI, { description: '模态窗口' }],
+//   ['vxe-modal', modalAPI, { description: '弹窗' }],
 //   ['vxe-form', formAPI, { subtags: ['vxe-form-item'], description: '表单' }],
 //   ['vxe-form-item', formItemAPI, { description: '表单 - 项' }],
 //   ['vxe-list', listAPI, { description: '列表' }],

@@ -2,7 +2,7 @@ import { CreateElement, VNode } from 'vue'
 import { VXETableComponent } from './component'
 
 /**
- * 模态窗口
+ * 弹窗
  */
 export declare class Modal extends VXETableComponent {
   /**
