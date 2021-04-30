@@ -453,7 +453,7 @@
       "destroy-on-close",
       "storage"
     ],
-    "description": "模态窗口"
+    "description": "弹窗"
   },
   "vxe-form": {
     "attributes": [
