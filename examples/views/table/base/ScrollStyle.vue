@@ -31,8 +31,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -64,8 +62,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -82,6 +78,13 @@ export default {
             }
           },
           methods: {
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -89,7 +92,7 @@ export default {
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return parseInt(XEUtils.sum(data, column.property))
+                    return parseInt(this.meanNum(data, column.property))
                   }
                   return '-'
                 })
@@ -130,6 +133,13 @@ export default {
     }
   },
   methods: {
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -137,7 +147,7 @@ export default {
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return parseInt(XEUtils.sum(data, column.property))
+            return parseInt(this.meanNum(data, column.property))
           }
           return '-'
         })

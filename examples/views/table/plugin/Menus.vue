@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -143,8 +141,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -219,6 +215,13 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -226,7 +229,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 })
@@ -239,6 +242,13 @@ export default {
     }
   },
   methods: {
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -246,7 +256,7 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         })

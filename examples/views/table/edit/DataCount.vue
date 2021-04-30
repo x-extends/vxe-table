@@ -34,8 +34,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -67,8 +65,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -81,11 +77,22 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             countAmount (row) {
-              return XEUtils.multiply(row.amount, row.number)
+              return row.amount * row.number
             },
             countAllAmount (data) {
-              return XEUtils.sum(data.map(row => this.countAmount(row)))
+              let count = 0
+              data.forEach(row => {
+                count += this.countAmount(row)
+              })
+              return count
             },
             footerMethod ({ columns, data }) {
               return [
@@ -94,7 +101,7 @@ export default {
                     return '合计'
                   }
                   if (columnIndex === 3) {
-                    return \`\${XEUtils.sum(data, 'number')} 本\`
+                    return \`\${this.sumNum(data, 'number')} 本\`
                   } else if (columnIndex === 4) {
                     return \`共 \${this.countAllAmount(data)} 元\`
                   }
@@ -109,11 +116,22 @@ export default {
     }
   },
   methods: {
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     countAmount (row) {
-      return XEUtils.multiply(row.amount, row.number)
+      return row.amount * row.number
     },
     countAllAmount (data) {
-      return XEUtils.sum(data.map(row => this.countAmount(row)))
+      let count = 0
+      data.forEach(row => {
+        count += this.countAmount(row)
+      })
+      return count
     },
     footerMethod ({ columns, data }) {
       return [
@@ -122,7 +140,7 @@ export default {
             return '合计'
           }
           if (columnIndex === 3) {
-            return `${XEUtils.sum(data, 'number')} 本`
+            return `${this.sumNum(data, 'number')} 本`
           } else if (columnIndex === 4) {
             return `共 ${this.countAllAmount(data)} 元`
           }

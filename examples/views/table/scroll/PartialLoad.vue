@@ -41,8 +41,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -79,8 +77,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -110,7 +106,7 @@ export default {
                   var list = []
                   for (var index = 0; index < size; index++) {
                     list.push({
-                      id: XEUtils.uniqueId(),
+                      id: 100000 + index,
                       name: 'test' + index,
                       role: 'developer',
                       age: 10,
@@ -151,7 +147,7 @@ export default {
           const list = []
           for (let index = 0; index < size; index++) {
             list.push({
-              id: XEUtils.uniqueId(),
+              id: 100000 + index,
               name: 'test' + index,
               role: 'developer',
               age: 10,

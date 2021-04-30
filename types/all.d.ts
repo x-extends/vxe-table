@@ -17,7 +17,7 @@ export interface VXETableByVueProperty {
   t: VxeGlobalI18n;
   _t: VxeGlobalTranslate;
   /**
-   * 全局的模态窗口
+   * 全局的弹窗
    */
   modal: ModalController;
   /**

@@ -112,8 +112,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -138,8 +136,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -152,13 +148,20 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const sums = []
               columns.forEach((column, columnIndex) => {
                 if (columnIndex === 0) {
                   sums.push('和值')
                 } else {
-                  sums.push(XEUtils.sum(data, column.property))
+                  sums.push(this.sumNum(data, column.property))
                 }
               })
               // 返回一个二维数组的表尾合计
@@ -182,8 +185,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -196,13 +197,20 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const sums = []
               columns.forEach((column, columnIndex) => {
                 if (columnIndex === 0) {
                   sums.push('和值')
                 } else {
-                  sums.push(XEUtils.sum(data, column.property))
+                  sums.push(this.sumNum(data, column.property))
                 }
               })
               // 返回一个二维数组的表尾合计
@@ -226,8 +234,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -240,13 +246,20 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const sums = []
               columns.forEach((column, columnIndex) => {
                 if (columnIndex === 0) {
                   sums.push('和值')
                 } else {
-                  sums.push(XEUtils.sum(data, column.property))
+                  sums.push(this.sumNum(data, column.property))
                 }
               })
               // 返回一个二维数组的表尾合计
@@ -270,8 +283,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -284,13 +295,20 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const sums = []
               columns.forEach((column, columnIndex) => {
                 if (columnIndex === 0) {
                   sums.push('和值')
                 } else {
-                  sums.push(XEUtils.sum(data, column.property))
+                  sums.push(this.sumNum(data, column.property))
                 }
               })
               // 返回一个二维数组的表尾合计
@@ -314,8 +332,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -328,13 +344,20 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const sums = []
               columns.forEach((column, columnIndex) => {
                 if (columnIndex === 0) {
                   sums.push('和值')
                 } else {
-                  sums.push(XEUtils.sum(data, column.property))
+                  sums.push(this.sumNum(data, column.property))
                 }
               })
               // 返回一个二维数组的表尾合计
@@ -347,13 +370,20 @@ export default {
     }
   },
   methods: {
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       const sums = []
       columns.forEach((column, columnIndex) => {
         if (columnIndex === 0) {
           sums.push('和值')
         } else {
-          sums.push(XEUtils.sum(data, column.property))
+          sums.push(this.sumNum(data, column.property))
         }
       })
       // 返回一个二维数组的表尾合计

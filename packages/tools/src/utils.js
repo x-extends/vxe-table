@@ -97,6 +97,7 @@ class ColumnInfo {
       id: _vm.colId || XEUtils.uniqueId('col_'),
       parentId: null,
       visible,
+      // 内部属性（一旦被使用，将导致不可升级版本）
       halfVisible: false,
       defaultVisible: visible,
       checked: false,

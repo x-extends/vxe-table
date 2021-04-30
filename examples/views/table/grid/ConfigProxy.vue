@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -147,7 +145,7 @@ export default {
                 { value: '2', label: '失败' },
                 { value: '3', label: '拒接' }
               ]
-              const cellValue = XEUtils.get(row, column.property)
+              const cellValue = row[column.property]
               const item = rest.find(item => item.value === cellValue)
               return [
                 <span style={ `color:${cellValue === '1' ? 'green' : 'red'}` }>{ item ? item.label : '' }</span>
@@ -201,8 +199,6 @@ export default {
         <vxe-grid v-bind="xGridOptions"></vxe-grid>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {

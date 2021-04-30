@@ -144,8 +144,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -207,8 +205,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -306,8 +302,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-
         export default {
           data () {
             return {
@@ -330,6 +324,13 @@ export default {
               }
               return cellValue
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -337,7 +338,7 @@ export default {
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.meanNum(data, column.property)
                   }
                   return null
                 })
@@ -390,8 +391,6 @@ export default {
         </vxe-pager>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -438,6 +437,13 @@ export default {
               }
               return cellValue
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
             footerMethod ({ columns, data }) {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -445,7 +451,7 @@ export default {
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.meanNum(data, column.property)
                   }
                   return null
                 })
@@ -538,6 +544,13 @@ export default {
       }
       return cellValue
     },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
     footerMethod ({ columns, data }) {
       const footerData = [
         columns.map((column, columnIndex) => {
@@ -545,7 +558,7 @@ export default {
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.meanNum(data, column.property)
           }
           return null
         })

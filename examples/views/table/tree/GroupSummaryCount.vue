@@ -196,13 +196,27 @@ export default {
             formatName ({ row }) {
               return row.children && row.children.length ? \`\${row.name} (\${row.num}人)\` : row.name
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             // 计算逻辑
             handleSummary  (children) {
               return {
-                num: XEUtils.sum(children, 'num'),
-                level: Math.floor(XEUtils.sum(children, 'level')),
-                age: parseInt(XEUtils.mean(children, 'age')),
-                rate: XEUtils.sum(children, 'rate')
+                num: this.sumNum(children, 'num'),
+                level: Math.floor(this.sumNum(children, 'level')),
+                age: parseInt(this.meanNum(children, 'age')),
+                rate: this.sumNum(children, 'rate')
               }
             },
             getGroupSummary (data) {
@@ -256,15 +270,15 @@ export default {
               return [
                 columns.map((column, columnIndex) => {
                   if (columnIndex === 0) {
-                    return \`合计 (\${XEUtils.sum(data, 'num')}人)\`
+                    return \`合计 (\${this.sumNum(data, 'num')}人)\`
                   }
                   switch (column.property) {
                     case 'level':
-                      return \`总共 \${Math.floor(XEUtils.sum(data, 'level'))}\`
+                      return \`总共 \${Math.floor(this.meanNum(data, 'level'))}\`
                     case 'age':
-                      return \`平均年龄 \${parseInt(XEUtils.mean(data, 'age'))}\`
+                      return \`平均年龄 \${parseInt(this.meanNum(data, 'age'))}\`
                     case 'rate':
-                      return \`总分 \${XEUtils.sum(data, 'rate')}\`
+                      return \`总分 \${this.sumNum(data, 'rate')}\`
                   }
                   return '-'
                 })
@@ -383,13 +397,27 @@ export default {
     formatName ({ row }) {
       return row.children && row.children.length ? `${row.name} (${row.num}人)` : row.name
     },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     // 计算逻辑
     handleSummary  (children) {
       return {
-        num: XEUtils.sum(children, 'num'),
-        level: Math.floor(XEUtils.sum(children, 'level')),
-        age: parseInt(XEUtils.mean(children, 'age')),
-        rate: XEUtils.sum(children, 'rate')
+        num: this.sumNum(children, 'num'),
+        level: Math.floor(this.sumNum(children, 'level')),
+        age: parseInt(this.meanNum(children, 'age')),
+        rate: this.sumNum(children, 'rate')
       }
     },
     getGroupSummary (data) {
@@ -443,15 +471,15 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return `合计 (${XEUtils.sum(data, 'num')}人)`
+            return `合计 (${this.sumNum(data, 'num')}人)`
           }
           switch (column.property) {
             case 'level':
-              return `总共 ${Math.floor(XEUtils.sum(data, 'level'))}`
+              return `总共 ${Math.floor(this.meanNum(data, 'level'))}`
             case 'age':
-              return `平均年龄 ${parseInt(XEUtils.mean(data, 'age'))}`
+              return `平均年龄 ${parseInt(this.meanNum(data, 'age'))}`
             case 'rate':
-              return `总分 ${XEUtils.sum(data, 'rate')}`
+              return `总分 ${this.sumNum(data, 'rate')}`
           }
           return '-'
         })

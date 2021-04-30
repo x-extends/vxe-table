@@ -286,12 +286,12 @@ export default {
               return XEUtils.toDateString(value, format)
             },
             getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-              const item = XEUtils.find(list, item => item[valueProp] === value)
+              const item = list.find(item => item[valueProp] === value)
               return item ? item[labelField] : null
             },
             getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
               return value.map(val => {
-                const item = XEUtils.find(list, item => item[valueProp] === val)
+                const item = list.find(item => item[valueProp] === val)
                 return item ? item[labelField] : null
               }).join(', ')
             },
@@ -325,6 +325,20 @@ export default {
                 return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
               }
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -332,7 +346,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.meanNum(data, column.property)
                   }
                   return null
                 }),
@@ -341,7 +355,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 })
@@ -376,12 +390,12 @@ export default {
       return XEUtils.toDateString(value, format)
     },
     getSelectLabel (value, list, valueProp = 'value', labelField = 'label') {
-      const item = XEUtils.find(list, item => item[valueProp] === value)
+      const item = list.find(item => item[valueProp] === value)
       return item ? item[labelField] : null
     },
     getSelectMultipleLabel (value, list, valueProp = 'value', labelField = 'label') {
       return value.map(val => {
-        const item = XEUtils.find(list, item => item[valueProp] === val)
+        const item = list.find(item => item[valueProp] === val)
         return item ? item[labelField] : null
       }).join(', ')
     },
@@ -415,6 +429,20 @@ export default {
         return (state.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
       }
     },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -422,7 +450,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.meanNum(data, column.property)
           }
           return null
         }),
@@ -431,7 +459,7 @@ export default {
             return '和值'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         })

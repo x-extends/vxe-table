@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VXETable from '../../../../packages/v-x-e-table'
-import XEUtils from 'xe-utils'
 
 import FilterInput from './components/FilterInput.vue'
 import FilterContent from './components/FilterContent.vue'
@@ -33,7 +32,7 @@ VXETable.renderer.add('FilterInput', {
   // 筛选方法
   filterMethod ({ option, row, column }) {
     const { data } = option
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     if (cellValue) {
       return cellValue.indexOf(data) > -1
     }
@@ -59,7 +58,7 @@ VXETable.renderer.add('FilterComplex', {
   },
   // 筛选数据方法
   filterMethod ({ option, row, column }) {
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     const { name } = option.data
     if (cellValue) {
       return cellValue.indexOf(name) > -1
@@ -87,7 +86,7 @@ VXETable.renderer.add('FilterContent', {
   // 筛选数据方法
   filterMethod ({ option, row, column }) {
     const { vals } = option.data
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     return vals.includes(cellValue)
   }
 })
@@ -110,7 +109,7 @@ VXETable.renderer.add('FilterExcel', {
   },
   // 筛选数据方法
   filterMethod ({ option, row, column }) {
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     const { vals, f1Type, f1Val } = option.data
     if (cellValue) {
       if (f1Type) {

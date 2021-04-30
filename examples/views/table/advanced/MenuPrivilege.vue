@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
 import XEClipboard from 'xe-clipboard'
 
 export default {
@@ -132,7 +131,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
         import XEClipboard from 'xe-clipboard'
 
         export default {
@@ -249,6 +247,13 @@ export default {
                   this.$XModal.message({ content: \`点击了 "\${menu.name}"\`, status: 'info' })
               }
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -256,7 +261,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'rate'].includes(column.property)) {
-                    return parseInt(XEUtils.mean(data, column.property))
+                    return parseInt(this.meanNum(data, column.property))
                   }
                   return null
                 })
@@ -318,6 +323,13 @@ export default {
           this.$XModal.message({ content: `点击了 "${menu.name}"`, status: 'info' })
       }
     },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -325,7 +337,7 @@ export default {
             return '平均'
           }
           if (['age', 'rate'].includes(column.property)) {
-            return parseInt(XEUtils.mean(data, column.property))
+            return parseInt(this.meanNum(data, column.property))
           }
           return null
         })

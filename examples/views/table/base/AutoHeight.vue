@@ -98,8 +98,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -221,8 +219,6 @@ export default {
         </div>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -241,6 +237,20 @@ export default {
             }
           },
           methods: {
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const means = []
               const sums = []
@@ -254,8 +264,8 @@ export default {
                   switch (column.property) {
                     case 'age':
                     case 'rate':
-                      meanCell = parseInt(XEUtils.mean(data, column.property))
-                      sumCell = XEUtils.sum(data, column.property)
+                      meanCell = parseInt(this.meanNum(data, column.property))
+                      sumCell = this.sumNum(data, column.property)
                       break
                   }
                   means.push(meanCell)
@@ -272,6 +282,20 @@ export default {
     }
   },
   methods: {
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       const means = []
       const sums = []
@@ -285,8 +309,8 @@ export default {
           switch (column.property) {
             case 'age':
             case 'rate':
-              meanCell = parseInt(XEUtils.mean(data, column.property))
-              sumCell = XEUtils.sum(data, column.property)
+              meanCell = parseInt(this.meanNum(data, column.property))
+              sumCell = this.sumNum(data, column.property)
               break
           }
           means.push(meanCell)

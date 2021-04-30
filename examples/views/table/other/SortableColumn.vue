@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
 import Sortable from 'sortablejs'
 
 export default {
@@ -95,7 +94,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
         import Sortable from 'sortablejs'
 
         export default {
@@ -172,7 +170,6 @@ export default {
           :data="tableData"></vxe-grid>
         `,
         `
-        import XEUtils from 'xe-utils'
         import Sortable from 'sortablejs'
 
         export default {
@@ -207,6 +204,20 @@ export default {
             }
           },
           methods: {
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               return [
                 columns.map((column, columnIndex) => {
@@ -214,7 +225,7 @@ export default {
                     return '平均'
                   }
                   if (['age', 'sex'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return this.meanNum(data, column.property)
                   }
                   return null
                 }),
@@ -223,7 +234,7 @@ export default {
                     return '和值'
                   }
                   if (['age', 'sex'].includes(column.property)) {
-                    return XEUtils.sum(data, column.property)
+                    return this.sumNum(data, column.property)
                   }
                   return null
                 })
@@ -287,6 +298,20 @@ export default {
     }
   },
   methods: {
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
@@ -294,7 +319,7 @@ export default {
             return '平均'
           }
           if (['age', 'sex'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return this.meanNum(data, column.property)
           }
           return null
         }),
@@ -303,7 +328,7 @@ export default {
             return '和值'
           }
           if (['age', 'sex'].includes(column.property)) {
-            return XEUtils.sum(data, column.property)
+            return this.sumNum(data, column.property)
           }
           return null
         })

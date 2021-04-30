@@ -172,13 +172,27 @@ export default {
             formatName ({ row }) {
               return row.children && row.children.length ? \`\${row.name} (\${row.num}人)\` : row.name
             },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             // 计算逻辑
             handleSummary  (children) {
               return {
-                num: XEUtils.sum(children, 'num'),
-                level: Math.floor(XEUtils.sum(children, 'level')),
-                age: parseInt(XEUtils.mean(children, 'age')),
-                rate: XEUtils.sum(children, 'rate')
+                num: this.sumNum(children, 'num'),
+                level: Math.floor(this.sumNum(children, 'level')),
+                age: parseInt(this.meanNum(children, 'age')),
+                rate: this.sumNum(children, 'rate')
               }
             },
             getGroupSummary (data) {
@@ -312,13 +326,27 @@ export default {
     formatName ({ row }) {
       return row.children && row.children.length ? `${row.name} (${row.num}人)` : row.name
     },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     // 计算逻辑
     handleSummary  (children) {
       return {
-        num: XEUtils.sum(children, 'num'),
-        level: Math.floor(XEUtils.sum(children, 'level')),
-        age: parseInt(XEUtils.mean(children, 'age')),
-        rate: XEUtils.sum(children, 'rate')
+        num: this.sumNum(children, 'num'),
+        level: Math.floor(this.sumNum(children, 'level')),
+        age: parseInt(this.meanNum(children, 'age')),
+        rate: this.sumNum(children, 'rate')
       }
     },
     getGroupSummary (data) {

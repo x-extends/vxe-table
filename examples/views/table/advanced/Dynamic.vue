@@ -45,8 +45,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -101,8 +99,6 @@ export default {
         </vxe-table>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -129,7 +125,7 @@ export default {
           },
           methods: {
             addColumn () {
-              const uniqueId = XEUtils.uniqueId()
+              const uniqueId = Date.now()
               this.tableColumn.push({
                 field: \`new_\${uniqueId}\`,
                 title: \`新列_\${uniqueId}\`,
@@ -174,7 +170,7 @@ export default {
   },
   methods: {
     addColumn () {
-      const uniqueId = XEUtils.uniqueId()
+      const uniqueId = Date.now()
       this.tableColumn.push({
         field: `new_${uniqueId}`,
         title: `新列_${uniqueId}`,

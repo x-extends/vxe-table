@@ -9,6 +9,7 @@
       resizable
       height="400"
       :menu-config="{}"
+      :tooltip-config="{}"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
       @header-cell-dblclick="headerCellDblclickEvent"
@@ -59,6 +60,7 @@ export default {
           resizable
           height="400"
           :menu-config="{}"
+          :tooltip-config="{}"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
           @header-cell-dblclick="headerCellDblclickEvent"

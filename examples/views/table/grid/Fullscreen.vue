@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import XEUtils from 'xe-utils'
-
 export default {
   data () {
     return {
@@ -117,8 +115,6 @@ export default {
         </vxe-grid>
         `,
         `
-        import XEUtils from 'xe-utils'
-        
         export default {
           data () {
             return {
@@ -177,6 +173,13 @@ export default {
             }
           },
           methods: {
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
             footerMethod ({ columns, data }) {
               const sums = []
               columns.forEach((column, columnIndex) => {
@@ -184,7 +187,7 @@ export default {
                   sums.push('和值')
                 } else {
                   if (column.property === 'rate') {
-                    sums.push(XEUtils.sum(data, column.property))
+                    sums.push(this.sumNum(data, column.property))
                   } else {
                     sums.push('-')
                   }
@@ -200,6 +203,13 @@ export default {
     }
   },
   methods: {
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
     footerMethod ({ columns, data }) {
       const sums = []
       columns.forEach((column, columnIndex) => {
@@ -207,7 +217,7 @@ export default {
           sums.push('和值')
         } else {
           if (column.property === 'rate') {
-            sums.push(XEUtils.sum(data, column.property))
+            sums.push(this.sumNum(data, column.property))
           } else {
             sums.push('-')
           }
