@@ -864,7 +864,7 @@ const apis = [
       {
         name: 'title',
         desc: '只对 type=checkbox,radio 有效，自定义标题模板',
-        version: '4.0.16',
+        version: '4.0.15',
         type: '',
         enum: '',
         defVal: '{column, columnIndex, $columnIndex, _columnIndex, $rowIndex}',
@@ -873,7 +873,7 @@ const apis = [
       {
         name: 'checkbox',
         desc: '只对 type=checkbox 有效，自定义复选框模板',
-        version: '4.0.16',
+        version: '4.0.15',
         type: '',
         enum: '',
         defVal: '{row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, checked, disabled, indeterminate}',
@@ -882,7 +882,7 @@ const apis = [
       {
         name: 'radio',
         desc: '只对 type=radio 有效，自定义单选框模板',
-        version: '4.0.16',
+        version: '4.0.15',
         type: '',
         enum: '',
         defVal: '{row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, checked, disabled}',

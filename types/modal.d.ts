@@ -2,7 +2,7 @@ import { VNode, RenderFunction, SetupContext, ComponentPublicInstance, Ref } fro
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
 /**
- * 组件 - 模态窗口
+ * 组件 - 弹窗
  * @example import { Modal as VxeModal } from 'vxe-table'
  */
 export const Modal: VXEComponent<VxeModalProps, VxeModalEventProps>;
