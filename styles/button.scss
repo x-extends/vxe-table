@@ -366,7 +366,7 @@ $btnThemeList: (
 }
 .vxe-button--dropdown-wrapper {
   padding: 5px;
-  background-color: #fff;
+  background-color: $vxe-button-dropdown-panel-background-color;
   border-radius: $vxe-border-radius;
   border: 1px solid $vxe-input-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);

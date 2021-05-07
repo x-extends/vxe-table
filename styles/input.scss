@@ -20,6 +20,9 @@ $iconWidth: 1.6em;
   &::placeholder {
     color: $vxe-input-placeholder-color;
   }
+  &::-webkit-autofill {
+    background-color: $vxe-input-background-color;
+  }
   &[type="number"] {
     appearance: none;
     -moz-appearance: textfield;

@@ -7,7 +7,7 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-table-column field="sex" title="最小列宽" min-width="20%"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
       <vxe-table-column field="time" title="Time"></vxe-table-column>
       <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -29,7 +29,7 @@
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+      <vxe-table-column field="sex" title="最小列宽" min-width="300"></vxe-table-column>
       <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
       <vxe-table-column field="time" title="Time" width="300"></vxe-table-column>
       <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
@@ -198,7 +198,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-table-column field="sex" title="最小列宽" min-width="20%"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
           <vxe-table-column field="time" title="Time"></vxe-table-column>
           <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
@@ -226,7 +226,7 @@ export default {
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
+          <vxe-table-column field="sex" title="最小列宽" min-width="300"></vxe-table-column>
           <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
           <vxe-table-column field="time" title="Time" width="300"></vxe-table-column>
           <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>

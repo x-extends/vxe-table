@@ -58,6 +58,7 @@
         <template #dropdown>
           <div class="my-dropdown4">
             <vxe-grid
+              border
               highlight-hover-row
               auto-resize
               height="auto"
@@ -176,6 +177,7 @@ export default {
             <template #dropdown>
               <div class="my-dropdown4">
                 <vxe-grid
+                  border
                   highlight-hover-row
                   auto-resize
                   height="auto"
@@ -308,16 +310,16 @@ export default {
           height: 200px;
           overflow: auto;
           border-radius: 4px;
-          background-color: #fff;
           border: 1px solid #dcdfe6;
+          background-color: #fff;
         }
         .list-item1:hover {
           background-color: #f5f7fa;
         }
         .my-dropdown2 {
           border-radius: 4px;
-          background-color: #fff;
           border: 1px solid #dcdfe6;
+          background-color: #fff;
         }
         .list-item2:hover {
           background-color: #f5f7fa;
@@ -325,14 +327,12 @@ export default {
         .my-dropdown3 {
           width: 400px;
           background-color: #fff;
-          border: 1px solid #dcdfe6;
           box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
         }
         .my-dropdown4 {
           width: 600px;
           height: 300px;
           background-color: #fff;
-          border: 1px solid #dcdfe6;
           box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
         }
         `
@@ -419,16 +419,16 @@ export default {
   height: 200px;
   overflow: auto;
   border-radius: 4px;
-  background-color: #fff;
   border: 1px solid #dcdfe6;
+  background-color: #fff;
 }
 .list-item1:hover {
   background-color: #f5f7fa;
 }
 .my-dropdown2 {
   border-radius: 4px;
-  background-color: #fff;
   border: 1px solid #dcdfe6;
+  background-color: #fff;
 }
 .list-item2:hover {
   background-color: #f5f7fa;
@@ -436,14 +436,12 @@ export default {
 .my-dropdown3 {
   width: 400px;
   background-color: #fff;
-  border: 1px solid #dcdfe6;
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
 }
 .my-dropdown4 {
   width: 600px;
   height: 300px;
   background-color: #fff;
-  border: 1px solid #dcdfe6;
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
 }
 </style>

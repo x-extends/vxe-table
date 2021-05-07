@@ -656,12 +656,17 @@ export default {
     dateConfig: Object,
     minDate: { type: [String, Number, Date], default: () => GlobalConfig.input.minDate },
     maxDate: { type: [String, Number, Date], default: () => GlobalConfig.input.maxDate },
-    startWeek: { type: Number, default: () => GlobalConfig.input.startWeek },
+    // 已废弃 startWeek，被 startDay 替换
+    startWeek: Number,
+    startDay: { type: [String, Number], default: () => GlobalConfig.input.startDay },
     labelFormat: { type: String, default: () => GlobalConfig.input.labelFormat },
     valueFormat: { type: String, default: () => GlobalConfig.input.valueFormat },
     editable: { type: Boolean, default: true },
     festivalMethod: { type: Function, default: () => GlobalConfig.input.festivalMethod },
     disabledMethod: { type: Function, default: () => GlobalConfig.input.disabledMethod },
+
+    // week
+    selectDay: { type: Number, default: () => GlobalConfig.input.selectDay },
 
     prefixIcon: String,
     suffixIcon: String,
@@ -798,7 +803,8 @@ export default {
     weekDatas () {
       const weeks = []
       if (this.isDatePickerType) {
-        let sWeek = XEUtils.toNumber(this.startWeek)
+        const { startDay, startWeek } = this
+        let sWeek = XEUtils.toNumber(XEUtils.isNumber(startDay) || XEUtils.isString(startDay) ? startDay : startWeek)
         weeks.push(sWeek)
         for (let index = 0; index < 6; index++) {
           if (sWeek >= 6) {
@@ -1290,15 +1296,21 @@ export default {
                   }
                   this.inputValue = inpDateVal
                 } else {
+                  let isChange = false
                   if (type === 'datetime') {
-                    if (!XEUtils.isDateSame(inputValue, inpDateVal, dateLabelFormat)) {
+                    if (inputValue !== XEUtils.toDateString(this.dateValue, dateLabelFormat) || inputValue !== XEUtils.toDateString(inpDateVal, dateLabelFormat)) {
+                      isChange = true
                       datetimePanelValue.setHours(inpDateVal.getHours())
                       datetimePanelValue.setMinutes(inpDateVal.getMinutes())
                       datetimePanelValue.setSeconds(inpDateVal.getSeconds())
                     }
+                  } else {
+                    isChange = true
                   }
                   this.inputValue = XEUtils.toDateString(inpDateVal, dateLabelFormat)
-                  this.dateChange(inpDateVal)
+                  if (isChange) {
+                    this.dateChange(inpDateVal)
+                  }
                 }
               } else {
                 this.dateRevert()
@@ -1698,7 +1710,7 @@ export default {
     dateChange (date) {
       const { value, datetimePanelValue, dateValueFormat } = this
       if (this.type === 'week') {
-        const sWeek = XEUtils.toNumber(this.startWeek)
+        const sWeek = XEUtils.toNumber(this.selectDay)
         date = XEUtils.getWhatWeek(date, 0, sWeek)
       } else if (this.hasTime) {
         date.setHours(datetimePanelValue.getHours())

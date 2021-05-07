@@ -33,15 +33,16 @@ $vxe-table-popup-border-color: #DADCE0;
 
 /*table*/
 $vxe-table-font-color: $vxe-font-color;
+$vxe-table-header-font-color: $vxe-font-color;
+$vxe-table-footer-font-color: $vxe-font-color;
 $vxe-table-border-radius: $vxe-border-radius;
 $vxe-table-border-width: 1px;
 $vxe-table-border-color: #e8eaec;
 $vxe-table-resizable-line-color: #D9DDDF;
 $vxe-table-resizable-drag-line-color: $vxe-primary-color;
-$vxe-table-background-color: #ffffff;
 $vxe-table-header-background-color: #f8f8f9;
-$vxe-table-body-background-color: $vxe-table-background-color;
-$vxe-table-footer-background-color: $vxe-table-background-color;
+$vxe-table-body-background-color: #ffffff;
+$vxe-table-footer-background-color: #ffffff;
 $vxe-table-tree-node-line-color:#909399;
 $vxe-table-tree-node-line-style: dotted;
 $vxe-table-header-font-weight: 700;
@@ -54,10 +55,10 @@ $vxe-table-row-line-height: 24px;
 $vxe-table-row-hover-background-color: #f5f7fa;
 $vxe-table-row-striped-background-color: #fafafa;
 $vxe-table-row-hover-striped-background-color: #f5f7fa;
-$vxe-table-row-radio-background-color: #fff3e0;
-$vxe-table-row-hover-radio-background-color: #ffebbc;
-$vxe-table-row-checked-background-color: #fff3e0;
-$vxe-table-row-hover-checked-background-color: #ffebbc;
+$vxe-table-row-radio-checked-background-color: #fff3e0;
+$vxe-table-row-hover-radio-checked-background-color: #ffebbc;
+$vxe-table-row-checkbox-checked-background-color: #fff3e0;
+$vxe-table-row-hover-checkbox-checked-background-color: #ffebbc;
 $vxe-table-row-current-background-color: #e6f7ff;
 $vxe-table-row-hover-current-background-color: #d7effb;
 
@@ -91,6 +92,9 @@ $vxe-table-cell-area-background-color: rgba(64,158,255,0.2);
 $vxe-table-checkbox-range-border-width: 1px;
 $vxe-table-checkbox-range-border-color: #006af1;
 $vxe-table-checkbox-range-background-color: rgba(50,128,252,0.2);
+
+$vxe-table-fixed-left-scrolling-box-shadow: 4px 3px 4px 0px rgba(0, 0, 0, 0.12);
+$vxe-table-fixed-right-scrolling-box-shadow: -4px 3px 4px 0px rgba(0, 0, 0, 0.12);
 
 /*filter*/
 $vxe-table-filter-panel-background-color: #fff;
@@ -129,6 +133,7 @@ $vxe-tooltip-validate-error-background-color: #f56c6c;
 
 /*pager*/
 $vxe-pager-background-color: #fff;
+$vxe-pager-perfect-background-color: #fff;
 $vxe-pager-perfect-button-background-color: #f4f4f5;
 
 /*modal*/
@@ -160,10 +165,12 @@ $vxe-radio-border-width: $vxe-checkbox-border-width;
 $vxe-radio-icon-background-color: #fff;
 $vxe-radio-checked-icon-background-color: #fff;
 $vxe-radio-indeterminate-icon-background-color: #fff;
+$vxe-radio-button-default-background-color: #fff;
 
 /*button*/
 $vxe-button-max-width: 500px;
 $vxe-button-default-background-color: #fff;
+$vxe-button-dropdown-panel-background-color: #fff;
 $vxe-button-height-default: 34px;
 $vxe-button-height-medium: 32px;
 $vxe-button-height-small: 30px;
@@ -175,7 +182,6 @@ $vxe-input-panel-background-color: $vxe-input-background-color;
 $vxe-input-date-festival-color: #999999;
 $vxe-input-date-festival-important-color: $vxe-primary-color;
 $vxe-input-date-notice-background-color: #FF0000;
-$vxe-input-date-header-background-color: #f8f8f9;
 $vxe-input-date-picker-hover-background-color: #f2f6fc;
 $vxe-input-date-picker-selected-color: #fff;
 $vxe-input-date-time-confirm-button-color: #fff;
@@ -231,6 +237,9 @@ $vxe-optgroup-title-color:#909399;
 /*switch*/
 $vxe-switch-font-color: #fff;
 $vxe-switch-icon-background-color: #fff;
+$vxe-switch-open-background-color: $vxe-primary-color;
+$vxe-switch-close-background-color: rgba(0,0,0,0.35);
+$vxe-switch-disabled-background-color: rgba(0,0,0,0.15);
 
 /*pulldown*/
 $vxe-pulldown-panel-background-color: #fff;

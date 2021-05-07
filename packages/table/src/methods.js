@@ -840,10 +840,14 @@ const Methods = {
   revertData (rows, field) {
     const { keepSource, tableSourceData, treeConfig } = this
     if (keepSource) {
-      if (arguments.length) {
-        if (rows && !XEUtils.isArray(rows)) {
+      if (rows) {
+        if (!XEUtils.isArray(rows)) {
           rows = [rows]
         }
+      } else {
+        rows = XEUtils.toArray(this.getUpdateRecords())
+      }
+      if (rows.length) {
         rows.forEach(row => {
           if (!this.isInsertByRow(row)) {
             const rowIndex = this.getRowIndex(row)

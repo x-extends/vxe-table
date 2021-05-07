@@ -133,7 +133,7 @@
           //   parseFormat: 'yyyy-MM-dd HH:mm:ss.SSS',
           //   labelFormat: '',
           //   valueFormat: '',
-          //   startWeek: 1,
+          //   startDay: 1,
           //   digits: 2,
           //   controls: true
           // },
