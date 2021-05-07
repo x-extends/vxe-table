@@ -924,6 +924,16 @@ export default {
     this.preventEvent(null, 'created')
   },
   mounted () {
+    const { $listeners } = this
+    if (!this.menuConfig && ($listeners['menu-click'] || $listeners['cell-menu'] || $listeners['header-cell-menu'] || $listeners['footer-cell-menu'])) {
+      UtilTools.warn('vxe.error.reqProp', ['menu-config'])
+    }
+    if (!this.tooltipConfig && ($listeners['cell-mouseenter'] || $listeners['cell-mouseleave'])) {
+      UtilTools.warn('vxe.error.reqProp', ['tooltip-config'])
+    }
+    if (!this.tooltipConfig && (this.$listeners['cell-mouseenter'] || this.$listeners['cell-mouseleave'])) {
+      UtilTools.warn('vxe.error.reqProp', ['tooltip-config'])
+    }
     if (this.autoResize) {
       const resizeObserver = new ResizeEvent(() => this.recalculate(true))
       resizeObserver.observe(this.$el)

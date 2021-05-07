@@ -37,6 +37,7 @@
       <vxe-table
         border
         height="200"
+        :tooltip-config="{}"
         :data="tableData"
         @cell-mouseenter="cellMouseenterEvent"
         @cell-mouseleave="cellMouseleaveEvent">
@@ -100,6 +101,7 @@ export default {
           <vxe-table
             border
             height="200"
+            :tooltip-config="{}"
             :data="tableData"
             @cell-mouseenter="cellMouseenterEvent"
             @cell-mouseleave="cellMouseleaveEvent">

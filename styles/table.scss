@@ -413,10 +413,10 @@
       background-color: $vxe-table-row-striped-background-color;
     }
     &.row--radio {
-      background-color: $vxe-table-row-radio-background-color;
+      background-color: $vxe-table-row-radio-checked-background-color;
     }
     &.row--checked {
-      background-color: $vxe-table-row-checked-background-color;
+      background-color: $vxe-table-row-checkbox-checked-background-color;
     }
     &.row--current {
       background-color: $vxe-table-row-current-background-color;
@@ -427,10 +427,10 @@
         background-color: $vxe-table-row-hover-striped-background-color;
       }
       &.row--radio {
-        background-color: $vxe-table-row-hover-radio-background-color;
+        background-color: $vxe-table-row-hover-radio-checked-background-color;
       }
       &.row--checked {
-        background-color: $vxe-table-row-hover-checked-background-color;
+        background-color: $vxe-table-row-hover-checkbox-checked-background-color;
       }
       &.row--current {
         background-color: $vxe-table-row-hover-current-background-color;
@@ -446,12 +446,12 @@
       }
       &.row--radio {
         .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-radio-background-color;
+          background-color: $vxe-table-row-radio-checked-background-color;
         }
       }
       &.row--checked {
         .vxe-tree--btn-wrapper {
-          background-color: $vxe-table-row-checked-background-color;
+          background-color: $vxe-table-row-checkbox-checked-background-color;
         }
       }
       &.row--current {
@@ -470,12 +470,12 @@
         }
         &.row--radio {
           .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-radio-background-color;
+            background-color: $vxe-table-row-hover-radio-checked-background-color;
           }
         }
         &.row--checked {
           .vxe-tree--btn-wrapper {
-            background-color: $vxe-table-row-hover-checked-background-color;
+            background-color: $vxe-table-row-hover-checkbox-checked-background-color;
           }
         }
         &.row--current {

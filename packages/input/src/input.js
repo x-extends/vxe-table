@@ -622,7 +622,9 @@ export default {
     dateConfig: Object,
     minDate: { type: [String, Number, Date], default: () => GlobalConfig.input.minDate },
     maxDate: { type: [String, Number, Date], default: () => GlobalConfig.input.maxDate },
-    startWeek: { type: Number, default: () => GlobalConfig.input.startWeek },
+    // 已废弃 startWeek，被 startDay 替换
+    startWeek: Number,
+    startDay: { type: [String, Number], default: () => GlobalConfig.input.startDay },
     labelFormat: { type: String, default: () => GlobalConfig.input.labelFormat },
     parseFormat: { type: String, default: () => GlobalConfig.input.parseFormat },
     valueFormat: { type: String, default: () => GlobalConfig.input.valueFormat },
@@ -766,7 +768,8 @@ export default {
     weekDatas () {
       const weeks = []
       if (this.isDatePicker) {
-        let sWeek = XEUtils.toNumber(XEUtils.isNumber(this.startWeek) ? this.startWeek : this.dateOpts.startWeek)
+        const { startDay, startWeek } = this
+        let sWeek = XEUtils.toNumber(XEUtils.isNumber(startDay) || XEUtils.isString(startDay) ? startDay : (XEUtils.isNumber(startWeek) ? startWeek : this.dateOpts.startWeek))
         weeks.push(sWeek)
         for (let index = 0; index < 6; index++) {
           if (sWeek >= 6) {

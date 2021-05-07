@@ -1,9 +1,9 @@
 <template>
   <div>
     <p class="tip">
-      使用 v-for 去循环列是不建议的<span class="green">（建议动态场景使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
+      使用 v-for 去循环静态列是非常糟糕的，仅用于改变属性，需确保 key 唯一性<span class="green">（动态场景需使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
       如果列信息发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
-      <span class="red">（注：动态更新属性必须要先定义，否则将失去自动响应）</span>
+      <span class="red">（注：该用法是不建议使用，所有兼容性应自行解决，该示例仅供参考）</span>
     </p>
 
     <vxe-toolbar>

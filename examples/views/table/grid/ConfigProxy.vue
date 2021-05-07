@@ -28,7 +28,6 @@
 
 <script>
 import XEAjax from 'xe-ajax'
-import XEUtils from 'xe-utils'
 import hljs from 'highlight.js'
 
 export default {
@@ -123,7 +122,7 @@ export default {
                 { value: '2', label: '失败' },
                 { value: '3', label: '拒接' }
               ]
-              const cellValue = XEUtils.get(row, column.property)
+              const cellValue = row[column.property]
               const item = rest.find(item => item.value === cellValue)
               return [
                 <span style={ `color:${cellValue === '1' ? 'green' : 'red'}` }>{ item ? item.label : '' }</span>

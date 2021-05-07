@@ -255,7 +255,8 @@ const GlobalConfig = {
     // valueFormat: '',
     minDate: new Date(1900, 0, 1),
     maxDate: new Date(2100, 0, 1),
-    startWeek: 1,
+    startDay: 1,
+    selectDay: 1,
     digits: 2,
     controls: true
   },

@@ -8,6 +8,7 @@
       show-overflow
       resizable
       height="400"
+      :tooltip-config="{}"
       :menu-config="{}"
       :data="tableData"
       @header-cell-click="headerCellClickEvent"
@@ -58,6 +59,7 @@ export default {
           show-overflow
           resizable
           height="400"
+          :tooltip-config="{}"
           :menu-config="{}"
           :data="tableData"
           @header-cell-click="headerCellClickEvent"
