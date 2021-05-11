@@ -5,6 +5,7 @@
   display: block;
   padding: 0;
   color: $vxe-font-color;
+  direction: ltr;
   .vxe-list--virtual-wrapper {
     position: relative;
     overflow: auto;

@@ -1337,7 +1337,15 @@
   },
   "vxe-input/start-week": {
     "type": "number | string",
-    "description": "只对 type=week 有效，设置起始周"
+    "description": "即将废弃，请使用 start-day"
+  },
+  "vxe-input/start-day": {
+    "type": "number | string",
+    "description": "设置每周的起始日期是星期几"
+  },
+  "vxe-input/select-day": {
+    "type": "number | string",
+    "description": "只对 type=week 有效，设置周视图选中后返回星期几"
   },
   "vxe-input/label-format": {
     "type": "string",
