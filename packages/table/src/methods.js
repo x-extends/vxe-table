@@ -839,40 +839,42 @@ const Methods = {
    */
   revertData (rows, field) {
     const { keepSource, tableSourceData, treeConfig } = this
-    if (keepSource) {
-      if (rows) {
-        if (!XEUtils.isArray(rows)) {
-          rows = [rows]
-        }
-      } else {
-        rows = XEUtils.toArray(this.getUpdateRecords())
-      }
-      if (rows.length) {
-        rows.forEach(row => {
-          if (!this.isInsertByRow(row)) {
-            const rowIndex = this.getRowIndex(row)
-            if (treeConfig && rowIndex === -1) {
-              throw new Error(UtilTools.getLog('vxe.error.noTree', ['revertData']))
-            }
-            const oRow = tableSourceData[rowIndex]
-            if (oRow && row) {
-              if (field) {
-                XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-              } else {
-                XEUtils.destructuring(row, XEUtils.clone(oRow, true))
-              }
-            }
-          }
-        })
-        return this.$nextTick()
-      }
-      return this.reloadData(tableSourceData)
-    } else {
+    if (!keepSource) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         UtilTools.warn('vxe.error.reqProp', ['keep-source'])
       }
+      return this.$nextTick()
     }
-    return this.$nextTick()
+    let targetRows = rows
+    if (rows) {
+      if (!XEUtils.isArray(rows)) {
+        targetRows = [rows]
+      }
+    } else {
+      targetRows = XEUtils.toArray(this.getUpdateRecords())
+    }
+    if (targetRows.length) {
+      targetRows.forEach(row => {
+        if (!this.isInsertByRow(row)) {
+          const rowIndex = this.getRowIndex(row)
+          if (treeConfig && rowIndex === -1) {
+            throw new Error(UtilTools.getLog('vxe.error.noTree', ['revertData']))
+          }
+          const oRow = tableSourceData[rowIndex]
+          if (oRow && row) {
+            if (field) {
+              XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+            } else {
+              XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+            }
+          }
+        }
+      })
+    }
+    if (rows) {
+      return this.$nextTick()
+    }
+    return this.reloadData(tableSourceData)
   },
   /**
    * 清空单元格内容

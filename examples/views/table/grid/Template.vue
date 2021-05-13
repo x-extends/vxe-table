@@ -229,11 +229,11 @@ export default {
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', num1: '222', sex: 'Man', age: 28, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' },
         { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', num1: '536', sex: 'Women', age: 22, address: 'Guangzhou', img1: '/vxe-table/static/other/img2.gif' },
         { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', num1: '1000', sex: 'Man', age: 32, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women ', age: 23, address: 'Shenzhen', img1: '' },
-        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women ', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women ', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
-        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women', age: 23, address: 'Shenzhen', img1: '' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man', age: 29, address: 'Shenzhen', img1: '' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
       ],
       tableToolbar: {
         custom: true,
@@ -488,11 +488,11 @@ export default {
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', num1: '222', sex: 'Man', age: 28, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' },
                 { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', num1: '536', sex: 'Women', age: 22, address: 'Guangzhou', img1: '/vxe-table/static/other/img2.gif' },
                 { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', num1: '1000', sex: 'Man', age: 32, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women ', age: 23, address: 'Shenzhen', img1: '' },
-                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women ', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women ', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
-                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
-                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women', age: 23, address: 'Shenzhen', img1: '' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man', age: 29, address: 'Shenzhen', img1: '' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
               ],
               tableToolbar: {
                 custom: true,

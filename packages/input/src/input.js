@@ -45,8 +45,12 @@ function getDateQuarter (date) {
 }
 
 function getNumberValue (_vm, val) {
-  const { type, digitsValue } = _vm
-  return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val)
+  const { type, exponential, digitsValue, inpMaxlength } = _vm
+  const restVal = (type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val))
+  if (exponential && (val === restVal || XEUtils.toValueString(val).toLowerCase() === XEUtils.toNumber(restVal).toExponential())) {
+    return val
+  }
+  return restVal.slice(0, inpMaxlength)
 }
 
 function renderDateLabel (h, _vm, item, label) {
@@ -645,6 +649,7 @@ export default {
     min: { type: [String, Number], default: null },
     max: { type: [String, Number], default: null },
     step: [String, Number],
+    exponential: { type: Boolean, default: () => GlobalConfig.input.exponential },
 
     // number、integer、float、password
     controls: { type: Boolean, default: () => GlobalConfig.input.controls },
@@ -1178,14 +1183,16 @@ export default {
       this.$emit('blur', { value, $event: evnt })
     },
     keydownEvent (evnt) {
-      if (this.isNumType) {
+      const { exponential, controls, isNumType } = this
+      if (isNumType) {
         const isCtrlKey = evnt.ctrlKey
+        const isShiftKey = evnt.shiftKey
         const isAltKey = evnt.altKey
         const keyCode = evnt.keyCode
-        if (!isCtrlKey && !isAltKey && (keyCode >= 223 || keyCode === 32 || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
+        if (!isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || ((!exponential || keyCode !== 69) && (keyCode >= 65 && keyCode <= 90)) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
           evnt.preventDefault()
         }
-        if (this.controls) {
+        if (controls) {
           this.numberKeydownEvent(evnt)
         }
       }
@@ -1265,7 +1272,7 @@ export default {
       }
     },
     afterCheckValue () {
-      const { type, inpReadonly, inputValue, isDatePickerType, isNumType, datetimePanelValue, dateLabelFormat, min, max } = this
+      const { type, exponential, inpReadonly, inputValue, isDatePickerType, isNumType, datetimePanelValue, dateLabelFormat, min, max } = this
       if (!inpReadonly) {
         if (isNumType) {
           if (inputValue) {
@@ -1274,6 +1281,12 @@ export default {
               inpNumVal = min
             } else if (!this.vaildMaxNum(inpNumVal)) {
               inpNumVal = max
+            }
+            if (exponential) {
+              const inpStringVal = XEUtils.toValueString(inputValue).toLowerCase()
+              if (inpStringVal === XEUtils.toNumber(inpNumVal).toExponential()) {
+                inpNumVal = inpStringVal
+              }
             }
             this.emitModel(getNumberValue(this, inpNumVal), { type: 'check' })
           }

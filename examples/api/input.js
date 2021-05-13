@@ -188,6 +188,15 @@ const apis = [
         list: []
       },
       {
+        name: 'exponential',
+        desc: '只对 type=number|integer|float 有效，数值是否允许输入科学计数',
+        version: '3.3.3',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.input.exponential',
+        list: []
+      },
+      {
         name: 'controls',
         desc: '只对 type=number|integer|float 有效，是否显示控制按钮',
         version: '',

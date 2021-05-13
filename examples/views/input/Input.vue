@@ -50,6 +50,7 @@
       <vxe-input v-model="value506" placeholder="整数类型" type="integer"></vxe-input>
       <vxe-input v-model="value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
       <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
+      <vxe-input v-model="value509" placeholder="允许输入科学计数" type="number" exponential clearable></vxe-input>
     </p>
 
     <p>
@@ -136,6 +137,7 @@ export default {
       value506: '44',
       value507: '',
       value508: '',
+      value509: '1e+2',
       value600: '',
       value601: '',
       value602: '',
@@ -255,6 +257,7 @@ export default {
           <vxe-input v-model="value506" placeholder="整数类型" type="integer"></vxe-input>
           <vxe-input v-model="value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
           <vxe-input v-model="value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
+          <vxe-input v-model="value509" placeholder="允许输入科学计数" type="number" exponential clearable></vxe-input>
         </p>
 
         <p>
@@ -317,6 +320,7 @@ export default {
               value506: '44',
               value507: '',
               value508: '',
+              value509: '1e+2',
               value600: '',
               value601: '',
               value602: '',
