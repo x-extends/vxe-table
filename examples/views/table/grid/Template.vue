@@ -292,16 +292,9 @@ export default {
           showOverflow: true,
           slots: {
             // 使用渲染函数
-            default: ({ row }, h) => {
+            default: ({ row }) => {
               return [
-                h('span', {
-                  style: {
-                    color: 'blue'
-                  },
-                  on: {
-                    click: () => this.addressClickEvent(row)
-                  }
-                }, row.address)
+                <span style="color: blue" onClick={ () => this.addressClickEvent(row) }>{ row.address }</span>
               ]
             }
           }
@@ -600,16 +593,9 @@ export default {
                   showOverflow: true,
                   slots: {
                     // 使用渲染函数
-                    default: ({ row }, h) => {
+                    default: ({ row }) => {
                       return [
-                        h('span', {
-                          style: {
-                            color: 'blue'
-                          },
-                          on: {
-                            click: () => this.addressClickEvent(row)
-                          }
-                        }, row.address)
+                        <span style="color: blue" onClick={ () => this.addressClickEvent(row) }>{ row.address }</span>
                       ]
                     }
                   }

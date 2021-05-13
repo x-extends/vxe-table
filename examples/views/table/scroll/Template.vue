@@ -91,16 +91,9 @@ export default {
           field: 'address',
           title: 'Address',
           slots: {
-            default: ({ row }, h) => {
+            default: ({ row }) => {
               return [
-                h('span', {
-                  style: {
-                    color: 'blue'
-                  },
-                  on: {
-                    click: () => this.addressClickEvent(row)
-                  }
-                }, row.address)
+                <span style="color: blue" onClick={ () => this.addressClickEvent(row) }>{ row.address }</span>
               ]
             }
           }
@@ -219,16 +212,9 @@ export default {
                   field: 'address',
                   title: 'Address',
                   slots: {
-                    default: ({ row }, h) => {
+                    default: ({ row }) => {
                       return [
-                        h('span', {
-                          style: {
-                            color: 'blue'
-                          },
-                          on: {
-                            click: () => this.addressClickEvent(row)
-                          }
-                        }, row.address)
+                        <span style="color: blue" onClick={ () => this.addressClickEvent(row) }>{ row.address }</span>
                       ]
                     }
                   }

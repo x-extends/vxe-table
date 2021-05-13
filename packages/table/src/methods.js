@@ -676,15 +676,16 @@ const Methods = {
       UtilTools.warn('vxe.error.reqProp', ['keep-source'])
       return this.$nextTick()
     }
+    let targetRows = rows
     if (rows) {
       if (!XEUtils.isArray(rows)) {
-        rows = [rows]
+        targetRows = [rows]
       }
     } else {
-      rows = XEUtils.toArray(this.getUpdateRecords())
+      targetRows = XEUtils.toArray(this.getUpdateRecords())
     }
-    if (rows.length) {
-      rows.forEach(row => {
+    if (targetRows.length) {
+      targetRows.forEach(row => {
         if (!this.isInsertByRow(row)) {
           const rowIndex = this.getRowIndex(row)
           if (treeConfig && rowIndex === -1) {
@@ -700,6 +701,8 @@ const Methods = {
           }
         }
       })
+    }
+    if (rows) {
       return this.$nextTick()
     }
     return this.reloadData(tableSourceData)
