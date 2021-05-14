@@ -18,10 +18,10 @@
       ref="xTree1"
       :tree-config="demo1.tableTreeConfig"
       :data="demo1.tableData">
-      <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -39,7 +39,7 @@
       ref="xTree2"
       :tree-config="demo2.tableTreeConfig"
       :data="demo2.tableData">
-      <vxe-table-column field="name" title="Name" tree-node>
+      <vxe-column field="name" title="Name" tree-node>
         <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
@@ -51,10 +51,10 @@
             <span>{{ row.name }}</span>
           </span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -72,10 +72,10 @@
       show-overflow
       :tree-config="demo3.tableTreeConfig"
       :data="demo3.tableData">
-      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column field="name" title="Name" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -244,10 +244,10 @@ export default defineComponent({
           ref="xTree1"
           :tree-config="demo1.tableTreeConfig"
           :data="demo1.tableData">
-          <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -315,7 +315,7 @@ export default defineComponent({
           ref="xTree2"
           :tree-config="demo2.tableTreeConfig"
           :data="demo2.tableData">
-          <vxe-table-column field="name" title="Name" tree-node>
+          <vxe-column field="name" title="Name" tree-node>
             <template #default="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
@@ -327,10 +327,10 @@ export default defineComponent({
                 <span>{{ row.name }}</span>
               </span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -392,10 +392,10 @@ export default defineComponent({
           show-overflow
           :tree-config="demo3.tableTreeConfig"
           :data="demo3.tableData">
-          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column field="name" title="Name" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `

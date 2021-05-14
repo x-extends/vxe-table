@@ -21,16 +21,16 @@
       keep-source
       :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column title="操作">
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column title="操作">
         <template #default="{ row }">
           <vxe-button v-if="!$refs.xTable.isInsertByRow(row)" @click="$refs.xTable.revertData(row)">还原</vxe-button>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -125,16 +125,16 @@ export default defineComponent({
           keep-source
           :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column title="操作">
             <template #default="{ row }">
               <vxe-button v-if="!$refs.xTable.isInsertByRow(row)" @click="$refs.xTable.revertData(row)">还原</vxe-button>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

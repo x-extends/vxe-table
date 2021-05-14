@@ -188,6 +188,15 @@ const apis = [
         list: []
       },
       {
+        name: 'exponential',
+        desc: '只对 type=number|integer|float 有效，数值是否允许输入科学计数',
+        version: '4.0.16',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.input.exponential',
+        list: []
+      },
+      {
         name: 'controls',
         desc: '只对 type=number|integer|float 有效，是否显示控制按钮',
         version: '',
@@ -218,11 +227,30 @@ const apis = [
       },
       {
         name: 'start-week',
-        desc: '只对 type=week 有效，设置起始周',
+        disabled: true,
+        desc: '即将废弃，请使用 start-day',
         version: '',
         type: 'number | string',
         enum: '0, 1, 2, 3, 4, 5, 6',
-        defVal: '默认 1，继承 setup.input.startWeek',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'start-day',
+        desc: '设置每周的起始日期是星期几',
+        version: '4.0.16',
+        type: 'number | string',
+        enum: '0, 1, 2, 3, 4, 5, 6',
+        defVal: '默认 1，继承 setup.input.startDay',
+        list: []
+      },
+      {
+        name: 'select-day',
+        desc: '只对 type=week 有效，设置周视图选中后返回星期几',
+        version: '4.0.16',
+        type: 'number | string',
+        enum: '0, 1, 2, 3, 4, 5, 6',
+        defVal: '默认 1，继承 setup.input.selectDay',
         list: []
       },
       {

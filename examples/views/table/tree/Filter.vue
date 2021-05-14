@@ -10,15 +10,15 @@
       :loading="demo1.loading"
       :data="demo1.tableData"
       :tree-config="{children: 'children'}">
-      <vxe-table-column field="name" title="名称" tree-node>
+      <vxe-column field="name" title="名称" tree-node>
         <template #header>
           <div>名称</div>
           <input v-model="demo1.filterName" type="type" placeholder="Filter" @keyup="searchEvent">
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="size" title="大小" width="140"></vxe-table-column>
-      <vxe-table-column field="type" title="类型" width="140"></vxe-table-column>
-      <vxe-table-column field="date" title="修改日期" width="260"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="size" title="大小" width="140"></vxe-column>
+      <vxe-column field="type" title="类型" width="140"></vxe-column>
+      <vxe-column field="date" title="修改日期" width="260"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -114,15 +114,15 @@ export default defineComponent({
           :loading="demo1.loading"
           :data="demo1.tableData"
           :tree-config="{children: 'children'}">
-          <vxe-table-column field="name" title="名称" tree-node>
+          <vxe-column field="name" title="名称" tree-node>
             <template #header>
               <div>名称</div>
               <input v-model="demo1.filterName" type="type" placeholder="Filter" @keyup="searchEvent">
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="size" title="大小" width="140"></vxe-table-column>
-          <vxe-table-column field="type" title="类型" width="140"></vxe-table-column>
-          <vxe-table-column field="date" title="修改日期" width="260"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="size" title="大小" width="140"></vxe-column>
+          <vxe-column field="type" title="类型" width="140"></vxe-column>
+          <vxe-column field="date" title="修改日期" width="260"></vxe-column>
         </vxe-table>
         `,
         `

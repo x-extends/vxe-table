@@ -13,15 +13,15 @@
       :data="tableData"
       :footer-method="footerMethod"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="书名" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="amount" title="单价" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column field="number" title="数量" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column title="总价">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="书名" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="amount" title="单价" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+      <vxe-column field="number" title="数量" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+      <vxe-column title="总价">
         <template #default="{ row }">
           <span>{{ countAmount(row) }} 元</span>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -96,15 +96,15 @@ export default defineComponent({
           :data="tableData"
           :footer-method="footerMethod"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="书名" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="amount" title="单价" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column field="number" title="数量" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column title="总价">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="书名" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="amount" title="单价" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+          <vxe-column field="number" title="数量" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+          <vxe-column title="总价">
             <template #default="{ row }">
               <span>{{ countAmount(row) }} 元</span>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

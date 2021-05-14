@@ -97,14 +97,7 @@
   &.is--perfect {
     border: 1px solid $vxe-table-border-color;
     border-top-width: 0;
-    background-color: $vxe-table-header-background-color;
-    .vxe-pager--prev-btn,
-    .vxe-pager--next-btn,
-    .vxe-pager--jump-prev,
-    .vxe-pager--num-btn,
-    .vxe-pager--jump-next {
-      background-color: #fff;
-    }
+    background-color: $vxe-pager-perfect-background-color;
   }
   &.is--border {
     .vxe-pager--num-btn {

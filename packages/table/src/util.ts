@@ -1,6 +1,7 @@
 import { watch } from 'vue'
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
+import { isPx, isScale } from '../../tools/dom'
 
 import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types/all'
 
@@ -92,15 +93,16 @@ export function getColMinWidth (params: {
   const { props: tableProps } = $table
   const { computeResizableOpts } = $table.getComputeMaps()
   const resizableOpts = computeResizableOpts.value
-  const { minWidth } = resizableOpts
-  if (minWidth) {
-    const customMinWidth = XEUtils.isFunction(minWidth) ? minWidth(params) : minWidth
+  const { minWidth: reMinWidth } = resizableOpts
+  // 如果自定义调整宽度逻辑
+  if (reMinWidth) {
+    const customMinWidth = XEUtils.isFunction(reMinWidth) ? reMinWidth(params) : reMinWidth
     if (customMinWidth !== 'auto') {
       return Math.max(1, XEUtils.toNumber(customMinWidth))
     }
   }
   const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
-  const { showHeaderOverflow } = column
+  const { showHeaderOverflow, minWidth: colMinWidth } = column
   const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
   const showEllipsis = headOverflow === 'ellipsis'
   const showTitle = headOverflow === 'title'
@@ -108,7 +110,8 @@ export function getColMinWidth (params: {
   const hasEllipsis = showTitle || showTooltip || showEllipsis
   const minTitleWidth = XEUtils.floor((XEUtils.toNumber(getComputedStyle(cell).fontSize) || 14) * 1.6)
   const paddingLeftRight = getPaddingLeftRightSize(cell) + getPaddingLeftRightSize(queryCellElement(cell, ''))
-  let colMinWidth = minTitleWidth + paddingLeftRight
+  let mWidth = minTitleWidth + paddingLeftRight
+  // 默认最小宽处理
   if (hasEllipsis) {
     const checkboxIconWidth = getPaddingLeftRightSize(queryCellElement(cell, '--title>.vxe-cell--checkbox'))
     const requiredIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--required-icon'))
@@ -116,9 +119,24 @@ export function getColMinWidth (params: {
     const helpIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell-help-icon'))
     const sortIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--sort'))
     const filterIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--filter'))
-    colMinWidth += checkboxIconWidth + requiredIconWidth + editIconWidth + helpIconWidth + filterIconWidth + sortIconWidth
+    mWidth += checkboxIconWidth + requiredIconWidth + editIconWidth + helpIconWidth + filterIconWidth + sortIconWidth
   }
-  return colMinWidth
+  // 如果设置最小宽
+  if (colMinWidth) {
+    const { refTableBody } = $table.getRefMaps()
+    const tableBody = refTableBody.value
+    const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+    if (bodyElem) {
+      if (isScale(colMinWidth)) {
+        const bodyWidth = bodyElem.clientWidth - 1
+        const meanWidth = bodyWidth / 100
+        return Math.max(mWidth, Math.floor(XEUtils.toInteger(colMinWidth) * meanWidth))
+      } else if (isPx(colMinWidth)) {
+        return Math.max(mWidth, XEUtils.toInteger(colMinWidth))
+      }
+    }
+  }
+  return mWidth
 }
 
 export function isColumnInfo (column: any): column is ColumnInfo {

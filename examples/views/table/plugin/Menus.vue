@@ -16,18 +16,18 @@
       :mouse-config="demo1.tableMouseConfig"
       :keyboard-config="demo1.tableKeyboardConfig"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
       <vxe-table-colgroup title="基本信息">
-        <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
+        <vxe-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-column>
         <vxe-table-colgroup title="详细详细">
-          <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
-      <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
+      <vxe-column field="rate" title="Rate" width="180" sortable></vxe-column>
       <vxe-table-colgroup title="其他信息">
-        <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
+        <vxe-column field="date13" title="Date" width="250"></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -51,7 +51,7 @@ export default defineComponent({
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
       ],
       tableMouseConfig: {
         selected: true
@@ -161,18 +161,18 @@ export default defineComponent({
           :mouse-config="demo1.tableMouseConfig"
           :keyboard-config="demo1.tableKeyboardConfig"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
           <vxe-table-colgroup title="基本信息">
-            <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-column>
             <vxe-table-colgroup title="详细详细">
-              <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
-          <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
+          <vxe-column field="rate" title="Rate" width="180" sortable></vxe-column>
           <vxe-table-colgroup title="其他信息">
-            <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
+            <vxe-column field="date13" title="Date" width="250"></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -187,7 +187,7 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 24, address: 'Shanghai' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
               ],
               tableMouseConfig: {
                 selected: true

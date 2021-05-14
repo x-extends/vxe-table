@@ -33,7 +33,7 @@ export interface TableMenuMethods {
 }
 
 export interface TableMenuPrivateMethods {
-  moveCtxMenu(evnt: any, keyCode: any, ctxMenuStore: any, property: any, operKey: any, operRest: any, menuList: any): void;
+  moveCtxMenu(evnt: any, ctxMenuStore: any, property: any, hasOper: boolean, operRest: any, menuList: any): void;
   handleGlobalContextmenuEvent(evnt: any): void;
   ctxMenuMouseoverEvent(evnt: any, item: any, child?: any): void;
   ctxMenuMouseoutEvent(evnt: any, item: any): void;

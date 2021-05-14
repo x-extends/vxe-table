@@ -13,35 +13,35 @@
       resizable
       highlight-hover-row
       :data="tableData">
-      <vxe-table-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-table-column>
-      <vxe-table-column field="desc" title="app.api.title.desc" min-width="200"></vxe-table-column>
-      <vxe-table-column field="type" title="app.api.title.type" min-width="140"></vxe-table-column>
-      <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
-      <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
+      <vxe-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-column>
+      <vxe-column field="desc" title="app.api.title.desc" min-width="200"></vxe-column>
+      <vxe-column field="type" title="app.api.title.type" min-width="140"></vxe-column>
+      <vxe-column field="enum" title="app.api.title.enum" min-width="150"></vxe-column>
+      <vxe-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-column>
     </vxe-table>
     <h2>原生渲染器</h2>
     <vxe-table
       resizable
       highlight-hover-row
       :data="nativeRenderList">
-      <vxe-table-column field="name" title="渲染器名称" min-width="100">
+      <vxe-column field="name" title="渲染器名称" min-width="100">
         <template #default="{ row }">
           <a class="link" :href="row.apiUrl" target="_blank">{{ row.name }}</a>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="desc" title="说明" min-width="280"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="desc" title="说明" min-width="280"></vxe-column>
     </vxe-table>
     <h2>内置渲染器</h2>
     <vxe-table
       resizable
       highlight-hover-row
       :data="xRenderList">
-      <vxe-table-column field="name" title="渲染器名称" min-width="100">
+      <vxe-column field="name" title="渲染器名称" min-width="100">
         <template #default="{ row }">
           <router-link class="link" :to="{name: 'VXEAPI', params: { name: row.compName }}">{{ row.name }}</router-link>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="desc" title="说明" min-width="280"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="desc" title="说明" min-width="280"></vxe-column>
     </vxe-table>
   </div>
 </template>

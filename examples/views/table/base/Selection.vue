@@ -18,11 +18,11 @@
       :data="demo1.tableData"
       @checkbox-all="selectAllChangeEvent1"
       @checkbox-change="selectChangeEvent1">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -51,10 +51,10 @@
       ref="xTable2"
       :data="demo2.tableData"
       :checkbox-config="demo2.tableCheckboxConfig">
-      <vxe-table-column type="checkbox" title="All"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" title="All"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -70,10 +70,10 @@
       border
       :data="demo3.tableData"
       :checkbox-config="demo3.tableCheckboxConfig">
-      <vxe-table-column type="checkbox" title="All"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" title="All"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -101,11 +101,11 @@
       ref="xTable4"
       :data="demo4.tableData"
       :checkbox-config="{checkField: 'checked', trigger: 'row'}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -127,11 +127,11 @@
       :data="demo5.tableData"
       :checkbox-config="{checkRowKeys: demo5.defaultSelecteRows5, highlight: true}"
       :radio-config="{labelField: 'name'}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="id" title="ID"></vxe-table-column>
-      <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="id" title="ID"></vxe-column>
+      <vxe-column type="radio" width="300" title="Name"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -156,11 +156,11 @@
       ref="xTable6"
       :data="tableData6"
       :checkbox-config="{checkStrictly: true}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -177,11 +177,11 @@
       highlight-hover-row
       :data="tableData7"
       :radio-config="{labelField: 'name'}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="radio" width="300" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -202,11 +202,11 @@
       :data="tableData8"
       :radio-config="{labelField: 'role'}"
       :checkbox-config="{labelField: 'name', highlight: true, range: true}">
-      <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
-      <vxe-table-column type="radio" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="checkbox" title="Name"></vxe-column>
+      <vxe-column type="radio" title="Role"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -230,8 +230,8 @@ export default defineComponent({
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ]
     })
 
@@ -256,8 +256,8 @@ export default defineComponent({
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ],
       tableCheckboxConfig: {
         labelField: 'name',
@@ -272,8 +272,8 @@ export default defineComponent({
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ],
       tableCheckboxConfig: {
         labelField: 'name',
@@ -288,8 +288,8 @@ export default defineComponent({
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', checked: false },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', checked: false },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', checked: false },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', checked: false }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', checked: false }
       ]
     })
 
@@ -299,8 +299,8 @@ export default defineComponent({
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ]
     })
 
@@ -308,29 +308,29 @@ export default defineComponent({
       { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
       { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
       { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
     ])
 
     const tableData7 = ref([
       { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
       { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
       { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
     ])
 
     const tableData8 = ref([
       { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
       { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
       { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-      { id: 10007, name: 'Test7', role: 'PM', sex: 'Women ', age: 38, address: 'Shanghai' },
-      { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 24, address: 'vxe-table 从入门到放弃' },
-      { id: 10009, name: 'Test9', role: 'Test', sex: 'Man ', age: 35, address: 'Shanghai' },
-      { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women ', age: 31, address: 'Shanghai' }
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+      { id: 10007, name: 'Test7', role: 'PM', sex: 'Women', age: 38, address: 'Shanghai' },
+      { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man', age: 24, address: 'vxe-table 从入门到放弃' },
+      { id: 10009, name: 'Test9', role: 'Test', sex: 'Man', age: 35, address: 'Shanghai' },
+      { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women', age: 31, address: 'Shanghai' }
     ])
 
     return {
@@ -364,11 +364,11 @@ export default defineComponent({
           :data="demo1.tableData"
           @checkbox-all="selectAllChangeEvent1"
           @checkbox-change="selectChangeEvent1">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -382,8 +382,8 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ]
             })
 
@@ -429,10 +429,10 @@ export default defineComponent({
           ref="xTable2"
           :data="demo2.tableData"
           :checkbox-config="demo2.tableCheckboxConfig">
-          <vxe-table-column type="checkbox" title="All"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" title="All"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -446,8 +446,8 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ],
               tableCheckboxConfig: {
                 labelField: 'name',
@@ -468,10 +468,10 @@ export default defineComponent({
           border
           :data="demo3.tableData"
           :checkbox-config="demo3.tableCheckboxConfig">
-          <vxe-table-column type="checkbox" title="All"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" title="All"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -485,8 +485,8 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ],
               tableCheckboxConfig: {
                 labelField: 'name',
@@ -519,11 +519,11 @@ export default defineComponent({
           ref="xTable4"
           :data="demo4.tableData"
           :checkbox-config="{checkField: 'checked', trigger: 'row'}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -536,8 +536,8 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', checked: false },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', checked: false },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', checked: false },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', checked: false }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', checked: false }
               ]
             })
 
@@ -555,11 +555,11 @@ export default defineComponent({
           :data="demo5.tableData"
           :checkbox-config="{checkRowKeys: demo5.defaultSelecteRows5, highlight: true}"
           :radio-config="{labelField: 'name'}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="id" title="ID"></vxe-table-column>
-          <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="id" title="ID"></vxe-column>
+          <vxe-column type="radio" width="300" title="Name"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -573,8 +573,8 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ]
             })
 
@@ -598,11 +598,11 @@ export default defineComponent({
           ref="xTable6"
           :data="tableData6"
           :checkbox-config="{checkStrictly: true}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -614,8 +614,8 @@ export default defineComponent({
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
               { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
             ])
 
             return {
@@ -630,11 +630,11 @@ export default defineComponent({
           highlight-hover-row
           :data="tableData7"
           :radio-config="{labelField: 'name'}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="radio" width="300" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="radio" width="300" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -646,8 +646,8 @@ export default defineComponent({
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
               { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
             ])
 
             return {
@@ -666,11 +666,11 @@ export default defineComponent({
           :data="tableData8"
           :radio-config="{labelField: 'role'}"
           :checkbox-config="{labelField: 'name', highlight: true, range: true}">
-          <vxe-table-column type="checkbox" title="Name"></vxe-table-column>
-          <vxe-table-column type="radio" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="checkbox" title="Name"></vxe-column>
+          <vxe-column type="radio" title="Role"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -682,13 +682,13 @@ export default defineComponent({
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
               { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-              { id: 10007, name: 'Test7', role: 'PM', sex: 'Women ', age: 38, address: 'Shanghai' },
-              { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man ', age: 24, address: 'vxe-table 从入门到放弃' },
-              { id: 10009, name: 'Test9', role: 'Test', sex: 'Man ', age: 35, address: 'Shanghai' },
-              { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women ', age: 31, address: 'Shanghai' }
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10007, name: 'Test7', role: 'PM', sex: 'Women', age: 38, address: 'Shanghai' },
+              { id: 10008, name: 'Test8', role: 'Designer', sex: 'Man', age: 24, address: 'vxe-table 从入门到放弃' },
+              { id: 10009, name: 'Test9', role: 'Test', sex: 'Man', age: 35, address: 'Shanghai' },
+              { id: 10010, name: 'Test10', role: 'Develop', sex: 'Women', age: 31, address: 'Shanghai' }
             ])
 
             return {

@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 import { getDomNode, getEventTargetNode } from '../../tools/dom'
 import { errLog, getLastZIndex, nextZIndex, isNumVal, getFuncText } from '../../tools/utils'
-import { GlobalEvent } from '../../tools/event'
+import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeButtonConstructor from '../../button/src/button'
 
@@ -387,7 +387,7 @@ export default defineComponent({
     }
 
     const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
-      const isEsc = evnt.keyCode === 27
+      const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
       if (isEsc) {
         const lastModal = XEUtils.max(allActivedModals, (item) => item.reactData.modalZindex)
         // 多个时，只关掉最上层的窗口

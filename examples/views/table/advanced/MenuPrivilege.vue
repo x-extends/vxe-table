@@ -15,11 +15,11 @@
       @header-cell-menu="headerCellContextMenuEvent"
       @cell-menu="cellContextMenuEvent"
       @menu-click="contextMenuClickEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="time" title="Time"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="time" title="Time"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -58,7 +58,7 @@ export default defineComponent({
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' }
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 36, address: 'Guangzhou' }
       ],
       tableMenu: {
         header: {
@@ -211,11 +211,11 @@ export default defineComponent({
           @header-cell-menu="headerCellContextMenuEvent"
           @cell-menu="cellContextMenuEvent"
           @menu-click="contextMenuClickEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="time" title="Time"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="time" title="Time"></vxe-column>
         </vxe-table>
         `,
         `
@@ -232,7 +232,7 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 36, address: 'Guangzhou' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 36, address: 'Guangzhou' }
               ],
               tableMenu: {
                 header: {

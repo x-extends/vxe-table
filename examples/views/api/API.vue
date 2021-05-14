@@ -31,12 +31,12 @@
       @header-cell-menu="headerCellContextMenuEvent"
       @cell-menu="cellContextMenuEvent"
       @menu-click="contextMenuClickEvent">
-      <vxe-table-column field="name" title="app.api.title.prop" type="html" min-width="280" show-overflow :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="apiData.nameFilters" tree-node></vxe-table-column>
-      <vxe-table-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-table-column>
-      <vxe-table-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-table-column>
-      <vxe-table-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-table-column>
-      <vxe-table-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-table-column>
-      <vxe-table-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
+      <vxe-column field="name" title="app.api.title.prop" type="html" min-width="280" show-overflow :title-help="{message: '参数名称及使用，如果是在 CDN 环境中使用 kebab-case（短横线式），如果项目基于 vue-cli 脚手架可以使用 camelCase（驼峰式）'}" :filters="apiData.nameFilters" tree-node></vxe-column>
+      <vxe-column field="desc" title="app.api.title.desc" type="html" min-width="200"></vxe-column>
+      <vxe-column field="type" title="app.api.title.type" type="html" min-width="140"></vxe-column>
+      <vxe-column field="enum" :title="$t('app.api.title.enum')" type="html" min-width="150"></vxe-column>
+      <vxe-column field="defVal" :title="$t('app.api.title.defVal')" type="html" min-width="160" :title-help="{message: '部分参数可支持全局设置，具体请查阅相关说明'}"></vxe-column>
+      <vxe-column field="version" :title="$t('app.api.title.version')" width="120" :title-help="{message: '该文档与最新版本保持同步，如果遇到参数无效时，需要检查当前使用的版本号是否支持该参数'}">
         <template #default="{ row }">
           <template v-if="row.version === 'pro'">
             <a class="link pro" href="https://xuliangzhan_admin.gitee.io/vxe-table/plugins/#/pro" target="_blank">pro</a>
@@ -51,7 +51,7 @@
             <span v-show="row.version" class="compatibility">v{{  row.version }}</span>
           </template>
         </template>
-      </vxe-table-column>
+      </vxe-column>
       <template #empty>
         <span class="red">找不对应 API，请输入正确的关键字！</span>
       </template>

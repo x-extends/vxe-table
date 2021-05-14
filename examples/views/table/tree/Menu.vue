@@ -14,11 +14,11 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="demo1.tableData"
       @menu-click="contextMenuClickEvent">
-      <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-column type="checkbox" width="120" tree-node></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -176,11 +176,11 @@ export default defineComponent({
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="demo1.tableData"
           @menu-click="contextMenuClickEvent">
-          <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-column type="checkbox" width="120" tree-node></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
         </vxe-table>
         `,
         `

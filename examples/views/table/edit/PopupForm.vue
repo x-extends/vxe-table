@@ -17,17 +17,17 @@
       height="300"
       :data="demo1.tableData"
       @cell-dblclick="cellDBLClickEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
-      <vxe-table-column title="操作" width="100" show-overflow>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
+      <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
           <vxe-button type="text" icon="fa fa-trash-o" @click="removeEvent(row)"></vxe-button>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <vxe-modal v-model="demo1.showEdit" :title="demo1.selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="demo1.submitLoading" resize destroy-on-close>
@@ -222,17 +222,17 @@ export default defineComponent({
           height="300"
           :data="demo1.tableData"
           @cell-dblclick="cellDBLClickEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
-          <vxe-table-column title="操作" width="100" show-overflow>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
+          <vxe-column title="操作" width="100" show-overflow>
             <template #default="{ row }">
               <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o" @click="removeEvent(row)"></vxe-button>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
 
         <vxe-modal v-model="demo1.showEdit" :title="demo1.selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="demo1.submitLoading" resize destroy-on-close>

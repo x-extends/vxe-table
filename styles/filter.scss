@@ -21,7 +21,7 @@
     }
   }
 }
-.filter--active {
+.is--active {
   .vxe-cell--filter {
     .vxe-filter--btn {
       color: $vxe-primary-color;
@@ -43,7 +43,7 @@
   &:not(.is--multiple) {
     text-align: center;
   }
-  &.filter--active {
+  &.is--active {
     display: block;
   }
   .vxe-table--filter-header,

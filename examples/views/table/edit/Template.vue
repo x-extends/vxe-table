@@ -20,14 +20,14 @@
       :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
       @checkbox-change="checkboxChangeEvent"
       @checkbox-all="checkboxChangeEvent">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
         <template #edit="scope">
           <vxe-input type="text" v-model="scope.row.role" @input="$refs.xTable.updateStatus(scope)"></vxe-input>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
+      </vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
         <template #edit="{ row }">
           <vxe-pulldown ref="xDown1" transfer>
             <template #default>
@@ -43,21 +43,21 @@
             </template>
           </vxe-pulldown>
         </template>
-      </vxe-table-column>
+      </vxe-column>
       <vxe-table-colgroup title="分组">
-        <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
+        <vxe-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
           <template #edit="scope">
             <vxe-input type="number" v-model="scope.row.age" @input="$refs.xTable.updateStatus(scope)"></vxe-input>
           </template>
-        </vxe-table-column>
-        <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
+        </vxe-column>
+        <vxe-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
           <template #edit="scope">
             <vxe-input type="number" v-model="scope.row.num" @input="$refs.xTable.updateStatus(scope)"></vxe-input>
           </template>
           <template #default="{ row }">￥{{ row.num }}</template>
-        </vxe-table-column>
+        </vxe-column>
       </vxe-table-colgroup>
-      <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
+      <vxe-column field="attr1" title="不同行渲染" :edit-render="{}">
         <template #edit="scope">
           <template v-if="scope.rowIndex === 0">
             <vxe-input type="date" v-model="scope.row.attr1" placeholder="请选择日期" @input="$refs.xTable.updateStatus(scope)" transfer></vxe-input>
@@ -76,7 +76,7 @@
             <vxe-input type="text" v-model="scope.row.attr1" placeholder="请输入内容"></vxe-input>
           </template>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <vxe-pager
@@ -210,14 +210,14 @@ export default defineComponent({
           :edit-config="{trigger: 'click', mode: 'cell', icon: 'fa fa-pencil'}"
           @checkbox-change="checkboxChangeEvent"
           @checkbox-all="checkboxChangeEvent">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{autofocus: '.vxe-input--inner'}">
             <template #edit="{ row }">
               <vxe-input type="text" v-model="row.role"></vxe-input>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
+          </vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{autofocus: '.custom-input'}">
             <template #edit="{ row }">
               <vxe-pulldown ref="xDown1" transfer>
                 <template #default>
@@ -233,21 +233,21 @@ export default defineComponent({
                 </template>
               </vxe-pulldown>
             </template>
-          </vxe-table-column>
+          </vxe-column>
           <vxe-table-colgroup title="分组">
-            <vxe-table-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
+            <vxe-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
               <template #edit="{ row }">
                 <vxe-input type="number" v-model="row.age"></vxe-input>
               </template>
-            </vxe-table-column>
-            <vxe-table-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
+            </vxe-column>
+            <vxe-column field="num" title="Money" :edit-render="{autofocus: '.vxe-input--inner'}">
               <template #edit="{ row }">
                 <vxe-input type="number" v-model="row.num"></vxe-input>
               </template>
               <template #default="{ row }">￥{{ row.num }}</template>
-            </vxe-table-column>
+            </vxe-column>
           </vxe-table-colgroup>
-          <vxe-table-column field="attr1" title="不同行渲染" :edit-render="{}">
+          <vxe-column field="attr1" title="不同行渲染" :edit-render="{}">
             <template #edit="scope">
               <template v-if="scope.rowIndex === 0">
                 <vxe-input type="date" v-model="scope.row.attr1" placeholder="请选择日期" @input="$refs.xTable.updateStatus(scope)" transfer></vxe-input>
@@ -266,7 +266,7 @@ export default defineComponent({
                 <vxe-input type="text" v-model="scope.row.attr1" placeholder="请输入内容"></vxe-input>
               </template>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
 
         <vxe-pager

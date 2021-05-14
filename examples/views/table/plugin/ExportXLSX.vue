@@ -28,19 +28,19 @@
       :merge-cells="demo1.mergeCells"
       :merge-footer-items="demo1.mergeFooterItems"
       :data="demo1.tableData">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="name" title="名称"></vxe-table-column>
-        <vxe-table-column field="date1" title="日期"></vxe-table-column>
+        <vxe-column field="name" title="名称"></vxe-column>
+        <vxe-column field="date1" title="日期"></vxe-column>
         <vxe-table-colgroup title="Group2">
-          <vxe-table-column field="sex" title="格式化" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="num" title="数值-默认"></vxe-table-column>
+          <vxe-column field="sex" title="格式化" :formatter="formatterSex"></vxe-column>
+          <vxe-column field="num" title="数值-默认"></vxe-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="num1" title="数值-数值" cell-type="number"></vxe-table-column>
-        <vxe-table-column field="num2" title="数值-字符串" cell-type="string"></vxe-table-column>
+        <vxe-column field="num1" title="数值-数值" cell-type="number"></vxe-column>
+        <vxe-column field="num2" title="数值-字符串" cell-type="string"></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -198,19 +198,19 @@ export default defineComponent({
           :merge-cells="demo1.mergeCells"
           :merge-footer-items="demo1.mergeFooterItems"
           :data="demo1.tableData">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="name" title="名称"></vxe-table-column>
-            <vxe-table-column field="date1" title="日期"></vxe-table-column>
+            <vxe-column field="name" title="名称"></vxe-column>
+            <vxe-column field="date1" title="日期"></vxe-column>
             <vxe-table-colgroup title="Group2">
-              <vxe-table-column field="sex" title="格式化" :formatter="formatterSex"></vxe-table-column>
-              <vxe-table-column field="num" title="数值-默认"></vxe-table-column>
+              <vxe-column field="sex" title="格式化" :formatter="formatterSex"></vxe-column>
+              <vxe-column field="num" title="数值-默认"></vxe-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="num1" title="数值-数值" cell-type="number"></vxe-table-column>
-            <vxe-table-column field="num2" title="数值-字符串" cell-type="string"></vxe-table-column>
+            <vxe-column field="num1" title="数值-数值" cell-type="number"></vxe-column>
+            <vxe-column field="num2" title="数值-字符串" cell-type="string"></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,

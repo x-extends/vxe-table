@@ -26,12 +26,12 @@
       :menu-config="demo1.tableMenu"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, isChecked: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-table-column>
-      <vxe-table-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-column>
+      <vxe-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -166,12 +166,12 @@ export default defineComponent({
           :menu-config="demo1.tableMenu"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, isChecked: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-table-column>
-          <vxe-table-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-column>
+          <vxe-column field="num" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-column>
         </vxe-table>
         `,
         `

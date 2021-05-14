@@ -425,6 +425,8 @@
       "min-date",
       "max-date",
       "start-week",
+      "start-day",
+      "select-day",
       "label-format",
       "value-format",
       "editable",

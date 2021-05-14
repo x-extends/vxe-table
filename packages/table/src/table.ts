@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { warnLog, errLog, getLog, getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
-import { GlobalEvent } from '../../tools/event'
+import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { useSize } from '../../hooks/size'
 import { VXETable } from '../../v-x-e-table'
 import GlobalConfig from '../../v-x-e-table/src/conf'
@@ -1382,7 +1382,7 @@ export default defineComponent({
               if (fixedWrapperElem) {
                 wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
               }
-              wrapperElem.style.marginTop = `${-scrollbarHeight}px`
+              wrapperElem.style.marginTop = `${-Math.max(1, scrollbarHeight)}px`
             }
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
@@ -2405,33 +2405,39 @@ export default defineComponent({
       revertData (rows: any, field) {
         const { keepSource } = props
         const { tableSourceData, tableFullData } = internalData
-        if (keepSource) {
-          if (arguments.length) {
-            if (rows && !XEUtils.isArray(rows)) {
-              rows = [rows]
-            }
-            rows.forEach((row: any) => {
-              if (!tableMethods.isInsertByRow(row)) {
-                const rowIndex = $xetable.findRowIndexOf(tableFullData, row)
-                const oRow = tableSourceData[rowIndex]
-                if (oRow && row) {
-                  if (field) {
-                    XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
-                  } else {
-                    XEUtils.destructuring(row, XEUtils.clone(oRow, true))
-                  }
-                }
-              }
-            })
-            return nextTick()
-          }
-          return tableMethods.reloadData(tableSourceData)
-        } else {
+        if (!keepSource) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             warnLog('vxe.error.reqProp', ['keep-source'])
           }
+          return nextTick()
         }
-        return nextTick()
+        let targetRows = rows
+        if (rows) {
+          if (!XEUtils.isArray(rows)) {
+            targetRows = [rows]
+          }
+        } else {
+          targetRows = XEUtils.toArray($xetable.getUpdateRecords())
+        }
+        if (targetRows.length) {
+          targetRows.forEach((row: any) => {
+            if (!tableMethods.isInsertByRow(row)) {
+              const rowIndex = $xetable.findRowIndexOf(tableFullData, row)
+              const oRow = tableSourceData[rowIndex]
+              if (oRow && row) {
+                if (field) {
+                  XEUtils.set(row, field, XEUtils.clone(XEUtils.get(oRow, field), true))
+                } else {
+                  XEUtils.destructuring(row, XEUtils.clone(oRow, true))
+                }
+              }
+            }
+          })
+        }
+        if (rows) {
+          return nextTick()
+        }
+        return tableMethods.reloadData(tableSourceData)
       },
       /**
        * 清空单元格内容
@@ -3786,8 +3792,7 @@ export default defineComponent({
       const { filterStore, ctxMenuStore, editStore } = reactData
       const mouseOpts = computeMouseOpts.value
       const { actived } = editStore
-      const keyCode = evnt.keyCode
-      const isEsc = keyCode === 27
+      const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
       if (isEsc) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
           if (keyboardConfig && mouseConfig && mouseOpts.area && $xetable.handleKeyboardEvent) {
@@ -3830,17 +3835,18 @@ export default defineComponent({
           const menuList = computeMenuList.value
           const { selected, actived } = editStore
           const keyCode = evnt.keyCode
-          const isBack = keyCode === 8
-          const isTab = keyCode === 9
-          const isEnter = keyCode === 13
-          const isSpacebar = keyCode === 32
-          const isLeftArrow = keyCode === 37
-          const isUpArrow = keyCode === 38
-          const isRightArrow = keyCode === 39
-          const isDwArrow = keyCode === 40
-          const isDel = keyCode === 46
-          const isF2 = keyCode === 113
-          const isContextMenu = keyCode === 93
+          const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
+          const isBack = hasEventKey(evnt, EVENT_KEYS.BACKSPACE)
+          const isTab = hasEventKey(evnt, EVENT_KEYS.TAB)
+          const isEnter = hasEventKey(evnt, EVENT_KEYS.ENTER)
+          const isSpacebar = hasEventKey(evnt, EVENT_KEYS.SPACEBAR)
+          const isLeftArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_LEFT)
+          const isUpArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_UP)
+          const isRightArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_RIGHT)
+          const isDwArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)
+          const isDel = hasEventKey(evnt, EVENT_KEYS.DELETE)
+          const isF2 = hasEventKey(evnt, EVENT_KEYS.F2)
+          const isContextMenu = hasEventKey(evnt, EVENT_KEYS.CONTEXT_MENU)
           const hasMetaKey = evnt.metaKey
           const hasCtrlKey = evnt.ctrlKey
           const hasShiftKey = evnt.shiftKey
@@ -3853,12 +3859,27 @@ export default defineComponent({
             // 如果配置了右键菜单; 支持方向键操作、回车
             evnt.preventDefault()
             if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
-              $xetable.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selectChild', 37, false, ctxMenuStore.selected.children)
+              $xetable.moveCtxMenu(evnt, ctxMenuStore, 'selectChild', isLeftArrow, false, ctxMenuStore.selected.children)
             } else {
-              $xetable.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, menuList)
+              $xetable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
             }
           } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xetable.handleKeyboardEvent) {
             $xetable.handleKeyboardEvent(evnt)
+          } else if (isEsc) {
+            // 如果按下了 Esc 键，关闭快捷菜单、筛选
+            $xetable.closeMenu()
+            tableMethods.closeFilter()
+            if (actived.row) {
+              // 如果是激活编辑状态，则取消编辑
+              if (actived.row) {
+                const params = actived.args
+                $xetable.clearActived(evnt)
+                // 如果配置了选中功能，则为选中状态
+                if (mouseOpts.selected) {
+                  nextTick(() => $xetable.handleSelected(params, evnt))
+                }
+              }
+            }
           } else if (isSpacebar && keyboardConfig && keyboardOpts.isChecked && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
             // 空格键支持选中复选框
             evnt.preventDefault()
@@ -4142,9 +4163,9 @@ export default defineComponent({
         const el = refElem.value
         if ($xegrid) {
           const gridEl = $xegrid.getRefMaps().refElem.value
-          return gridEl.parentNode as HTMLElement
+          return gridEl ? gridEl.parentNode as HTMLElement : null
         }
-        return el.parentNode as HTMLElement
+        return el ? el.parentNode as HTMLElement : null
       },
       /**
        * 获取父容器的高度
@@ -4152,9 +4173,12 @@ export default defineComponent({
       getParentHeight () {
         const { height } = props
         const el = refElem.value
-        const parentElem = el.parentNode as HTMLElement
-        const parentPaddingSize = height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
-        return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
+        if (el) {
+          const parentElem = el.parentNode as HTMLElement
+          const parentPaddingSize = height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+          return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
+        }
+        return 0
       },
       /**
        * 获取需要排除的高度
@@ -5334,13 +5358,18 @@ export default defineComponent({
 
       if (props.autoResize) {
         const el = refElem.value
+        const parentEl = tablePrivateMethods.getParentElem()
         resizeObserver = createResizeEvent(() => {
           if (props.autoResize) {
             tableMethods.recalculate(true)
           }
         })
-        resizeObserver.observe(el)
-        resizeObserver.observe(tablePrivateMethods.getParentElem())
+        if (el) {
+          resizeObserver.observe(el)
+        }
+        if (parentEl) {
+          resizeObserver.observe(parentEl)
+        }
       }
       GlobalEvent.on($xetable, 'paste', handleGlobalPasteEvent)
       GlobalEvent.on($xetable, 'copy', handleGlobalCopyEvent)

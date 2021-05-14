@@ -3,6 +3,7 @@ import XEUtils from 'xe-utils'
 import { VXETable } from '../../v-x-e-table'
 import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../tools/dom'
 import { hasChildrenList } from '../../tools/utils'
+import { hasEventKey, EVENT_KEYS } from '../../tools/event'
 
 import { VxeGlobalHooksHandles, TableMenuMethods, TableMenuPrivateMethods } from '../../../types/all'
 
@@ -32,7 +33,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
           evnt.preventDefault()
         } else if (isMenu && options && options.length) {
           params.options = options
-          $xetable.preventEvent(evnt, 'event.showMenu', params, null, () => {
+          $xetable.preventEvent(evnt, 'event.showMenu', params, () => {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
               $xetable.updateZindex()
@@ -111,24 +112,23 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
       /**
        * 处理菜单的移动
        * @param evnt
-       * @param keyCode
        * @param ctxMenuStore
        * @param property
-       * @param operKey
+       * @param hasOper
        * @param operRest
        * @param menuList
        */
-      moveCtxMenu (evnt, keyCode, ctxMenuStore, property, operKey, operRest, menuList) {
+      moveCtxMenu (evnt, ctxMenuStore, property, hasOper, operRest, menuList) {
         let selectItem
         const selectIndex = XEUtils.findIndexOf(menuList, item => ctxMenuStore[property] === item)
-        if (keyCode === operKey) {
+        if (hasOper) {
           if (operRest && hasChildrenList(ctxMenuStore.selected)) {
             ctxMenuStore.showChild = true
           } else {
             ctxMenuStore.showChild = false
             ctxMenuStore.selectChild = null
           }
-        } else if (keyCode === 38) {
+        } else if (hasEventKey(evnt, EVENT_KEYS.ARROW_UP)) {
           for (let len = selectIndex - 1; len >= 0; len--) {
             if (menuList[len].visible !== false) {
               selectItem = menuList[len]
@@ -136,7 +136,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }
           ctxMenuStore[property] = selectItem || menuList[menuList.length - 1]
-        } else if (keyCode === 40) {
+        } else if (hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)) {
           for (let index = selectIndex + 1; index < menuList.length; index++) {
             if (menuList[index].visible !== false) {
               selectItem = menuList[index]
@@ -144,7 +144,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }
           ctxMenuStore[property] = selectItem || menuList[0]
-        } else if (ctxMenuStore[property] && (keyCode === 13 || keyCode === 32)) {
+        } else if (ctxMenuStore[property] && (hasEventKey(evnt, EVENT_KEYS.ENTER) || hasEventKey(evnt, EVENT_KEYS.SPACEBAR))) {
           menuPrivateMethods.ctxMenuLinkEvent(evnt, ctxMenuStore[property])
         }
       },

@@ -17,10 +17,10 @@
       :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: demo1.roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="role1" title="Role" :edit-render="{name: '$select', options: demo1.roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-column>
+      <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -111,10 +111,10 @@ export default defineComponent({
           :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'row'}"
           @edit-actived="editActivedEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role1" title="Role" :edit-render="{name: '$select', options: demo1.roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="role1" title="Role" :edit-render="{name: '$select', options: demo1.roleList, props: {clearable: true}, events: {change: roleChangeEvent}}"></vxe-column>
+          <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
         </vxe-table>
         `,
         `

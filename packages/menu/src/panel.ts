@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, inject, ref, Ref } from 'vue'
+import { defineComponent, h, Teleport, inject, ref, Ref, createCommentVNode } from 'vue'
 import { getFuncText } from '../../tools/utils'
 import XEUtils from 'xe-utils'
 
@@ -42,7 +42,7 @@ export default defineComponent({
           }],
           style: ctxMenuStore.style
         }, ctxMenuStore.list.map((options, gIndex) => {
-          return h('ul', {
+          return options.every(item => item.visible === false) ? createCommentVNode() : h('ul', {
             class: 'vxe-context-menu--option-wrapper',
             key: gIndex
           }, options.map((item, index) => {

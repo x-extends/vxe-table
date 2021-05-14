@@ -12,10 +12,10 @@
       highlight-hover-row
       height="300"
       :data="demo1.tableData">
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -42,23 +42,23 @@
       :scroll-x="{gt: 10}"
       :scroll-y="{gt: 100}"
       :data="demo2.tableData">
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
-      <vxe-table-column field="attr1" title="Attr1" width="100"></vxe-table-column>
-      <vxe-table-column field="attr2" title="Attr2" width="100"></vxe-table-column>
-      <vxe-table-column field="attr3" title="Attr3" width="100"></vxe-table-column>
-      <vxe-table-column field="attr4" title="Attr4" width="100"></vxe-table-column>
-      <vxe-table-column field="attr5" title="Attr5" width="150" sortable></vxe-table-column>
-      <vxe-table-column field="attr6" title="Attr6" width="100"></vxe-table-column>
-      <vxe-table-column field="attr7" title="Attr7" width="100"></vxe-table-column>
-      <vxe-table-column field="attr8" title="Attr8" width="200" show-overflow></vxe-table-column>
-      <vxe-table-column field="attr9" title="Attr9" width="100"></vxe-table-column>
-      <vxe-table-column field="attr10" title="Attr10" width="100"></vxe-table-column>
-      <vxe-table-column field="attr11" title="Attr11" width="100"></vxe-table-column>
-      <vxe-table-column field="attr12" title="Attr12" width="100"></vxe-table-column>
-      <vxe-table-column field="attr13" title="Attr13" width="150" sortable></vxe-table-column>
-      <vxe-table-column field="attr14" title="Attr14" width="100"></vxe-table-column>
-      <vxe-table-column field="attr15" title="Attr15" width="100"></vxe-table-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" width="150" sortable></vxe-column>
+      <vxe-column field="attr1" title="Attr1" width="100"></vxe-column>
+      <vxe-column field="attr2" title="Attr2" width="100"></vxe-column>
+      <vxe-column field="attr3" title="Attr3" width="100"></vxe-column>
+      <vxe-column field="attr4" title="Attr4" width="100"></vxe-column>
+      <vxe-column field="attr5" title="Attr5" width="150" sortable></vxe-column>
+      <vxe-column field="attr6" title="Attr6" width="100"></vxe-column>
+      <vxe-column field="attr7" title="Attr7" width="100"></vxe-column>
+      <vxe-column field="attr8" title="Attr8" width="200" show-overflow></vxe-column>
+      <vxe-column field="attr9" title="Attr9" width="100"></vxe-column>
+      <vxe-column field="attr10" title="Attr10" width="100"></vxe-column>
+      <vxe-column field="attr11" title="Attr11" width="100"></vxe-column>
+      <vxe-column field="attr12" title="Attr12" width="100"></vxe-column>
+      <vxe-column field="attr13" title="Attr13" width="150" sortable></vxe-column>
+      <vxe-column field="attr14" title="Attr14" width="100"></vxe-column>
+      <vxe-column field="attr15" title="Attr15" width="100"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -169,10 +169,10 @@ export default defineComponent({
           highlight-hover-row
           height="300"
           :data="demo1.tableData">
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
         </vxe-table>
         `,
         `
@@ -216,23 +216,23 @@ export default defineComponent({
           :scroll-x="{gt: 10}"
           :scroll-y="{gt: 100}"
           :data="demo2.tableData">
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
-          <vxe-table-column field="attr1" title="Attr1" width="100"></vxe-table-column>
-          <vxe-table-column field="attr2" title="Attr2" width="100"></vxe-table-column>
-          <vxe-table-column field="attr3" title="Attr3" width="100"></vxe-table-column>
-          <vxe-table-column field="attr4" title="Attr4" width="100"></vxe-table-column>
-          <vxe-table-column field="attr5" title="Attr5" width="150" sortable></vxe-table-column>
-          <vxe-table-column field="attr6" title="Attr6" width="100"></vxe-table-column>
-          <vxe-table-column field="attr7" title="Attr7" width="100"></vxe-table-column>
-          <vxe-table-column field="attr8" title="Attr8" width="200" show-overflow></vxe-table-column>
-          <vxe-table-column field="attr9" title="Attr9" width="100"></vxe-table-column>
-          <vxe-table-column field="attr10" title="Attr10" width="100"></vxe-table-column>
-          <vxe-table-column field="attr11" title="Attr11" width="100"></vxe-table-column>
-          <vxe-table-column field="attr12" title="Attr12" width="100"></vxe-table-column>
-          <vxe-table-column field="attr13" title="Attr13" width="150" sortable></vxe-table-column>
-          <vxe-table-column field="attr14" title="Attr14" width="100"></vxe-table-column>
-          <vxe-table-column field="attr15" title="Attr15" width="100"></vxe-table-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" width="150" sortable></vxe-column>
+          <vxe-column field="attr1" title="Attr1" width="100"></vxe-column>
+          <vxe-column field="attr2" title="Attr2" width="100"></vxe-column>
+          <vxe-column field="attr3" title="Attr3" width="100"></vxe-column>
+          <vxe-column field="attr4" title="Attr4" width="100"></vxe-column>
+          <vxe-column field="attr5" title="Attr5" width="150" sortable></vxe-column>
+          <vxe-column field="attr6" title="Attr6" width="100"></vxe-column>
+          <vxe-column field="attr7" title="Attr7" width="100"></vxe-column>
+          <vxe-column field="attr8" title="Attr8" width="200" show-overflow></vxe-column>
+          <vxe-column field="attr9" title="Attr9" width="100"></vxe-column>
+          <vxe-column field="attr10" title="Attr10" width="100"></vxe-column>
+          <vxe-column field="attr11" title="Attr11" width="100"></vxe-column>
+          <vxe-column field="attr12" title="Attr12" width="100"></vxe-column>
+          <vxe-column field="attr13" title="Attr13" width="150" sortable></vxe-column>
+          <vxe-column field="attr14" title="Attr14" width="100"></vxe-column>
+          <vxe-column field="attr15" title="Attr15" width="100"></vxe-column>
         </vxe-table>
         `,
         `

@@ -21,6 +21,7 @@
   user-select: none;
   line-height: 1;
   cursor: pointer;
+  color: $vxe-font-color;
   > input {
     &[type="radio"] {
       position: absolute;
@@ -107,7 +108,7 @@
 
 .vxe-radio-button {
   .vxe-radio--label {
-    background-color: #fff;
+    background-color: $vxe-radio-button-default-background-color;
   }
   &:first-child {
     .vxe-radio--label {

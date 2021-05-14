@@ -3,7 +3,7 @@
     <h2>{{ $t('app.aside.nav.input') }}</h2>
     <p class="tip">
       输入框、选择器，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'input'}}">API</router-link><br>
-      <span class="red">（注：输入组件只能是字符串类型，其他类型谨慎使用）</span>
+      <span class="red">（注：输入组件输出为字符串类型）</span>
     </p>
 
     <p>
@@ -50,6 +50,7 @@
       <vxe-input v-model="demo1.value506" placeholder="整数类型" type="integer"></vxe-input>
       <vxe-input v-model="demo1.value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
       <vxe-input v-model="demo1.value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
+      <vxe-input v-model="demo1.value509" placeholder="允许输入科学计数" type="number" exponential clearable></vxe-input>
     </p>
 
     <p>
@@ -138,6 +139,7 @@ export default defineComponent({
       value506: '44',
       value507: '',
       value508: '',
+      value509: '1e+2',
       value600: '',
       value601: '',
       value602: '',
@@ -288,6 +290,7 @@ export default defineComponent({
           <vxe-input v-model="demo1.value506" placeholder="整数类型" type="integer"></vxe-input>
           <vxe-input v-model="demo1.value507" placeholder="整数间隔 5" type="integer" step="5" clearable></vxe-input>
           <vxe-input v-model="demo1.value508" placeholder="整数范围限制 0-100" type="integer" min="0" max="100" clearable></vxe-input>
+          <vxe-input v-model="demo1.value509" placeholder="允许输入科学计数" type="number" exponential clearable></vxe-input>
         </p>
 
         <p>
@@ -352,6 +355,7 @@ export default defineComponent({
               value506: '44',
               value507: '',
               value508: '',
+              value509: '1e+2',
               value600: '',
               value601: '',
               value602: '',

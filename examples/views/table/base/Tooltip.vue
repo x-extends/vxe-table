@@ -10,17 +10,17 @@
       :footer-method="footerMethod"
       :tooltip-config="demo1.tableTooltipConfig"
       :data="demo1.tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-table-column>
-      <vxe-table-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-column>
+      <vxe-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
+      <vxe-column field="rate" title="Rate">
         <template #header>
           <span>自定义标题</span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="160"></vxe-table-column>
-      <vxe-table-column type="html" field="content" title="Content" width="200"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="address" title="Address" width="160"></vxe-column>
+      <vxe-column type="html" field="content" title="Content" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -93,17 +93,17 @@ export default defineComponent({
           :footer-method="footerMethod"
           :tooltip-config="demo1.tableTooltipConfig"
           :data="demo1.tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-table-column>
-          <vxe-table-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="名称" :title-help="{message: '自定义帮助提示信息'}"></vxe-column>
+          <vxe-column field="role" title="角色" :title-help="{message: '自定义图标', icon: 'fa fa-bell'}"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
+          <vxe-column field="rate" title="Rate">
             <template #header>
               <span>自定义标题</span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="160"></vxe-table-column>
-          <vxe-table-column type="html" field="content" title="Content" width="200"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="address" title="Address" width="160"></vxe-column>
+          <vxe-column type="html" field="content" title="Content" width="200"></vxe-column>
         </vxe-table>
         `,
         `

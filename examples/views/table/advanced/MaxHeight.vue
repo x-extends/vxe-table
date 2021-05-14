@@ -11,15 +11,15 @@
       :loading="demo1.loading"
       :data="demo1.tableData"
       :footer-method="footerMethod">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-      <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="120"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+      <vxe-column field="region" title="Region" width="200"></vxe-column>
+      <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -40,14 +40,14 @@
       :loading="demo2.loading"
       :data="demo2.tableData"
       :footer-method="footerMethod">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="120"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+      <vxe-column field="time" title="Time" width="200"></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -95,9 +95,9 @@ export default defineComponent({
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
         { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
         { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+        { id: 100010, name: 'Test10', role: 'Develop', sex: '1', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
       ]
       demo2.loading = false
     }, 500)
@@ -157,15 +157,15 @@ export default defineComponent({
           :loading="demo1.loading"
           :data="demo1.tableData"
           :footer-method="footerMethod">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-          <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+          <vxe-column field="age" title="Age" width="120"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+          <vxe-column field="region" title="Region" width="200"></vxe-column>
+          <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>
         `,
         `
@@ -246,14 +246,14 @@ export default defineComponent({
           :loading="demo2.loading"
           :data="demo2.tableData"
           :footer-method="footerMethod">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+          <vxe-column field="age" title="Age" width="120"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+          <vxe-column field="time" title="Time" width="200"></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>
         `,
         `
@@ -277,9 +277,9 @@ export default defineComponent({
                 { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
                 { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
                 { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+                { id: 100010, name: 'Test10', role: 'Develop', sex: '1', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
               ]
               demo2.loading = false
             }, 500)

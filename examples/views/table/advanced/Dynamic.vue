@@ -1,9 +1,9 @@
 <template>
   <div>
     <p class="tip">
-      使用 v-for 去循环静态列是不建议的，需确保 key 唯一性<span class="green">（动态场景需使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
+      使用 v-for 去循环静态列是非常糟糕的，仅用于改变属性，需确保 key 唯一性<span class="green">（动态场景需使用 <grid-api-link name="vxe-grid"/> 进行渲染）</span><br>
       如果列信息发生变动，则需要通过调用 <table-api-link prop="refreshColumn"/> 方法刷新列信息<br>
-      <span class="red">（注：该用法是不建议使用，该示例仅供参考）</span>
+      <span class="red">（注：该用法是不建议使用，所有兼容性应自行解决，该示例仅供参考）</span>
     </p>
 
     <vxe-toolbar>
@@ -23,7 +23,7 @@
       ref="xTable"
       height="300"
       :data="demo1.tableData">
-      <vxe-table-column
+      <vxe-column
         v-for="config in demo1.tableColumn"
         :key="config.key"
         :type="config.type"
@@ -32,7 +32,7 @@
         :fixed="config.fixed"
         :width="config.width"
         :filters="config.filters">
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -68,8 +68,8 @@ export default defineComponent({
         { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0 ', age: 23, address: 'vxe-table 从入门到放弃' },
         { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0 ', age: 30, address: 'Shanghai' },
         { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '0 ', age: 21, address: 'vxe-table 从入门到放弃' },
-        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1 ', age: 29, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1 ', age: 35, address: 'vxe-table 从入门到放弃' }
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1', age: 35, address: 'vxe-table 从入门到放弃' }
       ]
     })
 
@@ -147,7 +147,7 @@ export default defineComponent({
           ref="xTable"
           height="300"
           :data="demo1.tableData">
-          <vxe-table-column
+          <vxe-column
             v-for="config in demo1.tableColumn"
             :key="config.key"
             :type="config.type"
@@ -156,7 +156,7 @@ export default defineComponent({
             :fixed="config.fixed"
             :width="config.width"
             :filters="config.filters">
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -183,8 +183,8 @@ export default defineComponent({
                 { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '0 ', age: 23, address: 'vxe-table 从入门到放弃' },
                 { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: '0 ', age: 30, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: '0 ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1 ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1 ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: '1', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: '1', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
             })
 

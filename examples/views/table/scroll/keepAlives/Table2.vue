@@ -8,11 +8,11 @@
       height="400"
       :loading="demo1.loading"
       :data="demo1.tableData">
-      <vxe-table-column type="radio" width="60"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="num2" title="Num2"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+      <vxe-column type="radio" width="60"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="num2" title="Num2"></vxe-column>
+      <vxe-column field="rate" title="Rate"></vxe-column>
     </vxe-table>
   </div>
 </template>

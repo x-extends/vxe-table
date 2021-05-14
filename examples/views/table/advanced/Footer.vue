@@ -14,11 +14,11 @@
       max-height="400"
       :footer-method="footerMethod1"
       :data="demo1.tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="amount" title="Amount"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="amount" title="Amount"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -38,11 +38,11 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName2"
       :data="demo2.tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="amount" title="Amount"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="amount" title="Amount"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -72,13 +72,13 @@
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName3"
       :data="demo3.tableData">
-      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
       <vxe-table-colgroup title="基本信息">
-        <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
-        <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>
+        <vxe-column field="name" title="Name" min-width="600" sortable></vxe-column>
+        <vxe-column field="age" title="Age" min-width="600"></vxe-column>
       </vxe-table-colgroup>
-      <vxe-table-column field="date" title="Date" min-width="600"></vxe-table-column>
-      <vxe-table-column field="amount" title="Amount" width="200" fixed="right"></vxe-table-column>
+      <vxe-column field="date" title="Date" min-width="600"></vxe-column>
+      <vxe-column field="amount" title="Amount" width="200" fixed="right"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -125,7 +125,7 @@ export default defineComponent({
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
         { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
       ]
     })
 
@@ -150,7 +150,7 @@ export default defineComponent({
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
         { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
       ]
     })
 
@@ -234,11 +234,11 @@ export default defineComponent({
           max-height="400"
           :footer-method="footerMethod1"
           :data="demo1.tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="amount" title="Amount"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="amount" title="Amount"></vxe-column>
         </vxe-table>
         `,
         `
@@ -282,11 +282,11 @@ export default defineComponent({
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName2"
           :data="demo2.tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="amount" title="Amount"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="amount" title="Amount"></vxe-column>
         </vxe-table>
         `,
         `
@@ -304,7 +304,7 @@ export default defineComponent({
                 { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
                 { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
               ]
             })
 
@@ -402,13 +402,13 @@ export default defineComponent({
           :footer-method="footerMethod"
           :footer-cell-class-name="footerCellClassName3"
           :data="demo3.tableData">
-          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
+          <vxe-column type="seq" width="60" fixed="left"></vxe-column>
           <vxe-table-colgroup title="基本信息">
-            <vxe-table-column field="name" title="Name" min-width="600" sortable></vxe-table-column>
-            <vxe-table-column field="age" title="Age" min-width="600"></vxe-table-column>
+            <vxe-column field="name" title="Name" min-width="600" sortable></vxe-column>
+            <vxe-column field="age" title="Age" min-width="600"></vxe-column>
           </vxe-table-colgroup>
-          <vxe-table-column field="date" title="Date" min-width="600"></vxe-table-column>
-          <vxe-table-column field="amount" title="Amount" width="200" fixed="right"></vxe-table-column>
+          <vxe-column field="date" title="Date" min-width="600"></vxe-column>
+          <vxe-column field="amount" title="Amount" width="200" fixed="right"></vxe-column>
         </vxe-table>
         `,
         `
@@ -428,7 +428,7 @@ export default defineComponent({
                 { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
                 { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' }
               ]
             })
 

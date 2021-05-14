@@ -27,12 +27,12 @@
       :footer-cell-class-name="footerCellClassName"
       :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
       <vxe-table-colgroup title="统计信息">
-        <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
-        <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-table-column>
-        <vxe-table-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-        <vxe-table-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+        <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
+        <vxe-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-column>
+        <vxe-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
+        <vxe-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -179,12 +179,12 @@ export default defineComponent({
           :footer-cell-class-name="footerCellClassName"
           :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
           <vxe-table-colgroup title="统计信息">
-            <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
-            <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-table-column>
-            <vxe-table-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-            <vxe-table-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+            <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
+            <vxe-column field="age" title="Age" :edit-render="{name: '$input', immediate: true, props: {type: 'number', min: 1, max: 120}, events: {change: updateFooterEvent}}"></vxe-column>
+            <vxe-column field="num1" title="Num" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
+            <vxe-column field="rate" title="Rate" :edit-render="{name: 'input', immediate: true, events: {input: updateFooterEvent}}"></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,

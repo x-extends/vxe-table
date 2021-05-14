@@ -13,7 +13,7 @@
       class="sortable-row-demo"
       :scroll-y="{enabled: false}"
       :data="demo1.tableData">
-      <vxe-table-column width="60">
+      <vxe-column width="60">
         <template #default>
           <span class="drag-btn">
             <i class="vxe-icon--menu"></i>
@@ -24,11 +24,11 @@
             <i class="vxe-icon--question" @click="demo1.showHelpTip = !demo1.showHelpTip"></i>
           </vxe-tooltip>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -85,8 +85,8 @@ export default defineComponent({
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
         { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
-        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ]
     })
 
@@ -246,7 +246,7 @@ export default defineComponent({
           class="sortable-row-demo"
           :scroll-y="{enabled: false}"
           :data="demo1.tableData">
-          <vxe-table-column width="60">
+          <vxe-column width="60">
             <template #default>
               <span class="drag-btn">
                 <i class="vxe-icon--menu"></i>
@@ -257,11 +257,11 @@ export default defineComponent({
                 <i class="vxe-icon--question" @click="demo1.showHelpTip = !demo1.showHelpTip"></i>
               </vxe-tooltip>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -280,8 +280,8 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
                 { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'Shenzhen' },
-                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' }
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ]
             })
 

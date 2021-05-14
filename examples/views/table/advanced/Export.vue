@@ -24,15 +24,15 @@
       :show-overflow="demo1.showOverflow"
       :export-config="{}"
       :data="demo1.tableData1">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="name" title="Name"></vxe-table-column>
+        <vxe-column field="name" title="Name"></vxe-column>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="Group2">
-        <vxe-table-column field="attr1" title="自动转换"></vxe-table-column>
-        <vxe-table-column field="amount" title="导出数值" cell-type="number"></vxe-table-column>
-        <vxe-table-column field="num" title="导出字符串" cell-type="string" sortable></vxe-table-column>
+        <vxe-column field="attr1" title="自动转换"></vxe-column>
+        <vxe-column field="amount" title="导出数值" cell-type="number"></vxe-column>
+        <vxe-column field="num" title="导出字符串" cell-type="string" sortable></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -56,11 +56,11 @@
       ref="xTable2"
       height="300"
       :data="demo2.tableData2">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -85,11 +85,11 @@
       ref="xTable3"
       :footer-method="footerMethod"
       :data="demo3.tableData3">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -118,11 +118,11 @@
       :loading="demo4.loading"
       :footer-method="footerMethod"
       :data="demo4.tableData4">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column type="html" field="html1" title="Html片段"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column type="html" field="html1" title="Html片段"></vxe-column>
     </vxe-table>
 
     <vxe-pager
@@ -146,7 +146,6 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxePagerEvents, VxeButtonEvents } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -174,6 +173,14 @@ export default defineComponent({
       return cellValue
     }
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
     const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
       const footerData = [
         columns.map((column, columnIndex) => {
@@ -181,7 +188,7 @@ export default defineComponent({
             return '平均'
           }
           if (['age'].includes(column.property)) {
-            return XEUtils.mean(data, column.property)
+            return meanNum(data, column.property)
           }
           return null
         })
@@ -211,11 +218,11 @@ export default defineComponent({
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
       ]
     })
 
@@ -236,11 +243,11 @@ export default defineComponent({
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
         { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
         { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
       ]
     })
 
@@ -275,11 +282,11 @@ export default defineComponent({
           { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
           { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
           { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
-          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
-          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
-          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
-          { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
-          { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+          { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+          { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
         ]
         demo4.tableData4 = list
         demo4.tablePage4.totalResult = 20
@@ -327,11 +334,11 @@ export default defineComponent({
           { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
           { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
           { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
-          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
-          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
-          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
-          { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
-          { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+          { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+          { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+          { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+          { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
         ]
         $table.exportData({
           filename: '自定义文件名',
@@ -384,15 +391,15 @@ export default defineComponent({
           :show-overflow="demo1.showOverflow"
           :export-config="{}"
           :data="demo1.tableData1">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-column field="name" title="Name"></vxe-column>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="Group2">
-            <vxe-table-column field="attr1" title="自动转换"></vxe-table-column>
-            <vxe-table-column field="amount" title="导出数值" cell-type="number"></vxe-table-column>
-            <vxe-table-column field="num" title="导出字符串" cell-type="string" sortable></vxe-table-column>
+            <vxe-column field="attr1" title="自动转换"></vxe-column>
+            <vxe-column field="amount" title="导出数值" cell-type="number"></vxe-column>
+            <vxe-column field="num" title="导出字符串" cell-type="string" sortable></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -409,9 +416,9 @@ export default defineComponent({
                 { name: 'tesfg t1', attr1: '154645623546345', amount: '45646464888888654654', num: 4564566456645 },
                 { name: 'sdf sgfd fdg', attr1: 1231242, amount: '4564564545646.6985', num: 0 },
                 { name: 'test1', attr1: true, amount: '12953.6985', num: 54646646 },
-                { name: 'aaa\n换行bb\n换行gg', attr1: '0', amount: '0', num: '645645645665567645234326456' },
+                { name: 'aaa\\n换行bb\\n换行gg', attr1: '0', amount: '0', num: '645645645665567645234326456' },
                 { name: 'te st1', attr1: false, amount: '1231231213123.456', num: '45645645645646456' },
-                { name: 'tesf \n换行g t6', attr1: 'test2', amount: '99999.08', num: 9999.88 }
+                { name: 'tesf \\n换行g t6', attr1: 'test2', amount: '99999.08', num: 9999.88 }
               ]
             })
 
@@ -456,11 +463,11 @@ export default defineComponent({
           ref="xTable2"
           height="300"
           :data="demo2.tableData2">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -474,11 +481,11 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
             })
 
@@ -516,17 +523,16 @@ export default defineComponent({
           ref="xTable3"
           :footer-method="footerMethod"
           :data="demo3.tableData3">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance, VxeTablePropTypes, VxeColumnPropTypes, VxeButtonEvents } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -539,6 +545,14 @@ export default defineComponent({
               return cellValue
             }
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -546,7 +560,7 @@ export default defineComponent({
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return meanNum(data, column.property)
                   }
                   return null
                 })
@@ -559,11 +573,11 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
             })
 
@@ -607,11 +621,11 @@ export default defineComponent({
           :loading="demo4.loading"
           :footer-method="footerMethod"
           :data="demo4.tableData4">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column type="html" field="html1" title="Html片段"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column type="html" field="html1" title="Html片段"></vxe-column>
         </vxe-table>
 
         <vxe-pager
@@ -639,6 +653,14 @@ export default defineComponent({
               return cellValue
             }
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
             const footerMethod: VxeTablePropTypes.FooterMethod = ({ columns, data }) => {
               const footerData = [
                 columns.map((column, columnIndex) => {
@@ -646,7 +668,7 @@ export default defineComponent({
                     return '平均'
                   }
                   if (['age'].includes(column.property)) {
-                    return XEUtils.mean(data, column.property)
+                    return meanNum(data, column.property)
                   }
                   return null
                 })
@@ -673,11 +695,11 @@ export default defineComponent({
                   { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
                   { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
                   { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
-                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
-                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
-                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
-                  { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
-                  { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+                  { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+                  { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
                 ]
                 demo4.tableData4 = list
                 demo4.tablePage4.totalResult = 20
@@ -725,11 +747,11 @@ export default defineComponent({
                   { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
                   { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', html1: '<span>111</span>' },
                   { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', html1: '<span>456</span>' },
-                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
-                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
-                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
-                  { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
-                  { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃', html1: '<span>111</span>' },
+                  { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', html1: '<span>456</span>' },
+                  { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃', html1: '<span>56</span>' },
+                  { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃', html1: '<span>768</span>' },
+                  { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃', html1: '<span>789</span>' }
                 ]
                 $table.exportData({
                   filename: '自定义文件名',

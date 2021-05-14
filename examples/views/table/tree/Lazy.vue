@@ -22,10 +22,10 @@
       row-id="id"
       :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="demo1.tableData">
-      <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -45,10 +45,10 @@
       :checkbox-config="{labelField: 'name'}"
       :tree-config="demo2.tableTree"
       :data="demo2.tableData">
-      <vxe-table-column type="checkbox" title="Name" width="400" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column type="checkbox" title="Name" width="400" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -148,10 +148,10 @@ export default defineComponent({
           row-id="id"
           :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="demo1.tableData">
-          <vxe-table-column field="name" title="Name" width="400" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -198,10 +198,10 @@ export default defineComponent({
           :checkbox-config="{labelField: 'name'}"
           :tree-config="demo2.tableTree"
           :data="demo2.tableData">
-          <vxe-table-column type="checkbox" title="Name" width="400" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column type="checkbox" title="Name" width="400" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `

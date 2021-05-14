@@ -1,6 +1,7 @@
 import { defineComponent, h, PropType, computed, inject, resolveComponent, ComponentOptions, ref, Ref, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
+import { hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { useSize } from '../../hooks/size'
 
 import { VxePagerPropTypes, VxePagerConstructor, VxePagerEmits, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods } from '../../../types/all'
@@ -165,12 +166,12 @@ export default defineComponent({
     }
 
     const jumpKeydownEvent = (evnt: KeyboardEvent) => {
-      if (evnt.keyCode === 13) {
+      if (hasEventKey(evnt, EVENT_KEYS.ENTER)) {
         triggerJumpEvent(evnt)
-      } else if (evnt.keyCode === 38) {
+      } else if (hasEventKey(evnt, EVENT_KEYS.ARROW_UP)) {
         evnt.preventDefault()
         handleNextPage(evnt)
-      } else if (evnt.keyCode === 40) {
+      } else if (hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)) {
         evnt.preventDefault()
         handlePrevPage(evnt)
       }

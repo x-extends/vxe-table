@@ -11,17 +11,17 @@
       :loading="demo1.loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="checkbox" title="ID" width="140"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
+      <vxe-column
         field="age"
         title="Age"
         sortable
         :filters="[{label: '大于16岁', value: 16}, {label: '大于26岁', value: 26}, {label: '大于30岁', value: 30}]"
-        :filter-method="filterAgeMethod"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        :filter-method="filterAgeMethod"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -76,7 +76,17 @@ export default defineComponent({
           { id: 10007, name: 'Test7', role: 'Test', sex: '0', age: 29, address: 'vxe-table 从入门到放弃' },
           { id: 10008, name: 'Test8', role: 'Develop', sex: '0', age: 35, address: 'vxe-table 从入门到放弃' },
           { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 21, address: 'vxe-table 从入门到放弃' },
-          { id: 100010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' }
+          { id: 10010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' },
+          { id: 10011, name: 'Test11', role: 'Test', sex: '0', age: 29, address: 'vxe-table 从入门到放弃' },
+          { id: 10012, name: 'Test12', role: 'Develop', sex: '1', age: 27, address: 'vxe-table 从入门到放弃' },
+          { id: 10013, name: 'Test13', role: 'Test', sex: '0', age: 24, address: 'vxe-table 从入门到放弃' },
+          { id: 10014, name: 'Test14', role: 'Develop', sex: '1', age: 34, address: 'vxe-table 从入门到放弃' },
+          { id: 10015, name: 'Test15', role: 'Test', sex: '1', age: 21, address: 'vxe-table 从入门到放弃' },
+          { id: 10016, name: 'Test16', role: 'Develop', sex: '0', age: 20, address: 'vxe-table 从入门到放弃' },
+          { id: 10017, name: 'Test17', role: 'Test', sex: '1', age: 31, address: 'vxe-table 从入门到放弃' },
+          { id: 10018, name: 'Test18', role: 'Develop', sex: '0', age: 32, address: 'vxe-table 从入门到放弃' },
+          { id: 10019, name: 'Test19', role: 'Test', sex: '1', age: 37, address: 'vxe-table 从入门到放弃' },
+          { id: 10020, name: 'Test20', role: 'Develop', sex: '1', age: 41, address: 'vxe-table 从入门到放弃' }
         ]
         demo1.loading = false
       }, 500)
@@ -97,17 +107,17 @@ export default defineComponent({
           :loading="demo1.loading"
           :checkbox-config="{labelField: 'id', highlight: true, range: true}"
           :data="demo1.tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="checkbox" title="ID" width="140"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :filters="sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex" :filters="sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
+          <vxe-column
             field="age"
             title="Age"
             sortable
             :filters="[{label: '大于16岁', value: 16}, {label: '大于26岁', value: 26}, {label: '大于30岁', value: 30}]"
-            :filter-method="filterAgeMethod"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+            :filter-method="filterAgeMethod"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -153,7 +163,17 @@ export default defineComponent({
                   { id: 10007, name: 'Test7', role: 'Test', sex: '0', age: 29, address: 'vxe-table 从入门到放弃' },
                   { id: 10008, name: 'Test8', role: 'Develop', sex: '0', age: 35, address: 'vxe-table 从入门到放弃' },
                   { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 21, address: 'vxe-table 从入门到放弃' },
-                  { id: 100010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' }
+                  { id: 10010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' },
+                  { id: 10011, name: 'Test11', role: 'Test', sex: '0', age: 29, address: 'vxe-table 从入门到放弃' },
+                  { id: 10012, name: 'Test12', role: 'Develop', sex: '1', age: 27, address: 'vxe-table 从入门到放弃' },
+                  { id: 10013, name: 'Test13', role: 'Test', sex: '0', age: 24, address: 'vxe-table 从入门到放弃' },
+                  { id: 10014, name: 'Test14', role: 'Develop', sex: '1', age: 34, address: 'vxe-table 从入门到放弃' },
+                  { id: 10015, name: 'Test15', role: 'Test', sex: '1', age: 21, address: 'vxe-table 从入门到放弃' },
+                  { id: 10016, name: 'Test16', role: 'Develop', sex: '0', age: 20, address: 'vxe-table 从入门到放弃' },
+                  { id: 10017, name: 'Test17', role: 'Test', sex: '1', age: 31, address: 'vxe-table 从入门到放弃' },
+                  { id: 10018, name: 'Test18', role: 'Develop', sex: '0', age: 32, address: 'vxe-table 从入门到放弃' },
+                  { id: 10019, name: 'Test19', role: 'Test', sex: '1', age: 37, address: 'vxe-table 从入门到放弃' },
+                  { id: 10020, name: 'Test20', role: 'Develop', sex: '1', age: 41, address: 'vxe-table 从入门到放弃' }
                 ]
                 demo1.loading = false
               }, 500)

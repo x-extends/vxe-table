@@ -61,11 +61,13 @@ export namespace VxeInputPropTypes {
   export type Min = string | number;
   export type Max = string | number;
   export type Step = string | number;
+  export type Exponential = boolean;
   export type Controls = boolean;
   export type Digits = string | number;
   export type MinDate = string | number | Date;
   export type MaxDate = string | number | Date;
-  export type StartWeek = number;
+  export type StartDay = number;
+  export type SelectDay = number;
   export type LabelFormat = string;
   export type ValueFormat = string;
   export type Editable = boolean;
@@ -97,6 +99,7 @@ export type VxeInputProps = {
   min?: VxeInputPropTypes.Min;
   max?: VxeInputPropTypes.Max;
   step?: VxeInputPropTypes.Step;
+  exponential?: VxeInputPropTypes.Exponential;
 
   // number、integer、float、password
   controls?: VxeInputPropTypes.Controls;
@@ -104,15 +107,22 @@ export type VxeInputProps = {
   // float
   digits?: VxeInputPropTypes.Digits;
 
-  // date、week、month、year
+  // date、week、month、quarter、year
   minDate?: VxeInputPropTypes.MinDate;
   maxDate?: VxeInputPropTypes.MaxDate;
-  startWeek?: VxeInputPropTypes.StartWeek;
+  /**
+   * @deprecated
+   */
+  startWeek?: VxeInputPropTypes.StartDay;
+  startDay?: VxeInputPropTypes.StartDay;
   labelFormat?: VxeInputPropTypes.LabelFormat;
   valueFormat?: VxeInputPropTypes.ValueFormat;
   editable?: VxeInputPropTypes.Editable;
   festivalMethod?: VxeInputPropTypes.FestivalMethod;
   disabledMethod?: VxeInputPropTypes.DisabledMethod;
+
+  // week
+  selectDay?: VxeInputPropTypes.SelectDay;
 
   prefixIcon?: VxeInputPropTypes.PrefixIcon;
   suffixIcon?: VxeInputPropTypes.SuffixIcon;

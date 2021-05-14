@@ -10,15 +10,15 @@
       :tree-config="{children: 'children'}"
       :expand-config="tableExpand"
       :data="tableData">
-      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column type="expand" width="80">
+      <vxe-column field="name" title="Name" tree-node></vxe-column>
+      <vxe-column type="expand" width="80">
         <template #content="{ row }">
           <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -107,15 +107,15 @@ export default defineComponent({
           :tree-config="{children: 'children'}"
           :expand-config="tableExpand"
           :data="tableData">
-          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-          <vxe-table-column type="expand" width="80">
+          <vxe-column field="name" title="Name" tree-node></vxe-column>
+          <vxe-column type="expand" width="80">
             <template #content="{ row }">
               <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `

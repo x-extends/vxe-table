@@ -646,7 +646,7 @@ export interface VxeTableMethods extends TableMethods { }
 export interface TablePrivateMethods {
   updateAfterDataIndex(): void;
   callSlot(slotFunc: Function | string | null, params: any): VNode[];
-  getParentElem(): Element;
+  getParentElem(): Element | null;
   getParentHeight(): number;
   getExcludeHeight(): number;
   defineField(record: any): any;

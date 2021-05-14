@@ -1,5 +1,4 @@
 import { VXETable } from '../../../../packages/all'
-import XEUtils from 'xe-utils'
 
 // 创建一个简单的输入框筛选
 VXETable.renderer.add('FilterInput', {
@@ -24,7 +23,7 @@ VXETable.renderer.add('FilterInput', {
   filterMethod (params) {
     const { option, row, column } = params
     const { data } = option
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     if (cellValue) {
       return cellValue.indexOf(data) > -1
     }
@@ -52,7 +51,7 @@ VXETable.renderer.add('FilterComplex', {
   // 筛选数据方法
   filterMethod (params) {
     const { option, row, column } = params
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     const { name } = option.data
     if (cellValue) {
       return cellValue.indexOf(name) > -1
@@ -82,7 +81,7 @@ VXETable.renderer.add('FilterContent', {
   filterMethod (params) {
     const { option, row, column } = params
     const { vals } = option.data
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     return vals.includes(cellValue)
   }
 })
@@ -107,7 +106,7 @@ VXETable.renderer.add('FilterExcel', {
   // 筛选数据方法
   filterMethod (params) {
     const { option, row, column } = params
-    const cellValue = XEUtils.get(row, column.property)
+    const cellValue = row[column.property]
     const { vals, f1Type, f1Val } = option.data
     if (cellValue) {
       if (f1Type) {

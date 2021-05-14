@@ -57,17 +57,17 @@
       :mouse-config="{selected: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-      <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+      <vxe-column field="region" title="Region" width="200"></vxe-column>
+      <vxe-column field="time" title="Time" width="200"></vxe-column>
+      <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -314,17 +314,17 @@ export default defineComponent({
           :mouse-config="{selected: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-          <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+          <vxe-column field="region" title="Region" width="200"></vxe-column>
+          <vxe-column field="time" title="Time" width="200"></vxe-column>
+          <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>
         `,
         `

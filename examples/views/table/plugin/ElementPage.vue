@@ -54,21 +54,21 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @edit-actived="editActivedEvent"
       @edit-closed="editClosedEvent">
-      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="ElInput" min-width="140" fixed="left" :edit-render="{name: 'ElInput'}"></vxe-table-column>
-      <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleSearchEvent}}"></vxe-table-column>
-      <vxe-table-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: demo1.sexList}"></vxe-table-column>
-      <vxe-table-column field="sexList" title="ElSelect multiple" width="180" :edit-render="{name: 'ElSelect', options: demo1.sexList, props: {multiple: true}}"></vxe-table-column>
-      <vxe-table-column field="state" title="ElSelect remote" width="140" :edit-render="{name: 'ElSelect', options: demo1.stateOptions, props: {remote: true, filterable: true, loading: demo1.stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
-      <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: demo1.regionList}}"></vxe-table-column>
-      <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
-      <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'YYYY-MM-DD HH:mm:ss'}}"></vxe-table-column>
-      <vxe-table-column field="date2" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="ElSwitch" width="100" :cell-render="{name: 'ElSwitch'}"></vxe-table-column>
-      <vxe-table-column field="rate1" title="ElSlider" width="200" :cell-render="{name: 'ElSlider'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :cell-render="{name: 'ElRate'}"></vxe-table-column>
+      <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+      <vxe-column field="name" title="ElInput" min-width="140" fixed="left" :edit-render="{name: 'ElInput'}"></vxe-column>
+      <vxe-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleSearchEvent}}"></vxe-column>
+      <vxe-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-column>
+      <vxe-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: demo1.sexList}"></vxe-column>
+      <vxe-column field="sexList" title="ElSelect multiple" width="180" :edit-render="{name: 'ElSelect', options: demo1.sexList, props: {multiple: true}}"></vxe-column>
+      <vxe-column field="state" title="ElSelect remote" width="140" :edit-render="{name: 'ElSelect', options: demo1.stateOptions, props: {remote: true, filterable: true, loading: demo1.stateloading, remoteMethod: remoteStateMethod}}"></vxe-column>
+      <vxe-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: demo1.regionList}}"></vxe-column>
+      <vxe-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-column>
+      <vxe-column field="date1" title="ElDatePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'YYYY-MM-DD HH:mm:ss'}}"></vxe-column>
+      <vxe-column field="date2" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-column>
+      <vxe-column field="flag" title="ElSwitch" width="100" :cell-render="{name: 'ElSwitch'}"></vxe-column>
+      <vxe-column field="rate1" title="ElSlider" width="200" :cell-render="{name: 'ElSlider'}"></vxe-column>
+      <vxe-column field="rate" title="ElRate" width="200" fixed="right" :cell-render="{name: 'ElRate'}"></vxe-column>
     </vxe-table>
 
     <el-pagination
@@ -438,21 +438,21 @@ export default defineComponent({
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @edit-actived="editActivedEvent"
           @edit-closed="editClosedEvent">
-          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="ElInput" min-width="140" fixed="left" :edit-render="{name: 'ElInput'}"></vxe-table-column>
-          <vxe-table-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleSearchEvent}}"></vxe-table-column>
-          <vxe-table-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: demo1.sexList}"></vxe-table-column>
-          <vxe-table-column field="sexList" title="ElSelect multiple" width="180" :edit-render="{name: 'ElSelect', options: demo1.sexList, props: {multiple: true}}"></vxe-table-column>
-          <vxe-table-column field="state" title="ElSelect remote" width="140" :edit-render="{name: 'ElSelect', options: demo1.stateOptions, props: {remote: true, filterable: true, loading: demo1.stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
-          <vxe-table-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: demo1.regionList}}"></vxe-table-column>
-          <vxe-table-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
-          <vxe-table-column field="date1" title="ElDatePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'YYYY-MM-DD HH:mm:ss'}}"></vxe-table-column>
-          <vxe-table-column field="date2" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="ElSwitch" width="100" :cell-render="{name: 'ElSwitch'}"></vxe-table-column>
-          <vxe-table-column field="rate1" title="ElSlider" width="200" :cell-render="{name: 'ElSlider'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="ElRate" width="200" fixed="right" :cell-render="{name: 'ElRate'}"></vxe-table-column>
+          <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+          <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+          <vxe-column field="name" title="ElInput" min-width="140" fixed="left" :edit-render="{name: 'ElInput'}"></vxe-column>
+          <vxe-column field="role" title="ElAutocomplete" width="160" :edit-render="{name: 'ElAutocomplete', props: {fetchSuggestions: roleSearchEvent}}"></vxe-column>
+          <vxe-column field="age" title="ElInputNumber" width="160" :edit-render="{name: 'ElInputNumber', props: {max: 35, min: 18}}"></vxe-column>
+          <vxe-column field="sex" title="ElSelect" width="140" :edit-render="{name: 'ElSelect', options: demo1.sexList}"></vxe-column>
+          <vxe-column field="sexList" title="ElSelect multiple" width="180" :edit-render="{name: 'ElSelect', options: demo1.sexList, props: {multiple: true}}"></vxe-column>
+          <vxe-column field="state" title="ElSelect remote" width="140" :edit-render="{name: 'ElSelect', options: demo1.stateOptions, props: {remote: true, filterable: true, loading: demo1.stateloading, remoteMethod: remoteStateMethod}}"></vxe-column>
+          <vxe-column field="region" title="ElCascader" width="200" :edit-render="{name: 'ElCascader', props: {options: demo1.regionList}}"></vxe-column>
+          <vxe-column field="date" title="ElDatePicker" width="200" :edit-render="{name: 'ElDatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-column>
+          <vxe-column field="date1" title="ElDatePicker" width="220" :edit-render="{name: 'ElDatePicker', props: {type: 'datetime', format: 'YYYY-MM-DD HH:mm:ss'}}"></vxe-column>
+          <vxe-column field="date2" title="ElTimeSelect" width="200" :edit-render="{name: 'ElTimeSelect', props: {pickerOptions: {start: '08:30', step: '00:15', end: '18:30'}}}"></vxe-column>
+          <vxe-column field="flag" title="ElSwitch" width="100" :cell-render="{name: 'ElSwitch'}"></vxe-column>
+          <vxe-column field="rate1" title="ElSlider" width="200" :cell-render="{name: 'ElSlider'}"></vxe-column>
+          <vxe-column field="rate" title="ElRate" width="200" fixed="right" :cell-render="{name: 'ElRate'}"></vxe-column>
         </vxe-table>
 
         <el-pagination

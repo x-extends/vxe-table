@@ -200,7 +200,6 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/all'
 import { VxeGridInstance, VxeGridProps, VxeTableEvents } from '../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -230,6 +229,14 @@ export default defineComponent({
       }
     })
 
+    const meanNum = (list: any[], field: string) => {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    }
+
     const gridOptions = reactive({
       border: true,
       resizable: true,
@@ -244,11 +251,11 @@ export default defineComponent({
         { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', num1: '222', sex: 'Man', age: 28, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' },
         { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', num1: '536', sex: 'Women', age: 22, address: 'Guangzhou', img1: '/vxe-table/static/other/img2.gif' },
         { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', num1: '1000', sex: 'Man', age: 32, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women ', age: 23, address: 'Shenzhen', img1: '' },
-        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women ', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women ', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
-        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
-        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women', age: 23, address: 'Shenzhen', img1: '' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man', age: 29, address: 'Shenzhen', img1: '' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
       ],
       toolbarConfig: {
         custom: true,
@@ -300,7 +307,7 @@ export default defineComponent({
             if (index === 0) {
               return '平均'
             } else if (['num1', 'age'].includes(column.property)) {
-              return XEUtils.mean(data, column.property)
+              return meanNum(data, column.property)
             }
             return null
           })
@@ -530,7 +537,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridProps, VxeTableEvents } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -560,6 +566,14 @@ export default defineComponent({
               }
             })
 
+            const meanNum = (list: any[], field: string) => {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            }
+
             const gridOptions = reactive({
               border: true,
               resizable: true,
@@ -574,11 +588,11 @@ export default defineComponent({
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', num1: '222', sex: 'Man', age: 28, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' },
                 { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', num1: '536', sex: 'Women', age: 22, address: 'Guangzhou', img1: '/vxe-table/static/other/img2.gif' },
                 { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', num1: '1000', sex: 'Man', age: 32, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women ', age: 23, address: 'Shenzhen', img1: '' },
-                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women ', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
-                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women ', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
-                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man ', age: 29, address: 'Shenzhen', img1: '' },
-                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man ', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', num1: '424323', sex: 'Women', age: 23, address: 'Shenzhen', img1: '' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', num1: '253', sex: 'Women', age: 30, address: 'Shanghai', img1: '/vxe-table/static/other/img1.gif' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', num1: '555', sex: 'Women', age: 21, address: 'Shenzhen', img1: '/vxe-table/static/other/img2.gif' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', num1: '11', sex: 'Man', age: 29, address: 'Shenzhen', img1: '' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', num1: '998', sex: 'Man', age: 35, address: 'Shenzhen', img1: '/vxe-table/static/other/img1.gif' }
               ],
               toolbarConfig: {
                 custom: true,
@@ -630,7 +644,7 @@ export default defineComponent({
                     if (index === 0) {
                       return '平均'
                     } else if (['num1', 'age'].includes(column.property)) {
-                      return XEUtils.mean(data, column.property)
+                      return meanNum(data, column.property)
                     }
                     return null
                   })

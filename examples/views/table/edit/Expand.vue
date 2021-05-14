@@ -8,8 +8,8 @@
       show-overflow
       :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="60">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="expand" width="60">
         <template #content="{ row }">
           <ul class="expand-form">
             <li>
@@ -32,10 +32,10 @@
             </li>
           </ul>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -72,8 +72,8 @@ export default defineComponent({
           show-overflow
           :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="60">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="expand" width="60">
             <template #content="{ row }">
               <ul class="expand-form">
                 <li>
@@ -96,10 +96,10 @@ export default defineComponent({
                 </li>
               </ul>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
         </vxe-table>
         `,
         `

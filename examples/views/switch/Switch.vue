@@ -18,8 +18,8 @@
     </p>
 
     <p>
-      <vxe-switch v-model="demo1.value9" open-label="开" on-value="Y" close-label="关" close-value="N"></vxe-switch>
-      <vxe-switch v-model="demo1.value10" open-label="打开" :on-value="1" close-label="关闭" :close-value="0"></vxe-switch>
+      <vxe-switch v-model="demo1.value9" open-label="开" open-value="Y" close-label="关" close-value="N"></vxe-switch>
+      <vxe-switch v-model="demo1.value10" open-label="打开" :open-value="1" close-label="关闭" :close-value="0"></vxe-switch>
       <vxe-switch v-model="demo1.value11" disabled></vxe-switch>
       <vxe-switch v-model="demo1.value12" open-label="是" close-label="否" disabled></vxe-switch>
     </p>
@@ -93,8 +93,8 @@ export default defineComponent({
         </p>
 
         <p>
-          <vxe-switch v-model="demo1.value9" open-label="开" on-value="Y" close-label="关" close-value="N"></vxe-switch>
-          <vxe-switch v-model="demo1.value10" open-label="打开" :on-value="1" close-label="关闭" :close-value="0"></vxe-switch>
+          <vxe-switch v-model="demo1.value9" open-label="开" open-value="Y" close-label="关" close-value="N"></vxe-switch>
+          <vxe-switch v-model="demo1.value10" open-label="打开" :open-value="1" close-label="关闭" :close-value="0"></vxe-switch>
           <vxe-switch v-model="demo1.value11" disabled></vxe-switch>
           <vxe-switch v-model="demo1.value12" open-label="是" close-label="否" disabled></vxe-switch>
         </p>

@@ -10,11 +10,11 @@
       height="500"
       :data="demo1.tableData"
       @cell-click="cellClickEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <vxe-modal v-model="demo1.showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
@@ -28,8 +28,8 @@
           :show-header="false"
           :sync-resize="demo1.showDetails"
           :data="demo1.detailData">
-          <vxe-table-column field="label" width="40%"></vxe-table-column>
-          <vxe-table-column field="value"></vxe-table-column>
+          <vxe-column field="label" width="40%"></vxe-column>
+          <vxe-column field="value"></vxe-column>
         </vxe-table>
       </template>
     </vxe-modal>
@@ -60,9 +60,9 @@ export default defineComponent({
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
         { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
         { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+        { id: 100010, name: 'Test10', role: 'Develop', sex: '1', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
       ]
     })
 
@@ -86,11 +86,11 @@ export default defineComponent({
           height="500"
           :data="demo1.tableData"
           @cell-click="cellClickEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
 
         <vxe-modal v-model="demo1.showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
@@ -104,8 +104,8 @@ export default defineComponent({
               :show-header="false"
               :sync-resize="demo1.showDetails"
               :data="demo1.detailData">
-              <vxe-table-column field="label" width="40%"></vxe-table-column>
-              <vxe-table-column field="value"></vxe-table-column>
+              <vxe-column field="label" width="40%"></vxe-column>
+              <vxe-column field="value"></vxe-column>
             </vxe-table>
           </template>
         </vxe-modal>
@@ -127,9 +127,9 @@ export default defineComponent({
                 { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
                 { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
                 { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+                { id: 100010, name: 'Test10', role: 'Develop', sex: '1', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
               ]
             })
 

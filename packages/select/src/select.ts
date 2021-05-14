@@ -4,7 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { getEventTargetNode, getAbsolutePos } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, getFuncText, formatText } from '../../tools/utils'
-import { GlobalEvent } from '../../tools/event'
+import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 
 import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps, VxeOptionProps } from '../../../types/all'
 
@@ -488,14 +488,13 @@ export default defineComponent({
       const { clearable, disabled } = props
       const { visiblePanel, currentValue } = reactData
       if (!disabled) {
-        const keyCode = evnt.keyCode
-        const isTab = keyCode === 9
-        const isEnter = keyCode === 13
-        const isEsc = keyCode === 27
-        const isUpArrow = keyCode === 38
-        const isDwArrow = keyCode === 40
-        const isDel = keyCode === 46
-        const isSpacebar = keyCode === 32
+        const isTab = hasEventKey(evnt, EVENT_KEYS.TAB)
+        const isEnter = hasEventKey(evnt, EVENT_KEYS.ENTER)
+        const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
+        const isUpArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_UP)
+        const isDwArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)
+        const isDel = hasEventKey(evnt, EVENT_KEYS.DELETE)
+        const isSpacebar = hasEventKey(evnt, EVENT_KEYS.SPACEBAR)
         if (isTab) {
           reactData.isActivated = false
         }

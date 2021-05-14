@@ -23,21 +23,21 @@
       ref="xTable"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil-square-o'}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :edit-render="{}">
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{}">
         <template #edit="scope">
           <textarea v-model="scope.row.address" @input="$refs.xTable.updateStatus(scope)"></textarea>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :formatter="formatDate" :edit-render="{}">
+      </vxe-column>
+      <vxe-column field="date12" title="Date" :formatter="formatDate" :edit-render="{}">
         <template #edit="scope">
           <input type="date" v-model="scope.row.date12" @input="$refs.xTable.updateStatus(scope)">
         </template>
-      </vxe-table-column>
-      <vxe-table-column title="操作" width="200">
+      </vxe-column>
+      <vxe-column title="操作" width="200">
         <template #default="{ row, rowIndex }">
           <template v-if="!row.date12">
             <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
@@ -49,7 +49,7 @@
             <vxe-button status="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
           </template>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -181,21 +181,21 @@ export default defineComponent({
           ref="xTable"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil-square-o'}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :edit-render="{}">
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{}">
             <template #edit="scope">
               <textarea v-model="scope.row.address" @input="$refs.xTable.updateStatus(scope)"></textarea>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :formatter="formatDate" :edit-render="{}">
+          </vxe-column>
+          <vxe-column field="date12" title="Date" :formatter="formatDate" :edit-render="{}">
             <template #edit="scope">
               <input type="date" v-model="scope.row.date12" @input="$refs.xTable.updateStatus(scope)">
             </template>
-          </vxe-table-column>
-          <vxe-table-column title="操作" width="200">
+          </vxe-column>
+          <vxe-column title="操作" width="200">
             <template #default="{ row, rowIndex }">
               <template v-if="!row.date12">
                 <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
@@ -207,7 +207,7 @@ export default defineComponent({
                 <vxe-button status="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
               </template>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

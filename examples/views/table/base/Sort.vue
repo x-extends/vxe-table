@@ -22,13 +22,13 @@
       ref="xTable"
       height="300"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="num" title="字符串" sort-type="string" sortable></vxe-table-column>
-      <vxe-table-column field="num2" title="数值" sort-type="number" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role" sortable></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="num" title="字符串" sort-type="string" sortable></vxe-column>
+      <vxe-column field="num2" title="数值" sort-type="number" sortable></vxe-column>
+      <vxe-column field="address" title="Address" sortable></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -45,15 +45,15 @@
       highlight-hover-row
       height="300"
       :data="tableData2">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
         <template #default="{ row }">
           <span style="color: red;">名字：{{ row.name }}</span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
-      <vxe-table-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-table-column>
-      <vxe-table-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="num" title="Num" sortable></vxe-column>
+      <vxe-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-column>
+      <vxe-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -71,11 +71,11 @@
       height="300"
       :data="tableData3"
       :sort-config="tableSort3">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="num1" title="Num1"></vxe-table-column>
-      <vxe-table-column field="num2" title="Num2"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="num1" title="Num1"></vxe-column>
+      <vxe-column field="num2" title="Num2"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -94,10 +94,10 @@
       :sort-config="{multiple: true}"
       :data="tableData4"
       @sort-change="sortChangeEvent3">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role" sortable></vxe-column>
+      <vxe-column field="num" title="Num" sortable></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -117,12 +117,12 @@
       :data="tableData"
       :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
       @sort-change="sortChangeEvent4">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex" sortable></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="address" title="Address" sortable></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -145,11 +145,11 @@ export default defineComponent({
       { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, num: '3.8', num2: '3.8', address: 'vxe-table 从入门到放弃' },
       { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, num: '511', num2: '511', address: 'Guangzhou' },
       { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, num: '12.8', num2: '12.8', address: 'Shanghai' },
-      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, num: '103', num2: '103', address: 'vxe-table 从入门到放弃' },
-      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, num: '56', num2: '56', address: 'Shanghai' },
-      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, num: '49', num2: '49', address: 'vxe-table 从入门到放弃' },
-      { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, num: '400.9', num2: '400.9', address: 'vxe-table 从入门到放弃' },
-      { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, num: '5000', num2: '5000', address: 'vxe-table 从入门到放弃' }
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, num: '103', num2: '103', address: 'vxe-table 从入门到放弃' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, num: '56', num2: '56', address: 'Shanghai' },
+      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, num: '49', num2: '49', address: 'vxe-table 从入门到放弃' },
+      { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, num: '400.9', num2: '400.9', address: 'vxe-table 从入门到放弃' },
+      { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, num: '5000', num2: '5000', address: 'vxe-table 从入门到放弃' }
     ])
 
     const tableData2 = ref([
@@ -176,7 +176,7 @@ export default defineComponent({
     ])
 
     const formatterNum2: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
-      return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+      return XEUtils.commafy(Number(cellValue), { digits: 2 })
     }
 
     const sortNameMethod2: VxeColumnPropTypes.SortBy = ({ row }) => {
@@ -303,13 +303,13 @@ export default defineComponent({
           ref="xTable"
           height="300"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="num" title="字符串" sort-type="string" sortable></vxe-table-column>
-          <vxe-table-column field="num2" title="数值" sort-type="number" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role" sortable></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="num" title="字符串" sort-type="string" sortable></vxe-column>
+          <vxe-column field="num2" title="数值" sort-type="number" sortable></vxe-column>
+          <vxe-column field="address" title="Address" sortable></vxe-column>
         </vxe-table>
         `,
         `
@@ -321,11 +321,11 @@ export default defineComponent({
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, num: '3.8', num2: '3.8', address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, num: '511', num2: '511', address: 'Guangzhou' },
               { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, num: '12.8', num2: '12.8', address: 'Shanghai' },
-              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, num: '103', num2: '103', address: 'vxe-table 从入门到放弃' },
-              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, num: '56', num2: '56', address: 'Shanghai' },
-              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, num: '49', num2: '49', address: 'vxe-table 从入门到放弃' },
-              { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, num: '400.9', num2: '400.9', address: 'vxe-table 从入门到放弃' },
-              { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, num: '5000', num2: '5000', address: 'vxe-table 从入门到放弃' }
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, num: '103', num2: '103', address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, num: '56', num2: '56', address: 'Shanghai' },
+              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, num: '49', num2: '49', address: 'vxe-table 从入门到放弃' },
+              { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, num: '400.9', num2: '400.9', address: 'vxe-table 从入门到放弃' },
+              { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, num: '5000', num2: '5000', address: 'vxe-table 从入门到放弃' }
             ])
             return {
               tableData
@@ -339,15 +339,15 @@ export default defineComponent({
           highlight-hover-row
           height="300"
           :data="tableData2">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :sort-by="sortNameMethod2" sortable>
             <template #default="{ row }">
               <span style="color: red;">名字：{{ row.name }}</span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
-          <vxe-table-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-table-column>
-          <vxe-table-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="num" title="Num" sortable></vxe-column>
+          <vxe-column field="num1" title="分离格式化与数值字段" sort-by="num1" sortable :formatter="formatterNum2"></vxe-column>
+          <vxe-column field="num2" title="分离格式化与字符串字段" sort-by="num2" sort-type="number" sortable :formatter="formatterNum2"></vxe-column>
         </vxe-table>
         `,
         `
@@ -380,7 +380,7 @@ export default defineComponent({
             ])
             
             const formatterNum2: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
-              return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })
+              return XEUtils.commafy(Number(cellValue), { digits: 2 })
             }
 
             const sortNameMethod2: VxeColumnPropTypes.SortBy = ({ row }) => {
@@ -403,11 +403,11 @@ export default defineComponent({
           height="300"
           :data="tableData3"
           :sort-config="tableSort3">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="num1" title="Num1"></vxe-table-column>
-          <vxe-table-column field="num2" title="Num2"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="num1" title="Num1"></vxe-column>
+          <vxe-column field="num2" title="Num2"></vxe-column>
         </vxe-table>
         `,
         `
@@ -493,10 +493,10 @@ export default defineComponent({
           :sort-config="{multiple: true}"
           :data="tableData4"
           @sort-change="sortChangeEvent3">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role" sortable></vxe-column>
+          <vxe-column field="num" title="Num" sortable></vxe-column>
         </vxe-table>
         `,
         `
@@ -548,12 +548,12 @@ export default defineComponent({
           :data="tableData"
           :sort-config="{trigger: 'cell', defaultSort: {field: 'age', order: 'desc'}, orders: ['desc', 'asc', null]}"
           @sort-change="sortChangeEvent4">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" sortable></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex" sortable></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="address" title="Address" sortable></vxe-column>
         </vxe-table>
         `,
         `
@@ -566,11 +566,11 @@ export default defineComponent({
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
               { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women ', age: 23, address: 'vxe-table 从入门到放弃' },
-              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women ', age: 30, address: 'Shanghai' },
-              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women ', age: 21, address: 'vxe-table 从入门到放弃' },
-              { id: 10007, name: 'Test7', role: 'Test', sex: 'Man ', age: 29, address: 'vxe-table 从入门到放弃' },
-              { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man ', age: 35, address: 'vxe-table 从入门到放弃' }
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃' },
+              { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
+              { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
             ])
 
             const sortChangeEvent4: VxeTableEvents.SortChange = ({ property, order }) => {

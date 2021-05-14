@@ -8,11 +8,11 @@
     <vxe-table
       border
       :data="demo1.tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="num" title="Num" :formatter="formatterNum" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex" sortable></vxe-table-column>
-      <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="num" title="Num" :formatter="formatterNum" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex" :formatter="formatterSex" sortable></vxe-column>
+      <vxe-column field="time" title="Time" :formatter="formatTime"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -30,15 +30,15 @@
     <vxe-table
       border
       :data="demo2.tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
-      <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
-      <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
-      <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
-      <vxe-table-column field="num7" title="数值"></vxe-table-column>
-      <vxe-table-column field="num8" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
-      <vxe-table-column field="num9" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
-      <vxe-table-column field="sex" title="格式化性别" formatter="formatSex"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-column>
+      <vxe-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-column>
+      <vxe-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-column>
+      <vxe-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-column>
+      <vxe-column field="num7" title="数值"></vxe-column>
+      <vxe-column field="num8" title="截取2位数" formatter="formatCutNumber"></vxe-column>
+      <vxe-column field="num9" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-column>
+      <vxe-column field="sex" title="格式化性别" formatter="formatSex"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -113,11 +113,11 @@ export default defineComponent({
         <vxe-table
           border
           :data="demo1.tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="num" title="Num" :formatter="formatterNum" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex" sortable></vxe-table-column>
-          <vxe-table-column field="time" title="Time" :formatter="formatTime"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="num" title="Num" :formatter="formatterNum" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex" :formatter="formatterSex" sortable></vxe-column>
+          <vxe-column field="time" title="Time" :formatter="formatTime"></vxe-column>
         </vxe-table>
         `,
         `
@@ -212,15 +212,15 @@ export default defineComponent({
         <vxe-table
           border
           :data="demo2.tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-table-column>
-          <vxe-table-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-table-column>
-          <vxe-table-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-table-column>
-          <vxe-table-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-table-column>
-          <vxe-table-column field="num7" title="数值"></vxe-table-column>
-          <vxe-table-column field="num8" title="截取2位数" formatter="formatCutNumber"></vxe-table-column>
-          <vxe-table-column field="num9" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-table-column>
-          <vxe-table-column field="sex" title="格式化性别" formatter="formatSex"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="date" title="转日期" width="180" formatter="formatDate"></vxe-column>
+          <vxe-column field="time" title="转日期格式" width="140" :formatter="['formatDate', 'yyyy-MM-dd']"></vxe-column>
+          <vxe-column field="amount" title="格式化金额" formatter="formatAmount"></vxe-column>
+          <vxe-column field="bankCard" title="银行卡" width="180" formatter="formatBankcard"></vxe-column>
+          <vxe-column field="num7" title="数值"></vxe-column>
+          <vxe-column field="num8" title="截取2位数" formatter="formatCutNumber"></vxe-column>
+          <vxe-column field="num9" title="四舍五入2位数" formatter="formatFixedNumber"></vxe-column>
+          <vxe-column field="sex" title="格式化性别" formatter="formatSex"></vxe-column>
         </vxe-table>
         `,
         `

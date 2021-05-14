@@ -7,7 +7,7 @@ import { VXETable } from '../../v-x-e-table'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
-import { GlobalEvent } from '../../tools/event'
+import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 
 import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps } from '../../../types/all'
 
@@ -962,7 +962,10 @@ export default defineComponent({
       },
       getParentHeight () {
         const el = refElem.value
-        return (reactData.isZMax ? getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - gridPrivateMethods.getExcludeHeight()
+        if (el) {
+          return (reactData.isZMax ? getDomNode().visibleHeight : XEUtils.toNumber(getComputedStyle(el.parentNode as HTMLElement).height)) - gridPrivateMethods.getExcludeHeight()
+        }
+        return 0
       },
       triggerToolbarBtnEvent (button, evnt) {
         gridMethods.commitProxy(button, evnt)
@@ -1000,7 +1003,7 @@ export default defineComponent({
 
     const handleGlobalKeydownEvent = (evnt: any) => {
       const zoomOpts = computeZoomOpts.value
-      const isEsc = evnt.keyCode === 27
+      const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
       if (isEsc && reactData.isZMax && zoomOpts.escRestore !== false) {
         gridPrivateMethods.triggerZoomEvent(evnt)
       }

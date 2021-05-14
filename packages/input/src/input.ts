@@ -4,7 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { getFuncText, getLastZIndex, nextZIndex } from '../../tools/utils'
 import { hasClass, getAbsolutePos, getEventTargetNode } from '../../tools/dom'
-import { GlobalEvent } from '../../tools/event'
+import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 
 import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef } from '../../../types/all'
 
@@ -101,6 +101,7 @@ export default defineComponent({
     min: { type: [String, Number] as PropType<VxeInputPropTypes.Min>, default: null },
     max: { type: [String, Number] as PropType<VxeInputPropTypes.Max>, default: null },
     step: [String, Number] as PropType<VxeInputPropTypes.Step>,
+    exponential: { type: Boolean as PropType<VxeInputPropTypes.Exponential>, default: () => GlobalConfig.input.exponential },
 
     // number、integer、float、password
     controls: { type: Boolean as PropType<VxeInputPropTypes.Controls>, default: () => GlobalConfig.input.controls },
@@ -111,12 +112,17 @@ export default defineComponent({
     // date、week、month、quarter、year
     minDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MinDate>, default: () => GlobalConfig.input.minDate },
     maxDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>, default: () => GlobalConfig.input.maxDate },
-    startWeek: { type: Number as PropType<VxeInputPropTypes.StartWeek>, default: () => GlobalConfig.input.startWeek },
+    // 已废弃 startWeek，被 startDay 替换
+    startWeek: Number as PropType<VxeInputPropTypes.StartDay>,
+    startDay: { type: [String, Number] as PropType<VxeInputPropTypes.StartDay>, default: () => GlobalConfig.input.startDay },
     labelFormat: { type: String as PropType<VxeInputPropTypes.LabelFormat>, default: () => GlobalConfig.input.labelFormat },
     valueFormat: { type: String as PropType<VxeInputPropTypes.ValueFormat>, default: () => GlobalConfig.input.valueFormat },
     editable: { type: Boolean as PropType<VxeInputPropTypes.Editable>, default: true },
     festivalMethod: { type: Function as PropType<VxeInputPropTypes.FestivalMethod>, default: () => GlobalConfig.input.festivalMethod },
     disabledMethod: { type: Function as PropType<VxeInputPropTypes.DisabledMethod>, default: () => GlobalConfig.input.disabledMethod },
+
+    // week
+    selectDay: { type: [String, Number] as PropType<VxeInputPropTypes.SelectDay>, default: () => GlobalConfig.input.weekDay },
 
     prefixIcon: String as PropType<VxeInputPropTypes.PrefixIcon>,
     suffixIcon: String as PropType<VxeInputPropTypes.SuffixIcon>,
@@ -354,8 +360,8 @@ export default defineComponent({
       const weeks = []
       const isDatePickerType = computeIsDatePickerType.value
       if (isDatePickerType) {
-        const { startWeek } = props
-        let sWeek = XEUtils.toNumber(startWeek)
+        const { startDay, startWeek } = props
+        let sWeek = XEUtils.toNumber(XEUtils.isNumber(startDay) || XEUtils.isString(startDay) ? startDay : startWeek)
         weeks.push(sWeek)
         for (let index = 0; index < 6; index++) {
           if (sWeek >= 6) {
@@ -596,9 +602,14 @@ export default defineComponent({
     })
 
     function getNumberValue (val: any) {
-      const { type } = props
+      const { type, exponential } = props
+      const inpMaxlength = computeInpMaxlength.value
       const digitsValue = computeDigitsValue.value
-      return type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val)
+      const restVal = (type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val))
+      if (exponential && (val === restVal || XEUtils.toValueString(val).toLowerCase() === XEUtils.toNumber(restVal).toExponential())) {
+        return val
+      }
+      return restVal.slice(0, inpMaxlength)
     }
 
     const triggerEvent = (evnt: Event & { type: 'input' | 'change' | 'keydown' | 'keyup' | 'wheel' | 'click' | 'focus' | 'blur' }) => {
@@ -606,7 +617,7 @@ export default defineComponent({
       inputMethods.dispatchEvent(evnt.type, { value: inputValue }, evnt)
     }
 
-    const emitModel = (value: VxeInputPropTypes.ModelValue, evnt: Event | { type: string }) => {
+    const emitModel = (value: string, evnt: Event | { type: string }) => {
       reactData.inputValue = value
       emit('update:modelValue', value)
       inputMethods.dispatchEvent('input', { value }, evnt)
@@ -743,12 +754,12 @@ export default defineComponent({
       }
     }
 
-    const vaildMaxNum = (num: number) => {
-      return props.max === null || num <= XEUtils.toNumber(props.max)
+    const vaildMaxNum = (num: number | string) => {
+      return props.max === null || XEUtils.toNumber(num) <= XEUtils.toNumber(props.max)
     }
 
-    const vaildMinNum = (num: number) => {
-      return props.min === null || num >= XEUtils.toNumber(props.min)
+    const vaildMinNum = (num: number | string) => {
+      return props.min === null || XEUtils.toNumber(num) >= XEUtils.toNumber(props.min)
     }
 
     const dateRevert = () => {
@@ -768,7 +779,7 @@ export default defineComponent({
       const isDateTimeType = computeIsDateTimeType.value
       const dateValueFormat = computeDateValueFormat.value
       if (props.type === 'week') {
-        const sWeek = XEUtils.toNumber(props.startWeek)
+        const sWeek = XEUtils.toNumber(props.selectDay)
         date = XEUtils.getWhatWeek(date, 0, sWeek)
       } else if (isDateTimeType) {
         date.setHours(datetimePanelValue.getHours())
@@ -783,7 +794,7 @@ export default defineComponent({
     }
 
     const afterCheckValue = () => {
-      const { type, min, max } = props
+      const { type, min, max, exponential } = props
       const { inputValue, datetimePanelValue } = reactData
       const isNumType = computeIsNumType.value
       const isDatePickerType = computeIsDatePickerType.value
@@ -792,11 +803,17 @@ export default defineComponent({
       if (!inpReadonly) {
         if (isNumType) {
           if (inputValue) {
-            let inpNumVal: VxeInputPropTypes.ModelValue = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+            let inpNumVal: number | string = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
             if (!vaildMinNum(inpNumVal)) {
               inpNumVal = min
             } else if (!vaildMaxNum(inpNumVal)) {
               inpNumVal = max
+            }
+            if (exponential) {
+              const inpStringVal = XEUtils.toValueString(inputValue).toLowerCase()
+              if (inpStringVal === XEUtils.toNumber(inpNumVal).toExponential()) {
+                inpNumVal = inpStringVal
+              }
             }
             emitModel(getNumberValue(inpNumVal), { type: 'check' })
           }
@@ -816,15 +833,22 @@ export default defineComponent({
                 }
                 reactData.inputValue = inpDateVal
               } else {
+                let isChange = false
                 if (type === 'datetime') {
-                  if (!XEUtils.isDateSame(inputValue, inpDateVal, dateLabelFormat)) {
+                  const dateValue = computeDateValue.value
+                  if (inputValue !== XEUtils.toDateString(dateValue, dateLabelFormat) || inputValue !== XEUtils.toDateString(inpDateVal, dateLabelFormat)) {
+                    isChange = true
                     datetimePanelValue.setHours(inpDateVal.getHours())
                     datetimePanelValue.setMinutes(inpDateVal.getMinutes())
                     datetimePanelValue.setSeconds(inpDateVal.getSeconds())
                   }
+                } else {
+                  isChange = true
                 }
                 reactData.inputValue = XEUtils.toDateString(inpDateVal, dateLabelFormat)
-                dateChange(inpDateVal)
+                if (isChange) {
+                  dateChange(inpDateVal)
+                }
               }
             } else {
               dateRevert()
@@ -912,9 +936,8 @@ export default defineComponent({
     }
 
     const numberKeydownEvent = (evnt: KeyboardEvent) => {
-      const { keyCode } = evnt
-      const isUpArrow = keyCode === 38
-      const isDwArrow = keyCode === 40
+      const isUpArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_UP)
+      const isDwArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)
       if (isUpArrow || isDwArrow) {
         evnt.preventDefault()
         if (isUpArrow) {
@@ -926,14 +949,14 @@ export default defineComponent({
     }
 
     const keydownEvent = (evnt: KeyboardEvent & { type: 'keydown' }) => {
-      const { controls } = props
+      const { exponential, controls } = props
       const isNumType = computeIsNumType.value
       if (isNumType) {
         const isCtrlKey = evnt.ctrlKey
         const isShiftKey = evnt.shiftKey
         const isAltKey = evnt.altKey
         const keyCode = evnt.keyCode
-        if (!isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
+        if (!isCtrlKey && !isShiftKey && !isAltKey && (hasEventKey(evnt, EVENT_KEYS.SPACEBAR) || ((!exponential || keyCode !== 69) && (keyCode >= 65 && keyCode <= 90)) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
           evnt.preventDefault()
         }
         if (controls) {
@@ -1219,11 +1242,10 @@ export default defineComponent({
       const { isActivated, datePanelValue, datePanelType } = reactData
       if (isActivated) {
         evnt.preventDefault()
-        const keyCode = evnt.keyCode
-        const isLeftArrow = keyCode === 37
-        const isUpArrow = keyCode === 38
-        const isRightArrow = keyCode === 39
-        const isDwArrow = keyCode === 40
+        const isLeftArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_LEFT)
+        const isUpArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_UP)
+        const isRightArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_RIGHT)
+        const isDwArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)
         if (datePanelType === 'year') {
           let offsetYear = XEUtils.getWhatYear(datePanelValue || Date.now(), 0, 'first')
           if (isLeftArrow) {
@@ -1279,7 +1301,7 @@ export default defineComponent({
     const datePgOffsetEvent = (evnt: KeyboardEvent) => {
       const { isActivated } = reactData
       if (isActivated) {
-        const isPgUp = evnt.keyCode === 33
+        const isPgUp = hasEventKey(evnt, EVENT_KEYS.PAGE_UP)
         evnt.preventDefault()
         if (isPgUp) {
           datePrevEvent(evnt)
@@ -1461,17 +1483,16 @@ export default defineComponent({
       const { visiblePanel } = reactData
       const isDatePickerType = computeIsDatePickerType.value
       if (!disabled) {
-        const keyCode = evnt.keyCode
-        const isTab = keyCode === 9
-        const isDel = keyCode === 46
-        const isEsc = keyCode === 27
-        const isEnter = keyCode === 13
-        const isLeftArrow = keyCode === 37
-        const isUpArrow = keyCode === 38
-        const isRightArrow = keyCode === 39
-        const isDwArrow = keyCode === 40
-        const isPgUp = keyCode === 33
-        const isPgDn = keyCode === 34
+        const isTab = hasEventKey(evnt, EVENT_KEYS.TAB)
+        const isDel = hasEventKey(evnt, EVENT_KEYS.DELETE)
+        const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
+        const isEnter = hasEventKey(evnt, EVENT_KEYS.ENTER)
+        const isLeftArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_LEFT)
+        const isUpArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_UP)
+        const isRightArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_RIGHT)
+        const isDwArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)
+        const isPgUp = hasEventKey(evnt, EVENT_KEYS.PAGE_UP)
+        const isPgDn = hasEventKey(evnt, EVENT_KEYS.PAGE_DOWN)
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         let isActivated = reactData.isActivated
         if (isTab) {

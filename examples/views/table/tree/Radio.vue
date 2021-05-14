@@ -8,10 +8,10 @@
       highlight-current-row
       :tree-config="{children: 'children'}"
       :data="demo1.tableData">
-      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column field="name" title="Name" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -27,10 +27,10 @@
       :tree-config="{children: 'children'}"
       :radio-config="{labelField: 'name', highlight: true}"
       :data="demo2.tableData">
-      <vxe-table-column type="radio" title="Name" width="400" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column type="radio" title="Name" width="400" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -50,14 +50,14 @@
       :radio-config="{labelField: 'name', trigger: 'row'}"
       :data="demo3.tableData"
       @current-change="currentChangeEvent">
-      <vxe-table-column type="radio" width="400" tree-node>
+      <vxe-column type="radio" width="400" tree-node>
         <template #header>
           <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!demo3.selectRow">取消</vxe-button>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -195,10 +195,10 @@ export default defineComponent({
           highlight-current-row
           :tree-config="{children: 'children'}"
           :data="demo1.tableData">
-          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column field="name" title="Name" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -247,10 +247,10 @@ export default defineComponent({
           :tree-config="{children: 'children'}"
           :radio-config="{labelField: 'name', highlight: true}"
           :data="demo2.tableData">
-          <vxe-table-column type="radio" title="Name" width="400" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column type="radio" title="Name" width="400" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -303,14 +303,14 @@ export default defineComponent({
           :radio-config="{labelField: 'name', trigger: 'row'}"
           :data="demo3.tableData"
           @current-change="currentChangeEvent">
-          <vxe-table-column type="radio" width="400" tree-node>
+          <vxe-column type="radio" width="400" tree-node>
             <template #header>
               <vxe-button type="text" @click="clearCurrentRowEvent" :disabled="!demo3.selectRow">取消</vxe-button>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `

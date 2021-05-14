@@ -12,11 +12,11 @@
       border
       height="300"
       :data="demo1.list">
-      <vxe-table-column type="seq" width="80"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
+      <vxe-column type="seq" width="80"></vxe-column>
+      <vxe-column field="name" title="Name" type="html"></vxe-column>
+      <vxe-column field="role" title="Role" type="html"></vxe-column>
+      <vxe-column field="age" title="Age" type="html"></vxe-column>
+      <vxe-column field="address" title="Address" type="html"></vxe-column>
       <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img2.gif">
@@ -46,11 +46,11 @@
       max-height="400"
       :tree-config="{}"
       :data="demo2.list">
-      <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-      <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
-      <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
+      <vxe-column type="seq" width="220" title="序号" tree-node></vxe-column>
+      <vxe-column field="name" title="Name" type="html"></vxe-column>
+      <vxe-column field="size" title="Size" type="html"></vxe-column>
+      <vxe-column field="type" title="Type" type="html"></vxe-column>
+      <vxe-column field="date" title="Date" type="html"></vxe-column>
       <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img1.gif">
@@ -87,9 +87,9 @@ export default defineComponent({
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
         { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
         { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
-        { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+        { id: 100010, name: 'Test10', role: 'Develop', sex: '1', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
       ] as any[]
     })
 
@@ -191,11 +191,11 @@ export default defineComponent({
           border
           height="300"
           :data="demo1.list">
-          <vxe-table-column type="seq" width="80"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
+          <vxe-column type="seq" width="80"></vxe-column>
+          <vxe-column field="name" title="Name" type="html"></vxe-column>
+          <vxe-column field="role" title="Role" type="html"></vxe-column>
+          <vxe-column field="age" title="Age" type="html"></vxe-column>
+          <vxe-column field="address" title="Address" type="html"></vxe-column>
           <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img2.gif">
@@ -221,9 +221,9 @@ export default defineComponent({
                 { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'vxe-table 从入门到放弃' },
                 { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', role: 'Develop', sex: '1 ', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'vxe-table 从入门到放弃' },
                 { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 26, amount: 2000, address: 'vxe-table 从入门到放弃' },
-                { id: 100010, name: 'Test10', role: 'Develop', sex: '1 ', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
+                { id: 100010, name: 'Test10', role: 'Develop', sex: '1', age: 21, amount: 666, address: 'vxe-table 从入门到放弃' }
               ] as any[]
             })
 
@@ -272,11 +272,11 @@ export default defineComponent({
           max-height="400"
           :tree-config="{}"
           :data="demo2.list">
-          <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-          <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
-          <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
+          <vxe-column type="seq" width="220" title="序号" tree-node></vxe-column>
+          <vxe-column field="name" title="Name" type="html"></vxe-column>
+          <vxe-column field="size" title="Size" type="html"></vxe-column>
+          <vxe-column field="type" title="Type" type="html"></vxe-column>
+          <vxe-column field="date" title="Date" type="html"></vxe-column>
           <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img1.gif">

@@ -43,7 +43,7 @@ export default defineComponent({
       proxyConfig: {
         form: true, // 启用表单代理
         ajax: {
-          // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
+          // 接收 Promise API
           query: ({ page, form }) => {
             return new Promise(resolve => {
               setTimeout(() => {
@@ -131,7 +131,7 @@ export default defineComponent({
               proxyConfig: {
                 form: true, // 启用表单代理
                 ajax: {
-                  // 任何支持 Promise API 的库都可以对接（fetch、jquery、axios、xe-ajax）
+                  // 接收 Promise API
                   query: ({ page, form }) => {
                     return new Promise(resolve => {
                       setTimeout(() => {

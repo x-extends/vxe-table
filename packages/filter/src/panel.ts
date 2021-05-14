@@ -250,6 +250,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { filterStore } = props
+      const { initStore } = tableReactData
       const { column } = filterStore
       const filterRender = column ? column.filterRender : null
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
@@ -257,10 +258,10 @@ export default defineComponent({
         class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
           'is--animat': $xetable.props.animat,
           'is--multiple': filterStore.multiple,
-          'filter--active': filterStore.visible
+          'is--active': filterStore.visible
         }],
         style: filterStore.style
-      }, filterStore.visible ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
+      }, initStore.filter ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
     }
 
     return renderVN

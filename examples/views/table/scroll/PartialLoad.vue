@@ -22,13 +22,13 @@
       height="500"
       row-id="id"
       :loading="demo1.loading">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
-      <vxe-table-column field="address" title="Address"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
+      <vxe-column field="address" title="Address"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -43,7 +43,6 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { VxeTableInstance } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
@@ -61,7 +60,7 @@ export default defineComponent({
           const list: any[] = []
           for (let index = 0; index < size; index++) {
             list.push({
-              id: XEUtils.uniqueId(),
+              id: 10000 + index,
               name: 'test' + index,
               role: 'developer',
               age: 10,
@@ -114,19 +113,18 @@ export default defineComponent({
           height="500"
           row-id="id"
           :loading="demo1.loading">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
-          <vxe-table-column field="address" title="Address"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
+          <vxe-column field="address" title="Address"></vxe-column>
         </vxe-table>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VxeTableInstance } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
@@ -144,7 +142,7 @@ export default defineComponent({
                   const list: any[] = []
                   for (let index = 0; index < size; index++) {
                     list.push({
-                      id: XEUtils.uniqueId(),
+                      id: 10000 + index,
                       name: 'test' + index,
                       role: 'developer',
                       age: 10,
