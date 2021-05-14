@@ -4,7 +4,7 @@
     <vxe-button class="edit-popup-button" status="primary" @click="popupEvent">选择</vxe-button>
     <vxe-modal
       show-footer
-      class="vxe-table--ignore-clear edit-popup-box"
+      class-name="vxe-table--ignore-clear edit-popup-box"
       title="选择多条"
       width="800"
       height="400"

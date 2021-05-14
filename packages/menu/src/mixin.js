@@ -139,7 +139,7 @@ export default {
           evnt.preventDefault()
         } else if (isCtxMenu && options && options.length) {
           params.options = options
-          this.preventEvent(evnt, 'event.showMenu', params, null, () => {
+          this.preventEvent(evnt, 'event.showMenu', params, () => {
             if (!visibleMethod || visibleMethod(params)) {
               evnt.preventDefault()
               this.updateZindex()

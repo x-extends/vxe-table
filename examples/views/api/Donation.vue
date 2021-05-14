@@ -32,7 +32,7 @@
         <div style="padding: 15px 0;width: 500px;">
           <vxe-radio-group v-model="supportAuthor">
             <vxe-radio label="1" content="支持作者"></vxe-radio>
-            <vxe-radio label="2" content="赞助作者"></vxe-radio>
+            <!-- <vxe-radio label="2" content="赞助作者"></vxe-radio> -->
           </vxe-radio-group>
           <div style="padding-top: 15px;">
             <span v-if="supportAuthor === '1'">如果该项目帮助了您，请作者喝杯咖啡吧</span>

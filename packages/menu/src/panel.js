@@ -17,12 +17,12 @@ export default {
   },
   render (h) {
     const $xetable = this.$parent
-    const { ctxMenuOpts, ctxMenuStore } = this
+    const { _e, ctxMenuOpts, ctxMenuStore } = this
     return h('div', {
       class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className],
       style: ctxMenuStore.style
     }, ctxMenuStore.list.map((options, gIndex) => {
-      return h('ul', {
+      return options.every(item => item.visible === false) ? _e() : h('ul', {
         class: 'vxe-context-menu--option-wrapper',
         key: gIndex
       }, options.map((item, index) => {

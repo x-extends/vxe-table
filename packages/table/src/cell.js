@@ -311,7 +311,7 @@ export const Cell = {
       }
     }
     const radioParams = { ...params, checked: isChecked, disabled: isDisabled }
-    return radioSlot ? $table.callSlot(radioSlot, radioParams) : [
+    return radioSlot ? $table.callSlot(radioSlot, radioParams, h) : [
       h('span', {
         class: ['vxe-cell--radio', {
           'is--checked': isChecked,
@@ -426,7 +426,7 @@ export const Cell = {
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, indeterminate }
-    return checkboxSlot ? $table.callSlot(checkboxSlot, checkboxParams) : [
+    return checkboxSlot ? $table.callSlot(checkboxSlot, checkboxParams, h) : [
       h('span', {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
@@ -482,7 +482,7 @@ export const Cell = {
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, indeterminate }
-    return checkboxSlot ? $table.callSlot(checkboxSlot, checkboxParams) : [
+    return checkboxSlot ? $table.callSlot(checkboxSlot, checkboxParams, h) : [
       h('span', {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,

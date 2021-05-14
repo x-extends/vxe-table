@@ -37,7 +37,7 @@ export interface ColumnEditRule {
    * 提示消息
    */
   message?: string;
-  trigger?: 'blur' | 'change';
+  trigger?: 'blur' | 'change' | 'manual';
   maxWidth?: number;
 }
 
