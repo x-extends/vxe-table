@@ -3958,18 +3958,19 @@ const Methods = {
    */
   scrollToTreeRow (row) {
     const { tableFullData, treeConfig, treeOpts } = this
+    const rests = []
     if (treeConfig) {
       const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
       if (matchObj) {
         const nodes = matchObj.nodes
         nodes.forEach((row, index) => {
           if (index < nodes.length - 1 && !this.isTreeExpandByRow(row)) {
-            this.setTreeExpand(row, true)
+            rests.push(this.setTreeExpand(row, true))
           }
         })
       }
     }
-    return this.$nextTick()
+    return Promise.all(rests).then(() => DomTools.rowToVisible(this, row))
   },
   /**
    * 手动清除滚动相关信息，还原到初始状态
