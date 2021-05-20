@@ -26,7 +26,7 @@ export default {
         class: 'vxe-context-menu--option-wrapper',
         key: gIndex
       }, options.map((item, index) => {
-        const hasChildMenus = item.children && item.children.length
+        const hasChildMenus = item.children && item.children.some((child) => child.visible !== false)
         return item.visible === false ? null : h('li', {
           class: [item.className, {
             'link--disabled': item.disabled,
