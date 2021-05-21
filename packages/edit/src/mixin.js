@@ -257,13 +257,13 @@ export default {
      * 处理激活编辑
      */
     handleActived (params, evnt) {
-      const { editStore, editOpts, tableColumn, mouseConfig } = this
+      const { editStore, editOpts, tableColumn, editConfig, mouseConfig } = this
       const { mode, activeMethod } = editOpts
       const { actived } = editStore
       const { row, column } = params
       const { editRender } = column
       const cell = params.cell = (params.cell || this.getCell(row, column))
-      if (isEnableConf(editRender) && cell) {
+      if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
         if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
@@ -435,8 +435,9 @@ export default {
      * 激活单元格编辑
      */
     _setActiveCell (row, fieldOrColumn) {
+      const { editConfig } = this
       const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
-      if (row && column && isEnableConf(column.editRender)) {
+      if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
         return this.scrollToRow(row, true).then(() => {
           const cell = this.getCell(row, column)
           if (cell) {

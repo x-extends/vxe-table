@@ -2089,7 +2089,7 @@ const Methods = {
         const hasAltKey = evnt.altKey
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
-        const isEditStatus = editConfig && actived.column && actived.row
+        const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
         let params
         if (filterStore.visible) {
           if (isEsc) {
@@ -2115,7 +2115,7 @@ const Methods = {
           } else {
             this.triggerRadioRowEvent(evnt, selected.args)
           }
-        } else if (isF2) {
+        } else if (isF2 && isEnableConf(editConfig)) {
           if (!isEditStatus) {
             // 如果按下了 F2 键
             if (selected.row && selected.column) {
@@ -2366,7 +2366,7 @@ const Methods = {
     const { row, column } = params
     const cell = evnt.currentTarget
     this.handleTargetEnterEvent()
-    if (editConfig) {
+    if (isEnableConf(editConfig)) {
       if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
         return
       }
@@ -3125,7 +3125,7 @@ const Methods = {
         }
       }
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
-      if (editConfig) {
+      if (isEnableConf(editConfig)) {
         if (editOpts.trigger === 'manual') {
           if (actived.args && actived.row === row && column !== actived.column) {
             this.handleChangeCell(evnt, params)
@@ -3152,7 +3152,7 @@ const Methods = {
     const { actived } = editStore
     const cell = evnt.currentTarget
     params.cell = cell
-    if (editConfig && editOpts.trigger === 'dblclick') {
+    if (isEnableConf(editConfig) && editOpts.trigger === 'dblclick') {
       if (!actived.args || evnt.currentTarget !== actived.args.cell) {
         if (editOpts.mode === 'row') {
           this.checkValidate('blur')

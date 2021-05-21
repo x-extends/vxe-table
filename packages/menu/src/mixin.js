@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import VXETable from '../../v-x-e-table'
 
 export default {
@@ -54,7 +54,7 @@ export default {
       const { $refs, tId, editStore, menuConfig, contextMenu, ctxMenuStore, ctxMenuOpts, mouseConfig, mouseOpts } = this
       const { selected } = editStore
       const layoutList = ['header', 'body', 'footer']
-      if (menuConfig || contextMenu) {
+      if (isEnableConf(menuConfig) || contextMenu) {
         if (ctxMenuStore.visible && $refs.ctxWrapper && DomTools.getEventTargetNode(evnt, $refs.ctxWrapper.$el).flag) {
           evnt.preventDefault()
           return

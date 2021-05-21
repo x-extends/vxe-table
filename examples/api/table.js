@@ -2255,6 +2255,15 @@ const apis = [
             list: []
           },
           {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '3.3.4',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'mode',
             desc: '编辑模式',
             version: '',

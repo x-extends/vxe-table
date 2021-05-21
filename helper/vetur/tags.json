@@ -421,6 +421,7 @@
       "step",
       "digits",
       "align",
+      "exponential",
       "controls",
       "min-date",
       "max-date",

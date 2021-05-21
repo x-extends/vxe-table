@@ -285,7 +285,15 @@ export default {
           { required: true, message: '请选择性别' }
         ],
         age: [
-          { required: true, message: '必填校验' }
+          { required: true, message: '请输入年龄' },
+          {
+            validator ({ itemValue }) {
+              // 自定义校验
+              if (Number(itemValue) > 35 || Number(itemValue) < 18) {
+                return new Error('年龄在 18 ~ 35 之间')
+              }
+            }
+          }
         ],
         date: [
           { required: true, message: '必填校验' }
@@ -598,7 +606,15 @@ export default {
                   { required: true, message: '请选择性别' }
                 ],
                 age: [
-                  { required: true, message: '必填校验' }
+                  { required: true, message: '请输入年龄' },
+                  {
+                    validator ({ itemValue }) {
+                      // 自定义校验
+                      if (Number(itemValue) > 35 || Number(itemValue) < 18) {
+                        return new Error('年龄在 18 ~ 35 之间')
+                      }
+                    }
+                  }
                 ],
                 date: [
                   { required: true, message: '必填校验' }

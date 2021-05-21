@@ -676,23 +676,23 @@ export const Cell = {
    */
   renderEditHeader (h, params) {
     const { $table, column } = params
-    const { editRules, editOpts } = $table
+    const { editConfig, editRules, editOpts } = $table
     const { sortable, remoteSort, filters, editRender } = column
-    let isRequired
+    let isRequired = false
     if (editRules) {
       const columnRules = XEUtils.get(editRules, params.column.property)
       if (columnRules) {
         isRequired = columnRules.some(rule => rule.required)
       }
     }
-    return [
+    return (isEnableConf(editConfig) ? [
       isRequired && editOpts.showAsterisk ? h('i', {
         class: 'vxe-cell--required-icon'
       }) : null,
       isEnableConf(editRender) && editOpts.showIcon ? h('i', {
         class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       }) : null
-    ].concat(Cell.renderDefaultHeader(h, params))
+    ] : []).concat(Cell.renderDefaultHeader(h, params))
       .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])
       .concat(filters ? Cell.renderFilterIcon(h, params) : [])
   },
