@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.toolbar') }}</h2>
-    <p class="tip">工具栏模块，需要与表格组合使用，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'toolbar'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
+    <p class="tip">工具栏模块，与表格组合使用，通过调用 <table-api-link prop="connect"/> 方法与表格建立连接</p>
 
     <p>
       <vxe-toolbar>
@@ -230,8 +230,8 @@ export default {
           created () {
             this.$nextTick(() => {
               // 将表格和工具栏进行关联
-              const xTable = this.$refs.xTable
-              xTable.connect(this.$refs.xToolbar)
+              const $table = this.$refs.xTable
+              $table.connect(this.$refs.xToolbar)
             })
           },
           methods: {
@@ -256,8 +256,8 @@ export default {
   created () {
     this.$nextTick(() => {
       // 将表格和工具栏进行关联
-      const xTable = this.$refs.xTable
-      xTable.connect(this.$refs.xToolbar)
+      const $table = this.$refs.xTable
+      $table.connect(this.$refs.xToolbar)
     })
   },
   methods: {

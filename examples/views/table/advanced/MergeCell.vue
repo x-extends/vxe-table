@@ -5,7 +5,7 @@
       <span class="red">（注意：合并数据属于临时行为，例如：操作数据源、显示隐藏列、固定列...等操作都会导致合并状态被取消）</span>
     </p>
 
-    <vxe-toolbar print></vxe-toolbar>
+    <vxe-toolbar ref="xToolbar" print></vxe-toolbar>
 
     <vxe-table
       border
@@ -88,7 +88,7 @@ export default {
       mergeFooterItems: [],
       demoCodes: [
         `
-        <vxe-toolbar print></vxe-toolbar>
+        <vxe-toolbar ref="xToolbar" print></vxe-toolbar>
 
         <vxe-table
           border
@@ -163,6 +163,10 @@ export default {
             }
           },
           created () {
+            this.$nextTick(() => {
+              // 手动将表格和工具栏进行关联
+              this.$refs.xTable.connect(this.$refs.xToolbar)
+            })
             this.loadList()
           },
           methods: {
@@ -275,6 +279,10 @@ export default {
     }
   },
   created () {
+    this.$nextTick(() => {
+      // 手动将表格和工具栏进行关联
+      this.$refs.xTable.connect(this.$refs.xToolbar)
+    })
     this.loadList()
   },
   methods: {

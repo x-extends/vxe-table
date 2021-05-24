@@ -7,7 +7,7 @@
       <span class="red">（注：打印的样式及模板自行实现，该示例仅供参考）</span>
     </p>
 
-    <vxe-toolbar print>
+    <vxe-toolbar ref="xToolbar" print>
       <template #buttons>
         <vxe-button @click="printEvent1">打印出货单据</vxe-button>
       </template>
@@ -173,7 +173,7 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar print>
+        <vxe-toolbar ref="xToolbar" print>
           <template #buttons>
             <vxe-button @click="printEvent1">打印出货单据</vxe-button>
           </template>
@@ -269,6 +269,12 @@ export default {
                 { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
               ]
             }
+          },
+          created () {
+            this.$nextTick(() => {
+              // 手动将表格和工具栏进行关联
+              this.$refs.xTable.connect(this.$refs.xToolbar)
+            })
           },
           methods: {
             printEvent1 () {
@@ -539,6 +545,12 @@ export default {
         `
       ]
     }
+  },
+  created () {
+    this.$nextTick(() => {
+      // 手动将表格和工具栏进行关联
+      this.$refs.xTable.connect(this.$refs.xToolbar)
+    })
   },
   methods: {
     printEvent1 () {

@@ -1238,6 +1238,13 @@ export default {
           if ($xegrid && !opts.remote) {
             const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
             const ajaxMethods = ajax.queryAll
+
+            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              if (!ajaxMethods) {
+                UtilTools.warn('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
+              }
+            }
+
             if (ajaxMethods) {
               const params = {
                 $table: this,

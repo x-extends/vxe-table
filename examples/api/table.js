@@ -174,7 +174,7 @@ const exportDataAPI = [
     version: '',
     type: 'string[]',
     enum: 'csv, html, xml, txt',
-    defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
+    defVal: 'csv, html, xml, txt',
     list: []
   },
   {
@@ -192,7 +192,7 @@ const exportDataAPI = [
     version: '',
     type: 'string[]',
     enum: 'current, selected, all',
-    defVal: '[\'current\', \'selected\', \'all\']',
+    defVal: 'current, selected',
     list: []
   },
   {

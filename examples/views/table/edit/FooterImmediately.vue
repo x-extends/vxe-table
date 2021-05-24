@@ -6,7 +6,7 @@
       <span class="red">（注：实时更新是非常糟糕的做法，运算量越大卡顿就越久，非特殊场景不建议使用）</span>
     </p>
 
-    <vxe-toolbar export>
+    <vxe-toolbar ref="xToolbar" export>
       <template #buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="removeEvent">删除</vxe-button>
@@ -61,7 +61,7 @@ export default {
       ],
       demoCodes: [
         `
-        <vxe-toolbar export>
+        <vxe-toolbar ref="xToolbar" export>
           <template #buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="removeEvent">删除</vxe-button>
@@ -106,6 +106,12 @@ export default {
                 { id: 10008, name: 'Test8', nickname: 'T8', role: 'PM', sex: '1', sex2: ['0'], num1: 2, age: 35, rate: 55 }
               ]
             }
+          },
+          created () {
+            this.$nextTick(() => {
+              // 手动将表格和工具栏进行关联
+              this.$refs.xTable.connect(this.$refs.xToolbar)
+            })
           },
           methods: {
             footerCellClassName ({ $rowIndex, columnIndex }) {
@@ -186,6 +192,12 @@ export default {
         `
       ]
     }
+  },
+  created () {
+    this.$nextTick(() => {
+      // 手动将表格和工具栏进行关联
+      this.$refs.xTable.connect(this.$refs.xToolbar)
+    })
   },
   methods: {
     footerCellClassName ({ $rowIndex, columnIndex }) {
