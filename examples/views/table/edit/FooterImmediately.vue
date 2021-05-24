@@ -6,7 +6,7 @@
       <span class="red">（注：实时更新是非常糟糕的做法，运算量越大卡顿就越久，非特殊场景不建议使用）</span>
     </p>
 
-    <vxe-toolbar export>
+    <vxe-toolbar ref="xToolbar" export>
       <template #buttons>
         <vxe-button @click="insertEvent">新增</vxe-button>
         <vxe-button @click="removeEvent">删除</vxe-button>
@@ -46,13 +46,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { VXETable } from '../../../../packages/all'
-import { VxeTableInstance, VxeTablePropTypes } from '../../../../types/index'
+import { VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
     const xTable = ref({} as VxeTableInstance)
+    const xToolbar = ref({} as VxeToolbarInstance)
 
     const demo1 = reactive({
       tableData: [
@@ -147,8 +148,16 @@ export default defineComponent({
       VXETable.modal.alert(`insertRecords=${insertRecords.length} removeRecords=${removeRecords.length} updateRecords=${updateRecords.length}`)
     }
 
+    nextTick(() => {
+      // 将表格和工具栏进行关联
+      const $table = xTable.value
+      const $toolbar = xToolbar.value
+      $table.connect($toolbar)
+    })
+
     return {
       xTable,
+      xToolbar,
       demo1,
       footerCellClassName,
       updateFooterEvent,
@@ -158,7 +167,7 @@ export default defineComponent({
       saveEvent,
       demoCodes: [
         `
-        <vxe-toolbar export>
+        <vxe-toolbar ref="xToolbar" export>
           <template #buttons>
             <vxe-button @click="insertEvent">新增</vxe-button>
             <vxe-button @click="removeEvent">删除</vxe-button>
@@ -189,12 +198,13 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
+        import { defineComponent, reactive, ref, nextTick } from 'vue'
+        import { VXETable, VxeTableInstance, VxeTablePropTypes, VxeToolbarInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
             const xTable = ref({} as VxeTableInstance)
+            const xToolbar = ref({} as VxeToolbarInstance)
 
             const demo1 = reactive({
               tableData: [
@@ -289,8 +299,16 @@ export default defineComponent({
               VXETable.modal.alert(\`insertRecords=\${insertRecords.length} removeRecords=\${removeRecords.length} updateRecords=\${updateRecords.length}\`)
             }
 
+            nextTick(() => {
+              // 将表格和工具栏进行关联
+              const $table = xTable.value
+              const $toolbar = xToolbar.value
+              $table.connect($toolbar)
+            })
+
             return {
               xTable,
+              xToolbar,
               demo1,
               footerCellClassName,
               updateFooterEvent,

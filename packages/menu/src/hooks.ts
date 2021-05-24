@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VXETable } from '../../v-x-e-table'
 import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../tools/dom'
-import { hasChildrenList } from '../../tools/utils'
+import { isEnableConf, hasChildrenList } from '../../tools/utils'
 import { hasEventKey, EVENT_KEYS } from '../../tools/event'
 
 import { VxeGlobalHooksHandles, TableMenuMethods, TableMenuPrivateMethods } from '../../../types/all'
@@ -162,7 +162,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         const el = refElem.value
         const { selected } = editStore
         const layoutList = ['header', 'body', 'footer']
-        if (menuConfig) {
+        if (isEnableConf(menuConfig)) {
           if (ctxMenuStore.visible && tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) {
             evnt.preventDefault()
             return

@@ -27,7 +27,7 @@
       show-overflow
       show-header-overflow
       ref="xTable"
-      height="600"
+      height="700"
       :export-config="{}"
       :sort-config="{trigger: 'cell'}"
       :loading="demo1.loading">
@@ -158,7 +158,7 @@ export default defineComponent({
           show-overflow
           show-header-overflow
           ref="xTable"
-          height="600"
+          height="700"
           :export-config="{}"
           :sort-config="{trigger: 'cell'}"
           :loading="demo1.loading">

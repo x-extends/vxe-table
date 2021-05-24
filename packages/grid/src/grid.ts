@@ -764,7 +764,9 @@ export default defineComponent({
                   }
                 })
             } else {
-              errLog('vxe.error.notFunc', ['query'])
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
+              }
             }
             break
           }
@@ -803,7 +805,9 @@ export default defineComponent({
                 }
               }
             } else {
-              errLog('vxe.error.notFunc', [code])
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
+              }
             }
             break
           }
@@ -851,7 +855,9 @@ export default defineComponent({
                 }
               }).catch((errMap: any) => errMap)
             } else {
-              errLog('vxe.error.notFunc', [code])
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
+              }
             }
             break
           }

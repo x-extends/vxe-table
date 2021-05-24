@@ -358,7 +358,7 @@ export default {
     },
     footer: {
       donation: '支持我们',
-      donationDesc: 'vxe-table is completely free to use.To keep the project healthy and sustainable, you can support the author with a donation.'
+      donationDesc: 'vxe-table is open source and free for MIT. In order to make the project healthy and sustainable development, you can support the author through donation.'
     },
     api: {
       apiSearch: 'API Search',

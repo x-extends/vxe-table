@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../table/src/util'
-import { errLog, parseFile, formatText } from '../../tools/utils'
+import { errLog, warnLog, parseFile, formatText } from '../../tools/utils'
 import { readLocalFile, handlePrint, saveLocalFile, createHtmlPage, getExportBlobByContent } from './util'
 
 import { VxeGlobalHooksHandles, VxeGridConstructor, VxeGridPrivateMethods, TableExportMethods } from '../../../types/all'
@@ -1105,6 +1105,13 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               const proxyOpts = computeProxyOpts.value
               const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = proxyOpts
               const ajaxMethods = ajax.queryAll
+
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                if (!ajaxMethods) {
+                  warnLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
+                }
+              }
+
               if (ajaxMethods) {
                 const params = {
                   $table: $xetable,

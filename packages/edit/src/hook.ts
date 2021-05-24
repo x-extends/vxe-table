@@ -393,8 +393,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        * 激活单元格编辑
        */
       setActiveCell (row, fieldOrColumn) {
+        const { editConfig } = props
         const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
-        if (row && column && isEnableConf(column.editRender)) {
+        if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
           return $xetable.scrollToRow(row, column).then(() => {
             const cell = $xetable.getCell(row, column)
             if (cell) {
@@ -431,7 +432,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        * 处理激活编辑
        */
       handleActived (params, evnt) {
-        const { mouseConfig } = props
+        const { editConfig, mouseConfig } = props
         const { editStore, tableColumn } = reactData
         const editOpts = computeEditOpts.value
         const { mode, activeMethod } = editOpts
@@ -439,7 +440,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { row, column } = params
         const { editRender } = column
         const cell = params.cell = (params.cell || $xetable.getCell(row, column))
-        if (isEnableConf(editRender) && cell) {
+        if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-actived' = 'edit-disabled'

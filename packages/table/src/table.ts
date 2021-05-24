@@ -3853,7 +3853,7 @@ export default defineComponent({
           const isAltKey = evnt.altKey
           const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
           const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
-          const isEditStatus = editConfig && actived.column && actived.row
+          const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
           let params: any
           if (operCtxMenu) {
             // 如果配置了右键菜单; 支持方向键操作、回车
@@ -3888,7 +3888,7 @@ export default defineComponent({
             } else {
               tablePrivateMethods.triggerRadioRowEvent(evnt, selected.args)
             }
-          } else if (isF2) {
+          } else if (isF2 && isEnableConf(editConfig)) {
             if (!isEditStatus) {
               // 如果按下了 F2 键
               if (selected.row && selected.column) {
@@ -3967,7 +3967,7 @@ export default defineComponent({
             } else if (actived.row || actived.column) {
               $xetable.moveTabSelected(actived.args, hasShiftKey, evnt)
             }
-          } else if (keyboardConfig && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
+          } else if (keyboardConfig && isEnableConf(editConfig) && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
             if (!isEditStatus) {
               const { delMethod, backMethod } = keyboardOpts
               // 如果是删除键
@@ -4016,7 +4016,7 @@ export default defineComponent({
                 }
               }
             }
-          } else if (keyboardConfig && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
+          } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             const { editMethod } = keyboardOpts
             // 启用编辑后，空格键功能将失效
             // if (isSpacebar) {
@@ -4566,7 +4566,7 @@ export default defineComponent({
         const { row, column } = params
         const cell = evnt.currentTarget as HTMLTableDataCellElement
         handleTargetEnterEvent()
-        if (editConfig) {
+        if (isEnableConf(editConfig)) {
           if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
             return
           }
@@ -4684,7 +4684,7 @@ export default defineComponent({
             }
           }
           // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
-          if (editConfig) {
+          if (isEnableConf(editConfig)) {
             if (editOpts.trigger === 'manual') {
               if (actived.args && actived.row === row && column !== actived.column) {
                 handleChangeCell(evnt, params)
@@ -4713,7 +4713,7 @@ export default defineComponent({
         const { actived } = editStore
         const cell = evnt.currentTarget
         params = Object.assign({ cell }, params)
-        if (editConfig && editOpts.trigger === 'dblclick') {
+        if (isEnableConf(editConfig) && editOpts.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
             if (editOpts.mode === 'row') {
               checkValidate('blur')
@@ -4871,6 +4871,7 @@ export default defineComponent({
       scrollToTreeRow (row) {
         const { treeConfig } = props
         const { tableFullData } = internalData
+        const rests: Promise<any>[] = []
         if (treeConfig) {
           const treeOpts = computeTreeOpts.value
           const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
@@ -4878,12 +4879,12 @@ export default defineComponent({
             const nodes = matchObj.nodes
             nodes.forEach((row, index) => {
               if (index < nodes.length - 1 && !tableMethods.isTreeExpandByRow(row)) {
-                tableMethods.setTreeExpand(row, true)
+                rests.push(tableMethods.setTreeExpand(row, true))
               }
             })
           }
         }
-        return nextTick()
+        return Promise.all(rests).then(() => rowToVisible($xetable, row))
       },
       // 更新横向 X 可视渲染上下剩余空间大小
       updateScrollXSpace () {

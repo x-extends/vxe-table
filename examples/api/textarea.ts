@@ -181,6 +181,24 @@ const apis = [
         list: []
       },
       {
+        name: 'keydown',
+        desc: '在键盘输入按下时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ value, $event }',
+        list: []
+      },
+      {
+        name: 'keyup',
+        desc: '在键盘输入按下弹起时触发该事件',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ value, $event }',
+        list: []
+      },
+      {
         name: 'change',
         desc: '在值发生改变时触发该方法',
         version: '',

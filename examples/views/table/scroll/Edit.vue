@@ -34,7 +34,7 @@
       show-overflow
       keep-source
       ref="xTable"
-      height="400"
+      height="500"
       :export-config="{}"
       :loading="demo1.loading"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
@@ -186,7 +186,7 @@ export default defineComponent({
           show-overflow
           keep-source
           ref="xTable"
-          height="400"
+          height="500"
           :export-config="{}"
           :loading="demo1.loading"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">

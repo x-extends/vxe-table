@@ -137,8 +137,8 @@
             </template>
           </vxe-form-item>
           <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
-            <template #default>
-              <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+            <template #default="params">
+              <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable @change="$refs.xForm.updateStatus(params)"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
@@ -261,7 +261,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 import { VXETable } from '../../../packages/all'
-import { VxeFormEvents } from '../../../types/index'
+import { VxeFormEvents, VxeFormPropTypes } from '../../../types/index'
 
 export default defineComponent({
   setup  () {
@@ -288,13 +288,21 @@ export default defineComponent({
           { required: true, message: '请输入名称' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符' }
         ],
-        nickname: [
-          { required: true, message: '请输入昵称' }
-        ],
         sex: [
           { required: true, message: '请选择性别' }
+        ],
+        age: [
+          { required: true, message: '请输入年龄' },
+          {
+            validator ({ itemValue }) {
+              // 自定义校验
+              if (Number(itemValue) > 35 || Number(itemValue) < 18) {
+                return new Error('年龄在 18 ~ 35 之间')
+              }
+            }
+          }
         ]
-      }
+      } as VxeFormPropTypes.Rules
     })
 
     const demo3 = reactive({
@@ -500,8 +508,8 @@ export default defineComponent({
                 </template>
               </vxe-form-item>
               <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
-                <template #default>
-                  <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
+                <template #default="params">
+                  <vxe-input v-model="demo2.formData2.age" type="integer" placeholder="请输入年龄" clearable @change="$refs.xForm.updateStatus(params)"></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
@@ -626,20 +634,28 @@ export default defineComponent({
                 sex: '',
                 age: 26,
                 date: null,
-                address: 左右布局''
+                address: '左右布局'
               },
               formRules2: {
                 name: [
                   { required: true, message: '请输入名称' },
                   { min: 3, max: 5, message: '长度在 3 到 5 个字符' }
                 ],
-                nickname: [
-                  { required: true, message: '请输入昵称' }
-                ],
                 sex: [
                   { required: true, message: '请选择性别' }
+                ],
+                age: [
+                  { required: true, message: '请输入年龄' },
+                  {
+                    validator ({ itemValue }) {
+                      // 自定义校验
+                      if (Number(itemValue) > 35 || Number(itemValue) < 18) {
+                        return new Error('年龄在 18 ~ 35 之间')
+                      }
+                    }
+                  }
                 ]
-              }
+              } as VxeFormPropTypes.Rules
             })
 
             const demo3 = reactive({

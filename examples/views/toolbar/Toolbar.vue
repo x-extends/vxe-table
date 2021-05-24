@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.toolbar') }}</h2>
-    <p class="tip">工具栏模块，与表格组合使用，通过调用 connect() 方法与表格建立连接</p>
+    <p class="tip">工具栏模块，与表格组合使用，通过调用 <table-api-link prop="connect"/> 方法与表格建立连接</p>
 
     <p>
       <vxe-toolbar>

@@ -174,7 +174,7 @@ const exportDataAPI = [
     version: '',
     type: 'string[]',
     enum: 'csv, html, xml, txt',
-    defVal: '[\'csv\', \'html\', \'xml\', \'txt\']',
+    defVal: 'csv, html, xml, txt',
     list: []
   },
   {
@@ -192,7 +192,7 @@ const exportDataAPI = [
     version: '',
     type: 'string[]',
     enum: 'current, selected, all',
-    defVal: '[\'current\', \'selected\', \'all\']',
+    defVal: 'current, selected',
     list: []
   },
   {
@@ -2261,6 +2261,15 @@ const apis = [
             type: 'string',
             enum: 'manual（手动触发方式，只能用于 mode=row）,click（点击触发编辑）,dblclick（双击触发编辑）',
             defVal: 'click',
+            list: []
+          },
+          {
+            name: 'enabled',
+            desc: '是否启用',
+            version: '4.0.17',
+            type: 'boolean',
+            enum: '',
+            defVal: 'true',
             list: []
           },
           {

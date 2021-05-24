@@ -704,24 +704,24 @@ export const Cell = {
     const { $table, column } = params
     const { props } = $table
     const { computeEditOpts } = $table.getComputeMaps()
-    const { editRules } = props
+    const { editConfig, editRules } = props
     const editOpts = computeEditOpts.value
     const { sortable, filters, editRender } = column
-    let isRequired
+    let isRequired = false
     if (editRules) {
       const columnRules = XEUtils.get(editRules, params.column.property) as VxeTableDefines.ValidatorRule[]
       if (columnRules) {
         isRequired = columnRules.some((rule) => rule.required)
       }
     }
-    return [
+    return (isEnableConf(editConfig) ? [
       isRequired && editOpts.showAsterisk ? h('i', {
         class: 'vxe-cell--required-icon'
       }) : null,
       isEnableConf(editRender) && editOpts.showIcon ? h('i', {
         class: ['vxe-cell--edit-icon', editOpts.icon || GlobalConfig.icon.TABLE_EDIT]
       }) : null
-    ].concat(Cell.renderDefaultHeader(params))
+    ] : []).concat(Cell.renderDefaultHeader(params))
       .concat(sortable ? Cell.renderSortIcon(params) : [])
       .concat(filters ? Cell.renderFilterIcon(params) : [])
   },

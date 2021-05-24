@@ -29,6 +29,9 @@ export default defineComponent({
   emits: [
     'update:modelValue',
     'input',
+    'keydown',
+    'keyup',
+    'click',
     'change',
     'focus',
     'blur'
@@ -225,6 +228,9 @@ export default defineComponent({
           } : null,
           onInput: inputEvent,
           onChange: changeEvent,
+          onKeydown: triggerEvent,
+          onKeyup: triggerEvent,
+          onClick: triggerEvent,
           onFocus: triggerEvent,
           onBlur: blurEvent
         }),

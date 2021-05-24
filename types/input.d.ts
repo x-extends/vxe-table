@@ -229,6 +229,45 @@ export namespace VxeInputDefines {
 
   export interface KeydownParams extends InputParams {}
   export interface KeydownEventParams extends InputKeyboardEventParams, KeydownParams { }
+  
+  export interface ClickParams extends InputParams {}
+  export interface ClickEventParams extends InputKeyboardEventParams, ClickParams { }
+  
+  export interface FocusParams extends InputParams {}
+  export interface FocusEventParams extends InputKeyboardEventParams, FocusParams { }
+
+  export interface BlurParams extends InputParams {}
+  export interface BlurEventParams extends InputKeyboardEventParams, BlurParams { }
+
+  export interface ClearParams extends InputParams {}
+  export interface ClearEventParams extends InputKeyboardEventParams, ClearParams { }
+
+  export interface SearchClickParams extends InputParams {}
+  export interface SearchClickEventParams extends InputKeyboardEventParams, SearchClickParams { }
+
+  export interface ToggleVisibleParams extends InputParams {}
+  export interface ToggleVisibleEventParams extends InputKeyboardEventParams, ToggleVisibleParams { }
+
+  export interface PrevNumberParams extends InputParams {}
+  export interface PrevNumberEventParams extends InputKeyboardEventParams, PrevNumberParams { }
+
+  export interface NextNumberParams extends InputParams {}
+  export interface NextNumberEventParams extends InputKeyboardEventParams, NextNumberParams { }
+
+  export interface PrefixClickParams extends InputParams {}
+  export interface PrefixClickEventParams extends InputKeyboardEventParams, PrefixClickParams { }
+
+  export interface SuffixClickParams extends InputParams {}
+  export interface SuffixClickEventParams extends InputKeyboardEventParams, SuffixClickParams { }
+
+  export interface DatePrevParams extends InputParams {}
+  export interface DatePrevEventParams extends InputKeyboardEventParams, DatePrevParams { }
+
+  export interface DateTodayParams extends InputParams {}
+  export interface DateTodayEventParams extends InputKeyboardEventParams, DateTodayParams { }
+
+  export interface DateNextParams extends InputParams {}
+  export interface DateNextEventParams extends InputKeyboardEventParams, DateNextParams { }
 }
 
 export type VxeInputEventProps = {
@@ -236,6 +275,19 @@ export type VxeInputEventProps = {
   onChange?: VxeInputEvents.Change;
   onKeydown?: VxeInputEvents.Keydown;
   onKeyup?: VxeInputEvents.Keyup;
+  onClick?: VxeInputEvents.Click;
+  onFocus?: VxeInputEvents.Focus;
+  onBlur?: VxeInputEvents.Blur;
+  onClear?: VxeInputEvents.Clear;
+  onSearchClick?: VxeInputEvents.SearchClick;
+  onToggleVisible?: VxeInputEvents.ToggleVisible;
+  onPrevNumber?: VxeInputEvents.PrevNumber;
+  onNextNumber?: VxeInputEvents.NextNumber;
+  onPrefixClick?: VxeInputEvents.PrefixClick;
+  onSuffixClick?: VxeInputEvents.SuffixClick;
+  onDatePrev?: VxeInputEvents.DatePrev;
+  onDateToday?: VxeInputEvents.DateToday;
+  onDateNext?: VxeInputEvents.DateNext;
 }
 
 export interface VxeInputListeners {
@@ -243,6 +295,19 @@ export interface VxeInputListeners {
   change?: VxeInputEvents.Change;
   keydown?: VxeInputEvents.Keydown;
   keyup?: VxeInputEvents.Keyup;
+  click?: VxeInputEvents.Click;
+  focus?: VxeInputEvents.Focus;
+  blur?: VxeInputEvents.Blur;
+  clear?: VxeInputEvents.Clear;
+  searchClick?: VxeInputEvents.SearchClick;
+  toggleVisible?: VxeInputEvents.ToggleVisible;
+  prevNumber?: VxeInputEvents.PrevNumber;
+  nextNumber?: VxeInputEvents.NextNumber;
+  prefixClick?: VxeInputEvents.PrefixClick;
+  suffixClick?: VxeInputEvents.SuffixClick;
+  datePrev?: VxeInputEvents.DatePrev;
+  dateToday?: VxeInputEvents.DateToday;
+  dateNext?: VxeInputEvents.DateNext;
 }
 
 export namespace VxeInputEvents {
@@ -250,4 +315,17 @@ export namespace VxeInputEvents {
   export type Change = (params: VxeInputDefines.ChangeEventParams) => void;
   export type Keydown = (params: VxeInputDefines.KeydownEventParams) => void;
   export type Keyup = (params: VxeInputDefines.KeyupEventParams) => void;
+  export type Click = (params: VxeInputDefines.ClickEventParams) => void;
+  export type Focus = (params: VxeInputDefines.FocusEventParams) => void;
+  export type Blur = (params: VxeInputDefines.BlurEventParams) => void;
+  export type Clear = (params: VxeInputDefines.ClearEventParams) => void;
+  export type SearchClick = (params: VxeInputDefines.SearchClickEventParams) => void;
+  export type ToggleVisible = (params: VxeInputDefines.ToggleVisibleEventParams) => void;
+  export type PrevNumber = (params: VxeInputDefines.PrevNumberEventParams) => void;
+  export type NextNumber = (params: VxeInputDefines.NextNumberEventParams) => void;
+  export type PrefixClick = (params: VxeInputDefines.PrefixClickEventParams) => void;
+  export type SuffixClick = (params: VxeInputDefines.SuffixClickEventParams) => void;
+  export type DatePrev = (params: VxeInputDefines.DatePrevEventParams) => void;
+  export type DateToday = (params: VxeInputDefines.DateTodayEventParams) => void;
+  export type DateNext = (params: VxeInputDefines.DateNextEventParams) => void;
 }

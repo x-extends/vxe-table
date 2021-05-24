@@ -116,6 +116,9 @@ export interface VxeTextareaPrivateMethods extends TextareaPrivateMethods { }
 export type VxeTextareaEmits = [
   'update:modelValue',
   'input',
+  'keydown',
+  'keyup',
+  'click',
   'change',
   'focus',
   'blur'
@@ -125,10 +128,57 @@ export namespace VxeTextareaDefines {
   interface TextareaEventParams extends VxeEvent {
     $textarea: VxeTextareaConstructor;
   }
+
+  export interface InputParams {
+    value: string;
+  }
+  export interface InputEventParams extends TextareaEventParams, InputParams { }
+
+  export interface ChangeParams extends InputParams {}
+  export interface ChangeEventParams extends TextareaEventParams, ChangeParams { }
+
+  export interface KeyupParams extends InputParams {}
+  export interface KeyupEventParams extends TextareaEventParams, KeyupParams { }
+
+  export interface KeydownParams extends InputParams {}
+  export interface KeydownEventParams extends TextareaEventParams, KeydownParams { }
+  
+  export interface ClickParams extends InputParams {}
+  export interface ClickEventParams extends TextareaEventParams, ClickParams { }
+
+  export interface FocusParams extends InputParams {}
+  export interface FocusEventParams extends TextareaEventParams, FocusParams { }
+
+  export interface BlurParams extends InputParams {}
+  export interface BlurEventParams extends TextareaEventParams, BlurParams { }
 }
 
-export type VxeTextareaEventProps = {}
+export type VxeTextareaEventProps = {
+  onInput?: VxeTextareaEvents.Input;
+  onChange?: VxeTextareaEvents.Change;
+  onKeydown?: VxeTextareaEvents.Keydown;
+  onKeyup?: VxeTextareaEvents.Keyup;
+  onClick?: VxeTextareaEvents.Click;
+  onFocus?: VxeTextareaEvents.Focus;
+  onBlur?: VxeTextareaEvents.Blur;
+}
 
-export interface VxeTextareaListeners { }
+export interface VxeTextareaListeners {
+  input?: VxeTextareaEvents.Input;
+  change?: VxeTextareaEvents.Change;
+  keydown?: VxeTextareaEvents.Keydown;
+  keyup?: VxeTextareaEvents.Keyup;
+  click?: VxeTextareaEvents.Click;
+  focus?: VxeTextareaEvents.Focus;
+  blur?: VxeTextareaEvents.Blur;
+}
 
-export namespace VxeTextareaEvents { }
+export namespace VxeTextareaEvents {
+  export type Input = (params: VxeTextareaDefines.InputEventParams) => void;
+  export type Change = (params: VxeTextareaDefines.ChangeEventParams) => void;
+  export type Keydown = (params: VxeTextareaDefines.KeydownEventParams) => void;
+  export type Keyup = (params: VxeTextareaDefines.KeyupEventParams) => void;
+  export type Click = (params: VxeTextareaDefines.ClickEventParams) => void;
+  export type Focus = (params: VxeTextareaDefines.FocusEventParams) => void;
+  export type Blur = (params: VxeTextareaDefines.BlurEventParams) => void;
+}
