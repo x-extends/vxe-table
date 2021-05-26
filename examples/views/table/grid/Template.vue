@@ -646,7 +646,7 @@ export default {
             },
             checkboxChangeEvent ({ records }) {
               this.isAllChecked = this.$refs.xGrid.isAllCheckboxChecked()
-              this.isIndeterminate = this.$refs.xGrid.isCheckboxIndeterminate()
+              this.isIndeterminate = this.$refs.xGrid.isAllCheckboxIndeterminate()
               this.selectRecords = records
             },
             changeAllEvent () {
@@ -755,7 +755,7 @@ export default {
     },
     checkboxChangeEvent ({ records }) {
       this.isAllChecked = this.$refs.xGrid.isAllCheckboxChecked()
-      this.isIndeterminate = this.$refs.xGrid.isCheckboxIndeterminate()
+      this.isIndeterminate = this.$refs.xGrid.isAllCheckboxIndeterminate()
       this.selectRecords = records
     },
     changeAllEvent () {

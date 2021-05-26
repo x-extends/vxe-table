@@ -251,21 +251,8 @@ export default {
               }
             },
             exportEvent () {
-              const toBuffer = (wbout) => {
-                const buf = new ArrayBuffer(wbout.length)
-                const view = new Uint8Array(buf)
-                for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-                return buf
-              }
-              // 转换数据
-              const table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
-              const book = XLSX.utils.book_new()
-              const sheet = XLSX.utils.table_to_sheet(table)
-              XLSX.utils.book_append_sheet(book, sheet)
-              const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-              const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
-              // 保存导出
-              this.$XSaveFile({ filename: '数据导出', type: 'xlsx', content: blob })
+              const workBook = XLSX.utils.table_to_book(this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body'))
+              XLSX.writeFile(workBook, '数据导出.xlsx')
             }
           }
         }
@@ -331,21 +318,8 @@ export default {
       }
     },
     exportEvent () {
-      const toBuffer = (wbout) => {
-        const buf = new ArrayBuffer(wbout.length)
-        const view = new Uint8Array(buf)
-        for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-        return buf
-      }
-      // 转换数据
-      const table = this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body')
-      const book = XLSX.utils.book_new()
-      const sheet = XLSX.utils.table_to_sheet(table)
-      XLSX.utils.book_append_sheet(book, sheet)
-      const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-      const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
-      // 保存导出
-      this.$XSaveFile({ filename: '数据导出', type: 'xlsx', content: blob })
+      const workBook = XLSX.utils.table_to_book(this.$refs.xGrid2.$el.querySelector('.body--wrapper>.vxe-table--body'))
+      XLSX.writeFile(workBook, '数据导出.xlsx')
     }
   }
 }

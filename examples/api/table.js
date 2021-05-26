@@ -3325,7 +3325,7 @@ const apis = [
         list: []
       },
       {
-        name: 'change-fnr',
+        name: 'fnr-change',
         desc: '只对 keyboard-config.isFNR 配置时有效，在查询与搜索弹框的 Tab 页被切换时会触发该事件',
         version: 'pro',
         type: '',
@@ -3958,8 +3958,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getRadioRecord()',
-        desc: '用于 type=radio，获取当已选中的行数据',
+        name: 'getRadioRecord(isFull)',
+        desc: '用于 type=radio，获取当已选中的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）',
         version: '2.7.8',
         type: 'Row',
         enum: '',
@@ -3977,8 +3977,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getRadioReserveRecord()',
-        desc: '用于 radio-config.reserve，获取已保留选中的行数据（不包含当前列表）',
+        name: 'getRadioReserveRecord(isFull)',
+        desc: '用于 radio-config.reserve，获取已保留选中的行数据（不包含当前列表，如果 isFull=true 则不包含全部列表）',
         version: '2.8.21',
         type: 'Row',
         enum: '',
@@ -3986,8 +3986,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getCheckboxRecords()',
-        desc: '用于 type=checkbox，获取已选中的行数据',
+        name: 'getCheckboxRecords(isFull)',
+        desc: '用于 type=checkbox，获取当前已选中的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）',
         version: '2.7.8',
         type: 'Array<Row>',
         enum: '',
@@ -4005,8 +4005,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getCheckboxReserveRecords()',
-        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据（不包含当前列表）',
+        name: 'getCheckboxReserveRecords(isFull)',
+        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据（不包含当前列表，如果 isFull=true 则不包含全部列表）',
         version: '2.7.8',
         type: 'Array<Row>',
         enum: '',
@@ -4014,8 +4014,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getCheckboxIndeterminateRecords()',
-        desc: '用于 tree-config 和 type=checkbox，获取半选状态的行数据',
+        name: 'getCheckboxIndeterminateRecords(isFull)',
+        desc: '用于 tree-config 和 type=checkbox，获取半选状态的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）',
         version: '2.9',
         type: 'Array<Row>',
         enum: '',
@@ -4191,9 +4191,19 @@ const apis = [
         list: []
       },
       {
-        name: 'isAllCheckboxChecked()',
-        desc: '用于 type=checkbox，判断复选行是否被全部选中',
+        name: 'isCheckboxIndeterminate()',
+        disabled: true,
+        desc: '即将废弃，请使用 isAllCheckboxIndeterminate',
         version: '2.9',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'isAllCheckboxIndeterminate()',
+        desc: '用于 type=checkbox，判断列头复选框是否被半选',
+        version: '2.10.23',
         type: 'Boolean',
         enum: '',
         defVal: '',

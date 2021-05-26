@@ -424,7 +424,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 用于 type=checkbox，获取已选中的行数据
    */
-  getCheckboxRecords(): RowInfo[];
+  getCheckboxRecords(isFull?: boolean): RowInfo[];
   /**
    * 根据行的唯一主键获取行
    * @param rowid 行主键
@@ -482,13 +482,13 @@ export declare class Table extends VXETableComponent {
    */
   setCheckboxRow(rows: RowInfo | RowInfo[], checked: boolean): Promise<any>;
   /**
-   * 用于 type=checkbox，判断复选行是否被全部选中
+   * 用于 type=checkbox，判断列头复选框是否被选中
    */
   isAllCheckboxChecked(): boolean;
   /**
-   * 用于 type=checkbox，判断复选框是否半选
+   * 用于 type=checkbox，判断列头复选框是否被半选
    */
-  isCheckboxIndeterminate(): boolean;
+  isAllCheckboxIndeterminate(): boolean;
   /**
    * 用于 type=checkbox，判断复选行数据是否勾选
    * @param row 指定行
@@ -507,7 +507,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 用于 radio-config.reserve，获取已保留选中的行数据
    */
-  getRadioReserveRecord(): RowInfo[];
+  getRadioReserveRecord(isFull?: boolean): RowInfo[];
   /**
    * 用于 radio-config.reserve，手动清空用户保留选中的行数据
    */
@@ -515,11 +515,11 @@ export declare class Table extends VXETableComponent {
   /**
    * 用于 checkbox-config.reserve，获取已保留选中的行数据
    */
-  getCheckboxReserveRecords(): RowInfo[];
+  getCheckboxReserveRecords(isFull?: boolean): RowInfo[];
   /**
    * 用于 type=checkbox，获取半选状态的行数据
    */
-  getCheckboxIndeterminateRecords(): RowInfo[]
+  getCheckboxIndeterminateRecords(isFull?: boolean): RowInfo[]
   /**
    * 用于 checkbox-config.reserve，手动清空用户保留选中的行数据
    */
@@ -582,7 +582,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 用于 type=radio，获取当已选中的行数据
    */
-  getRadioRecord(): RowInfo;
+  getRadioRecord(isFull?: boolean): RowInfo;
   /**
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param column 列对象
