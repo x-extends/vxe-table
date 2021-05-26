@@ -88,6 +88,7 @@ export default {
         .custom-radio {
           font-size: 18px;
           cursor: pointer;
+          user-select: none;
         }
         `
       ]
@@ -100,5 +101,6 @@ export default {
 .custom-radio {
   font-size: 18px;
   cursor: pointer;
+  user-select: none;
 }
 </style>

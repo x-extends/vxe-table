@@ -38,7 +38,7 @@ export default {
     zIndex: [String, Number],
     isArrow: { type: Boolean, default: true },
     enterable: Boolean,
-    leaveDelay: { type: Number, default: GlobalConfig.tooltip.leaveDelay },
+    leaveDelay: { type: Number, default: () => GlobalConfig.tooltip.leaveDelay },
     leaveMethod: Function
   },
   data () {

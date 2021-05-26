@@ -281,7 +281,7 @@ export default {
             checkboxChangeEvent ({ records }) {
               const $table = this.$refs.xTable
               this.isAllChecked = $table.isAllCheckboxChecked()
-              this.isIndeterminate = $table.isCheckboxIndeterminate()
+              this.isIndeterminate = $table.isAllCheckboxIndeterminate()
               this.selectRecords = records
             },
             changeAllEvent () {
@@ -325,7 +325,7 @@ export default {
     checkboxChangeEvent ({ records }) {
       const $table = this.$refs.xTable
       this.isAllChecked = $table.isAllCheckboxChecked()
-      this.isIndeterminate = $table.isCheckboxIndeterminate()
+      this.isIndeterminate = $table.isAllCheckboxIndeterminate()
       this.selectRecords = records
     },
     changeAllEvent () {

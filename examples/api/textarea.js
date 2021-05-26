@@ -151,6 +151,15 @@ const apis = [
         enum: '',
         defVal: 'false',
         list: []
+      },
+      {
+        name: 'countMethod',
+        desc: '自定义字数计算方法',
+        version: '3.3.5',
+        type: '({ value }) => number',
+        enum: '',
+        defVal: '',
+        list: []
       }
     ]
   },

@@ -27,18 +27,18 @@
       <template #form>
         <vxe-form :data="formData" @submit="searchEvent">
           <vxe-form-item title="名称" field="name">
-            <template #default>
-              <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+            <template #default="{ data }">
+              <vxe-input v-model="data.name" placeholder="请输入名称" clearable></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="昵称" field="nickname">
-            <template #default>
-              <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+            <template #default="{ data }">
+              <vxe-input v-model="data.nickname" placeholder="请输入昵称" clearable></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
-            <template #default>
-              <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
+            <template #default="{ data }">
+              <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
                 <vxe-option value="1" label="女"></vxe-option>
                 <vxe-option value="2" label="男"></vxe-option>
               </vxe-select>
@@ -296,18 +296,18 @@ export default {
           <template #form>
             <vxe-form :data="formData" @submit="searchEvent">
               <vxe-form-item title="名称" field="name">
-                <template #default>
-                  <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
+                <template #default="{ data }">
+                  <vxe-input v-model="data.name" placeholder="请输入名称" clearable></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item title="昵称" field="nickname">
-                <template #default>
-                  <vxe-input v-model="formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+                <template #default="{ data }">
+                  <vxe-input v-model="data.nickname" placeholder="请输入昵称" clearable></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item title="性别" field="sex">
-                <template #default>
-                  <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
+                <template #default="{ data }">
+                  <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
                     <vxe-option value="1" label="女"></vxe-option>
                     <vxe-option value="2" label="男"></vxe-option>
                   </vxe-select>
@@ -557,7 +557,7 @@ export default {
             checkboxChangeEvent ({ records }) {
               const $grid = this.$refs.xGrid
               this.isAllChecked = $grid.isAllCheckboxChecked()
-              this.isIndeterminate = $grid.isCheckboxIndeterminate()
+              this.isIndeterminate = $grid.isAllCheckboxIndeterminate()
               this.selectRecords = records
             },
             changeAllEvent () {
@@ -669,7 +669,7 @@ export default {
     checkboxChangeEvent ({ records }) {
       const $grid = this.$refs.xGrid
       this.isAllChecked = $grid.isAllCheckboxChecked()
-      this.isIndeterminate = $grid.isCheckboxIndeterminate()
+      this.isIndeterminate = $grid.isAllCheckboxIndeterminate()
       this.selectRecords = records
     },
     changeAllEvent () {

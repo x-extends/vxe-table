@@ -42,7 +42,7 @@ export default {
     minWidth: { type: [Number, String], default: () => GlobalConfig.modal.minWidth },
     minHeight: { type: [Number, String], default: () => GlobalConfig.modal.minHeight },
     zIndex: Number,
-    marginSize: { type: [Number, String], default: GlobalConfig.modal.marginSize },
+    marginSize: { type: [Number, String], default: () => GlobalConfig.modal.marginSize },
     fullscreen: Boolean,
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     destroyOnClose: { type: Boolean, default: () => GlobalConfig.modal.destroyOnClose },

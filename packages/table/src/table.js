@@ -127,7 +127,7 @@ export default {
     // 是否显示表尾合计
     showFooter: Boolean,
     // 表尾合计的计算方法
-    footerMethod: { type: Function, default: GlobalConfig.table.footerMethod },
+    footerMethod: Function,
     // 给行附加 className
     rowClassName: [String, Function],
     // 给单元格附加 className

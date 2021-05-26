@@ -23,7 +23,7 @@ export interface VXETableByVueProperty {
   /**
    * 剪贴板
    */
-  clipboard?: VXETableClipboard;
+  clipboard: VXETableClipboard;
 }
 
 declare module 'vue/types/vue' {

@@ -22,6 +22,7 @@ export default {
     maxlength: [String, Number],
     rows: { type: [String, Number], default: 2 },
     showWordCount: Boolean,
+    countMethod: Function,
     autosize: [Boolean, Object],
     form: String,
     resize: { type: String, default: () => GlobalConfig.textarea.resize },
@@ -70,7 +71,7 @@ export default {
     }
   },
   render (h) {
-    const { className, defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount } = this
+    const { className, defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount, countMethod } = this
     const attrs = {
       name,
       form,
@@ -105,7 +106,7 @@ export default {
         class: ['vxe-textarea--count', {
           'is--error': this.isCountError
         }]
-      }, `${this.inputCount}${maxlength ? `/${maxlength}` : ''}`) : null
+      }, countMethod ? `${countMethod({ value: inputValue })}` : `${this.inputCount}${maxlength ? `/${maxlength}` : ''}`) : null
     ])
   },
   methods: {

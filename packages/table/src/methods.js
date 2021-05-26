@@ -997,22 +997,23 @@ const Methods = {
   /**
    * 用于多选行，获取已选中的数据
    */
-  getCheckboxRecords () {
-    const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
+  getCheckboxRecords (isFull) {
+    const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts } = this
     const { checkField: property } = checkboxOpts
+    const currTableData = isFull ? tableFullData : afterFullData
     let rowList = []
     if (property) {
       if (treeConfig) {
-        rowList = XEUtils.filterTree(tableFullData, row => XEUtils.get(row, property), treeOpts)
+        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), treeOpts)
       } else {
-        rowList = tableFullData.filter(row => XEUtils.get(row, property))
+        rowList = currTableData.filter(row => XEUtils.get(row, property))
       }
     } else {
       const { selection } = this
       if (treeConfig) {
-        rowList = XEUtils.filterTree(tableFullData, row => selection.indexOf(row) > -1, treeOpts)
+        rowList = XEUtils.filterTree(currTableData, row => selection.indexOf(row) > -1, treeOpts)
       } else {
-        rowList = tableFullData.filter(row => selection.indexOf(row) > -1)
+        rowList = currTableData.filter(row => selection.indexOf(row) > -1)
       }
     }
     return rowList
@@ -2457,24 +2458,28 @@ const Methods = {
     return this.$nextTick()
   },
   /**
-   * 判断复选框是否全选
+   * 判断列头复选框是否被选中
    */
   isAllCheckboxChecked () {
     return this.isAllSelected
   },
   /**
-   * 判断复选框是否全选
+   * 判断列头复选框是否被半选
    */
-  isCheckboxIndeterminate () {
+  isAllCheckboxIndeterminate () {
     return !this.isAllSelected && this.isIndeterminate
+  },
+  isCheckboxIndeterminate () {
+    UtilTools.warn('vxe.error.delFunc', ['isCheckboxIndeterminate', 'isAllCheckboxIndeterminate'])
+    return this.isAllCheckboxIndeterminate()
   },
   /**
    * 获取复选框半选状态的行数据
    */
-  getCheckboxIndeterminateRecords () {
-    const { treeConfig, treeIndeterminates } = this
+  getCheckboxIndeterminateRecords (isFull) {
+    const { treeConfig, treeIndeterminates, afterFullData } = this
     if (treeConfig) {
-      return treeIndeterminates.slice(0)
+      return isFull ? treeIndeterminates.slice(0) : treeIndeterminates.filter(row => afterFullData.indexOf(row))
     }
     return []
   },
@@ -2515,9 +2520,12 @@ const Methods = {
     }
     return this.selection.indexOf(row) > -1
   },
+  isIndeterminateByCheckboxRow (row) {
+    return this.treeIndeterminates.indexOf(row) > -1 && !this.isCheckedByCheckboxRow(row)
+  },
   /**
    * 多选，行选中事件
-   * value 选中true 不选false 不确定-1
+   * value 选中true 不选false 半选-1
    */
   handleSelectRow ({ row }, value) {
     const { selection, afterFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
@@ -2812,10 +2820,10 @@ const Methods = {
   /**
    * 获取单选框保留选中的行
    */
-  getRadioReserveRecord () {
-    const { fullDataRowIdData, radioReserveRow, radioOpts } = this
+  getRadioReserveRecord (isFull) {
+    const { fullDataRowIdData, radioReserveRow, radioOpts, afterFullData } = this
     if (radioOpts.reserve && radioReserveRow) {
-      if (!fullDataRowIdData[getRowid(this, radioReserveRow)]) {
+      if (isFull ? !fullDataRowIdData[getRowid(this, radioReserveRow)] : afterFullData.some(row => getRowid(this, row) === getRowid(this, radioReserveRow))) {
         return radioReserveRow
       }
     }
@@ -2834,12 +2842,12 @@ const Methods = {
   /**
    * 获取复选框保留选中的行
    */
-  getCheckboxReserveRecords () {
-    const { fullDataRowIdData, checkboxReserveRowMap, checkboxOpts } = this
+  getCheckboxReserveRecords (isFull) {
+    const { fullDataRowIdData, afterFullData, checkboxReserveRowMap, checkboxOpts } = this
     const reserveSelection = []
     if (checkboxOpts.reserve) {
       XEUtils.each(checkboxReserveRowMap, (row, rowid) => {
-        if (row && !fullDataRowIdData[rowid]) {
+        if (row && (isFull ? !fullDataRowIdData[rowid] : afterFullData.some(item => getRowid(this, item) === rowid))) {
           reserveSelection.push(row)
         }
       })
@@ -2991,8 +2999,14 @@ const Methods = {
   /**
    * 用于单选行，获取当已选中的数据
    */
-  getRadioRecord () {
-    return this.selectRow
+  getRadioRecord (isFull) {
+    const { selectRow, tableFullData, afterFullData } = this
+    if (selectRow) {
+      if ((isFull ? tableFullData : afterFullData).indexOf(selectRow)) {
+        return selectRow
+      }
+    }
+    return null
   },
   /**
    * 行 hover 事件

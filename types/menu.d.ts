@@ -36,5 +36,6 @@ export interface MenuChildOption {
 }
 
 export interface MenuLinkParams extends ColumnCellRenderParams {
+  $event: MouseEvent;
   menu: MenuFirstOption | MenuChildOption;
 }

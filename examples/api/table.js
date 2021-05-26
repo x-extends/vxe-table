@@ -2975,6 +2975,15 @@ const apis = [
         list: []
       },
       {
+        name: 'clear-merge',
+        desc: '当用户点击取消所有临时合并时会触发该事件',
+        version: '3.3.5',
+        type: '',
+        enum: '',
+        defVal: '{ mergeCells, mergeFooterItems, $event }',
+        list: []
+      },
+      {
         name: 'sort-change',
         descKey: 'app.api.table.desc.sortChange',
         version: '',
@@ -2984,12 +2993,30 @@ const apis = [
         list: []
       },
       {
+        name: 'clear-sort',
+        desc: '当用户点击清除所有排序时会触发该事件',
+        version: '3.3.5',
+        type: '',
+        enum: '',
+        defVal: '{ sortList, $event }',
+        list: []
+      },
+      {
         name: 'filter-change',
         descKey: 'app.api.table.desc.filterChange',
         version: '',
         type: '',
         enum: '',
         defVal: '{ column, property, values, datas, filterList, $event }',
+        list: []
+      },
+      {
+        name: 'clear-filter',
+        desc: '当用户点击清除所有筛选条件时会触发该事件',
+        version: '3.3.5',
+        type: '',
+        enum: '',
+        defVal: '{ filterList, $event }',
         list: []
       },
       {
@@ -3101,7 +3128,7 @@ const apis = [
         list: []
       },
       {
-        name: 'change-fnr',
+        name: 'fnr-change',
         desc: '只对 keyboard-config.isFNR 配置时有效，在查询与搜索弹框的 Tab 页被切换时会触发该事件',
         version: 'pro',
         type: '',
@@ -3143,6 +3170,15 @@ const apis = [
         type: '',
         enum: '',
         defVal: '{ status, targetAreas, $event}',
+        list: []
+      },
+      {
+        name: 'clear-cell-area-merge',
+        desc: '只对 keyboard-config.isMerge 配置时有效，用户点击单元格取消时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ mergeCells, $event}',
         list: []
       },
       {
@@ -3642,8 +3678,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getRadioRecord()',
-        desc: '用于 type=radio，获取当已选中的行数据',
+        name: 'getRadioRecord(isFull)',
+        desc: '用于 type=radio，获取当前已选中的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）',
         version: '',
         type: 'Row',
         enum: '',
@@ -3651,8 +3687,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getRadioReserveRecord()',
-        desc: '用于 radio-config.reserve，获取已保留选中的行数据（不包含当前列表）',
+        name: 'getRadioReserveRecord(isFull)',
+        desc: '用于 radio-config.reserve，获取已保留选中的行数据（不包含当前列表，如果 isFull=true 则不包含全部列表）',
         version: '',
         type: 'Row',
         enum: '',
@@ -3660,8 +3696,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getCheckboxRecords()',
-        desc: '用于 type=checkbox，获取已选中的行数据',
+        name: 'getCheckboxRecords(isFull)',
+        desc: '用于 type=checkbox，获取当前已选中的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）',
         version: '',
         type: 'Array<Row>',
         enum: '',
@@ -3669,8 +3705,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getCheckboxReserveRecords()',
-        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据（不包含当前列表）',
+        name: 'getCheckboxReserveRecords(isFull)',
+        desc: '用于 checkbox-config.reserve，获取已保留选中的行数据（不包含当前列表，如果 isFull=true 则不包含全部列表）',
         version: '',
         type: 'Array<Row>',
         enum: '',
@@ -3678,8 +3714,8 @@ const apis = [
         list: []
       },
       {
-        name: 'getCheckboxIndeterminateRecords()',
-        desc: '用于 tree-config 和 type=checkbox，获取半选状态的行数据',
+        name: 'getCheckboxIndeterminateRecords(isFull)',
+        desc: '用于 tree-config 和 type=checkbox，获取半选状态的行数据（当前列表，如果 isFull=true 则获取全表已选中的数据）',
         version: '',
         type: 'Array<Row>',
         enum: '',
@@ -3787,7 +3823,7 @@ const apis = [
       },
       {
         name: 'isAllCheckboxChecked()',
-        desc: '用于 type=checkbox，判断复选行是否被全部选中',
+        desc: '用于 type=checkbox，判断列头复选框是否被选中',
         version: '',
         type: 'Boolean',
         enum: '',
@@ -3796,8 +3832,18 @@ const apis = [
       },
       {
         name: 'isCheckboxIndeterminate()',
-        desc: '用于 type=checkbox，判断复选行是否半选',
+        disabled: true,
+        desc: '即将废弃，请使用 isAllCheckboxIndeterminate',
         version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: '',
+        list: []
+      },
+      {
+        name: 'isAllCheckboxIndeterminate()',
+        desc: '用于 type=checkbox，判断列头复选框是否被半选',
+        version: '3.3.5',
         type: 'Boolean',
         enum: '',
         defVal: '',
@@ -3807,6 +3853,15 @@ const apis = [
         name: 'isCheckedByCheckboxRow(row)',
         desc: '用于 type=checkbox，判断复选行数据是否勾选',
         version: '',
+        type: 'Boolean',
+        enum: '',
+        defVal: 'row: Row',
+        list: []
+      },
+      {
+        name: 'isIndeterminateByCheckboxRow(row)',
+        desc: '用于 type=checkbox，判断复选行数据是否半选',
+        version: '3.3.5',
         type: 'Boolean',
         enum: '',
         defVal: 'row: Row',
@@ -4317,12 +4372,12 @@ const apis = [
         list: []
       },
       {
-        name: 'updateStatus(scope)',
+        name: 'updateStatus(slotParams)',
         desc: '更新单元格状态（当使用自定义渲染时可能会用到）',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'scope: { row, column }',
+        defVal: 'slotParams: { row, column }',
         list: []
       },
       {

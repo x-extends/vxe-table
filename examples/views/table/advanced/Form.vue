@@ -4,13 +4,13 @@
 
     <vxe-form :data="formData" @submit="submitEvent">
       <vxe-form-item title="app.body.label.name" field="name" :item-render="{}">
-        <template #default>
-          <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+        <template #default="{ data }">
+          <vxe-input v-model="data.name" placeholder="请输入名称"></vxe-input>
         </template>
       </vxe-form-item>
       <vxe-form-item title="性别" field="sex" :item-render="{}" :title-prefix="{ message: '帮助信息！！！' }">
-        <template #default>
-          <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
+        <template #default="{ data }">
+          <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
             <vxe-option value="1" label="女"></vxe-option>
             <vxe-option value="2" label="男"></vxe-option>
           </vxe-select>
@@ -69,13 +69,13 @@ export default {
         `
         <vxe-form :data="formData" @submit="submitEvent">
           <vxe-form-item title="app.body.label.name" field="name" :item-render="{}">
-            <template #default>
-              <vxe-input v-model="formData.name" placeholder="请输入名称"></vxe-input>
+            <template #default="{ data }">
+              <vxe-input v-model="data.name" placeholder="请输入名称"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex" :item-render="{}" :title-prefix="{ message: '帮助信息！！！' }">
-            <template #default>
-              <vxe-select v-model="formData.sex" placeholder="请选择性别" clearable>
+            <template #default="{ data }">
+              <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
                 <vxe-option value="1" label="女"></vxe-option>
                 <vxe-option value="2" label="男"></vxe-option>
               </vxe-select>

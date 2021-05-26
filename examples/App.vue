@@ -129,6 +129,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 
@@ -203,61 +204,71 @@ export default {
               label: 'app.aside.nav.icon',
               locat: {
                 name: 'ModuleIcon'
-              }
+              },
+              keywords: ['icon']
             },
             {
               label: 'app.aside.nav.button',
               locat: {
                 name: 'ModuleButton'
-              }
+              },
+              keywords: ['button']
             },
             {
               label: 'app.aside.nav.radio',
               locat: {
                 name: 'ModuleRadio'
-              }
+              },
+              keywords: ['radio']
             },
             {
               label: 'app.aside.nav.checkbox',
               locat: {
                 name: 'ModuleCheckbox'
-              }
+              },
+              keywords: ['checkbox']
             },
             {
               label: 'app.aside.nav.switch',
               locat: {
                 name: 'ModuleSwitch'
-              }
+              },
+              keywords: ['switch']
             },
             {
               label: 'app.aside.nav.input',
               locat: {
                 name: 'ModuleInput'
-              }
+              },
+              keywords: ['input']
             },
             {
               label: 'app.aside.nav.textarea',
               locat: {
                 name: 'ModuleTextarea'
-              }
+              },
+              keywords: ['textarea']
             },
             {
               label: 'app.aside.nav.select',
               locat: {
                 name: 'ModuleSelect'
-              }
+              },
+              keywords: ['select']
             },
             {
               label: 'app.aside.nav.pulldown',
               locat: {
                 name: 'ModulePulldown'
-              }
+              },
+              keywords: ['pulldown']
             },
             {
               label: 'app.aside.nav.pager',
               locat: {
                 name: 'ModulePager'
-              }
+              },
+              keywords: ['pager']
             },
             // {
             //   label: 'app.aside.nav.tooltip',
@@ -269,37 +280,43 @@ export default {
               label: 'app.aside.nav.toolbar',
               locat: {
                 name: 'ModuleToolbar'
-              }
+              },
+              keywords: ['toolbar']
             },
             {
               label: 'app.aside.nav.form',
               locat: {
                 name: 'ModuleForm'
-              }
+              },
+              keywords: ['form', 'form-item', 'form-gather']
             },
             {
               label: 'app.aside.nav.list',
               locat: {
                 name: 'ModuleList'
-              }
+              },
+              keywords: ['list']
             },
             {
               label: 'app.aside.nav.modal',
               locat: {
                 name: 'ModuleModal'
-              }
+              },
+              keywords: ['modal', '$XModal']
             },
             {
               label: 'app.aside.nav.file',
               locat: {
                 name: 'ModuleFile'
-              }
+              },
+              keywords: ['file', '$XReadFile']
             },
             {
               label: 'app.aside.nav.print',
               locat: {
                 name: 'ModulePrint'
-              }
+              },
+              keywords: ['print', '$XPrint']
             }
           ]
         },
@@ -313,221 +330,254 @@ export default {
               demoUrl: 'https://jsrun.pro/VrXKp/edit',
               locat: {
                 name: 'TableBasic'
-              }
+              },
+              keywords: ['field', 'title', 'width', 'type', 'highlight-hover-row']
             },
             {
               label: 'app.aside.nav.size',
               demoUrl: 'https://jsrun.pro/PmXKp/edit',
               locat: {
                 name: 'TableSize'
-              }
+              },
+              keywords: ['size']
             },
             {
               label: 'app.aside.nav.seq',
               demoUrl: 'https://jsrun.pro/xrXKp/edit',
               locat: {
                 name: 'TableSeq'
-              }
+              },
+              keywords: ['seq']
             },
             {
               label: 'app.aside.nav.width',
               locat: {
                 name: 'TableWidth'
-              }
+              },
+              keywords: ['width', 'min-width']
             },
             {
               label: 'app.aside.nav.autoBreak',
               locat: {
                 name: 'TableAutoBreak'
-              }
+              },
+              keywords: ['scroll-x', 'scroll-y']
             },
             {
               label: 'app.aside.nav.tooltips',
               locat: {
                 name: 'TableTooltip'
-              }
+              },
+              keywords: ['ellipsis', 'tooltip']
             },
             {
               label: 'app.aside.nav.ellipsis',
               locat: {
                 name: 'TableOverflow'
-              }
+              },
+              keywords: ['ellipsis', 'tooltip']
             },
             {
               label: 'app.aside.nav.stripe',
               demoUrl: 'https://jsrun.pro/zrXKp/edit',
               locat: {
                 name: 'TableStripe'
-              }
+              },
+              keywords: ['stripe']
             },
             {
               label: 'app.aside.nav.border',
               demoUrl: 'https://jsrun.pro/QrXKp/edit',
               locat: {
                 name: 'TableBorder'
-              }
+              },
+              keywords: ['border']
             },
             {
               label: 'app.aside.nav.round',
               demoUrl: 'https://jsrun.pro/Ua2Kp/edit',
               locat: {
                 name: 'TableRound'
-              }
+              },
+              keywords: ['round']
             },
             {
               label: 'app.aside.nav.style',
               demoUrl: 'https://jsrun.pro/EmXKp/edit',
               locat: {
                 name: 'TableStyle'
-              }
+              },
+              keywords: ['header-cell-class-name', 'row-class-name', 'cell-class-name']
             },
             {
               label: 'app.aside.nav.dynamicStyle',
               demoUrl: 'https://jsrun.pro/mVWKp/edit',
               locat: {
                 name: 'TableDynamicStyle'
-              }
+              },
+              keywords: ['header-cell-style', 'row-style', 'cell-style']
             },
             {
               label: 'app.aside.nav.scrollStyle',
               locat: {
                 name: 'TableScrollStyle'
-              }
+              },
+              keywords: ['scroll']
             },
             {
               label: 'app.aside.nav.hideHead',
               demoUrl: 'https://jsrun.pro/7mXKp/edit',
               locat: {
                 name: 'TableHeader'
-              }
+              },
+              keywords: ['show-header']
             },
             {
               label: 'app.aside.nav.resizable',
               demoUrl: 'https://jsrun.pro/5AXKp/edit',
               locat: {
                 name: 'TableResizable'
-              }
+              },
+              keywords: ['resizable']
             },
             {
               label: 'app.aside.nav.fluidHeight',
               demoUrl: 'https://jsrun.pro/smXKp/edit',
               locat: {
                 name: 'TableMaxHeight'
-              }
+              },
+              keywords: ['max-height']
             },
             {
               label: 'app.aside.nav.resize',
               locat: {
                 name: 'TableAutoHeight'
-              }
+              },
+              keywords: ['auto-resize', 'sync-resize', 'height', 'max-height']
             },
             {
               label: 'app.aside.nav.height',
               demoUrl: 'https://jsrun.pro/JrXKp/edit',
               locat: {
                 name: 'TableHeight'
-              }
+              },
+              keywords: ['auto-resize', 'sync-resize', 'height']
             },
             {
               label: 'app.aside.nav.fixed',
               demoUrl: 'https://jsrun.pro/TrXKp/edit',
               locat: {
                 name: 'TableFixed'
-              }
+              },
+              keywords: ['fixed']
             },
             {
               label: 'app.aside.nav.fullFixed',
               demoUrl: 'https://jsrun.pro/8rXKp/edit',
               locat: {
                 name: 'TableFixedFull'
-              }
+              },
+              keywords: ['fixed']
             },
             {
               label: 'app.aside.nav.group',
               demoUrl: 'https://jsrun.pro/7rXKp/edit',
               locat: {
                 name: 'TableGroup'
-              }
+              },
+              keywords: ['colgroup']
             },
             {
               label: 'app.aside.nav.headerHighlight',
               locat: {
                 name: 'TableHeaderHighlight'
-              }
+              },
+              keywords: ['highlight-hover-column', 'highlight-hover-column']
             },
             {
               label: 'app.aside.nav.current',
               locat: {
                 name: 'TableCurrent'
-              }
+              },
+              keywords: ['highlight-hover-row', 'highlight-hover-row']
             },
             {
               label: 'app.aside.nav.radio',
               demoUrl: 'https://jsrun.pro/9rXKp/edit',
               locat: {
                 name: 'TableRadio'
-              }
+              },
+              keywords: ['radio']
             },
             {
               label: 'app.aside.nav.checkbox',
               demoUrl: 'https://jsrun.pro/erXKp/edit',
               locat: {
                 name: 'TableSelection'
-              }
+              },
+              keywords: ['checkbox']
             },
             {
               label: 'app.aside.nav.sort',
               demoUrl: 'https://jsrun.pro/crXKp/edit',
               locat: {
                 name: 'TableSort'
-              }
+              },
+              keywords: ['sortable']
             },
             {
               label: 'app.aside.nav.filter',
               demoUrl: 'https://jsrun.pro/drXKp/edit',
               locat: {
                 name: 'TableFilter'
-              }
+              },
+              keywords: ['filters']
             },
             {
               label: 'app.aside.nav.empty',
               locat: {
                 name: 'TableEmpty'
-              }
+              },
+              keywords: ['empty-text']
             },
             {
               label: 'app.aside.nav.loading',
               demoUrl: 'https://jsrun.pro/GjXKp/edit',
               locat: {
                 name: 'TableLoading'
-              }
+              },
+              keywords: ['loading']
             },
             {
               label: 'app.aside.nav.format',
               demoUrl: 'https://jsrun.pro/FrXKp/edit',
               locat: {
                 name: 'TableFormat'
-              }
+              },
+              keywords: ['formatter']
             },
             {
               label: 'app.aside.nav.html',
               demoUrl: 'https://jsrun.pro/ItWKp/edit',
               locat: {
                 name: 'TableHTML'
-              }
+              },
+              keywords: ['html']
             },
             {
               label: 'app.aside.nav.data',
               demoUrl: 'https://jsrun.pro/FjWKp/edit',
               locat: {
                 name: 'TableData'
-              }
+              },
+              keywords: ['data']
             },
             {
               label: 'app.aside.nav.full',
               locat: {
                 name: 'TableFull'
-              }
+              },
+              keywords: ['highlight', 'range']
             }
           ]
         },
@@ -655,7 +705,8 @@ export default {
               demoUrl: 'https://jsrun.pro/cmXKp/edit',
               locat: {
                 name: 'TableExport'
-              }
+              },
+              keywords: ['html', 'csv', 'txt', 'xml']
             },
             {
               label: 'app.aside.nav.print',
@@ -1061,26 +1112,30 @@ export default {
               // demoUrl: 'https://jsrun.pro/vcWKp/edit',
               locat: {
                 name: 'TableEditInsert'
-              }
+              },
+              keywords: ['insertAt']
             },
             {
               label: 'app.aside.nav.delete',
               // demoUrl: 'https://jsrun.pro/6cWKp/edit',
               locat: {
                 name: 'TableEditRemove'
-              }
+              },
+              keywords: ['remove']
             },
             {
               label: 'app.aside.nav.revert',
               locat: {
                 name: 'TableEditRevert'
-              }
+              },
+              keywords: ['revertData']
             },
             {
               label: 'app.aside.nav.status',
               locat: {
                 name: 'TableEditStatus'
-              }
+              },
+              keywords: ['updateStatus', 'showStatus', 'showUpdateStatus', 'showInsertStatus']
             },
             {
               label: 'app.aside.nav.cellDisable',
@@ -1099,14 +1154,16 @@ export default {
               demoUrl: 'https://jsrun.pro/IcWKp/edit',
               locat: {
                 name: 'TableEditCellValid'
-              }
+              },
+              keywords: ['valid-config', 'validate', 'fullValidate']
             },
             {
               label: 'app.aside.nav.rowValid',
               demoUrl: 'https://jsrun.pro/wcWKp/edit',
               locat: {
                 name: 'TableEditRowValid'
-              }
+              },
+              keywords: ['valid-config', 'validate', 'fullValidate']
             },
             // {
             //   label: 'app.aside.nav.forceCellValid',
@@ -1218,7 +1275,8 @@ export default {
               label: 'app.aside.nav.template',
               locat: {
                 name: 'TableEditTemplate'
-              }
+              },
+              keywords: ['slots', 'updateStatus', 'template', '插槽']
             // },
             // {
             //   label: 'app.aside.nav.full',
@@ -1358,7 +1416,8 @@ export default {
               // demoUrl: 'https://jsrun.pro/m6WKp/edit',
               locat: {
                 name: 'GridMenu'
-              }
+              },
+              keywords: ['menu-config', 'menu-click', 'cell-menu']
             },
             // {
             //   label: 'app.aside.nav.span',
@@ -1401,14 +1460,16 @@ export default {
               label: 'app.aside.nav.fullQuery',
               locat: {
                 name: 'GridFullQuery'
-              }
+              },
+              keywords: ['queryAll', 'modes']
             },
             {
               label: 'app.aside.nav.full',
               // demoUrl: 'https://jsrun.pro/r6WKp/edit',
               locat: {
                 name: 'GridFullEdit'
-              }
+              },
+              keywords: ['importMethod', 'exportMethod', 'modes']
             // },
             // {
             //   label: 'app.aside.nav.configProxy',
@@ -1804,26 +1865,30 @@ export default {
               demoUrl: 'https://jsrun.pro/PIWKp/edit',
               locat: {
                 name: 'TablePluginExportXLSX'
-              }
+              },
+              keywords: ['xlsx']
             },
             {
               label: 'app.aside.nav.exportPDFPlugin',
               demoUrl: 'https://jsrun.pro/I8WKp/edit',
               locat: {
                 name: 'TablePluginExportPDF'
-              }
+              },
+              keywords: ['pdf']
             },
             {
               label: 'app.aside.nav.rendererPlugin',
               locat: {
                 name: 'TablePluginRenderer'
-              }
+              },
+              keywords: ['renderer']
             },
             {
               label: 'app.aside.nav.menusPlugin',
               locat: {
                 name: 'TablePluginMenus'
-              }
+              },
+              keywords: ['menu']
             },
             {
               label: 'app.aside.nav.treeRowPlugin',
@@ -1848,7 +1913,8 @@ export default {
               label: 'app.aside.nav.api',
               locat: {
                 name: 'FormatsAPI'
-              }
+              },
+              keywords: ['formats']
             }
           ]
         },
@@ -1861,7 +1927,8 @@ export default {
               label: 'app.aside.nav.api',
               locat: {
                 name: 'CommandsAPI'
-              }
+              },
+              keywords: ['commands']
             }
           ]
         },
@@ -1874,7 +1941,8 @@ export default {
               label: 'app.aside.nav.api',
               locat: {
                 name: 'MenusAPI'
-              }
+              },
+              keywords: ['menus']
             }
           ]
         },
@@ -1942,7 +2010,8 @@ export default {
               label: 'app.aside.nav.api',
               locat: {
                 name: 'InterceptorAPI'
-              }
+              },
+              keywords: ['interceptor']
             }
           ]
         },
@@ -2307,6 +2376,9 @@ export default {
     this.init()
   },
   methods: {
+    ...mapMutations([
+      'setSupportQQ'
+    ]),
     init () {
       this.getVersion()
       this.loadList()
@@ -2332,10 +2404,11 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ time, tags, versions }) => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ support, time, tags, versions }) => {
         this.showPlugin = true
         const stableVersionList = []
         const betaVersionList = []
+        this.setSupportQQ(support)
         if (versions) {
           versions.forEach(version => {
             if (new RegExp(`^${this.version}.\\d{1,3}.\\d{1,3}$`).test(version)) {
@@ -2378,7 +2451,7 @@ export default {
       const filterName = XEUtils.toValueString(this.filterName).trim().toLowerCase()
       if (filterName) {
         const filterRE = new RegExp(filterName, 'gi')
-        const rest = XEUtils.searchTree(this.tableData, item => item.label.toLowerCase().indexOf(filterName) > -1)
+        const rest = XEUtils.searchTree(this.tableData, item => item.label.toLowerCase().indexOf(filterName) > -1 || (item.keywords && item.keywords.some((key) => key.toLowerCase().indexOf(filterName) > -1)))
         XEUtils.eachTree(rest, item => {
           item.label = item.label.replace(filterRE, match => `<span class="keyword-lighten">${match}</span>`)
         })

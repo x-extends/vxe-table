@@ -1235,6 +1235,12 @@ export default {
             opts.data = selectRecords
           }
         } else if (mode === 'all') {
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (!$xegrid) {
+              UtilTools.warn('vxe.error.errProp', ['all', 'mode=current,selected'])
+            }
+          }
+
           if ($xegrid && !opts.remote) {
             const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
             const ajaxMethods = ajax.queryAll
