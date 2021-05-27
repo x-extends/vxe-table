@@ -18,7 +18,7 @@ export default defineComponent({
     zIndex: [String, Number] as PropType<VxeTooltipPropTypes.ZIndex>,
     isArrow: { type: Boolean as PropType<VxeTooltipPropTypes.IsArrow>, default: true },
     enterable: Boolean as PropType<VxeTooltipPropTypes.Enterable>,
-    leaveDelay: { type: Number as PropType<VxeTooltipPropTypes.LeaveDelay>, default: GlobalConfig.tooltip.leaveDelay },
+    leaveDelay: { type: Number as PropType<VxeTooltipPropTypes.LeaveDelay>, default: () => GlobalConfig.tooltip.leaveDelay },
     leaveMethod: Function as PropType<VxeTooltipPropTypes.LeaveMethod>
   },
   emits: [

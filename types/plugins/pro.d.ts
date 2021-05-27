@@ -69,6 +69,10 @@ export interface VxeTableProPrivateMethods {
   handlePasteCellAreaEvent(evnt: ClipboardEvent): void;
   handleCutCellAreaEvent(evnt: ClipboardEvent): void;
   triggerCellExtendMousedownEvent(evnt: MouseEvent, params: any): void;
+  triggerCopyCellAreaEvent(evnt: MouseEvent): void;
+  triggerCutCellAreaEvent(evnt: MouseEvent): void;
+  triggerPasteCellAreaEvent(evnt: MouseEvent): void;
+  triggerFNROpenEvent(evnt: MouseEvent, tab: 'find' | 'replace'): void;
 }
 export interface VxeProPluginPrivateMethods extends VxeTableProPrivateMethods {}
 
@@ -175,8 +179,8 @@ export namespace VxeTableProDefines {
   }
   export interface OpenFnrEventParams extends EventParams, OpenFnrParams { }
 
-  export interface ChangeFnrParams extends OpenFnrParams {}
-  export interface ChangeFnrEventParams extends EventParams, ChangeFnrParams { }
+  export interface FnrChangeParams extends OpenFnrParams {}
+  export interface FnrChangeEventParams extends EventParams, FnrChangeParams { }
 
   export interface CellAreaCopyParams {
     status: boolean;
@@ -187,12 +191,15 @@ export namespace VxeTableProDefines {
 }
 
 export type VxeTableProEmits = [
+  'change-fnr', // 废弃
+
   'open-fnr',
-  'change-fnr',
+  'fnr-change',
   'cell-area-copy',
   'cell-area-cut',
   'cell-area-paste',
   'cell-area-merge',
+  'clear-cell-area-merge',
   'header-cell-area-selection',
   'cell-area-selection-start',
   'cell-area-selection-end',
@@ -203,17 +210,17 @@ export type VxeTableProEmits = [
 declare module '../table' {
   interface VxeTableEventProps {
     onOpenFnr?: VxeTableEvents.OpenFnr;
-    onChangeFnr?: VxeTableEvents.ChangeFnr;
+    onFnrChange?: VxeTableEvents.FnrChange;
     onCellAreaCopy?: VxeTableEvents.CellAreaCopy;
   }
   interface VxeTableListeners {
     openFnr?: VxeTableEvents.OpenFnr;
-    changeFnr?: VxeTableEvents.ChangeFnr;
+    fnrChange?: VxeTableEvents.FnrChange;
     cellAreaCopy?: VxeTableEvents.CellAreaCopy;
   }
   namespace VxeTableEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void;
-    export type ChangeFnr = (params: VxeTableProDefines.ChangeFnrParams) => void;
+    export type FnrChange = (params: VxeTableProDefines.FnrChangeParams) => void;
     export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void;
   }
 }
@@ -221,17 +228,17 @@ declare module '../table' {
 declare module '../grid' {
   interface VxeGridEventProps {
     onOpenFnr?: VxeGridEvents.OpenFnr;
-    onChangeFnr?: VxeGridEvents.ChangeFnr;
+    onFnrChange?: VxeGridEvents.FnrChange;
     onCellAreaCopy?: VxeGridEvents.CellAreaCopy;
   }
   interface VxeGridListeners {
     openFnr?: VxeGridEvents.OpenFnr;
-    changeFnr?: VxeGridEvents.ChangeFnr;
+    changeFnr?: VxeGridEvents.FnrChange;
     cellAreaCopy?: VxeGridEvents.CellAreaCopy;
   }
   namespace VxeGridEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void;
-    export type ChangeFnr = (params: VxeTableProDefines.ChangeFnrParams) => void;
+    export type FnrChange = (params: VxeTableProDefines.FnrChangeParams) => void;
     export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void;
   }
 }

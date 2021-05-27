@@ -10,6 +10,7 @@ export namespace VxeGlobalMenusHandles {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
   }
   export interface MenusCallbackParams extends MenusParams, VxeGlobalRendererHandles.RenderCellParams {
+    $event: MouseEvent;
     menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption;
   }
 }

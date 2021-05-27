@@ -7,7 +7,7 @@
     </p>
     <pre>
       <pre-code class="shell">
-        npm install xe-utils vxe-table@next
+        npm install xe-utils@3 vxe-table@next
       </pre-code>
       <pre-code class="typescript">{{ demoCodes[0] }}</pre-code>
     </pre>

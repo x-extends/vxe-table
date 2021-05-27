@@ -24,8 +24,11 @@ export default [
   'footer-cell-click',
   'footer-cell-dblclick',
   'footer-cell-menu',
+  'clear-merge',
   'sort-change',
+  'clear-sort',
   'filter-change',
+  'clear-filter',
   'resizable-change',
   'toggle-row-expand',
   'toggle-tree-expand',
@@ -37,12 +40,15 @@ export default [
   'scroll',
   'custom',
 
+  'change-fnr', // 废弃
+
   'open-fnr',
-  'change-fnr',
+  'fnr-change',
   'cell-area-copy',
   'cell-area-cut',
   'cell-area-paste',
   'cell-area-merge',
+  'clear-cell-area-merge',
   'header-cell-area-selection',
   'cell-area-selection-start',
   'cell-area-selection-end',

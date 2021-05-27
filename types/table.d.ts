@@ -259,7 +259,7 @@ export interface TablePublicMethods {
   /**
    * 用于 type=checkbox，获取已选中的行数据
    */
-  getCheckboxRecords(): any[];
+  getCheckboxRecords(isFull?: boolean): any[];
   /**
    * 根据行的唯一主键获取行
    * @param rowid 行主键
@@ -328,18 +328,23 @@ export interface TablePublicMethods {
    */
   setCheckboxRow(rows: any | any[], checked: boolean): Promise<any>;
   /**
-   * 用于 type=checkbox，判断复选行是否被全部选中
+   * 用于 type=checkbox，判断列头复选框是否被选中
    */
   isAllCheckboxChecked(): boolean;
   /**
-   * 用于 type=checkbox，判断复选框是否半选
+   * 用于 type=checkbox，判断列头复选框是否被半选
    */
-  isCheckboxIndeterminate(): boolean;
+  isAllCheckboxIndeterminate(): boolean;
   /**
    * 用于 type=checkbox，判断复选行数据是否勾选
    * @param row 指定行
    */
   isCheckedByCheckboxRow(row: any): boolean;
+  /**
+   * 用于 type=checkbox，判断复选行数据是否半选
+   * @param row 指定行
+   */
+  isIndeterminateByCheckboxRow(row: any): boolean;
   /**
    * 用于 type=checkbox，切换某一行的选中状态
    * @param row 指定行
@@ -353,7 +358,7 @@ export interface TablePublicMethods {
   /**
    * 用于 radio-config.reserve，获取已保留选中的行数据
    */
-  getRadioReserveRecord(): any[];
+  getRadioReserveRecord(isFull?: boolean): any[];
   /**
    * 用于 radio-config.reserve，手动清空用户保留选中的行数据
    */
@@ -361,11 +366,11 @@ export interface TablePublicMethods {
   /**
    * 用于 checkbox-config.reserve，获取已保留选中的行数据
    */
-  getCheckboxReserveRecords(): any[];
+  getCheckboxReserveRecords(isFull?: boolean): any[];
   /**
    * 用于 type=checkbox，获取半选状态的行数据
    */
-  getCheckboxIndeterminateRecords(): any[]
+  getCheckboxIndeterminateRecords(isFull?: boolean): any[]
   /**
    * 用于 checkbox-config.reserve，手动清空用户保留选中的行数据
    */
@@ -428,7 +433,7 @@ export interface TablePublicMethods {
   /**
    * 用于 type=radio，获取当已选中的行数据
    */
-  getRadioRecord(): any;
+  getRadioRecord(isFull?: boolean): any;
   /**
    * 用于 highlight-current-column，设置某列行为高亮状态
    * @param columnOrField 列对象或字段名
@@ -1913,8 +1918,11 @@ export type VxeTableEmits = [
   'footer-cell-click',
   'footer-cell-dblclick',
   'footer-cell-menu',
+  'clear-merge',
   'sort-change',
+  'clear-sort',
   'filter-change',
+  'clear-filter',
   'resizable-change',
   'toggle-row-expand',
   'toggle-tree-expand',

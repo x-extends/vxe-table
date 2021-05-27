@@ -48,7 +48,6 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
-import { VXETable } from '../../../../packages/all'
 import { VxeGridProps, VxeGridInstance } from '../../../../types/index'
 import XLSX from 'xlsx'
 
@@ -152,24 +151,10 @@ export default defineComponent({
       ]
     } as VxeGridProps)
 
-    const toBuffer = (wbout: any) => {
-      const buf = new ArrayBuffer(wbout.length)
-      const view = new Uint8Array(buf)
-      for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-      return buf
-    }
-
     const exportEvent = () => {
       const $grid = xGrid2.value
-      // 转换数据
-      const table = $grid.$el.querySelector('.body--wrapper>.vxe-table--body') as HTMLElement
-      const book = XLSX.utils.book_new()
-      const sheet = XLSX.utils.table_to_sheet(table)
-      XLSX.utils.book_append_sheet(book, sheet)
-      const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-      const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
-      // 保存导出
-      VXETable.saveFile({ filename: '数据导出', type: 'xlsx', content: blob })
+      const workBook = XLSX.utils.table_to_book($grid.$el.querySelector('.body--wrapper>.vxe-table--body') as HTMLElement)
+      XLSX.writeFile(workBook, '数据导出.xlsx')
     }
 
     return {
@@ -279,7 +264,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeGridProps, VxeGridInstance } from 'vxe-table'
+        import { VxeGridProps, VxeGridInstance } from 'vxe-table'
         import XLSX from 'xlsx'
 
         export default defineComponent({
@@ -322,24 +307,10 @@ export default defineComponent({
               ]
             } as VxeGridProps)
 
-            const toBuffer = (wbout: any) => {
-              const buf = new ArrayBuffer(wbout.length)
-              const view = new Uint8Array(buf)
-              for (let index = 0; index !== wbout.length; ++index) view[index] = wbout.charCodeAt(index) & 0xFF
-              return buf
-            }
-
             const exportEvent = () => {
               const $grid = xGrid2.value
-              // 转换数据
-              const table = $grid.$el.querySelector('.body--wrapper>.vxe-table--body') as HTMLElement
-              const book = XLSX.utils.book_new()
-              const sheet = XLSX.utils.table_to_sheet(table)
-              XLSX.utils.book_append_sheet(book, sheet)
-              const wbout = XLSX.write(book, { bookType: 'xlsx', bookSST: false, type: 'binary' })
-              const blob = new Blob([toBuffer(wbout)], { type: 'application/octet-stream' })
-              // 保存导出
-              VXETable.saveFile({ filename: '数据导出', type: 'xlsx', content: blob })
+              const workBook = XLSX.utils.table_to_book($grid.$el.querySelector('.body--wrapper>.vxe-table--body') as HTMLElement)
+              XLSX.writeFile(workBook, '数据导出.xlsx')
             }
 
             return {

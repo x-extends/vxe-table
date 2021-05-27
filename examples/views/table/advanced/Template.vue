@@ -221,7 +221,7 @@ export default defineComponent({
     const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
       const $table = xTable.value
       demo1.isAllChecked = $table.isAllCheckboxChecked()
-      demo1.isIndeterminate = $table.isCheckboxIndeterminate()
+      demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
       demo1.selectRecords = records
     }
 
@@ -465,7 +465,7 @@ export default defineComponent({
             const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
               const $table = xTable.value
               demo1.isAllChecked = $table.isAllCheckboxChecked()
-              demo1.isIndeterminate = $table.isCheckboxIndeterminate()
+              demo1.isIndeterminate = $table.isAllCheckboxIndeterminate()
               demo1.selectRecords = records
             }
 

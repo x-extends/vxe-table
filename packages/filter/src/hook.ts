@@ -129,6 +129,45 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }
         }
+      },
+      /**
+       * 确认筛选
+       * 当筛选面板中的确定按钮被按下时触发
+       * @param {Event} evnt 事件
+       */
+      confirmFilterEvent (evnt: Event) {
+        const { filterStore, scrollXLoad, scrollYLoad } = reactData
+        const filterOpts = computeFilterOpts.value
+        const { column } = filterStore
+        const { property } = column
+        const values: any[] = []
+        const datas: any[] = []
+        column.filters.forEach((item: any) => {
+          if (item.checked) {
+            values.push(item.value)
+            datas.push(item.data)
+          }
+        })
+        filterStore.visible = false
+        const filterList = $xetable.getCheckedFilters()
+        // 如果是服务端筛选，则跳过本地筛选处理
+        if (!filterOpts.remote) {
+          $xetable.handleTableData(true)
+          $xetable.checkSelectionStatus()
+        }
+        $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
+        $xetable.updateFooter()
+        if (scrollXLoad || scrollYLoad) {
+          $xetable.clearScroll()
+          if (scrollYLoad) {
+            $xetable.updateScrollYSpace()
+          }
+        }
+        $xetable.closeFilter()
+        nextTick(() => {
+          $xetable.recalculate()
+          $xetable.updateCellAreas()
+        })
       }
     }
 

@@ -4,13 +4,13 @@
 
     <vxe-form :data="demo1.formData" @submit="findList">
       <vxe-form-item title="app.body.label.name" field="name" :item-render="{}">
-        <template #default>
-          <vxe-input v-model="demo1.formData.name" placeholder="请输入名称"></vxe-input>
+        <template #default="{ data }">
+          <vxe-input v-model="data.name" placeholder="请输入名称"></vxe-input>
         </template>
       </vxe-form-item>
       <vxe-form-item title="性别" field="sex" :item-render="{}">
-        <template #default>
-          <vxe-select v-model="demo1.formData.sex" placeholder="请选择性别">
+        <template #default="{ data }">
+          <vxe-select v-model="data.sex" placeholder="请选择性别">
             <vxe-option v-for="(item, index) in demo1.sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
           </vxe-select>
         </template>
@@ -91,13 +91,13 @@ export default defineComponent({
         `
         <vxe-form :data="demo1.formData" @submit="findList">
           <vxe-form-item title="app.body.label.name" field="name" :item-render="{}">
-            <template #default>
-              <vxe-input v-model="demo1.formData.name" placeholder="请输入名称"></vxe-input>
+            <template #default="{ data }">
+              <vxe-input v-model="data.name" placeholder="请输入名称"></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex" :item-render="{}">
-            <template #default>
-              <vxe-select v-model="demo1.formData.sex" placeholder="请选择性别">
+            <template #default="{ data }">
+              <vxe-select v-model="data.sex" placeholder="请选择性别">
                 <vxe-option v-for="(item, index) in demo1.sexList" :key="index" :value="item.value" :label="item.label"></vxe-option>
               </vxe-select>
             </template>

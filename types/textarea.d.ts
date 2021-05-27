@@ -64,6 +64,10 @@ export type VxeTextareaProps = {
    */
   showWordCount?: VxeTextareaPropTypes.ShowWordCount;
   /**
+   * 自定义字数统计方法
+   */
+  countMethod?: VxeTextareaPropTypes.CountMethod;
+  /**
    * 自适应文本高度
    */
   autosize?: VxeTextareaPropTypes.Autosize;
@@ -89,6 +93,9 @@ export namespace VxeTextareaPropTypes {
   export type Maxlength = string | number;
   export type Rows = string | number;
   export type ShowWordCount = boolean;
+  export type CountMethod = (params: {
+    value: string;
+  }) => number;
   export type Autosize = {
     minRows?: number;
     maxRows?: number;

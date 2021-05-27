@@ -353,12 +353,12 @@ const apis = [
         list: []
       },
       {
-        name: 'updateStatus(scope)',
+        name: 'updateStatus(slotParams)',
         desc: '更新项状态（当使用自定义渲染时可能会用到）',
         version: '',
         type: 'Promise',
         enum: '',
-        defVal: 'scope: { property }',
+        defVal: 'slotParams: { property }',
         list: []
       },
       {

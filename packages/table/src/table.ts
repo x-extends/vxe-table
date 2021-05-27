@@ -2207,7 +2207,7 @@ export default defineComponent({
        * 用于树结构，给行数据加载子节点
        */
       loadChildren (row, childRecords) {
-        return this.createData(childRecords).then((rows) => {
+        return tableMethods.createData(childRecords).then((rows) => {
           const { keepSource } = props
           const { fullDataRowIdData, fullAllDataRowIdData } = internalData
           const { tableSourceData } = internalData
@@ -2563,25 +2563,26 @@ export default defineComponent({
       /**
        * 用于多选行，获取已选中的数据
        */
-      getCheckboxRecords () {
+      getCheckboxRecords (isFull) {
         const { treeConfig } = props
-        const { tableFullData } = internalData
+        const { tableFullData, afterFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField: property } = checkboxOpts
         let rowList = []
+        const currTableData = isFull ? tableFullData : afterFullData
         if (property) {
           if (treeConfig) {
-            rowList = XEUtils.filterTree(tableFullData, row => XEUtils.get(row, property), treeOpts)
+            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), treeOpts)
           } else {
-            rowList = tableFullData.filter((row) => XEUtils.get(row, property))
+            rowList = currTableData.filter((row) => XEUtils.get(row, property))
           }
         } else {
           const { selection } = reactData
           if (treeConfig) {
-            rowList = XEUtils.filterTree(tableFullData, row => $xetable.findRowIndexOf(selection, row) > -1, treeOpts)
+            rowList = XEUtils.filterTree(currTableData, row => $xetable.findRowIndexOf(selection, row) > -1, treeOpts)
           } else {
-            rowList = tableFullData.filter((row) => $xetable.findRowIndexOf(selection, row) > -1)
+            rowList = currTableData.filter((row) => $xetable.findRowIndexOf(selection, row) > -1)
           }
         }
         return rowList
@@ -2748,25 +2749,26 @@ export default defineComponent({
         return nextTick()
       },
       /**
-       * 判断复选框是否全选
+       * 判断列头复选框是否被选中
        */
       isAllCheckboxChecked () {
         return reactData.isAllSelected
       },
       /**
-       * 判断复选框是否半选
+       * 判断列头复选框是否被半选
        */
-      isCheckboxIndeterminate () {
+      isAllCheckboxIndeterminate () {
         return !reactData.isAllSelected && reactData.isIndeterminate
       },
       /**
        * 获取复选框半选状态的行数据
        */
-      getCheckboxIndeterminateRecords () {
+      getCheckboxIndeterminateRecords (isFull) {
         const { treeConfig } = props
+        const { afterFullData } = internalData
         const { treeIndeterminates } = reactData
         if (treeConfig) {
-          return treeIndeterminates.slice(0)
+          return isFull ? treeIndeterminates.slice(0) : treeIndeterminates.filter(row => $xetable.findRowIndexOf(afterFullData, row) > -1)
         }
         return []
       },
@@ -2790,6 +2792,10 @@ export default defineComponent({
           return XEUtils.get(row, property)
         }
         return $xetable.findRowIndexOf(selection, row) > -1
+      },
+      isIndeterminateByCheckboxRow (row) {
+        const { treeIndeterminates } = reactData
+        return $xetable.findRowIndexOf(treeIndeterminates, row) > -1 && !tableMethods.isCheckedByCheckboxRow(row)
       },
       /**
        * 多选，切换某一行的选中状态
@@ -2905,11 +2911,11 @@ export default defineComponent({
       /**
        * 获取单选框保留选中的行
        */
-      getRadioReserveRecord () {
-        const { fullDataRowIdData, radioReserveRow } = internalData
+      getRadioReserveRecord (isFull) {
+        const { fullDataRowIdData, radioReserveRow, afterFullData } = internalData
         const radioOpts = computeRadioOpts.value
         if (radioOpts.reserve && radioReserveRow) {
-          if (!fullDataRowIdData[getRowid($xetable, radioReserveRow)]) {
+          if (isFull ? !fullDataRowIdData[getRowid($xetable, radioReserveRow)] : afterFullData.some(row => getRowid($xetable, row) === getRowid($xetable, radioReserveRow))) {
             return radioReserveRow
           }
         }
@@ -2922,13 +2928,13 @@ export default defineComponent({
       /**
        * 获取复选框保留选中的行
        */
-      getCheckboxReserveRecords () {
-        const { fullDataRowIdData, checkboxReserveRowMap } = internalData
+      getCheckboxReserveRecords (isFull) {
+        const { afterFullData, fullDataRowIdData, checkboxReserveRowMap } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const reserveSelection: any[] = []
         if (checkboxOpts.reserve) {
           XEUtils.each(checkboxReserveRowMap, (row, rowid) => {
-            if (row && !fullDataRowIdData[rowid]) {
+            if (row && (isFull ? !fullDataRowIdData[rowid] : afterFullData.some(item => getRowid($xetable, item) === rowid))) {
               reserveSelection.push(row)
             }
           })
@@ -3032,8 +3038,15 @@ export default defineComponent({
       /**
        * 用于单选行，获取当已选中的数据
        */
-      getRadioRecord () {
-        return reactData.selectRow
+      getRadioRecord (isFull) {
+        const { tableFullData, afterFullData } = internalData
+        const { selectRow } = reactData
+        if (selectRow) {
+          if ($xetable.findRowIndexOf(isFull ? tableFullData : afterFullData, selectRow) > -1) {
+            return selectRow
+          }
+        }
+        return null
       },
       getCurrentColumn () {
         return props.highlightCurrentColumn ? reactData.currentColumn : null
@@ -4432,7 +4445,7 @@ export default defineComponent({
       },
       /**
        * 多选，行选中事件
-       * value 选中true 不选false 不确定-1
+       * value 选中true 不选false 半选-1
        */
       handleSelectRow ({ row }, value) {
         const { treeConfig } = props

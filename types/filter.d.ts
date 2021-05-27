@@ -55,6 +55,7 @@ export interface TableFilterPrivateMethods {
   checkFilterOptions(): void;
   handleClearFilter(column: any): void;
   triggerFilterEvent(evnt: any, column: any, params: any): void;
+  confirmFilterEvent(evnt: Event): void;
 }
 
 declare module './grid' {

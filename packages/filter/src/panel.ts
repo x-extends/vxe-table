@@ -1,4 +1,4 @@
-import { defineComponent, h, computed, inject, nextTick } from 'vue'
+import { defineComponent, h, computed, inject } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { formatText } from '../../tools/utils'
@@ -13,7 +13,6 @@ export default defineComponent({
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
     const { reactData: tableReactData, internalData: tableInternalData } = $xetable
-    const { computeFilterOpts } = $xetable.getComputeMaps()
 
     const computeHasCheckOption = computed(() => {
       const { filterStore } = props
@@ -31,46 +30,6 @@ export default defineComponent({
       filterStore.isIndeterminate = false
     }
 
-    /**
-     * 确认筛选
-     * 当筛选面板中的确定按钮被按下时触发
-     * @param {Event} evnt 事件
-     */
-    const confirmFilterEvent = (evnt: Event) => {
-      const { filterStore, scrollXLoad, scrollYLoad } = tableReactData
-      const filterOpts = computeFilterOpts.value
-      const { column } = filterStore
-      const { property } = column
-      const values: any[] = []
-      const datas: any[] = []
-      column.filters.forEach((item: any) => {
-        if (item.checked) {
-          values.push(item.value)
-          datas.push(item.data)
-        }
-      })
-      filterStore.visible = false
-      const filterList = $xetable.getCheckedFilters()
-      // 如果是服务端筛选，则跳过本地筛选处理
-      if (!filterOpts.remote) {
-        $xetable.handleTableData(true)
-        $xetable.checkSelectionStatus()
-      }
-      $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
-      $xetable.updateFooter()
-      if (scrollXLoad || scrollYLoad) {
-        $xetable.clearScroll()
-        if (scrollYLoad) {
-          $xetable.updateScrollYSpace()
-        }
-      }
-      $xetable.closeFilter()
-      nextTick(() => {
-        $xetable.recalculate()
-        $xetable.updateCellAreas()
-      })
-    }
-
     /*************************
      * Publish methods
      *************************/
@@ -80,7 +39,7 @@ export default defineComponent({
       filterStore.options.forEach((option: any) => {
         option.checked = option._checked
       })
-      confirmFilterEvent(evnt)
+      $xetable.confirmFilterEvent(evnt)
     }
 
     // （单选）筛选发生改变
@@ -102,7 +61,7 @@ export default defineComponent({
     const resetFilter = (evnt: Event) => {
       const { filterStore } = props
       $xetable.handleClearFilter(filterStore.column)
-      confirmFilterEvent(evnt)
+      $xetable.confirmFilterEvent(evnt)
     }
 
     // （多选）筛选发生改变

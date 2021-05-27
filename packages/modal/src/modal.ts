@@ -46,7 +46,7 @@ export default defineComponent({
     minWidth: { type: [Number, String] as PropType<VxeModalPropTypes.MinWidth>, default: () => GlobalConfig.modal.minWidth },
     minHeight: { type: [Number, String] as PropType<VxeModalPropTypes.MinHeight>, default: () => GlobalConfig.modal.minHeight },
     zIndex: Number as PropType<VxeModalPropTypes.ZIndex>,
-    marginSize: { type: [Number, String] as PropType<VxeModalPropTypes.MarginSize>, default: GlobalConfig.modal.marginSize },
+    marginSize: { type: [Number, String] as PropType<VxeModalPropTypes.MarginSize>, default: () => GlobalConfig.modal.marginSize },
     fullscreen: Boolean as PropType<VxeModalPropTypes.Fullscreen>,
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     destroyOnClose: { type: Boolean as PropType<VxeModalPropTypes.DestroyOnClose>, default: () => GlobalConfig.modal.destroyOnClose },

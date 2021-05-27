@@ -229,35 +229,39 @@ export default defineComponent({
 
     const mouseenterEvent = () => {
       const panelElem = refBtnPanel.value
-      panelElem.dataset.active = 'Y'
-      reactData.animatVisible = true
-      setTimeout(() => {
-        if (panelElem.dataset.active === 'Y') {
-          reactData.showPanel = true
-          updateZindex()
-          updatePlacement()
-          setTimeout(() => {
-            if (reactData.showPanel) {
-              updatePlacement()
-            }
-          }, 50)
-        }
-      }, 20)
+      if (panelElem) {
+        panelElem.dataset.active = 'Y'
+        reactData.animatVisible = true
+        setTimeout(() => {
+          if (panelElem.dataset.active === 'Y') {
+            reactData.showPanel = true
+            updateZindex()
+            updatePlacement()
+            setTimeout(() => {
+              if (reactData.showPanel) {
+                updatePlacement()
+              }
+            }, 50)
+          }
+        }, 20)
+      }
     }
 
     const mouseenterTargetEvent = () => {
       const panelElem = refBtnPanel.value
-      panelElem.dataset.active = 'Y'
-      if (!reactData.inited) {
-        reactData.inited = true
-      }
-      internalData.showTime = setTimeout(() => {
-        if (panelElem.dataset.active === 'Y') {
-          mouseenterEvent()
-        } else {
-          reactData.animatVisible = false
+      if (panelElem) {
+        panelElem.dataset.active = 'Y'
+        if (!reactData.inited) {
+          reactData.inited = true
         }
-      }, 250)
+        internalData.showTime = setTimeout(() => {
+          if (panelElem.dataset.active === 'Y') {
+            mouseenterEvent()
+          } else {
+            reactData.animatVisible = false
+          }
+        }, 250)
+      }
     }
 
     const closePanel = () => {

@@ -1099,6 +1099,12 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               opts.data = selectRecords
             }
           } else if (mode === 'all') {
+            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              if (!$xegrid) {
+                warnLog('vxe.error.errProp', ['all', 'mode=current,selected'])
+              }
+            }
+
             if ($xegrid && !opts.remote) {
               const { reactData: gridReactData } = $xegrid
               const { computeProxyOpts } = $xegrid.getComputeMaps()

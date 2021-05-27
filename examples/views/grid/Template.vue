@@ -19,18 +19,18 @@
       <template #form>
         <vxe-form :data="demo1.formData" @submit="searchEvent">
           <vxe-form-item title="名称" field="name">
-            <template #default>
-              <vxe-input v-model="demo1.formData.name" placeholder="请输入名称" clearable></vxe-input>
+            <template #default="{ data }">
+              <vxe-input v-model="data.name" placeholder="请输入名称" clearable></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="昵称" field="nickname">
-            <template #default>
-              <vxe-input v-model="demo1.formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+            <template #default="{ data }">
+              <vxe-input v-model="data.nickname" placeholder="请输入昵称" clearable></vxe-input>
             </template>
           </vxe-form-item>
           <vxe-form-item title="性别" field="sex">
-            <template #default>
-              <vxe-select v-model="demo1.formData.sex" placeholder="请选择性别" clearable>
+            <template #default="{ data }">
+              <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
                 <vxe-option value="1" label="女"></vxe-option>
                 <vxe-option value="2" label="男"></vxe-option>
               </vxe-select>
@@ -335,7 +335,7 @@ export default defineComponent({
     const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
       const $grid = xGrid.value
       demo1.isAllChecked = $grid.isAllCheckboxChecked()
-      demo1.isIndeterminate = $grid.isCheckboxIndeterminate()
+      demo1.isIndeterminate = $grid.isAllCheckboxIndeterminate()
       demo1.selectRecords = records
     }
 
@@ -367,18 +367,18 @@ export default defineComponent({
           <template #form>
             <vxe-form :data="demo1.formData" @submit="searchEvent">
               <vxe-form-item title="名称" field="name">
-                <template #default>
-                  <vxe-input v-model="demo1.formData.name" placeholder="请输入名称" clearable></vxe-input>
+                <template #default="{ data }">
+                  <vxe-input v-model="data.name" placeholder="请输入名称" clearable></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item title="昵称" field="nickname">
-                <template #default>
-                  <vxe-input v-model="demo1.formData.nickname" placeholder="请输入昵称" clearable></vxe-input>
+                <template #default="{ data }">
+                  <vxe-input v-model="data.nickname" placeholder="请输入昵称" clearable></vxe-input>
                 </template>
               </vxe-form-item>
               <vxe-form-item title="性别" field="sex">
-                <template #default>
-                  <vxe-select v-model="demo1.formData.sex" placeholder="请选择性别" clearable>
+                <template #default="{ data }">
+                  <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
                     <vxe-option value="1" label="女"></vxe-option>
                     <vxe-option value="2" label="男"></vxe-option>
                   </vxe-select>
@@ -672,7 +672,7 @@ export default defineComponent({
             const checkboxChangeEvent: VxeTableEvents.CheckboxChange = ({ records }) => {
               const $grid = xGrid.value
               demo1.isAllChecked = $grid.isAllCheckboxChecked()
-              demo1.isIndeterminate = $grid.isCheckboxIndeterminate()
+              demo1.isIndeterminate = $grid.isAllCheckboxIndeterminate()
               demo1.selectRecords = records
             }
 
