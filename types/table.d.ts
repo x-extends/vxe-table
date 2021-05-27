@@ -391,7 +391,7 @@ export declare class Table extends VXETableComponent {
    * 只对 keep-source 开启有效，判断行数据是否发生改变
    * @param row 指定行
    */
-  isUpdateByRow(row: RowInfo): boolean;
+  isUpdateByRow(row: any, field?: string): boolean;
   /**
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
