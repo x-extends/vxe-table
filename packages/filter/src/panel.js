@@ -23,7 +23,7 @@ export default {
       class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
         'is--animat': $xetable.animat,
         'is--multiple': filterStore.multiple,
-        'filter--active': filterStore.visible
+        'is--active': filterStore.visible
       }],
       style: filterStore.style
     }, filterStore.visible ? this.renderOptions(h, filterRender, compConf).concat(this.renderFooter(h)) : [])

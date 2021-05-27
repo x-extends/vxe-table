@@ -538,7 +538,16 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ code, $event }',
+        defVal: '{ code, button, $event }',
+        list: []
+      },
+      {
+        name: 'toolbar-tool-click',
+        desc: '只对 toolbar.tools 配置时有效，当右侧工具被点击时会后触发该事件',
+        version: '3.2.9',
+        type: '',
+        enum: '',
+        defVal: '{ code, tool, $event }',
         list: []
       },
       {

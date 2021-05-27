@@ -19,7 +19,8 @@
       id="toolbar_demo5"
       height="400"
       :custom-config="{storage: true, checkMethod: checkColumnMethod}"
-      :data="tableData">
+      :data="tableData"
+      @resizable-change="resizableChangeEvent">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -66,7 +67,8 @@ export default {
           id="toolbar_demo5"
           height="400"
           :custom-config="{storage: true, checkMethod: checkColumnMethod}"
-          :data="tableData">
+          :data="tableData"
+          @resizable-change="resizableChangeEvent">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="role" title="Role"></vxe-table-column>
@@ -102,6 +104,15 @@ export default {
                 return false
               }
               return true
+            },
+            resizableChangeEvent () {
+              const columns = this.$refs.xTable1.getColumns()
+              const customData = columns.map(column => {
+                return {
+                  width: column.renderWidth
+                }
+              })
+              console.log(customData)
             }
           }
         }
@@ -121,6 +132,15 @@ export default {
         return false
       }
       return true
+    },
+    resizableChangeEvent () {
+      const columns = this.$refs.xTable1.getColumns()
+      const customData = columns.map(column => {
+        return {
+          width: column.renderWidth
+        }
+      })
+      console.log(customData)
     }
   }
 }

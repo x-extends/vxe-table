@@ -8,7 +8,7 @@
   vertical-align: middle;
   display: inline-block;
   line-height: 0;
-  &.is--active {
+  &.col--active {
     .vxe-filter--btn {
       color: $vxe-table-font-color;
     }
@@ -21,7 +21,7 @@
     }
   }
 }
-.filter--active {
+.is--filter-active {
   .vxe-cell--filter {
     .vxe-filter--btn {
       color: $vxe-primary-color;
@@ -43,7 +43,7 @@
   &:not(.is--multiple) {
     text-align: center;
   }
-  &.filter--active {
+  &.is--active {
     display: block;
   }
   .vxe-table--filter-header,
