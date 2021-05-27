@@ -27,9 +27,9 @@
       @scroll="scrollEvent">
       <vxe-column type="seq" title="序号" width="60" fixed="left"></vxe-column>
       <vxe-column field="name" title="Name" width="300"></vxe-column>
-      <vxe-table-colgroup title="Role" width="300">
+      <vxe-colgroup title="Role" width="300">
         <vxe-column field="role" title="Role" width="300"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="sex" title="Sex" width="300"></vxe-column>
       <vxe-column field="date" title="Date" width="300"></vxe-column>
       <vxe-column field="address" title="Address" fixed="right" width="300"></vxe-column>
@@ -147,9 +147,9 @@ export default defineComponent({
           @scroll="scrollEvent">
           <vxe-column type="seq" title="序号" width="60" fixed="left"></vxe-column>
           <vxe-column field="name" title="Name" width="300"></vxe-column>
-          <vxe-table-colgroup title="Role" width="300">
+          <vxe-colgroup title="Role" width="300">
             <vxe-column field="role" title="Role" width="300"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="sex" title="Sex" width="300"></vxe-column>
           <vxe-column field="date" title="Date" width="300"></vxe-column>
           <vxe-column field="address" title="Address" fixed="right" width="300"></vxe-column>

@@ -73,10 +73,10 @@
       :footer-cell-class-name="footerCellClassName3"
       :data="demo3.tableData">
       <vxe-column type="seq" width="60" fixed="left"></vxe-column>
-      <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="基本信息">
         <vxe-column field="name" title="Name" min-width="600" sortable></vxe-column>
         <vxe-column field="age" title="Age" min-width="600"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="date" title="Date" min-width="600"></vxe-column>
       <vxe-column field="amount" title="Amount" width="200" fixed="right"></vxe-column>
     </vxe-table>
@@ -403,10 +403,10 @@ export default defineComponent({
           :footer-cell-class-name="footerCellClassName3"
           :data="demo3.tableData">
           <vxe-column type="seq" width="60" fixed="left"></vxe-column>
-          <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="基本信息">
             <vxe-column field="name" title="Name" min-width="600" sortable></vxe-column>
             <vxe-column field="age" title="Age" min-width="600"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="date" title="Date" min-width="600"></vxe-column>
           <vxe-column field="amount" title="Amount" width="200" fixed="right"></vxe-column>
         </vxe-table>

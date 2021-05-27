@@ -26,14 +26,14 @@
       :data="demo1.tableData1">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="Group1">
+      <vxe-colgroup title="Group1">
         <vxe-column field="name" title="Name"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="Group2">
+      </vxe-colgroup>
+      <vxe-colgroup title="Group2">
         <vxe-column field="attr1" title="自动转换"></vxe-column>
         <vxe-column field="amount" title="导出数值" cell-type="number"></vxe-column>
         <vxe-column field="num" title="导出字符串" cell-type="string" sortable></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -393,14 +393,14 @@ export default defineComponent({
           :data="demo1.tableData1">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="Group1">
+          <vxe-colgroup title="Group1">
             <vxe-column field="name" title="Name"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="Group2">
+          </vxe-colgroup>
+          <vxe-colgroup title="Group2">
             <vxe-column field="attr1" title="自动转换"></vxe-column>
             <vxe-column field="amount" title="导出数值" cell-type="number"></vxe-column>
             <vxe-column field="num" title="导出字符串" cell-type="string" sortable></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

@@ -9,14 +9,14 @@
       :data="demo1.tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="分组1">
+      <vxe-colgroup title="分组1">
         <vxe-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-column>
         <vxe-column field="nickname" title="Nickname" :edit-render="{name: 'input', autoselect: true}"></vxe-column>
         <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', optionGroups: demo1.sexGriupList}"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="分组1">
+      </vxe-colgroup>
+      <vxe-colgroup title="分组1">
         <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -72,14 +72,14 @@ export default defineComponent({
           :data="demo1.tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="分组1">
+          <vxe-colgroup title="分组1">
             <vxe-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-column>
             <vxe-column field="nickname" title="Nickname" :edit-render="{name: 'input', autoselect: true}"></vxe-column>
             <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', optionGroups: demo1.sexGriupList}"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="分组1">
+          </vxe-colgroup>
+          <vxe-colgroup title="分组1">
             <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

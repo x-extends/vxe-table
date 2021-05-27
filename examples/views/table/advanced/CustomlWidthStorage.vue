@@ -19,7 +19,8 @@
       id="toolbar_demo5"
       height="400"
       :custom-config="demo1.tableCustom"
-      :data="demo1.tableData">
+      :data="demo1.tableData"
+      @resizable-change="resizableChangeEvent">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>
       <vxe-column field="role" title="Role"></vxe-column>
@@ -38,7 +39,7 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref, nextTick } from 'vue'
-import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance } from '../../../../types/index'
+import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance, VxeTableEvents } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -67,6 +68,17 @@ export default defineComponent({
       } as VxeTablePropTypes.CustomConfig
     })
 
+    const resizableChangeEvent: VxeTableEvents.ResizableChange = () => {
+      const $table = xTable.value
+      const columns = $table.getColumns()
+      const customData = columns.map(column => {
+        return {
+          width: column.renderWidth
+        }
+      })
+      console.log(customData)
+    }
+
     nextTick(() => {
       // 将表格和工具栏进行关联
       const $table = xTable.value
@@ -78,6 +90,7 @@ export default defineComponent({
       xTable,
       xToolbar,
       demo1,
+      resizableChangeEvent,
       demoCodes: [
         `
         <vxe-toolbar ref="xToolbar" custom>
@@ -94,7 +107,8 @@ export default defineComponent({
           id="toolbar_demo5"
           height="400"
           :custom-config="demo1.tableCustom"
-          :data="demo1.tableData">
+          :data="demo1.tableData"
+          @resizable-change="resizableChangeEvent">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name"></vxe-column>
           <vxe-column field="role" title="Role"></vxe-column>
@@ -104,7 +118,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive, ref, nextTick } from 'vue'
-        import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
+        import { VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance, VxeTableEvents } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -133,6 +147,17 @@ export default defineComponent({
               } as VxeTablePropTypes.CustomConfig
             })
 
+            const resizableChangeEvent: VxeTableEvents.ResizableChange = () => {
+              const $table = xTable.value
+              const columns = $table.getColumns()
+              const customData = columns.map(column => {
+                return {
+                  width: column.renderWidth
+                }
+              })
+              console.log(customData)
+            }
+
             nextTick(() => {
               // 将表格和工具栏进行关联
               const $table = xTable.value
@@ -143,7 +168,8 @@ export default defineComponent({
             return {
               xTable,
               xToolbar,
-              demo1
+              demo1,
+              resizableChangeEvent
             }
           }
         }

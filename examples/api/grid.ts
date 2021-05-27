@@ -509,11 +509,20 @@ const apis = [
       },
       {
         name: 'toolbar-button-click',
-        desc: '只对 toolbar.buttons 配置时有效，当工具栏的按钮被点击时会后触发该事件',
+        desc: '只对 toolbar.buttons 配置时有效，当左侧按钮被点击时会后触发该事件',
         version: '',
         type: '',
         enum: '',
-        defVal: '{ code, $event }',
+        defVal: '{ code, button, $event }',
+        list: []
+      },
+      {
+        name: 'toolbar-tool-click',
+        desc: '只对 toolbar.tools 配置时有效，当右侧工具被点击时会后触发该事件',
+        version: '4.0.7',
+        type: '',
+        enum: '',
+        defVal: '{ code, tool, $event }',
         list: []
       },
       {

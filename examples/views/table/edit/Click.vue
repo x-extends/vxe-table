@@ -33,16 +33,16 @@
       :data="tableData2"
       :edit-config="{trigger: 'click', mode: 'row'}">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="分组1">
+      <vxe-colgroup title="分组1">
         <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
         <vxe-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
         <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList2}"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="分组2">
+      </vxe-colgroup>
+      <vxe-colgroup title="分组2">
         <vxe-column field="num1" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
         <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
         <vxe-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-column>
     </vxe-table>
 
@@ -141,16 +141,16 @@ export default defineComponent({
           :data="tableData2"
           :edit-config="{trigger: 'click', mode: 'row'}">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="分组1">
+          <vxe-colgroup title="分组1">
             <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
             <vxe-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
             <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList2}"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="分组2">
+          </vxe-colgroup>
+          <vxe-colgroup title="分组2">
             <vxe-column field="num1" title="Number" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
             <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
             <vxe-column field="date13" title="Week" :edit-render="{name: '$input', props: {type: 'week'}}"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-column>
         </vxe-table>
         `,
