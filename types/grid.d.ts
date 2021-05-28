@@ -415,6 +415,7 @@ export interface VxeGridListeners {
   formReset?: VxeGridEvents.FormReset;
   formToggleCollapse?: VxeGridEvents.FormToggleCollapse;
   toolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
+  toolbarToolClick?: VxeGridEvents.ToolbarToolClick;
   zoom?: VxeGridEvents.Zoom;
 }
 

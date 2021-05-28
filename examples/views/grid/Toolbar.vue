@@ -2,10 +2,7 @@
   <div>
     <p class="tip">工具栏：通过 <grid-api-link prop="toolbar-config"/> 属性配置，支持显示/隐藏列、列宽拖动状态的保存功能，可以通过表格的 <table-api-link prop="custom-config"/> 参数开启将列个性化的设置状态保存到本地</p>
 
-    <vxe-grid
-      ref="xGrid"
-      v-bind="gridOptions"
-      @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
+    <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents"></vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -19,7 +16,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/all'
-import { VxeGridInstance, VxeGridEvents, VxeGridProps } from '../../../types/index'
+import { VxeGridInstance, VxeGridListeners, VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -70,6 +67,9 @@ export default defineComponent({
             ]
           }
         ],
+        tools: [
+          { code: 'myPrint', name: '自定义打印' }
+        ],
         import: true,
         export: true,
         print: true,
@@ -88,25 +88,36 @@ export default defineComponent({
       ]
     } as VxeGridProps)
 
-    const toolbarButtonClickEvent: VxeGridEvents.ToolbarButtonClick = ({ code }) => {
-      const $grid = xGrid.value
-      switch (code) {
-        case 'myInsert': {
-          $grid.insert({
-            name: 'xxx'
-          })
-          break
+    const gridEvents: VxeGridListeners = {
+      toolbarButtonClick ({ code }) {
+        const $grid = xGrid.value
+        switch (code) {
+          case 'myInsert': {
+            $grid.insert({
+              name: 'xxx'
+            })
+            break
+          }
+          case 'mySave': {
+            const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
+            VXETable.modal.message({ content: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
+            break
+          }
+          case 'myExport': {
+            $grid.exportData({
+              type: 'csv'
+            })
+            break
+          }
         }
-        case 'mySave': {
-          const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
-          VXETable.modal.message({ content: `新增 ${insertRecords.length} 条，删除 ${removeRecords.length} 条，更新 ${updateRecords.length} 条`, status: 'success' })
-          break
-        }
-        case 'myExport': {
-          $grid.exportData({
-            type: 'csv'
-          })
-          break
+      },
+      toolbarToolClick ({ code }) {
+        const $grid = xGrid.value
+        switch (code) {
+          case 'myPrint': {
+            $grid.print()
+            break
+          }
         }
       }
     }
@@ -114,17 +125,14 @@ export default defineComponent({
     return {
       xGrid,
       gridOptions,
-      toolbarButtonClickEvent,
+      gridEvents,
       demoCodes: [
         `
-        <vxe-grid
-          ref="xGrid"
-          v-bind="gridOptions"
-          @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
+        <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents"></vxe-grid>
         `,
         `
         import { defineComponent, reactive, ref } from 'vue'
-        import { VXETable, VxeGridInstance, VxeGridEvents, VxeGridProps } from 'vxe-table'
+        import { VXETable, VxeGridInstance, VxeGridListeners, VxeGridProps } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -175,6 +183,9 @@ export default defineComponent({
                     ]
                   }
                 ],
+                tools: [
+                  { code: 'myPrint', name: '自定义打印' }
+                ],
                 import: true,
                 export: true,
                 print: true,
@@ -193,25 +204,36 @@ export default defineComponent({
               ]
             } as VxeGridProps)
 
-            const toolbarButtonClickEvent: VxeGridEvents.ToolbarButtonClick = ({ code }) => {
-              const $grid = xGrid.value
-              switch (code) {
-                case 'myInsert': {
-                  $grid.insert({
-                    name: 'xxx'
-                  })
-                  break
+            const gridEvents: VxeGridListeners = {
+              toolbarButtonClick ({ code }) {
+                const $grid = xGrid.value
+                switch (code) {
+                  case 'myInsert': {
+                    $grid.insert({
+                      name: 'xxx'
+                    })
+                    break
+                  }
+                  case 'mySave': {
+                    const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
+                    VXETable.modal.message({ content: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
+                    break
+                  }
+                  case 'myExport': {
+                    $grid.exportData({
+                      type: 'csv'
+                    })
+                    break
+                  }
                 }
-                case 'mySave': {
-                  const { insertRecords, removeRecords, updateRecords } = $grid.getRecordset()
-                  VXETable.modal.message({ content: \`新增 \${insertRecords.length} 条，删除 \${removeRecords.length} 条，更新 \${updateRecords.length} 条\`, status: 'success' })
-                  break
-                }
-                case 'myExport': {
-                  $grid.exportData({
-                    type: 'csv'
-                  })
-                  break
+              },
+              toolbarToolClick ({ code }) {
+                const $grid = xGrid.value
+                switch (code) {
+                  case 'myPrint': {
+                    $grid.print()
+                    break
+                  }
                 }
               }
             }
@@ -219,7 +241,7 @@ export default defineComponent({
             return {
               xGrid,
               gridOptions,
-              toolbarButtonClickEvent
+              gridEvents
             }
           }
         })
