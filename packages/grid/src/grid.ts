@@ -1,4 +1,4 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { errLog, getLastZIndex, nextZIndex, isEnableConf } from '../../tools/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../tools/dom'
@@ -1025,19 +1025,21 @@ export default defineComponent({
       }
     })
 
-    nextTick(() => {
-      const { data, columns, proxyConfig } = props
-      const proxyOpts = computeProxyOpts.value
-      const formOpts = computeFormOpts.value
-      if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-        errLog('errConflicts', ['grid.data', 'grid.proxy-config'])
-      }
-      if (columns && columns.length) {
-        $xegrid.loadColumn(columns)
-      }
-      initToolbar()
-      initPages()
-      initProxy()
+    onMounted(() => {
+      nextTick(() => {
+        const { data, columns, proxyConfig } = props
+        const proxyOpts = computeProxyOpts.value
+        const formOpts = computeFormOpts.value
+        if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
+          errLog('errConflicts', ['grid.data', 'grid.proxy-config'])
+        }
+        if (columns && columns.length) {
+          $xegrid.loadColumn(columns)
+        }
+        initToolbar()
+        initPages()
+        initProxy()
+      })
       GlobalEvent.on($xegrid, 'keydown', handleGlobalKeydownEvent)
     })
 

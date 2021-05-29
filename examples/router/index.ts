@@ -131,6 +131,10 @@ import GridMenu from '../views/grid/Menu.vue'
 // import GridTreeLazyEdit from '../views/grid/TreeLazyEdit.vue'
 // import GridTreeEdit from '../views/grid/TreeEdit.vue'
 import GridFullEdit from '../views/grid/FullEdit.vue'
+import GridKeepAlives from '../views/grid/KeepAlives.vue'
+import GridKeepAliveGrid1 from '../views/grid/keepAlives/Grid1.vue'
+import GridKeepAliveGrid2 from '../views/grid/keepAlives/Grid2.vue'
+import GridKeepAliveGrid3 from '../views/grid/keepAlives/Grid3.vue'
 
 import TableTreeBasic from '../views/table/tree/Basic.vue'
 import TableTreeNormal from '../views/table/tree/Normal.vue'
@@ -1148,6 +1152,27 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/grid/fullQuery',
     name: 'GridFullQuery',
     component: GridFullQuery
+  },
+  {
+    path: '/table/grid/keepAlives',
+    component: GridKeepAlives,
+    children: [
+      {
+        path: 'table1',
+        name: 'GridKeepAliveGrid1',
+        component: GridKeepAliveGrid1
+      },
+      {
+        path: 'table2',
+        name: 'GridKeepAliveGrid2',
+        component: GridKeepAliveGrid2
+      },
+      {
+        path: 'table3',
+        name: 'GridKeepAliveGrid3',
+        component: GridKeepAliveGrid3
+      }
+    ]
   },
   {
     path: '/table/scroll/scroll',

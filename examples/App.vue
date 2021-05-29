@@ -1426,6 +1426,12 @@ export default defineComponent({
             //     name: 'GridTreeLazyEdit'
             //   }
             // },
+            {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'GridKeepAliveGrid1'
+              }
+            },
             // {
             //   label: 'app.aside.nav.crudTreeToolbar',
             //   locat: {

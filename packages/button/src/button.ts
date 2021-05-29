@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, computed, Teleport, VNode, onBeforeMount, onUnmounted, reactive, nextTick, PropType } from 'vue'
+import { defineComponent, h, ref, Ref, computed, Teleport, VNode, onUnmounted, reactive, nextTick, PropType, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -339,7 +339,7 @@ export default defineComponent({
 
     Object.assign($xebutton, buttonMethods)
 
-    onBeforeMount(() => {
+    onMounted(() => {
       GlobalEvent.on($xebutton, 'mousewheel', (evnt: Event) => {
         const panelElem = refBtnPanel.value
         if (reactData.showPanel && !getEventTargetNode(evnt, panelElem).flag) {

@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, onBeforeMount, watch, PropType, VNode } from 'vue'
+import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, watch, PropType, VNode, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 import { getDomNode, getEventTargetNode } from '../../tools/dom'
@@ -848,20 +848,22 @@ export default defineComponent({
       }
     })
 
-    nextTick(() => {
-      if (props.storage && !props.id) {
-        errLog('vxe.error.reqProp', ['modal.id'])
-      }
-      if (props.modelValue) {
-        openModal()
-      }
-      recalculate()
+    onMounted(() => {
+      nextTick(() => {
+        if (props.storage && !props.id) {
+          errLog('vxe.error.reqProp', ['modal.id'])
+        }
+        if (props.modelValue) {
+          openModal()
+        }
+        recalculate()
+      })
       if (props.escClosable) {
         GlobalEvent.on($xemodal, 'keydown', handleGlobalKeydownEvent)
       }
     })
 
-    onBeforeMount(() => {
+    onUnmounted(() => {
       GlobalEvent.off($xemodal, 'keydown')
       removeMsgQueue()
     })

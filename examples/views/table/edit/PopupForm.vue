@@ -32,7 +32,7 @@
 
     <vxe-modal v-model="demo1.showEdit" :title="demo1.selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="demo1.submitLoading" resize destroy-on-close>
       <template #default>
-        <vxe-form :data="demo1.formData" :items="demo1.formItems" :rules="demo1.formRules" title-align="right" title-width="100" @submit="demo1.submitEvent"></vxe-form>
+        <vxe-form :data="demo1.formData" :items="demo1.formItems" :rules="demo1.formRules" title-align="right" title-width="100" @submit="submitEvent"></vxe-form>
       </template>
     </vxe-modal>
 
@@ -237,7 +237,7 @@ export default defineComponent({
 
         <vxe-modal v-model="demo1.showEdit" :title="demo1.selectRow ? '编辑&保存' : '新增&保存'" width="800" min-width="600" min-height="300" :loading="demo1.submitLoading" resize destroy-on-close>
           <template #default>
-            <vxe-form :data="demo1.formData" :items="demo1.formItems" :rules="demo1.formRules" title-align="right" title-width="100" @submit="demo1.submitEvent"></vxe-form>
+            <vxe-form :data="demo1.formData" :items="demo1.formItems" :rules="demo1.formRules" title-align="right" title-width="100" @submit="submitEvent"></vxe-form>
           </template>
         </vxe-modal>
         `,

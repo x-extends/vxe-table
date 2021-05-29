@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, nextTick, onBeforeUnmount, reactive, watch, PropType } from 'vue'
+import { defineComponent, h, ref, Ref, nextTick, onBeforeUnmount, onMounted, reactive, watch, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -215,35 +215,37 @@ export default defineComponent({
       reactData.isUpdate = false
     })
 
-    nextTick(() => {
-      const { trigger, content, modelValue } = props
-      const wrapperElem = refElem.value
-      const parentNode = wrapperElem.parentNode
-      if (parentNode) {
-        reactData.message = content
-        reactData.tipZindex = nextZIndex()
-        XEUtils.arrayEach(wrapperElem.children, (elem, index) => {
-          if (index > 1) {
-            parentNode.insertBefore(elem, wrapperElem)
-            if (!reactData.target) {
-              reactData.target = elem as HTMLElement
+    onMounted(() => {
+      nextTick(() => {
+        const { trigger, content, modelValue } = props
+        const wrapperElem = refElem.value
+        const parentNode = wrapperElem.parentNode
+        if (parentNode) {
+          reactData.message = content
+          reactData.tipZindex = nextZIndex()
+          XEUtils.arrayEach(wrapperElem.children, (elem, index) => {
+            if (index > 1) {
+              parentNode.insertBefore(elem, wrapperElem)
+              if (!reactData.target) {
+                reactData.target = elem as HTMLElement
+              }
+            }
+          })
+          parentNode.removeChild(wrapperElem)
+          const { target } = reactData
+          if (target) {
+            if (trigger === 'hover') {
+              target.onmouseleave = targetMouseleaveEvent
+              target.onmouseenter = targetMouseenterEvent
+            } else if (trigger === 'click') {
+              target.onclick = clickEvent
             }
           }
-        })
-        parentNode.removeChild(wrapperElem)
-        const { target } = reactData
-        if (target) {
-          if (trigger === 'hover') {
-            target.onmouseleave = targetMouseleaveEvent
-            target.onmouseenter = targetMouseenterEvent
-          } else if (trigger === 'click') {
-            target.onclick = clickEvent
+          if (modelValue) {
+            tooltipMethods.open()
           }
         }
-        if (modelValue) {
-          tooltipMethods.open()
-        }
-      }
+      })
     })
 
     onBeforeUnmount(() => {

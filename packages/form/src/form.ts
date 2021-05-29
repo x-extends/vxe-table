@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, ComputedRef, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, VNode } from 'vue'
+import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, ComputedRef, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, VNode, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -681,8 +681,10 @@ export default defineComponent({
       loadItem(value || [])
     })
 
-    nextTick(() => {
-      loadItem(props.items || [])
+    onMounted(() => {
+      nextTick(() => {
+        loadItem(props.items || [])
+      })
     })
 
     const renderVN = () => {

@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount } from 'vue'
+import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -564,20 +564,22 @@ export default defineComponent({
       }
     }
 
-    nextTick(() => {
-      const { fixedType } = props
-      const { elemStore } = tableInternalData
-      const prefix = `${fixedType || 'main'}-body-`
-      const el = refElem.value
-      elemStore[`${prefix}wrapper`] = refElem.value
-      elemStore[`${prefix}table`] = refBodyTable.value
-      elemStore[`${prefix}colgroup`] = refBodyColgroup.value
-      elemStore[`${prefix}list`] = refBodyTBody.value
-      elemStore[`${prefix}xSpace`] = refBodyXSpace.value
-      elemStore[`${prefix}ySpace`] = refBodyYSpace.value
-      elemStore[`${prefix}emptyBlock`] = refBodyEmptyBlock.value
-      el.onscroll = scrollEvent
-      el._onscroll = scrollEvent
+    onMounted(() => {
+      nextTick(() => {
+        const { fixedType } = props
+        const { elemStore } = tableInternalData
+        const prefix = `${fixedType || 'main'}-body-`
+        const el = refElem.value
+        elemStore[`${prefix}wrapper`] = refElem.value
+        elemStore[`${prefix}table`] = refBodyTable.value
+        elemStore[`${prefix}colgroup`] = refBodyColgroup.value
+        elemStore[`${prefix}list`] = refBodyTBody.value
+        elemStore[`${prefix}xSpace`] = refBodyXSpace.value
+        elemStore[`${prefix}ySpace`] = refBodyYSpace.value
+        elemStore[`${prefix}emptyBlock`] = refBodyEmptyBlock.value
+        el.onscroll = scrollEvent
+        el._onscroll = scrollEvent
+      })
     })
 
     onBeforeUnmount(() => {

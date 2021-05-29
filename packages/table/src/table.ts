@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef } from 'vue'
+import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { warnLog, errLog, getLog, getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
@@ -5263,128 +5263,140 @@ export default defineComponent({
 
     let resizeObserver: XEResizeObserver
 
-    nextTick(() => {
-      const { data, treeConfig, showOverflow } = props
-      const { scrollXStore, scrollYStore } = internalData
-      const sYOpts = computeSYOpts.value
-      const editOpts = computeEditOpts.value
-      const treeOpts = computeTreeOpts.value
-      const radioOpts = computeRadioOpts.value
-      const checkboxOpts = computeCheckboxOpts.value
-      const expandOpts = computeExpandOpts.value
+    onActivated(() => {
+      tableMethods.recalculate().then(() => tableMethods.refreshScroll())
+      tablePrivateMethods.preventEvent(null, 'activated', { $table: $xetable })
+    })
 
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (!props.rowId && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
-          warnLog('vxe.error.reqProp', ['row-id'])
-        }
-        if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
-          warnLog('vxe.error.reqProp', ['keep-source'])
-        }
-        if (treeConfig && treeOpts.line && (!props.rowKey || !showOverflow)) {
-          warnLog('vxe.error.reqProp', ['row-key | show-overflow'])
-        }
-        if (treeConfig && props.stripe) {
-          warnLog('vxe.error.noTree', ['stripe'])
-        }
-        if (props.showFooter && !props.footerMethod) {
-          warnLog('vxe.error.reqProp', ['footer-method'])
-        }
-        // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
-        const { exportConfig, importConfig } = props
-        const exportOpts = computeExportOpts.value
-        const importOpts = computeImportOpts.value
-        if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
-          warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
-        }
-        if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
-          warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
-        }
-      }
+    onDeactivated(() => {
+      internalData.isActivated = false
+      tablePrivateMethods.preventEvent(null, 'deactivated', { $table: $xetable })
+    })
 
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        const customOpts = computeCustomOpts.value
-        const mouseOpts = computeMouseOpts.value
-        if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-          errLog('vxe.error.reqProp', ['id'])
-        }
-        if (props.treeConfig && checkboxOpts.range) {
-          errLog('vxe.error.noTree', ['checkbox-config.range'])
-        }
-        if (!$xetable.handleUpdateCellAreas) {
-          if (props.clipConfig) {
-            warnLog('vxe.error.notProp', ['clip-config'])
+    onMounted(() => {
+      nextTick(() => {
+        const { data, treeConfig, showOverflow } = props
+        const { scrollXStore, scrollYStore } = internalData
+        const sYOpts = computeSYOpts.value
+        const editOpts = computeEditOpts.value
+        const treeOpts = computeTreeOpts.value
+        const radioOpts = computeRadioOpts.value
+        const checkboxOpts = computeCheckboxOpts.value
+        const expandOpts = computeExpandOpts.value
+
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (!props.rowId && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
+            warnLog('vxe.error.reqProp', ['row-id'])
           }
-          if (props.fnrConfig) {
-            warnLog('vxe.error.notProp', ['fnr-config'])
+          if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
+            warnLog('vxe.error.reqProp', ['keep-source'])
           }
-          if (mouseOpts.area) {
-            errLog('vxe.error.notProp', ['mouse-config.area'])
-            return
+          if (treeConfig && treeOpts.line && (!props.rowKey || !showOverflow)) {
+            warnLog('vxe.error.reqProp', ['row-key | show-overflow'])
+          }
+          if (treeConfig && props.stripe) {
+            warnLog('vxe.error.noTree', ['stripe'])
+          }
+          if (props.showFooter && !props.footerMethod) {
+            warnLog('vxe.error.reqProp', ['footer-method'])
+          }
+          // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
+          const { exportConfig, importConfig } = props
+          const exportOpts = computeExportOpts.value
+          const importOpts = computeImportOpts.value
+          if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
+            warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
+          }
+          if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
+            warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
           }
         }
-        if (mouseOpts.area && mouseOpts.selected) {
-          warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
-        }
-        if (mouseOpts.area && checkboxOpts.range) {
-          warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
-        }
-        if (props.treeConfig && mouseOpts.area) {
-          errLog('vxe.error.noTree', ['mouse-config.area'])
-        }
-      }
 
-      // 检查是否有安装需要的模块
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (props.editConfig && !$xetable.insert) {
-          errLog('vxe.error.reqModule', ['Edit'])
-        }
-        if (props.editRules && !$xetable.validate) {
-          errLog('vxe.error.reqModule', ['Validator'])
-        }
-        if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xetable.triggerCellMousedownEvent) {
-          errLog('vxe.error.reqModule', ['Keyboard'])
-        }
-        if ((props.printConfig || props.importConfig || props.exportConfig) && !$xetable.exportData) {
-          errLog('vxe.error.reqModule', ['Export'])
-        }
-      }
-
-      Object.assign(scrollYStore, {
-        startIndex: 0,
-        endIndex: 0,
-        visibleSize: 0,
-        adaptive: sYOpts.adaptive !== false
-      })
-      Object.assign(scrollXStore, {
-        startIndex: 0,
-        endIndex: 0,
-        visibleSize: 0
-      })
-      loadTableData(data || []).then(() => {
-        if (data && data.length) {
-          internalData.inited = true
-          internalData.initStatus = true
-          handleLoadDefaults()
-          handleInitDefaults()
-        }
-        updateStyle()
-      })
-
-      if (props.autoResize) {
-        const el = refElem.value
-        const parentEl = tablePrivateMethods.getParentElem()
-        resizeObserver = createResizeEvent(() => {
-          if (props.autoResize) {
-            tableMethods.recalculate(true)
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          const customOpts = computeCustomOpts.value
+          const mouseOpts = computeMouseOpts.value
+          if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
+            errLog('vxe.error.reqProp', ['id'])
           }
+          if (props.treeConfig && checkboxOpts.range) {
+            errLog('vxe.error.noTree', ['checkbox-config.range'])
+          }
+          if (!$xetable.handleUpdateCellAreas) {
+            if (props.clipConfig) {
+              warnLog('vxe.error.notProp', ['clip-config'])
+            }
+            if (props.fnrConfig) {
+              warnLog('vxe.error.notProp', ['fnr-config'])
+            }
+            if (mouseOpts.area) {
+              errLog('vxe.error.notProp', ['mouse-config.area'])
+              return
+            }
+          }
+          if (mouseOpts.area && mouseOpts.selected) {
+            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+          }
+          if (mouseOpts.area && checkboxOpts.range) {
+            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+          }
+          if (props.treeConfig && mouseOpts.area) {
+            errLog('vxe.error.noTree', ['mouse-config.area'])
+          }
+        }
+
+        // 检查是否有安装需要的模块
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (props.editConfig && !$xetable.insert) {
+            errLog('vxe.error.reqModule', ['Edit'])
+          }
+          if (props.editRules && !$xetable.validate) {
+            errLog('vxe.error.reqModule', ['Validator'])
+          }
+          if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xetable.triggerCellMousedownEvent) {
+            errLog('vxe.error.reqModule', ['Keyboard'])
+          }
+          if ((props.printConfig || props.importConfig || props.exportConfig) && !$xetable.exportData) {
+            errLog('vxe.error.reqModule', ['Export'])
+          }
+        }
+
+        Object.assign(scrollYStore, {
+          startIndex: 0,
+          endIndex: 0,
+          visibleSize: 0,
+          adaptive: sYOpts.adaptive !== false
         })
-        if (el) {
-          resizeObserver.observe(el)
+        Object.assign(scrollXStore, {
+          startIndex: 0,
+          endIndex: 0,
+          visibleSize: 0
+        })
+        loadTableData(data || []).then(() => {
+          if (data && data.length) {
+            internalData.inited = true
+            internalData.initStatus = true
+            handleLoadDefaults()
+            handleInitDefaults()
+          }
+          updateStyle()
+        })
+
+        if (props.autoResize) {
+          const el = refElem.value
+          const parentEl = tablePrivateMethods.getParentElem()
+          resizeObserver = createResizeEvent(() => {
+            if (props.autoResize) {
+              tableMethods.recalculate(true)
+            }
+          })
+          if (el) {
+            resizeObserver.observe(el)
+          }
+          if (parentEl) {
+            resizeObserver.observe(parentEl)
+          }
         }
-        if (parentEl) {
-          resizeObserver.observe(parentEl)
-        }
-      }
+      })
       GlobalEvent.on($xetable, 'paste', handleGlobalPasteEvent)
       GlobalEvent.on($xetable, 'copy', handleGlobalCopyEvent)
       GlobalEvent.on($xetable, 'cut', handleGlobalCutEvent)
@@ -5396,19 +5408,6 @@ export default defineComponent({
       if ($xetable.handleGlobalContextmenuEvent) {
         GlobalEvent.on($xetable, 'contextmenu', $xetable.handleGlobalContextmenuEvent)
       }
-    })
-
-    onActivated(() => {
-      tableMethods.recalculate().then(() => tableMethods.refreshScroll())
-      tablePrivateMethods.preventEvent(null, 'activated', { $table: $xetable })
-    })
-
-    onDeactivated(() => {
-      internalData.isActivated = false
-      tablePrivateMethods.preventEvent(null, 'deactivated', { $table: $xetable })
-    })
-
-    onUnmounted(() => {
       tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xetable })
     })
 

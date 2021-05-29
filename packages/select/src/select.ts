@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, PropType, ref, Ref, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch } from 'vue'
+import { defineComponent, h, Teleport, PropType, ref, Ref, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -707,15 +707,16 @@ export default defineComponent({
       updateCache()
     })
 
-    nextTick(() => {
-      const { options, optionGroups } = props
-      if (optionGroups) {
-        reactData.fullGroupList = optionGroups
-      } else if (options) {
-        reactData.fullOptionList = options
-      }
-      updateCache()
-
+    onMounted(() => {
+      nextTick(() => {
+        const { options, optionGroups } = props
+        if (optionGroups) {
+          reactData.fullGroupList = optionGroups
+        } else if (options) {
+          reactData.fullOptionList = options
+        }
+        updateCache()
+      })
       GlobalEvent.on($xeselect, 'mousewheel', handleGlobalMousewheelEvent)
       GlobalEvent.on($xeselect, 'mousedown', handleGlobalMousedownEvent)
       GlobalEvent.on($xeselect, 'keydown', handleGlobalKeydownEvent)

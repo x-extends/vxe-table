@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, resolveComponent, VNode, ComponentOptions, reactive, nextTick, onUnmounted, PropType } from 'vue'
+import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, resolveComponent, VNode, ComponentOptions, reactive, nextTick, onMounted, onUnmounted, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -601,7 +601,7 @@ export default defineComponent({
 
     Object.assign($xetoolbar, toolbarMethods)
 
-    nextTick(() => {
+    onMounted(() => {
       GlobalEvent.on($xetoolbar, 'mousedown', handleGlobalMousedownEvent)
       GlobalEvent.on($xetoolbar, 'blur', handleGlobalBlurEvent)
     })
