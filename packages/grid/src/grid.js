@@ -585,11 +585,15 @@ export default {
         case 'delete': {
           const ajaxMethods = ajax.delete
           if (ajaxMethods) {
-            const removeRecords = this.getCheckboxRecords()
+            const selectRecords = $xetable.getCheckboxRecords()
+            const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
             const body = { removeRecords }
             const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
-            if (removeRecords.length) {
+            if (selectRecords.length) {
               return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
+                if (!removeRecords.length) {
+                  return $xetable.remove(selectRecords)
+                }
                 this.tableLoading = true
                 return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                   .then(rest => {

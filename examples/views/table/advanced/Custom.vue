@@ -213,7 +213,7 @@ export default {
         export default {
           data () {
             return {
-              columns: [],
+              columns2: [],
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -226,15 +226,15 @@ export default {
               ]
             }
           },
-          created () {
+          mounted () {
             // 获取所有列配置
             this.$nextTick(() => {
-              this.columns = this.$refs.xTable2.getColumns()
+              this.columns2 = this.$refs.xTable2.getColumns()
             })
             this.loading = true
             setTimeout(() => {
               // 将指定列设置为隐藏状态
-              this.columns.forEach(column => {
+              this.columns2.forEach(column => {
                 if (['name'].includes(column.property)) {
                   column.visible = false
                 }
@@ -278,7 +278,7 @@ export default {
         export default {
           data () {
             return {
-              columns: [],
+              columns3: [],
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -291,10 +291,10 @@ export default {
               ]
             }
           },
-          created () {
+          mounted () {
             // 获取所有列配置
             this.$nextTick(() => {
-              this.columns = this.$refs.xTable3.getColumns()
+              this.columns3 = this.$refs.xTable3.getColumns()
             })
           }
         }
@@ -328,7 +328,6 @@ export default {
         export default {
           data () {
             return {
-              columns: [],
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
@@ -368,7 +367,7 @@ export default {
       ]
     }
   },
-  created () {
+  mounted () {
     // 获取所有列配置
     this.$nextTick(() => {
       this.columns2 = this.$refs.xTable2.getColumns()

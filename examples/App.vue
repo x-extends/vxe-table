@@ -1457,6 +1457,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.keepAlives',
+              locat: {
+                name: 'GridKeepAliveGrid1'
+              }
+            },
+            {
               label: 'app.aside.nav.fullQuery',
               locat: {
                 name: 'GridFullQuery'

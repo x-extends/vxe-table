@@ -17,7 +17,9 @@
       :data="tableData"
       :custom-config="{storage: true}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
+      @toolbar-button-click="toolbarButtonClickEvent"
+      @toolbar-tool-click="toolbarToolClickEvent">
+    </vxe-grid>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
@@ -47,6 +49,9 @@ export default {
               { code: 'other3', name: '下拉的按钮3', type: 'text', disabled: false }
             ]
           }
+        ],
+        tools: [
+          { code: 'myPrint', name: '自定义打印' }
         ],
         import: true,
         export: true,
@@ -84,7 +89,9 @@ export default {
           :data="tableData"
           :custom-config="{storage: true}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-          @toolbar-button-click="toolbarButtonClickEvent"></vxe-grid>
+          @toolbar-button-click="toolbarButtonClickEvent"
+          @toolbar-tool-click="toolbarToolClickEvent">
+        </vxe-grid>
         `,
         `
         export default {
@@ -105,6 +112,9 @@ export default {
                       { code: 'other3', name: '下拉的按钮3', type: 'text', disabled: false }
                     ]
                   }
+                ],
+                tools: [
+                  { code: 'myPrint', name: '自定义打印' }
                 ],
                 refresh: true,
                 import: true,
@@ -167,6 +177,14 @@ export default {
                   })
                   break
               }
+            },
+            toolbarToolClickEvent ({ code }) {
+              const $grid = this.$refs.xGrid
+              switch (code) {
+                case 'myPrint':
+                  $grid.print()
+                  break
+              }
             }
           }
         }
@@ -211,6 +229,14 @@ export default {
           $grid.exportData({
             type: 'csv'
           })
+          break
+      }
+    },
+    toolbarToolClickEvent ({ code }) {
+      const $grid = this.$refs.xGrid
+      switch (code) {
+        case 'myPrint':
+          $grid.print()
           break
       }
     }

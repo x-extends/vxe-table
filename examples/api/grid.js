@@ -534,7 +534,7 @@ const apis = [
       },
       {
         name: 'toolbar-button-click',
-        desc: '只对 toolbar.buttons 配置时有效，当工具栏的按钮被点击时会后触发该事件',
+        desc: '只对 toolbar.buttons 配置时有效，当左侧按钮被点击时会后触发该事件',
         version: '',
         type: '',
         enum: '',
@@ -778,7 +778,7 @@ XEUtils.eachTree(gridAPI, (item, index, obj, paths, parent) => {
 const columnSlots = XEUtils.clone(columnAPI.find(item => item.name === 'Slots'), true)
 columnSlots.name = 'slots'
 columnSlots.list.forEach(item => {
-  item.type = 'String, Function'
+  item.type = 'string | ((params, h) => any[])'
   item.defVal = `${item.defVal}, h`
 })
 
