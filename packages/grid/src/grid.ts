@@ -773,11 +773,15 @@ export default defineComponent({
           case 'delete': {
             const ajaxMethods = ajax.delete
             if (ajaxMethods) {
-              const removeRecords = gridExtendTableMethods.getCheckboxRecords()
+              const selectRecords = gridExtendTableMethods.getCheckboxRecords()
+              const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
               const body = { removeRecords }
               const applyArgs = [{ $grid: $xegrid, code, button, body, options: ajaxMethods }].concat(args)
-              if (removeRecords.length) {
+              if (selectRecords.length) {
                 return handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
+                  if (!removeRecords.length) {
+                    return $xetable.remove(selectRecords)
+                  }
                   reactData.tableLoading = true
                   return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                     .then(rest => {

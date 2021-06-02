@@ -2915,7 +2915,7 @@ export default defineComponent({
         const { fullDataRowIdData, radioReserveRow, afterFullData } = internalData
         const radioOpts = computeRadioOpts.value
         if (radioOpts.reserve && radioReserveRow) {
-          if (isFull ? !fullDataRowIdData[getRowid($xetable, radioReserveRow)] : afterFullData.some(row => getRowid($xetable, row) === getRowid($xetable, radioReserveRow))) {
+          if (isFull ? !fullDataRowIdData[getRowid($xetable, radioReserveRow)] : !afterFullData.some(row => getRowid($xetable, row) === getRowid($xetable, radioReserveRow))) {
             return radioReserveRow
           }
         }
@@ -2934,7 +2934,7 @@ export default defineComponent({
         const reserveSelection: any[] = []
         if (checkboxOpts.reserve) {
           XEUtils.each(checkboxReserveRowMap, (row, rowid) => {
-            if (row && (isFull ? !fullDataRowIdData[rowid] : afterFullData.some(item => getRowid($xetable, item) === rowid))) {
+            if (row && (isFull ? !fullDataRowIdData[rowid] : !afterFullData.some(item => getRowid($xetable, item) === rowid))) {
               reserveSelection.push(row)
             }
           })
