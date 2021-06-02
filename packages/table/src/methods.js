@@ -2693,7 +2693,7 @@ const Methods = {
   getRadioReserveRecord (isFull) {
     const { fullDataRowIdData, afterFullData, radioReserveRow, radioOpts } = this
     if (radioOpts.reserve && radioReserveRow) {
-      if (isFull ? !fullDataRowIdData[getRowid(this, radioReserveRow)] : afterFullData.some(row => getRowid(this, row) === getRowid(this, radioReserveRow))) {
+      if (isFull ? !fullDataRowIdData[getRowid(this, radioReserveRow)] : !afterFullData.some(row => getRowid(this, row) === getRowid(this, radioReserveRow))) {
         return radioReserveRow
       }
     }
@@ -2722,7 +2722,7 @@ const Methods = {
     const reserveSelection = []
     if (checkboxOpts.reserve) {
       Object.keys(checkboxReserveRowMap).forEach(rowid => {
-        if ((isFull ? !fullDataRowIdData[rowid] : afterFullData.some(item => getRowid(this, item) === rowid))) {
+        if ((isFull ? !fullDataRowIdData[rowid] : !afterFullData.some(item => getRowid(this, item) === rowid))) {
           reserveSelection.push(checkboxReserveRowMap[rowid])
         }
       })
