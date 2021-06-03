@@ -383,7 +383,7 @@ export interface VxeGridListeners {
   checkboxRangeChange?: VxeGridEvents.CheckboxRangeChange;
   checkboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd;
   cellClick?: VxeGridEvents.CellClick
-  cellDBLClick?: VxeGridEvents.CellDblclick;
+  cellDblclick?: VxeGridEvents.CellDblclick;
   cellMenu?: VxeGridEvents.CellMenu;
   cellMouseenter?: VxeGridEvents.CellMouseenter;
   cellMouseleave?: VxeGridEvents.CellMouseleave;

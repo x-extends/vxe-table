@@ -2323,7 +2323,7 @@ export interface VxeTableListeners {
   checkboxRangeChange?: VxeTableEvents.CheckboxRangeChange;
   checkboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd;
   cellClick?: VxeTableEvents.CellClick;
-  cellDBLClick?: VxeTableEvents.CellDblclick;
+  cellDblclick?: VxeTableEvents.CellDblclick;
   cellMenu?: VxeTableEvents.CellMenu;
   cellMouseenter?: VxeTableEvents.CellMouseenter;
   cellMouseleave?: VxeTableEvents.CellMouseleave;

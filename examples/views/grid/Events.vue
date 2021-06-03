@@ -127,7 +127,7 @@ export default defineComponent({
       cellClick ({ column }) {
         console.log(`单元格点击${column.title}`)
       },
-      cellDBLClick ({ column }) {
+      cellDblclick ({ column }) {
         console.log(`单元格双击${column.title}`)
       },
       cellMouseenter ({ column }) {
@@ -280,7 +280,7 @@ export default defineComponent({
               cellClick ({ column }) {
                 console.log(\`单元格点击\${column.title}\`)
               },
-              cellDBLClick ({ column }) {
+              cellDblclick ({ column }) {
                 console.log(\`单元格双击\${column.title}\`)
               },
               cellMouseenter ({ column }) {
