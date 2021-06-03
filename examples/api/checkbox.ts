@@ -11,7 +11,7 @@ const apis = [
         name: 'modelValue',
         descKey: 'app.api.checkbox.desc.value',
         version: '',
-        type: 'any',
+        type: 'string | number | boolean',
         enum: '',
         defVal: '',
         list: []
@@ -66,6 +66,24 @@ const apis = [
         descKey: 'app.api.checkbox.desc.indeterminate',
         version: '',
         type: 'boolean',
+        enum: '',
+        defVal: 'false',
+        list: []
+      },
+      {
+        name: 'checked-value',
+        desc: '选中时的值',
+        version: '4.0.21',
+        type: 'string | number | boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
+        name: 'unchecked-value',
+        desc: '未选中时的值',
+        version: '4.0.21',
+        type: 'string | number | boolean',
         enum: '',
         defVal: 'false',
         list: []

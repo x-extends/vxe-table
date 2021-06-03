@@ -9,10 +9,12 @@ import { VxeCheckboxConstructor, VxeCheckboxGroupConstructor, VxeCheckboxEmits, 
 export default defineComponent({
   name: 'VxeCheckbox',
   props: {
-    modelValue: Boolean as PropType<VxeCheckboxPropTypes.ModelValue>,
+    modelValue: [String, Number, Boolean] as PropType<VxeCheckboxPropTypes.ModelValue>,
     label: { type: [String, Number] as PropType<VxeCheckboxPropTypes.Label>, default: null },
     indeterminate: Boolean as PropType<VxeCheckboxPropTypes.Indeterminate>,
     title: [String, Number] as PropType<VxeCheckboxPropTypes.Title>,
+    checkedValue: { type: [String, Number, Boolean] as PropType<VxeCheckboxPropTypes.CheckedValue>, default: true },
+    uncheckedValue: { type: [String, Number, Boolean] as PropType<VxeCheckboxPropTypes.UncheckedValue>, default: false },
     content: [String, Number] as PropType<VxeCheckboxPropTypes.Content>,
     disabled: Boolean as PropType<VxeCheckboxPropTypes.Disabled>,
     size: { type: String as PropType<VxeCheckboxPropTypes.Size>, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
@@ -43,18 +45,21 @@ export default defineComponent({
     })
 
     const computeChecked = computed(() => {
-      return $xecheckboxgroup ? XEUtils.includes($xecheckboxgroup.props.modelValue, props.label) : props.modelValue
+      return $xecheckboxgroup ? XEUtils.includes($xecheckboxgroup.props.modelValue, props.label) : props.modelValue === props.checkedValue
     })
 
     const changeEvent = (evnt: Event & { target: { checked: boolean } }) => {
+      const { checkedValue, uncheckedValue } = props
       const isDisabled = computeDisabled.value
       if (!isDisabled) {
         const checked = evnt.target.checked
+        const value = checked ? checkedValue : uncheckedValue
+        const params = { checked, value, label: props.label }
         if ($xecheckboxgroup) {
-          $xecheckboxgroup.handleChecked({ checked, label: props.label }, evnt)
+          $xecheckboxgroup.handleChecked(params, evnt)
         } else {
-          emit('update:modelValue', checked)
-          checkboxMethods.dispatchEvent('change', { checked, label: props.label }, evnt)
+          emit('update:modelValue', value)
+          checkboxMethods.dispatchEvent('change', params, evnt)
         }
       }
     }

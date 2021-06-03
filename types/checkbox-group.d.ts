@@ -1,6 +1,6 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
-import { VxeCheckboxEvents } from './checkbox'
+import { VxeCheckboxEvents, VxeCheckboxPropTypes } from './checkbox'
 
 /**
  * 组件 - 复选框组
@@ -40,7 +40,11 @@ export interface CheckboxGroupMethods {
 export interface VxeCheckboxGroupMethods extends CheckboxGroupMethods { }
 
 export interface CheckboxGroupPrivateMethods {
-  handleChecked(params: { checked: boolean, label: any }, evnt: Event): void;
+  handleChecked(params: {
+    checked: boolean;
+    value: VxeCheckboxPropTypes.ModelValue;
+    label: VxeCheckboxPropTypes.Label;
+  }, evnt: Event): void;
 }
 export interface VxeCheckboxGroupPrivateMethods extends CheckboxGroupPrivateMethods { }
 

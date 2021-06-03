@@ -17,7 +17,7 @@
     <p>
       <vxe-checkbox v-model="demo1.value9" content="复选1"></vxe-checkbox>
       <vxe-checkbox v-model="demo1.value10" content="复选2" disabled></vxe-checkbox>
-      <vxe-checkbox v-model="demo1.value11" content="复选3"></vxe-checkbox>
+      <vxe-checkbox v-model="demo1.value11" content="自定义值" checked-value="1" unchecked-value="0"></vxe-checkbox>
     </p>
 
     <p>
@@ -63,7 +63,7 @@ export default defineComponent({
       value8: false,
       value9: true,
       value10: true,
-      value11: false,
+      value11: '1',
       value12: ['3']
     })
     return {
@@ -84,7 +84,7 @@ export default defineComponent({
         <p>
           <vxe-checkbox v-model="demo1.value9" content="复选1"></vxe-checkbox>
           <vxe-checkbox v-model="demo1.value10" content="复选2" disabled></vxe-checkbox>
-          <vxe-checkbox v-model="demo1.value11" content="复选3"></vxe-checkbox>
+          <vxe-checkbox v-model="demo1.value11" content="自定义值" checked-value="1" unchecked-value="0"></vxe-checkbox>
         </p>
 
         <p>
@@ -113,7 +113,7 @@ export default defineComponent({
               value8: false,
               value9: true,
               value10: true,
-              value11: false,
+              value11: '1',
               value12: ['3']
             })
             return {

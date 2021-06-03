@@ -148,6 +148,7 @@ export namespace VxeGridPropTypes {
   export interface PagerOpts extends PagerConfig { }
 
   interface ProxyAjaxQueryPageParams {
+    total: number;
     pageSize: number;
     currentPage: number;
   }
@@ -159,17 +160,12 @@ export namespace VxeGridPropTypes {
     property: string;
   }
 
-  interface ProxyAjaxQueryFiltersParams {
-    field: string;
-    property: string;
-    values: any[];
-  }
-
   interface ProxyAjaxQueryParams {
+    $grid: VxeGridConstructor;
     page: ProxyAjaxQueryPageParams;
     sort: ProxyAjaxQuerySortCheckedParams;
     sorts: ProxyAjaxQuerySortCheckedParams[];
-    filters: ProxyAjaxQueryFiltersParams[];
+    filters: VxeTableDefines.FilterCheckedParams[];
     form: any;
   }
 
@@ -178,18 +174,20 @@ export namespace VxeGridPropTypes {
     $grid: VxeGridConstructor;
     sort: ProxyAjaxQuerySortCheckedParams;
     sorts: ProxyAjaxQuerySortCheckedParams[];
-    filters: ProxyAjaxQueryFiltersParams[];
+    filters: VxeTableDefines.FilterCheckedParams[];
     form: any;
     options: any;
   }
 
   interface ProxyAjaxDeleteParams {
+    $grid: VxeGridConstructor;
     body: {
       removeRecords: any[];
     }
   }
 
   interface ProxyAjaxSaveParams {
+    $grid: VxeGridConstructor;
     body: {
       insertRecords: any[];
       updateRecords: any[];

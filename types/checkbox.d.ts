@@ -33,6 +33,8 @@ export type VxeCheckboxProps = {
    * 原生 title 属性
    */
   title?: VxeCheckboxPropTypes.Title;
+  checkedValue?: VxeCheckboxPropTypes.CheckedValue;
+  uncheckedValue?: VxeCheckboxPropTypes.UncheckedValue;
   /**
    * 内容
    */
@@ -45,10 +47,12 @@ export type VxeCheckboxProps = {
 
 export namespace VxeCheckboxPropTypes {
   export type Size = SizeType;
-  export type ModelValue = boolean;
+  export type ModelValue = string | number | boolean;
   export type Label = string | number;
   export type Indeterminate = boolean;
   export type Title = string | number;
+  export type CheckedValue = string | number | boolean;
+  export type UncheckedValue = string | number | boolean;
   export type Content = string | number;
   export type Disabled = boolean;
 }
