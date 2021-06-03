@@ -4,11 +4,13 @@ import GlobalConfig from '../../conf'
 export default {
   name: 'VxeCheckbox',
   props: {
-    value: Boolean,
+    value: [String, Number, Boolean],
     label: [String, Number],
     indeterminate: Boolean,
     title: [String, Number],
     content: [String, Number],
+    checkedValue: { type: [String, Number, Boolean], default: true },
+    uncheckedValue: { type: [String, Number, Boolean], default: false },
     disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
@@ -29,7 +31,7 @@ export default {
     }
   },
   render (h) {
-    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
+    const { $slots, $xegroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content, checkedValue, uncheckedValue } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -49,17 +51,18 @@ export default {
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup ? ($xegroup.value && $xegroup.value.some(item => item === label)) : value
+          checked: isGroup ? ($xegroup.value && $xegroup.value.some(item => item === label)) : value === checkedValue
         },
         on: {
           change: evnt => {
             if (!isDisabled) {
               const checked = evnt.target.checked
-              const params = { checked, label, $event: evnt }
+              const value = checked ? checkedValue : uncheckedValue
+              const params = { checked, value, label, $event: evnt }
               if (isGroup) {
                 $xegroup.handleChecked(params, evnt)
               } else {
-                this.$emit('input', checked)
+                this.$emit('input', value)
                 this.$emit('change', params, evnt)
               }
             }
