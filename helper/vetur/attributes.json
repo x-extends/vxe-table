@@ -1172,7 +1172,7 @@
     "description": "是否禁用"
   },
   "vxe-checkbox/value": {
-    "type": "any",
+    "type": "string | number | boolean",
     "description": "v-model 绑定值"
   },
   "vxe-checkbox/label": {
@@ -1198,6 +1198,14 @@
   "vxe-checkbox/indeterminate": {
     "type": "boolean",
     "description": "是否不确定状态"
+  },
+  "vxe-checkbox/checked-value": {
+    "type": "string | number | boolean",
+    "description": "选中时的值"
+  },
+  "vxe-checkbox/unchecked-value": {
+    "type": "string | number | boolean",
+    "description": "未选中时的值"
   },
   "vxe-checkbox-group/value": {
     "type": "any[]",

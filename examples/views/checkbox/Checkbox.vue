@@ -17,7 +17,7 @@
     <p>
       <vxe-checkbox v-model="value9" content="复选1"></vxe-checkbox>
       <vxe-checkbox v-model="value10" content="复选2" disabled></vxe-checkbox>
-      <vxe-checkbox v-model="value11" content="复选3"></vxe-checkbox>
+      <vxe-checkbox v-model="value11" content="自定义值" checked-value="1" unchecked-value="0"></vxe-checkbox>
     </p>
 
     <p>
@@ -61,7 +61,7 @@ export default {
       value8: false,
       value9: true,
       value10: true,
-      value11: false,
+      value11: '1',
       value12: ['3'],
       demoCodes: [
         `
@@ -79,7 +79,7 @@ export default {
         <p>
           <vxe-checkbox v-model="value9" content="复选1"></vxe-checkbox>
           <vxe-checkbox v-model="value10" content="复选2" disabled></vxe-checkbox>
-          <vxe-checkbox v-model="value11" content="复选3"></vxe-checkbox>
+          <vxe-checkbox v-model="value11" content="自定义值" checked-value="1" unchecked-value="0"></vxe-checkbox>
         </p>
 
         <p>
@@ -106,7 +106,7 @@ export default {
               value8: false,
               value9: true,
               value10: true,
-              value11: false,
+              value11: '1',
               value12: ['3']
             }
           }

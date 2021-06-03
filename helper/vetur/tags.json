@@ -371,7 +371,9 @@
       "size",
       "disabled",
       "title",
-      "indeterminate"
+      "indeterminate",
+      "checked-value",
+      "unchecked-value"
     ],
     "description": "复选框"
   },

@@ -7,11 +7,13 @@ export default {
   name: 'VxeCheckbox',
   mixins: [vSize],
   props: {
-    value: Boolean,
+    value: [String, Number, Boolean],
     label: [String, Number],
     indeterminate: Boolean,
     title: [String, Number],
     content: [String, Number],
+    checkedValue: { type: [String, Number, Boolean], default: true },
+    uncheckedValue: { type: [String, Number, Boolean], default: false },
     disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
@@ -29,7 +31,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, $xecheckboxgroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content } = this
+    const { $scopedSlots, $xecheckboxgroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content, checkedValue } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -49,7 +51,7 @@ export default {
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup ? XEUtils.includes($xecheckboxgroup.value, label) : value
+          checked: isGroup ? XEUtils.includes($xecheckboxgroup.value, label) : value === checkedValue
         },
         on: {
           change: this.changeEvent
@@ -65,14 +67,15 @@ export default {
   },
   methods: {
     changeEvent (evnt) {
-      const { $xecheckboxgroup, isGroup, isDisabled, label } = this
+      const { $xecheckboxgroup, isGroup, isDisabled, label, checkedValue, uncheckedValue } = this
       if (!isDisabled) {
         const checked = evnt.target.checked
-        const params = { checked, label, $event: evnt }
+        const value = checked ? checkedValue : uncheckedValue
+        const params = { checked, value, label, $event: evnt }
         if (isGroup) {
           $xecheckboxgroup.handleChecked(params)
         } else {
-          this.$emit('input', checked)
+          this.$emit('input', value)
           this.$emit('change', params)
         }
       }
