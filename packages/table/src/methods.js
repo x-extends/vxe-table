@@ -2903,7 +2903,7 @@ const Methods = {
   getRadioRecord (isFull) {
     const { selectRow, tableFullData, afterFullData } = this
     if (selectRow) {
-      if ((isFull ? tableFullData : afterFullData).indexOf(selectRow)) {
+      if ((isFull ? tableFullData : afterFullData).indexOf(selectRow) > -1) {
         return selectRow
       }
     }
