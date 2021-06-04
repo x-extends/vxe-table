@@ -743,7 +743,7 @@ export interface TableReactData {
   // 单选框属性，选中行
   selectRow: any;
   // 表尾合计数据
-  footerTableData: any[];
+  footerTableData:any[][];
   // 展开列信息
   expandColumn: any;
   hasFixedColumn: boolean;
