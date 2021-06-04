@@ -1457,10 +1457,10 @@ const Methods = {
     const scaleMinList = []
     const autoList = []
     this.tableFullColumn.forEach(column => {
-      if (defaultWidth && !column.width) {
+      if (defaultWidth && XEUtils.eqNull(column.width)) {
         column.width = defaultWidth
       }
-      if (defaultMinWidth && !column.minWidth) {
+      if (defaultMinWidth && XEUtils.eqNull(column.minWidth)) {
         column.minWidth = defaultMinWidth
       }
       if (column.visible) {

@@ -83,7 +83,7 @@ export function setScrollLeft (elem, scrollLeft) {
 export const DomTools = {
   browse,
   isPx (val) {
-    return val && /^\d+(px)?$/.test(val)
+    return !XEUtils.eqNull(val) && /^\d+(px)?$/.test(val)
   },
   isScale,
   hasClass,
