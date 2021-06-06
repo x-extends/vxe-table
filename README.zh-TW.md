@@ -147,6 +147,26 @@ export default {
 👉 [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic) [👀備用地址](https://x-extends.github.io/vxe-table/#/table/base/basic)  
 👉 [查看檔案](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api) [👀備用地址](https://x-extends.github.io/vxe-table/#/table/api)
 
+## 運行項目
+
+安裝依賴
+
+```shell
+npm install
+```
+
+啓動本地調試
+
+```shell
+npm run serve
+```
+
+編譯打包，生成編譯後的目錄：es,lib
+
+```shell
+npm run lib
+```
+
 ## License
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan

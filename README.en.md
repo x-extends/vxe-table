@@ -143,6 +143,26 @@ export default {
 👉 [View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
 👉 [View API](https://x-extends.github.io/vxe-table/#/table/api)
 
+## Run the project
+
+Install dependencies
+
+```shell
+npm install
+```
+
+Start local debugging
+
+```shell
+npm run serve
+```
+
+Compile packaging, generated compiled directory: es,lib
+
+```shell
+npm run lib
+```
+
 ## License
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan
