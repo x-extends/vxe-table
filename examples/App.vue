@@ -722,12 +722,12 @@ export default defineComponent({
                 name: 'TableExpand'
               }
             },
-            // {
-            //   label: 'app.aside.nav.expandRowIcon',
-            //   locat: {
-            //     name: 'TableExpandIcon'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.expandRowIcon',
+              locat: {
+                name: 'TableExpandIcon'
+              }
+            },
             // {
             //   label: 'app.aside.nav.expandRowLazy',
             //   locat: {
@@ -746,13 +746,13 @@ export default defineComponent({
                 name: 'TableToolbar'
               }
             },
-            // {
-            //   label: 'app.aside.nav.customs',
-            //   // demoUrl: 'https://jsrun.pro/PrXKp/edit',
-            //   locat: {
-            //     name: 'TableCustom'
-            //   }
-            // },
+            {
+              label: 'app.aside.nav.customs',
+              // demoUrl: 'https://jsrun.pro/PrXKp/edit',
+              locat: {
+                name: 'TableCustom'
+              }
+            },
             {
               label: 'app.aside.nav.customStorage',
               locat: {
