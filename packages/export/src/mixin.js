@@ -926,7 +926,6 @@ function removePrintFrame () {
     if (printFrame.parentNode) {
       try {
         printFrame.contentDocument.write('')
-        printFrame.contentDocument.clear()
       } catch (e) { }
       printFrame.parentNode.removeChild(printFrame)
     }
@@ -941,7 +940,7 @@ function appendPrintFrame () {
 }
 
 function afterPrintEvent () {
-  removePrintFrame()
+  requestAnimationFrame(removePrintFrame)
 }
 
 export function handlePrint ($xetable, opts, content) {

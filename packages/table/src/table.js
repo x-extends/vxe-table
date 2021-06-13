@@ -638,11 +638,11 @@ export default {
     },
     mergeCells (value) {
       this.clearMergeCells()
-      this.setMergeCells(value)
+      this.$nextTick(() => this.setMergeCells(value))
     },
     mergeFooterItems (value) {
       this.clearMergeFooterItems()
-      this.setMergeFooterItems(value)
+      this.$nextTick(() => this.setMergeFooterItems(value))
     }
   },
   created () {

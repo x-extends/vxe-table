@@ -2821,10 +2821,25 @@ const Methods = {
    * 获取单选框保留选中的行
    */
   getRadioReserveRecord (isFull) {
-    const { fullDataRowIdData, radioReserveRow, radioOpts, afterFullData } = this
+    const { fullDataRowIdData, radioReserveRow, radioOpts, afterFullData, treeConfig, treeOpts } = this
     if (radioOpts.reserve && radioReserveRow) {
-      if (isFull ? !fullDataRowIdData[getRowid(this, radioReserveRow)] : !afterFullData.some(row => getRowid(this, row) === getRowid(this, radioReserveRow))) {
-        return radioReserveRow
+      const rowid = getRowid(this, radioReserveRow)
+      if (isFull) {
+        if (!fullDataRowIdData[rowid]) {
+          return radioReserveRow
+        }
+      } else {
+        const rowkey = getRowkey(this)
+        if (treeConfig) {
+          const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), treeOpts)
+          if (matchObj) {
+            return radioReserveRow
+          }
+        } else {
+          if (!afterFullData.some(row => rowid === XEUtils.get(row, rowkey))) {
+            return radioReserveRow
+          }
+        }
       }
     }
     return null
@@ -2843,12 +2858,26 @@ const Methods = {
    * 获取复选框保留选中的行
    */
   getCheckboxReserveRecords (isFull) {
-    const { fullDataRowIdData, afterFullData, checkboxReserveRowMap, checkboxOpts } = this
+    const { fullDataRowIdData, afterFullData, checkboxReserveRowMap, checkboxOpts, treeConfig, treeOpts } = this
     const reserveSelection = []
     if (checkboxOpts.reserve) {
-      XEUtils.each(checkboxReserveRowMap, (row, rowid) => {
-        if (row && (isFull ? !fullDataRowIdData[rowid] : !afterFullData.some(item => getRowid(this, item) === rowid))) {
-          reserveSelection.push(row)
+      XEUtils.each(checkboxReserveRowMap, (oldRow, oldRowid) => {
+        if (oldRow) {
+          if (isFull) {
+            if (!fullDataRowIdData[oldRowid]) {
+              reserveSelection.push(oldRow)
+            }
+          } else {
+            if (treeConfig) {
+              if (!XEUtils.findTree(afterFullData, row => getRowid(this, row) === oldRowid, treeOpts)) {
+                reserveSelection.push(oldRow)
+              }
+            } else {
+              if (!afterFullData.some(row => getRowid(this, row) === oldRowid)) {
+                reserveSelection.push(oldRow)
+              }
+            }
+          }
         }
       })
     }
@@ -3000,10 +3029,25 @@ const Methods = {
    * 用于单选行，获取当已选中的数据
    */
   getRadioRecord (isFull) {
-    const { selectRow, tableFullData, afterFullData } = this
+    const { treeConfig, treeOpts, selectRow, fullDataRowIdData, afterFullData } = this
     if (selectRow) {
-      if ((isFull ? tableFullData : afterFullData).indexOf(selectRow) > -1) {
-        return selectRow
+      const rowid = getRowid(this, selectRow)
+      if (isFull) {
+        if (!fullDataRowIdData[rowid]) {
+          return selectRow
+        }
+      } else {
+        if (treeConfig) {
+          const rowkey = getRowkey(this)
+          const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), treeOpts)
+          if (matchObj) {
+            return selectRow
+          }
+        } else {
+          if (afterFullData.indexOf(selectRow) > -1) {
+            return selectRow
+          }
+        }
       }
     }
     return null
