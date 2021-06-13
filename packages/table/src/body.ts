@@ -593,6 +593,7 @@ export default defineComponent({
       let { fixedColumn, fixedType, tableColumn } = props
       const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig } = tableProps
       const { tableData, mergeList, scrollXLoad, scrollYLoad, isAllOverflow } = tableReactData
+      const { visibleColumn } = tableInternalData
       const { slots } = tableContext
       const sYOpts = computeSYOpts.value
       const emptyOpts = computeEmptyOpts.value
@@ -602,6 +603,8 @@ export default defineComponent({
       if (fixedType) {
         if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
           tableColumn = fixedColumn
+        } else {
+          tableColumn = visibleColumn
         }
       }
       let emptyContent: string | VxeGlobalRendererHandles.RenderResult
