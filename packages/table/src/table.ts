@@ -2912,11 +2912,28 @@ export default defineComponent({
        * 获取单选框保留选中的行
        */
       getRadioReserveRecord (isFull) {
+        const { treeConfig } = props
         const { fullDataRowIdData, radioReserveRow, afterFullData } = internalData
         const radioOpts = computeRadioOpts.value
+        const treeOpts = computeTreeOpts.value
         if (radioOpts.reserve && radioReserveRow) {
-          if (isFull ? !fullDataRowIdData[getRowid($xetable, radioReserveRow)] : !afterFullData.some(row => getRowid($xetable, row) === getRowid($xetable, radioReserveRow))) {
-            return radioReserveRow
+          const rowid = getRowid($xetable, radioReserveRow)
+          if (isFull) {
+            if (!fullDataRowIdData[rowid]) {
+              return radioReserveRow
+            }
+          } else {
+            const rowkey = getRowkey($xetable)
+            if (treeConfig) {
+              const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), treeOpts)
+              if (matchObj) {
+                return radioReserveRow
+              }
+            } else {
+              if (!afterFullData.some(row => rowid === XEUtils.get(row, rowkey))) {
+                return radioReserveRow
+              }
+            }
           }
         }
         return null
@@ -2929,13 +2946,29 @@ export default defineComponent({
        * 获取复选框保留选中的行
        */
       getCheckboxReserveRecords (isFull) {
+        const { treeConfig } = props
         const { afterFullData, fullDataRowIdData, checkboxReserveRowMap } = internalData
         const checkboxOpts = computeCheckboxOpts.value
+        const treeOpts = computeTreeOpts.value
         const reserveSelection: any[] = []
         if (checkboxOpts.reserve) {
-          XEUtils.each(checkboxReserveRowMap, (row, rowid) => {
-            if (row && (isFull ? !fullDataRowIdData[rowid] : !afterFullData.some(item => getRowid($xetable, item) === rowid))) {
-              reserveSelection.push(row)
+          XEUtils.each(checkboxReserveRowMap, (oldRow, oldRowid) => {
+            if (oldRow) {
+              if (isFull) {
+                if (!fullDataRowIdData[oldRowid]) {
+                  reserveSelection.push(oldRow)
+                }
+              } else {
+                if (treeConfig) {
+                  if (!XEUtils.findTree(afterFullData, row => getRowid($xetable, row) === oldRowid, treeOpts)) {
+                    reserveSelection.push(oldRow)
+                  }
+                } else {
+                  if (!afterFullData.some(row => getRowid($xetable, row) === oldRowid)) {
+                    reserveSelection.push(oldRow)
+                  }
+                }
+              }
             }
           })
         }
@@ -3039,11 +3072,28 @@ export default defineComponent({
        * 用于单选行，获取当已选中的数据
        */
       getRadioRecord (isFull) {
-        const { tableFullData, afterFullData } = internalData
+        const { treeConfig } = props
+        const { fullDataRowIdData, afterFullData } = internalData
         const { selectRow } = reactData
+        const treeOpts = computeTreeOpts.value
         if (selectRow) {
-          if ($xetable.findRowIndexOf(isFull ? tableFullData : afterFullData, selectRow) > -1) {
-            return selectRow
+          const rowid = getRowid($xetable, selectRow)
+          if (isFull) {
+            if (!fullDataRowIdData[rowid]) {
+              return selectRow
+            }
+          } else {
+            if (treeConfig) {
+              const rowkey = getRowkey($xetable)
+              const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), treeOpts)
+              if (matchObj) {
+                return selectRow
+              }
+            } else {
+              if (afterFullData.indexOf(selectRow) > -1) {
+                return selectRow
+              }
+            }
           }
         }
         return null
@@ -5237,16 +5287,20 @@ export default defineComponent({
 
     watch(() => props.mergeCells, (value) => {
       tableMethods.clearMergeCells()
-      if (value) {
-        tableMethods.setMergeCells(value)
-      }
+      nextTick(() => {
+        if (value) {
+          tableMethods.setMergeCells(value)
+        }
+      })
     })
 
     watch(() => props.mergeFooterItems, (value) => {
       tableMethods.clearMergeFooterItems()
-      if (value) {
-        tableMethods.setMergeFooterItems(value)
-      }
+      nextTick(() => {
+        if (value) {
+          tableMethods.setMergeFooterItems(value)
+        }
+      })
     })
 
     VXETable.hooks.forEach((options) => {

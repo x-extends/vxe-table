@@ -240,7 +240,11 @@
     </p>
 
     <p>
-      <vxe-form :data="demo4.formData4" :items="demo4.formItems4"></vxe-form>
+      <vxe-form :data="demo4.formData4" :items="demo4.formItems4">
+        <template #myregion="{ data }">
+          <vxe-input v-model="data.region" placeholder="自定义插槽模板"></vxe-input>
+        </template>
+      </vxe-form>
     </p>
 
     <pre>
@@ -339,7 +343,7 @@ export default defineComponent({
             { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
             { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
             { field: 'age', title: '年龄', span: 24, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
-            { field: 'region', title: '名称', span: 24, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } }
+            { field: 'region', title: '地区', span: 24, slots: { default: 'myregion' } }
           ]
         },
         {
@@ -613,7 +617,11 @@ export default defineComponent({
         </p>
 
         <p>
-          <vxe-form :data="demo4.formData4" :items="demo4.formItems4"></vxe-form>
+          <vxe-form :data="demo4.formData4" :items="demo4.formItems4">
+            <template #myregion="{ data }">
+              <vxe-input v-model="data.region" placeholder="自定义插槽模板"></vxe-input>
+            </template>
+          </vxe-form>
         </p>
         `,
         `
@@ -694,7 +702,7 @@ export default defineComponent({
                     { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
                     { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
                     { field: 'age', title: '年龄', span: 24, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
-                    { field: 'region', title: '名称', span: 24, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } }
+                    { field: 'region', title: '地区', span: 24, slots: { default: 'myregion' } }
                   ]
                 },
                 {

@@ -98,8 +98,7 @@ function removePrintFrame () {
     if (printFrame.parentNode) {
       try {
         printFrame.contentDocument.write('')
-        printFrame.contentDocument.clear()
-      } catch (e) { }
+      } catch (e) {}
       printFrame.parentNode.removeChild(printFrame)
     }
     printFrame = null
@@ -113,7 +112,7 @@ function appendPrintFrame () {
 }
 
 function afterPrintEvent () {
-  removePrintFrame()
+  requestAnimationFrame(removePrintFrame)
 }
 
 export function handlePrint ($xetable: VxeTableConstructor | null, opts: VxeTablePropTypes.PrintConfig & { type: string }, content = ''): void {
