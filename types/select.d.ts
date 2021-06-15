@@ -28,9 +28,9 @@ export interface VxeSelectPrivateRef extends SelectPrivateRef { }
 export interface SelectReactData {
   inited: boolean;
   staticOptions: VxeSelectDefines.OptionInfo[];
-  fullGroupList: VxeOptgroupProps[];
+  fullGroupList: VxeSelectPropTypes.OptionGroups;
   fullOptionList: VxeOptionProps[];
-  visibleGroupList: VxeOptgroupProps[];
+  visibleGroupList: VxeSelectPropTypes.OptionGroups;
   visibleOptionList: VxeOptionProps[];
   panelIndex: number;
   panelStyle: VNodeStyle;
@@ -75,9 +75,9 @@ export namespace VxeSelectPropTypes {
   export type MultiCharOverflow = number | string;
   export type PrefixIcon = string;
   export type Placement = string;
-  export type Options = any[];
+  export type Options = VxeSelectDefines.SelectOptions[];
   export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps;
-  export type OptionGroups = VxeOptgroupProps[];
+  export type OptionGroups = VxeSelectDefines.SelectOptgroups[];
   export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps;
   export type EmptyText = string;
   export type OptionId = string;
@@ -138,6 +138,15 @@ export namespace VxeSelectDefines {
     disabled: VxeOptionPropTypes.Disabled;
 
     options: OptionInfo[];
+  }
+
+  export interface SelectOptions extends VxeOptionProps {
+    slots?: VxeOptionPropTypes.Slots;
+  }
+
+  export interface SelectOptgroups extends VxeOptgroupProps {
+    options?: VxeOptionProps[];
+    slots?: VxeOptionPropTypes.Slots;
   }
 
   interface SelectEventParams extends VxeEvent {

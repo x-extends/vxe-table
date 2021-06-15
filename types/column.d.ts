@@ -196,7 +196,7 @@ export namespace VxeColumnPropTypes {
   interface IconSlotParams extends DefaultSlotParams { }
 
   export type Slots = {
-    title?: string | ((params: DefaultSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
+    title?: string | ((params: HeaderSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
     radio?: string | ((params: DefaultSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
     checkbox?: string | ((params: DefaultSlotParams) => JSX.Element[] | VNode[] | string[]) | null;
     default?: string | ((params: DefaultSlotParams) => JSX.Element[] | VNode[] | string[]) | null;

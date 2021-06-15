@@ -90,12 +90,19 @@ export default defineComponent({
     const renderVN = () => {
       let { fixedType, fixedColumn, tableColumn, footerTableData } = props
       const { footerRowClassName, footerCellClassName, footerRowStyle, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
+      const { visibleColumn } = tableInternalData
       const { scrollXLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
       const tooltipOpts = computeTooltipOpts.value
       // 如果是使用优化模式
       if (fixedType) {
-        if ((!mergeFooterList.length || !footerSpanMethod) && (scrollXLoad || allColumnFooterOverflow)) {
-          tableColumn = fixedColumn
+        if (scrollXLoad || allColumnFooterOverflow) {
+          if (!mergeFooterList.length || !footerSpanMethod) {
+            tableColumn = fixedColumn
+          } else {
+            tableColumn = visibleColumn
+          }
+        } else {
+          tableColumn = visibleColumn
         }
       }
       return h('div', {

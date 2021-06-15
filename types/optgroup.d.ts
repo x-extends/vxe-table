@@ -21,5 +21,4 @@ export type VxeOptgroupProps = {
    * 是否禁用
    */
   disabled?: VxeOptionPropTypes.Disabled;
-  options: VxeOptionProps[];
 }

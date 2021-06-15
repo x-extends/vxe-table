@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, PropType, ref, Ref, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted } from 'vue'
+import { defineComponent, h, Teleport, PropType, ref, Ref, VNode, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -121,6 +121,18 @@ export default defineComponent({
     const computeMultiMaxCharNum = computed(() => {
       return XEUtils.toNumber(props.multiCharOverflow)
     })
+
+    const callSlot = <T>(slotFunc: ((params: T) => JSX.Element[] | VNode[] | string[]) | string | null, params: T) => {
+      if (slotFunc) {
+        if (XEUtils.isString(slotFunc)) {
+          slotFunc = slots[slotFunc] || null
+        }
+        if (XEUtils.isFunction(slotFunc)) {
+          return slotFunc(params)
+        }
+      }
+      return []
+    }
 
     const findOption = (optionValue: any) => {
       const { fullOptionList, fullGroupList } = reactData
@@ -559,11 +571,12 @@ export default defineComponent({
       const valueField = computeValueField.value
       const isGroup = computeIsGroup.value
       return list.map((option, cIndex) => {
-        const { className } = option
+        const { slots, className } = option
         const isVisible = !isGroup || isOptionVisible(option)
         const isDisabled = (group && group.disabled) || option.disabled
         const optionValue = option[valueField as 'value']
         const optid = getOptid(option)
+        const defaultSlot = slots ? slots.default : null
         return isVisible ? h('div', {
           key: optionKey ? optid : cIndex,
           class: ['vxe-select-option', className ? (XEUtils.isFunction(className) ? className({ option, $select: $xeselect }) : className) : '', {
@@ -590,7 +603,7 @@ export default defineComponent({
               setCurrentOption(option)
             }
           }
-        }, formatText(getFuncText(option[labelField as 'label']))) : null
+        }, defaultSlot ? callSlot(defaultSlot, { option, $select: $xeselect }) : formatText(getFuncText(option[labelField as 'label']))) : null
       })
     }
 
@@ -600,9 +613,10 @@ export default defineComponent({
       const groupLabelField = computeGroupLabelField.value
       const groupOptionsField = computeGroupOptionsField.value
       return visibleGroupList.map((group, gIndex) => {
-        const { className } = group
+        const { slots, className } = group
         const optid = getOptid(group)
         const isGroupDisabled = group.disabled
+        const defaultSlot = slots ? slots.default : null
         return h('div', {
           key: optionKey ? optid : gIndex,
           class: ['vxe-optgroup', className ? (XEUtils.isFunction(className) ? className({ option: group, $select: $xeselect }) : className) : '', {
@@ -613,10 +627,10 @@ export default defineComponent({
         }, [
           h('div', {
             class: 'vxe-optgroup--title'
-          }, getFuncText(group[groupLabelField as 'label'])),
+          }, defaultSlot ? callSlot(defaultSlot, { option: group, $select: $xeselect }) : getFuncText(group[groupLabelField as 'label'])),
           h('div', {
             class: 'vxe-optgroup--wrapper'
-          }, renderOption(group[groupOptionsField as 'options'], group))
+          }, renderOption(group[groupOptionsField as 'options'] || [], group))
         ])
       })
     }

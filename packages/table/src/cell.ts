@@ -230,9 +230,9 @@ export const Cell = {
       return $table.callSlot(iconSlot, params)
     }
     if (!isHidden) {
-      isAceived = treeExpandeds.indexOf(row) > -1
+      isAceived = $table.findRowIndexOf(treeExpandeds, row) > -1
       if (lazy) {
-        isLazyLoaded = treeLazyLoadeds.indexOf(row) > -1
+        isLazyLoaded = $table.findRowIndexOf(treeLazyLoadeds, row) > -1
         hasLazyChilds = row[hasChild]
       }
     }
@@ -436,7 +436,7 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let ons
     if (!isHidden) {
-      isChecked = selection.indexOf(row) > -1
+      isChecked = $table.findRowIndexOf(selection, row) > -1
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isDisabled) {
@@ -448,7 +448,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        indeterminate = $table.findRowIndexOf(treeIndeterminates, row) > -1
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, indeterminate }
@@ -508,7 +508,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        indeterminate = $table.findRowIndexOf(treeIndeterminates, row) > -1
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, indeterminate }
@@ -560,9 +560,9 @@ export const Cell = {
       return $table.callSlot(iconSlot, params)
     }
     if (!isHidden) {
-      isAceived = rowExpandeds.indexOf(params.row) > -1
+      isAceived = $table.findRowIndexOf(rowExpandeds, params.row) > -1
       if (lazy) {
-        isLazyLoaded = expandLazyLoadeds.indexOf(row) > -1
+        isLazyLoaded = $table.findRowIndexOf(expandLazyLoadeds, row) > -1
       }
     }
     return [

@@ -61,7 +61,17 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'default',
+        desc: '自定义选项显示内容模板',
+        version: '4.0.21',
+        type: '',
+        enum: '',
+        defVal: '{option}',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',

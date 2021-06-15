@@ -125,8 +125,8 @@ export interface GridPublicMethods {
 export interface VxeGridMethods extends GridMethods, TablePublicMethods { }
 
 export interface GridPrivateMethods {
-  callSlot(slotFunc: Function | string | null, params: any): VNode[];
-  extendTableMethods: <T>(methodKeys: T[]) => any;
+  callSlot<T>(slotFunc: ((params: T) => any[]) | string | null, params: T): VNode[];
+  extendTableMethods<T>(methodKeys: T[]): any;
   triggerToolbarBtnEvent(button: VxeToolbarPropTypes.ButtonConfig, evnt: Event): void;
   triggerToolbarTolEvent(button: VxeToolbarPropTypes.ToolConfig, evnt: Event): void;
   triggerZoomEvent(evnt: Event): void;

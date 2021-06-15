@@ -419,6 +419,9 @@ export default defineComponent({
           case 'PrevJump':
             renderFn = renderPrevJump
             break
+          case 'Number':
+            renderFn = renderNumber
+            break
           case 'JumpNumber':
             renderFn = renderJumpNumber
             break

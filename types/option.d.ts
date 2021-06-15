@@ -1,3 +1,4 @@
+import { VNode } from 'vue'
 import { VXEComponent } from './component'
 import { VxeSelectConstructor } from './select'
 
@@ -25,12 +26,27 @@ export type VxeOptionProps = {
    * 是否禁用
    */
   disabled?: VxeOptionPropTypes.Disabled;
+  slots?: {
+    default?: string | ((params: {
+      option: any;
+      $select: VxeSelectConstructor;
+    }) => JSX.Element[] | VNode[] | string[]) | null;
+  }
 }
 
 export namespace VxeOptionPropTypes {
   export type Value = any;
   export type Label = string | number | boolean;
   export type Visible = boolean;
-  export type ClassName = string | ((params: { option: any, $select: VxeSelectConstructor }) => string);
+  export type ClassName = string | ((params: {
+    option: any;
+    $select: VxeSelectConstructor;
+  }) => string);
   export type Disabled = boolean;
+  export type Slots = {
+    default?: string | ((params: {
+      option: any;
+      $select: VxeSelectConstructor;
+    }) => JSX.Element[] | VNode[] | string[]) | null;
+  }
 }
