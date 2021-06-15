@@ -157,7 +157,7 @@ Start local debugging
 npm run serve
 ```
 
-Compile packaging, generated compiled directory: es,lib
+Compile packaging, generated compiled directory: lib
 
 ```shell
 npm run lib

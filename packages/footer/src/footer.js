@@ -55,12 +55,27 @@ export default {
       currentColumn,
       overflowX,
       scrollbarWidth,
-      tooltipOpts
+      tooltipOpts,
+      visibleColumn
     } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
-      if ((!mergeFooterList.length || !footerSpanMethod) && (scrollXLoad || allColumnFooterOverflow)) {
-        tableColumn = fixedColumn
+      if (scrollXLoad || allColumnFooterOverflow) {
+        if (!mergeFooterList.length || !footerSpanMethod) {
+          tableColumn = fixedColumn
+        } else {
+          tableColumn = visibleColumn
+          // 检查固定列是否被合并，合并范围是否超出固定列
+          // if (mergeFooterList.length && !isMergeFooterLeftFixedExceeded && fixedType === 'left') {
+          //   tableColumn = fixedColumn
+          // } else if (mergeFooterList.length && !isMergeFooterRightFixedExceeded && fixedType === 'right') {
+          //   tableColumn = fixedColumn
+          // } else {
+          //   tableColumn = visibleColumn
+          // }
+        }
+      } else {
+        tableColumn = visibleColumn
       }
     }
     return h('div', {

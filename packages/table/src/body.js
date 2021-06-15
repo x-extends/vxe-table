@@ -442,8 +442,20 @@ export default {
     let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
-      if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
-        tableColumn = fixedColumn
+      if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+        if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
+          tableColumn = fixedColumn
+        } else {
+          tableColumn = visibleColumn
+          // 检查固定列是否被合并，合并范围是否超出固定列
+          // if (mergeList.length && !isMergeLeftFixedExceeded && fixedType === 'left') {
+          //   tableColumn = fixedColumn
+          // } else if (mergeList.length && !isMergeRightFixedExceeded && fixedType === 'right') {
+          //   tableColumn = fixedColumn
+          // } else {
+          //   tableColumn = visibleColumn
+          // }
+        }
       } else {
         tableColumn = visibleColumn
       }

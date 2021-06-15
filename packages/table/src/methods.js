@@ -1678,7 +1678,12 @@ const Methods = {
       mergeList,
       mergeFooterList,
       footerSpanMethod,
-      isAllOverflow
+      isAllOverflow,
+      visibleColumn
+      // isMergeLeftFixedExceeded,
+      // isMergeRightFixedExceeded,
+      // isMergeFooterLeftFixedExceeded,
+      // isMergeFooterRightFixedExceeded
     } = this
     const containerList = ['main', 'left', 'right']
     const emptyPlaceholderElem = $refs.emptyPlaceholder
@@ -1790,18 +1795,26 @@ const Methods = {
           let tWidth = tableWidth
 
           // 如果是使用优化模式
-          let isOptimize = false
           if (fixedType) {
-            if ((!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
-              isOptimize = true
+            if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+              if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
+                tableColumn = fixedColumn
+              } else {
+                tableColumn = visibleColumn
+                // 检查固定列是否被合并，合并范围是否超出固定列
+                // if (mergeList.length && !isMergeLeftFixedExceeded && fixedType === 'left') {
+                //   tableColumn = fixedColumn
+                // } else if (mergeList.length && !isMergeRightFixedExceeded && fixedType === 'right') {
+                //   tableColumn = fixedColumn
+                // } else {
+                //   tableColumn = visibleColumn
+                // }
+              }
+            } else {
+              tableColumn = visibleColumn
             }
           }
-          if (isOptimize) {
-            tableColumn = fixedColumn
-          }
-          if (isOptimize || scrollXLoad) {
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
-          }
+          tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
 
           if (tableElem) {
             tableElem.style.width = tWidth ? `${tWidth}px` : ''
@@ -1815,18 +1828,26 @@ const Methods = {
           let tWidth = tableWidth
 
           // 如果是使用优化模式
-          let isOptimize = false
           if (fixedType) {
-            if ((!mergeFooterList.length || !footerSpanMethod) && (scrollXLoad || allColumnFooterOverflow)) {
-              isOptimize = true
+            if (scrollXLoad || allColumnFooterOverflow) {
+              if (!mergeFooterList.length || !footerSpanMethod) {
+                tableColumn = fixedColumn
+              } else {
+                tableColumn = visibleColumn
+                // 检查固定列是否被合并，合并范围是否超出固定列
+                // if (mergeFooterList.length && !isMergeFooterLeftFixedExceeded && fixedType === 'left') {
+                //   tableColumn = fixedColumn
+                // } else if (mergeFooterList.length && !isMergeFooterRightFixedExceeded && fixedType === 'right') {
+                //   tableColumn = fixedColumn
+                // } else {
+                //   tableColumn = visibleColumn
+                // }
+              }
+            } else {
+              tableColumn = visibleColumn
             }
           }
-          if (isOptimize) {
-            tableColumn = fixedColumn
-          }
-          if (isOptimize || scrollXLoad) {
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
-          }
+          tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
 
           if (wrapperElem) {
             // 如果是固定列

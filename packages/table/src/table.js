@@ -586,6 +586,54 @@ export default {
       }
       return false
     }
+    // isMergeLeftFixedExceeded () {
+    //   const { mergeList, columnStore, visibleColumn } = this
+    //   const { leftList } = columnStore
+    //   const lastFCIndex = visibleColumn.indexOf(leftList[leftList.length - 1])
+    //   for (let i = 0, len = mergeList.length; i < len; i++) {
+    //     const item = mergeList[i]
+    //     if (item.col <= lastFCIndex && item.col + item.colspan > lastFCIndex) {
+    //       return true
+    //     }
+    //   }
+    //   return false
+    // },
+    // isMergeRightFixedExceeded () {
+    //   const { mergeList, columnStore, visibleColumn } = this
+    //   const { rightList } = columnStore
+    //   const firstFCIndex = visibleColumn.indexOf(rightList[0])
+    //   for (let i = 0, len = mergeList.length; i < len; i++) {
+    //     const item = mergeList[i]
+    //     if (item.col < firstFCIndex && item.col + item.colspan >= firstFCIndex) {
+    //       return true
+    //     }
+    //   }
+    //   return false
+    // },
+    // isMergeFooterLeftFixedExceeded () {
+    //   const { mergeFooterList, columnStore, visibleColumn } = this
+    //   const { leftList } = columnStore
+    //   const lastFCIndex = visibleColumn.indexOf(leftList[leftList.length - 1])
+    //   for (let i = 0, len = mergeFooterList.length; i < len; i++) {
+    //     const item = mergeFooterList[i]
+    //     if (item.col <= lastFCIndex && item.col + item.colspan > lastFCIndex) {
+    //       return true
+    //     }
+    //   }
+    //   return false
+    // },
+    // isMergeFooterRightFixedExceeded () {
+    //   const { mergeFooterList, columnStore, visibleColumn } = this
+    //   const { rightList } = columnStore
+    //   const firstFCIndex = visibleColumn.indexOf(rightList[0])
+    //   for (let i = 0, len = mergeFooterList.length; i < len; i++) {
+    //     const item = mergeFooterList[i]
+    //     if (item.col < firstFCIndex && item.col + item.colspan >= firstFCIndex) {
+    //       return true
+    //     }
+    //   }
+    //   return false
+    // }
   },
   watch: {
     data (value) {

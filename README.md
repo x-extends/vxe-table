@@ -161,7 +161,7 @@ npm install
 npm run serve
 ```
 
-编译打包，生成编译后的目录：es,lib
+编译打包，生成编译后的目录：lib
 
 ```shell
 npm run lib

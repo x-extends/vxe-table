@@ -117,10 +117,12 @@ function getSelectLabel (_vm, value) {
 export function renderOption (h, _vm, list, group) {
   const { isGroup, labelField, valueField, optionKey, value, multiple, currentValue } = _vm
   return list.map((option, cIndex) => {
+    const { slots } = option
     const isVisible = !isGroup || isOptionVisible(option)
     const isDisabled = (group && group.disabled) || option.disabled
     const optionValue = option[valueField]
     const optid = getOptid(_vm, option)
+    const defaultSlot = slots ? slots.default : null
     return isVisible ? h('div', {
       key: optionKey ? optid : cIndex,
       class: ['vxe-select-option', option.className, {
@@ -144,15 +146,17 @@ export function renderOption (h, _vm, list, group) {
           }
         }
       }
-    }, UtilTools.formatText(UtilTools.getFuncText(option[labelField]))) : null
+    }, defaultSlot ? _vm.callSlot(defaultSlot, { option, $select: _vm }, h) : UtilTools.formatText(UtilTools.getFuncText(option[labelField]))) : null
   })
 }
 
 export function renderOptgroup (h, _vm) {
   const { optionKey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
   return visibleGroupList.map((group, gIndex) => {
+    const { slots } = group
     const optid = getOptid(_vm, group)
     const isGroupDisabled = group.disabled
+    const defaultSlot = slots ? slots.default : null
     return h('div', {
       key: optionKey ? optid : gIndex,
       class: ['vxe-optgroup', group.className, {
@@ -164,7 +168,7 @@ export function renderOptgroup (h, _vm) {
     }, [
       h('div', {
         class: 'vxe-optgroup--title'
-      }, UtilTools.getFuncText(group[groupLabelField])),
+      }, defaultSlot ? _vm.callSlot(defaultSlot, { option: group, $select: _vm }, h) : UtilTools.getFuncText(group[groupLabelField])),
       h('div', {
         class: 'vxe-optgroup--wrapper'
       }, renderOption(h, _vm, group[groupOptionsField], group))
@@ -384,6 +388,18 @@ export default {
     ])
   },
   methods: {
+    callSlot (slotFunc, params, h) {
+      if (slotFunc) {
+        const { $scopedSlots } = this
+        if (XEUtils.isString(slotFunc)) {
+          slotFunc = $scopedSlots[slotFunc] || null
+        }
+        if (XEUtils.isFunction(slotFunc)) {
+          return slotFunc.call(this, params, h)
+        }
+      }
+      return []
+    },
     updateCache () {
       const { fullOptionList, fullGroupList, groupOptionsField } = this
       const optkey = getOptkey(this)
