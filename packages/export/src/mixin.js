@@ -30,7 +30,7 @@ function createFrame () {
 
 function getExportBlobByContent (content, options) {
   if (window.Blob) {
-    return new Blob([content], { type: `text/${options.type}` })
+    return new Blob([content], { type: `text/${options.type};charset=utf-8;` })
   }
   return null
 }
