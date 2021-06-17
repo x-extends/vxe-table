@@ -48,7 +48,7 @@ export const columnProps = {
   // 排序的字段类型，比如字符串转数值等
   sortType: String as PropType<VxeColumnPropTypes.SortType>,
   // 配置筛选条件数组
-  filters: { type: Array as PropType<VxeColumnPropTypes.Filter>, default: null },
+  filters: { type: Array as PropType<VxeColumnPropTypes.Filters>, default: null },
   // 筛选是否允许多选
   filterMultiple: { type: Boolean as PropType<VxeColumnPropTypes.FilterMultiple>, default: true },
   // 自定义筛选方法

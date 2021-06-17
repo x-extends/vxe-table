@@ -17,7 +17,7 @@ export const Table: VXEComponent<VxeTableProps, VxeTableEventProps>;
 export type VxeTableInstance = ComponentPublicInstance<VxeTableProps, VxeTableConstructor>;
 
 export interface VxeTableConstructor extends VxeComponentBase, VxeTableMethods {
-  props: VxeTableProps;
+  props: Readonly<VxeTableProps>;
   context: SetupContext<VxeTableEmits>;
   instance: ComponentInternalInstance;
   reactData: TableReactData;
@@ -1793,7 +1793,7 @@ export namespace VxeTablePropTypes {
   export interface ScrollX {
     gt?: number;
     oSize?: number;
-    [key: string]: any;
+    enabled?: boolean;
   }
   export interface SXOpts extends ScrollX {
     gt: number;
@@ -1804,7 +1804,8 @@ export namespace VxeTablePropTypes {
     mode?: 'default' | 'wheel';
     gt?: number;
     oSize?: number;
-    [key: string]: any;
+    enabled?: boolean;
+    adaptive?: boolean;
   }
   export interface SYOpts extends ScrollY {
     gt: number;

@@ -76,7 +76,8 @@ export namespace VxeFormPropTypes {
 
   export type PreventSubmit = boolean;
   export type ValidConfig = {
-    autoPos: boolean;
+    autoPos?: boolean;
+    showMessage?: boolean;
   };
   export interface ValidOpts extends ValidConfig { }
 

@@ -122,7 +122,7 @@ export default defineComponent({
     disabledMethod: { type: Function as PropType<VxeInputPropTypes.DisabledMethod>, default: () => GlobalConfig.input.disabledMethod },
 
     // week
-    selectDay: { type: [String, Number] as PropType<VxeInputPropTypes.SelectDay>, default: () => GlobalConfig.input.weekDay },
+    selectDay: { type: [String, Number] as PropType<VxeInputPropTypes.SelectDay>, default: () => GlobalConfig.input.selectDay },
 
     prefixIcon: String as PropType<VxeInputPropTypes.PrefixIcon>,
     suffixIcon: String as PropType<VxeInputPropTypes.SuffixIcon>,

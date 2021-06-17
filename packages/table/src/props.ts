@@ -59,7 +59,7 @@ export default {
   // 给表尾的行附加 className
   footerRowClassName: [String, Function] as PropType<VxeTablePropTypes.FooterRowClassName>,
   // 给表尾的单元格附加 className
-  footerCellClassName: [String, Function] as PropType<VxeTablePropTypes.FooterRowClassName>,
+  footerCellClassName: [String, Function] as PropType<VxeTablePropTypes.FooterCellClassName>,
   // 给单元格附加样式
   cellStyle: [Object, Function] as PropType<VxeTablePropTypes.CellStyle>,
   // 给表头单元格附加样式

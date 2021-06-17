@@ -393,7 +393,7 @@ export default defineComponent({
         // 多个时，只关掉最上层的窗口
         if (lastModal) {
           setTimeout(() => {
-            if (lastModal === $xemodal && lastModal.props.escClosable) {
+            if (lastModal === $xemodal && (lastModal as VxeModalConstructor).props.escClosable) {
               closeModal('exit')
             }
           }, 10)

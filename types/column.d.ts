@@ -49,6 +49,7 @@ export namespace VxeColumnPropTypes {
     resetValue?: any;
     checked?: boolean;
   }
+  export type Filters = Filter[]
 
   export type FilterMultiple = boolean;
 

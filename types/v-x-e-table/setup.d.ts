@@ -2,12 +2,18 @@ import { SizeType } from '../component'
 import { VxeTableProps } from '../table'
 import { VxeGridProps } from '../grid'
 import { VxeToolbarProps } from '../toolbar'
+import { VxeTooltipProps } from '../tooltip'
 import { VxePagerProps } from '../pager'
-
-interface DefaultOptions {
-  size?: SizeType;
-  [key: string]: any;
-}
+import { VxeModalProps } from '../modal'
+import { VxeFormProps } from '../form'
+import { VxeListProps } from '../list'
+import { VxeSwitchProps } from '../switch'
+import { VxeSelectProps } from '../select'
+import { VxeInputProps } from '../input'
+import { VxeTextareaProps } from '../textarea'
+import { VxeButtonProps } from '../button'
+import { VxeCheckboxProps } from '../checkbox'
+import { VxeRadioProps } from '../radio'
 
 export interface VXETableSetupOptions {
   size?: SizeType;
@@ -25,19 +31,19 @@ export interface VXETableSetupOptions {
     }
     [key: string]: any;
   };
-  tooltip?: DefaultOptions;
+  tooltip?: VxeTooltipProps;
   pager?: VxePagerProps;
-  form?: DefaultOptions;
-  input?: DefaultOptions;
-  textarea?: DefaultOptions;
-  select?: DefaultOptions;
+  form?: VxeFormProps;
+  input?: VxeInputProps;
+  textarea?: VxeTextareaProps;
+  select?: VxeSelectProps;
   toolbar?: VxeToolbarProps;
-  button?: DefaultOptions;
-  radio?: DefaultOptions;
-  checkbox?: DefaultOptions;
-  switch?: DefaultOptions;
-  modal?: DefaultOptions;
-  list?: DefaultOptions;
+  button?: VxeButtonProps;
+  radio?: VxeRadioProps;
+  checkbox?: VxeCheckboxProps;
+  switch?: VxeSwitchProps;
+  modal?: VxeModalProps;
+  list?: VxeListProps;
   translate?(key: string, args?: any): string;
   i18n?(key: string, args?: any): string;
   [key: string]: any;
@@ -59,19 +65,19 @@ export interface VXETableGlobalConfig extends VXETableSetupOptions {
     }
     [key: string]: any;
   };
-  tooltip: DefaultOptions;
+  tooltip: VxeTooltipProps;
   pager: VxePagerProps;
-  form: DefaultOptions;
-  input: DefaultOptions;
-  textarea: DefaultOptions;
-  select: DefaultOptions;
+  form: VxeFormProps;
+  input: VxeInputProps;
+  textarea: VxeTextareaProps;
+  select: VxeSelectProps;
   toolbar: VxeToolbarProps;
-  button: DefaultOptions;
-  radio: DefaultOptions;
-  checkbox: DefaultOptions;
-  switch: DefaultOptions;
-  modal: DefaultOptions;
-  list: DefaultOptions;
+  button: VxeButtonProps;
+  radio: VxeRadioProps;
+  checkbox: VxeCheckboxProps;
+  switch: VxeSwitchProps;
+  modal: VxeModalProps;
+  list: VxeListProps;
   i18n(key: string, args?: any): string;
 }
 

@@ -9,7 +9,7 @@ import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps } from '../../../types/all'
+import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps, VxeGridProps } from '../../../types/all'
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
@@ -154,7 +154,7 @@ export default defineComponent({
 
     const $xegrid = {
       xID,
-      props,
+      props: props as VxeGridProps,
       context,
       instance,
       reactData,

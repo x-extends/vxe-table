@@ -108,6 +108,10 @@ export namespace VxeListPropTypes {
      * 指定列表项的 className
      */
     sItem?: string;
+    /**
+     * 是否启用
+     */
+    enabled?: boolean;
   }
 }
 

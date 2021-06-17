@@ -15,7 +15,7 @@ export const Grid: VXEComponent<VxeGridProps, VxeGridEventProps>;
 export type VxeGridInstance = ComponentPublicInstance<VxeGridProps, VxeGridConstructor>;
 
 export interface VxeGridConstructor extends VxeComponentBase, VxeGridMethods {
-  props: VxeGridProps;
+  props: Readonly<VxeGridProps>;
   context: SetupContext<VxeGridEmits>;
   instance: ComponentInternalInstance;
   reactData: GridReactData;

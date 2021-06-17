@@ -24,7 +24,7 @@ export function createFrame (): HTMLIFrameElement {
 
 export function getExportBlobByContent (content: string, options: { type: string }): Blob | null {
   if (window.Blob) {
-    return new Blob([content], { type: `text/${options.type}` })
+    return new Blob([content], { type: `text/${options.type};charset=utf-8;` })
   }
   return null
 }

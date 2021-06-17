@@ -13,7 +13,7 @@ import tableProps from './props'
 import tableEmits from './emits'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn } from './util'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines } from '../../../types/all'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -569,7 +569,7 @@ export default defineComponent({
 
     const $xetable = {
       xID,
-      props,
+      props: props as VxeTableProps,
       context,
       instance,
       reactData,
@@ -1815,7 +1815,7 @@ export default defineComponent({
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const sYOpts = computeSYOpts.value
       const tableFullData = datas ? datas.slice(0) : []
-      const scrollYLoad = !treeConfig && sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
+      const scrollYLoad = !treeConfig && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       scrollYStore.startIndex = 0
       scrollYStore.endIndex = 1
       scrollXStore.startIndex = 0
@@ -2006,7 +2006,7 @@ export default defineComponent({
         })
       }
       const visibleColumn = leftList.concat(centerList).concat(rightList)
-      let scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+      let scrollXLoad = !!sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad && isGroup) {

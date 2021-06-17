@@ -74,7 +74,7 @@ export default defineComponent({
     let listMethods = {} as ListMethods
 
     const computeSYOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.list.scrollY, props.scrollY)
+      return Object.assign({} as { gt: number }, GlobalConfig.list.scrollY, props.scrollY)
     })
 
     const computeStyles = computed(() => {
@@ -115,13 +115,13 @@ export default defineComponent({
         const virtualBodyElem = refVirtualBody.value
         const sYOpts = computeSYOpts.value
         let rowHeight = 0
-        let firstItemElem
+        let firstItemElem: HTMLElement | undefined
         if (virtualBodyElem) {
           if (sYOpts.sItem) {
-            firstItemElem = virtualBodyElem.querySelector(sYOpts.sItem)
+            firstItemElem = virtualBodyElem.querySelector(sYOpts.sItem) as HTMLElement
           }
           if (!firstItemElem) {
-            firstItemElem = virtualBodyElem.children[0]
+            firstItemElem = virtualBodyElem.children[0] as HTMLElement
           }
         }
         if (firstItemElem) {
@@ -246,7 +246,7 @@ export default defineComponent({
         scrollYStore.startIndex = 0
         scrollYStore.visibleIndex = 0
         internalData.fullData = fullData
-        reactData.scrollYLoad = sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
+        reactData.scrollYLoad = !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
         handleData()
         return computeScrollLoad().then(() => {
           refreshScroll()

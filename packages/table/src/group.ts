@@ -3,7 +3,7 @@ import { columnProps } from './column'
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
-import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnProps } from '../../../types/all'
+import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeColgroup',
@@ -12,7 +12,7 @@ export default defineComponent({
     const refElem = ref() as Ref<HTMLDivElement>
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTablePrivateMethods)
     const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
-    const column = Cell.createColumn($xetable, props as VxeColumnProps)
+    const column = Cell.createColumn($xetable, props)
     const xecolumn: XEColumnInstance = { column }
     column.children = []
 
