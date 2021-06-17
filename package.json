@@ -69,12 +69,12 @@
     "sortablejs": "^1.10.2",
     "typescript": "~3.9.3",
     "view-design": "^4.4.0",
-    "vue": "^2.6.12",
+    "vue": "^2.6.14",
     "vue-class-component": "^7.2.3",
     "vue-i18n": "^8.18.1",
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.2.0",
-    "vue-template-compiler": "^2.6.12",
+    "vue-template-compiler": "^2.6.14",
     "vuex": "^3.4.0",
     "vxe-table-plugin-antd": "^1.11.2",
     "vxe-table-plugin-element": "^1.11.2",
@@ -87,7 +87,7 @@
     "xe-ajax": "^4.0.5",
     "xe-ajax-mock": "^1.12.0",
     "xe-clipboard": "^1.10.1",
-    "xe-utils": "^3.2.1",
+    "xe-utils": "^3.3.0",
     "xlsx": "^0.16.8"
   },
   "peerDependencies": {
