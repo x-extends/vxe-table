@@ -508,7 +508,7 @@ export default {
               locat: {
                 name: 'TableRadio'
               },
-              keywords: ['radio']
+              keywords: ['radio', 'radio-config']
             },
             {
               label: 'app.aside.nav.checkbox',
@@ -516,7 +516,7 @@ export default {
               locat: {
                 name: 'TableSelection'
               },
-              keywords: ['checkbox']
+              keywords: ['checkbox', 'checkbox-config']
             },
             {
               label: 'app.aside.nav.sort',
@@ -1072,21 +1072,24 @@ export default {
               demoUrl: 'https://jsrun.pro/SWWKp/edit',
               locat: {
                 name: 'TableEditManual'
-              }
+              },
+              keywords: ['edit-config']
             },
             {
               label: 'app.aside.nav.click',
               demoUrl: 'https://jsrun.pro/4WWKp/edit',
               locat: {
                 name: 'TableEditClick'
-              }
+              },
+              keywords: ['edit-config']
             },
             {
               label: 'app.aside.nav.dblclick',
               demoUrl: 'https://jsrun.pro/KfWKp/edit',
               locat: {
                 name: 'TableEditDBLClick'
-              }
+              },
+              keywords: ['edit-config']
             },
             {
               label: 'app.aside.nav.selectContent',

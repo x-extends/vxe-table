@@ -91,14 +91,15 @@
       <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
-    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式，用户手动选中时会触发 <table-api-link prop="current-change"/> 事件</p>
+    <p class="tip">单选的默认行为是不允许取消的，可以通过设置 <table-api-link prop="radio-config"/>.<table-api-link prop="strict"/>=false 允许取消</p>
 
     <vxe-table
       border
-      highlight-current-row
       height="300"
+      :radio-config="{strict: false}"
       :data="tableData"
-      @current-change="currentChangeEvent">
+      @radio-change="radioChangeEvent4">
+      <vxe-table-column type="radio" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -318,10 +319,11 @@ export default {
         `
         <vxe-table
           border
-          highlight-current-row
           height="300"
+          :radio-config="{strict: false}"
           :data="tableData"
-          @current-change="currentChangeEvent">
+          @radio-change="radioChangeEvent4">
+          <vxe-table-column type="radio" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
           <vxe-table-column field="age" title="Age"></vxe-table-column>
@@ -345,8 +347,8 @@ export default {
             }
           },
           methods: {
-            currentChangeEvent ({ row }) {
-              console.log('行选中事件')
+            radioChangeEvent4 ({ newValue, oldValue }) {
+              console.log(newValue, oldValue)
             }
           }
         }
@@ -426,8 +428,8 @@ export default {
     cellClickEvent () {
       console.log('单元格点击事件')
     },
-    currentChangeEvent ({ rowIndex }) {
-      console.log(`行选中事件 ${rowIndex}`)
+    radioChangeEvent4 ({ newValue, oldValue }) {
+      console.log(newValue, oldValue)
     },
     radioChangeEvent ({ row }) {
       this.selectRow = row

@@ -188,7 +188,7 @@ export const UtilTools = {
   // 行主键 value
   getRowid ($xetable, row) {
     const rowId = XEUtils.get(row, UtilTools.getRowkey($xetable))
-    return rowId ? encodeURIComponent(rowId) : ''
+    return XEUtils.eqNull(rowId) ? '' : encodeURIComponent(rowId)
   },
   // 获取所有的列，排除分组
   getColumnList (columns) {

@@ -505,7 +505,7 @@ const Methods = {
     const isLazy = treeConfig && treeOpts.lazy
     const handleCache = (row, index, items, path, parent) => {
       let rowid = getRowid(this, row)
-      if (!rowid) {
+      if (eqEmptyValue(rowid)) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
       }
@@ -782,7 +782,7 @@ const Methods = {
     })
     const ohterFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
     ohterFields.forEach((key) => {
-      if (key && !XEUtils.get(record, key)) {
+      if (key && eqEmptyValue(XEUtils.get(record, key))) {
         XEUtils.set(record, key, null)
       }
     })
@@ -790,7 +790,7 @@ const Methods = {
       record[treeOpts.children] = null
     }
     // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
-    if (!XEUtils.get(record, rowkey)) {
+    if (eqEmptyValue(XEUtils.get(record, rowkey))) {
       XEUtils.set(record, rowkey, getRowUniqueId())
     }
     return record
@@ -2964,17 +2964,30 @@ const Methods = {
    * 单选，行选中事件
    */
   triggerRadioRowEvent (evnt, params) {
-    const isChange = this.selectRow !== params.row
-    this.setRadioRow(params.row)
+    const { selectRow: oldValue, radioOpts } = this
+    const { row } = params
+    let newValue = row
+    let isChange = oldValue !== newValue
     if (isChange) {
-      this.emitEvent('radio-change', params, evnt)
+      this.setRadioRow(newValue)
+    } else if (!radioOpts.strict) {
+      isChange = oldValue === newValue
+      if (isChange) {
+        newValue = null
+        this.clearRadioRow()
+      }
+    }
+    if (isChange) {
+      this.emitEvent('radio-change', { oldValue, newValue, ...params }, evnt)
     }
   },
   triggerCurrentRowEvent (evnt, params) {
-    const isChange = this.currentRow !== params.row
-    this.setCurrentRow(params.row)
+    const { currentRow: oldValue } = this
+    const { row: newValue } = params
+    const isChange = oldValue !== newValue
+    this.setCurrentRow(newValue)
     if (isChange) {
-      this.emitEvent('current-change', params, evnt)
+      this.emitEvent('current-change', { oldValue, newValue, ...params }, evnt)
     }
   },
   /**

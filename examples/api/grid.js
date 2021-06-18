@@ -571,7 +571,7 @@ const apis = [
     list: [
       {
         name: 'commitProxy(code, ...arguments)',
-        desc: '给数据代理提交指令（支持额外的参数，对于很多特殊场景很有用）',
+        desc: '给数据代理提交指令（支持额外的参数，例如：手动调用触发查询、保存等方法）',
         version: '',
         type: '',
         enum: '',

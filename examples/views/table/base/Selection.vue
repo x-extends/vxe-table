@@ -124,7 +124,7 @@
       border
       highlight-hover-row
       row-id="id"
-      :data="tableData"
+      :data="tableData5"
       :checkbox-config="{checkRowKeys: defaultSelecteRows, highlight: true}"
       :radio-config="{labelField: 'name'}">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -238,6 +238,13 @@ export default {
         { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai', checked: false },
         { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃', checked: false },
         { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai', checked: false }
+      ],
+      tableData5: [
+        { id: 0, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: '', name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: null, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: undefined, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ],
       tableData8: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
@@ -420,7 +427,7 @@ export default {
           border
           highlight-hover-row
           row-id="id"
-          :data="tableData"
+          :data="tableData5"
           :checkbox-config="{checkRowKeys: defaultSelecteRows, highlight: true}"
           :radio-config="{labelField: 'name'}">
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -435,11 +442,11 @@ export default {
           data () {
             return {
               defaultSelecteRows: [10002, 10003],
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
-                { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-                { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+              tableData5: [
+                { id: 0, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: '', name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: null, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: undefined, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
                 { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ]
             }

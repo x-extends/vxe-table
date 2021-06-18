@@ -26,9 +26,10 @@ export default {
     // emptyRender: {
     //   name: ''
     // },
-    // radioConfig: {
-    //   trigger: 'default'
-    // },
+    radioConfig: {
+      // trigger: 'default'
+      strict: true
+    },
     checkboxConfig: {
       // trigger: 'default',
       strict: true
