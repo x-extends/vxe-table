@@ -235,7 +235,7 @@ export const UtilTools = {
   // 行主键 value
   getRowid ($xetable, row) {
     const rowId = XEUtils.get(row, UtilTools.getRowkey($xetable))
-    return rowId ? encodeURIComponent(rowId) : ''
+    return XEUtils.eqNull(rowId) ? '' : encodeURIComponent(rowId)
   },
   // 获取所有的列，排除分组
   getColumnList (columns) {
@@ -335,6 +335,12 @@ export const UtilTools = {
   },
   isEnableConf (conf) {
     return conf && conf.enabled !== false
+  },
+  /**
+   * 判断值为：'' | null | undefined 时都属于空值
+   */
+  eqEmptyValue (cellValue) {
+    return cellValue === '' || XEUtils.eqNull(cellValue)
   }
 }
 

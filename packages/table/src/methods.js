@@ -380,7 +380,7 @@ const Methods = {
     const isLazy = treeConfig && treeOpts.lazy
     const handleCache = (row, index, items, path, parent) => {
       let rowid = getRowid(this, row)
-      if (!rowid) {
+      if (UtilTools.eqEmptyValue(rowid)) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
       }
@@ -622,7 +622,7 @@ const Methods = {
     })
     const ohterFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
     ohterFields.forEach((key) => {
-      if (key && !XEUtils.get(record, key)) {
+      if (key && UtilTools.eqEmptyValue(XEUtils.get(record, key))) {
         XEUtils.set(record, key, null)
       }
     })
@@ -630,7 +630,7 @@ const Methods = {
       record[treeOpts.children] = null
     }
     // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
-    if (!XEUtils.get(record, rowkey)) {
+    if (UtilTools.eqEmptyValue(XEUtils.get(record, rowkey))) {
       XEUtils.set(record, rowkey, getRowUniqueId())
     }
     return record
