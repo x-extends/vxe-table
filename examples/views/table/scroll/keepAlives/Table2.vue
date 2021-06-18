@@ -5,9 +5,9 @@
     <vxe-table
       border
       show-overflow
+      ref="xTable"
       height="400"
-      :loading="demo1.loading"
-      :data="demo1.tableData">
+      :loading="demo1.loading">
       <vxe-column type="radio" width="60"></vxe-column>
       <vxe-column field="role" title="Role"></vxe-column>
       <vxe-column field="age" title="Age"></vxe-column>
@@ -18,10 +18,13 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref, nextTick } from 'vue'
+import { VxeTableInstance } from '../../../../../types/index'
 
 export default defineComponent({
   setup () {
+    const xTable = ref({} as VxeTableInstance)
+
     const mockList = (size: number) => {
       const list: any[] = []
       for (let index = 0; index < size; index++) {
@@ -40,18 +43,23 @@ export default defineComponent({
     }
 
     const demo1 = reactive({
-      loading: false,
-      tableData: [] as any[]
+      loading: false
     })
 
     demo1.loading = true
     setTimeout(() => {
-      demo1.tableData = mockList(600)
       demo1.loading = false
+      nextTick(() => {
+        const $table = xTable.value
+        if ($table) {
+          $table.loadData(mockList(600))
+        }
+      })
     }, 300)
 
     return {
-      demo1
+      demo1,
+      xTable
     }
   }
 })

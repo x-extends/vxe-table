@@ -9,8 +9,7 @@
       ref="xTable"
       height="500"
       :scroll-x="{enabled: false}"
-      :loading="demo1.loading"
-      :data="demo1.tableData">
+      :loading="demo1.loading">
       <vxe-column type="seq" title="序号" width="100"></vxe-column>
       <vxe-colgroup title="基本信息">
         <vxe-column field="name" title="Name" width="200" sortable></vxe-column>
@@ -41,7 +40,8 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref, onMounted, nextTick } from 'vue'
+import { VxeTableInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -63,19 +63,28 @@ export default defineComponent({
       })
     }
 
+    const xTable = ref({} as VxeTableInstance)
+
     const demo1 = reactive({
-      loading: false,
-      tableData: [] as any[]
+      loading: false
     })
 
     demo1.loading = true
-    mockList(1000).then(data => {
-      demo1.loading = false
-      demo1.tableData = data
+    onMounted(() => {
+      mockList(1000).then(data => {
+        demo1.loading = false
+        nextTick(() => {
+          const $table = xTable.value
+          if ($table) {
+            $table.loadData(data)
+          }
+        })
+      })
     })
 
     return {
       demo1,
+      xTable,
       demoCodes: [
         `
         <vxe-table
@@ -85,8 +94,7 @@ export default defineComponent({
           ref="xTable"
           height="500"
           :scroll-x="{enabled: false}"
-          :loading="demo1.loading"
-          :data="demo1.tableData">
+          :loading="demo1.loading">
           <vxe-column type="seq" title="序号" width="100"></vxe-column>
           <vxe-colgroup title="基本信息">
             <vxe-column field="name" title="Name" width="200" sortable></vxe-column>
@@ -108,7 +116,8 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, reactive, ref, onMounted, nextTick } from 'vue'
+        import { VxeTableInstance } from 'vxe-table'
 
         export default defineComponent({
           setup () {
@@ -130,19 +139,28 @@ export default defineComponent({
               })
             }
 
+            const xTable = ref({} as VxeTableInstance)
+
             const demo1 = reactive({
-              loading: false,
-              tableData: [] as any[]
+              loading: false
             })
-            
+
             demo1.loading = true
-            mockList(1000).then(data => {
-              demo1.loading = false
-              demo1.tableData = data
+            onMounted(() => {
+              mockList(1000).then(data => {
+                demo1.loading = false
+                nextTick(() => {
+                  const $table = xTable.value
+                  if ($table) {
+                    $table.loadData(data)
+                  }
+                })
+              })
             })
 
             return {
-              demo1
+              demo1,
+              xTable
             }
           }
         })

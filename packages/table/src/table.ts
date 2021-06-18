@@ -11,7 +11,7 @@ import Cell from './cell'
 import TableBodyComponent from './body'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, restoreScroll } from './util'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
 
@@ -624,18 +624,6 @@ export default defineComponent({
         }
       })
       return reserveList
-    }
-
-    const restoreScroll = (scrollLeft: number, scrollTop: number) => {
-      return tableMethods.clearScroll().then(() => {
-        if (scrollLeft || scrollTop) {
-          // 重置最后滚动状态
-          internalData.lastScrollLeft = 0
-          internalData.lastScrollTop = 0
-          // 还原滚动状态
-          return tableMethods.scrollTo(scrollLeft, scrollTop)
-        }
-      })
     }
 
     const computeVirtualX = () => {
@@ -1871,9 +1859,9 @@ export default defineComponent({
             .then(() => {
               // 是否变更虚拟滚动
               if (oldScrollYLoad === scrollYLoad) {
-                restoreScroll(lastScrollLeft, lastScrollTop).then(resolve)
+                restoreScroll($xetable, lastScrollLeft, lastScrollTop).then(resolve)
               } else {
-                setTimeout(() => restoreScroll(lastScrollLeft, lastScrollTop).then(resolve))
+                setTimeout(() => restoreScroll($xetable, lastScrollLeft, lastScrollTop).then(resolve))
               }
             })
         })
@@ -2702,7 +2690,7 @@ export default defineComponent({
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
         // 还原滚动条位置
         if (lastScrollLeft || lastScrollTop) {
-          return restoreScroll(lastScrollLeft, lastScrollTop)
+          return restoreScroll($xetable, lastScrollLeft, lastScrollTop)
         }
         // 重置
         setScrollTop(tableBodyElem, lastScrollTop)
@@ -3590,6 +3578,7 @@ export default defineComponent({
        * 手动清除滚动相关信息，还原到初始状态
        */
       clearScroll () {
+        const { scrollXStore, scrollYStore } = internalData
         const tableBody = refTableBody.value
         const tableFooter = refTableFooter.value
         const rightBody = refTableRightBody.value
@@ -3606,6 +3595,8 @@ export default defineComponent({
           tableBodyElem.scrollTop = 0
           tableBodyElem.scrollLeft = 0
         }
+        scrollXStore.startIndex = 0
+        scrollYStore.startIndex = 0
         return nextTick()
       },
       /**
@@ -5441,6 +5432,7 @@ export default defineComponent({
           endIndex: 0,
           visibleSize: 0
         })
+
         loadTableData(data || []).then(() => {
           if (data && data.length) {
             internalData.inited = true

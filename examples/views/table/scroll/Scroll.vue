@@ -10,8 +10,8 @@
       border
       show-overflow
       highlight-hover-row
-      height="300"
-      :data="demo1.tableData">
+      ref="xTable1"
+      height="300">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="role" title="Role"></vxe-column>
@@ -36,12 +36,11 @@
       show-header-overflow
       show-footer-overflow
       show-footer
-      ref="xTable"
+      ref="xTable2"
       height="300"
       :footer-method="footerMethod"
       :scroll-x="{gt: 10}"
-      :scroll-y="{gt: 100}"
-      :data="demo2.tableData">
+      :scroll-y="{gt: 100}">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" width="150" sortable></vxe-column>
       <vxe-column field="attr1" title="Attr1" width="100"></vxe-column>
@@ -85,51 +84,62 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, ref, onMounted, nextTick } from 'vue'
+import { VxeTableInstance } from '../../../../types/index'
 import XEUtils from 'xe-utils'
-
-const mockList1: any = []
-const mockList2: any = []
 
 export default defineComponent({
   setup () {
-    if (!mockList1.length) {
-      for (let index = 0; index < 500; index++) {
-        mockList1.push({
-          name: 'Test' + index,
-          role: 'Developer',
-          sex: '男'
-        })
-      }
+    const mockList1: any = []
+    for (let index = 0; index < 500; index++) {
+      mockList1.push({
+        name: 'Test' + index,
+        role: 'Developer',
+        sex: '男'
+      })
     }
 
-    const demo1 = reactive({
-      tableData: XEUtils.clone(mockList1, true)
+    const xTable1 = ref({} as VxeTableInstance)
+
+    onMounted(() => {
+      nextTick(() => {
+        const $table = xTable1.value
+        if ($table) {
+          $table.loadData(XEUtils.clone(mockList1, true))
+        }
+      })
     })
 
-    if (!mockList2.length) {
-      for (let index = 0; index < 2000; index++) {
-        mockList2.push({
-          name: 'Test' + index,
-          attr1: index,
-          attr2: 'a2-' + index,
-          attr3: 'a3-' + index,
-          attr4: 'a4-' + index,
-          attr5: 'a5-' + index,
-          attr6: 'a6-' + index,
-          attr7: 'a7-' + index,
-          attr8: 'a8-' + index,
-          attr9: 'a9-' + index,
-          attr10: 'a10-' + index,
-          attr11: 'a11-' + index,
-          attr12: 'a12-' + index,
-          attr13: 'a13-' + index,
-          attr14: 'a14-' + index
-        })
-      }
+    const mockList2: any = []
+    for (let index = 0; index < 2000; index++) {
+      mockList2.push({
+        name: 'Test' + index,
+        attr1: index,
+        attr2: 'a2-' + index,
+        attr3: 'a3-' + index,
+        attr4: 'a4-' + index,
+        attr5: 'a5-' + index,
+        attr6: 'a6-' + index,
+        attr7: 'a7-' + index,
+        attr8: 'a8-' + index,
+        attr9: 'a9-' + index,
+        attr10: 'a10-' + index,
+        attr11: 'a11-' + index,
+        attr12: 'a12-' + index,
+        attr13: 'a13-' + index,
+        attr14: 'a14-' + index
+      })
     }
-    const demo2 = reactive({
-      tableData: XEUtils.clone(mockList2, true)
+
+    const xTable2 = ref({} as VxeTableInstance)
+
+    onMounted(() => {
+      nextTick(() => {
+        const $table = xTable2.value
+        if ($table) {
+          $table.loadData(XEUtils.clone(mockList2, true))
+        }
+      })
     })
 
     const sumNum = (list: any[], field: string) => {
@@ -158,8 +168,8 @@ export default defineComponent({
     }
 
     return {
-      demo1,
-      demo2,
+      xTable1,
+      xTable2,
       footerMethod,
       demoCodes: [
         `
@@ -167,8 +177,8 @@ export default defineComponent({
           border
           show-overflow
           highlight-hover-row
-          height="300"
-          :data="demo1.tableData">
+          ref="xTable1"
+          height="300">
           <vxe-column type="seq" width="100"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
           <vxe-column field="role" title="Role"></vxe-column>
@@ -176,29 +186,34 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, ref, onMounted, nextTick } from 'vue'
+        import { VxeTableInstance } from 'vxe-table'
         import XEUtils from 'xe-utils'
-
-        const mockList1: any[] = []
 
         export default defineComponent({
           setup () {
-            if (!mockList1.length) {
-              for (let index = 0; index < 500; index++) {
-                mockList1.push({
-                  name: 'Test' + index,
-                  role: 'Developer',
-                  sex: '男'
-                })
-              }
+            const mockList1: any = []
+            for (let index = 0; index < 500; index++) {
+              mockList1.push({
+                name: 'Test' + index,
+                role: 'Developer',
+                sex: '男'
+              })
             }
 
-            const demo1 = reactive({
-              tableData: XEUtils.clone(mockList1, true)
+            const xTable1 = ref({} as VxeTableInstance)
+
+            onMounted(() => {
+              nextTick(() => {
+                const $table = xTable1.value
+                if ($table) {
+                  $table.loadData(XEUtils.clone(mockList1, true))
+                }
+              })
             })
 
             return {
-              demo1
+              xTable1
             }
           }
         })
@@ -210,12 +225,11 @@ export default defineComponent({
           show-header-overflow
           show-footer-overflow
           show-footer
-          ref="xTable"
+          ref="xTable2"
           height="300"
           :footer-method="footerMethod"
           :scroll-x="{gt: 10}"
-          :scroll-y="{gt: 100}"
-          :data="demo2.tableData">
+          :scroll-y="{gt: 100}">
           <vxe-column type="seq" width="100"></vxe-column>
           <vxe-column field="name" title="Name" width="150" sortable></vxe-column>
           <vxe-column field="attr1" title="Attr1" width="100"></vxe-column>
@@ -236,36 +250,42 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        import { defineComponent, reactive } from 'vue'
+        import { defineComponent, ref, onMounted, nextTick } from 'vue'
+        import { VxeTableInstance } from 'vxe-table'
         import XEUtils from 'xe-utils'
-
-        const mockList2: any[] = []
 
         export default defineComponent({
           setup () {
-            if (!mockList2.length) {
-              for (let index = 0; index < 2000; index++) {
-                mockList2.push({
-                  name: 'Test' + index,
-                  attr1: index,
-                  attr2: 'a2-' + index,
-                  attr3: 'a3-' + index,
-                  attr4: 'a4-' + index,
-                  attr5: 'a5-' + index,
-                  attr6: 'a6-' + index,
-                  attr7: 'a7-' + index,
-                  attr8: 'a8-' + index,
-                  attr9: 'a9-' + index,
-                  attr10: 'a10-' + index,
-                  attr11: 'a11-' + index,
-                  attr12: 'a12-' + index,
-                  attr13: 'a13-' + index,
-                  attr14: 'a14-' + index
-                })
-              }
+            const mockList2: any = []
+            for (let index = 0; index < 2000; index++) {
+              mockList2.push({
+                name: 'Test' + index,
+                attr1: index,
+                attr2: 'a2-' + index,
+                attr3: 'a3-' + index,
+                attr4: 'a4-' + index,
+                attr5: 'a5-' + index,
+                attr6: 'a6-' + index,
+                attr7: 'a7-' + index,
+                attr8: 'a8-' + index,
+                attr9: 'a9-' + index,
+                attr10: 'a10-' + index,
+                attr11: 'a11-' + index,
+                attr12: 'a12-' + index,
+                attr13: 'a13-' + index,
+                attr14: 'a14-' + index
+              })
             }
-            const demo2 = reactive({
-              tableData: XEUtils.clone(mockList2, true)
+
+            const xTable2 = ref({} as VxeTableInstance)
+
+            onMounted(() => {
+              nextTick(() => {
+                const $table = xTable2.value
+                if ($table) {
+                  $table.loadData(XEUtils.clone(mockList2, true))
+                }
+              })
             })
 
             const sumNum = (list: any[], field: string) => {
@@ -294,7 +314,7 @@ export default defineComponent({
             }
 
             return {
-              demo2,
+              xTable2,
               footerMethod
             }
           }

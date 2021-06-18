@@ -5,6 +5,19 @@ import { isPx, isScale } from '../../tools/dom'
 
 import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types/all'
 
+export function restoreScroll ($xetable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
+  const { internalData } = $xetable
+  return $xetable.clearScroll().then(() => {
+    if (scrollLeft || scrollTop) {
+      // 重置最后滚动状态
+      internalData.lastScrollLeft = 0
+      internalData.lastScrollTop = 0
+      // 还原滚动状态
+      return $xetable.scrollTo(scrollLeft, scrollTop)
+    }
+  })
+}
+
 /**
  * 生成行的唯一主键
  */

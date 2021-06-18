@@ -154,15 +154,15 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         if (!filterOpts.remote) {
           $xetable.handleTableData(true)
           $xetable.checkSelectionStatus()
-        }
-        $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
-        $xetable.updateFooter()
-        if (scrollXLoad || scrollYLoad) {
-          $xetable.clearScroll()
-          if (scrollYLoad) {
-            $xetable.updateScrollYSpace()
+          $xetable.updateFooter()
+          if (scrollXLoad || scrollYLoad) {
+            $xetable.clearScroll()
+            if (scrollYLoad) {
+              $xetable.updateScrollYSpace()
+            }
           }
         }
+        $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
         $xetable.closeFilter()
         nextTick(() => {
           $xetable.recalculate()
