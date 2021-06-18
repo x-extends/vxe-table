@@ -156,15 +156,15 @@ export default {
       if (!filterOpts.remote) {
         this.handleTableData(true)
         this.checkSelectionStatus()
-      }
-      this.emitEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
-      this.updateFooter()
-      if (scrollXLoad || scrollYLoad) {
-        this.clearScroll()
-        if (scrollYLoad) {
-          this.updateScrollYSpace()
+        this.updateFooter()
+        if (scrollXLoad || scrollYLoad) {
+          this.refreshScroll()
+          if (scrollYLoad) {
+            this.updateScrollYSpace()
+          }
         }
       }
+      this.emitEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
       this.closeFilter()
       this.$nextTick(() => {
         this.recalculate()

@@ -5,9 +5,9 @@
     <vxe-table
       border
       show-overflow
+      ref="xTable"
       height="400"
-      :loading="loading"
-      :data="tableData">
+      :loading="loading">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -20,14 +20,16 @@
 export default {
   data () {
     return {
-      loading: false,
-      tableData: []
+      loading: false
     }
   },
   created () {
     this.loading = true
     setTimeout(() => {
-      this.tableData = this.mockList(600)
+      const $table = this.$refs.xTable
+      if ($table) {
+        $table.loadData(this.mockList(600))
+      }
       this.loading = false
     }, 300)
   },

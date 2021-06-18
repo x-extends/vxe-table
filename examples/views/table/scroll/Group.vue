@@ -9,8 +9,7 @@
       ref="xTable"
       height="500"
       :scroll-x="{enabled: false}"
-      :loading="loading"
-      :data="tableData">
+      :loading="loading">
       <vxe-table-column type="seq" title="序号" width="100"></vxe-table-column>
       <vxe-table-colgroup title="基本信息">
         <vxe-table-column field="name" title="Name" width="200" sortable></vxe-table-column>
@@ -45,7 +44,6 @@ export default {
   data () {
     return {
       loading: false,
-      tableData: [],
       demoCodes: [
         `
         <vxe-table
@@ -55,8 +53,7 @@ export default {
           ref="xTable"
           height="500"
           :scroll-x="{enabled: false}"
-          :loading="loading"
-          :data="tableData">
+          :loading="loading">
           <vxe-table-column type="seq" title="序号" width="100"></vxe-table-column>
           <vxe-table-colgroup title="基本信息">
             <vxe-table-column field="name" title="Name" width="200" sortable></vxe-table-column>
@@ -81,15 +78,19 @@ export default {
         export default {
           data () {
             return {
-              loading: false,
-              tableData: []
+              loading: false
             }
           },
-          created () {
+          mounted () {
             this.loading = true
-            this.mockList(1000).then(data => {
-              this.loading = false
-              this.tableData = data
+            this.$nextTick(() => {
+              const $table = this.$refs.xTable
+              this.mockList(1000).then(data => {
+                this.loading = false
+                if ($table) {
+                  $table.loadData(data)
+                }
+              })
             })
           },
           methods: {
@@ -116,11 +117,16 @@ export default {
       ]
     }
   },
-  created () {
+  mounted () {
     this.loading = true
-    this.mockList(1000).then(data => {
-      this.loading = false
-      this.tableData = data
+    this.$nextTick(() => {
+      const $table = this.$refs.xTable
+      this.mockList(1000).then(data => {
+        this.loading = false
+        if ($table) {
+          $table.loadData(data)
+        }
+      })
     })
   },
   methods: {

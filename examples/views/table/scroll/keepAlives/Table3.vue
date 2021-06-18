@@ -5,15 +5,15 @@
     <vxe-table
       border
       show-overflow
+      ref="xTable"
       height="400"
-      :loading="loading"
-      :data="tableData">
+      :loading="loading">
       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="nickname" title="nickname"></vxe-table-column>
+      <vxe-table-column field="name" title="Name"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
       <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date"></vxe-table-column>
-      <vxe-table-column field="region" title="Region"></vxe-table-column>
+      <vxe-table-column field="num" title="Num"></vxe-table-column>
+      <vxe-table-column field="num2" title="Num2"></vxe-table-column>
       <vxe-table-column field="rate" title="Rate"></vxe-table-column>
     </vxe-table>
   </div>
@@ -23,14 +23,16 @@
 export default {
   data () {
     return {
-      loading: false,
-      tableData: []
+      loading: false
     }
   },
   created () {
     this.loading = true
     setTimeout(() => {
-      this.tableData = this.mockList(2000)
+      const $table = this.$refs.xTable
+      if ($table) {
+        $table.loadData(this.mockList(600))
+      }
       this.loading = false
     }, 300)
   },

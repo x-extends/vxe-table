@@ -10,9 +10,9 @@
       border
       show-overflow
       highlight-hover-row
+      ref="xTable1"
       height="300"
-      :sort-config="{trigger: 'cell'}"
-      :data="tableData">
+      :sort-config="{trigger: 'cell'}">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -38,13 +38,12 @@
       show-header-overflow
       show-footer-overflow
       show-footer
-      ref="xTable"
+      ref="xTable2"
       height="300"
       :sort-config="{trigger: 'cell'}"
       :footer-method="footerMethod"
       :scroll-x="{gt: 10}"
-      :scroll-y="{gt: 100}"
-      :data="tableData2">
+      :scroll-y="{gt: 100}">
       <vxe-table-column type="seq" width="100"></vxe-table-column>
       <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
@@ -104,17 +103,15 @@ import XEUtils from 'xe-utils'
 export default {
   data () {
     return {
-      tableData: [],
-      tableData2: [],
       demoCodes: [
         `
         <vxe-table
           border
           show-overflow
           highlight-hover-row
+          ref="xTable1"
           height="300"
-          :sort-config="{trigger: 'cell'}"
-          :data="tableData">
+          :sort-config="{trigger: 'cell'}">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -125,13 +122,16 @@ export default {
         `
         export default {
           data () {
-            return {
-              tableData: []
-            }
+            return {}
           },
-          created () {
-            this.mockList(500).then(data => {
-              this.tableData = data
+          mounted () {
+            this.$nextTick(() => {
+              const $table = this.$refs.xTable1
+              this.mockList(500).then(data => {
+                if ($table) {
+                  $table.loadData(data)
+                }
+              })
             })
           },
           methods: {
@@ -162,13 +162,12 @@ export default {
           show-header-overflow
           show-footer-overflow
           show-footer
-          ref="xTable"
+          ref="xTable2"
           height="300"
           :sort-config="{trigger: 'cell'}"
           :footer-method="footerMethod"
           :scroll-x="{gt: 10}"
-          :scroll-y="{gt: 100}"
-          :data="tableData2">
+          :scroll-y="{gt: 100}">
           <vxe-table-column type="seq" width="100"></vxe-table-column>
           <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
@@ -204,13 +203,16 @@ export default {
         
         export default {
           data () {
-            return {
-              tableData: []
-            }
+            return {}
           },
-          created () {
-            this.mockList(500).then(data => {
-              this.tableData = data
+          mounted () {
+            this.$nextTick(() => {
+              const $table = this.$refs.xTable2
+              this.mockList(500).then(data => {
+                if ($table) {
+                  $table.loadData(data)
+                }
+              })
             })
           },
           methods: {
@@ -256,12 +258,22 @@ export default {
       ]
     }
   },
-  created () {
-    this.mockList(500).then(data => {
-      this.tableData = data
+  mounted () {
+    this.$nextTick(() => {
+      const $table = this.$refs.xTable1
+      this.mockList(500).then(data => {
+        if ($table) {
+          $table.loadData(data)
+        }
+      })
     })
-    this.mockList(200).then(data => {
-      this.tableData2 = data
+    this.$nextTick(() => {
+      const $table = this.$refs.xTable2
+      this.mockList(500).then(data => {
+        if ($table) {
+          $table.loadData(data)
+        }
+      })
     })
   },
   methods: {

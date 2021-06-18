@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { clearTableAllStatus, handleFieldOrColumn } from './util'
+import { clearTableAllStatus, handleFieldOrColumn, restoreScroll } from './util'
 import { eqEmptyValue, isEnableConf } from '../../tools/src/utils'
 import { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
@@ -64,18 +64,6 @@ function handleReserveRow (_vm, reserveRowMap) {
     }
   })
   return reserveList
-}
-
-function restoreScroll (_vm, scrollLeft, scrollTop) {
-  return _vm.clearScroll().then(() => {
-    if (scrollLeft || scrollTop) {
-      // 重置最后滚动状态
-      _vm.lastScrollLeft = 0
-      _vm.lastScrollTop = 0
-      // 还原滚动状态
-      return _vm.scrollTo(scrollLeft, scrollTop)
-    }
-  })
 }
 
 function computeVirtualX (_vm) {
@@ -4065,7 +4053,7 @@ const Methods = {
    * 手动清除滚动相关信息，还原到初始状态
    */
   clearScroll () {
-    const { $refs } = this
+    const { $refs, scrollXStore, scrollYStore } = this
     const { tableBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
     const rightBodyElem = rightBody ? rightBody.$el : null
@@ -4080,6 +4068,8 @@ const Methods = {
       tableBodyElem.scrollTop = 0
       tableBodyElem.scrollLeft = 0
     }
+    scrollXStore.startIndex = 0
+    scrollYStore.startIndex = 0
     return this.$nextTick()
   },
   /**
