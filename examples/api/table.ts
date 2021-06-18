@@ -1191,8 +1191,17 @@ const apis = [
         defVal: '继承 setup.table.radioConfig',
         list: [
           {
+            name: 'strict',
+            desc: '严格模式，选中后不能取消',
+            version: '4.0.22',
+            type: 'Boolean',
+            enum: '',
+            defVal: 'true',
+            list: []
+          },
+          {
             name: 'reserve',
-            desc: '是否保留勾选状态，对于某些场景下非常有用，比如数据被刷新之后还保留之前选中的状态（需要有 row-id）',
+            desc: '是否保留勾选状态，例如：数据被刷新或者分页之后还保留之前选中的状态（需要有 row-id）',
             version: '',
             type: 'boolean',
             enum: '',
@@ -2836,7 +2845,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
+        defVal: '{ newValue, oldValue, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {
@@ -2845,7 +2854,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
+        defVal: '{ newValue, oldValue, row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $event }',
         list: []
       },
       {

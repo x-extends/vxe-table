@@ -4276,7 +4276,7 @@ export default defineComponent({
         })
         const ohterFields: (string | undefined)[] = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
         ohterFields.forEach((key) => {
-          if (key && !XEUtils.get(record, key)) {
+          if (key && eqEmptyValue(XEUtils.get(record, key))) {
             XEUtils.set(record, key, null)
           }
         })
@@ -4284,7 +4284,7 @@ export default defineComponent({
           record[treeOpts.children] = null
         }
         // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
-        if (!XEUtils.get(record, rowkey)) {
+        if (eqEmptyValue(XEUtils.get(record, rowkey))) {
           XEUtils.set(record, rowkey, getRowUniqueId())
         }
         return record
@@ -4316,7 +4316,7 @@ export default defineComponent({
         const isLazy = treeConfig && treeOpts.lazy
         const handleCache = (row: any, index: any, items: any, path?: any, parent?: any) => {
           let rowid = getRowid($xetable, row)
-          if (!rowid) {
+          if (eqEmptyValue(rowid)) {
             rowid = getRowUniqueId()
             XEUtils.set(row, rowkey, rowid)
           }
@@ -4845,17 +4845,31 @@ export default defineComponent({
        * 单选，行选中事件
        */
       triggerRadioRowEvent (evnt, params) {
-        const isChange = reactData.selectRow !== params.row
-        tableMethods.setRadioRow(params.row)
+        const { selectRow: oldValue } = reactData
+        const { row } = params
+        const radioOpts = computeRadioOpts.value
+        let newValue = row
+        let isChange = oldValue !== newValue
         if (isChange) {
-          tableMethods.dispatchEvent('radio-change', params, evnt)
+          tableMethods.setRadioRow(newValue)
+        } else if (!radioOpts.strict) {
+          isChange = oldValue === newValue
+          if (isChange) {
+            newValue = null
+            tableMethods.clearRadioRow()
+          }
+        }
+        if (isChange) {
+          tableMethods.dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
         }
       },
       triggerCurrentRowEvent (evnt, params) {
-        const isChange = reactData.currentRow !== params.row
-        tableMethods.setCurrentRow(params.row)
+        const { currentRow: oldValue } = reactData
+        const { row: newValue } = params
+        const isChange = oldValue !== newValue
+        tableMethods.setCurrentRow(newValue)
         if (isChange) {
-          tableMethods.dispatchEvent('current-change', params, evnt)
+          tableMethods.dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
         }
       },
       /**

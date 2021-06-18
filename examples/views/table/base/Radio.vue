@@ -91,14 +91,15 @@
       <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
-    <p class="tip">使用 <table-api-link prop="highlight-current-row"/> 高亮方式，用户手动选中时会触发 <table-api-link prop="current-change"/> 事件</p>
+    <p class="tip">单选的默认行为是不允许取消的，可以通过设置 <table-api-link prop="radio-config"/>.<table-api-link prop="strict"/>=false 允许取消</p>
 
     <vxe-table
       border
-      highlight-current-row
       height="300"
+      :radio-config="{strict: false}"
       :data="demo4.tableData"
-      @current-change="currentChangeEvent4">
+      @radio-change="radioChangeEvent4">
+      <vxe-column type="radio" width="60"></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>
       <vxe-column field="age" title="Age"></vxe-column>
@@ -246,8 +247,8 @@ export default defineComponent({
       ]
     })
 
-    const currentChangeEvent4: VxeTableEvents.CurrentChange = ({ rowIndex }) => {
-      console.log(`行选中事件 ${rowIndex}`)
+    const radioChangeEvent4: VxeTableEvents.CurrentChange = ({ newValue, oldValue }) => {
+      console.log(newValue, oldValue)
     }
 
     const demo5 = reactive({
@@ -287,7 +288,7 @@ export default defineComponent({
       checkRadioMethod2,
       demo3,
       demo4,
-      currentChangeEvent4,
+      radioChangeEvent4,
       demo5,
       demo6,
       demoCodes: [
@@ -463,10 +464,11 @@ export default defineComponent({
         `
         <vxe-table
           border
-          highlight-current-row
           height="300"
+          :radio-config="{strict: false}"
           :data="demo4.tableData"
-          @current-change="currentChangeEvent4">
+          @radio-change="radioChangeEvent4">
+          <vxe-column type="radio" width="60"></vxe-column>
           <vxe-column field="name" title="Name"></vxe-column>
           <vxe-column field="sex" title="Sex"></vxe-column>
           <vxe-column field="age" title="Age"></vxe-column>
@@ -492,13 +494,13 @@ export default defineComponent({
               ]
             })
 
-            const currentChangeEvent4: VxeTableEvents.CurrentChange = ({ rowIndex }) => {
-              console.log(\`行选中事件 \${rowIndex}\`)
+            const radioChangeEvent4: VxeTableEvents.CurrentChange = ({ newValue, oldValue }) => {
+              console.log(newValue, oldValue)
             }
 
             return {
               demo4,
-              currentChangeEvent4
+              radioChangeEvent4
             }
           }
         })

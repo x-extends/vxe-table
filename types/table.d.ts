@@ -677,7 +677,12 @@ export interface TablePrivateMethods {
   triggerCheckRowEvent(evnt: Event, params: { row: any }, value: boolean): void;
   triggerCheckAllEvent(evnt: MouseEvent | null, value: boolean): void;
   triggerRadioRowEvent(evnt: Event, params: { row: any }): void;
-  triggerCurrentRowEvent(evnt: Event, params: VxeTableDefines.CurrentChangeParams): void;
+  triggerCurrentRowEvent(evnt: Event, params: {
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
+    row: any;
+    rowIndex: number;
+    $rowIndex: number;
+  }): void;
   triggerRowExpandEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
   triggerTreeExpandEvent(evnt: Event, params: VxeTableDefines.CellRenderBodyParams): void;
   triggerSortEvent(evnt: Event, column: VxeTableDefines.ColumnInfo, order: VxeTablePropTypes.SortOrder): void;
@@ -743,7 +748,7 @@ export interface TableReactData {
   // 单选框属性，选中行
   selectRow: any;
   // 表尾合计数据
-  footerTableData:any[][];
+  footerTableData: any[][];
   // 展开列信息
   expandColumn: any;
   hasFixedColumn: boolean;
@@ -1126,7 +1131,7 @@ export namespace VxeTablePropTypes {
   }) => void | null | VNodeStyle);
 
   export type HeaderRowStyle = VNodeStyle | ((params: {
-    $table: & VxeTablePrivateMethods;
+    $table: VxeTableConstructor & VxeTablePrivateMethods;
     $rowIndex: number;
     fixed: VxeColumnPropTypes.Fixed;
     type: string;
@@ -1287,6 +1292,7 @@ export namespace VxeTablePropTypes {
     }): boolean;
     trigger?: 'default' | 'cell' | 'row';
     highlight?: boolean;
+    strict?: boolean;
   }
   export interface RadioOpts extends RadioConfig { }
 
@@ -1488,9 +1494,9 @@ export namespace VxeTablePropTypes {
      * 只对 extendByCopy | extendByCalc 启用后有效，自定义单元格扩展区域赋值之后的方法
      * @param params
      */
-     afterExtendSetMethod?(params: {
+    afterExtendSetMethod?(params: {
       extendValues: any[][];
-     } & VxeTableProDefines.ExtendCellAreaCalcBaseParams): boolean;
+    } & VxeTableProDefines.ExtendCellAreaCalcBaseParams): boolean;
   }
   export interface AreaOpts extends AreaConfig { }
 
@@ -2131,17 +2137,19 @@ export namespace VxeTableDefines {
   export interface CutParams { }
   export interface CutEventParams extends TableEventParams, CutParams { }
 
-  export interface CurrentChangeParams {
-    row: any;
-    rowIndex: number;
-    $rowIndex: number;
+  export interface CurrentChangeParams extends TableBaseCellParams {
+    newValue: any;
+    oldValue: any;
   }
   export interface CurrentChangeEventParams extends TableEventParams, CurrentChangeParams { }
 
-  export interface RadioChangeParams extends TableBaseCellParams { }
+  export interface RadioChangeParams extends TableBaseCellParams {
+    newValue: any;
+    oldValue: any;
+  }
   export interface RadioChangeEventParams extends TableEventParams, RadioChangeParams { }
 
-  export interface CheckboxChangeParams {
+  export interface CheckboxChangeParams extends TableBaseCellParams {
     checked: boolean;
     records: any[];
     reserves: any[];

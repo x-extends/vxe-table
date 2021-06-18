@@ -35,7 +35,7 @@ export function getRowkey ($xetable: VxeTableConstructor) {
 // 行主键 value
 export function getRowid ($xetable: VxeTableConstructor, row: any) {
   const rowId = XEUtils.get(row, getRowkey($xetable))
-  return rowId ? encodeURIComponent(rowId) : ''
+  return XEUtils.eqNull(rowId) ? '' : encodeURIComponent(rowId)
 }
 
 export interface XEColumnInstance {
