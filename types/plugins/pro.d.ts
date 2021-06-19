@@ -141,15 +141,15 @@ export namespace VxeTableProDefines {
   
   export interface CellAreaConfig {
     type?: CELL_AREA_TYPE;
-    startColumn: VxeTableDefines.ColumnInfo;
-    endColumn: VxeTableDefines.ColumnInfo;
+    startColumn: VxeTableDefines.ColumnInfo | number;
+    endColumn: VxeTableDefines.ColumnInfo | number;
     startRow: any;
     endRow: any;
   }
 
   export interface ActiveCellAreaConfig {
     area: VxeTableProDefines.MouseCellArea;
-    column: VxeTableDefines.ColumnInfo;
+    column: VxeTableDefines.ColumnInfo | number;
     row: any;
   }
 

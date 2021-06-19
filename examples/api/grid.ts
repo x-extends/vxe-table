@@ -627,6 +627,9 @@ const gridAPI: any = XEUtils.clone(tableAPI, true).map((item: any) => {
 })
 
 XEUtils.eachTree(gridAPI, (item: any, index, obj, paths, parent) => {
+  if (parent && ['export-config', 'print-config'].includes(parent.name) && item.name === 'modes') {
+    item.desc = '输出数据的方式列表，如果为 all，则会通过 proxy-config.ajax.queryAll 获取数据之后进行导出'
+  }
   if (parent && parent.name === 'buttons' && item.name === 'code') {
     item.list = [
       {

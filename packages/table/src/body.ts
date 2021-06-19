@@ -2,7 +2,7 @@ import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nex
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { mergeBodyMethod, getRowid, getPropClass } from './util'
+import { mergeBodyMethod, getRowid, getPropClass, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
 import { browse, updateCellTitle } from '../../tools/dom'
 import { isEnableConf } from '../../tools/utils'
 
@@ -14,10 +14,6 @@ const lineOffsetSizes = {
   mini: 3,
   small: 2,
   medium: 1
-}
-
-interface XEBodyScrollElement extends HTMLDivElement {
-  _onscroll: ((evnt: Event) => void) | null;
 }
 
 export default defineComponent({
@@ -390,24 +386,20 @@ export default defineComponent({
      * 同步滚动条
      */
     let scrollProcessTimeout: any
-    const syncBodyScroll = (scrollTop: number, elem1?: XEBodyScrollElement | null, elem2?: XEBodyScrollElement | null) => {
+    const syncBodyScroll = (scrollTop: number, elem1: XEBodyScrollElement | null, elem2: XEBodyScrollElement | null) => {
       if (elem1 || elem2) {
         if (elem1) {
-          elem1.onscroll = null
+          removeScrollListener(elem1)
           elem1.scrollTop = scrollTop
         }
         if (elem2) {
-          elem2.onscroll = null
+          removeScrollListener(elem2)
           elem2.scrollTop = scrollTop
         }
         clearTimeout(scrollProcessTimeout)
         scrollProcessTimeout = setTimeout(function () {
-          if (elem1) {
-            elem1.onscroll = elem1._onscroll
-          }
-          if (elem2) {
-            elem2.onscroll = elem2._onscroll
-          }
+          restoreScrollListener(elem1)
+          restoreScrollListener(elem2)
         }, 300)
       }
     }

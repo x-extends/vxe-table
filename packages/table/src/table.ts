@@ -11,7 +11,7 @@ import Cell from './cell'
 import TableBodyComponent from './body'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, restoreScroll } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
 
@@ -1859,9 +1859,9 @@ export default defineComponent({
             .then(() => {
               // 是否变更虚拟滚动
               if (oldScrollYLoad === scrollYLoad) {
-                restoreScroll($xetable, lastScrollLeft, lastScrollTop).then(resolve)
+                restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve)
               } else {
-                setTimeout(() => restoreScroll($xetable, lastScrollLeft, lastScrollTop).then(resolve))
+                setTimeout(() => restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve))
               }
             })
         })
@@ -2690,7 +2690,7 @@ export default defineComponent({
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
         // 还原滚动条位置
         if (lastScrollLeft || lastScrollTop) {
-          return restoreScroll($xetable, lastScrollLeft, lastScrollTop)
+          return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop)
         }
         // 重置
         setScrollTop(tableBodyElem, lastScrollTop)
@@ -3582,16 +3582,18 @@ export default defineComponent({
         const tableBody = refTableBody.value
         const tableFooter = refTableFooter.value
         const rightBody = refTableRightBody.value
-        const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-        const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
+        const tableBodyElem = tableBody ? tableBody.$el as XEBodyScrollElement : null
+        const rightBodyElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
         if (rightBodyElem) {
+          restoreScrollListener(rightBodyElem)
           rightBodyElem.scrollTop = 0
         }
         if (tableFooterElem) {
           tableFooterElem.scrollLeft = 0
         }
         if (tableBodyElem) {
+          restoreScrollListener(tableBodyElem)
           tableBodyElem.scrollTop = 0
           tableBodyElem.scrollLeft = 0
         }

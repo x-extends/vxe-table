@@ -5,7 +5,11 @@ import { isPx, isScale } from '../../tools/dom'
 
 import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types/all'
 
-export function restoreScroll ($xetable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
+export interface XEBodyScrollElement extends HTMLDivElement {
+  _onscroll: ((evnt: Event) => void) | null;
+}
+
+export function restoreScrollLocation ($xetable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
   const { internalData } = $xetable
   return $xetable.clearScroll().then(() => {
     if (scrollLeft || scrollTop) {
@@ -16,6 +20,18 @@ export function restoreScroll ($xetable: VxeTableConstructor, scrollLeft: number
       return $xetable.scrollTo(scrollLeft, scrollTop)
     }
   })
+}
+
+export function removeScrollListener (scrollElem: XEBodyScrollElement | null) {
+  if (scrollElem && scrollElem._onscroll) {
+    scrollElem.onscroll = null
+  }
+}
+
+export function restoreScrollListener (scrollElem: XEBodyScrollElement | null) {
+  if (scrollElem && scrollElem._onscroll) {
+    scrollElem.onscroll = scrollElem._onscroll
+  }
 }
 
 /**
