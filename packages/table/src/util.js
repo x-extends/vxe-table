@@ -8,7 +8,7 @@ const lineOffsetSizes = {
   medium: 1
 }
 
-export function restoreScroll (_vm, scrollLeft, scrollTop) {
+export function restoreScrollLocation (_vm, scrollLeft, scrollTop) {
   return _vm.clearScroll().then(() => {
     if (scrollLeft || scrollTop) {
       // 重置最后滚动状态
@@ -18,6 +18,18 @@ export function restoreScroll (_vm, scrollLeft, scrollTop) {
       return _vm.scrollTo(scrollLeft, scrollTop)
     }
   })
+}
+
+export function removeScrollListener (scrollElem) {
+  if (scrollElem && scrollElem._onscroll) {
+    scrollElem.onscroll = null
+  }
+}
+
+export function restoreScrollListener (scrollElem) {
+  if (scrollElem && scrollElem._onscroll) {
+    scrollElem.onscroll = scrollElem._onscroll
+  }
 }
 
 function getPaddingLeftRightSize (elem) {

@@ -3968,7 +3968,7 @@ const apis = [
       },
       {
         name: 'setCellAreas(areaConfigs, activeArea)',
-        desc: '如果功能被支持，用于 mouse-config.area，选择指定区域的单元格',
+        desc: '如果功能被支持，用于 mouse-config.area，选择指定区域的单元格（示例：setCellAreas([{ startRow, endRow, startColumn, endColumn }])）',
         version: 'pro',
         type: 'Promise<any>',
         enum: '',

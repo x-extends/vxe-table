@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { clearTableAllStatus, handleFieldOrColumn, restoreScroll } from './util'
+import { clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener } from './util'
 import { eqEmptyValue, isEnableConf } from '../../tools/src/utils'
 import { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
@@ -369,9 +369,9 @@ const Methods = {
           .then(() => {
             // 是否变更虚拟滚动
             if (oldScrollYLoad === scrollYLoad) {
-              restoreScroll(this, lastScrollLeft, lastScrollTop).then(resolve)
+              restoreScrollLocation(this, lastScrollLeft, lastScrollTop).then(resolve)
             } else {
-              setTimeout(() => restoreScroll(this, lastScrollLeft, lastScrollTop).then(resolve))
+              setTimeout(() => restoreScrollLocation(this, lastScrollLeft, lastScrollTop).then(resolve))
             }
           })
       })
@@ -1482,7 +1482,7 @@ const Methods = {
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     // 还原滚动条位置
     if (lastScrollLeft || lastScrollTop) {
-      return restoreScroll(this, lastScrollLeft, lastScrollTop)
+      return restoreScrollLocation(this, lastScrollLeft, lastScrollTop)
     }
     // 重置
     setScrollTop(tableBodyElem, lastScrollTop)
@@ -4072,12 +4072,14 @@ const Methods = {
     const rightBodyElem = rightBody ? rightBody.$el : null
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     if (rightBodyElem) {
+      restoreScrollListener(rightBodyElem)
       rightBodyElem.scrollTop = 0
     }
     if (tableFooterElem) {
       tableFooterElem.scrollLeft = 0
     }
     if (tableBodyElem) {
+      restoreScrollListener(tableBodyElem)
       tableBodyElem.scrollTop = 0
       tableBodyElem.scrollLeft = 0
     }

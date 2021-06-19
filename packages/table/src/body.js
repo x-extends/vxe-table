@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod } from './util'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener } from './util'
 import { browse } from '../../tools/src/dom'
 
 const renderType = 'body'
@@ -382,21 +382,17 @@ let scrollProcessTimeout
 function syncBodyScroll (scrollTop, elem1, elem2) {
   if (elem1 || elem2) {
     if (elem1) {
-      elem1.onscroll = null
+      removeScrollListener(elem1)
       elem1.scrollTop = scrollTop
     }
     if (elem2) {
-      elem2.onscroll = null
+      removeScrollListener(elem2)
       elem2.scrollTop = scrollTop
     }
     clearTimeout(scrollProcessTimeout)
     scrollProcessTimeout = setTimeout(function () {
-      if (elem1) {
-        elem1.onscroll = elem1._onscroll
-      }
-      if (elem2) {
-        elem2.onscroll = elem2._onscroll
-      }
+      restoreScrollListener(elem1)
+      restoreScrollListener(elem2)
     }, 300)
   }
 }
