@@ -332,7 +332,11 @@ export default defineComponent({
         nickname: '',
         sex: '0',
         role: '',
-        age: 22
+        age: 22,
+        val1: [],
+        val2: false,
+        val3: '',
+        flag: false
       },
       formItems4: [
         {
@@ -343,6 +347,10 @@ export default defineComponent({
             { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
             { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
             { field: 'age', title: '年龄', span: 24, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+            { field: 'val1', title: '复选框-组', span: 12, itemRender: { name: '$checkbox', options: [{ label: '爬山', value: '11' }, { label: '健身', value: '22' }] } },
+            { field: 'val2', title: '复选框', span: 12, itemRender: { name: '$checkbox' } },
+            { field: 'val3', title: '单选框', span: 12, itemRender: { name: '$radio', options: [{ label: '是', value: 'Y' }, { label: '否', value: 'N' }] } },
+            { field: 'flag', title: '开关', span: 24, itemRender: { name: '$switch', props: { openLabel: '是', closeLabel: '否' } } },
             { field: 'region', title: '地区', span: 24, slots: { default: 'myregion' } }
           ]
         },
@@ -691,7 +699,11 @@ export default defineComponent({
                 nickname: '',
                 sex: '0',
                 role: '',
-                age: 22
+                age: 22,
+                val1: [],
+                val2: false,
+                val3: '',
+                flag: false
               },
               formItems4: [
                 {
@@ -702,6 +714,10 @@ export default defineComponent({
                     { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
                     { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
                     { field: 'age', title: '年龄', span: 24, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
+                    { field: 'val1', title: '复选框-组', span: 12, itemRender: { name: '$checkbox', options: [{ label: '爬山', value: '11' }, { label: '健身', value: '22' }] } },
+                    { field: 'val2', title: '复选框', span: 12, itemRender: { name: '$checkbox' } },
+                    { field: 'val3', title: '单选框', span: 12, itemRender: { name: '$radio', options: [{ label: '是', value: 'Y' }, { label: '否', value: 'N' }] } },
+                    { field: 'flag', title: '开关', span: 24, itemRender: { name: '$switch', props: { openLabel: '是', closeLabel: '否' } } },
                     { field: 'region', title: '地区', span: 24, slots: { default: 'myregion' } }
                   ]
                 },

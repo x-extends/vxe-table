@@ -9,14 +9,14 @@ import formItemAPI from './form-item'
 const toolbarSlots: any = XEUtils.clone(toolbarAPI.find(item => item.name === 'Slots'), true)
 toolbarSlots.name = 'slots'
 toolbarSlots.list.forEach((item: any) => {
-  item.type = 'String, ((params) => any[])'
+  item.type = 'String, ((params) => VNode[])'
   item.defVal = `${item.defVal}`
 })
 
 const pagerSlots: any = XEUtils.clone(pagerAPI.find(item => item.name === 'Slots'), true)
 pagerSlots.name = 'slots'
 pagerSlots.list.forEach((item: any) => {
-  item.type = 'String, ((params) => any[])'
+  item.type = 'String, ((params) => VNode[])'
   item.defVal = `${item.defVal}`
 })
 
@@ -24,7 +24,7 @@ const formItemSlots: any = XEUtils.clone(formItemAPI.find(item => item.name === 
 formItemSlots.name = 'slots'
 formItemSlots.version = ''
 formItemSlots.list.forEach((item: any) => {
-  item.type = 'String, ((params) => any[])'
+  item.type = 'String, ((params) => VNode[])'
   item.defVal = `${item.defVal}`
 })
 
@@ -756,7 +756,7 @@ XEUtils.eachTree(gridAPI, (item: any, index, obj, paths, parent) => {
 const columnSlots: any = XEUtils.clone(columnAPI.find(item => item.name === 'Slots'), true)
 columnSlots.name = 'slots'
 columnSlots.list.forEach((item: any) => {
-  item.type = 'string | ((params) => any[])'
+  item.type = 'string | ((params) => VNode[])'
   item.defVal = `${item.defVal}`
 })
 

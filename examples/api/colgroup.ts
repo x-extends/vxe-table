@@ -33,7 +33,17 @@ const apis = [
     type: '',
     enum: '',
     defVal: '',
-    list: []
+    list: [
+      {
+        name: 'header',
+        desc: '自定义表头内容的模板',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{column, columnIndex, $columnIndex, _columnIndex, $rowIndex}',
+        list: []
+      }
+    ]
   },
   {
     name: 'Events',

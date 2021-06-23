@@ -512,21 +512,30 @@ function defaultFormItemRadioAndCheckboxRender (renderOpts: any, params: any) {
   const disabledProp = optionProps.disabled || 'disabled'
   const itemValue = XEUtils.get(data, property)
   const compName = getComponentName(name)
+  // 如果是分组
+  if (options) {
+    return [
+      h(resolveComponent(`${compName}-group`) as ComponentOptions, {
+        ...getComponentFormItemProps(renderOpts, params, itemValue),
+        ...getItemOns(renderOpts, params)
+      }, {
+        default: () => {
+          return options.map((item: any, index: any) => {
+            return h(resolveComponent(compName) as ComponentOptions, {
+              key: index,
+              label: item[valueProp],
+              content: item[labelProp],
+              disabled: item[disabledProp]
+            })
+          })
+        }
+      })
+    ]
+  }
   return [
-    h(resolveComponent(`${compName}-group`) as ComponentOptions, {
+    h(resolveComponent(compName) as ComponentOptions, {
       ...getComponentFormItemProps(renderOpts, params, itemValue),
       ...getItemOns(renderOpts, params)
-    }, {
-      default: () => {
-        return options.map((item: any, index: any) => {
-          return h(resolveComponent(compName) as ComponentOptions, {
-            key: index,
-            label: item[valueProp],
-            content: item[labelProp],
-            disabled: item[disabledProp]
-          })
-        })
-      }
     })
   ]
 }
