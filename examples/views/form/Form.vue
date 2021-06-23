@@ -305,7 +305,11 @@ export default {
         nickname: '',
         sex: '0',
         role: '',
-        age: 22
+        age: 22,
+        val1: [],
+        val2: false,
+        val3: '',
+        flag: false
       },
       formItems4: [
         { field: 'name', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
@@ -313,7 +317,10 @@ export default {
         { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
         { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
         { field: 'age', title: '年龄', span: 8, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
-        { field: 'region', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+        { field: 'val1', title: '复选框-组', span: 8, itemRender: { name: '$checkbox', options: [{ label: '爬山', value: '11' }, { label: '健身', value: '22' }] } },
+        { field: 'val2', title: '复选框', span: 8, itemRender: { name: '$checkbox' } },
+        { field: 'val3', title: '单选框', span: 8, itemRender: { name: '$radio', options: [{ label: '是', value: 'Y' }, { label: '否', value: 'N' }] } },
+        { field: 'flag', title: '开关', span: 8, itemRender: { name: '$switch', props: { openLabel: '是', closeLabel: '否' } } },
         { align: 'center', span: 24, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '配置式表单', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
       ],
       demoCodes: [
@@ -603,7 +610,11 @@ export default {
                 nickname: '',
                 sex: '0',
                 role: '',
-                age: 22
+                age: 22,
+                val1: [],
+                val2: false,
+                val3: '',
+                flag: false
               },
               formItems4: [
                 { field: 'name', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
@@ -611,7 +622,10 @@ export default {
                 { field: 'sex', title: '性别', span: 8, itemRender: { name: '$select', options: [{ value: '0', label: '女' }, { value: '1', label: '男' }], props: { placeholder: '请选择性别' } } },
                 { field: 'role', title: '角色', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
                 { field: 'age', title: '年龄', span: 8, itemRender: { name: '$input', props: { type: 'number', placeholder: '请输入年龄' } } },
-                { field: 'region', title: '名称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+                { field: 'val1', title: '复选框-组', span: 8, itemRender: { name: '$checkbox', options: [{ label: '爬山', value: '11' }, { label: '健身', value: '22' }] } },
+                { field: 'val2', title: '复选框', span: 8, itemRender: { name: '$checkbox' } },
+                { field: 'val3', title: '单选框', span: 8, itemRender: { name: '$radio', options: [{ label: '是', value: 'Y' }, { label: '否', value: 'N' }] } },
+                { field: 'flag', title: '开关', span: 8, itemRender: { name: '$switch', props: { openLabel: '是', closeLabel: '否' } } },
                 { align: 'center', span: 24, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: '配置式表单', status: 'primary' } }, { props: { type: 'reset', content: '重置' } }] } }
               ]
             }
