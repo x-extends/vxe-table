@@ -8,10 +8,22 @@
   width: 180px;
   color: $vxe-font-color;
   text-align: left;
-  &:not(.is--disabled) {
+  & > .vxe-input {
+    .vxe-input--inner {
+      cursor: pointer;
+    }
+  }
+  &.is--disabled {
     & > .vxe-input {
       .vxe-input--inner {
-        cursor: pointer;
+        cursor: no-drop;
+      }
+    }
+  }
+  &.is--loading {
+    & > .vxe-input {
+      .vxe-input--inner {
+        cursor: progress;
       }
     }
   }

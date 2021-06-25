@@ -183,6 +183,7 @@ export default defineComponent({
         class: ['vxe-pager--prev-btn', {
           'is--disabled': props.currentPage <= 1
         }],
+        type: 'button',
         title: GlobalConfig.i18n('vxe.pager.prevPage'),
         onClick: handlePrevPage
       }, [
@@ -199,6 +200,7 @@ export default defineComponent({
           'is--fixed': !tagName,
           'is--disabled': props.currentPage <= 1
         }],
+        type: 'button',
         title: GlobalConfig.i18n('vxe.pager.prevJump'),
         onClick: handlePrevJump
       }, [
@@ -219,6 +221,7 @@ export default defineComponent({
           'is--fixed': !tagName,
           'is--disabled': props.currentPage >= pageCount
         }],
+        type: 'button',
         title: GlobalConfig.i18n('vxe.pager.nextJump'),
         onClick: handleNextJump
       }, [
@@ -238,6 +241,7 @@ export default defineComponent({
         class: ['vxe-pager--next-btn', {
           'is--disabled': props.currentPage >= pageCount
         }],
+        type: 'button',
         title: GlobalConfig.i18n('vxe.pager.nextPage'),
         onClick: handleNextPage
       }, [
@@ -269,6 +273,7 @@ export default defineComponent({
         nums.push(
           h('button', {
             class: 'vxe-pager--num-btn',
+            type: 'button',
             onClick: (evnt: Event) => jumpPageEvent(evnt, 1)
           }, 1),
           renderPrevJump('span')
@@ -283,6 +288,7 @@ export default defineComponent({
               class: ['vxe-pager--num-btn', {
                 'is--active': currentPage === number
               }],
+              type: 'button',
               onClick: (evnt: Event) => jumpPageEvent(evnt, number)
             }, number)
           )
@@ -293,6 +299,7 @@ export default defineComponent({
           renderNextJump('button'),
           h('button', {
             class: 'vxe-pager--num-btn',
+            type: 'button',
             onClick: (evnt: Event) => jumpPageEvent(evnt, pageCount)
           }, pageCount)
         )
