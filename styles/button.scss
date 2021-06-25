@@ -55,17 +55,6 @@ $btnThemeList: (
   user-select: none;
   appearance: none;
   @include animatTransition(border, .2s);
-  &.is--disabled {
-    color: $vxe-disabled-color;
-    .vxe-button--icon {
-      &.vxe-icon--zoomin {
-        border-color: $vxe-disabled-color;
-      }
-    }
-    &:not(.is--loading) {
-      cursor: no-drop;
-    }
-  }
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
@@ -76,6 +65,7 @@ $btnThemeList: (
     }
   }
   &.is--loading {
+    cursor: progress;
     &:before {
       content: "";
       position: absolute;
@@ -86,6 +76,17 @@ $btnThemeList: (
       border-radius: inherit;
       background-color: hsla(0,0%,100%,.35);
       pointer-events: none;
+    }
+  }
+  &.is--disabled {
+    color: $vxe-disabled-color;
+    .vxe-button--icon {
+      &.vxe-icon--zoomin {
+        border-color: $vxe-disabled-color;
+      }
+    }
+    &:not(.is--loading) {
+      cursor: no-drop;
     }
   }
   &.type--text {

@@ -119,6 +119,7 @@ export default {
           'is--disabled': this.currentPage <= 1
         }],
         attrs: {
+          type: 'button',
           title: GlobalConfig.i18n('vxe.pager.prevPage')
         },
         on: {
@@ -138,6 +139,7 @@ export default {
           'is--disabled': this.currentPage <= 1
         }],
         attrs: {
+          type: 'button',
           title: GlobalConfig.i18n('vxe.pager.prevJump')
         },
         on: {
@@ -172,6 +174,7 @@ export default {
           'is--disabled': this.currentPage >= this.pageCount
         }],
         attrs: {
+          type: 'button',
           title: GlobalConfig.i18n('vxe.pager.nextJump')
         },
         on: {
@@ -193,6 +196,7 @@ export default {
           'is--disabled': this.currentPage >= this.pageCount
         }],
         attrs: {
+          type: 'button',
           title: GlobalConfig.i18n('vxe.pager.nextPage')
         },
         on: {
@@ -288,6 +292,9 @@ export default {
         nums.push(
           h('button', {
             class: 'vxe-pager--num-btn',
+            attrs: {
+              type: 'button'
+            },
             on: {
               click: () => this.jumpPage(1)
             }
@@ -303,6 +310,9 @@ export default {
               class: ['vxe-pager--num-btn', {
                 'is--active': currentPage === number
               }],
+              attrs: {
+                type: 'button'
+              },
               on: {
                 click: () => this.jumpPage(number)
               },
@@ -316,6 +326,9 @@ export default {
           this.renderNextJump(h, 'button'),
           h('button', {
             class: 'vxe-pager--num-btn',
+            attrs: {
+              type: 'button'
+            },
             on: {
               click: () => this.jumpPage(pageCount)
             }

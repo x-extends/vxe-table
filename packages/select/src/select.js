@@ -337,6 +337,7 @@ export default {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
+        'is--loading': loading,
         'is--active': isActivated
       }]
     }, [

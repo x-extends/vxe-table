@@ -263,18 +263,36 @@ export default {
       }
     },
     closeEvent (evnt) {
+      const { events = {} } = this
       const type = 'close'
-      this.$emit(type, { type, $modal: this, $event: evnt })
+      const params = { type, $modal: this, $event: evnt }
+      if (events[type]) {
+        events[type].call(this, params)
+      } else {
+        this.$emit(type, params)
+      }
       this.close(type)
     },
     confirmEvent (evnt) {
+      const { events = {} } = this
       const type = 'confirm'
-      this.$emit(type, { type, $modal: this, $event: evnt })
+      const params = { type, $modal: this, $event: evnt }
+      if (events[type]) {
+        events[type].call(this, params)
+      } else {
+        this.$emit(type, params)
+      }
       this.close(type)
     },
     cancelEvent (evnt) {
+      const { events = {} } = this
       const type = 'cancel'
-      this.$emit(type, { type, $modal: this, $event: evnt })
+      const params = { type, $modal: this, $event: evnt }
+      if (events[type]) {
+        events[type].call(this, params)
+      } else {
+        this.$emit(type, params)
+      }
       this.close(type)
     },
     open () {
