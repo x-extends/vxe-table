@@ -4,7 +4,7 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
+        <vxe-button @click="$refs.xTable1.setRadioRow(demo1.tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="clearRadioRowEevnt1">取消选中</vxe-button>
         <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
       </template>
@@ -41,8 +41,8 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
-        <vxe-button @click="$refs.xTable2.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
+        <vxe-button @click="$refs.xTable2.setRadioRow(demo2.tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
+        <vxe-button @click="$refs.xTable2.setRadioRow(demo2.tableData[1])">设置第二行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>
       </template>
     </vxe-toolbar>
@@ -295,7 +295,7 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="$refs.xTable1.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
+            <vxe-button @click="$refs.xTable1.setRadioRow(demo1.tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="clearRadioRowEevnt1">取消选中</vxe-button>
             <vxe-button @click="getRadioEvent1">获取选中</vxe-button>
           </template>
@@ -375,8 +375,8 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="$refs.xTable2.setRadioRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
-            <vxe-button @click="$refs.xTable2.setRadioRow(tableData[1])">设置第二行选中</vxe-button>
+            <vxe-button @click="$refs.xTable2.setRadioRow(demo2.tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
+            <vxe-button @click="$refs.xTable2.setRadioRow(demo2.tableData[1])">设置第二行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.clearRadioRow()">清除所有行选中</vxe-button>
           </template>
         </vxe-toolbar>
