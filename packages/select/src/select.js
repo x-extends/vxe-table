@@ -338,8 +338,8 @@ export default {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
-        'is--active': isActivated,
-        'is--loading': loading
+        'is--loading': loading,
+        'is--active': isActivated
       }]
     }, [
       h('div', {

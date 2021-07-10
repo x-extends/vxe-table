@@ -36,6 +36,7 @@
 
 .vxe-textarea--inner,
 .vxe-textarea--autosize {
+  line-height: $vxe-textarea-line-height;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
 }
