@@ -164,7 +164,7 @@ export default defineComponent({
       const { modelValue, multiple } = props
       const multiMaxCharNum = computeMultiMaxCharNum.value
       if (modelValue && multiple) {
-        return (modelValue as any[]).map((val) => {
+        return (XEUtils.isArray(modelValue) ? modelValue : [modelValue]).map((val) => {
           const label = getSelectLabel(val)
           if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
             return `${label.substring(0, multiMaxCharNum)}...`
