@@ -2900,13 +2900,7 @@ const Methods = {
    * 用于单选行，获取当已选中的数据
    */
   getRadioRecord () {
-    const { fullDataRowIdData, radioReserveRow, radioOpts } = this
-    if (radioOpts.reserve && radioReserveRow) {
-      if (!fullDataRowIdData[getRowid(this, radioReserveRow)]) {
-        return radioReserveRow
-      }
-    }
-    return null
+    return this.selectRow
   },
   /**
    * 行 hover 事件
