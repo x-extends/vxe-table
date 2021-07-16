@@ -30,7 +30,7 @@ import { VxeGridProps, VxeGridInstance, VxeGridEvents } from '../../../types/ind
 
 export default defineComponent({
   setup () {
-    const gridOptions1 = reactive({
+    const gridOptions1 = reactive<VxeGridProps>({
       border: true,
       showOverflow: true,
       editConfig: {
@@ -57,7 +57,7 @@ export default defineComponent({
         { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
         { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ]
-    } as VxeGridProps)
+    })
 
     const editDisabledEvent: VxeGridEvents.EditDisabled = () => {
       console.log('禁止编辑')
@@ -65,7 +65,7 @@ export default defineComponent({
 
     const xGrid2 = ref({} as VxeGridInstance)
 
-    const gridOptions2 = reactive({
+    const gridOptions2 = reactive<VxeGridProps>({
       border: true,
       showOverflow: true,
       editConfig: {
@@ -86,7 +86,7 @@ export default defineComponent({
         { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
         { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ]
-    } as VxeGridProps)
+    })
 
     const editActivedEvent: VxeGridEvents.EditDisabled = ({ row }) => {
       const $grid = xGrid2.value
@@ -127,7 +127,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions1 = reactive({
+            const gridOptions1 = reactive<VxeGridProps>({
               border: true,
               showOverflow: true,
               editConfig: {
@@ -154,7 +154,7 @@ export default defineComponent({
                 { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
                 { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ]
-            } as VxeGridProps)
+            })
 
             const editDisabledEvent: VxeGridEvents.EditDisabled = () => {
               console.log('禁止编辑')
@@ -178,7 +178,7 @@ export default defineComponent({
           setup () {
             const xGrid2 = ref({} as VxeGridInstance)
 
-            const gridOptions2 = reactive({
+            const gridOptions2 = reactive<VxeGridProps>({
               border: true,
               showOverflow: true,
               editConfig: {
@@ -199,7 +199,7 @@ export default defineComponent({
                 { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
                 { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
               ]
-            } as VxeGridProps)
+            })
 
             const editActivedEvent: VxeGridEvents.EditDisabled = ({ row }) => {
               const $grid = xGrid2.value

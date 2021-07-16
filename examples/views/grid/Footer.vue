@@ -38,7 +38,7 @@ export default defineComponent({
       return count
     }
 
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       stripe: true,
       resizable: true,
@@ -88,7 +88,7 @@ export default defineComponent({
           })
         ]
       }
-    } as VxeGridProps)
+    })
 
     return {
       gridOptions,
@@ -118,7 +118,7 @@ export default defineComponent({
               return count
             }
 
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               stripe: true,
               resizable: true,
@@ -168,7 +168,7 @@ export default defineComponent({
                   })
                 ]
               }
-            } as VxeGridProps)
+            })
 
             return {
               gridOptions

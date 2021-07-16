@@ -19,7 +19,7 @@ import { VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       resizable: true,
       border: true,
       showOverflow: true,
@@ -79,7 +79,7 @@ export default defineComponent({
         { field: 'sex', title: 'Sex' },
         { field: 'describe', title: 'Describe', showOverflow: true }
       ]
-    } as VxeGridProps)
+    })
 
     // 异步更新下拉选项
     setTimeout(() => {
@@ -107,7 +107,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               resizable: true,
               border: true,
               showOverflow: true,
@@ -167,7 +167,7 @@ export default defineComponent({
                 { field: 'sex', title: 'Sex' },
                 { field: 'describe', title: 'Describe', showOverflow: true }
               ]
-            } as VxeGridProps)
+            })
 
             setTimeout(() => {
               const { formConfig } = gridOptions

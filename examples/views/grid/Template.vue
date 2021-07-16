@@ -237,7 +237,7 @@ export default defineComponent({
       return count / list.length
     }
 
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       showFooter: true,
@@ -313,7 +313,7 @@ export default defineComponent({
           })
         ]
       }
-    } as VxeGridProps)
+    })
 
     const searchEvent = () => {
       VXETable.modal.alert('查询')
@@ -574,7 +574,7 @@ export default defineComponent({
               return count / list.length
             }
 
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               showFooter: true,
@@ -650,7 +650,7 @@ export default defineComponent({
                   })
                 ]
               }
-            } as VxeGridProps)
+            })
 
             const searchEvent = () => {
               VXETable.modal.alert('查询')

@@ -19,7 +19,7 @@ import { VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       keepSource: true,
@@ -124,7 +124,7 @@ export default defineComponent({
         { field: 'role', title: 'Role', editRender: { name: 'input' } },
         { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
       ]
-    } as VxeGridProps)
+    })
 
     return {
       gridOptions,
@@ -138,7 +138,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               keepSource: true,
@@ -243,7 +243,7 @@ export default defineComponent({
                 { field: 'role', title: 'Role', editRender: { name: 'input' } },
                 { field: 'address', title: 'Address', showOverflow: true, editRender: { name: 'input' } }
               ]
-            } as VxeGridProps)
+            })
 
             return {
               gridOptions

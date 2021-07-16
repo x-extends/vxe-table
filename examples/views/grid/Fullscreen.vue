@@ -77,7 +77,7 @@ export default defineComponent({
       return count / list.length
     }
 
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       showOverflow: true,
@@ -130,7 +130,7 @@ export default defineComponent({
         // 返回一个二维数组的表尾合计
         return [sums]
       }
-    } as VxeGridProps)
+    })
 
     return {
       xGrid,
@@ -203,7 +203,7 @@ export default defineComponent({
               return count / list.length
             }
 
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               showOverflow: true,
@@ -256,7 +256,7 @@ export default defineComponent({
                 // 返回一个二维数组的表尾合计
                 return [sums]
               }
-            } as VxeGridProps)
+            })
 
             return {
               xGrid,

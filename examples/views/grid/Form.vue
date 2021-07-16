@@ -19,7 +19,7 @@ import { VxeGridProps, VxeGridListeners } from '../../../types/index'
 
 export default defineComponent({
   setup () {
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       resizable: true,
       border: true,
       showOverflow: true,
@@ -51,7 +51,7 @@ export default defineComponent({
         { field: 'address', title: 'Address', showOverflow: true }
       ],
       data: []
-    } as VxeGridProps)
+    })
 
     const findList = () => {
       gridOptions.loading = true
@@ -102,7 +102,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               resizable: true,
               border: true,
               showOverflow: true,
@@ -134,7 +134,7 @@ export default defineComponent({
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
               data: []
-            } as VxeGridProps)
+            })
 
             const findList = () => {
               gridOptions.loading = true

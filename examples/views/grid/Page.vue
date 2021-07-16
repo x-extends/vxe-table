@@ -38,7 +38,7 @@ export default defineComponent({
       pageSize: 10
     })
 
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       height: 530,
@@ -52,7 +52,7 @@ export default defineComponent({
         { field: 'role', title: 'Role' },
         { field: 'address', title: 'Address', showOverflow: true }
       ]
-    } as VxeGridProps)
+    })
 
     const findList = () => {
       gridOptions.loading = true
@@ -118,7 +118,7 @@ export default defineComponent({
               pageSize: 10
             })
 
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               height: 530,
@@ -132,7 +132,7 @@ export default defineComponent({
                 { field: 'role', title: 'Role' },
                 { field: 'address', title: 'Address', showOverflow: true }
               ]
-            } as VxeGridProps)
+            })
 
             const findList = () => {
               gridOptions.loading = true

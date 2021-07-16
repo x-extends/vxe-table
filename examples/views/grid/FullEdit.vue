@@ -30,7 +30,7 @@ export default defineComponent({
   setup () {
     const xGrid = ref({} as VxeGridInstance)
 
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       showHeaderOverflow: true,
@@ -266,7 +266,7 @@ export default defineComponent({
         mode: 'row',
         showStatus: true
       }
-    } as VxeGridProps)
+    })
 
     onMounted(() => {
       const sexList = [
@@ -305,7 +305,7 @@ export default defineComponent({
           setup () {
             const xGrid = ref({} as VxeGridInstance)
 
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               showHeaderOverflow: true,
@@ -541,7 +541,7 @@ export default defineComponent({
                 mode: 'row',
                 showStatus: true
               }
-            } as VxeGridProps)
+            })
 
             onMounted(() => {
               const sexList = [

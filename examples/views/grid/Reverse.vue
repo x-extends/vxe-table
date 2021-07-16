@@ -32,7 +32,7 @@ import { VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
-    const gridOptions1 = reactive({
+    const gridOptions1 = reactive<VxeGridProps>({
       border: true,
       showHeader: false,
       columns: [
@@ -51,16 +51,16 @@ export default defineComponent({
         { col1: 'Age', col2: 28, col3: 18, col4: 22, col5: 30, col6: 26, col7: 34 },
         { col1: 'Address', col2: 'Shenzhen', col3: 'Guangzhou', col4: 'Shanghai', col5: 'Shenzhen', col6: 'Shanghai', col7: 'Guangzhou' }
       ]
-    } as VxeGridProps)
+    })
 
-    const gridOptions2 = reactive({
+    const gridOptions2 = reactive<VxeGridProps>({
       border: true,
       showOverflow: true,
       height: 400,
       showHeader: false,
       columns: [],
       data: []
-    } as VxeGridProps)
+    })
 
     const myColumns2 = [
       { field: 'id', title: 'ID' },
@@ -126,7 +126,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions1 = reactive({
+            const gridOptions1 = reactive<VxeGridProps>({
               border: true,
               showHeader: false,
               columns: [
@@ -145,7 +145,7 @@ export default defineComponent({
                 { col1: 'Age', col2: 28, col3: 18, col4: 22, col5: 30, col6: 26, col7: 34 },
                 { col1: 'Address', col2: 'Shenzhen', col3: 'Guangzhou', col4: 'Shanghai', col5: 'Shenzhen', col6: 'Shanghai', col7: 'Guangzhou' }
               ]
-            } as VxeGridProps)
+            })
 
             return {
               gridOptions1
@@ -167,14 +167,14 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions2 = reactive({
+            const gridOptions2 = reactive<VxeGridProps>({
               border: true,
               showOverflow: true,
               height: 400,
               showHeader: false,
               columns: [],
               data: []
-            } as VxeGridProps)
+            })
 
             const myColumns2 = [
               { field: 'id', title: 'ID' },

@@ -32,9 +32,9 @@ import { VxeGridInstance, VxeGridListeners, VxeGridProps } from '../../../types/
 
 export default defineComponent({
   setup () {
-    const xGrid = ref({} as VxeGridInstance)
+    const xGrid = ref<VxeGridInstance>()
 
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       keepSource: true,
@@ -64,7 +64,7 @@ export default defineComponent({
         { title: '操作', width: 200, slots: { default: 'operate' } }
       ],
       data: []
-    } as VxeGridProps)
+    })
 
     const findList = () => {
       gridOptions.loading = true
@@ -100,25 +100,31 @@ export default defineComponent({
 
     const editRowEvent = (row: any) => {
       const $grid = xGrid.value
-      $grid.setActiveRow(row)
+      if ($grid) {
+        $grid.setActiveRow(row)
+      }
     }
 
     const saveRowEvent = async () => {
       const $grid = xGrid.value
-      await $grid.clearActived()
-      gridOptions.loading = true
-      // 模拟异步保存
-      setTimeout(() => {
-        gridOptions.loading = false
-        VXETable.modal.message({ content: '保存成功！', status: 'success' })
-      }, 300)
+      if ($grid) {
+        await $grid.clearActived()
+        gridOptions.loading = true
+        // 模拟异步保存
+        setTimeout(() => {
+          gridOptions.loading = false
+          VXETable.modal.message({ content: '保存成功！', status: 'success' })
+        }, 300)
+      }
     }
 
     const removeRowEvent = async (row: any) => {
       const type = await VXETable.modal.confirm('您确定要删除该数据?')
       const $grid = xGrid.value
-      if (type === 'confirm') {
-        await $grid.remove(row)
+      if ($grid) {
+        if (type === 'confirm') {
+          await $grid.remove(row)
+        }
       }
     }
 
@@ -167,9 +173,9 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const xGrid = ref({} as VxeGridInstance)
+            const xGrid = ref<VxeGridInstance>()
 
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               keepSource: true,
@@ -199,7 +205,7 @@ export default defineComponent({
                 { title: '操作', width: 200, slots: { default: 'operate' } }
               ],
               data: []
-            } as VxeGridProps)
+            })
 
             const findList = () => {
               gridOptions.loading = true
@@ -235,25 +241,31 @@ export default defineComponent({
 
             const editRowEvent = (row: any) => {
               const $grid = xGrid.value
-              $grid.setActiveRow(row)
+              if ($grid) {
+                $grid.setActiveRow(row)
+              }
             }
 
             const saveRowEvent = async () => {
               const $grid = xGrid.value
-              await $grid.clearActived()
-              gridOptions.loading = true
-              // 模拟异步保存
-              setTimeout(() => {
-                gridOptions.loading = false
-                VXETable.modal.message({ content: '保存成功！', status: 'success' })
-              }, 300)
+              if ($grid) {
+                await $grid.clearActived()
+                gridOptions.loading = true
+                // 模拟异步保存
+                setTimeout(() => {
+                  gridOptions.loading = false
+                  VXETable.modal.message({ content: '保存成功！', status: 'success' })
+                }, 300)
+              }
             }
 
             const removeRowEvent = async (row: any) => {
               const type = await VXETable.modal.confirm('您确定要删除该数据?')
               const $grid = xGrid.value
-              if (type === 'confirm') {
-                await $grid.remove(row)
+              if ($grid) {
+                if (type === 'confirm') {
+                  await $grid.remove(row)
+                }
               }
             }
 

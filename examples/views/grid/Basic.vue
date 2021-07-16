@@ -27,7 +27,7 @@ import { VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       height: 300,
@@ -53,7 +53,7 @@ export default defineComponent({
         { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'Shenzhen' },
         { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'Shenzhen' }
       ]
-    } as VxeGridProps)
+    })
     return {
       gridOptions,
       demoCodes: [
@@ -72,7 +72,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               height: 300,
@@ -98,7 +98,7 @@ export default defineComponent({
                 { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'Shenzhen' },
                 { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'Shenzhen' }
               ]
-            } as VxeGridProps)
+            })
             return {
               gridOptions
             }

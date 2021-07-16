@@ -24,7 +24,7 @@ import { VxeGridProps } from '../../../types/index'
 
 export default defineComponent({
   setup () {
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: false,
       height: 530,
@@ -80,7 +80,7 @@ export default defineComponent({
           }
         }
       }
-    } as VxeGridProps)
+    })
 
     return {
       gridOptions,
@@ -94,7 +94,7 @@ export default defineComponent({
 
         export default defineComponent({
           setup () {
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: false,
               height: 530,
@@ -150,7 +150,7 @@ export default defineComponent({
                   }
                 }
               }
-            } as VxeGridProps)
+            })
 
             return {
               gridOptions

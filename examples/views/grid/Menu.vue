@@ -47,7 +47,7 @@ export default defineComponent({
       return count
     }
 
-    const gridOptions = reactive({
+    const gridOptions = reactive<VxeGridProps>({
       border: true,
       resizable: true,
       showFooter: true,
@@ -127,7 +127,7 @@ export default defineComponent({
           })
         ]
       }
-    } as VxeGridProps)
+    })
 
     const cellContextMenuEvent: VxeGridEvents.CellMenu = ({ row }) => {
       const $grid = xGrid.value
@@ -186,7 +186,7 @@ export default defineComponent({
               return count
             }
 
-            const gridOptions = reactive({
+            const gridOptions = reactive<VxeGridProps>({
               border: true,
               resizable: true,
               showFooter: true,
@@ -266,7 +266,7 @@ export default defineComponent({
                   })
                 ]
               }
-            } as VxeGridProps)
+            })
 
             const cellContextMenuEvent: VxeGridEvents.CellMenu = ({ row }) => {
               const $grid = xGrid.value
