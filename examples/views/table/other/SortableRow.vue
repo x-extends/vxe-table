@@ -41,7 +41,6 @@
 
     <p class="tip">
       例如 <table-api-link name="vxe-grid"/> 简单示例：<br>
-      由于树节点的深层结构，所以需要在树节点在变动之后调用 <table-api-link prop="syncData"/> 方法刷新数据<br>
       <span class="red">（注：该示例仅供参考，具体请自行实现）</span>
     </p>
 
