@@ -271,7 +271,7 @@ export default {
     selectLabel () {
       const { value, multiple, multiMaxCharNum } = this
       if (value && multiple) {
-        return value.map(val => {
+        return (XEUtils.isArray(value) ? value : [value]).map(val => {
           const label = getSelectLabel(this, val)
           if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
             return `${label.substring(0, multiMaxCharNum)}...`

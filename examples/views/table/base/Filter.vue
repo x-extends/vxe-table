@@ -13,9 +13,10 @@
     <vxe-table
       border
       highlight-hover-row
+      ref="xTable1"
       :data="tableData">
       <vxe-table-column field="id" title="ID"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10002', value: 10002}, {label: 'id大于10003', value: 10003}]" :filter-method="filterNameMethod"></vxe-table-column>
+      <vxe-table-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-table-column>
       <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
       <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
         <template #filter="{ $panel, column }">
@@ -81,9 +82,10 @@ export default {
         <vxe-table
           border
           highlight-hover-row
+          ref="xTable1"
           :data="tableData">
           <vxe-table-column field="id" title="ID"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10002', value: 10002}, {label: 'id大于10003', value: 10003}]" :filter-method="filterNameMethod"></vxe-table-column>
+          <vxe-table-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-table-column>
           <vxe-table-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-table-column>
           <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
             <template #filter="{ $panel, column }">
@@ -106,6 +108,21 @@ export default {
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 28, address: 'Shanghai' }
               ]
             }
+          },
+          mounted () {
+            // 异步加载筛选数据
+            setTimeout(() => {
+              const $table = this.$refs.xTable1
+              if ($table) {
+                const nameColumn = $table.getColumnByField('name')
+                if (nameColumn) {
+                  $table.setFilter(nameColumn, [
+                    { label: 'id大于10002', value: 10002 },
+                    { label: 'id大于10003', value: 10003 }
+                  ])
+                }
+              }
+            }, 500)
           },
           methods: {
             filterNameMethod ({ value, row, column }) {
@@ -165,6 +182,21 @@ export default {
         `
       ]
     }
+  },
+  mounted () {
+    // 异步加载筛选数据
+    setTimeout(() => {
+      const $table = this.$refs.xTable1
+      if ($table) {
+        const nameColumn = $table.getColumnByField('name')
+        if (nameColumn) {
+          $table.setFilter(nameColumn, [
+            { label: 'id大于10002', value: 10002 },
+            { label: 'id大于10003', value: 10003 }
+          ])
+        }
+      }
+    }, 500)
   },
   methods: {
     filterNameMethod ({ value, row }) {

@@ -33,6 +33,7 @@ export default {
         align: 'left',
         toolbarConfig: {
           slots: {
+            // 自定义工具栏模板
             buttons: 'toolbar_buttons'
           }
         },
@@ -75,6 +76,7 @@ export default {
                 align: 'left',
                 toolbarConfig: {
                   slots: {
+                    // 自定义工具栏模板
                     buttons: 'toolbar_buttons'
                   }
                 },

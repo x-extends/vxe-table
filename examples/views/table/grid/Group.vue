@@ -22,6 +22,7 @@ export default {
         stripe: true,
         resizable: true,
         height: 500,
+        // 分组列头，通过 children 定义子列
         columns: [
           { type: 'seq', width: 50 },
           {
@@ -64,6 +65,7 @@ export default {
                 stripe: true,
                 resizable: true,
                 height: 500,
+                // 分组列头，通过 children 定义子列
                 columns: [
                   { type: 'seq', width: 50 },
                   {

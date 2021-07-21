@@ -43,9 +43,13 @@ export default {
           pageSizes: [10, 20, 50, 100, 200, 500]
         },
         editConfig: {
+          // 设置触发编辑为手动模式
           trigger: 'manual',
+          // 设置为整行编辑模式
           mode: 'row',
+          // 显示修改状态和新增状态
           showStatus: true,
+          // 自定义可编辑列头的图标
           icon: 'fa fa-file-text-o'
         },
         columns: [
@@ -94,9 +98,13 @@ export default {
                   pageSizes: [10, 20, 50, 100, 200, 500]
                 },
                 editConfig: {
+                  // 设置触发编辑为手动模式
                   trigger: 'manual',
+                  // 设置为整行编辑模式
                   mode: 'row',
+                  // 显示修改状态和新增状态
                   showStatus: true,
+                  // 自定义可编辑列头的图标
                   icon: 'fa fa-file-text-o'
                 },
                 columns: [

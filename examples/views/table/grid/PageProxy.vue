@@ -28,14 +28,17 @@ export default {
         height: 530,
         rowId: 'id',
         pagerConfig: {
+          // 默认每页大小
           pageSize: 10
         },
         checkboxConfig: {
+          // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
           reserve: true
         },
         proxyConfig: {
           seq: true, // 启用动态序号代理（分页之后索引自动计算为当前页的起始序号）
           props: {
+            // 自定义响应结果读取的字段，例如返回结果为：{result: [], page: {total: 10}}
             result: 'result',
             total: 'page.total'
           },
@@ -93,14 +96,17 @@ export default {
               height: 530,
               rowId: 'id',
               pagerConfig: {
+                // 默认每页大小
                 pageSize: 10
               },
               checkboxConfig: {
+                // 设置复选框支持分页勾选，需要设置 rowId 行数据主键
                 reserve: true
               },
               proxyConfig: {
                 seq: true, // 启用动态序号代理（分页之后索引自动计算为当前页的起始序号）
                 props: {
+                  // 自定义响应结果读取的字段，例如返回结果为：{result: [], page: {total: 10}}
                   result: 'result',
                   total: 'page.total'
                 },

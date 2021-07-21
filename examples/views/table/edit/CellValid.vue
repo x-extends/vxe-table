@@ -69,7 +69,7 @@ export default {
       })
     }
     const roleValid = ({ cellValue }) => {
-      if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
+      if (cellValue && !['Develop', 'Test', 'Designer', 'PM'].includes(cellValue)) {
         return new Error('角色输入不正确')
       }
     }
@@ -155,7 +155,7 @@ export default {
               })
             }
             const roleValid = ({ cellValue }) => {
-              if (cellValue && !['前端', '后端', '设计师', '项目经理', '测试'].includes(cellValue)) {
+              if (cellValue && !['Develop', 'Test', 'Designer', 'PM'].includes(cellValue)) {
                 return new Error('角色输入不正确')
               }
             }
