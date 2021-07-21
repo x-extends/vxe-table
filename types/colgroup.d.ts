@@ -1,5 +1,4 @@
-import { VXETableComponent } from './component'
-import { ColumnFixed, ColumnAlign, ColumnFormatterMethodParams, ColumnCellRenderOptions, ColumnContentRenderOptions } from './column'
+import { ColumnFixed, ColumnAlign, ColumnFormatterMethodParams, ColumnCellRenderOptions, ColumnContentRenderOptions, Column } from './column'
 import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterMethodParams } from './filter'
 import { ColumnCellRenderParams } from './v-x-e-table/renderer'
 import { ColumnHeaderRenderParams } from './header'
@@ -11,7 +10,7 @@ import { TableOverflow } from './table'
 /**
  * 组件 - 表格分组列
  */
-export interface Colgroup extends VXETableComponent {}
+export declare class Colgroup extends Column {}
 
 export interface ColgroupOptions extends ColgroupProps {}
 
