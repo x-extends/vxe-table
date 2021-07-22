@@ -1726,9 +1726,16 @@ export namespace VxeTablePropTypes {
       findRE: RegExp | null;
     }): boolean;
     beforeFindMethod?(params: {
+      isAll: boolean;
       findValue: string | null;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }): boolean;
+    afterFindMethod?(params: {
+      isAll: boolean;
+      findValue: string | null;
+      result: VxeTableProDefines.FindAndReplaceResult[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }): void;
     isReplace?: boolean;
     replaceMethod?: (params: {
       row: any;
@@ -1736,10 +1743,18 @@ export namespace VxeTablePropTypes {
       cellValue: any;
     }) => void;
     beforeReplaceMethod?: (params: {
+      isAll: boolean;
       findValue: string | null;
       replaceValue: string;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
     }) => boolean;
+    afterReplaceMethod?: (params: {
+      isAll: boolean;
+      findValue: string | null;
+      replaceValue: string;
+      result: VxeTableProDefines.FindAndReplaceResult[];
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+    }) => void;
   }
   export interface FNROpts extends FNRConfig { }
 

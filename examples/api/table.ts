@@ -1982,9 +1982,18 @@ const apis = [
           },
           {
             name: 'beforeFindMethod',
-            desc: '自定义单元格替换之前的方法，可以通过返回 false 阻止替换行为',
+            desc: '自定义单元格查找之前的方法，可以通过返回 false 阻止查找行为',
             version: 'pro',
-            type: '({ findValue }) => boolean',
+            type: '({ isAll, findValue }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'afterFindMethod',
+            desc: '自定义单元格查找之后的方法',
+            version: 'pro',
+            type: '({ isAll, findValue, result }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -2011,7 +2020,16 @@ const apis = [
             name: 'beforeReplaceMethod',
             desc: '自定义单元格替换之前的方法，可以通过返回 false 阻止替换行为',
             version: 'pro',
-            type: '({ findValue, replaceValue }) => boolean',
+            type: '({ isAll, findValue, replaceValue }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
+            name: 'afterReplaceMethod',
+            desc: '自定义单元格替换之后的方法',
+            version: 'pro',
+            type: '({ isAll, findValue, replaceValue, result }) => void',
             enum: '',
             defVal: '',
             list: []
@@ -3147,7 +3165,7 @@ const apis = [
       },
       {
         name: 'open-fnr',
-        desc: '只对 keyboard-config.isFNR 配置时有效，在查询与搜索弹框被打开时会触发该事件',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在查找与替换弹框被打开时会触发该事件',
         version: 'pro',
         type: '',
         enum: '',
@@ -3156,11 +3174,47 @@ const apis = [
       },
       {
         name: 'fnr-change',
-        desc: '只对 keyboard-config.isFNR 配置时有效，在查询与搜索弹框的 Tab 页被切换时会触发该事件',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在查找与替换弹框的 Tab 页被切换时会触发该事件',
         version: 'pro',
         type: '',
         enum: '',
         defVal: '{ tab, $event}',
+        list: []
+      },
+      {
+        name: 'fnr-find',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在点击查找时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ findValue, row, column, $event}',
+        list: []
+      },
+      {
+        name: 'fnr-find-all',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在点击查找所有时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ findValue, result, $event}',
+        list: []
+      },
+      {
+        name: 'fnr-replace',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在点击替换时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ findValue, replaceValue, row, column, $event}',
+        list: []
+      },
+      {
+        name: 'fnr-replace-all',
+        desc: '只对 keyboard-config.isFNR 配置时有效，在点击替换所有时会触发该事件',
+        version: 'pro',
+        type: '',
+        enum: '',
+        defVal: '{ findValue, replaceValue, result, $event}',
         list: []
       },
       {

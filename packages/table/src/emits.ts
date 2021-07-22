@@ -44,6 +44,10 @@ export default [
 
   'open-fnr',
   'fnr-change',
+  'fnr-find',
+  'fnr-find-all',
+  'fnr-replace',
+  'fnr-replace-all',
   'cell-area-copy',
   'cell-area-cut',
   'cell-area-paste',

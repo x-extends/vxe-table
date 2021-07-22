@@ -2,7 +2,7 @@ import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, w
 import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 import { getDomNode, getEventTargetNode } from '../../tools/dom'
-import { errLog, getLastZIndex, nextZIndex, isNumVal, getFuncText } from '../../tools/utils'
+import { errLog, getLastZIndex, nextZIndex, getFuncText } from '../../tools/utils'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeButtonConstructor from '../../button/src/button'
@@ -117,8 +117,8 @@ export default defineComponent({
     const recalculate = () => {
       const { width, height } = props
       const boxElem = getBox()
-      boxElem.style.width = width ? (isNumVal(width) ? `${width}px` : width) : ''
-      boxElem.style.height = height ? (isNumVal(height) ? `${height}px` : height) : ''
+      boxElem.style.width = `${width ? (isNaN(width as number) ? width : `${width}px`) : ''}`
+      boxElem.style.height = `${height ? (isNaN(height as number) ? height : `${height}px`) : ''}`
       return nextTick()
     }
 

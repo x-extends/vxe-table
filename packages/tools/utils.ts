@@ -44,10 +44,6 @@ export function getLastZIndex () {
 export const warnLog = outLog('warn')
 export const errLog = outLog('error')
 
-export function isNumVal (num: string | number): num is number {
-  return !isNaN(parseFloat('' + num))
-}
-
 export function hasChildrenList (item: any) {
   return item && item.children && item.children.length > 0
 }

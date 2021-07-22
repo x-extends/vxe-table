@@ -13,9 +13,10 @@
     <vxe-table
       border
       highlight-hover-row
+      ref="xTable1"
       :data="demo1.tableData">
       <vxe-column field="id" title="ID"></vxe-column>
-      <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10002', value: 10002}, {label: 'id大于10003', value: 10003}]" :filter-method="filterNameMethod"></vxe-column>
+      <vxe-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-column>
       <vxe-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-column>
       <vxe-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
         <template #filter="{ $panel, column }">
@@ -65,11 +66,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
-import { VxeColumnPropTypes } from '../../../../types/index'
+import { defineComponent, ref, reactive, nextTick } from 'vue'
+import { VxeTableInstance, VxeColumnPropTypes } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
+    const xTable1 = ref({} as VxeTableInstance)
+
     const demo1 = reactive({
       tableData: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' },
@@ -79,6 +82,22 @@ export default defineComponent({
         { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 32, address: 'Shenzhen' },
         { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 28, address: 'Shanghai' }
       ]
+    })
+
+    nextTick(() => {
+      // 异步加载筛选数据
+      setTimeout(() => {
+        const $table = xTable1.value
+        if ($table) {
+          const nameColumn = $table.getColumnByField('name')
+          if (nameColumn) {
+            $table.setFilter(nameColumn, [
+              { label: 'id大于10002', value: 10002 },
+              { label: 'id大于10003', value: 10003 }
+            ])
+          }
+        }
+      }, 500)
     })
 
     const demo2 = reactive({
@@ -101,6 +120,7 @@ export default defineComponent({
     }
 
     return {
+      xTable1,
       demo1,
       demo2,
       filterNameMethod,
@@ -110,9 +130,10 @@ export default defineComponent({
         <vxe-table
           border
           highlight-hover-row
+          ref="xTable1"
           :data="demo1.tableData">
           <vxe-column field="id" title="ID"></vxe-column>
-          <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10002', value: 10002}, {label: 'id大于10003', value: 10003}]" :filter-method="filterNameMethod"></vxe-column>
+          <vxe-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-column>
           <vxe-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-column>
           <vxe-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod">
             <template #filter="{ $panel, column }">
@@ -124,28 +145,41 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeColumnPropTypes } from '../../../../types/index'
+        import { VxeTableInstance } from '../../../../types/index'
 
         export default defineComponent({
           setup () {
+            const xTable1 = ref({} as VxeTableInstance)
+
             const demo1 = reactive({
               tableData: [
                 { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: '0', age: 32, address: 'Shanghai' },
-                { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 24, address: 'Shanghai' }
+                { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 24, address: 'Shanghai' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 32, address: 'Shenzhen' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 28, address: 'Shanghai' }
               ]
             })
 
-            const filterNameMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
-              return row.id >= value
-            }
-
-            const filterAgeMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
-              return row.age === Number(option.data)
-            }
+            nextTick(() => {
+              // 异步加载筛选数据
+              setTimeout(() => {
+                const $table = xTable1.value
+                if ($table) {
+                  const nameColumn = $table.getColumnByField('name')
+                  if (nameColumn) {
+                    $table.setFilter(nameColumn, [
+                      { label: 'id大于10002', value: 10002 },
+                      { label: 'id大于10003', value: 10003 }
+                    ])
+                  }
+                }
+              }, 500)
+            })
 
             return {
+              xTable1,
               demo1,
               filterNameMethod,
               filterAgeMethod

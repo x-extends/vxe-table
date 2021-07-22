@@ -4,7 +4,6 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
 import { browse } from '../../tools/dom'
-import { isNumVal } from '../../tools/utils'
 import { GlobalEvent } from '../../tools/event'
 
 import { VxeListConstructor, VxeListPropTypes, VxeListEmits, ListReactData, ListInternalData, ListMethods, ListPrivateRef, VxeListMethods } from '../../../types/all'
@@ -81,10 +80,10 @@ export default defineComponent({
       const { height, maxHeight } = props
       const style: { [key: string]: string | number } = {}
       if (height) {
-        style.height = isNumVal(height) ? `${height}px` : height
+        style.height = `${isNaN(height as number) ? height : `${height}px`}`
       } else if (maxHeight) {
         style.height = 'auto'
-        style.maxHeight = isNumVal(maxHeight) ? `${maxHeight}px` : maxHeight
+        style.maxHeight = `${isNaN(maxHeight as number) ? maxHeight : `${maxHeight}px`}`
       }
       return style
     })

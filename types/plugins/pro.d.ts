@@ -58,7 +58,7 @@ export interface VxeTableProMethods {
    */
   openReplace(): Promise<any>;
 }
-export interface VxeProPluginMethods extends VxeTableProMethods {}
+export interface VxeProPluginMethods extends VxeTableProMethods { }
 
 export interface VxeTableProPrivateMethods {
   handleKeyboardEvent(evnt: KeyboardEvent): void;
@@ -74,7 +74,7 @@ export interface VxeTableProPrivateMethods {
   triggerPasteCellAreaEvent(evnt: MouseEvent): void;
   triggerFNROpenEvent(evnt: MouseEvent, tab: 'find' | 'replace'): void;
 }
-export interface VxeProPluginPrivateMethods extends VxeTableProPrivateMethods {}
+export interface VxeProPluginPrivateMethods extends VxeTableProPrivateMethods { }
 
 declare module '../table' {
   interface VxeTableMethods extends VxeTableProMethods { }
@@ -103,7 +103,7 @@ export namespace VxeTableProDefines {
     value: string;
     label: string;
   }
-  
+
   export interface FNRSearch {
     seq: number;
     row: number;
@@ -123,7 +123,7 @@ export namespace VxeTableProDefines {
     width: number;
     height: number;
   }
-  
+
   export interface MouseCellArea {
     el?: HTMLElement | null;
     leftEl?: HTMLElement | null;
@@ -138,7 +138,7 @@ export namespace VxeTableProDefines {
   }
 
   export type CELL_AREA_TYPE = 'main' | 'copy' | 'extend' | 'multi' | 'active'
-  
+
   export interface CellAreaConfig {
     type?: CELL_AREA_TYPE;
     startColumn: VxeTableDefines.ColumnInfo | number;
@@ -179,8 +179,43 @@ export namespace VxeTableProDefines {
   }
   export interface OpenFnrEventParams extends EventParams, OpenFnrParams { }
 
-  export interface FnrChangeParams extends OpenFnrParams {}
+  export interface FnrChangeParams extends OpenFnrParams { }
   export interface FnrChangeEventParams extends EventParams, FnrChangeParams { }
+
+  export interface FnrFindParams {
+    findValue: string;
+    row: any;
+    column: VxeTableDefines.ColumnInfo;
+  }
+  export interface FnrFindEventParams extends FnrFindParams { }
+
+  export interface FindAndReplaceResult {
+    row: any
+    _rowIndex: number
+    column: VxeTableDefines.ColumnInfo
+    _columnIndex: number
+  }
+
+  export interface FnrFindAllParams {
+    findValue: string;
+    result: FindAndReplaceResult[]
+  }
+  export interface FnrFindAllEventParams extends FnrFindAllParams { }
+
+  export interface FnrReplaceParams {
+    findValue: string;
+    replaceValue: string;
+    row: any;
+    column: VxeTableDefines.ColumnInfo;
+  }
+  export interface FnrReplaceEventParams extends FnrReplaceParams { }
+
+  export interface FnrReplaceAllParams {
+    findValue: string;
+    replaceValue: string;
+    result: FindAndReplaceResult[]
+  }
+  export interface FnrReplaceAllEventParams extends FnrReplaceAllParams { }
 
   export interface CellAreaCopyParams {
     status: boolean;
@@ -195,6 +230,10 @@ export type VxeTableProEmits = [
 
   'open-fnr',
   'fnr-change',
+  'fnr-find',
+  'fnr-find-all',
+  'fnr-replace',
+  'fnr-replace-all',
   'cell-area-copy',
   'cell-area-cut',
   'cell-area-paste',
@@ -211,16 +250,28 @@ declare module '../table' {
   interface VxeTableEventProps {
     onOpenFnr?: VxeTableEvents.OpenFnr;
     onFnrChange?: VxeTableEvents.FnrChange;
+    onFnrFind?: VxeTableEvents.FnrFind;
+    onFnrFindAll?: VxeTableEvents.FnrFindAll;
+    onFnrReplace?: VxeTableEvents.FnrReplace;
+    onFnrReplaceAll?: VxeTableEvents.FnrReplaceAll;
     onCellAreaCopy?: VxeTableEvents.CellAreaCopy;
   }
   interface VxeTableListeners {
     openFnr?: VxeTableEvents.OpenFnr;
     fnrChange?: VxeTableEvents.FnrChange;
+    fnrFind?: VxeTableEvents.FnrFind;
+    fnrFindAll?: VxeTableEvents.FnrFindAll;
+    fnrReplace?: VxeTableEvents.FnrReplace;
+    fnrReplaceAll?: VxeTableEvents.FnrReplaceAll;
     cellAreaCopy?: VxeTableEvents.CellAreaCopy;
   }
   namespace VxeTableEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void;
     export type FnrChange = (params: VxeTableProDefines.FnrChangeParams) => void;
+    export type FnrFind = (params: VxeTableProDefines.FnrFindParams) => void;
+    export type FnrFindAll = (params: VxeTableProDefines.FnrFindAllParams) => void;
+    export type FnrReplace = (params: VxeTableProDefines.FnrReplaceParams) => void;
+    export type FnrReplaceAll = (params: VxeTableProDefines.FnrReplaceAllParams) => void;
     export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void;
   }
 }
@@ -229,16 +280,28 @@ declare module '../grid' {
   interface VxeGridEventProps {
     onOpenFnr?: VxeGridEvents.OpenFnr;
     onFnrChange?: VxeGridEvents.FnrChange;
+    onFnrFind?: VxeGridEvents.FnrFind;
+    onFnrFindAll?: VxeGridEvents.FnrFindAll;
+    onFnrReplace?: VxeGridEvents.FnrReplace;
+    onFnrReplaceAll?: VxeGridEvents.FnrReplaceAll;
     onCellAreaCopy?: VxeGridEvents.CellAreaCopy;
   }
   interface VxeGridListeners {
     openFnr?: VxeGridEvents.OpenFnr;
     changeFnr?: VxeGridEvents.FnrChange;
+    fnrFind?: VxeGridEvents.FnrFind;
+    fnrFindAll?: VxeGridEvents.FnrFindAll;
+    fnrReplace?: VxeGridEvents.FnrReplace;
+    fnrReplaceAll?: VxeGridEvents.FnrReplaceAll;
     cellAreaCopy?: VxeGridEvents.CellAreaCopy;
   }
   namespace VxeGridEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void;
     export type FnrChange = (params: VxeTableProDefines.FnrChangeParams) => void;
+    export type FnrFind = (params: VxeTableProDefines.FnrFindParams) => void;
+    export type FnrFindAll = (params: VxeTableProDefines.FnrFindAllParams) => void;
+    export type FnrReplace = (params: VxeTableProDefines.FnrReplaceParams) => void;
+    export type FnrReplaceAll = (params: VxeTableProDefines.FnrReplaceAllParams) => void;
     export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void;
   }
 }
