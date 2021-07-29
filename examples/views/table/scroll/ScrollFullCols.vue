@@ -9,6 +9,7 @@
 
     <vxe-grid
       border
+      resizable
       show-overflow
       show-header-overflow
       highlight-hover-row
@@ -63,6 +64,7 @@ export default {
         `
         <vxe-grid
           border
+          resizable
           show-overflow
           show-header-overflow
           highlight-hover-row

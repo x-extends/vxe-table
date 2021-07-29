@@ -36,8 +36,8 @@
             <vxe-option value="1" :label="$t('app.body.other.v1')" class-name="end-of-life"></vxe-option>
           </vxe-select>
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <template v-if="apiLoading">
-            <a v-if="showPlugin" class="link support" href="/vxe-table/plugins" target="_blank">💡插件</a>
+          <template v-if="apiLoading && showPlugin">
+            <a v-if="disabledPlugin" class="link support" href="/vxe-table/plugins" target="_blank">💡插件</a>
             <a v-else title="维护中" class="link support" style="cursor: no-drop;color: #BFBFBF;background-color:#fff;" @click="$XModal.alert('维护中...', '维护中')">插件</a>
           </template>
         </div>
@@ -154,6 +154,7 @@ export default {
       sponsorList: [],
       apiLoading: false,
       showPlugin: false,
+      disabledPlugin: false,
       tableList: [
         {
           label: 'app.aside.nav.start',
@@ -2417,12 +2418,14 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ plugin, support, time, tags, versions }) => {
+      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
         this.apiLoading = true
-        this.showPlugin = plugin
+        this.apiLoading = true
+        this.disabledPlugin = dp
+        this.showPlugin = sp
         const stableVersionList = []
         const betaVersionList = []
-        this.setSupportQQ(support)
+        this.setSupportQQ(ss)
         if (versions) {
           versions.forEach(version => {
             if (new RegExp(`^${this.version}.\\d{1,3}.\\d{1,3}$`).test(version)) {

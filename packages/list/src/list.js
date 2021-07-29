@@ -134,8 +134,11 @@ export default {
     loadData (datas) {
       const { sYOpts, scrollYStore } = this
       const fullData = datas || []
-      scrollYStore.startIndex = 0
-      scrollYStore.visibleIndex = 0
+      Object.assign(scrollYStore, {
+        startIndex: 0,
+        endIndex: 1,
+        visibleSize: 0
+      })
       this.fullData = fullData
       this.scrollYLoad = sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
       this.handleData()

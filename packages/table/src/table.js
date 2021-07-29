@@ -856,13 +856,13 @@ export default {
 
     Object.assign(scrollYStore, {
       startIndex: 0,
-      endIndex: 0,
+      endIndex: 1,
       visibleSize: 0,
       adaptive: sYOpts.adaptive !== false
     })
     Object.assign(scrollXStore, {
       startIndex: 0,
-      endIndex: 0,
+      endIndex: 1,
       visibleSize: 0
     })
     this.loadTableData(data).then(() => {
