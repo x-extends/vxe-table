@@ -304,7 +304,7 @@ function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderEditOptio
 
 function defaultButtonEditRender (renderOpts: any, params: any) {
   return [
-    h('vxe-button', {
+    h(resolveComponent('vxe-button') as ComponentOptions, {
       ...getCellEditProps(renderOpts, params, null),
       ...getComponentOns(renderOpts, params)
     })
