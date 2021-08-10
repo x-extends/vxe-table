@@ -111,7 +111,6 @@ const GlobalConfig: VXETableGlobalConfig = {
     },
     scrollY: {
       enabled: true,
-      mode: 'wheel',
       gt: 100
       // oSize: 0
     }
