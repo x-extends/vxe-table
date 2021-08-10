@@ -1674,7 +1674,7 @@ export default defineComponent({
           treeLazyLoadeds.push(row)
           loadMethod({ $table: $xetable, row }).catch(() => []).then((childRecords: any) => {
             rest.treeLoaded = true
-            XEUtils.remove(treeLazyLoadeds, item => item === row)
+            XEUtils.remove(treeLazyLoadeds, item => $xetable.eqRow(item, row))
             if (!XEUtils.isArray(childRecords)) {
               childRecords = []
             }
@@ -1721,7 +1721,7 @@ export default defineComponent({
           expandLazyLoadeds.push(row)
           loadMethod({ $table: $xetable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).catch((e: any) => e).then(() => {
             rest.expandLoaded = true
-            XEUtils.remove(expandLazyLoadeds, item => item === row)
+            XEUtils.remove(expandLazyLoadeds, item => $xetable.eqRow(item, row))
             rowExpandeds.push(row)
             resolve(nextTick().then(() => tableMethods.recalculate()))
           })
@@ -3245,7 +3245,7 @@ export default defineComponent({
         const rest = fullAllDataRowIdData[getRowid($xetable, row)]
         if (lazy && rest) {
           rest.expandLoaded = false
-          XEUtils.remove(expandLazyLoadeds, item => row === item)
+          XEUtils.remove(expandLazyLoadeds, item => $xetable.eqRow(item, row))
         }
         return nextTick()
       },
@@ -3378,7 +3378,7 @@ export default defineComponent({
         const rest = fullAllDataRowIdData[getRowid($xetable, row)]
         if (lazy && rest) {
           rest.treeLoaded = false
-          XEUtils.remove(treeExpandeds, item => row === item)
+          XEUtils.remove(treeExpandeds, item => $xetable.eqRow(item, row))
         }
         return nextTick()
       },
@@ -4523,7 +4523,7 @@ export default defineComponent({
             } else {
               // 更新子节点状态
               XEUtils.eachTree([row], (item) => {
-                if (row === item || (!checkMethod || checkMethod({ row: item }))) {
+                if ($xetable.eqRow(item, row) || (!checkMethod || checkMethod({ row: item }))) {
                   XEUtils.set(item, property, value)
                   XEUtils.remove(treeIndeterminates, half => half === item)
                   handleCheckboxReserveRow(row, value)
@@ -4560,7 +4560,7 @@ export default defineComponent({
             } else {
               // 更新子节点状态
               XEUtils.eachTree([row], (item) => {
-                if (row === item || (!checkMethod || checkMethod({ row: item }))) {
+                if ($xetable.eqRow(item, row) || (!checkMethod || checkMethod({ row: item }))) {
                   if (value) {
                     selection.push(item)
                   } else {

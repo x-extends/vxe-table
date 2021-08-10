@@ -741,42 +741,42 @@ const apis = [
           //   defVal: '',
           //   list: []
           // },
-          {
-            name: 'options',
-            desc: '只对 name=select 有效，下拉选项列表',
-            version: '',
-            type: 'any[]',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'optionProps',
-            desc: '只对 name=select 有效，下拉选项属性参数配置',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '{ value, label }',
-            list: []
-          },
-          {
-            name: 'optionGroups',
-            desc: '只对 name=select 有效，下拉分组选项列表',
-            version: '',
-            type: 'any[]',
-            enum: '',
-            defVal: '',
-            list: []
-          },
-          {
-            name: 'optionGroupProps',
-            desc: '只对 name=select 有效，下拉分组选项属性参数配置',
-            version: '',
-            type: 'any',
-            enum: '',
-            defVal: '{ options, label }',
-            list: []
-          },
+          // {
+          //   name: 'options',
+          //   desc: '只对 name=select 有效，下拉选项列表',
+          //   version: '',
+          //   type: 'any[]',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'optionProps',
+          //   desc: '只对 name=select 有效，下拉选项属性参数配置',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '{ value, label }',
+          //   list: []
+          // },
+          // {
+          //   name: 'optionGroups',
+          //   desc: '只对 name=select 有效，下拉分组选项列表',
+          //   version: '',
+          //   type: 'any[]',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
+          // {
+          //   name: 'optionGroupProps',
+          //   desc: '只对 name=select 有效，下拉分组选项属性参数配置',
+          //   version: '',
+          //   type: 'any',
+          //   enum: '',
+          //   defVal: '{ options, label }',
+          //   list: []
+          // },
           {
             name: 'events',
             desc: '渲染组件的事件（请查看目标渲染的 Events）',

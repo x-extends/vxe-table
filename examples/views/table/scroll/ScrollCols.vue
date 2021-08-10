@@ -42,6 +42,7 @@ export default defineComponent({
       showOverflow: true,
       showHeaderOverflow: true,
       height: 500,
+      resizable: true,
       loading: false,
       toolbarConfig: {
         slots: {
@@ -215,6 +216,7 @@ export default defineComponent({
               showOverflow: true,
               showHeaderOverflow: true,
               height: 500,
+              resizable: true,
               loading: false,
               toolbarConfig: {
                 slots: {

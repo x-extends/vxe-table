@@ -50,7 +50,6 @@ export default defineComponent({
       scrollYStore: {
         startIndex: 0,
         endIndex: 0,
-        visibleIndex: 0,
         visibleSize: 0,
         offsetSize: 0,
         rowHeight: 0
@@ -242,8 +241,11 @@ export default defineComponent({
         const { scrollYStore } = internalData
         const sYOpts = computeSYOpts.value
         const fullData = datas || []
-        scrollYStore.startIndex = 0
-        scrollYStore.visibleIndex = 0
+        Object.assign(scrollYStore, {
+          startIndex: 0,
+          endIndex: 1,
+          visibleSize: 0
+        })
         internalData.fullData = fullData
         reactData.scrollYLoad = !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
         handleData()

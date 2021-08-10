@@ -38,7 +38,6 @@ export interface ListInternalData {
   scrollYStore: {
     startIndex: number;
     endIndex: number;
-    visibleIndex: number;
     visibleSize: number;
     offsetSize: number;
     rowHeight: number;

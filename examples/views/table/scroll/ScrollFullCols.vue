@@ -65,6 +65,7 @@ export default defineComponent({
       highlightHoverRow: true,
       highlightCurrentRow: true,
       height: 600,
+      resizable: true,
       loading: false,
       toolbarConfig: {
         slots: {
@@ -239,6 +240,7 @@ export default defineComponent({
               highlightHoverRow: true,
               highlightCurrentRow: true,
               height: 600,
+              resizable: true,
               loading: false,
               toolbarConfig: {
                 slots: {
