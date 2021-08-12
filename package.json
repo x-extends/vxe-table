@@ -89,7 +89,7 @@
     "xe-ajax": "^4.0.5",
     "xe-clipboard": "^1.10.1",
     "xe-utils": "^3.3.1",
-    "xlsx": "^0.16.8"
+    "xlsx": "^0.17.0"
   },
   "peerDependencies": {
     "vue": "^2.6.0",
