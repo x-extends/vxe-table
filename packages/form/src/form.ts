@@ -95,20 +95,20 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<FormReactData>({
       collapseAll: true,
       staticItems: [],
       formItems: []
-    } as FormReactData)
+    })
 
-    const internalData = reactive({
+    const internalData = reactive<FormInternalData>({
       tooltipTimeout: null,
       tooltipActive: false,
       tooltipStore: {
         item: null,
         visible: false
       }
-    } as FormInternalData)
+    })
 
     const refElem = ref() as Ref<HTMLFormElement>
     const refTooltip = ref() as Ref<VxeTooltipInstance>
@@ -123,7 +123,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxeFormConstructor & VxeFormPrivateMethods
+    } as unknown as VxeFormConstructor & VxeFormPrivateMethods
 
     let formMethods = {} as FormMethods
 

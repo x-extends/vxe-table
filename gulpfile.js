@@ -82,7 +82,12 @@ gulp.task('build_modules', () => {
     }))
     .pipe(gulp.dest('es'))
     .pipe(babel({
-      presets: ['@babel/env']
+      presets: [
+        '@babel/env'
+      ],
+      plugins: [
+        '@babel/plugin-proposal-class-properties'
+      ]
     }))
     .pipe(gulp.dest('lib'))
     .pipe(uglify())

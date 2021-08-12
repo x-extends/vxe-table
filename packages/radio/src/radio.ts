@@ -30,7 +30,7 @@ export default defineComponent({
       xID,
       props,
       context
-    } as VxeRadioConstructor
+    } as unknown as VxeRadioConstructor
 
     const computeSize = useSize(props)
 

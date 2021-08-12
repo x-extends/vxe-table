@@ -32,7 +32,7 @@ export default defineComponent({
       xID,
       props,
       context
-    } as VxeCheckboxConstructor
+    } as unknown as VxeCheckboxConstructor
 
     let checkboxMethods = {} as CheckboxMethods
 

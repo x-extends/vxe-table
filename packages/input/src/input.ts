@@ -157,7 +157,7 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<InputReactData>({
       inited: false,
       panelIndex: 0,
       showPwd: false,
@@ -173,7 +173,7 @@ export default defineComponent({
       datePanelType: 'day',
       selectMonth: null,
       currentDate: null
-    } as InputReactData)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refInputTarget = ref() as Ref<HTMLInputElement>
@@ -191,7 +191,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxeInputConstructor
+    } as unknown as VxeInputConstructor
 
     let inputMethods = {} as InputMethods
 

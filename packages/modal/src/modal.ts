@@ -76,7 +76,7 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<ModalReactData>({
       inited: false,
       visible: false,
       contentVisible: false,
@@ -84,7 +84,7 @@ export default defineComponent({
       modalZindex: 0,
       zoomLocat: null,
       firstOpen: false
-    } as ModalReactData)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refModalBox = ref() as Ref<HTMLDivElement>
@@ -101,7 +101,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxeModalConstructor & VxeModalMethods
+    } as unknown as VxeModalConstructor & VxeModalMethods
 
     let modalMethods = {} as ModalMethods
 

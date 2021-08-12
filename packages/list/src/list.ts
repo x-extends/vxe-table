@@ -67,7 +67,7 @@ export default defineComponent({
       reactData,
       internalData,
       getRefMaps: () => refMaps
-    } as VxeListConstructor & VxeListMethods
+    } as unknown as VxeListConstructor & VxeListMethods
 
     let listMethods = {} as ListMethods
 

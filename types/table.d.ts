@@ -872,6 +872,7 @@ export interface TableReactData {
     isPrint: boolean;
     hasFooter: boolean;
     hasMerge: boolean;
+    hasTree: boolean;
     hasColgroup: boolean;
     visible: boolean;
   },
@@ -882,6 +883,7 @@ export interface TableReactData {
     type: any;
     isColgroup: boolean;
     isMerge: boolean;
+    isAllExpand: boolean;
     useStyle: boolean;
     original: boolean;
     message: boolean;

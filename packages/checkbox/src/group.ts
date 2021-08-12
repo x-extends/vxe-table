@@ -25,7 +25,7 @@ export default defineComponent({
       xID,
       props,
       context
-    } as VxeCheckboxGroupConstructor & VxeCheckboxGroupPrivateMethods
+    } as unknown as VxeCheckboxGroupConstructor & VxeCheckboxGroupPrivateMethods
 
     useSize(props)
 

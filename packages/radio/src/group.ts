@@ -26,7 +26,7 @@ export default defineComponent({
       props,
       context,
       name: XEUtils.uniqueId('xegroup_')
-    } as VxeRadioGroupConstructor & VxeRadioGroupPrivateMethods
+    } as unknown as VxeRadioGroupConstructor & VxeRadioGroupPrivateMethods
 
     let radioGroupMethods = {} as RadioGroupMethods
 

@@ -220,7 +220,7 @@ export default defineComponent({
           'is--active': filterStore.visible
         }],
         style: filterStore.style
-      }, initStore.filter ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
+      }, initStore.filter && filterStore.visible ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
     }
 
     return renderVN

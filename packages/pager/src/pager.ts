@@ -68,7 +68,7 @@ export default defineComponent({
       props,
       context,
       getRefMaps: () => refMaps
-    } as VxePagerConstructor & VxePagerPrivateMethods
+    } as unknown as VxePagerConstructor & VxePagerPrivateMethods
 
     let pagerMethods = {} as PagerMethods
     let pagerPrivateMethods = {} as PagerPrivateMethods

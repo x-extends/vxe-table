@@ -32,18 +32,18 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<SwitchReactData>({
       isActivated: false,
       hasAnimat: false,
       offsetLeft: 0
-    } as SwitchReactData)
+    })
 
     const $xeswitch = {
       xID,
       props,
       context,
       reactData
-    } as VxeSwitchConstructor
+    } as unknown as VxeSwitchConstructor
 
     const refButton = ref() as Ref<HTMLButtonElement>
 

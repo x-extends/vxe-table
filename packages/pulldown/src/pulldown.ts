@@ -27,7 +27,7 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<PulldownReactData>({
       inited: false,
       panelIndex: 0,
       panelStyle: null,
@@ -35,7 +35,7 @@ export default defineComponent({
       visiblePanel: false,
       animatVisible: false,
       isActivated: false
-    } as PulldownReactData)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refPulldowContent = ref() as Ref<HTMLDivElement>
@@ -51,7 +51,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxePulldownConstructor & VxePulldownMethods
+    } as unknown as VxePulldownConstructor & VxePulldownMethods
 
     let pulldownMethods = {} as PulldownMethods
 

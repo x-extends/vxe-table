@@ -51,7 +51,7 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<SelectReactData>({
       inited: false,
       staticOptions: [],
       fullGroupList: [],
@@ -65,7 +65,7 @@ export default defineComponent({
       visiblePanel: false,
       animatVisible: false,
       isActivated: false
-    } as SelectReactData)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refInput = ref() as Ref<VxeInputConstructor>
@@ -82,7 +82,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxeSelectConstructor & VxeSelectMethods
+    } as unknown as VxeSelectConstructor & VxeSelectMethods
 
     let selectMethods = {} as SelectMethods
 

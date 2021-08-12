@@ -36,10 +36,10 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<ToolbarReactData>({
       isRefresh: false,
       columns: []
-    } as ToolbarReactData)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refCustomWrapper = ref() as Ref<HTMLDivElement>
@@ -62,7 +62,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxeToolbarConstructor
+    } as unknown as VxeToolbarConstructor
 
     let toolbarMethods = {} as ToolbarMethods
 

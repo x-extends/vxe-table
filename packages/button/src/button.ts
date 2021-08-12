@@ -76,14 +76,14 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<ButtonReactData>({
       inited: false,
       showPanel: false,
       animatVisible: false,
       panelIndex: 0,
       panelStyle: {},
       panelPlacement: ''
-    } as ButtonReactData)
+    })
 
     const internalData: ButtonInternalData = {
       showTime: null
@@ -104,7 +104,7 @@ export default defineComponent({
       reactData,
       internalData,
       getRefMaps: () => refMaps
-    } as VxeButtonConstructor
+    } as unknown as VxeButtonConstructor
 
     let buttonMethods = {} as ButtonMethods
 

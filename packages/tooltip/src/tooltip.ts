@@ -31,7 +31,7 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<TooltipReactData>({
       target: null,
       isUpdate: false,
       isHover: false,
@@ -44,7 +44,7 @@ export default defineComponent({
         placement: '',
         arrowStyle: {}
       }
-    } as TooltipReactData)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
 
@@ -58,7 +58,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxeTooltipConstructor
+    } as unknown as VxeTooltipConstructor
 
     let tooltipMethods = {} as TooltipMethods
 

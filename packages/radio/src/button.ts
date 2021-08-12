@@ -31,7 +31,7 @@ export default defineComponent({
       xID,
       props,
       context
-    } as VxeRadioButtonConstructor
+    } as unknown as VxeRadioButtonConstructor
 
     let radioButtonMethods = {} as RadioButtonMethods
 

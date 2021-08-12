@@ -27,7 +27,6 @@ export interface PulldownReactData {
   panelIndex: number;
   panelStyle: VNodeStyle | null;
   panelPlacement: string | null;
-  currentValue: null;
   visiblePanel: boolean;
   animatVisible: boolean;
   isActivated: boolean;

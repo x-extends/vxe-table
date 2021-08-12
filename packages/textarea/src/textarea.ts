@@ -44,9 +44,9 @@ export default defineComponent({
 
     const computeSize = useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<TextareaReactData>({
       inputValue: props.modelValue
-    } as TextareaReactData)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refTextarea = ref() as Ref<HTMLTextAreaElement>
@@ -62,7 +62,7 @@ export default defineComponent({
       context,
       reactData,
       getRefMaps: () => refMaps
-    } as VxeTextareaConstructor
+    } as unknown as VxeTextareaConstructor
 
     let textareaMethods = {} as TextareaMethods
 

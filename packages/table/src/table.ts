@@ -35,7 +35,7 @@ export default defineComponent({
 
     const instance = getCurrentInstance()
 
-    const reactData = reactive({
+    const reactData = reactive<TableReactData>({
       // 低性能的静态列
       staticColumns: [],
       // 渲染的列分组
@@ -213,7 +213,7 @@ export default defineComponent({
         isHeader: false,
         isFooter: false
       }
-    } as TableReactData)
+    })
 
     const internalData: TableInternalData = {
       tZindex: 0,
@@ -578,7 +578,7 @@ export default defineComponent({
       getComputeMaps: () => computeMaps,
 
       xegrid: $xegrid
-    } as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
+    } as unknown as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
 
     const eqCellValue = (row1: any, row2: any, field: string) => {
       const val1 = XEUtils.get(row1, field)
