@@ -25,15 +25,15 @@
           <span>{{ row.name }}</span>
         </template>
         <template #content="{ row, rowIndex }">
-          <template v-if="rowIndex === 1">
+          <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="demo1.tableData">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else class="expand-wrapper">
             <ul>
               <li>
                 <span>ID：</span>
@@ -52,7 +52,7 @@
                 <span>{{ row.createTime }}</span>
               </li>
             </ul>
-          </template>
+          </div>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -64,6 +64,7 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
     <p class="tip">还可以通过 <table-api-link prop="expand-config"/>={<table-api-link prop="toggleMethod"/>} 方法实现展开与关闭的细节处理，返回值用来决定是否允许继续执行</p>
@@ -78,15 +79,15 @@
           <span>{{ row.name }}</span>
         </template>
         <template #content="{ row, rowIndex }">
-          <template v-if="rowIndex === 1">
+          <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="demo2.tableData">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else class="expand-wrapper">
             <ul>
               <li>
                 <span>ID：</span>
@@ -105,7 +106,7 @@
                 <span>{{ row.createTime }}</span>
               </li>
             </ul>
-          </template>
+          </div>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -115,8 +116,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">还可以通过 <table-api-link prop="expand-config"/>={<table-api-link prop="visibleMethod"/>} 方法实现权限控制，返回值用来决定是否显示展开按钮</p>
@@ -131,15 +133,15 @@
           <span>{{ row.name }}</span>
         </template>
         <template #content="{ row, rowIndex }">
-          <template v-if="rowIndex === 1">
+          <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="demo3.tableData">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else class="expand-wrapper">
             <ul>
               <li>
                 <span>ID：</span>
@@ -158,7 +160,7 @@
                 <span>{{ row.createTime }}</span>
               </li>
             </ul>
-          </template>
+          </div>
         </template>
       </vxe-table-column>
       <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -168,8 +170,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[8] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -264,15 +267,15 @@ export default defineComponent({
               <span>{{ row.name }}</span>
             </template>
             <template #content="{ row, rowIndex }">
-              <template v-if="rowIndex === 1">
+              <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="demo1.tableData">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="age" title="Age"></vxe-table-column>
                 </vxe-table>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else class="expand-wrapper">
                 <ul>
                   <li>
                     <span>ID：</span>
@@ -291,7 +294,7 @@ export default defineComponent({
                     <span>{{ row.createTime }}</span>
                   </li>
                 </ul>
-              </template>
+              </div>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -321,6 +324,11 @@ export default defineComponent({
         })
         `,
         `
+        .expand-wrapper {
+          padding: 20px;
+        }
+        `,
+        `
         <vxe-table
           border
           :expand-config="demo2.expandConfig"
@@ -331,15 +339,15 @@ export default defineComponent({
               <span>{{ row.name }}</span>
             </template>
             <template #content="{ row, rowIndex }">
-              <template v-if="rowIndex === 1">
+              <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="demo2.tableData">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="age" title="Age"></vxe-table-column>
                 </vxe-table>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else class="expand-wrapper">
                 <ul>
                   <li>
                     <span>ID：</span>
@@ -358,7 +366,7 @@ export default defineComponent({
                     <span>{{ row.createTime }}</span>
                   </li>
                 </ul>
-              </template>
+              </div>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -405,6 +413,11 @@ export default defineComponent({
         })
         `,
         `
+        .expand-wrapper {
+          padding: 20px;
+        }
+        `,
+        `
         <vxe-table
           border
           :expand-config="demo3.expandConfig"
@@ -415,15 +428,15 @@ export default defineComponent({
               <span>{{ row.name }}</span>
             </template>
             <template #content="{ row, rowIndex }">
-              <template v-if="rowIndex === 1">
+              <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="demo3.tableData">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="age" title="Age"></vxe-table-column>
                 </vxe-table>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else class="expand-wrapper">
                 <ul>
                   <li>
                     <span>ID：</span>
@@ -442,7 +455,7 @@ export default defineComponent({
                     <span>{{ row.createTime }}</span>
                   </li>
                 </ul>
-              </template>
+              </div>
             </template>
           </vxe-table-column>
           <vxe-table-column field="sex" title="Sex"></vxe-table-column>
@@ -479,9 +492,20 @@ export default defineComponent({
             }
           }
         })
+        `,
+        `
+        .expand-wrapper {
+          padding: 20px;
+        }
         `
       ]
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.expand-wrapper {
+  padding: 20px;
+}
+</style>

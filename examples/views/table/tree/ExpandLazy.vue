@@ -13,7 +13,9 @@
       <vxe-column field="name" title="Name" tree-node></vxe-column>
       <vxe-column type="expand" width="80">
         <template #content="{ row }">
-          <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+          <div class="expand-wrapper">
+            <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+          </div>
         </template>
       </vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -26,6 +28,7 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -110,7 +113,9 @@ export default defineComponent({
           <vxe-column field="name" title="Name" tree-node></vxe-column>
           <vxe-column type="expand" width="80">
             <template #content="{ row }">
-              <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+              <div class="expand-wrapper">
+                <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+              </div>
             </template>
           </vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
@@ -190,9 +195,20 @@ export default defineComponent({
             }
           }
         })
+        `,
+        `
+        .expand-wrapper {
+          padding: 20px;
+        }
         `
       ]
     }
   }
 })
 </script>
+
+<style lang="scss" scoped>
+.expand-wrapper {
+  padding: 20px;
+}
+</style>
