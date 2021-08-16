@@ -13,7 +13,9 @@
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column type="expand" width="80">
         <template #content="{ row }">
-          <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+          <div class="expand-wrapper">
+            <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+          </div>
         </template>
       </vxe-table-column>
       <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -26,6 +28,7 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -75,7 +78,9 @@ export default {
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column type="expand" width="80">
             <template #content="{ row }">
-              <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+              <div class="expand-wrapper">
+                <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
+              </div>
             </template>
           </vxe-table-column>
           <vxe-table-column field="size" title="Size"></vxe-table-column>
@@ -146,6 +151,11 @@ export default {
             }
           }
         }
+        `,
+        `
+        .expand-wrapper {
+          padding: 20px;
+        }
         `
       ]
     }
@@ -178,3 +188,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.expand-wrapper {
+  padding: 20px;
+}
+</style>

@@ -48,6 +48,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     height,
     columnKey,
     overflowX,
+    sYOpts,
     scrollXLoad,
     scrollYLoad,
     highlightCurrentRow,
@@ -75,6 +76,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   } = $xetable
   const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
+  const { rHeight } = sYOpts
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -200,7 +202,10 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
           'c--title': showTitle,
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
-        }]
+        }],
+        style: {
+          maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+        }
       })
     )
   } else {
@@ -213,6 +218,9 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
         }],
+        style: {
+          maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+        },
         attrs: {
           title: showTitle ? $xetable.getCellLabel(row, column) : null
         }
@@ -249,7 +257,9 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
     key: columnKey ? column.id : $columnIndex,
     attrs,
-    style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
+    style: Object.assign({
+      height: hasEllipsis && rHeight ? `${rHeight}px` : ''
+    }, cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null),
     on: tdOns
   }, tdVNs)
 }

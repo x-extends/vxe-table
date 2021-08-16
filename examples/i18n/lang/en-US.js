@@ -27,6 +27,7 @@ export default {
         hideHead: 'Hidden header',
         resizable: 'Resizable',
         fluidHeight: 'Maximum table height',
+        rowHeight: 'Row height',
         resize: 'Resize height and width',
         height: 'Table with fixed header',
         visible: '默认是否显示',

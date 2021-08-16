@@ -112,6 +112,9 @@ export default {
         }
         `,
         `
+        .expand-form {
+          padding: 20px;
+        }
         .expand-form li {
           margin: 5px 0;
         }
@@ -133,6 +136,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.expand-form {
+  padding: 20px;
+}
 .expand-form li {
   margin: 5px 0;
 }

@@ -11,15 +11,15 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="80">
         <template #content="{ row, rowIndex }">
-          <template v-if="rowIndex === 1">
+          <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="childData">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else class="expand-wrapper">
             <ul>
               <li>
                 <span>ID：</span>
@@ -38,7 +38,7 @@
                 <span>{{ row.createTime }}</span>
               </li>
             </ul>
-          </template>
+          </div>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -51,6 +51,7 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -81,15 +82,15 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="80">
             <template #content="{ row, rowIndex }">
-              <template v-if="rowIndex === 1">
+              <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="childData">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="age" title="Age"></vxe-table-column>
                 </vxe-table>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else class="expand-wrapper">
                 <ul>
                   <li>
                     <span>ID：</span>
@@ -108,7 +109,7 @@ export default {
                     <span>{{ row.createTime }}</span>
                   </li>
                 </ul>
-              </template>
+              </div>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -136,9 +137,20 @@ export default {
             }
           }
         }
+        `,
+        `
+        .expand-wrapper {
+          padding: 20px;
+        }
         `
       ]
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.expand-wrapper {
+  padding: 20px;
+}
+</style>

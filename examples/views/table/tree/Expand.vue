@@ -12,7 +12,7 @@
       <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
       <vxe-table-column type="expand" title="Details" width="80">
         <template #content="{ row }">
-          <ul>
+          <ul class="expand-wrapper">
             <li>
               <span>ID：</span>
               <span>{{ row.id }}</span>
@@ -38,6 +38,7 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -84,7 +85,7 @@ export default {
           <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template #content="{ row, rowIndex }">
-              <ul>
+              <ul class="expand-wrapper">
                 <li>
                   <span>ID：</span>
                   <span>{{ row.id }}</span>
@@ -140,9 +141,20 @@ export default {
             }
           }
         }
+        `,
+        `
+        .expand-wrapper {
+          padding: 20px;
+        }
         `
       ]
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.expand-wrapper {
+  padding: 20px;
+}
+</style>

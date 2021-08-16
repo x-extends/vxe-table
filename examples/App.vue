@@ -1518,6 +1518,12 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.rowHeight',
+              locat: {
+                name: 'TableScrollRowHeight'
+              }
+            },
+            {
               label: 'app.aside.nav.group',
               locat: {
                 name: 'TableScrollGroup'

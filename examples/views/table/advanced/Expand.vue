@@ -26,15 +26,15 @@
       <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>
       <vxe-table-column type="expand" width="80" :fixed="expandFixed">
         <template #content="{ row, rowIndex }">
-          <template v-if="rowIndex === 1">
+          <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="otherList">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="address" title="Address"></vxe-table-column>
             </vxe-table>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else class="expand-wrapper">
             <ul>
               <li>
                 <span>ID：</span>
@@ -53,7 +53,7 @@
                 <span>{{ row.address }}</span>
               </li>
             </ul>
-          </template>
+          </div>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
@@ -66,6 +66,7 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
 
     <p class="tip">默认展开指定行，通过 <table-api-link prop="expandRowKeys"/> 参数设置默认展开行，指定默认值需要有 <table-api-link prop="row-id"/></p>
@@ -78,15 +79,15 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
         <template #content="{ row, rowIndex }">
-          <template v-if="rowIndex === 1">
+          <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="tableData">
               <vxe-table-column field="role" title="Role"></vxe-table-column>
               <vxe-table-column field="age" title="Age"></vxe-table-column>
             </vxe-table>
-          </template>
-          <template v-else>
+          </div>
+          <div v-else class="expand-wrapper">
             <ul>
               <li>
                 <span>ID：</span>
@@ -105,7 +106,7 @@
                 <span>{{ row.address }}</span>
               </li>
             </ul>
-          </template>
+          </div>
         </template>
       </vxe-table-column>
       <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -116,8 +117,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[5] }}</pre-code>
     </pre>
 
     <p class="tip">
@@ -132,7 +134,7 @@
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" title="Name">
         <template #content="{ row }">
-          <ul>
+          <ul class="expand-wrapper">
             <li>
               <span>ID：</span>
               <span>{{ row.id }}</span>
@@ -159,8 +161,9 @@
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 
     <pre>
-      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
-      <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="xml">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[8] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -207,15 +210,15 @@ export default {
           <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>
           <vxe-table-column type="expand" width="80" :fixed="expandFixed">
             <template #content="{ row, rowIndex }">
-              <template v-if="rowIndex === 1">
+              <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="otherList">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="address" title="Address"></vxe-table-column>
                 </vxe-table>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else class="expand-wrapper">
                 <ul>
                   <li>
                     <span>ID：</span>
@@ -234,7 +237,7 @@ export default {
                     <span>{{ row.address }}</span>
                   </li>
                 </ul>
-              </template>
+              </div>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
@@ -279,6 +282,11 @@ export default {
         }
         `,
         `
+        .expand-wrapper {
+          padding: 20px;
+        }
+        `,
+        `
         <vxe-table
           border
           row-id="id"
@@ -287,15 +295,15 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">
             <template #content="{ row, rowIndex }">
-              <template v-if="rowIndex === 1">
+              <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="tableData">
                   <vxe-table-column field="role" title="Role"></vxe-table-column>
                   <vxe-table-column field="age" title="Age"></vxe-table-column>
                 </vxe-table>
-              </template>
-              <template v-else>
+              </div>
+              <div v-else class="expand-wrapper">
                 <ul>
                   <li>
                     <span>ID：</span>
@@ -314,7 +322,7 @@ export default {
                     <span>{{ row.address }}</span>
                   </li>
                 </ul>
-              </template>
+              </div>
             </template>
           </vxe-table-column>
           <vxe-table-column field="name" title="Name"></vxe-table-column>
@@ -339,6 +347,11 @@ export default {
         }
         `,
         `
+        .expand-wrapper {
+          padding: 20px;
+        }
+        `,
+        `
         <vxe-table
           border
           :data="tableData"
@@ -346,7 +359,7 @@ export default {
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" title="Name">
             <template #content="{ row }">
-              <ul>
+              <ul class="expand-wrapper">
                 <li>
                   <span>ID：</span>
                   <span>{{ row.id }}</span>
@@ -385,6 +398,11 @@ export default {
             }
           }
         }
+        `,
+        `
+        .expand-wrapper {
+          padding: 20px;
+        }
         `
       ]
     }
@@ -414,3 +432,9 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.expand-wrapper {
+  padding: 20px;
+}
+</style>

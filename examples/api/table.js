@@ -2725,16 +2725,16 @@ const apis = [
             enum: '',
             defVal: '0',
             list: []
+          },
+          {
+            name: 'rHeight',
+            desc: '指定行高',
+            version: '3.3.11',
+            type: 'number',
+            enum: '',
+            defVal: '',
+            list: []
           }
-          // {
-          //   name: 'rHeight',
-          //   desc: '指定行高',
-          //   version: '',
-          //   type: 'number',
-          //   enum: '',
-          //   defVal: '默认自动计算',
-          //   list: []
-          // },
           // {
           //   name: 'adaptive',
           //   desc: '自动适配最优的渲染方式',
