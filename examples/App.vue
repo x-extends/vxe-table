@@ -1494,6 +1494,12 @@ export default defineComponent({
               }
             },
             {
+              label: 'app.aside.nav.rowHeight',
+              locat: {
+                name: 'TableScrollRowHeight'
+              }
+            },
+            {
               label: 'app.aside.nav.group',
               locat: {
                 name: 'TableScrollGroup'

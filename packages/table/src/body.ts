@@ -116,8 +116,10 @@ export default defineComponent({
       const checkboxOpts = computeCheckboxOpts.value
       const editOpts = computeEditOpts.value
       const tooltipOpts = computeTooltipOpts.value
+      const sYOpts = computeSYOpts.value
       const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
       const { actived } = editStore
+      const { rHeight } = sYOpts
       const showAllTip = tooltipOpts.showAll
       const columnIndex = $xetable.getColumnIndex(column)
       const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -226,7 +228,10 @@ export default defineComponent({
               'c--title': showTitle,
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
-            }]
+            }],
+            style: {
+              maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+            }
           })
         )
       } else {
@@ -239,6 +244,9 @@ export default defineComponent({
               'c--tooltip': showTooltip,
               'c--ellipsis': showEllipsis
             }],
+            style: {
+              maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+            },
             title: showTitle ? $xetable.getCellLabel(row, column) : null
           }, column.renderCell(params))
         )
@@ -274,7 +282,9 @@ export default defineComponent({
         }, getPropClass(className, params), getPropClass(cellClassName, params)],
         key: columnKey ? column.id : $columnIndex,
         ...attrs,
-        style: cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null,
+        style: Object.assign({
+          height: hasEllipsis && rHeight ? `${rHeight}px` : ''
+        }, cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null),
         ...tdOns
       }, tdVNs)
     }

@@ -176,6 +176,7 @@ import TableScrollFullCols from '../views/table/scroll/ScrollFullCols.vue'
 // import TableScrollHighlight from '../views/table/scroll/Highlight.vue'
 import TableScrollKeyboard from '../views/table/scroll/Keyboard.vue'
 import TableScrollMaxHeight from '../views/table/scroll/MaxHeight.vue'
+import TableScrollRowHeight from '../views/table/scroll/RowHeight.vue'
 import TableScrollGroup from '../views/table/scroll/Group.vue'
 import TableScrollMerge from '../views/table/scroll/Merge.vue'
 import TableScrollEdit from '../views/table/scroll/Edit.vue'
@@ -1213,6 +1214,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/scroll/maxHeight',
     name: 'TableScrollMaxHeight',
     component: TableScrollMaxHeight
+  },
+  {
+    path: '/table/scroll/rowHeight',
+    name: 'TableScrollRowHeight',
+    component: TableScrollRowHeight
   },
   {
     path: '/table/scroll/group',

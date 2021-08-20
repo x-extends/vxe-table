@@ -77,7 +77,8 @@ gulp.task('build_modules', () => {
       strict: true,
       moduleResolution: 'node',
       noImplicitAny: true,
-      target: 'esnext',
+      target: 'es5',
+      module: 'esnext',
       lib: ['dom', 'esnext']
     }))
     .pipe(gulp.dest('es'))
@@ -85,9 +86,7 @@ gulp.task('build_modules', () => {
       presets: [
         '@babel/env'
       ],
-      plugins: [
-        '@babel/plugin-proposal-class-properties'
-      ]
+      plugins: []
     }))
     .pipe(gulp.dest('lib'))
     .pipe(uglify())

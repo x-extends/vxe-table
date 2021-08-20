@@ -2743,16 +2743,16 @@ const apis = [
             enum: '',
             defVal: '0',
             list: []
+          },
+          {
+            name: 'rHeight',
+            desc: '当启用虚拟滚动后，该参数用于设置每一行的固定高度',
+            version: '4.0.27',
+            type: 'number',
+            enum: '',
+            defVal: '',
+            list: []
           }
-          // {
-          //   name: 'rHeight',
-          //   desc: '指定行高',
-          //   version: '',
-          //   type: 'number',
-          //   enum: '',
-          //   defVal: '默认自动计算',
-          //   list: []
-          // },
           // {
           //   name: 'adaptive',
           //   desc: '自动适配最优的渲染方式',

@@ -1828,6 +1828,7 @@ export namespace VxeTablePropTypes {
     gt?: number;
     oSize?: number;
     enabled?: boolean;
+    rHeight?: number;
     adaptive?: boolean;
   }
   export interface SYOpts extends ScrollY {
