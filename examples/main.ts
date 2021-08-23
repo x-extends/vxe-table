@@ -16,14 +16,6 @@ import ToolbarAPILink from './components/ToolbarAPILink.vue'
 import PagerAPILink from './components/PagerAPILink.vue'
 import VirtualTreeAPILink from './components/VirtualTreeAPILink.vue'
 
-import EditDownTable from './plugins/table/renderer/components/EditDownTable.vue'
-import EditPopupModal from './plugins/table/renderer/components/EditPopupModal.vue'
-import EditDownModal from './plugins/table/renderer/components/EditDownModal.vue'
-import FilterInput from './plugins/table/renderer/components/FilterInput.vue'
-import FilterContent from './plugins/table/renderer/components/FilterContent.vue'
-import FilterComplex from './plugins/table/renderer/components/FilterComplex.vue'
-import FilterExcel from './plugins/table/renderer/components/FilterExcel.vue'
-
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
 
@@ -80,14 +72,6 @@ app.component(TableColumnAPILink.name, TableColumnAPILink)
 app.component(ToolbarAPILink.name, ToolbarAPILink)
 app.component(PagerAPILink.name, PagerAPILink)
 app.component(VirtualTreeAPILink.name, VirtualTreeAPILink)
-
-app.component(EditDownTable.name, EditDownTable)
-app.component(EditPopupModal.name, EditPopupModal)
-app.component(EditDownModal.name, EditDownModal)
-app.component(FilterInput.name, FilterInput)
-app.component(FilterContent.name, FilterContent)
-app.component(FilterComplex.name, FilterComplex)
-app.component(FilterExcel.name, FilterExcel)
 
 app.use(Icon)
 app.use(Filter)

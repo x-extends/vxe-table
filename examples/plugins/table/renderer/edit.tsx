@@ -1,4 +1,7 @@
 import { VXETable } from '../../../../packages/all'
+import EditDownTable from './components/EditDownTable.vue'
+import EditPopupModal from './components/EditPopupModal.vue'
+import EditDownModal from './components/EditDownModal.vue'
 
 // 创建一个简单的输入框渲染
 VXETable.renderer.add('MyInput', {
@@ -25,7 +28,7 @@ VXETable.renderer.add('EditDownTable', {
   autofocus: '.vxe-input--inner',
   renderEdit (renderOpts, params) {
     return [
-      <edit-down-table params={ params }></edit-down-table>
+      <EditDownTable params={ params }></EditDownTable>
     ]
   }
 })
@@ -35,7 +38,7 @@ VXETable.renderer.add('EditPopupModal', {
   autofocus: '.vxe-input--inner',
   renderEdit (renderOpts, params) {
     return [
-      <edit-popup-modal params={ params }></edit-popup-modal>
+      <EditPopupModal params={ params }></EditPopupModal>
     ]
   }
 })
@@ -45,7 +48,7 @@ VXETable.renderer.add('EditDownModal', {
   autofocus: '.vxe-input--inner',
   renderEdit (renderOpts, params) {
     return [
-      <edit-down-modal params={ params } renderOpts={ renderOpts }></edit-down-modal>
+      <EditDownModal params={ params }></EditDownModal>
     ]
   }
 })

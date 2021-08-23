@@ -1,11 +1,15 @@
 import { VXETable } from '../../../../packages/all'
+import FilterInput from './components/FilterInput.vue'
+import FilterContent from './components/FilterContent.vue'
+import FilterComplex from './components/FilterComplex.vue'
+import FilterExtend from './components/FilterExtend.vue'
 
 // 创建一个简单的输入框筛选
 VXETable.renderer.add('FilterInput', {
   // 筛选模板
   renderFilter (renderOpts, params) {
     return [
-      <filter-input params={ params }></filter-input>
+      <FilterInput params={ params }></FilterInput>
     ]
   },
   // 重置数据方法
@@ -38,7 +42,7 @@ VXETable.renderer.add('FilterComplex', {
   // 筛选模板
   renderFilter (renderOpts, params) {
     return [
-      <filter-complex params={ params }></filter-complex>
+      <FilterComplex params={ params }></FilterComplex>
     ]
   },
   // 重置数据方法
@@ -67,7 +71,7 @@ VXETable.renderer.add('FilterContent', {
   // 筛选模板
   renderFilter (renderOpts, params) {
     return [
-      <filter-content params={ params }></filter-content>
+      <FilterContent params={ params }></FilterContent>
     ]
   },
   // 重置数据方法
@@ -86,14 +90,14 @@ VXETable.renderer.add('FilterContent', {
   }
 })
 
-// 创建一个实现Excel的筛选器
-VXETable.renderer.add('FilterExcel', {
+// 创建一个复杂的筛选器
+VXETable.renderer.add('FilterExtend', {
   // 不显示底部按钮，使用自定义的按钮
   showFilterFooter: false,
   // 筛选模板
   renderFilter (renderOpts, params) {
     return [
-      <filter-excel params={ params }></filter-excel>
+      <FilterExtend params={ params }></FilterExtend>
     ]
   },
   // 重置数据方法

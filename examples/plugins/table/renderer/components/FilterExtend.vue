@@ -57,7 +57,7 @@ import { VxeGlobalRendererHandles } from '../../../../../types/index'
 import XEUtils from 'xe-utils'
 
 export default defineComponent({
-  name: 'FilterExcel',
+  name: 'FilterExtend',
   props: {
     params: Object as PropType<VxeGlobalRendererHandles.RenderFilterParams>
   },
