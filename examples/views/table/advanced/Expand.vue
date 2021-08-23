@@ -74,7 +74,7 @@
     <vxe-table
       border
       row-id="id"
-      :expand-config="{expandRowKeys: ['1']}"
+      :expand-config="{expandRowKeys: ['10003']}"
       :data="tableData">
       <vxe-table-column type="seq" width="60"></vxe-table-column>
       <vxe-table-column type="expand" width="60">
@@ -290,7 +290,7 @@ export default {
         <vxe-table
           border
           row-id="id"
-          :expand-config="{expandRowKeys: ['1']}"
+          :expand-config="{expandRowKeys: ['10003']}"
           :data="tableData">
           <vxe-table-column type="seq" width="60"></vxe-table-column>
           <vxe-table-column type="expand" width="60">

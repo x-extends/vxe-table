@@ -54,7 +54,7 @@
 import XEUtils from 'xe-utils'
 
 export default {
-  name: 'FilterExcel',
+  name: 'FilterExtend',
   props: {
     params: Object
   },

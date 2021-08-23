@@ -52,7 +52,7 @@ VXETable.renderer.add('EditDownModal', {
   autofocus: '.vxe-input--inner',
   renderEdit (h, renderOpts, params) {
     return [
-      <edit-down-modal params={ params } renderOpts={ renderOpts }></edit-down-modal>
+      <edit-down-modal params={ params }></edit-down-modal>
     ]
   }
 })

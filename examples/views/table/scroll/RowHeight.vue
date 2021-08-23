@@ -11,7 +11,7 @@
       :scroll-y="{gt: 0, rHeight: 120}"
       :loading="loading">
       <vxe-table-column type="seq" title="序号" width="100"></vxe-table-column>
-      <vxe-table-column title="图片" width="120" align="center">
+      <vxe-table-column title="图片" width="140" align="center">
         <template #default>
           <img src="/vxe-table/static/other/img1.gif" style="width: 100px;">
         </template>

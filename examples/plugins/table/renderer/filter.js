@@ -4,12 +4,12 @@ import VXETable from '../../../../packages/v-x-e-table'
 import FilterInput from './components/FilterInput.vue'
 import FilterContent from './components/FilterContent.vue'
 import FilterComplex from './components/FilterComplex.vue'
-import FilterExcel from './components/FilterExcel.vue'
+import FilterExtend from './components/FilterExtend.vue'
 
 Vue.component(FilterInput.name, FilterInput)
 Vue.component(FilterContent.name, FilterContent)
 Vue.component(FilterComplex.name, FilterComplex)
-Vue.component(FilterExcel.name, FilterExcel)
+Vue.component(FilterExtend.name, FilterExtend)
 
 // 创建一个简单的输入框筛选
 VXETable.renderer.add('FilterInput', {
@@ -91,14 +91,14 @@ VXETable.renderer.add('FilterContent', {
   }
 })
 
-// 创建一个实现Excel的筛选器
-VXETable.renderer.add('FilterExcel', {
+// 创建一个复杂的筛选器
+VXETable.renderer.add('FilterExtend', {
   // 不显示底部按钮，使用自定义的按钮
   isFooter: false,
   // 筛选模板
   renderFilter (h, renderOpts, params) {
     return [
-      <filter-excel params={ params }></filter-excel>
+      <filter-extend params={ params }></filter-extend>
     ]
   },
   // 重置数据方法

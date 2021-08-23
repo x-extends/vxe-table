@@ -2728,7 +2728,7 @@ const apis = [
           },
           {
             name: 'rHeight',
-            desc: '指定行高',
+            desc: '当启用虚拟滚动后，该参数用于设置每一行的固定高度',
             version: '3.3.11',
             type: 'number',
             enum: '',
