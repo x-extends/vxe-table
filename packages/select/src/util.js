@@ -30,7 +30,7 @@ export function createOption ($xeselect, _vm) {
 
 export function destroyOption (_vm) {
   const { $xeselect, optionConfig } = _vm
-  const matchObj = XEUtils.findTree($xeselect.collectOption, option => option === optionConfig)
+  const matchObj = XEUtils.findTree($xeselect.collectOption, option => option === optionConfig, { children: 'options' })
   if (matchObj) {
     matchObj.items.splice(matchObj.index, 1)
   }
@@ -39,8 +39,9 @@ export function destroyOption (_vm) {
 export function assemOption (_vm) {
   const { $el, $xeselect, $xeoptgroup, optionConfig } = _vm
   const groupConfig = $xeoptgroup ? $xeoptgroup.optionConfig : null
-  optionConfig.slots = _vm.$scopedSlots
   if (groupConfig) {
+    // 子选项才允许自定义插槽
+    optionConfig.slots = _vm.$slots
     if (!groupConfig.options) {
       groupConfig.options = []
     }
