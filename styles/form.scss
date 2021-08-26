@@ -11,22 +11,12 @@
   font-family: $vxe-font-family;
   background-color: $vxe-form-background-color;
   text-align: left;
-  &.is--colon {
-    .vxe-form--item-title {
-      &:after {
-        content: ":";
-        font-size: 1.2em;
-        font-family: SimSun, sans-serif;
-      }
-    }
-  }
 }
 
 .vxe-form-slots {
   display: none;
 }
 
-.vxe-form--item-title,
 .vxe-form--item-content,
 .vxe-form--item-trigger-node {
   display: inline-block;
@@ -34,25 +24,45 @@
 }
 
 .vxe-form--item-title {
+  display: flex;
+  flex-direction: row;
   max-width: 320px;
   padding-right: 0.8em;
   &.is--ellipsis {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    .vxe-form--item-title-content {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .vxe-form--item-title-prefix,
+  .vxe-form--item-title-suffix,
+  .vxe-form--item-title-postfix {
+    flex-shrink: 0;
   }
   .vxe-form--item-title-prefix,
   .vxe-form--item-title-suffix {
     cursor: help;
-    & > [class*="vxe-icon--"] {
-      margin-top: -0.2em;
+    vertical-align: middle;
+    & > i {
+      vertical-align: middle;
     }
   }
   .vxe-form--item-title-prefix {
     margin-right: 0.25em;
   }
   .vxe-form--item-title-suffix {
-    margin-left: 0.25em;
+    margin-left: 0.2em;
+  }
+  .vxe-form--item-title-postfix {
+    display: flex;
+    align-items: center;
+  }
+  .vxe-form--item-title-content {
+    flex-grow: 1;
+  }
+  .vxe-form--item-title-label {
+    vertical-align: middle;
   }
 }
 
@@ -99,15 +109,25 @@
   &.is--asterisk {
     .vxe-form--item {
       &.is--required {
-        .vxe-form--item-title {
+        .vxe-form--item-title-content {
           &:before {
             content: "*";
             color: $vxe-form-validate-error-color;
+            font-family: Verdana,Arial,Tahoma;
             margin-right: 0.2em;
-            font-family: $vxe-icon-font-family;
             font-weight: normal;
+            vertical-align: middle;
           }
         }
+      }
+    }
+  }
+  &.is--colon {
+    .vxe-form--item-title-postfix {
+      &:after {
+        content: ":";
+        font-weight: normal;
+        margin-left: 0.2em;
       }
     }
   }

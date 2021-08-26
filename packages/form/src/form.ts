@@ -431,7 +431,7 @@ export default defineComponent({
       const { item } = params
       const { tooltipStore } = internalData
       const $tooltip = refTooltip.value
-      const overflowElem = evnt.currentTarget as HTMLDivElement
+      const overflowElem = (evnt.currentTarget as HTMLDivElement).children[0]
       const content = (overflowElem.textContent || '').trim()
       const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
       clearTimeout(internalData.tooltipTimeout)
@@ -512,9 +512,10 @@ export default defineComponent({
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const params = { data, property: field, item, $form: $xeform }
       const titleSlot = slots ? slots.title : null
-      const tss = []
+      const contVNs = []
+      const titVNs = []
       if (titlePrefix) {
-        tss.push(
+        titVNs.push(
           titlePrefix.message
             ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
               content: getFuncText(titlePrefix.message),
@@ -526,13 +527,19 @@ export default defineComponent({
             : renderPrefixIcon(titlePrefix)
         )
       }
-      tss.push(
+      titVNs.push(
         h('span', {
           class: 'vxe-form--item-title-label'
         }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (titleSlot ? callSlot(titleSlot, params) : getFuncText(item.title)))
       )
+      contVNs.push(
+        h('div', {
+          class: 'vxe-form--item-title-content'
+        }, titVNs)
+      )
+      const fixVNs = []
       if (titleSuffix) {
-        tss.push(
+        fixVNs.push(
           titleSuffix.message
             ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
               content: getFuncText(titleSuffix.message),
@@ -544,11 +551,16 @@ export default defineComponent({
             : renderSuffixIcon(titleSuffix)
         )
       }
-      return tss
+      contVNs.push(
+        h('div', {
+          class: 'vxe-form--item-title-postfix'
+        }, fixVNs)
+      )
+      return contVNs
     }
 
     const renderItems = (itemList: VxeFormDefines.ItemInfo[]): VNode[] => {
-      const { rules, data, titleOverflow: allTitleOverflow } = props
+      const { data, rules, titleOverflow: allTitleOverflow } = props
       const { collapseAll } = reactData
       const validOpts = computeValidOpts.value
       return itemList.map((item, index) => {
@@ -567,9 +579,15 @@ export default defineComponent({
         const hasEllipsis = showTitle || showTooltip || showEllipsis
         let itemVisibleMethod = visibleMethod
         const params = { data, property: field, item, $form: $xeform }
-        let isRequired
         if (visible === false) {
           return createCommentVNode()
+        }
+        let isRequired = false
+        if (rules) {
+          const itemRules = rules[field]
+          if (itemRules) {
+            isRequired = itemRules.some((rule) => rule.required)
+          }
         }
         // 如果为项集合
         const isGather = children && children.length > 0
@@ -581,12 +599,6 @@ export default defineComponent({
         }
         if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
           itemVisibleMethod = compConf.itemVisibleMethod
-        }
-        if (rules) {
-          const itemRules = rules[field]
-          if (itemRules) {
-            isRequired = itemRules.some((rule) => rule.required)
-          }
         }
         let contentVNs: any[] = []
         if (defaultSlot) {
@@ -688,7 +700,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { loading, className, data } = props
+      const { loading, className, data, titleColon, titleAsterisk } = props
       const { formItems } = reactData
       const vSize = computeSize.value
       const tooltipOpts = computeTooltipOpts.value
@@ -696,8 +708,8 @@ export default defineComponent({
         ref: refElem,
         class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: $xeform }) : className) : '', {
           [`size--${vSize}`]: vSize,
-          'is--colon': props.titleColon,
-          'is--asterisk': props.titleAsterisk,
+          'is--colon': titleColon,
+          'is--asterisk': titleAsterisk,
           'is--loading': loading
         }],
         onSubmit: submitEvent,
