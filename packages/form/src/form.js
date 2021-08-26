@@ -95,9 +95,10 @@ function renderTitle (h, _vm, item) {
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const params = { data, property: field, item, $form: _vm }
-  const tss = []
+  const contVNs = []
+  const titVNs = []
   if (titlePrefix) {
-    tss.push(
+    titVNs.push(
       titlePrefix.message
         ? h('vxe-tooltip', {
           props: {
@@ -111,13 +112,19 @@ function renderTitle (h, _vm, item) {
         : renderPrefixIcon(h, titlePrefix)
     )
   }
-  tss.push(
+  titVNs.push(
     h('span', {
       class: 'vxe-form--item-title-label'
     }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? callSlot(_vm, slots.title, params, h) : UtilTools.getFuncText(item.title)))
   )
+  contVNs.push(
+    h('div', {
+      class: 'vxe-form--item-title-content'
+    }, titVNs)
+  )
+  const fixVNs = []
   if (titleSuffix) {
-    tss.push(
+    fixVNs.push(
       titleSuffix.message
         ? h('vxe-tooltip', {
           props: {
@@ -131,7 +138,12 @@ function renderTitle (h, _vm, item) {
         : renderSuffixIcon(h, titleSuffix)
     )
   }
-  return tss
+  contVNs.push(
+    h('div', {
+      class: 'vxe-form--item-title-postfix'
+    }, fixVNs)
+  )
+  return contVNs
 }
 
 function renderItems (h, _vm, itemList) {
@@ -443,7 +455,7 @@ export default {
       const { item } = params
       const { tooltipStore } = this
       const $tooltip = this.$refs.tooltip
-      const overflowElem = evnt.currentTarget
+      const overflowElem = evnt.currentTarget.children[0]
       const content = (overflowElem.textContent || '').trim()
       const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
       clearTimeout(this.tooltipTimeout)

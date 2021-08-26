@@ -123,6 +123,9 @@
         <vxe-form-gather span="12">
           <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
           <vxe-form-item title="昵称" span="24">
+            <template #title>
+              <span style="color: red;">自定义标题</span>
+            </template>
             <template #default="{ data }">
               <span>自定义 {{ data.nickname }}</span>
             </template>
@@ -147,7 +150,7 @@
           </vxe-form-item>
         </vxe-form-gather>
         <vxe-form-gather span="12">
-          <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
+          <vxe-form-item title="标题貌似有点长呢标题貌似有点长呢" field="address" span="24" :item-render="{}">
             <template #default="params">
               <vxe-textarea v-model="params.data.address" placeholder="请输入地址" :autosize="{minRows: 6, maxRows: 10}" clearable @input="$refs.xForm.updateStatus(params)"></vxe-textarea>
             </template>
@@ -174,7 +177,10 @@
             <vxe-input v-model="data.nickname" placeholder="请输入昵称" clearable></vxe-input>
           </template>
         </vxe-form-item>
-        <vxe-form-item title="性别" field="sex" span="8" :item-render="{}">
+        <vxe-form-item title="性别" field="sex" span="8" :item-render="{}" :title-prefix="{ message: '左边图标', icon: 'fa fa-thumbs-up' }" :title-suffix="{ message: '右边图标', icon: 'fa fa-mars-stroke' }">
+          <template #title>
+            <span style="color: red;">标题</span>
+          </template>
           <template #default="{ data }">
             <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
@@ -182,7 +188,7 @@
             </vxe-select>
           </template>
         </vxe-form-item>
-        <vxe-form-item title="年龄" field="age" span="8" :item-render="{}" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
+        <vxe-form-item title="年龄" field="age" span="8" :item-render="{}" :title-suffix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
           <template #default="{ data }">
             <vxe-input v-model="data.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
           </template>
@@ -475,6 +481,9 @@ export default {
             <vxe-form-gather span="12">
               <vxe-form-item title="名称" field="name" span="24"></vxe-form-item>
               <vxe-form-item title="昵称" span="24">
+                <template #title>
+                  <span style="color: red;">自定义标题</span>
+                </template>
                 <template #default="{ data }">
                   <span>自定义 {{ data.nickname }}</span>
                 </template>
@@ -499,7 +508,7 @@ export default {
               </vxe-form-item>
             </vxe-form-gather>
             <vxe-form-gather span="12">
-              <vxe-form-item title="标题貌似有点长呢" field="address" span="24" :item-render="{}">
+              <vxe-form-item title="标题貌似有点长呢标题貌似有点长呢" field="address" span="24" :item-render="{}">
                 <template #default="params">
                   <vxe-textarea v-model="params.data.address" placeholder="请输入地址" :autosize="{minRows: 6, maxRows: 10}" clearable @input="$refs.xForm.updateStatus(params)"></vxe-textarea>
                 </template>
@@ -526,7 +535,10 @@ export default {
                 <vxe-input v-model="data.nickname" placeholder="请输入昵称" clearable></vxe-input>
               </template>
             </vxe-form-item>
-            <vxe-form-item title="性别" field="sex" span="8" :item-render="{}">
+            <vxe-form-item title="性别" field="sex" span="8" :item-render="{}" :title-prefix="{ message: '左边图标', icon: 'fa fa-thumbs-up' }" :title-suffix="{ message: '右边图标', icon: 'fa fa-mars-stroke' }">
+              <template #title>
+                <span style="color: red;">标题</span>
+              </template>
               <template #default="{ data }">
                 <vxe-select v-model="data.sex" placeholder="请选择性别" clearable>
                   <vxe-option value="1" label="女"></vxe-option>
@@ -534,7 +546,7 @@ export default {
                 </vxe-select>
               </template>
             </vxe-form-item>
-            <vxe-form-item title="年龄" field="age" span="8" :item-render="{}" :title-prefix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
+            <vxe-form-item title="年龄" field="age" span="8" :item-render="{}" :title-suffix="{ message: '请输入数值！', icon: 'fa fa-info-circle' }">
               <template #default="{ data }">
                 <vxe-input v-model="data.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
               </template>
