@@ -91,9 +91,9 @@
       </vxe-toolbar>
 
       <vxe-table ref="xTable" :data="tableData">
-        <vxe-table-column field="name" title="Name"></vxe-table-column>
-        <vxe-table-column field="role" title="Role"></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+        <vxe-column field="name" title="Name"></vxe-column>
+        <vxe-column field="role" title="Role"></vxe-column>
+        <vxe-column field="sex" title="Sex"></vxe-column>
       </vxe-table>
     </p>
 
@@ -208,9 +208,9 @@ export default {
           </vxe-toolbar>
 
           <vxe-table ref="xTable" :data="tableData">
-            <vxe-table-column field="name" title="Name"></vxe-table-column>
-            <vxe-table-column field="role" title="Role"></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+            <vxe-column field="name" title="Name"></vxe-column>
+            <vxe-column field="role" title="Role"></vxe-column>
+            <vxe-column field="sex" title="Sex"></vxe-column>
           </vxe-table>
         </p>
         `,

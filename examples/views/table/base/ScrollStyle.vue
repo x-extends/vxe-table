@@ -12,12 +12,12 @@
       height="400"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="250"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="250"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="350" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+      <vxe-column field="name" title="Name" width="300"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="250"></vxe-column>
+      <vxe-column field="age" title="Age" width="250"></vxe-column>
+      <vxe-column field="role" title="Role" width="300"></vxe-column>
+      <vxe-column field="address" title="Address" width="350" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -53,12 +53,12 @@ export default {
           height="400"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="250"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="250"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="350" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+          <vxe-column field="name" title="Name" width="300"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="250"></vxe-column>
+          <vxe-column field="age" title="Age" width="250"></vxe-column>
+          <vxe-column field="role" title="Role" width="300"></vxe-column>
+          <vxe-column field="address" title="Address" width="350" show-overflow></vxe-column>
         </vxe-table>
         `,
         `

@@ -20,10 +20,10 @@
       :tree-config="{children: 'childs'}"
       :data="tableData1"
       @toggle-tree-expand="toggleExpandChangeEvent">
-      <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -40,10 +40,10 @@
       row-id="id"
       :tree-config="{children: 'children', expandRowKeys: defaultExpandKeys}"
       :data="tableData2">
-      <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -61,13 +61,13 @@
       row-id="id"
       :data="tableData3"
       :tree-config="{children: 'list', expandAll: true}">
-      <vxe-table-column type="seq" width="180" title="序号" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+      <vxe-column type="seq" width="180" title="序号" tree-node></vxe-column>
+      <vxe-column field="name" title="app.body.label.name"></vxe-column>
       <vxe-table-colgroup title="基本信息">
-        <vxe-table-column field="size" title="Size"></vxe-table-column>
-        <vxe-table-column field="type" title="Type"></vxe-table-column>
+        <vxe-column field="size" title="Size"></vxe-column>
+        <vxe-column field="type" title="Type"></vxe-column>
       </vxe-table-colgroup>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -185,10 +185,10 @@ export default {
           :tree-config="{children: 'childs'}"
           :data="tableData1"
           @toggle-tree-expand="toggleExpandChangeEvent">
-          <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -242,10 +242,10 @@ export default {
           row-id="id"
           :tree-config="{children: 'children', expandRowKeys: defaultExpandKeys}"
           :data="tableData2">
-          <vxe-table-column field="name" title="app.body.label.name" tree-node></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -292,13 +292,13 @@ export default {
           row-id="id"
           :data="tableData3"
           :tree-config="{children: 'list', expandAll: true}">
-          <vxe-table-column type="seq" width="180" title="序号" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
+          <vxe-column type="seq" width="180" title="序号" tree-node></vxe-column>
+          <vxe-column field="name" title="app.body.label.name"></vxe-column>
           <vxe-table-colgroup title="基本信息">
-            <vxe-table-column field="size" title="Size"></vxe-table-column>
-            <vxe-table-column field="type" title="Type"></vxe-table-column>
+            <vxe-column field="size" title="Size"></vxe-column>
+            <vxe-column field="type" title="Type"></vxe-column>
           </vxe-table-colgroup>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `

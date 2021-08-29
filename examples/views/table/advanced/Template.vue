@@ -34,8 +34,8 @@
       :data="tableData"
       @checkbox-change="checkboxChangeEvent"
       @checkbox-all="checkboxChangeEvent">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="160" :resizable="false" show-overflow>
         <template #header>
           <div class="first-col">
             <div class="first-col-top">名称</div>
@@ -49,13 +49,13 @@
         <template #default="{ row }">
           <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="app.body.label.name" sortable>
+      </vxe-column>
+      <vxe-column field="name" title="app.body.label.name" sortable>
         <template #default="{ row }">
           <a href="https://github.com/x-extends/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
+      </vxe-column>
+      <vxe-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
         <template #header>
           <span style="color: red;">自定义头部</span>
         </template>
@@ -72,8 +72,8 @@
           <vxe-button type="text">编辑</vxe-button>
           <vxe-button type="text">删除</vxe-button>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="time" title="Time">
+      </vxe-column>
+      <vxe-column field="time" title="Time">
         <template #header>
           <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
         </template>
@@ -88,8 +88,8 @@
             <span>{{ formatDate(row.time) }}</span>
           </template>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow>
+      </vxe-column>
+      <vxe-column field="address" title="Address" show-overflow>
         <template #default="{ row, rowIndex }">
           <template v-if="rowIndex === 1">
             <vxe-select v-model="row.flag1" transfer>
@@ -101,8 +101,8 @@
             <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
           </template>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
+      </vxe-column>
+      <vxe-column field="html1" title="Html片段" width="200" show-overflow>
         <template #default="{ row }">
           <span v-html="row.html1"></span>
         </template>
@@ -111,13 +111,13 @@
             <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
           </span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="img1" title="图片路径" width="120">
+      </vxe-column>
+      <vxe-column field="img1" title="图片路径" width="120">
         <template #default="{ row }">
           <img v-if="row.img1" :src="row.img1" style="width: 100px;">
           <span v-else>无</span>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <vxe-pager
@@ -220,8 +220,8 @@ export default {
           :data="tableData"
           @checkbox-change="checkboxChangeEvent"
           @checkbox-all="checkboxChangeEvent">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="160" :resizable="false" show-overflow>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="160" :resizable="false" show-overflow>
             <template #header>
               <div class="first-col">
                 <div class="first-col-top">名称</div>
@@ -235,13 +235,13 @@ export default {
             <template #default="{ row }">
               <vxe-button @click="showDetailEvent(row)">弹框{{ row.name }}</vxe-button>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="app.body.label.name" sortable>
+          </vxe-column>
+          <vxe-column field="name" title="app.body.label.name" sortable>
             <template #default="{ row }">
               <a href="https://github.com/x-extends/vxe-table" target="_black">我是超链接：{{ row.name }}</a>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
+          </vxe-column>
+          <vxe-column field="sex" title="app.body.label.sex" :filters="[{data: ''}]" :filter-method="filterSexMethod">
             <template #header>
               <span style="color: red;">自定义头部</span>
             </template>
@@ -258,8 +258,8 @@ export default {
               <vxe-button type="text">编辑</vxe-button>
               <vxe-button type="text">删除</vxe-button>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="time" title="Time">
+          </vxe-column>
+          <vxe-column field="time" title="Time">
             <template #header>
               <vxe-input v-model="value1" placeholder="放个输入框" size="mini"></vxe-input>
             </template>
@@ -274,8 +274,8 @@ export default {
                 <span>{{ formatDate(row.time) }}</span>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow>
+          </vxe-column>
+          <vxe-column field="address" title="Address" show-overflow>
             <template #default="{ row, rowIndex }">
               <template v-if="rowIndex === 1">
                 <vxe-select v-model="row.flag1" transfer>
@@ -287,8 +287,8 @@ export default {
                 <a href="https://github.com/x-extends/vxe-table">{{ row.name }}</a>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="html1" title="Html片段" width="200" show-overflow>
+          </vxe-column>
+          <vxe-column field="html1" title="Html片段" width="200" show-overflow>
             <template #default="{ row }">
               <span v-html="row.html1"></span>
             </template>
@@ -297,13 +297,13 @@ export default {
                 <img src="/vxe-table/static/other/img1.gif" style="width: 36px;">自定义模板<img src="/vxe-table/static/other/img2.gif" style="width: 30px;">
               </span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="img1" title="图片路径" width="120">
+          </vxe-column>
+          <vxe-column field="img1" title="图片路径" width="120">
             <template #default="{ row }">
               <img v-if="row.img1" :src="row.img1" style="width: 100px;">
               <span v-else>无</span>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
 
         <vxe-pager

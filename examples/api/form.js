@@ -344,6 +344,15 @@ const apis = [
         list: []
       },
       {
+        name: 'validateField(field, callback)',
+        desc: '对表单指定项进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise',
+        version: '3.3.12',
+        type: 'Promise<ErrMap>',
+        enum: '',
+        defVal: 'field: string, callback?: Function',
+        list: []
+      },
+      {
         name: 'clearValidate(field)',
         desc: '手动清除校验状态，如果指定 field 则清除指定的项，否则清除整个表单',
         version: '',

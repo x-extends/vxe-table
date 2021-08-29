@@ -8,10 +8,10 @@
       height="400"
       :tree-config="{}"
       :data="tableData">
-      <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="date14" title="Date"></vxe-table-column>
+      <vxe-column field="name" title="Name" tree-node></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="date14" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -38,10 +38,10 @@ export default {
           height="400"
           :tree-config="{}"
           :data="tableData">
-          <vxe-table-column field="name" title="Name" tree-node></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="date14" title="Date"></vxe-table-column>
+          <vxe-column field="name" title="Name" tree-node></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="date14" title="Date"></vxe-column>
         </vxe-table>
         `,
         `

@@ -8,11 +8,11 @@
       highlight-hover-row
       highlight-current-column
       :data="tableData">
-      <vxe-table-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-table-column>
-      <vxe-table-column field="desc" title="app.api.title.desc" min-width="200"></vxe-table-column>
-      <vxe-table-column field="type" title="app.api.title.type" min-width="140"></vxe-table-column>
-      <vxe-table-column field="enum" title="app.api.title.enum" min-width="150"></vxe-table-column>
-      <vxe-table-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-table-column>
+      <vxe-column field="name" title="app.api.title.prop" min-width="280" tree-node></vxe-column>
+      <vxe-column field="desc" title="app.api.title.desc" min-width="200"></vxe-column>
+      <vxe-column field="type" title="app.api.title.type" min-width="140"></vxe-column>
+      <vxe-column field="enum" title="app.api.title.enum" min-width="150"></vxe-column>
+      <vxe-column field="defVal" title="app.api.title.defVal" min-width="160"></vxe-column>
     </vxe-table>
     <h2>示例</h2>
     <pre>
@@ -60,10 +60,10 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="num1" title="默认两位小数" formatter="myAmount"></vxe-table-column>
-          <vxe-table-column field="num2" title="保留3位小数" :formatter="['myAmount', 3]"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="num1" title="默认两位小数" formatter="myAmount"></vxe-column>
+          <vxe-column field="num2" title="保留3位小数" :formatter="['myAmount', 3]"></vxe-column>
         </vxe-table>
         `,
         `

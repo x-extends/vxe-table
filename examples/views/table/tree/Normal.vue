@@ -20,7 +20,7 @@
       :tree-config="{}"
       :radio-config="{labelField: 'name'}"
       :data="tableData">
-      <vxe-table-column type="radio" tree-node></vxe-table-column>
+      <vxe-column type="radio" tree-node></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -40,7 +40,7 @@
       :data="tableData"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}">
-      <vxe-table-column type="checkbox" tree-node></vxe-table-column>
+      <vxe-column type="checkbox" tree-node></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -62,7 +62,7 @@
       :data="tableData3"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
-      <vxe-table-column type="checkbox" tree-node>
+      <vxe-column type="checkbox" tree-node>
         <template #default="{ row }">
           <span>
             <template v-if="row.children && row.children.length">
@@ -74,15 +74,15 @@
             <span>{{ row.name }}</span>
           </span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column title="操作" width="140">
+      </vxe-column>
+      <vxe-column title="操作" width="140">
         <template #default="{ row }">
           <vxe-button type="text" icon="fa fa-eye"></vxe-button>
           <vxe-button type="text" icon="fa fa-edit"></vxe-button>
           <vxe-button type="text" icon="fa fa-trash-o" @click="removeRowEvent(row)"></vxe-button>
           <vxe-button type="text" icon="fa fa-id-card-o"></vxe-button>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -175,7 +175,7 @@ export default {
           :tree-config="{}"
           :radio-config="{labelField: 'name'}"
           :data="tableData">
-          <vxe-table-column type="radio" tree-node></vxe-table-column>
+          <vxe-column type="radio" tree-node></vxe-column>
         </vxe-table>
         `,
         `
@@ -233,7 +233,7 @@ export default {
           :data="tableData"
           :checkbox-config="{labelField: 'name'}"
           :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}">
-          <vxe-table-column type="checkbox" tree-node></vxe-table-column>
+          <vxe-column type="checkbox" tree-node></vxe-column>
         </vxe-table>
         `,
         `
@@ -285,7 +285,7 @@ export default {
           :data="tableData3"
           :checkbox-config="{labelField: 'name'}"
           :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
-          <vxe-table-column type="checkbox" tree-node>
+          <vxe-column type="checkbox" tree-node>
             <template #default="{ row }">
               <span>
                 <template v-if="row.children && row.children.length">
@@ -297,15 +297,15 @@ export default {
                 <span>{{ row.name }}</span>
               </span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column title="操作" width="140">
+          </vxe-column>
+          <vxe-column title="操作" width="140">
             <template #default="{ row }">
               <vxe-button type="text" icon="fa fa-eye"></vxe-button>
               <vxe-button type="text" icon="fa fa-edit"></vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o" @click="removeRowEvent(row)"></vxe-button>
               <vxe-button type="text" icon="fa fa-id-card-o"></vxe-button>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

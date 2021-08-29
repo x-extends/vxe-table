@@ -32,27 +32,27 @@
       :export-config="{}"
       :loading="loading"
       :checkbox-config="{checkField: 'checked'}">
-      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-      <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300"></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
-      <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
-      <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
-      <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
-      <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
-      <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
-      <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
-      <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
-      <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-      <vxe-table-column field="attr10" title="Attr10" width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200" fixed="right"></vxe-table-column>
+      <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+      <vxe-column type="seq" width="100" fixed="left"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+      <vxe-column field="region" title="Region" width="200"></vxe-column>
+      <vxe-column field="time" title="Time" width="200"></vxe-column>
+      <vxe-column field="address" title="Address" width="300"></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
+      <vxe-column field="attr1" title="Attr1" width="200"></vxe-column>
+      <vxe-column field="attr2" title="Attr2" width="200"></vxe-column>
+      <vxe-column field="attr3" title="Attr3" width="200"></vxe-column>
+      <vxe-column field="attr4" title="Attr4" width="200"></vxe-column>
+      <vxe-column field="attr5" title="Attr5" width="200"></vxe-column>
+      <vxe-column field="attr6" title="Attr6" width="200"></vxe-column>
+      <vxe-column field="attr7" title="Attr7" width="200"></vxe-column>
+      <vxe-column field="attr8" title="Attr8" width="200"></vxe-column>
+      <vxe-column field="attr9" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr10" title="Attr10" width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="200" fixed="right"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -110,27 +110,27 @@ export default {
           :export-config="{}"
           :loading="loading"
           :checkbox-config="{checkField: 'checked'}">
-          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="seq" width="100" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-          <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300"></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="attr1" title="Attr1" width="200"></vxe-table-column>
-          <vxe-table-column field="attr2" title="Attr2" width="200"></vxe-table-column>
-          <vxe-table-column field="attr3" title="Attr3" width="200"></vxe-table-column>
-          <vxe-table-column field="attr4" title="Attr4" width="200"></vxe-table-column>
-          <vxe-table-column field="attr5" title="Attr5" width="200"></vxe-table-column>
-          <vxe-table-column field="attr6" title="Attr6" width="200"></vxe-table-column>
-          <vxe-table-column field="attr7" title="Attr7" width="200"></vxe-table-column>
-          <vxe-table-column field="attr8" title="Attr8" width="200"></vxe-table-column>
-          <vxe-table-column field="attr9" title="Attr9" width="200"></vxe-table-column>
-          <vxe-table-column field="attr10" title="Attr10" width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200" fixed="right"></vxe-table-column>
+          <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+          <vxe-column type="seq" width="100" fixed="left"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+          <vxe-column field="region" title="Region" width="200"></vxe-column>
+          <vxe-column field="time" title="Time" width="200"></vxe-column>
+          <vxe-column field="address" title="Address" width="300"></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
+          <vxe-column field="attr1" title="Attr1" width="200"></vxe-column>
+          <vxe-column field="attr2" title="Attr2" width="200"></vxe-column>
+          <vxe-column field="attr3" title="Attr3" width="200"></vxe-column>
+          <vxe-column field="attr4" title="Attr4" width="200"></vxe-column>
+          <vxe-column field="attr5" title="Attr5" width="200"></vxe-column>
+          <vxe-column field="attr6" title="Attr6" width="200"></vxe-column>
+          <vxe-column field="attr7" title="Attr7" width="200"></vxe-column>
+          <vxe-column field="attr8" title="Attr8" width="200"></vxe-column>
+          <vxe-column field="attr9" title="Attr9" width="200"></vxe-column>
+          <vxe-column field="attr10" title="Attr10" width="200"></vxe-column>
+          <vxe-column field="age" title="Age" width="200" fixed="right"></vxe-column>
         </vxe-table>
         `,
         `

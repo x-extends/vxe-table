@@ -5,10 +5,10 @@
     <vxe-table
       :data="tableData"
       :scroll-y="{enabled: false}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -36,10 +36,10 @@ export default {
         <vxe-table
           :data="tableData"
           :scroll-y="{enabled: false}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `

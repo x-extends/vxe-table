@@ -25,11 +25,11 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :checkbox-config="{labelField: 'id'}"
       :data="tableData">
-      <vxe-table-column type="checkbox" title="ID" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-column type="checkbox" title="ID" tree-node></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -106,11 +106,11 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :checkbox-config="{labelField: 'id'}"
           :data="tableData">
-          <vxe-table-column type="checkbox" title="ID" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-column type="checkbox" title="ID" tree-node></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
         </vxe-table>
         `,
         `
@@ -159,14 +159,14 @@ export default {
             }
           },
           methods: {
-            validEvent () {
-              this.$refs.xTree.validate((errMap) => {
-                if (errMap) {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                }
-              })
+            async validEvent () {
+              const $table = this.$refs.xTree
+              const errMap = await $table.validate().catch(errMap => errMap)
+              if (errMap) {
+                this.$XModal.message({ status: 'error', message: '校验不通过！' })
+              } else {
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              }
             },
             fullValidEvent () {
               this.$refs.xTree.fullValidate((errMap) => {
@@ -203,16 +203,16 @@ export default {
                 }
               })
             },
-            selectValidEvent () {
-              let selectRecords = this.$refs.xTree.getCheckboxRecords()
+            async selectValidEvent () {
+              const $table = this.$refs.xTree
+              const selectRecords = $table.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                this.$refs.xTree.validate(selectRecords, (errMap) => {
-                  if (errMap) {
-                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                  } else {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  }
-                })
+                const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+                if (errMap) {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                }
               } else {
                 this.$XModal.message({ status: 'warning', message: '未选中数据！' })
               }
@@ -232,14 +232,14 @@ export default {
     }
   },
   methods: {
-    validEvent () {
-      this.$refs.xTree.validate((errMap) => {
-        if (errMap) {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
-        } else {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        }
-      })
+    async validEvent () {
+      const $table = this.$refs.xTree
+      const errMap = await $table.validate().catch(errMap => errMap)
+      if (errMap) {
+        this.$XModal.message({ status: 'error', message: '校验不通过！' })
+      } else {
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      }
     },
     fullValidEvent () {
       this.$refs.xTree.fullValidate((errMap) => {
@@ -276,16 +276,16 @@ export default {
         }
       })
     },
-    selectValidEvent () {
-      const selectRecords = this.$refs.xTree.getCheckboxRecords()
+    async selectValidEvent () {
+      const $table = this.$refs.xTree
+      const selectRecords = $table.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        this.$refs.xTree.validate(selectRecords, (errMap) => {
-          if (errMap) {
-            this.$XModal.message({ status: 'error', message: '校验不通过！' })
-          } else {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          }
-        })
+        const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+        if (errMap) {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        }
       } else {
         this.$XModal.message({ status: 'warning', message: '未选中数据！' })
       }

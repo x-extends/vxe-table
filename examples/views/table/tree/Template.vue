@@ -20,23 +20,23 @@
       resizable
       :tree-config="{children: 'children'}"
       :data="tableData">
-      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-      <vxe-table-column field="size" title="Size"></vxe-table-column>
-      <vxe-table-column field="type" title="Type">
+      <vxe-column field="name" title="app.body.label.name"></vxe-column>
+      <vxe-column field="size" title="Size"></vxe-column>
+      <vxe-column field="type" title="Type">
         <template #default="{ row }">
           <span>{{ `类型：${row.type || '无'}` }}</span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="attr3" title="Image" tree-node>
+      </vxe-column>
+      <vxe-column field="attr3" title="Image" tree-node>
         <template #default>
           <img src="/vxe-table/static/other/img1.gif" height="50">
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="date" title="Date">
+      </vxe-column>
+      <vxe-column field="date" title="Date">
         <template #default="{ row }">
           <span>{{ formatDate(row.date) }}</span>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -100,23 +100,23 @@ export default {
           resizable
           :tree-config="{children: 'children'}"
           :data="tableData">
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-          <vxe-table-column field="size" title="Size"></vxe-table-column>
-          <vxe-table-column field="type" title="Type">
+          <vxe-column field="name" title="app.body.label.name"></vxe-column>
+          <vxe-column field="size" title="Size"></vxe-column>
+          <vxe-column field="type" title="Type">
             <template #default="{ row }">
               <span>{{ \`类型：\${row.type || '无'}\` }}</span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="attr3" title="Image" tree-node>
+          </vxe-column>
+          <vxe-column field="attr3" title="Image" tree-node>
             <template #default>
               <img src="/vxe-table/static/other/img1.gif" height="50">
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="date" title="Date">
+          </vxe-column>
+          <vxe-column field="date" title="Date">
             <template #default="{ row }">
               <span>{{ formatDate(row.date) }}</span>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

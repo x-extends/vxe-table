@@ -11,11 +11,11 @@
       resizable
       :empty-render="{name: 'NotData'}"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -77,11 +77,11 @@ export default {
           resizable
           :empty-render="{name: 'NotData'}"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="expand" width="80" :content-render="{name: 'MyExpand'}"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `

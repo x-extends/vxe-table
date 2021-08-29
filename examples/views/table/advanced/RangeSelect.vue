@@ -7,11 +7,11 @@
       height="400"
       :checkbox-config="{trigger: 'row', highlight: true, range: true}"
       :data="tableData">
-      <vxe-table-column type="checkbox" width="80"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="time" title="Time"></vxe-table-column>
+      <vxe-column type="checkbox" width="80"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="time" title="Time"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,11 +46,11 @@ export default {
           height="400"
           :checkbox-config="{trigger: 'row', highlight: true, range: true}"
           :data="tableData">
-          <vxe-table-column type="checkbox" width="80"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="time" title="Time"></vxe-table-column>
+          <vxe-column type="checkbox" width="80"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="time" title="Time"></vxe-column>
         </vxe-table>
         `,
         `

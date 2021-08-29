@@ -11,16 +11,16 @@
       height="300"
       :loading="loading"
       :keyboard-config="{isArrow: true}">
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-      <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="200"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+      <vxe-column field="region" title="Region" width="200"></vxe-column>
+      <vxe-column field="time" title="Time" width="200"></vxe-column>
+      <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -55,16 +55,16 @@ export default {
           height="300"
           :loading="loading"
           :keyboard-config="{isArrow: true}">
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-          <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+          <vxe-column field="age" title="Age" width="200"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+          <vxe-column field="region" title="Region" width="200"></vxe-column>
+          <vxe-column field="time" title="Time" width="200"></vxe-column>
+          <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>
         `,
         `

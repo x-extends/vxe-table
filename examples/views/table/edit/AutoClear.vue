@@ -12,13 +12,13 @@
       ref="xTable"
       :data="tableData"
       :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-table-column>
-      <vxe-table-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
-      <vxe-table-column title="操作">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-column>
+      <vxe-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-column>
+      <vxe-column title="操作">
         <template #default="{ row }">
           <template v-if="$refs.xTable.isActiveByRow(row)">
             <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
@@ -28,7 +28,7 @@
             <vxe-button @click="editRowEvent(row)">编辑</vxe-button>
           </template>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -65,13 +65,13 @@ export default {
           ref="xTable"
           :data="tableData"
           :edit-config="{ trigger: 'manual', mode: 'row', autoClear: false}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-table-column>
-          <vxe-table-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input', immediate: true}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: 'select', options: sexList}"></vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{name: 'input', immediate: true, attrs: { type: 'date' }}"></vxe-column>
+          <vxe-column field="num" title="Num" :edit-render="{name: 'input', immediate: true, attrs: {type: 'number'}}"></vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{name: 'textarea'}"></vxe-column>
+          <vxe-column title="操作">
             <template #default="{ row }">
               <template v-if="$refs.xTable.isActiveByRow(row)">
                 <vxe-button @click="saveRowEvent(row)">保存</vxe-button>
@@ -81,7 +81,7 @@ export default {
                 <vxe-button @click="editRowEvent(row)">编辑</vxe-button>
               </template>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

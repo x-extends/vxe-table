@@ -11,10 +11,10 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
       @edit-disabled="editDisabledEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -32,11 +32,11 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}"
       @edit-actived="editActivedEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-column>
       <vxe-table-colgroup title="分组">
-        <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-table-column>
-        <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-table-column>
+        <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-column>
+        <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -79,10 +79,10 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', activeMethod: activeCellMethod}"
           @edit-disabled="editDisabledEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
         </vxe-table>
         `,
         `
@@ -126,11 +126,11 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
           @edit-actived="editActivedEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-column>
           <vxe-table-colgroup title="分组">
-            <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-table-column>
-            <vxe-table-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-table-column>
+            <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-column>
+            <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,

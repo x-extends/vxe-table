@@ -9,11 +9,11 @@
       :sort-config="{multiple: true, trigger: 'cell'}"
       :data="tableData"
       @sort-change="sortChangeEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role" sortable></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="num" title="Num" sortable></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -65,11 +65,11 @@ export default {
           :sort-config="{multiple: true, trigger: 'cell'}"
           :data="tableData"
           @sort-change="sortChangeEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="num" title="Num" sortable></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role" sortable></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="num" title="Num" sortable></vxe-column>
         </vxe-table>
         `,
         `

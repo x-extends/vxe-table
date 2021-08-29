@@ -53,17 +53,17 @@
       :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="seq" title="Number" width="80" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="AInput" min-width="140" fixed="left" :edit-render="{name: 'AInput'}"></vxe-table-column>
-      <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
-      <vxe-table-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="sexList" title="ASelect multiple" width="180" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-table-column>
-      <vxe-table-column field="region" title="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
-      <vxe-table-column field="date1" title="ADatePicker" width="200" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="ASwitch" width="100" :cell-render="{name: 'ASwitch'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="ARate" width="200" fixed="right" :cell-render="{name: 'ARate'}"></vxe-table-column>
+      <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+      <vxe-column type="seq" title="Number" width="80" fixed="left"></vxe-column>
+      <vxe-column field="name" title="AInput" min-width="140" fixed="left" :edit-render="{name: 'AInput'}"></vxe-column>
+      <vxe-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-column>
+      <vxe-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-column>
+      <vxe-column field="sex" title="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-column>
+      <vxe-column field="sexList" title="ASelect multiple" width="180" :edit-render="{name: 'ASelect', options: sexList, props: {mode: 'multiple'}}"></vxe-column>
+      <vxe-column field="region" title="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-column>
+      <vxe-column field="date1" title="ADatePicker" width="200" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-column>
+      <vxe-column field="flag" title="ASwitch" width="100" :cell-render="{name: 'ASwitch'}"></vxe-column>
+      <vxe-column field="rate" title="ARate" width="200" fixed="right" :cell-render="{name: 'ARate'}"></vxe-column>
     </vxe-table>
 
     <a-pagination
@@ -223,16 +223,16 @@ export default {
             :data="tableData"
             :edit-rules="validRules"
             :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
-            <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column type="seq" title="Number" width="80" fixed="left"></vxe-table-column>
-            <vxe-table-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-table-column>
-            <vxe-table-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-table-column>
-            <vxe-table-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-            <vxe-table-column field="sex" title="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-table-column>
-            <vxe-table-column field="region" title="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-table-column>
-            <vxe-table-column field="date1" title="ADatePicker" width="200" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-table-column>
-            <vxe-table-column field="flag" title="ASwitch" width="100" :cell-render="{name: 'ASwitch'}"></vxe-table-column>
-            <vxe-table-column field="rate" title="ARate" width="200" fixed="right" :cell-render="{name: 'ARate'}"></vxe-table-column>
+            <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+            <vxe-column type="seq" title="Number" width="80" fixed="left"></vxe-column>
+            <vxe-column field="name" title="AInput" min-width="140" :edit-render="{name: 'AInput'}"></vxe-column>
+            <vxe-column field="role" title="AAutoComplete" width="160" :edit-render="{name: 'AAutoComplete', props: ACProps, events: {search: roleSearchEvent}}"></vxe-column>
+            <vxe-column field="age" title="AInputNumber" width="160" :edit-render="{name: 'AInputNumber', props: {max: 35, min: 18}}"></vxe-column>
+            <vxe-column field="sex" title="ASelect" width="140" :edit-render="{name: 'ASelect', options: sexList}"></vxe-column>
+            <vxe-column field="region" title="ACascader" width="200" :edit-render="{name: 'ACascader', props: {options: regionList}}"></vxe-column>
+            <vxe-column field="date1" title="ADatePicker" width="200" :edit-render="{name: 'ADatePicker', props: {type: 'date', format: 'YYYY/MM/DD'}}"></vxe-column>
+            <vxe-column field="flag" title="ASwitch" width="100" :cell-render="{name: 'ASwitch'}"></vxe-column>
+            <vxe-column field="rate" title="ARate" width="200" fixed="right" :cell-render="{name: 'ARate'}"></vxe-column>
           </vxe-table>
 
           <a-pagination
@@ -377,14 +377,14 @@ export default {
                 this.$message.warning('数据未改动！')
               }
             },
-            vaildEvent () {
-              this.$refs.xTable.validate((errMap) => {
-                if (errMap) {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                }
-              })
+            async vaildEvent () {
+              const $table = this.$refs.xTable
+              const errMap = await $table.validate().catch(errMap => errMap)
+              if (errMap) {
+                this.$XModal.message({ status: 'error', message: '校验不通过！' })
+              } else {
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              }
             },
             dropdownMenuEvent (name) {
               switch (name) {
@@ -469,14 +469,14 @@ export default {
         this.$message.warning('数据未改动！')
       }
     },
-    vaildEvent () {
-      this.$refs.xTable.validate((errMap) => {
-        if (errMap) {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
-        } else {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        }
-      })
+    async vaildEvent () {
+      const $table = this.$refs.xTable
+      const errMap = await $table.validate().catch(errMap => errMap)
+      if (errMap) {
+        this.$XModal.message({ status: 'error', message: '校验不通过！' })
+      } else {
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      }
     },
     dropdownMenuEvent (name) {
       switch (name) {

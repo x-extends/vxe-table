@@ -11,15 +11,15 @@
       :loading="loading"
       :data="tableData1"
       :footer-method="footerMethod">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-      <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="120"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+      <vxe-column field="region" title="Region" width="200"></vxe-column>
+      <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -40,14 +40,14 @@
       :loading="loading"
       :data="tableData2"
       :footer-method="footerMethod">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="120"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+      <vxe-column field="time" title="Time" width="200"></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -77,15 +77,15 @@ export default {
           :loading="loading"
           :data="tableData"
           :footer-method="footerMethod">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-          <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+          <vxe-column field="age" title="Age" width="120"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+          <vxe-column field="region" title="Region" width="200"></vxe-column>
+          <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>
         `,
         `
@@ -158,14 +158,14 @@ export default {
           :loading="loading"
           :data="tableData"
           :footer-method="footerMethod">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="120"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="120"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+          <vxe-column field="age" title="Age" width="120"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="120"></vxe-column>
+          <vxe-column field="time" title="Time" width="200"></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>
         `,
         `

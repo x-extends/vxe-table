@@ -23,7 +23,7 @@
       ref="xTable"
       height="300"
       :data="tableData">
-      <vxe-table-column
+      <vxe-column
         v-for="config in tableColumn"
         :key="config.key"
         :type="config.type"
@@ -32,7 +32,7 @@
         :fixed="config.fixed"
         :width="config.width"
         :filters="config.filters">
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -86,7 +86,7 @@ export default {
           ref="xTable"
           height="300"
           :data="tableData">
-          <vxe-table-column
+          <vxe-column
             v-for="config in tableColumn"
             :key="config.key"
             :type="config.type"
@@ -95,7 +95,7 @@ export default {
             :fixed="config.fixed"
             :width="config.width"
             :filters="config.filters">
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

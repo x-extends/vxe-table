@@ -8,11 +8,11 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="seq"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="date" title="Date"></vxe-table-column>
+      <vxe-column type="seq"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -27,11 +27,11 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="seq" width="80"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="140"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-column type="seq" width="80"></vxe-column>
+      <vxe-column field="name" title="Name" width="200"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="140"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,11 +46,11 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="seq" width="80"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" min-width="200"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" min-width="140"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" min-width="120"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" min-width="120"></vxe-table-column>
+      <vxe-column type="seq" width="80"></vxe-column>
+      <vxe-column field="name" title="Name" min-width="200"></vxe-column>
+      <vxe-column field="role" title="Role" min-width="140"></vxe-column>
+      <vxe-column field="sex" title="Sex" min-width="120"></vxe-column>
+      <vxe-column field="age" title="Age" min-width="120"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -65,11 +65,11 @@
     <vxe-table
       border
       :data="tableData">
-      <vxe-table-column type="seq" width="10%"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="30%"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" width="20%"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="20%"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="20%"></vxe-table-column>
+      <vxe-column type="seq" width="10%"></vxe-column>
+      <vxe-column field="name" title="Name" width="30%"></vxe-column>
+      <vxe-column field="role" title="Role" width="20%"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="20%"></vxe-column>
+      <vxe-column field="age" title="Age" width="20%"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -100,11 +100,11 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="seq"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="date" title="Date"></vxe-table-column>
+          <vxe-column type="seq"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,
         `
@@ -129,11 +129,11 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="seq" width="80"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="200"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="140"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-column type="seq" width="80"></vxe-column>
+          <vxe-column field="name" title="Name" width="200"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="140"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `
@@ -158,11 +158,11 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="seq" width="80"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" min-width="200"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" min-width="140"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" min-width="120"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" min-width="120"></vxe-table-column>
+          <vxe-column type="seq" width="80"></vxe-column>
+          <vxe-column field="name" title="Name" min-width="200"></vxe-column>
+          <vxe-column field="role" title="Role" min-width="140"></vxe-column>
+          <vxe-column field="sex" title="Sex" min-width="120"></vxe-column>
+          <vxe-column field="age" title="Age" min-width="120"></vxe-column>
         </vxe-table>
         `,
         `
@@ -187,11 +187,11 @@ export default {
         <vxe-table
           border
           :data="tableData">
-          <vxe-table-column type="seq" width="10%"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="30%"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" width="20%"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="20%"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="20%"></vxe-table-column>
+          <vxe-column type="seq" width="10%"></vxe-column>
+          <vxe-column field="name" title="Name" width="30%"></vxe-column>
+          <vxe-column field="role" title="Role" width="20%"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="20%"></vxe-column>
+          <vxe-column field="age" title="Age" width="20%"></vxe-column>
         </vxe-table>
         `,
         `

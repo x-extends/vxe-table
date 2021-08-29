@@ -57,17 +57,17 @@
       :mouse-config="{selected: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-      <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-      <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-      <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+      <vxe-column field="region" title="Region" width="200"></vxe-column>
+      <vxe-column field="time" title="Time" width="200"></vxe-column>
+      <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+      <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+      <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
     <pre>
@@ -171,17 +171,17 @@ export default {
           :mouse-config="{selected: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200"></vxe-table-column>
-          <vxe-table-column field="region" title="Region" width="200"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
-          <vxe-table-column field="updateTime" title="UpdateTime" width="200"></vxe-table-column>
-          <vxe-table-column field="createTime" title="CreateTime" width="200"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="age" title="Age" width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="200" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="200"></vxe-column>
+          <vxe-column field="region" title="Region" width="200"></vxe-column>
+          <vxe-column field="time" title="Time" width="200"></vxe-column>
+          <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
+          <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
+          <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>
         `,
         `
@@ -233,14 +233,14 @@ export default {
               }
               return list
             },
-            validEvent () {
-              this.$refs.xTable.validate((errMap) => {
-                if (errMap) {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                }
-              })
+            async validEvent () {
+              const $table = this.$refs.xTable
+              const errMap = await $table.validate().catch(errMap => errMap)
+              if (errMap) {
+                this.$XModal.message({ status: 'error', message: '校验不通过！' })
+              } else {
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              }
             },
             fullValidEvent () {
               this.$refs.xTable.fullValidate((errMap) => {
@@ -275,16 +275,16 @@ export default {
                 }
               })
             },
-            selectValidEvent () {
-              let selectRecords = this.$refs.xTable.getCheckboxRecords()
+            async selectValidEvent () {
+              const $table = this.$refs.xTable
+              const selectRecords = $table.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                this.$refs.xTable.validate(selectRecords, (errMap) => {
-                  if (errMap) {
-                    this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                  } else {
-                    this.$XModal.message({ status: 'success', message: '校验成功！' })
-                  }
-                })
+                const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+                if (errMap) {
+                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ status: 'success', message: '校验成功！' })
+                }
               } else {
                 this.$XModal.message({ status: 'warning', message: '未选中数据！' })
               }
@@ -349,14 +349,14 @@ export default {
       }
       return list
     },
-    validEvent () {
-      this.$refs.xTable.validate((errMap) => {
-        if (errMap) {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
-        } else {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        }
-      })
+    async validEvent () {
+      const $table = this.$refs.xTable
+      const errMap = await $table.validate().catch(errMap => errMap)
+      if (errMap) {
+        this.$XModal.message({ status: 'error', message: '校验不通过！' })
+      } else {
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      }
     },
     fullValidEvent () {
       this.$refs.xTable.fullValidate((errMap) => {
@@ -391,16 +391,16 @@ export default {
         }
       })
     },
-    selectValidEvent () {
-      const selectRecords = this.$refs.xTable.getCheckboxRecords()
+    async selectValidEvent () {
+      const $table = this.$refs.xTable
+      const selectRecords = $table.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        this.$refs.xTable.validate(selectRecords, (errMap) => {
-          if (errMap) {
-            this.$XModal.message({ status: 'error', message: '校验不通过！' })
-          } else {
-            this.$XModal.message({ status: 'success', message: '校验成功！' })
-          }
-        })
+        const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+        if (errMap) {
+          this.$XModal.message({ status: 'error', message: '校验不通过！' })
+        } else {
+          this.$XModal.message({ status: 'success', message: '校验成功！' })
+        }
       } else {
         this.$XModal.message({ status: 'warning', message: '未选中数据！' })
       }

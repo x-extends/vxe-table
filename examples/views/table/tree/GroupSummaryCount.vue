@@ -21,10 +21,10 @@
       :span-method="colspanMethod"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column field="name" title="名称" tree-node :formatter="formatName"></vxe-table-column>
-      <vxe-table-column field="level" title="级别"></vxe-table-column>
-      <vxe-table-column field="age" title="年龄"></vxe-table-column>
-      <vxe-table-column field="rate" title="分数"></vxe-table-column>
+      <vxe-column field="name" title="名称" tree-node :formatter="formatName"></vxe-column>
+      <vxe-column field="level" title="级别"></vxe-column>
+      <vxe-column field="age" title="年龄"></vxe-column>
+      <vxe-column field="rate" title="分数"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -68,10 +68,10 @@ export default {
           :span-method="colspanMethod"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column field="name" title="名称" tree-node :formatter="formatName"></vxe-table-column>
-          <vxe-table-column field="level" title="级别"></vxe-table-column>
-          <vxe-table-column field="age" title="年龄"></vxe-table-column>
-          <vxe-table-column field="rate" title="分数"></vxe-table-column>
+          <vxe-column field="name" title="名称" tree-node :formatter="formatName"></vxe-column>
+          <vxe-column field="level" title="级别"></vxe-column>
+          <vxe-column field="age" title="年龄"></vxe-column>
+          <vxe-column field="rate" title="分数"></vxe-column>
         </vxe-table>
         `,
         `

@@ -8,17 +8,17 @@
       show-overflow
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
-      <vxe-table-column
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-column>
+      <vxe-column
         field="nickname"
         title="Nickname"
         :filters="[{ data: '' }]"
         :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
-        :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, events: {change: sexChangeEvent}}"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, events: {change: dateChangeEvent}}"></vxe-table-column>
+        :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, events: {change: sexChangeEvent}}"></vxe-column>
+      <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, events: {change: dateChangeEvent}}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -54,17 +54,17 @@ export default {
           show-overflow
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-table-column>
-          <vxe-table-column
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input', events: {input: nameChangeEvent}}"></vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{name: '$input', events: {input: roleChangeEvent}}"></vxe-column>
+          <vxe-column
             field="nickname"
             title="Nickname"
             :filters="[{ data: '' }]"
             :filter-render="{name: 'input', attrs: {placeholder: '按回车确认筛选'}, events: {keyup: enterFilterEvent}}"
-            :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, events: {change: sexChangeEvent}}"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, events: {change: dateChangeEvent}}"></vxe-table-column>
+            :edit-render="{name: 'input', events: {focus: roleFocusEvent}}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList, events: {change: sexChangeEvent}}"></vxe-column>
+          <vxe-column field="date12" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, events: {change: dateChangeEvent}}"></vxe-column>
         </vxe-table>
         `,
         `

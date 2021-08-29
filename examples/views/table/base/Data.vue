@@ -4,12 +4,12 @@
 
     <vxe-table
       :data="tableData1">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="content" title="Html" type="html" show-overflow></vxe-table-column>
-      <vxe-table-column field="role" title="Role" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="content" title="Html" type="html" show-overflow></vxe-column>
+      <vxe-column field="role" title="Role" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -23,12 +23,12 @@
 
     <vxe-table
       :data="tableData2">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="userInfo.name" title="Name"></vxe-table-column>
-      <vxe-table-column field="other[0].sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="userInfo.age" title="Age"></vxe-table-column>
-      <vxe-table-column field="other[1].more.content" title="Html" type="html" show-overflow></vxe-table-column>
-      <vxe-table-column field="role" title="Role" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="userInfo.name" title="Name"></vxe-column>
+      <vxe-column field="other[0].sex" title="Sex"></vxe-column>
+      <vxe-column field="userInfo.age" title="Age"></vxe-column>
+      <vxe-column field="other[1].more.content" title="Html" type="html" show-overflow></vxe-column>
+      <vxe-column field="role" title="Role" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -43,12 +43,12 @@
     <vxe-table
       row-id="0"
       :data="tableData3">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="1" title="Name"></vxe-table-column>
-      <vxe-table-column field="2" title="Sex"></vxe-table-column>
-      <vxe-table-column field="3" title="Age"></vxe-table-column>
-      <vxe-table-column field="4" title="Html" type="html" show-overflow></vxe-table-column>
-      <vxe-table-column field="5" title="Role" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="1" title="Name"></vxe-column>
+      <vxe-column field="2" title="Sex"></vxe-column>
+      <vxe-column field="3" title="Age"></vxe-column>
+      <vxe-column field="4" title="Html" type="html" show-overflow></vxe-column>
+      <vxe-column field="5" title="Role" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -114,12 +114,12 @@ export default {
         `
         <vxe-table
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="content" title="Html" type="html" show-overflow></vxe-table-column>
-          <vxe-table-column field="role" title="Role" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="content" title="Html" type="html" show-overflow></vxe-column>
+          <vxe-column field="role" title="Role" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -139,12 +139,12 @@ export default {
         `
         <vxe-table
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="userInfo.name" title="Name"></vxe-table-column>
-          <vxe-table-column field="other[0].sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="userInfo.age" title="Age"></vxe-table-column>
-          <vxe-table-column field="other[1].more.content" title="Html" type="html" show-overflow></vxe-table-column>
-          <vxe-table-column field="role" title="Role" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="userInfo.name" title="Name"></vxe-column>
+          <vxe-column field="other[0].sex" title="Sex"></vxe-column>
+          <vxe-column field="userInfo.age" title="Age"></vxe-column>
+          <vxe-column field="other[1].more.content" title="Html" type="html" show-overflow></vxe-column>
+          <vxe-column field="role" title="Role" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -193,12 +193,12 @@ export default {
         <vxe-table
           row-id="0"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="1" title="Name"></vxe-table-column>
-          <vxe-table-column field="2" title="Sex"></vxe-table-column>
-          <vxe-table-column field="3" title="Age"></vxe-table-column>
-          <vxe-table-column field="4" title="Html" type="html" show-overflow></vxe-table-column>
-          <vxe-table-column field="5" title="Role" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="1" title="Name"></vxe-column>
+          <vxe-column field="2" title="Sex"></vxe-column>
+          <vxe-column field="3" title="Age"></vxe-column>
+          <vxe-column field="4" title="Html" type="html" show-overflow></vxe-column>
+          <vxe-column field="5" title="Role" show-overflow></vxe-column>
         </vxe-table>
         `,
         `

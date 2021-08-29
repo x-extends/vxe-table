@@ -9,17 +9,17 @@
       highlight-current-row
       height="500"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
-      <vxe-table-column title="操作" width="100" show-overflow>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
+      <vxe-column title="操作" width="100" show-overflow>
         <template #default="{ row }">
           <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
           <vxe-button type="text" icon="fa fa-trash-o"></vxe-button>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>
@@ -100,17 +100,17 @@ export default {
           highlight-current-row
           height="500"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
-          <vxe-table-column title="操作" width="100" show-overflow>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
+          <vxe-column title="操作" width="100" show-overflow>
             <template #default="{ row }">
               <vxe-button type="text" icon="fa fa-edit" @click="editEvent(row)"></vxe-button>
               <vxe-button type="text" icon="fa fa-trash-o"></vxe-button>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
 
         <vxe-modal ref="xModal" v-model="showEdit" title="编辑&保存" width="800" resize destroy-on-close>

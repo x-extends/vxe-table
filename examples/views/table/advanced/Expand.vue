@@ -23,15 +23,15 @@
       auto-resize
       :data="tableData"
       @toggle-row-expand="toggleExpandChangeEvent">
-      <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>
-      <vxe-table-column type="expand" width="80" :fixed="expandFixed">
+      <vxe-column type="seq" width="60" :fixed="seqFixed"></vxe-column>
+      <vxe-column type="expand" width="80" :fixed="expandFixed">
         <template #content="{ row, rowIndex }">
           <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="otherList">
-              <vxe-table-column field="role" title="Role"></vxe-table-column>
-              <vxe-table-column field="address" title="Address"></vxe-table-column>
+              <vxe-column field="role" title="Role"></vxe-column>
+              <vxe-column field="address" title="Address"></vxe-column>
             </vxe-table>
           </div>
           <div v-else class="expand-wrapper">
@@ -55,10 +55,10 @@
             </ul>
           </div>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="400"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="400" :fixed="ageFixed"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name" width="400"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="400"></vxe-column>
+      <vxe-column field="age" title="Age" width="400" :fixed="ageFixed"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -76,15 +76,15 @@
       row-id="id"
       :expand-config="{expandRowKeys: ['10003']}"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="60">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="expand" width="60">
         <template #content="{ row, rowIndex }">
           <div v-if="rowIndex === 1" class="expand-wrapper">
             <vxe-table
               border
               :data="tableData">
-              <vxe-table-column field="role" title="Role"></vxe-table-column>
-              <vxe-table-column field="age" title="Age"></vxe-table-column>
+              <vxe-column field="role" title="Role"></vxe-column>
+              <vxe-column field="age" title="Age"></vxe-column>
             </vxe-table>
           </div>
           <div v-else class="expand-wrapper">
@@ -108,10 +108,10 @@
             </ul>
           </div>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -131,8 +131,8 @@
       border
       :data="tableData"
       :expand-config="{labelField: 'name', expandAll: true}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" title="Name">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="expand" title="Name">
         <template #content="{ row }">
           <ul class="expand-wrapper">
             <li>
@@ -153,9 +153,9 @@
             </li>
           </ul>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -207,15 +207,15 @@ export default {
           auto-resize
           :data="tableData"
           @toggle-row-expand="toggleExpandChangeEvent">
-          <vxe-table-column type="seq" width="60" :fixed="seqFixed"></vxe-table-column>
-          <vxe-table-column type="expand" width="80" :fixed="expandFixed">
+          <vxe-column type="seq" width="60" :fixed="seqFixed"></vxe-column>
+          <vxe-column type="expand" width="80" :fixed="expandFixed">
             <template #content="{ row, rowIndex }">
               <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="otherList">
-                  <vxe-table-column field="role" title="Role"></vxe-table-column>
-                  <vxe-table-column field="address" title="Address"></vxe-table-column>
+                  <vxe-column field="role" title="Role"></vxe-column>
+                  <vxe-column field="address" title="Address"></vxe-column>
                 </vxe-table>
               </div>
               <div v-else class="expand-wrapper">
@@ -239,10 +239,10 @@ export default {
                 </ul>
               </div>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="400"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="400"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="400" :fixed="ageFixed"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name" width="400"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="400"></vxe-column>
+          <vxe-column field="age" title="Age" width="400" :fixed="ageFixed"></vxe-column>
         </vxe-table>
         `,
         `
@@ -292,15 +292,15 @@ export default {
           row-id="id"
           :expand-config="{expandRowKeys: ['10003']}"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="60">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="expand" width="60">
             <template #content="{ row, rowIndex }">
               <div v-if="rowIndex === 1" class="expand-wrapper">
                 <vxe-table
                   border
                   :data="tableData">
-                  <vxe-table-column field="role" title="Role"></vxe-table-column>
-                  <vxe-table-column field="age" title="Age"></vxe-table-column>
+                  <vxe-column field="role" title="Role"></vxe-column>
+                  <vxe-column field="age" title="Age"></vxe-column>
                 </vxe-table>
               </div>
               <div v-else class="expand-wrapper">
@@ -324,10 +324,10 @@ export default {
                 </ul>
               </div>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `
@@ -356,8 +356,8 @@ export default {
           border
           :data="tableData"
           :expand-config="{labelField: 'name', expandAll: true}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" title="Name">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="expand" title="Name">
             <template #content="{ row }">
               <ul class="expand-wrapper">
                 <li>
@@ -378,9 +378,9 @@ export default {
                 </li>
               </ul>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `

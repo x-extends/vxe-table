@@ -11,17 +11,17 @@
       :loading="loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="checkbox" title="ID" width="140"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :filters="sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex" :filters="sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
+      <vxe-column
         field="age"
         title="Age"
         sortable
         :filters="[{label: '大于16岁', value: 16}, {label: '大于26岁', value: 26}, {label: '大于30岁', value: 30}]"
-        :filter-method="filterAgeMethod"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        :filter-method="filterAgeMethod"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -54,17 +54,17 @@ export default {
           :loading="loading"
           :checkbox-config="{labelField: 'id', highlight: true, range: true}"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="checkbox" title="ID" width="140"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :filters="sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex" :filters="sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
+          <vxe-column
             field="age"
             title="Age"
             sortable
             :filters="[{label: '大于16岁', value: 16}, {label: '大于26岁', value: 26}, {label: '大于30岁', value: 30}]"
-            :filter-method="filterAgeMethod"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+            :filter-method="filterAgeMethod"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `

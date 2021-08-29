@@ -10,11 +10,11 @@
       height="500"
       :data="tableData"
       @cell-click="cellClickEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <vxe-modal v-model="showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
@@ -28,8 +28,8 @@
           :show-header="false"
           :sync-resize="showDetails"
           :data="detailData">
-          <vxe-table-column field="label" width="40%"></vxe-table-column>
-          <vxe-table-column field="value"></vxe-table-column>
+          <vxe-column field="label" width="40%"></vxe-column>
+          <vxe-column field="value"></vxe-column>
         </vxe-table>
       </template>
     </vxe-modal>
@@ -71,11 +71,11 @@ export default {
           height="500"
           :data="tableData"
           @cell-click="cellClickEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
 
         <vxe-modal v-model="showDetails" title="查看详情" width="600" height="400" :mask="false" :lock-view="false" resize>
@@ -89,8 +89,8 @@ export default {
               :show-header="false"
               :sync-resize="showDetails"
               :data="detailData">
-              <vxe-table-column field="label" width="40%"></vxe-table-column>
-              <vxe-table-column field="value"></vxe-table-column>
+              <vxe-column field="label" width="40%"></vxe-column>
+              <vxe-column field="value"></vxe-column>
             </vxe-table>
           </template>
         </vxe-modal>

@@ -18,12 +18,12 @@
       :loading="loading"
       :export-config="tableExport"
       :data="tableData">
-      <vxe-table-column field="orderNo" title="Order NO"></vxe-table-column>
-      <vxe-table-column field="productNo" title="Product NO"></vxe-table-column>
-      <vxe-table-column field="productName" title="Product name"></vxe-table-column>
-      <vxe-table-column field="realNum" title="Real quantity"></vxe-table-column>
-      <vxe-table-column field="plannedNum" title="Planned quantity"></vxe-table-column>
-      <vxe-table-column field="describe" title="Describe"></vxe-table-column>
+      <vxe-column field="orderNo" title="Order NO"></vxe-column>
+      <vxe-column field="productNo" title="Product NO"></vxe-column>
+      <vxe-column field="productName" title="Product name"></vxe-column>
+      <vxe-column field="realNum" title="Real quantity"></vxe-column>
+      <vxe-column field="plannedNum" title="Planned quantity"></vxe-column>
+      <vxe-column field="describe" title="Describe"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -62,12 +62,12 @@ export default {
           :loading="loading"
           :export-config="tableExport"
           :data="tableData">
-          <vxe-table-column field="orderNo" title="Order NO"></vxe-table-column>
-          <vxe-table-column field="productNo" title="Product NO"></vxe-table-column>
-          <vxe-table-column field="productName" title="Product name"></vxe-table-column>
-          <vxe-table-column field="realNum" title="Real quantity"></vxe-table-column>
-          <vxe-table-column field="plannedNum" title="Planned quantity"></vxe-table-column>
-          <vxe-table-column field="describe" title="Describe"></vxe-table-column>
+          <vxe-column field="orderNo" title="Order NO"></vxe-column>
+          <vxe-column field="productNo" title="Product NO"></vxe-column>
+          <vxe-column field="productName" title="Product name"></vxe-column>
+          <vxe-column field="realNum" title="Real quantity"></vxe-column>
+          <vxe-column field="plannedNum" title="Planned quantity"></vxe-column>
+          <vxe-column field="describe" title="Describe"></vxe-column>
         </vxe-table>
         `,
         `

@@ -13,11 +13,11 @@
       ref="xTable1"
       height="300"
       :sort-config="{trigger: 'cell'}">
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -44,34 +44,34 @@
       :footer-method="footerMethod"
       :scroll-x="{gt: 10}"
       :scroll-y="{gt: 100}">
-      <vxe-table-column type="seq" width="100"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
-      <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
-      <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
-      <vxe-table-column field="attr19" title="Name" width="150" sortable></vxe-table-column>
-      <vxe-table-column field="attr18" title="Sex" width="100"></vxe-table-column>
-      <vxe-table-column field="attr17" title="Age" width="100"></vxe-table-column>
-      <vxe-table-column field="date3" title="Date" width="200" show-overflow></vxe-table-column>
-      <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
-      <vxe-table-column field="attr16" title="Age" width="100"></vxe-table-column>
-      <vxe-table-column field="attr15" title="Num2" width="100"></vxe-table-column>
-      <vxe-table-column field="attr14" title="Sex" width="100"></vxe-table-column>
-      <vxe-table-column field="attr13" title="Name" width="150" sortable></vxe-table-column>
-      <vxe-table-column field="attr12" title="Sex" width="100"></vxe-table-column>
-      <vxe-table-column field="attr11" title="Age" width="100"></vxe-table-column>
-      <vxe-table-column field="attr1" title="Num" width="100"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
-      <vxe-table-column field="attr2" title="Role" width="100"></vxe-table-column>
-      <vxe-table-column field="attr3" title="Age" width="100"></vxe-table-column>
-      <vxe-table-column field="attr4" title="Num2" width="100"></vxe-table-column>
-      <vxe-table-column field="attr5" title="Rate" width="100"></vxe-table-column>
-      <vxe-table-column field="attr6" title="Name" width="150" sortable></vxe-table-column>
-      <vxe-table-column field="attr7" title="Date" width="200" show-overflow></vxe-table-column>
-      <vxe-table-column field="attr8" title="Role" width="100"></vxe-table-column>
-      <vxe-table-column field="attr9" title="Num" width="100"></vxe-table-column>
-      <vxe-table-column field="attr10" title="Address" width="200" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="100"></vxe-column>
+      <vxe-column field="name" title="Name" width="150" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex" width="100"></vxe-column>
+      <vxe-column field="age" title="Age" width="100"></vxe-column>
+      <vxe-column field="num" title="Num" width="100"></vxe-column>
+      <vxe-column field="num2" title="Num2" width="100"></vxe-column>
+      <vxe-column field="attr19" title="Name" width="150" sortable></vxe-column>
+      <vxe-column field="attr18" title="Sex" width="100"></vxe-column>
+      <vxe-column field="attr17" title="Age" width="100"></vxe-column>
+      <vxe-column field="date3" title="Date" width="200" show-overflow></vxe-column>
+      <vxe-column field="role" title="Role" width="100"></vxe-column>
+      <vxe-column field="attr16" title="Age" width="100"></vxe-column>
+      <vxe-column field="attr15" title="Num2" width="100"></vxe-column>
+      <vxe-column field="attr14" title="Sex" width="100"></vxe-column>
+      <vxe-column field="attr13" title="Name" width="150" sortable></vxe-column>
+      <vxe-column field="attr12" title="Sex" width="100"></vxe-column>
+      <vxe-column field="attr11" title="Age" width="100"></vxe-column>
+      <vxe-column field="attr1" title="Num" width="100"></vxe-column>
+      <vxe-column field="address" title="Address" width="200" show-overflow></vxe-column>
+      <vxe-column field="attr2" title="Role" width="100"></vxe-column>
+      <vxe-column field="attr3" title="Age" width="100"></vxe-column>
+      <vxe-column field="attr4" title="Num2" width="100"></vxe-column>
+      <vxe-column field="attr5" title="Rate" width="100"></vxe-column>
+      <vxe-column field="attr6" title="Name" width="150" sortable></vxe-column>
+      <vxe-column field="attr7" title="Date" width="200" show-overflow></vxe-column>
+      <vxe-column field="attr8" title="Role" width="100"></vxe-column>
+      <vxe-column field="attr9" title="Num" width="100"></vxe-column>
+      <vxe-column field="attr10" title="Address" width="200" show-overflow></vxe-column>
     </vxe-table>
 
     <pre>
@@ -112,11 +112,11 @@ export default {
           ref="xTable1"
           height="300"
           :sort-config="{trigger: 'cell'}">
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -168,34 +168,34 @@ export default {
           :footer-method="footerMethod"
           :scroll-x="{gt: 10}"
           :scroll-y="{gt: 100}">
-          <vxe-table-column type="seq" width="100"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="150" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="100"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="100"></vxe-table-column>
-          <vxe-table-column field="num" title="Num" width="100"></vxe-table-column>
-          <vxe-table-column field="num2" title="Num2" width="100"></vxe-table-column>
-          <vxe-table-column field="attr19" title="Name" width="150" sortable></vxe-table-column>
-          <vxe-table-column field="attr18" title="Sex" width="100"></vxe-table-column>
-          <vxe-table-column field="attr17" title="Age" width="100"></vxe-table-column>
-          <vxe-table-column field="date3" title="Date" width="200" show-overflow></vxe-table-column>
-          <vxe-table-column field="role" title="Role" width="100"></vxe-table-column>
-          <vxe-table-column field="attr16" title="Age" width="100"></vxe-table-column>
-          <vxe-table-column field="attr15" title="Num2" width="100"></vxe-table-column>
-          <vxe-table-column field="attr14" title="Sex" width="100"></vxe-table-column>
-          <vxe-table-column field="attr13" title="Name" width="150" sortable></vxe-table-column>
-          <vxe-table-column field="attr12" title="Sex" width="100"></vxe-table-column>
-          <vxe-table-column field="attr11" title="Age" width="100"></vxe-table-column>
-          <vxe-table-column field="attr1" title="Num" width="100"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="200" show-overflow></vxe-table-column>
-          <vxe-table-column field="attr2" title="Role" width="100"></vxe-table-column>
-          <vxe-table-column field="attr3" title="Age" width="100"></vxe-table-column>
-          <vxe-table-column field="attr4" title="Num2" width="100"></vxe-table-column>
-          <vxe-table-column field="attr5" title="Rate" width="100"></vxe-table-column>
-          <vxe-table-column field="attr6" title="Name" width="150" sortable></vxe-table-column>
-          <vxe-table-column field="attr7" title="Date" width="200" show-overflow></vxe-table-column>
-          <vxe-table-column field="attr8" title="Role" width="100"></vxe-table-column>
-          <vxe-table-column field="attr9" title="Num" width="100"></vxe-table-column>
-          <vxe-table-column field="attr10" title="Address" width="200" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="100"></vxe-column>
+          <vxe-column field="name" title="Name" width="150" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex" width="100"></vxe-column>
+          <vxe-column field="age" title="Age" width="100"></vxe-column>
+          <vxe-column field="num" title="Num" width="100"></vxe-column>
+          <vxe-column field="num2" title="Num2" width="100"></vxe-column>
+          <vxe-column field="attr19" title="Name" width="150" sortable></vxe-column>
+          <vxe-column field="attr18" title="Sex" width="100"></vxe-column>
+          <vxe-column field="attr17" title="Age" width="100"></vxe-column>
+          <vxe-column field="date3" title="Date" width="200" show-overflow></vxe-column>
+          <vxe-column field="role" title="Role" width="100"></vxe-column>
+          <vxe-column field="attr16" title="Age" width="100"></vxe-column>
+          <vxe-column field="attr15" title="Num2" width="100"></vxe-column>
+          <vxe-column field="attr14" title="Sex" width="100"></vxe-column>
+          <vxe-column field="attr13" title="Name" width="150" sortable></vxe-column>
+          <vxe-column field="attr12" title="Sex" width="100"></vxe-column>
+          <vxe-column field="attr11" title="Age" width="100"></vxe-column>
+          <vxe-column field="attr1" title="Num" width="100"></vxe-column>
+          <vxe-column field="address" title="Address" width="200" show-overflow></vxe-column>
+          <vxe-column field="attr2" title="Role" width="100"></vxe-column>
+          <vxe-column field="attr3" title="Age" width="100"></vxe-column>
+          <vxe-column field="attr4" title="Num2" width="100"></vxe-column>
+          <vxe-column field="attr5" title="Rate" width="100"></vxe-column>
+          <vxe-column field="attr6" title="Name" width="150" sortable></vxe-column>
+          <vxe-column field="attr7" title="Date" width="200" show-overflow></vxe-column>
+          <vxe-column field="attr8" title="Role" width="100"></vxe-column>
+          <vxe-column field="attr9" title="Num" width="100"></vxe-column>
+          <vxe-column field="attr10" title="Address" width="200" show-overflow></vxe-column>
         </vxe-table>
         `,
         `

@@ -10,21 +10,21 @@
       height="500"
       :scroll-y="{gt: 0, rHeight: 120}"
       :loading="loading">
-      <vxe-table-column type="seq" title="序号" width="100"></vxe-table-column>
-      <vxe-table-column title="图片" width="140" align="center">
+      <vxe-column type="seq" title="序号" width="100"></vxe-column>
+      <vxe-column title="图片" width="140" align="center">
         <template #default>
           <img src="/vxe-table/static/other/img1.gif" style="width: 100px;">
         </template>
-      </vxe-table-column>
-      <vxe-table-column title="基本信息">
+      </vxe-column>
+      <vxe-column title="基本信息">
         <template #default="{ row }">
           <div class="label-ellipsis">{{ row.name }}</div>
           <div class="label-ellipsis">{{ row.num }}</div>
           <div class="label-ellipsis">{{ row.address }}</div>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
-      <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="num" title="Num" width="200"></vxe-column>
+      <vxe-column field="time" title="Time" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -52,21 +52,21 @@ export default {
           height="500"
           :scroll-y="{gt: 0, rHeight: 120}"
           :loading="loading">
-          <vxe-table-column type="seq" title="序号" width="100"></vxe-table-column>
-          <vxe-table-column title="图片" width="120" align="center">
+          <vxe-column type="seq" title="序号" width="100"></vxe-column>
+          <vxe-column title="图片" width="120" align="center">
             <template #default>
               <img src="/vxe-table/static/other/img1.gif" style="width: 100px;">
             </template>
-          </vxe-table-column>
-          <vxe-table-column title="基本信息">
+          </vxe-column>
+          <vxe-column title="基本信息">
             <template #default="{ row }">
               <div class="label-ellipsis">{{ row.name }}</div>
               <div class="label-ellipsis">{{ row.num }}</div>
               <div class="label-ellipsis">{{ row.address }}</div>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
-          <vxe-table-column field="time" title="Time" width="200"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="num" title="Num" width="200"></vxe-column>
+          <vxe-column field="time" title="Time" width="200"></vxe-column>
         </vxe-table>
         `,
         `

@@ -43,9 +43,9 @@
             <vxe-table
               auto-resize
               :data="tableData3">
-              <vxe-table-column field="name" title="Name"></vxe-table-column>
-              <vxe-table-column field="role" title="Role"></vxe-table-column>
-              <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+              <vxe-column field="name" title="Name"></vxe-column>
+              <vxe-column field="role" title="Role"></vxe-column>
+              <vxe-column field="sex" title="Sex"></vxe-column>
             </vxe-table>
           </div>
         </template>
@@ -162,9 +162,9 @@ export default {
                 <vxe-table
                   auto-resize
                   :data="tableData3">
-                  <vxe-table-column field="name" title="Name"></vxe-table-column>
-                  <vxe-table-column field="role" title="Role"></vxe-table-column>
-                  <vxe-table-column field="sex" title="Sex"></vxe-table-column>
+                  <vxe-column field="name" title="Name"></vxe-column>
+                  <vxe-column field="role" title="Role"></vxe-column>
+                  <vxe-column field="sex" title="Sex"></vxe-column>
                 </vxe-table>
               </div>
             </template>

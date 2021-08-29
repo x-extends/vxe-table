@@ -398,7 +398,7 @@ export default {
     submitEvent (evnt) {
       evnt.preventDefault()
       if (!this.preventSubmit) {
-        this.beginValidate().then(() => {
+        this.beginValidate(this.getItems()).then(() => {
           this.$emit('submit', { data: this.data, $form: this, $event: evnt })
         }).catch(errMap => {
           this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt })
@@ -500,14 +500,16 @@ export default {
       return this.$nextTick()
     },
     validate (callback) {
-      return this.beginValidate('', callback)
+      return this.beginValidate(this.getItems(), '', callback)
     },
-    beginValidate (type, callback) {
+    validateField (field, callback) {
+      return this.beginValidate(this.getItems().filter(item => item.field === field), '', callback)
+    },
+    beginValidate (itemList, type, callback) {
       const { data, rules: formRules, validOpts } = this
       const validRest = {}
       const validFields = []
       const itemValids = []
-      const itemList = this.getItems()
       this.clearValidate()
       clearTimeout(this.showErrTime)
       if (data && formRules) {

@@ -16,8 +16,8 @@
       ref="xTable"
       :data="tableData"
       :expand-config="{lazy: true, loadMethod: loadContentMethod}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="80">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="expand" width="80">
         <template #content="{ row }">
           <ul>
             <li v-for="(item, index) in row.detailList" :key="index">
@@ -27,10 +27,10 @@
             </li>
           </ul>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,15 +46,15 @@
       border
       :data="tableData2"
       :expand-config="{accordion: true, lazy: true, loadMethod: loadContentMethod2}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column type="expand" width="80">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column type="expand" width="80">
         <template #content="{ row }">
           <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -100,8 +100,8 @@ export default {
           ref="xTable"
           :data="tableData"
           :expand-config="{lazy: true, loadMethod: loadContentMethod}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="80">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="expand" width="80">
             <template #content="{ row }">
               <ul>
                 <li v-for="(item, index) in row.detailList" :key="index">
@@ -111,10 +111,10 @@ export default {
                 </li>
               </ul>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `
@@ -156,15 +156,15 @@ export default {
           border
           :data="tableData"
           :expand-config="{accordion: true, lazy: true, loadMethod: loadContentMethod}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column type="expand" width="80">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column type="expand" width="80">
             <template #content="{ row }">
               <vxe-grid :columns="row.childCols" :data="row.childData"></vxe-grid>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `

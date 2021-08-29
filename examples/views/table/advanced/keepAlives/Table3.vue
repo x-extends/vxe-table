@@ -7,12 +7,12 @@
       height="400"
       :loading="loading"
       :data="tableData">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="nickname" title="nickname"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="amount" title="Amount"></vxe-table-column>
-      <vxe-table-column field="address" title="Address"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="nickname" title="nickname"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="amount" title="Amount"></vxe-column>
+      <vxe-column field="address" title="Address"></vxe-column>
     </vxe-table>
   </div>
 </template>

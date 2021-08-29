@@ -12,8 +12,8 @@
       :data="tableData"
       :scroll-x="{enabled: false}"
       :scroll-y="{enabled: false}">
-      <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="Name">
+      <vxe-column type="seq" width="80" fixed="left"></vxe-column>
+      <vxe-column field="name" title="Name">
         <template #default="{ row, rowIndex }">
           <template v-if="rowIndex % 4 === 0">
             <div>{{ row.name }}</div>
@@ -27,9 +27,9 @@
             <span>{{ row.name }}</span>
           </template>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age">
+      </vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age">
         <template #default="{ row, rowIndex }">
           <template v-if="rowIndex % 5 === 0">
             <img src="/vxe-table/static/other/img1.gif" style="width: 60px;">
@@ -38,8 +38,8 @@
             <span>{{ row.age }}</span>
           </template>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -74,8 +74,8 @@ export default {
           :data="tableData"
           :scroll-x="{enabled: false}"
           :scroll-y="{enabled: false}">
-          <vxe-table-column type="seq" width="80" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name">
+          <vxe-column type="seq" width="80" fixed="left"></vxe-column>
+          <vxe-column field="name" title="Name">
             <template #default="{ row, rowIndex }">
               <template v-if="rowIndex % 4 === 0">
                 <div>{{ row.name }}</div>
@@ -89,9 +89,9 @@ export default {
                 <span>{{ row.name }}</span>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age">
+          </vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age">
             <template #default="{ row, rowIndex }">
               <template v-if="rowIndex % 5 === 0">
                 <img src="/vxe-table/static/other/img1.gif" style="width: 60px;">
@@ -100,8 +100,8 @@ export default {
                 <span>{{ row.age }}</span>
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
         </vxe-table>
         `,
         `

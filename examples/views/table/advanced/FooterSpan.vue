@@ -12,11 +12,11 @@
       :merge-footer-items="mergeFooterItems"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" footer-align="center"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role" sortable></vxe-column>
+      <vxe-column field="rate" title="Rate" footer-align="center"></vxe-column>
+      <vxe-column field="age" title="Age" footer-align="center"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -35,11 +35,11 @@
       :footer-span-method="footerColspanMethod"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" footer-align="center"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role" sortable></vxe-column>
+      <vxe-column field="rate" title="Rate" footer-align="center"></vxe-column>
+      <vxe-column field="age" title="Age" footer-align="center"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -58,11 +58,11 @@
       :footer-span-method="footerRowspanMethod"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" footer-align="center"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="role" title="Role" sortable></vxe-column>
+      <vxe-column field="rate" title="Rate" footer-align="center"></vxe-column>
+      <vxe-column field="age" title="Age" footer-align="center"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -100,11 +100,11 @@ export default {
           :merge-footer-items="mergeFooterItems"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" footer-align="center"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role" sortable></vxe-column>
+          <vxe-column field="rate" title="Rate" footer-align="center"></vxe-column>
+          <vxe-column field="age" title="Age" footer-align="center"></vxe-column>
         </vxe-table>
         `,
         `
@@ -181,11 +181,11 @@ export default {
           :footer-span-method="footerColspanMethod"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" footer-align="center"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role" sortable></vxe-column>
+          <vxe-column field="rate" title="Rate" footer-align="center"></vxe-column>
+          <vxe-column field="age" title="Age" footer-align="center"></vxe-column>
         </vxe-table>
         `,
         `
@@ -274,11 +274,11 @@ export default {
           :footer-span-method="footerRowspanMethod"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="role" title="Role" sortable></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" footer-align="center"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" footer-align="center"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="role" title="Role" sortable></vxe-column>
+          <vxe-column field="rate" title="Rate" footer-align="center"></vxe-column>
+          <vxe-column field="age" title="Age" footer-align="center"></vxe-column>
         </vxe-table>
         `,
         `

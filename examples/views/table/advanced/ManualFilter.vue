@@ -23,14 +23,14 @@
       height="400"
       :loading="loading"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column
         field="name"
         title="Name"
         sortable
         :filters="[{ label: '包含 6', value: '6' }, { label: '包含 4', value: '4' }]"
-        :filter-method="filterNameMethod"></vxe-table-column>
-      <vxe-table-column
+        :filter-method="filterNameMethod"></vxe-column>
+      <vxe-column
         field="role"
         title="Role"
         sortable
@@ -41,21 +41,21 @@
             <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
           </select>
         </template>
-      </vxe-table-column>
-      <vxe-table-column
+      </vxe-column>
+      <vxe-column
         field="sex"
         title="Sex"
         sortable
         :filter-multiple="false"
-        :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
+        :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-column>
+      <vxe-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
         <template #filter="{ $panel, column }">
           <template v-for="(option, index) in column.filters">
             <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
           </template>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="amount" title="Amount" sortable></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="amount" title="Amount" sortable></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -96,14 +96,14 @@ export default {
           height="400"
           :loading="loading"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column
             field="name"
             title="Name"
             sortable
             :filters="[{ label: '包含 6', value: '6' }, { label: '包含 4', value: '4' }]"
-            :filter-method="filterNameMethod"></vxe-table-column>
-          <vxe-table-column
+            :filter-method="filterNameMethod"></vxe-column>
+          <vxe-column
             field="role"
             title="Role"
             sortable
@@ -114,21 +114,21 @@ export default {
                 <option v-for="(label, cIndex) in roleList" :key="cIndex" :value="label">{{ label }}</option>
               </select>
             </template>
-          </vxe-table-column>
-          <vxe-table-column
+          </vxe-column>
+          <vxe-column
             field="sex"
             title="Sex"
             sortable
             :filter-multiple="false"
-            :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
+            :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]"></vxe-column>
+          <vxe-column field="age" title="Age" :filters="[{ data: '' }]" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
             <template #filter="{ $panel, column }">
               <template v-for="(option, index) in column.filters">
                 <input class="my-input" type="type" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选">
               </template>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="amount" title="Amount" sortable></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="amount" title="Amount" sortable></vxe-column>
         </vxe-table>
         `,
         `

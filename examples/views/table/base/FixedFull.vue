@@ -8,17 +8,17 @@
       height="300"
       highlight-hover-row
       :data="tableData">
-      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-      <vxe-table-column title="操作" fixed="right" width="200">
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+      <vxe-column field="name" title="Name" width="300"></vxe-column>
+      <vxe-column field="role" title="Role" width="300"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="300"></vxe-column>
+      <vxe-column field="date" title="Date" width="300"></vxe-column>
+      <vxe-column title="操作" fixed="right" width="200">
         <template #default>
           <vxe-button type="text">按钮1</vxe-button>
           <vxe-button type="text">按钮2</vxe-button>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -46,17 +46,17 @@
       highlight-hover-row
       show-overflow
       :data="tableData">
-      <vxe-table-column type="seq" width="60" :fixed="colFixeds.col0"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300" :fixed="colFixeds.col1"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-table-column>
-      <vxe-table-column title="操作" width="200" :fixed="colFixeds.col5">
+      <vxe-column type="seq" width="60" :fixed="colFixeds.col0"></vxe-column>
+      <vxe-column field="name" title="Name" width="300" :fixed="colFixeds.col1"></vxe-column>
+      <vxe-column field="role" title="Role" width="300"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="300"></vxe-column>
+      <vxe-column field="date" title="Date" width="300" :fixed="colFixeds.col4"></vxe-column>
+      <vxe-column title="操作" width="200" :fixed="colFixeds.col5">
         <template #default>
           <vxe-button status="primary">按钮1</vxe-button>
           <vxe-button>按钮2</vxe-button>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -75,20 +75,20 @@
       height="400"
       :data="tableData">
       <vxe-table-colgroup title="基本信息" fixed="left">
-        <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-        <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
+        <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+        <vxe-column field="name" title="Name" fixed="left" width="180"></vxe-column>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="更多信息">
-        <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-        <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+        <vxe-column field="role" title="Role" width="300"></vxe-column>
+        <vxe-column field="age" title="Age" width="200"></vxe-column>
         <vxe-table-colgroup title="详细信息">
-          <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-          <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
+          <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+          <vxe-column field="num" title="Num" width="200"></vxe-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="额外信息" fixed="right">
-        <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
-        <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
+        <vxe-column field="date3" title="Date" fixed="right" width="140"></vxe-column>
+        <vxe-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -141,17 +141,17 @@ export default {
           height="300"
           highlight-hover-row
           :data="tableData">
-          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" width="300"></vxe-table-column>
-          <vxe-table-column title="操作" fixed="right" width="200">
+          <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+          <vxe-column field="name" title="Name" width="300"></vxe-column>
+          <vxe-column field="role" title="Role" width="300"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="300"></vxe-column>
+          <vxe-column field="date" title="Date" width="300"></vxe-column>
+          <vxe-column title="操作" fixed="right" width="200">
             <template #default>
               <vxe-button type="text">按钮1</vxe-button>
               <vxe-button type="text">按钮2</vxe-button>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -199,20 +199,20 @@ export default {
           height="400"
           :data="tableData">
           <vxe-table-colgroup title="基本信息" fixed="left">
-            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
+            <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+            <vxe-column field="name" title="Name" fixed="left" width="180"></vxe-column>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="更多信息">
-            <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-            <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
+            <vxe-column field="role" title="Role" width="300"></vxe-column>
+            <vxe-column field="age" title="Age" width="200"></vxe-column>
             <vxe-table-colgroup title="详细信息">
-              <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-              <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
+              <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+              <vxe-column field="num" title="Num" width="200"></vxe-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="额外信息" fixed="right">
-            <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
+            <vxe-column field="date3" title="Date" fixed="right" width="140"></vxe-column>
+            <vxe-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -267,22 +267,22 @@ export default {
           border
           height="400"
           :data="tableData">
-          <vxe-table-column title="基本信息" fixed="left">
-            <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-            <vxe-table-column field="name" title="Name" fixed="left" width="180"></vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="更多信息">
-            <vxe-table-column field="role" title="Role" width="300"></vxe-table-column>
-            <vxe-table-column field="age" title="Age" width="200"></vxe-table-column>
-            <vxe-table-column title="详细信息">
-              <vxe-table-column field="sex" title="Sex" width="200"></vxe-table-column>
-              <vxe-table-column field="num" title="Num" width="200"></vxe-table-column>
-            </vxe-table-column>
-          </vxe-table-column>
-          <vxe-table-column title="额外信息" fixed="right">
-            <vxe-table-column field="date3" title="Date" fixed="right" width="140"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-table-column>
-          </vxe-table-column>
+          <vxe-column title="基本信息" fixed="left">
+            <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+            <vxe-column field="name" title="Name" fixed="left" width="180"></vxe-column>
+          </vxe-column>
+          <vxe-column title="更多信息">
+            <vxe-column field="role" title="Role" width="300"></vxe-column>
+            <vxe-column field="age" title="Age" width="200"></vxe-column>
+            <vxe-column title="详细信息">
+              <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+              <vxe-column field="num" title="Num" width="200"></vxe-column>
+            </vxe-column>
+          </vxe-column>
+          <vxe-column title="额外信息" fixed="right">
+            <vxe-column field="date3" title="Date" fixed="right" width="140"></vxe-column>
+            <vxe-column field="address" title="Address" fixed="right" width="200" show-overflow></vxe-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

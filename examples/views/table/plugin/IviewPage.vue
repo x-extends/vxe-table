@@ -53,19 +53,19 @@
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       @edit-actived="editActivedEvent"
       @edit-closed="editClosedEvent">
-      <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-      <vxe-table-column field="name" title="Input" min-width="140" fixed="left" :edit-render="{name: 'Input'}"></vxe-table-column>
-      <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
-      <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="sexList" title="Select multiple" width="180" :edit-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-table-column>
-      <vxe-table-column field="state" title="Select" width="140" :edit-render="{name: 'Select', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
-      <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
-      <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-      <vxe-table-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-      <vxe-table-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-table-column>
+      <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+      <vxe-column field="name" title="Input" min-width="140" fixed="left" :edit-render="{name: 'Input'}"></vxe-column>
+      <vxe-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-column>
+      <vxe-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-column>
+      <vxe-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-column>
+      <vxe-column field="sexList" title="Select multiple" width="180" :edit-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-column>
+      <vxe-column field="state" title="Select" width="140" :edit-render="{name: 'Select', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-column>
+      <vxe-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-column>
+      <vxe-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-column>
+      <vxe-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-column>
+      <vxe-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-column>
+      <vxe-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-column>
     </vxe-table>
 
     <Page
@@ -226,19 +226,19 @@ export default {
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           @edit-actived="editActivedEvent"
           @edit-closed="editClosedEvent">
-          <vxe-table-column type="checkbox" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column type="seq" width="60" fixed="left"></vxe-table-column>
-          <vxe-table-column field="name" title="Input" min-width="140" fixed="left" :edit-render="{name: 'Input'}"></vxe-table-column>
-          <vxe-table-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-table-column>
-          <vxe-table-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="sexList" title="Select multiple" width="180" :edit-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-table-column>
-          <vxe-table-column field="state" title="Select" width="140" :edit-render="{name: 'Select', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-table-column>
-          <vxe-table-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-table-column>
-          <vxe-table-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-table-column>
-          <vxe-table-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-table-column>
-          <vxe-table-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-table-column>
+          <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+          <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+          <vxe-column field="name" title="Input" min-width="140" fixed="left" :edit-render="{name: 'Input'}"></vxe-column>
+          <vxe-column field="role" title="AutoComplete" min-width="160" :edit-render="{name: 'AutoComplete', props: {data: restaurants, filterMethod: roleFilterMethod}}"></vxe-column>
+          <vxe-column field="age" title="InputNumber" width="140" :edit-render="{name: 'InputNumber', props: {max: 35, min: 18}}"></vxe-column>
+          <vxe-column field="sex" title="Select" width="140" :edit-render="{name: 'Select', options: sexList}"></vxe-column>
+          <vxe-column field="sexList" title="Select multiple" width="180" :edit-render="{name: 'Select', options: sexList, props: {multiple: true}}"></vxe-column>
+          <vxe-column field="state" title="Select" width="140" :edit-render="{name: 'Select', options: stateOptions, props: {remote: true, filterable: true, loading: stateloading, remoteMethod: remoteStateMethod}}"></vxe-column>
+          <vxe-column field="region" title="Cascader" width="200" :edit-render="{name: 'Cascader', props: {data: regionList}}"> </vxe-column>
+          <vxe-column field="date" title="DatePicker" width="200" :edit-render="{name: 'DatePicker', props: {type: 'date', format: 'yyyy/MM/dd'}}"></vxe-column>
+          <vxe-column field="date6" title="TimePicker" width="200" :edit-render="{name: 'TimePicker', props: {type: 'time'}}"></vxe-column>
+          <vxe-column field="flag" title="iSwitch" width="100" :cell-render="{name: 'iSwitch'}"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="200" fixed="right" :cell-render="{name: 'Rate'}"></vxe-column>
         </vxe-table>
 
         <Page
@@ -435,14 +435,14 @@ export default {
                 this.$Message.info('数据未改动！')
               }
             },
-            vaildEvent () {
-              this.$refs.xTable.validate((errMap) => {
-                if (errMap) {
-                  this.$XModal.message({ status: 'error', message: '校验不通过！' })
-                } else {
-                  this.$XModal.message({ status: 'success', message: '校验成功！' })
-                }
-              })
+            async vaildEvent () {
+              const $table = this.$refs.xTable
+              const errMap = await $table.validate().catch(errMap => errMap)
+              if (errMap) {
+                this.$XModal.message({ status: 'error', message: '校验不通过！' })
+              } else {
+                this.$XModal.message({ status: 'success', message: '校验成功！' })
+              }
             },
             dropdownMenuEvent (name) {
               switch (name) {
@@ -578,14 +578,14 @@ export default {
         this.$Message.info('数据未改动！')
       }
     },
-    vaildEvent () {
-      this.$refs.xTable.validate((errMap) => {
-        if (errMap) {
-          this.$XModal.message({ status: 'error', message: '校验不通过！' })
-        } else {
-          this.$XModal.message({ status: 'success', message: '校验成功！' })
-        }
-      })
+    async vaildEvent () {
+      const $table = this.$refs.xTable
+      const errMap = await $table.validate().catch(errMap => errMap)
+      if (errMap) {
+        this.$XModal.message({ status: 'error', message: '校验不通过！' })
+      } else {
+        this.$XModal.message({ status: 'success', message: '校验成功！' })
+      }
     },
     dropdownMenuEvent (name) {
       switch (name) {

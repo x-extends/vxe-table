@@ -10,20 +10,20 @@
       resizable
       show-overflow
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :cell-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :cell-render="{name: '$select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :cell-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :cell-render="{name: '$select', options: sexList}"></vxe-column>
+      <vxe-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+      <vxe-column field="role" title="Role">
         <template #default="{ row }">
           <vxe-input type="text" v-model="row.role"></vxe-input>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="date3" title="Date">
+      </vxe-column>
+      <vxe-column field="date3" title="Date">
         <template #default="{ row }">
           <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -61,20 +61,20 @@ export default {
           resizable
           show-overflow
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :cell-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :cell-render="{name: '$select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :cell-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :cell-render="{name: '$select', options: sexList}"></vxe-column>
+          <vxe-column field="age" title="Age" :cell-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+          <vxe-column field="role" title="Role">
             <template #default="{ row }">
               <vxe-input type="text" v-model="row.role"></vxe-input>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="date3" title="Date">
+          </vxe-column>
+          <vxe-column field="date3" title="Date">
             <template #default="{ row }">
               <vxe-input type="date" v-model="row.date3" transfer></vxe-input>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

@@ -17,11 +17,11 @@
       show-overflow
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="简单输入框" :edit-render="{name: 'MyInput'}"></vxe-table-column>
-      <vxe-table-column field="role" title="下拉表格" :edit-render="{name: 'EditDownTable'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="弹窗表格" :edit-render="{name: 'EditPopupModal'}"></vxe-table-column>
-      <vxe-table-column field="address" title="复杂渲染" :edit-render="{name: 'EditDownModal'}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="简单输入框" :edit-render="{name: 'MyInput'}"></vxe-column>
+      <vxe-column field="role" title="下拉表格" :edit-render="{name: 'EditDownTable'}"></vxe-column>
+      <vxe-column field="sex" title="弹窗表格" :edit-render="{name: 'EditPopupModal'}"></vxe-column>
+      <vxe-column field="address" title="复杂渲染" :edit-render="{name: 'EditDownModal'}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -77,11 +77,11 @@ export default {
           show-overflow
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="简单输入框" :edit-render="{name: 'MyInput'}"></vxe-table-column>
-          <vxe-table-column field="role" title="下拉表格" :edit-render="{name: 'EditDownTable'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="弹窗表格" :edit-render="{name: 'EditPopupModal'}"></vxe-table-column>
-          <vxe-table-column field="address" title="复杂渲染" :edit-render="{name: 'EditDownModal'}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="简单输入框" :edit-render="{name: 'MyInput'}"></vxe-column>
+          <vxe-column field="role" title="下拉表格" :edit-render="{name: 'EditDownTable'}"></vxe-column>
+          <vxe-column field="sex" title="弹窗表格" :edit-render="{name: 'EditPopupModal'}"></vxe-column>
+          <vxe-column field="address" title="复杂渲染" :edit-render="{name: 'EditDownModal'}"></vxe-column>
         </vxe-table>
         `,
         `

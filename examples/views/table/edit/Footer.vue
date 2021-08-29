@@ -26,12 +26,12 @@
       :footer-cell-class-name="footerCellClassName"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'row'}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}}"></vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -78,12 +78,12 @@ export default {
           :footer-cell-class-name="footerCellClassName"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'row'}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number', min: 1, max: 120}}"></vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{name: 'input'}"></vxe-column>
         </vxe-table>
         `,
         `

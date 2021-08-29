@@ -5,10 +5,10 @@
     <vxe-table
       empty-text="没有更多数据了！"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -24,11 +24,11 @@
       border
       :loading="loading"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
       <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img2.gif">
@@ -51,12 +51,12 @@
       height="300"
       :loading="loading"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
-      <vxe-table-column field="date12" title="Date" width="300"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" width="300"></vxe-column>
+      <vxe-column field="sex" title="Sex" width="300"></vxe-column>
+      <vxe-column field="age" title="Age" width="300"></vxe-column>
+      <vxe-column field="date12" title="Date" width="300"></vxe-column>
+      <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
       <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img1.gif">
@@ -86,10 +86,10 @@ export default {
         <vxe-table
           empty-text="没有更多数据了！"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `
@@ -111,11 +111,11 @@ export default {
           border
           :loading="loading"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
           <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img2.gif">
@@ -147,12 +147,12 @@ export default {
           height="300"
           :loading="loading"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" width="300"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="300"></vxe-table-column>
-          <vxe-table-column field="date12" title="Date" width="300"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" width="300" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" width="300"></vxe-column>
+          <vxe-column field="sex" title="Sex" width="300"></vxe-column>
+          <vxe-column field="age" title="Age" width="300"></vxe-column>
+          <vxe-column field="date12" title="Date" width="300"></vxe-column>
+          <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
           <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img1.gif">

@@ -88,7 +88,7 @@ $iconWidth: 1.6em;
   }
   &.is--prefix {
     .vxe-input--inner {
-      padding-left: #{$iconWidth + 0.2em};
+      padding-left: $iconWidth + 0.2em;
     }
   }
 }
@@ -104,7 +104,7 @@ $iconWidth: 1.6em;
   }
   &.is--suffix {
     .vxe-input--inner {
-      padding-right: #{$iconWidth + 0.2em};
+      padding-right: $iconWidth + 0.2em;
     }
   }
   &.is--left {
@@ -136,7 +136,7 @@ $iconWidth: 1.6em;
     &.type--year,
     &.type--time {
       .vxe-input--inner {
-        padding-right: #{$iconWidth + 0.2em};
+        padding-right: $iconWidth + 0.2em;
       }
       .vxe-input--suffix {
         right: $iconWidth;
@@ -158,7 +158,7 @@ $iconWidth: 1.6em;
       &.type--year,
       &.type--time {
         .vxe-input--inner {
-          padding-right: #{$iconWidth * 2};
+          padding-right: $iconWidth * 2;
         }
       }
     }

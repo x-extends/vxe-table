@@ -9,11 +9,11 @@
       :tree-config="{children: 'children'}"
       :edit-config="{trigger: 'click', mode: 'row'}"
       :data="tableData">
-      <vxe-table-column type="checkbox" width="120" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-column type="checkbox" width="120" tree-node></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -83,11 +83,11 @@ export default {
           :tree-config="{children: 'children'}"
           :edit-config="{trigger: 'click', mode: 'row'}"
           :data="tableData">
-          <vxe-table-column type="checkbox" prop="checked" width="120" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column type="checkbox" prop="checked" width="120" tree-node></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="date" title="Date" :edit-render="{name: 'input'}"></vxe-column>
         </vxe-table>
         `,
         `

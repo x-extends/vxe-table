@@ -12,11 +12,11 @@
       border
       height="300"
       :data="list1">
-      <vxe-table-column type="seq" width="80"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
+      <vxe-column type="seq" width="80"></vxe-column>
+      <vxe-column field="name" title="Name" type="html"></vxe-column>
+      <vxe-column field="role" title="Role" type="html"></vxe-column>
+      <vxe-column field="age" title="Age" type="html"></vxe-column>
+      <vxe-column field="address" title="Address" type="html"></vxe-column>
       <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img2.gif">
@@ -46,11 +46,11 @@
       max-height="400"
       :tree-config="{}"
       :data="list2">
-      <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
-      <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-      <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
-      <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
+      <vxe-column type="seq" width="220" title="序号" tree-node></vxe-column>
+      <vxe-column field="name" title="Name" type="html"></vxe-column>
+      <vxe-column field="size" title="Size" type="html"></vxe-column>
+      <vxe-column field="type" title="Type" type="html"></vxe-column>
+      <vxe-column field="date" title="Date" type="html"></vxe-column>
       <template #empty>
         <span style="color: red;">
           <img src="/vxe-table/static/other/img1.gif">
@@ -131,11 +131,11 @@ export default {
           border
           height="300"
           :data="list1">
-          <vxe-table-column type="seq" width="80"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" type="html"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" type="html"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" type="html"></vxe-table-column>
+          <vxe-column type="seq" width="80"></vxe-column>
+          <vxe-column field="name" title="Name" type="html"></vxe-column>
+          <vxe-column field="role" title="Role" type="html"></vxe-column>
+          <vxe-column field="age" title="Age" type="html"></vxe-column>
+          <vxe-column field="address" title="Address" type="html"></vxe-column>
           <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img2.gif">
@@ -208,11 +208,11 @@ export default {
           max-height="400"
           :tree-config="{}"
           :data="list2">
-          <vxe-table-column type="seq" width="220" title="序号" tree-node></vxe-table-column>
-          <vxe-table-column field="name" title="Name" type="html"></vxe-table-column>
-          <vxe-table-column field="size" title="Size" type="html"></vxe-table-column>
-          <vxe-table-column field="type" title="Type" type="html"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" type="html"></vxe-table-column>
+          <vxe-column type="seq" width="220" title="序号" tree-node></vxe-column>
+          <vxe-column field="name" title="Name" type="html"></vxe-column>
+          <vxe-column field="size" title="Size" type="html"></vxe-column>
+          <vxe-column field="type" title="Type" type="html"></vxe-column>
+          <vxe-column field="date" title="Date" type="html"></vxe-column>
           <template #empty>
             <span style="color: red;">
               <img src="/vxe-table/static/other/img1.gif">

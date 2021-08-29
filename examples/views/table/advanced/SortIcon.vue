@@ -10,11 +10,11 @@
       height="300"
       :sort-config="{iconAsc: 'fa fa-chevron-up', iconDesc: 'fa fa-chevron-down'}"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="address" title="Address" sortable></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -50,11 +50,11 @@ export default {
           height="300"
           :sort-config="{iconAsc: 'fa fa-chevron-up', iconDesc: 'fa fa-chevron-down'}"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" sortable></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="address" title="Address" sortable></vxe-column>
         </vxe-table>
         `,
         `

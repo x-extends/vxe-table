@@ -7,11 +7,11 @@
       highlight-hover-row
       max-height="200"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" align="center"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex" align="center"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -28,11 +28,11 @@
       highlight-hover-row
       max-height="200"
       :data="tableData2">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -50,11 +50,11 @@
         highlight-hover-row
         max-height="100%"
         :data="tableData">
-        <vxe-table-column type="seq" width="60"></vxe-table-column>
-        <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-        <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-        <vxe-table-column field="age" title="Age"></vxe-table-column>
-        <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+        <vxe-column type="seq" width="60"></vxe-column>
+        <vxe-column field="name" title="Name" sortable></vxe-column>
+        <vxe-column field="sex" title="Sex"></vxe-column>
+        <vxe-column field="age" title="Age"></vxe-column>
+        <vxe-column field="address" title="Address" show-overflow></vxe-column>
       </vxe-table>
     </div>
 
@@ -86,11 +86,11 @@ export default {
           highlight-hover-row
           max-height="200"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" align="center"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex" align="center"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -111,11 +111,11 @@ export default {
           highlight-hover-row
           max-height="200"
           :data="tableData2">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -137,11 +137,11 @@ export default {
             highlight-hover-row
             max-height="100%"
             :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="Name" sortable></vxe-table-column>
-            <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-            <vxe-table-column field="age" title="Age"></vxe-table-column>
-            <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+            <vxe-column type="seq" width="60"></vxe-column>
+            <vxe-column field="name" title="Name" sortable></vxe-column>
+            <vxe-column field="sex" title="Sex"></vxe-column>
+            <vxe-column field="age" title="Age"></vxe-column>
+            <vxe-column field="address" title="Address" show-overflow></vxe-column>
           </vxe-table>
         </div>
         `,

@@ -13,32 +13,32 @@
       :data="tableData"
       :sort-config="{showIcon: false}"
       @header-cell-click="headerCellClickEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">
         <template #header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
             <i class="fa" :class="[column.order ? `fa-sort-alpha-${column.order}` : 'fa-long-arrow-down']"></i>
           </span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable>
+      </vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="age" title="Age" sortable>
         <template #header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
             <i class="fa" :class="[column.order ? `fa-sort-numeric-${column.order}` : 'fa-long-arrow-down']"></i>
           </span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="amount" title="Amount" :formatter="formatAmount" sortable>
+      </vxe-column>
+      <vxe-column field="amount" title="Amount" :formatter="formatAmount" sortable>
         <template #header="{ column }">
           <span>{{ column.title }}</span>
           <span class="custom-sort" :class="{'is-order': column.order}">
             <i class="fa" :class="[column.order ? `fa-sort-amount-${column.order}` : 'fa-long-arrow-down']"></i>
           </span>
         </template>
-      </vxe-table-column>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -80,32 +80,32 @@ export default {
           :data="tableData"
           :sort-config="{showIcon: false}"
           @header-cell-click="headerCellClickEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable :filters="[{label: 'id大于10', value: 10}, {label: 'id大于40', value: 40}]" :filter-method="filterNameMethod">
             <template #header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
                 <i class="fa" :class="[column.order ? \`fa-sort-alpha-\${column.order}\` : 'fa-long-arrow-down']"></i>
               </span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable>
+          </vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="age" title="Age" sortable>
             <template #header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
                 <i class="fa" :class="[column.order ? \`fa-sort-numeric-\${column.order}\` : 'fa-long-arrow-down']"></i>
               </span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="amount" title="Amount" :formatter="formatAmount" sortable>
+          </vxe-column>
+          <vxe-column field="amount" title="Amount" :formatter="formatAmount" sortable>
             <template #header="{ column }">
               <span>{{ column.title }}</span>
               <span class="custom-sort" :class="{'is-order': column.order}">
                 <i class="fa" :class="[column.order ? \`fa-sort-amount-\${column.order}\` : 'fa-long-arrow-down']"></i>
               </span>
             </template>
-          </vxe-table-column>
+          </vxe-column>
         </vxe-table>
         `,
         `

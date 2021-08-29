@@ -82,10 +82,11 @@
     </p>
 
     <p>
-      <vxe-button @click="$XModal.alert({ content: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: '按 Escape 键可以关闭', escClosable: true })">按 Escape 键可以关闭</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
+      <vxe-button content="点击遮罩层可以关闭" @click="$XModal.alert({ content: '点击遮罩层可以关闭', maskClosable: true })"></vxe-button>
+      <vxe-button content="按 Escape 键可以关闭" @click="$XModal.alert({ content: '按 Escape 键可以关闭', escClosable: true })"></vxe-button>
+      <vxe-button content="锁界面不要遮罩层" @click="$XModal.alert({ content: '锁界面不要遮罩层', mask: false })"></vxe-button>
+      <vxe-button content="多窗口、叠加窗口" @click="$XModal.alert({ content: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })"></vxe-button>
+      <vxe-button content="允许拖动范围超出屏幕" @click="$XModal.alert({ content: '允许拖动范围超出屏幕', marginSize: -500 })"></vxe-button>
     </p>
 
     <p>
@@ -97,10 +98,10 @@
             auto-resize
             height="300"
             :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-            <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+            <vxe-column type="seq" width="60"></vxe-column>
+            <vxe-column field="name" title="app.body.label.name"></vxe-column>
+            <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+            <vxe-column field="age" title="app.body.label.age"></vxe-column>
           </vxe-table>
         </template>
       </vxe-modal>
@@ -113,10 +114,10 @@
             auto-resize
             height="300"
             :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-            <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+            <vxe-column type="seq" width="60"></vxe-column>
+            <vxe-column field="name" title="app.body.label.name"></vxe-column>
+            <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+            <vxe-column field="age" title="app.body.label.age"></vxe-column>
           </vxe-table>
         </template>
       </vxe-modal>
@@ -177,10 +178,10 @@
             auto-resize
             height="auto"
             :data="tableData">
-            <vxe-table-column type="seq" width="60"></vxe-table-column>
-            <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-            <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+            <vxe-column type="seq" width="60"></vxe-column>
+            <vxe-column field="name" title="app.body.label.name"></vxe-column>
+            <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+            <vxe-column field="age" title="app.body.label.age"></vxe-column>
           </vxe-table>
         </template>
       </vxe-modal>
@@ -389,11 +390,12 @@ export default {
           </vxe-modal>
         </p>
 
-        <p>
-          <vxe-button @click="$XModal.alert({ content: '点击遮罩层可以关闭', maskClosable: true })">点击遮罩层可以关闭</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: '按 Escape 键可以关闭', escClosable: true })">按 Escape 键可以关闭</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: '锁界面不要遮罩层', mask: false })">锁界面不要遮罩层</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })">多窗口、叠加窗口</vxe-button>
+        <<p>
+          <vxe-button content="点击遮罩层可以关闭" @click="$XModal.alert({ content: '点击遮罩层可以关闭', maskClosable: true })"></vxe-button>
+          <vxe-button content="按 Escape 键可以关闭" @click="$XModal.alert({ content: '按 Escape 键可以关闭', escClosable: true })"></vxe-button>
+          <vxe-button content="锁界面不要遮罩层" @click="$XModal.alert({ content: '锁界面不要遮罩层', mask: false })"></vxe-button>
+          <vxe-button content="多窗口、叠加窗口" @click="$XModal.alert({ content: '多窗口、叠加窗口（一旦脱离当前实例，需要配合手动关闭）', lockView: false, mask: false })"></vxe-button>
+          <vxe-button content="允许拖动范围超出屏幕" @click="$XModal.alert({ content: '允许拖动范围超出屏幕', marginSize: -500 })"></vxe-button>
         </p>
 
         <p>
@@ -405,10 +407,10 @@ export default {
                 auto-resize
                 height="300"
                 :data="tableData">
-                <vxe-table-column type="seq" width="60"></vxe-table-column>
-                <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-                <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-                <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+                <vxe-column type="seq" width="60"></vxe-column>
+                <vxe-column field="name" title="app.body.label.name"></vxe-column>
+                <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+                <vxe-column field="age" title="app.body.label.age"></vxe-column>
               </vxe-table>
             </template>
           </vxe-modal>
@@ -421,10 +423,10 @@ export default {
                 auto-resize
                 height="300"
                 :data="tableData">
-                <vxe-table-column type="seq" width="60"></vxe-table-column>
-                <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-                <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-                <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+                <vxe-column type="seq" width="60"></vxe-column>
+                <vxe-column field="name" title="app.body.label.name"></vxe-column>
+                <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+                <vxe-column field="age" title="app.body.label.age"></vxe-column>
               </vxe-table>
             </template>
           </vxe-modal>
@@ -485,10 +487,10 @@ export default {
                 auto-resize
                 height="auto"
                 :data="tableData">
-                <vxe-table-column type="seq" width="60"></vxe-table-column>
-                <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-                <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-                <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+                <vxe-column type="seq" width="60"></vxe-column>
+                <vxe-column field="name" title="app.body.label.name"></vxe-column>
+                <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+                <vxe-column field="age" title="app.body.label.age"></vxe-column>
               </vxe-table>
             </template>
           </vxe-modal>

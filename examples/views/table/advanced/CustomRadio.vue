@@ -7,18 +7,18 @@
       ref="xTable"
       height="400"
       :data="tableData">
-      <vxe-table-column type="radio" width="60">
+      <vxe-column type="radio" width="60">
         <template #radio="{ row, checked }">
           <span class="custom-radio" @click.stop="$refs.xTable.setRadioRow(row)">
             <span v-if="checked">🌝</span>
             <span v-else>🌚</span>
           </span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -52,18 +52,18 @@ export default {
           ref="xTable"
           height="400"
           :data="tableData">
-          <vxe-table-column type="radio" width="60">
+          <vxe-column type="radio" width="60">
             <template #radio="{ row, checked }">
               <span class="custom-radio" @click.stop="$refs.xTable.setRadioRow(row)">
                 <span v-if="checked">🌝</span>
                 <span v-else>🌚</span>
               </span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address"></vxe-column>
         </vxe-table>
         `,
         `

@@ -30,12 +30,12 @@
       :loading="loading"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-      <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-column>
+      <vxe-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+      <vxe-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -91,12 +91,12 @@ export default {
           :loading="loading"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-table-column>
-          <vxe-table-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', options: sexList}"></vxe-column>
+          <vxe-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'number'}}"></vxe-column>
+          <vxe-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
         </vxe-table>
         `,
         `

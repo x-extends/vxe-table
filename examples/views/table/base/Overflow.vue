@@ -12,16 +12,16 @@
       highlight-hover-row
       :footer-method="footerMethod"
       :data="tableData1">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="名称" show-overflow="ellipsis"></vxe-table-column>
-      <vxe-table-column field="role" title="角色" show-overflow></vxe-table-column>
-      <vxe-table-column field="date" title="标题溢出，显示为 tooltip xxxxxxxxxx" show-header-overflow show-overflow="title" show-footer-overflow></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="名称" show-overflow="ellipsis"></vxe-column>
+      <vxe-column field="role" title="角色" show-overflow></vxe-column>
+      <vxe-column field="date" title="标题溢出，显示为 tooltip xxxxxxxxxx" show-header-overflow show-overflow="title" show-footer-overflow></vxe-column>
+      <vxe-column field="rate" title="Rate" show-header-overflow="title">
         <template #header>
           <span>标题显示原生 title ___________________________</span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="address" title="不换行不换行不换行不换行不换行不换行不换行不换行不换行" width="160"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="address" title="不换行不换行不换行不换行不换行不换行不换行不换行不换行" width="160"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -45,10 +45,10 @@
       :footer-method="footerMethod"
       :data="tableData2"
       :tooltip-config="{contentMethod: showTooltipMethod, enterable: true}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="名称"></vxe-table-column>
-      <vxe-table-column field="role" title="标题溢出直接隐藏 xxxxxxxxxxxxxxxxxxxxxxxxxxx" show-header-overflow="ellipsis"></vxe-table-column>
-      <vxe-table-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="名称"></vxe-column>
+      <vxe-column field="role" title="标题溢出直接隐藏 xxxxxxxxxxxxxxxxxxxxxxxxxxx" show-header-overflow="ellipsis"></vxe-column>
+      <vxe-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-column>
       <vxe-table-colgroup title="基本信息">
         <vxe-table-colgroup field="rate" show-header-overflow="title">
           <template #header>
@@ -56,7 +56,7 @@
           </template>
         </vxe-table-colgroup>
         <vxe-table-colgroup title="详细信息">
-          <vxe-table-column type="html" field="address" title="标题溢出显示tooltip内容内容内容内容内容内容" width="160" show-header-overflow show-overflow></vxe-table-column>
+          <vxe-column type="html" field="address" title="标题溢出显示tooltip内容内容内容内容内容内容" width="160" show-header-overflow show-overflow></vxe-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
     </vxe-table>
@@ -102,16 +102,16 @@ export default {
           highlight-hover-row
           :footer-method="footerMethod"
           :data="tableData1">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="名称" show-overflow="ellipsis"></vxe-table-column>
-          <vxe-table-column field="role" title="角色" show-overflow></vxe-table-column>
-          <vxe-table-column field="date" title="标题溢出，显示为 tooltip xxxxxxxxxx" show-header-overflow show-overflow="title" show-footer-overflow></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" show-header-overflow="title">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="名称" show-overflow="ellipsis"></vxe-column>
+          <vxe-column field="role" title="角色" show-overflow></vxe-column>
+          <vxe-column field="date" title="标题溢出，显示为 tooltip xxxxxxxxxx" show-header-overflow show-overflow="title" show-footer-overflow></vxe-column>
+          <vxe-column field="rate" title="Rate" show-header-overflow="title">
             <template #header>
               <span>标题显示原生 title ___________________________</span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="address" title="不换行不换行不换行不换行不换行不换行不换行不换行不换行" width="160"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="address" title="不换行不换行不换行不换行不换行不换行不换行不换行不换行" width="160"></vxe-column>
         </vxe-table>
         `,
         `
@@ -158,10 +158,10 @@ export default {
           :footer-method="footerMethod"
           :data="tableData2"
           :tooltip-config="{contentMethod: showTooltipMethod, enterable: true}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="名称"></vxe-table-column>
-          <vxe-table-column field="role" title="标题溢出直接隐藏 xxxxxxxxxxxxxxxxxxxxxxxxxxx" show-header-overflow="ellipsis"></vxe-table-column>
-          <vxe-table-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="名称"></vxe-column>
+          <vxe-column field="role" title="标题溢出直接隐藏 xxxxxxxxxxxxxxxxxxxxxxxxxxx" show-header-overflow="ellipsis"></vxe-column>
+          <vxe-column field="date" title="Date" show-header-overflow show-overflow show-footer-overflow></vxe-column>
           <vxe-table-colgroup title="基本信息">
             <vxe-table-colgroup field="rate" show-header-overflow="title">
               <template #header>
@@ -169,7 +169,7 @@ export default {
               </template>
             </vxe-table-colgroup>
             <vxe-table-colgroup title="详细信息">
-              <vxe-table-column type="html" field="address" title="标题溢出显示tooltip内容内容内容内容内容内容" width="160" show-header-overflow show-overflow></vxe-table-column>
+              <vxe-column type="html" field="address" title="标题溢出显示tooltip内容内容内容内容内容内容" width="160" show-header-overflow show-overflow></vxe-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
         </vxe-table>

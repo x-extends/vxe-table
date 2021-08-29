@@ -7,7 +7,7 @@
       ref="xTable"
       height="400"
       :data="tableData">
-      <vxe-table-column type="checkbox" width="60">
+      <vxe-column type="checkbox" width="60">
         <template #header="{ checked, indeterminate }">
           <span class="custom-checkbox" @click.stop="$refs.xTable.toggleAllCheckboxRow()">
             <i v-if="indeterminate" class="fa fa-minus-square-o"></i>
@@ -22,11 +22,11 @@
             <i v-else class="fa fa-square-o"></i>
           </span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column field="address" title="Address"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="address" title="Address"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -60,7 +60,7 @@ export default {
           ref="xTable"
           height="400"
           :data="tableData">
-          <vxe-table-column type="checkbox" width="60">
+          <vxe-column type="checkbox" width="60">
             <template #header="{ checked, indeterminate }">
               <span class="custom-checkbox" @click.stop="$refs.xTable.toggleAllCheckboxRow()">
                 <i v-if="indeterminate" class="fa fa-minus-square-o"></i>
@@ -75,11 +75,11 @@ export default {
                 <i v-else class="fa fa-square-o"></i>
               </span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column field="address" title="Address"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="address" title="Address"></vxe-column>
         </vxe-table>
         `,
         `

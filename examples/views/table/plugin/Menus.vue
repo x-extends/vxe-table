@@ -16,18 +16,18 @@
       :mouse-config="{selected: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
       <vxe-table-colgroup title="基本信息">
-        <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
+        <vxe-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-column>
         <vxe-table-colgroup title="详细详细">
-          <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-column>
         </vxe-table-colgroup>
       </vxe-table-colgroup>
-      <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
+      <vxe-column field="rate" title="Rate" width="180" sortable></vxe-column>
       <vxe-table-colgroup title="其他信息">
-        <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
+        <vxe-column field="date13" title="Date" width="250"></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -125,18 +125,18 @@ export default {
           :mouse-config="{selected: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell'}">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
           <vxe-table-colgroup title="基本信息">
-            <vxe-table-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-column>
             <vxe-table-colgroup title="详细详细">
-              <vxe-table-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-column>
             </vxe-table-colgroup>
           </vxe-table-colgroup>
-          <vxe-table-column field="rate" title="Rate" width="180" sortable></vxe-table-column>
+          <vxe-column field="rate" title="Rate" width="180" sortable></vxe-column>
           <vxe-table-colgroup title="其他信息">
-            <vxe-table-column field="date13" title="Date" width="250"></vxe-table-column>
+            <vxe-column field="date13" title="Date" width="250"></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,

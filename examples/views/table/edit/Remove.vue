@@ -19,11 +19,11 @@
       show-overflow
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -66,11 +66,11 @@ export default {
           show-overflow
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="age" title="Age" :edit-render="{name: 'input'}"></vxe-column>
         </vxe-table>
         `,
         `

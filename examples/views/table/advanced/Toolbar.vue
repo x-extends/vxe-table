@@ -13,17 +13,17 @@
       ref="xTable1"
       :print-config="{}"
       :data="tableData1">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
       <vxe-table-colgroup title="分组信息">
         <vxe-table-colgroup title="基本信息">
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
+          <vxe-column field="name" title="app.body.label.name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
         </vxe-table-colgroup>
-        <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+        <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
       </vxe-table-colgroup>
-      <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+      <vxe-column field="age" title="app.body.label.age"></vxe-column>
       <vxe-table-colgroup title="其他信息">
-        <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+        <vxe-column field="rate" title="Rate"></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -44,12 +44,12 @@
       :loading="loading"
       :data="tableData"
       @custom="toolbarCustomEvent">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-      <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
-      <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="app.body.label.name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+      <vxe-column field="age" title="app.body.label.age"></vxe-column>
+      <vxe-column field="rate" title="Rate"></vxe-column>
     </vxe-table>
 
     <div>
@@ -111,17 +111,17 @@ export default {
           ref="xTable1"
           :print-config="{}"
           :data="tableData1">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
           <vxe-table-colgroup title="分组信息">
             <vxe-table-colgroup title="基本信息">
-              <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-              <vxe-table-column field="role" title="Role"></vxe-table-column>
+              <vxe-column field="name" title="app.body.label.name"></vxe-column>
+              <vxe-column field="role" title="Role"></vxe-column>
             </vxe-table-colgroup>
-            <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
+            <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
           </vxe-table-colgroup>
-          <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
+          <vxe-column field="age" title="app.body.label.age"></vxe-column>
           <vxe-table-colgroup title="其他信息">
-            <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+            <vxe-column field="rate" title="Rate"></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -158,12 +158,12 @@ export default {
           :loading="loading"
           :data="tableData"
           @custom="toolbarCustomEvent">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="app.body.label.name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="app.body.label.sex"></vxe-table-column>
-          <vxe-table-column field="age" title="app.body.label.age"></vxe-table-column>
-          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="app.body.label.name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
+          <vxe-column field="age" title="app.body.label.age"></vxe-column>
+          <vxe-column field="rate" title="Rate"></vxe-column>
         </vxe-table>
 
         <div>

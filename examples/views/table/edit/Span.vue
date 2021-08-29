@@ -19,10 +19,10 @@
       :data="tableData"
       :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'cell'}">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', props: {placeholder: '请输入角色'}}"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', props: {placeholder: '请输入地址'}}"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="role" title="Role" :edit-render="{name: 'input', props: {placeholder: '请输入角色'}}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{name: 'input', props: {placeholder: '请输入名称'}}"></vxe-column>
+      <vxe-column field="address" title="Address" :edit-render="{name: 'input', props: {placeholder: '请输入地址'}}"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -83,10 +83,10 @@ export default {
           :data="tableData"
           :edit-rules="validRules"
           :edit-config="{trigger: 'click', mode: 'cell'}">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="role" title="Role" :edit-render="{name: 'input', props: {placeholder: '请输入角色'}}"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :edit-render="{name: 'input', props: {placeholder: '请输入名称'}}"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :edit-render="{name: 'input', props: {placeholder: '请输入地址'}}"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="role" title="Role" :edit-render="{name: 'input', props: {placeholder: '请输入角色'}}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{name: 'input', props: {placeholder: '请输入名称'}}"></vxe-column>
+          <vxe-column field="address" title="Address" :edit-render="{name: 'input', props: {placeholder: '请输入地址'}}"></vxe-column>
         </vxe-table>
         `,
         `
@@ -129,18 +129,17 @@ export default {
                 $table.setActiveCell(row, 'role')
               })
             },
-            saveEvent () {
+            async saveEvent () {
               const $table = this.$refs.xTable
               const body = $table.getRecordset()
               const { insertRecords, removeRecords, updateRecords } = body
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
-                $table.validate((errMap) => {
-                  if (errMap) {
-                    this.$XModal.message({ status: 'error', content: '校验不通过！' })
-                  } else {
-                    this.$XModal.message({ content: '保存成功！', status: 'success' })
-                  }
-                })
+                const errMap = await $table.validate().catch(errMap => errMap)
+                if (errMap) {
+                  this.$XModal.message({ status: 'error', content: '校验不通过！' })
+                } else {
+                  this.$XModal.message({ content: '保存成功！', status: 'success' })
+                }
               } else {
                 this.$Message.info('数据未改动！')
               }
@@ -179,18 +178,17 @@ export default {
         $table.setActiveCell(row, 'role')
       })
     },
-    saveEvent () {
+    async saveEvent () {
       const $table = this.$refs.xTable
       const body = $table.getRecordset()
       const { insertRecords, removeRecords, updateRecords } = body
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
-        $table.validate((errMap) => {
-          if (errMap) {
-            this.$XModal.message({ status: 'error', content: '校验不通过！' })
-          } else {
-            this.$XModal.message({ content: '保存成功！', status: 'success' })
-          }
-        })
+        const errMap = await $table.validate().catch(errMap => errMap)
+        if (errMap) {
+          this.$XModal.message({ status: 'error', content: '校验不通过！' })
+        } else {
+          this.$XModal.message({ content: '保存成功！', status: 'success' })
+        }
       } else {
         this.$Message.info('数据未改动！')
       }

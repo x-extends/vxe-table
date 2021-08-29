@@ -24,15 +24,15 @@
       :show-overflow="showOverflow1"
       :export-config="{}"
       :data="tableData1">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="seq" width="60"></vxe-column>
       <vxe-table-colgroup title="Group1">
-        <vxe-table-column field="name" title="Name"></vxe-table-column>
+        <vxe-column field="name" title="Name"></vxe-column>
       </vxe-table-colgroup>
       <vxe-table-colgroup title="Group2">
-        <vxe-table-column field="attr1" title="自动转换"></vxe-table-column>
-        <vxe-table-column field="amount" title="导出数值" cell-type="number"></vxe-table-column>
-        <vxe-table-column field="num" title="导出字符串" cell-type="string" sortable></vxe-table-column>
+        <vxe-column field="attr1" title="自动转换"></vxe-column>
+        <vxe-column field="amount" title="导出数值" cell-type="number"></vxe-column>
+        <vxe-column field="num" title="导出字符串" cell-type="string" sortable></vxe-column>
       </vxe-table-colgroup>
     </vxe-table>
 
@@ -56,11 +56,11 @@
       ref="xTable2"
       height="300"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -85,11 +85,11 @@
       ref="xTable3"
       :footer-method="footerMethod"
       :data="tableData">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-      <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+      <vxe-column field="age" title="Age" sortable></vxe-column>
+      <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -118,11 +118,11 @@
       :loading="loading"
       :footer-method="footerMethod"
       :data="tableData4">
-      <vxe-table-column type="seq" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
-      <vxe-table-column type="html" field="html1" title="Html片段"></vxe-table-column>
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column type="html" field="html1" title="Html片段"></vxe-column>
     </vxe-table>
 
     <vxe-pager
@@ -192,15 +192,15 @@ export default {
           :show-overflow="showOverflow1"
           :export-config="{}"
           :data="tableData1">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column type="seq" width="60"></vxe-column>
           <vxe-table-colgroup title="Group1">
-            <vxe-table-column field="name" title="Name"></vxe-table-column>
+            <vxe-column field="name" title="Name"></vxe-column>
           </vxe-table-colgroup>
           <vxe-table-colgroup title="Group2">
-            <vxe-table-column field="attr1" title="自动转换"></vxe-table-column>
-            <vxe-table-column field="amount" title="导出数值" cell-type="number"></vxe-table-column>
-            <vxe-table-column field="num" title="导出字符串" cell-type="string" sortable></vxe-table-column>
+            <vxe-column field="attr1" title="自动转换"></vxe-column>
+            <vxe-column field="amount" title="导出数值" cell-type="number"></vxe-column>
+            <vxe-column field="num" title="导出字符串" cell-type="string" sortable></vxe-column>
           </vxe-table-colgroup>
         </vxe-table>
         `,
@@ -247,11 +247,11 @@ export default {
           ref="xTable2"
           height="300"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -294,11 +294,11 @@ export default {
           ref="xTable3"
           :footer-method="footerMethod"
           :data="tableData">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" sortable></vxe-table-column>
-          <vxe-table-column field="address" title="Address" show-overflow></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+          <vxe-column field="age" title="Age" sortable></vxe-column>
+          <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
         `
@@ -374,11 +374,11 @@ export default {
           :loading="loading"
           :footer-method="footerMethod"
           :data="tableData4">
-          <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :formatter="formatterSex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
-          <vxe-table-column type="html" field="html1" title="Html片段"></vxe-table-column>
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="sex" title="Sex" :formatter="formatterSex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column type="html" field="html1" title="Html片段"></vxe-column>
         </vxe-table>
 
         <vxe-pager

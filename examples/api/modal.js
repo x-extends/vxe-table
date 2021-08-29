@@ -207,6 +207,15 @@ const apis = [
         list: []
       },
       {
+        name: 'margin-size',
+        descKey: 'app.api.modal.desc.marginSize',
+        version: '',
+        type: 'number',
+        enum: '',
+        defVal: '默认 0，继承 setup.modal.marginSize',
+        list: []
+      },
+      {
         name: 'show-close',
         desc: '是否显示关闭按钮',
         version: '3.2.20',
