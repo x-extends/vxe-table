@@ -4,6 +4,7 @@ export default {
       nav: {
         start: '開發指南',
         install: '全局安装',
+        quick: '快速入门',
         use: '按需加载',
         global: '全域參數',
         icons: '全域圖標',
@@ -672,6 +673,7 @@ export default {
           escClosable: '是否允许按 Esc 键关闭窗口',
           showZoom: '标题是否标显示最大化与还原按钮',
           resize: '是否允许窗口边缘拖动调整窗口大小',
+          marginSize: '只对 resize 启用后有效，用于设置可拖动界限范围，如果为负数则允许拖动超出屏幕边界',
           duration: '只对 type=message 有效，自动关闭的延时，如果为 -1 禁用自动关闭',
           size: '尺寸',
           width: '窗口的宽度',

@@ -333,13 +333,12 @@ export default defineComponent({
 
     let showErrTime: number
 
-    const beginValidate = (type?: string, callback?: any) => {
+    const beginValidate = (itemList: VxeFormDefines.ItemInfo[], type?: string, callback?: any) => {
       const { data, rules: formRules } = props
       const validOpts = computeValidOpts.value
       const validRest: any = {}
       const validFields: string[] = []
       const itemValids: any[] = []
-      const itemList = getItems()
       clearValidate()
       clearTimeout(showErrTime)
       if (data && formRules) {
@@ -396,13 +395,17 @@ export default defineComponent({
     }
 
     const validate = (callback: any) => {
-      return beginValidate('', callback)
+      return beginValidate(getItems(), '', callback)
+    }
+
+    const validateField = (field: VxeFormItemPropTypes.Field, callback: any) => {
+      return beginValidate(getItems().filter(item => item.field === field), '', callback)
     }
 
     const submitEvent = (evnt: Event) => {
       evnt.preventDefault()
       if (!props.preventSubmit) {
-        beginValidate().then(() => {
+        beginValidate(getItems()).then(() => {
           formMethods.dispatchEvent('submit', { data: props.data }, evnt)
         }).catch(errMap => {
           formMethods.dispatchEvent('submit-invalid', { data: props.data, errMap }, evnt)
@@ -676,6 +679,7 @@ export default defineComponent({
       },
       reset,
       validate,
+      validateField,
       clearValidate,
       updateStatus,
       toggleCollapse,

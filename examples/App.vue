@@ -157,6 +157,12 @@ export default defineComponent({
               }
             },
             {
+              label: 'app.aside.nav.quick',
+              locat: {
+                name: 'StartQuick'
+              }
+            },
+            {
               label: 'app.aside.nav.global',
               locat: {
                 name: 'StartGlobal'

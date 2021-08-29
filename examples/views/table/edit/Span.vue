@@ -80,18 +80,17 @@ export default defineComponent({
       $table.setActiveCell(newRow, 'role')
     }
 
-    const saveEvent = () => {
+    const saveEvent = async () => {
       const $table = xTable.value
       const body = $table.getRecordset()
       const { insertRecords, removeRecords, updateRecords } = body
       if (insertRecords.length || removeRecords.length || updateRecords.length) {
-        $table.validate((errMap) => {
-          if (errMap) {
-            VXETable.modal.message({ status: 'error', content: '校验不通过！' })
-          } else {
-            VXETable.modal.message({ content: '保存成功！', status: 'success' })
-          }
-        })
+        const errMap = await $table.validate().catch(errMap => errMap)
+        if (errMap) {
+          VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+        } else {
+          VXETable.modal.message({ content: '保存成功！', status: 'success' })
+        }
       } else {
         VXETable.modal.message({ content: '数据未改动！', status: 'warning' })
       }
@@ -195,18 +194,17 @@ export default defineComponent({
               $table.setActiveCell(newRow, 'role')
             }
 
-            const saveEvent = () => {
+            const saveEvent = async () => {
               const $table = xTable.value
               const body = $table.getRecordset()
               const { insertRecords, removeRecords, updateRecords } = body
               if (insertRecords.length || removeRecords.length || updateRecords.length) {
-                $table.validate((errMap) => {
-                  if (errMap) {
-                    VXETable.modal.message({ status: 'error', content: '校验不通过！' })
-                  } else {
-                    VXETable.modal.message({ content: '保存成功！', status: 'success' })
-                  }
-                })
+                const errMap = await $table.validate().catch(errMap => errMap)
+                if (errMap) {
+                  VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+                } else {
+                  VXETable.modal.message({ content: '保存成功！', status: 'success' })
+                }
               } else {
                 VXETable.modal.message({ content: '数据未改动！', status: 'warning' })
               }

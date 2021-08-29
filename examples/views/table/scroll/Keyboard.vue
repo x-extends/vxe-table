@@ -154,15 +154,14 @@ export default defineComponent({
       })
     }
 
-    const validEvent = () => {
+    const validEvent = async () => {
       const $table = xTable.value
-      $table.validate((errMap) => {
-        if (errMap) {
-          VXETable.modal.message({ status: 'error', content: '校验不通过！' })
-        } else {
-          VXETable.modal.message({ status: 'success', content: '校验成功！' })
-        }
-      })
+      const errMap = await $table.validate().catch(errMap => errMap)
+      if (errMap) {
+        VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+      } else {
+        VXETable.modal.message({ status: 'success', content: '校验成功！' })
+      }
     }
 
     const fullValidEvent = () => {
@@ -200,17 +199,16 @@ export default defineComponent({
       })
     }
 
-    const selectValidEvent = () => {
+    const selectValidEvent = async () => {
       const $table = xTable.value
       const selectRecords = $table.getCheckboxRecords()
       if (selectRecords.length > 0) {
-        $table.validate(selectRecords, (errMap) => {
-          if (errMap) {
-            VXETable.modal.message({ status: 'error', content: '校验不通过！' })
-          } else {
-            VXETable.modal.message({ status: 'success', content: '校验成功！' })
-          }
-        })
+        const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+        if (errMap) {
+          VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+        } else {
+          VXETable.modal.message({ status: 'success', content: '校验成功！' })
+        }
       } else {
         VXETable.modal.message({ status: 'warning', content: '未选中数据！' })
       }
@@ -309,8 +307,8 @@ export default defineComponent({
           keep-source
           ref="xTable"
           height="300"
-          :loading="loading"
-          :edit-rules="validRules"
+          :loading="demo1.loading"
+          :edit-rules="demo1.validRules"
           :mouse-config="{selected: true}"
           :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
@@ -328,9 +326,14 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref } from 'vue'
+        import { VXETable, VxeTableInstance, VxeTablePropTypes } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const xTable = ref({} as VxeTableInstance)
+
+            const demo1 = reactive({
               loading: false,
               validRules: {
                 name: [
@@ -340,28 +343,10 @@ export default defineComponent({
                 sex: [
                   { required: true, message: '性别必须填写' }
                 ]
-              }
-            }
-          },
-          created () {
-            this.findList()
-          },
-          methods: {
-            findList () {
-              this.loading = true
-              return new Promise(resolve => {
-                setTimeout(() => {
-                  const tableData = this.mockList(600)
-                  // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
-                  if (this.$refs.xTable) {
-                    this.$refs.xTable.loadData(tableData)
-                  }
-                  resolve()
-                  this.loading = false
-                }, 300)
-              })
-            },
-            mockList (size) {
+              } as VxeTablePropTypes.ValidConfig
+            })
+
+            const mockList = (size: number) => {
               const list = []
               for (let index = 0; index < size; index++) {
                 list.push({
@@ -375,25 +360,44 @@ export default defineComponent({
                 })
               }
               return list
-            },
-            validEvent () {
-              this.$refs.xTable.validate((errMap) => {
-                if (errMap) {
-                  this.$XModal.message({ status: 'error', content: '校验不通过！' })
-                } else {
-                  this.$XModal.message({ status: 'success', content: '校验成功！' })
-                }
+            }
+
+            const findList = () => {
+              demo1.loading = true
+              return new Promise(resolve => {
+                setTimeout(() => {
+                  const tableData = mockList(600)
+                  // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
+                  const $table = xTable.value
+                  if ($table) {
+                    $table.loadData(tableData)
+                  }
+                  resolve(null)
+                  demo1.loading = false
+                }, 300)
               })
-            },
-            fullValidEvent () {
-              this.$refs.xTable.fullValidate((errMap) => {
+            }
+
+            const validEvent = async () => {
+              const $table = xTable.value
+              const errMap = await $table.validate().catch(errMap => errMap)
+              if (errMap) {
+                VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+              } else {
+                VXETable.modal.message({ status: 'success', content: '校验成功！' })
+              }
+            }
+
+            const fullValidEvent = () => {
+              const $table = xTable.value
+              $table.fullValidate((errMap) => {
                 if (errMap) {
-                  let msgList = []
-                  Object.values(errMap).forEach(errList => {
+                  const msgList: string[] = []
+                  Object.values(errMap).forEach((errList) => {
                     errList.forEach(params => {
-                      let { rowIndex, column, rules } = params
+                      const { rowIndex, column, rules } = params
                       rules.forEach(rule => {
-                        msgList.push(\`第 \${rowIndex} 行 \${column.title} 校验错误：\${rule.message}\`)
+                        msgList.push(\`第 \${rowIndex + 1} 行 \${column.title} 校验错误：\${rule.message}\`)
                       })
                     })
                   })
@@ -414,44 +418,67 @@ export default defineComponent({
                     }
                   })
                 } else {
-                  this.$XModal.message({ status: 'success', content: '校验成功！' })
+                  VXETable.modal.message({ status: 'success', content: '校验成功！' })
                 }
               })
-            },
-            selectValidEvent () {
-              let selectRecords = this.$refs.xTable.getCheckboxRecords()
+            }
+
+            const selectValidEvent = async () => {
+              const $table = xTable.value
+              const selectRecords = $table.getCheckboxRecords()
               if (selectRecords.length > 0) {
-                this.$refs.xTable.validate(selectRecords, (errMap) => {
-                  if (errMap) {
-                    this.$XModal.message({ status: 'error', content: '校验不通过！' })
-                  } else {
-                    this.$XModal.message({ status: 'success', content: '校验成功！' })
-                  }
-                })
+                const errMap = await $table.validate(selectRecords).catch(errMap => errMap)
+                if (errMap) {
+                  VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+                } else {
+                  VXETable.modal.message({ status: 'success', content: '校验成功！' })
+                }
               } else {
-                this.$XModal.message({ status: 'warning', content: '未选中数据！' })
+                VXETable.modal.message({ status: 'warning', content: '未选中数据！' })
               }
-            },
-            insertEvent (row) {
-              let xTable = this.$refs.xTable
+            }
+
+            const insertEvent = (row: any) => {
+              const $table = xTable.value
               const record = {
                 checked: false
               }
-              xTable.insertAt(record, row).then(({ row }) => {
-                xTable.setActiveRow(row)
+              $table.insertAt(record, row).then(({ row }) => {
+                $table.setActiveRow(row)
               })
-            },
-            getInsertEvent () {
-              let insertRecords = this.$refs.xTable.getInsertRecords()
-              this.$XModal.alert(insertRecords.length)
-            },
-            getRemoveEvent () {
-              let removeRecords = this.$refs.xTable.getRemoveRecords()
-              this.$XModal.alert(removeRecords.length)
-            },
-            getUpdateEvent () {
-              let updateRecords = this.$refs.xTable.getUpdateRecords()
-              this.$XModal.alert(updateRecords.length)
+            }
+
+            const getInsertEvent = () => {
+              const $table = xTable.value
+              const insertRecords = $table.getInsertRecords()
+              VXETable.modal.alert(insertRecords.length)
+            }
+
+            const getRemoveEvent = () => {
+              const $table = xTable.value
+              const removeRecords = $table.getRemoveRecords()
+              VXETable.modal.alert(removeRecords.length)
+            }
+
+            const getUpdateEvent = () => {
+              const $table = xTable.value
+              const updateRecords = $table.getUpdateRecords()
+              VXETable.modal.alert(updateRecords.length)
+            }
+
+            findList()
+
+            return {
+              xTable,
+              demo1,
+              findList,
+              validEvent,
+              fullValidEvent,
+              selectValidEvent,
+              insertEvent,
+              getInsertEvent,
+              getRemoveEvent,
+              getUpdateEvent
             }
           }
         })

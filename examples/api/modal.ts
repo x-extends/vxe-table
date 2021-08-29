@@ -216,6 +216,15 @@ const apis = [
         list: []
       },
       {
+        name: 'margin-size',
+        descKey: 'app.api.modal.desc.marginSize',
+        version: '',
+        type: 'number',
+        enum: '',
+        defVal: '默认 0，继承 setup.modal.marginSize',
+        list: []
+      },
+      {
         name: 'duration',
         descKey: 'app.api.modal.desc.duration',
         version: '',

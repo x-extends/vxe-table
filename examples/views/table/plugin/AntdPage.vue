@@ -247,19 +247,18 @@ export default defineComponent({
       }
     }
 
-    const vaildEvent = () => {
+    const vaildEvent = async () => {
       const $table = xTable.value
-      $table.validate((errMap) => {
-        if (errMap) {
-          message.error({
-            content: '校验不通过！'
-          })
-        } else {
-          message.success({
-            content: '校验成功！'
-          })
-        }
-      })
+      const errMap = await $table.validate().catch(errMap => errMap)
+      if (errMap) {
+        message.error({
+          content: '校验不通过！'
+        })
+      } else {
+        message.success({
+          content: '校验成功！'
+        })
+      }
     }
 
     const dropdownMenuEvent = (name: string) => {
@@ -562,19 +561,18 @@ export default defineComponent({
               }
             }
 
-            const vaildEvent = () => {
+            const vaildEvent = async () => {
               const $table = xTable.value
-              $table.validate((errMap) => {
-                if (errMap) {
-                  message.error({
-                    content: '校验不通过！'
-                  })
-                } else {
-                  message.success({
-                    content: '校验成功！'
-                  })
-                }
-              })
+              const errMap = await $table.validate().catch(errMap => errMap)
+              if (errMap) {
+                message.error({
+                  content: '校验不通过！'
+                })
+              } else {
+                message.success({
+                  content: '校验成功！'
+                })
+              }
             }
 
             const dropdownMenuEvent = (name: string) => {

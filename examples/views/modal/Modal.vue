@@ -86,6 +86,7 @@
       <vxe-button content="按 Esc 键可以关闭" @click="$XModal.alert({ content: '按 Esc 键可以关闭', escClosable: true })"></vxe-button>
       <vxe-button content="锁界面不要遮罩层" @click="$XModal.alert({ content: '锁界面不要遮罩层', mask: false })"></vxe-button>
       <vxe-button content="多窗口、叠加窗口" @click="$XModal.alert({ content: '多窗口、叠加窗口', lockView: false, mask: false })"></vxe-button>
+      <vxe-button content="允许拖动范围超出屏幕" @click="$XModal.alert({ content: '允许拖动范围超出屏幕', marginSize: -500 })"></vxe-button>
     </p>
 
     <p>
@@ -391,6 +392,7 @@ export default defineComponent({
           <vxe-button content="按 Esc 键可以关闭" @click="$XModal.alert({ content: '按 Esc 键可以关闭', escClosable: true })"></vxe-button>
           <vxe-button content="锁界面不要遮罩层" @click="$XModal.alert({ content: '锁界面不要遮罩层', mask: false })"></vxe-button>
           <vxe-button content="多窗口、叠加窗口" @click="$XModal.alert({ content: '多窗口、叠加窗口', lockView: false, mask: false })"></vxe-button>
+          <vxe-button content="允许拖动范围超出屏幕" @click="$XModal.alert({ content: '允许拖动范围超出屏幕', marginSize: -500 })"></vxe-button>
         </p>
 
         <p>

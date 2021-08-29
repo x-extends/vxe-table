@@ -4,6 +4,7 @@ export default {
       nav: {
         start: 'Development',
         install: 'Global install',
+        quick: 'Quick starts',
         use: 'Import on demand',
         global: 'Global props',
         icons: 'Global icon',
@@ -674,6 +675,7 @@ export default {
           escClosable: 'Whether Esc key is allowed to close the modal',
           showZoom: '标题是否标显示最大化与还原按钮',
           resize: '是否允许窗口边缘拖动调整窗口大小',
+          marginSize: '只对 resize 启用后有效，用于设置可拖动界限范围，如果为负数则允许拖动超出屏幕边界',
           duration: 'Only valid for type=message, auto-closed delay, if -1 is disabled automatically closed',
           size: 'Size',
           width: 'The width of the modal window',
