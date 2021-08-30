@@ -65,7 +65,11 @@ export default defineComponent({
           <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
 
-        <vxe-grid v-bind="gridOptions"></vxe-grid>
+        <vxe-grid v-bind="gridOptions">
+          <template #name="{ row }">
+            <span>自定义插槽模板 {{ row.name }}</span>
+          </template>
+        </vxe-grid>
         `,
         `
         export default {
@@ -81,8 +85,8 @@ export default defineComponent({
                 border: true,
                 columns: [
                   { type: 'seq', width: 50 },
-                  { field: 'name', title: 'app.body.label.name' },
-                  { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+                  { field: 'name', title: 'Name', slots: { default: 'name' } },
+                  { field: 'sex', title: 'Sex', showHeaderOverflow: true },
                   { field: 'address', title: 'Address', showOverflow: true }
                 ],
                 data: [
@@ -108,7 +112,11 @@ export default defineComponent({
           <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
 
-        <vxe-grid v-bind="gridOptions"></vxe-grid>
+        <vxe-grid v-bind="gridOptions">
+          <template #name="{ row }">
+            <span>自定义插槽模板 {{ row.name }}</span>
+          </template>
+        </vxe-grid>
         `,
         `
         import { defineComponent } from 'vue'
@@ -126,8 +134,8 @@ export default defineComponent({
                 border: true,
                 columns: [
                   { type: 'seq', width: 50 },
-                  { field: 'name', title: 'app.body.label.name' },
-                  { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+                  { field: 'name', title: 'Name', slots: { default: 'name' } },
+                  { field: 'sex', title: 'Sex', showHeaderOverflow: true },
                   { field: 'address', title: 'Address', showOverflow: true }
                 ],
                 data: [
@@ -153,7 +161,11 @@ export default defineComponent({
           <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
 
-        <vxe-grid v-bind="gridOptions"></vxe-grid>
+        <vxe-grid v-bind="gridOptions">
+          <template #name="{ row }">
+            <span>自定义插槽模板 {{ row.name }}</span>
+          </template>
+        </vxe-grid>
         `,
         `
         import { ref, reactive } from 'vue'
@@ -171,8 +183,8 @@ export default defineComponent({
               border: true,
               columns: [
                 { type: 'seq', width: 50 },
-                { field: 'name', title: 'app.body.label.name' },
-                { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+                { field: 'name', title: 'Name', slots: { default: 'name' } },
+                { field: 'sex', title: 'Sex', showHeaderOverflow: true },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
               data: [
@@ -202,27 +214,40 @@ export default defineComponent({
           <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
 
-        <vxe-grid v-bind="gridOptions"></vxe-grid>
+        <vxe-grid v-bind="gridOptions">
+          <template #name="{ row }">
+            <span>自定义插槽模板 {{ row.name }}</span>
+          </template>
+        </vxe-grid>
         `,
         `
-        import { defineComponent, ref } from 'vue'
+        import { defineComponent, ref, reactive } from 'vue'
         import { VxeGridProps } from 'vxe-table'
+
+        interface UserVO {
+          id: number;
+          name: string;
+          role: string;
+          sex: string;
+          age: number;
+          address: string;
+        }
 
         export default defineComponent({
           setup () {
-            const tableData = ref([
+            const tableData = ref<UserVO[]>([
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
               { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
               { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
             ])
 
-            const gridOptions = reactive<VxeGridProps>({
+            const gridOptions = reactive<VxeGridProps<UserVO>>({
               border: true,
               columns: [
                 { type: 'seq', width: 50 },
-                { field: 'name', title: 'app.body.label.name' },
-                { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+                { field: 'name', title: 'Name', slots: { default: 'name' } },
+                { field: 'sex', title: 'Sex', showHeaderOverflow: true },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
               data: [
@@ -241,24 +266,43 @@ export default defineComponent({
         })
         `,
         `
-        import { defineComponent, ref } from 'vue'
+        import { defineComponent, ref, reactive } from 'vue'
         import { VxeTable, VxeColumn, VxeGrid, VxeGridProps } from 'vxe-table'
+
+        interface UserVO {
+          id: number;
+          name: string;
+          role: string;
+          sex: string;
+          age: number;
+          address: string;
+        }
 
         export default defineComponent({
           setup () {
-            const tableData = ref([
+            const tableData = ref<UserVO>([
               { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
               { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
               { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
               { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
             ])
 
-            const gridOptions = reactive<VxeGridProps>({
+            const gridOptions = reactive<VxeGridProps<UserVO>>({
               border: true,
               columns: [
                 { type: 'seq', width: 50 },
-                { field: 'name', title: 'app.body.label.name' },
-                { field: 'sex', title: 'app.body.label.sex', showHeaderOverflow: true },
+                {
+                  field: 'name',
+                  title: 'Name',
+                  slots: {
+                    default ({ row }: { row: UserVO }) {
+                      return [
+                        <span>自定义插槽模板 { row.name }</span>
+                      ]
+                    }
+                  }
+                },
+                { field: 'sex', title: 'Sex', showHeaderOverflow: true },
                 { field: 'address', title: 'Address', showOverflow: true }
               ],
               data: [
@@ -272,11 +316,11 @@ export default defineComponent({
             return () => {
               return (
                 <div>
-                  <VxeTable border data={tableData}>
+                  <VxeTable border data={tableData.value}>
                     <VxeColumn type="seq" width="60"></VxeColumn>
                     <VxeColumn field="name" title="Name">
                       {{
-                        default: (row) => {
+                        default ({ row }: { row: UserVO }) {
                           return [
                             <span>自定义插槽模板 { row.name }</span>
                           ]
@@ -287,7 +331,7 @@ export default defineComponent({
                     <VxeColumn field="age" title="Age"></VxeColumn>
                   </VxeTable>
 
-                  <VxeGrid v-bind="gridOptions"></VxeGrid>
+                  <VxeGrid {...gridOptions}></VxeGrid>
                 </div>
               )
             }
