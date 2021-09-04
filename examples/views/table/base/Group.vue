@@ -6,20 +6,20 @@
       border
       height="400"
       :data="tableData">
-      <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="基本信息">
         <vxe-column type="seq" width="60"></vxe-column>
         <vxe-column field="name" title="Name"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="更多信息">
+      </vxe-colgroup>
+      <vxe-colgroup title="更多信息">
         <vxe-column field="role" title="Role"></vxe-column>
-        <vxe-table-colgroup title="详细信息">
+        <vxe-colgroup title="详细信息">
           <vxe-column field="sex" title="Sex"></vxe-column>
           <vxe-column field="age" title="Age"></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="分类信息">
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-colgroup title="分类信息">
         <vxe-column field="date3" title="Date"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="address" title="Address" show-overflow></vxe-column>
     </vxe-table>
 
@@ -46,28 +46,28 @@
       ref="xTable"
       height="400"
       :data="tableData">
-      <vxe-table-colgroup field="group0" title="基本信息">
+      <vxe-colgroup field="group0" title="基本信息">
         <vxe-column type="seq" width="60"></vxe-column>
         <vxe-column field="name" title="Name" width="180"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup field="group1" title="分类信息1">
+      </vxe-colgroup>
+      <vxe-colgroup field="group1" title="分类信息1">
         <vxe-column field="age" title="Age1" width="120"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup field="group2" title="更多信息">
+      </vxe-colgroup>
+      <vxe-colgroup field="group2" title="更多信息">
         <vxe-column field="role" title="Role" width="300"></vxe-column>
         <vxe-column field="attr1" title="Attr1" width="200"></vxe-column>
-        <vxe-table-colgroup title="详细信息">
+        <vxe-colgroup title="详细信息">
           <vxe-column field="sex" title="Sex" width="200"></vxe-column>
           <vxe-column field="num" title="Num" width="200"></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup field="group3" title="分类信息2">
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-colgroup field="group3" title="分类信息2">
         <vxe-column field="attr6" title="Attr6" width="120"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup field="group4" title="额外信息">
+      </vxe-colgroup>
+      <vxe-colgroup field="group4" title="额外信息">
         <vxe-column field="date3" title="Date" width="140"></vxe-column>
         <vxe-column field="address" title="Address" width="200" show-overflow></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -101,20 +101,20 @@ export default {
           border
           height="400"
           :data="tableData">
-          <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="基本信息">
             <vxe-column type="seq" width="60"></vxe-column>
             <vxe-column field="name" title="Name"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="更多信息">
+          </vxe-colgroup>
+          <vxe-colgroup title="更多信息">
             <vxe-column field="role" title="Role"></vxe-column>
-            <vxe-table-colgroup title="详细信息">
+            <vxe-colgroup title="详细信息">
               <vxe-column field="sex" title="Sex"></vxe-column>
               <vxe-column field="age" title="Age"></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="分类信息">
+            </vxe-colgroup>
+          </vxe-colgroup>
+          <vxe-colgroup title="分类信息">
             <vxe-column field="date3" title="Date"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="address" title="Address" show-overflow></vxe-column>
         </vxe-table>
         `,
@@ -151,28 +151,28 @@ export default {
           ref="xTable"
           height="400"
           :data="tableData">
-          <vxe-table-colgroup field="group0" title="基本信息">
+          <vxe-colgroup field="group0" title="基本信息">
             <vxe-column type="seq" width="60"></vxe-column>
             <vxe-column field="name" title="Name" width="180"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup field="group1" title="分类信息1">
+          </vxe-colgroup>
+          <vxe-colgroup field="group1" title="分类信息1">
             <vxe-column field="age" title="Age1" width="120"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup field="group2" title="更多信息">
+          </vxe-colgroup>
+          <vxe-colgroup field="group2" title="更多信息">
             <vxe-column field="role" title="Role" width="300"></vxe-column>
             <vxe-column field="attr1" title="Attr1" width="200"></vxe-column>
-            <vxe-table-colgroup title="详细信息">
+            <vxe-colgroup title="详细信息">
               <vxe-column field="sex" title="Sex" width="200"></vxe-column>
               <vxe-column field="num" title="Num" width="200"></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup field="group3" title="分类信息2">
+            </vxe-colgroup>
+          </vxe-colgroup>
+          <vxe-colgroup field="group3" title="分类信息2">
             <vxe-column field="attr6" title="Attr6" width="120"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup field="group4" title="额外信息">
+          </vxe-colgroup>
+          <vxe-colgroup field="group4" title="额外信息">
             <vxe-column field="date3" title="Date" width="140"></vxe-column>
             <vxe-column field="address" title="Address" width="200" show-overflow></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

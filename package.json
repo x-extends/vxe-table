@@ -88,7 +88,7 @@
     "vxe-table-plugin-virtual-tree": "0.6.10",
     "xe-ajax": "^4.0.5",
     "xe-clipboard": "^1.10.1",
-    "xe-utils": "^3.3.1",
+    "xe-utils": "^3.3.2",
     "xlsx": "^0.17.0"
   },
   "peerDependencies": {

@@ -19,16 +19,16 @@
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="基本信息">
         <vxe-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-column>
-        <vxe-table-colgroup title="详细详细">
+        <vxe-colgroup title="详细详细">
           <vxe-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
+        </vxe-colgroup>
+      </vxe-colgroup>
       <vxe-column field="rate" title="Rate" width="180" sortable></vxe-column>
-      <vxe-table-colgroup title="其他信息">
+      <vxe-colgroup title="其他信息">
         <vxe-column field="date13" title="Date" width="250"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -128,16 +128,16 @@ export default {
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="role" title="Role" width="300" sortable :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="基本信息">
             <vxe-column field="sex" title="sex" width="180" :edit-render="{name: 'input'}"></vxe-column>
-            <vxe-table-colgroup title="详细详细">
+            <vxe-colgroup title="详细详细">
               <vxe-column field="age" title="Age" width="180" sortable :filters="[{ data: [] }]" :filter-render="{name: 'input'}" :edit-render="{name: 'input'}"></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
+            </vxe-colgroup>
+          </vxe-colgroup>
           <vxe-column field="rate" title="Rate" width="180" sortable></vxe-column>
-          <vxe-table-colgroup title="其他信息">
+          <vxe-colgroup title="其他信息">
             <vxe-column field="date13" title="Date" width="250"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

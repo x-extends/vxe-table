@@ -126,18 +126,18 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="基本信息">
         <vxe-column type="seq" width="60"></vxe-column>
         <vxe-column field="name" title="Name"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="更多信息">
+      </vxe-colgroup>
+      <vxe-colgroup title="更多信息">
         <vxe-column field="role" title="Role"></vxe-column>
         <vxe-column field="age" title="Age"></vxe-column>
-        <vxe-table-colgroup title="详细信息">
+        <vxe-colgroup title="详细信息">
           <vxe-column field="sex" title="Sex"></vxe-column>
           <vxe-column field="date" title="Date" width="140" show-overflow></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
+        </vxe-colgroup>
+      </vxe-colgroup>
       <vxe-column field="address" title="Address" width="200" show-overflow></vxe-column>
     </vxe-table>
 
@@ -154,22 +154,22 @@
       border
       resizable
       :data="tableData">
-      <vxe-table-colgroup title="基本信息" fixed="left">
+      <vxe-colgroup title="基本信息" fixed="left">
         <vxe-column type="seq" width="60" fixed="left"></vxe-column>
         <vxe-column field="name" title="Name" fixed="left" width="100"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="更多信息">
+      </vxe-colgroup>
+      <vxe-colgroup title="更多信息">
         <vxe-column field="role" title="Role" width="300"></vxe-column>
         <vxe-column field="attr1" title="Attr1" width="300"></vxe-column>
-        <vxe-table-colgroup title="详细信息">
+        <vxe-colgroup title="详细信息">
           <vxe-column field="sex" title="Sex" width="300"></vxe-column>
           <vxe-column field="date" title="Date" width="300"></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="其他信息" fixed="right">
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-colgroup title="其他信息" fixed="right">
         <vxe-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-column>
         <vxe-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -347,18 +347,18 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="基本信息">
             <vxe-column type="seq" width="60"></vxe-column>
             <vxe-column field="name" title="Name"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="更多信息">
+          </vxe-colgroup>
+          <vxe-colgroup title="更多信息">
             <vxe-column field="role" title="Role"></vxe-column>
             <vxe-column field="age" title="Age"></vxe-column>
-            <vxe-table-colgroup title="详细信息">
+            <vxe-colgroup title="详细信息">
               <vxe-column field="sex" title="Sex"></vxe-column>
               <vxe-column field="date" title="Date" width="140" show-overflow></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
+            </vxe-colgroup>
+          </vxe-colgroup>
           <vxe-column field="address" title="Address" width="200" show-overflow></vxe-column>
         </vxe-table>
         `,
@@ -381,22 +381,22 @@ export default {
           border
           resizable
           :data="tableData">
-          <vxe-table-colgroup title="基本信息" fixed="left">
+          <vxe-colgroup title="基本信息" fixed="left">
             <vxe-column type="seq" width="60" fixed="left"></vxe-column>
             <vxe-column field="name" title="Name" fixed="left" width="100"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="更多信息">
+          </vxe-colgroup>
+          <vxe-colgroup title="更多信息">
             <vxe-column field="role" title="Role" width="300"></vxe-column>
             <vxe-column field="attr1" title="Attr1" width="300"></vxe-column>
-            <vxe-table-colgroup title="详细信息">
+            <vxe-colgroup title="详细信息">
               <vxe-column field="sex" title="Sex" width="300"></vxe-column>
               <vxe-column field="date" title="Date" width="300"></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="其他信息" fixed="right">
+            </vxe-colgroup>
+          </vxe-colgroup>
+          <vxe-colgroup title="其他信息" fixed="right">
             <vxe-column field="age" title="Age" width="100" fixed="right" show-overflow></vxe-column>
             <vxe-column field="address" title="Address" width="100" fixed="right" show-overflow></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

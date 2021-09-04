@@ -43,7 +43,7 @@
           </vxe-pulldown>
         </template>
       </vxe-column>
-      <vxe-table-colgroup title="分组">
+      <vxe-colgroup title="分组">
         <vxe-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
           <template #edit="scope">
             <vxe-input type="number" v-model="scope.row.age" @input="$refs.xTable.updateStatus(scope)"></vxe-input>
@@ -55,7 +55,7 @@
           </template>
           <template #default="{ row }">￥{{ row.num }}</template>
         </vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="attr1" title="不同行渲染" :edit-render="{}">
         <template #edit="scope">
           <template v-if="scope.rowIndex === 0">
@@ -181,7 +181,7 @@ export default {
               </vxe-pulldown>
             </template>
           </vxe-column>
-          <vxe-table-colgroup title="分组">
+          <vxe-colgroup title="分组">
             <vxe-column field="age" title="Age" :edit-render="{autofocus: '.vxe-input--inner'}">
               <template #edit="{ row }">
                 <vxe-input type="number" v-model="row.age"></vxe-input>
@@ -193,7 +193,7 @@ export default {
               </template>
               <template #default="{ row }">￥{{ row.num }}</template>
             </vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="attr1" title="不同行渲染" :edit-render="{}">
             <template #edit="scope">
               <template v-if="scope.rowIndex === 0">

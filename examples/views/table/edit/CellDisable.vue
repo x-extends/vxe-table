@@ -34,10 +34,10 @@
       @edit-actived="editActivedEvent">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-column>
-      <vxe-table-colgroup title="分组">
+      <vxe-colgroup title="分组">
         <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-column>
         <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -128,10 +128,10 @@ export default {
           @edit-actived="editActivedEvent">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" :edit-render="{name: 'input', attrs: {disabled: nameDisabled}}"></vxe-column>
-          <vxe-table-colgroup title="分组">
+          <vxe-colgroup title="分组">
             <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', props: {disabled: sexDisabled}, options: sexList}"></vxe-column>
             <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date', disabled: dateDisabled}}"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

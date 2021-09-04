@@ -31,17 +31,17 @@
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="分组1">
+      <vxe-colgroup title="分组1">
         <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
         <vxe-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="分组2">
-        <vxe-table-colgroup title="分组21">
+      </vxe-colgroup>
+      <vxe-colgroup title="分组2">
+        <vxe-colgroup title="分组21">
           <vxe-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-column>
           <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
+        </vxe-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -126,17 +126,17 @@ export default {
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="分组1">
+          <vxe-colgroup title="分组1">
             <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
             <vxe-column field="role" title="Role" :edit-render="{name: '$input'}"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="分组2">
-            <vxe-table-colgroup title="分组21">
+          </vxe-colgroup>
+          <vxe-colgroup title="分组2">
+            <vxe-colgroup title="分组21">
               <vxe-column field="sex2" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
               <vxe-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-column>
               <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
+            </vxe-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

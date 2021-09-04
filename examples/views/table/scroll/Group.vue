@@ -11,21 +11,21 @@
       :scroll-x="{enabled: false}"
       :loading="loading">
       <vxe-column type="seq" title="序号" width="100"></vxe-column>
-      <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="基本信息">
         <vxe-column field="name" title="Name" width="200" sortable></vxe-column>
         <vxe-column field="age" title="Age" width="200"></vxe-column>
         <vxe-column field="sex" title="Sex" width="200"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="详细信息">
-        <vxe-table-colgroup title="分组">
+      </vxe-colgroup>
+      <vxe-colgroup title="详细信息">
+        <vxe-colgroup title="分组">
           <vxe-column field="rate" title="Rate" width="200"></vxe-column>
           <vxe-column field="region" title="Region" width="200"></vxe-column>
-        </vxe-table-colgroup>
-        <vxe-table-colgroup title="其他">
+        </vxe-colgroup>
+        <vxe-colgroup title="其他">
           <vxe-column field="time" title="Time" width="200" sortable></vxe-column>
           <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
+        </vxe-colgroup>
+      </vxe-colgroup>
       <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
       <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
@@ -55,21 +55,21 @@ export default {
           :scroll-x="{enabled: false}"
           :loading="loading">
           <vxe-column type="seq" title="序号" width="100"></vxe-column>
-          <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="基本信息">
             <vxe-column field="name" title="Name" width="200" sortable></vxe-column>
             <vxe-column field="age" title="Age" width="200"></vxe-column>
             <vxe-column field="sex" title="Sex" width="200"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="详细信息">
-            <vxe-table-colgroup title="分组">
+          </vxe-colgroup>
+          <vxe-colgroup title="详细信息">
+            <vxe-colgroup title="分组">
               <vxe-column field="rate" title="Rate" width="200"></vxe-column>
               <vxe-column field="region" title="Region" width="200"></vxe-column>
-            </vxe-table-colgroup>
-            <vxe-table-colgroup title="其他">
+            </vxe-colgroup>
+            <vxe-colgroup title="其他">
               <vxe-column field="time" title="Time" width="200" sortable></vxe-column>
               <vxe-column field="address" title="Address" width="300" show-overflow></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
+            </vxe-colgroup>
+          </vxe-colgroup>
           <vxe-column field="updateTime" title="UpdateTime" width="200"></vxe-column>
           <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
         </vxe-table>

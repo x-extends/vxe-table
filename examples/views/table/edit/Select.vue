@@ -9,13 +9,13 @@
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="分组1">
+      <vxe-colgroup title="分组1">
         <vxe-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-column>
         <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="分组1">
+      </vxe-colgroup>
+      <vxe-colgroup title="分组1">
         <vxe-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -70,13 +70,13 @@ export default {
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="分组1">
+          <vxe-colgroup title="分组1">
             <vxe-column field="name" title="Name" :edit-render="{name: 'input', autoselect: true}"></vxe-column>
             <vxe-column field="sex" title="Sex" :edit-render="{name: '$select', optionGroups: sexGriupList}"></vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="分组1">
+          </vxe-colgroup>
+          <vxe-colgroup title="分组1">
             <vxe-column field="date13" title="Date" :edit-render="{name: '$input', props: {type: 'date'}, autoselect: true}"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

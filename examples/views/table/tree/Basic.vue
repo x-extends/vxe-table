@@ -63,10 +63,10 @@
       :tree-config="{children: 'list', expandAll: true}">
       <vxe-column type="seq" width="180" title="序号" tree-node></vxe-column>
       <vxe-column field="name" title="app.body.label.name"></vxe-column>
-      <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="基本信息">
         <vxe-column field="size" title="Size"></vxe-column>
         <vxe-column field="type" title="Type"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="date" title="Date"></vxe-column>
     </vxe-table>
 
@@ -294,10 +294,10 @@ export default {
           :tree-config="{children: 'list', expandAll: true}">
           <vxe-column type="seq" width="180" title="序号" tree-node></vxe-column>
           <vxe-column field="name" title="app.body.label.name"></vxe-column>
-          <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="基本信息">
             <vxe-column field="size" title="Size"></vxe-column>
             <vxe-column field="type" title="Type"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="date" title="Date"></vxe-column>
         </vxe-table>
         `,

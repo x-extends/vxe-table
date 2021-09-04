@@ -78,14 +78,14 @@
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column field="name" title="Name" :visible="false"></vxe-column>
       <vxe-column field="role" title="Role"></vxe-column>
-      <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="基本信息">
         <vxe-column field="sex" title="Sex" :visible="false"></vxe-column>
         <vxe-column field="age" title="Age"></vxe-column>
-        <vxe-table-colgroup title="其他信息">
+        <vxe-colgroup title="其他信息">
           <vxe-column field="rate" title="Rate"></vxe-column>
           <vxe-column field="flag" title="Flag"></vxe-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
+        </vxe-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -264,14 +264,14 @@ export default {
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column field="name" title="Name" :visible="false"></vxe-column>
           <vxe-column field="role" title="Role"></vxe-column>
-          <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="基本信息">
             <vxe-column field="sex" title="Sex" :visible="false"></vxe-column>
             <vxe-column field="age" title="Age"></vxe-column>
-            <vxe-table-colgroup title="其他信息">
+            <vxe-colgroup title="其他信息">
               <vxe-column field="rate" title="Rate"></vxe-column>
               <vxe-column field="flag" title="Flag"></vxe-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
+            </vxe-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

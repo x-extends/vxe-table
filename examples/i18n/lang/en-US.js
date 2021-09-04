@@ -4,6 +4,7 @@ export default {
       nav: {
         start: 'Development',
         install: 'Global install',
+        quick: 'Quick starts',
         use: 'Import on demand',
         global: 'Global props',
         icons: 'Global icon',

@@ -10,27 +10,27 @@
       :loading="loading"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="文本">
+      <vxe-colgroup title="文本">
         <vxe-column field="name" :filters="[{data: ''}]" :filter-method="customStringFilterMethod">
           <template #header="{ column }">
             <vxe-input type="text" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @change="filterEvent(option)" placeholder="请输入" clearable></vxe-input>
           </template>
         </vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="日期">
+      </vxe-colgroup>
+      <vxe-colgroup title="日期">
         <vxe-column field="date" :filters="[{data: ''}]" :filter-method="customDateFilterMethod">
           <template #header="{ column }">
             <vxe-input type="date" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @change="filterEvent(option)" placeholder="请选择" clearable transfer></vxe-input>
           </template>
         </vxe-column>
-      </vxe-table-colgroup>
-      <vxe-table-colgroup title="下拉框">
+      </vxe-colgroup>
+      <vxe-colgroup title="下拉框">
         <vxe-column field="sex" :filters="[{data: ''}]" :filter-method="customEqualFilterMethod" :formatter="formatterSex">
           <template #header="{ column }">
             <vxe-select v-for="(option, index) in column.filters" :key="index" v-model="option.data" :options="sexList" @change="filterEvent(option)" placeholder="请选择" clearable transfer></vxe-select>
           </template>
         </vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="address" title="Address" sortable></vxe-column>
     </vxe-table>
 
@@ -65,27 +65,27 @@ export default {
           :loading="loading"
           :data="tableData">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="文本">
+          <vxe-colgroup title="文本">
             <vxe-column field="name" :filters="[{data: ''}]" :filter-method="customStringFilterMethod">
               <template #header="{ column }">
                 <vxe-input type="text" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @change="filterEvent(option)" placeholder="请输入" clearable></vxe-input>
               </template>
             </vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="日期">
+          </vxe-colgroup>
+          <vxe-colgroup title="日期">
             <vxe-column field="date" :filters="[{data: ''}]" :filter-method="customDateFilterMethod">
               <template #header="{ column }">
                 <vxe-input type="date" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @change="filterEvent(option)" placeholder="请选择" clearable transfer></vxe-input>
               </template>
             </vxe-column>
-          </vxe-table-colgroup>
-          <vxe-table-colgroup title="下拉框">
+          </vxe-colgroup>
+          <vxe-colgroup title="下拉框">
             <vxe-column field="sex" :filters="[{data: ''}]" :filter-method="customEqualFilterMethod" :formatter="formatterSex">
               <template #header="{ column }">
                 <vxe-select v-for="(option, index) in column.filters" :key="index" v-model="option.data" :options="sexList" @change="filterEvent(option)" placeholder="请选择" clearable transfer></vxe-select>
               </template>
             </vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="address" title="Address" sortable></vxe-column>
         </vxe-table>
         `,

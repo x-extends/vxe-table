@@ -4,6 +4,7 @@ export default {
       nav: {
         start: '開發指南',
         install: '全局安装',
+        quick: '快速入门',
         use: '按需加载',
         global: '全域參數',
         icons: '全域圖標',

@@ -14,17 +14,17 @@
       :print-config="{}"
       :data="tableData1">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="分组信息">
-        <vxe-table-colgroup title="基本信息">
+      <vxe-colgroup title="分组信息">
+        <vxe-colgroup title="基本信息">
           <vxe-column field="name" title="app.body.label.name"></vxe-column>
           <vxe-column field="role" title="Role"></vxe-column>
-        </vxe-table-colgroup>
+        </vxe-colgroup>
         <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
       <vxe-column field="age" title="app.body.label.age"></vxe-column>
-      <vxe-table-colgroup title="其他信息">
+      <vxe-colgroup title="其他信息">
         <vxe-column field="rate" title="Rate"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -112,17 +112,17 @@ export default {
           :print-config="{}"
           :data="tableData1">
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="分组信息">
-            <vxe-table-colgroup title="基本信息">
+          <vxe-colgroup title="分组信息">
+            <vxe-colgroup title="基本信息">
               <vxe-column field="name" title="app.body.label.name"></vxe-column>
               <vxe-column field="role" title="Role"></vxe-column>
-            </vxe-table-colgroup>
+            </vxe-colgroup>
             <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
           <vxe-column field="age" title="app.body.label.age"></vxe-column>
-          <vxe-table-colgroup title="其他信息">
+          <vxe-colgroup title="其他信息">
             <vxe-column field="rate" title="Rate"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `

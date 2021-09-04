@@ -23,14 +23,14 @@
       :data="tableData">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-table-colgroup title="Group1">
+      <vxe-colgroup title="Group1">
         <vxe-column field="name" title="Name"></vxe-column>
-        <vxe-table-colgroup title="Group2">
+        <vxe-colgroup title="Group2">
           <vxe-column field="role" title="Role"></vxe-column>
           <vxe-column field="age" title="Age"></vxe-column>
-        </vxe-table-colgroup>
+        </vxe-colgroup>
         <vxe-column field="address" title="Address"></vxe-column>
-      </vxe-table-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -99,14 +99,14 @@ export default {
           :data="tableData">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-table-colgroup title="Group1">
+          <vxe-colgroup title="Group1">
             <vxe-column field="name" title="Name"></vxe-column>
-            <vxe-table-colgroup title="Group2">
+            <vxe-colgroup title="Group2">
               <vxe-column field="role" title="Role"></vxe-column>
               <vxe-column field="age" title="Age"></vxe-column>
-            </vxe-table-colgroup>
+            </vxe-colgroup>
             <vxe-column field="address" title="Address"></vxe-column>
-          </vxe-table-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `
