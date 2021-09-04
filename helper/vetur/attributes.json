@@ -1667,6 +1667,10 @@
     "type": "boolean",
     "description": "是否允许窗口边缘拖动调整窗口大小"
   },
+  "vxe-modal/margin-size": {
+    "type": "number",
+    "description": "只对 resize 启用后有效，用于设置可拖动界限范围，如果为负数则允许拖动超出屏幕边界"
+  },
   "vxe-modal/show-close": {
     "type": "boolean",
     "description": "是否显示关闭按钮"
@@ -1714,6 +1718,10 @@
   "vxe-modal/fullscreen": {
     "type": "boolean",
     "description": "默认最大化显示"
+  },
+  "vxe-modal/draggable": {
+    "type": "boolean",
+    "description": "是否启用窗口拖动"
   },
   "vxe-modal/dblclick-zoom": {
     "type": "boolean",

@@ -23,27 +23,28 @@
     </p>
 
     <p>
-      <vxe-button @click="$XModal.message({ content: '消息提示' })">默认消息框</vxe-button>
-      <vxe-button @click="$XModal.message({ content: 'info 消息提示', status: 'info' })">info</vxe-button>
-      <vxe-button @click="$XModal.message({ content: 'warning 消息提示', status: 'warning' })">warning</vxe-button>
-      <vxe-button @click="$XModal.message({ content: 'question 消息提示', status: 'question' })">question</vxe-button>
-      <vxe-button @click="$XModal.message({ content: 'success 消息提示', status: 'success' })">success</vxe-button>
-      <vxe-button @click="$XModal.message({ content: 'error 消息提示', status: 'error' })">error</vxe-button>
-      <vxe-button @click="$XModal.message({ content: 'loading 消息提示', status: 'loading' })">loading</vxe-button>
-      <vxe-button @click="$XModal.message({ content: 'iconStatus 自定义图标', status:'success', iconStatus: 'fa fa-thumbs-up' })">自定义图标</vxe-button>
-      <vxe-button @click="$XModal.message({ content: '不允许重复点击', id: 'unique1' })">不允许重复点击</vxe-button>
+      <vxe-button content="默认消息框" @click="$XModal.message({ content: '消息提示' })"></vxe-button>
+      <vxe-button content="info" @click="$XModal.message({ content: 'info 消息提示', status: 'info' })"></vxe-button>
+      <vxe-button content="warning" @click="$XModal.message({ content: 'warning 消息提示', status: 'warning' })"></vxe-button>
+      <vxe-button content="question" @click="$XModal.message({ content: 'question 消息提示', status: 'question' })"></vxe-button>
+      <vxe-button content="success" @click="$XModal.message({ content: 'success 消息提示', status: 'success' })"></vxe-button>
+      <vxe-button content="error" @click="$XModal.message({ content: 'error 消息提示', status: 'error' })"></vxe-button>
+      <vxe-button content="loading" @click="$XModal.message({ content: 'loading 消息提示', status: 'loading' })"></vxe-button>
+      <vxe-button content="自定义图标" @click="$XModal.message({ content: 'iconStatus 自定义图标', status:'success', iconStatus: 'fa fa-thumbs-up' })"></vxe-button>
+      <vxe-button content="不允许重复点击" @click="$XModal.message({ content: '不允许重复点击', id: 'unique1' })"></vxe-button>
     </p>
 
     <p>
-      <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示框</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: 'info 提示框', status: 'info' })">info</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: 'warning 提示框', status: 'warning' })">warning</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: 'question 提示框', status: 'question' })">question</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: 'success 提示框', status: 'success' })">success</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: 'error 提示框', title:'app.body.msg.error', status: 'error' })">error</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: 'loading 提示框', status: 'loading' })">loading</vxe-button>
-      <vxe-button @click="$XModal.alert({ content: 'iconStatus 自定义图标', status:'error', iconStatus: 'fa fa-hand-peace-o' })">自定义图标</vxe-button>
-      <vxe-button @click="confirmEvent">确认提示框</vxe-button>
+      <vxe-button content="基本提示框" @click="$XModal.alert('基本提示框', '标题1')"></vxe-button>
+      <vxe-button content="info" @click="$XModal.alert({ content: 'info 提示框', status: 'info' })"></vxe-button>
+      <vxe-button content="warning" @click="$XModal.alert({ content: 'warning 提示框', status: 'warning' })"></vxe-button>
+      <vxe-button content="question" @click="$XModal.alert({ content: 'question 提示框', status: 'question' })"></vxe-button>
+      <vxe-button content="success" @click="$XModal.alert({ content: 'success 提示框', status: 'success' })"></vxe-button>
+      <vxe-button content="error" @click="$XModal.alert({ content: 'error 提示框', title:'app.body.msg.error', status: 'error' })"></vxe-button>
+      <vxe-button content="loading" @click="$XModal.alert({ content: 'loading 提示框', status: 'loading' })"></vxe-button>
+      <vxe-button content="自定义图标" @click="$XModal.alert({ content: 'iconStatus 自定义图标', status:'error', iconStatus: 'fa fa-hand-peace-o' })"></vxe-button>
+      <vxe-button content="禁止拖动" @click="$XModal.alert({ content: '禁止后，按住头部无法进行拖动', draggable: false })"></vxe-button>
+      <vxe-button content="确认提示框" @click="confirmEvent"></vxe-button>
     </p>
 
     <p>
@@ -332,27 +333,28 @@ export default {
       demoCodes: [
         `
         <p>
-          <vxe-button @click="$XModal.message({ content: '消息提示' })">默认消息框</vxe-button>
-          <vxe-button @click="$XModal.message({ content: 'info 消息提示', status: 'info' })">info</vxe-button>
-          <vxe-button @click="$XModal.message({ content: 'warning 消息提示', status: 'warning' })">warning</vxe-button>
-          <vxe-button @click="$XModal.message({ content: 'question 消息提示', status: 'question' })">question</vxe-button>
-          <vxe-button @click="$XModal.message({ content: 'success 消息提示', status: 'success' })">success</vxe-button>
-          <vxe-button @click="$XModal.message({ content: 'error 消息提示', status: 'error' })">error</vxe-button>
-          <vxe-button @click="$XModal.message({ content: 'loading 消息提示', status: 'loading' })">loading</vxe-button>
-          <vxe-button @click="$XModal.message({ content: 'iconStatus 自定义图标', status:'success', iconStatus: 'fa fa-thumbs-up' })">自定义图标</vxe-button>
-          <vxe-button @click="$XModal.message({ content: '不允许重复点击', id: 'unique1' })">不允许重复点击</vxe-button>
+          <vxe-button content="默认消息框" @click="$XModal.message({ content: '消息提示' })"></vxe-button>
+          <vxe-button content="info" @click="$XModal.message({ content: 'info 消息提示', status: 'info' })"></vxe-button>
+          <vxe-button content="warning" @click="$XModal.message({ content: 'warning 消息提示', status: 'warning' })"></vxe-button>
+          <vxe-button content="question" @click="$XModal.message({ content: 'question 消息提示', status: 'question' })"></vxe-button>
+          <vxe-button content="success" @click="$XModal.message({ content: 'success 消息提示', status: 'success' })"></vxe-button>
+          <vxe-button content="error" @click="$XModal.message({ content: 'error 消息提示', status: 'error' })"></vxe-button>
+          <vxe-button content="loading" @click="$XModal.message({ content: 'loading 消息提示', status: 'loading' })"></vxe-button>
+          <vxe-button content="自定义图标" @click="$XModal.message({ content: 'iconStatus 自定义图标', status:'success', iconStatus: 'fa fa-thumbs-up' })"></vxe-button>
+          <vxe-button content="不允许重复点击" @click="$XModal.message({ content: '不允许重复点击', id: 'unique1' })"></vxe-button>
         </p>
 
         <p>
-          <vxe-button @click="$XModal.alert('基本提示框', '标题1')">基本提示框</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: 'info 提示框', status: 'info' })">info</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: 'warning 提示框', status: 'warning' })">warning</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: 'question 提示框', status: 'question' })">question</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: 'success 提示框', status: 'success' })">success</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: 'error 提示框', title:'app.body.msg.error', status: 'error' })">error</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: 'loading 提示框', status: 'loading' })">loading</vxe-button>
-          <vxe-button @click="$XModal.alert({ content: 'iconStatus 自定义图标', status:'error', iconStatus: 'fa fa-hand-peace-o' })">自定义图标</vxe-button>
-          <vxe-button @click="confirmEvent">确认提示框</vxe-button>
+          <vxe-button content="基本提示框" @click="$XModal.alert('基本提示框', '标题1')"></vxe-button>
+          <vxe-button content="info" @click="$XModal.alert({ content: 'info 提示框', status: 'info' })"></vxe-button>
+          <vxe-button content="warning" @click="$XModal.alert({ content: 'warning 提示框', status: 'warning' })"></vxe-button>
+          <vxe-button content="question" @click="$XModal.alert({ content: 'question 提示框', status: 'question' })"></vxe-button>
+          <vxe-button content="success" @click="$XModal.alert({ content: 'success 提示框', status: 'success' })"></vxe-button>
+          <vxe-button content="error" @click="$XModal.alert({ content: 'error 提示框', title:'app.body.msg.error', status: 'error' })"></vxe-button>
+          <vxe-button content="loading" @click="$XModal.alert({ content: 'loading 提示框', status: 'loading' })"></vxe-button>
+          <vxe-button content="自定义图标" @click="$XModal.alert({ content: 'iconStatus 自定义图标', status:'error', iconStatus: 'fa fa-hand-peace-o' })"></vxe-button>
+          <vxe-button content="禁止拖动" @click="$XModal.alert({ content: '禁止后，按住头部无法进行拖动', draggable: false })"></vxe-button>
+          <vxe-button content="确认提示框" @click="confirmEvent"></vxe-button>
         </p>
 
         <p>

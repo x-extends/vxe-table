@@ -343,12 +343,21 @@ const apis = [
         list: []
       },
       {
+        name: 'draggable',
+        descKey: 'app.api.modal.desc.draggable',
+        version: '3.3.13',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 true，继承 setup.modal.draggable',
+        list: []
+      },
+      {
         name: 'dblclickZoom',
         descKey: 'app.api.modal.desc.dblclickZoom',
         version: '',
         type: 'boolean',
         enum: '',
-        defVal: 'true',
+        defVal: '默认 true，继承 setup.modal.dblclickZoom',
         list: []
       },
       {

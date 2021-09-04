@@ -44,6 +44,7 @@ export default {
     zIndex: Number,
     marginSize: { type: [Number, String], default: () => GlobalConfig.modal.marginSize },
     fullscreen: Boolean,
+    draggable: { type: Boolean, default: () => GlobalConfig.modal.draggable },
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     destroyOnClose: { type: Boolean, default: () => GlobalConfig.modal.destroyOnClose },
     showTitleOverflow: { type: Boolean, default: () => GlobalConfig.modal.showTitleOverflow },
@@ -115,14 +116,15 @@ export default {
     }
   },
   render (h) {
-    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, draggable, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
     const content = this.content || this.message
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
     const titleSlot = $scopedSlots.title || slots.title
-    const headerOns = {
-      mousedown: this.mousedownEvent
+    const headerOns = {}
+    if (draggable) {
+      headerOns.mousedown = this.mousedownEvent
     }
     if (showZoom && dblclickZoom && type === 'modal') {
       headerOns.dblclick = this.toggleZoomEvent
@@ -157,7 +159,10 @@ export default {
         ref: 'modalBox'
       }, [
         this.showHeader ? h('div', {
-          class: ['vxe-modal--header', !isMsg && showTitleOverflow ? 'is--ellipsis' : ''],
+          class: ['vxe-modal--header', {
+            'is--drag': draggable,
+            'is--ellipsis': !isMsg && showTitleOverflow
+          }],
           on: headerOns
         }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : headerSlot.call(this, { $modal: this }, h)) : [
           titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
