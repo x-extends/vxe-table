@@ -43,6 +43,7 @@
       <vxe-button content="error" @click="$XModal.alert({ content: 'error 提示框', title:'app.body.msg.error', status: 'error' })"></vxe-button>
       <vxe-button content="loading" @click="$XModal.alert({ content: 'loading 提示框', status: 'loading' })"></vxe-button>
       <vxe-button content="自定义图标" @click="$XModal.alert({ content: 'iconStatus 自定义图标', status:'error', iconStatus: 'fa fa-hand-peace-o' })"></vxe-button>
+      <vxe-button content="禁止拖动" @click="$XModal.alert({ content: '禁止按住头部进行拖动', draggable: false })"></vxe-button>
       <vxe-button content="确认提示框" @click="confirmEvent"></vxe-button>
     </p>
 
@@ -349,6 +350,7 @@ export default defineComponent({
           <vxe-button content="error" @click="$XModal.alert({ content: 'error 提示框', title:'app.body.msg.error', status: 'error' })"></vxe-button>
           <vxe-button content="loading" @click="$XModal.alert({ content: 'loading 提示框', status: 'loading' })"></vxe-button>
           <vxe-button content="自定义图标" @click="$XModal.alert({ content: 'iconStatus 自定义图标', status:'error', iconStatus: 'fa fa-hand-peace-o' })"></vxe-button>
+          <vxe-button content="禁止拖动" @click="$XModal.alert({ content: '禁止按住头部进行拖动', draggable: false })"></vxe-button>
           <vxe-button content="确认提示框" @click="confirmEvent"></vxe-button>
         </p>
 

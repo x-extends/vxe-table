@@ -142,6 +142,7 @@ export namespace VxeModalPropTypes {
   export type ZIndex = number;
   export type MarginSize = number | string;
   export type Fullscreen = boolean;
+  export type Draggable = boolean;
   export type Remember = boolean;
   export type DestroyOnClose = boolean;
   export type ShowTitleOverflow = boolean;
@@ -185,6 +186,7 @@ export type VxeModalProps = {
   showZoom?: VxeModalPropTypes.ShowZoom;
   showClose?: VxeModalPropTypes.ShowClose;
   dblclickZoom?: VxeModalPropTypes.DblclickZoom;
+  draggable?: VxeModalPropTypes.Draggable;
   width?: VxeModalPropTypes.Width;
   height?: VxeModalPropTypes.Height;
   minWidth?: VxeModalPropTypes.MinWidth;

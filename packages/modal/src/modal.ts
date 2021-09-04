@@ -48,6 +48,7 @@ export default defineComponent({
     zIndex: Number as PropType<VxeModalPropTypes.ZIndex>,
     marginSize: { type: [Number, String] as PropType<VxeModalPropTypes.MarginSize>, default: () => GlobalConfig.modal.marginSize },
     fullscreen: Boolean as PropType<VxeModalPropTypes.Fullscreen>,
+    draggable: { type: Boolean as PropType<VxeModalPropTypes.Draggable>, default: () => GlobalConfig.modal.draggable },
     remember: { type: Boolean, default: () => GlobalConfig.modal.remember },
     destroyOnClose: { type: Boolean as PropType<VxeModalPropTypes.DestroyOnClose>, default: () => GlobalConfig.modal.destroyOnClose },
     showTitleOverflow: { type: Boolean as PropType<VxeModalPropTypes.ShowTitleOverflow>, default: () => GlobalConfig.modal.showTitleOverflow },
@@ -703,21 +704,27 @@ export default defineComponent({
     }
 
     const renderHeaders = () => {
-      const { slots: propSlots = {}, showZoom } = props
+      const { slots: propSlots = {}, showZoom, draggable } = props
       const isMsg = computeIsMsg.value
       const headerSlot = slots.header || propSlots.header
       const headVNs: VNode[] = []
       if (props.showHeader) {
         const headerOns: {
+          onMousedown?: typeof mousedownEvent;
           onDblclick?: typeof toggleZoomEvent;
         } = {}
+        if (draggable) {
+          headerOns.onMousedown = mousedownEvent
+        }
         if (showZoom && props.dblclickZoom && props.type === 'modal') {
           headerOns.onDblclick = toggleZoomEvent
         }
         headVNs.push(
           h('div', {
-            class: ['vxe-modal--header', !isMsg && props.showTitleOverflow ? 'is--ellipsis' : ''],
-            onMousedown: mousedownEvent,
+            class: ['vxe-modal--header', {
+              'is--drag': draggable,
+              'is--ellipsis': !isMsg && props.showTitleOverflow
+            }],
             ...headerOns
           }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : headerSlot({ $modal: $xemodal })) as VNode[] : renderTitles())
         )

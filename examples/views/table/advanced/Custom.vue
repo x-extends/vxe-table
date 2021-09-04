@@ -19,10 +19,10 @@
       ref="xTable1"
       height="200"
       :data="demo1.tableData">
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="sex" title="Sex" :visible="false"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -44,11 +44,11 @@
       height="200"
       :loading="demo2.loading"
       :data="demo2.tableData">
-      <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-      <vxe-table-column field="age" title="Age"></vxe-table-column>
+      <vxe-column type="seq" title="序号" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -72,17 +72,17 @@
       height="300"
       :loading="demo3.loading"
       :data="demo3.tableData">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" :visible="false"></vxe-table-column>
-      <vxe-table-column field="role" title="Role"></vxe-table-column>
-      <vxe-table-colgroup title="基本信息">
-        <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
-        <vxe-table-column field="age" title="Age"></vxe-table-column>
-        <vxe-table-colgroup title="其他信息">
-          <vxe-table-column field="rate" title="Rate"></vxe-table-column>
-          <vxe-table-column field="flag" title="Flag"></vxe-table-column>
-        </vxe-table-colgroup>
-      </vxe-table-colgroup>
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" :visible="false"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-colgroup title="基本信息">
+        <vxe-column field="sex" title="Sex" :visible="false"></vxe-column>
+        <vxe-column field="age" title="Age"></vxe-column>
+        <vxe-colgroup title="其他信息">
+          <vxe-column field="rate" title="Rate"></vxe-column>
+          <vxe-column field="flag" title="Flag"></vxe-column>
+        </vxe-colgroup>
+      </vxe-colgroup>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -99,23 +99,23 @@
       ref="xTable4"
       height="200"
       :data="demo4.tableData">
-      <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="Name" width="200">
+      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" width="200">
         <template #header>
           <i :class="demo4.collapsable1 ? 'fa fa-minus-square' : 'fa fa-plus-square'" @click="collapsable1Event"></i>
           <span>Name</span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="role" title="Role" :visible="false" width="200"></vxe-table-column>
-      <vxe-table-column field="sex" title="Sex" :visible="false" width="200"></vxe-table-column>
-      <vxe-table-column field="age" title="Age" width="200">
+      </vxe-column>
+      <vxe-column field="role" title="Role" :visible="false" width="200"></vxe-column>
+      <vxe-column field="sex" title="Sex" :visible="false" width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="200">
         <template #header>
           <i :class="demo4.collapsable2 ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" @click="collapsable2Event"></i>
           <span>Age</span>
         </template>
-      </vxe-table-column>
-      <vxe-table-column field="rate" title="Rate" :visible="false" width="200"></vxe-table-column>
-      <vxe-table-column field="address" title="Address" :visible="false" width="200"></vxe-table-column>
+      </vxe-column>
+      <vxe-column field="rate" title="Rate" :visible="false" width="200"></vxe-column>
+      <vxe-column field="address" title="Address" :visible="false" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -279,10 +279,10 @@ export default defineComponent({
           ref="xTable1"
           height="200"
           :data="demo1.tableData">
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="sex" title="Sex" :visible="false"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `
@@ -323,11 +323,11 @@ export default defineComponent({
           height="200"
           :loading="demo2.loading"
           :data="demo2.tableData">
-          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex"></vxe-table-column>
-          <vxe-table-column field="age" title="Age"></vxe-table-column>
+          <vxe-column type="seq" title="序号" width="60"></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
         </vxe-table>
         `,
         `
@@ -393,17 +393,17 @@ export default defineComponent({
           height="300"
           :loading="demo3.loading"
           :data="demo3.tableData">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" :visible="false"></vxe-table-column>
-          <vxe-table-column field="role" title="Role"></vxe-table-column>
-          <vxe-table-colgroup title="基本信息">
-            <vxe-table-column field="sex" title="Sex" :visible="false"></vxe-table-column>
-            <vxe-table-column field="age" title="Age"></vxe-table-column>
-            <vxe-table-colgroup title="其他信息">
-              <vxe-table-column field="rate" title="Rate"></vxe-table-column>
-              <vxe-table-column field="flag" title="Flag"></vxe-table-column>
-            </vxe-table-colgroup>
-          </vxe-table-colgroup>
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" :visible="false"></vxe-column>
+          <vxe-column field="role" title="Role"></vxe-column>
+          <vxe-colgroup title="基本信息">
+            <vxe-column field="sex" title="Sex" :visible="false"></vxe-column>
+            <vxe-column field="age" title="Age"></vxe-column>
+            <vxe-colgroup title="其他信息">
+              <vxe-column field="rate" title="Rate"></vxe-column>
+              <vxe-column field="flag" title="Flag"></vxe-column>
+            </vxe-colgroup>
+          </vxe-colgroup>
         </vxe-table>
         `,
         `
@@ -453,23 +453,23 @@ export default defineComponent({
           ref="xTable4"
           height="200"
           :data="demo4.tableData">
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="Name" width="200">
+          <vxe-column type="checkbox" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" width="200">
             <template #header>
               <i :class="demo4.collapsable1 ? 'fa fa-minus-square' : 'fa fa-plus-square'" @click="collapsable1Event"></i>
               <span>Name</span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="role" title="Role" :visible="false" width="200"></vxe-table-column>
-          <vxe-table-column field="sex" title="Sex" :visible="false" width="200"></vxe-table-column>
-          <vxe-table-column field="age" title="Age" width="200">
+          </vxe-column>
+          <vxe-column field="role" title="Role" :visible="false" width="200"></vxe-column>
+          <vxe-column field="sex" title="Sex" :visible="false" width="200"></vxe-column>
+          <vxe-column field="age" title="Age" width="200">
             <template #header>
               <i :class="demo4.collapsable2 ? 'fa fa-minus-square-o' : 'fa fa-plus-square-o'" @click="collapsable2Event"></i>
               <span>Age</span>
             </template>
-          </vxe-table-column>
-          <vxe-table-column field="rate" title="Rate" :visible="false" width="200"></vxe-table-column>
-          <vxe-table-column field="address" title="Address" :visible="false" width="200"></vxe-table-column>
+          </vxe-column>
+          <vxe-column field="rate" title="Rate" :visible="false" width="200"></vxe-column>
+          <vxe-column field="address" title="Address" :visible="false" width="200"></vxe-column>
         </vxe-table>
         `,
         `

@@ -311,6 +311,7 @@ const GlobalConfig: VXETableGlobalConfig = {
     showTitleOverflow: true,
     animat: true,
     showClose: true,
+    draggable: true,
     // storage: false,
     storageKey: 'VXE_MODAL_POSITION'
   },

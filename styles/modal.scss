@@ -141,9 +141,6 @@
       left: 50%;
       top: 0;
       box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-      .vxe-modal--header {
-        cursor: move;
-      }
     }
     .vxe-modal--body {
       overflow: auto;
@@ -249,6 +246,9 @@
     background-color: $vxe-modal-header-background-color;
     border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;
+    &.is--drag {
+      cursor: move;
+    }
     &.is--ellipsis {
       overflow: hidden;
       text-overflow: ellipsis;
