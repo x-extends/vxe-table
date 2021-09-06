@@ -1,4 +1,4 @@
-import { defineComponent, h, onUnmounted, provide, inject, ref, Ref, onMounted } from 'vue'
+import { defineComponent, h, onUnmounted, provide, inject, ref, Ref, onMounted, Slot } from 'vue'
 import { columnProps } from './column'
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
@@ -13,12 +13,14 @@ export default defineComponent({
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTablePrivateMethods)
     const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
     const column = Cell.createColumn($xetable, props)
+    const columnSlots: {
+      header?: Slot;
+    } = {}
     if (slots.header) {
-      column.slots = {
-        header: slots.header
-      }
+      columnSlots.header = slots.header
     }
     const xecolumn: XEColumnInstance = { column }
+    column.slots = columnSlots
     column.children = []
 
     provide('xecolgroup', xecolumn)
