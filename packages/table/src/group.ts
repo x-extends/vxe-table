@@ -13,6 +13,11 @@ export default defineComponent({
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTablePrivateMethods)
     const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
     const column = Cell.createColumn($xetable, props)
+    if (slots.header) {
+      column.slots = {
+        header: slots.header
+      }
+    }
     const xecolumn: XEColumnInstance = { column }
     column.children = []
 
