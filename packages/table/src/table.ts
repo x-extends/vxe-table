@@ -3181,9 +3181,9 @@ export default defineComponent({
           clearAllSort()
         }
         if (!sortOpts.remote) {
-          return tablePrivateMethods.handleTableData(true)
+          tablePrivateMethods.handleTableData(true)
         }
-        return nextTick()
+        return nextTick().then(updateStyle)
       },
       isSort (fieldOrColumn) {
         if (fieldOrColumn) {
