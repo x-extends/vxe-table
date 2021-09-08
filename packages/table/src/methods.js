@@ -3351,9 +3351,9 @@ const Methods = {
       clearAllSort(this)
     }
     if (!sortOpts.remote) {
-      return this.handleTableData(true)
+      this.handleTableData(true)
     }
-    return this.$nextTick()
+    return this.$nextTick().then(this.updateStyle)
   },
   // 在 v3 中废弃
   getSortColumn () {
