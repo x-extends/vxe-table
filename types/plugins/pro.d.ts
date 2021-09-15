@@ -165,11 +165,12 @@ export namespace VxeTableProDefines {
     extendCols: VxeTableDefines.ColumnInfo[];
     direction: ExtendCellAreaDirection;
     $table: VxeTableConstructor & VxeTablePrivateMethods;
+    $grid: VxeGridConstructor | null | undefined;
   }
 
   interface EventParams extends VxeEvent {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
-    $grid: VxeGridConstructor & VxeGridPrivateMethods;
+    $grid: VxeGridConstructor | null | undefined;
   }
 
   type FnrTab = 'find' | 'replace';

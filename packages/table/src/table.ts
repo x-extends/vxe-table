@@ -2066,10 +2066,11 @@ export default defineComponent({
           warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }
       }
-      nextTick(() => {
+      return nextTick().then(() => {
         if ($xetoolbar) {
           $xetoolbar.syncUpdate({ collectColumn, $table: $xetable })
         }
+        return tableMethods.recalculate()
       })
     }
 
@@ -2241,8 +2242,7 @@ export default defineComponent({
        */
       loadColumn (columns) {
         const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn($xetable, column))
-        handleColumn(collectColumn)
-        return nextTick()
+        return handleColumn(collectColumn)
       },
       /**
        * 加载列配置并恢复到初始状态

@@ -26,7 +26,7 @@ export interface VxeTableConstructor extends VxeComponentBase, VxeTableMethods {
   getComputeMaps(): TablePrivateComputed;
   renderVN: RenderFunction;
 
-  xegrid?: VxeGridConstructor | null;
+  xegrid?: VxeGridConstructor | null | undefined;
 }
 
 export interface TablePrivateRef {
@@ -1042,7 +1042,7 @@ export namespace VxeTablePropTypes {
 
   export type FooterMethod = (params: {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
-    $grid: VxeGridConstructor | null;
+    $grid: VxeGridConstructor | null | undefined;
     columns: VxeTableDefines.ColumnInfo[];
     data: any[];
   }) => Array<string | number | null>[];
@@ -1616,6 +1616,7 @@ export namespace VxeTablePropTypes {
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): string;
     /**
      * 自定义单元格复制取值之前的方法，可以通过返回 false 阻止复制行为
@@ -1624,6 +1625,7 @@ export namespace VxeTablePropTypes {
       isCut: boolean;
       targetAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): boolean;
     /**
      * 自定义单元格复制到剪贴板之后的方法
@@ -1632,6 +1634,7 @@ export namespace VxeTablePropTypes {
       isCut: boolean;
       targetAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): boolean;
     /**
      * 重写单元格剪贴值清除的方法，将剪贴单元格的值清除
@@ -1641,6 +1644,7 @@ export namespace VxeTablePropTypes {
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }) => void;
     /**
      * 自定义单元格剪贴值清除之前的方法，可以通过返回 false 阻止清除行为
@@ -1649,6 +1653,7 @@ export namespace VxeTablePropTypes {
       cutAreas: VxeTableProDefines.CellAreaParams[];
       currentAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }) => boolean;
     /**
      * 自定义单元格剪贴值清除之后的方法
@@ -1657,6 +1662,7 @@ export namespace VxeTablePropTypes {
       cutAreas: VxeTableProDefines.CellAreaParams[];
       currentAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }) => void;
     /**
      * 重写单元格粘贴赋值的方法，从剪贴板赋值到单元格
@@ -1667,6 +1673,7 @@ export namespace VxeTablePropTypes {
       column: VxeTableDefines.ColumnInfo;
       cellValue: any;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): void;
     /**
      * 自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为
@@ -1676,6 +1683,7 @@ export namespace VxeTablePropTypes {
       targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: any[][];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): boolean;
     /**
      * 自定义单元格粘贴赋值之后的方法
@@ -1688,6 +1696,7 @@ export namespace VxeTablePropTypes {
       insertRows: any[];
       insertColumns: VxeTableDefines.ColumnInfo[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): boolean;
     /**
      * 只对 isRowIncrement 有效，自定义创建自增行数据的方法
@@ -1699,6 +1708,7 @@ export namespace VxeTablePropTypes {
       pasteCells: string[][];
       insertRows: any[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): any[];
     /**
      * 只对 isColumnIncrement 有效，自定义创建自增列配置的方法
@@ -1710,6 +1720,7 @@ export namespace VxeTablePropTypes {
       pasteCells: string[][];
       insertColumns: VxeTableDefines.ColumnOptions[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): VxeTableDefines.ColumnOptions[];
   }
   export interface ClipOpts extends ClipConfig { }
@@ -1731,12 +1742,14 @@ export namespace VxeTablePropTypes {
       isAll: boolean;
       findValue: string | null;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): boolean;
     afterFindMethod?(params: {
       isAll: boolean;
       findValue: string | null;
       result: VxeTableProDefines.FindAndReplaceResult[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): void;
     isReplace?: boolean;
     replaceMethod?: (params: {
@@ -1749,6 +1762,7 @@ export namespace VxeTablePropTypes {
       findValue: string | null;
       replaceValue: string;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }) => boolean;
     afterReplaceMethod?: (params: {
       isAll: boolean;
@@ -1756,6 +1770,7 @@ export namespace VxeTablePropTypes {
       replaceValue: string;
       result: VxeTableProDefines.FindAndReplaceResult[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }) => void;
   }
   export interface FNROpts extends FNRConfig { }
