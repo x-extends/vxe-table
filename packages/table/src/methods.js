@@ -456,8 +456,7 @@ const Methods = {
    */
   loadColumn (columns) {
     const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn(this, column), { children: 'children' })
-    this.handleColumn(collectColumn)
-    return this.$nextTick()
+    return this.handleColumn(collectColumn)
   },
   /**
    * 加载列配置并恢复到初始状态
@@ -488,10 +487,11 @@ const Methods = {
         UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
       }
     }
-    this.$nextTick(() => {
+    return this.$nextTick().then(() => {
       if (this.$toolbar) {
         this.$toolbar.syncUpdate({ collectColumn, $table: this })
       }
+      return this.recalculate()
     })
   },
   /**

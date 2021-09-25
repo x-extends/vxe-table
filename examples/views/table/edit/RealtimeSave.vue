@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">通过监听 <table-api-link prop="edit-closed"/> 事件实现编辑完成即时保存功能，再配合 <table-api-link prop="reloadRow"/> 局部刷新函数<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">通过监听 <table-api-link prop="edit-closed"/> 事件实现编辑完成即时保存功能，再配合 <table-api-link prop="reloadRow"/> 局部加载行的函数，调用该方法之后，会将指定行的状态更新为初始状态，可用于局部刷新数据<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-table
       border
