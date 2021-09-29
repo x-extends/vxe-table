@@ -611,9 +611,19 @@ export default defineComponent({
       if (proxyConfig) {
         if (isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
           const formData: any = {}
-          formOpts.items.forEach(({ field, itemRender }) => {
+          formOpts.items.forEach(item => {
+            const { field, itemRender } = item
             if (field) {
-              formData[field] = itemRender && !XEUtils.isUndefined(itemRender.defaultValue) ? itemRender.defaultValue : undefined
+              let itemValue = null
+              if (itemRender) {
+                const { defaultValue } = itemRender
+                if (XEUtils.isFunction(defaultValue)) {
+                  itemValue = defaultValue({ item })
+                } else if (!XEUtils.isUndefined(defaultValue)) {
+                  itemValue = defaultValue
+                }
+              }
+              formData[field] = itemValue
             }
           })
           reactData.formData = formData

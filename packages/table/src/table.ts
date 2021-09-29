@@ -4271,13 +4271,23 @@ export default defineComponent({
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const rowkey = getRowkey($xetable)
-        internalData.visibleColumn.forEach(({ property, editRender }) => {
+        internalData.tableFullColumn.forEach(column => {
+          const { property, editRender } = column
           if (property && !XEUtils.has(record, property)) {
-            XEUtils.set(record, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
+            let cellValue = null
+            if (editRender) {
+              const { defaultValue } = editRender
+              if (XEUtils.isFunction(defaultValue)) {
+                cellValue = defaultValue({ column })
+              } else if (!XEUtils.isUndefined(defaultValue)) {
+                cellValue = defaultValue
+              }
+            }
+            XEUtils.set(record, property, cellValue)
           }
         })
-        const ohterFields: (string | undefined)[] = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
-        ohterFields.forEach((key) => {
+        const otherFields: (string | undefined)[] = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
+        otherFields.forEach((key) => {
           if (key && eqEmptyValue(XEUtils.get(record, key))) {
             XEUtils.set(record, key, null)
           }

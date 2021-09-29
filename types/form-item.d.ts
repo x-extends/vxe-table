@@ -138,7 +138,7 @@ export interface FormItemRenderOptions extends VxeGlobalRendererHandles.RenderOp
    */
   content?: string;
   autofocus?: boolean;
-  defaultValue?: any;
+  defaultValue?: ((params: { item: VxeFormItemProps }) => any) | null | undefined | string | number | RegExp | object | any[] | Date;
 }
 
 /**

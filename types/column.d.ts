@@ -131,7 +131,7 @@ export namespace VxeColumnPropTypes {
     optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps;
     autofocus?: string;
     autoselect?: boolean;
-    defaultValue?: any;
+    defaultValue?: ((params: { column: VxeTableDefines.ColumnInfo }) => any) | null | undefined | string | number | RegExp | object | any[] | Date;
     immediate?: boolean;
     content?: string;
     placeholder?: string;
