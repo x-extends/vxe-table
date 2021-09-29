@@ -775,13 +775,23 @@ const Methods = {
   defineField (record) {
     const { radioOpts, checkboxOpts, treeConfig, treeOpts, expandOpts } = this
     const rowkey = getRowkey(this)
-    this.visibleColumn.forEach(({ property, editRender }) => {
+    this.tableFullColumn.forEach(column => {
+      const { property, editRender } = column
       if (property && !XEUtils.has(record, property)) {
-        XEUtils.set(record, property, editRender && !XEUtils.isUndefined(editRender.defaultValue) ? editRender.defaultValue : null)
+        let cellValue = null
+        if (editRender) {
+          const { defaultValue } = editRender
+          if (XEUtils.isFunction(defaultValue)) {
+            cellValue = defaultValue({ column })
+          } else if (!XEUtils.isUndefined(defaultValue)) {
+            cellValue = defaultValue
+          }
+        }
+        XEUtils.set(record, property, cellValue)
       }
     })
-    const ohterFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
-    ohterFields.forEach((key) => {
+    const otherFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
+    otherFields.forEach((key) => {
       if (key && eqEmptyValue(XEUtils.get(record, key))) {
         XEUtils.set(record, key, null)
       }

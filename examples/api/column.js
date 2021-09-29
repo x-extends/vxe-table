@@ -684,7 +684,7 @@ const apis = [
             name: 'defaultValue',
             desc: '默认值（插入数据时列的默认值）',
             version: '',
-            type: 'any',
+            type: 'any | ({ column }) => any',
             enum: '',
             defVal: 'null',
             list: []

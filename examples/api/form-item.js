@@ -285,7 +285,7 @@ const apis = [
             name: 'defaultValue',
             desc: '项默认值',
             version: '',
-            type: 'any',
+            type: 'any | ({ item }) => any',
             enum: '',
             defVal: 'null',
             list: []
