@@ -163,9 +163,6 @@ export const Cell = {
     const { $table, row, column } = params
     const { slots, editRender, cellRender } = column
     const renderOpts = editRender || cellRender
-    if (slots && slots.default) {
-      return $table.callSlot(slots.default, params, h)
-    }
     if (renderOpts) {
       const funName = editRender ? 'renderCell' : 'renderDefault'
       const compConf = VXETable.renderer.get(renderOpts.name)
@@ -174,6 +171,9 @@ export const Cell = {
       }
     }
     const cellValue = $table.getCellLabel(row, column)
+    if (slots && slots.default && !eqEmptyValue(cellValue)) {
+      return $table.callSlot(slots.default, params, h)
+    }
     const cellPlaceholder = editRender ? editRender.placeholder : ''
     return [
       h('span', {
@@ -725,9 +725,6 @@ export const Cell = {
         return $table.callSlot(slots.edit, params, h)
       }
       return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params)) : []
-    }
-    if (slots && slots.default) {
-      return $table.callSlot(slots.default, params, h)
     }
     if (formatter) {
       return [
