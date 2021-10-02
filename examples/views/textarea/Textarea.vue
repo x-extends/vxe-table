@@ -11,7 +11,7 @@
     </p>
 
     <p>
-      <vxe-textarea v-model="value5" placeholder="多行文本域"></vxe-textarea>
+      <vxe-textarea v-model="value5" placeholder="多行文本域" :rows="3"></vxe-textarea>
       <vxe-textarea v-model="value6" placeholder="只读的" readonly></vxe-textarea>
       <vxe-textarea v-model="value7" placeholder="禁用的" disabled></vxe-textarea>
       <vxe-textarea v-model="value8" placeholder="显示字数统计" maxlength="100" show-word-count></vxe-textarea>

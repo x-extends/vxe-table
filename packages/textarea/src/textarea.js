@@ -71,14 +71,15 @@ export default {
     }
   },
   render (h) {
-    const { className, defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount, countMethod } = this
+    const { className, defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount, countMethod, rows } = this
     const attrs = {
       name,
       form,
       placeholder,
       maxlength,
       readonly,
-      disabled
+      disabled,
+      rows
     }
     if (placeholder) {
       attrs.placeholder = UtilTools.getFuncText(placeholder)
