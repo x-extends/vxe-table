@@ -202,7 +202,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { className, resize, placeholder, disabled, maxlength, autosize, showWordCount, countMethod } = props
+      const { className, resize, placeholder, disabled, maxlength, autosize, showWordCount, countMethod, rows } = props
       const { inputValue } = reactData
       const vSize = computeSize.value
       const isCountError = computeIsCountError.value
@@ -227,6 +227,7 @@ export default defineComponent({
           style: resize ? {
             resize
           } : null,
+          rows,
           onInput: inputEvent,
           onChange: changeEvent,
           onKeydown: triggerEvent,
