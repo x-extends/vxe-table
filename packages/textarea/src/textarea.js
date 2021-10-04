@@ -21,6 +21,7 @@ export default {
     placeholder: String,
     maxlength: [String, Number],
     rows: { type: [String, Number], default: 2 },
+    cols: { type: [String, Number], default: null },
     showWordCount: Boolean,
     countMethod: Function,
     autosize: [Boolean, Object],
@@ -71,7 +72,7 @@ export default {
     }
   },
   render (h) {
-    const { className, defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount, countMethod, rows } = this
+    const { className, defaultEvents, inputValue, vSize, name, form, resize, placeholder, readonly, disabled, maxlength, autosize, showWordCount, countMethod, rows, cols } = this
     const attrs = {
       name,
       form,
@@ -79,7 +80,8 @@ export default {
       maxlength,
       readonly,
       disabled,
-      rows
+      rows,
+      cols
     }
     if (placeholder) {
       attrs.placeholder = UtilTools.getFuncText(placeholder)
@@ -88,7 +90,9 @@ export default {
       class: ['vxe-textarea', className, {
         [`size--${vSize}`]: vSize,
         'is--autosize': autosize,
-        'is--disabled': disabled
+        'is--disabled': disabled,
+        'def--rows': !XEUtils.eqNull(rows),
+        'def--cols': !XEUtils.eqNull(cols)
       }]
     }, [
       h('textarea', {
