@@ -16,6 +16,11 @@
       <vxe-textarea v-model="demo1.value7" placeholder="禁用的" disabled></vxe-textarea>
       <vxe-textarea v-model="demo1.value8" placeholder="显示字数统计" maxlength="100" show-word-count></vxe-textarea>
       <vxe-textarea v-model="demo1.value9" placeholder="自适应文本高度" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
+      <vxe-textarea v-model="demo1.value10" placeholder="默认3行与40列" rows="3" cols="40"></vxe-textarea>
+      <vxe-textarea v-model="demo1.value11" placeholder="关闭调节元素" resize="none"></vxe-textarea>
+      <vxe-textarea v-model="demo1.value12" placeholder="可以调节元素的高度" resize="vertical"></vxe-textarea>
+      <vxe-textarea v-model="demo1.value13" placeholder="以调节元素的宽度" resize="horizontal"></vxe-textarea>
+      <vxe-textarea v-model="demo1.value14" placeholder="可以调节元素的宽度和高度" resize="both"></vxe-textarea>
     </p>
 
     <pre>
@@ -48,7 +53,12 @@ export default defineComponent({
       value6: '',
       value7: '',
       value8: '',
-      value9: ''
+      value9: '',
+      value10: '',
+      value11: '',
+      value12: '',
+      value13: '',
+      value14: ''
     })
     return {
       demo1,
@@ -67,6 +77,11 @@ export default defineComponent({
           <vxe-textarea v-model="demo1.value7" placeholder="禁用的" disabled></vxe-textarea>
           <vxe-textarea v-model="demo1.value8" placeholder="显示字数统计" maxlength="100" show-word-count></vxe-textarea>
           <vxe-textarea v-model="demo1.value9" placeholder="自适应文本高度" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
+          <vxe-textarea v-model="demo1.value10" placeholder="默认3行与40列" rows="3" cols="40"></vxe-textarea>
+          <vxe-textarea v-model="demo1.value11" placeholder="关闭调节元素" resize="none"></vxe-textarea>
+          <vxe-textarea v-model="demo1.value12" placeholder="可以调节元素的高度" resize="vertical"></vxe-textarea>
+          <vxe-textarea v-model="demo1.value13" placeholder="以调节元素的宽度" resize="horizontal"></vxe-textarea>
+          <vxe-textarea v-model="demo1.value14" placeholder="可以调节元素的宽度和高度" resize="both"></vxe-textarea>
         </p>
         `,
         `
@@ -83,7 +98,12 @@ export default defineComponent({
               value6: '',
               value7: '',
               value8: '',
-              value9: ''
+              value9: '',
+              value10: '',
+              value11: '',
+              value12: '',
+              value13: '',
+              value14: ''
             })
             return {
               demo1

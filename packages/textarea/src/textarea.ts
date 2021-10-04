@@ -20,6 +20,7 @@ export default defineComponent({
     placeholder: String as PropType<VxeTextareaPropTypes.Placeholder>,
     maxlength: [String, Number] as PropType<VxeTextareaPropTypes.Maxlength>,
     rows: { type: [String, Number] as PropType<VxeTextareaPropTypes.Rows>, default: 2 },
+    cols: { type: [String, Number] as PropType<VxeTextareaPropTypes.Cols>, default: null },
     showWordCount: Boolean as PropType<VxeTextareaPropTypes.ShowWordCount>,
     countMethod: Function as PropType<VxeTextareaPropTypes.CountMethod>,
     autosize: [Boolean, Object] as PropType<VxeTextareaPropTypes.Autosize>,
@@ -202,7 +203,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { className, resize, placeholder, disabled, maxlength, autosize, showWordCount, countMethod } = props
+      const { className, resize, placeholder, disabled, maxlength, autosize, showWordCount, countMethod, rows, cols } = props
       const { inputValue } = reactData
       const vSize = computeSize.value
       const isCountError = computeIsCountError.value
@@ -212,7 +213,9 @@ export default defineComponent({
         class: ['vxe-textarea', className, {
           [`size--${vSize}`]: vSize,
           'is--autosize': autosize,
-          'is--disabled': disabled
+          'is--disabled': disabled,
+          'def--rows': !XEUtils.eqNull(rows),
+          'def--cols': !XEUtils.eqNull(cols)
         }]
       }, [
         h('textarea', {
@@ -224,6 +227,8 @@ export default defineComponent({
           maxlength,
           readonly: props.readonly,
           disabled,
+          rows,
+          cols,
           style: resize ? {
             resize
           } : null,

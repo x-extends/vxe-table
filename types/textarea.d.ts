@@ -60,6 +60,10 @@ export type VxeTextareaProps = {
    */
   rows?: VxeTextareaPropTypes.Rows;
   /**
+   * 原生 cols 属性
+   */
+  cols?: VxeTextareaPropTypes.Cols;
+  /**
    * 是否显示字数统计
    */
   showWordCount?: VxeTextareaPropTypes.ShowWordCount;
@@ -92,6 +96,7 @@ export namespace VxeTextareaPropTypes {
   export type Placeholder = string;
   export type Maxlength = string | number;
   export type Rows = string | number;
+  export type Cols = string | number;
   export type ShowWordCount = boolean;
   export type CountMethod = (params: {
     value: string;
