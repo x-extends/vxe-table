@@ -67,6 +67,7 @@ export type VxeGridEmits = [
   'form-submit',
   'form-submit-invalid',
   'form-reset',
+  'form-collapse',
   'form-toggle-collapse',
   'toolbar-button-click',
   'toolbar-tool-click',
@@ -303,7 +304,7 @@ export namespace VxeGridDefines {
   export interface FormSubmitEventParams extends GridEventParams, VxeFormDefines.SubmitEventParams { }
   export interface FormSubmitInvalidEventParams extends GridEventParams, VxeFormDefines.SubmitInvalidParams { }
   export interface FormResetEventParams extends GridEventParams, VxeFormDefines.ResetEventParams { }
-  export interface FormToggleCollapseEventParams extends GridEventParams, VxeFormDefines.ToggleCollapseEventParams { }
+  export interface FormCollapseEventParams extends GridEventParams, VxeFormDefines.CollapseEventParams { }
 
   export interface ToolbarButtonClickParams {
     code: string;
@@ -364,7 +365,7 @@ export interface VxeGridEventProps {
   onFormSubmit?: VxeGridEvents.FormSubmit;
   onFormSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
   onFormReset?: VxeGridEvents.FormReset;
-  onFormToggleCollapse?: VxeGridEvents.FormToggleCollapse;
+  onFormCollapse?: VxeGridEvents.FormCollapse;
   onToolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
   onToolbarToolClick?: VxeGridEvents.ToolbarToolClick;
   onZoom?: VxeGridEvents.Zoom;
@@ -411,7 +412,7 @@ export interface VxeGridListeners {
   formSubmit?: VxeGridEvents.FormSubmit;
   formSubmitInvalid?: VxeGridEvents.FormSubmitInvalid;
   formReset?: VxeGridEvents.FormReset;
-  formToggleCollapse?: VxeGridEvents.FormToggleCollapse;
+  formCollapse?: VxeGridEvents.FormCollapse;
   toolbarButtonClick?: VxeGridEvents.ToolbarButtonClick;
   toolbarToolClick?: VxeGridEvents.ToolbarToolClick;
   zoom?: VxeGridEvents.Zoom;
@@ -457,7 +458,7 @@ export namespace VxeGridEvents {
   export type FormSubmit = (params: VxeGridDefines.FormSubmitEventParams) => void;
   export type FormSubmitInvalid = (params: VxeGridDefines.FormSubmitInvalidEventParams) => void;
   export type FormReset = (params: VxeGridDefines.FormResetEventParams) => void;
-  export type FormToggleCollapse = (params: VxeGridDefines.FormToggleCollapseEventParams) => void;
+  export type FormCollapse = (params: VxeGridDefines.FormCollapseEventParams) => void;
   export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickEventParams) => void;
   export type ToolbarToolClick = (params: VxeGridDefines.ToolbarToolClickEventParams) => void;
   export type Zoom = (params: VxeGridDefines.ZoomEventParams) => void;

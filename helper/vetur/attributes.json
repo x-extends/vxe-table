@@ -1787,6 +1787,14 @@
     "type": "string, ({ data }) => string",
     "description": "给表单附加 className"
   },
+  "vxe-form/collapse-status": {
+    "type": "boolean",
+    "description": "v-model 绑定值，折叠状态"
+  },
+  "vxe-form/custom-layout": {
+    "type": "boolean",
+    "description": "是否使用自定义布局"
+  },
   "vxe-form/items": {
     "type": "any[]",
     "description": "项列表"

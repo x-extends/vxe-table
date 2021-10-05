@@ -423,7 +423,7 @@ export default defineComponent({
       const { fixedType } = props
       const { highlightHoverRow } = tableProps
       const { scrollXLoad, scrollYLoad } = tableReactData
-      const { lastScrollTop, lastScrollLeft } = tableInternalData
+      const { elemStore, lastScrollTop, lastScrollLeft } = tableInternalData
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableFooter = refTableFooter.value
@@ -436,6 +436,10 @@ export default defineComponent({
       const bodyElem = tableBody.$el as XEBodyScrollElement
       const leftElem = leftBody ? leftBody.$el as XEBodyScrollElement : null
       const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
+      const bodyYElem = elemStore['main-body-ySpace']
+      const bodyXElem = elemStore['main-body-xSpace']
+      const bodyHeight = bodyYElem ? bodyYElem.clientHeight : 0
+      const bodyWidth = bodyXElem ? bodyXElem.clientWidth : 0
       let scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isRollX = scrollLeft !== lastScrollLeft
@@ -477,7 +481,7 @@ export default defineComponent({
       if (isRollX && validTip && validTip.reactData.visible) {
         validTip.updatePlacement()
       }
-      $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX: isRollX, isY: isRollY }, evnt)
+      $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, bodyHeight, bodyWidth, isX: isRollX, isY: isRollY }, evnt)
     }
 
     let wheelTime: any
@@ -487,12 +491,17 @@ export default defineComponent({
     let isPrevWheelTop = false
 
     const handleWheel = (evnt: WheelEvent, isTopWheel: boolean, deltaTop: number, isRollX: boolean, isRollY: boolean) => {
+      const { elemStore } = tableInternalData
       const tableBody = refTableBody.value
       const leftBody = refTableLeftBody.value
       const rightBody = refTableRightBody.value
       const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
       const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
       const bodyElem = tableBody.$el as HTMLDivElement
+      const bodyYElem = elemStore['main-body-ySpace']
+      const bodyXElem = elemStore['main-body-xSpace']
+      const bodyHeight = bodyYElem ? bodyYElem.clientHeight : 0
+      const bodyWidth = bodyXElem ? bodyXElem.clientWidth : 0
       const remainSize = isPrevWheelTop === isTopWheel ? Math.max(0, wheelYSize - wheelYTotal) : 0
       isPrevWheelTop = isTopWheel
       wheelYSize = Math.abs(isTopWheel ? deltaTop - remainSize : deltaTop + remainSize)
@@ -519,7 +528,7 @@ export default defineComponent({
           if (isTopWheel ? targerTop < scrollHeight - clientHeight : targerTop >= 0) {
             wheelTime = setTimeout(handleSmooth, 10)
           }
-          $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft: bodyElem.scrollLeft, isX: isRollX, isY: isRollY }, evnt)
+          $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft: bodyElem.scrollLeft, bodyHeight, bodyWidth, isX: isRollX, isY: isRollY }, evnt)
         }
       }
       handleSmooth()

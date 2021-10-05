@@ -13,7 +13,7 @@ import tableProps from './props'
 import tableEmits from './emits'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, TablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -514,7 +514,7 @@ export default defineComponent({
       return false
     })
 
-    const refMaps: TablePrivateRef = {
+    const refMaps: VxeTablePrivateRef = {
       refElem,
       refTooltip,
       refValidTooltip,

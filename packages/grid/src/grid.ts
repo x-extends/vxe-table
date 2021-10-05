@@ -21,6 +21,7 @@ const gridComponentEmits: VxeGridEmits = [
   'form-submit',
   'form-submit-invalid',
   'form-reset',
+  'form-collapse',
   'form-toggle-collapse',
   'toolbar-button-click',
   'toolbar-tool-click',
@@ -358,9 +359,10 @@ export default defineComponent({
       gridMethods.dispatchEvent('form-submit-invalid', params)
     }
 
-    const togglCollapseEvent: VxeFormEvents.ToggleCollapse = (params) => {
+    const collapseEvent: VxeFormEvents.Collapse = (params) => {
       nextTick(() => gridExtendTableMethods.recalculate(true))
       gridMethods.dispatchEvent('form-toggle-collapse', params)
+      gridMethods.dispatchEvent('form-collapse', params)
     }
 
     const handleZoom = (isMax?: boolean) => {
@@ -436,7 +438,7 @@ export default defineComponent({
                 onSubmit: submitFormEvent,
                 onReset: resetFormEvent,
                 onSubmitInvalid: submitInvalidEvent,
-                onToggleCollapse: togglCollapseEvent
+                onCollapse: collapseEvent
               }, formSlots)
             )
           }

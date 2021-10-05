@@ -1,16 +1,18 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, onMounted, provide } from 'vue'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, onMounted, provide, nextTick } from 'vue'
+import { errLog } from '../../tools/utils'
 import { createItem, watchItem, destroyItem, assemItem, XEFormItemProvide } from './util'
 import { formItemProps } from './form-item'
 
-import { VxeFormConstructor } from '../../../types/all'
+import { VxeFormConstructor, VxeFormPrivateMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeFormGather',
   props: formItemProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>
-    const $xeform = inject('$xeform', {} as VxeFormConstructor)
+    const $xeform = inject('$xeform', {} as VxeFormConstructor & VxeFormPrivateMethods)
     const formGather = inject('xeformgather', null as XEFormItemProvide | null)
+    const defaultSlot = slots.default
     const formItem = createItem($xeform, props)
     const xeformitem: XEFormItemProvide = { formItem }
     formItem.children = []
@@ -27,10 +29,18 @@ export default defineComponent({
       destroyItem($xeform, formItem)
     })
 
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      nextTick(() => {
+        if ($xeform && $xeform.props.customLayout) {
+          errLog('vxe.error.errConflicts', ['custom-layout', '<form-gather ...>'])
+        }
+      })
+    }
+
     const renderVN = () => {
       return h('div', {
         ref: refElem
-      }, slots.default ? slots.default() : [])
+      }, defaultSlot ? defaultSlot() : [])
     }
 
     return renderVN

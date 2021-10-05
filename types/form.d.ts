@@ -1,4 +1,4 @@
-import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, ComputedRef, VNode } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeFormItemProps, VxeFormItemPropTypes } from './form-item'
 
@@ -16,6 +16,7 @@ export interface VxeFormConstructor extends VxeComponentBase, VxeFormMethods {
   reactData: FormReactData;
   internalData: FormInternalData;
   getRefMaps(): FormPrivateRef;
+  getComputeMaps(): FormPrivateComputed;
   renderVN: RenderFunction;
 }
 
@@ -23,6 +24,13 @@ export interface FormPrivateRef {
   refElem: Ref<HTMLFormElement>;
 }
 export interface VxeFormPrivateRef extends FormPrivateRef { }
+
+export interface FormPrivateComputed {
+  computeSize: ComputedRef<VxeFormPropTypes.Size>;
+  computeValidOpts: ComputedRef<VxeFormPropTypes.ValidOpts>;
+  computeTooltipOpts: ComputedRef<VxeFormPropTypes.TooltipOpts>;
+}
+export interface VxeFormPrivateComputed extends FormPrivateComputed { }
 
 export interface FormReactData {
   collapseAll: boolean;
@@ -40,6 +48,8 @@ export interface FormInternalData {
 }
 
 export type VxeFormEmits = [
+  'update:collapseStatus',
+  'collapse',
   'toggle-collapse',
   'submit',
   'submit-invalid',
@@ -48,6 +58,7 @@ export type VxeFormEmits = [
 
 export namespace VxeFormPropTypes {
   export type Size = SizeType;
+  export type CollapseStatus = boolean;
   export type Loading = boolean;
   export type Data = any;
   export type Span = string | number;
@@ -91,10 +102,13 @@ export namespace VxeFormPropTypes {
     leaveMethod?: (params: { $event: Event }) => boolean;
   }
   export interface TooltipOpts extends TooltipConfig { }
+
+  export type CustomLayout = boolean;
 }
 
 export type VxeFormProps<D = any> = {
   size?: VxeFormPropTypes.Size;
+  collapseStatus?: VxeFormPropTypes.CollapseStatus;
   loading?: VxeFormPropTypes.Loading;
   data?: D;
   span?: VxeFormPropTypes.Span;
@@ -110,6 +124,7 @@ export type VxeFormProps<D = any> = {
   preventSubmit?: VxeFormPropTypes.PreventSubmit;
   validConfig?: VxeFormPropTypes.ValidConfig;
   tooltipConfig?: VxeFormPropTypes.TooltipConfig;
+  customLayout?: VxeFormPropTypes.CustomLayout;
 }
 
 export interface FormMethods {
@@ -154,7 +169,14 @@ export interface FormMethods {
 }
 export interface VxeFormMethods extends FormMethods { }
 
-export interface FormPrivateMethods { }
+export interface FormPrivateMethods {
+  callSlot<T>(slotFunc: ((params: T) => any[]) | string | null, params: T): VNode[];
+  toggleCollapseEvent(evnt: Event): void;
+  triggerHeaderHelpEvent(evnt: MouseEvent, params: {
+    item: VxeFormDefines.ItemInfo;
+  }): void;
+  handleTargetLeaveEvent(): void;
+}
 export interface VxeFormPrivateMethods extends FormPrivateMethods { }
 
 export namespace VxeFormDefines {
@@ -239,35 +261,35 @@ export namespace VxeFormDefines {
     data: any;
   }
 
-  export interface ToggleCollapseParams extends FormBaseParams { }
-  export interface ToggleCollapseEventParams extends FormEventParams, ToggleCollapseParams { }
+  export interface CollapseParams extends FormBaseParams { }
+  export interface CollapseEventParams extends FormEventParams, CollapseParams { }
 
   export interface SubmitParams extends FormBaseParams { }
-  export interface SubmitEventParams extends FormEventParams, ToggleCollapseParams { }
+  export interface SubmitEventParams extends FormEventParams, SubmitParams { }
 
   export interface SubmitInvalidParams extends FormBaseParams { }
-  export interface SubmitInvalidEventParams extends FormEventParams, ToggleCollapseParams { }
+  export interface SubmitInvalidEventParams extends FormEventParams, SubmitInvalidParams { }
 
   export interface ResetParams extends FormBaseParams { }
-  export interface ResetEventParams extends FormEventParams, ToggleCollapseParams { }
+  export interface ResetEventParams extends FormEventParams, ResetParams { }
 }
 
 export type VxeFormEventProps = {
-  onToggleCollapse?: VxeFormEvents.ToggleCollapse;
+  onCollapse?: VxeFormEvents.Collapse;
   onSubmit?: VxeFormEvents.Submit;
   onSubmitInvalid?: VxeFormEvents.SubmitInvalid;
   onReset?: VxeFormEvents.Reset;
 }
 
 export interface VxeFormListeners {
-  toggleCollapse?: VxeFormEvents.ToggleCollapse;
+  collapse?: VxeFormEvents.Collapse;
   submit?: VxeFormEvents.Submit;
   submitInvalid?: VxeFormEvents.SubmitInvalid;
   reset?: VxeFormEvents.Reset;
 }
 
 export namespace VxeFormEvents {
-  export type ToggleCollapse = (params: VxeFormDefines.ToggleCollapseEventParams) => void;
+  export type Collapse = (params: VxeFormDefines.CollapseEventParams) => void;
   export type Submit = (params: VxeFormDefines.SubmitEventParams) => void;
   export type SubmitInvalid = (params: VxeFormDefines.SubmitInvalidEventParams) => void;
   export type Reset = (params: VxeFormDefines.ResetEventParams) => void;

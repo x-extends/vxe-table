@@ -3,10 +3,12 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { errLog, getFuncText, isEnableConf, eqEmptyValue } from '../../tools/utils'
+import { scrollToView } from '../../tools/dom'
 import { createItem } from './util'
+import { renderTitle } from './render'
 import { useSize } from '../../hooks/size'
 
-import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes, VxeTooltipInstance, FormInternalData } from '../../../types/all'
+import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes, VxeTooltipInstance, FormInternalData, VxeFormPrivateComputed } from '../../../types/all'
 
 class Rule {
   constructor (rule: any) {
@@ -63,6 +65,7 @@ function getResetValue (value: any, resetValue: any) {
 export default defineComponent({
   name: 'VxeForm',
   props: {
+    collapseStatus: { type: Boolean as PropType<VxeFormPropTypes.CollapseStatus>, default: true },
     loading: Boolean as PropType<VxeFormPropTypes.Loading>,
     data: Object as PropType<VxeFormPropTypes.Data>,
     size: { type: String as PropType<VxeFormPropTypes.Size>, default: () => GlobalConfig.form.size || GlobalConfig.size },
@@ -78,9 +81,12 @@ export default defineComponent({
     rules: Object as PropType<VxeFormPropTypes.Rules>,
     preventSubmit: { type: Boolean as PropType<VxeFormPropTypes.PreventSubmit>, default: () => GlobalConfig.form.preventSubmit },
     validConfig: Object as PropType<VxeFormPropTypes.ValidConfig>,
-    tooltipConfig: Object as PropType<VxeFormPropTypes.TooltipConfig>
+    tooltipConfig: Object as PropType<VxeFormPropTypes.TooltipConfig>,
+    customLayout: { type: Boolean as PropType<VxeFormPropTypes.CustomLayout>, default: () => GlobalConfig.form.customLayout }
   },
   emits: [
+    'update:collapseStatus',
+    'collapse',
     'toggle-collapse',
     'submit',
     'submit-invalid',
@@ -96,7 +102,7 @@ export default defineComponent({
     const computeSize = useSize(props)
 
     const reactData = reactive<FormReactData>({
-      collapseAll: true,
+      collapseAll: props.collapseStatus,
       staticItems: [],
       formItems: []
     })
@@ -112,18 +118,6 @@ export default defineComponent({
 
     const refElem = ref() as Ref<HTMLFormElement>
     const refTooltip = ref() as Ref<VxeTooltipInstance>
-
-    const refMaps: FormPrivateRef = {
-      refElem
-    }
-
-    const $xeform = {
-      xID,
-      props,
-      context,
-      reactData,
-      getRefMaps: () => refMaps
-    } as unknown as VxeFormConstructor & VxeFormPrivateMethods
 
     let formMethods = {} as FormMethods
 
@@ -150,6 +144,25 @@ export default defineComponent({
       }
       return opts
     })
+
+    const refMaps: FormPrivateRef = {
+      refElem
+    }
+
+    const computeMaps: VxeFormPrivateComputed = {
+      computeSize,
+      computeValidOpts,
+      computeTooltipOpts
+    }
+
+    const $xeform = {
+      xID,
+      props,
+      context,
+      reactData,
+      getRefMaps: () => refMaps,
+      getComputeMaps: () => computeMaps
+    } as unknown as VxeFormConstructor & VxeFormPrivateMethods
 
     const callSlot = (slotFunc: ((params: any) => any) | string | null, params: any): VNode[] => {
       if (slotFunc) {
@@ -191,14 +204,22 @@ export default defineComponent({
       return itemList
     }
 
+    const getCollapseStatus = () => {
+      return reactData.collapseAll
+    }
+
     const toggleCollapse = () => {
-      reactData.collapseAll = !reactData.collapseAll
+      const status = !getCollapseStatus()
+      reactData.collapseAll = status
+      emit('update:collapseStatus', status)
       return nextTick()
     }
 
     const toggleCollapseEvent = (evnt: Event) => {
       toggleCollapse()
-      formMethods.dispatchEvent('toggle-collapse', { collapse: !reactData.collapseAll, data: props.data }, evnt)
+      const status = getCollapseStatus()
+      formMethods.dispatchEvent('toggle-collapse', { status, collapse: status, data: props.data }, evnt)
+      formMethods.dispatchEvent('collapse', { status, collapse: status, data: props.data }, evnt)
     }
 
     const clearValidate = (field?: string) => {
@@ -244,12 +265,16 @@ export default defineComponent({
     const handleFocus = (fields: string[]) => {
       const itemList = getItems()
       const el = refElem.value
-      fields.some((property) => {
+      fields.some((property, index) => {
         const item = itemList.find((item) => item.field === property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem: HTMLInputElement | null = null
+          // 定位到第一个
+          if (!index) {
+            scrollToView(el.querySelector(`.${item.id}`))
+          }
           // 如果指定了聚焦 class
           if (itemRender.autofocus) {
             inputElem = el.querySelector(`.${item.id} ${itemRender.autofocus}`) as HTMLInputElement
@@ -489,79 +514,6 @@ export default defineComponent({
       }
     }
 
-    const renderPrefixIcon = (titlePrefix: VxeFormItemPropTypes.TitlePrefix) => {
-      return h('span', {
-        class: 'vxe-form--item-title-prefix'
-      }, [
-        h('i', {
-          class: titlePrefix.icon || GlobalConfig.icon.FORM_PREFIX
-        })
-      ])
-    }
-
-    const renderSuffixIcon = (titleSuffix: VxeFormItemPropTypes.TitleSuffix) => {
-      return h('span', {
-        class: 'vxe-form--item-title-suffix'
-      }, [
-        h('i', {
-          class: titleSuffix.icon || GlobalConfig.icon.FORM_SUFFIX
-        })
-      ])
-    }
-
-    const renderTitle = (item: VxeFormDefines.ItemInfo) => {
-      const { data } = props
-      const { slots, field, itemRender, titlePrefix, titleSuffix } = item
-      const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-      const params = { data, property: field, item, $form: $xeform }
-      const titleSlot = slots ? slots.title : null
-      const contVNs = []
-      const titVNs = []
-      if (titlePrefix) {
-        titVNs.push(
-          titlePrefix.message
-            ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-              content: getFuncText(titlePrefix.message),
-              enterable: titlePrefix.enterable,
-              theme: titlePrefix.theme
-            }, {
-              default: () => renderPrefixIcon(titlePrefix)
-            })
-            : renderPrefixIcon(titlePrefix)
-        )
-      }
-      titVNs.push(
-        h('span', {
-          class: 'vxe-form--item-title-label'
-        }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (titleSlot ? callSlot(titleSlot, params) : getFuncText(item.title)))
-      )
-      contVNs.push(
-        h('div', {
-          class: 'vxe-form--item-title-content'
-        }, titVNs)
-      )
-      const fixVNs = []
-      if (titleSuffix) {
-        fixVNs.push(
-          titleSuffix.message
-            ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-              content: getFuncText(titleSuffix.message),
-              enterable: titleSuffix.enterable,
-              theme: titleSuffix.theme
-            }, {
-              default: () => renderSuffixIcon(titleSuffix)
-            })
-            : renderSuffixIcon(titleSuffix)
-        )
-      }
-      contVNs.push(
-        h('div', {
-          class: 'vxe-form--item-title-postfix'
-        }, fixVNs)
-      )
-      return contVNs
-    }
-
     const renderItems = (itemList: VxeFormDefines.ItemInfo[]): VNode[] => {
       const { data, rules, titleOverflow: allTitleOverflow } = props
       const { collapseAll } = reactData
@@ -664,7 +616,7 @@ export default defineComponent({
               } : null,
               title: showTitle ? getFuncText(title) : null,
               ...ons
-            }, renderTitle(item)) : null,
+            }, renderTitle($xeform, item)) : null,
             h('div', {
               class: ['vxe-form--item-content', align ? `align--${align}` : null]
             }, contentVNs)
@@ -687,7 +639,14 @@ export default defineComponent({
       closeTooltip
     }
 
-    Object.assign($xeform, formMethods)
+    const formPrivateMethods: VxeFormPrivateMethods = {
+      callSlot,
+      toggleCollapseEvent,
+      triggerHeaderHelpEvent,
+      handleTargetLeaveEvent
+    }
+
+    Object.assign($xeform, formMethods, formPrivateMethods)
 
     watch(() => reactData.staticItems, (value) => {
       reactData.formItems = value
@@ -697,17 +656,27 @@ export default defineComponent({
       loadItem(value || [])
     })
 
+    watch(() => props.collapseStatus, (value) => {
+      reactData.collapseAll = !!value
+    })
+
     onMounted(() => {
       nextTick(() => {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (props.customLayout && props.items) {
+            errLog('vxe.error.errConflicts', ['custom-layout', 'items'])
+          }
+        }
         loadItem(props.items || [])
       })
     })
 
     const renderVN = () => {
-      const { loading, className, data, titleColon, titleAsterisk } = props
+      const { loading, className, data, titleColon, titleAsterisk, customLayout } = props
       const { formItems } = reactData
       const vSize = computeSize.value
       const tooltipOpts = computeTooltipOpts.value
+      const defaultSlot = slots.default
       return h('form', {
         ref: refElem,
         class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: $xeform }) : className) : '', {
@@ -721,11 +690,11 @@ export default defineComponent({
       }, [
         h('div', {
           class: 'vxe-form--wrapper vxe-row'
-        }, renderItems(formItems)),
+        }, customLayout ? (defaultSlot ? defaultSlot({}) : []) : renderItems(formItems)),
         h('div', {
           class: 'vxe-form-slots',
           ref: 'hideItem'
-        }, slots.default ? slots.default({}) : []),
+        }, customLayout ? [] : (defaultSlot ? defaultSlot({}) : [])),
         h('div', {
           class: ['vxe-loading', {
             'is--visible': loading

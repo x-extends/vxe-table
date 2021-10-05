@@ -128,9 +128,10 @@ export function getAbsolutePos (elem: any) {
   return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
 }
 
+const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
+const scrollIntoView = 'scrollIntoView'
+
 export function scrollToView (elem: any) {
-  const scrollIntoViewIfNeeded = 'scrollIntoViewIfNeeded'
-  const scrollIntoView = 'scrollIntoView'
   if (elem) {
     if (elem[scrollIntoViewIfNeeded]) {
       elem[scrollIntoViewIfNeeded]()
