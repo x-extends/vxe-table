@@ -16,7 +16,7 @@
       <vxe-textarea v-model="value7" placeholder="禁用的" disabled></vxe-textarea>
       <vxe-textarea v-model="value8" placeholder="显示字数统计" maxlength="100" show-word-count></vxe-textarea>
       <vxe-textarea v-model="value9" placeholder="自适应文本高度" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
-      <vxe-textarea v-model="value10" placeholder="默认3行与40列"></vxe-textarea>
+      <vxe-textarea v-model="value10" placeholder="默认3行与40列" rows="3" cols="40"></vxe-textarea>
       <vxe-textarea v-model="value11" placeholder="关闭调节元素" resize="none"></vxe-textarea>
       <vxe-textarea v-model="value12" placeholder="可以调节元素的高度" resize="vertical"></vxe-textarea>
       <vxe-textarea v-model="value13" placeholder="以调节元素的宽度" resize="horizontal"></vxe-textarea>
@@ -72,7 +72,7 @@ export default {
           <vxe-textarea v-model="value7" placeholder="禁用的" disabled></vxe-textarea>
           <vxe-textarea v-model="value8" placeholder="显示字数统计" maxlength="100" show-word-count></vxe-textarea>
           <vxe-textarea v-model="value9" placeholder="自适应文本高度" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
-          <vxe-textarea v-model="value10" placeholder="默认3行与40列"></vxe-textarea>
+          <vxe-textarea v-model="value10" placeholder="默认3行与40列" rows="3" cols="40"></vxe-textarea>
           <vxe-textarea v-model="value11" placeholder="关闭调节元素" resize="none"></vxe-textarea>
           <vxe-textarea v-model="value12" placeholder="可以调节元素的高度" resize="vertical"></vxe-textarea>
           <vxe-textarea v-model="value13" placeholder="以调节元素的宽度" resize="horizontal"></vxe-textarea>

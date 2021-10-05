@@ -3133,7 +3133,7 @@ const apis = [
         version: '',
         type: '',
         enum: '',
-        defVal: '{ type, scrollTop, scrollLeft, isX, isY, $event }',
+        defVal: '{ type, scrollTop, scrollLeft, bodyWidth, bodyHeight, isX, isY, $event }',
         list: []
       },
       {
@@ -3431,7 +3431,7 @@ const apis = [
         version: '',
         type: 'Promise<{row, rows}>',
         enum: '',
-        defVal: 'records: object | Array<object>, row?: Row',
+        defVal: 'records: object | Array<object>, row?: Row | -1 | 0',
         list: []
       },
       {

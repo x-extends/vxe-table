@@ -574,13 +574,17 @@ export default {
      */
     scrollEvent (evnt) {
       const { $el: scrollBodyElem, $parent: $xetable, fixedType } = this
-      const { $refs, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
+      const { $refs, elemStore, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
       const { tableHeader, tableBody, leftBody, rightBody, tableFooter, validTip } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
       const bodyElem = tableBody.$el
       const leftElem = leftBody ? leftBody.$el : null
       const rightElem = rightBody ? rightBody.$el : null
+      const bodyYElem = elemStore['main-body-ySpace']
+      const bodyXElem = elemStore['main-body-xSpace']
+      const bodyHeight = bodyYElem ? bodyYElem.clientHeight : 0
+      const bodyWidth = bodyXElem ? bodyXElem.clientWidth : 0
       let scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isRollX = scrollLeft !== lastScrollLeft
@@ -622,16 +626,20 @@ export default {
       if (isRollX && validTip && validTip.visible) {
         validTip.updatePlacement()
       }
-      $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, isX: isRollX, isY: isRollY }, evnt)
+      $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, bodyHeight, bodyWidth, isX: isRollX, isY: isRollY }, evnt)
     },
     handleWheel (evnt, isTopWheel, deltaTop, isRollX, isRollY) {
       const { $parent: $xetable } = this
-      const { $refs } = $xetable
+      const { $refs, elemStore } = $xetable
       const { tableBody, leftBody, rightBody } = $refs
       const bodyElem = tableBody.$el
       const leftElem = leftBody ? leftBody.$el : null
       const rightElem = rightBody ? rightBody.$el : null
       const remainSize = this.isPrevWheelTop === isTopWheel ? Math.max(0, this.wheelYSize - this.wheelYTotal) : 0
+      const bodyYElem = elemStore['main-body-ySpace']
+      const bodyXElem = elemStore['main-body-xSpace']
+      const bodyHeight = bodyYElem ? bodyYElem.clientHeight : 0
+      const bodyWidth = bodyXElem ? bodyXElem.clientWidth : 0
       this.isPrevWheelTop = isTopWheel
       this.wheelYSize = Math.abs(isTopWheel ? deltaTop - remainSize : deltaTop + remainSize)
       this.wheelYInterval = 0
@@ -659,7 +667,7 @@ export default {
           }
           this.wheelYTotal = wheelYTotal
           this.wheelYInterval = wheelYInterval
-          $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft: bodyElem.scrollLeft, isX: isRollX, isY: isRollY }, evnt)
+          $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft: bodyElem.scrollLeft, bodyHeight, bodyWidth, isX: isRollX, isY: isRollY }, evnt)
         }
       }
       handleSmooth()

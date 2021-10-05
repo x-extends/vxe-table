@@ -40,8 +40,8 @@ function renderDefaultForm (h, _vm) {
         on: {
           submit: _vm.submitEvent,
           reset: _vm.resetEvent,
-          'submit-invalid': _vm.submitInvalidEvent,
-          'toggle-collapse': _vm.togglCollapseEvent
+          collapse: _vm.collapseEvent,
+          'submit-invalid': _vm.submitInvalidEvent
         },
         scopedSlots: formSlots
       })
@@ -819,9 +819,10 @@ export default {
     submitInvalidEvent (params) {
       this.$emit('form-submit-invalid', Object.assign({ $grid: this }, params))
     },
-    togglCollapseEvent (params) {
+    collapseEvent (params) {
       this.$nextTick(() => this.recalculate(true))
       this.$emit('form-toggle-collapse', Object.assign({ $grid: this }, params))
+      this.$emit('form-collapse', Object.assign({ $grid: this }, params))
     },
     triggerZoomEvent (evnt) {
       this.zoom()

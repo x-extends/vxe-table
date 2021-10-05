@@ -2,8 +2,9 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, isEnableConf } from '../../tools'
+import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { createItem } from './util'
+import { renderTitle } from './render'
 import { eqEmptyValue } from '../../tools/src/utils'
 import { browse } from '../../tools/src/dom'
 
@@ -57,95 +58,6 @@ function getResetValue (value, resetValue) {
   return resetValue
 }
 
-function callSlot (_vm, slotFunc, params, h) {
-  if (slotFunc) {
-    const { $scopedSlots } = _vm
-    if (XEUtils.isString(slotFunc)) {
-      slotFunc = $scopedSlots[slotFunc] || null
-    }
-    if (XEUtils.isFunction(slotFunc)) {
-      return slotFunc.call(_vm, params, h)
-    }
-  }
-  return []
-}
-
-function renderPrefixIcon (h, titlePrefix) {
-  return h('span', {
-    class: 'vxe-form--item-title-prefix'
-  }, [
-    h('i', {
-      class: titlePrefix.icon || GlobalConfig.icon.FORM_PREFIX
-    })
-  ])
-}
-
-function renderSuffixIcon (h, titleSuffix) {
-  return h('span', {
-    class: 'vxe-form--item-title-suffix'
-  }, [
-    h('i', {
-      class: titleSuffix.icon || GlobalConfig.icon.FORM_SUFFIX
-    })
-  ])
-}
-
-function renderTitle (h, _vm, item) {
-  const { data } = _vm
-  const { slots, field, itemRender, titlePrefix, titleSuffix } = item
-  const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-  const params = { data, property: field, item, $form: _vm }
-  const contVNs = []
-  const titVNs = []
-  if (titlePrefix) {
-    titVNs.push(
-      titlePrefix.message
-        ? h('vxe-tooltip', {
-          props: {
-            content: UtilTools.getFuncText(titlePrefix.message),
-            enterable: titlePrefix.enterable,
-            theme: titlePrefix.theme
-          }
-        }, [
-          renderPrefixIcon(h, titlePrefix)
-        ])
-        : renderPrefixIcon(h, titlePrefix)
-    )
-  }
-  titVNs.push(
-    h('span', {
-      class: 'vxe-form--item-title-label'
-    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? callSlot(_vm, slots.title, params, h) : UtilTools.getFuncText(item.title)))
-  )
-  contVNs.push(
-    h('div', {
-      class: 'vxe-form--item-title-content'
-    }, titVNs)
-  )
-  const fixVNs = []
-  if (titleSuffix) {
-    fixVNs.push(
-      titleSuffix.message
-        ? h('vxe-tooltip', {
-          props: {
-            content: UtilTools.getFuncText(titleSuffix.message),
-            enterable: titleSuffix.enterable,
-            theme: titleSuffix.theme
-          }
-        }, [
-          renderSuffixIcon(h, titleSuffix)
-        ])
-        : renderSuffixIcon(h, titleSuffix)
-    )
-  }
-  contVNs.push(
-    h('div', {
-      class: 'vxe-form--item-title-postfix'
-    }, fixVNs)
-  )
-  return contVNs
-}
-
 function renderItems (h, _vm, itemList) {
   const { _e, rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
   return itemList.map((item, index) => {
@@ -185,7 +97,7 @@ function renderItems (h, _vm, itemList) {
     }
     let contentVNs = []
     if (slots && slots.default) {
-      contentVNs = callSlot(_vm, slots.default, params, h)
+      contentVNs = _vm.callSlot(slots.default, params, h)
     } else if (compConf && compConf.renderItemContent) {
       contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
     } else if (compConf && compConf.renderItem) {
@@ -258,6 +170,7 @@ export default {
   name: 'VxeForm',
   mixins: [vSize],
   props: {
+    collapseStatus: { type: Boolean, default: true },
     loading: Boolean,
     data: Object,
     size: { type: String, default: () => GlobalConfig.form.size || GlobalConfig.size },
@@ -272,11 +185,12 @@ export default {
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
-    validConfig: Object
+    validConfig: Object,
+    customLayout: { type: Boolean, default: () => GlobalConfig.form.customLayout }
   },
   data () {
     return {
-      collapseAll: true,
+      collapseAll: this.collapseStatus,
       staticItems: [],
       formItems: [],
 
@@ -305,24 +219,32 @@ export default {
       return opts
     }
   },
-  created () {
-    this.$nextTick(() => {
-      const { items } = this
-      if (items) {
-        this.loadItem(items)
-      }
-    })
-  },
   watch: {
     staticItems (value) {
       this.formItems = value
     },
     items (value) {
       this.loadItem(value)
+    },
+    collapseStatus (value) {
+      this.collapseAll = !!value
     }
   },
+  created () {
+    this.$nextTick(() => {
+      const { items } = this
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (this.customLayout && this.items) {
+          UtilTools.error('vxe.error.errConflicts', ['custom-layout', 'items'])
+        }
+      }
+      if (items) {
+        this.loadItem(items)
+      }
+    })
+  },
   render (h) {
-    const { _e, loading, className, data, vSize, tooltipOpts, formItems } = this
+    const { _e, loading, className, data, vSize, tooltipOpts, formItems, customLayout } = this
     const hasUseTooltip = VXETable._tooltip
     return h('form', {
       class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: this }) : className) : '', {
@@ -338,11 +260,11 @@ export default {
     }, [
       h('div', {
         class: 'vxe-form--wrapper vxe-row'
-      }, renderItems(h, this, formItems)),
+      }, customLayout ? this.$slots.default : renderItems(h, this, formItems)),
       h('div', {
         class: 'vxe-form-slots',
         ref: 'hideItem'
-      }, this.$slots.default),
+      }, customLayout ? [] : this.$slots.default),
       h('div', {
         class: ['vxe-loading', {
           'is--visible': loading
@@ -362,6 +284,18 @@ export default {
     ])
   },
   methods: {
+    callSlot (slotFunc, params, h) {
+      if (slotFunc) {
+        const { $scopedSlots } = this
+        if (XEUtils.isString(slotFunc)) {
+          slotFunc = $scopedSlots[slotFunc] || null
+        }
+        if (XEUtils.isFunction(slotFunc)) {
+          return slotFunc.call(this, params, h)
+        }
+      }
+      return []
+    },
     loadItem (list) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         const { $scopedSlots } = this
@@ -388,12 +322,16 @@ export default {
       return itemList
     },
     toggleCollapse () {
-      this.collapseAll = !this.collapseAll
+      const status = !this.collapseAll
+      this.collapseAll = status
+      this.$emit('update:collapseStatus', status)
       return this.$nextTick()
     },
     toggleCollapseEvent (evnt) {
       this.toggleCollapse()
-      this.$emit('toggle-collapse', { collapse: !this.collapseAll, data: this.data, $form: this, $event: evnt }, evnt)
+      const status = this.collapseAll
+      this.$emit('toggle-collapse', { status, collapse: status, data: this.data, $form: this, $event: evnt }, evnt)
+      this.$emit('collapse', { status, collapse: status, data: this.data, $form: this, $event: evnt }, evnt)
     },
     submitEvent (evnt) {
       evnt.preventDefault()
@@ -631,12 +569,16 @@ export default {
     handleFocus (fields) {
       const { $el } = this
       const itemList = this.getItems()
-      fields.some(property => {
+      fields.some((property, index) => {
         const item = itemList.find(item => item.field === property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem
+          // 定位到第一个
+          if (!index) {
+            DomTools.scrollToView($el.querySelector(`.${item.id}`))
+          }
           // 如果指定了聚焦 class
           if (itemRender.autofocus) {
             inputElem = $el.querySelector(`.${item.id} ${itemRender.autofocus}`)

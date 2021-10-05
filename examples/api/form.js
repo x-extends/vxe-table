@@ -114,6 +114,24 @@ const apis = [
         list: []
       },
       {
+        name: 'collapse-status',
+        desc: 'v-model 绑定值，折叠状态',
+        version: '3.3.14',
+        type: 'boolean',
+        enum: '',
+        defVal: 'true',
+        list: []
+      },
+      {
+        name: 'custom-layout',
+        desc: '是否使用自定义布局',
+        version: '3.3.14',
+        type: 'boolean',
+        enum: '',
+        defVal: '默认 false，继承 setup.form.customLayout',
+        list: []
+      },
+      {
         name: 'items',
         desc: '项列表',
         version: '',
@@ -308,11 +326,21 @@ const apis = [
       },
       {
         name: 'toggle-collapse',
-        desc: '当折叠按钮被手动点击时会触发该事件',
+        desc: '即将废弃，请使用 collapse',
+        disabled: true,
         version: '',
         type: '',
         enum: '',
-        defVal: '{ collapse, data, $event }',
+        defVal: '{ status, data, $event }',
+        list: []
+      },
+      {
+        name: 'collapse',
+        desc: '当折叠按钮被手动点击时会触发该事件',
+        version: '3.3.14',
+        type: '',
+        enum: '',
+        defVal: '{ status, data, $event }',
         list: []
       }
     ]

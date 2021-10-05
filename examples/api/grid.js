@@ -525,11 +525,21 @@ const apis = [
       },
       {
         name: 'form-toggle-collapse',
-        desc: '只对 form-config 配置时有效，当折叠按钮被手动点击时会触发该事件',
+        desc: '即将废弃，请使用 form-collapse',
+        disabled: true,
         version: '',
         type: '',
         enum: '',
-        defVal: '{ collapse, data, $event }',
+        defVal: '{ status, data, $event }',
+        list: []
+      },
+      {
+        name: 'form-collapse',
+        desc: '只对 form-config 配置时有效，当折叠按钮被手动点击时会触发该事件',
+        version: '3.3.14',
+        type: '',
+        enum: '',
+        defVal: '{ status, data, $event }',
         list: []
       },
       {
