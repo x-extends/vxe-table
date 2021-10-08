@@ -3872,7 +3872,9 @@ export default defineComponent({
           } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
             evnt.stopPropagation()
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
-            $xetable.closeMenu()
+            if ($xetable.closeMenu) {
+              $xetable.closeMenu()
+            }
             tableMethods.closeFilter()
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
@@ -3939,7 +3941,9 @@ export default defineComponent({
             $xetable.handleKeyboardEvent(evnt)
           } else if (isEsc) {
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
-            $xetable.closeMenu()
+            if (isMenu) {
+              $xetable.closeMenu()
+            }
             tableMethods.closeFilter()
             if (actived.row) {
               // 如果是激活编辑状态，则取消编辑
