@@ -3480,6 +3480,15 @@ const apis = [
         list: []
       },
       {
+        name: 'removeInsertRow()',
+        desc: '删除新增的临时数据（不支持深层结构）',
+        version: '',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '3.3.15',
+        list: []
+      },
+      {
         name: 'removeMergeCells(merges)',
         desc: '取消单元格的临时合并状态，如果为数组，则取消多个合并',
         version: '',

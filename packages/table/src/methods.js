@@ -911,6 +911,13 @@ const Methods = {
     return this.editStore.insertList.indexOf(row) > -1
   },
   /**
+   * 删除所有新增的临时数据
+   * @returns
+   */
+  removeInsertRow () {
+    return this.remove(this.editStore.insertList)
+  },
+  /**
    * 检查行或列数据是否发生改变
    * @param {Row} row 行对象
    * @param {String} field 字段名
