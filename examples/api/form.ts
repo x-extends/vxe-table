@@ -3,6 +3,7 @@ import itemAPI from './form-item'
 // import gatherAPI from './form-gather'
 
 const itemProps: any = itemAPI.find(item => item.name === 'Props')
+const itemSlots: any = itemAPI.find(item => item.name === 'Slots')
 // const gatherProps: any = gatherAPI.find(item => item.name === 'Props')
 
 const apis = [
@@ -147,6 +148,15 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
+          },
+          {
+            name: 'slots',
+            desc: '项集合',
+            version: '',
+            type: 'any[]',
+            enum: '',
+            defVal: '',
+            list: XEUtils.mapTree(itemSlots.list, (item: any) => Object.assign({}, item, { name: XEUtils.camelCase(item.name) }))
           }
         ])
       },

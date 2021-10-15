@@ -310,6 +310,15 @@ const apis = [
         enum: '',
         defVal: '{ data, property }',
         list: []
+      },
+      {
+        name: 'title',
+        desc: '自定义标题',
+        version: '',
+        type: '',
+        enum: '',
+        defVal: '{ data, property }',
+        list: []
       }
     ]
   },
