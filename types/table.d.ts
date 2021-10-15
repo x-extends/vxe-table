@@ -220,6 +220,10 @@ export interface TablePublicMethods {
    */
   isInsertByRow(row: any): boolean;
   /**
+   * 删除所有新增的临时数据
+   */
+  removeInsertRow(): Promise<{ row: any, rows: any[] }>;
+  /**
    * 只对 keep-source 开启有效，判断行数据是否发生改变
    * @param row 指定行
    * @param field 指定字段

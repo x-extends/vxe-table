@@ -2481,6 +2481,14 @@ export default defineComponent({
         return $xetable.findRowIndexOf(editStore.insertList, row) > -1
       },
       /**
+       * 删除所有新增的临时数据
+       * @returns
+       */
+      removeInsertRow () {
+        const { editStore } = reactData
+        return $xetable.remove(editStore.insertList)
+      },
+      /**
        * 检查行或列数据是否发生改变
        * @param {Row} row 行对象
        * @param {String} field 字段名
@@ -3941,7 +3949,7 @@ export default defineComponent({
             $xetable.handleKeyboardEvent(evnt)
           } else if (isEsc) {
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
-            if (isMenu) {
+            if ($xetable.closeMenu) {
               $xetable.closeMenu()
             }
             tableMethods.closeFilter()

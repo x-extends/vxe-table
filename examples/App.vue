@@ -1267,13 +1267,12 @@ export default defineComponent({
                 name: 'TableEditTemplate'
               },
               keywords: ['slots', 'updateStatus', 'template', '插槽']
-            // // },
-            // // {
-            // //   label: 'app.aside.nav.full',
-            // //   disabled: true,
-            // //   locat: {
-            // //     name: 'TableEditFull'
-            // //   }
+            },
+            {
+              label: 'app.aside.nav.full',
+              locat: {
+                name: 'TableEditFull'
+              }
             }
           ]
         },

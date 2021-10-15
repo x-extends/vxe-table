@@ -1419,7 +1419,7 @@ const apis = [
           },
           {
             name: 'contentMethod',
-            desc: '该方法可以通过返回值来重写默认的提示内容',
+            desc: '该方法可以通过返回值来重写默认的提示内容，可以返回 null 使用默认的提示消息，可以返回空内容去掉指定单元格的提示消息',
             version: '',
             type: '({ items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event }) => string',
             enum: '',
@@ -3355,7 +3355,7 @@ const apis = [
       // },
       {
         name: 'reloadRow(rows, record, field)',
-        desc: '局部加载行数据并恢复到初始状态（对于行数据需要局部更改的场景中可能会用到）',
+        desc: '局部加载行数据并恢复到初始状态，仅用于修改的数据，对新增的临时数据无效（对于行数据需要局部更改的场景中可能会用到）',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -3495,6 +3495,15 @@ const apis = [
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'removeInsertRow()',
+        desc: '删除新增的临时数据（不支持深层结构）',
+        version: '',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '4.0.30',
         list: []
       },
       {
