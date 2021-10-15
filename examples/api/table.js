@@ -1410,7 +1410,7 @@ const apis = [
           },
           {
             name: 'contentMethod',
-            desc: '该方法接收一个字符串，可以通过返回值来重写默认的提示内容',
+            desc: '该方法可以通过返回值来重写默认的提示内容，可以返回 null 使用默认的提示消息，可以返回空内容去掉指定单元格的提示消息',
             version: '',
             type: '({ items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event }) => string',
             enum: '',

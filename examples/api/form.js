@@ -5,6 +5,13 @@ import itemAPI from './form-item'
 const itemProps = itemAPI.find(item => item.name === 'Props')
 // const gatherProps = gatherAPI.find(item => item.name === 'Props')
 
+const itemSlots = XEUtils.clone(itemAPI.find(item => item.name === 'Slots'), true)
+itemSlots.name = 'slots'
+itemSlots.list.forEach(item => {
+  item.type = 'string, ((params, h) => VNode[])'
+  item.defVal = `${item.defVal}, h`
+})
+
 const apis = [
   {
     name: 'Props',
@@ -147,7 +154,8 @@ const apis = [
             enum: '',
             defVal: '',
             list: []
-          }
+          },
+          itemSlots
         ])
       },
       {
