@@ -314,10 +314,10 @@
       cursor: w-resize;
     }
     .wl-resize {
-      left: -#{$SpaceSize / 2 + 1}px;
+      left: -#{$SpaceSize * 0.5 + 1}px;
     }
     .wr-resize {
-      right: -#{$SpaceSize / 2 + 1}px;
+      right: -#{$SpaceSize * 0.5 + 1}px;
     }
     .swst-resize,
     .sest-resize,
@@ -359,10 +359,10 @@
       cursor: s-resize;
     }
     .st-resize {
-      top: -#{$SpaceSize / 2 + 1}px;
+      top: -#{$SpaceSize * 0.5 + 1}px;
     }
     .sb-resize {
-      bottom: -#{$SpaceSize / 2 + 1}px;
+      bottom: -#{$SpaceSize * 0.5 + 1}px;
     }
   }
 }

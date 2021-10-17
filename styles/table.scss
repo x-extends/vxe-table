@@ -474,7 +474,7 @@
     line-height: $vxe-table-row-line-height;
     text-align: left;
     &:not(.col--ellipsis) {
-      padding: #{floor(($vxe-table-row-height-default - $vxe-table-row-line-height) / 2)} 0;
+      padding: #{floor(($vxe-table-row-height-default - $vxe-table-row-line-height) * 0.5)} 0;
     }
     &.col--current {
       background-color: $vxe-table-column-current-background-color;
@@ -609,7 +609,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: #{floor(($vxe-table-row-height-medium - $vxe-table-row-line-height) / 2)} 0;
+        padding: #{floor(($vxe-table-row-height-medium - $vxe-table-row-line-height) * 0.5)} 0;
       }
     }
     .vxe-cell {
@@ -635,7 +635,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: #{floor(($vxe-table-row-height-small - $vxe-table-row-line-height) / 2)} 0;
+        padding: #{floor(($vxe-table-row-height-small - $vxe-table-row-line-height) * 0.5)} 0;
       }
     }
     .vxe-cell {
@@ -661,7 +661,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: #{floor(($vxe-table-row-height-mini - $vxe-table-row-line-height) / 2)} 0;
+        padding: #{floor(($vxe-table-row-height-mini - $vxe-table-row-line-height) * 0.5)} 0;
       }
     }
     .vxe-cell {
