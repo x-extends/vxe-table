@@ -903,6 +903,7 @@ const Methods = {
             const allFilterMethod = filterOpts.filterMethod
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
             const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
+            const defaultFilterMethod = compConf ? compConf.defaultFilterMethod : null
             const cellValue = UtilTools.getCellValue(row, column)
             if (filterMethod) {
               return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
@@ -910,6 +911,8 @@ const Methods = {
               return itemList.some((item) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
             } else if (allFilterMethod) {
               return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
+            } else if (defaultFilterMethod) {
+              return itemList.some((item) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
             }
             return valueList.indexOf(XEUtils.get(row, property)) > -1
           }
