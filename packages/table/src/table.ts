@@ -1177,7 +1177,8 @@ export default defineComponent({
             return filterColumns.every(({ column, valueList, itemList }) => {
               const { filterMethod, filterRender } = column
               const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-              const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
+              const compFilterMethod = compConf ? compConf.filterMethod : null
+              const defaultFilterMethod: any = compConf ? (compConf as any).defaultFilterMethod : null
               const cellValue = getCellValue(row, column)
               if (filterMethod) {
                 return itemList.some((item: any) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
@@ -1185,6 +1186,8 @@ export default defineComponent({
                 return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               } else if (allFilterMethod) {
                 return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
+              } else if (defaultFilterMethod) {
+                return itemList.some((item: any) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               }
               return valueList.indexOf(XEUtils.get(row, column.property)) > -1
             })
@@ -2241,7 +2244,7 @@ export default defineComponent({
        * @param {ColumnInfo} columns 列配置
        */
       loadColumn (columns) {
-        const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn($xetable, column))
+        const collectColumn = XEUtils.mapTree(columns, column => reactive(Cell.createColumn($xetable, column)))
         return handleColumn(collectColumn)
       },
       /**
@@ -2383,7 +2386,7 @@ export default defineComponent({
       createData (records) {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
-        const handleRrecord = (record: any) => tablePrivateMethods.defineField(Object.assign({}, record))
+        const handleRrecord = (record: any) => reactive(tablePrivateMethods.defineField(Object.assign({}, record)))
         const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
         return nextTick().then(() => rows)
       },
