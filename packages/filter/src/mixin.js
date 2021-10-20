@@ -85,7 +85,7 @@ export default {
           // 判断面板不能大于表格高度
           let maxHeight = null
           if (filterHeight >= bodyElem.clientHeight) {
-            maxHeight = bodyElem.clientHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0)
+            maxHeight = Math.max(40, bodyElem.clientHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
           }
           if (column.fixed === 'left') {
             left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth
@@ -111,6 +111,7 @@ export default {
           filterStore.maxHeight = maxHeight
         })
       }
+      this.emitEvent('filter-visible', { column, property: column.property, filterList: this.getCheckedFilters(), visible: filterStore.visible }, evnt)
     },
     _getCheckedFilters () {
       const { tableFullColumn } = this
@@ -150,7 +151,6 @@ export default {
           datas.push(item.data)
         }
       })
-      filterStore.visible = false
       const filterList = this.getCheckedFilters()
       // 如果是服务端筛选，则跳过本地筛选处理
       if (!filterOpts.remote) {

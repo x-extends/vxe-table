@@ -3404,12 +3404,17 @@ const Methods = {
    * @param {Event} evnt 事件
    */
   closeFilter () {
-    Object.assign(this.filterStore, {
+    const { filterStore } = this
+    const { column, visible } = filterStore
+    Object.assign(filterStore, {
       isAllSelected: false,
       isIndeterminate: false,
       options: [],
       visible: false
     })
+    if (visible) {
+      this.emitEvent('filter-visible', { column, property: column.property, filterList: this.getCheckedFilters(), visible: false }, null)
+    }
     return this.$nextTick()
   },
   /**

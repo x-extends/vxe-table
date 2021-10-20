@@ -962,7 +962,9 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--checkbox .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-medium;
+    }
     .vxe-cell--radio .vxe-radio--icon {
       font-size: $vxe-radio-font-size-medium;
     }
@@ -978,7 +980,9 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--checkbox .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-small;
+    }
     .vxe-cell--radio .vxe-radio--icon {
       font-size: $vxe-radio-font-size-small;
     }
@@ -994,7 +998,9 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon,
+    .vxe-cell--checkbox .vxe-checkbox--icon {
+      font-size: $vxe-checkbox-font-size-mini;
+    }
     .vxe-cell--radio .vxe-radio--icon {
       font-size: $vxe-radio-font-size-mini;
     }

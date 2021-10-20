@@ -3029,6 +3029,15 @@ const apis = [
         list: []
       },
       {
+        name: 'filter-visible',
+        desc: '当筛选面板被触发时会触发该事件',
+        version: '3.3.16',
+        type: '',
+        enum: '',
+        defVal: '{ column, property, visible, filterList, $event }',
+        list: []
+      },
+      {
         name: 'filter-change',
         descKey: 'app.api.table.desc.filterChange',
         version: '',

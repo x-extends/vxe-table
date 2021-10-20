@@ -14,7 +14,9 @@
       border
       highlight-hover-row
       ref="xTable1"
-      :data="tableData">
+      :data="tableData"
+      @filter-visible="filterVisibleEvent"
+      @filter-change="filterChangeEvent">
       <vxe-column field="id" title="ID"></vxe-column>
       <vxe-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-column>
       <vxe-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-column>
@@ -83,7 +85,9 @@ export default {
           border
           highlight-hover-row
           ref="xTable1"
-          :data="tableData">
+          :data="tableData"
+          @filter-visible="filterVisibleEvent"
+          @filter-change="filterChangeEvent">
           <vxe-column field="id" title="ID"></vxe-column>
           <vxe-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-column>
           <vxe-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-column>
@@ -125,6 +129,12 @@ export default {
             }, 500)
           },
           methods: {
+            filterVisibleEvent ({ column, visible }) {
+              console.log(\`\${column.property} \${visible ? '打开' : '关闭'}筛选面板\`)
+            },
+            filterChangeEvent ({ column }) {
+              console.log(\`\${column.property} 筛选了数据\`)
+            },
             filterNameMethod ({ value, row, column }) {
               return row.id >= value
             },
@@ -199,6 +209,12 @@ export default {
     }, 500)
   },
   methods: {
+    filterVisibleEvent ({ column, visible }) {
+      console.log(`${column.property} ${visible ? '打开' : '关闭'}筛选面板`)
+    },
+    filterChangeEvent ({ column }) {
+      console.log(`${column.property} 筛选了数据`)
+    },
     filterNameMethod ({ value, row }) {
       return row.id >= value
     },
