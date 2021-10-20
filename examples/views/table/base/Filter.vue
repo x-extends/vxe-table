@@ -14,7 +14,9 @@
       border
       highlight-hover-row
       ref="xTable1"
-      :data="demo1.tableData">
+      :data="demo1.tableData"
+      @filter-visible="filterVisibleEvent"
+      @filter-change="filterChangeEvent">
       <vxe-column field="id" title="ID"></vxe-column>
       <vxe-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-column>
       <vxe-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-column>
@@ -67,7 +69,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, reactive, nextTick } from 'vue'
-import { VxeTableInstance, VxeColumnPropTypes } from '../../../../types/index'
+import { VxeTableInstance, VxeColumnPropTypes, VxeTableEvents } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
@@ -83,6 +85,14 @@ export default defineComponent({
         { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 28, address: 'Shanghai' }
       ]
     })
+
+    const filterVisibleEvent: VxeTableEvents.FilterVisible = ({ column, visible }) => {
+      console.log(`${column.property} ${visible ? '打开' : '关闭'}筛选面板`)
+    }
+
+    const filterChangeEvent: VxeTableEvents.FilterChange = ({ column }) => {
+      console.log(`${column.property} 筛选了数据`)
+    }
 
     nextTick(() => {
       // 异步加载筛选数据
@@ -122,6 +132,8 @@ export default defineComponent({
     return {
       xTable1,
       demo1,
+      filterVisibleEvent,
+      filterChangeEvent,
       demo2,
       filterNameMethod,
       filterAgeMethod,
@@ -131,7 +143,9 @@ export default defineComponent({
           border
           highlight-hover-row
           ref="xTable1"
-          :data="demo1.tableData">
+          :data="demo1.tableData"
+          @filter-visible="filterVisibleEvent"
+          @filter-change="filterChangeEvent">
           <vxe-column field="id" title="ID"></vxe-column>
           <vxe-column field="name" title="Name" sortable :filters="[]" :filter-method="filterNameMethod"></vxe-column>
           <vxe-column field="sex" title="Sex" sortable :filters="[{label: 'Man', value: '1'}, {label: 'Woman', value: '0'}]" :filter-multiple="false"></vxe-column>
@@ -145,7 +159,7 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeTableInstance } from '../../../../types/index'
+        import { VxeTableInstance, VxeTableEvents } from '../../../../types/index'
 
         export default defineComponent({
           setup () {
@@ -161,6 +175,14 @@ export default defineComponent({
                 { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 28, address: 'Shanghai' }
               ]
             })
+
+            const filterVisibleEvent: VxeTableEvents.FilterVisible = ({ column, visible }) => {
+              console.log(\`\${column.property} \${visible ? '打开' : '关闭'}筛选面板\`)
+            }
+
+            const filterChangeEvent: VxeTableEvents.FilterChange = ({ column }) => {
+              console.log(\`\${column.property} 筛选了数据\`)
+            }
 
             nextTick(() => {
               // 异步加载筛选数据
@@ -182,7 +204,9 @@ export default defineComponent({
               xTable1,
               demo1,
               filterNameMethod,
-              filterAgeMethod
+              filterAgeMethod,
+              filterVisibleEvent,
+              filterChangeEvent
             }
           }
         })

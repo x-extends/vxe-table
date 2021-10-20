@@ -3056,6 +3056,15 @@ const apis = [
         list: []
       },
       {
+        name: 'filter-visible',
+        desc: '当筛选面板被触发时会触发该事件',
+        version: '4.1.0',
+        type: '',
+        enum: '',
+        defVal: '{ column, property, visible, filterList, $event }',
+        list: []
+      },
+      {
         name: 'clear-filter',
         desc: '当用户点击清除所有筛选条件时会触发该事件',
         version: '4.0.18',

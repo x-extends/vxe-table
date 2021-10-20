@@ -14,7 +14,7 @@
   /*排序*/
   .vxe-cell--sort {
     width: 1.5em;
-    height: 1.5em;
+    height: 1.35em;
     vertical-align: middle;
     text-align: center;
     display: inline-block;
@@ -36,10 +36,10 @@
     }
   }
   .vxe-sort--asc-btn {
-    top: -0.04em;
+    top: -0.15em;
   }
   .vxe-sort--desc-btn {
-    bottom: -0.04em;
+    bottom: -0.15em;
   }
 }
 
@@ -80,12 +80,12 @@
       top: 0.2em;
     }
   }
-  .vxe-cell--required-icon,
-  .vxe-cell--edit-icon,
-  .vxe-cell-help-icon,
-  .vxe-cell--title {
-    vertical-align: middle;
-  }
+  // .vxe-cell--required-icon,
+  // .vxe-cell--edit-icon,
+  // .vxe-cell-help-icon,
+  // .vxe-cell--title {
+  //   vertical-align: middle;
+  // }
   .vxe-cell--required-icon {
     margin-right: 0.1em;
   }
@@ -95,9 +95,6 @@
   }
   .vxe-cell-help-icon {
     cursor: help;
-  }
-  .vxe-cell--title {
-    line-height: 1.5;
   }
   .vxe-resizable {
     position: absolute;

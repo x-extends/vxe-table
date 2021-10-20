@@ -1966,6 +1966,7 @@ export type VxeTableEmits = [
   'sort-change',
   'clear-sort',
   'filter-change',
+  'filter-visible',
   'clear-filter',
   'resizable-change',
   'toggle-row-expand',
@@ -2269,9 +2270,17 @@ export namespace VxeTableDefines {
     datas: any[];
   }
   export interface FilterChangeParams extends FilterCheckedParams {
-    filterList: FilterCheckedParams[]
+    filterList: FilterCheckedParams[];
   }
   export interface FilterChangeEventParams extends TableEventParams, FilterChangeParams { }
+
+  export interface FilterVisibleParams {
+    column: VxeTableDefines.ColumnInfo;
+    property: VxeColumnPropTypes.Field;
+    filterList: FilterCheckedParams[];
+    visible: boolean;
+  }
+  export interface FilterVisibleEventParams extends TableEventParams, FilterVisibleParams { }
 
   export interface ResizableChangeParams extends TableBaseHeaderCellParams { }
   export interface ResizableChangeEventParams extends TableEventParams, ResizableChangeParams { }
@@ -2344,6 +2353,7 @@ export interface VxeTableEventProps {
   onFooterCellMenu?: VxeTableEvents.FooterCellMenu;
   onSortChange?: VxeTableEvents.SortChange;
   onFilterChange?: VxeTableEvents.FilterChange;
+  onFilterVisible?: VxeTableEvents.FilterVisible;
   onResizableChange?: VxeTableEvents.ResizableChange;
   onToggleRowExpand?: VxeTableEvents.ToggleRowExpand;
   onToggleTreeExpand?: VxeTableEvents.ToggleTreeExpand;
@@ -2418,6 +2428,7 @@ export namespace VxeTableEvents {
   export type FooterCellMenu = (params: VxeTableDefines.FooterCellMenuEventParams) => void;
   export type SortChange = (params: VxeTableDefines.SortChangeEventParams) => void;
   export type FilterChange = (params: VxeTableDefines.FilterChangeEventParams) => void;
+  export type FilterVisible = (params: VxeTableDefines.FilterVisibleEventParams) => void;
   export type ResizableChange = (params: VxeTableDefines.ResizableChangeEventParams) => void;
   export type ToggleRowExpand = (params: VxeTableDefines.ToggleRowExpandEventParams) => void;
   export type ToggleTreeExpand = (params: VxeTableDefines.ToggleTreeExpandEventParams) => void;

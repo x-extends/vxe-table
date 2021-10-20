@@ -288,6 +288,7 @@ export namespace VxeGridDefines {
   export interface FooterCellMenuEventParams extends GridEventParams, VxeTableDefines.FooterCellMenuEventParams { }
   export interface SortChangeEventParams extends GridEventParams, VxeTableDefines.SortChangeEventParams { }
   export interface FilterChangeEventParams extends GridEventParams, VxeTableDefines.FilterChangeEventParams { }
+  export interface FilterVisibleEventParams extends GridEventParams, VxeTableDefines.FilterVisibleEventParams { }
   export interface ResizableChangeEventParams extends GridEventParams, VxeTableDefines.ResizableChangeEventParams { }
   export interface ToggleRowExpandEventParams extends GridEventParams, VxeTableDefines.ToggleRowExpandEventParams { }
   export interface ToggleTreeExpandEventParams extends GridEventParams, VxeTableDefines.ToggleTreeExpandEventParams { }
@@ -349,6 +350,7 @@ export interface VxeGridEventProps {
   onFooterCellMenu?: VxeGridEvents.FooterCellMenu;
   onSortChange?: VxeGridEvents.SortChange;
   onFilterChange?: VxeGridEvents.FilterChange;
+  onFilterVisible?: VxeGridEvents.FilterVisible;
   onResizableChange?: VxeGridEvents.ResizableChange;
   onToggleRowExpand?: VxeGridEvents.ToggleRowExpand;
   onToggleTreeExpand?: VxeGridEvents.ToggleTreeExpand;
@@ -396,6 +398,7 @@ export interface VxeGridListeners {
   footerCellMenu?: VxeGridEvents.FooterCellMenu;
   sortChange?: VxeGridEvents.SortChange;
   filterChange?: VxeGridEvents.FilterChange;
+  filterVisible?: VxeGridEvents.FilterVisible;
   resizableChange?: VxeGridEvents.ResizableChange;
   toggleRowExpand?: VxeGridEvents.ToggleRowExpand;
   toggleTreeExpand?: VxeGridEvents.ToggleTreeExpand;
@@ -443,6 +446,7 @@ export namespace VxeGridEvents {
   export type FooterCellMenu = (params: VxeGridDefines.FooterCellMenuEventParams) => void;
   export type SortChange = (params: VxeGridDefines.SortChangeEventParams) => void;
   export type FilterChange = (params: VxeGridDefines.FilterChangeEventParams) => void;
+  export type FilterVisible = (params: VxeGridDefines.FilterVisibleEventParams) => void;
   export type ResizableChange = (params: VxeGridDefines.ResizableChangeEventParams) => void;
   export type ToggleRowExpand = (params: VxeGridDefines.ToggleRowExpandEventParams) => void;
   export type ToggleTreeExpand = (params: VxeGridDefines.ToggleTreeExpandEventParams) => void;

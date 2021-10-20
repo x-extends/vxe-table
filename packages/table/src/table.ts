@@ -3220,12 +3220,16 @@ export default defineComponent({
        */
       closeFilter () {
         const { filterStore } = reactData
+        const { column, visible } = filterStore
         Object.assign(filterStore, {
           isAllSelected: false,
           isIndeterminate: false,
           options: [],
           visible: false
         })
+        if (visible) {
+          $xetable.dispatchEvent('filter-visible', { column, property: column.property, filterList: $xetable.getCheckedFilters(), visible: false }, null)
+        }
         return nextTick()
       },
       /**
