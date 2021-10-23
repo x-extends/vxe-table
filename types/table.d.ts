@@ -1389,6 +1389,9 @@ export namespace VxeTablePropTypes {
    * 树形结构配置项
    */
   export interface TreeConfig {
+    transform?: boolean;
+    rowtKey?: string;
+    parentKey?: string;
     children?: string;
     indent?: number;
     line?: boolean;
@@ -1417,6 +1420,8 @@ export namespace VxeTablePropTypes {
     iconLoaded?: string;
   }
   export interface TreeOpts extends TreeConfig {
+    rowtKey: string;
+    parentKey: string;
     children: string;
     indent: number;
     hasChild: string;

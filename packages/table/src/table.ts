@@ -1805,6 +1805,18 @@ export default defineComponent({
       const { editStore, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const sYOpts = computeSYOpts.value
+      const treeOpts = computeTreeOpts.value
+      if (treeConfig && treeOpts.transform) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (!treeOpts.rowtKey) {
+            errLog('vxe.error.reqProp', ['table.tree-config.rowtKey'])
+          }
+          if (!treeOpts.parentKey) {
+            errLog('vxe.error.reqProp', ['table.tree-config.parentKey'])
+          }
+        }
+        datas = XEUtils.toArrayTree(datas, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
+      }
       const tableFullData = datas ? datas.slice(0) : []
       const scrollYLoad = !treeConfig && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       scrollYStore.startIndex = 0

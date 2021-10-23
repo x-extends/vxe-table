@@ -83,7 +83,7 @@
     "vxe-table-plugin-element": "^3.0.5",
     "vxe-table-plugin-export-pdf": "^3.0.2",
     "vxe-table-plugin-export-xlsx": "^3.0.3",
-    "vxe-table-plugin-menus": "^3.0.5",
+    "vxe-table-plugin-menus": "^3.0.6",
     "vxe-table-plugin-renderer": "^3.0.2",
     "vxe-table-plugin-shortcut-key": "^3.0.2",
     "xe-ajax": "^4.0.5",
