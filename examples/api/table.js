@@ -1564,8 +1564,35 @@ const apis = [
         defVal: '继承 setup.table.treeConfig',
         list: [
           {
+            name: 'transform',
+            desc: '自动将列表转为树结构（需要有 rowKey 和 parentKey）',
+            version: '3.3.16',
+            type: 'string',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'rowKey',
+            desc: '树节点的字段名',
+            version: '3.3.16',
+            type: 'string',
+            enum: '',
+            defVal: 'id',
+            list: []
+          },
+          {
+            name: 'parentKey',
+            desc: '树父节点的字段名',
+            version: '3.3.16',
+            type: 'string',
+            enum: '',
+            defVal: 'parentId',
+            list: []
+          },
+          {
             name: 'children',
-            desc: '树子节点的属性',
+            desc: '树子节点的字段名',
             version: '',
             type: 'string',
             enum: '',

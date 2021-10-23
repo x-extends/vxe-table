@@ -1,7 +1,9 @@
 <template>
   <div>
     <p class="tip">
-      树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，通过 <table-api-link prop="row-id"/> 指定主键，还可以通过 <table-api-link prop="trigger"/> 指定触发方式<br>
+      树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，<br>
+      设置 <table-api-link prop="transform"/> 开启自动将列表转成树结构<br>
+      通过 <table-api-link prop="row-id"/> 指定主键，还可以通过 <table-api-link prop="trigger"/> 指定触发方式<br>
       <span class="red">(注：树结构不支持大量数据，如果数据量超过 2000 条，请谨慎使用！)</span>
     </p>
 
@@ -17,7 +19,7 @@
       resizable
       border="inner"
       ref="xTree"
-      :tree-config="{children: 'childs'}"
+      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
       :data="tableData1"
       @toggle-tree-expand="toggleExpandChangeEvent">
       <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
@@ -84,32 +86,16 @@ export default {
   data () {
     return {
       tableData1: [
-        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        {
-          id: 1005,
-          name: 'Test2',
-          type: 'mp4',
-          size: null,
-          date: '2021-04-01',
-          childs: [
-            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-            { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
-            {
-              id: 10053,
-              name: 'vxe-table 从入门到放弃96',
-              type: 'avi',
-              size: null,
-              date: '2021-04-01',
-              childs: [
-                { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
-                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-              ]
-            }
-          ]
-        },
-        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 1000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 1005, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 1005, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 20045, parentId: 24300, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+        { id: 10053, parentId: 24300, name: 'vxe-table 从入门到放弃96', type: 'avi', size: null, date: '2021-04-01' },
+        { id: 24330, parentId: 10053, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+        { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+        { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 24555, parentId: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
       ],
       tableData2: [
         { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
@@ -182,7 +168,7 @@ export default {
           resizable
           border="inner"
           ref="xTree"
-          :tree-config="{children: 'childs'}"
+          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
           :data="tableData1"
           @toggle-tree-expand="toggleExpandChangeEvent">
           <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
@@ -196,32 +182,16 @@ export default {
           data () {
             return {
               tableData1: [
-                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                {
-                  id: 1005,
-                  name: 'Test2',
-                  type: 'mp4',
-                  size: null,
-                  date: '2021-04-01',
-                  childs: [
-                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
-                    {
-                      id: 10053,
-                      name: 'vxe-table 从入门到放弃96',
-                      type: 'avi',
-                      size: null,
-                      date: '2021-04-01',
-                      childs: [
-                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
-                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-                      ]
-                    }
-                  ]
-                },
-                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: 1000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 1005, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 1005, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'vxe-table 从入门到放弃96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 24555, parentId: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
               ]
             }
           },

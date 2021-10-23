@@ -63,6 +63,8 @@ export default {
       showIcon: true
     },
     treeConfig: {
+      rowtKey: 'id',
+      parentKey: 'parentId',
       children: 'children',
       hasChild: 'hasChild',
       indent: 20,

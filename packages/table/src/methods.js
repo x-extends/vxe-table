@@ -311,7 +311,18 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, treeConfig, editStore, sYOpts, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad } = this
+    const { keepSource, treeConfig, treeOpts, editStore, sYOpts, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad } = this
+    if (treeConfig && treeOpts.transform) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (!treeOpts.rowtKey) {
+          UtilTools.error('vxe.error.reqProp', ['table.tree-config.rowtKey'])
+        }
+        if (!treeOpts.parentKey) {
+          UtilTools.error('vxe.error.reqProp', ['table.tree-config.parentKey'])
+        }
+      }
+      datas = XEUtils.toArrayTree(datas, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
+    }
     const tableFullData = datas ? datas.slice(0) : []
     const scrollYLoad = !treeConfig && sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
