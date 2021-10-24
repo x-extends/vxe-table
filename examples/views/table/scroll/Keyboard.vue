@@ -55,6 +55,7 @@
       :loading="demo1.loading"
       :edit-rules="demo1.validRules"
       :mouse-config="{selected: true}"
+      :checkbox-config="{checkField: 'checked'}"
       :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
       :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -126,6 +127,7 @@ export default defineComponent({
       const list = []
       for (let index = 0; index < size; index++) {
         list.push({
+          checked: false,
           name: `名称${index}`,
           sex: '0',
           num: 123,
@@ -310,6 +312,7 @@ export default defineComponent({
           :loading="demo1.loading"
           :edit-rules="demo1.validRules"
           :mouse-config="{selected: true}"
+          :checkbox-config="{checkField: 'checked'}"
           :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
           :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}">
           <vxe-column type="checkbox" width="60"></vxe-column>
@@ -350,6 +353,7 @@ export default defineComponent({
               const list = []
               for (let index = 0; index < size; index++) {
                 list.push({
+                  checked: false,
                   name: \`名称\${index}\`,
                   sex: '0',
                   num: 123,

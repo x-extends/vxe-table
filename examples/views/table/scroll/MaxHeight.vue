@@ -109,7 +109,7 @@ export default defineComponent({
       demo2.loading = true
       return new Promise(resolve => {
         setTimeout(() => {
-          const tableData = mockList(400)
+          const tableData = mockList(60)
           // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
           const $table = xTable2.value
           if ($table) {
@@ -252,7 +252,7 @@ export default defineComponent({
               demo2.loading = true
               return new Promise(resolve => {
                 setTimeout(() => {
-                  const tableData = mockList(600)
+                  const tableData = mockList(60)
                   // 阻断 vue 对大数组的监听，避免 vue 绑定大数据造成短暂的卡顿
                   const $table = xTable2.value
                   if ($table) {
