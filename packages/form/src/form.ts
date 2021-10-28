@@ -72,7 +72,7 @@ export default defineComponent({
     span: [String, Number] as PropType<VxeFormPropTypes.Span>,
     align: { type: String as PropType<VxeFormPropTypes.Align>, default: () => GlobalConfig.form.align },
     titleAlign: { type: String as PropType<VxeFormPropTypes.TitleAlign>, default: () => GlobalConfig.form.titleAlign },
-    titleWidth: [String, Number] as PropType<VxeFormPropTypes.TitleWidth>,
+    titleWidth: { type: [String, Number] as PropType<VxeFormPropTypes.TitleWidth>, default: () => GlobalConfig.form.titleWidth },
     titleColon: { type: Boolean as PropType<VxeFormPropTypes.TitleColon>, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean as PropType<VxeFormPropTypes.TitleAsterisk>, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String] as PropType<VxeFormPropTypes.TitleOverflow>, default: null },
