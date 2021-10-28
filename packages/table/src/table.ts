@@ -1177,7 +1177,8 @@ export default defineComponent({
             return filterColumns.every(({ column, valueList, itemList }) => {
               const { filterMethod, filterRender } = column
               const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-              const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
+              const compFilterMethod = compConf ? compConf.filterMethod : null
+              const defaultFilterMethod: any = compConf ? (compConf as any).defaultFilterMethod : null
               const cellValue = getCellValue(row, column)
               if (filterMethod) {
                 return itemList.some((item: any) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
@@ -1185,6 +1186,8 @@ export default defineComponent({
                 return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               } else if (allFilterMethod) {
                 return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
+              } else if (defaultFilterMethod) {
+                return itemList.some((item: any) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               }
               return valueList.indexOf(XEUtils.get(row, column.property)) > -1
             })
@@ -1802,6 +1805,18 @@ export default defineComponent({
       const { editStore, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const sYOpts = computeSYOpts.value
+      const treeOpts = computeTreeOpts.value
+      if (treeConfig && treeOpts.transform) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (!treeOpts.rowtKey) {
+            errLog('vxe.error.reqProp', ['table.tree-config.rowtKey'])
+          }
+          if (!treeOpts.parentKey) {
+            errLog('vxe.error.reqProp', ['table.tree-config.parentKey'])
+          }
+        }
+        datas = XEUtils.toArrayTree(datas, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
+      }
       const tableFullData = datas ? datas.slice(0) : []
       const scrollYLoad = !treeConfig && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       scrollYStore.startIndex = 0
@@ -2241,7 +2256,7 @@ export default defineComponent({
        * @param {ColumnInfo} columns 列配置
        */
       loadColumn (columns) {
-        const collectColumn = XEUtils.mapTree(columns, column => Cell.createColumn($xetable, column))
+        const collectColumn = XEUtils.mapTree(columns, column => reactive(Cell.createColumn($xetable, column)))
         return handleColumn(collectColumn)
       },
       /**
@@ -2383,7 +2398,7 @@ export default defineComponent({
       createData (records) {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
-        const handleRrecord = (record: any) => tablePrivateMethods.defineField(Object.assign({}, record))
+        const handleRrecord = (record: any) => reactive(tablePrivateMethods.defineField(Object.assign({}, record)))
         const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
         return nextTick().then(() => rows)
       },
@@ -2479,6 +2494,14 @@ export default defineComponent({
       isInsertByRow (row) {
         const { editStore } = reactData
         return $xetable.findRowIndexOf(editStore.insertList, row) > -1
+      },
+      /**
+       * 删除所有新增的临时数据
+       * @returns
+       */
+      removeInsertRow () {
+        const { editStore } = reactData
+        return $xetable.remove(editStore.insertList)
       },
       /**
        * 检查行或列数据是否发生改变
@@ -3209,12 +3232,16 @@ export default defineComponent({
        */
       closeFilter () {
         const { filterStore } = reactData
+        const { column, visible } = filterStore
         Object.assign(filterStore, {
           isAllSelected: false,
           isIndeterminate: false,
           options: [],
           visible: false
         })
+        if (visible) {
+          $xetable.dispatchEvent('filter-visible', { column, property: column.property, filterList: $xetable.getCheckedFilters(), visible: false }, null)
+        }
         return nextTick()
       },
       /**
@@ -3941,7 +3968,7 @@ export default defineComponent({
             $xetable.handleKeyboardEvent(evnt)
           } else if (isEsc) {
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
-            if (isMenu) {
+            if ($xetable.closeMenu) {
               $xetable.closeMenu()
             }
             tableMethods.closeFilter()

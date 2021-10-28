@@ -37,6 +37,7 @@
       height="500"
       :export-config="{}"
       :loading="demo1.loading"
+      :checkbox-config="{checkField: 'checked'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
@@ -86,6 +87,7 @@ export default defineComponent({
       const list: any[] = []
       for (let index = 0; index < size; index++) {
         list.push({
+          checked: false,
           name: `名称${index}`,
           sex: '0',
           num: 123,
@@ -189,6 +191,7 @@ export default defineComponent({
           height="500"
           :export-config="{}"
           :loading="demo1.loading"
+          :checkbox-config="{checkField: 'checked'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="100"></vxe-column>
@@ -228,6 +231,7 @@ export default defineComponent({
               const list: any[] = []
               for (let index = 0; index < size; index++) {
                 list.push({
+                  checked: false,
                   name: \`名称\${index}\`,
                   sex: '0',
                   num: 123,

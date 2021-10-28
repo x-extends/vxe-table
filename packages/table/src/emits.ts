@@ -28,6 +28,7 @@ export default [
   'sort-change',
   'clear-sort',
   'filter-change',
+  'filter-visible',
   'clear-filter',
   'resizable-change',
   'toggle-row-expand',

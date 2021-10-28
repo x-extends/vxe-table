@@ -21,7 +21,8 @@
       show-overflow
       height="500"
       row-id="id"
-      :loading="demo1.loading">
+      :loading="demo1.loading"
+      :checkbox-config="{checkField: 'checked'}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -60,6 +61,7 @@ export default defineComponent({
           const list: any[] = []
           for (let index = 0; index < size; index++) {
             list.push({
+              checked: false,
               id: 10000 + index,
               name: 'test' + index,
               role: 'developer',
@@ -112,7 +114,8 @@ export default defineComponent({
           show-overflow
           height="500"
           row-id="id"
-          :loading="demo1.loading">
+          :loading="demo1.loading"
+          :checkbox-config="{checkField: 'checked'}">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="100"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -142,6 +145,7 @@ export default defineComponent({
                   const list: any[] = []
                   for (let index = 0; index < size; index++) {
                     list.push({
+                      checked: false,
                       id: 10000 + index,
                       name: 'test' + index,
                       role: 'developer',

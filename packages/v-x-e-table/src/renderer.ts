@@ -549,7 +549,7 @@ const renderMap: { [name: string]: any } = {
     renderEdit: nativeEditRender,
     renderDefault: nativeEditRender,
     renderFilter: nativeFilterRender,
-    filterMethod: handleFilterMethod,
+    defaultFilterMethod: handleFilterMethod,
     renderItemContent: nativeItemRender
   },
   textarea: {
@@ -575,7 +575,7 @@ const renderMap: { [name: string]: any } = {
         renderOpts.optionGroups ? renderNativeOptgroups(renderOpts, params, renderNativeOptions) : renderNativeOptions(renderOpts.options, renderOpts, params))
       })
     },
-    filterMethod: handleFilterMethod,
+    defaultFilterMethod: handleFilterMethod,
     renderItemContent (renderOpts: any, params: any) {
       return [
         h('select', {
@@ -613,7 +613,7 @@ const renderMap: { [name: string]: any } = {
     },
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
-    filterMethod: handleFilterMethod,
+    defaultFilterMethod: handleFilterMethod,
     renderItemContent: defaultItemRender
   },
   $textarea: {
@@ -647,7 +647,7 @@ const renderMap: { [name: string]: any } = {
         })
       })
     },
-    filterMethod: handleFilterMethod,
+    defaultFilterMethod: handleFilterMethod,
     renderItemContent (renderOpts: any, params: any) {
       const { data, property } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts

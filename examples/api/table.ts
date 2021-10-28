@@ -1419,7 +1419,7 @@ const apis = [
           },
           {
             name: 'contentMethod',
-            desc: '该方法可以通过返回值来重写默认的提示内容',
+            desc: '该方法可以通过返回值来重写默认的提示内容，可以返回 null 使用默认的提示消息，可以返回空内容去掉指定单元格的提示消息',
             version: '',
             type: '({ items?, row?, rowIndex?, $rowIndex, column, columnIndex, $columnIndex, type, cell, $event }) => string',
             enum: '',
@@ -1573,8 +1573,35 @@ const apis = [
         defVal: '继承 setup.table.treeConfig',
         list: [
           {
+            name: 'transform',
+            desc: '自动将列表转为树结构（需要有 rowKey 和 parentKey）',
+            version: '4.1.0',
+            type: 'string',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'rowKey',
+            desc: '树节点的字段名',
+            version: '4.1.0',
+            type: 'string',
+            enum: '',
+            defVal: 'id',
+            list: []
+          },
+          {
+            name: 'parentKey',
+            desc: '树父节点的字段名',
+            version: '4.1.0',
+            type: 'string',
+            enum: '',
+            defVal: 'parentId',
+            list: []
+          },
+          {
             name: 'children',
-            desc: '树子节点的属性',
+            desc: '树子节点的字段名',
             version: '',
             type: 'string',
             enum: '',
@@ -3056,6 +3083,15 @@ const apis = [
         list: []
       },
       {
+        name: 'filter-visible',
+        desc: '当筛选面板被触发时会触发该事件',
+        version: '4.1.0',
+        type: '',
+        enum: '',
+        defVal: '{ column, property, visible, filterList, $event }',
+        list: []
+      },
+      {
         name: 'clear-filter',
         desc: '当用户点击清除所有筛选条件时会触发该事件',
         version: '4.0.18',
@@ -3355,7 +3391,7 @@ const apis = [
       // },
       {
         name: 'reloadRow(rows, record, field)',
-        desc: '局部加载行数据并恢复到初始状态（对于行数据需要局部更改的场景中可能会用到）',
+        desc: '局部加载行数据并恢复到初始状态，仅用于修改的数据，对新增的临时数据无效（对于行数据需要局部更改的场景中可能会用到）',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -3495,6 +3531,15 @@ const apis = [
         type: 'Promise<{row, rows}>',
         enum: '',
         defVal: '',
+        list: []
+      },
+      {
+        name: 'removeInsertRow()',
+        desc: '删除新增的临时数据（不支持深层结构）',
+        version: '',
+        type: 'Promise<{row, rows}>',
+        enum: '',
+        defVal: '4.0.30',
         list: []
       },
       {

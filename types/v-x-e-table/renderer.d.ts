@@ -8,7 +8,7 @@ import { FormItemRenderOptions, FormItemTitleRenderParams, FormItemContentRender
 
 type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResult | JSX.Element[]>;
 
-interface DefineRendererOption<T> {
+export interface DefineRendererOption<T> {
   // 筛选渲染
   className?: string;
   showFilterFooter?: boolean;

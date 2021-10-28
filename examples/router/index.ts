@@ -242,7 +242,7 @@ import TableEditUniqueSelect from '../views/table/edit/UniqueSelect.vue'
 import TableEditCascadingSelect from '../views/table/edit/CascadingSelect.vue'
 import TableEditEvents from '../views/table/edit/Events.vue'
 import TableEditTemplate from '../views/table/edit/Template.vue'
-// import TableEditFull from '../views/table/edit/Full.vue'
+import TableEditFull from '../views/table/edit/Full.vue'
 
 // import TableBadEdit from '../views/table/bad/Edit.vue'
 // import TableBadNonsupport from '../views/table/bad/Nonsupport.vue'
@@ -1477,11 +1477,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'TableEditTemplate',
     component: TableEditTemplate
   },
-  // {
-  //   path: '/table/edit/full',
-  //   name: 'TableEditFull',
-  //   component: TableEditFull
-  // },
+  {
+    path: '/table/edit/full',
+    name: 'TableEditFull',
+    component: TableEditFull
+  },
   // {
   //   path: '/table/bad/edit',
   //   name: 'TableBadEdit',

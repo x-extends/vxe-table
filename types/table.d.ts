@@ -220,6 +220,10 @@ export interface TablePublicMethods {
    */
   isInsertByRow(row: any): boolean;
   /**
+   * 删除所有新增的临时数据
+   */
+  removeInsertRow(): Promise<{ row: any, rows: any[] }>;
+  /**
    * 只对 keep-source 开启有效，判断行数据是否发生改变
    * @param row 指定行
    * @param field 指定字段
@@ -1385,6 +1389,9 @@ export namespace VxeTablePropTypes {
    * 树形结构配置项
    */
   export interface TreeConfig {
+    transform?: boolean;
+    rowtKey?: string;
+    parentKey?: string;
     children?: string;
     indent?: number;
     line?: boolean;
@@ -1413,6 +1420,8 @@ export namespace VxeTablePropTypes {
     iconLoaded?: string;
   }
   export interface TreeOpts extends TreeConfig {
+    rowtKey: string;
+    parentKey: string;
     children: string;
     indent: number;
     hasChild: string;
@@ -1962,6 +1971,7 @@ export type VxeTableEmits = [
   'sort-change',
   'clear-sort',
   'filter-change',
+  'filter-visible',
   'clear-filter',
   'resizable-change',
   'toggle-row-expand',
@@ -2265,9 +2275,17 @@ export namespace VxeTableDefines {
     datas: any[];
   }
   export interface FilterChangeParams extends FilterCheckedParams {
-    filterList: FilterCheckedParams[]
+    filterList: FilterCheckedParams[];
   }
   export interface FilterChangeEventParams extends TableEventParams, FilterChangeParams { }
+
+  export interface FilterVisibleParams {
+    column: VxeTableDefines.ColumnInfo;
+    property: VxeColumnPropTypes.Field;
+    filterList: FilterCheckedParams[];
+    visible: boolean;
+  }
+  export interface FilterVisibleEventParams extends TableEventParams, FilterVisibleParams { }
 
   export interface ResizableChangeParams extends TableBaseHeaderCellParams { }
   export interface ResizableChangeEventParams extends TableEventParams, ResizableChangeParams { }
@@ -2340,6 +2358,7 @@ export interface VxeTableEventProps {
   onFooterCellMenu?: VxeTableEvents.FooterCellMenu;
   onSortChange?: VxeTableEvents.SortChange;
   onFilterChange?: VxeTableEvents.FilterChange;
+  onFilterVisible?: VxeTableEvents.FilterVisible;
   onResizableChange?: VxeTableEvents.ResizableChange;
   onToggleRowExpand?: VxeTableEvents.ToggleRowExpand;
   onToggleTreeExpand?: VxeTableEvents.ToggleTreeExpand;
@@ -2414,6 +2433,7 @@ export namespace VxeTableEvents {
   export type FooterCellMenu = (params: VxeTableDefines.FooterCellMenuEventParams) => void;
   export type SortChange = (params: VxeTableDefines.SortChangeEventParams) => void;
   export type FilterChange = (params: VxeTableDefines.FilterChangeEventParams) => void;
+  export type FilterVisible = (params: VxeTableDefines.FilterVisibleEventParams) => void;
   export type ResizableChange = (params: VxeTableDefines.ResizableChangeEventParams) => void;
   export type ToggleRowExpand = (params: VxeTableDefines.ToggleRowExpandEventParams) => void;
   export type ToggleTreeExpand = (params: VxeTableDefines.ToggleTreeExpandEventParams) => void;
