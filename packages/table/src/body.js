@@ -72,11 +72,13 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     validOpts,
     editStore,
     validStore,
-    tooltipConfig
+    tooltipConfig,
+    rowOpts
   } = $xetable
   const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
-  const { rHeight } = sYOpts
+  const { rHeight: scrollYRHeight } = sYOpts
+  const { height: rowHeight } = rowOpts
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -204,7 +206,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
           'c--ellipsis': showEllipsis
         }],
         style: {
-          maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+          maxHeight: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
         }
       })
     )
@@ -219,7 +221,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
           'c--ellipsis': showEllipsis
         }],
         style: {
-          maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+          maxHeight: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
         },
         attrs: {
           title: showTitle ? $xetable.getCellLabel(row, column) : null
@@ -258,7 +260,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     key: columnKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
-      height: hasEllipsis && rHeight ? `${rHeight}px` : ''
+      height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
     }, cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null),
     on: tdOns
   }, tdVNs)

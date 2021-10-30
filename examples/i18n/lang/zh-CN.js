@@ -131,7 +131,7 @@ export default {
         scrollMode: '滚动模式',
         scrollRows: '纵向',
         scrollFullRows: '纵向 + 复杂渲染',
-        scrollCols: '横向&纵向',
+        scrollCols: '横向',
         scrollFullCols: '横向&纵向 + 复杂渲染',
         moveHighlight: '键盘移动高亮行',
         scrollTree: '虚拟树',

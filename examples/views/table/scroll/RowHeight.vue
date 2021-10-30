@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动启用后需要等行高，可以通过 <table-api-link prop="scroll-x"/>.rHeight 修改所有行的高度</p>
+    <p class="tip">虚拟滚动启用后需要等行高，可以通过 <table-api-link prop="row-config"/>.height 修改行的高度</p>
 
     <vxe-table
       border
@@ -8,7 +8,8 @@
       show-overflow
       ref="xTable"
       height="500"
-      :scroll-y="{gt: 0, rHeight: 120}"
+      :row-config="{height: 120}"
+      :scroll-y="{gt: 0}"
       :loading="loading">
       <vxe-column type="seq" title="序号" width="100"></vxe-column>
       <vxe-column title="图片" width="140" align="center">
@@ -50,10 +51,11 @@ export default {
           show-overflow
           ref="xTable"
           height="500"
-          :scroll-y="{gt: 0, rHeight: 120}"
+          :row-config="{height: 120}"
+          :scroll-y="{gt: 0}"
           :loading="loading">
           <vxe-column type="seq" title="序号" width="100"></vxe-column>
-          <vxe-column title="图片" width="120" align="center">
+          <vxe-column title="图片" width="140" align="center">
             <template #default>
               <img src="/vxe-table/static/other/img1.gif" style="width: 100px;">
             </template>

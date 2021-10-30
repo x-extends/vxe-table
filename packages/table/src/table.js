@@ -179,8 +179,11 @@ export default {
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: [Boolean, String, Number],
-    // 设置列的默认参数，仅对部分支持的属性有效
+    // 列配置信息
     columnConfig: Object,
+    // 行配置信息
+    rowConfig: Object,
+    // 列调整配置项
     resizableConfig: Object,
     // 序号配置项
     seqConfig: Object,
@@ -453,7 +456,10 @@ export default {
       }
     },
     columnOpts () {
-      return Object.assign({}, this.columnConfig)
+      return Object.assign({}, GlobalConfig.table.columnConfig, this.columnConfig)
+    },
+    rowOpts () {
+      return Object.assign({}, GlobalConfig.table.rowConfig, this.rowConfig)
     },
     resizableOpts () {
       return Object.assign({}, GlobalConfig.table.resizableConfig, this.resizableConfig)
@@ -779,6 +785,9 @@ export default {
       }
       if (this.treeConfig && this.checkboxOpts.range) {
         UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
+      }
+      if (this.rowOpts.height && !this.showOverflow) {
+        UtilTools.warn('vxe.error.notProp', ['table.show-overflow'])
       }
       if (!this.handleUpdateCellAreas) {
         if (this.clipConfig) {

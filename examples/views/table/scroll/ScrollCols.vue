@@ -17,10 +17,10 @@
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{checkField: 'checked'}">
       <template #toolbar_buttons>
-        <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(1000, 20)">1k列20条</vxe-button>
+        <vxe-button @click="loadColumnAndData(1000, 100)">1k列100条</vxe-button>
+        <vxe-button @click="loadColumnAndData(5000, 500)">5k列500条</vxe-button>
+        <vxe-button @click="loadColumnAndData(5000, 10000)">5k列1w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
       </template>
@@ -53,10 +53,10 @@ export default {
           :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :checkbox-config="{checkField: 'checked'}">
           <template #toolbar_buttons>
-            <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 20)">1k列20条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 100)">1k列100条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 500)">5k列500条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 10000)">5k列1w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
           </template>
@@ -70,7 +70,7 @@ export default {
             }
           },
           created () {
-            this.loadColumnAndData(600, 600)
+            this.loadColumnAndData(600, 10)
           },
           methods: {
             loadColumnAndData (colSize, rowSize) {
@@ -140,7 +140,7 @@ export default {
     }
   },
   created () {
-    this.loadColumnAndData(600, 600)
+    this.loadColumnAndData(600, 10)
   },
   methods: {
     loadColumnAndData (colSize, rowSize) {

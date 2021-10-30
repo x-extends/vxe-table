@@ -20,10 +20,10 @@
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{checkField: 'checked', labelField: 'name'}">
       <template #toolbar_buttons>
-        <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(50, 20)">50列20条</vxe-button>
+        <vxe-button @click="loadColumnAndData(100, 50)">100列50条</vxe-button>
+        <vxe-button @click="loadColumnAndData(200, 100)">200列100条</vxe-button>
+        <vxe-button @click="loadColumnAndData(5000, 10000)">5k列1w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
         <vxe-button @click="$refs.xGrid.setAllCheckboxRow(true)">所有选中</vxe-button>
@@ -75,10 +75,10 @@ export default {
           :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
           :checkbox-config="{checkField: 'checked', labelField: 'name'}">
           <template #toolbar_buttons>
-            <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 50000)">5k列5w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(50, 20)">50列20条</vxe-button>
+            <vxe-button @click="loadColumnAndData(100, 50)">100列50条</vxe-button>
+            <vxe-button @click="loadColumnAndData(200, 100)">200列100条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 10000)">5k列1w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 50000)">1w列5w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
             <vxe-button @click="$refs.xGrid.setAllCheckboxRow(true)">所有选中</vxe-button>
@@ -95,7 +95,7 @@ export default {
             }
           },
           created () {
-            this.loadColumnAndData(600, 600)
+            this.loadColumnAndData(20, 20)
           },
           methods: {
             loadColumnAndData (colSize, rowSize) {
@@ -190,7 +190,7 @@ export default {
     }
   },
   created () {
-    this.loadColumnAndData(600, 600)
+    this.loadColumnAndData(20, 20)
   },
   methods: {
     loadColumnAndData (colSize, rowSize) {

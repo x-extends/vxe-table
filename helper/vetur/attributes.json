@@ -183,6 +183,10 @@
     "type": "any",
     "description": "列的默认参数"
   },
+  "vxe-table/row-config": {
+    "type": "any",
+    "description": "行配置信息"
+  },
   "vxe-table/resizable-config": {
     "type": "object",
     "description": "列宽拖动配置项"
@@ -674,6 +678,10 @@
   "vxe-grid/column-config": {
     "type": "any",
     "description": "列的默认参数"
+  },
+  "vxe-grid/row-config": {
+    "type": "any",
+    "description": "行配置信息"
   },
   "vxe-grid/resizable-config": {
     "type": "object",

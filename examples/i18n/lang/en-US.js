@@ -132,7 +132,7 @@ export default {
         scrollMode: 'Scroll mode',
         scrollRows: 'vertical',
         scrollFullRows: 'vertical + complicated',
-        scrollCols: 'horizontal and vertical',
+        scrollCols: 'horizontal',
         scrollFullCols: 'horizontal and vertical + complicated',
         moveHighlight: 'Keyboard move highlight row',
         scrollTree: 'Virtual tree',
