@@ -25,8 +25,12 @@ class Rule {
     })
   }
 
+  get content () {
+    return getFuncText(this.$options.content || this.$options.message)
+  }
+
   get message () {
-    return getFuncText(this.$options.message)
+    return this.content
   }
 
   [key: string]: any
@@ -327,12 +331,12 @@ export default defineComponent({
                 })
                 if (customValid) {
                   if (XEUtils.isError(customValid)) {
-                    errorRules.push(new Rule({ type: 'custom', trigger, message: customValid.message, rule: new Rule(rule) }))
+                    errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
                   } else if (customValid.catch) {
                     // 如果为异步校验（注：异步校验是并发无序的）
                     syncVailds.push(
                       customValid.catch((e: any) => {
-                        errorRules.push(new Rule({ type: 'custom', trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger, content: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
                       })
                     )
                   }
@@ -585,7 +589,7 @@ export default defineComponent({
               style: errRule.maxWidth ? {
                 width: `${errRule.maxWidth}px`
               } : null
-            }, errRule.message)
+            }, errRule.content)
           )
         }
         const ons = showTooltip ? {

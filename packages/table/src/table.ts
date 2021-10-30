@@ -4644,10 +4644,10 @@ export default defineComponent({
       triggerHeaderHelpEvent (evnt, params) {
         const { column } = params
         const { titleHelp } = column
-        if (titleHelp.message) {
+        if (titleHelp.content || titleHelp.message) {
           const { tooltipStore } = internalData
           const $tooltip = refTooltip.value
-          const content = getFuncText(titleHelp.message)
+          const content = getFuncText(titleHelp.content || titleHelp.message)
           handleTargetEnterEvent()
           tooltipStore.visible = true
           if ($tooltip) {
@@ -5224,6 +5224,19 @@ export default defineComponent({
         }
         return false
       }
+    }
+
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
+        ($xetable as any)[name] = function () {
+          errLog('vxe.error.reqModule', ['Export'])
+        }
+      })
+      'clearValidate,fullValidate,validate'.split(',').forEach(name => {
+        ($xetable as any)[name] = function () {
+          errLog('vxe.error.reqModule', ['Validator'])
+        }
+      })
     }
 
     Object.assign($xetable, tableMethods, tablePrivateMethods)

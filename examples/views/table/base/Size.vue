@@ -49,7 +49,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar export custom>
+    <vxe-toolbar ref="xToolbar1" export custom>
       <template #buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -58,6 +58,7 @@
 
     <vxe-table
       border
+      ref="xTable1"
       :export-config="{}"
       :align="demo1.allAlign"
       :data="tableData">
@@ -125,7 +126,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar size="medium" export custom>
+    <vxe-toolbar ref="xToolbar2" size="medium" export custom>
       <template #buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -134,6 +135,7 @@
 
     <vxe-table
       border
+      ref="xTable2"
       size="medium"
       :export-config="{}"
       :align="demo1.allAlign"
@@ -203,7 +205,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar size="small" export custom>
+    <vxe-toolbar ref="xToolbar3" size="small" export custom>
       <template #buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -212,6 +214,7 @@
 
     <vxe-table
       border
+      ref="xTable3"
       size="small"
       :export-config="{}"
       :align="demo1.allAlign"
@@ -281,7 +284,7 @@
       </vxe-form-item>
     </vxe-form>
 
-    <vxe-toolbar size="mini" export custom>
+    <vxe-toolbar ref="xToolbar4" size="mini" export custom>
       <template #buttons>
         <vxe-input v-model="formData.name" placeholder="请输入名称" clearable></vxe-input>
         <vxe-button status="primary">查询</vxe-button>
@@ -290,6 +293,7 @@
 
     <vxe-table
       border
+      ref="xTable4"
       size="mini"
       :export-config="{}"
       :align="demo1.allAlign"
@@ -324,10 +328,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive, ref, nextTick } from 'vue'
+import { VxeTableInstance, VxeToolbarInstance } from '../../../../types/index'
 
 export default defineComponent({
   setup () {
+    const xTable1 = ref({} as VxeTableInstance)
+    const xTable2 = ref({} as VxeTableInstance)
+    const xTable3 = ref({} as VxeTableInstance)
+    const xTable4 = ref({} as VxeTableInstance)
+    const xToolbar1 = ref({} as VxeToolbarInstance)
+    const xToolbar2 = ref({} as VxeToolbarInstance)
+    const xToolbar3 = ref({} as VxeToolbarInstance)
+    const xToolbar4 = ref({} as VxeToolbarInstance)
+
     const demo1 = reactive({
       allAlign: null
     })
@@ -355,7 +369,21 @@ export default defineComponent({
       { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
       { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
     ])
+    nextTick(() => {
+      xTable1.value.connect(xToolbar1.value)
+      xTable2.value.connect(xToolbar2.value)
+      xTable3.value.connect(xToolbar3.value)
+      xTable4.value.connect(xToolbar4.value)
+    })
     return {
+      xTable1,
+      xTable2,
+      xTable3,
+      xTable4,
+      xToolbar1,
+      xToolbar2,
+      xToolbar3,
+      xToolbar4,
       demo1,
       formData,
       tablePage,

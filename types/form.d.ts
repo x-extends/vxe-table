@@ -235,9 +235,13 @@ export namespace VxeFormDefines {
     /**
      * 提示消息
      */
-    message?: string;
+    content?: string;
     trigger?: 'change';
     maxWidth?: number;
+    /**
+     * @deprecated 已废弃，请使用 content
+     */
+    message?: string;
   }
 
   interface ValidateErrorParams {

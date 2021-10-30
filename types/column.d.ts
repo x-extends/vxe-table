@@ -104,8 +104,12 @@ export namespace VxeColumnPropTypes {
   export type FooterExportMethod = (params: FooterExportParams) => string | number;
 
   export interface TitleHelp {
-    message?: string | number;
+    content?: string | number;
     icon?: string;
+    /**
+     * @deprecated 已废弃，请使用 content
+     */
+    message?: string;
   }
 
   export type CellType = 'auto' | 'number' | 'string';

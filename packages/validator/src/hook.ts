@@ -27,8 +27,12 @@ class Rule {
    * 获取校验不通过的消息
    * 支持国际化翻译
    */
+  get content () {
+    return getFuncText(this.$options.content || this.$options.message)
+  }
+
   get message () {
-    return getFuncText(this.$options.message)
+    return this.content
   }
 
   [key: string]: any
@@ -272,7 +276,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           const rules = XEUtils.get(editRules, property)
           if (rules) {
             const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
-            rules.forEach((rule: any) => {
+            rules.forEach((rule) => {
               const { type, trigger, required } = rule
               if (validType === 'all' || !trigger || validType === trigger) {
                 if (XEUtils.isFunction(rule.validator)) {
@@ -289,13 +293,13 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                   if (customValid) {
                     if (XEUtils.isError(customValid)) {
                       validRuleErr = true
-                      errorRules.push(new Rule({ type: 'custom', trigger, message: customValid.message, rule: new Rule(rule) }))
+                      errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
                     } else if (customValid.catch) {
                       // 如果为异步校验（注：异步校验是并发无序的）
                       syncVailds.push(
                         customValid.catch((e: any) => {
                           validRuleErr = true
-                          errorRules.push(new Rule({ type: 'custom', trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
+                          errorRules.push(new Rule({ type: 'custom', trigger, content: e && e.message ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
                         })
                       )
                     }
@@ -367,7 +371,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         const validOpts = computeValidOpts.value
         const { rule, row, column, cell } = params
         const validTip = refValidTooltip.value
-        const content = rule.message
+        const content = rule.content
         return nextTick().then(() => {
           Object.assign(validStore, {
             row,

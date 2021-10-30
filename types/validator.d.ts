@@ -70,9 +70,13 @@ declare module './table' {
       /**
        * 提示消息
        */
-      message?: string;
+      content?: string;
       trigger?: 'blur' | 'change' | 'manual';
       maxWidth?: number;
+      /**
+       * @deprecated 已废弃，请使用 content
+       */
+      message?: string;
     }
     export interface ValidatorErrorParams {
       $table: VxeTableConstructor;

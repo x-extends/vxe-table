@@ -91,7 +91,7 @@ import XEUtils from 'xe-utils'
 export default defineComponent({
   setup () {
     const mockList1: any = []
-    for (let index = 0; index < 500; index++) {
+    for (let index = 0; index < 300; index++) {
       mockList1.push({
         name: 'Test' + index,
         role: 'Developer',
@@ -111,7 +111,7 @@ export default defineComponent({
     })
 
     const mockList2: any = []
-    for (let index = 0; index < 2000; index++) {
+    for (let index = 0; index < 200; index++) {
       mockList2.push({
         name: 'Test' + index,
         attr1: index,
@@ -193,7 +193,7 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const mockList1: any = []
-            for (let index = 0; index < 500; index++) {
+            for (let index = 0; index < 300; index++) {
               mockList1.push({
                 name: 'Test' + index,
                 role: 'Developer',
@@ -257,7 +257,7 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const mockList2: any = []
-            for (let index = 0; index < 2000; index++) {
+            for (let index = 0; index < 200; index++) {
               mockList2.push({
                 name: 'Test' + index,
                 attr1: index,

@@ -118,6 +118,8 @@
       <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
 
+    <p class="tip">表单校验</p>
+
     <vxe-form
       title-colon
       ref="xForm"
@@ -178,6 +180,8 @@
       <pre-code class="html">{{ demoCodes[2] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
+
+    <p class="tip">默认渲染方式为配置式，不支持自定义的布局，可以通过设置 custom-layout 切换为自定义布局</p>
 
     <vxe-form v-model:collapseStatus="demo3.collapseStatus3" :data="demo3.formData3" title-align="right" title-width="100" prevent-submit title-colon custom-layout>
       <div style="color: red;">使用自定义布局</div>
@@ -247,6 +251,8 @@
       <pre-code class="html">{{ demoCodes[4] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
     </pre>
+
+    <p class="tip">配置式表单</p>
 
     <vxe-form :data="demo4.formData4" :items="demo4.formItems4">
       <template #myregion="{ data }">

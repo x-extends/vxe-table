@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { browse } from '../../tools/dom'
-import { getLog, parseFile } from '../../tools/utils'
+import { getLog, parseFile, errLog } from '../../tools/utils'
 
 import { VxeTablePropTypes, SaveFileFunction, ReadFileFunction, VxeTableConstructor } from '../../../types/all'
 
@@ -82,6 +82,12 @@ export const readLocalFile: ReadFileFunction = (options) => {
         resolve({ status: true, files, file })
       } else {
         if (opts.message !== false) {
+          // 检测弹窗模块
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (!VXETable.modal) {
+              errLog('vxe.error.reqModule', ['Modal'])
+            }
+          }
           VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
         }
         const params = { status: false, files, file }
@@ -152,16 +158,22 @@ export const saveLocalFile: SaveFileFunction = (options) => {
   const name = `${filename}.${type}`
   if (window.Blob) {
     const blob = content instanceof Blob ? content : getExportBlobByContent(XEUtils.toValueString(content), options)
-    if (navigator.msSaveBlob) {
-      navigator.msSaveBlob(blob, name)
+    if ((navigator as any).msSaveBlob) {
+      (navigator as any).msSaveBlob(blob, name)
     } else {
+      const url = URL.createObjectURL(blob)
       const linkElem = document.createElement('a')
       linkElem.target = '_blank'
       linkElem.download = name
-      linkElem.href = URL.createObjectURL(blob)
+      linkElem.href = url
       document.body.appendChild(linkElem)
       linkElem.click()
-      document.body.removeChild(linkElem)
+      requestAnimationFrame(() => {
+        if (linkElem.parentNode) {
+          linkElem.parentNode.removeChild(linkElem)
+        }
+        URL.revokeObjectURL(url)
+      })
     }
     return Promise.resolve()
   }

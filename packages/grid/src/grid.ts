@@ -259,6 +259,12 @@ export default defineComponent({
         gridExtendTableMethods.clearCheckboxRow()
       } else {
         if (isMsg) {
+          // 检测弹窗模块
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (!VXETable.modal) {
+              errLog('vxe.error.reqModule', ['Modal'])
+            }
+          }
           VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       }
@@ -285,6 +291,12 @@ export default defineComponent({
             }
           })
         } else {
+          // 检测弹窗模块
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (!VXETable.modal) {
+              errLog('vxe.error.reqModule', ['Modal'])
+            }
+          }
           VXETable.modal.message({ id: `msg_${code}`, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       } else {
@@ -800,6 +812,12 @@ export default defineComponent({
                       reactData.tableLoading = false
                       reactData.pendingRecords = reactData.pendingRecords.filter((row) => $xetable.findRowIndexOf(removeRecords, row) === -1)
                       if (isMsg) {
+                        // 检测弹窗模块
+                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                          if (!VXETable.modal) {
+                            errLog('vxe.error.reqModule', ['Modal'])
+                          }
+                        }
                         VXETable.modal.message({ content: getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                       }
                       if (afterDelete) {
@@ -811,12 +829,23 @@ export default defineComponent({
                     .catch(rest => {
                       reactData.tableLoading = false
                       if (isMsg) {
+                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                          if (!VXETable.modal.message) {
+                            errLog('vxe.error.reqModule', ['Modal'])
+                          }
+                        }
                         VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
                     })
                 })
               } else {
                 if (isMsg) {
+                  // 检测弹窗模块
+                  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                    if (!VXETable.modal) {
+                      errLog('vxe.error.reqModule', ['Modal'])
+                    }
+                  }
                   VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
                 }
               }
@@ -850,6 +879,12 @@ export default defineComponent({
                       reactData.tableLoading = false
                       reactData.pendingRecords = []
                       if (isMsg) {
+                        // 检测弹窗模块
+                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                          if (!VXETable.modal) {
+                            errLog('vxe.error.reqModule', ['Modal'])
+                          }
+                        }
                         VXETable.modal.message({ content: getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                       }
                       if (afterSave) {
@@ -861,11 +896,23 @@ export default defineComponent({
                     .catch(rest => {
                       reactData.tableLoading = false
                       if (isMsg) {
+                        // 检测弹窗模块
+                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                          if (!VXETable.modal) {
+                            errLog('vxe.error.reqModule', ['Modal'])
+                          }
+                        }
                         VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
                     })
                 } else {
                   if (isMsg) {
+                    // 检测弹窗模块
+                    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                      if (!VXETable.modal) {
+                        errLog('vxe.error.reqModule', ['Modal'])
+                      }
+                    }
                     VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                   }
                 }

@@ -92,10 +92,14 @@ export namespace VxeFormItemPropTypes {
   export type ClassName = string | ((params: ClassNameParams) => string);
 
   interface PrefixOption {
-    message?: string;
+    content?: string;
     enterable?: boolean;
     theme?: string;
     icon?: string;
+    /**
+     * @deprecated 已废弃，请使用 content
+     */
+    message?: string;
   }
   export type TitlePrefix = PrefixOption
   export type TitleSuffix = PrefixOption

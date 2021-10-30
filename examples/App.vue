@@ -113,8 +113,8 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, reactive, watch } from 'vue'
 import { useStore } from 'vuex'
-import i18n from '@/i18n'
-import router from '@/router'
+import i18n from './i18n'
+import router from './router'
 import XEUtils from 'xe-utils'
 import XEAjax from 'xe-ajax'
 

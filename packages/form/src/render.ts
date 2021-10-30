@@ -35,9 +35,9 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
   const titVNs = []
   if (titlePrefix) {
     titVNs.push(
-      titlePrefix.message
+      (titlePrefix.content || titlePrefix.message)
         ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          content: getFuncText(titlePrefix.message),
+          content: getFuncText(titlePrefix.content || titlePrefix.message),
           enterable: titlePrefix.enterable,
           theme: titlePrefix.theme
         }, {
@@ -59,9 +59,9 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
   const fixVNs = []
   if (titleSuffix) {
     fixVNs.push(
-      titleSuffix.message
+      (titleSuffix.content || titleSuffix.message)
         ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          content: getFuncText(titleSuffix.message),
+          content: getFuncText(titleSuffix.content || titleSuffix.message),
           enterable: titleSuffix.enterable,
           theme: titleSuffix.theme
         }, {

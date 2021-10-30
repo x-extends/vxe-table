@@ -167,11 +167,6 @@ export type VxeModalProps = {
   position?: VxeModalPropTypes.Position;
   title?: VxeModalPropTypes.Title;
   duration?: VxeModalPropTypes.Duration;
-  /**
-   * 请使用 content
-   * @deprecated
-   */
-  message?: VxeModalPropTypes.Content;
   content?: VxeModalPropTypes.Content;
   cancelButtonText?: VxeModalPropTypes.CancelButtonText;
   confirmButtonText?: VxeModalPropTypes.ConfirmButtonText;
@@ -203,6 +198,10 @@ export type VxeModalProps = {
   animat?: VxeModalPropTypes.Animat;
   beforeHideMethod?: VxeModalPropTypes.BeforeHideMethod;
   slots?: VxeModalPropTypes.Slots;
+  /**
+   * @deprecated 已废弃，请使用 content
+   */
+  message?: VxeModalPropTypes.Content;
 }
 
 export type ModalSlots = {
