@@ -2375,10 +2375,10 @@ const Methods = {
   triggerHeaderHelpEvent (evnt, params) {
     const { column } = params
     const { titleHelp } = column
-    if (titleHelp.message) {
+    if (titleHelp.content || titleHelp.message) {
       const { $refs, tooltipStore } = this
       const tooltip = $refs.tooltip
-      const content = UtilTools.getFuncText(titleHelp.message)
+      const content = UtilTools.getFuncText(titleHelp.content || titleHelp.message)
       this.handleTargetEnterEvent()
       tooltipStore.visible = true
       if (tooltip) {
@@ -4333,6 +4333,15 @@ const funcs = 'setFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellAr
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (!this[`_${name}`]) {
+        if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
+          UtilTools.error('vxe.error.reqModule', ['Export'])
+        } else if ('clearValidate,fullValidate,validate'.split(',').includes(name)) {
+          UtilTools.error('vxe.error.reqModule', ['Validator'])
+        }
+      }
+    }
     return this[`_${name}`] ? this[`_${name}`](...args) : null
   }
 })

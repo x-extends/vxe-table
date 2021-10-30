@@ -84,9 +84,12 @@ export default {
                 if (type === 'header') {
                   return column.title ? '自定义标题提示内容：' + column.title : ''
                 } else if (type === 'footer') {
-                  return items[_columnIndex] ? '自定义表尾提示内容，\n并且自定义换行：\n' + items[_columnIndex] : ''
+                  return items[_columnIndex] ? '自定义表尾提示内容，\\n并且自定义换行：\\n' + items[_columnIndex] : ''
                 }
                 return row[property] ? '自定义提示内容：' + row[property] : ''
+              } else if (property === 'rate') {
+                // 返回空字符串，控制单元格不显示提示内容
+                return ''
               }
               // 其余的单元格使用默认行为
               return null
@@ -125,6 +128,9 @@ export default {
           return items[_columnIndex] ? '自定义表尾提示内容，\n并且自定义换行：\n' + items[_columnIndex] : ''
         }
         return row[property] ? '自定义提示内容：' + row[property] : ''
+      } else if (property === 'rate') {
+        // 返回空字符串，控制单元格不显示提示内容
+        return ''
       }
       // 其余的单元格使用默认行为
       return null

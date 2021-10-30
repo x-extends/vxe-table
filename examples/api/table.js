@@ -210,7 +210,7 @@ const exportDataAPI = [
     version: '',
     type: 'boolean',
     enum: '',
-    defVal: 'false',
+    defVal: 'true',
     list: []
   },
   {
@@ -393,7 +393,7 @@ const importDataAPI = [
     version: '',
     type: 'boolean',
     enum: '',
-    defVal: 'false',
+    defVal: 'true',
     list: []
   },
   {
@@ -2529,6 +2529,15 @@ const apis = [
             defVal: '',
             list: []
           },
+          // {
+          //   name: 'content',
+          //   desc: '校验提示内容（支持开启国际化）',
+          //   version: '3.3.17',
+          //   type: 'string',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
           {
             name: 'message',
             desc: '校验提示内容（支持开启国际化）',

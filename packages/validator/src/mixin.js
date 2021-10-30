@@ -24,8 +24,12 @@ class Rule {
    * 获取校验不通过的消息
    * 支持国际化翻译
    */
+  get content () {
+    return UtilTools.getFuncText(this.$options.content || this.$options.message)
+  }
+
   get message () {
-    return UtilTools.getFuncText(this.$options.message)
+    return this.content
   }
 }
 
@@ -245,13 +249,13 @@ export default {
                 if (customValid) {
                   if (XEUtils.isError(customValid)) {
                     this.validRuleErr = true
-                    errorRules.push(new Rule({ type: 'custom', trigger, message: customValid.message, rule: new Rule(rule) }))
+                    errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
                   } else if (customValid.catch) {
                     // 如果为异步校验（注：异步校验是并发无序的）
                     syncVailds.push(
                       customValid.catch(e => {
                         this.validRuleErr = true
-                        errorRules.push(new Rule({ type: 'custom', trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger, content: e && e.message ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
                       })
                     )
                   }
@@ -324,7 +328,7 @@ export default {
       const { $refs, height, tableData, validOpts } = this
       const { rule, row, column, cell } = params
       const validTip = $refs.validTip
-      const content = rule.message
+      const content = rule.content
       return this.$nextTick(() => {
         Object.assign(this.validStore, {
           row,

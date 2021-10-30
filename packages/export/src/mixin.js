@@ -543,13 +543,20 @@ export function saveLocalFile (options) {
     if (navigator.msSaveBlob) {
       navigator.msSaveBlob(blob, name)
     } else {
+      const url = URL.createObjectURL(blob)
       const linkElem = document.createElement('a')
       linkElem.target = '_blank'
       linkElem.download = name
-      linkElem.href = URL.createObjectURL(blob)
+      linkElem.href = url
       document.body.appendChild(linkElem)
       linkElem.click()
       document.body.removeChild(linkElem)
+      requestAnimationFrame(() => {
+        if (linkElem.parentNode) {
+          linkElem.parentNode.removeChild(linkElem)
+        }
+        URL.revokeObjectURL(url)
+      })
     }
     return Promise.resolve()
   }
@@ -564,6 +571,12 @@ function downloadFile ($xetable, opts, content) {
   }
   saveLocalFile({ filename, type, content }).then(() => {
     if (opts.message !== false) {
+      // 检测弹窗模块
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (!VXETable.modal) {
+          UtilTools.error('vxe.error.reqModule', ['Modal'])
+        }
+      }
       VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
     }
   })
@@ -785,6 +798,12 @@ function handleImport ($xetable, content, opts) {
           loadRest = $xetable.reloadData(data)
         }
         if (opts.message !== false) {
+          // 检测弹窗模块
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (!VXETable.modal) {
+              UtilTools.error('vxe.error.reqModule', ['Modal'])
+            }
+          }
           VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
         }
         return loadRest.then(() => {
@@ -794,6 +813,12 @@ function handleImport ($xetable, content, opts) {
         })
       })
   } else if (opts.message !== false) {
+    // 检测弹窗模块
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (!VXETable.modal) {
+        UtilTools.error('vxe.error.reqModule', ['Modal'])
+      }
+    }
     VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
     if (_importReject) {
       _importReject({ status: false })
@@ -808,6 +833,12 @@ function handleFileImport ($xetable, file, opts) {
   // 检查类型，如果为自定义导出，则不需要校验类型
   if (!importMethod && !XEUtils.includes(VXETable.config.importTypes, type)) {
     if (opts.message !== false) {
+      // 检测弹窗模块
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (!VXETable.modal) {
+          UtilTools.error('vxe.error.reqModule', ['Modal'])
+        }
+      }
       VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
     }
     const params = { status: false }
@@ -910,6 +941,12 @@ export function readLocalFile (options = {}) {
         resolve({ status: true, files, file })
       } else {
         if (options.message !== false) {
+          // 检测弹窗模块
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (!VXETable.modal) {
+              UtilTools.error('vxe.error.reqModule', ['Modal'])
+            }
+          }
           VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
         }
         const params = { status: false, files, file }
