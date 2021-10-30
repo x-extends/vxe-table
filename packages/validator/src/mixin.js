@@ -24,8 +24,12 @@ class Rule {
    * 获取校验不通过的消息
    * 支持国际化翻译
    */
+  get content () {
+    return UtilTools.getFuncText(this.$options.content || this.$options.message)
+  }
+
   get message () {
-    return UtilTools.getFuncText(this.$options.message)
+    return this.content
   }
 }
 
@@ -258,7 +262,7 @@ export default {
                     syncVailds.push(
                       customValid.catch(e => {
                         this.validRuleErr = true
-                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e && e.message ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e && e.message ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
                       })
                     )
                   }

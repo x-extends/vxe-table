@@ -18,8 +18,12 @@ class Rule {
     })
   }
 
+  get content () {
+    return UtilTools.getFuncText(this.$options.content || this.$options.message)
+  }
+
   get message () {
-    return UtilTools.getFuncText(this.$options.message)
+    return this.content
   }
 }
 
@@ -338,7 +342,7 @@ export default {
                     // 如果为异步校验（注：异步校验是并发无序的）
                     syncVailds.push(
                       customValid.catch(e => {
-                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : rule.message, rule: new Rule(rule) }))
+                        errorRules.push(new Rule({ type: 'custom', trigger: rule.trigger, message: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
                       })
                     )
                   }

@@ -22,6 +22,7 @@ export default {
         border: 'Border',
         round: 'Round border',
         style: 'Cell style',
+        compact: 'Compact style',
         dynamicStyle: 'Cell dynamic style',
         scrollStyle: 'Scrollbar style',
         hideHead: 'Hidden header',
@@ -318,11 +319,11 @@ export default {
         copyToClipboard: 'Copied to clipboard'
       },
       other: {
-        v1: '1.0+ (vue 2.6+ End of life) ~ 2020-04 Stop',
-        v2: '2.0+ (vue 2.6+ Old) ~ 2021-12 Stop',
-        v3: '3.0+ (vue 2.6+ Stable)',
+        v1: 'v1+ (vue 2.6+ End of life) ~ 2020-04 Stop',
+        v2: 'v2+ (vue 2.6+ Old) ~ 2021-12 Stop',
+        v3: 'v3+ (vue 2.6+ Stable)',
         v3d5: '3.5+ (vue 2.6+ Sticky)',
-        v4: '4.0+ (vue 3.0+ Latest)',
+        v4: 'v4+ (vue 3.0+ Latest)',
         v4d5: '4.5+ (vue 3.0+ Sticky)',
         plan: {
           v1: 'v1 Based on vue2.6+, Support for all major browsers',

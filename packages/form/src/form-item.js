@@ -28,10 +28,10 @@ function renderTitle (h, _vm) {
   const titles = []
   if (titlePrefix) {
     titles.push(
-      titlePrefix.message
+      (itlePrefix.content || titlePrefix.message)
         ? h('vxe-tooltip', {
           props: {
-            content: UtilTools.getFuncText(titlePrefix.message),
+            content: UtilTools.getFuncText(titlePrefix.content || titlePrefix.message),
             enterable: titlePrefix.enterable,
             theme: titlePrefix.theme
           }
@@ -48,10 +48,10 @@ function renderTitle (h, _vm) {
   )
   if (titleSuffix) {
     titles.push(
-      titleSuffix.message
+      (titleSuffix.content || titleSuffix.message)
         ? h('vxe-tooltip', {
           props: {
-            content: UtilTools.getFuncText(titleSuffix.message),
+            content: UtilTools.getFuncText(titleSuffix.content || titleSuffix.message),
             enterable: titleSuffix.enterable,
             theme: titleSuffix.theme
           }

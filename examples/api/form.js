@@ -173,6 +173,15 @@ const apis = [
             defVal: '',
             list: []
           },
+          // {
+          //   name: 'content',
+          //   desc: '校验提示内容（支持开启国际化）',
+          //   version: '2.10.25',
+          //   type: 'string',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
+          // },
           {
             name: 'message',
             desc: '校验提示内容（支持开启国际化）',

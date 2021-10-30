@@ -2,8 +2,18 @@ import XEUtils from 'xe-utils'
 
 const titleTooltip = [
   {
-    name: 'message',
+    name: 'content',
     desc: '提示消息（支持开启国际化）',
+    version: '2.10.25',
+    type: 'string',
+    enum: '',
+    defVal: '',
+    list: []
+  },
+  {
+    name: 'message',
+    disabled: true,
+    desc: '请使用 content',
     version: '',
     type: 'String',
     enum: '',

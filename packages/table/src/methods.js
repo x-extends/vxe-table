@@ -2187,10 +2187,10 @@ const Methods = {
   triggerHeaderHelpEvent (evnt, params) {
     const { column } = params
     const { titleHelp } = column
-    if (titleHelp.message) {
+    if (titleHelp.content || titleHelp.message) {
       const { $refs, tooltipStore } = this
       const tooltip = $refs.tooltip
-      const content = UtilTools.getFuncText(titleHelp.message)
+      const content = UtilTools.getFuncText(titleHelp.content || titleHelp.message)
       this.handleTargetEnterEvent()
       tooltipStore.visible = true
       if (tooltip) {
