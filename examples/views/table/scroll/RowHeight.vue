@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">虚拟滚动启用后需要等行高，可以通过 <table-api-link prop="scroll-x"/>.rHeight 修改所有行的高度</p>
+    <p class="tip">虚拟滚动启用后需要等行高，可以通过 <table-api-link prop="row-config"/>.height 修改行的高度</p>
 
     <vxe-table
       border
@@ -8,7 +8,8 @@
       show-overflow
       ref="xTable"
       height="500"
-      :scroll-y="{gt: 0, rHeight: 120}"
+      :row-config="{height: 120}"
+      :scroll-y="{gt: 0}"
       :loading="demo1.loading">
       <vxe-column type="seq" title="序号" width="100"></vxe-column>
       <vxe-column title="图片" width="140" align="center">
@@ -90,10 +91,11 @@ export default defineComponent({
           show-overflow
           ref="xTable"
           height="500"
-          :scroll-y="{gt: 0, rHeight: 120}"
-          :loading="loading">
+          :row-config="{height: 120}"
+          :scroll-y="{gt: 0}"
+          :loading="demo1.loading">
           <vxe-column type="seq" title="序号" width="100"></vxe-column>
-          <vxe-column title="图片" width="120" align="center">
+          <vxe-column title="图片" width="140" align="center">
             <template #default>
               <img src="/vxe-table/static/other/img1.gif" style="width: 100px;">
             </template>
@@ -110,38 +112,50 @@ export default defineComponent({
         </vxe-table>
         `,
         `
-        export default {
-          data () {
-            return {
+        import { defineComponent, reactive, ref } from 'vue'
+        import { VxeTableInstance } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const demo1 = reactive({
               loading: false
-            }
-          },
-          mounted () {
-            this.loading = true
-            this.$nextTick(() => {
-              const $table = this.$refs.xTable
-              this.mockList(1000).then(data => {
-                this.loading = false
-                if ($table) {
-                  $table.loadData(data)
-                }
-              })
             })
-          },
-          methods: {
-            mockList (size) {
+
+            const xTable = ref({} as VxeTableInstance)
+
+            const mockList = (size: number) => {
+              const list: any[] = []
+              for (let index = 0; index < size; index++) {
+                list.push({
+                  name: \`名称\${index} 名称名称 名称名称 名称名称名称名称名称名称 名称名称名称名称 名称名称名称名称名称名称\`,
+                  time: '2021-01-01 10:20:30',
+                  num: 20,
+                  address: 'shenzhen shenzhen shenzhen shenzhen shenzhen'
+                })
+              }
+              return list
+            }
+
+            const findList = () => {
+              demo1.loading = true
               return new Promise(resolve => {
-                const list = []
-                for (let index = 0; index < size; index++) {
-                  list.push({
-                    name: \`名称\${index} 名称名称 名称名称 名称名称名称名称名称名称 名称名称名称名称 名称名称名称名称名称名称\`,
-                    time: '2021-01-01 10:20:30',
-                    num: 20,
-                    address: 'shenzhen shenzhen shenzhen shenzhen shenzhen'
-                  })
-                }
-                resolve(list)
+                setTimeout(() => {
+                  const data = mockList(600)
+                  const $table = xTable.value
+                  if ($table) {
+                    $table.loadData(data)
+                  }
+                  resolve(null)
+                  demo1.loading = false
+                }, 300)
               })
+            }
+
+            findList()
+
+            return {
+              demo1,
+              xTable
             }
           }
         })

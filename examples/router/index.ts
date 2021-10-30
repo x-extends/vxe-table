@@ -40,6 +40,7 @@ import TableHeaderHighlight from '../views/table/base/HeaderHighlight.vue'
 import TableResizable from '../views/table/base/Resizable.vue'
 import TableMaxHeight from '../views/table/base/MaxHeight.vue'
 import TableHeight from '../views/table/base/Height.vue'
+import TableRowHeight from '../views/table/base/RowHeight.vue'
 import TableAutoHeight from '../views/table/base/AutoHeight.vue'
 import TableFixed from '../views/table/base/Fixed.vue'
 import TableFixedFull from '../views/table/base/FixedFull.vue'
@@ -493,6 +494,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/base/height',
     name: 'TableHeight',
     component: TableHeight
+  },
+  {
+    path: '/table/base/rowHeight',
+    name: 'TableRowHeight',
+    component: TableRowHeight
   },
   {
     path: '/table/base/autoHeight',

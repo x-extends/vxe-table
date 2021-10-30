@@ -69,7 +69,7 @@ export default defineComponent({
     loading: Boolean as PropType<VxeFormPropTypes.Loading>,
     data: Object as PropType<VxeFormPropTypes.Data>,
     size: { type: String as PropType<VxeFormPropTypes.Size>, default: () => GlobalConfig.form.size || GlobalConfig.size },
-    span: [String, Number] as PropType<VxeFormPropTypes.Span>,
+    span: { type: [String, Number] as PropType<VxeFormPropTypes.Span>, default: () => GlobalConfig.form.span },
     align: { type: String as PropType<VxeFormPropTypes.Align>, default: () => GlobalConfig.form.align },
     titleAlign: { type: String as PropType<VxeFormPropTypes.TitleAlign>, default: () => GlobalConfig.form.titleAlign },
     titleWidth: { type: [String, Number] as PropType<VxeFormPropTypes.TitleWidth>, default: () => GlobalConfig.form.titleWidth },

@@ -181,7 +181,11 @@
   },
   "vxe-table/column-config": {
     "type": "any",
-    "description": "列的默认参数"
+    "description": "列配置信息"
+  },
+  "vxe-table/row-config": {
+    "type": "any",
+    "description": "行配置信息"
   },
   "vxe-table/resizable-config": {
     "type": "object",
@@ -673,7 +677,11 @@
   },
   "vxe-grid/column-config": {
     "type": "any",
-    "description": "列的默认参数"
+    "description": "列配置信息"
+  },
+  "vxe-grid/row-config": {
+    "type": "any",
+    "description": "行配置信息"
   },
   "vxe-grid/resizable-config": {
     "type": "object",

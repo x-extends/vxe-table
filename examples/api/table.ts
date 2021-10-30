@@ -917,15 +917,15 @@ const apis = [
       // },
       {
         name: 'column-config',
-        desc: '列的默认参数',
+        desc: '列配置信息',
         version: '',
         type: 'any',
         enum: '',
-        defVal: '',
+        defVal: '继承 setup.table.columnConfig',
         list: [
           {
             name: 'width',
-            desc: '列的默认宽度',
+            desc: '列的宽度',
             version: '',
             type: 'number, string',
             enum: 'auto, px, %',
@@ -934,10 +934,29 @@ const apis = [
           },
           {
             name: 'minWidth',
-            desc: '列的默认最小宽度',
+            desc: '列的最小宽度',
             version: '',
             type: 'number, string',
             enum: 'auto, px, %',
+            defVal: '',
+            list: []
+          }
+        ]
+      },
+      {
+        name: 'row-config',
+        desc: '行配置信息',
+        version: '4.1.1',
+        type: 'any',
+        enum: '',
+        defVal: '继承 setup.table.rowConfig',
+        list: [
+          {
+            name: 'height',
+            desc: '只对 show-overflow 有效，行的高度',
+            version: '',
+            type: 'number',
+            enum: '',
             defVal: '',
             list: []
           }

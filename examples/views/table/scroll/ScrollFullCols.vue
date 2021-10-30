@@ -9,11 +9,11 @@
 
     <vxe-grid ref="xGrid" v-bind="gridOptions">
       <template #toolbar_buttons>
-        <vxe-button @click="loadColumnAndData(50, 1000)">50列1k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(1000, 50)">1k列50条</vxe-button>
+        <vxe-button @click="loadColumnAndData(50, 20)">50列20条</vxe-button>
+        <vxe-button @click="loadColumnAndData(100, 50)">100列50条</vxe-button>
+        <vxe-button @click="loadColumnAndData(200, 100)">200列100条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(5000, 10000)">5k列1w条</vxe-button>
         <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
         <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
         <vxe-button @click="loadColumnAndData(100000, 50000)">10w列5w条</vxe-button>
@@ -196,7 +196,7 @@ export default defineComponent({
     }
 
     nextTick(() => {
-      loadColumnAndData(600, 600)
+      loadColumnAndData(20, 10)
     })
 
     return {
@@ -208,11 +208,11 @@ export default defineComponent({
         `
         <vxe-grid ref="xGrid" v-bind="gridOptions">
           <template #toolbar_buttons>
-            <vxe-button @click="loadColumnAndData(50, 1000)">50列1k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(1000, 50)">1k列50条</vxe-button>
+            <vxe-button @click="loadColumnAndData(50, 20)">50列20条</vxe-button>
+            <vxe-button @click="loadColumnAndData(100, 50)">100列50条</vxe-button>
+            <vxe-button @click="loadColumnAndData(200, 100)">200列100条</vxe-button>
             <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 10000)">5k列1w条</vxe-button>
             <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
             <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
             <vxe-button @click="loadColumnAndData(100000, 50000)">10w列5w条</vxe-button>
@@ -371,7 +371,7 @@ export default defineComponent({
             }
 
             nextTick(() => {
-              loadColumnAndData(600, 600)
+              loadColumnAndData(20, 10)
             })
 
             return {

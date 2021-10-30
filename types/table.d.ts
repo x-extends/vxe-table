@@ -55,6 +55,8 @@ export interface TablePrivateComputed {
   computeValidOpts: ComputedRef<VxeTablePropTypes.ValidOpts>;
   computeSXOpts: ComputedRef<VxeTablePropTypes.SXOpts>;
   computeSYOpts: ComputedRef<VxeTablePropTypes.SYOpts>;
+  computeColumnOpts: ComputedRef<VxeTablePropTypes.ColumnOpts>;
+  computeRowOpts: ComputedRef<VxeTablePropTypes.RowOpts>;
   computeResizableOpts: ComputedRef<VxeTablePropTypes.ResizableOpts>;
   computeSeqOpts: ComputedRef<VxeTablePropTypes.SeqOpts>;
   computeRadioOpts: ComputedRef<VxeTablePropTypes.RadioOpts>;
@@ -1192,13 +1194,21 @@ export namespace VxeTablePropTypes {
   export type SyncResize = boolean | string | number;
 
   /**
-   * 列的默认配置
+   * 列配置信息
    */
   export interface ColumnConfig {
     width?: number;
     minWidth?: number;
   }
   export interface ColumnOpts extends ColumnConfig { }
+
+  /**
+   * 行配置信息
+   */
+  export interface RowConfig {
+    height?: number;
+  }
+  export interface RowOpts extends RowConfig { }
 
   /**
    * 自定义列配置项
@@ -1212,6 +1222,9 @@ export namespace VxeTablePropTypes {
   }
   export interface CustomOpts extends CustomConfig { }
 
+  /**
+   * 列调整配置项
+   */
   export interface ResizableConfig {
     minWidth?: number | string | ((params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -1911,6 +1924,7 @@ export type VxeTableProps<D = any> = {
   autoResize?: VxeTablePropTypes.AutoResize;
   syncResize?: VxeTablePropTypes.SyncResize;
   columnConfig?: VxeTablePropTypes.ColumnConfig;
+  rowConfig?: VxeTablePropTypes.RowConfig;
   customConfig?: VxeTablePropTypes.CustomConfig;
   resizableConfig?: VxeTablePropTypes.ResizableConfig;
   seqConfig?: VxeTablePropTypes.SeqConfig;

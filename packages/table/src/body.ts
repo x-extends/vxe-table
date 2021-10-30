@@ -31,7 +31,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts } = $xetable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -110,16 +110,18 @@ export default defineComponent({
      */
     const renderColumn = ($seq: string, seq: number, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
       const { columnKey, height, showOverflow: allColumnOverflow, cellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
-      const { tableData, overflowX, scrollXLoad, scrollYLoad, currentColumn, mergeList, editStore, validStore, isAllOverflow } = tableReactData
+      const { tableData, overflowX, scrollYLoad, currentColumn, mergeList, editStore, validStore, isAllOverflow } = tableReactData
       const { afterFullData } = tableInternalData
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const editOpts = computeEditOpts.value
       const tooltipOpts = computeTooltipOpts.value
+      const rowOpts = computeRowOpts.value
       const sYOpts = computeSYOpts.value
       const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
       const { actived } = editStore
-      const { rHeight } = sYOpts
+      const { rHeight: scrollYRHeight } = sYOpts
+      const { height: rowHeight } = rowOpts
       const showAllTip = tooltipOpts.showAll
       const columnIndex = $xetable.getColumnIndex(column)
       const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -138,7 +140,7 @@ export default defineComponent({
       const attrs: any = { colid: column.id }
       const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
-      if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
+      if (scrollYLoad && !hasEllipsis) {
         showEllipsis = hasEllipsis = true
       }
       // hover 进入事件
@@ -230,7 +232,7 @@ export default defineComponent({
               'c--ellipsis': showEllipsis
             }],
             style: {
-              maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+              maxHeight: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
             }
           })
         )
@@ -245,7 +247,7 @@ export default defineComponent({
               'c--ellipsis': showEllipsis
             }],
             style: {
-              maxHeight: hasEllipsis && rHeight ? `${rHeight}px` : ''
+              maxHeight: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
             },
             title: showTitle ? $xetable.getCellLabel(row, column) : null
           }, column.renderCell(params))
@@ -283,7 +285,7 @@ export default defineComponent({
         key: columnKey ? column.id : $columnIndex,
         ...attrs,
         style: Object.assign({
-          height: hasEllipsis && rHeight ? `${rHeight}px` : ''
+          height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
         }, cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null),
         ...tdOns
       }, tdVNs)
@@ -603,7 +605,7 @@ export default defineComponent({
     const renderVN = () => {
       let { fixedColumn, fixedType, tableColumn } = props
       const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig } = tableProps
-      const { tableData, mergeList, scrollXLoad, scrollYLoad, isAllOverflow } = tableReactData
+      const { tableData, mergeList, scrollYLoad, isAllOverflow } = tableReactData
       const { visibleColumn } = tableInternalData
       const { slots } = tableContext
       const sYOpts = computeSYOpts.value
@@ -614,7 +616,7 @@ export default defineComponent({
       // const isMergeRightFixedExceeded = computeIsMergeRightFixedExceeded.value
       // 如果是使用优化模式
       if (fixedType) {
-        if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+        if (scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
           if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
             tableColumn = fixedColumn
           } else {

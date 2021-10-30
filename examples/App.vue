@@ -443,6 +443,13 @@ export default defineComponent({
               keywords: ['max-height']
             },
             {
+              label: 'app.aside.nav.rowHeight',
+              locat: {
+                name: 'TableRowHeight'
+              },
+              keywords: ['row-config', 'height']
+            },
+            {
               label: 'app.aside.nav.resize',
               locat: {
                 name: 'TableAutoHeight'

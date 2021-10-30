@@ -8,12 +8,12 @@
 
     <vxe-grid ref="xGrid" v-bind="gridOptions">
       <template #toolbar_buttons>
-        <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-        <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
-        <vxe-button @click="loadColumnAndData(100000, 300000)">10w列30w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(1000, 20)">1k列20条</vxe-button>
+        <vxe-button @click="loadColumnAndData(1000, 100)">1k列100条</vxe-button>
+        <vxe-button @click="loadColumnAndData(5000, 500)">5k列500条</vxe-button>
+        <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(50000, 100000)">5w列10w条</vxe-button>
+        <vxe-button @click="loadColumnAndData(100000, 30000)">10w列30w条</vxe-button>
       </template>
     </vxe-grid>
 
@@ -39,8 +39,8 @@ export default defineComponent({
   setup () {
     const gridOptions = reactive({
       border: true,
-      showOverflow: true,
       showHeaderOverflow: true,
+      showOverflow: true,
       height: 500,
       resizable: true,
       loading: false,
@@ -181,7 +181,7 @@ export default defineComponent({
     }
 
     nextTick(() => {
-      loadColumnAndData(600, 600)
+      loadColumnAndData(600, 10)
     })
 
     return {
@@ -192,12 +192,12 @@ export default defineComponent({
         `
         <vxe-grid ref="xGrid" v-bind="gridOptions">
           <template #toolbar_buttons>
-            <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
-            <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(5000, 100000)">5k列10w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(10000, 100000)">1w列10w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(50000, 200000)">5w列20w条</vxe-button>
-            <vxe-button @click="loadColumnAndData(100000, 300000)">10w列30w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 20)">1k列20条</vxe-button>
+            <vxe-button @click="loadColumnAndData(1000, 100)">1k列100条</vxe-button>
+            <vxe-button @click="loadColumnAndData(5000, 500)">5k列500条</vxe-button>
+            <vxe-button @click="loadColumnAndData(10000, 10000)">1w列1w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(50000, 100000)">5w列10w条</vxe-button>
+            <vxe-button @click="loadColumnAndData(100000, 30000)">10w列30w条</vxe-button>
           </template>
         </vxe-grid>
         `,
@@ -213,8 +213,8 @@ export default defineComponent({
           setup () {
             const gridOptions = reactive({
               border: true,
-              showOverflow: true,
               showHeaderOverflow: true,
+              showOverflow: true,
               height: 500,
               resizable: true,
               loading: false,
@@ -355,7 +355,7 @@ export default defineComponent({
             }
 
             nextTick(() => {
-              loadColumnAndData(600, 600)
+              loadColumnAndData(600, 10)
             })
 
             return {

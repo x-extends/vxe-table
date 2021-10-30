@@ -99,8 +99,11 @@ export default {
   autoResize: { type: Boolean as PropType<VxeTablePropTypes.AutoResize>, default: () => GlobalConfig.table.autoResize },
   // 是否自动根据状态属性去更新响应式表格宽高
   syncResize: [Boolean, String, Number],
-  // 设置列的默认参数，仅对部分支持的属性有效
+  // 列配置信息
   columnConfig: Object as PropType<VxeTablePropTypes.ColumnConfig>,
+  // 行配置信息
+  rowConfig: Object as PropType<VxeTablePropTypes.RowConfig>,
+  // 列调整配置项
   resizableConfig: Object as PropType<VxeTablePropTypes.ResizableConfig>,
   // 序号配置项
   seqConfig: Object as PropType<VxeTablePropTypes.SeqConfig>,

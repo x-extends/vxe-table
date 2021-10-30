@@ -332,7 +332,11 @@ export default defineComponent({
     })
 
     const computeColumnOpts = computed(() => {
-      return Object.assign({}, props.columnConfig) as VxeTablePropTypes.ColumnOpts
+      return Object.assign({}, GlobalConfig.table.columnConfig, props.columnConfig) as VxeTablePropTypes.ColumnOpts
+    })
+
+    const computeRowOpts = computed(() => {
+      return Object.assign({}, GlobalConfig.table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
     })
 
     const computeResizableOpts = computed(() => {
@@ -539,6 +543,8 @@ export default defineComponent({
       computeValidOpts,
       computeSXOpts,
       computeSYOpts,
+      computeColumnOpts,
+      computeRowOpts,
       computeResizableOpts,
       computeSeqOpts,
       computeRadioOpts,
@@ -1331,7 +1337,7 @@ export default defineComponent({
 
             // 如果是使用优化模式
             if (fixedType) {
-              if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+              if (scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
                 if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
                   tableColumn = fixedColumn
                 } else {
@@ -1419,15 +1425,9 @@ export default defineComponent({
                 const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
                 let hasEllipsis = showTitle || showTooltip || showEllipsis
                 const listElem = elemStore[`${name}-${layout}-list`]
-                // 滚动的渲染不支持动态行高
-                if (layout === 'header' || layout === 'footer') {
-                  if (scrollXLoad && !hasEllipsis) {
-                    hasEllipsis = true
-                  }
-                } else {
-                  if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-                    hasEllipsis = true
-                  }
+                // 纵向虚拟滚动不支持动态行高
+                if (scrollYLoad && !hasEllipsis) {
+                  hasEllipsis = true
                 }
                 if (listElem) {
                   XEUtils.arrayEach(listElem.querySelectorAll(`.${column.id}`), (elem: any) => {
@@ -5433,11 +5433,15 @@ export default defineComponent({
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           const customOpts = computeCustomOpts.value
           const mouseOpts = computeMouseOpts.value
+          const rowOpts = computeRowOpts.value
           if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
             errLog('vxe.error.reqProp', ['id'])
           }
           if (props.treeConfig && checkboxOpts.range) {
             errLog('vxe.error.noTree', ['checkbox-config.range'])
+          }
+          if (rowOpts.height && !props.showOverflow) {
+            warnLog('vxe.error.notProp', ['table.show-overflow'])
           }
           if (!$xetable.handleUpdateCellAreas) {
             if (props.clipConfig) {
