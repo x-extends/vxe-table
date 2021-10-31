@@ -9,6 +9,7 @@ export default {
   table: {
     fit: true,
     showHeader: true,
+    animat: true,
     delayHover: 250,
     // keepSource: false,
     // showOverflow: null,
@@ -17,7 +18,6 @@ export default {
     // resizeInterval: 500,
     // size: null,
     // zIndex: null,
-    // resizable: false,
     // autoResize: false,
     // stripe: false,
     // border: false,

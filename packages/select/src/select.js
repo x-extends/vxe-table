@@ -291,17 +291,17 @@ export default {
         this.fullGroupList = []
         this.fullOptionList = value
       }
-      this.updateCache()
+      this.cacheItemMap()
     },
     options (value) {
       this.fullGroupList = []
       this.fullOptionList = value
-      this.updateCache()
+      this.cacheItemMap()
     },
     optionGroups (value) {
       this.fullOptionList = []
       this.fullGroupList = value
-      this.updateCache()
+      this.cacheItemMap()
     }
   },
   created () {
@@ -311,7 +311,7 @@ export default {
     } else if (options) {
       this.fullOptionList = options
     }
-    this.updateCache()
+    this.cacheItemMap()
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
@@ -401,7 +401,7 @@ export default {
       }
       return []
     },
-    updateCache () {
+    cacheItemMap () {
       const { fullOptionList, fullGroupList, groupOptionsField } = this
       const optkey = getOptkey(this)
       const handleOptis = (item) => {

@@ -4,7 +4,7 @@ const titleTooltip = [
   {
     name: 'content',
     desc: '提示消息（支持开启国际化）',
-    version: '3.3.17',
+    version: '3.4.0',
     type: 'string',
     enum: '',
     defVal: '',

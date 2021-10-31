@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="reloadTreeChilds"/> 方法重新加载子节点
+      树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="lazyTreeChildren"/> 方法重新加载子节点
     </p>
 
     <vxe-table
@@ -155,7 +155,7 @@ export default {
                   xTree.clearTreeExpandLoaded(row)
                   break
                 case 'reloadNodes':
-                  xTree.reloadTreeChilds(row)
+                  xTree.lazyTreeChildren(row)
                   break
                 case 'expand':
                   xTree.setTreeExpand(row, true)
@@ -211,7 +211,7 @@ export default {
           xTree.clearTreeExpandLoaded(row)
           break
         case 'reloadNodes':
-          xTree.reloadTreeChilds(row)
+          xTree.lazyTreeChildren(row)
           break
         case 'expand':
           xTree.setTreeExpand(row, true)

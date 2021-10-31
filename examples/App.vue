@@ -1512,6 +1512,18 @@ export default {
               }
             },
             {
+              label: 'app.aside.nav.tree',
+              locat: {
+                name: 'TableScrollTree'
+              }
+            },
+            {
+              label: 'app.aside.nav.lazyTree',
+              locat: {
+                name: 'TableScrollLazyTree'
+              }
+            },
+            {
               label: 'app.aside.nav.moveHighlight',
               locat: {
                 name: 'TableScrollHighlight'
@@ -1915,18 +1927,18 @@ export default {
                 name: 'TablePluginMenus'
               },
               keywords: ['menu']
-            },
-            {
-              label: 'app.aside.nav.treeRowPlugin',
-              locat: {
-                name: 'TablePluginTreeRows'
-              }
-            },
-            {
-              label: 'app.aside.nav.treeColPlugin',
-              locat: {
-                name: 'TablePluginTreeCols'
-              }
+            // },
+            // {
+            //   label: 'app.aside.nav.treeRowPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeRows'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.treeColPlugin',
+            //   locat: {
+            //     name: 'TablePluginTreeCols'
+            //   }
             }
           ]
         },

@@ -306,43 +306,67 @@ const Methods = {
     this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullData.slice(0)
     return this.$nextTick()
   },
+  updateScrollYStatus (fullData) {
+    const { treeConfig, treeOpts, sYOpts } = this
+    const { transform } = treeOpts
+    const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < fullData.length
+    this.scrollYLoad = scrollYLoad
+    return scrollYLoad
+  },
   /**
    * 加载表格数据
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, treeConfig, treeOpts, editStore, sYOpts, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad } = this
-    if (treeConfig && treeOpts.transform) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (!treeOpts.rowtKey) {
-          UtilTools.error('vxe.error.reqProp', ['table.tree-config.rowtKey'])
+    const { keepSource, treeConfig, treeOpts, editStore, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad } = this
+    let treeData = []
+    let fullData = datas ? datas.slice(0) : []
+    if (treeConfig) {
+      // 树结构自动转换
+      if (treeOpts.transform) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (!treeOpts.rowtKey) {
+            UtilTools.error('vxe.error.reqProp', ['table.tree-config.rowtKey'])
+          }
+          if (!treeOpts.parentKey) {
+            UtilTools.error('vxe.error.reqProp', ['table.tree-config.parentKey'])
+          }
+          if (!treeOpts.children) {
+            UtilTools.error('vxe.error.reqProp', ['tree-config.children'])
+          }
+          fullData.forEach(row => {
+            if (row[treeOpts.children] && row[treeOpts.children].length) {
+              UtilTools.warn('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+            }
+          })
         }
-        if (!treeOpts.parentKey) {
-          UtilTools.error('vxe.error.reqProp', ['table.tree-config.parentKey'])
-        }
+        treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
+        fullData = treeData.slice(0)
+      } else {
+        treeData = fullData.slice(0)
       }
-      datas = XEUtils.toArrayTree(datas, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
     }
-    const tableFullData = datas ? datas.slice(0) : []
-    const scrollYLoad = !treeConfig && sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
     scrollYStore.startIndex = 0
     scrollYStore.endIndex = 1
     scrollXStore.startIndex = 0
     scrollXStore.endIndex = 1
     editStore.insertList = []
     editStore.removeList = []
+    const sYLoad = this.updateScrollYStatus(fullData)
+    this.scrollYLoad = sYLoad
     // 全量数据
-    this.tableFullData = tableFullData
+    this.tableFullData = fullData
+    this.treeFullData = treeData
     // 缓存数据
-    this.updateCache(true)
+    this.cacheRowMap(true)
     // 原始数据
     this.tableSynchData = datas
+    // 克隆原数据，用于显示编辑状态，与编辑值做对比
     if (keepSource) {
-      this.tableSourceData = XEUtils.clone(tableFullData, true)
+      this.tableSourceData = XEUtils.clone(fullData, true)
     }
-    this.scrollYLoad = scrollYLoad
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (scrollYLoad) {
+      if (sYLoad) {
         if (!(this.height || this.maxHeight)) {
           UtilTools.error('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
         }
@@ -368,8 +392,8 @@ const Methods = {
     }).then(() => {
       this.computeScrollLoad()
     }).then(() => {
-      // 是否加载了数据
-      if (scrollYLoad) {
+      // 是否启用了虚拟滚动
+      if (sYLoad) {
         scrollYStore.endIndex = scrollYStore.visibleSize
       }
       this.handleReserveStatus()
@@ -379,7 +403,7 @@ const Methods = {
           .then(() => this.recalculate())
           .then(() => {
             // 是否变更虚拟滚动
-            if (oldScrollYLoad === scrollYLoad) {
+            if (oldScrollYLoad === sYLoad) {
               restoreScrollLocation(this, lastScrollLeft, lastScrollTop).then(resolve)
             } else {
               setTimeout(() => restoreScrollLocation(this, lastScrollLeft, lastScrollTop).then(resolve))
@@ -446,7 +470,7 @@ const Methods = {
             tableSourceData[rowIndex] = record
             XEUtils.clear(row, undefined)
             Object.assign(row, this.defineField(Object.assign({}, record)))
-            this.updateCache(true)
+            this.cacheRowMap(true)
           } else {
             XEUtils.destructuring(oRow, XEUtils.clone(row, true))
           }
@@ -509,12 +533,12 @@ const Methods = {
    * 更新数据行的 Map
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
-  updateCache (source) {
+  cacheRowMap (source) {
     const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap } = this
     let { fullDataRowIdData, fullAllDataRowIdData } = this
     const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
-    const handleCache = (row, index, items, path, parent) => {
+    const handleCache = (row, index, items, path, parent, nodes) => {
       let rowid = getRowid(this, row)
       if (eqEmptyValue(rowid)) {
         rowid = getRowUniqueId()
@@ -523,7 +547,7 @@ const Methods = {
       if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
         row[treeOpts.children] = null
       }
-      const rest = { row, rowid, index: treeConfig && parent ? -1 : index, items, parent }
+      const rest = { row, rowid, index: treeConfig && parent ? -1 : index, items, parent, level: nodes ? nodes.length - 1 : 0 }
       if (source) {
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
@@ -543,10 +567,12 @@ const Methods = {
       tableFullData.forEach(handleCache)
     }
   },
-  loadChildren (row, childRecords) {
+  loadTreeChildren (row, childRecords) {
+    const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+    const { children } = treeOpts
+    const rest = fullAllDataRowIdData[getRowid(this, row)]
+    const parentLevel = rest ? rest.level : 0
     return this.createData(childRecords).then((rows) => {
-      const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
-      const { children } = treeOpts
       if (keepSource) {
         const rowid = getRowid(this, row)
         const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid(this, item), treeOpts)
@@ -554,9 +580,9 @@ const Methods = {
           matchObj.item[children] = XEUtils.clone(rows, true)
         }
       }
-      XEUtils.eachTree(rows, (childRow, index, items, path, parent) => {
+      XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
         const rowid = getRowid(this, childRow)
-        const rest = { row: childRow, rowid, index: -1, items, parent }
+        const rest = { row: childRow, rowid, index: -1, items, parent, level: parentLevel + nodes.length }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(childRow, rest)
         fullAllDataRowIdData[rowid] = rest
@@ -3458,10 +3484,10 @@ const Methods = {
     return this.$nextTick()
   },
   /**
-   * 重新加载展开行的内容
+   * 重新懒加载展开行，并展开内容
    * @param {Row} row 行对象
    */
-  reloadExpandContent (row) {
+  lazyExpandContent (row) {
     const { expandOpts, expandLazyLoadeds } = this
     const { lazy } = expandOpts
     if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
@@ -3469,6 +3495,13 @@ const Methods = {
         .then(() => this.handleAsyncRowExpand(row))
     }
     return this.$nextTick()
+  },
+  reloadExpandContent (row) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.warn('vxe.error.delFunc', ['reloadExpandContent', 'lazyExpandContent'])
+    }
+    // 即将废弃
+    return this.lazyExpandContent(row)
   },
   /**
    * 展开行事件
@@ -3650,17 +3683,31 @@ const Methods = {
     return this.$nextTick()
   },
   /**
-   * 重新加载树的子节点
+   * 重新懒加载树节点，并展开该节点
    * @param {Row} row 行对象
    */
-  reloadTreeChilds (row) {
+  lazyTreeChildren (row) {
     const { treeOpts, treeLazyLoadeds } = this
-    const { lazy, hasChild } = treeOpts
+    const { transform, lazy, hasChild } = treeOpts
     if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
-      this.clearTreeExpandLoaded(row)
-        .then(() => this.handleAsyncTreeExpandChilds(row))
+      this.clearTreeExpandLoaded(row).then(() => {
+        return this.handleAsyncTreeExpandChilds(row)
+      }).then(() => {
+        if (transform) {
+          return this.updateVirtualTreeData()
+        }
+      }).then(() => {
+        return this.recalculate()
+      })
     }
     return this.$nextTick()
+  },
+  reloadTreeChilds (row) {
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      UtilTools.warn('vxe.error.delFunc', ['reloadTreeChilds', 'lazyTreeChildren'])
+    }
+    // 即将废弃
+    return this.lazyTreeChildren(row)
   },
   /**
    * 展开树节点事件
@@ -3719,7 +3766,7 @@ const Methods = {
           childRecords = []
         }
         if (childRecords) {
-          this.loadChildren(row, childRecords).then(childRows => {
+          this.loadTreeChildren(row, childRecords).then(childRows => {
             if (childRows.length && treeExpandeds.indexOf(row) === -1) {
               treeExpandeds.push(row)
             }
@@ -3750,6 +3797,78 @@ const Methods = {
     return this.setTreeExpand(expandeds, expanded)
   },
   /**
+   * 默认，展开与收起树节点
+   * @param rows
+   * @param expanded
+   * @returns
+   */
+  handleBaseTreeExpand (rows, expanded) {
+    const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, treeNodeColumn } = this
+    const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
+    const result = []
+    const columnIndex = this.getColumnIndex(treeNodeColumn)
+    const $columnIndex = this.getVMColumnIndex(treeNodeColumn)
+    let validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
+    if (accordion) {
+      validRows = validRows.length ? [validRows[validRows.length - 1]] : []
+      // 同一级只能展开一个
+      const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], treeOpts)
+      if (matchObj) {
+        XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
+      }
+    }
+    if (expanded) {
+      validRows.forEach(row => {
+        if (treeExpandeds.indexOf(row) === -1) {
+          const rest = fullAllDataRowMap.get(row)
+          const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
+          // 是否使用懒加载
+          if (isLoad) {
+            result.push(this.handleAsyncTreeExpandChilds(row))
+          } else {
+            if (row[children] && row[children].length) {
+              treeExpandeds.push(row)
+            }
+          }
+        }
+      })
+    } else {
+      XEUtils.remove(treeExpandeds, row => validRows.indexOf(row) > -1)
+    }
+    if (reserve) {
+      validRows.forEach(row => this.handleTreeExpandReserve(row, expanded))
+    }
+    return Promise.all(result).then(this.recalculate)
+  },
+  updateVirtualTreeData () {
+    const { scrollYLoad: oldScrollYLoad, treeExpandeds, treeOpts, treeFullData } = this
+    const fullData = []
+    XEUtils.eachTree(treeFullData, (row, index, items, path, parent) => {
+      if (!parent || treeExpandeds.indexOf(parent) > -1) {
+        fullData.push(row)
+      }
+    }, treeOpts)
+    const scrollYLoad = this.updateScrollYStatus(fullData)
+    this.tableFullData = scrollYLoad ? fullData : treeFullData
+    if (scrollYLoad || oldScrollYLoad !== scrollYLoad) {
+      return this.handleTableData(true).then(() => this.recalculate())
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 虚拟树的展开与收起
+   * @param rows
+   * @param expanded
+   * @returns
+   */
+  handleVirtualTreeExpand (rows, expanded) {
+    return this.handleBaseTreeExpand(rows, expanded).then(() => {
+      return this.updateVirtualTreeData()
+    }).then(() => {
+      return this.recalculate()
+    })
+  },
+  /**
    * 设置展开树形节点，二个参数设置这一行展开与否
    * 支持单行
    * 支持多行
@@ -3757,47 +3876,19 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setTreeExpand (rows, expanded) {
-    const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, treeNodeColumn } = this
-    const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
-    const result = []
-    const columnIndex = this.getColumnIndex(treeNodeColumn)
-    const $columnIndex = this.getVMColumnIndex(treeNodeColumn)
+    const { treeOpts } = this
+    const { transform } = treeOpts
     if (rows) {
       if (!XEUtils.isArray(rows)) {
         rows = [rows]
       }
       if (rows.length) {
-        let validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
-        if (accordion) {
-          validRows = validRows.length ? [validRows[validRows.length - 1]] : []
-          // 同一级只能展开一个
-          const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], treeOpts)
-          if (matchObj) {
-            XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
-          }
-        }
-        if (expanded) {
-          validRows.forEach(row => {
-            if (treeExpandeds.indexOf(row) === -1) {
-              const rest = fullAllDataRowMap.get(row)
-              const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
-              // 是否使用懒加载
-              if (isLoad) {
-                result.push(this.handleAsyncTreeExpandChilds(row))
-              } else {
-                if (row[children] && row[children].length) {
-                  treeExpandeds.push(row)
-                }
-              }
-            }
-          })
+        // 如果为虚拟树
+        if (transform) {
+          return this.handleVirtualTreeExpand(rows, expanded)
         } else {
-          XEUtils.remove(treeExpandeds, row => validRows.indexOf(row) > -1)
+          return this.handleBaseTreeExpand(rows, expanded)
         }
-        if (reserve) {
-          validRows.forEach(row => this.handleTreeExpandReserve(row, expanded))
-        }
-        return Promise.all(result).then(this.recalculate)
       }
     }
     return this.$nextTick()
@@ -3820,7 +3911,7 @@ const Methods = {
     if (reserve) {
       XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), treeOpts)
     }
-    return this.$nextTick().then(() => {
+    return this.updateVirtualTreeData().then(() => {
       if (isExists) {
         this.recalculate()
       }

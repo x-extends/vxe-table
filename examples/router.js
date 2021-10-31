@@ -175,6 +175,8 @@ import TableScrollRows from './views/table/scroll/ScrollRows.vue'
 import TableScrollFullRows from './views/table/scroll/ScrollFullRows.vue'
 import TableScrollCols from './views/table/scroll/ScrollCols.vue'
 import TableScrollFullCols from './views/table/scroll/ScrollFullCols.vue'
+import TableScrollTree from './views/table/scroll/Tree.vue'
+import TableScrollLazyTree from './views/table/scroll/LazyTree.vue'
 import TableScrollHighlight from './views/table/scroll/Highlight.vue'
 import TableScrollKeyboard from './views/table/scroll/Keyboard.vue'
 import TableScrollMaxHeight from './views/table/scroll/MaxHeight.vue'
@@ -288,8 +290,8 @@ import TablePluginShortcutKey from './views/table/plugin/ShortcutKey.vue'
 import TablePluginExportPDF from './views/table/plugin/ExportPDF.vue'
 import TablePluginRenderer from './views/table/plugin/Renderer.vue'
 import TablePluginMenus from './views/table/plugin/Menus.vue'
-import TablePluginTreeRows from './views/table/plugin/TreeRows'
-import TablePluginTreeCols from './views/table/plugin/TreeCols'
+// import TablePluginTreeRows from './views/table/plugin/TreeRows'
+// import TablePluginTreeCols from './views/table/plugin/TreeCols'
 
 import VXEAPI from './views/api/API.vue'
 import Donation from './views/api/Donation.vue'
@@ -1217,6 +1219,16 @@ export default new Router({
       component: TableScrollFullCols
     },
     {
+      path: '/table/scroll/tree',
+      name: 'TableScrollTree',
+      component: TableScrollTree
+    },
+    {
+      path: '/table/scroll/lazyTree',
+      name: 'TableScrollLazyTree',
+      component: TableScrollLazyTree
+    },
+    {
       path: '/table/scroll/highlight',
       name: 'TableScrollHighlight',
       component: TableScrollHighlight
@@ -1687,16 +1699,16 @@ export default new Router({
       name: 'TablePluginMenus',
       component: TablePluginMenus
     },
-    {
-      path: '/table/plugin/treeRows',
-      name: 'TablePluginTreeRows',
-      component: TablePluginTreeRows
-    },
-    {
-      path: '/table/plugin/treeCols',
-      name: 'TablePluginTreeCols',
-      component: TablePluginTreeCols
-    },
+    // {
+    //   path: '/table/plugin/treeRows',
+    //   name: 'TablePluginTreeRows',
+    //   component: TablePluginTreeRows
+    // },
+    // {
+    //   path: '/table/plugin/treeCols',
+    //   name: 'TablePluginTreeCols',
+    //   component: TablePluginTreeCols
+    // },
     {
       path: '/donation/api',
       name: 'Donation',

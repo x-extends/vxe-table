@@ -223,7 +223,7 @@ const apis = [
           // {
           //   name: 'content',
           //   desc: '校验提示内容（支持开启国际化）',
-          //   version: '3.3.17',
+          //   version: '3.4.0',
           //   type: 'string',
           //   enum: '',
           //   defVal: '',

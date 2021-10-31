@@ -266,7 +266,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
   }, tdVNs)
 }
 
-function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tableColumn) {
+function renderRows (h, _vm, $xetable, $seq, fixedType, tableData, tableColumn) {
   const {
     stripe,
     rowKey,
@@ -286,7 +286,8 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
     radioOpts,
     checkboxOpts,
     expandColumn,
-    hasFixedColumn
+    hasFixedColumn,
+    fullAllDataRowIdData
   } = $xetable
   const rows = []
   tableData.forEach((row, $rowIndex) => {
@@ -315,6 +316,8 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       }
     }
     const rowid = UtilTools.getRowid($xetable, row)
+    const rest = fullAllDataRowIdData[rowid]
+    const rowLevel = rest ? rest.level : 0
     const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
     let isNewRow = false
     if (editConfig) {
@@ -377,10 +380,10 @@ function renderRows (h, _vm, $xetable, $seq, rowLevel, fixedType, tableData, tab
       )
     }
     // 如果是树形表格
-    if (treeConfig && treeExpandeds.length) {
+    if (treeConfig && !scrollYLoad && treeExpandeds.length) {
       const rowChildren = row[treeOpts.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
-        rows.push(...renderRows(h, _vm, $xetable, $seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
+        rows.push(...renderRows(h, _vm, $xetable, $seq ? `${$seq}.${seq}` : `${seq}`, fixedType, rowChildren, tableColumn))
       }
     }
   })
@@ -525,7 +528,7 @@ export default {
          */
         h('tbody', {
           ref: 'tbody'
-        }, renderRows(h, this, $xetable, '', 0, fixedType, tableData, tableColumn))
+        }, renderRows(h, this, $xetable, '', fixedType, tableData, tableColumn))
       ]),
       h('div', {
         class: 'vxe-table--checkbox-range'

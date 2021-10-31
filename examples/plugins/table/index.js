@@ -46,7 +46,6 @@ import {
 import VXETablePluginElement from 'vxe-table-plugin-element'
 import VXETablePluginIView from 'vxe-table-plugin-iview'
 import VXETablePluginAntd from 'vxe-table-plugin-antd'
-import VXETablePluginVirtualTree from 'vxe-table-plugin-virtual-tree'
 import VXETablePluginMenus from 'vxe-table-plugin-menus'
 import VXETablePluginExportPDF from 'vxe-table-plugin-export-pdf'
 import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
@@ -124,7 +123,6 @@ Vue.prototype.$XPrint = VXETable.print
 VXETable.use(VXETablePluginElement)
 VXETable.use(VXETablePluginIView)
 VXETable.use(VXETablePluginAntd)
-VXETable.use(VXETablePluginVirtualTree)
 VXETable.use(VXETablePluginMenus)
 VXETable.use(VXETablePluginExportPDF)
 VXETable.use(VXETablePluginRenderer)

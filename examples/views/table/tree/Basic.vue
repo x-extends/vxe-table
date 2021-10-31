@@ -4,7 +4,6 @@
       树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，<br>
       设置 <table-api-link prop="transform"/> 开启自动将列表转成树结构<br>
       通过 <table-api-link prop="row-id"/> 指定主键，还可以通过 <table-api-link prop="trigger"/> 指定触发方式<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 2000 条，请谨慎使用！)</span>
     </p>
 
     <vxe-toolbar>

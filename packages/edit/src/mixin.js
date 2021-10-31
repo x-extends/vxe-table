@@ -73,7 +73,7 @@ export default {
       this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       this.handleTableData()
       this.updateFooter()
-      this.updateCache()
+      this.cacheRowMap()
       this.checkSelectionStatus()
       if (scrollYLoad) {
         this.updateScrollYSpace()
@@ -161,7 +161,7 @@ export default {
       this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       this.handleTableData()
       this.updateFooter()
-      this.updateCache()
+      this.cacheRowMap()
       this.checkSelectionStatus()
       if (scrollYLoad) {
         this.updateScrollYSpace()

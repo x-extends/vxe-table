@@ -529,6 +529,7 @@ const apis = [
       },
       {
         name: 'resizable',
+        abandoned: true,
         descKey: 'app.api.table.desc.resizable',
         version: '',
         type: 'boolean',
@@ -924,8 +925,17 @@ const apis = [
         defVal: '',
         list: [
           {
+            name: 'resizable',
+            desc: '每一列是否启用列宽调整',
+            version: '',
+            type: 'boolean',
+            enum: 'false',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'width',
-            desc: '列的宽度',
+            desc: '每一列的宽度',
             version: '',
             type: 'number, string',
             enum: 'auto, px, %',
@@ -934,7 +944,7 @@ const apis = [
           },
           {
             name: 'minWidth',
-            desc: '列的最小宽度',
+            desc: '每一列的最小宽度',
             version: '',
             type: 'number, string',
             enum: 'auto, px, %',
@@ -946,14 +956,14 @@ const apis = [
       {
         name: 'row-config',
         desc: '行配置信息',
-        version: '3.3.17',
+        version: '3.4.0',
         type: 'any',
         enum: '',
         defVal: '继承 setup.table.rowConfig',
         list: [
           {
             name: 'height',
-            desc: '只对 show-overflow 有效，行的高度',
+            desc: '只对 show-overflow 有效，每一行的高度',
             version: '',
             type: 'number',
             enum: '',
@@ -2532,7 +2542,7 @@ const apis = [
           // {
           //   name: 'content',
           //   desc: '校验提示内容（支持开启国际化）',
-          //   version: '3.3.17',
+          //   version: '3.4.0',
           //   type: 'string',
           //   enum: '',
           //   defVal: '',
@@ -2702,7 +2712,7 @@ const apis = [
       // },
       {
         name: 'scroll-x',
-        desc: '横向虚拟滚动配置（不支持深层结构和展开行）',
+        desc: '横向虚拟滚动配置（不支持展开行）',
         version: '',
         type: 'any',
         enum: '',
@@ -2739,7 +2749,7 @@ const apis = [
       },
       {
         name: 'scroll-y',
-        desc: '纵向虚拟滚动配置（不支持深层结构和展开行）',
+        desc: '纵向虚拟滚动配置（不支持展开行）',
         version: '',
         type: 'any',
         enum: '',
@@ -3409,21 +3419,41 @@ const apis = [
         list: []
       },
       {
-        name: 'reloadExpandContent(rows)',
+        name: 'lazyExpandContent(row)',
         desc: '用于懒加载展开行，重新加载展开行的内容',
-        version: '',
+        version: '3.4.0',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'rows: Row | Row[]',
+        defVal: 'rows: Row',
         list: []
       },
       {
-        name: 'reloadTreeChilds(rows)',
-        desc: '用于懒加载树表格，重新加载子节点',
+        name: 'reloadExpandContent(row)',
+        desc: '即将废弃，请使用 lazyExpandContent',
+        disabled: true,
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'rows: Row | Row[]',
+        defVal: 'rows: Row',
+        list: []
+      },
+      {
+        name: 'lazyTreeChildren(row)',
+        desc: '用于懒加载树表格，重新加载子节点',
+        version: '3.4.0',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'rows: Row',
+        list: []
+      },
+      {
+        name: 'reloadTreeChilds(row)',
+        desc: '即将废弃，请使用 lazyTreeChildren',
+        disabled: true,
+        version: '',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'rows: Row',
         list: []
       },
       // {
