@@ -285,11 +285,11 @@
   },
   "vxe-table/scroll-x": {
     "type": "any",
-    "description": "横向虚拟滚动配置（不支持深层结构和展开行）"
+    "description": "横向虚拟滚动配置（不支持展开行）"
   },
   "vxe-table/scroll-y": {
     "type": "any",
-    "description": "纵向虚拟滚动配置（不支持深层结构和展开行）"
+    "description": "纵向虚拟滚动配置（不支持展开行）"
   },
   "vxe-table/params": {
     "type": "any",
@@ -781,11 +781,11 @@
   },
   "vxe-grid/scroll-x": {
     "type": "any",
-    "description": "横向虚拟滚动配置（不支持深层结构和展开行）"
+    "description": "横向虚拟滚动配置（不支持展开行）"
   },
   "vxe-grid/scroll-y": {
     "type": "any",
-    "description": "纵向虚拟滚动配置（不支持深层结构和展开行）"
+    "description": "纵向虚拟滚动配置（不支持展开行）"
   },
   "vxe-grid/params": {
     "type": "any",
