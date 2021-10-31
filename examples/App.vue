@@ -1493,6 +1493,18 @@ export default defineComponent({
                 name: 'TableScroll'
               }
             },
+            {
+              label: 'app.aside.nav.tree',
+              locat: {
+                name: 'TableScrollTree'
+              }
+            },
+            {
+              label: 'app.aside.nav.lazyTree',
+              locat: {
+                name: 'TableScrollLazyTree'
+              }
+            },
             // {
             //   label: 'app.aside.nav.moveHighlight',
             //   locat: {

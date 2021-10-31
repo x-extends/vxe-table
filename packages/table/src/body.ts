@@ -291,10 +291,10 @@ export default defineComponent({
       }, tdVNs)
     }
 
-    const renderRows = ($seq: string, rowLevel: any, fixedType: any, tableData: any, tableColumn: any) => {
+    const renderRows = ($seq: string, fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
       const { hasFixedColumn, treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
-      const { scrollYStore } = tableInternalData
+      const { fullAllDataRowIdData, scrollYStore } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
@@ -326,6 +326,8 @@ export default defineComponent({
           }
         }
         const rowid = getRowid($xetable, row)
+        const rest = fullAllDataRowIdData[rowid]
+        const rowLevel = rest ? rest.level : 0
         const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
         let isNewRow = false
         if (editConfig) {
@@ -384,10 +386,10 @@ export default defineComponent({
           )
         }
         // 如果是树形表格
-        if (treeConfig && treeExpandeds.length) {
+        if (treeConfig && !scrollYLoad && treeExpandeds.length) {
           const rowChildren = row[treeOpts.children]
           if (rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1) {
-            rows.push(...renderRows($seq ? `${$seq}.${seq}` : `${seq}`, rowLevel + 1, fixedType, rowChildren, tableColumn))
+            rows.push(...renderRows($seq ? `${$seq}.${seq}` : `${seq}`, fixedType, rowChildren, tableColumn))
           }
         }
       })
@@ -684,7 +686,7 @@ export default defineComponent({
            */
           h('tbody', {
             ref: refBodyTBody
-          }, renderRows('', 0, fixedType, tableData, tableColumn))
+          }, renderRows('', fixedType, tableData, tableColumn))
         ]),
         h('div', {
           class: 'vxe-table--checkbox-range'

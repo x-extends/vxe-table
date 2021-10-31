@@ -334,7 +334,7 @@ const exportDataAPI = [
     name: 'useStyle',
     desc: '只对 type=html,xlsx 有效，支持带样式',
     version: '',
-    type: 'Boolean',
+    type: 'boolean',
     enum: '',
     defVal: 'false',
     list: []
@@ -529,6 +529,7 @@ const apis = [
       },
       {
         name: 'resizable',
+        abandoned: true,
         descKey: 'app.api.table.desc.resizable',
         version: '',
         type: 'boolean',
@@ -924,8 +925,17 @@ const apis = [
         defVal: '继承 setup.table.columnConfig',
         list: [
           {
+            name: 'resizable',
+            desc: '每一列是否启用列宽调整',
+            version: '',
+            type: 'boolean',
+            enum: 'false',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'width',
-            desc: '列的宽度',
+            desc: '每一列的宽度',
             version: '',
             type: 'number, string',
             enum: 'auto, px, %',
@@ -934,7 +944,7 @@ const apis = [
           },
           {
             name: 'minWidth',
-            desc: '列的最小宽度',
+            desc: '每一列的最小宽度',
             version: '',
             type: 'number, string',
             enum: 'auto, px, %',
@@ -953,7 +963,7 @@ const apis = [
         list: [
           {
             name: 'height',
-            desc: '只对 show-overflow 有效，行的高度',
+            desc: '只对 show-overflow 有效，每一行的高度',
             version: '',
             type: 'number',
             enum: '',
@@ -1213,7 +1223,7 @@ const apis = [
             name: 'strict',
             desc: '严格模式，选中后不能取消',
             version: '4.0.22',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -2249,7 +2259,7 @@ const apis = [
             name: 'isMerge',
             desc: '如果功能被支持，用于 mouse-config.area，开启合并和取消合并功能',
             version: 'pro',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -2258,7 +2268,7 @@ const apis = [
             name: 'isClip',
             desc: '如果功能被支持，用于 mouse-config.area，开启复制、剪贴、粘贴功能',
             version: 'pro',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -2267,7 +2277,7 @@ const apis = [
             name: 'isFNR',
             desc: '如果功能被支持，用于 mouse-config.area，开启查找和替换功能',
             version: 'pro',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -2276,7 +2286,7 @@ const apis = [
             name: 'isChecked',
             desc: '如果功能被支持，用于 column.type=checkbox|radio，开启空格键切换复选框或单选框状态功能',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -2285,7 +2295,7 @@ const apis = [
             name: 'enterToTab',
             desc: '是否将回车键行为改成 Tab 键行为',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -2720,7 +2730,7 @@ const apis = [
       // },
       {
         name: 'scroll-x',
-        desc: '横向虚拟滚动配置（不支持深层结构和展开行）',
+        desc: '横向虚拟滚动配置（不支持展开行）',
         version: '',
         type: 'any',
         enum: '',
@@ -2757,7 +2767,7 @@ const apis = [
       },
       {
         name: 'scroll-y',
-        desc: '纵向虚拟滚动配置（不支持深层结构和展开行）',
+        desc: '纵向虚拟滚动配置（不支持展开行）',
         version: '',
         type: 'any',
         enum: '',
@@ -3427,21 +3437,40 @@ const apis = [
         list: []
       },
       {
-        name: 'reloadExpandContent(rows)',
+        name: 'lazyExpandContent(row)',
+        desc: '重新懒加载展开行，并展开内容',
+        version: '4.1.1',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'rows: Row',
+        list: []
+      },
+      {
+        name: 'reloadExpandContent(row)',
         desc: '用于懒加载展开行，重新加载展开行的内容',
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'rows: Row | Row[]',
+        defVal: 'rows: Row',
         list: []
       },
       {
-        name: 'reloadTreeChilds(rows)',
-        desc: '用于懒加载树表格，重新加载子节点',
+        name: 'lazyTreeChildren(row)',
+        desc: '重新懒加载树节点，并展开该节点',
+        version: '4.1.1',
+        type: 'Promise<any>',
+        enum: '',
+        defVal: 'rows: Row',
+        list: []
+      },
+      {
+        name: 'reloadTreeChilds(row)',
+        desc: '即将废弃，请使用 lazyTreeChildren',
+        disabled: true,
         version: '',
         type: 'Promise<any>',
         enum: '',
-        defVal: 'rows: Row | Row[]',
+        defVal: 'rows: Row',
         list: []
       },
       // {
@@ -3952,7 +3981,7 @@ const apis = [
         name: 'isActiveByRow(row)',
         desc: '用于 edit-config，判断行是否为激活编辑状态',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row',
         list: []
@@ -3961,7 +3990,7 @@ const apis = [
         name: 'isInsertByRow(row)',
         desc: '用于 edit-config，判断行是否为插入的临时数据',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -3970,7 +3999,7 @@ const apis = [
         name: 'isUpdateByRow(row, field)',
         desc: '只对 keep-source 开启有效，判断行数据是否发生改变',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row: Row, field?: string',
         list: []
@@ -3979,7 +4008,7 @@ const apis = [
         name: 'isAllCheckboxChecked()',
         desc: '用于 type=checkbox，判断列头复选框是否被选中',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '',
         list: []
@@ -3988,7 +4017,7 @@ const apis = [
         name: 'isAllCheckboxIndeterminate()',
         desc: '用于 type=checkbox，判断列头复选框是否被半选',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: '',
         list: []
@@ -3997,7 +4026,7 @@ const apis = [
         name: 'isCheckedByCheckboxRow(row)',
         desc: '用于 type=checkbox，判断复选行数据是否勾选',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -4006,7 +4035,7 @@ const apis = [
         name: 'isIndeterminateByCheckboxRow(row)',
         desc: '用于 type=checkbox，判断复选行数据是否半选',
         version: '4.0.18',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -4015,7 +4044,7 @@ const apis = [
         name: 'isCheckedByRadioRow(row)',
         desc: '用于 type=radio，判断单选行数据是否勾选',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -4024,7 +4053,7 @@ const apis = [
         name: 'isExpandByRow(row)',
         desc: '用于 expand-config，判断行是否为展开状态',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row',
         list: []
@@ -4033,7 +4062,7 @@ const apis = [
         name: 'isRowExpandLoaded(row)',
         desc: '用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row',
         list: []
@@ -4042,7 +4071,7 @@ const apis = [
         name: 'isTreeExpandByRow(row)',
         desc: '用于 tree-config，判断行是否为树形节点展开状态',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -4051,7 +4080,7 @@ const apis = [
         name: 'isTreeExpandLoaded(row)',
         desc: '用于 tree-config.lazy，用于懒加载树表格，判断树节点是否懒加载完成',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'row: Row',
         list: []
@@ -4060,7 +4089,7 @@ const apis = [
         name: 'isFilter(fieldOrColumn)',
         desc: '判断指定列是否为筛选状态，如果为空则判断所有列',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'fieldOrColumn?: string | ColumnInfo',
         list: []
@@ -4463,7 +4492,7 @@ const apis = [
             name: 'visible',
             desc: '是否重置可视列状态',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []
@@ -4472,7 +4501,7 @@ const apis = [
             name: 'resizable',
             desc: '是否重置列宽拖动状态',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -4591,7 +4620,7 @@ const apis = [
         name: 'isSort(fieldOrColumn)',
         desc: '判断指定列是否为排序状态，如果为空则判断所有列',
         version: '',
-        type: 'Boolean',
+        type: 'boolean',
         enum: '',
         defVal: 'fieldOrColumn?: string | ColumnInfo',
         list: []
@@ -4726,7 +4755,7 @@ const apis = [
             name: 'multiple',
             desc: '是否允许多选',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'false',
             list: []
@@ -4744,7 +4773,7 @@ const apis = [
             name: 'message',
             desc: '是否显示内置的消息提示',
             version: '',
-            type: 'Boolean',
+            type: 'boolean',
             enum: '',
             defVal: 'true',
             list: []

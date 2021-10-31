@@ -20,7 +20,6 @@ const GlobalConfig: VXETableGlobalConfig = {
     // resizeInterval: 500,
     // size: null,
     // zIndex: null,
-    // resizable: false,
     // autoResize: false,
     // stripe: false,
     // border: false,

@@ -32,7 +32,6 @@ import TableTooltip from '../views/table/base/Tooltip.vue'
 import TableStripe from '../views/table/base/Stripe.vue'
 import TableBorder from '../views/table/base/Border.vue'
 import TableRound from '../views/table/base/Round.vue'
-import TableCompact from '../views/table/base/Compact.vue'
 import TableStyle from '../views/table/base/Style.vue'
 import TableDynamicStyle from '../views/table/base/DynamicStyle.vue'
 import TableScrollStyle from '../views/table/base/ScrollStyle.vue'
@@ -176,6 +175,8 @@ import TableScrollRows from '../views/table/scroll/ScrollRows.vue'
 import TableScrollFullRows from '../views/table/scroll/ScrollFullRows.vue'
 import TableScrollCols from '../views/table/scroll/ScrollCols.vue'
 import TableScrollFullCols from '../views/table/scroll/ScrollFullCols.vue'
+import TableScrollTree from '../views/table/scroll/Tree.vue'
+import TableScrollLazyTree from '../views/table/scroll/LazyTree.vue'
 // import TableScrollHighlight from '../views/table/scroll/Highlight.vue'
 import TableScrollKeyboard from '../views/table/scroll/Keyboard.vue'
 import TableScrollMaxHeight from '../views/table/scroll/MaxHeight.vue'
@@ -1217,6 +1218,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/scroll/fullCols',
     name: 'TableScrollFullCols',
     component: TableScrollFullCols
+  },
+  {
+    path: '/table/scroll/tree',
+    name: 'TableScrollTree',
+    component: TableScrollTree
+  },
+  {
+    path: '/table/scroll/lazyTree',
+    name: 'TableScrollLazyTree',
+    component: TableScrollLazyTree
   },
   // {
   //   path: '/table/scroll/highlight',

@@ -198,7 +198,7 @@ export default defineComponent({
       return nextTick()
     }
 
-    const updateCache = () => {
+    const cacheItemMap = () => {
       const { fullOptionList, fullGroupList } = reactData
       const groupOptionsField = computeGroupOptionsField.value
       const key = getOptkey()
@@ -706,19 +706,19 @@ export default defineComponent({
         reactData.fullGroupList = []
         reactData.fullOptionList = value || []
       }
-      updateCache()
+      cacheItemMap()
     })
 
     watch(() => props.options, (value) => {
       reactData.fullGroupList = []
       reactData.fullOptionList = value || []
-      updateCache()
+      cacheItemMap()
     })
 
     watch(() => props.optionGroups, (value) => {
       reactData.fullOptionList = []
       reactData.fullGroupList = value || []
-      updateCache()
+      cacheItemMap()
     })
 
     onMounted(() => {
@@ -729,7 +729,7 @@ export default defineComponent({
         } else if (options) {
           reactData.fullOptionList = options
         }
-        updateCache()
+        cacheItemMap()
       })
       GlobalEvent.on($xeselect, 'mousewheel', handleGlobalMousewheelEvent)
       GlobalEvent.on($xeselect, 'mousedown', handleGlobalMousedownEvent)

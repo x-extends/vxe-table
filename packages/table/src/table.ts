@@ -261,6 +261,7 @@ export default defineComponent({
       treeExpandedReserveRowMap: {},
       // 完整数据、条件处理后
       tableFullData: [],
+      treeFullData: [],
       afterFullData: [],
       tableSynchData: [],
       tableSourceData: [],
@@ -1137,7 +1138,7 @@ export default defineComponent({
         if (rest) {
           rest._index = _index
         } else {
-          fullDataRowIdData[rowid] = { row, rowid, index: -1, $index: -1, _index, items: [], parent: null }
+          fullDataRowIdData[rowid] = { row, rowid, index: -1, $index: -1, _index, items: [], parent: null, level: 0 }
         }
       })
     }
@@ -1682,7 +1683,7 @@ export default defineComponent({
               childRecords = []
             }
             if (childRecords) {
-              tableMethods.loadChildren(row, childRecords).then(childRows => {
+              tableMethods.loadTreeChildren(row, childRecords).then(childRows => {
                 if (childRows.length && $xetable.findRowIndexOf(treeExpandeds, row) === -1) {
                   treeExpandeds.push(row)
                 }
@@ -1795,7 +1796,6 @@ export default defineComponent({
         nextTick(updateStyle)
       })
     }
-
     /**
      * 加载表格数据
      * @param {Array} datas 数据
@@ -1804,39 +1804,56 @@ export default defineComponent({
       const { keepSource, treeConfig } = props
       const { editStore, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
-      const sYOpts = computeSYOpts.value
       const treeOpts = computeTreeOpts.value
-      if (treeConfig && treeOpts.transform) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          if (!treeOpts.rowtKey) {
-            errLog('vxe.error.reqProp', ['table.tree-config.rowtKey'])
+      const { transform } = treeOpts
+      let treeData = []
+      let fullData = datas ? datas.slice(0) : []
+      if (treeConfig) {
+        if (transform) {
+          // 树结构自动转换
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (!treeOpts.rowtKey) {
+              errLog('vxe.error.reqProp', ['tree-config.rowtKey'])
+            }
+            if (!treeOpts.parentKey) {
+              errLog('vxe.error.reqProp', ['tree-config.parentKey'])
+            }
+            if (!treeOpts.children) {
+              errLog('vxe.error.reqProp', ['tree-config.children'])
+            }
+            fullData.forEach(row => {
+              if (row[treeOpts.children] && row[treeOpts.children].length) {
+                warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+              }
+            })
           }
-          if (!treeOpts.parentKey) {
-            errLog('vxe.error.reqProp', ['table.tree-config.parentKey'])
-          }
+          treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
+          fullData = treeData.slice(0)
+        } else {
+          treeData = fullData.slice(0)
         }
-        datas = XEUtils.toArrayTree(datas, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
       }
-      const tableFullData = datas ? datas.slice(0) : []
-      const scrollYLoad = !treeConfig && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
       scrollYStore.startIndex = 0
       scrollYStore.endIndex = 1
       scrollXStore.startIndex = 0
       scrollXStore.endIndex = 1
       editStore.insertList = []
       editStore.removeList = []
+      const sYLoad = updateScrollYStatus(fullData)
+      reactData.scrollYLoad = sYLoad
       // 全量数据
-      internalData.tableFullData = tableFullData
+      internalData.tableFullData = fullData
+      internalData.treeFullData = treeData
       // 缓存数据
-      tablePrivateMethods.updateCache(true)
+      tablePrivateMethods.cacheRowMap(true)
       // 原始数据
       internalData.tableSynchData = datas
+      // 克隆原数据，用于显示编辑状态，与编辑值做对比
       if (keepSource) {
-        internalData.tableSourceData = XEUtils.clone(tableFullData, true)
+        internalData.tableSourceData = XEUtils.clone(fullData, true)
       }
-      reactData.scrollYLoad = scrollYLoad
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (scrollYLoad) {
+        if (sYLoad) {
           if (!(props.height || props.maxHeight)) {
             errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
           }
@@ -1862,8 +1879,8 @@ export default defineComponent({
       }).then(() => {
         computeScrollLoad()
       }).then(() => {
-        // 是否加载了数据
-        if (scrollYLoad) {
+        // 是否启用了虚拟滚动
+        if (sYLoad) {
           scrollYStore.endIndex = scrollYStore.visibleSize
         }
         handleReserveStatus()
@@ -1873,7 +1890,7 @@ export default defineComponent({
             .then(() => tableMethods.recalculate())
             .then(() => {
               // 是否变更虚拟滚动
-              if (oldScrollYLoad === scrollYLoad) {
+              if (oldScrollYLoad === sYLoad) {
                 restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve)
               } else {
                 setTimeout(() => restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve))
@@ -2089,6 +2106,97 @@ export default defineComponent({
       })
     }
 
+    const updateScrollYStatus = (fullData: any[]) => {
+      const { treeConfig } = props
+      const sYOpts = computeSYOpts.value
+      const treeOpts = computeTreeOpts.value
+      const { transform } = treeOpts
+      const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < fullData.length
+      reactData.scrollYLoad = scrollYLoad
+      return scrollYLoad
+    }
+
+    const updateVirtualTreeData = () => {
+      const { scrollYLoad: oldScrollYLoad, treeExpandeds } = reactData
+      const { treeFullData } = internalData
+      const treeOpts = computeTreeOpts.value
+      const fullData: any[] = []
+      XEUtils.eachTree(treeFullData, (row, index, items, path, parent) => {
+        if (!parent || $xetable.findRowIndexOf(treeExpandeds, parent) > -1) {
+          fullData.push(row)
+        }
+      }, treeOpts)
+      const scrollYLoad = updateScrollYStatus(fullData)
+      internalData.tableFullData = scrollYLoad ? fullData : treeFullData
+      if (scrollYLoad || oldScrollYLoad !== scrollYLoad) {
+        return tablePrivateMethods.handleTableData(true).then(() => tableMethods.recalculate())
+      }
+      return nextTick()
+    }
+
+    /**
+     * 展开与收起树节点
+     * @param rows
+     * @param expanded
+     * @returns
+     */
+    const handleBaseTreeExpand = (rows: any[], expanded: boolean) => {
+      const { treeExpandeds, treeLazyLoadeds, treeNodeColumn } = reactData
+      const { fullAllDataRowIdData, tableFullData } = internalData
+      const treeOpts = computeTreeOpts.value
+      const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
+      const result: any[] = []
+      const columnIndex = tableMethods.getColumnIndex(treeNodeColumn)
+      const $columnIndex = tableMethods.getVMColumnIndex(treeNodeColumn)
+      let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xetable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
+      if (accordion) {
+        validRows = validRows.length ? [validRows[validRows.length - 1]] : []
+        // 同一级只能展开一个
+        const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], treeOpts)
+        if (matchObj) {
+          XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
+        }
+      }
+      if (expanded) {
+        validRows.forEach((row: any) => {
+          if ($xetable.findRowIndexOf(treeExpandeds, row) === -1) {
+            const rest = fullAllDataRowIdData[getRowid($xetable, row)]
+            const isLoad = lazy && row[hasChild] && !rest.treeLoaded && $xetable.findRowIndexOf(treeLazyLoadeds, row) === -1
+            // 是否使用懒加载
+            if (isLoad) {
+              result.push(handleAsyncTreeExpandChilds(row))
+            } else {
+              if (row[children] && row[children].length) {
+                treeExpandeds.push(row)
+              }
+            }
+          }
+        })
+      } else {
+        XEUtils.remove(treeExpandeds, row => $xetable.findRowIndexOf(validRows, row) > -1)
+      }
+      if (reserve) {
+        validRows.forEach((row: any) => handleTreeExpandReserve(row, expanded))
+      }
+      return Promise.all(result).then(() => {
+        return tableMethods.recalculate()
+      })
+    }
+
+    /**
+     * 虚拟树的展开与收起
+     * @param rows
+     * @param expanded
+     * @returns
+     */
+    const handleVirtualTreeExpand = (rows: any[], expanded: boolean) => {
+      return handleBaseTreeExpand(rows, expanded).then(() => {
+        return updateVirtualTreeData()
+      }).then(() => {
+        return tableMethods.recalculate()
+      })
+    }
+
     /**
      * 纵向 Y 可视渲染处理
      */
@@ -2209,7 +2317,7 @@ export default defineComponent({
                 tableSourceData[rowIndex] = record
                 XEUtils.clear(row, undefined)
                 Object.assign(row, tablePrivateMethods.defineField(Object.assign({}, record)))
-                tablePrivateMethods.updateCache(true)
+                tablePrivateMethods.cacheRowMap(true)
               } else {
                 XEUtils.destructuring(oRow, XEUtils.clone(row, true))
               }
@@ -2226,13 +2334,14 @@ export default defineComponent({
       /**
        * 用于树结构，给行数据加载子节点
        */
-      loadChildren (row, childRecords) {
+      loadTreeChildren (row, childRecords) {
+        const { keepSource } = props
+        const { tableSourceData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+        const treeOpts = computeTreeOpts.value
+        const { children } = treeOpts
+        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
+        const parentLevel = rest ? rest.level : 0
         return tableMethods.createData(childRecords).then((rows) => {
-          const { keepSource } = props
-          const { fullDataRowIdData, fullAllDataRowIdData } = internalData
-          const { tableSourceData } = internalData
-          const treeOpts = computeTreeOpts.value
-          const { children } = treeOpts
           if (keepSource) {
             const rowid = getRowid($xetable, row)
             const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid($xetable, item), treeOpts)
@@ -2240,9 +2349,9 @@ export default defineComponent({
               matchObj.item[children] = XEUtils.clone(rows, true)
             }
           }
-          XEUtils.eachTree(rows, (childRow, index, items, path, parent) => {
+          XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
             const rowid = getRowid($xetable, childRow)
-            const rest = { row: childRow, rowid, index: -1, _index: -1, $index: -1, items, parent }
+            const rest = { row: childRow, rowid, index: -1, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, treeOpts)
@@ -3277,10 +3386,10 @@ export default defineComponent({
         return nextTick()
       },
       /**
-       * 重新加载展开行的内容
+       * 重新懒加载展开行，并展开内容
        * @param {Row} row 行对象
        */
-      reloadExpandContent (row) {
+      lazyExpandContent (row) {
         const { expandLazyLoadeds } = reactData
         const expandOpts = computeExpandOpts.value
         const { lazy } = expandOpts
@@ -3289,6 +3398,16 @@ export default defineComponent({
             .then(() => handleAsyncRowExpand(row))
         }
         return nextTick()
+      },
+      /**
+       * @deprecated 已废弃，请使用 lazyExpandContent
+       */
+      reloadExpandContent (row) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          warnLog('vxe.error.delFunc', ['reloadExpandContent', 'lazyExpandContent'])
+        }
+        // 即将废弃
+        return tableMethods.lazyExpandContent(row)
       },
       /**
        * 切换展开行
@@ -3410,18 +3529,32 @@ export default defineComponent({
         return nextTick()
       },
       /**
-       * 重新加载树的子节点
+       * 重新懒加载树节点，并展开该节点
        * @param {Row} row 行对象
        */
-      reloadTreeChilds (row) {
+      lazyTreeChildren (row) {
         const { treeLazyLoadeds } = reactData
         const treeOpts = computeTreeOpts.value
-        const { lazy, hasChild } = treeOpts
+        const { transform, lazy, hasChild } = treeOpts
         if (lazy && row[hasChild] && $xetable.findRowIndexOf(treeLazyLoadeds, row) === -1) {
-          tableMethods.clearTreeExpandLoaded(row)
-            .then(() => handleAsyncTreeExpandChilds(row))
+          tableMethods.clearTreeExpandLoaded(row).then(() => {
+            return handleAsyncTreeExpandChilds(row)
+          }).then(() => {
+            if (transform) {
+              return updateVirtualTreeData()
+            }
+          }).then(() => {
+            return tableMethods.recalculate()
+          })
         }
         return nextTick()
+      },
+      reloadTreeChilds (row) {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'lazyTreeChildren'])
+        }
+        // 即将废弃
+        return tableMethods.lazyTreeChildren(row)
       },
       /**
        * 切换/展开树节点
@@ -3454,51 +3587,19 @@ export default defineComponent({
        * @param {Boolean} expanded 是否展开
        */
       setTreeExpand (rows, expanded) {
-        const { treeExpandeds, treeLazyLoadeds, treeNodeColumn } = reactData
-        const { fullAllDataRowIdData, tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
-        const result: any[] = []
-        const columnIndex = tableMethods.getColumnIndex(treeNodeColumn)
-        const $columnIndex = tableMethods.getVMColumnIndex(treeNodeColumn)
+        const { transform } = treeOpts
         if (rows) {
           if (!XEUtils.isArray(rows)) {
             rows = [rows]
           }
           if (rows.length) {
-            let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xetable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
-            if (accordion) {
-              validRows = validRows.length ? [validRows[validRows.length - 1]] : []
-              // 同一级只能展开一个
-              const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], treeOpts)
-              if (matchObj) {
-                XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
-              }
-            }
-            if (expanded) {
-              validRows.forEach((row: any) => {
-                if ($xetable.findRowIndexOf(treeExpandeds, row) === -1) {
-                  const rest = fullAllDataRowIdData[getRowid($xetable, row)]
-                  const isLoad = lazy && row[hasChild] && !rest.treeLoaded && $xetable.findRowIndexOf(treeLazyLoadeds, row) === -1
-                  // 是否使用懒加载
-                  if (isLoad) {
-                    result.push(handleAsyncTreeExpandChilds(row))
-                  } else {
-                    if (row[children] && row[children].length) {
-                      treeExpandeds.push(row)
-                    }
-                  }
-                }
-              })
+            // 如果为虚拟树
+            if (transform) {
+              return handleVirtualTreeExpand(rows, expanded)
             } else {
-              XEUtils.remove(treeExpandeds, row => $xetable.findRowIndexOf(validRows, row) > -1)
+              return handleBaseTreeExpand(rows, expanded)
             }
-            if (reserve) {
-              validRows.forEach((row: any) => handleTreeExpandReserve(row, expanded))
-            }
-            return Promise.all(result).then(() => {
-              return tableMethods.recalculate()
-            })
           }
         }
         return nextTick()
@@ -3516,15 +3617,15 @@ export default defineComponent({
        */
       clearTreeExpand () {
         const { treeExpandeds } = reactData
-        const { tableFullData } = internalData
+        const { treeFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const { reserve } = treeOpts
         const isExists = treeExpandeds.length
         reactData.treeExpandeds = []
         if (reserve) {
-          XEUtils.eachTree(tableFullData, row => handleTreeExpandReserve(row, false), treeOpts)
+          XEUtils.eachTree(treeFullData, row => handleTreeExpandReserve(row, false), treeOpts)
         }
-        return nextTick().then(() => {
+        return updateVirtualTreeData().then(() => {
           if (isExists) {
             tableMethods.recalculate()
           }
@@ -4351,13 +4452,13 @@ export default defineComponent({
        * 更新数据行的 Map
        * 牺牲数据组装的耗时，用来换取使用过程中的流畅
        */
-      updateCache (isSource) {
+      cacheRowMap (isSource) {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
-        let { fullDataRowIdData, fullAllDataRowIdData, tableFullData } = internalData
+        let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, treeFullData } = internalData
         const rowkey = getRowkey($xetable)
         const isLazy = treeConfig && treeOpts.lazy
-        const handleCache = (row: any, index: any, items: any, path?: any, parent?: any) => {
+        const handleCache = (row: any, index: any, items: any, path?: any, parent?: any, nodes?: any[]) => {
           let rowid = getRowid($xetable, row)
           if (eqEmptyValue(rowid)) {
             rowid = getRowUniqueId()
@@ -4366,7 +4467,7 @@ export default defineComponent({
           if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
             row[treeOpts.children] = null
           }
-          const rest = { row, rowid, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent }
+          const rest = { row, rowid, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level: nodes ? nodes.length - 1 : 0 }
           if (isSource) {
             fullDataRowIdData[rowid] = rest
           }
@@ -4377,7 +4478,7 @@ export default defineComponent({
         }
         fullAllDataRowIdData = internalData.fullAllDataRowIdData = {}
         if (treeConfig) {
-          XEUtils.eachTree(tableFullData, handleCache, treeOpts)
+          XEUtils.eachTree(treeFullData, handleCache, treeOpts)
         } else {
           tableFullData.forEach(handleCache)
         }

@@ -22,6 +22,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar } = $xetable.getRefMaps()
+    const { computeColumnOpts } = $xetable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
@@ -147,6 +148,7 @@ export default defineComponent({
       let { fixedType, fixedColumn, tableColumn } = props
       const { resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { isGroup, currentColumn, scrollYLoad, overflowX, scrollbarWidth } = tableReactData
+      const columnOpts = computeColumnOpts.value
       let headerGroups: VxeTableDefines.ColumnInfo[][] = headerColumn.value
       // 如果是使用优化模式
       if (!isGroup) {
@@ -258,7 +260,7 @@ export default defineComponent({
                 /**
                  * 列宽拖动
                  */
-                !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : resizable) ? h('div', {
+                !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || resizable)) ? h('div', {
                   class: ['vxe-resizable', {
                     'is--line': !border || border === 'none'
                   }],

@@ -129,7 +129,7 @@ export interface TablePublicMethods {
    * @param row 行对象
    * @param children 子节点
    */
-  loadChildren(row: any, children: any[]): Promise<any[]>;
+  loadTreeChildren(row: any, children: any[]): Promise<any[]>;
   /**
    * 加载列配置
    * @param columns 列对象
@@ -490,10 +490,14 @@ export interface TablePublicMethods {
    */
   clearRowExpandLoaded(row: any): Promise<any>;
   /**
-   * 用于懒加载展开行，重新加载展开行的内容
-   * @param rows 指定行
+   * 重新懒加载展开行，并展开内容
+   * @param row 指定行
    */
-  reloadExpandContent(rows: any | any[]): Promise<any>;
+  lazyExpandContent(row: any): Promise<any>;
+  /**
+   * @deprecated 已废弃，请使用 lazyExpandContent
+   */
+  reloadExpandContent(row: any): Promise<any>;
   /**
    * 用于 type=expand，切换展开行的状态
    * @param row 指定行
@@ -542,10 +546,14 @@ export interface TablePublicMethods {
    */
   clearTreeExpandLoaded(row: any): Promise<any>;
   /**
-   * 用于懒加载树表格，重新加载子节点
+   * 重新懒加载树节点，并展开该节点
    * @param rows 指定行
    */
-  reloadTreeChilds(rows: any | any[]): Promise<any>;
+  lazyTreeChildren(row: any): Promise<any>;
+  /**
+   * @deprecated 已废弃，请使用 lazyTreeChildren
+   */
+  reloadTreeChilds(row: any): Promise<any>;
   /**
    * 用于 tree-config，切换展开树形节点的状态
    * @param row 指定行
@@ -662,7 +670,7 @@ export interface TablePrivateMethods {
   getExcludeHeight(): number;
   defineField(record: any): any;
   handleTableData(force?: boolean): Promise<any>;
-  updateCache(isSource?: boolean): void;
+  cacheRowMap(isSource?: boolean): void;
   saveCustomResizable(isReset?: boolean): void;
   saveCustomVisible(): void;
   analyColumnWidth(): void;
@@ -948,6 +956,7 @@ export interface TableInternalData {
   afterFullData: any[];
   tableSynchData: any[];
   tableSourceData: any[];
+  treeFullData: any[];
   // 收集的列配置（带分组）
   collectColumn: VxeTableDefines.ColumnInfo[],
   // 完整所有列（不带分组）
@@ -964,6 +973,7 @@ export interface TableInternalData {
       _index: number;
       items: any[];
       parent: any;
+      level: number;
       treeLoaded?: boolean;
       expandLoaded?: boolean;
       formatData?: {
@@ -983,6 +993,7 @@ export interface TableInternalData {
       _index: number;
       items: any[];
       parent: any;
+      level: number;
     }
   };
   fullColumnIdData: {
@@ -1197,8 +1208,9 @@ export namespace VxeTablePropTypes {
    * 列配置信息
    */
   export interface ColumnConfig {
-    width?: number;
-    minWidth?: number;
+    resizable?: VxeColumnPropTypes.Resizable;
+    width?: VxeColumnPropTypes.Width;
+    minWidth?: VxeColumnPropTypes.MinWidth;
   }
   export interface ColumnOpts extends ColumnConfig { }
 

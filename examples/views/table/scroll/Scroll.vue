@@ -91,7 +91,7 @@ import XEUtils from 'xe-utils'
 export default defineComponent({
   setup () {
     const mockList1: any = []
-    for (let index = 0; index < 300; index++) {
+    for (let index = 0; index < 200; index++) {
       mockList1.push({
         name: 'Test' + index,
         role: 'Developer',
@@ -193,7 +193,7 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const mockList1: any = []
-            for (let index = 0; index < 300; index++) {
+            for (let index = 0; index < 200; index++) {
               mockList1.push({
                 name: 'Test' + index,
                 role: 'Developer',

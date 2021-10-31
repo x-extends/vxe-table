@@ -4,7 +4,6 @@
       树表格，通过配置 <table-api-link prop="tree-config"/> 和指定列 <table-column-api-link prop="tree-node"/> 属性来开启树表格，<br>
       设置 <table-api-link prop="transform"/> 开启自动将列表转成树结构<br>
       通过 <table-api-link prop="row-id"/> 指定主键，还可以通过 <table-api-link prop="trigger"/> 指定触发方式<br>
-      <span class="red">(注：树结构不支持大量数据，如果数据量超过 2000 条，请谨慎使用！)</span>
     </p>
 
     <vxe-toolbar>
@@ -93,9 +92,9 @@ export default defineComponent({
 
     const demo1 = reactive({
       tableData: [
-        { id: 1000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        { id: 1005, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
-        { id: 24300, parentId: 1005, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 10000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
         { id: 20045, parentId: 24300, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
         { id: 10053, parentId: 24300, name: 'vxe-table 从入门到放弃96', type: 'avi', size: null, date: '2021-04-01' },
         { id: 24330, parentId: 10053, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },

@@ -447,7 +447,7 @@ export default {
           checkboxConfig: '复选框配置项',
           tooltipConfig: 'tooltip 配置项',
           expandConfig: '展开行配置项（不支持虚拟滚动）',
-          treeConfig: '树形结构配置项（不支持虚拟滚动）',
+          treeConfig: '树形结构配置项',
           menuConfig: '快捷菜单配置项',
           contextMenu: '即将废弃，请使用 menu-config',
           clipConfig: '复制/粘贴配置项',

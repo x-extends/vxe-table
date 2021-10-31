@@ -1,19 +1,20 @@
 <template>
   <div>
     <p class="tip">
-      树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="lazyTreeChildren"/> 方法重新加载子节点
+      虚拟树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="lazyTreeChildren"/> 方法重新加载子节点
     </p>
 
     <vxe-table
       border
       resizable
       ref="xTree1"
+      height="400"
       row-id="id"
       :menu-config="demo1.tableMenu"
       :tree-config="demo1.treeConfig"
       :data="demo1.tableData"
       @menu-click="contextMenuClickEvent">
-      <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
+      <vxe-column field="id" title="Id" width="400" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
       <vxe-column field="date" title="Date"></vxe-column>
@@ -35,19 +36,27 @@ import { VxeTableInstance, VxeTablePropTypes, VxeTableEvents } from '../../../..
 export default defineComponent({
   setup () {
     const xTree1 = ref({} as VxeTableInstance)
+    let key = 1
 
     const demo1 = reactive({
       treeConfig: {
         lazy: true,
-        children: 'children',
+        transform: true,
+        rowKey: 'id',
+        parentKey: 'parentId',
         hasChild: 'hasChild',
         loadMethod ({ row }) {
           // 异步加载子节点
           return new Promise(resolve => {
             setTimeout(() => {
               const childs = [
-                { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
-                { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-09', hasChild: false },
+                { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-09', hasChild: true },
+                { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-08-05', hasChild: false },
+                { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-01', hasChild: false },
+                { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-01', hasChild: true },
+                { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-01', hasChild: false }
               ]
               resolve(childs)
             }, 500)
@@ -58,26 +67,10 @@ export default defineComponent({
         body: {
           options: [
             [
-              {
-                code: 'clearLoaded',
-                name: '清除加载状态',
-                disabled: false
-              },
-              {
-                code: 'reloadNodes',
-                name: '重新加载子节点',
-                disabled: false
-              },
-              {
-                code: 'expand',
-                name: '展开节点',
-                disabled: false
-              },
-              {
-                code: 'contract',
-                name: '收起节点',
-                disabled: false
-              }
+              { code: 'clearLoaded', name: '清除加载状态', disabled: false },
+              { code: 'reloadNodes', name: '重新加载子节点', disabled: false },
+              { code: 'expand', name: '展开节点', disabled: false },
+              { code: 'contract', name: '收起节点', disabled: false }
             ]
           ]
         },
@@ -102,10 +95,14 @@ export default defineComponent({
         }
       } as VxeTablePropTypes.MenuConfig,
       tableData: [
-        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-        { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: ++key, parentKey: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+        { id: ++key, parentKey: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-04' },
+        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-04-01' },
+        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-03' },
+        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-09' },
+        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-05-01' }
       ] as any[]
     })
 
@@ -137,12 +134,13 @@ export default defineComponent({
           border
           resizable
           ref="xTree1"
+          height="400"
           row-id="id"
           :menu-config="demo1.tableMenu"
           :tree-config="demo1.treeConfig"
           :data="demo1.tableData"
           @menu-click="contextMenuClickEvent">
-          <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
+          <vxe-column field="id" title="Id" width="400" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
           <vxe-column field="date" title="Date"></vxe-column>
@@ -155,19 +153,27 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const xTree1 = ref({} as VxeTableInstance)
+            let key = 1
 
             const demo1 = reactive({
               treeConfig: {
                 lazy: true,
-                children: 'children',
+                transform: true,
+                rowKey: 'id',
+                parentKey: 'parentId',
                 hasChild: 'hasChild',
                 loadMethod ({ row }) {
                   // 异步加载子节点
                   return new Promise(resolve => {
                     setTimeout(() => {
                       const childs = [
-                        { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
-                        { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                        { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                        { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-09', hasChild: false },
+                        { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-09', hasChild: true },
+                        { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-08-05', hasChild: false },
+                        { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-01', hasChild: false },
+                        { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-01', hasChild: true },
+                        { id: ++key, parentId: row.id, name: row.name + 'Test', type: 'mp3', size: null, date: '2021-07-01', hasChild: false }
                       ]
                       resolve(childs)
                     }, 500)
@@ -178,26 +184,10 @@ export default defineComponent({
                 body: {
                   options: [
                     [
-                      {
-                        code: 'clearLoaded',
-                        name: '清除加载状态',
-                        disabled: false
-                      },
-                      {
-                        code: 'reloadNodes',
-                        name: '重新加载子节点',
-                        disabled: false
-                      },
-                      {
-                        code: 'expand',
-                        name: '展开节点',
-                        disabled: false
-                      },
-                      {
-                        code: 'contract',
-                        name: '收起节点',
-                        disabled: false
-                      }
+                      { code: 'clearLoaded', name: '清除加载状态', disabled: false },
+                      { code: 'reloadNodes', name: '重新加载子节点', disabled: false },
+                      { code: 'expand', name: '展开节点', disabled: false },
+                      { code: 'contract', name: '收起节点', disabled: false }
                     ]
                   ]
                 },
@@ -222,10 +212,14 @@ export default defineComponent({
                 }
               } as VxeTablePropTypes.MenuConfig,
               tableData: [
-                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-                { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: ++key, parentKey: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+                { id: ++key, parentKey: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-04' },
+                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-04-01' },
+                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-03' },
+                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-09' },
+                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-05-01' }
               ] as any[]
             })
 
