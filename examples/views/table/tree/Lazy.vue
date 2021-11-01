@@ -20,8 +20,8 @@
       resizable
       ref="xTree"
       row-id="id"
-      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
-      :data="tableData">
+      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+      :data="tableData1">
       <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
@@ -64,11 +64,11 @@
 export default {
   data () {
     return {
-      tableData: [
-        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-        { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+      tableData1: [
+        { id: 10000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+        { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+        { id: 24555, parentId: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
       ],
       loading2: false,
       tableData2: [],
@@ -89,8 +89,8 @@ export default {
           resizable
           ref="xTree"
           row-id="id"
-          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
-          :data="tableData">
+          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+          :data="tableData1">
           <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
@@ -101,11 +101,11 @@ export default {
         export default {
           data () {
             return {
-              tableData: [
-                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-                { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+              tableData1: [
+                { id: 10000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+                { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+                { id: 24555, parentId: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
               ]
             }
           },
@@ -115,8 +115,8 @@ export default {
               return new Promise(resolve => {
                 setTimeout(() => {
                   const childs = [
-                    { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
-                    { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                    { id: row.id + 100000, parentId: row.id, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                    { id: row.id + 150000, parentId: row.id, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
                   ]
                   resolve(childs)
                 }, 500)
@@ -169,8 +169,8 @@ export default {
               return new Promise(resolve => {
                 setTimeout(() => {
                   const childs = [
-                    { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
-                    { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                    { id: row.id + 100000, parentId: row.id, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                    { id: row.id + 150000, parentId: row.id, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
                   ]
                   resolve(childs)
                 }, 500)
@@ -202,8 +202,8 @@ export default {
       return new Promise(resolve => {
         setTimeout(() => {
           const childs = [
-            { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
-            { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+            { id: row.id + 100000, parentId: row.id, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+            { id: row.id + 150000, parentId: row.id, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
           ]
           resolve(childs)
         }, 500)
