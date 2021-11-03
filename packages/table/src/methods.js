@@ -3487,7 +3487,7 @@ const Methods = {
    * 重新懒加载展开行，并展开内容
    * @param {Row} row 行对象
    */
-  lazyExpandContent (row) {
+  reloadRowExpand (row) {
     const { expandOpts, expandLazyLoadeds } = this
     const { lazy } = expandOpts
     if (lazy && expandLazyLoadeds.indexOf(row) === -1) {
@@ -3498,10 +3498,10 @@ const Methods = {
   },
   reloadExpandContent (row) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['reloadExpandContent', 'lazyExpandContent'])
+      UtilTools.warn('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
     }
     // 即将废弃
-    return this.lazyExpandContent(row)
+    return this.reloadRowExpand(row)
   },
   /**
    * 展开行事件
@@ -3686,7 +3686,7 @@ const Methods = {
    * 重新懒加载树节点，并展开该节点
    * @param {Row} row 行对象
    */
-  lazyTreeChildren (row) {
+  reloadTreeExpand (row) {
     const { treeOpts, treeLazyLoadeds } = this
     const { transform, lazy, hasChild } = treeOpts
     if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
@@ -3704,10 +3704,10 @@ const Methods = {
   },
   reloadTreeChilds (row) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['reloadTreeChilds', 'lazyTreeChildren'])
+      UtilTools.warn('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
     }
     // 即将废弃
-    return this.lazyTreeChildren(row)
+    return this.reloadTreeExpand(row)
   },
   /**
    * 展开树节点事件

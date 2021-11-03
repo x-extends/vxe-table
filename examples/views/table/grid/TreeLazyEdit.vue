@@ -214,7 +214,7 @@ export default {
                   $grid.clearTreeExpandLoaded(row)
                   break
                 case 'reloadNodes':
-                  $grid.lazyTreeChildren(row)
+                  $grid.reloadTreeExpand(row)
                   break
                 case 'expand':
                   $grid.setTreeExpand(row, true)
@@ -263,7 +263,7 @@ export default {
           $grid.clearTreeExpandLoaded(row)
           break
         case 'reloadNodes':
-          $grid.lazyTreeChildren(row)
+          $grid.reloadTreeExpand(row)
           break
         case 'expand':
           $grid.setTreeExpand(row, true)

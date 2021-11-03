@@ -634,7 +634,7 @@ export declare class Table extends VXETableComponent {
    * 用于懒加载展开行，重新加载展开行的内容
    * @param rows 指定行
    */
-  reloadExpandContent(rows: RowInfo | RowInfo[]): Promise<any>;
+  reloadRowExpand(rows: RowInfo | RowInfo[]): Promise<any>;
   /**
    * 用于 type=expand，切换展开行的状态
    * @param row 指定行
