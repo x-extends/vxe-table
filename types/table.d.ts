@@ -493,9 +493,9 @@ export interface TablePublicMethods {
    * 重新懒加载展开行，并展开内容
    * @param row 指定行
    */
-  lazyExpandContent(row: any): Promise<any>;
+  reloadRowExpand(row: any): Promise<any>;
   /**
-   * @deprecated 已废弃，请使用 lazyExpandContent
+   * @deprecated 已废弃，请使用 reloadRowExpand
    */
   reloadExpandContent(row: any): Promise<any>;
   /**
@@ -549,9 +549,9 @@ export interface TablePublicMethods {
    * 重新懒加载树节点，并展开该节点
    * @param rows 指定行
    */
-  lazyTreeChildren(row: any): Promise<any>;
+  reloadTreeExpand(row: any): Promise<any>;
   /**
-   * @deprecated 已废弃，请使用 lazyTreeChildren
+   * @deprecated 已废弃，请使用 reloadTreeExpand
    */
   reloadTreeChilds(row: any): Promise<any>;
   /**

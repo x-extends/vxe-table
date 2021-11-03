@@ -3389,7 +3389,7 @@ export default defineComponent({
        * 重新懒加载展开行，并展开内容
        * @param {Row} row 行对象
        */
-      lazyExpandContent (row) {
+      reloadRowExpand (row) {
         const { expandLazyLoadeds } = reactData
         const expandOpts = computeExpandOpts.value
         const { lazy } = expandOpts
@@ -3399,15 +3399,12 @@ export default defineComponent({
         }
         return nextTick()
       },
-      /**
-       * @deprecated 已废弃，请使用 lazyExpandContent
-       */
       reloadExpandContent (row) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['reloadExpandContent', 'lazyExpandContent'])
+          warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
         }
         // 即将废弃
-        return tableMethods.lazyExpandContent(row)
+        return tableMethods.reloadRowExpand(row)
       },
       /**
        * 切换展开行
@@ -3532,7 +3529,7 @@ export default defineComponent({
        * 重新懒加载树节点，并展开该节点
        * @param {Row} row 行对象
        */
-      lazyTreeChildren (row) {
+      reloadTreeExpand (row) {
         const { treeLazyLoadeds } = reactData
         const treeOpts = computeTreeOpts.value
         const { transform, lazy, hasChild } = treeOpts
@@ -3551,10 +3548,10 @@ export default defineComponent({
       },
       reloadTreeChilds (row) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'lazyTreeChildren'])
+          warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
         }
         // 即将废弃
-        return tableMethods.lazyTreeChildren(row)
+        return tableMethods.reloadTreeExpand(row)
       },
       /**
        * 切换/展开树节点

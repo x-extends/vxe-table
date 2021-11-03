@@ -3437,7 +3437,7 @@ const apis = [
         list: []
       },
       {
-        name: 'lazyExpandContent(row)',
+        name: 'reloadRowExpand(row)',
         desc: '重新懒加载展开行，并展开内容',
         version: '4.1.1',
         type: 'Promise<any>',
@@ -3446,7 +3446,7 @@ const apis = [
         list: []
       },
       {
-        name: 'reloadExpandContent(row)',
+        name: 'reloadRowExpand(row)',
         desc: '用于懒加载展开行，重新加载展开行的内容',
         version: '',
         type: 'Promise<any>',
@@ -3455,7 +3455,7 @@ const apis = [
         list: []
       },
       {
-        name: 'lazyTreeChildren(row)',
+        name: 'reloadTreeExpand(row)',
         desc: '重新懒加载树节点，并展开该节点',
         version: '4.1.1',
         type: 'Promise<any>',
@@ -3465,7 +3465,7 @@ const apis = [
       },
       {
         name: 'reloadTreeChilds(row)',
-        desc: '即将废弃，请使用 lazyTreeChildren',
+        desc: '即将废弃，请使用 reloadTreeExpand',
         disabled: true,
         version: '',
         type: 'Promise<any>',
