@@ -53,8 +53,8 @@ export default defineComponent({
     const demo1 = reactive({
       treeConfig: {
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId'
+        rowField: 'id',
+        parentField: 'parentId'
       } as VxeTablePropTypes.TreeConfig,
       tableMenu: {
         header: {
@@ -169,8 +169,8 @@ export default defineComponent({
             const demo1 = reactive({
               treeConfig: {
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId'
+                rowField: 'id',
+                parentField: 'parentId'
               } as VxeTablePropTypes.TreeConfig,
               tableMenu: {
                 header: {

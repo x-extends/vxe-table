@@ -1256,8 +1256,17 @@ const apis = [
             list: []
           },
           {
+            name: 'visibleMethod',
+            desc: '是否允许勾选的方法，该方法，的返回值用来决定这一行的 radio 是否显示',
+            version: '4.1.3',
+            type: '({ row }) => boolean',
+            enum: '',
+            defVal: '',
+            list: []
+          },
+          {
             name: 'checkMethod',
-            desc: '是否允许选中的方法，该方法，的返回值用来决定这一行的 Radio 是否可以选中',
+            desc: '是否允许选中的方法，该方法，的返回值用来决定这一行的 radio 是否可以选中',
             version: '',
             type: '({ row }) => boolean',
             enum: '',
@@ -1353,6 +1362,15 @@ const apis = [
             type: 'boolean',
             enum: '',
             defVal: 'true',
+            list: []
+          },
+          {
+            name: 'visibleMethod',
+            desc: '是否允许勾选的方法，该方法，的返回值用来决定这一行的 checkbox 是否显示',
+            version: '4.1.3',
+            type: '({ row }) => boolean',
+            enum: '',
+            defVal: '',
             list: []
           },
           {
@@ -1603,26 +1621,26 @@ const apis = [
         list: [
           {
             name: 'transform',
-            desc: '自动将列表转为树结构（需要有 rowKey 和 parentKey）',
-            version: '4.1.0',
+            desc: '自动将列表转为树结构（需要有 rowField 和 parentField）',
+            version: '4.1.3',
             type: 'string',
             enum: '',
             defVal: 'false',
             list: []
           },
           {
-            name: 'rowKey',
+            name: 'rowField',
             desc: '树节点的字段名',
-            version: '4.1.0',
+            version: '4.1.3',
             type: 'string',
             enum: '',
             defVal: 'id',
             list: []
           },
           {
-            name: 'parentKey',
+            name: 'parentField',
             desc: '树父节点的字段名',
-            version: '4.1.0',
+            version: '4.1.3',
             type: 'string',
             enum: '',
             defVal: 'parentId',
@@ -2808,15 +2826,15 @@ const apis = [
             enum: '',
             defVal: '0',
             list: []
-          },
-          {
-            name: 'rHeight',
-            desc: '当启用虚拟滚动后，该参数用于设置每一行的固定高度',
-            version: '4.0.27',
-            type: 'number',
-            enum: '',
-            defVal: '',
-            list: []
+          // },
+          // {
+          //   name: 'rHeight',
+          //   desc: '当启用虚拟滚动后，该参数用于设置每一行的固定高度',
+          //   version: '4.0.27',
+          //   type: 'number',
+          //   enum: '',
+          //   defVal: '',
+          //   list: []
           }
           // {
           //   name: 'adaptive',

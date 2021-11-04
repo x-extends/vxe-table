@@ -53,8 +53,8 @@ export default defineComponent({
       tableData: [] as any[],
       treeConfig: {
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId'
+        rowField: 'id',
+        parentField: 'parentId'
       }
     })
 
@@ -169,8 +169,8 @@ export default defineComponent({
               tableData: [],
               treeConfig: {
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId'
+                rowField: 'id',
+                parentField: 'parentId'
               }
             })
 

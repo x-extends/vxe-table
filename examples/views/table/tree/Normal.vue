@@ -17,7 +17,7 @@
       show-overflow
       ref="xTree1"
       :show-header="false"
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :radio-config="{labelField: 'name'}"
       :data="demo1.tableData">
       <vxe-column type="radio" tree-node></vxe-column>
@@ -240,7 +240,7 @@ export default defineComponent({
           show-overflow
           ref="xTree1"
           :show-header="false"
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :radio-config="{labelField: 'name'}"
           :data="demo1.tableData">
           <vxe-column type="radio" tree-node></vxe-column>

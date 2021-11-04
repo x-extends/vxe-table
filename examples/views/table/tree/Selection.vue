@@ -6,7 +6,7 @@
 
     <vxe-table
       resizable
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :data="demo1.tableData"
       :checkbox-config="{labelField: 'id', highlight: true}"
       @checkbox-change="selectChangeEvent">
@@ -172,7 +172,7 @@ export default defineComponent({
         `
         <vxe-table
           resizable
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :data="demo1.tableData"
           :checkbox-config="{labelField: 'id', highlight: true}"
           @checkbox-change="selectChangeEvent">

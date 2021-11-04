@@ -65,8 +65,8 @@ const GlobalConfig: VXETableGlobalConfig = {
       showIcon: true
     },
     treeConfig: {
-      rowtKey: 'id',
-      parentKey: 'parentId',
+      rowField: 'id',
+      parentField: 'parentId',
       children: 'children',
       hasChild: 'hasChild',
       indent: 20,

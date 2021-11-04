@@ -1321,6 +1321,9 @@ export namespace VxeTablePropTypes {
     checkMethod?(params: {
       row: any;
     }): boolean;
+    visibleMethod?(params: {
+      row: any;
+    }): boolean;
     trigger?: 'default' | 'cell' | 'row';
     highlight?: boolean;
     strict?: boolean;
@@ -1341,6 +1344,9 @@ export namespace VxeTablePropTypes {
     checkStrictly?: boolean;
     strict?: boolean;
     checkMethod?(params: {
+      row: any;
+    }): boolean;
+    visibleMethod?(params: {
       row: any;
     }): boolean;
     trigger?: 'default' | 'cell' | 'row';
@@ -1415,8 +1421,8 @@ export namespace VxeTablePropTypes {
    */
   export interface TreeConfig {
     transform?: boolean;
-    rowtKey?: string;
-    parentKey?: string;
+    rowField?: string;
+    parentField?: string;
     children?: string;
     indent?: number;
     line?: boolean;
@@ -1445,8 +1451,8 @@ export namespace VxeTablePropTypes {
     iconLoaded?: string;
   }
   export interface TreeOpts extends TreeConfig {
-    rowtKey: string;
-    parentKey: string;
+    rowField: string;
+    parentField: string;
     children: string;
     indent: number;
     hasChild: string;
@@ -1877,6 +1883,9 @@ export namespace VxeTablePropTypes {
     gt?: number;
     oSize?: number;
     enabled?: boolean;
+    /**
+     * @deprecated 请使用 row-config.height
+     */
     rHeight?: number;
     adaptive?: boolean;
   }

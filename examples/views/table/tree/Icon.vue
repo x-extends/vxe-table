@@ -117,8 +117,8 @@ export default defineComponent({
       ],
       tableTreeConfig: {
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId',
+        rowField: 'id',
+        parentField: 'parentId',
         iconOpen: 'fa fa-minus-square-o',
         iconClose: 'fa fa-plus-square-o'
       } as VxeTablePropTypes.TreeConfig
@@ -273,8 +273,8 @@ export default defineComponent({
               ],
               tableTreeConfig: {
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId',
+                rowField: 'id',
+                parentField: 'parentId',
                 iconOpen: 'fa fa-minus-square-o',
                 iconClose: 'fa fa-plus-square-o'
               } as VxeTablePropTypes.TreeConfig

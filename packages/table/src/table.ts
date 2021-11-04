@@ -1812,11 +1812,11 @@ export default defineComponent({
         if (transform) {
           // 树结构自动转换
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            if (!treeOpts.rowtKey) {
-              errLog('vxe.error.reqProp', ['tree-config.rowtKey'])
+            if (!treeOpts.rowField) {
+              errLog('vxe.error.reqProp', ['tree-config.rowField'])
             }
-            if (!treeOpts.parentKey) {
-              errLog('vxe.error.reqProp', ['tree-config.parentKey'])
+            if (!treeOpts.parentField) {
+              errLog('vxe.error.reqProp', ['tree-config.parentField'])
             }
             if (!treeOpts.children) {
               errLog('vxe.error.reqProp', ['tree-config.children'])
@@ -1827,7 +1827,7 @@ export default defineComponent({
               }
             })
           }
-          treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
+          treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowField, parentKey: treeOpts.parentField, children: treeOpts.children })
           fullData = treeData.slice(0)
         } else {
           treeData = fullData.slice(0)

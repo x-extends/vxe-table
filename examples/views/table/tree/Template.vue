@@ -78,8 +78,8 @@ export default defineComponent({
       ],
       tableTreeConfig: {
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId'
+        rowField: 'id',
+        parentField: 'parentId'
       } as VxeTablePropTypes.TreeConfig
     })
 
@@ -157,8 +157,8 @@ export default defineComponent({
               ],
               tableTreeConfig: {
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId'
+                rowField: 'id',
+                parentField: 'parentId'
               } as VxeTablePropTypes.TreeConfig
             })
 

@@ -42,8 +42,8 @@ export default defineComponent({
       treeConfig: {
         lazy: true,
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId',
+        rowField: 'id',
+        parentField: 'parentId',
         hasChild: 'hasChild',
         loadMethod ({ row }) {
           // 异步加载子节点
@@ -159,8 +159,8 @@ export default defineComponent({
               treeConfig: {
                 lazy: true,
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId',
+                rowField: 'id',
+                parentField: 'parentId',
                 hasChild: 'hasChild',
                 loadMethod ({ row }) {
                   // 异步加载子节点

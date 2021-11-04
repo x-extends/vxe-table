@@ -6,8 +6,8 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTree.toggleTreeExpand(demo1.tableData[0], true)">切换第一个</vxe-button>
-        <vxe-button @click="$refs.xTree.setTreeExpand(demo1.tableData[2], true)">展开第三个</vxe-button>
+        <vxe-button @click="$refs.xTree.toggleTreeExpand(demo1.tableData[1], true)">切换第二个</vxe-button>
+        <vxe-button @click="$refs.xTree.setTreeExpand(demo1.tableData[8], true)">展开第三个</vxe-button>
         <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
@@ -19,7 +19,7 @@
       show-overflow
       show-header-overflow
       ref="xTree"
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :checkbox-config="{labelField: 'id'}"
       :data="demo1.tableData">
       <vxe-column type="checkbox" title="ID" fixed="left" width="280" tree-node></vxe-column>
@@ -71,8 +71,8 @@ export default defineComponent({
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="$refs.xTree.toggleTreeExpand(demo1.tableData[0], true)">切换第一个</vxe-button>
-            <vxe-button @click="$refs.xTree.setTreeExpand(demo1.tableData[2], true)">展开第三个</vxe-button>
+            <vxe-button @click="$refs.xTree.toggleTreeExpand(demo1.tableData[1], true)">切换第二个</vxe-button>
+            <vxe-button @click="$refs.xTree.setTreeExpand(demo1.tableData[8], true)">展开第三个</vxe-button>
             <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
             <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
           </template>
@@ -84,7 +84,7 @@ export default defineComponent({
           show-overflow
           show-header-overflow
           ref="xTree"
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :checkbox-config="{labelField: 'id'}"
           :data="demo1.tableData">
           <vxe-column type="checkbox" title="ID" fixed="left" width="280" tree-node></vxe-column>
