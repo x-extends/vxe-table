@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增删改查、虛擬滾動、懶加載、快捷選單、數據校驗、樹形結構、列印匯出、表單渲染、數據分頁、虛擬清單、彈窗、自定義範本、渲染器、賊靈活的配寘項、擴展接口等…
+一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增删改查、虛擬清單、虛擬樹、懶加載、快捷選單、數據校驗、列印匯出、表單渲染、數據分頁、彈窗、自定義範本、渲染器、賊靈活的配寘項、擴展接口等…
 
 * 設計理念
   * 面向現代瀏覽器，高效的簡潔 API 設計
@@ -65,8 +65,8 @@
 * [x] 工具列
 * [x] 下拉容器
 * [x] 虛擬清單
+* [x] 虛擬樹
 * [x] 增删改查
-* [x] 樹表格
 * [x] 數據校驗
 * [x] 數據代理
 * [x] 鍵盤導航

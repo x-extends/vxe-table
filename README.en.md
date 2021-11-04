@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-A [vue](https://www.npmjs.com/package/vue) based PC form component, support add, delete, change, virtual scroll, lazy load, shortcut menu, data validation, tree structure, print export, form rendering, data paging, virtual list, modal window, custom template, renderer, flexible configuration items, extension interface, etc...
+A [vue](https://www.npmjs.com/package/vue) based PC form component, support add, delete, change, virtual list, virtual tree, lazy load, shortcut menu, data validation, print export, form rendering, data paging, modal window, custom template, renderer, flexible configuration items, extension interface, etc...
 
 * Design concept
   * Efficient and concise API design for modern browsers
@@ -60,9 +60,9 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
 * [x] Form
 * [x] Toolbar
 * [x] Pulldown
-* [x] List
+* [x] Virtual list
+* [x] Virtual tree
 * [x] Editable CRUD
-* [x] Tree table
 * [x] Validate
 * [x] Data Proxy
 * [x] Keyboard navigation
