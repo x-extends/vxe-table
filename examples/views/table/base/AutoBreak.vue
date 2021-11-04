@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">单元格超出指定宽度自动换行，通过设置 <table-api-link prop="scroll-x"/>="{enabled: false} 和 <table-api-link prop="scroll-y"/>="{enabled: false} 关闭虚拟滚动，则支持自动换行</p>
+    <p class="tip">单元格超出指定宽度自动换行，通过设置 <table-api-link prop="scroll-y"/>="{enabled: false} 关闭虚拟滚动，则支持自动换行</p>
 
     <vxe-table
       :data="tableData"

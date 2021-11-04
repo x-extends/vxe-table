@@ -16,7 +16,7 @@
       resizable
       ref="xTree"
       max-height="400"
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :data="tableData">
       <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -71,7 +71,7 @@ export default {
           resizable
           ref="xTree"
           max-height="400"
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :data="tableData">
           <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

@@ -10,7 +10,7 @@
       show-overflow
       highlight-hover-row
       row-key
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', line: true}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
       :data="tableData1">
       <vxe-column field="name" title="Name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -173,7 +173,7 @@ export default {
           show-overflow
           highlight-hover-row
           row-key
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', line: true}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
           :data="tableData1">
           <vxe-column field="name" title="Name" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

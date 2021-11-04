@@ -7,7 +7,7 @@
     <vxe-table
       highlight-current-row
       :data="tableData"
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :keyboard-config="{isArrow: true, isEnter: true}">
       <vxe-column field="name" title="Name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -62,7 +62,7 @@ export default {
         <vxe-table
           highlight-current-row
           :data="tableData"
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :keyboard-config="{isArrow: true, isEnter: true}">
           <vxe-column field="name" title="Name" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

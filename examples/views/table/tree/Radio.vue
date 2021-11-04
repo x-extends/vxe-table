@@ -6,7 +6,7 @@
 
     <vxe-table
       highlight-current-row
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :data="tableData1">
       <vxe-column field="name" title="Name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -126,7 +126,7 @@ export default {
         `
         <vxe-table
           highlight-current-row
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :data="tableData1">
           <vxe-column field="name" title="Name" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

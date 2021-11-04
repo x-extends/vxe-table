@@ -51,8 +51,8 @@ export default {
       removeList: [],
       treeConfig: {
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId'
+        rowField: 'id',
+        parentField: 'parentId'
       },
       demoCodes: [
         `
@@ -93,8 +93,8 @@ export default {
               removeList: [],
               treeConfig: {
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId'
+                rowField: 'id',
+                parentField: 'parentId'
               }
             }
           },

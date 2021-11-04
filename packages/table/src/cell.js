@@ -291,17 +291,18 @@ export const Cell = {
     const { $table, column, isHidden } = params
     const { radioOpts, selectRow } = $table
     const { slots } = column
-    const { labelField, checkMethod } = radioOpts
+    const { labelField, checkMethod, visibleMethod } = radioOpts
     const { row } = params
     const defaultSlot = slots ? slots.default : null
     const radioSlot = slots ? slots.radio : null
     const isChecked = row === selectRow
+    const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
       on = {
         click (evnt) {
-          if (!isDisabled) {
+          if (!isDisabled && isVisible) {
             $table.triggerRadioRowEvent(evnt, params)
           }
         }
@@ -310,26 +311,36 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
     }
-    const radioParams = { ...params, checked: isChecked, disabled: isDisabled }
-    return radioSlot ? $table.callSlot(radioSlot, radioParams, h) : [
-      h('span', {
-        class: ['vxe-cell--radio', {
-          'is--checked': isChecked,
-          'is--disabled': isDisabled
-        }],
-        on
-      }, [
+    const radioParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible }
+    if (radioSlot) {
+      return $table.callSlot(radioSlot, radioParams, h)
+    }
+    const radioVNs = []
+    if (isVisible) {
+      radioVNs.push(
         h('span', {
           class: 'vxe-radio--icon vxe-radio--checked-icon'
         }),
         h('span', {
           class: 'vxe-radio--icon vxe-radio--unchecked-icon'
         })
-      ].concat(defaultSlot || labelField ? [
+      )
+    }
+    if (defaultSlot || labelField) {
+      radioVNs.push(
         h('span', {
           class: 'vxe-radio--label'
         }, defaultSlot ? $table.callSlot(defaultSlot, radioParams, h) : XEUtils.get(row, labelField))
-      ] : []))
+      )
+    }
+    return [
+      h('span', {
+        class: ['vxe-cell--radio', {
+          'is--checked': isChecked,
+          'is--disabled': isDisabled
+        }],
+        on
+      }, radioVNs)
     ]
   },
   renderTreeRadioCell (h, params) {
@@ -401,19 +412,20 @@ export const Cell = {
   renderSelectionCell (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
-    const { labelField, checkMethod } = $table.checkboxOpts
+    const { labelField, checkMethod, visibleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
     let indeterminate = false
     let isChecked = false
+    const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
       isChecked = $table.selection.indexOf(row) > -1
       on = {
         click (evnt) {
-          if (!isDisabled) {
+          if (!isDisabled && isVisible) {
             $table.triggerCheckRowEvent(evnt, params, !isChecked)
           }
         }
@@ -425,16 +437,13 @@ export const Cell = {
         indeterminate = treeIndeterminates.indexOf(row) > -1
       }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, indeterminate }
-    return checkboxSlot ? $table.callSlot(checkboxSlot, checkboxParams, h) : [
-      h('span', {
-        class: ['vxe-cell--checkbox', {
-          'is--checked': isChecked,
-          'is--disabled': isDisabled,
-          'is--indeterminate': indeterminate
-        }],
-        on
-      }, [
+    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
+    if (checkboxSlot) {
+      return $table.callSlot(checkboxSlot, checkboxParams, h)
+    }
+    const checkVNs = []
+    if (isVisible) {
+      checkVNs.push(
         h('span', {
           class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
         }),
@@ -444,11 +453,24 @@ export const Cell = {
         h('span', {
           class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
         })
-      ].concat(defaultSlot || labelField ? [
+      )
+    }
+    if (defaultSlot || labelField) {
+      checkVNs.push(
         h('span', {
           class: 'vxe-checkbox--label'
         }, defaultSlot ? $table.callSlot(defaultSlot, checkboxParams, h) : XEUtils.get(row, labelField))
-      ] : []))
+      )
+    }
+    return [
+      h('span', {
+        class: ['vxe-cell--checkbox', {
+          'is--checked': isChecked,
+          'is--disabled': isDisabled,
+          'is--indeterminate': indeterminate
+        }],
+        on
+      }, checkVNs)
     ]
   },
   renderTreeSelectionCell (h, params) {
@@ -457,19 +479,20 @@ export const Cell = {
   renderSelectionCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
-    const { labelField, checkField: property, halfField, checkMethod } = $table.checkboxOpts
+    const { labelField, checkField: property, halfField, checkMethod, visibleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
     let indeterminate = false
     let isChecked = false
+    const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
       isChecked = XEUtils.get(row, property)
       on = {
         click (evnt) {
-          if (!isDisabled) {
+          if (!isDisabled && isVisible) {
             $table.triggerCheckRowEvent(evnt, params, !isChecked)
           }
         }
@@ -481,16 +504,13 @@ export const Cell = {
         indeterminate = treeIndeterminates.indexOf(row) > -1
       }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, indeterminate }
-    return checkboxSlot ? $table.callSlot(checkboxSlot, checkboxParams, h) : [
-      h('span', {
-        class: ['vxe-cell--checkbox', {
-          'is--checked': isChecked,
-          'is--disabled': isDisabled,
-          'is--indeterminate': halfField && !isChecked ? row[halfField] : indeterminate
-        }],
-        on
-      }, [
+    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
+    if (checkboxSlot) {
+      return $table.callSlot(checkboxSlot, checkboxParams, h)
+    }
+    const checkVNs = []
+    if (isVisible) {
+      checkVNs.push(
         h('span', {
           class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
         }),
@@ -500,11 +520,24 @@ export const Cell = {
         h('span', {
           class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
         })
-      ].concat(defaultSlot || labelField ? [
+      )
+    }
+    if (defaultSlot || labelField) {
+      checkVNs.push(
         h('span', {
           class: 'vxe-checkbox--label'
         }, defaultSlot ? $table.callSlot(defaultSlot, checkboxParams, h) : XEUtils.get(row, labelField))
-      ] : []))
+      )
+    }
+    return [
+      h('span', {
+        class: ['vxe-cell--checkbox', {
+          'is--checked': isChecked,
+          'is--disabled': isDisabled,
+          'is--indeterminate': halfField && !isChecked ? row[halfField] : indeterminate
+        }],
+        on
+      }, checkVNs)
     ]
   },
   renderTreeSelectionCellByProp (h, params) {

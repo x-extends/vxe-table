@@ -16,7 +16,7 @@
       border
       resizable
       ref="xTree1"
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData1">
       <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -181,7 +181,7 @@ export default {
           border
           resizable
           ref="xTree"
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData1">
           <vxe-column field="name" title="app.body.label.name"  tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

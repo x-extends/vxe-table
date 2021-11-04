@@ -53,7 +53,6 @@ import VXETablePluginRenderer from 'vxe-table-plugin-renderer'
 import 'vxe-table-plugin-element/dist/style.css'
 import 'vxe-table-plugin-iview/dist/style.css'
 import 'vxe-table-plugin-antd/dist/style.css'
-import 'vxe-table-plugin-virtual-tree/dist/style.css'
 import 'vxe-table-plugin-renderer/dist/style.css'
 
 import './renderer'

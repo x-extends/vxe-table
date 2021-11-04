@@ -69,8 +69,8 @@ export default {
       ],
       treeConfig: {
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId'
+        rowField: 'id',
+        parentField: 'parentId'
       },
       validRules: {
         name: [
@@ -135,8 +135,8 @@ export default {
               ],
               treeConfig: {
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId'
+                rowField: 'id',
+                parentField: 'parentId'
               },
               validRules: {
                 name: [

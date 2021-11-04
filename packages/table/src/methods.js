@@ -325,11 +325,11 @@ const Methods = {
       // 树结构自动转换
       if (treeOpts.transform) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          if (!treeOpts.rowtKey) {
-            UtilTools.error('vxe.error.reqProp', ['table.tree-config.rowtKey'])
+          if (!treeOpts.rowField) {
+            UtilTools.error('vxe.error.reqProp', ['table.tree-config.rowField'])
           }
-          if (!treeOpts.parentKey) {
-            UtilTools.error('vxe.error.reqProp', ['table.tree-config.parentKey'])
+          if (!treeOpts.parentField) {
+            UtilTools.error('vxe.error.reqProp', ['table.tree-config.parentField'])
           }
           if (!treeOpts.children) {
             UtilTools.error('vxe.error.reqProp', ['tree-config.children'])
@@ -340,7 +340,7 @@ const Methods = {
             }
           })
         }
-        treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowtKey, parentKey: treeOpts.parentKey, children: treeOpts.children })
+        treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowField, parentKey: treeOpts.parentField, children: treeOpts.children })
         fullData = treeData.slice(0)
       } else {
         treeData = fullData.slice(0)

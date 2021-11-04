@@ -33,14 +33,14 @@
     </pre>
 
     <p class="tip">
-      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性<br>
+      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="visibleMethod"/> 是否显示复选框<br>
     </p>
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
-        <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
-        <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
+        <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData2[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
+        <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData2[1])">切换第二行选中</vxe-button>
+        <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData2[2], tableData2[3]], true)">设置第三、四行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
         <vxe-button @click="$refs.xTable2.clearCheckboxRow()">清除所有行选中</vxe-button>
       </template>
@@ -49,8 +49,8 @@
     <vxe-table
       border
       ref="xTable2"
-      :data="tableData"
-      :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod2}">
+      :data="tableData2"
+      :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod2, visibleMethod: showCheckboxkMethod2}">
       <vxe-column type="checkbox" title="All"></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>
       <vxe-column field="age" title="Age"></vxe-column>
@@ -232,6 +232,15 @@ export default {
         { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
         { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
       ],
+      tableData2: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Women', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: 'Man', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Test', sex: 'Women', age: 38, address: 'Shenzhen' },
+        { id: 10007, name: 'Test7', role: 'Develop', sex: 'Women', age: 29, address: 'Shenzhen' }
+      ],
       tableData4: [
         { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃', checked: false },
         { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou', checked: false },
@@ -313,9 +322,9 @@ export default {
         `
         <vxe-toolbar>
           <template #buttons>
-            <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
-            <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData[1])">切换第二行选中</vxe-button>
-            <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData[2], tableData[3]], true)">设置第三、四行选中</vxe-button>
+            <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData2[0])">设置第一行选中（如果被禁用，不可选中）</vxe-button>
+            <vxe-button @click="$refs.xTable2.toggleCheckboxRow(tableData2[1])">切换第二行选中</vxe-button>
+            <vxe-button @click="$refs.xTable2.setCheckboxRow([tableData2[2], tableData2[3]], true)">设置第三、四行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.setAllCheckboxRow(true)">设置所有行选中</vxe-button>
             <vxe-button @click="$refs.xTable2.clearCheckboxRow()">清除所有行选中</vxe-button>
           </template>
@@ -324,8 +333,8 @@ export default {
         <vxe-table
           border
           ref="xTable2"
-          :data="tableData"
-          :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod2}">
+          :data="tableData2"
+          :checkbox-config="{labelField: 'name', checkMethod: checCheckboxkMethod2, visibleMethod: showCheckboxkMethod2}">
           <vxe-column type="checkbox" title="All"></vxe-column>
           <vxe-column field="sex" title="Sex"></vxe-column>
           <vxe-column field="age" title="Age"></vxe-column>
@@ -336,18 +345,23 @@ export default {
         export default {
           data () {
             return {
-              tableData: [
-                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+              tableData2: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: 'Women', age: 28, address: 'vxe-table 从入门到放弃' },
                 { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
                 { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
                 { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
-                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' }
+                { id: 10005, name: 'Test5', role: 'Develop', sex: 'Man', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Test', sex: 'Women', age: 38, address: 'Shenzhen' },
+                { id: 10007, name: 'Test7', role: 'Develop', sex: 'Women', age: 29, address: 'Shenzhen' }
               ]
             }
           },
           methods: {
             checCheckboxkMethod2 ({ row }) {
               return row.age > 26
+            },
+            showCheckboxkMethod2 ({ row }) {
+              return row.sex === 'Women'
             }
           }
         }
@@ -560,6 +574,9 @@ export default {
   methods: {
     checCheckboxkMethod2 ({ row }) {
       return row.age > 26
+    },
+    showCheckboxkMethod2 ({ row }) {
+      return row.sex === 'Women'
     },
     checCheckboxkMethod3 () {
       return false

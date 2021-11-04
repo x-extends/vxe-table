@@ -25,8 +25,8 @@ export default {
         rowId: 'id',
         treeConfig: {
           transform: true,
-          rowKey: 'id',
-          parentKey: 'parentId'
+          rowField: 'id',
+          parentField: 'parentId'
         },
         exportConfig: {},
         toolbarConfig: {
@@ -117,8 +117,8 @@ export default {
                 rowId: 'id',
                 treeConfig: {
                   transform: true,
-                  rowKey: 'id',
-                  parentKey: 'parentId'
+                  rowField: 'id',
+                  parentField: 'parentId'
                 },
                 exportConfig: {},
                 toolbarConfig: {

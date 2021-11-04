@@ -24,8 +24,8 @@ export default {
         treeConfig: {
           lazy: true,
           transform: true,
-          rowKey: 'id',
-          parentKey: 'parentId',
+          rowField: 'id',
+          parentField: 'parentId',
           hasChild: 'hasChild', // 设置是否有子节点标识
           loadMethod ({ row }) {
             // 模拟后台接口
@@ -82,8 +82,8 @@ export default {
                 treeConfig: {
                   lazy: true,
                   transform: true,
-                  rowKey: 'id',
-                  parentKey: 'parentId',
+                  rowField: 'id',
+                  parentField: 'parentId',
                   hasChild: 'hasChild', // 设置是否有子节点标识
                   loadMethod ({ row }) {
                     // 模拟后台接口

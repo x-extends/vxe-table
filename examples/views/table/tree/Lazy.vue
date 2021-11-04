@@ -20,7 +20,7 @@
       resizable
       ref="xTree"
       row-id="id"
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData1">
       <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -89,7 +89,7 @@ export default {
           resizable
           ref="xTree"
           row-id="id"
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData1">
           <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

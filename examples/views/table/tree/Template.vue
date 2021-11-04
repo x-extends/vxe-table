@@ -18,7 +18,7 @@
     <vxe-table
       border
       resizable
-      :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :data="tableData">
       <vxe-column field="name" title="app.body.label.name"></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -90,7 +90,7 @@ export default {
         <vxe-table
           border
           resizable
-          :tree-config="{transform: true, rowKey: 'id', parentKey: 'parentId'}"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :data="tableData">
           <vxe-column field="name" title="app.body.label.name"></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

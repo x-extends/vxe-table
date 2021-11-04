@@ -22,8 +22,8 @@ export default {
         resizable: true,
         treeConfig: {
           transform: true,
-          rowKey: 'id',
-          parentKey: 'parentId'
+          rowField: 'id',
+          parentField: 'parentId'
         },
         proxyConfig: {
           ajax: {
@@ -78,8 +78,8 @@ export default {
                 resizable: true,
                 treeConfig: {
                   transform: true,
-                  rowKey: 'id',
-                  parentKey: 'parentId'
+                  rowField: 'id',
+                  parentField: 'parentId'
                 },
                 proxyConfig: {
                   ajax: {

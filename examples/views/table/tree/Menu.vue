@@ -68,8 +68,8 @@ export default {
       ],
       treeConfig: {
         transform: true,
-        rowKey: 'id',
-        parentKey: 'parentId'
+        rowField: 'id',
+        parentField: 'parentId'
       },
       headerMenus: [
         [
@@ -130,8 +130,8 @@ export default {
               ],
               treeConfig: {
                 transform: true,
-                rowKey: 'id',
-                parentKey: 'parentId'
+                rowField: 'id',
+                parentField: 'parentId'
               },
               headerMenus: [
                 [

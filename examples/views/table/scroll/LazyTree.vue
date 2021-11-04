@@ -11,7 +11,7 @@
       ref="xTree"
       row-id="id"
       :menu-config="{body: {options: bodyMenus}, visibleMethod}"
-      :tree-config="{lazy: true, transform: true, rowKey: 'id', parentKey: 'parentId', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+      :tree-config="{lazy: true, transform: true, rowField: 'id', parentField: 'parentId', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData"
       @menu-click="contextMenuClickEvent">
       <vxe-column field="id" title="ID" width="400" tree-node></vxe-column>
@@ -61,7 +61,7 @@ export default {
           ref="xTree"
           row-id="id"
           :menu-config="{body: {options: bodyMenus}, visibleMethod}"
-          :tree-config="{lazy: true, transform: true, rowKey: 'id', parentKey: 'parentId', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+          :tree-config="{lazy: true, transform: true, rowField: 'id', parentField: 'parentId', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
           :data="tableData"
           @menu-click="contextMenuClickEvent">
           <vxe-column field="id" title="ID" width="400" tree-node></vxe-column>
