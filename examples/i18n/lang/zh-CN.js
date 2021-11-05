@@ -117,7 +117,7 @@ export default {
         groupSummary: '分组汇总',
         groupSummaryCount: '分组汇总合计',
         edit: '可编辑',
-        crudToolbar: '增删改查 + 工具栏',
+        crudToolbar: '增删改查',
         lazy: '懒加载',
         lazyMenu: '懒加载 + 快捷菜单',
         lazyEdit: '懒加载 + 可编辑',

@@ -2135,7 +2135,7 @@ const Methods = {
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
-        const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu } = this
+        const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu, rowOpts } = this
         const { selected, actived } = editStore
         const { keyCode } = evnt
         const isBack = keyCode === 8
@@ -2198,7 +2198,7 @@ const Methods = {
           this.keyCtxTimeout = setTimeout(() => {
             this._keyCtx = false
           }, 1000)
-        } else if (isEnter && !hasAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
+        } else if (isEnter && !hasAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
           // 退出选中
           if (hasCtrlKey) {
             // 如果是激活编辑状态，则取消编辑
@@ -2227,7 +2227,7 @@ const Methods = {
                   this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                 }
               }
-            } else if (treeConfig && highlightCurrentRow && currentRow) {
+            } else if (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
               // 如果是树形表格当前行回车移动到子节点
               const childrens = currentRow[treeOpts.children]
               if (childrens && childrens.length) {
@@ -2245,7 +2245,7 @@ const Methods = {
             // 如果按下了方向键
             if (selected.row && selected.column) {
               this.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-            } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
+            } else if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
               // 当前行按键上下移动
               this.moveCurrentRow(isUpArrow, isDwArrow, evnt)
             }
@@ -2257,7 +2257,7 @@ const Methods = {
           } else if (actived.row || actived.column) {
             this.moveTabSelected(actived.args, hasShiftKey, evnt)
           }
-        } else if (keyboardConfig && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
+        } else if (keyboardConfig && (isDel || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
           if (!isEditStatus) {
             const { delMethod, backMethod } = keyboardOpts
             // 如果是删除键
@@ -2289,7 +2289,7 @@ const Methods = {
                 // 如果按下 del 键，更新表尾数据
                 this.updateFooter()
               }
-            } else if (isBack && keyboardOpts.isArrow && treeConfig && highlightCurrentRow && currentRow) {
+            } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
               const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
               if (parentRow) {
@@ -3052,11 +3052,11 @@ const Methods = {
    * @param {Row} row 行对象
    */
   setCurrentRow (row) {
-    const { $el } = this
+    const { $el, rowOpts } = this
     this.clearCurrentRow()
     this.clearCurrentColumn()
     this.currentRow = row
-    if (this.highlightCurrentRow) {
+    if (rowOpts.isCurrent || this.highlightCurrentRow) {
       if ($el) {
         XEUtils.arrayEach($el.querySelectorAll(`[rowid="${getRowid(this, row)}"]`), elem => addClass(elem, 'row--current'))
       }
@@ -3102,7 +3102,7 @@ const Methods = {
    * 用于当前行，获取当前行的数据
    */
   getCurrentRecord () {
-    return this.highlightCurrentRow ? this.currentRow : null
+    return this.rowOpts.isCurrent || this.highlightCurrentRow ? this.currentRow : null
   },
   /**
    * 用于单选行，获取当已选中的数据
@@ -3164,7 +3164,7 @@ const Methods = {
       this.triggerSortEvent(evnt, column, getNextSortOrder(this, column))
     }
     this.emitEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
-    if (this.highlightCurrentColumn) {
+    if (this.columnOpts.isCurrent || this.highlightCurrentColumn) {
       return this.setCurrentColumn(column)
     }
     return this.$nextTick()
@@ -3173,7 +3173,7 @@ const Methods = {
     this.emitEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
   },
   getCurrentColumn () {
-    return this.highlightCurrentColumn ? this.currentColumn : null
+    return this.columnOpts.isCurrent || this.highlightCurrentColumn ? this.currentColumn : null
   },
   /**
    * 用于当前列，设置某列行为高亮状态
@@ -3220,7 +3220,7 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt, params) {
-    const { highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts } = this
+    const { highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts, rowOpts } = this
     const { actived } = editStore
     const { row, column } = params
     const { type, treeNode } = column
@@ -3247,7 +3247,7 @@ const Methods = {
     if (!triggerTreeNode) {
       if (!triggerExpandNode) {
         // 如果是高亮行
-        if (highlightCurrentRow) {
+        if (rowOpts.isCurrent || highlightCurrentRow) {
           if (!triggerCheckbox && !triggerRadio) {
             this.triggerCurrentRowEvent(evnt, params)
           }

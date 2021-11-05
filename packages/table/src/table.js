@@ -976,7 +976,9 @@ export default {
       ctxMenuStore,
       ctxMenuOpts,
       footerTableData,
-      hasTip
+      hasTip,
+      columnOpts,
+      rowOpts
     } = this
     const { leftList, rightList } = columnStore
     return h('div', {
@@ -985,8 +987,8 @@ export default {
         'cell--highlight': highlightCell,
         'cell--selected': mouseConfig && mouseOpts.selected,
         'cell--area': mouseConfig && mouseOpts.area,
-        'row--highlight': highlightHoverRow,
-        'column--highlight': highlightHoverColumn,
+        'row--highlight': rowOpts.isHover || highlightHoverRow,
+        'column--highlight': columnOpts.isHover || highlightHoverColumn,
         'is--header': showHeader,
         'is--footer': showFooter,
         'is--group': isGroup,

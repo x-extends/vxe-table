@@ -141,7 +141,7 @@ function renderColumn (h, _vm, $xetable, $seq, seq, rowid, fixedType, rowLevel, 
     }
   }
   // 点击事件处理
-  if (highlightCurrentRow ||
+  if ((rowOpts.isCurrent || highlightCurrentRow) ||
     tableListeners['cell-click'] ||
     (editRender && editConfig) ||
     (expandOpts.trigger === 'row' || (expandOpts.trigger === 'cell')) ||
@@ -287,7 +287,8 @@ function renderRows (h, _vm, $xetable, $seq, fixedType, tableData, tableColumn) 
     checkboxOpts,
     expandColumn,
     hasFixedColumn,
-    fullAllDataRowIdData
+    fullAllDataRowIdData,
+    rowOpts
   } = $xetable
   const rows = []
   tableData.forEach((row, $rowIndex) => {
@@ -301,7 +302,7 @@ function renderRows (h, _vm, $xetable, $seq, fixedType, tableData, tableColumn) 
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
     rowIndex = $xetable.getRowIndex(row)
     // 事件绑定
-    if (highlightHoverRow) {
+    if (rowOpts.isHover || highlightHoverRow) {
       trOn.mouseenter = evnt => {
         if (isOperateMouse($xetable)) {
           return
@@ -579,7 +580,7 @@ export default {
      */
     scrollEvent (evnt) {
       const { $el: scrollBodyElem, $parent: $xetable, fixedType } = this
-      const { $refs, elemStore, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
+      const { $refs, elemStore, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft, rowOpts } = $xetable
       const { tableHeader, tableBody, leftBody, rightBody, tableFooter, validTip } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
@@ -597,7 +598,7 @@ export default {
       $xetable.lastScrollTop = scrollTop
       $xetable.lastScrollLeft = scrollLeft
       $xetable.lastScrollTime = Date.now()
-      if (highlightHoverRow) {
+      if (rowOpts.isHover || highlightHoverRow) {
         $xetable.clearHoverRow()
       }
       if (leftElem && fixedType === 'left') {
@@ -683,7 +684,7 @@ export default {
     wheelEvent (evnt) {
       const { deltaY, deltaX } = evnt
       const { $el: scrollBodyElem, $parent: $xetable } = this
-      const { $refs, highlightHoverRow, scrollYLoad, lastScrollTop, lastScrollLeft } = $xetable
+      const { $refs, highlightHoverRow, scrollYLoad, lastScrollTop, lastScrollLeft, rowOpts } = $xetable
       const { tableBody } = $refs
       const bodyElem = tableBody.$el
 
@@ -706,7 +707,7 @@ export default {
         $xetable.lastScrollTop = scrollTop
         $xetable.lastScrollLeft = scrollLeft
         $xetable.lastScrollTime = Date.now()
-        if (highlightHoverRow) {
+        if (rowOpts.isHover || highlightHoverRow) {
           $xetable.clearHoverRow()
         }
         this.handleWheel(evnt, isTopWheel, deltaTop, isRollX, isRollY)

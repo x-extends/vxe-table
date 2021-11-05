@@ -121,7 +121,7 @@ export default {
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true
             }
-            if (highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
+            if (columnOpts.isCurrent || highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
               thOns.click = evnt => $xetable.triggerHeaderCellClickEvent(evnt, params)
             }
             if (tableListeners['header-cell-dblclick']) {

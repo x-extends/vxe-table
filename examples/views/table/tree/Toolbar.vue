@@ -1,14 +1,13 @@
 <template>
   <div>
-    <p class="tip">
-      增删改查、工具栏<br>
-      <span class="red">（注：内置的 CRUD 管理器是不支持插入子节点的，如果要往子节点插入或删除节点数据，可以直接操作数据源）</span>
-    </p>
+    <p class="tip">树形结构，增删改查</p>
 
     <vxe-toolbar :refresh="{query: reload}" export print custom>
       <template #buttons>
-        <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
-        <vxe-button @click="saveEvent">保存</vxe-button>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+        <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -16,12 +15,12 @@
       resizable
       show-overflow
       keep-source
-      ref="xTree"
+      ref="xTable"
       row-id="id"
       :print-config="{}"
       :export-config="{}"
       :loading="loading"
-      :tree-config="treeConfig"
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -29,6 +28,12 @@
       <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+      <vxe-column title="操作">
+        <template #default="{ row }">
+          <vxe-button type="text" status="primary" @click="insertRow(row)">新增子节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -48,18 +53,14 @@ export default {
     return {
       loading: false,
       tableData: [],
-      removeList: [],
-      treeConfig: {
-        transform: true,
-        rowField: 'id',
-        parentField: 'parentId'
-      },
       demoCodes: [
         `
         <vxe-toolbar :refresh="{query: reload}" export print custom>
           <template #buttons>
-            <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
-            <vxe-button @click="saveEvent">保存</vxe-button>
+            <vxe-button @click="insertEvent">新增</vxe-button>
+            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+            <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -67,12 +68,12 @@ export default {
           resizable
           show-overflow
           keep-source
-          ref="xTree"
+          ref="xTable"
           row-id="id"
           :print-config="{}"
           :export-config="{}"
           :loading="loading"
-          :tree-config="treeConfig"
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData">
           <vxe-column type="checkbox" width="60"></vxe-column>
@@ -80,6 +81,12 @@ export default {
           <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+          <vxe-column title="操作">
+            <template #default="{ row }">
+              <vxe-button type="text" status="primary" @click="insertRow(row)">新增子节点</vxe-button>
+              <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -89,13 +96,7 @@ export default {
           data () {
             return {
               loading: false,
-              ttableData: [],
-              removeList: [],
-              treeConfig: {
-                transform: true,
-                rowField: 'id',
-                parentField: 'parentId'
-              }
+              tableData: []
             }
           },
           created () {
@@ -127,26 +128,54 @@ export default {
                     { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
                   ]
                   this.loading = false
-                  resolve(this.tableData)
+                  resolve()
                 }, 300)
               })
             },
             insertEvent () {
-              const xTree = this.$refs.xTree
+              const $table = this.$refs.xTable
               const newRow = {
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
-              xTree.insert(newRow).then(({ row }) => xTree.setActiveRow(row))
+              $table.insert(newRow).then(({ row }) => $table.setActiveRow(row))
+            },
+            async insertRow (row) {
+              const $table = this.$refs.xTable
+              const record = {
+                name: '新数据',
+                id: Date.now(),
+                parentId: row.id, // 指定父节点，自动插入该节点中
+                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+              }
+              const { row: newRow } = await $table.insert(record)
+              await $table.setTreeExpand(row, true) // 将父节点展开
+              await $table.setActiveRow(newRow) // 插入子节点
+            },
+            async removeRow (row) {
+              const $table = this.$refs.xTable
+              await $table.remove(row)
             },
             reload () {
+              const $table = this.$refs.xTable
               // 清除所有状态
-              this.$refs.xTree.clearAll()
+              $table.clearAll()
               return this.findList()
             },
-            saveEvent () {
-              const { insertRecords, updateRecords } = this.$refs.xTree.getRecordset()
-              this.$XModal.alert(\`insertRecords=\${insertRecords.length} updateRecords=\${updateRecords.length}\`)
+            getInsertEvent () {
+              const $table = this.$refs.xTable
+              const insertRecords = $table.getInsertRecords()
+              this.$XModal.alert(insertRecords.length)
+            },
+            getRemoveEvent () {
+              const $table = this.$refs.xTable
+              const removeRecords = $table.getRemoveRecords()
+              this.$XModal.alert(removeRecords.length)
+            },
+            getUpdateEvent () {
+              const $table = this.$refs.xTable
+              const updateRecords = $table.getUpdateRecords()
+              this.$XModal.alert(updateRecords.length)
             }
           }
         }
@@ -183,26 +212,54 @@ export default {
             { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
           ]
           this.loading = false
-          resolve(this.tableData)
+          resolve()
         }, 300)
       })
     },
     insertEvent () {
-      const xTree = this.$refs.xTree
+      const $table = this.$refs.xTable
       const newRow = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
-      xTree.insert(newRow).then(({ row }) => xTree.setActiveRow(row))
+      $table.insert(newRow).then(({ row }) => $table.setActiveRow(row))
+    },
+    async insertRow (row) {
+      const $table = this.$refs.xTable
+      const record = {
+        name: '新数据',
+        id: Date.now(),
+        parentId: row.id, // 指定父节点，自动插入该节点中
+        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+      }
+      const { row: newRow } = await $table.insert(record)
+      await $table.setTreeExpand(row, true) // 将父节点展开
+      await $table.setActiveRow(newRow) // 插入子节点
+    },
+    async removeRow (row) {
+      const $table = this.$refs.xTable
+      await $table.remove(row)
     },
     reload () {
+      const $table = this.$refs.xTable
       // 清除所有状态
-      this.$refs.xTree.clearAll()
+      $table.clearAll()
       return this.findList()
     },
-    saveEvent () {
-      const { insertRecords, updateRecords } = this.$refs.xTree.getRecordset()
-      this.$XModal.alert(`insertRecords=${insertRecords.length} updateRecords=${updateRecords.length}`)
+    getInsertEvent () {
+      const $table = this.$refs.xTable
+      const insertRecords = $table.getInsertRecords()
+      this.$XModal.alert(insertRecords.length)
+    },
+    getRemoveEvent () {
+      const $table = this.$refs.xTable
+      const removeRecords = $table.getRemoveRecords()
+      this.$XModal.alert(removeRecords.length)
+    },
+    getUpdateEvent () {
+      const $table = this.$refs.xTable
+      const updateRecords = $table.getUpdateRecords()
+      this.$XModal.alert(updateRecords.length)
     }
   }
 }

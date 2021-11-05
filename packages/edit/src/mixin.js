@@ -3,6 +3,8 @@ import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { browse } from '../../tools/src/dom'
 
+const { getRowid } = UtilTools
+
 export default {
   methods: {
     /**
@@ -22,21 +24,51 @@ export default {
      * @param {Row} row 指定行
      */
     _insertAt (records, row) {
-      const { mergeList, afterFullData, editStore, sYOpts, scrollYLoad, tableFullData, treeConfig } = this
+      const { treeFullData, mergeList, afterFullData, editStore, sYOpts, scrollYLoad, tableFullData, treeConfig, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = this
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
       const newRecords = records.map(record => this.defineField(Object.assign({}, record)))
       if (!row) {
-        afterFullData.unshift(...newRecords)
-        tableFullData.unshift(...newRecords)
-        // 刷新单元格合并
-        mergeList.forEach(mergeItem => {
-          const { row: mergeRowIndex } = mergeItem
-          if (mergeRowIndex > 0) {
-            mergeItem.row = mergeRowIndex + newRecords.length
-          }
-        })
+        // 如果为虚拟树
+        if (treeConfig && treeOpts.transform) {
+          newRecords.forEach(item => {
+            const parentRowId = item[treeOpts.parentField]
+            const rowid = getRowid(this, item)
+            if (parentRowId) {
+              const matchObj = XEUtils.findTree(treeFullData, item => parentRowId === item[treeOpts.rowField], treeOpts)
+              if (matchObj) {
+                const { item: parentRow } = matchObj
+                const parentRest = fullAllDataRowIdData[getRowid(this, parentRow)]
+                const parentLevel = parentRest ? parentRest.level : 0
+                let parentChilds = parentRow[treeOpts.children]
+                if (!XEUtils.isArray(parentChilds)) {
+                  parentChilds = parentRow[treeOpts.children] = []
+                }
+                parentChilds.push(item)
+                const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
+                fullDataRowIdData[rowid] = rest
+                fullAllDataRowIdData[rowid] = rest
+              } else {
+                // 父节点不存在
+              }
+            } else {
+              afterFullData.unshift(item)
+              treeFullData.unshift(item)
+            }
+          })
+          this.updateVirtualTreeData()
+        } else {
+          afterFullData.unshift(...newRecords)
+          tableFullData.unshift(...newRecords)
+          // 刷新单元格合并
+          mergeList.forEach(mergeItem => {
+            const { row: mergeRowIndex } = mergeItem
+            if (mergeRowIndex > 0) {
+              mergeItem.row = mergeRowIndex + newRecords.length
+            }
+          })
+        }
       } else {
         if (row === -1) {
           afterFullData.push(...newRecords)
@@ -95,7 +127,7 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      const { afterFullData, tableFullData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, sYOpts, scrollYLoad } = this
+      const { afterFullData, tableFullData, treeFullData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, sYOpts, scrollYLoad, treeOpts } = this
       const { actived, removeList, insertList } = editStore
       const { checkField: property } = checkboxOpts
       let rest = []
@@ -126,26 +158,43 @@ export default {
         this.afterFullData = []
         this.clearMergeCells()
       } else {
-        rows.forEach(row => {
-          const tfIndex = tableFullData.indexOf(row)
-          if (tfIndex > -1) {
-            const rItems = tableFullData.splice(tfIndex, 1)
-            rest.push(rItems[0])
-          }
-          const afIndex = afterFullData.indexOf(row)
-          if (afIndex > -1) {
-            // 刷新单元格合并
-            mergeList.forEach(mergeItem => {
-              const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-              if (mergeRowIndex > afIndex) {
-                mergeItem.row = mergeRowIndex - 1
-              } else if (mergeRowIndex + mergeRowspan > afIndex) {
-                mergeItem.rowspan = mergeRowspan - 1
-              }
-            })
-            afterFullData.splice(afIndex, 1)
-          }
-        })
+        // 如果为虚拟树
+        if (treeConfig && treeOpts.transform) {
+          rows.forEach((row) => {
+            const rowid = getRowid(this, row)
+            const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid(this, item), treeOpts)
+            if (matchObj) {
+              const rItems = matchObj.items.splice(matchObj.index, 1)
+              rest.push(rItems[0])
+            }
+            const afIndex = afterFullData.indexOf(row)
+            if (afIndex > -1) {
+              afterFullData.splice(afIndex, 1)
+            }
+            this.updateVirtualTreeData()
+          })
+        } else {
+          rows.forEach(row => {
+            const tfIndex = tableFullData.indexOf(row)
+            if (tfIndex > -1) {
+              const rItems = tableFullData.splice(tfIndex, 1)
+              rest.push(rItems[0])
+            }
+            const afIndex = afterFullData.indexOf(row)
+            if (afIndex > -1) {
+              // 刷新单元格合并
+              mergeList.forEach(mergeItem => {
+                const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+                if (mergeRowIndex > afIndex) {
+                  mergeItem.row = mergeRowIndex - 1
+                } else if (mergeRowIndex + mergeRowspan > afIndex) {
+                  mergeItem.rowspan = mergeRowspan - 1
+                }
+              })
+              afterFullData.splice(afIndex, 1)
+            }
+          })
+        }
       }
       // 如果当前行被激活编辑，则清除激活状态
       if (actived.row && rows.indexOf(actived.row) > -1) {
@@ -216,14 +265,26 @@ export default {
      * 获取新增的临时数据
      */
     _getInsertRecords () {
+      const { treeConfig, treeFullData, tableFullData, treeOpts } = this
       const insertList = this.editStore.insertList
       const insertRecords = []
       if (insertList.length) {
-        this.tableFullData.forEach(row => {
-          if (insertList.indexOf(row) > -1) {
-            insertRecords.push(row)
-          }
-        })
+        // 如果为虚拟树
+        if (treeConfig && treeOpts.transform) {
+          insertList.forEach(row => {
+            const rowid = getRowid(this, row)
+            const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid(this, item), treeOpts)
+            if (matchObj) {
+              insertRecords.push(row)
+            }
+          })
+        } else {
+          insertList.forEach(row => {
+            if (tableFullData.indexOf(row) > -1) {
+              insertRecords.push(row)
+            }
+          })
+        }
       }
       return insertRecords
     },
