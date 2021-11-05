@@ -299,6 +299,7 @@ export default defineComponent({
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
       const editOpts = computeEditOpts.value
+      const rowOpts = computeRowOpts.value
       const rows: any[] = []
       tableData.forEach((row: any, $rowIndex: any) => {
         const trOn: any = {}
@@ -311,7 +312,7 @@ export default defineComponent({
         // 确保任何情况下 rowIndex 都精准指向真实 data 索引
         rowIndex = $xetable.getRowIndex(row)
         // 事件绑定
-        if (highlightHoverRow) {
+        if (rowOpts.isHover || highlightHoverRow) {
           trOn.onMouseenter = (evnt: any) => {
             if (isOperateMouse()) {
               return
@@ -428,6 +429,7 @@ export default defineComponent({
       const { highlightHoverRow } = tableProps
       const { scrollXLoad, scrollYLoad } = tableReactData
       const { elemStore, lastScrollTop, lastScrollLeft } = tableInternalData
+      const rowOpts = computeRowOpts.value
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableFooter = refTableFooter.value
@@ -451,7 +453,7 @@ export default defineComponent({
       tableInternalData.lastScrollTop = scrollTop
       tableInternalData.lastScrollLeft = scrollLeft
       tableInternalData.lastScrollTime = Date.now()
-      if (highlightHoverRow) {
+      if (rowOpts.isHover || highlightHoverRow) {
         $xetable.clearHoverRow()
       }
       if (leftElem && fixedType === 'left') {
@@ -546,6 +548,7 @@ export default defineComponent({
       const { highlightHoverRow } = tableProps
       const { scrollYLoad } = tableReactData
       const { lastScrollTop, lastScrollLeft } = tableInternalData
+      const rowOpts = computeRowOpts.value
       const tableBody = refTableBody.value
       const scrollBodyElem = refElem.value
       const bodyElem = tableBody.$el as HTMLDivElement
@@ -569,7 +572,7 @@ export default defineComponent({
         tableInternalData.lastScrollTop = scrollTop
         tableInternalData.lastScrollLeft = scrollLeft
         tableInternalData.lastScrollTime = Date.now()
-        if (highlightHoverRow) {
+        if (rowOpts.isHover || highlightHoverRow) {
           $xetable.clearHoverRow()
         }
         handleWheel(evnt, isTopWheel, deltaTop, isRollX, isRollY)

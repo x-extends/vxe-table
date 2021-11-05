@@ -14,6 +14,7 @@
       height="500"
       ref="xTable"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
+      :scroll-y="{gt: 20}"
       :data="demo1.tableData">
       <vxe-column field="name" title="Name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -195,6 +196,7 @@ export default defineComponent({
           height="500"
           ref="xTable"
           :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
+          :scroll-y="{gt: 20}"
           :data="demo1.tableData">
           <vxe-column field="name" title="Name" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>

@@ -2341,8 +2341,8 @@ export default defineComponent({
         const { tableSourceData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { children } = treeOpts
-        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
-        const parentLevel = rest ? rest.level : 0
+        const parentRest = fullAllDataRowIdData[getRowid($xetable, row)]
+        const parentLevel = parentRest ? parentRest.level : 0
         return tableMethods.createData(childRecords).then((rows) => {
           if (keepSource) {
             const rowid = getRowid($xetable, row)
@@ -3154,11 +3154,12 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       setCurrentRow (row) {
+        const rowOpts = computeRowOpts.value
         const el = refElem.value
         tableMethods.clearCurrentRow()
         tableMethods.clearCurrentColumn()
         reactData.currentRow = row
-        if (props.highlightCurrentRow) {
+        if (rowOpts.isCurrent || props.highlightCurrentRow) {
           if (el) {
             XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xetable, row)}"]`), elem => addClass(elem, 'row--current'))
           }
@@ -3204,7 +3205,8 @@ export default defineComponent({
        * 用于当前行，获取当前行的数据
        */
       getCurrentRecord () {
-        return props.highlightCurrentRow ? reactData.currentRow : null
+        const rowOpts = computeRowOpts.value
+        return rowOpts.isCurrent || props.highlightCurrentRow ? reactData.currentRow : null
       },
       /**
        * 用于单选行，获取当已选中的数据
@@ -3237,7 +3239,8 @@ export default defineComponent({
         return null
       },
       getCurrentColumn () {
-        return props.highlightCurrentColumn ? reactData.currentColumn : null
+        const columnOpts = computeColumnOpts.value
+        return columnOpts.isCurrent || props.highlightCurrentColumn ? reactData.currentColumn : null
       },
       /**
        * 用于当前列，设置某列行为高亮状态
@@ -4034,6 +4037,7 @@ export default defineComponent({
           const editOpts = computeEditOpts.value
           const treeOpts = computeTreeOpts.value
           const menuList = computeMenuList.value
+          const rowOpts = computeRowOpts.value
           const { selected, actived } = editStore
           const keyCode = evnt.keyCode
           const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
@@ -4106,7 +4110,7 @@ export default defineComponent({
             keyCtxTimeout = setTimeout(() => {
               internalData._keyCtx = false
             }, 1000)
-          } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && highlightCurrentRow && currentRow))) {
+          } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
             // 退出选中
             if (hasCtrlKey) {
               // 如果是激活编辑状态，则取消编辑
@@ -4135,7 +4139,7 @@ export default defineComponent({
                     $xetable.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                   }
                 }
-              } else if (treeConfig && highlightCurrentRow && currentRow) {
+              } else if (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
                 // 如果是树形表格当前行回车移动到子节点
                 const childrens = currentRow[treeOpts.children]
                 if (childrens && childrens.length) {
@@ -4158,7 +4162,7 @@ export default defineComponent({
               // 如果按下了方向键
               if (selected.row && selected.column) {
                 $xetable.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
-              } else if ((isUpArrow || isDwArrow) && highlightCurrentRow) {
+              } else if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
                 // 当前行按键上下移动
                 $xetable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
               }
@@ -4170,7 +4174,7 @@ export default defineComponent({
             } else if (actived.row || actived.column) {
               $xetable.moveTabSelected(actived.args, hasShiftKey, evnt)
             }
-          } else if (keyboardConfig && isEnableConf(editConfig) && (isDel || (treeConfig && highlightCurrentRow && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
+          } else if (keyboardConfig && isEnableConf(editConfig) && (isDel || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
             if (!isEditStatus) {
               const { delMethod, backMethod } = keyboardOpts
               // 如果是删除键
@@ -4202,7 +4206,7 @@ export default defineComponent({
                   // 如果按下 del 键，更新表尾数据
                   tableMethods.updateFooter()
                 }
-              } else if (isBack && keyboardOpts.isArrow && treeConfig && highlightCurrentRow && currentRow) {
+              } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
                 // 如果树形表格回退键关闭当前行返回父节点
                 const { parent: parentRow } = XEUtils.findTree(internalData.afterFullData, item => item === currentRow, treeOpts)
                 if (parentRow) {
@@ -4827,6 +4831,7 @@ export default defineComponent({
       triggerHeaderCellClickEvent (evnt, params) {
         const { _lastResizeTime } = internalData
         const sortOpts = computeSortOpts.value
+        const columnOpts = computeColumnOpts.value
         const { column } = params
         const cell = evnt.currentTarget
         const triggerResizable = _lastResizeTime && _lastResizeTime > Date.now() - 300
@@ -4836,7 +4841,7 @@ export default defineComponent({
           tablePrivateMethods.triggerSortEvent(evnt, column, getNextSortOrder(column))
         }
         tableMethods.dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
-        if (props.highlightCurrentColumn) {
+        if (columnOpts.isCurrent || props.highlightCurrentColumn) {
           tableMethods.setCurrentColumn(column)
         }
       },
@@ -4856,6 +4861,7 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
+        const rowOpts = computeRowOpts.value
         const { actived } = editStore
         const { row, column } = params
         const { type, treeNode } = column
@@ -4882,7 +4888,7 @@ export default defineComponent({
         if (!triggerTreeNode) {
           if (!triggerExpandNode) {
             // 如果是高亮行
-            if (highlightCurrentRow) {
+            if (rowOpts.isCurrent || highlightCurrentRow) {
               if (!triggerCheckbox && !triggerRadio) {
                 tablePrivateMethods.triggerCurrentRowEvent(evnt, params)
               }
@@ -5189,6 +5195,7 @@ export default defineComponent({
         tablePrivateMethods.handleTableData()
         tablePrivateMethods.updateScrollYSpace()
       },
+      updateVirtualTreeData,
       /**
        * 处理固定列的显示状态
        */
@@ -5677,6 +5684,8 @@ export default defineComponent({
       const { leftList, rightList } = columnStore
       const tooltipOpts = computeTooltipOpts.value
       const treeOpts = computeTreeOpts.value
+      const rowOpts = computeRowOpts.value
+      const columnOpts = computeColumnOpts.value
       const vSize = computeSize.value
       const tableBorder = computeTableBorder.value
       const mouseOpts = computeMouseOpts.value
@@ -5691,8 +5700,8 @@ export default defineComponent({
           'cell--highlight': highlightCell,
           'cell--selected': mouseConfig && mouseOpts.selected,
           'cell--area': mouseConfig && mouseOpts.area,
-          'row--highlight': highlightHoverRow,
-          'column--highlight': highlightHoverColumn,
+          'row--highlight': rowOpts.isHover || highlightHoverRow,
+          'column--highlight': columnOpts.isHover || highlightHoverColumn,
           'is--header': showHeader,
           'is--footer': showFooter,
           'is--group': isGroup,

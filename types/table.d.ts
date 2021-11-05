@@ -707,6 +707,7 @@ export interface TablePrivateMethods {
   updateScrollYSpace(): void;
   updateScrollXData(): void;
   updateScrollYData(): void;
+  updateVirtualTreeData(): Promise<any>;
   checkScrolling(): void;
   updateZindex(): void;
   updateCellAreas(): void;
@@ -1208,6 +1209,8 @@ export namespace VxeTablePropTypes {
    * 列配置信息
    */
   export interface ColumnConfig {
+    isCurrent?: boolean;
+    isHover?: boolean;
     resizable?: VxeColumnPropTypes.Resizable;
     width?: VxeColumnPropTypes.Width;
     minWidth?: VxeColumnPropTypes.MinWidth;
@@ -1218,6 +1221,8 @@ export namespace VxeTablePropTypes {
    * 行配置信息
    */
   export interface RowConfig {
+    isCurrent?: boolean;
+    isHover?: boolean;
     height?: number;
   }
   export interface RowOpts extends RowConfig { }

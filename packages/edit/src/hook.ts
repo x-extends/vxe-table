@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { renderer } from '../../v-x-e-table'
 import { errLog, getLog, isEnableConf } from '../../tools/utils'
-import { getCellValue, setCellValue } from '../../table/src/util'
+import { getCellValue, setCellValue, getRowid } from '../../table/src/util'
 import { browse, removeClass, addClass } from '../../tools/dom'
 
 import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/all'
@@ -79,22 +79,53 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       insertAt (records: any, row: any) {
         const { treeConfig } = props
         const { mergeList, editStore, scrollYLoad } = reactData
-        const { afterFullData, tableFullData } = internalData
+        const { treeFullData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const sYOpts = computeSYOpts.value
+        const treeOpts = computeTreeOpts.value
         if (!XEUtils.isArray(records)) {
           records = [records]
         }
-        const newRecords = records.map((record: any) => $xetable.defineField(Object.assign({}, record)))
+        const newRecords: any[] = records.map((record: any) => $xetable.defineField(Object.assign({}, record)))
         if (!row) {
-          afterFullData.unshift(...newRecords)
-          tableFullData.unshift(...newRecords)
-          // 刷新单元格合并
-          mergeList.forEach((mergeItem: any) => {
-            const { row: mergeRowIndex } = mergeItem
-            if (mergeRowIndex > 0) {
-              mergeItem.row = mergeRowIndex + newRecords.length
-            }
-          })
+          // 如果为虚拟树
+          if (treeConfig && treeOpts.transform) {
+            newRecords.forEach(item => {
+              const parentRowId = item[treeOpts.parentField]
+              const rowid = getRowid($xetable, item)
+              if (parentRowId) {
+                const matchObj = XEUtils.findTree(treeFullData, item => parentRowId === item[treeOpts.rowField], treeOpts)
+                if (matchObj) {
+                  const { item: parentRow } = matchObj
+                  const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
+                  const parentLevel = parentRest ? parentRest.level : 0
+                  let parentChilds = parentRow[treeOpts.children]
+                  if (!XEUtils.isArray(parentChilds)) {
+                    parentChilds = parentRow[treeOpts.children] = []
+                  }
+                  parentChilds.push(item)
+                  const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
+                  fullDataRowIdData[rowid] = rest
+                  fullAllDataRowIdData[rowid] = rest
+                } else {
+                  // 父节点不存在
+                }
+              } else {
+                afterFullData.unshift(item)
+                treeFullData.unshift(item)
+              }
+            })
+            $xetable.updateVirtualTreeData()
+          } else {
+            afterFullData.unshift(...newRecords)
+            tableFullData.unshift(...newRecords)
+            // 刷新单元格合并
+            mergeList.forEach((mergeItem: any) => {
+              const { row: mergeRowIndex } = mergeItem
+              if (mergeRowIndex > 0) {
+                mergeItem.row = mergeRowIndex + newRecords.length
+              }
+            })
+          }
         } else {
           if (row === -1) {
             afterFullData.push(...newRecords)
@@ -156,9 +187,10 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       remove (rows: any) {
         const { treeConfig } = props
         const { mergeList, editStore, selection, scrollYLoad } = reactData
-        const { afterFullData, tableFullData } = internalData
+        const { treeFullData, afterFullData, tableFullData } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const sYOpts = computeSYOpts.value
+        const treeOpts = computeTreeOpts.value
         const { actived, removeList, insertList } = editStore
         const { checkField: property } = checkboxOpts
         let rest: any[] = []
@@ -189,26 +221,43 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           internalData.afterFullData = []
           $xetable.clearMergeCells()
         } else {
-          rows.forEach((row: any) => {
-            const tfIndex = $xetable.findRowIndexOf(tableFullData, row)
-            if (tfIndex > -1) {
-              const rItems = tableFullData.splice(tfIndex, 1)
-              rest.push(rItems[0])
-            }
-            const afIndex = $xetable.findRowIndexOf(afterFullData, row)
-            if (afIndex > -1) {
-              // 刷新单元格合并
-              mergeList.forEach((mergeItem: any) => {
-                const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-                if (mergeRowIndex > afIndex) {
-                  mergeItem.row = mergeRowIndex - 1
-                } else if (mergeRowIndex + mergeRowspan > afIndex) {
-                  mergeItem.rowspan = mergeRowspan - 1
-                }
-              })
-              afterFullData.splice(afIndex, 1)
-            }
-          })
+          // 如果为虚拟树
+          if (treeConfig && treeOpts.transform) {
+            rows.forEach((row: any) => {
+              const rowid = getRowid($xetable, row)
+              const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid($xetable, item), treeOpts)
+              if (matchObj) {
+                const rItems = matchObj.items.splice(matchObj.index, 1)
+                rest.push(rItems[0])
+              }
+              const afIndex = $xetable.findRowIndexOf(afterFullData, row)
+              if (afIndex > -1) {
+                afterFullData.splice(afIndex, 1)
+              }
+              $xetable.updateVirtualTreeData()
+            })
+          } else {
+            rows.forEach((row: any) => {
+              const tfIndex = $xetable.findRowIndexOf(tableFullData, row)
+              if (tfIndex > -1) {
+                const rItems = tableFullData.splice(tfIndex, 1)
+                rest.push(rItems[0])
+              }
+              const afIndex = $xetable.findRowIndexOf(afterFullData, row)
+              if (afIndex > -1) {
+                // 刷新单元格合并
+                mergeList.forEach((mergeItem: any) => {
+                  const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+                  if (mergeRowIndex > afIndex) {
+                    mergeItem.row = mergeRowIndex - 1
+                  } else if (mergeRowIndex + mergeRowspan > afIndex) {
+                    mergeItem.rowspan = mergeRowspan - 1
+                  }
+                })
+                afterFullData.splice(afIndex, 1)
+              }
+            })
+          }
         }
         // 如果当前行被激活编辑，则清除激活状态
         if (actived.row && $xetable.findRowIndexOf(rows, actived.row) > -1) {
@@ -280,16 +329,29 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        * 获取新增的临时数据
        */
       getInsertRecords () {
+        const { treeConfig } = props
         const { editStore } = reactData
-        const { tableFullData } = internalData
+        const { treeFullData, tableFullData } = internalData
+        const treeOpts = computeTreeOpts.value
         const insertList = editStore.insertList
         const insertRecords: any[] = []
         if (insertList.length) {
-          tableFullData.forEach((row: any) => {
-            if ($xetable.findRowIndexOf(insertList, row) > -1) {
-              insertRecords.push(row)
-            }
-          })
+          // 如果为虚拟树
+          if (treeConfig && treeOpts.transform) {
+            insertList.forEach(row => {
+              const rowid = getRowid($xetable, row)
+              const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid($xetable, item), treeOpts)
+              if (matchObj) {
+                insertRecords.push(row)
+              }
+            })
+          } else {
+            insertList.forEach(row => {
+              if ($xetable.findRowIndexOf(tableFullData, row) > -1) {
+                insertRecords.push(row)
+              }
+            })
+          }
         }
         return insertRecords
       },

@@ -33,7 +33,7 @@
     </pre>
 
     <p class="tip">
-      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="labelField"/> 列显示属性<br>
+      还可以通过 <table-api-link prop="checkMethod"/> 方法控制 checkbox 是否允许用户手动勾选，还可以配置 <table-api-link prop="visibleMethod"/> 是否显示复选框<br>
     </p>
 
     <vxe-toolbar>

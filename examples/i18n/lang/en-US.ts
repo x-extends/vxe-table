@@ -118,7 +118,7 @@ export default {
         groupSummary: 'Group summary',
         groupSummaryCount: 'Group summary total',
         edit: 'Editable',
-        crudToolbar: 'CRUD + Toolbar',
+        crudToolbar: 'CRUD',
         lazy: 'Lazy loading',
         lazyMenu: 'Lazy loading + contextmenu',
         lazyEdit: 'Lazy loading + editable',

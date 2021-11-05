@@ -1,14 +1,13 @@
 <template>
   <div>
-    <p class="tip">
-      增删改查、工具栏<br>
-      <span class="red">（注：内置的 CRUD 管理器是不支持插入子节点的，如果要往子节点插入或删除节点数据，可以直接操作数据源）</span>
-    </p>
+    <p class="tip">树形结构，增删改查</p>
 
     <vxe-toolbar ref="xToolbar" :refresh="{query: searchMethod}" export print custom>
       <template #buttons>
-        <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
-        <vxe-button @click="saveEvent">保存</vxe-button>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+        <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -16,7 +15,7 @@
       resizable
       show-overflow
       keep-source
-      ref="xTree"
+      ref="xTable"
       row-id="id"
       :print-config="{}"
       :export-config="{}"
@@ -29,6 +28,12 @@
       <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+      <vxe-column title="操作">
+        <template #default="{ row }">
+          <vxe-button type="text" status="primary" @click="insertRow(row)">新增子节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
+        </template>
+      </vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -58,7 +63,7 @@ export default defineComponent({
       }
     })
 
-    const xTree = ref({} as VxeTableInstance)
+    const xTable = ref({} as VxeTableInstance)
     const xToolbar = ref({} as VxeToolbarInstance)
 
     const findList = () => {
@@ -91,50 +96,88 @@ export default defineComponent({
       })
     }
 
-    const insertEvent = async () => {
-      const $table = xTree.value
+    const searchMethod = () => {
+      const $table = xTable.value
+      // 清除所有状态
+      $table.clearAll()
+      return findList()
+    }
+
+    const insertRow = async (row: any) => {
+      const $table = xTable.value
       const record = {
         name: '新数据',
+        id: Date.now(),
+        parentId: row.id, // 指定父节点，自动插入该节点中
+        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+      }
+      const { row: newRow } = await $table.insert(record)
+      await $table.setTreeExpand(row, true) // 将父节点展开
+      await $table.setActiveRow(newRow) // 插入子节点
+    }
+
+    const removeRow = async (row: any) => {
+      const $table = xTable.value
+      await $table.remove(row)
+    }
+
+    const insertEvent = async () => {
+      const $table = xTable.value
+      const record = {
+        name: '新数据',
+        id: Date.now(),
+        parentId: null,
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
       const { row: newRow } = await $table.insert(record)
       await $table.setActiveRow(newRow)
     }
 
-    const searchMethod = () => {
-      const $table = xTree.value
-      // 清除所有状态
-      $table.clearAll()
-      return findList()
+    const getInsertEvent = () => {
+      const $table = xTable.value
+      const insertRecords = $table.getInsertRecords()
+      VXETable.modal.alert(`新增：${insertRecords.length}`)
     }
 
-    const saveEvent = () => {
-      const $table = xTree.value
-      const { insertRecords, updateRecords } = $table.getRecordset()
-      VXETable.modal.alert(`insertRecords=${insertRecords.length} updateRecords=${updateRecords.length}`)
+    const getRemoveEvent = () => {
+      const $table = xTable.value
+      const removeRecords = $table.getRemoveRecords()
+      VXETable.modal.alert(removeRecords.length)
+    }
+
+    const getUpdateEvent = () => {
+      const $table = xTable.value
+      const updateRecords = $table.getUpdateRecords()
+      VXETable.modal.alert(`更新：${updateRecords.length}`)
     }
 
     nextTick(() => {
       // 将表格和工具栏进行关联
-      const $table = xTree.value
+      const $table = xTable.value
       const $toolbar = xToolbar.value
       $table.connect($toolbar)
       findList()
     })
 
     return {
-      xTree,
+      xTable,
       xToolbar,
       demo1,
       insertEvent,
       searchMethod,
-      saveEvent,
+      removeRow,
+      insertRow,
+      getInsertEvent,
+      getRemoveEvent,
+      getUpdateEvent,
       demoCodes: [
         `
         <vxe-toolbar ref="xToolbar" :refresh="{query: searchMethod}" export print custom>
           <template #buttons>
-            <vxe-button @click="insertEvent">{{ $t('app.body.button.insert') }}</vxe-button>
-            <vxe-button @click="saveEvent">保存</vxe-button>
+            <vxe-button @click="insertEvent">新增</vxe-button>
+            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
+            <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -142,7 +185,7 @@ export default defineComponent({
           resizable
           show-overflow
           keep-source
-          ref="xTree"
+          ref="xTable"
           row-id="id"
           :print-config="{}"
           :export-config="{}"
@@ -155,6 +198,12 @@ export default defineComponent({
           <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
+          <vxe-column title="操作">
+            <template #default="{ row }">
+              <vxe-button type="text" status="primary" @click="insertRow(row)">新增子节点</vxe-button>
+              <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
+            </template>
+          </vxe-column>
         </vxe-table>
         `,
         `
@@ -166,7 +215,7 @@ export default defineComponent({
           setup () {
             const demo1 = reactive({
               loading: false,
-              tableData: [],
+              tableData: [] as any[],
               treeConfig: {
                 transform: true,
                 rowField: 'id',
@@ -174,7 +223,7 @@ export default defineComponent({
               }
             })
 
-            const xTree = ref({} as VxeTableInstance)
+            const xTable = ref({} as VxeTableInstance)
             const xToolbar = ref({} as VxeToolbarInstance)
 
             const findList = () => {
@@ -207,44 +256,80 @@ export default defineComponent({
               })
             }
 
-            const insertEvent = async () => {
-              const $table = xTree.value
+            const searchMethod = () => {
+              const $table = xTable.value
+              // 清除所有状态
+              $table.clearAll()
+              return findList()
+            }
+
+            const insertRow = async (row: any) => {
+              const $table = xTable.value
               const record = {
                 name: '新数据',
+                id: Date.now(),
+                parentId: row.id, // 指定父节点，自动插入该节点中
+                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+              }
+              const { row: newRow } = await $table.insert(record)
+              await $table.setTreeExpand(row, true) // 将父节点展开
+              await $table.setActiveRow(newRow) // 插入子节点
+            }
+
+            const removeRow = async (row: any) => {
+              const $table = xTable.value
+              await $table.remove(row)
+            }
+
+            const insertEvent = async () => {
+              const $table = xTable.value
+              const record = {
+                name: '新数据',
+                id: Date.now(),
+                parentId: null,
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
               const { row: newRow } = await $table.insert(record)
               await $table.setActiveRow(newRow)
             }
 
-            const searchMethod = () => {
-              const $table = xTree.value
-              // 清除所有状态
-              $table.clearAll()
-              return findList()
+            const getInsertEvent = () => {
+              const $table = xTable.value
+              const insertRecords = $table.getInsertRecords()
+              VXETable.modal.alert(\`新增：\${insertRecords.length}\`)
             }
 
-            const saveEvent = () => {
-              const $table = xTree.value
-              const { insertRecords, updateRecords } = $table.getRecordset()
-              VXETable.modal.alert(\`insertRecords=\${insertRecords.length} updateRecords=\${updateRecords.length}\`)
+            const getRemoveEvent = () => {
+              const $table = xTable.value
+              const removeRecords = $table.getRemoveRecords()
+              VXETable.modal.alert(removeRecords.length)
+            }
+
+            const getUpdateEvent = () => {
+              const $table = xTable.value
+              const updateRecords = $table.getUpdateRecords()
+              VXETable.modal.alert(\`更新：\${updateRecords.length}\`)
             }
 
             nextTick(() => {
               // 将表格和工具栏进行关联
-              const $table = xTree.value
+              const $table = xTable.value
               const $toolbar = xToolbar.value
               $table.connect($toolbar)
               findList()
             })
 
             return {
-              xTree,
+              xTable,
               xToolbar,
               demo1,
               insertEvent,
               searchMethod,
-              saveEvent
+              removeRow,
+              insertRow,
+              getInsertEvent,
+              getRemoveEvent,
+              getUpdateEvent
             }
           }
         })

@@ -388,16 +388,19 @@ body,
     }
   }
   > .body {
+    display: flex;
     position: relative;
     flex-grow: 1;
-    overflow: auto;
-    padding: 15px 0 25px 0;
+    overflow: hidden;
     & > .content {
+      width: 100%;
+      flex-flow: 1;
       position: relative;
       margin: 0 auto;
-      padding: 0 25px 0 25px;
+      padding: 15px 25px 25px 25px;
+      overflow: auto;
       &:not(.full) {
-        max-width: 1200px;
+        padding: 15px 10% 25px 10%;
         min-width: 800px;
       }
     }

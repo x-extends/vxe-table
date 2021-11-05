@@ -629,6 +629,7 @@ const apis = [
       },
       {
         name: 'highlight-current-row',
+        abandoned: true,
         descKey: 'app.api.table.desc.highlightCurrentRow',
         version: '',
         type: 'boolean',
@@ -638,6 +639,7 @@ const apis = [
       },
       {
         name: 'highlight-hover-row',
+        abandoned: true,
         descKey: 'app.api.table.desc.highlightHoverRow',
         version: '',
         type: 'boolean',
@@ -647,6 +649,7 @@ const apis = [
       },
       {
         name: 'highlight-current-column',
+        abandoned: true,
         descKey: 'app.api.table.desc.highlightCurrentColumn',
         version: '',
         type: 'boolean',
@@ -656,6 +659,7 @@ const apis = [
       },
       {
         name: 'highlight-hover-column',
+        abandoned: true,
         descKey: 'app.api.table.desc.highlightHoverColumn',
         version: '',
         type: 'boolean',
@@ -925,6 +929,24 @@ const apis = [
         defVal: '继承 setup.table.columnConfig',
         list: [
           {
+            name: 'isCurrent',
+            desc: '当鼠标点击列头时，是否要高亮当前列',
+            version: '4.1.5',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isHover',
+            desc: '当鼠标移到列头时，是否要高亮当前头',
+            version: '4.1.5',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
             name: 'resizable',
             desc: '每一列是否启用列宽调整',
             version: '',
@@ -961,6 +983,24 @@ const apis = [
         enum: '',
         defVal: '继承 setup.table.rowConfig',
         list: [
+          {
+            name: 'isCurrent',
+            desc: '当鼠标点击行时，是否要高亮当前行',
+            version: '4.1.5',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
+          {
+            name: 'isHover',
+            desc: '当鼠标移到行时，是否要高亮当前行',
+            version: '4.1.5',
+            type: 'boolean',
+            enum: '',
+            defVal: 'false',
+            list: []
+          },
           {
             name: 'height',
             desc: '只对 show-overflow 有效，每一行的高度',
@@ -1621,7 +1661,7 @@ const apis = [
         list: [
           {
             name: 'transform',
-            desc: '自动将列表转为树结构（需要有 rowField 和 parentField）',
+            desc: '自动将列表转为树结构',
             version: '4.1.3',
             type: 'string',
             enum: '',
@@ -2586,7 +2626,8 @@ const apis = [
           },
           {
             name: 'trigger',
-            desc: '触发校验方式（如果为空，则为常规校验方式； 如果指定触发方式，则只会在匹配情况下进行校验）',
+            abandoned: true,
+            desc: '触发校验方式（如果为空，则正常校验；如果为manual，则永远不会被自动触发；除非明确知道自定义目标的触发方式，否则设置后将导致不会被触发）',
             version: '',
             type: 'string',
             enum: 'blur,change,manual',
@@ -2774,7 +2815,7 @@ const apis = [
           },
           {
             name: 'oSize',
-            desc: '指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于古董级的低性能浏览器可以设置大一点）',
+            desc: '指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于低性能浏览器可以设置大一点，减低渲染次数）',
             version: '',
             type: 'number',
             enum: '',
@@ -2820,7 +2861,7 @@ const apis = [
           },
           {
             name: 'oSize',
-            desc: '指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于古董级的低性能浏览器可以设置大一点）',
+            desc: '指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于低性能浏览器可以设置大一点，减低渲染次数）',
             version: '',
             type: 'number',
             enum: '',
