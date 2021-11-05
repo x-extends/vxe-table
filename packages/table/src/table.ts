@@ -2121,8 +2121,10 @@ export default defineComponent({
       const { treeFullData } = internalData
       const treeOpts = computeTreeOpts.value
       const fullData: any[] = []
+      const expandMaps: Map<any, number> = new Map()
       XEUtils.eachTree(treeFullData, (row, index, items, path, parent) => {
-        if (!parent || $xetable.findRowIndexOf(treeExpandeds, parent) > -1) {
+        if (!parent || (expandMaps.has(parent) && $xetable.findRowIndexOf(treeExpandeds, parent) > -1)) {
+          expandMaps.set(row, 1)
           fullData.push(row)
         }
       }, treeOpts)
