@@ -3843,8 +3843,10 @@ const Methods = {
   updateVirtualTreeData () {
     const { scrollYLoad: oldScrollYLoad, treeExpandeds, treeOpts, treeFullData } = this
     const fullData = []
+    const expandMaps = new Map()
     XEUtils.eachTree(treeFullData, (row, index, items, path, parent) => {
-      if (!parent || treeExpandeds.indexOf(parent) > -1) {
+      if (!parent || (expandMaps.has(parent) && treeExpandeds.indexOf(parent) > -1)) {
+        expandMaps.set(row, 1)
         fullData.push(row)
       }
     }, treeOpts)
