@@ -68,10 +68,10 @@ export default defineComponent({
   setup () {
     const demo1 = reactive({
       tableData: [
-        { id: 10000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
         { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
         { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-        { id: 24555, parentId: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
       ] as any[]
     })
 
@@ -119,10 +119,10 @@ export default defineComponent({
       // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
       demo2.tableTree.expandRowKeys = [1005, 10053]
       demo2.tableData = [
-        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
         { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
         { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
       ]
     }, 300)
 
@@ -162,10 +162,10 @@ export default defineComponent({
           setup () {
             const demo1 = reactive({
               tableData: [
-                { id: 10000, parentId: null, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                 { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
                 { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-                { id: 24555, parentId: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
               ] as any[]
             })
 
@@ -241,10 +241,10 @@ export default defineComponent({
               // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
               demo2.tableTree.expandRowKeys = [1005, 10053]
               demo2.tableData = [
-                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                 { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
                 { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
               ]
             }, 300)
 

@@ -152,7 +152,7 @@ import TableTreeSort from '../views/table/tree/Sort.vue'
 // import TableTreeGroupSummaryCount from '../views/table/tree/GroupSummaryCount.vue'
 import TableTreeExpand from '../views/table/tree/Expand.vue'
 import TableTreeExpandLazy from '../views/table/tree/ExpandLazy.vue'
-import TableTreeToolbar from '../views/table/tree/Toolbar.vue'
+import TableTreeCRUD from '../views/table/tree/CRUD.vue'
 // import TableTreeInsert from '../views/table/tree/Insert.vue'
 import TableTreeMenu from '../views/table/tree/Menu.vue'
 // import TableTreeSpan from '../views/table/tree/Span.vue'
@@ -879,9 +879,9 @@ const routes: Array<RouteRecordRaw> = [
     component: TableTreeExpandLazy
   },
   {
-    path: '/table/tree/toolbar',
-    name: 'TableTreeToolbar',
-    component: TableTreeToolbar
+    path: '/table/tree/crud',
+    name: 'TableTreeCRUD',
+    component: TableTreeCRUD
   },
   // {
   //   path: '/table/tree/insert',

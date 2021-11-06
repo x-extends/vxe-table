@@ -99,10 +99,10 @@ export default defineComponent({
         { id: ++key, parentKey: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
         { id: ++key, parentKey: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
         { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-04' },
-        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-04-01' },
-        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-03' },
-        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-09' },
-        { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-05-01' }
+        { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-04-01' },
+        { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-10-03' },
+        { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-10-09' },
+        { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-05-01' }
       ] as any[]
     })
 
@@ -216,10 +216,10 @@ export default defineComponent({
                 { id: ++key, parentKey: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
                 { id: ++key, parentKey: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
                 { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-04' },
-                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-04-01' },
-                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-03' },
-                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-10-09' },
-                { id: ++key, parentKey: null, name: 'vxe-table 从入门到放弃', type: 'avi', size: 224, date: '2020-05-01' }
+                { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-04-01' },
+                { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-10-03' },
+                { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-10-09' },
+                { id: ++key, parentKey: null, name: 'test abc', type: 'avi', size: 224, date: '2020-05-01' }
               ] as any[]
             })
 

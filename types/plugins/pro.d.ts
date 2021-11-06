@@ -28,9 +28,9 @@ export interface VxeTableProMethods {
    */
   pasteCellArea(): Promise<any>;
   /**
-   * 用于 mouse-config.area，用于清除鼠标选择的区域
+   * 用于 mouse-config.area，用于清除鼠标选择的区域，可以指定清除的区域
    */
-  clearCellAreas(): Promise<any>;
+  clearCellAreas(area?: number | VxeTableProDefines.MouseCellArea): Promise<any>;
   /**
    * 用于 mouse-config.area，手动清除标记为复制粘贴的区域
    */
@@ -40,9 +40,9 @@ export interface VxeTableProMethods {
    * @param areaConfigs 指定区域
    */
   setCellAreas(areaConfigs: VxeTableProDefines.CellAreaConfig[], activeArea?: {
-    area?: VxeTableProDefines.CellAreaConfig;
-    column: VxeTableDefines.ColumnInfo;
-    row: any;
+    area?: number | VxeTableProDefines.CellAreaConfig;
+    column?: number | VxeTableDefines.ColumnInfo;
+    row?: any;
   }): Promise<any>;
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
@@ -148,7 +148,7 @@ export namespace VxeTableProDefines {
   }
 
   export interface ActiveCellAreaConfig {
-    area: VxeTableProDefines.MouseCellArea;
+    area: VxeTableProDefines.MouseCellArea | number;
     column: VxeTableDefines.ColumnInfo | number;
     row: any;
   }

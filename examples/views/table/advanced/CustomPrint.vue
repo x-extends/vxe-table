@@ -158,14 +158,14 @@ export default defineComponent({
         }
       } as VxeTablePropTypes.PrintConfig,
       tableData: [
-        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
         { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Shanghai' },
         { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Beijing' },
-        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
         { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shenzhen' },
-        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃' },
-        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
-        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
       ]
     })
 
@@ -197,7 +197,7 @@ export default defineComponent({
     const codeList = [
       { name: '某年xx1', price: 340, code: '1201545742000' },
       { name: 'vue 开发指南', price: 99, code: '1271545042006' },
-      { name: 'vxe-table 从入门到放弃', price: 288, code: '1001545847781' },
+      { name: 'test abc', price: 288, code: '1001545847781' },
       { name: 'vue 进阶用法', price: 188, code: '1201511842009' },
       { name: '某某xx2', price: 860, code: '1201543242003' },
       { name: 'js 从入门到精通', price: 99, code: '1201775849605' },
@@ -505,14 +505,14 @@ export default defineComponent({
                 }
               } as VxeTablePropTypes.PrintConfig,
               tableData: [
-                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'vxe-table 从入门到放弃' },
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
                 { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Shanghai' },
                 { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Beijing' },
-                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'vxe-table 从入门到放弃' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
                 { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shenzhen' },
-                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'vxe-table 从入门到放弃' },
-                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'vxe-table 从入门到放弃' },
-                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'vxe-table 从入门到放弃' }
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
               ]
             })
 
@@ -566,11 +566,11 @@ export default defineComponent({
             const codeList = [
               { name: '某年xx1', price: 340, code: '1201545742000' },
               { name: 'vue 开发指南', price: 99, code: '1271545042006' },
-              { name: 'vxe-table 从入门到放弃', price: 288, code: '1001545847781' },
+              { name: 'test abc', price: 288, code: '1001545847781' },
               { name: 'vue 进阶用法', price: 188, code: '1201511842009' },
               { name: '某某xx2', price: 860, code: '1201543242003' },
               { name: 'js 从入门到精通', price: 99, code: '1201775849605' },
-              { name: 'vxe-table pro 从入门到放弃', price: 888, code: '1201775112606' },
+              { name: 'vxe-table pro test abc', price: 888, code: '1201775112606' },
               { name: 'js 进阶宝典', price: 166, code: '1201775849608' }
             ]
             const printEvent2 = () => {

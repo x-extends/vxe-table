@@ -13,6 +13,7 @@
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
         <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
         <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
+        <vxe-button @click="saveEvent">保存</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -21,15 +22,24 @@
       show-overflow
       keep-source
       ref="xTable"
+      :loading="loading"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil-square-o'}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="name" title="Name" :edit-render="{autofocus: '.myinput'}">
+        <template #edit="scope">
+          <input type="text" class="myinput" v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"/>
+        </template>
+      </vxe-column>
+      <vxe-column field="sex" title="Sex" :edit-render="{autofocus: '.myinput'}">
+        <template #edit="scope">
+          <input type="text" class="myinput" v-model="scope.row.sex" @input="$refs.xTable.updateStatus(scope)"/>
+        </template>
+      </vxe-column>
       <vxe-column field="address" title="Address" :edit-render="{}">
         <template #edit="scope">
-          <textarea v-model="scope.row.address" @input="$refs.xTable.updateStatus(scope)"></textarea>
+          <input type="text" v-model="scope.row.address" @input="$refs.xTable.updateStatus(scope)"/>
         </template>
       </vxe-column>
       <vxe-column field="date12" title="Date" :formatter="formatDate" :edit-render="{}">
@@ -38,15 +48,9 @@
         </template>
       </vxe-column>
       <vxe-column title="操作" width="200">
-        <template #default="{ row, rowIndex }">
-          <template v-if="!row.date12">
-            <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
-          </template>
-          <template v-else-if="rowIndex % 2 === 0">
-            <vxe-button @click="saveEvent(row)" :loading="row.loading">更新行数据</vxe-button>
-          </template>
-          <template v-else>
-            <vxe-button status="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
+        <template #default="{ row }">
+          <template v-if="$refs.xTable.isUpdateByRow(row)">
+            <vxe-button @click="saveUpdateEvent(row)" :loading="row.loading">局部保存</vxe-button>
           </template>
         </template>
       </vxe-column>
@@ -69,6 +73,7 @@ import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
+    const loading = ref(false)
     const tableData = ref([
       { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
       { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
@@ -89,49 +94,35 @@ export default defineComponent({
       await $table.setActiveCell(newRow, 'name')
     }
 
-    const submitSave = (row: any): Promise<any> => {
-      return new Promise(resolve => {
-        const rest = {
-          name: '',
-          sex: '',
-          date12: XEUtils.toDateString(new Date())
-        }
-        if (row.name) {
-          rest.name = row.name
-        }
-        if (row.sex) {
-          rest.sex = row.sex
-        }
-        setTimeout(() => resolve(rest), 500)
-      })
-    }
-
-    const saveEvent = async (row: any, field?: string) => {
+    const saveUpdateEvent = (row: any) => {
       const $table = xTable.value
       if ($table.isUpdateByRow(row)) {
         row.loading = true
-        await submitSave(row)
-        // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
-        await $table.reloadRow(row, null, field)
-        VXETable.modal.message({ content: '保存成功！', status: 'success' })
-        row.loading = false
+        // 模拟异步
+        setTimeout(() => {
+          row.loading = false
+          // 保存完成后将行恢复到初始状态
+          $table.reloadRow(row, {})
+          VXETable.modal.message({ content: '保存成功！', status: 'success' })
+        }, 300)
       } else {
         VXETable.modal.message({ content: '数据未改动！', status: 'info' })
       }
     }
 
-    const saveEvent2 = async (row: any) => {
-      const $table = xTable.value
-      if ($table.isUpdateByRow(row)) {
-        row.loading = true
-        const data = await submitSave(row)
-        // 局部保存，并更新本地数据
-        await $table.reloadRow(row, data)
-        VXETable.modal.message({ content: '保存成功！', status: 'success' })
-        row.loading = false
-      } else {
-        VXETable.modal.message({ content: '数据未改动！', status: 'info' })
-      }
+    const saveEvent = () => {
+      loading.value = true
+      // 默认异步
+      setTimeout(() => {
+        loading.value = false
+        // 保存完成后重新刷新数据
+        tableData.value = [
+          { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
+          { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+          { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
+          { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' }
+        ]
+      }, 300)
     }
 
     const getInsertEvent = () => {
@@ -155,10 +146,11 @@ export default defineComponent({
     return {
       xTable,
       tableData,
+      loading,
       formatDate,
       insertEvent,
       saveEvent,
-      saveEvent2,
+      saveUpdateEvent,
       getInsertEvent,
       getRemoveEvent,
       getUpdateEvent,
@@ -171,6 +163,7 @@ export default defineComponent({
             <vxe-button @click="getInsertEvent">获取新增</vxe-button>
             <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
             <vxe-button @click="getUpdateEvent">获取修改</vxe-button>
+            <vxe-button @click="saveEvent">保存</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -179,15 +172,24 @@ export default defineComponent({
           show-overflow
           keep-source
           ref="xTable"
+          :loading="loading"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell', showStatus: true, icon: 'fa fa-pencil-square-o'}">
           <vxe-column type="checkbox" width="60"></vxe-column>
           <vxe-column type="seq" width="60"></vxe-column>
-          <vxe-column field="name" title="Name" :edit-render="{name: 'input'}"></vxe-column>
-          <vxe-column field="sex" title="Sex" :edit-render="{name: 'input'}"></vxe-column>
+          <vxe-column field="name" title="Name" :edit-render="{autofocus: '.myinput'}">
+            <template #edit="scope">
+              <input type="text" class="myinput" v-model="scope.row.name" @input="$refs.xTable.updateStatus(scope)"/>
+            </template>
+          </vxe-column>
+          <vxe-column field="sex" title="Sex" :edit-render="{autofocus: '.myinput'}">
+            <template #edit="scope">
+              <input type="text" class="myinput" v-model="scope.row.sex" @input="$refs.xTable.updateStatus(scope)"/>
+            </template>
+          </vxe-column>
           <vxe-column field="address" title="Address" :edit-render="{}">
             <template #edit="scope">
-              <textarea v-model="scope.row.address" @input="$refs.xTable.updateStatus(scope)"></textarea>
+              <input type="text" v-model="scope.row.address" @input="$refs.xTable.updateStatus(scope)"/>
             </template>
           </vxe-column>
           <vxe-column field="date12" title="Date" :formatter="formatDate" :edit-render="{}">
@@ -196,15 +198,9 @@ export default defineComponent({
             </template>
           </vxe-column>
           <vxe-column title="操作" width="200">
-            <template #default="{ row, rowIndex }">
-              <template v-if="!row.date12">
-                <vxe-button @click="saveEvent2(row)" :loading="row.loading">更新并替换新数据</vxe-button>
-              </template>
-              <template v-else-if="rowIndex % 2 === 0">
-                <vxe-button @click="saveEvent(row)" :loading="row.loading">更新行数据</vxe-button>
-              </template>
-              <template v-else>
-                <vxe-button status="primary" @click="saveEvent(row, 'name')" :loading="row.loading">更新 Name 列</vxe-button>
+            <template #default="{ row }">
+              <template v-if="$refs.xTable.isUpdateByRow(row)">
+                <vxe-button @click="saveUpdateEvent(row)" :loading="row.loading">局部保存</vxe-button>
               </template>
             </template>
           </vxe-column>
@@ -212,11 +208,12 @@ export default defineComponent({
         `,
         `
         import { defineComponent, ref } from 'vue'
-        import { VXETable, VxeTableInstance, VxeColumnPropTypes } from 'vxe-table'
+        import { VXETable, VxeTableInstance, VxeColumnPropTypes } from '../../../../types/index'
         import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
+            const loading = ref(false)
             const tableData = ref([
               { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
               { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
@@ -237,49 +234,35 @@ export default defineComponent({
               await $table.setActiveCell(newRow, 'name')
             }
 
-            const submitSave = (row: any): Promise<any> => {
-              return new Promise(resolve => {
-                const rest = {
-                  name: '',
-                  sex: '',
-                  date12: XEUtils.toDateString(new Date())
-                }
-                if (row.name) {
-                  rest.name = row.name
-                }
-                if (row.sex) {
-                  rest.sex = row.sex
-                }
-                setTimeout(() => resolve(rest), 500)
-              })
-            }
-
-            const saveEvent = async (row: any, field?: string) => {
+            const saveUpdateEvent = (row: any) => {
               const $table = xTable.value
               if ($table.isUpdateByRow(row)) {
                 row.loading = true
-                await submitSave(row)
-                // 局部保存，并将行数据恢复到初始状态（如果 record 为空则不改动行数据，只恢复状态）
-                await $table.reloadRow(row, null, field)
-                VXETable.modal.message({ content: '保存成功！', status: 'success' })
-                row.loading = false
+                // 模拟异步
+                setTimeout(() => {
+                  row.loading = false
+                  // 保存完成后将行恢复到初始状态
+                  $table.reloadRow(row, {})
+                  VXETable.modal.message({ content: '保存成功！', status: 'success' })
+                }, 300)
               } else {
                 VXETable.modal.message({ content: '数据未改动！', status: 'info' })
               }
             }
 
-            const saveEvent2 = async (row: any) => {
-              const $table = xTable.value
-              if ($table.isUpdateByRow(row)) {
-                row.loading = true
-                const data = await submitSave(row)
-                // 局部保存，并更新本地数据
-                await $table.reloadRow(row, data)
-                VXETable.modal.message({ content: '保存成功！', status: 'success' })
-                row.loading = false
-              } else {
-                VXETable.modal.message({ content: '数据未改动！', status: 'info' })
-              }
+            const saveEvent = () => {
+              loading.value = true
+              // 默认异步
+              setTimeout(() => {
+                loading.value = false
+                // 保存完成后重新刷新数据
+                tableData.value = [
+                  { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: '0', sex2: ['0'], num1: 40, age: 28, address: 'Shenzhen', date12: '', date13: '' },
+                  { id: 10002, name: 'Test2', nickname: 'T2', role: 'Designer', sex: '1', sex2: ['0', '1'], num1: 20, age: 22, address: 'Guangzhou', date12: '', date13: '2020-08-20' },
+                  { id: 10003, name: 'Test3', nickname: 'T3', role: 'Test', sex: '0', sex2: ['1'], num1: 200, age: 32, address: 'Shanghai', date12: '2020-09-10', date13: '' },
+                  { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: '1', sex2: ['1'], num1: 30, age: 23, address: 'Shenzhen', date12: '', date13: '2020-12-04' }
+                ]
+              }, 300)
             }
 
             const getInsertEvent = () => {
@@ -303,10 +286,11 @@ export default defineComponent({
             return {
               xTable,
               tableData,
+              loading,
               formatDate,
               insertEvent,
               saveEvent,
-              saveEvent2,
+              saveUpdateEvent,
               getInsertEvent,
               getRemoveEvent,
               getUpdateEvent

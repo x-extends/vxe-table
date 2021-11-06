@@ -30,7 +30,7 @@ export default defineComponent({
     demo1.loading = true
     setTimeout(() => {
       demo1.tableData = [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'vxe-table 从入门到放弃' },
+        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'test abc' },
         { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' }
       ]
       demo1.loading = false
