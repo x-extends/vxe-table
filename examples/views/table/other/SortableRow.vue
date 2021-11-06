@@ -106,7 +106,7 @@ export default {
         { field: 'date', title: 'Date' }
       ],
       tableTreeData: [
-        { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
         {
           id: 1005,
           name: 'Test2',
@@ -115,15 +115,15 @@ export default {
           date: '2021-04-01',
           children: [
             { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-            { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+            { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
             {
               id: 10053,
-              name: 'vxe-table 从入门到放弃96',
+              name: 'test abc96',
               type: 'avi',
               size: null,
               date: '2021-04-01',
               children: [
-                { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
                 { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
                 { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
               ]
@@ -131,7 +131,7 @@ export default {
           ]
         },
         { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-        { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
       ],
       demoCodes: [
         `
@@ -225,7 +225,7 @@ export default {
             return {
               showHelpTip2: false,
               tableTreeData: [
-                { id: 1000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                 {
                   id: 1005,
                   name: 'Test2',
@@ -234,15 +234,15 @@ export default {
                   date: '2021-04-01',
                   children: [
                     { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-                    { id: 20045, name: 'vxe-table 从入门到放弃4', type: 'html', size: 600, date: '2021-04-01' },
+                    { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
                     {
                       id: 10053,
-                      name: 'vxe-table 从入门到放弃96',
+                      name: 'test abc96',
                       type: 'avi',
                       size: null,
                       date: '2021-04-01',
                       children: [
-                        { id: 24330, name: 'vxe-table 从入门到放弃5', type: 'txt', size: 25, date: '2021-10-01' },
+                        { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
                         { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
                         { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
                       ]
@@ -250,7 +250,7 @@ export default {
                   ]
                 },
                 { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-                { id: 24555, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
               ],
               tableColumn: [
                 {

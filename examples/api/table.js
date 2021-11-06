@@ -3498,7 +3498,7 @@ const apis = [
       },
       {
         name: 'reloadData(data)',
-        desc: '加载数据并清除所有状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
+        desc: '加载数据并清除所有状态（对于表格数据需要重载、局部更新被修改的数据）',
         version: '',
         type: 'Promise',
         enum: '',
@@ -3507,6 +3507,7 @@ const apis = [
       },
       {
         name: 'updateData()',
+        abandoned: true,
         desc: '手动处理数据（对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到）',
         version: '2.1.4',
         type: 'Promise',

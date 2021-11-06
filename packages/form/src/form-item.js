@@ -28,7 +28,7 @@ function renderTitle (h, _vm) {
   const titles = []
   if (titlePrefix) {
     titles.push(
-      (itlePrefix.content || titlePrefix.message)
+      (titlePrefix.content || titlePrefix.message)
         ? h('vxe-tooltip', {
           props: {
             content: UtilTools.getFuncText(titlePrefix.content || titlePrefix.message),
