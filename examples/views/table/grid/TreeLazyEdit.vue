@@ -60,7 +60,7 @@ export default {
               setTimeout(() => {
                 dataId++
                 const list = [
-                  { id: row.id + dataId + 1, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                  { id: row.id + dataId + 1, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                   { id: row.id + dataId + 2, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true }
                 ]
                 resolve(list)
@@ -75,10 +75,10 @@ export default {
               return new Promise(resolve => {
                 setTimeout(() => {
                   const list = [
-                    { id: 10000000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                    { id: 10000000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                     { id: 20000000, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
                     { id: 30000000, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01', hasChild: true },
-                    { id: 40000000, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+                    { id: 40000000, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
                   ]
                   resolve(list)
                 }, 500)
@@ -145,7 +145,7 @@ export default {
                       setTimeout(() => {
                         dataId++
                         const list = [
-                          { id: row.id + dataId + 1, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                          { id: row.id + dataId + 1, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                           { id: row.id + dataId + 2, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true }
                         ]
                         resolve(list)
@@ -160,10 +160,10 @@ export default {
                       return new Promise(resolve => {
                         setTimeout(() => {
                           const list = [
-                            { id: 10000000, name: 'vxe-table 从入门到放弃1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                            { id: 10000000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                             { id: 20000000, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
                             { id: 30000000, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01', hasChild: true },
-                            { id: 40000000, name: 'vxe-table 从入门到放弃9', type: 'avi', size: 224, date: '2020-10-01' }
+                            { id: 40000000, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
                           ]
                           resolve(list)
                         }, 500)

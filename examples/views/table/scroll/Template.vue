@@ -285,7 +285,7 @@ export default {
                     rate: 3,
                     img1: '/vxe-table/static/other/img1.gif',
                     html2: \`<span style="color:red">HTML标签\${index}</span>\`,
-                    address: \`vxe-table 从入门到放弃系列\${index}\`
+                    address: \`test abc系列\${index}\`
                   })
                 }
                 resolve(list)
@@ -365,7 +365,7 @@ export default {
             rate: 3,
             img1: '/vxe-table/static/other/img1.gif',
             html2: `<span style="color:red">HTML标签${index}</span>`,
-            address: `vxe-table 从入门到放弃系列${index}`
+            address: `test abc系列${index}`
           })
         }
         resolve(list)
