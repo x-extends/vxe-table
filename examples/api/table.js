@@ -3443,7 +3443,7 @@ const apis = [
       },
       {
         name: 'reloadData(data)',
-        desc: '加载数据并清除所有状态（对于表格数据需要重载、局部递增的场景中可能会用到）',
+        desc: '加载数据并清除所有状态（对于表格数据需要重载、局部更新被修改的数据）',
         version: '',
         type: 'Promise<any>',
         enum: '',
@@ -3452,6 +3452,7 @@ const apis = [
       },
       {
         name: 'updateData()',
+        abandoned: true,
         desc: '手动处理数据（对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到）',
         version: '',
         type: 'Promise<any>',
@@ -4479,8 +4480,8 @@ const apis = [
       //   list: []
       // },
       {
-        name: 'clearCellAreas()',
-        desc: '如果功能被支持，用于 mouse-config.area，手动清除鼠标选择的区域',
+        name: 'clearCellAreas(area)',
+        desc: '如果功能被支持，用于 mouse-config.area，用于清除鼠标选择的区域，可以指定清除的区域',
         version: 'pro',
         type: 'Promise<any>',
         enum: '',

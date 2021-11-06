@@ -859,9 +859,9 @@ export declare class Table extends VXETableComponent {
    */
   clearActived(): Promise<any>;
   /**
-   * 用于 mouse-config.area，用于清除鼠标选择的区域
+   * 用于 mouse-config.area，用于清除鼠标选择的区域，可以指定清除的区域
    */
-  clearCellAreas(): Promise<any>;
+  clearCellAreas(area?: number | MouseCellArea): Promise<any>;
   /**
    * 用于 edit-config，获取已激活的行数据
    */
@@ -901,9 +901,9 @@ export declare class Table extends VXETableComponent {
    * @param areaConfigs 指定区域
    */
   setCellAreas(areaConfigs: CellAreaConfig[], activeArea?: {
-    area?: MouseCellArea;
-    column: ColumnInfo;
-    row: RowInfo;
+    area?: number | MouseCellArea;
+    column?: number | ColumnInfo;
+    row?: number | RowInfo;
   }): Promise<any>;
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
@@ -911,8 +911,8 @@ export declare class Table extends VXETableComponent {
    */
   setActiveCellArea(activeArea: {
     area: MouseCellArea;
-    column: ColumnInfo;
-    row: RowInfo;
+    column: number | ColumnInfo;
+    row: number | RowInfo;
   }): Promise<any>;
   /**
    * 临时合并单元格，如果为数组则合并多个

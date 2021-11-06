@@ -966,9 +966,9 @@ export default {
               }
             },
             {
-              label: 'app.aside.nav.crudToolbar',
+              label: 'app.aside.nav.crud',
               locat: {
-                name: 'TableTreeToolbar'
+                name: 'TableTreeCRUD'
               }
             },
             {
@@ -1146,7 +1146,7 @@ export default {
               keywords: ['revertData']
             },
             {
-              label: 'app.aside.nav.status',
+              label: 'app.aside.nav.partialUpdate',
               locat: {
                 name: 'TableEditStatus'
               },

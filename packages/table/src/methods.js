@@ -464,16 +464,12 @@ const Methods = {
       const oRow = tableSourceData[rowIndex]
       if (oRow && row) {
         if (field) {
-          XEUtils.set(oRow, field, XEUtils.get(record || row, field))
+          const newValue = XEUtils.get(record || row, field)
+          XEUtils.set(row, field, newValue)
+          XEUtils.set(oRow, field, newValue)
         } else {
-          if (record) {
-            tableSourceData[rowIndex] = record
-            XEUtils.clear(row, undefined)
-            Object.assign(row, this.defineField(Object.assign({}, record)))
-            this.cacheRowMap(true)
-          } else {
-            XEUtils.destructuring(oRow, XEUtils.clone(row, true))
-          }
+          const newRecord = XEUtils.clone({ ...record }, true)
+          XEUtils.destructuring(oRow, Object.assign(row, newRecord))
         }
       }
       this.tableData = tableData.slice(0)
