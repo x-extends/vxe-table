@@ -45,15 +45,15 @@ export default defineComponent({
     const demo1 = reactive({
       tableTree: {
         lazy: true,
-        children: 'children',
+        transform: true,
         hasChild: 'hasChild',
         loadMethod ({ row }) {
           // 异步加载子节点
           return new Promise(resolve => {
             setTimeout(() => {
               const childs = [
-                { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
-                { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                { id: row.id + 100000, parentId: row.id, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                { id: row.id + 150000, parentId: row.id, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
               ]
               resolve(childs)
             }, 500)
@@ -61,10 +61,10 @@ export default defineComponent({
         }
       } as VxeTablePropTypes.TreeConfig,
       tableData: [
-        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-        { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+        { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
       ] as any[]
     })
 
@@ -113,15 +113,15 @@ export default defineComponent({
             const demo1 = reactive({
               tableTree: {
                 lazy: true,
-                children: 'children',
+                transform: true,
                 hasChild: 'hasChild',
                 loadMethod ({ row }) {
                   // 异步加载子节点
                   return new Promise(resolve => {
                     setTimeout(() => {
                       const childs = [
-                        { id: row.id + 100000, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
-                        { id: row.id + 150000, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
+                        { id: row.id + 100000, parentId: row.id, name: row.name + 'Test45', type: 'mp4', size: null, date: '2021-10-03', hasChild: true },
+                        { id: row.id + 150000, parentId: row.id, name: row.name + 'Test56', type: 'mp3', size: null, date: '2021-07-09', hasChild: false }
                       ]
                       resolve(childs)
                     }, 500)
@@ -129,10 +129,10 @@ export default defineComponent({
                 }
               } as VxeTablePropTypes.TreeConfig,
               tableData: [
-                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-                { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+                { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
               ] as any[]
             })
 

@@ -13,9 +13,12 @@ export interface TableEditMethods {
    */
   insert(records: RecordInfo | RecordInfo[]): Promise<{ row: any, rows: any[] }>;
   /**
-   * 往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置、null从第一行插入、-1 从最后插入
-   * @param records 新数据
-   * @param row 指定行
+   * 往表格指定行中插入临时数据
+   * 如果 row 为空则从插入到顶部，如果为树结构，则插入到目标节点顶部
+   * 如果 row 为 -1 则从插入到底部，如果为树结构，则插入到目标节点底部
+   * 如果 row 为有效行则插入到该行的位置，如果为树结构，则有插入到效的目标节点该行的位置
+   * @param {Object/Array} records 新的数据
+   * @param {Row} row 指定行
    */
   insertAt(records: RecordInfo | RecordInfo[], row: any | -1 | null): Promise<{ row: any, rows: any[] }>;
   /**

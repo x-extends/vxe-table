@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { renderer } from '../../v-x-e-table'
-import { errLog, getLog, isEnableConf } from '../../tools/utils'
+import { errLog, getLog, isEnableConf, warnLog } from '../../tools/utils'
 import { getCellValue, setCellValue, getRowid } from '../../table/src/util'
 import { browse, removeClass, addClass } from '../../tools/dom'
 
@@ -59,6 +59,42 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       }
     }
 
+    function insertTreeRow (newRecords: any[], isAppend: boolean) {
+      const { treeFullData, afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const treeOpts = computeTreeOpts.value
+      const funcName = isAppend ? 'push' : 'unshift'
+      newRecords.forEach(item => {
+        const parentRowId = item[treeOpts.parentField]
+        const rowid = getRowid($xetable, item)
+        const matchObj = parentRowId ? XEUtils.findTree(treeFullData, item => parentRowId === item[treeOpts.rowField], treeOpts) : null
+        if (matchObj) {
+          const { item: parentRow } = matchObj
+          const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
+          const parentLevel = parentRest ? parentRest.level : 0
+          let parentChilds = parentRow[treeOpts.children]
+          if (!XEUtils.isArray(parentChilds)) {
+            parentChilds = parentRow[treeOpts.children] = []
+          }
+          parentChilds[funcName](item)
+          const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
+          fullDataRowIdData[rowid] = rest
+          fullAllDataRowIdData[rowid] = rest
+        } else {
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (parentRowId) {
+              warnLog('vxe.error.unableInsert')
+            }
+          }
+          afterFullData[funcName](item)
+          treeFullData[funcName](item)
+          const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: treeFullData, parent: null, level: 0 }
+          fullDataRowIdData[rowid] = rest
+          fullAllDataRowIdData[rowid] = rest
+        }
+      })
+      $xetable.updateVirtualTreeData()
+    }
+
     editMethods = {
       /**
        * 往表格中插入临时数据
@@ -70,9 +106,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       },
       /**
        * 往表格指定行中插入临时数据
-       * 如果 row 为空则从插入到顶部
-       * 如果 row 为 -1 则从插入到底部
-       * 如果 row 为有效行则插入到该行的位置
+       * 如果 row 为空则从插入到顶部，如果为树结构，则插入到目标节点顶部
+       * 如果 row 为 -1 则从插入到底部，如果为树结构，则插入到目标节点底部
+       * 如果 row 为有效行则插入到该行的位置，如果为树结构，则有插入到效的目标节点该行的位置
        * @param {Object/Array} records 新的数据
        * @param {Row} row 指定行
        */
@@ -82,40 +118,15 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { treeFullData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const sYOpts = computeSYOpts.value
         const treeOpts = computeTreeOpts.value
+        const { transform } = treeOpts
         if (!XEUtils.isArray(records)) {
           records = [records]
         }
         const newRecords: any[] = records.map((record: any) => $xetable.defineField(Object.assign({}, record)))
         if (!row) {
           // 如果为虚拟树
-          if (treeConfig && treeOpts.transform) {
-            newRecords.forEach(item => {
-              const parentRowId = item[treeOpts.parentField]
-              const rowid = getRowid($xetable, item)
-              if (parentRowId) {
-                const matchObj = XEUtils.findTree(treeFullData, item => parentRowId === item[treeOpts.rowField], treeOpts)
-                if (matchObj) {
-                  const { item: parentRow } = matchObj
-                  const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
-                  const parentLevel = parentRest ? parentRest.level : 0
-                  let parentChilds = parentRow[treeOpts.children]
-                  if (!XEUtils.isArray(parentChilds)) {
-                    parentChilds = parentRow[treeOpts.children] = []
-                  }
-                  parentChilds.unshift(item)
-                  const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
-                  fullDataRowIdData[rowid] = rest
-                  fullAllDataRowIdData[rowid] = rest
-                  $xetable.cacheRowMap(true)
-                } else {
-                  // 父节点不存在
-                }
-              } else {
-                afterFullData.unshift(item)
-                treeFullData.unshift(item)
-              }
-            })
-            $xetable.updateVirtualTreeData()
+          if (treeConfig && transform) {
+            insertTreeRow(newRecords, false)
           } else {
             afterFullData.unshift(...newRecords)
             tableFullData.unshift(...newRecords)
@@ -129,41 +140,80 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           }
         } else {
           if (row === -1) {
-            afterFullData.push(...newRecords)
-            tableFullData.push(...newRecords)
-            // 刷新单元格合并
-            mergeList.forEach((mergeItem: any) => {
-              const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-              if (mergeRowIndex + mergeRowspan > afterFullData.length) {
-                mergeItem.rowspan = mergeRowspan + newRecords.length
-              }
-            })
+            // 如果为虚拟树
+            if (treeConfig && transform) {
+              insertTreeRow(newRecords, true)
+            } else {
+              afterFullData.push(...newRecords)
+              tableFullData.push(...newRecords)
+              // 刷新单元格合并
+              mergeList.forEach((mergeItem: any) => {
+                const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+                if (mergeRowIndex + mergeRowspan > afterFullData.length) {
+                  mergeItem.rowspan = mergeRowspan + newRecords.length
+                }
+              })
+            }
           } else {
-            if (treeConfig) {
-              throw new Error(getLog('vxe.error.noTree', ['insert']))
-            }
-            const afIndex = $xetable.findRowIndexOf(afterFullData, row)
-            if (afIndex === -1) {
-              throw new Error(errLog('vxe.error.unableInsert'))
-            }
-            afterFullData.splice(afIndex, 0, ...newRecords)
-            tableFullData.splice($xetable.findRowIndexOf(tableFullData, row), 0, ...newRecords)
-            // 刷新单元格合并
-            mergeList.forEach((mergeItem: any) => {
-              const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-              if (mergeRowIndex > afIndex) {
-                mergeItem.row = mergeRowIndex + newRecords.length
-              } else if (mergeRowIndex + mergeRowspan > afIndex) {
-                mergeItem.rowspan = mergeRowspan + newRecords.length
+            // 如果为虚拟树
+            if (treeConfig && transform) {
+              const matchObj = XEUtils.findTree(treeFullData, item => row[treeOpts.rowField] === item[treeOpts.rowField], treeOpts)
+              if (matchObj) {
+                const { parent: parentRow } = matchObj
+                const parentChilds = matchObj.items
+                const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
+                const parentLevel = parentRest ? parentRest.level : 0
+                newRecords.forEach((item, i) => {
+                  const rowid = getRowid($xetable, item)
+                  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                    if (item[treeOpts.parentField]) {
+                      if (parentRow && item[treeOpts.parentField] !== parentRow[treeOpts.rowField]) {
+                        errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[treeOpts.rowField]}`])
+                      }
+                    }
+                  }
+                  if (parentRow) {
+                    item[treeOpts.parentField] = parentRow[treeOpts.rowField]
+                  }
+                  parentChilds.splice(matchObj.index + i, 0, item)
+                  const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
+                  fullDataRowIdData[rowid] = rest
+                  fullAllDataRowIdData[rowid] = rest
+                })
+                $xetable.updateVirtualTreeData()
+              } else {
+                if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                  warnLog('vxe.error.unableInsert')
+                }
+                insertTreeRow(newRecords, true)
               }
-            })
+            } else {
+              if (treeConfig) {
+                throw new Error(getLog('vxe.error.noTree', ['insert']))
+              }
+              const afIndex = $xetable.findRowIndexOf(afterFullData, row)
+              if (afIndex === -1) {
+                throw new Error(errLog('vxe.error.unableInsert'))
+              }
+              afterFullData.splice(afIndex, 0, ...newRecords)
+              tableFullData.splice($xetable.findRowIndexOf(tableFullData, row), 0, ...newRecords)
+              // 刷新单元格合并
+              mergeList.forEach((mergeItem: any) => {
+                const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+                if (mergeRowIndex > afIndex) {
+                  mergeItem.row = mergeRowIndex + newRecords.length
+                } else if (mergeRowIndex + mergeRowspan > afIndex) {
+                  mergeItem.rowspan = mergeRowspan + newRecords.length
+                }
+              })
+            }
           }
         }
         editStore.insertList.unshift(...newRecords)
         reactData.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
         $xetable.updateFooter()
         $xetable.cacheRowMap()
-        $xetable.handleTableData()
+        $xetable.handleTableData(transform)
         $xetable.updateAfterDataIndex()
         $xetable.checkSelectionStatus()
         if (scrollYLoad) {
@@ -192,6 +242,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const checkboxOpts = computeCheckboxOpts.value
         const sYOpts = computeSYOpts.value
         const treeOpts = computeTreeOpts.value
+        const { transform } = treeOpts
         const { actived, removeList, insertList } = editStore
         const { checkField: property } = checkboxOpts
         let rest: any[] = []
@@ -223,7 +274,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           $xetable.clearMergeCells()
         } else {
           // 如果为虚拟树
-          if (treeConfig && treeOpts.transform) {
+          if (treeConfig && transform) {
             rows.forEach((row: any) => {
               const rowid = getRowid($xetable, row)
               const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid($xetable, item), treeOpts)
@@ -274,7 +325,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         reactData.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
         $xetable.updateFooter()
         $xetable.cacheRowMap()
-        $xetable.handleTableData()
+        $xetable.handleTableData(transform)
         $xetable.updateAfterDataIndex()
         $xetable.checkSelectionStatus()
         if (scrollYLoad) {

@@ -39,7 +39,7 @@ export default defineComponent({
     const demo1 = reactive({
       treeConfig: {
         lazy: true,
-        children: 'children',
+        transform: true,
         hasChild: 'hasChild',
         loadMethod ({ row }) {
           // 异步加载子节点
@@ -143,7 +143,7 @@ export default defineComponent({
             const demo1 = reactive({
               treeConfig: {
                 lazy: true,
-                children: 'children',
+                transform: true,
                 hasChild: 'hasChild',
                 loadMethod ({ row }) {
                   // 异步加载子节点
