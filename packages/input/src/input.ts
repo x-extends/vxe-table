@@ -601,11 +601,18 @@ export default defineComponent({
       return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
     })
 
+    function toFloatValueFixed (inputValue: string | number, digitsValue: number) {
+      if (/^-/.test('' + inputValue)) {
+        return XEUtils.toFixed(XEUtils.ceil(inputValue, digitsValue), digitsValue)
+      }
+      return XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
+    }
+
     function getNumberValue (val: any) {
       const { type, exponential } = props
       const inpMaxlength = computeInpMaxlength.value
       const digitsValue = computeDigitsValue.value
-      const restVal = (type === 'float' ? XEUtils.toFixed(XEUtils.floor(val, digitsValue), digitsValue) : XEUtils.toValueString(val))
+      const restVal = (type === 'float' ? toFloatValueFixed(val, digitsValue) : XEUtils.toValueString(val))
       if (exponential && (val === restVal || XEUtils.toValueString(val).toLowerCase() === XEUtils.toNumber(restVal).toExponential())) {
         return val
       }
@@ -746,7 +753,7 @@ export default defineComponent({
         changeValue()
       } else if (type === 'float') {
         if (inputValue) {
-          const validValue = XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
+          const validValue = toFloatValueFixed(inputValue, digitsValue)
           if (inputValue !== validValue) {
             emitModel(validValue, { type: 'init' })
           }

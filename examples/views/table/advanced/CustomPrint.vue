@@ -201,7 +201,7 @@ export default defineComponent({
       { name: 'vue 进阶用法', price: 188, code: '1201511842009' },
       { name: '某某xx2', price: 860, code: '1201543242003' },
       { name: 'js 从入门到精通', price: 99, code: '1201775849605' },
-      { name: 'vxe-table pro 从入门到放弃', price: 888, code: '1201775112606' },
+      { name: 'vxe-table pro test abc', price: 888, code: '1201775112606' },
       { name: 'js 进阶宝典', price: 166, code: '1201775849608' }
     ]
     const printEvent2 = () => {

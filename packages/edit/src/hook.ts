@@ -102,10 +102,11 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                   if (!XEUtils.isArray(parentChilds)) {
                     parentChilds = parentRow[treeOpts.children] = []
                   }
-                  parentChilds.push(item)
+                  parentChilds.unshift(item)
                   const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
                   fullDataRowIdData[rowid] = rest
                   fullAllDataRowIdData[rowid] = rest
+                  $xetable.cacheRowMap(true)
                 } else {
                   // 父节点不存在
                 }
