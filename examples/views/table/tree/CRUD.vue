@@ -28,9 +28,11 @@
       <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
-      <vxe-column title="操作">
+      <vxe-column title="操作" width="500">
         <template #default="{ row }">
-          <vxe-button type="text" status="primary" @click="insertRow(row)">新增子节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertRow(row, 'current')">插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertRow(row, 'top')">顶部插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertRow(row, 'bottom')">尾部插入子节点</vxe-button>
           <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
         </template>
       </vxe-column>
@@ -81,9 +83,10 @@ export default {
           <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
           <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
-          <vxe-column title="操作">
+          <vxe-column title="操作" width="500">
             <template #default="{ row }">
-              <vxe-button type="text" status="primary" @click="insertRow(row)">新增子节点</vxe-button>
+              <vxe-button type="text" status="primary" @click="insertRow(row)">顶部插入节点</vxe-button>
+              <vxe-button type="text" status="primary" @click="insertRow(row, -1)">尾部插入节点</vxe-button>
               <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
             </template>
           </vxe-column>
@@ -140,17 +143,41 @@ export default {
               }
               $table.insert(newRow).then(({ row }) => $table.setActiveRow(row))
             },
-            async insertRow (row) {
+            async insertRow (currRow, locat) {
               const $table = this.$refs.xTable
-              const record = {
-                name: '新数据',
-                id: Date.now(),
-                parentId: row.id, // 指定父节点，自动插入该节点中
-                date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+              // 如果 null 则插入到目标节点顶部
+              // 如果 -1 则插入到目标节点底部
+              // 如果 row 则有插入到效的目标节点该行的位置
+              if (locat === 'current') {
+                const record = {
+                  name: '新数据',
+                  id: Date.now(),
+                  parentId: currRow.parentId, // 父节点必须与当前行一致
+                  date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+                }
+                const { row: newRow } = await $table.insertAt(record, currRow)
+                await $table.setActiveRow(newRow) // 插入子节点
+              } else if (locat === 'top') {
+                const record = {
+                  name: '新数据',
+                  id: Date.now(),
+                  parentId: currRow.id, // 需要指定父节点，自动插入该节点中
+                  date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+                }
+                const { row: newRow } = await $table.insert(record)
+                await $table.setTreeExpand(currRow, true) // 将父节点展开
+                await $table.setActiveRow(newRow) // 插入子节点
+              } else if (locat === 'bottom') {
+                const record = {
+                  name: '新数据',
+                  id: Date.now(),
+                  parentId: currRow.id, // 需要指定父节点，自动插入该节点中
+                  date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+                }
+                const { row: newRow } = await $table.insertAt(record, -1)
+                await $table.setTreeExpand(currRow, true) // 将父节点展开
+                await $table.setActiveRow(newRow) // 插入子节点
               }
-              const { row: newRow } = await $table.insert(record)
-              await $table.setTreeExpand(row, true) // 将父节点展开
-              await $table.setActiveRow(newRow) // 插入子节点
             },
             async removeRow (row) {
               const $table = this.$refs.xTable
@@ -224,17 +251,41 @@ export default {
       }
       $table.insert(newRow).then(({ row }) => $table.setActiveRow(row))
     },
-    async insertRow (row) {
+    async insertRow (currRow, locat) {
       const $table = this.$refs.xTable
-      const record = {
-        name: '新数据',
-        id: Date.now(),
-        parentId: row.id, // 指定父节点，自动插入该节点中
-        date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+      // 如果 null 则插入到目标节点顶部
+      // 如果 -1 则插入到目标节点底部
+      // 如果 row 则有插入到效的目标节点该行的位置
+      if (locat === 'current') {
+        const record = {
+          name: '新数据',
+          id: Date.now(),
+          parentId: currRow.parentId, // 父节点必须与当前行一致
+          date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+        }
+        const { row: newRow } = await $table.insertAt(record, currRow)
+        await $table.setActiveRow(newRow) // 插入子节点
+      } else if (locat === 'top') {
+        const record = {
+          name: '新数据',
+          id: Date.now(),
+          parentId: currRow.id, // 需要指定父节点，自动插入该节点中
+          date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+        }
+        const { row: newRow } = await $table.insert(record)
+        await $table.setTreeExpand(currRow, true) // 将父节点展开
+        await $table.setActiveRow(newRow) // 插入子节点
+      } else if (locat === 'bottom') {
+        const record = {
+          name: '新数据',
+          id: Date.now(),
+          parentId: currRow.id, // 需要指定父节点，自动插入该节点中
+          date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+        }
+        const { row: newRow } = await $table.insertAt(record, -1)
+        await $table.setTreeExpand(currRow, true) // 将父节点展开
+        await $table.setActiveRow(newRow) // 插入子节点
       }
-      const { row: newRow } = await $table.insert(record)
-      await $table.setTreeExpand(row, true) // 将父节点展开
-      await $table.setActiveRow(newRow) // 插入子节点
     },
     async removeRow (row) {
       const $table = this.$refs.xTable

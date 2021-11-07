@@ -933,26 +933,26 @@ export default {
                 name: 'TableTreeFilter'
               }
             },
-            {
-              label: 'app.aside.nav.treeSort',
-              locat: {
-                name: 'TableTreeSort'
-              }
-            },
-            {
-              label: 'app.aside.nav.groupSummary',
-              // demoUrl: 'https://jsrun.pro/KVWKp/edit',
-              locat: {
-                name: 'TableTreeGroupSummary'
-              }
-            },
-            {
-              label: 'app.aside.nav.groupSummaryCount',
-              // demoUrl: 'https://jsrun.pro/GTWKp/edit',
-              locat: {
-                name: 'TableTreeGroupSummaryCount'
-              }
-            },
+            // {
+            //   label: 'app.aside.nav.treeSort',
+            //   locat: {
+            //     name: 'TableTreeSort'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.groupSummary',
+            //   // demoUrl: 'https://jsrun.pro/KVWKp/edit',
+            //   locat: {
+            //     name: 'TableTreeGroupSummary'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.groupSummaryCount',
+            //   // demoUrl: 'https://jsrun.pro/GTWKp/edit',
+            //   locat: {
+            //     name: 'TableTreeGroupSummaryCount'
+            //   }
+            // },
             {
               label: 'app.aside.nav.expandRow',
               locat: {

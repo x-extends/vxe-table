@@ -1,15 +1,13 @@
 <template>
   <div>
-    <p class="tip">
-      插入数据，简单的实现示例<br>
-      <span class="red">（注：内置的 CRUD 管理器是不支持插入子节点的，如果要往子节点插入或删除节点数据，可以直接操作数据源）</span>
-    </p>
+    <p class="tip">插入数据，简单的实现示例</p>
 
     <vxe-toolbar custom>
       <template #buttons>
-        <vxe-button @click="insertEvent()">插入第一行</vxe-button>
-        <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
-        <vxe-button @click="saveEvent">保存</vxe-button>
+        <vxe-button @click="insertEvent">新增</vxe-button>
+        <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+        <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+        <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -17,8 +15,7 @@
       resizable
       show-overflow
       keep-source
-      ref="xTree"
-      class="my_treetable_insert"
+      ref="xTable"
       :tree-config="treeConfig"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="tableData">
@@ -34,7 +31,6 @@
     <pre>
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
-      <pre-code class="css">{{ demoCodes[2] }}</pre-code>
     </pre>
   </div>
 </template>
@@ -46,43 +42,38 @@ export default {
   data () {
     return {
       tableData: [
-        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        {
-          id: 1005,
-          name: 'Test2',
-          type: 'mp4',
-          size: null,
-          date: '2021-04-01',
-          children: [
-            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-            { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-            {
-              id: 10053,
-              name: 'test abc96',
-              type: 'avi',
-              size: null,
-              date: '2021-04-01',
-              children: [
-                { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-              ]
-            }
-          ]
-        },
-        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 10000, parentId: null, name: 'vxe-table test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 20045, parentId: 24300, name: 'vxe-table test abc4', type: 'html', size: 600, date: '2021-04-01' },
+        { id: 10053, parentId: 24300, name: 'vxe-table test abc96', type: 'avi', size: null, date: '2021-04-01' },
+        { id: 24330, parentId: 10053, name: 'vxe-table test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+        { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+        { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24555, parentId: null, name: 'vxe-table test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+        { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
       ],
       treeConfig: {
-        children: 'children'
+        transform: true,
+        rowField: 'id',
+        parentField: 'parentId'
       },
       demoCodes: [
         `
         <vxe-toolbar custom>
           <template #buttons>
-            <vxe-button @click="insertEvent()">插入第一行</vxe-button>
-            <vxe-button @click="getSelectionEvent">获取选中</vxe-button>
-            <vxe-button @click="saveEvent">保存</vxe-button>
+            <vxe-button @click="insertEvent">新增</vxe-button>
+            <vxe-button @click="$refs.xTable.removeCheckboxRow()">删除选中</vxe-button>
+            <vxe-button @click="getInsertEvent">获取新增</vxe-button>
+            <vxe-button @click="getRemoveEvent">获取删除</vxe-button>
           </template>
         </vxe-toolbar>
 
@@ -90,8 +81,7 @@ export default {
           resizable
           show-overflow
           keep-source
-          ref="xTree"
-          class="my_treetable_insert"
+          ref="xTable"
           :tree-config="treeConfig"
           :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
           :data="tableData">
@@ -109,61 +99,52 @@ export default {
           data () {
             return {
               tableData: [
-                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                {
-                  id: 1005,
-                  name: 'Test2',
-                  type: 'mp4',
-                  size: null,
-                  date: '2021-04-01',
-                  children: [
-                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-                    { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-                    {
-                      id: 10053,
-                      name: 'test abc96',
-                      type: 'avi',
-                      size: null,
-                      date: '2021-04-01',
-                      children: [
-                        { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-                      ]
-                    }
-                  ]
-                },
-                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: 10000, parentId: null, name: 'vxe-table test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'vxe-table test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'vxe-table test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'vxe-table test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'vxe-table test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
               ],
               treeConfig: {
-                children: 'children'
+                transform: true,
+                rowField: 'id',
+                parentField: 'parentId'
               }
             }
           },
           methods: {
             insertEvent () {
-              const xTree = this.$refs.xTree
+              const $table = this.$refs.xTable
               const newRow = {
                 name: '新数据',
                 date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
               }
-              xTree.insert(newRow).then(() => xTree.setActiveRow(newRow))
+              $table.insert(newRow).then(({ row }) => $table.setActiveRow(row))
             },
-            getSelectionEvent () {
-              const selectRecords = this.$refs.xTree.getCheckboxRecords()
-              this.$XModal.alert(selectRecords.length)
+            getInsertEvent () {
+              const $table = this.$refs.xTable
+              const insertRecords = $table.getInsertRecords()
+              this.$XModal.alert(insertRecords.length)
             },
-            saveEvent () {
-              const { insertRecords, updateRecords } = this.$refs.xTree.getRecordset()
-              this.$XModal.alert(\`insertRecords=\${insertRecords.length} updateRecords=\${updateRecords.length}\`)
+            getRemoveEvent () {
+              const $table = this.$refs.xTable
+              const removeRecords = $table.getRemoveRecords()
+              this.$XModal.alert(removeRecords.length)
             }
           }
-        }
-        `,
-        `
-        .my_treetable_insert .vxe-body--row.is--new {
-          background-color: #f1fdf1;
         }
         `
       ]
@@ -171,27 +152,23 @@ export default {
   },
   methods: {
     insertEvent () {
-      const xTree = this.$refs.xTree
+      const $table = this.$refs.xTable
       const newRow = {
         name: '新数据',
         date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
       }
-      xTree.insert(newRow).then(({ row }) => xTree.setActiveRow(row))
+      $table.insert(newRow).then(({ row }) => $table.setActiveRow(row))
     },
-    getSelectionEvent () {
-      const selectRecords = this.$refs.xTree.getCheckboxRecords()
-      this.$XModal.alert(selectRecords.length)
+    getInsertEvent () {
+      const $table = this.$refs.xTable
+      const insertRecords = $table.getInsertRecords()
+      this.$XModal.alert(insertRecords.length)
     },
-    saveEvent () {
-      const { insertRecords, updateRecords } = this.$refs.xTree.getRecordset()
-      this.$XModal.alert(`insertRecords=${insertRecords.length} updateRecords=${updateRecords.length}`)
+    getRemoveEvent () {
+      const $table = this.$refs.xTable
+      const removeRecords = $table.getRemoveRecords()
+      this.$XModal.alert(removeRecords.length)
     }
   }
 }
 </script>
-
-<style lang="scss">
-.my_treetable_insert .vxe-body--row.is--new {
-  background-color: #f1fdf1;
-}
-</style>

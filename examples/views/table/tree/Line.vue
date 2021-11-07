@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       树表格，通过配置 <table-api-link prop="tree-config"/>={<table-api-link prop="line"/>: true} 属性来开启树节点连接线<br>
-      <span class="red">（注：连接线只支持基本功能，开启渲染节点线将会影响渲染性能，具体取决于数据量）</span>
+       <span class="red">（注：连接线不支持虚拟滚动）</span>
     </p>
 
     <vxe-table
@@ -11,7 +11,8 @@
       highlight-hover-row
       row-key
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
-      :data="tableData1">
+      :data="tableData1"
+      :scroll-y="{enabled: false}">
       <vxe-column field="name" title="Name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
@@ -34,9 +35,10 @@
       highlight-current-row
       row-key
       size="medium"
-      :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
       :checkbox-config="{labelField: 'name'}"
-      :data="tableData">
+      :data="tableData2"
+      :scroll-y="{enabled: false}">
       <vxe-column type="checkbox" title="Name" width="280" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
@@ -59,8 +61,9 @@
       row-key
       size="small"
       :radio-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-      :data="tableData">
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :data="tableData3"
+      :scroll-y="{enabled: false}">
       <vxe-column type="radio" title="Name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
@@ -84,8 +87,9 @@
       ref="xTree"
       size="mini"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}"
-      :data="tableData">
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}"
+      :data="tableData4"
+      :scroll-y="{enabled: false}">
       <vxe-column type="checkbox" title="Name" tree-node>
         <template #default="{ row }">
           <span>
@@ -138,33 +142,65 @@ export default {
         { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
         { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
       ],
-      tableData: [
-        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        {
-          id: 1005,
-          name: 'Test2',
-          type: 'mp4',
-          size: null,
-          date: '2021-04-01',
-          children: [
-            { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-            { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-            {
-              id: 10053,
-              name: 'test abc96',
-              type: 'avi',
-              size: null,
-              date: '2021-04-01',
-              children: [
-                { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-              ]
-            }
-          ]
-        },
-        { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+      tableData2: [
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+        { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+        { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+        { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+        { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+        { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+      ],
+      tableData3: [
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+        { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+        { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+        { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+        { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+        { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
+      ],
+      tableData4: [
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+        { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+        { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+        { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+        { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+        { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+        { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+        { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+        { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+        { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
       ],
       demoCodes: [
         `
@@ -174,7 +210,8 @@ export default {
           highlight-hover-row
           row-key
           :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
-          :data="tableData1">
+          :data="tableData1"
+          :scroll-y="{enabled: false}">
           <vxe-column field="name" title="Name" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
@@ -217,9 +254,10 @@ export default {
           highlight-current-row
           row-key
           size="medium"
-          :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
           :checkbox-config="{labelField: 'name'}"
-          :data="tableData">
+          :data="tableData2"
+          :scroll-y="{enabled: false}">
           <vxe-column type="checkbox" title="Name" width="280" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
@@ -230,33 +268,25 @@ export default {
         export default {
           data () {
             return {
-              tableData: [
-                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                {
-                  id: 1005,
-                  name: 'Test2',
-                  type: 'mp4',
-                  size: null,
-                  date: '2021-04-01',
-                  children: [
-                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-                    { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-                    {
-                      id: 10053,
-                      name: 'test abc96',
-                      type: 'avi',
-                      size: null,
-                      date: '2021-04-01',
-                      children: [
-                        { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-                      ]
-                    }
-                  ]
-                },
-                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+              tableData2: [
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
               ]
             }
           }
@@ -270,8 +300,9 @@ export default {
           row-key
           size="small"
           :radio-config="{labelField: 'name'}"
-          :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
-          :data="tableData">
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :data="tableData3"
+          :scroll-y="{enabled: false}">
           <vxe-column type="radio" title="Name" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
@@ -282,33 +313,25 @@ export default {
         export default {
           data () {
             return {
-              tableData: [
-                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                {
-                  id: 1005,
-                  name: 'Test2',
-                  type: 'mp4',
-                  size: null,
-                  date: '2021-04-01',
-                  children: [
-                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-                    { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-                    {
-                      id: 10053,
-                      name: 'test abc96',
-                      type: 'avi',
-                      size: null,
-                      date: '2021-04-01',
-                      children: [
-                        { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-                      ]
-                    }
-                  ]
-                },
-                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+              tableData3: [
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
               ]
             }
           }
@@ -322,8 +345,9 @@ export default {
           row-key
           ref="xTree"
           size="mini"
-          :tree-config="{children: 'children', accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}"
-          :data="tableData">
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}"
+          :data="tableData4"
+          :scroll-y="{enabled: false}">
           <vxe-column field="name" title="Name" tree-node>
             <template #default="{ row }">
               <span>
@@ -346,33 +370,25 @@ export default {
         export default {
           data () {
             return {
-              tableData: [
-                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                {
-                  id: 1005,
-                  name: 'Test2',
-                  type: 'mp4',
-                  size: null,
-                  date: '2021-04-01',
-                  children: [
-                    { id: 24300, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
-                    { id: 20045, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
-                    {
-                      id: 10053,
-                      name: 'test abc96',
-                      type: 'avi',
-                      size: null,
-                      date: '2021-04-01',
-                      children: [
-                        { id: 24330, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
-                        { id: 21011, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
-                        { id: 22200, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
-                      ]
-                    }
-                  ]
-                },
-                { id: 23666, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
-                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+              tableData4: [
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
+                { id: 24300, parentId: 10050, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
+                { id: 20045, parentId: 24300, name: 'test abc4', type: 'html', size: 600, date: '2021-04-01' },
+                { id: 10053, parentId: 24300, name: 'test abc96', type: 'avi', size: null, date: '2021-04-01' },
+                { id: 24330, parentId: 10053, name: 'test abc5', type: 'txt', size: 25, date: '2021-10-01' },
+                { id: 21011, parentId: 10053, name: 'Test6', type: 'pdf', size: 512, date: '2020-01-01' },
+                { id: 22200, parentId: 10053, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
+                { id: 23677, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23671, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23672, parentId: 23677, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23688, parentId: 23666, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23681, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 23682, parentId: 23688, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' },
+                { id: 24566, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
+                { id: 24577, parentId: 24555, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' }
               ]
             }
           }

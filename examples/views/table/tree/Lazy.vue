@@ -43,7 +43,7 @@
       row-id="id"
       :loading="loading2"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+      :tree-config="{transform: true, lazy: true, hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
       :data="tableData2">
       <vxe-column type="checkbox" title="Name" width="400" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
@@ -132,7 +132,7 @@ export default {
           row-id="id"
           :loading="loading2"
           :checkbox-config="{labelField: 'name'}"
-          :tree-config="{lazy: true, children: 'children', hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
+          :tree-config="{transform: true, lazy: true, hasChild: 'hasChild', expandRowKeys: defaultExpandRowKeys, loadMethod: loadChildrenMethod, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}"
           :data="tableData2">
           <vxe-column type="checkbox" title="Name" width="400" tree-node></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
@@ -154,12 +154,12 @@ export default {
             setTimeout(() => {
               this.loading2 = false
               // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
-              this.defaultExpandRowKeys = [1005, 10053]
+              this.defaultExpandRowKeys = [10050, 23666]
               this.tableData2 = [
-                { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-                { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-                { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-                { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+                { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+                { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+                { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+                { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
               ]
             }, 300)
           },
@@ -187,12 +187,12 @@ export default {
     setTimeout(() => {
       this.loading2 = false
       // 默认展开的节点必须在数据初始化之前赋值且只会执行一次
-      this.defaultExpandRowKeys = [1005, 10053]
+      this.defaultExpandRowKeys = [10050, 23666]
       this.tableData2 = [
-        { id: 1000, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
-        { id: 1005, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
-        { id: 23666, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
-        { id: 24555, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
+        { id: 10000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
+        { id: 10050, parentId: null, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01', hasChild: true },
+        { id: 23666, parentId: null, name: 'Test23', type: 'mp4', size: null, date: '2021-01-02', hasChild: true },
+        { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
       ]
     }, 300)
   },
