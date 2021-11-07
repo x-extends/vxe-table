@@ -33,6 +33,13 @@ function toStringTime (str) {
   return new Date('')
 }
 
+function toFloatValueFixed (inputValue, digitsValue) {
+  if (/^-/.test('' + inputValue)) {
+    return XEUtils.toFixed(XEUtils.ceil(inputValue, digitsValue), digitsValue)
+  }
+  return XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
+}
+
 function renderDefaultInput (h, _vm) {
   const { inpAttrs, inpEvents, value } = _vm
   return h('input', {
@@ -1149,7 +1156,7 @@ export default {
         this.changeValue()
       } else if (type === 'float') {
         if (value) {
-          const validValue = XEUtils.toFixed(XEUtils.floor(value, digitsValue), digitsValue)
+          const validValue = toFloatValueFixed(value, digitsValue)
           if (value !== validValue) {
             this.emitUpdate(validValue, { type: 'init' })
           }
@@ -1176,7 +1183,7 @@ export default {
             } else if (!this.vaildMaxNum(inpVal)) {
               inpVal = max
             }
-            this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(inpVal, digitsValue), digitsValue) : XEUtils.toString(inpVal), { type: 'check' })
+            this.emitUpdate(type === 'float' ? toFloatValueFixed(inpVal, digitsValue) : XEUtils.toString(inpVal), { type: 'check' })
           }
         } else if (isDatePicker) {
           let inpVal = inputValue
@@ -1305,7 +1312,7 @@ export default {
       const inputValue = type === 'integer' ? XEUtils.toInteger(value) : XEUtils.toNumber(value)
       const newValue = isPlus ? XEUtils.add(inputValue, stepValue) : XEUtils.subtract(inputValue, stepValue)
       if (this.vaildMinNum(newValue) && this.vaildMaxNum(newValue)) {
-        this.emitUpdate(type === 'float' ? XEUtils.toFixed(XEUtils.floor(newValue, digitsValue), digitsValue) : XEUtils.toString(newValue), evnt)
+        this.emitUpdate(type === 'float' ? toFloatValueFixed(newValue, digitsValue) : XEUtils.toString(newValue), evnt)
       }
     },
     // 数值
