@@ -25,25 +25,7 @@
 </template>
 
 <script>
-import CodeMirror from 'codemirror'
-
 export default {
-  created () {
-    this.$nextTick(() => {
-      CodeMirror(this.$refs.runHTML, {
-        lineNumbers: true,
-        mode: 'htmlmixed'
-      })
-      CodeMirror(this.$refs.runJS, {
-        lineNumbers: true,
-        mode: 'javascript'
-      })
-      CodeMirror(this.$refs.runCSS, {
-        lineNumbers: true,
-        mode: 'css'
-      })
-    })
-  }
 }
 </script>
 

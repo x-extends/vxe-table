@@ -27,6 +27,8 @@ export interface RendererMapOptions {
   renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): VNode[] | string[];
   filterMethod?(params: ColumnFilterMethodParams): boolean;
   filterResetMethod?(params: ColumnFilterResetParams): void;
+  // 默认行为
+  defaultFilterMethod?(params: ColumnFilterMethodParams): boolean;
 
   // 单元格渲染
   renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
@@ -66,7 +68,7 @@ export class RenderOptions {
   /**
    * 渲染器名称
    */
-  name: string;
+  name?: string;
   /**
    * 目标组件渲染的参数
    */

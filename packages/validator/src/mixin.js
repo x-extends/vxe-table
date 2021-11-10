@@ -151,21 +151,21 @@ export default {
           const ruleProps = Object.keys(validRest)
           return this.$nextTick().then(() => {
             if (ruleProps.length) {
-              return Promise.reject(validRest[ruleProps[0]][0])
+              return validRest[ruleProps[0]][0]
             }
             if (cb) {
               cb()
             }
           })
         }).catch(firstErrParams => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             const finish = () => {
               this.$nextTick(() => {
                 if (cb) {
                   cb(validRest)
                   resolve()
                 } else {
-                  reject(validRest)
+                  resolve(validRest)
                 }
               })
             }

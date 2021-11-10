@@ -119,9 +119,6 @@
 </template>
 
 <script>
-import QRCode from 'qrcode'
-import jsbarcode from 'jsbarcode'
-
 // 打印样式
 const printStyle = `
 .title {
@@ -398,12 +395,6 @@ export default {
               this.codeList.forEach(item => {
                 const img = document.createElement('img')
                 // 生成条形码
-                jsbarcode(img, item.code, {
-                  lineColor: '#000',
-                  width: 2,
-                  height: 80,
-                  displayValue: true
-                })
                 const tmpl = \`
                 <div class="bar-code">
                   <p>\${item.name}</p>
@@ -441,20 +432,18 @@ export default {
               }
               \`
               // 生成二维码
-              QRCode.toDataURL('https://gitee.com/xuliangzhan_admin/vxe-table').then(url => {
-                // 打印模板
-                const printTmpl = \`
-                <p class="title">扫一扫二维码</p>
-                <div class="qrcode">
-                  <img src="\${url}">
-                  <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
-                </div>
-                \`
-                this.$XPrint({
-                  sheetName: '打印二维码模板',
-                  style: printStyle,
-                  content: printTmpl
-                })
+              // 打印模板
+              const printTmpl = \`
+              <p class="title">扫一扫二维码</p>
+              <div class="qrcode">
+                <img src="">
+                <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
+              </div>
+              \`
+              this.$XPrint({
+                sheetName: '打印二维码模板',
+                style: printStyle,
+                content: printTmpl
               })
             }
           }
@@ -685,12 +674,6 @@ export default {
       this.codeList.forEach(item => {
         const img = document.createElement('img')
         // 生成条形码
-        jsbarcode(img, item.code, {
-          lineColor: '#000',
-          width: 2,
-          height: 80,
-          displayValue: true
-        })
         const tmpl = `
         <div class="barcode">
           <p>${item.name}</p>
@@ -715,20 +698,18 @@ export default {
       }
       `
       // 生成二维码
-      QRCode.toDataURL('https://gitee.com/xuliangzhan_admin/vxe-table').then(url => {
-        // 打印模板
-        const printTmpl = `
-        <p class="title">扫一扫二维码</p>
-        <div class="qrcode">
-          <img src="${url}">
-          <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
-        </div>
-        `
-        this.$XPrint({
-          sheetName: '打印二维码模板',
-          style: printStyle,
-          content: printTmpl
-        })
+      // 打印模板
+      const printTmpl = `
+      <p class="title">扫一扫二维码</p>
+      <div class="qrcode">
+        <img src="">
+        <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
+      </div>
+      `
+      this.$XPrint({
+        sheetName: '打印二维码模板',
+        style: printStyle,
+        content: printTmpl
       })
     },
     printEvent4 () {
