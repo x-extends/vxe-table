@@ -21,7 +21,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { VXETable } from '../../../packages/all'
-import XEClipboard from 'xe-clipboard'
 
 interface ItemVO {
   icon: string;
@@ -30,9 +29,7 @@ interface ItemVO {
 export default defineComponent({
   setup () {
     const copyEvent = ({ icon }: ItemVO) => {
-      if (XEClipboard.copy(icon)) {
-        VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
-      }
+      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
     }
     return {
       list: [

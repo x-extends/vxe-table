@@ -685,7 +685,7 @@ export const renderer: VxeGlobalRenderer = {
     XEUtils.each(opts, (options, name) => renderer.add(name, options))
     return renderer
   },
-  get (name) {
+  get (name: string) {
     return renderMap[name] || null
   },
   add (name, options) {

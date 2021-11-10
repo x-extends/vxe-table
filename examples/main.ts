@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 import i18n from './i18n'
 
-import 'font-awesome/css/font-awesome.css'
 import './assets/style/index.scss'
 import './plugins'
 
@@ -15,12 +14,6 @@ import TableColumnAPILink from './components/TableColumnAPILink.vue'
 import ToolbarAPILink from './components/ToolbarAPILink.vue'
 import PagerAPILink from './components/PagerAPILink.vue'
 import VirtualTreeAPILink from './components/VirtualTreeAPILink.vue'
-
-import Antd from 'ant-design-vue'
-import 'ant-design-vue/dist/antd.css'
-
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
 
 import {
   VXETable,
@@ -109,9 +102,6 @@ app.use(List)
 app.use(Pulldown)
 
 app.use(Table)
-
-app.use(Antd)
-app.use(ElementPlus)
 
 app.use(store)
 app.use(router)

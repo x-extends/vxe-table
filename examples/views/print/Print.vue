@@ -125,8 +125,6 @@
 import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { VXETable } from '../../../packages/all'
 import { VxeTableInstance, VxeToolbarInstance } from '../../../types/index'
-import QRCode from 'qrcode'
-import jsbarcode from 'jsbarcode'
 
 export default defineComponent({
   setup () {
@@ -273,12 +271,6 @@ export default defineComponent({
       codeList.forEach(item => {
         const img = document.createElement('img')
         // 生成条形码
-        jsbarcode(img, item.code, {
-          lineColor: '#000',
-          width: 2,
-          height: 80,
-          displayValue: true
-        })
         const tmpl = `
         <div class="barcode">
           <p>${item.name}</p>
@@ -304,20 +296,18 @@ export default defineComponent({
       }
       `
       // 生成二维码
-      QRCode.toDataURL('https://gitee.com/xuliangzhan_admin/vxe-table').then((url: string) => {
-        // 打印模板
-        const printTmpl = `
-        <p class="title">扫一扫二维码</p>
-        <div class="qrcode">
-          <img src="${url}">
-          <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
-        </div>
-        `
-        VXETable.print({
-          sheetName: '打印二维码模板',
-          style: printStyle,
-          content: printTmpl
-        })
+      // 打印模板
+      const printTmpl = `
+      <p class="title">扫一扫二维码</p>
+      <div class="qrcode">
+        <img src="">
+        <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
+      </div>
+      `
+      VXETable.print({
+        sheetName: '打印二维码模板',
+        style: printStyle,
+        content: printTmpl
       })
     }
 
@@ -683,7 +673,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable } from 'vxe-table'
-        import jsbarcode from 'jsbarcode'
 
         export default defineComponent({
           setup () {
@@ -714,12 +703,6 @@ export default defineComponent({
               codeList.forEach(item => {
                 const img = document.createElement('img')
                 // 生成条形码
-                jsbarcode(img, item.code, {
-                  lineColor: '#000',
-                  width: 2,
-                  height: 80,
-                  displayValue: true
-                })
                 const tmpl = \`
                 <div class="barcode">
                   <p>\${item.name}</p>
@@ -752,7 +735,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable } from 'vxe-table'
-        import QRCode from 'qrcode'
 
         export default defineComponent({
           setup () {
@@ -765,20 +747,18 @@ export default defineComponent({
               }
               \`
               // 生成二维码
-              QRCode.toDataURL('https://gitee.com/xuliangzhan_admin/vxe-table').then((url: string) => {
-                // 打印模板
-                const printTmpl = \`
-                <p class="title">扫一扫二维码</p>
-                <div class="qrcode">
-                  <img src="\${url}">
-                  <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
-                </div>
-                \`
-                VXETable.print({
-                  sheetName: '打印二维码模板',
-                  style: printStyle,
-                  content: printTmpl
-                })
+              // 打印模板
+              const printTmpl = \`
+              <p class="title">扫一扫二维码</p>
+              <div class="qrcode">
+                <img src="">
+                <div style="margin-top: 15px;">如果对您有帮助，点击右上角支持我们吧！</div>
+              </div>
+              \`
+              VXETable.print({
+                sheetName: '打印二维码模板',
+                style: printStyle,
+                content: printTmpl
               })
             }
 

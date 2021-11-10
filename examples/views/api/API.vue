@@ -45,7 +45,6 @@ import pack from '../../../package.json'
 
 import { VxeGridInstance, VxeGridProps } from '../../../types/index'
 
-import XEClipboard from 'xe-clipboard'
 import tableAPI from '../../api/table'
 import colgroupAPI from '../../api/colgroup'
 import columnAPI from '../../api/column'
@@ -333,13 +332,6 @@ export default defineComponent({
             filename: `vxe-${apiName.value}_v${pack.version}`
           })
           break
-        case 'copy':
-          if (row && column) {
-            if (XEClipboard.copy(row[column.property])) {
-              VXETable.modal.message({ content: i18n.global.t('app.body.msg.copyToClipboard'), status: 'success' })
-            }
-          }
-          break
         case 'resize':
           apiData.filterName = ''
           apiData.tableData = []
@@ -402,9 +394,6 @@ export default defineComponent({
         },
         body: {
           options: [
-            [
-              { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy' }
-            ],
             [
               { code: 'resize', name: '重新加载' },
               { code: 'exportHTMLAPI', name: '导出文档.html', prefixIcon: 'fa fa-download' },

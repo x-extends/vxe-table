@@ -17,6 +17,8 @@ export interface DefineRendererOption<T> {
   filterRemoteMethod?(params: VxeGlobalRendererHandles.FilterRemoteMethod): boolean;
   filterResetMethod?(params: VxeGlobalRendererHandles.FilterResetMethodParams): void;
   filterRecoverMethod?(params: VxeGlobalRendererHandles.FilterRecoverMethodParams): void;
+  // 默认行为
+  defaultFilterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean;
 
   // 单元格渲染
   renderHeader?(renderOpts: VxeGlobalRendererHandles.RenderHeaderOptions, params: VxeGlobalRendererHandles.RenderHeaderParams): T;
@@ -197,7 +199,7 @@ export namespace VxeGlobalRendererHandles {
     /**
      * 渲染器名称
      */
-    name: string;
+    name?: string;
     /**
      * 目标组件渲染的参数
      */
@@ -246,7 +248,7 @@ export interface VxeGlobalRenderer {
   mixin(options: {
     [name: string]: RendererOptions;
   }): VxeGlobalRenderer;
-  get(name: string): DefineRendererOption<VxeGlobalRendererHandles.RenderResult>;
+  get(name: string | null | undefined): DefineRendererOption<VxeGlobalRendererHandles.RenderResult>;
   add(name: string, options: RendererOptions): VxeGlobalRenderer;
   delete(name: string): void;
 }

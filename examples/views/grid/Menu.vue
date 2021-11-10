@@ -33,7 +33,6 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { VXETable } from '../../../packages/all'
 import { VxeGridInstance, VxeGridProps, VxeGridEvents } from '../../../types/index'
-import XEClipboard from 'xe-clipboard'
 
 export default defineComponent({
   setup () {
@@ -139,9 +138,7 @@ export default defineComponent({
       switch (menu.code) {
         case 'copy':
           if (row && column) {
-            if (XEClipboard.copy(row[column.property])) {
-              VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
-            }
+            VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
           }
           break
         case 'clear':
@@ -172,7 +169,6 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref } from 'vue'
         import { VXETable, VxeGridInstance, VxeGridProps, VxeGridEvents } from 'vxe-table'
-        import XEClipboard from 'xe-clipboard'
 
         export default defineComponent({
           setup () {
@@ -278,9 +274,7 @@ export default defineComponent({
               switch (menu.code) {
                 case 'copy':
                   if (row && column) {
-                    if (XEClipboard.copy(row[column.property])) {
-                      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
-                    }
+                    VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
                   }
                   break
                 case 'clear':

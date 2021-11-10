@@ -395,7 +395,7 @@ export default defineComponent({
             callback()
           }
         }).catch(() => {
-          return new Promise<void>((resolve, reject) => {
+          return new Promise<void>((resolve) => {
             showErrTime = window.setTimeout(() => {
               itemList.forEach((item) => {
                 if (item.errRule) {
@@ -412,7 +412,7 @@ export default defineComponent({
               callback(validRest)
               resolve()
             } else {
-              reject(validRest)
+              resolve(validRest)
             }
           })
         })
