@@ -8,15 +8,6 @@ function resolve (dir) {
 process.env[envs.join('_')] = !process || !process.env || !process.env.npm_lifecycle_event || process.env.npm_lifecycle_event.indexOf('lib:dev_pack') === 0 ? 'development' : process.env.NODE_ENV
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/vxe-table/v1' : '/',
-  outputDir: '../../../vxe-table/public/v1',
-  assetsDir: 'static',
-  productionSourceMap: false,
-  configureWebpack: {
-    performance: {
-      hints: false
-    }
-  },
   pages: {
     index: {
       entry: 'examples/main.js',
@@ -25,7 +16,11 @@ module.exports = {
       title: 'vxe-table 1.0+ (Deprecated)'
     }
   },
-  transpileDependencies: ['highlight.js'],
+  configureWebpack: {
+    performance: {
+      hints: false
+    }
+  },
   chainWebpack (config) {
     config.resolve.alias
       .set('@', resolve('examples'))
