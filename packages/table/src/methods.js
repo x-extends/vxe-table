@@ -2923,6 +2923,16 @@ const Methods = {
     const { fullDataRowIdData, afterFullData, checkboxReserveRowMap, checkboxOpts, treeConfig, treeOpts } = this
     const reserveSelection = []
     if (checkboxOpts.reserve) {
+      const afterFullIdMaps = {}
+      if (treeConfig) {
+        XEUtils.eachTree(afterFullData, row => {
+          afterFullIdMaps[getRowid(this, row)] = 1
+        }, treeOpts)
+      } else {
+        afterFullData.forEach(row => {
+          afterFullIdMaps[getRowid(this, row)] = 1
+        })
+      }
       XEUtils.each(checkboxReserveRowMap, (oldRow, oldRowid) => {
         if (oldRow) {
           if (isFull) {
@@ -2930,14 +2940,8 @@ const Methods = {
               reserveSelection.push(oldRow)
             }
           } else {
-            if (treeConfig) {
-              if (!XEUtils.findTree(afterFullData, row => getRowid(this, row) === oldRowid, treeOpts)) {
-                reserveSelection.push(oldRow)
-              }
-            } else {
-              if (!afterFullData.some(row => getRowid(this, row) === oldRowid)) {
-                reserveSelection.push(oldRow)
-              }
+            if (!afterFullIdMaps[oldRowid]) {
+              reserveSelection.push(oldRow)
             }
           }
         }
