@@ -3086,6 +3086,16 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const reserveSelection: any[] = []
         if (checkboxOpts.reserve) {
+          const afterFullIdMaps: { [key: string]: number } = {}
+          if (treeConfig) {
+            XEUtils.eachTree(afterFullData, row => {
+              afterFullIdMaps[getRowid($xetable, row)] = 1
+            }, treeOpts)
+          } else {
+            afterFullData.forEach(row => {
+              afterFullIdMaps[getRowid($xetable, row)] = 1
+            })
+          }
           XEUtils.each(checkboxReserveRowMap, (oldRow, oldRowid) => {
             if (oldRow) {
               if (isFull) {
@@ -3093,14 +3103,8 @@ export default defineComponent({
                   reserveSelection.push(oldRow)
                 }
               } else {
-                if (treeConfig) {
-                  if (!XEUtils.findTree(afterFullData, row => getRowid($xetable, row) === oldRowid, treeOpts)) {
-                    reserveSelection.push(oldRow)
-                  }
-                } else {
-                  if (!afterFullData.some(row => getRowid($xetable, row) === oldRowid)) {
-                    reserveSelection.push(oldRow)
-                  }
+                if (!afterFullIdMaps[oldRowid]) {
+                  reserveSelection.push(oldRow)
                 }
               }
             }
