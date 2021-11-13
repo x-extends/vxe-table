@@ -3230,7 +3230,7 @@ export default defineComponent({
                 return selectRow
               }
             } else {
-              if (afterFullData.indexOf(selectRow) > -1) {
+              if ($xetable.findRowIndexOf(afterFullData, selectRow) > -1) {
                 return selectRow
               }
             }
@@ -3993,6 +3993,7 @@ export default defineComponent({
       const { mouseConfig, keyboardConfig } = props
       const { filterStore, ctxMenuStore, editStore } = reactData
       const mouseOpts = computeMouseOpts.value
+      const keyboardOpts = computeKeyboardOpts.value
       const { actived } = editStore
       const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
       if (isEsc) {
@@ -4006,13 +4007,15 @@ export default defineComponent({
               $xetable.closeMenu()
             }
             tableMethods.closeFilter()
-            // 如果是激活编辑状态，则取消编辑
-            if (actived.row) {
-              const params = actived.args
-              $xetable.clearActived(evnt)
-              // 如果配置了选中功能，则为选中状态
-              if (mouseOpts.selected) {
-                nextTick(() => $xetable.handleSelected(params, evnt))
+            if (keyboardConfig && keyboardOpts.isEsc) {
+              // 如果是激活编辑状态，则取消编辑
+              if (actived.row) {
+                const params = actived.args
+                $xetable.clearActived(evnt)
+                // 如果配置了选中功能，则为选中状态
+                if (mouseOpts.selected) {
+                  nextTick(() => $xetable.handleSelected(params, evnt))
+                }
               }
             }
           }
@@ -4076,7 +4079,7 @@ export default defineComponent({
               $xetable.closeMenu()
             }
             tableMethods.closeFilter()
-            if (actived.row) {
+            if (keyboardConfig && keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args

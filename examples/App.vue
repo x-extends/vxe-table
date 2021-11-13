@@ -1763,50 +1763,6 @@ export default defineComponent({
         //   ]
         // },
         {
-          label: 'app.aside.nav.other',
-          value: 'other',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.elementRender',
-              locat: {
-                name: 'TableOtherElement'
-              }
-            },
-            // {
-            //   label: 'app.aside.nav.iviewRender',
-            //   locat: {
-            //     name: 'TableOtherIview'
-            //   }
-            // },
-            {
-              label: 'app.aside.nav.antd',
-              locat: {
-                name: 'TableOtherAntd'
-              }
-            },
-            {
-              label: 'app.aside.nav.sortablejsRow',
-              locat: {
-                name: 'TableSortableRow'
-              }
-            },
-            {
-              label: 'app.aside.nav.sortablejsColumn',
-              demoUrl: 'https://jsrun.pro/MibKp/edit',
-              locat: {
-                name: 'TableSortableColumn'
-              }
-            },
-            {
-              label: 'app.aside.nav.xlsxRender',
-              locat: {
-                name: 'TableXlsx'
-              }
-            }
-          ]
-        },
-        {
           label: 'app.aside.nav.formats',
           value: 'formats',
           expand: false,

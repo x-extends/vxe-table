@@ -93,6 +93,9 @@ const GlobalConfig: VXETableGlobalConfig = {
     mouseConfig: {
       extension: true
     },
+    keyboardConfig: {
+      isEsc: true
+    },
     areaConfig: {
       selectCellByHeader: true
     },

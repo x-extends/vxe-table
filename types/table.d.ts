@@ -1556,6 +1556,10 @@ export namespace VxeTablePropTypes {
      */
     isArrow?: boolean;
     /**
+     * 是否开启Esc键退出编辑功能
+     */
+    isEsc?: boolean;
+    /**
      * 是否开启删除键功能
      */
     isDel?: boolean;
