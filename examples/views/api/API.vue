@@ -426,9 +426,6 @@ export default {
     },
     handleSearch () {
       const filterName = XEUtils.toValueString(this.filterName).trim()
-      if (this.lastFilterName === filterName) {
-        return
-      }
       if (filterName) {
         const options = { children: 'list' }
         if (/pro/i.test(filterName)) {
@@ -460,7 +457,6 @@ export default {
           }
         })
       }
-      this.lastFilterName = filterName
     },
     // 调用频率间隔 500 毫秒
     searchEvent: XEUtils.debounce(function () {

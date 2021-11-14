@@ -114,15 +114,15 @@ export default {
     footerAlign: { type: String, default: () => GlobalConfig.table.footerAlign },
     // 是否显示表头
     showHeader: { type: Boolean, default: () => GlobalConfig.table.showHeader },
-    // 是否要高亮当前选中行
+    // （即将废弃）是否要高亮当前选中行
     highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.table.highlightCurrentRow },
-    // 鼠标移到行是否要高亮显示
+    // （即将废弃）鼠标移到行是否要高亮显示
     highlightHoverRow: { type: Boolean, default: () => GlobalConfig.table.highlightHoverRow },
-    // 是否要高亮当前选中列
+    // （即将废弃）是否要高亮当前选中列
     highlightCurrentColumn: { type: Boolean, default: () => GlobalConfig.table.highlightCurrentColumn },
-    // 鼠标移到列是否要高亮显示
+    // （即将废弃）鼠标移到列是否要高亮显示
     highlightHoverColumn: { type: Boolean, default: () => GlobalConfig.table.highlightHoverColumn },
-    // 激活单元格编辑时是否高亮显示
+    // （即将废弃）激活单元格编辑时是否高亮显示
     highlightCell: Boolean,
     // 是否显示表尾合计
     showFooter: Boolean,
@@ -235,7 +235,7 @@ export default {
     scrollX: Object,
     // 纵向虚拟滚动配置项
     scrollY: Object,
-    // 优化相关
+    // （即将废弃）优化相关
     animat: { type: Boolean, default: () => GlobalConfig.table.animat },
     delayHover: { type: Number, default: () => GlobalConfig.table.delayHover },
     // 额外的参数

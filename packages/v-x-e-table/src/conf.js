@@ -91,6 +91,9 @@ export default {
     mouseConfig: {
       extension: true
     },
+    keyboardConfig: {
+      isEsc: true
+    },
     areaConfig: {
       selectCellByHeader: true
     },

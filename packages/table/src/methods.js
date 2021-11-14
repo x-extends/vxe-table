@@ -2097,7 +2097,7 @@ const Methods = {
    * 表格键盘事件
    */
   keydownEvent (evnt) {
-    const { filterStore, ctxMenuStore, editStore, keyboardConfig, mouseConfig, mouseOpts } = this
+    const { filterStore, ctxMenuStore, editStore, keyboardConfig, mouseConfig, mouseOpts, keyboardOpts } = this
     const { actived } = editStore
     const { keyCode } = evnt
     const isEsc = keyCode === 27
@@ -2110,13 +2110,15 @@ const Methods = {
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
           this.closeFilter()
           this.closeMenu()
-          // 如果是激活编辑状态，则取消编辑
-          if (actived.row) {
-            const params = actived.args
-            this.clearActived(evnt)
-            // 如果配置了选中功能，则为选中状态
-            if (mouseConfig && mouseOpts.selected) {
-              this.$nextTick(() => this.handleSelected(params, evnt))
+          if (keyboardConfig && keyboardOpts.isEsc) {
+            // 如果是激活编辑状态，则取消编辑
+            if (actived.row) {
+              const params = actived.args
+              this.clearActived(evnt)
+              // 如果配置了选中功能，则为选中状态
+              if (mouseConfig && mouseOpts.selected) {
+                this.$nextTick(() => this.handleSelected(params, evnt))
+              }
             }
           }
         }
