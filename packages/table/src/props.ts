@@ -34,15 +34,15 @@ export default {
   footerAlign: { type: String as PropType<VxeTablePropTypes.FooterAlign>, default: () => GlobalConfig.table.footerAlign },
   // 是否显示表头
   showHeader: { type: Boolean as PropType<VxeTablePropTypes.ShowHeader>, default: () => GlobalConfig.table.showHeader },
-  // 是否要高亮当前选中行
+  // （即将废弃）是否要高亮当前选中行
   highlightCurrentRow: { type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentRow>, default: () => GlobalConfig.table.highlightCurrentRow },
-  // 鼠标移到行是否要高亮显示
+  // （即将废弃）鼠标移到行是否要高亮显示
   highlightHoverRow: { type: Boolean as PropType<VxeTablePropTypes.HighlightHoverRow>, default: () => GlobalConfig.table.highlightHoverRow },
-  // 是否要高亮当前选中列
+  // （即将废弃）是否要高亮当前选中列
   highlightCurrentColumn: { type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentColumn>, default: () => GlobalConfig.table.highlightCurrentColumn },
-  // 鼠标移到列是否要高亮显示
+  // （即将废弃）鼠标移到列是否要高亮显示
   highlightHoverColumn: { type: Boolean as PropType<VxeTablePropTypes.HighlightHoverColumn>, default: () => GlobalConfig.table.highlightHoverColumn },
-  // 激活单元格编辑时是否高亮显示
+  // （即将废弃）激活单元格编辑时是否高亮显示
   highlightCell: Boolean as PropType<VxeTablePropTypes.HighlightCell>,
   // 是否显示表尾合计
   showFooter: Boolean as PropType<VxeTablePropTypes.ShowFooter>,
@@ -153,7 +153,7 @@ export default {
   scrollX: Object as PropType<VxeTablePropTypes.ScrollX>,
   // 纵向虚拟滚动配置项
   scrollY: Object as PropType<VxeTablePropTypes.ScrollY>,
-  // 优化相关
+  // （即将废弃）优化相关
   animat: { type: Boolean as PropType<VxeTablePropTypes.Animat>, default: () => GlobalConfig.table.animat },
   delayHover: { type: Number as PropType<VxeTablePropTypes.DelayHover>, default: () => GlobalConfig.table.delayHover as number },
   // 额外的参数

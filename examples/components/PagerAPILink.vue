@@ -1,5 +1,5 @@
 <template>
-  <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pager'}, query: {filterName: prop}}">{{ prop || name }}</router-link>
+  <span>{{ prop || name }}</span>
 </template>
 
 <script lang="ts">
