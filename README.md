@@ -75,7 +75,7 @@
 依赖库：[vue](https://www.npmjs.com/package/vue) 2.6+, [xe-utils](https://www.npmjs.com/package/xe-utils) 2.7+
 
 ```shell
-npm install xe-utils vxe-table
+npm install xe-utils@2 vxe-table@1
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
