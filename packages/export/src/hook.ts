@@ -100,6 +100,9 @@ function getFooterData (opts: any, footerTableData: any) {
 
 function getCsvCellTypeLabel (column: any, cellValue: any) {
   if (cellValue) {
+    if (column.type === 'seq') {
+      return `\t${cellValue}`
+    }
     switch (column.cellType) {
       case 'string':
         if (!isNaN(cellValue)) {
@@ -292,10 +295,16 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return row[treeOpts.children] && row[treeOpts.children].length
     }
 
-    const getSeq = (row: any, rowIndex: any, column: any, columnIndex: any) => {
+    const getSeq = (row: any, rowIndex: any, column: any, columnIndex: any, paths: string[] | null) => {
       const seqOpts = computeSeqOpts.value
       const seqMethod = seqOpts.seqMethod || column.seqMethod
-      return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : (seqOpts.startIndex + rowIndex + 1)
+      if (seqMethod) {
+        return seqMethod({ row, rowIndex, column, columnIndex })
+      }
+      if (paths) {
+        return paths.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+      }
+      return seqOpts.startIndex + rowIndex + 1
     }
 
     const toBooleanValue = (cellValue: any) => {
@@ -314,10 +323,11 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       if (treeConfig) {
         // 如果是树表格只允许导出数据源
         const rest: any[] = []
+        const expandMaps: Map<any, number> = new Map()
         XEUtils.eachTree(datas, (item, rowIndex, items, path, parent, nodes) => {
           const row = item._row || item
           const parentRow = parent && parent._row ? parent._row : parent
-          if ((isAllExpand || !parentRow || $xetable.isTreeExpandByRow(parentRow))) {
+          if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xetable.isTreeExpandByRow(parentRow)))) {
             const hasRowChild = hasTreeChildren(row)
             const item: any = {
               _row: row,
@@ -340,7 +350,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               } else {
                 switch (column.type) {
                   case 'seq':
-                    cellValue = getSeq(row, rowIndex, column, columnIndex)
+                    cellValue = getSeq(row, rowIndex, column, columnIndex, path)
                     break
                   case 'checkbox':
                     cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
@@ -371,6 +381,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               }
               item[column.id] = XEUtils.toValueString(cellValue)
             })
+            expandMaps.set(row, 1)
             rest.push(Object.assign(item, row))
           }
         }, treeOpts)
@@ -395,7 +406,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             switch (column.type) {
               case 'seq':
-                cellValue = getSeq(row, rowIndex, column, columnIndex)
+                cellValue = getSeq(row, rowIndex, column, columnIndex, [])
                 break
               case 'checkbox':
                 cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
