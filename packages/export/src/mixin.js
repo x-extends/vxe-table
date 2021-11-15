@@ -40,10 +40,16 @@ function hasTreeChildren ($xetable, row) {
   return row[treeOpts.children] && row[treeOpts.children].length > 0
 }
 
-function getSeq ($xetable, row, rowIndex, column, columnIndex) {
+function getSeq ($xetable, row, rowIndex, column, columnIndex, paths) {
   const seqOpts = $xetable.seqOpts
   const seqMethod = seqOpts.seqMethod || column.seqMethod
-  return seqMethod ? seqMethod({ row, rowIndex, column, columnIndex }) : (seqOpts.startIndex + rowIndex + 1)
+  if (seqMethod) {
+    return seqMethod({ row, rowIndex, column, columnIndex })
+  }
+  if (paths) {
+    return paths.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+  }
+  return seqOpts.startIndex + rowIndex + 1
 }
 
 function defaultFilterExportColumn (column) {
@@ -73,10 +79,11 @@ function getLabelData ($xetable, opts, columns, datas) {
   if (treeConfig) {
     // 如果是树表格只允许导出数据源
     const rest = []
+    const expandMaps = new Map()
     XEUtils.eachTree(datas, (item, rowIndex, items, path, parent, nodes) => {
       const row = item._row || item
       const parentRow = parent && parent._row ? parent._row : parent
-      if ((isAllExpand || !parentRow || $xetable.isTreeExpandByRow(parentRow))) {
+      if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xetable.isTreeExpandByRow(parentRow)))) {
         const hasRowChild = hasTreeChildren($xetable, row)
         const item = {
           _row: row,
@@ -99,7 +106,7 @@ function getLabelData ($xetable, opts, columns, datas) {
           } else {
             switch (column.type) {
               case 'seq':
-                cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+                cellValue = getSeq($xetable, row, rowIndex, column, columnIndex, path)
                 break
               case 'checkbox':
                 cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
@@ -130,6 +137,7 @@ function getLabelData ($xetable, opts, columns, datas) {
           }
           item[column.id] = XEUtils.toValueString(cellValue)
         })
+        expandMaps.set(row, 1)
         rest.push(Object.assign(item, row))
       }
     }, treeOpts)
@@ -154,7 +162,7 @@ function getLabelData ($xetable, opts, columns, datas) {
       } else {
         switch (column.type) {
           case 'seq':
-            cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+            cellValue = getSeq($xetable, row, rowIndex, column, columnIndex, null)
             break
           case 'checkbox':
             cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
@@ -227,6 +235,9 @@ function getFooterData (opts, footerTableData) {
 
 function getCsvCellTypeLabel (column, cellValue) {
   if (cellValue) {
+    if (column.type === 'seq') {
+      return `\t${cellValue}`
+    }
     switch (column.cellType) {
       case 'string':
         if (!isNaN(cellValue)) {
