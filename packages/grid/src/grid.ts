@@ -871,7 +871,11 @@ export default defineComponent({
                 body.insertRecords = insertRecords.filter((row) => $xetable.findRowIndexOf(pendingRecords, row) === -1)
               }
               // 只校验新增和修改的数据
-              return $xetable.validate(body.insertRecords.concat(updateRecords)).then(() => {
+              return $xetable.validate(body.insertRecords.concat(updateRecords)).then((errMap) => {
+                if (errMap) {
+                  // 如果校验不通过
+                  return
+                }
                 if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                   reactData.tableLoading = true
                   return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
@@ -916,7 +920,7 @@ export default defineComponent({
                     VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                   }
                 }
-              }).catch((errMap: any) => errMap)
+              })
             } else {
               if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                 errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
