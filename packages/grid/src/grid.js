@@ -670,7 +670,11 @@ export default {
               body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
             }
             // 只校验新增和修改的数据
-            return this.validate(body.insertRecords.concat(updateRecords)).then(() => {
+            return this.validate(body.insertRecords.concat(updateRecords)).then((errMap) => {
+              if (errMap) {
+                // 如果校验不通过
+                return
+              }
               if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                 this.tableLoading = true
                 return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
@@ -715,7 +719,7 @@ export default {
                   VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                 }
               }
-            }).catch(errMap => errMap)
+            })
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
               UtilTools.error('vxe.error.notFunc', ['proxy-config.ajax.save'])
