@@ -174,7 +174,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
     const filterMethods: TableFilterMethods = {
       /**
        * 手动弹出筛选面板
-       * @param column 
+       * @param column
        */
       openFilter (fieldOrColumn) {
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
