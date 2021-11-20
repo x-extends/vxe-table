@@ -6,6 +6,25 @@ import VXETable from '../../v-x-e-table'
 export default {
   methods: {
     /**
+     * 手动弹出筛选面板
+     * @param column
+     */
+    _openFilter (fieldOrColumn) {
+      const column = handleFieldOrColumn(this, fieldOrColumn)
+      if (column && column.filters) {
+        const { elemStore } = this
+        const { fixed } = column
+        return this.scrollToColumn(column).then(() => {
+          const headerWrapperElem = elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper']
+          if (headerWrapperElem) {
+            const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-filter--btn`)
+            DomTools.triggerEvent(filterBtnElem, 'click')
+          }
+        })
+      }
+      return this.$nextTick()
+    },
+    /**
      * 修改筛选条件列表
      * @param {ColumnInfo} fieldOrColumn 列
      * @param {Array} options 选项

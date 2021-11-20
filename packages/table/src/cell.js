@@ -99,16 +99,16 @@ export const Cell = {
     }
     switch (type) {
       case 'seq':
-        renMaps.renderHeader = this.renderIndexHeader
-        renMaps.renderCell = treeNode ? this.renderTreeIndexCell : this.renderIndexCell
+        renMaps.renderHeader = this.renderSeqHeader
+        renMaps.renderCell = treeNode ? this.renderTreeIndexCell : this.renderSeqCell
         break
       case 'radio':
         renMaps.renderHeader = this.renderRadioHeader
         renMaps.renderCell = treeNode ? this.renderTreeRadioCell : this.renderRadioCell
         break
       case 'checkbox':
-        renMaps.renderHeader = this.renderSelectionHeader
-        renMaps.renderCell = checkboxOpts.checkField ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderSelectionCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderSelectionCell)
+        renMaps.renderHeader = this.renderCheckboxHeader
+        renMaps.renderCell = checkboxOpts.checkField ? (treeNode ? this.renderTreeSelectionCellByProp : this.renderCheckboxCellByProp) : (treeNode ? this.renderTreeSelectionCell : this.renderCheckboxCell)
         break
       case 'expand':
         renMaps.renderCell = this.renderExpandCell
@@ -253,24 +253,24 @@ export const Cell = {
   /**
    * 索引
    */
-  renderIndexHeader (h, params) {
+  renderSeqHeader (h, params) {
     const { $table, column } = params
     const { slots } = column
     return renderTitleContent(h, params, slots && slots.header ? $table.callSlot(slots.header, params, h) : UtilTools.formatText(column.getTitle(), 1))
   },
-  renderIndexCell (h, params) {
+  renderSeqCell (h, params) {
     const { $table, column } = params
-    const { seqOpts } = $table
+    const { treeConfig, seqOpts } = $table
     const { slots } = column
     if (slots && slots.default) {
       return $table.callSlot(slots.default, params, h)
     }
-    const { $seq, seq, level } = params
+    const { seq } = params
     const seqMethod = seqOpts.seqMethod
-    return [UtilTools.formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex) + seq, 1)]
+    return [UtilTools.formatText(seqMethod ? seqMethod(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + seq, 1)]
   },
   renderTreeIndexCell (h, params) {
-    return Cell.renderTreeIcon(h, params, Cell.renderIndexCell(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderSeqCell(h, params))
   },
 
   /**
@@ -350,7 +350,7 @@ export const Cell = {
   /**
    * 多选
    */
-  renderSelectionHeader (h, params) {
+  renderCheckboxHeader (h, params) {
     const { $table, column, isHidden } = params
     const { isIndeterminate: isAllCheckboxIndeterminate, isAllCheckboxDisabled } = $table
     const { slots } = column
@@ -409,7 +409,7 @@ export const Cell = {
       ] : []))
     ])
   },
-  renderSelectionCell (h, params) {
+  renderCheckboxCell (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
     const { labelField, checkMethod, visibleMethod } = $table.checkboxOpts
@@ -474,9 +474,9 @@ export const Cell = {
     ]
   },
   renderTreeSelectionCell (h, params) {
-    return Cell.renderTreeIcon(h, params, Cell.renderSelectionCell(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderCheckboxCell(h, params))
   },
-  renderSelectionCellByProp (h, params) {
+  renderCheckboxCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
     const { labelField, checkField: property, halfField, checkMethod, visibleMethod } = $table.checkboxOpts
@@ -541,7 +541,7 @@ export const Cell = {
     ]
   },
   renderTreeSelectionCellByProp (h, params) {
-    return Cell.renderTreeIcon(h, params, Cell.renderSelectionCellByProp(h, params))
+    return Cell.renderTreeIcon(h, params, Cell.renderCheckboxCellByProp(h, params))
   },
 
   /**

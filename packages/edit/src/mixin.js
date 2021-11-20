@@ -21,7 +21,7 @@ function insertTreeRow (_vm, newRecords, isAppend) {
         parentChilds = parentRow[treeOpts.children] = []
       }
       parentChilds[funcName](item)
-      const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
@@ -32,7 +32,7 @@ function insertTreeRow (_vm, newRecords, isAppend) {
       }
       afterFullData[funcName](item)
       treeFullData[funcName](item)
-      const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: treeFullData, parent: null, level: 0 }
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: treeFullData, parent: null, level: 0 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     }
@@ -118,7 +118,7 @@ export default {
                   item[treeOpts.parentField] = parentRow[treeOpts.rowField]
                 }
                 parentChilds.splice(matchObj.index + i, 0, item)
-                const rest = { row: item, rowid, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
+                const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
                 fullDataRowIdData[rowid] = rest
                 fullAllDataRowIdData[rowid] = rest
               })
@@ -156,6 +156,7 @@ export default {
       this.handleTableData(transform)
       this.updateFooter()
       this.cacheRowMap()
+      this.updateAfterDataIndex()
       this.checkSelectionStatus()
       if (scrollYLoad) {
         this.updateScrollYSpace()
@@ -262,6 +263,7 @@ export default {
       this.handleTableData(transform)
       this.updateFooter()
       this.cacheRowMap()
+      this.updateAfterDataIndex()
       this.checkSelectionStatus()
       if (scrollYLoad) {
         this.updateScrollYSpace()

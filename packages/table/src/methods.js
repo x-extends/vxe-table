@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools } from '../../tools'
-import { clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener } from './util'
+import { clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq } from './util'
 import { eqEmptyValue, isEnableConf } from '../../tools/src/utils'
 import { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/src/dom'
 import { formats } from '../../v-x-e-table/src/formats'
@@ -536,6 +536,8 @@ const Methods = {
     const isLazy = treeConfig && treeOpts.lazy
     const handleCache = (row, index, items, path, parent, nodes) => {
       let rowid = getRowid(this, row)
+      const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
+      const level = nodes ? nodes.length - 1 : 0
       if (eqEmptyValue(rowid)) {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
@@ -543,7 +545,7 @@ const Methods = {
       if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
         row[treeOpts.children] = null
       }
-      const rest = { row, rowid, index: treeConfig && parent ? -1 : index, items, parent, level: nodes ? nodes.length - 1 : 0 }
+      const rest = { row, rowid, seq, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level }
       if (source) {
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(row, rest)
@@ -578,7 +580,7 @@ const Methods = {
       }
       XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
         const rowid = getRowid(this, childRow)
-        const rest = { row: childRow, rowid, index: -1, items, parent, level: parentLevel + nodes.length }
+        const rest = { row: childRow, rowid, seq: -1, index: -1, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(childRow, rest)
         fullAllDataRowIdData[rowid] = rest
@@ -723,6 +725,21 @@ const Methods = {
       }
     }
     return null
+  },
+  /**
+   * 根据 row 获取序号
+   * @param {Row} row 行对象
+   */
+  getRowSeq (row) {
+    const { fullDataRowIdData } = this
+    if (row) {
+      const rowid = getRowid(this, row)
+      const rest = fullDataRowIdData[rowid]
+      if (rest) {
+        return rest.seq
+      }
+    }
+    return -1
   },
   /**
    * 根据 row 获取相对于 data 中的索引
@@ -1131,6 +1148,47 @@ const Methods = {
     }
     this.afterFullData = tableData
     return tableData
+  },
+  /**
+   * 预编译
+   * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
+   */
+  updateAfterDataIndex () {
+    const { treeConfig, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeFullData, treeOpts } = this
+    if (treeConfig) {
+      XEUtils.eachTree(treeFullData, (row, index, items, path) => {
+        const rowid = getRowid(this, row)
+        const allrest = fullAllDataRowIdData[rowid]
+        const fullrest = fullDataRowIdData[rowid]
+        const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+        if (allrest) {
+          allrest.seq = seq
+        }
+        if (fullrest) {
+          fullrest.seq = seq
+        } else {
+          fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+        }
+      }, treeOpts)
+    } else {
+      afterFullData.forEach((row, index) => {
+        const rowid = getRowid(this, row)
+        const allrest = fullAllDataRowIdData[rowid]
+        const fullrest = fullDataRowIdData[rowid]
+        const seq = index + 1
+        if (allrest) {
+          allrest.seq = seq
+        }
+        if (fullrest) {
+          fullrest.seq = seq
+          fullrest._index = index
+        } else {
+          fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+        }
+      })
+    }
   },
   /**
    * 根据行的唯一主键获取行
@@ -4424,7 +4482,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,openFind,openReplace,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,openFind,openReplace,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

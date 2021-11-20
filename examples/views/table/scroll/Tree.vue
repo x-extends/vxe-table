@@ -16,7 +16,8 @@
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :scroll-y="{gt: 20}"
       :data="tableData">
-      <vxe-column field="name" title="Name" tree-node></vxe-column>
+      <vxe-column type="seq" width="200" tree-node></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
       <vxe-column field="date" title="Date"></vxe-column>

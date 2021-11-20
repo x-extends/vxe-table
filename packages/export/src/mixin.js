@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools } from '../../tools'
-import { mergeBodyMethod } from '../../table/src/util'
+import { mergeBodyMethod, toTreePathSeq } from '../../table/src/util'
 import { browse } from '../../tools/src/dom'
 
 const { formatText } = UtilTools
@@ -40,14 +40,14 @@ function hasTreeChildren ($xetable, row) {
   return row[treeOpts.children] && row[treeOpts.children].length > 0
 }
 
-function getSeq ($xetable, row, rowIndex, column, columnIndex, paths) {
+function getSeq ($xetable, row, rowIndex, column, columnIndex, path) {
   const seqOpts = $xetable.seqOpts
   const seqMethod = seqOpts.seqMethod || column.seqMethod
   if (seqMethod) {
     return seqMethod({ row, rowIndex, column, columnIndex })
   }
-  if (paths) {
-    return paths.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+  if (path) {
+    return toTreePathSeq(path)
   }
   return seqOpts.startIndex + rowIndex + 1
 }

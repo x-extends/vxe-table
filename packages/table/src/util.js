@@ -20,6 +20,10 @@ export function restoreScrollLocation (_vm, scrollLeft, scrollTop) {
   })
 }
 
+export function toTreePathSeq (path) {
+  return path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+}
+
 export function removeScrollListener (scrollElem) {
   if (scrollElem && scrollElem._onscroll) {
     scrollElem.onscroll = null

@@ -264,38 +264,38 @@ export default {
           const panelStyle = {
             zIndex: panelIndex
           }
-          const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
+          const { top, left, boundingTop, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
           let panelPlacement = 'bottom'
           if (transfer) {
-            let left = boundingLeft + targetWidth - panelWidth
-            let top = boundingTop + targetHeight
+            let btnLeft = left + targetWidth - panelWidth
+            let btnTop = top + targetHeight
             if (placement === 'top') {
               panelPlacement = 'top'
-              top = boundingTop - panelHeight
+              btnTop = top - panelHeight
             } else if (!placement) {
               // 如果下面不够放，则向上
-              if (top + panelHeight + marginSize > visibleHeight) {
+              if (boundingTop + targetHeight + panelHeight + marginSize > visibleHeight) {
                 panelPlacement = 'top'
-                top = boundingTop - panelHeight
+                btnTop = top - panelHeight
               }
               // 如果上面不够放，则向下（优先）
-              if (top < marginSize) {
+              if (btnTop < marginSize) {
                 panelPlacement = 'bottom'
-                top = boundingTop + targetHeight
+                btnTop = top + targetHeight
               }
             }
             // 如果溢出右边
-            if (left + panelWidth + marginSize > visibleWidth) {
-              left -= left + panelWidth + marginSize - visibleWidth
+            if (btnLeft + panelWidth + marginSize > visibleWidth) {
+              btnLeft -= btnLeft + panelWidth + marginSize - visibleWidth
             }
             // 如果溢出左边
-            if (left < marginSize) {
-              left = marginSize
+            if (btnLeft < marginSize) {
+              btnLeft = marginSize
             }
             Object.assign(panelStyle, {
-              left: `${left}px`,
+              left: `${btnLeft}px`,
               right: 'auto',
-              top: `${top}px`,
+              top: `${btnTop}px`,
               minWidth: `${targetWidth}px`
             })
           } else {
