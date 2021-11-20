@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VXETable } from '../../v-x-e-table'
 import { toFilters, handleFieldOrColumn } from '../../table/src/util'
-import { getDomNode } from '../../tools/dom'
+import { getDomNode, triggerEvent } from '../../tools/dom'
 
 import { VxeGlobalHooksHandles, TableFilterMethods, TableFilterPrivateMethods } from '../../../types/all'
 
@@ -172,6 +172,25 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     const filterMethods: TableFilterMethods = {
+      /**
+       * 手动弹出筛选面板
+       * @param column 
+       */
+      openFilter (fieldOrColumn) {
+        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        if (column && column.filters) {
+          const { elemStore } = internalData
+          const { fixed } = column
+          return $xetable.scrollToColumn(column).then(() => {
+            const headerWrapperElem = elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper']
+            if (headerWrapperElem) {
+              const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-filter--btn`)
+              triggerEvent(filterBtnElem, 'click')
+            }
+          })
+        }
+        return nextTick()
+      },
       /**
        * 修改筛选条件列表
        * @param {ColumnInfo} fieldOrColumn 列或字段名

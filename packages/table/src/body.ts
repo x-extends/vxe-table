@@ -108,7 +108,7 @@ export default defineComponent({
     /**
      * 渲染列
      */
-    const renderColumn = ($seq: string, seq: number, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
+    const renderColumn = (seq: number | string, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
       const { columnKey, height, showOverflow: allColumnOverflow, cellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
       const { tableData, overflowX, scrollYLoad, currentColumn, mergeList, editStore, validStore, isAllOverflow } = tableReactData
       const { afterFullData } = tableInternalData
@@ -138,7 +138,7 @@ export default defineComponent({
       const hasValidError = validStore.row === row && validStore.column === column
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
       const attrs: any = { colid: column.id }
-      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, $seq, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
       if (scrollYLoad && !hasEllipsis) {
         showEllipsis = hasEllipsis = true
@@ -291,10 +291,10 @@ export default defineComponent({
       }, tdVNs)
     }
 
-    const renderRows = ($seq: string, fixedType: any, tableData: any, tableColumn: any) => {
+    const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
       const { hasFixedColumn, treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
-      const { fullAllDataRowIdData, scrollYStore } = tableInternalData
+      const { fullDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
@@ -304,10 +304,6 @@ export default defineComponent({
       tableData.forEach((row: any, $rowIndex: any) => {
         const trOn: any = {}
         let rowIndex = $rowIndex
-        let seq = rowIndex + 1
-        if (scrollYLoad) {
-          seq += scrollYStore.startIndex
-        }
         const _rowIndex = $xetable.getVTRowIndex(row)
         // 确保任何情况下 rowIndex 都精准指向真实 data 索引
         rowIndex = $xetable.getRowIndex(row)
@@ -327,9 +323,10 @@ export default defineComponent({
           }
         }
         const rowid = getRowid($xetable, row)
-        const rest = fullAllDataRowIdData[rowid]
+        const rest = fullDataRowIdData[rowid]
         const rowLevel = rest ? rest.level : 0
-        const params = { $table: $xetable, $seq, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+        const seq = rest ? rest.seq : -1
+        const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
         let isNewRow = false
         if (editConfig) {
           isNewRow = $xetable.findRowIndexOf(editStore.insertList, row) > -1
@@ -348,7 +345,7 @@ export default defineComponent({
             key: rowKey || treeConfig ? rowid : $rowIndex,
             ...trOn
           }, tableColumn.map((column: any, $columnIndex: any) => {
-            return renderColumn($seq, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
+            return renderColumn(seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
           }))
         )
         // 如果行被展开了
@@ -361,7 +358,7 @@ export default defineComponent({
           }
           const { showOverflow } = expandColumn
           const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-          const expandParams = { $table: $xetable, $seq, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+          const expandParams = { $table: $xetable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
           rows.push(
             h('tr', {
               class: 'vxe-body--expanded-row',
@@ -390,7 +387,7 @@ export default defineComponent({
         if (treeConfig && !scrollYLoad && treeExpandeds.length) {
           const rowChildren = row[treeOpts.children]
           if (rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1) {
-            rows.push(...renderRows($seq ? `${$seq}.${seq}` : `${seq}`, fixedType, rowChildren, tableColumn))
+            rows.push(...renderRows(fixedType, rowChildren, tableColumn))
           }
         }
       })
@@ -689,7 +686,7 @@ export default defineComponent({
            */
           h('tbody', {
             ref: refBodyTBody
-          }, renderRows('', fixedType, tableData, tableColumn))
+          }, renderRows(fixedType, tableData, tableColumn))
         ]),
         h('div', {
           class: 'vxe-table--checkbox-range'

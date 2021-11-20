@@ -11,7 +11,7 @@ import Cell from './cell'
 import TableBodyComponent from './body'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
 
@@ -271,8 +271,9 @@ export default defineComponent({
       tableFullColumn: [],
       // 渲染所有列
       visibleColumn: [],
-      // 缓存数据集
+      // 总的缓存数据集
       fullAllDataRowIdData: {},
+      // 渲染中缓存数据
       fullDataRowIdData: {},
       fullColumnIdData: {},
       fullColumnFieldData: {},
@@ -1130,17 +1131,49 @@ export default defineComponent({
       }
     }
 
+    /**
+     * 预编译
+     * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
+     */
     const updateAfterDataIndex = () => {
-      const { afterFullData, fullDataRowIdData } = internalData
-      afterFullData.forEach((row, _index) => {
-        const rowid = getRowid($xetable, row)
-        const rest = fullDataRowIdData[rowid]
-        if (rest) {
-          rest._index = _index
-        } else {
-          fullDataRowIdData[rowid] = { row, rowid, index: -1, $index: -1, _index, items: [], parent: null, level: 0 }
-        }
-      })
+      const { treeConfig } = props
+      const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const { treeFullData } = internalData
+      const treeOpts = computeTreeOpts.value
+      if (treeConfig) {
+        XEUtils.eachTree(treeFullData, (row, index, items, path) => {
+          const rowid = getRowid($xetable, row)
+          const allrest = fullAllDataRowIdData[rowid]
+          const fullrest = fullDataRowIdData[rowid]
+          const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+          if (allrest) {
+            allrest.seq = seq
+          }
+          if (fullrest) {
+            fullrest.seq = seq
+          } else {
+            fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+            fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          }
+        }, treeOpts)
+      } else {
+        afterFullData.forEach((row, index) => {
+          const rowid = getRowid($xetable, row)
+          const allrest = fullAllDataRowIdData[rowid]
+          const fullrest = fullDataRowIdData[rowid]
+          const seq = index + 1
+          if (allrest) {
+            allrest.seq = seq
+          }
+          if (fullrest) {
+            fullrest.seq = seq
+            fullrest._index = index
+          } else {
+            fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+            fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          }
+        })
+      }
     }
 
     /**
@@ -2062,11 +2095,11 @@ export default defineComponent({
         tableMethods.clearMergeFooterItems()
       }
       reactData.scrollXLoad = scrollXLoad
-      visibleColumn.forEach((column, _index) => {
+      visibleColumn.forEach((column, index) => {
         const colid = column.id
         const rest = fullColumnIdData[colid]
         if (rest) {
-          rest._index = _index
+          rest._index = index
         }
       })
       internalData.visibleColumn = visibleColumn
@@ -2224,6 +2257,33 @@ export default defineComponent({
       }
     }
 
+    const createGetRowCacheProp = (prop: 'seq' | 'index' | '_index' | '$index') => {
+      return function (row: any) {
+        const { fullDataRowIdData } = internalData
+        if (row) {
+          const rowid = getRowid($xetable, row)
+          const rest = fullDataRowIdData[rowid]
+          if (rest) {
+            return rest[prop]
+          }
+        }
+        return -1
+      }
+    }
+
+    const createGetColumnCacheProp = (prop: 'index' | '_index' | '$index') => {
+      return function (column: VxeTableDefines.ColumnInfo) {
+        const { fullColumnIdData } = internalData
+        if (column) {
+          const rest = fullColumnIdData[column.id]
+          if (rest) {
+            return rest[prop]
+          }
+        }
+        return -1
+      }
+    }
+
     const debounceScrollY = XEUtils.debounce(function (evnt: Event) {
       loadScrollYData(evnt)
     }, 20, { leading: false, trailing: true })
@@ -2349,7 +2409,7 @@ export default defineComponent({
           }
           XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
             const rowid = getRowid($xetable, childRow)
-            const rest = { row: childRow, rowid, index: -1, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
+            const rest = { row: childRow, rowid, seq: -1, index: -1, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, treeOpts)
@@ -2411,92 +2471,40 @@ export default defineComponent({
         return null
       },
       /**
+       * 根据 row 获取序号
+       * @param {Row} row 行对象
+       */
+      getRowSeq: createGetRowCacheProp('seq'),
+      /**
        * 根据 row 获取相对于 data 中的索引
        * @param {Row} row 行对象
        */
-      getRowIndex (row) {
-        const { fullDataRowIdData } = internalData
-        if (row) {
-          const rowid = getRowid($xetable, row)
-          const rest = fullDataRowIdData[rowid]
-          if (rest) {
-            return rest.index
-          }
-        }
-        return -1
-      },
+      getRowIndex: createGetRowCacheProp('index') as ((row: any) => number),
       /**
        * 根据 row 获取相对于当前数据中的索引
        * @param {Row} row 行对象
        */
-      getVTRowIndex (row) {
-        const { fullDataRowIdData } = internalData
-        if (row) {
-          const rowid = getRowid($xetable, row)
-          const rest = fullDataRowIdData[rowid]
-          if (rest) {
-            return rest._index
-          }
-        }
-        return -1
-      },
+      getVTRowIndex: createGetRowCacheProp('_index') as ((row: any) => number),
       /**
        * 根据 row 获取渲染中的虚拟索引
        * @param {Row} row 行对象
        */
-      getVMRowIndex (row) {
-        const { fullDataRowIdData } = internalData
-        if (row) {
-          const rowid = getRowid($xetable, row)
-          const rest = fullDataRowIdData[rowid]
-          if (rest) {
-            return rest.$index
-          }
-        }
-        return -1
-      },
+      getVMRowIndex: createGetRowCacheProp('$index') as ((row: any) => number),
       /**
        * 根据 column 获取相对于 columns 中的索引
        * @param {ColumnInfo} column 列配置
        */
-      getColumnIndex (column) {
-        const { fullColumnIdData } = internalData
-        if (column) {
-          const rest = fullColumnIdData[column.id]
-          if (rest) {
-            return rest.index
-          }
-        }
-        return -1
-      },
+      getColumnIndex: createGetColumnCacheProp('index'),
       /**
        * 根据 column 获取相对于当前表格列中的索引
        * @param {ColumnInfo} column 列配置
        */
-      getVTColumnIndex (column) {
-        const { fullColumnIdData } = internalData
-        if (column) {
-          const rest = fullColumnIdData[column.id]
-          if (rest) {
-            return rest._index
-          }
-        }
-        return -1
-      },
+      getVTColumnIndex: createGetColumnCacheProp('_index'),
       /**
        * 根据 column 获取渲染中的虚拟索引
        * @param {ColumnInfo} column 列配置
        */
-      getVMColumnIndex (column) {
-        const { fullColumnIdData } = internalData
-        if (column) {
-          const rest = fullColumnIdData[column.id]
-          if (rest) {
-            return rest.$index
-          }
-        }
-        return -1
-      },
+      getVMColumnIndex: createGetColumnCacheProp('$index'),
       /**
        * 创建 data 对象
        * 对于某些特殊场景可能会用到，会自动对数据的字段名进行检测，如果不存在就自动定义
@@ -4464,8 +4472,10 @@ export default defineComponent({
         let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, treeFullData } = internalData
         const rowkey = getRowkey($xetable)
         const isLazy = treeConfig && treeOpts.lazy
-        const handleCache = (row: any, index: any, items: any, path?: any, parent?: any, nodes?: any[]) => {
+        const handleCache = (row: any, index: any, items: any, path?: any[], parent?: any, nodes?: any[]) => {
           let rowid = getRowid($xetable, row)
+          const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
+          const level = nodes ? nodes.length - 1 : 0
           if (eqEmptyValue(rowid)) {
             rowid = getRowUniqueId()
             XEUtils.set(row, rowkey, rowid)
@@ -4473,7 +4483,7 @@ export default defineComponent({
           if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
             row[treeOpts.children] = null
           }
-          const rest = { row, rowid, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level: nodes ? nodes.length - 1 : 0 }
+          const rest = { row, rowid, seq, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level }
           if (isSource) {
             fullDataRowIdData[rowid] = rest
           }

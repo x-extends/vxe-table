@@ -33,6 +33,11 @@ export interface VxeFilterPanel {
 
 export interface TableFilterMethods {
   /**
+   * 手动弹出筛选
+   * @param fieldOrColumn 
+   */
+  openFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo):Promise<any>;
+  /**
    * 用于 filters，修改筛选列表
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
    * @param columnOrField 列对象或字段名

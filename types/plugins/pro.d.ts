@@ -81,6 +81,11 @@ declare module '../table' {
   interface VxeTablePrivateMethods extends VxeTableProPrivateMethods { }
 }
 
+declare module '../grid' {
+  interface VxeGridMethods extends VxeTableProMethods { }
+  interface VxeGridPrivateMethods extends VxeTableProPrivateMethods { }
+}
+
 export interface VXETableProClipboard {
   text?: string;
   html?: string;

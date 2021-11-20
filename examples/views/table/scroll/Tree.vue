@@ -14,9 +14,10 @@
       height="500"
       ref="xTable"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
-      :scroll-y="{gt: 20}"
+      :scroll-y="{gt: 0}"
       :data="demo1.tableData">
-      <vxe-column field="name" title="Name" tree-node></vxe-column>
+      <vxe-column type="seq" width="200" tree-node></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
       <vxe-column field="date" title="Date"></vxe-column>
@@ -196,9 +197,10 @@ export default defineComponent({
           height="500"
           ref="xTable"
           :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
-          :scroll-y="{gt: 20}"
+          :scroll-y="{gt: 0}"
           :data="demo1.tableData">
-          <vxe-column field="name" title="Name" tree-node></vxe-column>
+          <vxe-column type="seq" width="200" tree-node></vxe-column>
+          <vxe-column field="name" title="Name"></vxe-column>
           <vxe-column field="size" title="Size"></vxe-column>
           <vxe-column field="type" title="Type"></vxe-column>
           <vxe-column field="date" title="Date"></vxe-column>

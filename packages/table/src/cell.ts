@@ -107,16 +107,16 @@ export const Cell = {
     }
     switch (type) {
       case 'seq':
-        renConfs.renderHeader = Cell.renderIndexHeader
-        renConfs.renderCell = treeNode ? Cell.renderTreeIndexCell : Cell.renderIndexCell
+        renConfs.renderHeader = Cell.renderSeqHeader
+        renConfs.renderCell = treeNode ? Cell.renderTreeIndexCell : Cell.renderSeqCell
         break
       case 'radio':
         renConfs.renderHeader = Cell.renderRadioHeader
         renConfs.renderCell = treeNode ? Cell.renderTreeRadioCell : Cell.renderRadioCell
         break
       case 'checkbox':
-        renConfs.renderHeader = Cell.renderSelectionHeader
-        renConfs.renderCell = checkboxOpts.checkField ? (treeNode ? Cell.renderTreeSelectionCellByProp : Cell.renderSelectionCellByProp) : (treeNode ? Cell.renderTreeSelectionCell : Cell.renderSelectionCell)
+        renConfs.renderHeader = Cell.renderCheckboxHeader
+        renConfs.renderCell = checkboxOpts.checkField ? (treeNode ? Cell.renderTreeSelectionCellByProp : Cell.renderCheckboxCellByProp) : (treeNode ? Cell.renderTreeSelectionCell : Cell.renderCheckboxCell)
         break
       case 'expand':
         renConfs.renderCell = Cell.renderExpandCell
@@ -268,14 +268,16 @@ export const Cell = {
   /**
    * 索引
    */
-  renderIndexHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderSeqHeader (params: VxeTableDefines.CellRenderHeaderParams) {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
     return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : formatText(column.getTitle(), 1))
   },
-  renderIndexCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderSeqCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, column } = params
+    const { props } = $table
+    const { treeConfig } = props
     const { computeSeqOpts } = $table.getComputeMaps()
     const seqOpts = computeSeqOpts.value
     const { slots } = column
@@ -283,12 +285,12 @@ export const Cell = {
     if (defaultSlot) {
       return $table.callSlot(defaultSlot, params)
     }
-    const { $seq, seq, level } = params
+    const { seq } = params
     const seqMethod = seqOpts.seqMethod
-    return [formatText(seqMethod ? seqMethod(params) : level ? `${$seq}.${seq}` : (seqOpts.startIndex || 0) + seq, 1)]
+    return [formatText(seqMethod ? seqMethod(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + (seq as number), 1)]
   },
   renderTreeIndexCell (params: VxeTableDefines.CellRenderBodyParams) {
-    return Cell.renderTreeIcon(params, Cell.renderIndexCell(params) as VNode[])
+    return Cell.renderTreeIcon(params, Cell.renderSeqCell(params) as VNode[])
   },
 
   /**
@@ -371,7 +373,7 @@ export const Cell = {
   /**
    * 多选
    */
-  renderSelectionHeader (params: VxeTableDefines.CellRenderHeaderParams) {
+  renderCheckboxHeader (params: VxeTableDefines.CellRenderHeaderParams) {
     const { $table, column, isHidden } = params
     const { reactData } = $table
     const { computeIsAllCheckboxDisabled, computeCheckboxOpts } = $table.getComputeMaps()
@@ -431,7 +433,7 @@ export const Cell = {
       ] : []))
     ])
   },
-  renderSelectionCell (params: VxeTableDefines.CellRenderBodyParams) {
+  renderCheckboxCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, row, column, isHidden } = params
     const { props, reactData } = $table
     const { treeConfig } = props
@@ -500,9 +502,9 @@ export const Cell = {
     ]
   },
   renderTreeSelectionCell (params: VxeTableDefines.CellRenderBodyParams) {
-    return Cell.renderTreeIcon(params, Cell.renderSelectionCell(params))
+    return Cell.renderTreeIcon(params, Cell.renderCheckboxCell(params))
   },
-  renderSelectionCellByProp (params: VxeTableDefines.CellRenderBodyParams) {
+  renderCheckboxCellByProp (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, row, column, isHidden } = params
     const { props, reactData } = $table
     const { treeConfig } = props
@@ -571,7 +573,7 @@ export const Cell = {
     ]
   },
   renderTreeSelectionCellByProp (params: VxeTableDefines.CellRenderBodyParams) {
-    return Cell.renderTreeIcon(params, Cell.renderSelectionCellByProp(params))
+    return Cell.renderTreeIcon(params, Cell.renderCheckboxCellByProp(params))
   },
 
   /**

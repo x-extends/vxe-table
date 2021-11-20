@@ -163,6 +163,11 @@ export interface TablePublicMethods {
     parent?: VxeTableDefines.ColumnInfo;
   } | null;
   /**
+   * 根据 row 获取行的序号
+   * @param row 行对象
+   */
+  getRowSeq(row: any): string | number;
+  /**
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
    */
@@ -969,6 +974,7 @@ export interface TableInternalData {
     [key: string]: {
       row: any;
       rowid: string;
+      seq: string | number;
       index: number;
       $index: number;
       _index: number;
@@ -989,6 +995,7 @@ export interface TableInternalData {
     [key: string]: {
       row: any;
       rowid: string;
+      seq: string | number;
       index: number;
       $index: number;
       _index: number;
@@ -2147,8 +2154,7 @@ export namespace VxeTableDefines {
   }
   export interface CellRenderBodyParams {
     $table: VxeTableConstructor & VxeTablePrivateMethods;
-    $seq: string;
-    seq: number;
+    seq: string | number;
     rowid: string;
     row: any;
     rowIndex: number;

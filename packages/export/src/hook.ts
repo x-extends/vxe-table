@@ -2,7 +2,7 @@ import { inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../table/src/util'
+import { isColumnInfo, mergeBodyMethod, getCellValue, toTreePathSeq } from '../../table/src/util'
 import { errLog, warnLog, parseFile, formatText } from '../../tools/utils'
 import { readLocalFile, handlePrint, saveLocalFile, createHtmlPage, getExportBlobByContent } from './util'
 
@@ -295,14 +295,14 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return row[treeOpts.children] && row[treeOpts.children].length
     }
 
-    const getSeq = (row: any, rowIndex: any, column: any, columnIndex: any, paths: string[] | null) => {
+    const getSeq = (row: any, rowIndex: any, column: any, columnIndex: any, path: string[] | null) => {
       const seqOpts = computeSeqOpts.value
       const seqMethod = seqOpts.seqMethod || column.seqMethod
       if (seqMethod) {
         return seqMethod({ row, rowIndex, column, columnIndex })
       }
-      if (paths) {
-        return paths.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+      if (path) {
+        return toTreePathSeq(path)
       }
       return seqOpts.startIndex + rowIndex + 1
     }

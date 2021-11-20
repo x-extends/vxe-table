@@ -142,12 +142,7 @@ export function scrollToView (elem: any) {
 }
 
 export function triggerEvent (targetElem: Element, type: string) {
-  let evnt
-  if (typeof Event === 'function') {
-    evnt = new Event(type)
-  } else {
-    evnt = document.createEvent('Event')
-    evnt.initEvent(type, true, true)
+  if (targetElem) {
+    targetElem.dispatchEvent(new Event(type))
   }
-  targetElem.dispatchEvent(evnt)
 }

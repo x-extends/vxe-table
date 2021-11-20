@@ -98,6 +98,10 @@ export function toFilters (filters: any) {
   return filters
 }
 
+export function toTreePathSeq (path: any[]) {
+  return path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+}
+
 export function getCellValue (row: any, column: any) {
   return XEUtils.get(row, column.property)
 }
