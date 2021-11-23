@@ -45,7 +45,7 @@ export function getRowUniqueId () {
 export function getRowkey ($xetable: VxeTableConstructor) {
   const { props } = $xetable
   const { rowId } = props
-  return rowId || '_XID'
+  return rowId || '_X_ID'
 }
 
 // 行主键 value

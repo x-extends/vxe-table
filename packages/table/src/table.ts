@@ -259,10 +259,12 @@ export default defineComponent({
       rowExpandedReserveRowMap: {},
       // 树结构数据，已展开保留的行
       treeExpandedReserveRowMap: {},
-      // 完整数据、条件处理后
+      // 列表完整数据、条件处理后
       tableFullData: [],
-      treeFullData: [],
       afterFullData: [],
+      // 树结构完整数据、条件处理后
+      tableFullTreeData: [],
+      afterTreeFullData: [],
       tableSynchData: [],
       tableSourceData: [],
       // 收集的列配置（带分组）
@@ -601,7 +603,7 @@ export default defineComponent({
       return XEUtils.isEqual(val1, val2)
     }
 
-    const getNextSortOrder = (column: any) => {
+    const getNextSortOrder = (column: VxeTableDefines.ColumnInfo) => {
       const sortOpts = computeSortOpts.value
       const { orders } = sortOpts
       const currOrder = column.order || null
@@ -1138,10 +1140,10 @@ export default defineComponent({
     const updateAfterDataIndex = () => {
       const { treeConfig } = props
       const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
-      const { treeFullData } = internalData
+      const { afterTreeFullData } = internalData
       const treeOpts = computeTreeOpts.value
       if (treeConfig) {
-        XEUtils.eachTree(treeFullData, (row, index, items, path) => {
+        XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
           const rowid = getRowid($xetable, row)
           const allrest = fullAllDataRowIdData[rowid]
           const fullrest = fullDataRowIdData[rowid]
@@ -1181,23 +1183,37 @@ export default defineComponent({
      * 如果存在筛选条件，继续处理
      */
     const updateAfterFullData = () => {
-      const { tableFullColumn, tableFullData } = internalData
+      const { treeConfig } = props
+      const { tableFullColumn, tableFullData, tableFullTreeData } = internalData
       const filterOpts = computeFilterOpts.value
       const sortOpts = computeSortOpts.value
+      const treeOpts = computeTreeOpts.value
+      const { transform } = treeOpts
       const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
       const { remote: allRemoteSort, sortMethod: allSortMethod } = sortOpts
-      let tableData = tableFullData.slice(0)
+      let tableData: any[] = []
+      let tableTree: any[] = []
+
+      // 处理列
       if (!allRemoteFilter || !allRemoteSort) {
-        const filterColumns: any[] = []
-        const orderColumns: any[] = []
-        tableFullColumn.forEach((column: any) => {
+        const filterColumns: {
+          column: VxeTableDefines.ColumnInfo
+          valueList: any[]
+          itemList: VxeTableDefines.FilterOption[]
+        }[] = []
+        const orderColumns: {
+          column: VxeTableDefines.ColumnInfo
+          property: string
+          order: VxeTablePropTypes.SortOrder
+        }[] = []
+        tableFullColumn.forEach((column) => {
           const { sortable, order, filters } = column
           if (!allRemoteFilter && filters && filters.length) {
             const valueList: any[] = []
-            const itemList: any[] = []
-            filters.forEach((item: any) => {
+            const itemList: VxeTableDefines.FilterOption[] = []
+            filters.forEach((item) => {
               if (item.checked) {
-                itemList.push(item)
+                itemList.push(item as VxeTableDefines.FilterOption)
                 valueList.push(item.value)
               }
             })
@@ -1213,28 +1229,37 @@ export default defineComponent({
         // 处理筛选
         // 支持单列、多列、组合筛选
         if (!allRemoteFilter && filterColumns.length) {
-          tableData = tableData.filter((row: any) => {
+          const handleFilter = (row: any) => {
             return filterColumns.every(({ column, valueList, itemList }) => {
               const { filterMethod, filterRender } = column
               const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
               const compFilterMethod = compConf ? compConf.filterMethod : null
-              const defaultFilterMethod: any = compConf ? (compConf as any).defaultFilterMethod : null
+              const defaultFilterMethod = compConf ? compConf.defaultFilterMethod : null
               const cellValue = getCellValue(row, column)
               if (filterMethod) {
-                return itemList.some((item: any) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
+                return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               } else if (compFilterMethod) {
-                return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
+                return itemList.some((item) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               } else if (allFilterMethod) {
                 return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
               } else if (defaultFilterMethod) {
-                return itemList.some((item: any) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
+                return itemList.some((item) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               }
               return valueList.indexOf(XEUtils.get(row, column.property)) > -1
             })
-          })
+          }
+          if (treeConfig && transform) {
+            tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, { ...treeOpts, original: true })
+          } else {
+            tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
+            tableTree = tableData
+          }
+        } else {
+          tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
+          tableTree = tableData
         }
 
-        // 处理排序
+        // 处理排序（不能用于树形结构）
         // 支持单列、多列、组合排序
         if (!allRemoteSort && orderColumns.length) {
           if (allSortMethod) {
@@ -1243,11 +1268,12 @@ export default defineComponent({
           } else {
             tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
           }
+          tableTree = tableData
         }
       }
       internalData.afterFullData = tableData
+      internalData.afterTreeFullData = tableTree
       updateAfterDataIndex()
-      return tableData
     }
 
     const updateStyle = () => {
@@ -1273,7 +1299,7 @@ export default defineComponent({
         const fixedType = index > 0 ? name : ''
         const layoutList = ['header', 'body', 'footer']
         const isFixedLeft = fixedType === 'left'
-        let fixedColumn: any[] = []
+        let fixedColumn: VxeTableDefines.ColumnInfo[] = []
         let fixedWrapperElem: HTMLDivElement
         if (fixedType) {
           fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
@@ -1333,12 +1359,12 @@ export default defineComponent({
                   let childWidth = 0
                   let countChild = 0
                   if (hasEllipsis) {
-                    XEUtils.eachTree(column.children, (item: any) => {
+                    XEUtils.eachTree(column.children, (item) => {
                       if (!item.children || !column.children.length) {
                         countChild++
                       }
                       childWidth += item.renderWidth
-                    })
+                    }, { children: 'children' })
                   }
                   thElem.style.width = hasEllipsis ? `${childWidth - countChild - (border ? 2 : 0)}px` : ''
                 }
@@ -1364,7 +1390,7 @@ export default defineComponent({
                 wrapperElem.style.top = `${headerHeight}px`
               }
               fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
-              fixedWrapperElem.style.width = `${fixedColumn.reduce((previous: any, column: any) => previous + column.renderWidth, isFixedLeft ? 0 : scrollbarWidth)}px`
+              fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isFixedLeft ? 0 : scrollbarWidth)}px`
             }
 
             let tWidth = tableWidth
@@ -1854,13 +1880,24 @@ export default defineComponent({
             if (!treeOpts.children) {
               errLog('vxe.error.reqProp', ['tree-config.children'])
             }
+            if (!treeOpts.mapChildren) {
+              errLog('vxe.error.reqProp', ['tree-config.mapChildren'])
+            }
+            if (treeOpts.children === treeOpts.mapChildren) {
+              errLog('vxe.error.errConflicts', ['tree-config.children', 'tree-config.mapChildren'])
+            }
             fullData.forEach(row => {
               if (row[treeOpts.children] && row[treeOpts.children].length) {
                 warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
               }
             })
           }
-          treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowField, parentKey: treeOpts.parentField, children: treeOpts.children })
+          treeData = XEUtils.toArrayTree(fullData, {
+            key: treeOpts.rowField,
+            parentKey: treeOpts.parentField,
+            children: treeOpts.children,
+            mapChildren: treeOpts.mapChildren
+          })
           fullData = treeData.slice(0)
         } else {
           treeData = fullData.slice(0)
@@ -1876,7 +1913,7 @@ export default defineComponent({
       reactData.scrollYLoad = sYLoad
       // 全量数据
       internalData.tableFullData = fullData
-      internalData.treeFullData = treeData
+      internalData.tableFullTreeData = treeData
       // 缓存数据
       tablePrivateMethods.cacheRowMap(true)
       // 原始数据
@@ -2149,26 +2186,6 @@ export default defineComponent({
       return scrollYLoad
     }
 
-    const updateVirtualTreeData = () => {
-      const { scrollYLoad: oldScrollYLoad, treeExpandeds } = reactData
-      const { treeFullData } = internalData
-      const treeOpts = computeTreeOpts.value
-      const fullData: any[] = []
-      const expandMaps: Map<any, number> = new Map()
-      XEUtils.eachTree(treeFullData, (row, index, items, path, parent) => {
-        if (!parent || (expandMaps.has(parent) && $xetable.findRowIndexOf(treeExpandeds, parent) > -1)) {
-          expandMaps.set(row, 1)
-          fullData.push(row)
-        }
-      }, treeOpts)
-      const scrollYLoad = updateScrollYStatus(fullData)
-      internalData.tableFullData = scrollYLoad ? fullData : treeFullData
-      if (scrollYLoad || oldScrollYLoad !== scrollYLoad) {
-        return tablePrivateMethods.handleTableData(true).then(() => tableMethods.recalculate())
-      }
-      return nextTick()
-    }
-
     /**
      * 展开与收起树节点
      * @param rows
@@ -2226,7 +2243,7 @@ export default defineComponent({
      */
     const handleVirtualTreeExpand = (rows: any[], expanded: boolean) => {
       return handleBaseTreeExpand(rows, expanded).then(() => {
-        return updateVirtualTreeData()
+        return tablePrivateMethods.handleTableData()
       }).then(() => {
         return tableMethods.recalculate()
       })
@@ -3338,7 +3355,7 @@ export default defineComponent({
         return tableMethods.getSortColumns().length > 0
       },
       getSortColumns () {
-        const sortList: any[] = []
+        const sortList: VxeTableDefines.SortCheckedParams[] = []
         const { tableFullColumn } = internalData
         tableFullColumn.forEach((column) => {
           const { order } = column
@@ -3551,7 +3568,7 @@ export default defineComponent({
             return handleAsyncTreeExpandChilds(row)
           }).then(() => {
             if (transform) {
-              return updateVirtualTreeData()
+              return tablePrivateMethods.handleTableData()
             }
           }).then(() => {
             return tableMethods.recalculate()
@@ -3627,15 +3644,15 @@ export default defineComponent({
        */
       clearTreeExpand () {
         const { treeExpandeds } = reactData
-        const { treeFullData } = internalData
+        const { tableFullTreeData } = internalData
         const treeOpts = computeTreeOpts.value
         const { reserve } = treeOpts
         const isExists = treeExpandeds.length
         reactData.treeExpandeds = []
         if (reserve) {
-          XEUtils.eachTree(treeFullData, row => handleTreeExpandReserve(row, false), treeOpts)
+          XEUtils.eachTree(tableFullTreeData, row => handleTreeExpandReserve(row, false), treeOpts)
         }
-        return updateVirtualTreeData().then(() => {
+        return tablePrivateMethods.handleTableData().then(() => {
           if (isExists) {
             tableMethods.recalculate()
           }
@@ -4448,10 +4465,29 @@ export default defineComponent({
         return record
       },
       handleTableData (force?: boolean) {
+        const { treeConfig } = props
         const { scrollYLoad } = reactData
         const { scrollYStore, fullDataRowIdData } = internalData
-        const fullData = force ? updateAfterFullData() : internalData.afterFullData
-        const tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullData.slice(0)
+        const { treeExpandeds } = reactData
+        const treeOpts = computeTreeOpts.value
+        let fullList: any[] = []
+        // 是否进行数据处理
+        if (force) {
+          updateAfterFullData()
+        }
+        // 如果为虚拟树，将树结构拍平
+        if (treeConfig && treeOpts.transform) {
+          const expandMaps: Map<any, number> = new Map()
+          XEUtils.eachTree(internalData.afterTreeFullData, (row, index, items, path, parent) => {
+            if (!parent || (expandMaps.has(parent) && $xetable.findRowIndexOf(treeExpandeds, parent) > -1)) {
+              expandMaps.set(row, 1)
+              fullList.push(row)
+            }
+          }, { children: treeOpts.mapChildren })
+        } else {
+          fullList = internalData.afterFullData
+        }
+        const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
         tableData.forEach((row, $index) => {
           const rowid = getRowid($xetable, row)
           const rest = fullDataRowIdData[rowid]
@@ -4469,7 +4505,7 @@ export default defineComponent({
       cacheRowMap (isSource) {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
-        let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, treeFullData } = internalData
+        let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
         const rowkey = getRowkey($xetable)
         const isLazy = treeConfig && treeOpts.lazy
         const handleCache = (row: any, index: any, items: any, path?: any[], parent?: any, nodes?: any[]) => {
@@ -4494,7 +4530,7 @@ export default defineComponent({
         }
         fullAllDataRowIdData = internalData.fullAllDataRowIdData = {}
         if (treeConfig) {
-          XEUtils.eachTree(treeFullData, handleCache, treeOpts)
+          XEUtils.eachTree(tableFullTreeData, handleCache, treeOpts)
         } else {
           tableFullData.forEach(handleCache)
         }
@@ -4794,7 +4830,7 @@ export default defineComponent({
         const editOpts = computeEditOpts.value
         const { actived } = editStore
         const { row, column } = params
-        const cell = evnt.currentTarget as HTMLTableDataCellElement
+        const cell = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent()
         if (isEnableConf(editConfig)) {
           if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
@@ -4821,7 +4857,7 @@ export default defineComponent({
       triggerFooterTooltipEvent (evnt, params) {
         const { column } = params
         const { tooltipStore } = internalData
-        const cell = evnt.currentTarget as HTMLTableDataCellElement
+        const cell = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent()
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') || cell.children[0], null, params)
@@ -5208,7 +5244,6 @@ export default defineComponent({
         tablePrivateMethods.handleTableData()
         tablePrivateMethods.updateScrollYSpace()
       },
-      updateVirtualTreeData,
       /**
        * 处理固定列的显示状态
        */
@@ -5346,6 +5381,7 @@ export default defineComponent({
       }
     }
 
+    // 检测对应模块是否安装
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
         ($xetable as any)[name] = function () {

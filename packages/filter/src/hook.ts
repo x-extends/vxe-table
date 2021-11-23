@@ -84,7 +84,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
             // 判断面板不能大于表格高度
             let maxHeight = null
             if (filterHeight >= bodyElem.clientHeight) {
-              maxHeight = Math.max(40, bodyElem.clientHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
+              maxHeight = Math.max(60, bodyElem.clientHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
             }
             if (column.fixed === 'left') {
               left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth

@@ -6,7 +6,7 @@ body:
   id: issue_link
   attributes:
     label: "可复现的链接："
-    description: "一个最小化的重现能让我们精确地定位问题，从而快速解决问题。如何创建，点击 v3：[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsrun](https://jsrun.net/vIyKp/edit) 或 v4：[codesandbox](https://codesandbox.io/s/vxe-table-wentiyanshi-forked-54v2j)、[jsrun](https://jsrun.net/K5IKp/edit)，编辑后保存。"
+    description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。如何创建，点击 v3：[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsfiddle](https://jsfiddle.net/86p7Ltny/)、[jsrun](https://jsrun.net/vIyKp/edit) 或 v4：[codesandbox](https://codesandbox.io/s/vxe-table-wentiyanshi-forked-54v2j)、[jsfiddle](https://jsfiddle.net/9qoghkbj/)、[jsrun](https://jsrun.net/K5IKp/edit)，将代码示例编辑后保存。"
   validations:
     required: true
 - type: textarea

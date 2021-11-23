@@ -54,6 +54,7 @@ export namespace VxeColumnPropTypes {
   export type FilterMultiple = boolean;
 
   interface FilterMethodParams {
+    $table: VxeTableConstructor,
     value: any;
     option: VxeTableDefines.FilterOption;
     cellValue: any;

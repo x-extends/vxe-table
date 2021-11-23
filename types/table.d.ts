@@ -712,7 +712,6 @@ export interface TablePrivateMethods {
   updateScrollYSpace(): void;
   updateScrollXData(): void;
   updateScrollYData(): void;
-  updateVirtualTreeData(): Promise<any>;
   checkScrolling(): void;
   updateZindex(): void;
   updateCellAreas(): void;
@@ -957,12 +956,14 @@ export interface TableInternalData {
   rowExpandedReserveRowMap: any;
   // 树结构数据，已展开保留的行
   treeExpandedReserveRowMap: any;
-  // 完整数据、条件处理后
+  // 列表完整数据、条件处理后
   tableFullData: any[];
   afterFullData: any[];
   tableSynchData: any[];
   tableSourceData: any[];
-  treeFullData: any[];
+  // 树的全量数据、条件处理后
+  tableFullTreeData: any[];
+  afterTreeFullData: any[];
   // 收集的列配置（带分组）
   collectColumn: VxeTableDefines.ColumnInfo[],
   // 完整所有列（不带分组）
@@ -1436,6 +1437,7 @@ export namespace VxeTablePropTypes {
     rowField?: string;
     parentField?: string;
     children?: string;
+    mapChildren?: string;
     indent?: number;
     line?: boolean;
     expandAll?: boolean;
@@ -1468,6 +1470,7 @@ export namespace VxeTablePropTypes {
     children: string;
     indent: number;
     hasChild: string;
+    mapChildren: string;
     iconOpen: string;
     iconClose: string;
     iconLoaded: string;

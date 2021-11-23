@@ -13,7 +13,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
     const { props, reactData, internalData } = $xetable
     const { refElem } = $xetable.getRefMaps()
-    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeSYOpts, computeTreeOpts } = $xetable.getComputeMaps()
+    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeTreeOpts } = $xetable.getComputeMaps()
 
     let editMethods = {} as TableEditMethods
     let editPrivateMethods = {} as TableEditPrivateMethods
@@ -60,13 +60,13 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     function insertTreeRow (newRecords: any[], isAppend: boolean) {
-      const { treeFullData, afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
       const funcName = isAppend ? 'push' : 'unshift'
       newRecords.forEach(item => {
         const parentRowId = item[treeOpts.parentField]
         const rowid = getRowid($xetable, item)
-        const matchObj = parentRowId ? XEUtils.findTree(treeFullData, item => parentRowId === item[treeOpts.rowField], treeOpts) : null
+        const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[treeOpts.rowField], treeOpts) : null
         if (matchObj) {
           const { item: parentRow } = matchObj
           const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
@@ -86,13 +86,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }
           afterFullData[funcName](item)
-          treeFullData[funcName](item)
-          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: treeFullData, parent: null, level: 0 }
+          tableFullTreeData[funcName](item)
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         }
       })
-      $xetable.updateVirtualTreeData()
     }
 
     editMethods = {
@@ -114,9 +113,8 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       insertAt (records: any, row: any) {
         const { treeConfig } = props
-        const { mergeList, editStore, scrollYLoad } = reactData
-        const { treeFullData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
-        const sYOpts = computeSYOpts.value
+        const { mergeList, editStore } = reactData
+        const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         if (!XEUtils.isArray(records)) {
@@ -157,7 +155,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             // 如果为虚拟树
             if (treeConfig && transform) {
-              const matchObj = XEUtils.findTree(treeFullData, item => row[treeOpts.rowField] === item[treeOpts.rowField], treeOpts)
+              const matchObj = XEUtils.findTree(tableFullTreeData, item => row[treeOpts.rowField] === item[treeOpts.rowField], treeOpts)
               if (matchObj) {
                 const { parent: parentRow } = matchObj
                 const parentChilds = matchObj.items
@@ -180,7 +178,6 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                   fullDataRowIdData[rowid] = rest
                   fullAllDataRowIdData[rowid] = rest
                 })
-                $xetable.updateVirtualTreeData()
               } else {
                 if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                   warnLog('vxe.error.unableInsert')
@@ -210,13 +207,11 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           }
         }
         editStore.insertList.unshift(...newRecords)
-        reactData.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
         $xetable.updateFooter()
         $xetable.cacheRowMap()
-        $xetable.handleTableData(transform)
-        $xetable.updateAfterDataIndex()
+        $xetable.handleTableData(treeConfig && treeOpts.transform)
         $xetable.checkSelectionStatus()
-        if (scrollYLoad) {
+        if (reactData.scrollYLoad) {
           $xetable.updateScrollYSpace()
         }
         return nextTick().then(() => {
@@ -237,10 +232,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       remove (rows: any) {
         const { treeConfig } = props
-        const { mergeList, editStore, selection, scrollYLoad } = reactData
-        const { treeFullData, afterFullData, tableFullData } = internalData
+        const { mergeList, editStore, selection } = reactData
+        const { tableFullTreeData, afterFullData, tableFullData } = internalData
         const checkboxOpts = computeCheckboxOpts.value
-        const sYOpts = computeSYOpts.value
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         const { actived, removeList, insertList } = editStore
@@ -277,7 +271,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           if (treeConfig && transform) {
             rows.forEach((row: any) => {
               const rowid = getRowid($xetable, row)
-              const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid($xetable, item), treeOpts)
+              const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid($xetable, item), treeOpts)
               if (matchObj) {
                 const rItems = matchObj.items.splice(matchObj.index, 1)
                 rest.push(rItems[0])
@@ -286,7 +280,6 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               if (afIndex > -1) {
                 afterFullData.splice(afIndex, 1)
               }
-              $xetable.updateVirtualTreeData()
             })
           } else {
             rows.forEach((row: any) => {
@@ -322,13 +315,11 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             insertList.splice(iIndex, 1)
           }
         })
-        reactData.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
         $xetable.updateFooter()
         $xetable.cacheRowMap()
-        $xetable.handleTableData(transform)
-        $xetable.updateAfterDataIndex()
+        $xetable.handleTableData(treeConfig && treeOpts.transform)
         $xetable.checkSelectionStatus()
-        if (scrollYLoad) {
+        if (reactData.scrollYLoad) {
           $xetable.updateScrollYSpace()
         }
         return nextTick().then(() => {
@@ -383,7 +374,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       getInsertRecords () {
         const { treeConfig } = props
         const { editStore } = reactData
-        const { treeFullData, tableFullData } = internalData
+        const { tableFullTreeData, tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const insertList = editStore.insertList
         const insertRecords: any[] = []
@@ -392,7 +383,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           if (treeConfig && treeOpts.transform) {
             insertList.forEach(row => {
               const rowid = getRowid($xetable, row)
-              const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid($xetable, item), treeOpts)
+              const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid($xetable, item), treeOpts)
               if (matchObj) {
                 insertRecords.push(row)
               }

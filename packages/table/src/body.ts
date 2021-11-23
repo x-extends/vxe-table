@@ -384,7 +384,7 @@ export default defineComponent({
           )
         }
         // 如果是树形表格
-        if (treeConfig && !scrollYLoad && treeExpandeds.length) {
+        if (treeConfig && !scrollYLoad && !treeOpts.transform && treeExpandeds.length) {
           const rowChildren = row[treeOpts.children]
           if (rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1) {
             rows.push(...renderRows(fixedType, rowChildren, tableColumn))

@@ -176,7 +176,7 @@ export default defineComponent({
     })
 
     const getOptkey = () => {
-      return props.optionId || '_XID'
+      return props.optionId || '_X_ID'
     }
 
     const getOptid = (option: any) => {
