@@ -602,7 +602,7 @@ const Methods = {
   },
   loadTreeChildren (row, childRecords) {
     const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
-    const { children } = treeOpts
+    const { transform, children, mapChildren } = treeOpts
     const rest = fullAllDataRowIdData[getRowid(this, row)]
     const parentLevel = rest ? rest.level : 0
     return this.createData(childRecords).then((rows) => {
@@ -622,6 +622,9 @@ const Methods = {
         fullAllDataRowMap.set(childRow, rest)
       }, treeOpts)
       row[children] = rows
+      if (transform) {
+        row[mapChildren] = rows
+      }
       return rows
     })
   },
@@ -3862,7 +3865,7 @@ const Methods = {
   },
   handleAsyncTreeExpandChilds (row) {
     const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds, checkboxOpts } = this
-    const { loadMethod } = treeOpts
+    const { transform, loadMethod } = treeOpts
     const { checkStrictly } = checkboxOpts
     const rest = fullAllDataRowMap.get(row)
     return new Promise(resolve => {
@@ -3882,9 +3885,17 @@ const Methods = {
             if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
               this.setCheckboxRow(childRows, true)
             }
+            this.$nextTick().then(() => {
+              if (transform) {
+                return this.handleTableData()
+              }
+            }).then(() => {
+              return this.recalculate()
+            }).then(() => resolve())
           })
+        } else {
+          this.$nextTick().then(() => this.recalculate()).then(() => resolve())
         }
-        resolve(this.$nextTick().then(this.recalculate))
       })
     })
   },
