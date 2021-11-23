@@ -148,7 +148,7 @@ const apis = [
         version: '',
         type: 'string',
         enum: '',
-        defVal: '默认 _XID，继承 setup.select.optionId',
+        defVal: '默认 _X_ID，继承 setup.select.optionId',
         list: []
       },
       {

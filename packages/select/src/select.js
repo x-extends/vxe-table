@@ -13,7 +13,7 @@ function getOptUniqueId () {
 }
 
 function getOptkey (_vm) {
-  return _vm.optionId || '_XID'
+  return _vm.optionId || '_X_ID'
 }
 
 function getOptid (_vm, option) {

@@ -49,7 +49,7 @@ export default {
     //  storage: false,
     //  checkMethod () {}
     // },
-    // rowId: '_XID', // 行数据的唯一主键字段名
+    // rowId: '_X_ID', // 行数据的唯一主键字段名
     sortConfig: {
       // remote: false,
       // trigger: 'default',
@@ -67,6 +67,7 @@ export default {
       parentField: 'parentId',
       children: 'children',
       hasChild: 'hasChild',
+      mapChildren: '_X_CHILD',
       indent: 20,
       showIcon: true
     },

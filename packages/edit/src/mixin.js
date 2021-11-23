@@ -6,12 +6,12 @@ import { browse } from '../../tools/src/dom'
 const { getRowid } = UtilTools
 
 function insertTreeRow (_vm, newRecords, isAppend) {
-  const { treeFullData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
+  const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
   const funcName = isAppend ? 'push' : 'unshift'
   newRecords.forEach(item => {
     const parentRowId = item[treeOpts.parentField]
     const rowid = getRowid(_vm, item)
-    const matchObj = parentRowId ? XEUtils.findTree(treeFullData, item => parentRowId === item[treeOpts.rowField], treeOpts) : null
+    const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[treeOpts.rowField], treeOpts) : null
     if (matchObj) {
       const { item: parentRow } = matchObj
       const parentRest = fullAllDataRowIdData[getRowid(_vm, parentRow)]
@@ -31,13 +31,12 @@ function insertTreeRow (_vm, newRecords, isAppend) {
         }
       }
       afterFullData[funcName](item)
-      treeFullData[funcName](item)
-      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: treeFullData, parent: null, level: 0 }
+      tableFullTreeData[funcName](item)
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     }
   })
-  _vm.updateVirtualTreeData()
 }
 
 export default {
@@ -59,7 +58,7 @@ export default {
      * @param {Row} row 指定行
      */
     _insertAt (records, row) {
-      const { treeFullData, mergeList, afterFullData, editStore, sYOpts, scrollYLoad, tableFullData, treeConfig, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = this
+      const { tableFullTreeData, mergeList, afterFullData, editStore, tableFullData, treeConfig, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = this
       const { transform } = treeOpts
       if (!XEUtils.isArray(records)) {
         records = [records]
@@ -99,7 +98,7 @@ export default {
         } else {
           // 如果为虚拟树
           if (treeConfig && transform) {
-            const matchObj = XEUtils.findTree(treeFullData, item => row[treeOpts.rowField] === item[treeOpts.rowField], treeOpts)
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => row[treeOpts.rowField] === item[treeOpts.rowField], treeOpts)
             if (matchObj) {
               const { parent: parentRow } = matchObj
               const parentChilds = matchObj.items
@@ -122,7 +121,6 @@ export default {
                 fullDataRowIdData[rowid] = rest
                 fullAllDataRowIdData[rowid] = rest
               })
-              this.updateVirtualTreeData()
             } else {
               if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                 UtilTools.warn('vxe.error.unableInsert')
@@ -152,13 +150,12 @@ export default {
         }
       }
       editStore.insertList.unshift(...newRecords)
-      this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
-      this.handleTableData(transform)
+      this.handleTableData(treeConfig && treeOpts.transform)
       this.updateFooter()
       this.cacheRowMap()
       this.updateAfterDataIndex()
       this.checkSelectionStatus()
-      if (scrollYLoad) {
+      if (this.scrollYLoad) {
         this.updateScrollYSpace()
       }
       return this.$nextTick().then(() => {
@@ -178,7 +175,7 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      const { afterFullData, tableFullData, treeFullData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, sYOpts, scrollYLoad, treeOpts } = this
+      const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, treeOpts } = this
       const { transform } = treeOpts
       const { actived, removeList, insertList } = editStore
       const { checkField: property } = checkboxOpts
@@ -214,7 +211,7 @@ export default {
         if (treeConfig && transform) {
           rows.forEach((row) => {
             const rowid = getRowid(this, row)
-            const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid(this, item), treeOpts)
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), treeOpts)
             if (matchObj) {
               const rItems = matchObj.items.splice(matchObj.index, 1)
               rest.push(rItems[0])
@@ -223,7 +220,6 @@ export default {
             if (afIndex > -1) {
               afterFullData.splice(afIndex, 1)
             }
-            this.updateVirtualTreeData()
           })
         } else {
           rows.forEach(row => {
@@ -259,13 +255,12 @@ export default {
           insertList.splice(iIndex, 1)
         }
       })
-      this.scrollYLoad = !treeConfig && sYOpts.gt > -1 && sYOpts.gt < tableFullData.length
-      this.handleTableData(transform)
+      this.handleTableData(treeConfig && treeOpts.transform)
       this.updateFooter()
       this.cacheRowMap()
       this.updateAfterDataIndex()
       this.checkSelectionStatus()
-      if (scrollYLoad) {
+      if (this.scrollYLoad) {
         this.updateScrollYSpace()
       }
       return this.$nextTick().then(() => {
@@ -318,7 +313,7 @@ export default {
      * 获取新增的临时数据
      */
     _getInsertRecords () {
-      const { treeConfig, treeFullData, tableFullData, treeOpts } = this
+      const { treeConfig, tableFullTreeData, tableFullData, treeOpts } = this
       const insertList = this.editStore.insertList
       const insertRecords = []
       if (insertList.length) {
@@ -326,7 +321,7 @@ export default {
         if (treeConfig && treeOpts.transform) {
           insertList.forEach(row => {
             const rowid = getRowid(this, row)
-            const matchObj = XEUtils.findTree(treeFullData, item => rowid === getRowid(this, item), treeOpts)
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), treeOpts)
             if (matchObj) {
               insertRecords.push(row)
             }

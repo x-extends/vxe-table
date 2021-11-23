@@ -183,7 +183,7 @@ export const UtilTools = {
   },
   // 行主键 key
   getRowkey ($xetable) {
-    return $xetable.rowId || '_XID'
+    return $xetable.rowId || '_X_ID'
   },
   // 行主键 value
   getRowid ($xetable, row) {

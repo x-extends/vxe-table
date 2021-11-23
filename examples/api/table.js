@@ -898,7 +898,7 @@ const apis = [
         version: '',
         type: 'string',
         enum: '',
-        defVal: '默认 _XID，继承 setup.table.rowId',
+        defVal: '默认 _X_ID，继承 setup.table.rowId',
         list: []
       },
       {

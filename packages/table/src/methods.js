@@ -301,9 +301,33 @@ const Methods = {
     return this.handleTableData(true).then(this.updateFooter).then(this.recalculate)
   },
   handleTableData (force) {
-    const { scrollYLoad, scrollYStore } = this
-    const fullData = force ? this.updateAfterFullData() : this.afterFullData
-    this.tableData = scrollYLoad ? fullData.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullData.slice(0)
+    const { treeConfig, scrollYLoad, scrollYStore, fullDataRowIdData, treeExpandeds, treeOpts } = this
+    let fullList = []
+    // 是否进行数据处理
+    if (force) {
+      this.updateAfterFullData()
+    }
+    // 如果为虚拟树，将树结构拍平
+    if (treeConfig && treeOpts.transform) {
+      const expandMaps = new Map()
+      XEUtils.eachTree(this.afterTreeFullData, (row, index, items, path, parent) => {
+        if (!parent || (expandMaps.has(parent) && treeExpandeds.indexOf(parent) > -1)) {
+          expandMaps.set(row, 1)
+          fullList.push(row)
+        }
+      }, { children: treeOpts.mapChildren })
+    } else {
+      fullList = this.afterFullData
+    }
+    const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
+    tableData.forEach((row, $index) => {
+      const rowid = getRowid(this, row)
+      const rest = fullDataRowIdData[rowid]
+      if (rest) {
+        rest.$index = $index
+      }
+    })
+    this.tableData = tableData
     return this.$nextTick()
   },
   updateScrollYStatus (fullData) {
@@ -334,13 +358,24 @@ const Methods = {
           if (!treeOpts.children) {
             UtilTools.error('vxe.error.reqProp', ['tree-config.children'])
           }
+          if (!treeOpts.mapChildren) {
+            UtilTools.error('vxe.error.reqProp', ['tree-config.mapChildren'])
+          }
+          if (treeOpts.children === treeOpts.mapChildren) {
+            UtilTools.error('vxe.error.errConflicts', ['tree-config.children', 'tree-config.mapChildren'])
+          }
           fullData.forEach(row => {
             if (row[treeOpts.children] && row[treeOpts.children].length) {
               UtilTools.warn('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
             }
           })
         }
-        treeData = XEUtils.toArrayTree(fullData, { key: treeOpts.rowField, parentKey: treeOpts.parentField, children: treeOpts.children })
+        treeData = XEUtils.toArrayTree(fullData, {
+          key: treeOpts.rowField,
+          parentKey: treeOpts.parentField,
+          children: treeOpts.children,
+          mapChildren: treeOpts.mapChildren
+        })
         fullData = treeData.slice(0)
       } else {
         treeData = fullData.slice(0)
@@ -356,7 +391,7 @@ const Methods = {
     this.scrollYLoad = sYLoad
     // 全量数据
     this.tableFullData = fullData
-    this.treeFullData = treeData
+    this.tableFullTreeData = treeData
     // 缓存数据
     this.cacheRowMap(true)
     // 原始数据
@@ -530,7 +565,7 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheRowMap (source) {
-    const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap } = this
+    const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap, tableFullTreeData } = this
     let { fullDataRowIdData, fullAllDataRowIdData } = this
     const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
@@ -560,7 +595,7 @@ const Methods = {
     fullAllDataRowIdData = this.fullAllDataRowIdData = {}
     fullAllDataRowMap.clear()
     if (treeConfig) {
-      XEUtils.eachTree(tableFullData, handleCache, treeOpts)
+      XEUtils.eachTree(tableFullTreeData, handleCache, treeOpts)
     } else {
       tableFullData.forEach(handleCache)
     }
@@ -1078,10 +1113,12 @@ const Methods = {
    * 如果存在筛选条件，继续处理
    */
   updateAfterFullData () {
-    const { tableFullColumn, tableFullData, filterOpts, sortOpts } = this
+    const { tableFullColumn, tableFullData, filterOpts, sortOpts, treeConfig, treeOpts, tableFullTreeData } = this
     const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
     const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple } = sortOpts
-    let tableData = tableFullData.slice(0)
+    const { transform } = treeOpts
+    let tableData = []
+    let tableTree = []
     const filterColumns = []
     const orderColumns = []
     tableFullColumn.forEach(column => {
@@ -1104,7 +1141,7 @@ const Methods = {
       }
     })
     if (filterColumns.length) {
-      tableData = tableData.filter(row => {
+      const handleFilter = (row) => {
         return filterColumns.every(({ column, valueList, itemList }) => {
           if (valueList.length && !allRemoteFilter) {
             const { filterMethod, filterRender } = column
@@ -1125,7 +1162,16 @@ const Methods = {
           }
           return true
         })
-      })
+      }
+      if (treeConfig && transform) {
+        tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, { ...treeOpts, original: true })
+      } else {
+        tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
+        tableTree = tableData
+      }
+    } else {
+      tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
+      tableTree = tableData
     }
     const firstOrderColumn = orderColumns[0]
     if (!allRemoteSort && firstOrderColumn) {
@@ -1145,18 +1191,20 @@ const Methods = {
           tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, order }) => [getOrderField(this, column), order]))
         }
       }
+      tableTree = tableData
     }
     this.afterFullData = tableData
-    return tableData
+    this.afterTreeFullData = tableTree
+    this.updateAfterDataIndex()
   },
   /**
    * 预编译
    * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
    */
   updateAfterDataIndex () {
-    const { treeConfig, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeFullData, treeOpts } = this
+    const { treeConfig, afterFullData, fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData, treeOpts } = this
     if (treeConfig) {
-      XEUtils.eachTree(treeFullData, (row, index, items, path) => {
+      XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
         const rowid = getRowid(this, row)
         const allrest = fullAllDataRowIdData[rowid]
         const fullrest = fullDataRowIdData[rowid]
@@ -3754,7 +3802,7 @@ const Methods = {
         return this.handleAsyncTreeExpandChilds(row)
       }).then(() => {
         if (transform) {
-          return this.updateVirtualTreeData()
+          return this.handleTableData()
         }
       }).then(() => {
         return this.recalculate()
@@ -3900,23 +3948,6 @@ const Methods = {
     }
     return Promise.all(result).then(this.recalculate)
   },
-  updateVirtualTreeData () {
-    const { scrollYLoad: oldScrollYLoad, treeExpandeds, treeOpts, treeFullData } = this
-    const fullData = []
-    const expandMaps = new Map()
-    XEUtils.eachTree(treeFullData, (row, index, items, path, parent) => {
-      if (!parent || (expandMaps.has(parent) && treeExpandeds.indexOf(parent) > -1)) {
-        expandMaps.set(row, 1)
-        fullData.push(row)
-      }
-    }, treeOpts)
-    const scrollYLoad = this.updateScrollYStatus(fullData)
-    this.tableFullData = scrollYLoad ? fullData : treeFullData
-    if (scrollYLoad || oldScrollYLoad !== scrollYLoad) {
-      return this.handleTableData(true).then(() => this.recalculate())
-    }
-    return this.$nextTick()
-  },
   /**
    * 虚拟树的展开与收起
    * @param rows
@@ -3925,7 +3956,7 @@ const Methods = {
    */
   handleVirtualTreeExpand (rows, expanded) {
     return this.handleBaseTreeExpand(rows, expanded).then(() => {
-      return this.updateVirtualTreeData()
+      return this.handleTableData()
     }).then(() => {
       return this.recalculate()
     })
@@ -3973,7 +4004,7 @@ const Methods = {
     if (reserve) {
       XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), treeOpts)
     }
-    return this.updateVirtualTreeData().then(() => {
+    return this.handleTableData().then(() => {
       if (isExists) {
         this.recalculate()
       }

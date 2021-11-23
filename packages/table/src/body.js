@@ -377,7 +377,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
       )
     }
     // 如果是树形表格
-    if (treeConfig && !scrollYLoad && treeExpandeds.length) {
+    if (treeConfig && !scrollYLoad && !treeOpts.transform && treeExpandeds.length) {
       const rowChildren = row[treeOpts.children]
       if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
         rows.push(...renderRows(h, _vm, $xetable, fixedType, rowChildren, tableColumn))
