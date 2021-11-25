@@ -14,7 +14,7 @@
       </template>
     </vxe-toolbar>
 
-    <vxe-table
+    <vxe-table stripe
       resizable
       border="inner"
       ref="xTree"

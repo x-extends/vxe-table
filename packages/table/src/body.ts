@@ -300,6 +300,7 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const editOpts = computeEditOpts.value
       const rowOpts = computeRowOpts.value
+      const { transform } = treeOpts
       const rows: any[] = []
       tableData.forEach((row: any, $rowIndex: any) => {
         const trOn: any = {}
@@ -324,9 +325,14 @@ export default defineComponent({
         }
         const rowid = getRowid($xetable, row)
         const rest = fullDataRowIdData[rowid]
-        const rowLevel = rest ? rest.level : 0
-        const seq = rest ? rest.seq : -1
+        let rowLevel = 0
+        let seq: string | number = -1
+        if (rest) {
+          rowLevel = rest.level
+          seq = rest.seq
+        }
         const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+        // 处理新增状态
         let isNewRow = false
         if (editConfig) {
           isNewRow = $xetable.findRowIndexOf(editStore.insertList, row) > -1
@@ -384,7 +390,7 @@ export default defineComponent({
           )
         }
         // 如果是树形表格
-        if (treeConfig && !scrollYLoad && !treeOpts.transform && treeExpandeds.length) {
+        if (treeConfig && !scrollYLoad && !transform && treeExpandeds.length) {
           const rowChildren = row[treeOpts.children]
           if (rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1) {
             rows.push(...renderRows(fixedType, rowChildren, tableColumn))

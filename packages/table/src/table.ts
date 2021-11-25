@@ -1150,9 +1150,11 @@ export default defineComponent({
           const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
           if (allrest) {
             allrest.seq = seq
+            allrest._index = index
           }
           if (fullrest) {
             fullrest.seq = seq
+            fullrest._index = index
           } else {
             fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
             fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
@@ -1166,6 +1168,7 @@ export default defineComponent({
           const seq = index + 1
           if (allrest) {
             allrest.seq = seq
+            allrest._index = index
           }
           if (fullrest) {
             fullrest.seq = seq
@@ -1250,6 +1253,7 @@ export default defineComponent({
           }
           if (treeConfig && transform) {
             tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, { ...treeOpts, original: true })
+            tableData = tableTree
           } else {
             tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
             tableTree = tableData
@@ -1262,13 +1266,24 @@ export default defineComponent({
         // 处理排序（不能用于树形结构）
         // 支持单列、多列、组合排序
         if (!allRemoteSort && orderColumns.length) {
-          if (allSortMethod) {
-            const sortRests = allSortMethod({ data: tableData, sortList: orderColumns, $table: $xetable })
-            tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
+          if (treeConfig && transform) {
+            // 虚拟树和列表一样，只能排序根级节点
+            if (allSortMethod) {
+              const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: $xetable })
+              tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
+            } else {
+              tableTree = XEUtils.orderBy(tableTree, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
+            }
+            tableData = tableTree
           } else {
-            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
+            if (allSortMethod) {
+              const sortRests = allSortMethod({ data: tableData, sortList: orderColumns, $table: $xetable })
+              tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
+            } else {
+              tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
+            }
+            tableTree = tableData
           }
-          tableTree = tableData
         }
       }
       internalData.afterFullData = tableData
@@ -1729,7 +1744,7 @@ export default defineComponent({
       const { fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
       const checkboxOpts = computeCheckboxOpts.value
-      const { loadMethod } = treeOpts
+      const { transform, loadMethod } = treeOpts
       const { checkStrictly } = checkboxOpts
       const rest = fullAllDataRowIdData[getRowid($xetable, row)]
       return new Promise(resolve => {
@@ -1750,9 +1765,17 @@ export default defineComponent({
                 if (!checkStrictly && tableMethods.isCheckedByCheckboxRow(row)) {
                   tableMethods.setCheckboxRow(childRows, true)
                 }
+                nextTick().then(() => {
+                  if (transform) {
+                    return tablePrivateMethods.handleTableData()
+                  }
+                }).then(() => {
+                  return tableMethods.recalculate()
+                }).then(() => resolve())
               })
+            } else {
+              nextTick().then(() => tableMethods.recalculate()).then(() => resolve())
             }
-            resolve(nextTick().then(() => tableMethods.recalculate()))
           })
         } else {
           resolve()
@@ -2318,7 +2341,7 @@ export default defineComponent({
         return clearTableAllStatus($xetable)
       },
       /**
-       * 同步 data 数据
+       * 同步 data 数据（即将废弃）
        * 如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
        * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
        */
@@ -2413,7 +2436,7 @@ export default defineComponent({
         const { keepSource } = props
         const { tableSourceData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { children } = treeOpts
+        const { transform, children, mapChildren } = treeOpts
         const parentRest = fullAllDataRowIdData[getRowid($xetable, row)]
         const parentLevel = parentRest ? parentRest.level : 0
         return tableMethods.createData(childRecords).then((rows) => {
@@ -2431,6 +2454,9 @@ export default defineComponent({
             fullAllDataRowIdData[rowid] = rest
           }, treeOpts)
           row[children] = rows
+          if (transform) {
+            row[mapChildren] = rows
+          }
           return rows
         })
       },

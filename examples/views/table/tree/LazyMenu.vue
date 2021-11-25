@@ -67,12 +67,11 @@ export default defineComponent({
         },
         visibleMethod ({ row, type, options }) {
           const $table = xTree1.value
-          const treeConfig = demo1.treeConfig
           if (type === 'body') {
             options.forEach(list => {
               list.forEach(item => {
                 if (item.code === 'expand' || item.code === 'contract') {
-                  if (row && treeConfig.children && row[treeConfig.children] && row[treeConfig.children].length) {
+                  if (row && row.hasChild) {
                     const isExpand = $table.isTreeExpandByRow(row)
                     item.disabled = item.code === 'expand' ? isExpand : !isExpand
                   } else {
