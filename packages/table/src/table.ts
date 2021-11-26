@@ -1252,6 +1252,7 @@ export default defineComponent({
             })
           }
           if (treeConfig && transform) {
+            // 筛选虚拟树
             tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, { ...treeOpts, original: true })
             tableData = tableTree
           } else {
@@ -1259,8 +1260,14 @@ export default defineComponent({
             tableTree = tableData
           }
         } else {
-          tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
-          tableTree = tableData
+          if (treeConfig && transform) {
+            // 还原虚拟树
+            tableTree = XEUtils.searchTree(tableFullTreeData, () => true, { ...treeOpts, original: true })
+            tableData = tableTree
+          } else {
+            tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
+            tableTree = tableData
+          }
         }
 
         // 处理排序（不能用于树形结构）
