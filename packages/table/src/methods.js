@@ -283,7 +283,7 @@ const Methods = {
     return clearTableAllStatus(this)
   },
   /**
-   * 同步 data 数据
+   * 同步 data 数据（即将废弃）
    * 如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
    * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
    */
@@ -1167,34 +1167,53 @@ const Methods = {
         })
       }
       if (treeConfig && transform) {
+        // 筛选虚拟树
         tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, { ...treeOpts, original: true })
+        tableData = tableTree
       } else {
         tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
         tableTree = tableData
       }
     } else {
-      tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
-      tableTree = tableData
+      if (treeConfig && transform) {
+        // 还原虚拟树
+        tableTree = XEUtils.searchTree(tableFullTreeData, () => true, { ...treeOpts, original: true })
+        tableData = tableTree
+      } else {
+        tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
+        tableTree = tableData
+      }
     }
     const firstOrderColumn = orderColumns[0]
     if (!allRemoteSort && firstOrderColumn) {
-      if (allSortMethod) {
-        const sortRests = allSortMethod({ data: tableData, column: firstOrderColumn.column, property: firstOrderColumn.property, order: firstOrderColumn.order, sortList: orderColumns, $table: this })
-        tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
-      } else {
-        // 兼容 v4
-        if (sortMultiple) {
-          tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(this, column), order]))
+      if (treeConfig && transform) {
+        // 虚拟树和列表一样，只能排序根级节点
+        if (allSortMethod) {
+          const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: this })
+          tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
         } else {
-          // 兼容 v2，在 v4 中废弃， sortBy 不能为数组
-          let sortByConfs
-          if (XEUtils.isArray(firstOrderColumn.sortBy)) {
-            sortByConfs = firstOrderColumn.sortBy.map(item => [item, firstOrderColumn.order])
-          }
-          tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, order }) => [getOrderField(this, column), order]))
+          tableTree = XEUtils.orderBy(tableTree, orderColumns.map(({ column, order }) => [getOrderField(this, column), order]))
         }
+        tableData = tableTree
+      } else {
+        if (allSortMethod) {
+          const sortRests = allSortMethod({ data: tableData, column: firstOrderColumn.column, property: firstOrderColumn.property, order: firstOrderColumn.order, sortList: orderColumns, $table: this })
+          tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
+        } else {
+          // 兼容 v4
+          if (sortMultiple) {
+            tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(this, column), order]))
+          } else {
+            // 兼容 v2，在 v4 中废弃， sortBy 不能为数组
+            let sortByConfs
+            if (XEUtils.isArray(firstOrderColumn.sortBy)) {
+              sortByConfs = firstOrderColumn.sortBy.map(item => [item, firstOrderColumn.order])
+            }
+            tableData = XEUtils.orderBy(tableData, sortByConfs || [firstOrderColumn].map(({ column, order }) => [getOrderField(this, column), order]))
+          }
+        }
+        tableTree = tableData
       }
-      tableTree = tableData
     }
     this.afterFullData = tableData
     this.afterTreeFullData = tableTree
@@ -1214,14 +1233,16 @@ const Methods = {
         const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
         if (allrest) {
           allrest.seq = seq
+          allrest._index = index
         }
         if (fullrest) {
           fullrest.seq = seq
+          fullrest._index = index
         } else {
           fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
           fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
         }
-      }, treeOpts)
+      }, { children: treeOpts.mapChildren })
     } else {
       afterFullData.forEach((row, index) => {
         const rowid = getRowid(this, row)
@@ -1230,6 +1251,7 @@ const Methods = {
         const seq = index + 1
         if (allrest) {
           allrest.seq = seq
+          allrest._index = index
         }
         if (fullrest) {
           fullrest.seq = seq

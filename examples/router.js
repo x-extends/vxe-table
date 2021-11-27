@@ -198,20 +198,6 @@ import TableScrollKeepAliveTable1 from './views/table/scroll/keepAlives/Table1.v
 import TableScrollKeepAliveTable2 from './views/table/scroll/keepAlives/Table2.vue'
 import TableScrollKeepAliveTable3 from './views/table/scroll/keepAlives/Table3.vue'
 
-import TableVirtualTreeBasic from './views/table/virtual-tree/Basic.vue'
-import TableVirtualTreeNormal from './views/table/virtual-tree/Normal.vue'
-import TableVirtualTreeRadio from './views/table/virtual-tree/Radio.vue'
-import TableVirtualTreeCheckbox from './views/table/virtual-tree/Checkbox.vue'
-import TableVirtualTreeIcon from './views/table/virtual-tree/Icon.vue'
-import TableVirtualTreeFixed from './views/table/virtual-tree/Fixed.vue'
-import TableVirtualTreeMaxHeight from './views/table/virtual-tree/MaxHeight.vue'
-import TableVirtualTreeEdit from './views/table/virtual-tree/Edit.vue'
-import TableVirtualTreeInsert from './views/table/virtual-tree/Insert.vue'
-import TableVirtualTreeRemove from './views/table/virtual-tree/Remove.vue'
-import TableVirtualTreeMenu from './views/table/virtual-tree/Menu.vue'
-import TableVirtualTreeTemplate from './views/table/virtual-tree/Template.vue'
-import TableVirtualTreeBig from './views/table/virtual-tree/Big.vue'
-
 import TableEditPopupForm from './views/table/edit/PopupForm.vue'
 import TableEditManual from './views/table/edit/Manual.vue'
 import TableEditClick from './views/table/edit/Click.vue'
@@ -246,10 +232,6 @@ import TableEditCascadingSelect from './views/table/edit/CascadingSelect.vue'
 import TableEditEvents from './views/table/edit/Events.vue'
 import TableEditTemplate from './views/table/edit/Template.vue'
 import TableEditFull from './views/table/edit/Full.vue'
-
-import TableBadEdit from './views/table/bad/Edit.vue'
-import TableBadNonsupport from './views/table/bad/Nonsupport.vue'
-import TableBadLineHeight from './views/table/bad/LineHeight.vue'
 
 import ModuleIcon from './views/icon/Icon.vue'
 import ModuleButton from './views/button/Button.vue'
@@ -934,71 +916,6 @@ export default new Router({
       component: TableTreeTemplate
     },
     {
-      path: '/table/virtualTree/basic',
-      name: 'TableVirtualTreeBasic',
-      component: TableVirtualTreeBasic
-    },
-    {
-      path: '/table/virtualTree/normal',
-      name: 'TableVirtualTreeNormal',
-      component: TableVirtualTreeNormal
-    },
-    {
-      path: '/table/virtualTree/radio',
-      name: 'TableVirtualTreeRadio',
-      component: TableVirtualTreeRadio
-    },
-    {
-      path: '/table/virtualTree/checkbox',
-      name: 'TableVirtualTreeCheckbox',
-      component: TableVirtualTreeCheckbox
-    },
-    {
-      path: '/table/virtualTree/icon',
-      name: 'TableVirtualTreeIcon',
-      component: TableVirtualTreeIcon
-    },
-    {
-      path: '/table/virtualTree/fixed',
-      name: 'TableVirtualTreeFixed',
-      component: TableVirtualTreeFixed
-    },
-    {
-      path: '/table/virtualTree/maxHeight',
-      name: 'TableVirtualTreeMaxHeight',
-      component: TableVirtualTreeMaxHeight
-    },
-    {
-      path: '/table/virtualTree/edit',
-      name: 'TableVirtualTreeEdit',
-      component: TableVirtualTreeEdit
-    },
-    {
-      path: '/table/virtualTree/insert',
-      name: 'TableVirtualTreeInsert',
-      component: TableVirtualTreeInsert
-    },
-    {
-      path: '/table/virtualTree/remove',
-      name: 'TableVirtualTreeRemove',
-      component: TableVirtualTreeRemove
-    },
-    {
-      path: '/table/virtualTree/menu',
-      name: 'TableVirtualTreeMenu',
-      component: TableVirtualTreeMenu
-    },
-    {
-      path: '/table/virtualTree/template',
-      name: 'TableVirtualTreeTemplate',
-      component: TableVirtualTreeTemplate
-    },
-    {
-      path: '/table/virtualTree/big',
-      name: 'TableVirtualTreeBig',
-      component: TableVirtualTreeBig
-    },
-    {
       path: '/table/grid/basic',
       name: 'GridBasic',
       component: GridBasic
@@ -1474,21 +1391,6 @@ export default new Router({
       path: '/table/edit/full',
       name: 'TableEditFull',
       component: TableEditFull
-    },
-    {
-      path: '/table/bad/edit',
-      name: 'TableBadEdit',
-      component: TableBadEdit
-    },
-    {
-      path: '/table/bad/nonsupport',
-      name: 'TableBadNonsupport',
-      component: TableBadNonsupport
-    },
-    {
-      path: '/table/bad/lineHeight',
-      name: 'TableBadLineHeight',
-      component: TableBadLineHeight
     },
     {
       path: '/table/module/icon',
