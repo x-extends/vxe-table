@@ -81,7 +81,7 @@
                     <span v-html="item.label"></span>
                   </a>
                   <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
-                    <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name), 'is-bad': ['TableBadEdit', 'TableBadLineHeight', 'TableBadNonsupport'].includes(child.locat.name)}">
+                    <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name)}">
                       <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
                       <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
                     </li>
@@ -1732,32 +1732,6 @@ export default defineComponent({
         //       label: 'app.aside.nav.big',
         //       locat: {
         //         name: 'TableVirtualTreeBig'
-        //       }
-        //     }
-        //   ]
-        // },
-        // {
-        //   label: 'app.aside.nav.bad',
-        //   value: 'bad',
-        //   expand: false,
-        //   children: [
-        //     {
-        //       label: 'app.aside.nav.badEdit',
-        //       demoUrl: 'https://jsrun.pro/uIWKp/edit',
-        //       locat: {
-        //         name: 'TableBadEdit'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.badLineHeight',
-        //       locat: {
-        //         name: 'TableBadLineHeight'
-        //       }
-        //     },
-        //     {
-        //       label: 'app.aside.nav.badNonsupport',
-        //       locat: {
-        //         name: 'TableBadNonsupport'
         //       }
         //     }
         //   ]

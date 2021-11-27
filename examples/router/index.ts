@@ -247,11 +247,6 @@ import TableEditEvents from '../views/table/edit/Events.vue'
 import TableEditTemplate from '../views/table/edit/Template.vue'
 import TableEditFull from '../views/table/edit/Full.vue'
 
-// import TableBadEdit from '../views/table/bad/Edit.vue'
-// import TableBadNonsupport from '../views/table/bad/Nonsupport.vue'
-// import TableBadLineHeight from '../views/table/bad/LineHeight.vue'
-import TableBadChange from '../views/table/bad/Change.vue'
-
 import ModuleIcon from '../views/icon/Icon.vue'
 import ModuleButton from '../views/button/Button.vue'
 import ModuleRadio from '../views/radio/Radio.vue'
@@ -1474,21 +1469,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/edit/full',
     name: 'TableEditFull',
     component: TableEditFull
-  },
-  // {
-  //   path: '/table/bad/edit',
-  //   name: 'TableBadEdit',
-  //   component: TableBadEdit
-  // },
-  // {
-  //   path: '/table/bad/nonsupport',
-  //   name: 'TableBadNonsupport',
-  //   component: TableBadNonsupport
-  // },
-  {
-    path: '/table/bad/change',
-    name: 'TableBadChange',
-    component: TableBadChange
   },
   {
     path: '/table/module/icon',

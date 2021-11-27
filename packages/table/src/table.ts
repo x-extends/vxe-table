@@ -1159,7 +1159,7 @@ export default defineComponent({
             fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
             fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
           }
-        }, treeOpts)
+        }, { children: treeOpts.mapChildren })
       } else {
         afterFullData.forEach((row, index) => {
           const rowid = getRowid($xetable, row)

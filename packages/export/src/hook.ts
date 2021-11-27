@@ -2,7 +2,7 @@ import { inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { isColumnInfo, mergeBodyMethod, getCellValue, toTreePathSeq } from '../../table/src/util'
+import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../table/src/util'
 import { errLog, warnLog, parseFile, formatText } from '../../tools/utils'
 import { readLocalFile, handlePrint, saveLocalFile, createHtmlPage, getExportBlobByContent } from './util'
 
@@ -295,16 +295,13 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return row[treeOpts.children] && row[treeOpts.children].length
     }
 
-    const getSeq = (row: any, rowIndex: any, column: any, columnIndex: any, path: string[] | null) => {
+    const getSeq = (row: any, rowIndex: any, column: any, columnIndex: any) => {
       const seqOpts = computeSeqOpts.value
       const seqMethod = seqOpts.seqMethod || column.seqMethod
       if (seqMethod) {
         return seqMethod({ row, rowIndex, column, columnIndex })
       }
-      if (path) {
-        return toTreePathSeq(path)
-      }
-      return seqOpts.startIndex + rowIndex + 1
+      return $xetable.getRowSeq(row)
     }
 
     const toBooleanValue = (cellValue: any) => {
@@ -350,7 +347,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               } else {
                 switch (column.type) {
                   case 'seq':
-                    cellValue = getSeq(row, rowIndex, column, columnIndex, path)
+                    cellValue = getSeq(row, rowIndex, column, columnIndex)
                     break
                   case 'checkbox':
                     cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
@@ -406,7 +403,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             switch (column.type) {
               case 'seq':
-                cellValue = getSeq(row, rowIndex, column, columnIndex, [])
+                cellValue = getSeq(row, rowIndex, column, columnIndex)
                 break
               case 'checkbox':
                 cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))

@@ -50,7 +50,6 @@ import colgroupAPI from '../../api/colgroup'
 import columnAPI from '../../api/column'
 import toolbarAPI from '../../api/toolbar'
 import gridAPI from '../../api/grid'
-import virtualTreeAPI from '../../api/virtual-tree'
 import pagerAPI from '../../api/pager'
 import radioAPI from '../../api/radio'
 import radioGroupAPI from '../../api/radio-group'
@@ -217,9 +216,6 @@ export default defineComponent({
               break
             case 'grid':
               apis = gridAPI
-              break
-            case 'virtual-tree':
-              apis = virtualTreeAPI
               break
             case 'pager':
               apis = pagerAPI
