@@ -151,7 +151,7 @@ export default {
           const ruleProps = Object.keys(validRest)
           return this.$nextTick().then(() => {
             if (ruleProps.length) {
-              return validRest[ruleProps[0]][0]
+              return Promise.reject(validRest[ruleProps[0]][0])
             }
             if (cb) {
               cb()
