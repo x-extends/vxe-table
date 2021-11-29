@@ -209,7 +209,10 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         editStore.insertList.unshift(...newRecords)
         $xetable.updateFooter()
         $xetable.cacheRowMap()
-        $xetable.handleTableData(treeConfig && treeOpts.transform)
+        $xetable.handleTableData(treeConfig && transform)
+        if (!(treeConfig && transform)) {
+          $xetable.updateAfterDataIndex()
+        }
         $xetable.checkSelectionStatus()
         if (reactData.scrollYLoad) {
           $xetable.updateScrollYSpace()
@@ -317,7 +320,10 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         })
         $xetable.updateFooter()
         $xetable.cacheRowMap()
-        $xetable.handleTableData(treeConfig && treeOpts.transform)
+        $xetable.handleTableData(treeConfig && transform)
+        if (!(treeConfig && transform)) {
+          $xetable.updateAfterDataIndex()
+        }
         $xetable.checkSelectionStatus()
         if (reactData.scrollYLoad) {
           $xetable.updateScrollYSpace()

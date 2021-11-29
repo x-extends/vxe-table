@@ -294,7 +294,7 @@ export default defineComponent({
     const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
       const { hasFixedColumn, treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
-      const { fullDataRowIdData } = tableInternalData
+      const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
@@ -324,7 +324,7 @@ export default defineComponent({
           }
         }
         const rowid = getRowid($xetable, row)
-        const rest = fullDataRowIdData[rowid]
+        const rest = fullAllDataRowIdData[rowid]
         let rowLevel = 0
         let seq: string | number = -1
         if (rest) {
