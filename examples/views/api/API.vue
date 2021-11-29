@@ -37,7 +37,6 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, reactive, watch, ref } from 'vue'
 import { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
-import { VXETable } from '../../../packages/all'
 import i18n from '@/i18n'
 import router from '@/router'
 import XEUtils from 'xe-utils'
@@ -302,7 +301,7 @@ export default defineComponent({
       })
     }
 
-    const contextMenuClickEvent = ({ menu, row, column }: any) => {
+    const contextMenuClickEvent = ({ menu, column }: any) => {
       const $grid = xGrid.value
       switch (menu.code) {
         case 'hideColumn':

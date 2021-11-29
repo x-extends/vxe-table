@@ -1182,6 +1182,30 @@ export default defineComponent({
     }
 
     /**
+     * 如果为虚拟树，将树结构拍平
+     * @returns
+     */
+    const handleVirtualTreeToList = () => {
+      const { treeConfig } = props
+      const { treeExpandeds } = reactData
+      const treeOpts = computeTreeOpts.value
+      if (treeConfig && treeOpts.transform) {
+        const fullData: any = []
+        const expandMaps: Map<any, number> = new Map()
+        XEUtils.eachTree(internalData.afterTreeFullData, (row, index, items, path, parent) => {
+          if (!parent || (expandMaps.has(parent) && $xetable.findRowIndexOf(treeExpandeds, parent) > -1)) {
+            expandMaps.set(row, 1)
+            fullData.push(row)
+          }
+        }, { children: treeOpts.mapChildren })
+        internalData.afterFullData = fullData
+        updateScrollYStatus(fullData)
+        return fullData
+      }
+      return internalData.afterFullData
+    }
+
+    /**
      * 获取处理后全量的表格数据
      * 如果存在筛选条件，继续处理
      */
@@ -2273,6 +2297,7 @@ export default defineComponent({
      */
     const handleVirtualTreeExpand = (rows: any[], expanded: boolean) => {
       return handleBaseTreeExpand(rows, expanded).then(() => {
+        handleVirtualTreeToList()
         return tablePrivateMethods.handleTableData()
       }).then(() => {
         return tableMethods.recalculate()
@@ -3580,11 +3605,15 @@ export default defineComponent({
         const { treeExpandeds } = reactData
         const { fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { lazy } = treeOpts
+        const { transform, lazy } = treeOpts
         const rest = fullAllDataRowIdData[getRowid($xetable, row)]
         if (lazy && rest) {
           rest.treeLoaded = false
           XEUtils.remove(treeExpandeds, item => $xetable.eqRow(item, row))
+        }
+        if (transform) {
+          handleVirtualTreeToList()
+          return tablePrivateMethods.handleTableData()
         }
         return nextTick()
       },
@@ -3629,7 +3658,7 @@ export default defineComponent({
       setAllTreeExpand (expanded: boolean) {
         const { tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { lazy, children } = treeOpts
+        const { transform, lazy, children } = treeOpts
         const expandeds: any[] = []
         XEUtils.eachTree(tableFullData, (row) => {
           const rowChildren = row[children]
@@ -3637,7 +3666,12 @@ export default defineComponent({
             expandeds.push(row)
           }
         }, treeOpts)
-        return tableMethods.setTreeExpand(expandeds, expanded)
+        return tableMethods.setTreeExpand(expandeds, expanded).then(() => {
+          if (transform) {
+            handleVirtualTreeToList()
+            return tableMethods.recalculate()
+          }
+        })
       },
       /**
        * 设置展开树形节点，二个参数设置这一行展开与否
@@ -3679,13 +3713,16 @@ export default defineComponent({
         const { treeExpandeds } = reactData
         const { tableFullTreeData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { reserve } = treeOpts
+        const { transform, reserve } = treeOpts
         const isExists = treeExpandeds.length
         reactData.treeExpandeds = []
         if (reserve) {
           XEUtils.eachTree(tableFullTreeData, row => handleTreeExpandReserve(row, false), treeOpts)
         }
         return tablePrivateMethods.handleTableData().then(() => {
+          if (transform) {
+            handleVirtualTreeToList()
+          }
           if (isExists) {
             tableMethods.recalculate()
           }
@@ -4498,27 +4535,15 @@ export default defineComponent({
         return record
       },
       handleTableData (force?: boolean) {
-        const { treeConfig } = props
         const { scrollYLoad } = reactData
         const { scrollYStore, fullDataRowIdData } = internalData
-        const { treeExpandeds } = reactData
-        const treeOpts = computeTreeOpts.value
-        let fullList: any[] = []
+        let fullList: any[] = internalData.afterFullData
         // 是否进行数据处理
         if (force) {
+          // 更新数据，处理筛选和排序
           updateAfterFullData()
-        }
-        // 如果为虚拟树，将树结构拍平
-        if (treeConfig && treeOpts.transform) {
-          const expandMaps: Map<any, number> = new Map()
-          XEUtils.eachTree(internalData.afterTreeFullData, (row, index, items, path, parent) => {
-            if (!parent || (expandMaps.has(parent) && $xetable.findRowIndexOf(treeExpandeds, parent) > -1)) {
-              expandMaps.set(row, 1)
-              fullList.push(row)
-            }
-          }, { children: treeOpts.mapChildren })
-        } else {
-          fullList = internalData.afterFullData
+          // 如果为虚拟树，将树结构拍平
+          fullList = handleVirtualTreeToList()
         }
         const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
         tableData.forEach((row, $index) => {
