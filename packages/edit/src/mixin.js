@@ -150,10 +150,12 @@ export default {
         }
       }
       editStore.insertList.unshift(...newRecords)
-      this.handleTableData(treeConfig && treeOpts.transform)
+      this.handleTableData(treeConfig && transform)
+      if (!(treeConfig && transform)) {
+        this.updateAfterDataIndex()
+      }
       this.updateFooter()
       this.cacheRowMap()
-      this.updateAfterDataIndex()
       this.checkSelectionStatus()
       if (this.scrollYLoad) {
         this.updateScrollYSpace()
@@ -255,10 +257,12 @@ export default {
           insertList.splice(iIndex, 1)
         }
       })
-      this.handleTableData(treeConfig && treeOpts.transform)
+      this.handleTableData(treeConfig && transform)
+      if (!(treeConfig && transform)) {
+        this.updateAfterDataIndex()
+      }
       this.updateFooter()
       this.cacheRowMap()
-      this.updateAfterDataIndex()
       this.checkSelectionStatus()
       if (this.scrollYLoad) {
         this.updateScrollYSpace()

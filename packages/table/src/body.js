@@ -286,7 +286,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     checkboxOpts,
     expandColumn,
     hasFixedColumn,
-    fullDataRowIdData,
+    fullAllDataRowIdData,
     rowOpts
   } = $xetable
   const rows = []
@@ -312,7 +312,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
       }
     }
     const rowid = UtilTools.getRowid($xetable, row)
-    const rest = fullDataRowIdData[rowid]
+    const rest = fullAllDataRowIdData[rowid]
     const rowLevel = rest ? rest.level : 0
     const seq = rest ? rest.seq : -1
     const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }

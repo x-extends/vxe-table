@@ -1241,36 +1241,28 @@ const Methods = {
       XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
         const rowid = getRowid(this, row)
         const allrest = fullAllDataRowIdData[rowid]
-        const fullrest = fullDataRowIdData[rowid]
         const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
         if (allrest) {
           allrest.seq = seq
           allrest._index = index
-        }
-        if (fullrest) {
-          fullrest.seq = seq
-          fullrest._index = index
         } else {
-          fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
-          fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          fullAllDataRowIdData[rowid] = rest
+          fullDataRowIdData[rowid] = rest
         }
       }, { children: treeOpts.mapChildren })
     } else {
       afterFullData.forEach((row, index) => {
         const rowid = getRowid(this, row)
         const allrest = fullAllDataRowIdData[rowid]
-        const fullrest = fullDataRowIdData[rowid]
         const seq = index + 1
         if (allrest) {
           allrest.seq = seq
           allrest._index = index
-        }
-        if (fullrest) {
-          fullrest.seq = seq
-          fullrest._index = index
         } else {
-          fullAllDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
-          fullDataRowIdData[rowid] = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          fullAllDataRowIdData[rowid] = rest
+          fullDataRowIdData[rowid] = rest
         }
       })
     }
