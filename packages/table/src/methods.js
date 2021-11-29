@@ -301,23 +301,14 @@ const Methods = {
     return this.handleTableData(true).then(this.updateFooter).then(this.recalculate)
   },
   handleTableData (force) {
-    const { treeConfig, scrollYLoad, scrollYStore, fullDataRowIdData, treeExpandeds, treeOpts } = this
-    let fullList = []
+    const { scrollYLoad, scrollYStore, fullDataRowIdData, afterFullData } = this
+    let fullList = afterFullData
     // 是否进行数据处理
     if (force) {
+      // 更新数据，处理筛选和排序
       this.updateAfterFullData()
-    }
-    // 如果为虚拟树，将树结构拍平
-    if (treeConfig && treeOpts.transform) {
-      const expandMaps = new Map()
-      XEUtils.eachTree(this.afterTreeFullData, (row, index, items, path, parent) => {
-        if (!parent || (expandMaps.has(parent) && treeExpandeds.indexOf(parent) > -1)) {
-          expandMaps.set(row, 1)
-          fullList.push(row)
-        }
-      }, { children: treeOpts.mapChildren })
-    } else {
-      fullList = this.afterFullData
+      // 如果为虚拟树，将树结构拍平
+      fullList = this.handleVirtualTreeToList()
     }
     const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
     tableData.forEach((row, $index) => {
@@ -1110,6 +1101,27 @@ const Methods = {
       }
     }
     return rowList
+  },
+  /**
+   * 如果为虚拟树，将树结构拍平
+   * @returns
+   */
+  handleVirtualTreeToList () {
+    const { treeOpts, treeConfig, treeExpandeds, afterTreeFullData, afterFullData } = this
+    if (treeConfig && treeOpts.transform) {
+      const fullData = []
+      const expandMaps = new Map()
+      XEUtils.eachTree(afterTreeFullData, (row, index, items, path, parent) => {
+        if (!parent || (expandMaps.has(parent) && treeExpandeds.indexOf(parent) > -1)) {
+          expandMaps.set(row, 1)
+          fullData.push(row)
+        }
+      }, { children: treeOpts.mapChildren })
+      this.afterFullData = fullData
+      this.updateScrollYStatus(fullData)
+      return fullData
+    }
+    return afterFullData
   },
   /**
    * 获取处理后全量的表格数据
@@ -3807,11 +3819,15 @@ const Methods = {
   },
   clearTreeExpandLoaded (row) {
     const { treeOpts, treeExpandeds, fullAllDataRowMap } = this
-    const { lazy } = treeOpts
+    const { transform, lazy } = treeOpts
     const rest = fullAllDataRowMap.get(row)
     if (lazy && rest) {
       rest.treeLoaded = false
       XEUtils.remove(treeExpandeds, item => row === item)
+    }
+    if (transform) {
+      this.handleVirtualTreeToList()
+      return this.handleTableData()
     }
     return this.$nextTick()
   },
@@ -3989,6 +4005,7 @@ const Methods = {
    */
   handleVirtualTreeExpand (rows, expanded) {
     return this.handleBaseTreeExpand(rows, expanded).then(() => {
+      this.handleVirtualTreeToList()
       return this.handleTableData()
     }).then(() => {
       return this.recalculate()
@@ -4031,13 +4048,16 @@ const Methods = {
    */
   clearTreeExpand () {
     const { treeOpts, treeExpandeds, tableFullData } = this
-    const { reserve } = treeOpts
+    const { transform, reserve } = treeOpts
     const isExists = treeExpandeds.length
     this.treeExpandeds = []
     if (reserve) {
       XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), treeOpts)
     }
     return this.handleTableData().then(() => {
+      if (transform) {
+        this.handleVirtualTreeToList()
+      }
       if (isExists) {
         this.recalculate()
       }
