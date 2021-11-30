@@ -52,9 +52,12 @@ export default defineComponent({
     }
 
     const countTreeExpand = (prevRow: any, params: any) => {
+      let count = 1
+      if (!prevRow) {
+        return count
+      }
       const treeOpts = computeTreeOpts.value
       const rowChildren = prevRow[treeOpts.children]
-      let count = 1
       if ($xetable.isTreeExpandByRow(prevRow)) {
         for (let index = 0; index < rowChildren.length; index++) {
           count += countTreeExpand(rowChildren[index], params)
@@ -63,13 +66,12 @@ export default defineComponent({
       return count
     }
 
-    const calcTreeLine = (params: any, items: any[]) => {
-      const { $rowIndex } = params
+    const calcTreeLine = (params: any, items: any[], rIndex: number) => {
       let expandSize = 1
-      if ($rowIndex) {
-        expandSize = countTreeExpand(items[$rowIndex - 1], params)
+      if (rIndex) {
+        expandSize = countTreeExpand(items[rIndex - 1], params)
       }
-      return tableReactData.rowHeight * expandSize - ($rowIndex ? 1 : (12 - getOffsetSize()))
+      return tableReactData.rowHeight * expandSize - (rIndex ? 1 : (12 - getOffsetSize()))
     }
 
     // 滚动、拖动过程中不需要触发
@@ -79,11 +81,22 @@ export default defineComponent({
       return _isResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number))
     }
 
-    const renderLine = (rowLevel: number, items: any[], params: any) => {
-      const { column } = params
+    const renderLine = (params: any) => {
+      const { row, column } = params
       const { treeConfig } = tableProps
       const treeOpts = computeTreeOpts.value
       const { slots, treeNode } = column
+      const { fullAllDataRowIdData } = tableInternalData
+      const rowid = getRowid($xetable, row)
+      const rest = fullAllDataRowIdData[rowid]
+      let rLevel = 0
+      let rIndex = 0
+      let items = []
+      if (rest) {
+        rLevel = rest.level
+        rIndex = rest._index
+        items = rest.items
+      }
       if (slots && slots.line) {
         return $xetable.callSlot(slots.line, params)
       }
@@ -95,8 +108,8 @@ export default defineComponent({
             h('div', {
               class: 'vxe-tree--line',
               style: {
-                height: `${calcTreeLine(params, items)}px`,
-                left: `${(rowLevel * treeOpts.indent) + (rowLevel ? 2 - getOffsetSize() : 0) + 16}px`
+                height: `${calcTreeLine(params, items, rIndex)}px`,
+                left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize() : 0) + 16}px`
               }
             })
           ])
@@ -239,7 +252,7 @@ export default defineComponent({
       } else {
         // 渲染单元格
         tdVNs.push(
-          ...renderLine(rowLevel, items, params),
+          ...renderLine(params),
           h('div', {
             class: ['vxe-cell', {
               'c--title': showTitle,
@@ -305,7 +318,6 @@ export default defineComponent({
       tableData.forEach((row: any, $rowIndex: any) => {
         const trOn: any = {}
         let rowIndex = $rowIndex
-        const _rowIndex = $xetable.getVTRowIndex(row)
         // 确保任何情况下 rowIndex 都精准指向真实 data 索引
         rowIndex = $xetable.getRowIndex(row)
         // 事件绑定
@@ -327,9 +339,11 @@ export default defineComponent({
         const rest = fullAllDataRowIdData[rowid]
         let rowLevel = 0
         let seq: string | number = -1
+        let _rowIndex = 0
         if (rest) {
           rowLevel = rest.level
           seq = rest.seq
+          _rowIndex = rest._index
         }
         const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
         // 处理新增状态

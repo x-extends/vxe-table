@@ -3622,6 +3622,7 @@ export default defineComponent({
             return handleAsyncTreeExpandChilds(row)
           }).then(() => {
             if (transform) {
+              handleVirtualTreeToList()
               return tablePrivateMethods.handleTableData()
             }
           }).then(() => {
@@ -3714,9 +3715,11 @@ export default defineComponent({
         return tablePrivateMethods.handleTableData().then(() => {
           if (transform) {
             handleVirtualTreeToList()
+            return tablePrivateMethods.handleTableData()
           }
+        }).then(() => {
           if (isExists) {
-            tableMethods.recalculate()
+            return tableMethods.recalculate()
           }
         })
       },
