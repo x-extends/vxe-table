@@ -3835,6 +3835,7 @@ const Methods = {
         return this.handleAsyncTreeExpandChilds(row)
       }).then(() => {
         if (transform) {
+          this.handleVirtualTreeToList()
           return this.handleTableData()
         }
       }).then(() => {
@@ -4049,7 +4050,9 @@ const Methods = {
     return this.handleTableData().then(() => {
       if (transform) {
         this.handleVirtualTreeToList()
+        return this.handleTableData()
       }
+    }).then(() => {
       if (isExists) {
         this.recalculate()
       }

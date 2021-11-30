@@ -12,10 +12,20 @@ function isOperateMouse ($xetable) {
   return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.delayHover)
 }
 
-function renderLine (h, _vm, $xetable, rowLevel, items, params) {
-  const column = params.column
-  const { treeOpts, treeConfig } = $xetable
+function renderLine (h, _vm, $xetable, params) {
+  const { row, column } = params
+  const { treeOpts, treeConfig, fullAllDataRowIdData } = $xetable
   const { slots, treeNode } = column
+  const rowid = UtilTools.getRowid($xetable, row)
+  const rest = fullAllDataRowIdData[rowid]
+  let rLevel = 0
+  let rIndex = 0
+  let items = []
+  if (rest) {
+    rLevel = rest.level
+    rIndex = rest._index
+    items = rest.items
+  }
   if (slots && slots.line) {
     return $xetable.callSlot(slots.line, params, h)
   }
@@ -27,8 +37,8 @@ function renderLine (h, _vm, $xetable, rowLevel, items, params) {
         h('div', {
           class: 'vxe-tree--line',
           style: {
-            height: `${calcTreeLine(params, items)}px`,
-            left: `${(rowLevel * treeOpts.indent) + (rowLevel ? 2 - getOffsetSize($xetable) : 0) + 16}px`
+            height: `${calcTreeLine(params, items, rIndex)}px`,
+            left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xetable) : 0) + 16}px`
           }
         })
       ])
@@ -213,7 +223,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   } else {
     // 渲染单元格
     tdVNs.push(
-      ...renderLine(h, _vm, $xetable, rowLevel, items, params),
+      ...renderLine(h, _vm, $xetable, params),
       h('div', {
         class: ['vxe-cell', {
           'c--title': showTitle,

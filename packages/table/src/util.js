@@ -115,9 +115,12 @@ export function getColMinWidth (params) {
 }
 
 function countTreeExpand (prevRow, params) {
+  let count = 1
+  if (!prevRow) {
+    return count
+  }
   const { $table } = params
   const rowChildren = prevRow[$table.treeOpts.children]
-  let count = 1
   if ($table.isTreeExpandByRow(prevRow)) {
     for (let index = 0; index < rowChildren.length; index++) {
       count += countTreeExpand(rowChildren[index], params)
@@ -130,13 +133,13 @@ export function getOffsetSize ($xetable) {
   return lineOffsetSizes[$xetable.vSize] || 0
 }
 
-export function calcTreeLine (params, items) {
-  const { $table, $rowIndex } = params
+export function calcTreeLine (params, items, rIndex) {
+  const { $table } = params
   let expandSize = 1
-  if ($rowIndex) {
-    expandSize = countTreeExpand(items[$rowIndex - 1], params)
+  if (rIndex) {
+    expandSize = countTreeExpand(items[rIndex - 1], params)
   }
-  return $table.rowHeight * expandSize - ($rowIndex ? 1 : (12 - getOffsetSize($table)))
+  return $table.rowHeight * expandSize - (rIndex ? 1 : (12 - getOffsetSize($table)))
 }
 
 export function mergeBodyMethod (mergeList, _rowIndex, _columnIndex) {
