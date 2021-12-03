@@ -2,7 +2,7 @@ import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance
 import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnPropTypes, VxeColumnProps } from './column'
-import { VxeGlobalRendererHandles } from './v-x-e-table'
+import { VXETableSetupOptions, VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
 import { VxeGridConstructor } from './grid'
@@ -669,6 +669,7 @@ export interface TablePublicMethods {
 export interface VxeTableMethods extends TableMethods { }
 
 export interface TablePrivateMethods {
+  getSetupOptions(): VXETableSetupOptions;
   updateAfterDataIndex(): void;
   callSlot<T>(slotFunc: ((params: T) => any[]) | string | null, params: T): VNode[];
   getParentElem(): Element | null;

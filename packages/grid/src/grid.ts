@@ -658,7 +658,7 @@ export default defineComponent({
        * @param {String/Object} code 字符串或对象
        */
       commitProxy (proxyTarget: string | VxeToolbarPropTypes.ButtonConfig, ...args: any[]) {
-        const { toolbarConfig, pagerConfig } = props
+        const { toolbarConfig, pagerConfig, editRules } = props
         const { tablePage, formData } = reactData
         const isMsg = computeIsMsg.value
         const proxyOpts = computeProxyOpts.value
@@ -870,8 +870,12 @@ export default defineComponent({
               if (pendingRecords.length) {
                 body.insertRecords = insertRecords.filter((row) => $xetable.findRowIndexOf(pendingRecords, row) === -1)
               }
-              // 只校验新增和修改的数据
-              return $xetable.validate(body.insertRecords.concat(updateRecords)).then((errMap) => {
+              let restPromise: Promise<any> = Promise.resolve()
+              if (editRules) {
+                // 只校验新增和修改的数据
+                restPromise = $xetable.validate(body.insertRecords.concat(updateRecords))
+              }
+              return restPromise.then((errMap) => {
                 if (errMap) {
                   // 如果校验不通过
                   return

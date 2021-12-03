@@ -1,4 +1,5 @@
 import { nextTick } from 'vue'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
 import { getFuncText, eqEmptyValue } from '../../tools/utils'
 import { scrollToView } from '../../tools/dom'
@@ -156,14 +157,19 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             }
           })
         }).catch(firstErrParams => {
-          return new Promise<void>((resolve) => {
+          return new Promise<void>((resolve, reject) => {
             const finish = () => {
               nextTick(() => {
                 if (cb) {
                   cb(validRest)
                   resolve()
                 } else {
-                  resolve(validRest)
+                  if (GlobalConfig.validToReject === 'obsolete') {
+                    // 已废弃，校验失败将不会执行catch
+                    reject(validRest)
+                  } else {
+                    resolve(validRest)
+                  }
                 }
               })
             }

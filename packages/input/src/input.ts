@@ -2148,6 +2148,20 @@ export default defineComponent({
       changeValue()
     })
 
+    watch(() => props.type, () => {
+      // 切换类型是重置内置变量
+      Object.assign(reactData, {
+        inputValue: props.modelValue,
+        datetimePanelValue: null,
+        datePanelValue: null,
+        datePanelLabel: '',
+        datePanelType: 'day',
+        selectMonth: null,
+        currentDate: null
+      })
+      initValue()
+    })
+
     watch(computeDateLabelFormat, () => {
       dateParseValue(reactData.datePanelValue)
       reactData.inputValue = reactData.datePanelLabel

@@ -1308,6 +1308,15 @@ export default defineComponent({
             tableTree = tableData
           }
         }
+      } else {
+        if (treeConfig && transform) {
+          // 还原虚拟树
+          tableTree = XEUtils.searchTree(tableFullTreeData, () => true, { ...treeOpts, original: true })
+          tableData = tableTree
+        } else {
+          tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
+          tableTree = tableData
+        }
       }
       internalData.afterFullData = tableData
       internalData.afterTreeFullData = tableTree
@@ -4444,6 +4453,9 @@ export default defineComponent({
      * 内部方法
      */
     tablePrivateMethods = {
+      getSetupOptions () {
+        return GlobalConfig
+      },
       updateAfterDataIndex,
       callSlot (slotFunc, params) {
         if (slotFunc) {
