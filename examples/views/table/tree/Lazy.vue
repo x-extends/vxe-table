@@ -8,8 +8,8 @@
 
     <vxe-toolbar>
       <template #buttons>
-        <vxe-button @click="$refs.xTree.toggleTreeExpand(tableData[1])">切换第二行展开</vxe-button>
-        <vxe-button @click="$refs.xTree.setTreeExpand([tableData[1], tableData[3]], true)">设置第二、四行展开</vxe-button>
+        <vxe-button @click="$refs.xTree.toggleTreeExpand(tableData1[1])">切换第二行展开</vxe-button>
+        <vxe-button @click="$refs.xTree.setTreeExpand([tableData1[1], tableData1[3]], true)">设置第二、四行展开</vxe-button>
         <vxe-button @click="$refs.xTree.setAllTreeExpand(true)">展开所有</vxe-button>
         <vxe-button @click="$refs.xTree.clearTreeExpand()">关闭所有</vxe-button>
       </template>
@@ -20,8 +20,9 @@
       resizable
       ref="xTree"
       row-id="id"
-      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
+      :tree-config="{lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData1">
+      <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" width="400" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>

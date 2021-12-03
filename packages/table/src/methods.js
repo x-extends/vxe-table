@@ -606,7 +606,7 @@ const Methods = {
       }
       XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
         const rowid = getRowid(this, childRow)
-        const rest = { row: childRow, rowid, seq: -1, index: -1, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
+        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(childRow, rest)
         fullAllDataRowIdData[rowid] = rest
@@ -616,6 +616,7 @@ const Methods = {
       if (transform) {
         row[mapChildren] = rows
       }
+      this.updateAfterDataIndex()
       return rows
     })
   },
@@ -1250,7 +1251,7 @@ const Methods = {
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
-      }, { children: treeOpts.mapChildren })
+      }, { children: treeOpts.transform ? treeOpts.mapChildren : treeOpts.children })
     } else {
       afterFullData.forEach((row, index) => {
         const rowid = getRowid(this, row)
