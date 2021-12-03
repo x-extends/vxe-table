@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { UtilTools, DomTools } from '../../tools'
 import { eqEmptyValue } from '../../tools/src/utils'
 
@@ -158,14 +159,19 @@ export default {
             }
           })
         }).catch(firstErrParams => {
-          return new Promise((resolve) => {
+          return new Promise((resolve, reject) => {
             const finish = () => {
               this.$nextTick(() => {
                 if (cb) {
                   cb(validRest)
                   resolve()
                 } else {
-                  resolve(validRest)
+                  if (GlobalConfig.validToReject === 'obsolete') {
+                    // 已废弃，校验失败将不会执行catch
+                    reject(validRest)
+                  } else {
+                    resolve(validRest)
+                  }
                 }
               })
             }

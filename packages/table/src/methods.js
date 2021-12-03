@@ -4554,10 +4554,14 @@ const Methods = {
       }
     }
     return cellLabel
-  }
+  },
   /*************************
    * Publish methods
    *************************/
+
+  getSetupOptions () {
+    return GlobalConfig
+  }
 }
 
 // Module methods

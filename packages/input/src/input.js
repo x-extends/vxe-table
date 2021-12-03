@@ -1031,6 +1031,19 @@ export default {
       this.inputValue = val
       this.changeValue()
     },
+    type () {
+      // 切换类型是重置内置变量
+      Object.assign(this, {
+        inputValue: this.value,
+        datetimePanelValue: null,
+        datePanelValue: null,
+        datePanelLabel: '',
+        datePanelType: 'day',
+        selectMonth: null,
+        currentDate: null
+      })
+      this.initValue()
+    },
     dateLabelFormat () {
       this.dateParseValue(this.datePanelValue)
       this.inputValue = this.datePanelLabel

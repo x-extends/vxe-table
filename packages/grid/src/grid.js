@@ -462,7 +462,7 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget, ...args) {
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, formData, isMsg } = this
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
       const $xetable = $refs.xTable
       let button
@@ -669,8 +669,12 @@ export default {
             if (pendingRecords.length) {
               body.insertRecords = insertRecords.filter(row => pendingRecords.indexOf(row) === -1)
             }
-            // 只校验新增和修改的数据
-            return this.validate(body.insertRecords.concat(updateRecords)).then((errMap) => {
+            let restPromise = Promise.resolve()
+            if (editRules) {
+              // 只校验新增和修改的数据
+              restPromise = this.validate(body.insertRecords.concat(updateRecords))
+            }
+            return restPromise.then((errMap) => {
               if (errMap) {
                 // 如果校验不通过
                 return

@@ -21,6 +21,7 @@
       :tree-config="{children: 'childs'}"
       :data="tableData1"
       @toggle-tree-expand="toggleExpandChangeEvent">
+      <vxe-column type="seq" width="80"></vxe-column>
       <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>
       <vxe-column field="type" title="Type"></vxe-column>
