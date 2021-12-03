@@ -1155,7 +1155,7 @@ export default defineComponent({
             fullAllDataRowIdData[rowid] = rest
             fullDataRowIdData[rowid] = rest
           }
-        }, { children: treeOpts.mapChildren })
+        }, { children: treeOpts.transform ? treeOpts.mapChildren : treeOpts.children })
       } else {
         afterFullData.forEach((row, index) => {
           const rowid = getRowid($xetable, row)
@@ -2482,7 +2482,7 @@ export default defineComponent({
           }
           XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
             const rowid = getRowid($xetable, childRow)
-            const rest = { row: childRow, rowid, seq: -1, index: -1, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
+            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, treeOpts)
@@ -2490,6 +2490,7 @@ export default defineComponent({
           if (transform) {
             row[mapChildren] = rows
           }
+          updateAfterDataIndex()
           return rows
         })
       },
