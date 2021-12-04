@@ -18,6 +18,10 @@ export interface VxeRadioConstructor extends VxeComponentBase, VxeRadioMethods {
 export type VxeRadioProps = {
   size?: VxeRadioPropTypes.Size;
   /**
+   * 严格模式，不允许取消
+   */
+  strict?: VxeRadioPropTypes.Strict;
+  /**
    * 绑定值
    */
   modelValue?: VxeRadioPropTypes.ModelValue;
@@ -45,6 +49,7 @@ export type VxeRadioProps = {
 
 export namespace VxeRadioPropTypes {
   export type Size = SizeType;
+  export type Strict = boolean;
   export type ModelValue = any;
   export type Label = any;
   export type Title = string | number;

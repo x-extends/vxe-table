@@ -10,6 +10,7 @@ export default defineComponent({
   props: {
     modelValue: [String, Number, Boolean] as PropType<VxeRadioGroupPropTypes.ModelValue>,
     disabled: Boolean as PropType<VxeRadioGroupPropTypes.Disabled>,
+    strict: { type: Boolean as PropType<VxeRadioGroupPropTypes.Strict>, default: () => GlobalConfig.radio.strict },
     size: { type: String as PropType<VxeRadioGroupPropTypes.Size>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   emits: [

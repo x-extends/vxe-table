@@ -14,7 +14,8 @@ export default defineComponent({
     title: [String, Number] as PropType<VxeRadioButtonPropTypes.Title>,
     content: [String, Number] as PropType<VxeRadioButtonPropTypes.Content>,
     disabled: Boolean as PropType<VxeRadioButtonPropTypes.Disabled>,
-    size: { type: String as PropType<VxeRadioButtonPropTypes.Size>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
+    strict: { type: Boolean as PropType<VxeRadioButtonPropTypes.Strict>, default: () => GlobalConfig.radioButton.strict },
+    size: { type: String as PropType<VxeRadioButtonPropTypes.Size>, default: () => GlobalConfig.radioButton.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',
@@ -45,6 +46,10 @@ export default defineComponent({
       return $xeradiogroup ? $xeradiogroup.name : null
     })
 
+    const computeStrict = computed(() => {
+      return $xeradiogroup ? $xeradiogroup.props.strict : props.strict
+    })
+
     const computeChecked = computed(() => {
       const { modelValue, label } = props
       return $xeradiogroup ? $xeradiogroup.props.modelValue === label : modelValue === label
@@ -58,15 +63,28 @@ export default defineComponent({
 
     Object.assign($xeradiobutton, radioButtonMethods)
 
+    const handleValue = (label: VxeRadioButtonPropTypes.Label, evnt: Event) => {
+      if ($xeradiogroup) {
+        $xeradiogroup.handleChecked({ label }, evnt)
+      } else {
+        emit('update:modelValue', label)
+        radioButtonMethods.dispatchEvent('change', { label }, evnt)
+      }
+    }
+
     const changeEvent = (evnt: Event) => {
-      const { label } = props
       const isDisabled = computeDisabled.value
       if (!isDisabled) {
-        if ($xeradiogroup) {
-          $xeradiogroup.handleChecked({ label }, evnt)
-        } else {
-          emit('update:modelValue', label)
-          radioButtonMethods.dispatchEvent('change', { label }, evnt)
+        handleValue(props.label, evnt)
+      }
+    }
+
+    const clickEvent = (evnt: Event) => {
+      const isDisabled = computeDisabled.value
+      const isStrict = computeStrict.value
+      if (!isDisabled && !isStrict) {
+        if (props.label === ($xeradiogroup ? $xeradiogroup.props.modelValue : props.modelValue)) {
+          handleValue(null, evnt)
         }
       }
     }
@@ -89,7 +107,8 @@ export default defineComponent({
           name,
           checked,
           disabled: isDisabled,
-          onChange: changeEvent
+          onChange: changeEvent,
+          onClick: clickEvent
         }),
         h('span', {
           class: 'vxe-radio--label'

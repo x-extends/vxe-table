@@ -15,6 +15,7 @@ export default defineComponent({
     content: [String, Number] as PropType<VxeRadioPropTypes.Content>,
     disabled: Boolean as PropType<VxeRadioPropTypes.Disabled>,
     name: String as PropType<VxeRadioPropTypes.Name>,
+    strict: { type: Boolean as PropType<VxeRadioPropTypes.Strict>, default: () => GlobalConfig.radio.strict },
     size: { type: String as PropType<VxeRadioPropTypes.Size>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
   },
   emits: [
@@ -46,20 +47,37 @@ export default defineComponent({
       return $xeradiogroup ? $xeradiogroup.name : props.name
     })
 
+    const computeStrict = computed(() => {
+      return $xeradiogroup ? $xeradiogroup.props.strict : props.strict
+    })
+
     const computeChecked = computed(() => {
       const { modelValue, label } = props
       return $xeradiogroup ? $xeradiogroup.props.modelValue === label : modelValue === label
     })
 
+    const handleValue = (label: VxeRadioPropTypes.Label, evnt: Event) => {
+      if ($xeradiogroup) {
+        $xeradiogroup.handleChecked({ label }, evnt)
+      } else {
+        emit('update:modelValue', label)
+        radioMethods.dispatchEvent('change', { label }, evnt)
+      }
+    }
+
     const changeEvent = (evnt: Event) => {
-      const { label } = props
       const isDisabled = computeDisabled.value
       if (!isDisabled) {
-        if ($xeradiogroup) {
-          $xeradiogroup.handleChecked({ label }, evnt)
-        } else {
-          emit('update:modelValue', label)
-          radioMethods.dispatchEvent('change', { label }, evnt)
+        handleValue(props.label, evnt)
+      }
+    }
+
+    const clickEvent = (evnt: Event) => {
+      const isDisabled = computeDisabled.value
+      const isStrict = computeStrict.value
+      if (!isDisabled && !isStrict) {
+        if (props.label === ($xeradiogroup ? $xeradiogroup.props.modelValue : props.modelValue)) {
+          handleValue(null, evnt)
         }
       }
     }
@@ -90,7 +108,8 @@ export default defineComponent({
           name,
           checked,
           disabled: isDisabled,
-          onChange: changeEvent
+          onChange: changeEvent,
+          onClick: clickEvent
         }),
         h('span', {
           class: 'vxe-radio--icon'

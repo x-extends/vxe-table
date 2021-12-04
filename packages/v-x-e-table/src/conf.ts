@@ -294,7 +294,16 @@ const GlobalConfig: VXETableGlobalConfig = {
     // transfer: false
   },
   radio: {
-    // size: null
+    // size: null,
+    strict: true
+  },
+  radioButton: {
+    // size: null,
+    strict: true
+  },
+  radioGroup: {
+    // size: null,
+    strict: true
   },
   checkbox: {
     // size: null

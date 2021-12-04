@@ -14,6 +14,8 @@ import { VxeTextareaProps } from '../textarea'
 import { VxeButtonProps } from '../button'
 import { VxeCheckboxProps } from '../checkbox'
 import { VxeRadioProps } from '../radio'
+import { VxeRadioButtonProps } from '../radio-button'
+import { VxeRadioGroupProps } from '../radio-group'
 
 export interface VXETableSetupOptions {
   size?: SizeType;
@@ -74,6 +76,8 @@ export interface VXETableGlobalConfig extends VXETableSetupOptions {
   toolbar: VxeToolbarProps;
   button: VxeButtonProps;
   radio: VxeRadioProps;
+  radioButton: VxeRadioButtonProps;
+  radioGroup: VxeRadioGroupProps;
   checkbox: VxeCheckboxProps;
   switch: VxeSwitchProps;
   modal: VxeModalProps;

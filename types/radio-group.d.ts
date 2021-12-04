@@ -23,6 +23,10 @@ export type VxeRadioGroupEmits = [
 
 export type VxeRadioGroupProps = {
   size?: VxeRadioGroupPropTypes.Size;
+  /**
+   * 严格模式，不允许取消
+   */
+  strict?: VxeRadioGroupPropTypes.Strict;
   modelValue?: VxeRadioGroupPropTypes.ModelValue;
   disabled?: VxeRadioGroupPropTypes.Disabled;
 }
@@ -30,6 +34,7 @@ export type VxeRadioGroupProps = {
 export namespace VxeRadioGroupPropTypes {
   export type Size = SizeType;
   export type ModelValue = any;
+  export type Strict = boolean;
   export type Disabled = boolean;
 }
 

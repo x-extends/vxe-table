@@ -32,6 +32,10 @@ export type VxeRadioButtonEmits = [
 export type VxeRadioButtonProps = {
   size?: VxeRadioButtonPropTypes.Size;
   modelValue?: VxeRadioButtonPropTypes.ModelValue;
+  /**
+   * 严格模式，不允许取消
+   */
+  strict?: VxeRadioButtonPropTypes.Strict;
   label?: VxeRadioButtonPropTypes.Label;
   title?: VxeRadioButtonPropTypes.Title;
   content?: VxeRadioButtonPropTypes.Content;
@@ -41,6 +45,7 @@ export type VxeRadioButtonProps = {
 export namespace VxeRadioButtonPropTypes {
   export type Size = VxeRadioPropTypes.Size;
   export type ModelValue = any;
+  export type Strict = boolean;
   export type Label = VxeRadioPropTypes.Label;
   export type Title = string | number;
   export type Content = string | number;
