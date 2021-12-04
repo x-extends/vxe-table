@@ -6,7 +6,8 @@ export default {
   props: {
     value: [String, Number, Boolean],
     disabled: Boolean,
-    size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
+    strict: { type: Boolean, default: () => GlobalConfig.radioGroup.strict },
+    size: { type: String, default: () => GlobalConfig.radioGroup.size || GlobalConfig.size }
   },
   provide () {
     return {

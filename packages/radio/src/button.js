@@ -9,7 +9,8 @@ export default {
     title: [String, Number],
     content: [String, Number],
     disabled: Boolean,
-    size: { type: String, default: () => GlobalConfig.radio.size || GlobalConfig.size }
+    strict: { type: Boolean, default: () => GlobalConfig.radioButton.strict },
+    size: { type: String, default: () => GlobalConfig.radioButton.size || GlobalConfig.size }
   },
   inject: {
     $xeradiogroup: {
@@ -23,6 +24,10 @@ export default {
     isDisabled () {
       const { $xeradiogroup } = this
       return this.disabled || ($xeradiogroup && $xeradiogroup.disabled)
+    },
+    isStrict () {
+      const { $xeradiogroup } = this
+      return $xeradiogroup ? $xeradiogroup.strict : this.strict
     }
   },
   render (h) {
@@ -49,7 +54,8 @@ export default {
           checked: $xeradiogroup ? $xeradiogroup.value === label : value === label
         },
         on: {
-          change: this.changeEvent
+          change: this.changeEvent,
+          click: this.clickEvent
         }
       }),
       h('span', {
@@ -58,15 +64,27 @@ export default {
     ])
   },
   methods: {
+    handleValue (label, evnt) {
+      const { $xeradiogroup } = this
+      const params = { label, $event: evnt }
+      if ($xeradiogroup) {
+        $xeradiogroup.handleChecked(params)
+      } else {
+        this.$emit('input', label)
+        this.$emit('change', params)
+      }
+    },
     changeEvent (evnt) {
-      const { $xeradiogroup, isDisabled, label } = this
+      const { isDisabled } = this
       if (!isDisabled) {
-        const params = { label, $event: evnt }
-        if ($xeradiogroup) {
-          $xeradiogroup.handleChecked(params)
-        } else {
-          this.$emit('input', label)
-          this.$emit('change', params)
+        this.handleValue(this.label, evnt)
+      }
+    },
+    clickEvent (evnt) {
+      const { $xeradiogroup, isDisabled, isStrict } = this
+      if (!isDisabled && !isStrict) {
+        if (this.label === ($xeradiogroup ? $xeradiogroup.value : this.value)) {
+          this.handleValue(null, evnt)
         }
       }
     }

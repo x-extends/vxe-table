@@ -27,6 +27,16 @@
     </p>
 
     <p>
+      <vxe-radio-group v-model="value9" :strict="false">
+        <vxe-radio label="1" content="HTML"></vxe-radio>
+        <vxe-radio label="2" content="CSS"></vxe-radio>
+        <vxe-radio label="3" content="Javascript"></vxe-radio>
+        <vxe-radio label="4" content="SASS"></vxe-radio>
+        <vxe-radio label="5" content="LESS"></vxe-radio>
+      </vxe-radio-group>
+    </p>
+
+    <p>
       <vxe-radio-group v-model="value4">
         <vxe-radio-button label="1" content="按钮1"></vxe-radio-button>
         <vxe-radio-button label="2" content="按钮2"></vxe-radio-button>
@@ -37,12 +47,12 @@
         <vxe-radio-button label="2" content="按钮2"></vxe-radio-button>
         <vxe-radio-button label="3" content="按钮3"></vxe-radio-button>
       </vxe-radio-group>
-      <vxe-radio-group v-model="value6" size="small">
+      <vxe-radio-group v-model="value6" size="small" :strict="false">
         <vxe-radio-button label="1" content="按钮1"></vxe-radio-button>
         <vxe-radio-button label="2" content="按钮2"></vxe-radio-button>
         <vxe-radio-button label="3" content="按钮3"></vxe-radio-button>
       </vxe-radio-group>
-      <vxe-radio-group v-model="value7" size="mini">
+      <vxe-radio-group v-model="value7" size="mini" :strict="false">
         <vxe-radio-button label="1" content="按钮1"></vxe-radio-button>
         <vxe-radio-button label="2" content="按钮2"></vxe-radio-button>
         <vxe-radio-button label="3" content="按钮3"></vxe-radio-button>
@@ -81,6 +91,7 @@ export default {
       value5: null,
       value6: '1',
       value7: '1',
+      value9: '',
       demoCodes: [
         `
         <p>
