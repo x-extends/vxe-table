@@ -1045,8 +1045,10 @@ export default {
       this.initValue()
     },
     dateLabelFormat () {
-      this.dateParseValue(this.datePanelValue)
-      this.inputValue = this.datePanelLabel
+      if (this.isDatePickerType) {
+        this.dateParseValue(this.datePanelValue)
+        this.inputValue = this.datePanelLabel
+      }
     }
   },
   created () {
