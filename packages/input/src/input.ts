@@ -2163,8 +2163,11 @@ export default defineComponent({
     })
 
     watch(computeDateLabelFormat, () => {
-      dateParseValue(reactData.datePanelValue)
-      reactData.inputValue = reactData.datePanelLabel
+      const isDatePickerType = computeIsDatePickerType.value
+      if (isDatePickerType) {
+        dateParseValue(reactData.datePanelValue)
+        reactData.inputValue = reactData.datePanelLabel
+      }
     })
 
     nextTick(() => {
