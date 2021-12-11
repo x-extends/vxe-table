@@ -28,6 +28,16 @@
     </p>
 
     <p>
+      <vxe-input v-model="value701" placeholder="周选择" type="week" :start-day="0" clearable></vxe-input>
+      <vxe-input v-model="value702" placeholder="周选择" type="week" :start-day="1" clearable></vxe-input>
+      <vxe-input v-model="value703" placeholder="周选择" type="week" :start-day="2" clearable></vxe-input>
+      <vxe-input v-model="value704" placeholder="周选择" type="week" :start-day="3" clearable></vxe-input>
+      <vxe-input v-model="value705" placeholder="周选择" type="week" :start-day="4" clearable></vxe-input>
+      <vxe-input v-model="value706" placeholder="周选择" type="week" :start-day="5" clearable></vxe-input>
+      <vxe-input v-model="value707" placeholder="周选择" type="week" :start-day="6" clearable></vxe-input>
+    </p>
+
+    <p>
       <vxe-input v-model="value400" placeholder="日期选择" type="date"></vxe-input>
       <vxe-input v-model="value401" placeholder="周选择" type="week" clearable></vxe-input>
       <vxe-input v-model="value402" placeholder="月选择" type="month" valueFormat="yyyy-MM-dd"></vxe-input>
@@ -142,6 +152,13 @@ export default {
       value601: '',
       value602: '',
       value603: '',
+      value701: '2017-12-18',
+      value702: '2017-12-18',
+      value703: '2017-12-18',
+      value704: '2017-12-18',
+      value705: '2017-12-18',
+      value706: '2017-12-18',
+      value707: '2017-12-18',
       noticeMaps: {
         20200910: {
           notice: true, // 显示小圆点事件通知

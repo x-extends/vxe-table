@@ -756,15 +756,10 @@ export default {
       return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
     dateValue () {
-      const { value, isDatePickerType, type, dateValueFormat } = this
+      const { value, isDatePickerType, dateValueFormat } = this
       let val = null
       if (value && isDatePickerType) {
-        let date
-        if (type === 'time') {
-          date = toStringTimeDate(value)
-        } else {
-          date = XEUtils.toStringDate(value, dateValueFormat)
-        }
+        const date = this.parseDate(value, dateValueFormat)
         if (XEUtils.isValidDate(date)) {
           val = date
         }
@@ -812,11 +807,14 @@ export default {
       }
       return ''
     },
+    firstDayOfWeek () {
+      const { startDay, startWeek } = this
+      return XEUtils.toNumber(XEUtils.isNumber(startDay) || XEUtils.isString(startDay) ? startDay : startWeek)
+    },
     weekDatas () {
       const weeks = []
       if (this.isDatePickerType) {
-        const { startDay, startWeek } = this
-        let sWeek = XEUtils.toNumber(XEUtils.isNumber(startDay) || XEUtils.isString(startDay) ? startDay : startWeek)
+        let { firstDayOfWeek: sWeek } = this
         weeks.push(sWeek)
         for (let index = 0; index < 6; index++) {
           if (sWeek >= 6) {
@@ -957,7 +955,8 @@ export default {
       return XEUtils.chunk(this.dayList, 7)
     },
     weekDates () {
-      return this.dayDatas.map(list => {
+      const { dayDatas, firstDayOfWeek } = this
+      return dayDatas.map(list => {
         const firstItem = list[0]
         const item = {
           date: firstItem.date,
@@ -966,7 +965,7 @@ export default {
           isCurrent: false,
           isNow: false,
           isNext: false,
-          label: XEUtils.getYearWeek(firstItem.date)
+          label: XEUtils.getYearWeek(firstItem.date, firstDayOfWeek)
         }
         return [item].concat(list)
       })
@@ -1268,6 +1267,13 @@ export default {
       }
       this.$emit('clear', { $panel: $refs.panel, value, $event: evnt })
     },
+    parseDate (value, format) {
+      const { type } = this
+      if (type === 'time') {
+        return toStringTimeDate(value)
+      }
+      return XEUtils.toStringDate(value, format)
+    },
     /**
      * 检查初始值
      */
@@ -1294,7 +1300,7 @@ export default {
       }
     },
     afterCheckValue () {
-      const { type, exponential, inpReadonly, inputValue, isDatePickerType, isNumType, datetimePanelValue, dateLabelFormat, min, max } = this
+      const { type, exponential, inpReadonly, inputValue, isDatePickerType, isNumType, datetimePanelValue, dateLabelFormat, min, max, firstDayOfWeek } = this
       if (!inpReadonly) {
         if (isNumType) {
           if (inputValue) {
@@ -1317,12 +1323,7 @@ export default {
             if (type === 'week' || type === 'quarter') {
               // 周和季度选择器不支持解析，无需处理
             } else {
-              let inpDateVal
-              if (type === 'time') {
-                inpDateVal = toStringTimeDate(inputValue)
-              } else {
-                inpDateVal = XEUtils.toStringDate(inputValue, dateLabelFormat)
-              }
+              let inpDateVal = this.parseDate(inputValue, dateLabelFormat)
               if (XEUtils.isValidDate(inpDateVal)) {
                 if (type === 'time') {
                   inpDateVal = toStringTimeDate(inpDateVal)
@@ -1342,7 +1343,7 @@ export default {
                   } else {
                     isChange = true
                   }
-                  this.inputValue = XEUtils.toDateString(inpDateVal, dateLabelFormat)
+                  this.inputValue = XEUtils.toDateString(inpDateVal, dateLabelFormat, { firstDay: firstDayOfWeek })
                   if (isChange) {
                     this.dateChange(inpDateVal)
                   }
@@ -1652,18 +1653,27 @@ export default {
       }
     },
     dateParseValue (date) {
-      const { type, dateLabelFormat, valueFormat } = this
+      const { type, dateLabelFormat, valueFormat, firstDayOfWeek } = this
       let dValue = null
       let dLabel = ''
       if (date) {
-        if (type === 'time') {
-          dValue = toStringTimeDate(date)
-        } else {
-          dValue = XEUtils.toStringDate(date, valueFormat)
-        }
+        dValue = this.parseDate(date, valueFormat)
       }
       if (XEUtils.isValidDate(dValue)) {
-        dLabel = XEUtils.toDateString(dValue, dateLabelFormat)
+        dLabel = XEUtils.toDateString(dValue, dateLabelFormat, { firstDay: firstDayOfWeek })
+        // 由于年份和第几周是冲突的行为，所以需要特殊处理，判断是否跨年
+        if (dateLabelFormat && type === 'week') {
+          const firstWeekDate = XEUtils.getWhatWeek(dValue, 0, firstDayOfWeek, firstDayOfWeek)
+          if (firstWeekDate.getFullYear() < dValue.getFullYear()) {
+            const yyIndex = dateLabelFormat.indexOf('yyyy')
+            if (yyIndex > -1) {
+              const yyNum = Number(dLabel.substring(yyIndex, yyIndex + 4))
+              if (yyNum && !isNaN(yyNum)) {
+                dLabel = dLabel.replace(`${yyNum}`, `${yyNum - 1}`)
+              }
+            }
+          }
+        }
       } else {
         dValue = null
       }
@@ -1671,7 +1681,7 @@ export default {
       this.datePanelLabel = dLabel
     },
     dateOffsetEvent (evnt) {
-      const { isActivated, datePanelValue, datePanelType } = this
+      const { isActivated, datePanelValue, datePanelType, firstDayOfWeek } = this
       if (isActivated) {
         evnt.preventDefault()
         const keyCode = evnt.keyCode
@@ -1720,11 +1730,11 @@ export default {
           if (isLeftArrow) {
             offsetDay = XEUtils.getWhatDay(offsetDay, -1)
           } else if (isUpArrow) {
-            offsetDay = XEUtils.getWhatWeek(offsetDay, -1)
+            offsetDay = XEUtils.getWhatWeek(offsetDay, -1, firstDayOfWeek)
           } else if (isRightArrow) {
             offsetDay = XEUtils.getWhatDay(offsetDay, 1)
           } else if (isDwArrow) {
-            offsetDay = XEUtils.getWhatWeek(offsetDay, 1)
+            offsetDay = XEUtils.getWhatWeek(offsetDay, 1, firstDayOfWeek)
           }
           this.dateMoveDay(offsetDay)
         }
@@ -1743,16 +1753,16 @@ export default {
       }
     },
     dateChange (date) {
-      const { value, datetimePanelValue, dateValueFormat } = this
+      const { value, datetimePanelValue, dateValueFormat, firstDayOfWeek } = this
       if (this.type === 'week') {
         const sWeek = XEUtils.toNumber(this.selectDay)
-        date = XEUtils.getWhatWeek(date, 0, sWeek)
+        date = XEUtils.getWhatWeek(date, 0, sWeek, firstDayOfWeek)
       } else if (this.hasTime) {
         date.setHours(datetimePanelValue.getHours())
         date.setMinutes(datetimePanelValue.getMinutes())
         date.setSeconds(datetimePanelValue.getSeconds())
       }
-      const inpVal = XEUtils.toDateString(date, dateValueFormat)
+      const inpVal = XEUtils.toDateString(date, dateValueFormat, { firstDay: firstDayOfWeek })
       this.dateCheckMonth(date)
       if (!XEUtils.isEqual(value, inpVal)) {
         this.emitModel(inpVal, { type: 'update' })
