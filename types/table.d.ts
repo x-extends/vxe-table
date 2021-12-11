@@ -273,6 +273,10 @@ export interface TablePublicMethods {
    */
   getCheckboxRecords(isFull?: boolean): any[];
   /**
+   * 只对 tree-config 有效，获取行的父级
+   */
+  getParentRow (rowOrRowid: any): any | null;
+  /**
    * 根据行的唯一主键获取行
    * @param rowid 行主键
    */

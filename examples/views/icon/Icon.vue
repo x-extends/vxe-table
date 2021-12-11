@@ -28,7 +28,7 @@ interface ItemVO {
 
 export default defineComponent({
   setup () {
-    const copyEvent = ({ icon }: ItemVO) => {
+    const copyEvent = () => {
       VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
     }
     return {

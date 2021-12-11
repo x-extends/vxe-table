@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, nextTick, ref, Ref } from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'PreCode',

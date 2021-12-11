@@ -41,6 +41,16 @@
     </p>
 
     <p>
+      <vxe-input v-model="demo1.value701" placeholder="周选择" type="week" :start-day="0" clearable></vxe-input>
+      <vxe-input v-model="demo1.value702" placeholder="周选择" type="week" :start-day="1" clearable></vxe-input>
+      <vxe-input v-model="demo1.value703" placeholder="周选择" type="week" :start-day="2" clearable></vxe-input>
+      <vxe-input v-model="demo1.value704" placeholder="周选择" type="week" :start-day="3" clearable></vxe-input>
+      <vxe-input v-model="demo1.value705" placeholder="周选择" type="week" :start-day="4" clearable></vxe-input>
+      <vxe-input v-model="demo1.value706" placeholder="周选择" type="week" :start-day="5" clearable></vxe-input>
+      <vxe-input v-model="demo1.value707" placeholder="周选择" type="week" :start-day="6" clearable></vxe-input>
+    </p>
+
+    <p>
       <vxe-input v-model="demo1.value500" placeholder="数值类型" type="number"></vxe-input>
       <vxe-input v-model="demo1.value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
       <vxe-input v-model="demo1.value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
@@ -143,7 +153,14 @@ export default defineComponent({
       value600: '',
       value601: '',
       value602: '',
-      value603: ''
+      value603: '',
+      value701: '2017-12-18',
+      value702: '2017-12-18',
+      value703: '2017-12-18',
+      value704: '2017-12-18',
+      value705: '2017-12-18',
+      value706: '2017-12-18',
+      value707: '2017-12-18'
     })
 
     const disabledDateMethod: VxeInputPropTypes.DisabledMethod = (params) => {

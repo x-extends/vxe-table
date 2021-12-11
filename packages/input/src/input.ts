@@ -195,6 +195,14 @@ export default defineComponent({
 
     let inputMethods = {} as InputMethods
 
+    const parseDate = (value: VxeInputPropTypes.ModelValue, format: string) => {
+      const { type } = props
+      if (type === 'time') {
+        return toStringTimeDate(value)
+      }
+      return XEUtils.toStringDate(value, format)
+    }
+
     const computeIsDateTimeType = computed(() => {
       const { type } = props
       return type === 'time' || type === 'datetime'
@@ -255,17 +263,12 @@ export default defineComponent({
     })
 
     const computeDateValue = computed(() => {
-      const { modelValue, type } = props
+      const { modelValue } = props
       const isDatePickerType = computeIsDatePickerType.value
       const dateValueFormat = computeDateValueFormat.value
       let val = null
       if (modelValue && isDatePickerType) {
-        let date
-        if (type === 'time') {
-          date = toStringTimeDate(modelValue)
-        } else {
-          date = XEUtils.toStringDate(modelValue, dateValueFormat)
-        }
+        const date = parseDate(modelValue, dateValueFormat)
         if (XEUtils.isValidDate(date)) {
           val = date
         }
@@ -356,12 +359,16 @@ export default defineComponent({
       return ''
     })
 
+    const computeFirstDayOfWeek = computed(() => {
+      const { startDay, startWeek } = props
+      return XEUtils.toNumber(XEUtils.isNumber(startDay) || XEUtils.isString(startDay) ? startDay : startWeek) as VxeInputPropTypes.StartDay
+    })
+
     const computeWeekDatas = computed(() => {
       const weeks = []
       const isDatePickerType = computeIsDatePickerType.value
       if (isDatePickerType) {
-        const { startDay, startWeek } = props
-        let sWeek = XEUtils.toNumber(XEUtils.isNumber(startDay) || XEUtils.isString(startDay) ? startDay : startWeek)
+        let sWeek = computeFirstDayOfWeek.value
         weeks.push(sWeek)
         for (let index = 0; index < 6; index++) {
           if (sWeek >= 6) {
@@ -516,6 +523,7 @@ export default defineComponent({
 
     const computeWeekDates = computed(() => {
       const dayDatas = computeDayDatas.value
+      const firstDayOfWeek = computeFirstDayOfWeek.value
       return dayDatas.map((list) => {
         const firstItem = list[0]
         const item: DateDayItem = {
@@ -525,7 +533,7 @@ export default defineComponent({
           isCurrent: false,
           isNow: false,
           isNext: false,
-          label: XEUtils.getYearWeek(firstItem.date)
+          label: XEUtils.getYearWeek(firstItem.date, firstDayOfWeek)
         }
         return [item].concat(list)
       })
@@ -711,17 +719,27 @@ export default defineComponent({
       const { type } = props
       const { valueFormat } = props
       const dateLabelFormat = computeDateLabelFormat.value
+      const firstDayOfWeek = computeFirstDayOfWeek.value
       let dValue: Date | null = null
       let dLabel = ''
       if (value) {
-        if (type === 'time') {
-          dValue = toStringTimeDate(value)
-        } else {
-          dValue = XEUtils.toStringDate(value, valueFormat)
-        }
+        dValue = parseDate(value, valueFormat)
       }
       if (XEUtils.isValidDate(dValue)) {
-        dLabel = XEUtils.toDateString(dValue, dateLabelFormat)
+        dLabel = XEUtils.toDateString(dValue, dateLabelFormat, { firstDay: firstDayOfWeek })
+        // 由于年份和第几周是冲突的行为，所以需要特殊处理，判断是否跨年
+        if (dateLabelFormat && type === 'week') {
+          const firstWeekDate = XEUtils.getWhatWeek(dValue, 0, firstDayOfWeek, firstDayOfWeek)
+          if (firstWeekDate.getFullYear() < dValue.getFullYear()) {
+            const yyIndex = dateLabelFormat.indexOf('yyyy')
+            if (yyIndex > -1) {
+              const yyNum = Number(dLabel.substring(yyIndex, yyIndex + 4))
+              if (yyNum && !isNaN(yyNum)) {
+                dLabel = dLabel.replace(`${yyNum}`, `${yyNum - 1}`)
+              }
+            }
+          }
+        }
       } else {
         dValue = null
       }
@@ -785,15 +803,16 @@ export default defineComponent({
       const { datetimePanelValue } = reactData
       const isDateTimeType = computeIsDateTimeType.value
       const dateValueFormat = computeDateValueFormat.value
+      const firstDayOfWeek = computeFirstDayOfWeek.value
       if (props.type === 'week') {
-        const sWeek = XEUtils.toNumber(props.selectDay)
-        date = XEUtils.getWhatWeek(date, 0, sWeek)
+        const sWeek = XEUtils.toNumber(props.selectDay) as VxeInputPropTypes.SelectDay
+        date = XEUtils.getWhatWeek(date, 0, sWeek, firstDayOfWeek)
       } else if (isDateTimeType) {
         date.setHours(datetimePanelValue.getHours())
         date.setMinutes(datetimePanelValue.getMinutes())
         date.setSeconds(datetimePanelValue.getSeconds())
       }
-      const inpVal = XEUtils.toDateString(date, dateValueFormat)
+      const inpVal = XEUtils.toDateString(date, dateValueFormat, { firstDay: firstDayOfWeek })
       dateCheckMonth(date)
       if (!XEUtils.isEqual(modelValue, inpVal)) {
         emitModel(inpVal, { type: 'update' })
@@ -826,12 +845,7 @@ export default defineComponent({
           }
         } else if (isDatePickerType) {
           if (inputValue) {
-            let inpDateVal: VxeInputPropTypes.ModelValue
-            if (type === 'time') {
-              inpDateVal = toStringTimeDate(inputValue)
-            } else {
-              inpDateVal = XEUtils.toStringDate(inputValue, dateLabelFormat)
-            }
+            let inpDateVal: VxeInputPropTypes.ModelValue = parseDate(inputValue, dateLabelFormat as string)
             if (XEUtils.isValidDate(inpDateVal)) {
               if (type === 'time') {
                 inpDateVal = XEUtils.toDateString(inpDateVal, dateLabelFormat)
@@ -841,6 +855,7 @@ export default defineComponent({
                 reactData.inputValue = inpDateVal
               } else {
                 let isChange = false
+                const firstDayOfWeek = computeFirstDayOfWeek.value
                 if (type === 'datetime') {
                   const dateValue = computeDateValue.value
                   if (inputValue !== XEUtils.toDateString(dateValue, dateLabelFormat) || inputValue !== XEUtils.toDateString(inpDateVal, dateLabelFormat)) {
@@ -852,7 +867,7 @@ export default defineComponent({
                 } else {
                   isChange = true
                 }
-                reactData.inputValue = XEUtils.toDateString(inpDateVal, dateLabelFormat)
+                reactData.inputValue = XEUtils.toDateString(inpDateVal, dateLabelFormat, { firstDay: firstDayOfWeek })
                 if (isChange) {
                   dateChange(inpDateVal)
                 }
@@ -1291,14 +1306,15 @@ export default defineComponent({
           dateMoveMonth(offsetMonth)
         } else {
           let offsetDay = datePanelValue || XEUtils.getWhatDay(Date.now(), 0, 'first')
+          const firstDayOfWeek = computeFirstDayOfWeek.value
           if (isLeftArrow) {
             offsetDay = XEUtils.getWhatDay(offsetDay, -1)
           } else if (isUpArrow) {
-            offsetDay = XEUtils.getWhatWeek(offsetDay, -1)
+            offsetDay = XEUtils.getWhatWeek(offsetDay, -1, firstDayOfWeek)
           } else if (isRightArrow) {
             offsetDay = XEUtils.getWhatDay(offsetDay, 1)
           } else if (isDwArrow) {
-            offsetDay = XEUtils.getWhatWeek(offsetDay, 1)
+            offsetDay = XEUtils.getWhatWeek(offsetDay, 1, firstDayOfWeek)
           }
           dateMoveDay(offsetDay)
         }

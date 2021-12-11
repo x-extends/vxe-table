@@ -66,8 +66,8 @@ export namespace VxeInputPropTypes {
   export type Digits = string | number;
   export type MinDate = string | number | Date;
   export type MaxDate = string | number | Date;
-  export type StartDay = number;
-  export type SelectDay = number;
+  export type StartDay = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  export type SelectDay = 0 | 1 | 2 | 3 | 4 | 5 | 6;
   export type LabelFormat = string;
   export type ValueFormat = string;
   export type Editable = boolean;

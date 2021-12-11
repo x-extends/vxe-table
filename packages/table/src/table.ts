@@ -2807,6 +2807,25 @@ export default defineComponent({
         return rowList
       },
       /**
+       * 只对 tree-config 有效，获取行的父级
+       */
+      getParentRow (rowOrRowid) {
+        const { treeConfig } = props
+        const { fullDataRowIdData } = internalData
+        if (rowOrRowid && treeConfig) {
+          let rowid
+          if (XEUtils.isString(rowOrRowid)) {
+            rowid = rowOrRowid
+          } else {
+            rowid = getRowid($xetable, rowOrRowid)
+          }
+          if (rowid) {
+            return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].parent : null
+          }
+        }
+        return null
+      },
+      /**
        * 根据行的唯一主键获取行
        * @param {String/Number} rowid 行主键
        */
