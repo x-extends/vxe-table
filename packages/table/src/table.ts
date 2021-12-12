@@ -2784,22 +2784,23 @@ export default defineComponent({
        */
       getCheckboxRecords (isFull) {
         const { treeConfig } = props
-        const { tableFullData, afterFullData } = internalData
+        const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
+        const { transform, children, mapChildren } = treeOpts
         const { checkField: property } = checkboxOpts
         let rowList = []
-        const currTableData = isFull ? tableFullData : afterFullData
+        const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
         if (property) {
           if (treeConfig) {
-            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), treeOpts)
+            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), { children: transform ? mapChildren : children })
           } else {
             rowList = currTableData.filter((row) => XEUtils.get(row, property))
           }
         } else {
           const { selection } = reactData
           if (treeConfig) {
-            rowList = XEUtils.filterTree(currTableData, row => $xetable.findRowIndexOf(selection, row) > -1, treeOpts)
+            rowList = XEUtils.filterTree(currTableData, row => $xetable.findRowIndexOf(selection, row) > -1, { children: transform ? mapChildren : children })
           } else {
             rowList = currTableData.filter((row) => $xetable.findRowIndexOf(selection, row) > -1)
           }

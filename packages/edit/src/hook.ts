@@ -62,18 +62,19 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
     function insertTreeRow (newRecords: any[], isAppend: boolean) {
       const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
+      const { rowField, parentField, children, mapChildren } = treeOpts
       const funcName = isAppend ? 'push' : 'unshift'
       newRecords.forEach(item => {
-        const parentRowId = item[treeOpts.parentField]
+        const parentRowId = item[parentField]
         const rowid = getRowid($xetable, item)
-        const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[treeOpts.rowField], treeOpts) : null
+        const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[rowField], { children: mapChildren }) : null
         if (matchObj) {
           const { item: parentRow } = matchObj
           const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
           const parentLevel = parentRest ? parentRest.level : 0
-          let parentChilds = parentRow[treeOpts.children]
+          let parentChilds = parentRow[children]
           if (!XEUtils.isArray(parentChilds)) {
-            parentChilds = parentRow[treeOpts.children] = []
+            parentChilds = parentRow[children] = []
           }
           parentChilds[funcName](item)
           const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
@@ -116,7 +117,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { mergeList, editStore } = reactData
         const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { transform } = treeOpts
+        const { transform, rowField, mapChildren } = treeOpts
         if (!XEUtils.isArray(records)) {
           records = [records]
         }
@@ -155,7 +156,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             // 如果为虚拟树
             if (treeConfig && transform) {
-              const matchObj = XEUtils.findTree(tableFullTreeData, item => row[treeOpts.rowField] === item[treeOpts.rowField], treeOpts)
+              const matchObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: mapChildren })
               if (matchObj) {
                 const { parent: parentRow } = matchObj
                 const parentChilds = matchObj.items
@@ -165,13 +166,13 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                   const rowid = getRowid($xetable, item)
                   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                     if (item[treeOpts.parentField]) {
-                      if (parentRow && item[treeOpts.parentField] !== parentRow[treeOpts.rowField]) {
-                        errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[treeOpts.rowField]}`])
+                      if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
+                        errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
                       }
                     }
                   }
                   if (parentRow) {
-                    item[treeOpts.parentField] = parentRow[treeOpts.rowField]
+                    item[treeOpts.parentField] = parentRow[rowField]
                   }
                   parentChilds.splice(matchObj.index + i, 0, item)
                   const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
@@ -188,7 +189,15 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               if (treeConfig) {
                 throw new Error(getLog('vxe.error.noTree', ['insert']))
               }
-              const afIndex = $xetable.findRowIndexOf(afterFullData, row)
+              let afIndex = -1
+              // 如果是可视索引
+              if (XEUtils.isNumber(row)) {
+                if (row < afterFullData.length) {
+                  afIndex = row
+                }
+              } else {
+                afIndex = $xetable.findRowIndexOf(afterFullData, row)
+              }
               if (afIndex === -1) {
                 throw new Error(errLog('vxe.error.unableInsert'))
               }

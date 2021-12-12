@@ -1102,7 +1102,7 @@ export default defineComponent({
         const proxyOpts = computeProxyOpts.value
         const formOpts = computeFormOpts.value
         if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-          errLog('errConflicts', ['grid.data', 'grid.proxy-config'])
+          errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
         }
         if (columns && columns.length) {
           $xegrid.loadColumn(columns)
