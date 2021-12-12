@@ -253,7 +253,7 @@ export default {
   created () {
     const { data, formOpts, proxyOpts, proxyConfig } = this
     if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-      console.error('[vxe-grid] There is a conflict between the props proxy-config and data.')
+      UtilTools.error('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
     }
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {

@@ -7,18 +7,19 @@ const { getRowid } = UtilTools
 
 function insertTreeRow (_vm, newRecords, isAppend) {
   const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
+  const { rowField, parentField, children, mapChildren } = treeOpts
   const funcName = isAppend ? 'push' : 'unshift'
   newRecords.forEach(item => {
-    const parentRowId = item[treeOpts.parentField]
+    const parentRowId = item[parentField]
     const rowid = getRowid(_vm, item)
-    const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[treeOpts.rowField], treeOpts) : null
+    const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[rowField], { children: mapChildren }) : null
     if (matchObj) {
       const { item: parentRow } = matchObj
       const parentRest = fullAllDataRowIdData[getRowid(_vm, parentRow)]
       const parentLevel = parentRest ? parentRest.level : 0
-      let parentChilds = parentRow[treeOpts.children]
+      let parentChilds = parentRow[children]
       if (!XEUtils.isArray(parentChilds)) {
-        parentChilds = parentRow[treeOpts.children] = []
+        parentChilds = parentRow[children] = []
       }
       parentChilds[funcName](item)
       const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
@@ -59,7 +60,7 @@ export default {
      */
     _insertAt (records, row) {
       const { tableFullTreeData, mergeList, afterFullData, editStore, tableFullData, treeConfig, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = this
-      const { transform } = treeOpts
+      const { transform, rowField, mapChildren } = treeOpts
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
@@ -98,7 +99,7 @@ export default {
         } else {
           // 如果为虚拟树
           if (treeConfig && transform) {
-            const matchObj = XEUtils.findTree(tableFullTreeData, item => row[treeOpts.rowField] === item[treeOpts.rowField], treeOpts)
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: mapChildren })
             if (matchObj) {
               const { parent: parentRow } = matchObj
               const parentChilds = matchObj.items
@@ -108,13 +109,13 @@ export default {
                 const rowid = getRowid(this, item)
                 if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                   if (item[treeOpts.parentField]) {
-                    if (parentRow && item[treeOpts.parentField] !== parentRow[treeOpts.rowField]) {
-                      UtilTools.error('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[treeOpts.rowField]}`])
+                    if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
+                      UtilTools.error('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
                     }
                   }
                 }
                 if (parentRow) {
-                  item[treeOpts.parentField] = parentRow[treeOpts.rowField]
+                  item[treeOpts.parentField] = parentRow[rowField]
                 }
                 parentChilds.splice(matchObj.index + i, 0, item)
                 const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
@@ -131,7 +132,15 @@ export default {
             if (treeConfig) {
               throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
             }
-            const afIndex = afterFullData.indexOf(row)
+            let afIndex = -1
+            // 如果是可视索引
+            if (XEUtils.isNumber(row)) {
+              if (row < afterFullData.length) {
+                afIndex = row
+              }
+            } else {
+              afIndex = afterFullData.indexOf(row)
+            }
             if (afIndex === -1) {
               throw new Error(UtilTools.error('vxe.error.unableInsert'))
             }

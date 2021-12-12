@@ -1083,20 +1083,21 @@ const Methods = {
    * 用于多选行，获取已选中的数据
    */
   getCheckboxRecords (isFull) {
-    const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts } = this
+    const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts, tableFullTreeData, afterTreeFullData } = this
+    const { transform, children, mapChildren } = treeOpts
     const { checkField: property } = checkboxOpts
-    const currTableData = isFull ? tableFullData : afterFullData
+    const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
     let rowList = []
     if (property) {
       if (treeConfig) {
-        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), treeOpts)
+        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), { children: transform ? mapChildren : children })
       } else {
         rowList = currTableData.filter(row => XEUtils.get(row, property))
       }
     } else {
       const { selection } = this
       if (treeConfig) {
-        rowList = XEUtils.filterTree(currTableData, row => selection.indexOf(row) > -1, treeOpts)
+        rowList = XEUtils.filterTree(currTableData, row => selection.indexOf(row) > -1, { children: transform ? mapChildren : children })
       } else {
         rowList = currTableData.filter(row => selection.indexOf(row) > -1)
       }
