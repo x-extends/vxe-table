@@ -299,7 +299,7 @@ export default defineComponent({
     const maximize = () => {
       return nextTick().then(() => {
         if (!reactData.zoomLocat) {
-          const marginSize = XEUtils.toNumber(props.marginSize)
+          const marginSize = Math.max(0, XEUtils.toNumber(props.marginSize))
           const boxElem = getBox()
           const { visibleHeight, visibleWidth } = getDomNode()
           reactData.zoomLocat = {

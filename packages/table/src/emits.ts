@@ -58,5 +58,7 @@ export default [
   'cell-area-selection-start',
   'cell-area-selection-end',
   'cell-area-extension-start',
-  'cell-area-extension-end'
+  'cell-area-extension-end',
+  'cell-area-arrows-start',
+  'cell-area-arrows-end'
 ] as VxeTableEmits

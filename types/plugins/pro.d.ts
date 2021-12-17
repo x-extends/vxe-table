@@ -229,6 +229,82 @@ export namespace VxeTableProDefines {
     cellValues: string[][];
   }
   export interface CellAreaCopyEventParams extends EventParams, CellAreaCopyParams { }
+
+  export interface CellAreaCutParams {
+    status: boolean;
+    targetAreas: VxeTableProDefines.CellAreaParams[];
+    cellValues: string[][];
+  }
+  export interface CellAreaCutEventParams extends EventParams, CellAreaCutParams { }
+
+  export interface CellAreaPasteParams {
+    status: boolean;
+    targetAreas: VxeTableProDefines.CellAreaParams[];
+  }
+  export interface CellAreaPasteEventParams extends EventParams, CellAreaPasteParams { }
+
+  export interface CellAreaMergeParams {
+    status: boolean;
+    targetAreas: VxeTableProDefines.CellAreaParams[];
+  }
+  export interface CellAreaMergeEventParams extends EventParams, CellAreaMergeParams { }
+
+  export interface ClearCellAreaMergeParams {
+    mergeCells: VxeTableDefines.MergeInfo[];
+  }
+  export interface ClearCellAreaMergeEventParams extends EventParams, ClearCellAreaMergeParams { }
+
+  export interface HeaderCellAreaSelectionParams {
+    targetRows: any[];
+    targetCols: VxeTableDefines.ColumnInfo[];
+    column: VxeTableDefines.ColumnInfo;
+    _columnIndex: number
+  }
+  export interface HeaderCellAreaSelectionEventParams extends EventParams, HeaderCellAreaSelectionParams { }
+
+  export interface CellAreaSelectionStartParams {
+    row: any
+    _rowIndex: number
+    $rowIndex: number
+    column: VxeTableDefines.ColumnInfo;
+    _columnIndex: number
+    $columnIndex: number
+    cell: HTMLElement
+  }
+  export interface CellAreaSelectionStartEventParams extends EventParams, CellAreaSelectionStartParams { }
+
+  export interface CellAreaSelectionEndParams {
+    rows: any[]
+    cols: VxeTableDefines.ColumnInfo[]
+  }
+  export interface CellAreaSelectionEndEventParams extends EventParams, CellAreaSelectionEndParams { }
+
+  export interface CellAreaExtensionStartParams extends CellAreaSelectionStartParams {}
+  export interface CellAreaExtensionStartEventParams extends EventParams, CellAreaExtensionStartParams { }
+
+  export interface CellAreaExtensionEndParams {
+    rows: any[]
+    cols: VxeTableDefines.ColumnInfo[]
+    targetRows: any[]
+    targetCols: VxeTableDefines.ColumnInfo[]
+  }
+  export interface CellAreaExtensionEndEventParams extends EventParams, CellAreaExtensionEndParams { }
+
+  export interface CellAreaArrowsStartParams {
+    rows: any[]
+    cols: VxeTableDefines.ColumnInfo[]
+    isLeft: boolean
+    isUp: boolean
+    isRight: boolean
+    isDown: boolean
+  }
+  export interface CellAreaArrowsStartEventParams extends EventParams, CellAreaArrowsStartParams { }
+
+  export interface CellAreaArrowsEndParams extends CellAreaArrowsStartParams {
+    targetRows: any[]
+    targetCols: VxeTableDefines.ColumnInfo[]
+  }
+  export interface CellAreaArrowsEndEventParams extends EventParams, CellAreaArrowsEndParams { }
 }
 
 export type VxeTableProEmits = [
@@ -250,6 +326,8 @@ export type VxeTableProEmits = [
   'cell-area-selection-end',
   'cell-area-extension-start',
   'cell-area-extension-end',
+  'cell-area-arrows-start',
+  'cell-area-arrows-end'
 ]
 
 declare module '../table' {
@@ -261,6 +339,17 @@ declare module '../table' {
     onFnrReplace?: VxeTableEvents.FnrReplace;
     onFnrReplaceAll?: VxeTableEvents.FnrReplaceAll;
     onCellAreaCopy?: VxeTableEvents.CellAreaCopy;
+    onCellAreaCut?: VxeTableEvents.CellAreaCut;
+    onCellAreaPaste?: VxeTableEvents.CellAreaPaste;
+    onCellAreaMerge?: VxeTableEvents.CellAreaMerge;
+    onClearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge;
+    onHeaderCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection;
+    onCellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart;
+    onCellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd;
+    onCellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart;
+    onCellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd;
+    onCellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart;
+    onCellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd;
   }
   interface VxeTableListeners {
     openFnr?: VxeTableEvents.OpenFnr;
@@ -270,6 +359,17 @@ declare module '../table' {
     fnrReplace?: VxeTableEvents.FnrReplace;
     fnrReplaceAll?: VxeTableEvents.FnrReplaceAll;
     cellAreaCopy?: VxeTableEvents.CellAreaCopy;
+    cellAreaCut?: VxeTableEvents.CellAreaCut;
+    cellAreaPaste?: VxeTableEvents.CellAreaPaste;
+    cellAreaMerge?: VxeTableEvents.CellAreaMerge;
+    clearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge;
+    headerCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection;
+    cellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart;
+    cellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd;
+    cellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart;
+    cellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd;
+    cellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart;
+    cellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd;
   }
   namespace VxeTableEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void;
@@ -279,6 +379,17 @@ declare module '../table' {
     export type FnrReplace = (params: VxeTableProDefines.FnrReplaceParams) => void;
     export type FnrReplaceAll = (params: VxeTableProDefines.FnrReplaceAllParams) => void;
     export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void;
+    export type CellAreaCut = (params: VxeTableProDefines.CellAreaCutParams) => void;
+    export type CellAreaPaste = (params: VxeTableProDefines.CellAreaPasteParams) => void;
+    export type CellAreaMerge = (params: VxeTableProDefines.CellAreaMergeEventParams) => void;
+    export type ClearCellAreaMerge = (params: VxeTableProDefines.ClearCellAreaMergeEventParams) => void;
+    export type HeaderCellAreaSelection = (params: VxeTableProDefines.HeaderCellAreaSelectionEventParams) => void;
+    export type CellAreaSelectionStart = (params: VxeTableProDefines.CellAreaSelectionStartEventParams) => void;
+    export type CellAreaSelectionEnd = (params: VxeTableProDefines.CellAreaSelectionEndEventParams) => void;
+    export type CellAreaExtensionStart = (params: VxeTableProDefines.CellAreaExtensionStartEventParams) => void;
+    export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void;
+    export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void;
+    export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void;
   }
 }
 
@@ -291,6 +402,17 @@ declare module '../grid' {
     onFnrReplace?: VxeGridEvents.FnrReplace;
     onFnrReplaceAll?: VxeGridEvents.FnrReplaceAll;
     onCellAreaCopy?: VxeGridEvents.CellAreaCopy;
+    onCellAreaCut?: VxeGridEvents.CellAreaCut;
+    onCellAreaPaste?: VxeGridEvents.CellAreaPaste;
+    onCellAreaMerge?: VxeGridEvents.CellAreaMerge;
+    onClearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge;
+    onHeaderCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection;
+    onCellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart;
+    onCellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd;
+    onCellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart;
+    onCellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd;
+    onCellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart;
+    onCellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd;
   }
   interface VxeGridListeners {
     openFnr?: VxeGridEvents.OpenFnr;
@@ -300,6 +422,16 @@ declare module '../grid' {
     fnrReplace?: VxeGridEvents.FnrReplace;
     fnrReplaceAll?: VxeGridEvents.FnrReplaceAll;
     cellAreaCopy?: VxeGridEvents.CellAreaCopy;
+    cellAreaCut?: VxeGridEvents.CellAreaCut;
+    cellAreaMerge?: VxeGridEvents.CellAreaMerge;
+    clearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge;
+    headerCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection;
+    cellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart;
+    cellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd;
+    cellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart;
+    cellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd;
+    cellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart;
+    cellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd;
   }
   namespace VxeGridEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void;
@@ -309,5 +441,16 @@ declare module '../grid' {
     export type FnrReplace = (params: VxeTableProDefines.FnrReplaceParams) => void;
     export type FnrReplaceAll = (params: VxeTableProDefines.FnrReplaceAllParams) => void;
     export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void;
+    export type CellAreaCut = (params: VxeTableProDefines.CellAreaCutParams) => void;
+    export type CellAreaPaste = (params: VxeTableProDefines.CellAreaPasteParams) => void;
+    export type CellAreaMerge = (params: VxeTableProDefines.CellAreaMergeParams) => void;
+    export type ClearCellAreaMerge = (params: VxeTableProDefines.ClearCellAreaMergeParams) => void;
+    export type HeaderCellAreaSelection = (params: VxeTableProDefines.HeaderCellAreaSelectionParams) => void;
+    export type CellAreaSelectionStart = (params: VxeTableProDefines.CellAreaSelectionStartEventParams) => void;
+    export type CellAreaSelectionEnd = (params: VxeTableProDefines.CellAreaSelectionEndEventParams) => void;
+    export type CellAreaExtensionStart = (params: VxeTableProDefines.CellAreaExtensionStartEventParams) => void;
+    export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void;
+    export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void;
+    export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void;
   }
 }

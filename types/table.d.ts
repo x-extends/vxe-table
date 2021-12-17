@@ -1263,7 +1263,7 @@ export namespace VxeTablePropTypes {
       columnIndex: number;
       $columnIndex: number;
       $rowIndex: number;
-      cell: HTMLTableHeaderCellElement;
+      cell: HTMLElement;
     }) => number | string);
   }
   export interface ResizableOpts extends ResizableConfig { }
