@@ -412,7 +412,7 @@ export const Cell = {
   renderCheckboxCell (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
-    const { labelField, checkMethod, visibleMethod } = $table.checkboxOpts
+    const { labelField, checkMethod, visibleMethod, titleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
@@ -420,6 +420,7 @@ export const Cell = {
     let isChecked = false
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
+    let disabledTitle = null
     let on
     if (!isHidden) {
       isChecked = $table.selection.indexOf(row) > -1
@@ -433,6 +434,13 @@ export const Cell = {
       if (checkMethod) {
         isDisabled = !checkMethod({ row })
       }
+      if (titleMethod){
+        disabledTitle = titleMethod({
+          row,
+          isDisabled,
+          isChecked
+        })
+      }
       if (treeConfig) {
         indeterminate = treeIndeterminates.indexOf(row) > -1
       }
@@ -445,13 +453,22 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon',
+          attrs: {
+            title: disabledTitle
+          }
         }),
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon',
+          attrs: {
+            title: disabledTitle
+          }
         }),
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon',
+          attrs: {
+            title: disabledTitle
+          }
         })
       )
     }
@@ -479,7 +496,7 @@ export const Cell = {
   renderCheckboxCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
-    const { labelField, checkField: property, halfField, checkMethod, visibleMethod } = $table.checkboxOpts
+    const { labelField, checkField: property, halfField, checkMethod, visibleMethod, titleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
@@ -487,6 +504,7 @@ export const Cell = {
     let isChecked = false
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
+    let disabledTitle = null
     let on
     if (!isHidden) {
       isChecked = XEUtils.get(row, property)
@@ -500,6 +518,13 @@ export const Cell = {
       if (checkMethod) {
         isDisabled = !checkMethod({ row })
       }
+      if (titleMethod){
+        disabledTitle = titleMethod({
+          row,
+          isDisabled,
+          isChecked
+        })
+      }
       if (treeConfig) {
         indeterminate = treeIndeterminates.indexOf(row) > -1
       }
@@ -512,13 +537,22 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon',
+          attrs: {
+            title: disabledTitle
+          }
         }),
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon',
+          attrs: {
+            title: disabledTitle
+          }
         }),
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon',
+          attrs: {
+            title: disabledTitle
+          }
         })
       )
     }
