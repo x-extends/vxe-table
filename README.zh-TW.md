@@ -101,13 +101,15 @@ Vue.use(VXETable)
 
 ### CDN
 
+不建議將公共的CDN地址用於生產，因為該連接隨時都可能會失效，導致項目掛掉；  
+使用CDN管道記得鎖定版本號，避免受到非相容性更新的影響
+
 ```HTML
 <!-- 引入樣式 -->
 <link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
 <!-- 引入腳本 -->
 <script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table"></script>
-<!-- 建議使用 CDN 管道引入的用戶在連結位址上鎖定版本，避免受到非相容性更新的影響 -->
 ```
 
 ## 示例
