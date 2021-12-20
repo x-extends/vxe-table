@@ -97,13 +97,15 @@ Vue.use(VXETable)
 
 ### CDN
 
+不建议将公共的 CDN 地址用于生产，因为该连接随时都可能会失效，导致项目挂掉;  
+使用 CDN 方式记得锁定版本号，避免受到非兼容性更新的影响
+
 ```HTML
 <!-- 引入样式 -->
 <link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
 <!-- 引入脚本 -->
 <script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table"></script>
-<!-- 建议使用 CDN 方式引入的用户在链接地址上锁定版本，避免受到非兼容性更新的影响 -->
 ```
 
 ## 示例
