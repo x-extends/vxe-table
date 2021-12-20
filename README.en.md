@@ -103,13 +103,15 @@ createApp(App).use(VXETable).mount('#app')
 
 ### CDN
 
+It is not recommended to use the public CDN address for production, because the connection may fail at any time, causing the project to hang up;  
+Remember to lock the version number by using CDN to avoid being affected by incompatible updates.
+
 ```HTML
 <!-- Style -->
 <link rel="stylesheet" href="https://unpkg.com/vxe-table@next/lib/style.css">
 <!-- Script -->
 <script src="https://unpkg.com/xe-utils"></script>
 <script src="https://unpkg.com/vxe-table@next"></script>
-<!-- It is recommended that users introduced by CDN lock the version on the link address to avoid the impact of incompatible updates -->
 ```
 
 ## Example
