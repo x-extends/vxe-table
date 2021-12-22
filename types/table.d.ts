@@ -1688,6 +1688,7 @@ export namespace VxeTablePropTypes {
      */
     beforeCopyMethod?(params: {
       isCut: boolean;
+      activeArea: VxeTableProDefines.MouseActiveCellArea;
       targetAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
       $grid: VxeGridConstructor | null | undefined;
@@ -1715,6 +1716,7 @@ export namespace VxeTablePropTypes {
      * 自定义单元格剪贴值清除之前的方法，可以通过返回 false 阻止清除行为
      */
     beforeCutMethod?: (params: {
+      activeArea: VxeTableProDefines.MouseActiveCellArea;
       cutAreas: VxeTableProDefines.CellAreaParams[];
       currentAreas: VxeTableProDefines.CellAreaParams[];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
@@ -1744,9 +1746,13 @@ export namespace VxeTablePropTypes {
      * 自定义单元格粘贴赋值之前的方法，可以通过返回 false 阻止复制行为
      */
     beforePasteMethod?(params: {
+      isCut: boolean;
+      activeArea: VxeTableProDefines.MouseActiveCellArea;
+      cutAreas: VxeTableProDefines.CellAreaParams[];
       currentAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
-      cellValues: any[][];
+      cellValues: string[][];
+      pasteCells: string[][];
       $table: VxeTableConstructor & VxeTablePrivateMethods;
       $grid: VxeGridConstructor | null | undefined;
     }): boolean;
@@ -1754,7 +1760,9 @@ export namespace VxeTablePropTypes {
      * 自定义单元格粘贴赋值之后的方法
      */
     afterPasteMethod?(params: {
+      isCut: boolean;
       currentAreas: VxeTableProDefines.CellAreaParams[];
+      cutAreas: VxeTableProDefines.CellAreaParams[];
       targetAreas: VxeTableProDefines.CellAreaParams[];
       cellValues: any[][];
       pasteCells: string[][];

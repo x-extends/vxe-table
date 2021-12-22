@@ -295,11 +295,18 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return row[treeOpts.children] && row[treeOpts.children].length
     }
 
-    const getSeq = (row: any, rowIndex: any, column: any, columnIndex: any) => {
+    const getSeq = (row: any, $rowIndex: any, column: any, $columnIndex: any) => {
       const seqOpts = computeSeqOpts.value
       const seqMethod = seqOpts.seqMethod || column.seqMethod
       if (seqMethod) {
-        return seqMethod({ row, rowIndex, column, columnIndex })
+        return seqMethod({
+          row,
+          rowIndex: $xetable.getRowIndex(row),
+          $rowIndex,
+          column,
+          columnIndex: $xetable.getColumnIndex(column),
+          $columnIndex
+        })
       }
       return $xetable.getRowSeq(row)
     }
@@ -309,7 +316,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     const getLabelData = (opts: any, columns: any[], datas: any[]) => {
-      const { isAllExpand } = opts
+      const { isAllExpand, mode } = opts
       const { treeConfig } = props
       const radioOpts = computeRadioOpts.value
       const checkboxOpts = computeCheckboxOpts.value
@@ -321,7 +328,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         // 如果是树表格只允许导出数据源
         const rest: any[] = []
         const expandMaps: Map<any, number> = new Map()
-        XEUtils.eachTree(datas, (item, rowIndex, items, path, parent, nodes) => {
+        XEUtils.eachTree(datas, (item, $rowIndex, items, path, parent, nodes) => {
           const row = item._row || item
           const parentRow = parent && parent._row ? parent._row : parent
           if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xetable.isTreeExpandByRow(parentRow)))) {
@@ -332,7 +339,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               _hasChild: hasRowChild,
               _expand: hasRowChild && $xetable.isTreeExpandByRow(row)
             }
-            columns.forEach((column, columnIndex) => {
+            columns.forEach((column, $columnIndex) => {
               let cellValue: string | boolean = ''
               const renderOpts = column.editRender || column.cellRender
               let exportLabelMethod = column.exportMethod
@@ -347,7 +354,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               } else {
                 switch (column.type) {
                   case 'seq':
-                    cellValue = getSeq(row, rowIndex, column, columnIndex)
+                    cellValue = mode === 'all' ? path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('') : getSeq(row, $rowIndex, column, $columnIndex)
                     break
                   case 'checkbox':
                     cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
@@ -384,11 +391,11 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         }, treeOpts)
         return rest
       }
-      return datas.map((row, rowIndex) => {
+      return datas.map((row, $rowIndex) => {
         const item: any = {
           _row: row
         }
-        columns.forEach((column: any, columnIndex: any) => {
+        columns.forEach((column, $columnIndex) => {
           let cellValue: string | boolean = ''
           const renderOpts = column.editRender || column.cellRender
           let exportLabelMethod = column.exportMethod
@@ -403,7 +410,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             switch (column.type) {
               case 'seq':
-                cellValue = getSeq(row, rowIndex, column, columnIndex)
+                cellValue = mode === 'all' ? $rowIndex + 1 : getSeq(row, $rowIndex, column, $columnIndex)
                 break
               case 'checkbox':
                 cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
@@ -447,7 +454,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return getLabelData(opts, columns, datas)
     }
 
-    const getFooterCellValue = (opts: any, items: any, column: any) => {
+    const getFooterCellValue = (opts: any, items: any[], column: any) => {
       const renderOpts = column.editRender || column.cellRender
       let exportLabelMethod = column.footerExportMethod
       if (!exportLabelMethod && renderOpts && renderOpts.name) {
@@ -461,13 +468,13 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return cellValue
     }
 
-    const toCsv = (opts: any, columns: any, datas: any) => {
+    const toCsv = (opts: any, columns: any[], datas: any[]) => {
       let content = csvBOM
       if (opts.isHeader) {
-        content += columns.map((column: any) => toTxtCellLabel(getHeaderTitle(opts, column))).join(',') + enterSymbol
+        content += columns.map((column) => toTxtCellLabel(getHeaderTitle(opts, column))).join(',') + enterSymbol
       }
-      datas.forEach((row: any) => {
-        content += columns.map((column: any) => toTxtCellLabel(getCsvCellTypeLabel(column, row[column.id]))).join(',') + enterSymbol
+      datas.forEach((row) => {
+        content += columns.map((column) => toTxtCellLabel(getCsvCellTypeLabel(column, row[column.id]))).join(',') + enterSymbol
       })
       if (opts.isFooter) {
         const { footerTableData } = reactData
@@ -479,13 +486,13 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return content
     }
 
-    const toTxt = (opts: any, columns: any, datas: any) => {
+    const toTxt = (opts: any, columns: any[], datas: any[]) => {
       let content = ''
       if (opts.isHeader) {
-        content += columns.map((column: any) => toTxtCellLabel(getHeaderTitle(opts, column))).join('\t') + enterSymbol
+        content += columns.map((column) => toTxtCellLabel(getHeaderTitle(opts, column))).join('\t') + enterSymbol
       }
-      datas.forEach((row: any) => {
-        content += columns.map((column: any) => toTxtCellLabel(row[column.id])).join('\t') + enterSymbol
+      datas.forEach((row) => {
+        content += columns.map((column) => toTxtCellLabel(row[column.id])).join('\t') + enterSymbol
       })
       if (opts.isFooter) {
         const { footerTableData } = reactData
@@ -497,7 +504,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       return content
     }
 
-    const hasEllipsis = (column: any, property: any, allColumnOverflow: any) => {
+    const hasEllipsis = (column: any, property: string, allColumnOverflow: any) => {
       const columnOverflow = column[property]
       const headOverflow = XEUtils.isUndefined(columnOverflow) || XEUtils.isNull(columnOverflow) ? allColumnOverflow : columnOverflow
       const showEllipsis = headOverflow === 'ellipsis'
