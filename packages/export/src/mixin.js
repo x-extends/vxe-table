@@ -40,11 +40,18 @@ function hasTreeChildren ($xetable, row) {
   return row[treeOpts.children] && row[treeOpts.children].length > 0
 }
 
-function getSeq ($xetable, row, rowIndex, column, columnIndex) {
+function getSeq ($xetable, row, $rowIndex, column, $columnIndex) {
   const seqOpts = $xetable.seqOpts
   const seqMethod = seqOpts.seqMethod || column.seqMethod
   if (seqMethod) {
-    return seqMethod({ row, rowIndex, column, columnIndex })
+    return seqMethod({
+      row,
+      rowIndex: $xetable.getRowIndex(row),
+      $rowIndex,
+      column,
+      columnIndex: $xetable.getColumnIndex(column),
+      $columnIndex
+    })
   }
   return $xetable.getRowSeq(row)
 }
@@ -68,7 +75,7 @@ function toBooleanValue (cellValue) {
 }
 
 function getLabelData ($xetable, opts, columns, datas) {
-  const { isAllExpand } = opts
+  const { isAllExpand, mode } = opts
   const { treeConfig, treeOpts, radioOpts, checkboxOpts } = $xetable
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
@@ -77,7 +84,7 @@ function getLabelData ($xetable, opts, columns, datas) {
     // 如果是树表格只允许导出数据源
     const rest = []
     const expandMaps = new Map()
-    XEUtils.eachTree(datas, (item, rowIndex, items, path, parent, nodes) => {
+    XEUtils.eachTree(datas, (item, $rowIndex, items, path, parent, nodes) => {
       const row = item._row || item
       const parentRow = parent && parent._row ? parent._row : parent
       if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xetable.isTreeExpandByRow(parentRow)))) {
@@ -88,7 +95,7 @@ function getLabelData ($xetable, opts, columns, datas) {
           _hasChild: hasRowChild,
           _expand: hasRowChild && $xetable.isTreeExpandByRow(row)
         }
-        columns.forEach((column, columnIndex) => {
+        columns.forEach((column, $columnIndex) => {
           let cellValue = ''
           const renderOpts = column.editRender || column.cellRender
           let exportLabelMethod = column.exportMethod
@@ -103,7 +110,7 @@ function getLabelData ($xetable, opts, columns, datas) {
           } else {
             switch (column.type) {
               case 'seq':
-                cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+                cellValue = mode === 'all' ? path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('') : getSeq($xetable, row, $rowIndex, column, $columnIndex)
                 break
               case 'checkbox':
                 cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
@@ -140,11 +147,11 @@ function getLabelData ($xetable, opts, columns, datas) {
     }, treeOpts)
     return rest
   }
-  return datas.map((row, rowIndex) => {
+  return datas.map((row, $rowIndex) => {
     const item = {
       _row: row
     }
-    columns.forEach((column, columnIndex) => {
+    columns.forEach((column, $columnIndex) => {
       let cellValue = ''
       const renderOpts = column.editRender || column.cellRender
       let exportLabelMethod = column.exportMethod
@@ -159,7 +166,7 @@ function getLabelData ($xetable, opts, columns, datas) {
       } else {
         switch (column.type) {
           case 'seq':
-            cellValue = getSeq($xetable, row, rowIndex, column, columnIndex)
+            cellValue = mode === 'all' ? $rowIndex + 1 : getSeq($xetable, row, $rowIndex, column, $columnIndex)
             break
           case 'checkbox':
             cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
