@@ -62,6 +62,10 @@ $vxe-table-row-hover-checkbox-checked-background-color: #ffebbc !default;
 $vxe-table-row-current-background-color: #e6f7ff !default;
 $vxe-table-row-hover-current-background-color: #d7effb !default;
 
+$vxe-table-column-padding-default: 13px 0 !default;
+$vxe-table-column-padding-medium: 11px 0 !default;
+$vxe-table-column-padding-small: 9px 0 !default;
+$vxe-table-column-padding-mini: 7px 0 !default;
 $vxe-table-column-hover-background-color: #d7effb !default;
 $vxe-table-column-current-background-color: #e6f7ff !default;
 $vxe-table-column-icon-border-color: #c0c4cc !default;
@@ -175,6 +179,10 @@ $vxe-button-height-default: 34px !default;
 $vxe-button-height-medium: 32px !default;
 $vxe-button-height-small: 30px !default;
 $vxe-button-height-mini: 28px !default;
+$vxe-button-round-border-radius-default: 17px !default;
+$vxe-button-round-border-radius-medium: 16px !default;
+$vxe-button-round-border-radius-small: 15px !default;
+$vxe-button-round-border-radius-mini: 14px !default;
 
 /*input*/
 $vxe-input-background-color: #fff !default;

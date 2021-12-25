@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
 
-import XEUtils from 'xe-utils'
+import 'xe-utils'
 import {
   VXETable,
 

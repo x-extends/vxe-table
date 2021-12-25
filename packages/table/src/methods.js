@@ -1139,7 +1139,7 @@ const Methods = {
     const filterColumns = []
     const orderColumns = []
     tableFullColumn.forEach(column => {
-      const { sortable, order, filters } = column
+      const { property, sortable, order, filters } = column
       if (!allRemoteFilter && filters && filters.length) {
         const valueList = []
         const itemList = []
@@ -1154,7 +1154,7 @@ const Methods = {
         }
       }
       if (!allRemoteSort && sortable && order) {
-        orderColumns.push({ column, property: column.property, order })
+        orderColumns.push({ column, field: column.property, property, order })
       }
     })
     if (filterColumns.length) {
@@ -3586,9 +3586,9 @@ const Methods = {
   getSortColumns () {
     const sortList = []
     this.tableFullColumn.forEach((column) => {
-      const { order } = column
+      const { property, order } = column
       if ((column.sortable || column.remoteSort) && order) {
-        sortList.push({ column, property: column.property, order })
+        sortList.push({ column, field: column.property, property, order })
       }
     })
     return sortList

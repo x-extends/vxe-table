@@ -531,6 +531,7 @@ export default {
                 }
                 sortList = defaultSort.map((item) => {
                   return {
+                    field: item.field,
                     property: item.field,
                     order: item.order
                   }
