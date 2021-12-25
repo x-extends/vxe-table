@@ -158,6 +158,7 @@ export namespace VxeGridPropTypes {
     column: VxeTableDefines.ColumnInfo;
     order: string;
     sortBy: string;
+    field: string;
     property: string;
   }
 

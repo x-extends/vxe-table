@@ -1222,11 +1222,12 @@ export default defineComponent({
         }[] = []
         const orderColumns: {
           column: VxeTableDefines.ColumnInfo
+          field: string
           property: string
           order: VxeTablePropTypes.SortOrder
         }[] = []
         tableFullColumn.forEach((column) => {
-          const { sortable, order, filters } = column
+          const { property, sortable, order, filters } = column
           if (!allRemoteFilter && filters && filters.length) {
             const valueList: any[] = []
             const itemList: VxeTableDefines.FilterOption[] = []
@@ -1241,7 +1242,7 @@ export default defineComponent({
             }
           }
           if (!allRemoteSort && sortable && order) {
-            orderColumns.push({ column, property: column.property, order })
+            orderColumns.push({ column, field: property, property, order })
           }
         })
 
@@ -3438,9 +3439,9 @@ export default defineComponent({
         const sortList: VxeTableDefines.SortCheckedParams[] = []
         const { tableFullColumn } = internalData
         tableFullColumn.forEach((column) => {
-          const { order } = column
+          const { property, order } = column
           if (column.sortable && order) {
-            sortList.push({ column, property: column.property, order })
+            sortList.push({ column, field: property, property, order })
           }
         })
         return sortList

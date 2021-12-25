@@ -2094,6 +2094,7 @@ export namespace VxeTableDefines {
     property: string;
 
     type: VxeColumnPropTypes.Type;
+    field: VxeColumnPropTypes.Type;
     title: VxeColumnPropTypes.Title;
     width: VxeColumnPropTypes.Width;
     minWidth: VxeColumnPropTypes.MinWidth;
@@ -2327,6 +2328,7 @@ export namespace VxeTableDefines {
 
   export interface SortCheckedParams {
     column: VxeTableDefines.ColumnInfo;
+    field: VxeColumnPropTypes.Field;
     property: VxeColumnPropTypes.Field;
     order: VxeTablePropTypes.SortOrder;
   }
@@ -2337,6 +2339,7 @@ export namespace VxeTableDefines {
 
   export interface FilterCheckedParams {
     column: VxeTableDefines.ColumnInfo;
+    field: VxeColumnPropTypes.Field;
     property: VxeColumnPropTypes.Field;
     values: any[];
     datas: any[];
@@ -2348,6 +2351,7 @@ export namespace VxeTableDefines {
 
   export interface FilterVisibleParams {
     column: VxeTableDefines.ColumnInfo;
+    field: VxeColumnPropTypes.Field;
     property: VxeColumnPropTypes.Field;
     filterList: FilterCheckedParams[];
     visible: boolean;

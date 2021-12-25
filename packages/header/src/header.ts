@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch } from 'vue'
+import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { convertToRows } from './util'
 import { getColMinWidth } from '../../table/src/util'
@@ -130,18 +130,20 @@ export default defineComponent({
 
     watch(() => props.tableColumn, uploadColumn)
 
-    nextTick(() => {
-      const { fixedType } = props
-      const { internalData } = $xetable
-      const { elemStore } = internalData
-      const prefix = `${fixedType || 'main'}-header-`
-      elemStore[`${prefix}wrapper`] = refElem.value
-      elemStore[`${prefix}table`] = refHeaderTable.value
-      elemStore[`${prefix}colgroup`] = refHeaderColgroup.value
-      elemStore[`${prefix}list`] = refHeaderTHead.value
-      elemStore[`${prefix}xSpace`] = refHeaderXSpace.value
-      elemStore[`${prefix}repair`] = refHeaderBorderRepair.value
-      uploadColumn()
+    onMounted(() => {
+      nextTick(() => {
+        const { fixedType } = props
+        const { internalData } = $xetable
+        const { elemStore } = internalData
+        const prefix = `${fixedType || 'main'}-header-`
+        elemStore[`${prefix}wrapper`] = refElem.value
+        elemStore[`${prefix}table`] = refHeaderTable.value
+        elemStore[`${prefix}colgroup`] = refHeaderColgroup.value
+        elemStore[`${prefix}list`] = refHeaderTHead.value
+        elemStore[`${prefix}xSpace`] = refHeaderXSpace.value
+        elemStore[`${prefix}repair`] = refHeaderBorderRepair.value
+        uploadColumn()
+      })
     })
 
     const renderVN = () => {

@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick } from 'vue'
+import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { getPropClass } from '../../table/src/util'
 import { updateCellTitle } from '../../tools/dom'
@@ -76,15 +76,17 @@ export default defineComponent({
       $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }
 
-    nextTick(() => {
-      const { fixedType } = props
-      const { elemStore } = tableInternalData
-      const prefix = `${fixedType || 'main'}-footer-`
-      elemStore[`${prefix}wrapper`] = refElem.value
-      elemStore[`${prefix}table`] = refFooterTable.value
-      elemStore[`${prefix}colgroup`] = refFooterColgroup.value
-      elemStore[`${prefix}list`] = refFooterTFoot.value
-      elemStore[`${prefix}xSpace`] = refFooterXSpace.value
+    onMounted(() => {
+      nextTick(() => {
+        const { fixedType } = props
+        const { elemStore } = tableInternalData
+        const prefix = `${fixedType || 'main'}-footer-`
+        elemStore[`${prefix}wrapper`] = refElem.value
+        elemStore[`${prefix}table`] = refFooterTable.value
+        elemStore[`${prefix}colgroup`] = refFooterColgroup.value
+        elemStore[`${prefix}list`] = refFooterTFoot.value
+        elemStore[`${prefix}xSpace`] = refFooterXSpace.value
+      })
     })
 
     const renderVN = () => {

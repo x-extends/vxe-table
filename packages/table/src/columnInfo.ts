@@ -59,6 +59,7 @@ export class ColumnInfo {
       // 基本属性
       type: _vm.type,
       property: _vm.field,
+      field: _vm.field,
       title: _vm.title,
       width: _vm.width,
       minWidth: _vm.minWidth,

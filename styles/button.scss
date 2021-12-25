@@ -124,7 +124,7 @@ $btnThemeList: (
     line-height: 1;
     border: 1px solid $vxe-input-border-color;
     &.is--round {
-      border-radius: $vxe-button-height-default * 0.5;
+      border-radius: $vxe-button-round-border-radius-default;
     }
     &:not(.is--round) {
       border-radius: $vxe-border-radius;
@@ -223,7 +223,7 @@ $btnThemeList: (
         min-width: $vxe-button-height-medium;
       }
       &.is--round {
-        border-radius: $vxe-button-height-medium * 0.5;
+        border-radius: $vxe-button-round-border-radius-medium;
       }
     }
     .vxe-button--loading-icon,
@@ -239,7 +239,7 @@ $btnThemeList: (
         min-width: $vxe-button-height-small;
       }
       &.is--round {
-        border-radius: $vxe-button-height-small * 0.5;
+        border-radius: $vxe-button-round-border-radius-small;
       }
     }
     .vxe-button--loading-icon,
@@ -255,7 +255,7 @@ $btnThemeList: (
         min-width: $vxe-button-height-mini;
       }
       &.is--round {
-        border-radius: $vxe-button-height-mini * 0.5;
+        border-radius: $vxe-button-round-border-radius-mini;
       }
     }
     .vxe-button--loading-icon,
