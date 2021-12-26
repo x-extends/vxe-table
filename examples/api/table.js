@@ -1842,7 +1842,7 @@ const apis = [
           },
           {
             name: 'header',
-            desc: '表头的快捷菜单',
+            desc: '表头的右键菜单',
             version: '',
             type: 'any',
             enum: '',
@@ -1851,7 +1851,7 @@ const apis = [
           },
           {
             name: 'body',
-            desc: '内容的快捷菜单',
+            desc: '内容的右键菜单',
             version: '',
             type: 'any',
             enum: '',
@@ -1860,7 +1860,7 @@ const apis = [
           },
           {
             name: 'footer',
-            desc: '表尾的快捷菜单',
+            desc: '表尾的右键菜单',
             version: '',
             type: 'any',
             enum: '',
@@ -4581,7 +4581,7 @@ const apis = [
       },
       {
         name: 'closeMenu()',
-        desc: '手动关闭快捷菜单（某些特殊场景可能会用到）',
+        desc: '手动关闭右键菜单（某些特殊场景可能会用到）',
         version: '',
         type: 'Promise<any>',
         enum: '',
