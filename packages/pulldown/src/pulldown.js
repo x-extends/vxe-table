@@ -6,6 +6,7 @@ export default {
   name: 'VxePulldown',
   mixins: [vSize],
   props: {
+    value: Boolean,
     disabled: Boolean,
     placement: String,
     size: { type: String, default: () => GlobalConfig.size },
@@ -22,6 +23,15 @@ export default {
       visiblePanel: false,
       animatVisible: false,
       isActivated: false
+    }
+  },
+  watch: {
+    value (value) {
+      if (value) {
+        this.showPanel()
+      } else {
+        this.hidePanel()
+      }
     }
   },
   created () {
@@ -140,6 +150,7 @@ export default {
           this.animatVisible = true
           setTimeout(() => {
             this.visiblePanel = true
+            this.$emit('update:input', true)
             this.updatePlacement()
             setTimeout(() => {
               resolve(this.updatePlacement())
@@ -156,6 +167,7 @@ export default {
      */
     hidePanel () {
       this.visiblePanel = false
+      this.$emit('update:input', false)
       return new Promise(resolve => {
         if (this.animatVisible) {
           this.hidePanelTimeout = setTimeout(() => {
