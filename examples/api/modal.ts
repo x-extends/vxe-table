@@ -11,7 +11,7 @@ const apis = [
         name: 'modelValue',
         descKey: 'app.api.modal.desc.value',
         version: '',
-        type: 'any',
+        type: 'boolean',
         enum: '',
         defVal: '',
         list: []

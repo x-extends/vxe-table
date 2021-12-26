@@ -4,7 +4,7 @@
     <p class="tip">下拉容器，可以非常简单的基于下拉容器去实现各种下拉组件。查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'pulldown'}}">API</router-link></p>
 
     <p>
-      <vxe-pulldown ref="xDown1">
+      <vxe-pulldown v-model="demo1.visible">
         <template #default>
           <vxe-input v-model="demo1.value1" placeholder="可搜索的下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
         </template>
@@ -116,15 +116,13 @@ export default defineComponent({
     ]
 
     const demo1 = reactive({
+      visible: false,
       value1: '',
       list1: data1
     })
 
-    const xDown1 = ref({} as VxePulldownInstance)
-
     const focusEvent1 = () => {
-      const $pulldown1 = xDown1.value
-      $pulldown1.showPanel()
+      demo1.visible = true
     }
 
     const keyupEvent1 = () => {
@@ -132,11 +130,9 @@ export default defineComponent({
     }
 
     const selectEvent1 = (item: ItemVO1) => {
-      const $pulldown1 = xDown1.value
       demo1.value1 = item.label
-      $pulldown1.hidePanel().then(() => {
-        demo1.list1 = data1
-      })
+      demo1.visible = false
+      demo1.list1 = data1
     }
 
     const data2: ItemVO2[] = [
@@ -259,7 +255,6 @@ export default defineComponent({
 
     return {
       demo1,
-      xDown1,
       focusEvent1,
       keyupEvent1,
       selectEvent1,
@@ -281,7 +276,7 @@ export default defineComponent({
       demoCodes: [
         `
         <p>
-          <vxe-pulldown ref="xDown1">
+          <vxe-pulldown v-model="demo1.visible">
             <template #default>
               <vxe-input v-model="demo1.value1" placeholder="可搜索的下拉框" @focus="focusEvent1" @keyup="keyupEvent1"></vxe-input>
             </template>
@@ -378,27 +373,23 @@ export default defineComponent({
             ]
 
             const demo1 = reactive({
+              visible: false,
               value1: '',
               list1: data1
             })
 
-            const xDown1 = ref({} as VxePulldownInstance)
-
             const focusEvent1 = () => {
-              const $pulldown1 = xDown1.value
-              $pulldown1.showPanel()
+              demo1.visible = true
             }
 
             const keyupEvent1 = () => {
               demo1.list1 = demo1.value1 ? data1.filter((item) => item.label.indexOf(demo1.value1) > -1) : data1
             }
 
-            const selectEvent1 = (item: ItemVO) => {
-              const $pulldown1 = xDown1.value
+            const selectEvent1 = (item: ItemVO1) => {
               demo1.value1 = item.label
-              $pulldown1.hidePanel().then(() => {
-                demo1.list1 = data1
-              })
+              demo1.visible = false
+              demo1.list1 = data1
             }
 
             const data2: ItemVO[] = [
@@ -522,7 +513,6 @@ export default defineComponent({
 
             return {
               demo1,
-              xDown1,
               focusEvent1,
               keyupEvent1,
               selectEvent1,

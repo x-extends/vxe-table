@@ -60,10 +60,12 @@ export interface PulldownPrivateMethods { }
 export interface VxePulldownPrivateMethods extends PulldownPrivateMethods { }
 
 export type VxePulldownEmits = [
+  'update:modelValue',
   'hide-panel'
 ]
 
 export namespace VxePulldownPropTypes {
+  export type ModelValue = boolean;
   export type Size = SizeType;
   export type Disabled = boolean;
   export type Placement = string;
@@ -73,6 +75,7 @@ export namespace VxePulldownPropTypes {
 
 export type VxePulldownProps = {
   size?: VxePulldownPropTypes.Size;
+  modelValue?: VxePulldownPropTypes.ModelValue;
   /**
    * 是否禁用
    */

@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, ref, Ref, onUnmounted, reactive, nextTick, PropType } from 'vue'
+import { defineComponent, h, Teleport, ref, Ref, onUnmounted, reactive, nextTick, PropType, watch } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -11,6 +11,7 @@ import { VNodeStyle, VxePulldownConstructor, VxePulldownPropTypes, VxePulldownEm
 export default defineComponent({
   name: 'VxePulldown',
   props: {
+    modelValue: Boolean as PropType<VxePulldownPropTypes.ModelValue>,
     disabled: Boolean as PropType<VxePulldownPropTypes.Disabled>,
     placement: String as PropType<VxePulldownPropTypes.Placement>,
     size: { type: String as PropType<VxePulldownPropTypes.Size>, default: () => GlobalConfig.size },
@@ -18,6 +19,7 @@ export default defineComponent({
     transfer: Boolean as PropType<VxePulldownPropTypes.Transfer>
   },
   emits: [
+    'update:modelValue',
     'hide-panel'
   ] as VxePulldownEmits,
   setup (props, context) {
@@ -156,6 +158,7 @@ export default defineComponent({
           reactData.animatVisible = true
           setTimeout(() => {
             reactData.visiblePanel = true
+            emit('update:modelValue', true)
             updatePlacement()
             setTimeout(() => {
               resolve(updatePlacement())
@@ -173,6 +176,7 @@ export default defineComponent({
      */
     const hidePanel = () => {
       reactData.visiblePanel = false
+      emit('update:modelValue', false)
       return new Promise(resolve => {
         if (reactData.animatVisible) {
           hidePanelTimeout = window.setTimeout(() => {
@@ -244,6 +248,14 @@ export default defineComponent({
     }
 
     Object.assign($xepulldown, pulldownMethods)
+
+    watch(() => props.modelValue, (value) => {
+      if (value) {
+        showPanel()
+      } else {
+        hidePanel()
+      }
+    })
 
     nextTick(() => {
       GlobalEvent.on($xepulldown, 'mousewheel', handleGlobalMousewheelEvent)
