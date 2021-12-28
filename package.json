@@ -66,7 +66,7 @@
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2",
     "xe-ajax": "^4.0.5",
-    "xe-utils": "^3.5.1"
+    "xe-utils": "^3.5.2"
   },
   "peerDependencies": {
     "vue": "^3.2.2",

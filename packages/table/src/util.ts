@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isPx, isScale } from '../../tools/dom'
 
-import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines, VxeColumnProps } from '../../../types/all'
+import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types/all'
 
 export interface XEBodyScrollElement extends HTMLDivElement {
   _onscroll: ((evnt: Event) => void) | null;
@@ -85,7 +85,7 @@ function getElemenMarginWidth (elem: HTMLElement | null) {
   return 0
 }
 
-function queryCellElement (cell: HTMLTableHeaderCellElement, selector: string) {
+function queryCellElement (cell: HTMLTableCellElement, selector: string) {
   return cell.querySelector('.vxe-cell' + selector) as HTMLElement | null
 }
 
@@ -120,7 +120,7 @@ export function getColMinWidth (params: {
   columnIndex: number;
   $columnIndex: number;
   $rowIndex: number;
-  cell: HTMLTableHeaderCellElement;
+  cell: HTMLTableCellElement;
 }) {
   const { $table, column, cell } = params
   const { props: tableProps } = $table
@@ -176,7 +176,7 @@ export function isColumnInfo (column: any): column is ColumnInfo {
   return column && (column.constructor === ColumnInfo || column instanceof ColumnInfo)
 }
 
-export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeColumnProps, renderOptions: any) {
+export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any) {
   return isColumnInfo(options) ? options : new ColumnInfo($xetable, options, renderOptions)
 }
 

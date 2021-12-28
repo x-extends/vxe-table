@@ -135,12 +135,12 @@ export interface TablePublicMethods {
    * 加载列配置
    * @param columns 列对象
    */
-  loadColumn(columns: VxeTableDefines.ColumnOptions[]): Promise<any>;
+  loadColumn(columns: (VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo)[]): Promise<any>;
   /**
    * 加载列配置并恢复到初始状态
    * @param columns 列对象
    */
-  reloadColumn(columns: VxeTableDefines.ColumnOptions[]): Promise<any>;
+  reloadColumn(columns: (VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo)[]): Promise<any>;
   /**
    * 根据 tr 元素获取对应的 row 信息
    * @param tr 行节点元素
@@ -2391,6 +2391,10 @@ export namespace VxeTableDefines {
     type: string;
     scrollTop: number;
     scrollLeft: number;
+    scrollHeight: number;
+    scrollWidth: number;
+    bodyWidth: number;
+    bodyHeight: number;
     isX: boolean;
     isY: boolean;
   }

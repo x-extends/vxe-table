@@ -175,7 +175,7 @@ export default defineComponent({
       },
       {
         name: 'event.showMenu',
-        desc: '显示快捷菜单之前触发，允许返回 false 阻止默认行为',
+        desc: '显示右键菜单之前触发，允许返回 false 阻止默认行为',
         version: '',
         type: 'Boolean',
         enum: '',

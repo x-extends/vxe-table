@@ -93,7 +93,7 @@ function getDefaultCellLabel (params: VxeTableDefines.CellRenderBodyParams) {
 }
 
 export const Cell = {
-  createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, columnOpts: VxeColumnProps) {
+  createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, columnOpts: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo) {
     const { type, sortable, filters, editRender, treeNode } = columnOpts
     const { props } = $xetable
     const { editConfig } = props

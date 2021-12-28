@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">快捷菜单操作</p>
+    <p class="tip">右键菜单操作</p>
 
     <vxe-toolbar custom></vxe-toolbar>
 
