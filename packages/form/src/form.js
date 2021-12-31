@@ -340,6 +340,7 @@ export default {
     submitEvent (evnt) {
       evnt.preventDefault()
       if (!this.preventSubmit) {
+        this.clearValidate()
         this.beginValidate(this.getItems()).then(() => {
           this.$emit('submit', { data: this.data, $form: this, $event: evnt })
         }).catch(errMap => {
@@ -442,6 +443,7 @@ export default {
       return this.$nextTick()
     },
     validate (callback) {
+      this.clearValidate()
       return this.beginValidate(this.getItems(), '', callback)
     },
     validateField (field, callback) {
@@ -452,7 +454,6 @@ export default {
       const validRest = {}
       const validFields = []
       const itemValids = []
-      this.clearValidate()
       clearTimeout(this.showErrTime)
       if (data && formRules) {
         itemList.forEach(item => {
