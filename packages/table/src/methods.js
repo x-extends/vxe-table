@@ -2462,7 +2462,7 @@ const Methods = {
           // }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
-            if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+            if (!editOpts.activeMethod || editOpts.activeMethod({ ...selected.args, $table: this })) {
               if (editMethod) {
                 editMethod({
                   row: selected.row,

@@ -389,7 +389,7 @@ export default {
         if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
-          if (!activeMethod || activeMethod(params)) {
+          if (!activeMethod || activeMethod({ ...params, $table: this })) {
             if (mouseConfig) {
               this.clearSelected(evnt)
               this.clearCellAreas(evnt)
