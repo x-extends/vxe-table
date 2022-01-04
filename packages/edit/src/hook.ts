@@ -559,12 +559,13 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { actived } = editStore
         const { row, column } = params
         const { editRender } = column
-        const cell = params.cell = (params.cell || $xetable.getCell(row, column))
+        const cell = (params.cell || $xetable.getCell(row, column))
+        params.cell = cell
         if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-actived' = 'edit-disabled'
-            if (!activeMethod || activeMethod(params)) {
+            if (!activeMethod || activeMethod({ ...params, $table: $xetable })) {
               if (mouseConfig) {
                 editMethods.clearSelected()
                 if ($xetable.clearCellAreas) {

@@ -4355,14 +4355,15 @@ export default defineComponent({
             // }
             // 如果是按下非功能键之外允许直接编辑
             if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
-              if (!editOpts.activeMethod || editOpts.activeMethod(selected.args)) {
+              if (!editOpts.activeMethod || editOpts.activeMethod({ ...selected.args, $table: $xetable })) {
                 if (editMethod) {
                   editMethod({
                     row: selected.row,
                     rowIndex: tableMethods.getRowIndex(selected.row),
                     column: selected.column,
                     columnIndex: tableMethods.getColumnIndex(selected.column),
-                    $table: $xetable
+                    $table: $xetable,
+                    $grid: $xegrid
                   })
                 } else {
                   setCellValue(selected.row, selected.column, null)

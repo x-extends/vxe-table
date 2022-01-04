@@ -368,7 +368,6 @@ export default defineComponent({
       const validRest: any = {}
       const validFields: string[] = []
       const itemValids: any[] = []
-      clearValidate()
       clearTimeout(showErrTime)
       if (data && formRules) {
         itemList.forEach((item) => {
@@ -424,6 +423,7 @@ export default defineComponent({
     }
 
     const validate = (callback: any) => {
+      clearValidate()
       return beginValidate(getItems(), '', callback)
     }
 
@@ -434,6 +434,7 @@ export default defineComponent({
     const submitEvent = (evnt: Event) => {
       evnt.preventDefault()
       if (!props.preventSubmit) {
+        clearValidate()
         beginValidate(getItems()).then(() => {
           formMethods.dispatchEvent('submit', { data: props.data }, evnt)
         }).catch(errMap => {

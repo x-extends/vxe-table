@@ -1640,6 +1640,7 @@ export namespace VxeTablePropTypes {
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
       $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): boolean;
   }
   export interface KeyboardOpts extends KeyboardConfig { }
@@ -1869,6 +1870,8 @@ export namespace VxeTablePropTypes {
       rowIndex: number;
       column: VxeTableDefines.ColumnInfo;
       columnIndex: number;
+      $table: VxeTableConstructor & VxeTablePrivateMethods;
+      $grid: VxeGridConstructor | null | undefined;
     }): boolean;
   }
   export interface EditOpts extends EditConfig { }

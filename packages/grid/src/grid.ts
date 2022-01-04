@@ -181,7 +181,7 @@ export default defineComponent({
       const { pendingRecords } = reactData
       const $xetable = refTable.value
       const activeMethod = editConfig ? editConfig.activeMethod : null
-      return $xetable.findRowIndexOf(pendingRecords, params.row) === -1 && (!activeMethod || activeMethod(params))
+      return $xetable.findRowIndexOf(pendingRecords, params.row) === -1 && (!activeMethod || activeMethod({ ...params, $grid: $xegrid }))
     }
 
     const computeTableProps = computed(() => {
