@@ -3273,7 +3273,7 @@ export default defineComponent({
         return nextTick()
       },
       isCheckedByRadioRow (row) {
-        return reactData.selectRow === row
+        return $xetable.eqRow(reactData.selectRow, row)
       },
       /**
        * 用于单选行，设置某一行为选中状态
@@ -4813,7 +4813,7 @@ export default defineComponent({
               }, treeOpts)
             }
             // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => item === row, treeOpts)
+            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), treeOpts)
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
@@ -4838,7 +4838,7 @@ export default defineComponent({
               if ($xetable.findRowIndexOf(treeIndeterminates, row) === -1) {
                 treeIndeterminates.push(row)
               }
-              XEUtils.remove(selection, item => item === row)
+              XEUtils.remove(selection, item => $xetable.eqRow(item, row))
             } else {
               // 更新子节点状态
               XEUtils.eachTree([row], (item) => {
@@ -4854,7 +4854,7 @@ export default defineComponent({
               }, treeOpts)
             }
             // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => item === row, treeOpts)
+            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), treeOpts)
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems = checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
@@ -4874,7 +4874,7 @@ export default defineComponent({
                   selection.push(row)
                 }
               } else {
-                XEUtils.remove(selection, item => item === row)
+                XEUtils.remove(selection, item => $xetable.eqRow(item, row))
               }
               handleCheckboxReserveRow(row, value)
             }
@@ -5244,7 +5244,7 @@ export default defineComponent({
         const rests: Promise<any>[] = []
         if (treeConfig) {
           const treeOpts = computeTreeOpts.value
-          const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
+          const matchObj = XEUtils.findTree(tableFullData, item => $xetable.eqRow(item, row), treeOpts)
           if (matchObj) {
             const nodes = matchObj.nodes
             nodes.forEach((row, index) => {
