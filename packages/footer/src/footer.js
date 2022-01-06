@@ -36,6 +36,16 @@ export default {
     elemStore[`${prefix}list`] = $refs.tfoot
     elemStore[`${prefix}xSpace`] = $refs.xSpace
   },
+  destroyed () {
+    const { $parent: $xetable, fixedType } = this
+    const { elemStore } = $xetable
+    const prefix = `${fixedType || 'main'}-footer-`
+    elemStore[`${prefix}wrapper`] = null
+    elemStore[`${prefix}table`] = null
+    elemStore[`${prefix}colgroup`] = null
+    elemStore[`${prefix}list`] = null
+    elemStore[`${prefix}xSpace`] = null
+  },
   render (h) {
     let { _e, $parent: $xetable, fixedType, fixedColumn, tableColumn, footerTableData } = this
     const {

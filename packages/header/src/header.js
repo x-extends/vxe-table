@@ -39,6 +39,17 @@ export default {
     elemStore[`${prefix}xSpace`] = $refs.xSpace
     elemStore[`${prefix}repair`] = $refs.repair
   },
+  destroyed () {
+    const { $parent: $xetable, fixedType } = this
+    const { elemStore } = $xetable
+    const prefix = `${fixedType || 'main'}-header-`
+    elemStore[`${prefix}wrapper`] = null
+    elemStore[`${prefix}table`] = null
+    elemStore[`${prefix}colgroup`] = null
+    elemStore[`${prefix}list`] = null
+    elemStore[`${prefix}xSpace`] = null
+    elemStore[`${prefix}repair`] = null
+  },
   render (h) {
     const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
     const { $listeners: tableListeners, tId, isGroup, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable

@@ -455,6 +455,18 @@ export default {
     this.$el._onscroll = null
     this.$el.onscroll = null
   },
+  destroyed () {
+    const { $parent: $xetable, fixedType } = this
+    const { elemStore } = $xetable
+    const prefix = `${fixedType || 'main'}-body-`
+    elemStore[`${prefix}wrapper`] = null
+    elemStore[`${prefix}table`] = null
+    elemStore[`${prefix}colgroup`] = null
+    elemStore[`${prefix}list`] = null
+    elemStore[`${prefix}xSpace`] = null
+    elemStore[`${prefix}ySpace`] = null
+    elemStore[`${prefix}emptyBlock`] = null
+  },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
     let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
