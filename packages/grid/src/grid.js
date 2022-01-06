@@ -401,7 +401,7 @@ export default {
     handleActiveMethod (params) {
       const { editConfig } = this
       const activeMethod = editConfig ? editConfig.activeMethod : null
-      return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod({ ...params, $grid: $xegrid }))
+      return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod({ ...params, $grid: this }))
     },
     initToolbar () {
       this.$nextTick(() => {
