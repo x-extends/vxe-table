@@ -6,7 +6,7 @@ import { getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools
 import { updateCellTitle } from '../../tools/dom'
 import { createColumn } from './util'
 
-import { VxeColumnProps, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
+import { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
 
 function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params

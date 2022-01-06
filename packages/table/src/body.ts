@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted } from 'vue'
+import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -645,6 +645,19 @@ export default defineComponent({
       clearTimeout(wheelTime)
       el._onscroll = null
       el.onscroll = null
+    })
+
+    onUnmounted(() => {
+      const { fixedType } = props
+      const { elemStore } = tableInternalData
+      const prefix = `${fixedType || 'main'}-body-`
+      elemStore[`${prefix}wrapper`] = null
+      elemStore[`${prefix}table`] = null
+      elemStore[`${prefix}colgroup`] = null
+      elemStore[`${prefix}list`] = null
+      elemStore[`${prefix}xSpace`] = null
+      elemStore[`${prefix}ySpace`] = null
+      elemStore[`${prefix}emptyBlock`] = null
     })
 
     const renderVN = () => {

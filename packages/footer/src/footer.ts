@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, onMounted } from 'vue'
+import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { getPropClass } from '../../table/src/util'
 import { updateCellTitle } from '../../tools/dom'
@@ -87,6 +87,17 @@ export default defineComponent({
         elemStore[`${prefix}list`] = refFooterTFoot.value
         elemStore[`${prefix}xSpace`] = refFooterXSpace.value
       })
+    })
+
+    onUnmounted(() => {
+      const { fixedType } = props
+      const { elemStore } = tableInternalData
+      const prefix = `${fixedType || 'main'}-footer-`
+      elemStore[`${prefix}wrapper`] = null
+      elemStore[`${prefix}table`] = null
+      elemStore[`${prefix}colgroup`] = null
+      elemStore[`${prefix}list`] = null
+      elemStore[`${prefix}xSpace`] = null
     })
 
     const renderVN = () => {
