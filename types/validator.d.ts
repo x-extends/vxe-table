@@ -87,6 +87,7 @@ declare module './table' {
       columnIndex: number;
       row: any;
       rowIndex: number;
+      field: string;
     }
     export interface ValidatorErrorMapParams {
       [key: string]: VxeTableDefines.ValidatorErrorParams[];

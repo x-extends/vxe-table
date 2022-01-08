@@ -124,6 +124,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                         row,
                         columnIndex: $xetable.getColumnIndex(column),
                         column,
+                        field: column.property,
                         $table: $xetable
                       }
                       if (!validRest[column.property]) {
@@ -294,6 +295,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                     rowIndex: $xetable.getRowIndex(row),
                     column,
                     columnIndex: $xetable.getColumnIndex(column),
+                    field: column.property,
                     $table: $xetable
                   })
                   if (customValid) {

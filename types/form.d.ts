@@ -250,6 +250,10 @@ export namespace VxeFormDefines {
     rule: VxeFormDefines.FormRule;
     rules: VxeFormDefines.FormRule[];
     data: any;
+    field: string;
+    /**
+     * 已废弃，该属性被 field 替换
+     */
     property: string;
   }
 

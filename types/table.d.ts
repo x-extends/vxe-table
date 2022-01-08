@@ -2094,6 +2094,10 @@ export namespace VxeTableDefines {
    * 列对象
    */
   export class ColumnInfo {
+    /**
+     * 该属性已废弃，该属性被 field 替换
+     * @deprecated
+     */
     property: string;
 
     type: VxeColumnPropTypes.Type;

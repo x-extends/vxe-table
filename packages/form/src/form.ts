@@ -250,7 +250,7 @@ export default defineComponent({
           if (isEnableConf(itemRender)) {
             const compConf = VXETable.renderer.get(itemRender.name)
             if (compConf && compConf.itemResetMethod) {
-              compConf.itemResetMethod({ data, property: field, item, $form: $xeform })
+              compConf.itemResetMethod({ data, field, property: field, item, $form: $xeform })
             } else if (field) {
               XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
             }
@@ -326,6 +326,7 @@ export default defineComponent({
                   rule,
                   rules,
                   data,
+                  field: property,
                   property,
                   $form: $xeform
                 })
@@ -377,7 +378,7 @@ export default defineComponent({
               validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
               }).catch(({ rule, rules }) => {
-                const rest = { rule, rules, data, property: field, $form: $xeform }
+                const rest = { rule, rules, data, field, property: field, $form: $xeform }
                 if (!validRest[field]) {
                   validRest[field] = []
                 }
@@ -538,7 +539,7 @@ export default defineComponent({
         const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
         const hasEllipsis = showTitle || showTooltip || showEllipsis
         let itemVisibleMethod = visibleMethod
-        const params = { data, property: field, item, $form: $xeform }
+        const params = { data, field, property: field, item, $form: $xeform }
         if (visible === false) {
           return createCommentVNode()
         }
