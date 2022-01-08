@@ -1,4 +1,5 @@
 .DS_Store
+.history
 node_modules
 /dist
 /lib
