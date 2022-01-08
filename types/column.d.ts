@@ -306,6 +306,13 @@ export interface ColumnOptions {
  * 列对象
  */
 export class ColumnInfo {
+  /**
+   * 该属性已废弃，该属性被 field 替换
+   * @deprecated
+   */
+  property: string;
+
+  field: string;
   title: string;
   width: number | string;
   minWidth: number | string;
@@ -314,7 +321,6 @@ export class ColumnInfo {
   align: ColumnAlign;
   headerAlign: ColumnAlign;
   footerAlign: ColumnAlign;
-  property: string;
   type: string;
   sortable: boolean;
   treeNode: boolean;

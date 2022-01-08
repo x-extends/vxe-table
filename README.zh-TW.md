@@ -146,8 +146,8 @@ export default {
 ## 檔案
 
 💡 [使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
-👉 [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/base/basic) [👀備用地址](https://x-extends.github.io/vxe-table/#/table/base/basic)  
-👉 [查看檔案](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api) [👀備用地址](https://x-extends.github.io/vxe-table/#/table/api)
+👉 [查看演示](https://vxe-table.pages.dev/) [👀備用地址1](https://xuliangzhan_admin.gitee.io/vxe-table/) [👀備用地址2](https://x-extends.github.io/vxe-table/#/table/base/basic)  
+👉 [查看檔案](https://vxe-table.pages.dev/#/table/api) [👀備用地址1](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api) [👀備用地址2](https://x-extends.github.io/vxe-table/#/table/api)
 
 ## 運行項目
 

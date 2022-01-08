@@ -127,7 +127,16 @@ export default {
                 colVailds.push(
                   this.validCellRules('all', row, column)
                     .catch(({ rule, rules }) => {
-                      const rest = { rule, rules, rowIndex: this.getRowIndex(row), row, columnIndex: this.getColumnIndex(column), column, $table: this }
+                      const rest = {
+                        rule,
+                        rules,
+                        rowIndex: this.getRowIndex(row),
+                        row,
+                        columnIndex: this.getColumnIndex(column),
+                        column,
+                        field: column.property,
+                        $table: this
+                      }
                       if (!validRest[column.property]) {
                         validRest[column.property] = []
                       }
@@ -250,6 +259,7 @@ export default {
                   rowIndex: this.getRowIndex(row),
                   column,
                   columnIndex: this.getColumnIndex(column),
+                  field: column.property,
                   $table: this
                 })
                 if (customValid) {

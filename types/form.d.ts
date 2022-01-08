@@ -33,7 +33,7 @@ export declare class Form extends VXETableComponent {
    * 对表单执行项进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param callback 回调函数
    */
-   validateField(callback?: (errMap?: FormValidErrMapParams) => void): Promise<any>;
+  validateField(callback?: (errMap?: FormValidErrMapParams) => void): Promise<any>;
   /**
    * 手动清除校验状态，如果指定 field 则清除指定的项，否则清除整个表单
    * @param field 字段名
@@ -108,6 +108,7 @@ export interface FormValidErrParams {
   rules: FormRule[];
   data: any;
   property: string;
+  field: string;
 }
 
 export interface FormValidErrMapParams {

@@ -77,7 +77,7 @@ function renderItems (h, _vm, itemList) {
     const showTitle = itemOverflow === 'title'
     const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
     const hasEllipsis = showTitle || showTooltip || showEllipsis
-    const params = { data, property: field, item, $form: _vm }
+    const params = { data, field, property: field, item, $form: _vm }
     let isRequired
     if (visible === false) {
       return _e()
@@ -357,7 +357,7 @@ export default {
           if (isEnableConf(itemRender)) {
             const compConf = VXETable.renderer.get(itemRender.name)
             if (compConf && compConf.itemResetMethod) {
-              compConf.itemResetMethod({ data, property: field, item, $form: this })
+              compConf.itemResetMethod({ data, field, property: field, item, $form: this })
             } else if (field) {
               XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
             }
@@ -463,7 +463,7 @@ export default {
               this.validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
               }).catch(({ rule, rules }) => {
-                const rest = { rule, rules, data, property: field, $form: this }
+                const rest = { rule, rules, data, field, property: field, $form: this }
                 if (!validRest[field]) {
                   validRest[field] = []
                 }
@@ -538,6 +538,7 @@ export default {
                   rule,
                   rules,
                   data,
+                  field: property,
                   property,
                   $form: this
                 })
