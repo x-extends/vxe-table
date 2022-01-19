@@ -352,25 +352,23 @@ export const Cell = {
    */
   renderCheckboxHeader (h, params) {
     const { $table, column, isHidden } = params
-    const { isIndeterminate: isAllCheckboxIndeterminate, isAllCheckboxDisabled } = $table
+    const { isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate, isAllCheckboxDisabled } = $table
     const { slots } = column
     const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = $table.checkboxOpts
     const headerTitle = column.getTitle()
-    let isChecked = false
     let on
     if (!isHidden) {
-      isChecked = isAllCheckboxDisabled ? false : $table.isAllSelected
       on = {
         click (evnt) {
           if (!isAllCheckboxDisabled) {
-            $table.triggerCheckAllEvent(evnt, !isChecked)
+            $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
           }
         }
       }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
+    const checkboxParams = { ...params, checked: isAllCheckboxSelected, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
     if (headerSlot) {
       return renderTitleContent(h, checkboxParams, $table.callSlot(headerSlot, checkboxParams, h))
     }
@@ -384,7 +382,7 @@ export const Cell = {
     return renderTitleContent(h, checkboxParams, [
       h('span', {
         class: ['vxe-cell--checkbox', {
-          'is--checked': isChecked,
+          'is--checked': isAllCheckboxSelected,
           'is--disabled': isAllCheckboxDisabled,
           'is--indeterminate': isAllCheckboxIndeterminate
         }],

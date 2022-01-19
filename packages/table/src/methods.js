@@ -2964,14 +2964,28 @@ const Methods = {
     const { afterFullData, selection, treeIndeterminates, checkboxOpts, treeConfig } = this
     const { checkField, halfField, checkStrictly, checkMethod } = checkboxOpts
     if (!checkStrictly) {
+      const disableRows = []
+      const checkRows = []
+      let isAllResolve = false
       let isAllSelected = false
       let isIndeterminate = false
       if (checkField) {
-        isAllSelected = afterFullData.length && afterFullData.every(
+        isAllResolve = afterFullData.every(
           checkMethod
-            ? (row) => !checkMethod({ row }) || XEUtils.get(row, checkField)
+            ? (row) => {
+              if (!checkMethod({ row })) {
+                disableRows.push(row)
+                return true
+              }
+              if (XEUtils.get(row, checkField)) {
+                checkRows.push(row)
+                return true
+              }
+              return false
+            }
             : row => XEUtils.get(row, checkField)
         )
+        isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
         if (treeConfig) {
           if (halfField) {
             isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, halfField) || treeIndeterminates.indexOf(row) > -1)
@@ -2986,11 +3000,22 @@ const Methods = {
           }
         }
       } else {
-        isAllSelected = afterFullData.length && afterFullData.every(
+        isAllResolve = afterFullData.every(
           checkMethod
-            ? (row) => !checkMethod({ row }) || selection.indexOf(row) > -1
+            ? (row) => {
+              if (!checkMethod({ row })) {
+                disableRows.push(row)
+                return true
+              }
+              if (selection.indexOf(row) > -1) {
+                checkRows.push(row)
+                return true
+              }
+              return false
+            }
             : row => selection.indexOf(row) > -1
         )
+        isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
         if (treeConfig) {
           isIndeterminate = !isAllSelected && afterFullData.some(row => treeIndeterminates.indexOf(row) > -1 || selection.indexOf(row) > -1)
         } else {
