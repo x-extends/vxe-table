@@ -50,13 +50,17 @@ export interface VxeTableProMethods {
    */
   setActiveCellArea(activeArea: VxeTableProDefines.ActiveCellAreaConfig): Promise<any>;
   /**
-   * 用于 mouse-config.area，打开单元格查找功能
+   * 打开单元格查找窗口
    */
   openFind(): Promise<any>;
   /**
-   * 用于 mouse-config.area，打开单元格替换功能
+   * 打开单元格替换窗口
    */
   openReplace(): Promise<any>;
+  /**
+   * 手动关闭查找与替换窗口
+   */
+  closeFNR(): Promise<any>;
 }
 export interface VxeProPluginMethods extends VxeTableProMethods { }
 

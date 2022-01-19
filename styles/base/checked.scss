@@ -170,5 +170,10 @@
         border-color: $vxe-primary-disabled-color;
       }
     }
+    .vxe-checkbox--indeterminate-icon {
+      &:after {
+        background-color: $vxe-primary-disabled-color;
+      }
+    }
   }
 }

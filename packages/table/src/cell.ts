@@ -377,26 +377,24 @@ export const Cell = {
     const { $table, column, isHidden } = params
     const { reactData } = $table
     const { computeIsAllCheckboxDisabled, computeCheckboxOpts } = $table.getComputeMaps()
-    const { isIndeterminate: isAllCheckboxIndeterminate, isAllSelected } = reactData
+    const { isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate } = reactData
     const isAllCheckboxDisabled = computeIsAllCheckboxDisabled.value
     const { slots } = column
     const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = computeCheckboxOpts.value
     const headerTitle = column.getTitle()
-    let isChecked = false
     let ons
     if (!isHidden) {
-      isChecked = isAllCheckboxDisabled ? false : isAllSelected
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isAllCheckboxDisabled) {
-            $table.triggerCheckAllEvent(evnt, !isChecked)
+            $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
           }
         }
       }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
+    const checkboxParams = { ...params, checked: isAllCheckboxSelected, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
     if (headerSlot) {
       return renderTitleContent(checkboxParams, $table.callSlot(headerSlot, checkboxParams))
     }
@@ -410,7 +408,7 @@ export const Cell = {
     return renderTitleContent(checkboxParams, [
       h('span', {
         class: ['vxe-cell--checkbox', {
-          'is--checked': isChecked,
+          'is--checked': isAllCheckboxSelected,
           'is--disabled': isAllCheckboxDisabled,
           'is--indeterminate': isAllCheckboxIndeterminate
         }],

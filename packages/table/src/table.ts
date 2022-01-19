@@ -4747,14 +4747,28 @@ export default defineComponent({
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, halfField, checkStrictly, checkMethod } = checkboxOpts
         if (!checkStrictly) {
+          const disableRows = []
+          const checkRows = []
+          let isAllResolve = false
           let isAllSelected = false
           let isIndeterminate = false
           if (checkField) {
-            isAllSelected = afterFullData.length > 0 && afterFullData.every(
+            isAllResolve = afterFullData.every(
               checkMethod
-                ? (row) => !checkMethod({ row }) || XEUtils.get(row, checkField)
-                : (row) => XEUtils.get(row, checkField)
+                ? (row) => {
+                  if (!checkMethod({ row })) {
+                    disableRows.push(row)
+                    return true
+                  }
+                  if (XEUtils.get(row, checkField)) {
+                    checkRows.push(row)
+                    return true
+                  }
+                  return false
+                }
+                : row => XEUtils.get(row, checkField)
             )
+            isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
             if (treeConfig) {
               if (halfField) {
                 isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, halfField) || $xetable.findRowIndexOf(treeIndeterminates, row) > -1)
@@ -4769,11 +4783,22 @@ export default defineComponent({
               }
             }
           } else {
-            isAllSelected = afterFullData.length > 0 && afterFullData.every(
+            isAllResolve = afterFullData.every(
               checkMethod
-                ? (row) => !checkMethod({ row }) || $xetable.findRowIndexOf(selection, row) > -1
-                : (row) => $xetable.findRowIndexOf(selection, row) > -1
+                ? (row) => {
+                  if (!checkMethod({ row })) {
+                    disableRows.push(row)
+                    return true
+                  }
+                  if ($xetable.findRowIndexOf(selection, row) > -1) {
+                    checkRows.push(row)
+                    return true
+                  }
+                  return false
+                }
+                : row => $xetable.findRowIndexOf(selection, row) > -1
             )
+            isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
             if (treeConfig) {
               isIndeterminate = !isAllSelected && afterFullData.some((row) => $xetable.findRowIndexOf(treeIndeterminates, row) > -1 || $xetable.findRowIndexOf(selection, row) > -1)
             } else {
