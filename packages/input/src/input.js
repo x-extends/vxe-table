@@ -44,6 +44,10 @@ function getDateQuarter (date) {
   return 4
 }
 
+function handleNumber (val) {
+  return XEUtils.isString(val) ? val.replace(/,/g, '') : val
+}
+
 function toFloatValueFixed (inputValue, digitsValue) {
   if (/^-/.test('' + inputValue)) {
     return XEUtils.toFixed(XEUtils.ceil(inputValue, digitsValue), digitsValue)
@@ -1304,7 +1308,7 @@ export default {
       if (!inpReadonly) {
         if (isNumType) {
           if (inputValue) {
-            let inpNumVal = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+            let inpNumVal = type === 'integer' ? XEUtils.toInteger(handleNumber(inputValue)) : XEUtils.toNumber(handleNumber(inputValue))
             if (!this.vaildMinNum(inpNumVal)) {
               inpNumVal = min
             } else if (!this.vaildMaxNum(inpNumVal)) {
@@ -1446,7 +1450,7 @@ export default {
     },
     numberChange (isPlus, evnt) {
       const { min, max, type, inputValue, stepValue } = this
-      const numValue = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+      const numValue = type === 'integer' ? XEUtils.toInteger(handleNumber(inputValue)) : XEUtils.toNumber(handleNumber(inputValue))
       const newValue = isPlus ? XEUtils.add(numValue, stepValue) : XEUtils.subtract(numValue, stepValue)
       let restNum
       if (!this.vaildMinNum(newValue)) {
