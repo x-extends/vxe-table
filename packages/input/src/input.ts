@@ -609,6 +609,10 @@ export default defineComponent({
       return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
     })
 
+    const handleNumber = (val: string | number) => {
+      return XEUtils.isString(val) ? val.replace(/,/g, '') : val
+    }
+
     function toFloatValueFixed (inputValue: string | number, digitsValue: number) {
       if (/^-/.test('' + inputValue)) {
         return XEUtils.toFixed(XEUtils.ceil(inputValue, digitsValue), digitsValue)
@@ -829,7 +833,7 @@ export default defineComponent({
       if (!inpReadonly) {
         if (isNumType) {
           if (inputValue) {
-            let inpNumVal: number | string = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+            let inpNumVal: number | string = type === 'integer' ? XEUtils.toInteger(handleNumber(inputValue)) : XEUtils.toNumber(handleNumber(inputValue))
             if (!vaildMinNum(inpNumVal)) {
               inpNumVal = min
             } else if (!vaildMaxNum(inpNumVal)) {
@@ -917,7 +921,7 @@ export default defineComponent({
       const { min, max, type } = props
       const { inputValue } = reactData
       const stepValue = computeStepValue.value
-      const numValue = type === 'integer' ? XEUtils.toInteger(inputValue) : XEUtils.toNumber(inputValue)
+      const numValue = type === 'integer' ? XEUtils.toInteger(handleNumber(inputValue)) : XEUtils.toNumber(handleNumber(inputValue))
       const newValue = isPlus ? XEUtils.add(numValue, stepValue) : XEUtils.subtract(numValue, stepValue)
       let restNum: number | string
       if (!vaildMinNum(newValue)) {

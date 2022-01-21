@@ -592,10 +592,10 @@ export default defineComponent({
             leftSlot = getFuncSlot(pagerOptSlots, 'left')
             rightSlot = getFuncSlot(pagerOptSlots, 'right')
             if (leftSlot) {
-              pagerSlots.buttons = leftSlot
+              pagerSlots.left = leftSlot
             }
             if (rightSlot) {
-              pagerSlots.tools = rightSlot
+              pagerSlots.right = rightSlot
             }
           }
           slotVNs.push(
