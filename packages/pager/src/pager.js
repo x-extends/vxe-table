@@ -45,6 +45,11 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      inpCurrPage: this.currentPage
+    }
+  },
   computed: {
     isSizes () {
       return this.layouts.some(name => name === 'Sizes')
@@ -73,6 +78,11 @@ export default {
         }
         return { value: '', label: '', ...item }
       })
+    }
+  },
+  watch: {
+    currentPage (value) {
+      this.inpCurrPage = value
     }
   },
   render (h) {
@@ -240,13 +250,14 @@ export default {
         h('input', {
           class: 'vxe-pager--goto',
           domProps: {
-            value: this.currentPage
+            value: this.inpCurrPage
           },
           attrs: {
             type: 'text',
             autocomplete: 'off'
           },
           on: {
+            input: this.jumpInputEvent,
             keydown: this.jumpKeydownEvent,
             blur: this.triggerJumpEvent
           }
@@ -372,6 +383,9 @@ export default {
         this.$emit('update:pageSize', pageSize)
         this.$emit('page-change', { type: 'size', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) })
       }
+    },
+    jumpInputEvent (evnt) {
+      this.inpCurrPage = evnt.target.value
     },
     jumpKeydownEvent (evnt) {
       if (evnt.keyCode === 13) {

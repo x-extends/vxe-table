@@ -2,58 +2,12 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { toStringTimeDate, getDateQuarter } from './date'
+import { handleNumber, toFloatValueFixed } from './number'
 
 const yearSize = 20
 const monthSize = 20
 const quarterSize = 8
-
-function toStringTimeDate (str) {
-  if (str) {
-    const rest = new Date()
-    let h, m, s
-    if (XEUtils.isDate(str)) {
-      h = str.getHours()
-      m = str.getMinutes()
-      s = str.getSeconds()
-    } else {
-      str = XEUtils.toValueString(str)
-      const parses = str.match(/^(\d{1,2})(:(\d{1,2}))?(:(\d{1,2}))?/)
-      if (parses) {
-        h = parses[1]
-        m = parses[3]
-        s = parses[5]
-      }
-    }
-    rest.setHours(h || 0)
-    rest.setMinutes(m || 0)
-    rest.setSeconds(s || 0)
-    return rest
-  }
-  return new Date('')
-}
-
-function getDateQuarter (date) {
-  const month = date.getMonth()
-  if (month < 3) {
-    return 1
-  } else if (month < 6) {
-    return 2
-  } else if (month < 9) {
-    return 3
-  }
-  return 4
-}
-
-function handleNumber (val) {
-  return XEUtils.isString(val) ? val.replace(/,/g, '') : val
-}
-
-function toFloatValueFixed (inputValue, digitsValue) {
-  if (/^-/.test('' + inputValue)) {
-    return XEUtils.toFixed(XEUtils.ceil(inputValue, digitsValue), digitsValue)
-  }
-  return XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
-}
 
 function getNumberValue (_vm, val) {
   const { type, exponential, digitsValue, inpMaxlength } = _vm
