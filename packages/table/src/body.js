@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener } from './util'
-import { browse } from '../../tools/src/dom'
+import { browse, setScrollLeftAndTop } from '../../tools/src/dom'
 
 const renderType = 'body'
 
@@ -401,7 +401,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
  * 同步滚动条
  */
 let scrollProcessTimeout
-function syncBodyScroll (scrollTop, elem1, elem2) {
+function syncBodyScroll (_vm, fixedType, scrollTop, elem1, elem2) {
   if (elem1 || elem2) {
     if (elem1) {
       removeScrollListener(elem1)
@@ -412,9 +412,30 @@ function syncBodyScroll (scrollTop, elem1, elem2) {
       elem2.scrollTop = scrollTop
     }
     clearTimeout(scrollProcessTimeout)
-    scrollProcessTimeout = setTimeout(function () {
+    scrollProcessTimeout = setTimeout(() => {
+      const { tableBody, leftBody, rightBody } = _vm.$refs
+      const bodyElem = tableBody.$el
+      const leftElem = leftBody ? leftBody.$el : null
+      const rightElem = rightBody ? rightBody.$el : null
       restoreScrollListener(elem1)
       restoreScrollListener(elem2)
+      // 检查滚动条是的同步
+      let targetTop = bodyElem.scrollTop
+      let targetLeft = bodyElem.scrollLeft
+      if (fixedType === 'left') {
+        if (leftElem) {
+          targetTop = leftElem.scrollTop
+          targetLeft = leftElem.scrollLeft
+        }
+      } else if (fixedType === 'right') {
+        if (rightElem) {
+          targetTop = rightElem.scrollTop
+          targetLeft = rightElem.scrollLeft
+        }
+      }
+      setScrollLeftAndTop(bodyElem, targetLeft, targetTop)
+      setScrollLeftAndTop(leftElem, targetLeft, targetTop)
+      setScrollLeftAndTop(rightElem, targetLeft, targetTop)
     }, 300)
   }
 }
@@ -621,10 +642,10 @@ export default {
       }
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
-        syncBodyScroll(scrollTop, bodyElem, rightElem)
+        syncBodyScroll($xetable, fixedType, scrollTop, bodyElem, rightElem)
       } else if (rightElem && fixedType === 'right') {
         scrollTop = rightElem.scrollTop
-        syncBodyScroll(scrollTop, bodyElem, leftElem)
+        syncBodyScroll($xetable, fixedType, scrollTop, bodyElem, leftElem)
       } else {
         if (isRollX) {
           if (headerElem) {
@@ -637,7 +658,7 @@ export default {
         if (leftElem || rightElem) {
           $xetable.checkScrolling()
           if (isRollY) {
-            syncBodyScroll(scrollTop, leftElem, rightElem)
+            syncBodyScroll($xetable, fixedType, scrollTop, leftElem, rightElem)
           }
         }
       }
@@ -689,15 +710,15 @@ export default {
             wheelYInterval = wheelYInterval - (wheelYTotal - wheelYSize)
           }
           const { scrollTop, clientHeight, scrollHeight } = bodyElem
-          const targerTop = scrollTop + (wheelYInterval * (isTopWheel ? -1 : 1))
-          bodyElem.scrollTop = targerTop
+          const targetTop = scrollTop + (wheelYInterval * (isTopWheel ? -1 : 1))
+          bodyElem.scrollTop = targetTop
           if (leftElem) {
-            leftElem.scrollTop = targerTop
+            leftElem.scrollTop = targetTop
           }
           if (rightElem) {
-            rightElem.scrollTop = targerTop
+            rightElem.scrollTop = targetTop
           }
-          if (isTopWheel ? targerTop < scrollHeight - clientHeight : targerTop >= 0) {
+          if (isTopWheel ? targetTop < scrollHeight - clientHeight : targetTop >= 0) {
             this.wheelTime = setTimeout(handleSmooth, 10)
           }
           this.wheelYTotal = wheelYTotal

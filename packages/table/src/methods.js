@@ -9,7 +9,7 @@ import { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '..
 import { formats } from '../../v-x-e-table/src/formats'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
-const { calcHeight, hasClass, addClass, removeClass, getEventTargetNode } = DomTools
+const { calcHeight, hasClass, addClass, removeClass, getEventTargetNode, isNodeElement } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
 const debounceScrollYDuration = browse.msie ? 80 : 20
@@ -294,11 +294,30 @@ const Methods = {
     })
   },
   /**
-   * 手动处理数据
+   * 手动处理数据，用于手动排序与筛选
    * 对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到
    */
   updateData () {
-    return this.handleTableData(true).then(this.updateFooter).then(this.recalculate)
+    const { scrollXLoad, scrollYLoad } = this
+    return this.handleTableData(true).then(() => {
+      this.updateFooter()
+      this.checkSelectionStatus()
+      if (scrollXLoad || scrollYLoad) {
+        if (scrollXLoad) {
+          this.updateScrollXSpace()
+        }
+        if (scrollYLoad) {
+          this.updateScrollYSpace()
+        }
+        return this.refreshScroll()
+      }
+    }).then(() => {
+      this.updateCellAreas()
+      return this.recalculate(true)
+    }).then(() => {
+      // 存在滚动行为未结束情况
+      setTimeout(() => this.recalculate(), 50)
+    })
   },
   handleTableData (force) {
     const { scrollYLoad, scrollYStore, fullDataRowIdData, afterFullData } = this
@@ -1688,15 +1707,22 @@ const Methods = {
     const leftBodyElem = leftBody ? leftBody.$el : null
     const rightBodyElem = rightBody ? rightBody.$el : null
     const tableFooterElem = tableFooter ? tableFooter.$el : null
-    // 还原滚动条位置
-    if (lastScrollLeft || lastScrollTop) {
-      return restoreScrollLocation(this, lastScrollLeft, lastScrollTop)
-    }
-    // 重置
-    setScrollTop(tableBodyElem, lastScrollTop)
-    setScrollTop(leftBodyElem, lastScrollTop)
-    setScrollTop(rightBodyElem, lastScrollTop)
-    setScrollLeft(tableFooterElem, lastScrollLeft)
+    return new Promise(resolve => {
+      // 还原滚动条位置
+      if (lastScrollLeft || lastScrollTop) {
+        return restoreScrollLocation(this, lastScrollLeft, lastScrollTop).then(() => {
+          // 存在滚动行为未结束情况
+          setTimeout(resolve, 30)
+        })
+      }
+      // 重置
+      setScrollTop(tableBodyElem, lastScrollTop)
+      setScrollTop(leftBodyElem, lastScrollTop)
+      setScrollTop(rightBodyElem, lastScrollTop)
+      setScrollLeft(tableFooterElem, lastScrollLeft)
+      // 存在滚动行为未结束情况
+      setTimeout(resolve, 30)
+    })
   },
   /**
    * 计算单元格列宽，动态分配可用剩余空间
@@ -1965,7 +1991,7 @@ const Methods = {
           }
         } else if (layout === 'body') {
           const emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
-          if (wrapperElem) {
+          if (isNodeElement(wrapperElem)) {
             if (customMaxHeight) {
               wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
             } else {
@@ -1981,7 +2007,7 @@ const Methods = {
           if (fixedWrapperElem) {
             const isRightFixed = fixedType === 'right'
             const fixedColumn = columnStore[`${fixedType}List`]
-            if (wrapperElem) {
+            if (isNodeElement(wrapperElem)) {
               wrapperElem.style.top = `${headerHeight}px`
             }
             fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
@@ -2045,7 +2071,7 @@ const Methods = {
           }
           tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
 
-          if (wrapperElem) {
+          if (isNodeElement(wrapperElem)) {
             // 如果是固定列
             if (fixedWrapperElem) {
               wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`

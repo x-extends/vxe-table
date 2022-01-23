@@ -159,7 +159,7 @@ export default {
      * @param {Event} evnt 事件
      */
     confirmFilterEvent (evnt) {
-      const { filterStore, filterOpts, scrollXLoad, scrollYLoad } = this
+      const { filterStore, filterOpts, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = this
       const { column } = filterStore
       const { property } = column
       const values = []
@@ -175,19 +175,26 @@ export default {
       if (!filterOpts.remote) {
         this.handleTableData(true)
         this.checkSelectionStatus()
-        this.updateFooter()
-        if (scrollXLoad || scrollYLoad) {
-          this.refreshScroll()
-          if (scrollYLoad) {
-            this.updateScrollYSpace()
-          }
-        }
       }
       this.emitEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
       this.closeFilter()
-      this.$nextTick(() => {
-        this.recalculate()
+      this.updateFooter().then(() => {
+        const { scrollXLoad, scrollYLoad } = this
+        if ((oldScrollXLoad || scrollXLoad) || (oldScrollYLoad || scrollYLoad)) {
+          if ((oldScrollXLoad || scrollXLoad)) {
+            this.updateScrollXSpace()
+          }
+          if ((oldScrollYLoad || scrollYLoad)) {
+            this.updateScrollYSpace()
+          }
+          return this.refreshScroll()
+        }
+      }).then(() => {
         this.updateCellAreas()
+        return this.recalculate(true)
+      }).then(() => {
+        // 存在滚动行为未结束情况
+        setTimeout(() => this.recalculate(), 50)
       })
     },
     handleClearFilter (column) {

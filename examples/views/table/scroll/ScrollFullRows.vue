@@ -34,7 +34,7 @@
       :checkbox-config="{checkField: 'checked'}">
       <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
       <vxe-column type="seq" width="100" fixed="left"></vxe-column>
-      <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
+      <vxe-column field="name" title="Name" sortable width="200" :filters="[{label: '50',value:50},{label: '120',value:120},{label: '220',value:220}]" :filter-method="filterNameMethod"></vxe-column>
       <vxe-column field="sex" title="Sex" width="200"></vxe-column>
       <vxe-column field="rate" title="Rate" width="200"></vxe-column>
       <vxe-column field="region" title="Region" width="200"></vxe-column>
@@ -209,6 +209,7 @@ export default {
         const list = []
         for (let index = 0; index < size; index++) {
           list.push({
+            key: index,
             name: `名称${index}`,
             checked: false,
             sex: '0',
@@ -225,6 +226,9 @@ export default {
     getSelectEvent () {
       const selectRecords = this.$refs.xTable.getCheckboxRecords()
       this.$XModal.alert(selectRecords.length)
+    },
+    filterNameMethod ({ value, row }) {
+      return row.key > value
     }
   }
 }
