@@ -21,6 +21,10 @@ export interface PagerPrivateRef {
 }
 export interface VxePagerPrivateRef extends PagerPrivateRef { }
 
+export interface PagerReactData {
+  inpCurrPage: string | number;
+}
+
 export type VxePagerProps = {
   size?: VxePagerPropTypes.Size;
   /**

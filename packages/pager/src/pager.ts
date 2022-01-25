@@ -1,10 +1,10 @@
-import { defineComponent, h, PropType, computed, inject, resolveComponent, ComponentOptions, ref, Ref, nextTick } from 'vue'
+import { defineComponent, h, PropType, computed, inject, resolveComponent, ComponentOptions, ref, Ref, reactive, nextTick, watch } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { useSize } from '../../hooks/size'
 
-import { VxePagerPropTypes, VxePagerConstructor, VxePagerEmits, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods } from '../../../types/all'
+import { VxePagerPropTypes, VxePagerConstructor, VxePagerEmits, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods, PagerReactData } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxePager',
@@ -56,6 +56,10 @@ export default defineComponent({
     const computeSize = useSize(props)
 
     const $xegrid = inject('$xegrid', null as VxeGridConstructor | null)
+
+    const reactData = reactive<PagerReactData>({
+      inpCurrPage: props.currentPage
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
 
@@ -163,6 +167,11 @@ export default defineComponent({
       const pageSize = XEUtils.toNumber(value)
       emit('update:pageSize', pageSize)
       pagerMethods.dispatchEvent('page-change', { type: 'size', pageSize, currentPage: Math.min(props.currentPage, getPageCount(props.total, pageSize)) })
+    }
+
+    const jumpInputEvent = (evnt: KeyboardEvent) => {
+      const inputElem: HTMLInputElement = evnt.target as HTMLInputElement
+      reactData.inpCurrPage = inputElem.value
     }
 
     const jumpKeydownEvent = (evnt: KeyboardEvent) => {
@@ -337,9 +346,10 @@ export default defineComponent({
         }, GlobalConfig.i18n('vxe.pager.goto')) : null,
         h('input', {
           class: 'vxe-pager--goto',
-          value: props.currentPage,
+          value: reactData.inpCurrPage,
           type: 'text',
           autocomplete: 'off',
+          onInput: jumpInputEvent,
           onKeydown: jumpKeydownEvent,
           onBlur: triggerJumpEvent
         }),
@@ -404,6 +414,10 @@ export default defineComponent({
     }
 
     Object.assign($xepager, pagerMethods, pagerPrivateMethods)
+
+    watch(() => props.currentPage, (value) => {
+      reactData.inpCurrPage = value
+    })
 
     const renderVN = () => {
       const { align, layouts, className } = props

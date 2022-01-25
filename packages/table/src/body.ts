@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { mergeBodyMethod, getRowid, getPropClass, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
-import { browse, updateCellTitle } from '../../tools/dom'
+import { browse, updateCellTitle, setScrollLeftAndTop } from '../../tools/dom'
 import { isEnableConf } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
@@ -418,7 +418,7 @@ export default defineComponent({
      * 同步滚动条
      */
     let scrollProcessTimeout: any
-    const syncBodyScroll = (scrollTop: number, elem1: XEBodyScrollElement | null, elem2: XEBodyScrollElement | null) => {
+    const syncBodyScroll = (fixedType: VxeColumnPropTypes.Fixed, scrollTop: number, elem1: XEBodyScrollElement | null, elem2: XEBodyScrollElement | null) => {
       if (elem1 || elem2) {
         if (elem1) {
           removeScrollListener(elem1)
@@ -429,9 +429,32 @@ export default defineComponent({
           elem2.scrollTop = scrollTop
         }
         clearTimeout(scrollProcessTimeout)
-        scrollProcessTimeout = setTimeout(function () {
+        scrollProcessTimeout = setTimeout(() => {
+          const tableBody = refTableBody.value
+          const leftBody = refTableLeftBody.value
+          const rightBody = refTableRightBody.value
+          const bodyElem = tableBody.$el as XEBodyScrollElement
+          const leftElem = leftBody ? leftBody.$el as XEBodyScrollElement : null
+          const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
           restoreScrollListener(elem1)
           restoreScrollListener(elem2)
+          // 检查滚动条是的同步
+          let targetTop = bodyElem.scrollTop
+          let targetLeft = bodyElem.scrollLeft
+          if (fixedType === 'left') {
+            if (leftElem) {
+              targetTop = leftElem.scrollTop
+              targetLeft = leftElem.scrollLeft
+            }
+          } else if (fixedType === 'right') {
+            if (rightElem) {
+              targetTop = rightElem.scrollTop
+              targetLeft = rightElem.scrollLeft
+            }
+          }
+          setScrollLeftAndTop(bodyElem, targetLeft, targetTop)
+          setScrollLeftAndTop(leftElem, targetLeft, targetTop)
+          setScrollLeftAndTop(rightElem, targetLeft, targetTop)
         }, 300)
       }
     }
@@ -475,10 +498,10 @@ export default defineComponent({
       }
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
-        syncBodyScroll(scrollTop, bodyElem, rightElem)
+        syncBodyScroll(fixedType, scrollTop, bodyElem, rightElem)
       } else if (rightElem && fixedType === 'right') {
         scrollTop = rightElem.scrollTop
-        syncBodyScroll(scrollTop, bodyElem, leftElem)
+        syncBodyScroll(fixedType, scrollTop, bodyElem, leftElem)
       } else {
         if (isRollX) {
           if (headerElem) {
@@ -491,7 +514,7 @@ export default defineComponent({
         if (leftElem || rightElem) {
           $xetable.checkScrolling()
           if (isRollY) {
-            syncBodyScroll(scrollTop, leftElem, rightElem)
+            syncBodyScroll(fixedType, scrollTop, leftElem, rightElem)
           }
         }
       }

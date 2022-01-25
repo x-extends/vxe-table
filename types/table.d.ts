@@ -104,7 +104,7 @@ export interface TablePublicMethods {
    */
   syncData(): Promise<any>;
   /**
-   * 手动处理数据
+   * 手动处理数据，用于手动排序与筛选
    * 对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到
    */
   updateData(): Promise<any>;
@@ -2098,10 +2098,13 @@ export namespace VxeTableDefines {
      * 该属性已废弃，该属性被 field 替换
      * @deprecated
      */
-    property: string;
+    property: VxeColumnPropTypes.Field;
 
+    /**
+     * 公开属性
+     */
     type: VxeColumnPropTypes.Type;
-    field: VxeColumnPropTypes.Type;
+    field: VxeColumnPropTypes.Field;
     title: VxeColumnPropTypes.Title;
     width: VxeColumnPropTypes.Width;
     minWidth: VxeColumnPropTypes.MinWidth;
@@ -2136,6 +2139,10 @@ export namespace VxeTableDefines {
     params: VxeColumnPropTypes.Params;
     slots: VxeColumnPropTypes.Slots;
 
+    /**
+     * 以下内部属性
+     * 内部属性随时都会调整，不应该被使用
+     */
     id: string;
     parentId: string;
     level: number;

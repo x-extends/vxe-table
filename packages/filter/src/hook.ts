@@ -137,7 +137,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
        * @param {Event} evnt 事件
        */
       confirmFilterEvent (evnt: Event) {
-        const { filterStore, scrollXLoad, scrollYLoad } = reactData
+        const { filterStore, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
         const filterOpts = computeFilterOpts.value
         const { column } = filterStore
         const { property } = column
@@ -154,19 +154,26 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         if (!filterOpts.remote) {
           $xetable.handleTableData(true)
           $xetable.checkSelectionStatus()
-          $xetable.updateFooter()
-          if (scrollXLoad || scrollYLoad) {
-            $xetable.clearScroll()
-            if (scrollYLoad) {
-              $xetable.updateScrollYSpace()
-            }
-          }
         }
         $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
         $xetable.closeFilter()
-        nextTick(() => {
-          $xetable.recalculate()
+        $xetable.updateFooter().then(() => {
+          const { scrollXLoad, scrollYLoad } = reactData
+          if ((oldScrollXLoad || scrollXLoad) || (oldScrollYLoad || scrollYLoad)) {
+            if (oldScrollXLoad || scrollXLoad) {
+              $xetable.updateScrollXSpace()
+            }
+            if (oldScrollYLoad || scrollYLoad) {
+              $xetable.updateScrollYSpace()
+            }
+            return $xetable.refreshScroll()
+          }
+        }).then(() => {
           $xetable.updateCellAreas()
+          return $xetable.recalculate(true)
+        }).then(() => {
+          // 存在滚动行为未结束情况
+          setTimeout(() => $xetable.recalculate(), 50)
         })
       }
     }

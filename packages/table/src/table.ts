@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
+import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../tools/dom'
 import { warnLog, errLog, getLog, getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
@@ -1420,7 +1420,7 @@ export default defineComponent({
             }
           } else if (layout === 'body') {
             const emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
-            if (wrapperElem) {
+            if (isNodeElement(wrapperElem)) {
               if (customMaxHeight) {
                 wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
               } else {
@@ -1434,7 +1434,7 @@ export default defineComponent({
 
             // 如果是固定列
             if (fixedWrapperElem) {
-              if (wrapperElem) {
+              if (isNodeElement(wrapperElem)) {
                 wrapperElem.style.top = `${headerHeight}px`
               }
               fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
@@ -1498,7 +1498,7 @@ export default defineComponent({
             }
             tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
 
-            if (wrapperElem) {
+            if (isNodeElement(wrapperElem)) {
               // 如果是固定列
               if (fixedWrapperElem) {
                 wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
@@ -2387,11 +2387,29 @@ export default defineComponent({
         })
       },
       /**
-       * 手动处理数据
+       * 手动处理数据，用于手动排序与筛选
        * 对于手动更改了排序、筛选...等条件后需要重新处理数据时可能会用到
        */
       updateData () {
-        return tablePrivateMethods.handleTableData(true).then(tableMethods.updateFooter).then(() => tableMethods.recalculate())
+        const { scrollXLoad, scrollYLoad } = reactData
+        return tablePrivateMethods.handleTableData(true).then(() => {
+          tableMethods.updateFooter()
+          if (scrollXLoad || scrollYLoad) {
+            if (scrollXLoad) {
+              tablePrivateMethods.updateScrollXSpace()
+            }
+            if (scrollYLoad) {
+              tablePrivateMethods.updateScrollYSpace()
+            }
+            return tableMethods.refreshScroll()
+          }
+        }).then(() => {
+          tablePrivateMethods.updateCellAreas()
+          return tableMethods.recalculate(true)
+        }).then(() => {
+          // 存在滚动行为未结束情况
+          setTimeout(() => $xetable.recalculate(), 50)
+        })
       },
       /**
        * 重新加载数据，不会清空表格状态
@@ -2924,16 +2942,22 @@ export default defineComponent({
         const leftBodyElem = leftBody ? leftBody.$el as HTMLDivElement : null
         const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-        // 还原滚动条位置
-        if (lastScrollLeft || lastScrollTop) {
-          return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop)
-        }
-        // 重置
-        setScrollTop(tableBodyElem, lastScrollTop)
-        setScrollTop(leftBodyElem, lastScrollTop)
-        setScrollTop(rightBodyElem, lastScrollTop)
-        setScrollLeft(tableFooterElem, lastScrollLeft)
-        return nextTick()
+        return new Promise(resolve => {
+          // 还原滚动条位置
+          if (lastScrollLeft || lastScrollTop) {
+            return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve).then(() => {
+              // 存在滚动行为未结束情况
+              setTimeout(resolve, 30)
+            })
+          }
+          // 重置
+          setScrollTop(tableBodyElem, lastScrollTop)
+          setScrollTop(leftBodyElem, lastScrollTop)
+          setScrollTop(rightBodyElem, lastScrollTop)
+          setScrollLeft(tableFooterElem, lastScrollLeft)
+          // 存在滚动行为未结束情况
+          setTimeout(resolve, 30)
+        })
       },
       /**
        * 计算单元格列宽，动态分配可用剩余空间

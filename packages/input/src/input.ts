@@ -5,6 +5,8 @@ import { useSize } from '../../hooks/size'
 import { getFuncText, getLastZIndex, nextZIndex } from '../../tools/utils'
 import { hasClass, getAbsolutePos, getEventTargetNode } from '../../tools/dom'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
+import { toStringTimeDate, getDateQuarter } from './date'
+import { handleNumber, toFloatValueFixed } from './number'
 
 import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef } from '../../../types/all'
 
@@ -51,33 +53,6 @@ interface DateHourMinuteSecondItem {
 const yearSize = 20
 const monthSize = 20
 const quarterSize = 8
-
-function toStringTimeDate (str: VxeInputPropTypes.ModelValue) {
-  if (str) {
-    const rest = new Date()
-    let h = 0
-    let m = 0
-    let s = 0
-    if (XEUtils.isDate(str)) {
-      h = str.getHours()
-      m = str.getMinutes()
-      s = str.getSeconds()
-    } else {
-      str = XEUtils.toValueString(str)
-      const parses = str.match(/^(\d{1,2})(:(\d{1,2}))?(:(\d{1,2}))?/)
-      if (parses) {
-        h = XEUtils.toNumber(parses[1])
-        m = XEUtils.toNumber(parses[3])
-        s = XEUtils.toNumber(parses[5])
-      }
-    }
-    rest.setHours(h)
-    rest.setMinutes(m)
-    rest.setSeconds(s)
-    return rest
-  }
-  return new Date('')
-}
 
 export default defineComponent({
   name: 'VxeInput',
@@ -410,18 +385,6 @@ export default defineComponent({
       return XEUtils.chunk(yearList, 4)
     })
 
-    const getDateQuarter = (date: Date) => {
-      const month = date.getMonth()
-      if (month < 3) {
-        return 1
-      } else if (month < 6) {
-        return 2
-      } else if (month < 9) {
-        return 3
-      }
-      return 4
-    }
-
     const computeQuarterList = computed(() => {
       const { selectMonth, currentDate } = reactData
       const quarters: DateQuarterItem[] = []
@@ -609,18 +572,7 @@ export default defineComponent({
       return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
     })
 
-    const handleNumber = (val: string | number) => {
-      return XEUtils.isString(val) ? val.replace(/,/g, '') : val
-    }
-
-    function toFloatValueFixed (inputValue: string | number, digitsValue: number) {
-      if (/^-/.test('' + inputValue)) {
-        return XEUtils.toFixed(XEUtils.ceil(inputValue, digitsValue), digitsValue)
-      }
-      return XEUtils.toFixed(XEUtils.floor(inputValue, digitsValue), digitsValue)
-    }
-
-    function getNumberValue (val: any) {
+    const getNumberValue = (val: any) => {
       const { type, exponential } = props
       const inpMaxlength = computeInpMaxlength.value
       const digitsValue = computeDigitsValue.value
