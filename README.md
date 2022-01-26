@@ -1,7 +1,5 @@
 # vxe-table
 
-简体中文 | [English](README.en.md)
-
 [![star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
 [![npm build](https://travis-ci.com/x-extends/vxe-table.svg?branch=master)](https://travis-ci.com/x-extends/vxe-table)
@@ -142,8 +140,7 @@ export default {
 ## 文档
 
 💡 [使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
-👉 [查看演示](https://xuliangzhan_admin.gitee.io/vxe-table/) [👀备用地址2](https://x-extends.github.io/vxe-table/#/table/base/basic)  
-👉 [查看文档](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api) [👀备用地址2](https://x-extends.github.io/vxe-table/#/table/api)
+👉 [官网地址](https://vxetable.cn)  
 
 ## License
 
