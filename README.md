@@ -131,8 +131,7 @@ export default {
 
 ## 文档
 
-💡 [使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
-👉 [官网地址](https://vxetable.cn)  
+👉 [查看文档](https://vxetable.cn)  
 
 ## License
 
