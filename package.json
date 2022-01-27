@@ -66,11 +66,11 @@
     "vuex": "^3.4.0",
     "xe-ajax": "^4.0.5",
     "xe-clipboard": "^1.10.1",
-    "xe-utils": "^3.5.2"
+    "xe-utils": "^3.5.3"
   },
   "peerDependencies": {
     "vue": "^2.6.0",
-    "xe-utils": "^3.5.2"
+    "xe-utils": "^3.5.0"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",

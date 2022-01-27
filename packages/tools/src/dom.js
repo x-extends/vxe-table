@@ -80,12 +80,12 @@ export function setScrollLeft (elem, scrollLeft) {
   }
 }
 
-export function setScrollLeftAndTop (elem, scrollLeft, scrollTop) {
-  if (elem) {
-    elem.scrollLeft = scrollLeft
-    elem.scrollTop = scrollTop
-  }
-}
+// export function setScrollLeftAndTop (elem, scrollLeft, scrollTop) {
+//   if (elem) {
+//     elem.scrollLeft = scrollLeft
+//     elem.scrollTop = scrollTop
+//   }
+// }
 
 function isNodeElement (elem) {
   return elem && elem.nodeType === 1

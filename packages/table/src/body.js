@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
 import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener } from './util'
-import { browse, setScrollLeftAndTop } from '../../tools/src/dom'
+import { setScrollTop } from '../../tools/src/dom'
 
 const renderType = 'body'
 
@@ -421,21 +421,18 @@ function syncBodyScroll (_vm, fixedType, scrollTop, elem1, elem2) {
       restoreScrollListener(elem2)
       // 检查滚动条是的同步
       let targetTop = bodyElem.scrollTop
-      let targetLeft = bodyElem.scrollLeft
       if (fixedType === 'left') {
         if (leftElem) {
           targetTop = leftElem.scrollTop
-          targetLeft = leftElem.scrollLeft
         }
       } else if (fixedType === 'right') {
         if (rightElem) {
           targetTop = rightElem.scrollTop
-          targetLeft = rightElem.scrollLeft
         }
       }
-      setScrollLeftAndTop(bodyElem, targetLeft, targetTop)
-      setScrollLeftAndTop(leftElem, targetLeft, targetTop)
-      setScrollLeftAndTop(rightElem, targetLeft, targetTop)
+      setScrollTop(bodyElem, targetTop)
+      setScrollTop(leftElem, targetTop)
+      setScrollTop(rightElem, targetTop)
     }, 300)
   }
 }
@@ -749,8 +746,8 @@ export default {
       const { tableBody } = $refs
       const bodyElem = tableBody.$el
 
-      const deltaTop = browse.firefox ? deltaY * 40 : deltaY
-      const deltaLeft = browse.firefox ? deltaX * 40 : deltaX
+      const deltaTop = deltaY
+      const deltaLeft = deltaX
       const isTopWheel = deltaTop < 0
       // 如果滚动位置已经是顶部或底部，则不需要触发
       if (isTopWheel ? scrollBodyElem.scrollTop <= 0 : scrollBodyElem.scrollTop >= scrollBodyElem.scrollHeight - scrollBodyElem.clientHeight) {
