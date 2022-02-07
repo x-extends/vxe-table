@@ -25,9 +25,9 @@ export interface VxeTooltipPrivateRef extends TooltipPrivateRef { }
 export interface TooltipReactData {
   target: HTMLElement | null;
   isUpdate: boolean;
-  isHover: boolean;
   visible: boolean;
   message: string | number | undefined,
+  tipActive: boolean;
   tipTarget: HTMLElement | null;
   tipZindex: number;
   tipStore: {
@@ -46,6 +46,7 @@ export namespace VxeTooltipPropTypes {
   export type ZIndex = string | number;
   export type IsArrow = boolean;
   export type Enterable = boolean;
+  export type EnterDelay = number;
   export type LeaveDelay = number;
   export type LeaveMethod = (params: { $event: MouseEvent }) => boolean;
 }
@@ -59,6 +60,7 @@ export type VxeTooltipProps = {
   zIndex?: VxeTooltipPropTypes.ZIndex;
   isArrow?: VxeTooltipPropTypes.IsArrow;
   enterable?: VxeTooltipPropTypes.Enterable;
+  enterDelay?: VxeTooltipPropTypes.EnterDelay;
   leaveDelay?: VxeTooltipPropTypes.LeaveDelay;
   leaveMethod?: VxeTooltipPropTypes.LeaveMethod;
 }
@@ -70,13 +72,15 @@ export interface TooltipMethods {
    * @param target 自定义目标元素
    * @param message 自定义消息
    */
-  open(target?: any, message?: VxeTooltipPropTypes.Content): Promise<any>;
-  toVisible(target?: HTMLElement, message?: VxeTooltipPropTypes.Content): Promise<any>;
+  open(target?: any, message?: VxeTooltipPropTypes.Content): Promise<void>;
+  toVisible(target?: HTMLElement, message?: VxeTooltipPropTypes.Content): Promise<void>;
   /**
    * 隐藏
    */
   close(): Promise<any>;
   updatePlacement(): Promise<any>;
+  isActived(): boolean;
+  setActived(actived: boolean): void;
 }
 export interface VxeTooltipMethods extends TooltipMethods { }
 

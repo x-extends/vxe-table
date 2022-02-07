@@ -361,20 +361,20 @@ export default defineComponent({
 
     let computeTooltipOpts = ref() as ComputedRef<VxeTablePropTypes.TooltipOpts>
 
-    const handleTooltipLeaveMethod = () => {
-      const tooltipOpts = computeTooltipOpts.value
-      setTimeout(() => {
-        if (!internalData.tooltipActive) {
-          tableMethods.closeTooltip()
-        }
-      }, tooltipOpts.leaveDelay)
-      return false
-    }
+    // const handleTooltipLeaveMethod = () => {
+    //   const tooltipOpts = computeTooltipOpts.value
+    //   setTimeout(() => {
+    //     if (!internalData.tooltipActive) {
+    //       tableMethods.closeTooltip()
+    //     }
+    //   }, tooltipOpts.leaveDelay)
+    //   return false
+    // }
 
     computeTooltipOpts = computed(() => {
       const opts: VxeTablePropTypes.TooltipOpts = Object.assign({ leaveDelay: 300 }, GlobalConfig.table.tooltipConfig, props.tooltipConfig)
       if (opts.enterable) {
-        opts.leaveMethod = handleTooltipLeaveMethod
+        // opts.leaveMethod = handleTooltipLeaveMethod
       }
       return opts
     })
@@ -4460,10 +4460,17 @@ export default defineComponent({
       tableMethods.recalculate(true)
     }
 
-    const handleTargetEnterEvent = () => {
+    const handleTargetEnterEvent = (isClear: boolean) => {
+      const $tooltip = refTooltip.value
       clearTimeout(internalData.tooltipTimeout)
       internalData.tooltipActive = true
-      tableMethods.closeTooltip()
+      if (isClear) {
+        tableMethods.closeTooltip()
+      } else {
+        if ($tooltip) {
+          $tooltip.setActived(true)
+        }
+      }
     }
 
     /**
@@ -4938,7 +4945,7 @@ export default defineComponent({
           const { tooltipStore } = internalData
           const $tooltip = refTooltip.value
           const content = getFuncText(titleHelp.content || titleHelp.message)
-          handleTargetEnterEvent()
+          handleTargetEnterEvent(true)
           tooltipStore.visible = true
           if ($tooltip) {
             $tooltip.open(evnt.currentTarget, content)
@@ -4952,7 +4959,7 @@ export default defineComponent({
         const { tooltipStore } = internalData
         const { column } = params
         const titleElem = evnt.currentTarget
-        handleTargetEnterEvent()
+        handleTargetEnterEvent(true)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           handleTooltip(evnt, titleElem, titleElem, null, params)
         }
@@ -4968,7 +4975,7 @@ export default defineComponent({
         const { actived } = editStore
         const { row, column } = params
         const cell = evnt.currentTarget as HTMLTableCellElement
-        handleTargetEnterEvent()
+        handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row !== row)
         if (isEnableConf(editConfig)) {
           if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
             return
@@ -4995,18 +5002,22 @@ export default defineComponent({
         const { column } = params
         const { tooltipStore } = internalData
         const cell = evnt.currentTarget as HTMLTableCellElement
-        handleTargetEnterEvent()
+        handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') || cell.children[0], null, params)
         }
       },
       handleTargetLeaveEvent () {
         const tooltipOpts = computeTooltipOpts.value
+        let $tooltip = refTooltip.value
         internalData.tooltipActive = false
+        if ($tooltip) {
+          $tooltip.setActived(false)
+        }
         if (tooltipOpts.enterable) {
           internalData.tooltipTimeout = setTimeout(() => {
-            const $tooltip = refTooltip.value
-            if ($tooltip && !$tooltip.reactData.isHover) {
+            $tooltip = refTooltip.value
+            if ($tooltip && !$tooltip.isActived()) {
               tableMethods.closeTooltip()
             }
           }, tooltipOpts.leaveDelay)

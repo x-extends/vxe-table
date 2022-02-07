@@ -4,7 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { errLog, getFuncText, isEnableConf, eqEmptyValue } from '../../tools/utils'
 import { scrollToView } from '../../tools/dom'
-import { createItem } from './util'
+import { createItem, handleFieldOrItem } from './util'
 import { renderTitle } from './render'
 import { useSize } from '../../hooks/size'
 
@@ -208,6 +208,11 @@ export default defineComponent({
       return itemList
     }
 
+    const getItemByField = (field: string) => {
+      const rest = XEUtils.findTree(reactData.formItems, item => item.field === field, { children: 'children' })
+      return rest ? rest.item : null
+    }
+
     const getCollapseStatus = () => {
       return reactData.collapseAll
     }
@@ -226,15 +231,14 @@ export default defineComponent({
       formMethods.dispatchEvent('collapse', { status, collapse: status, data: props.data }, evnt)
     }
 
-    const clearValidate = (field?: string) => {
-      const itemList = getItems()
-      if (field) {
-        const item = itemList.find((item) => item.field === field)
+    const clearValidate = (fieldOrItem?: VxeFormItemPropTypes.Field | VxeFormDefines.ItemInfo) => {
+      if (fieldOrItem) {
+        const item = handleFieldOrItem($xeform, fieldOrItem)
         if (item) {
           item.showError = false
         }
       } else {
-        itemList.forEach((item) => {
+        getItems().forEach((item) => {
           item.showError = false
         })
       }
@@ -267,10 +271,9 @@ export default defineComponent({
     }
 
     const handleFocus = (fields: string[]) => {
-      const itemList = getItems()
       const el = refElem.value
       fields.some((property, index) => {
-        const item = itemList.find((item) => item.field === property)
+        const item = getItemByField(property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
@@ -428,8 +431,9 @@ export default defineComponent({
       return beginValidate(getItems(), '', callback)
     }
 
-    const validateField = (field: VxeFormItemPropTypes.Field, callback: any) => {
-      return beginValidate(getItems().filter(item => item.field === field), '', callback)
+    const validateField = (fieldOrItem: VxeFormItemPropTypes.Field | VxeFormDefines.ItemInfo, callback: any) => {
+      const item = handleFieldOrItem($xeform, fieldOrItem)
+      return beginValidate(item ? [item] : [], '', callback)
     }
 
     const submitEvent = (evnt: Event) => {
@@ -484,11 +488,15 @@ export default defineComponent({
 
     const handleTargetLeaveEvent = () => {
       const tooltipOpts = computeTooltipOpts.value
+      let $tooltip = refTooltip.value
       internalData.tooltipActive = false
+      if ($tooltip) {
+        $tooltip.setActived(false)
+      }
       if (tooltipOpts.enterable) {
         internalData.tooltipTimeout = setTimeout(() => {
-          const $tooltip = refTooltip.value
-          if ($tooltip && !$tooltip.reactData.isHover) {
+          $tooltip = refTooltip.value
+          if ($tooltip && !$tooltip.isActived()) {
             closeTooltip()
           }
         }, tooltipOpts.leaveDelay)
@@ -510,8 +518,7 @@ export default defineComponent({
             clearValidate(property)
           })
           .catch(({ rule }) => {
-            const itemList = getItems()
-            const item = itemList.find((item) => item.field === property)
+            const item = getItemByField(property)
             if (item) {
               item.showError = true
               item.errRule = rule
@@ -642,6 +649,7 @@ export default defineComponent({
       updateStatus,
       toggleCollapse,
       getItems,
+      getItemByField,
       closeTooltip
     }
 

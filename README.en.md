@@ -151,9 +151,7 @@ export default defineComponent({
 
 ## Docs
 
-💡 [User guide](https://github.com/xuliangzhan/vxe-table-demo)  
-👉 [View example](https://x-extends.github.io/vxe-table/#/table/base/basic)  
-👉 [View API](https://x-extends.github.io/vxe-table/#/table/api)
+👉 [Document](https://vxetable.cn)  
 
 ## Run the project
 

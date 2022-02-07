@@ -2,7 +2,7 @@ import { watch } from 'vue'
 import XEUtils from 'xe-utils'
 import { ItemInfo } from './itemInfo'
 
-import { VxeFormConstructor } from '../../../types/all'
+import { VxeFormConstructor, VxeFormDefines } from '../../../types/all'
 
 export interface XEFormItemProvide {
   formItem: ItemInfo;
@@ -14,6 +14,13 @@ export function isFormItem (item: any): item is ItemInfo {
 
 export function createItem ($xeform: VxeFormConstructor, _vm: any) {
   return isFormItem(_vm) ? _vm : new ItemInfo($xeform, _vm)
+}
+
+export const handleFieldOrItem = ($xeform: VxeFormConstructor, fieldOrItem: string | VxeFormDefines.ItemInfo) => {
+  if (fieldOrItem) {
+    return XEUtils.isString(fieldOrItem) ? $xeform.getItemByField(fieldOrItem) : fieldOrItem
+  }
+  return null
 }
 
 export function watchItem (props: any, formItem: ItemInfo) {

@@ -7,6 +7,9 @@ VXETable.setup({
   table: {
     exportConfig: {
       types: ['csv', 'html', 'xml', 'txt']
+    },
+    scrollY: {
+      mode: 'wheel'
     }
   },
   translate: (key: any) => key && key.indexOf('app.') > -1 ? i18n.global.t(key) : key,

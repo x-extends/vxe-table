@@ -154,9 +154,7 @@ export default defineComponent({
 
 ## 檔案
 
-💡 [使用指南](https://github.com/xuliangzhan/vxe-table-demo)  
-👉 [查看檔案](https://xuliangzhan_admin.gitee.io/vxe-table/) [👀備用地址1](https://x-extends.github.io/vxe-table/#/table/base/basic)  
-👉 [查看檔案](https://xuliangzhan_admin.gitee.io/vxe-table/#/table/api) [👀備用地址1](https://x-extends.github.io/vxe-table/#/table/api)
+👉 [查看檔案](https://vxetable.cn)  
 
 ## 運行項目
 

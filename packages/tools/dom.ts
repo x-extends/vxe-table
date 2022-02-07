@@ -89,12 +89,12 @@ export function setScrollLeft (elem: HTMLElement | null, scrollLeft: number) {
   }
 }
 
-export function setScrollLeftAndTop (elem: HTMLElement | null, scrollLeft: number, scrollTop: number) {
-  if (elem) {
-    elem.scrollLeft = scrollLeft
-    elem.scrollTop = scrollTop
-  }
-}
+// export function setScrollLeftAndTop (elem: HTMLElement | null, scrollLeft: number, scrollTop: number) {
+//   if (elem) {
+//     elem.scrollLeft = scrollLeft
+//     elem.scrollTop = scrollTop
+//   }
+// }
 
 export function updateCellTitle (overflowElem: any, column: any) {
   const content = column.type === 'html' ? overflowElem.innerText : overflowElem.textContent

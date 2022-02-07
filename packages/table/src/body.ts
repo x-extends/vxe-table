@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { mergeBodyMethod, getRowid, getPropClass, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
-import { browse, updateCellTitle, setScrollLeftAndTop } from '../../tools/dom'
+import { updateCellTitle, setScrollTop } from '../../tools/dom'
 import { isEnableConf } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
@@ -440,21 +440,18 @@ export default defineComponent({
           restoreScrollListener(elem2)
           // 检查滚动条是的同步
           let targetTop = bodyElem.scrollTop
-          let targetLeft = bodyElem.scrollLeft
           if (fixedType === 'left') {
             if (leftElem) {
               targetTop = leftElem.scrollTop
-              targetLeft = leftElem.scrollLeft
             }
           } else if (fixedType === 'right') {
             if (rightElem) {
               targetTop = rightElem.scrollTop
-              targetLeft = rightElem.scrollLeft
             }
           }
-          setScrollLeftAndTop(bodyElem, targetLeft, targetTop)
-          setScrollLeftAndTop(leftElem, targetLeft, targetTop)
-          setScrollLeftAndTop(rightElem, targetLeft, targetTop)
+          setScrollTop(bodyElem, targetTop)
+          setScrollTop(leftElem, targetTop)
+          setScrollTop(rightElem, targetTop)
         }, 300)
       }
     }
@@ -616,8 +613,8 @@ export default defineComponent({
       const scrollBodyElem = refElem.value
       const bodyElem = tableBody.$el as HTMLDivElement
 
-      const deltaTop = browse.firefox ? deltaY * 40 : deltaY
-      const deltaLeft = browse.firefox ? deltaX * 40 : deltaX
+      const deltaTop = deltaY
+      const deltaLeft = deltaX
       const isTopWheel = deltaTop < 0
       // 如果滚动位置已经是顶部或底部，则不需要触发
       if (isTopWheel ? scrollBodyElem.scrollTop <= 0 : scrollBodyElem.scrollTop >= scrollBodyElem.scrollHeight - scrollBodyElem.clientHeight) {
@@ -731,7 +728,7 @@ export default defineComponent({
         ref: refElem,
         class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
         xid: xID,
-        ...(scrollYLoad && sYOpts.mode === 'wheel' ? { onWheel: wheelEvent } : {})
+        ...(sYOpts.mode === 'wheel' ? { onWheel: wheelEvent } : {})
       }, [
         fixedType ? createCommentVNode() : h('div', {
           ref: refBodyXSpace,
