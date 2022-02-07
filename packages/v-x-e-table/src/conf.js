@@ -228,6 +228,7 @@ export default {
     // size: null,
     trigger: 'hover',
     theme: 'dark',
+    enterDelay: 500,
     leaveDelay: 300
   },
   pager: {

@@ -49,6 +49,13 @@ export function getItemConfig ($xeform, _vm, options) {
   return isItem(_vm) ? _vm : new ItemConfig($xeform, _vm, options)
 }
 
+export const handleFieldOrItem = ($xeform, fieldOrItem) => {
+  if (fieldOrItem) {
+    return XEUtils.isString(fieldOrItem) ? $xeform.getItemByField(fieldOrItem) : fieldOrItem
+  }
+  return null
+}
+
 export function createItem ($xeform, _vm) {
   return getItemConfig($xeform, _vm)
 }

@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { createItem } from './util'
+import { createItem, handleFieldOrItem } from './util'
 import { renderTitle } from './render'
 import { eqEmptyValue } from '../../tools/src/utils'
 import { browse } from '../../tools/src/dom'
@@ -325,6 +325,10 @@ export default {
       }, { children: 'children' })
       return itemList
     },
+    getItemByField (field) {
+      const rest = XEUtils.findTree(this.formItems, item => item.field === field, { children: 'children' })
+      return rest ? rest.item : null
+    },
     toggleCollapse () {
       const status = !this.collapseAll
       this.collapseAll = status
@@ -416,11 +420,15 @@ export default {
     },
     handleTargetLeaveEvent () {
       const { tooltipOpts } = this
+      let $tooltip = this.$refs.tooltip
       this.tooltipActive = false
+      if ($tooltip) {
+        $tooltip.setActived(false)
+      }
       if (tooltipOpts.enterable) {
         this.tooltipTimeout = setTimeout(() => {
-          const $tooltip = this.$refs.tooltip
-          if ($tooltip && !$tooltip.isHover) {
+          $tooltip = this.$refs.tooltip
+          if ($tooltip && !$tooltip.isActived()) {
             this.closeTooltip()
           }
         }, tooltipOpts.leaveDelay)
@@ -428,15 +436,14 @@ export default {
         this.closeTooltip()
       }
     },
-    clearValidate (field) {
-      const itemList = this.getItems()
-      if (field) {
-        const item = itemList.find(item => item.field === field)
+    clearValidate (fieldOrItem) {
+      if (fieldOrItem) {
+        const item = handleFieldOrItem(this, fieldOrItem)
         if (item) {
           item.showError = false
         }
       } else {
-        itemList.forEach(item => {
+        this.getItems().forEach(item => {
           item.showError = false
         })
       }
@@ -446,8 +453,9 @@ export default {
       this.clearValidate()
       return this.beginValidate(this.getItems(), '', callback)
     },
-    validateField (field, callback) {
-      return this.beginValidate(this.getItems().filter(item => item.field === field), '', callback)
+    validateField (fieldOrItem, callback) {
+      const item = handleFieldOrItem(this, fieldOrItem)
+      return this.beginValidate(item ? [item] : [], '', callback)
     },
     beginValidate (itemList, type, callback) {
       const { data, rules: formRules, validOpts } = this
@@ -480,7 +488,7 @@ export default {
             callback()
           }
         }).catch(() => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.showErrTime = setTimeout(() => {
               itemList.forEach(item => {
                 if (item.errRule) {
@@ -497,7 +505,7 @@ export default {
               callback(validRest)
               resolve()
             } else {
-              reject(validRest)
+              resolve(validRest)
             }
           })
         })
@@ -574,9 +582,8 @@ export default {
     },
     handleFocus (fields) {
       const { $el } = this
-      const itemList = this.getItems()
       fields.some((property, index) => {
-        const item = itemList.find(item => item.field === property)
+        const item = this.getItemByField(property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
@@ -619,8 +626,7 @@ export default {
             this.clearValidate(property)
           })
           .catch(({ rule }) => {
-            const itemList = this.getItems()
-            const item = itemList.find(item => item.field === property)
+            const item = this.getItemByField(property)
             if (item) {
               item.showError = true
               item.errRule = rule

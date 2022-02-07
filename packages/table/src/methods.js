@@ -2558,18 +2558,29 @@ const Methods = {
     }, tooltipOpts.leaveDelay)
     return false
   },
-  handleTargetEnterEvent () {
+  handleTargetEnterEvent (isClear) {
+    const $tooltip = this.$refs.tooltip
     clearTimeout(this.tooltipTimeout)
     this.tooltipActive = true
-    this.closeTooltip()
+    if (isClear) {
+      this.closeTooltip()
+    } else {
+      if ($tooltip) {
+        $tooltip.setActived(true)
+      }
+    }
   },
   handleTargetLeaveEvent () {
     const tooltipOpts = this.tooltipOpts
+    let $tooltip = this.$refs.tooltip
     this.tooltipActive = false
+    if ($tooltip) {
+      $tooltip.setActived(false)
+    }
     if (tooltipOpts.enterable) {
       this.tooltipTimeout = setTimeout(() => {
-        const tooltip = this.$refs.tooltip
-        if (tooltip && !tooltip.isHover) {
+        $tooltip = this.$refs.tooltip
+        if ($tooltip && !$tooltip.isActived()) {
           this.closeTooltip()
         }
       }, tooltipOpts.leaveDelay)
@@ -2582,12 +2593,12 @@ const Methods = {
     const { titleHelp } = column
     if (titleHelp.content || titleHelp.message) {
       const { $refs, tooltipStore } = this
-      const tooltip = $refs.tooltip
+      const $tooltip = $refs.tooltip
       const content = UtilTools.getFuncText(titleHelp.content || titleHelp.message)
-      this.handleTargetEnterEvent()
+      this.handleTargetEnterEvent(true)
       tooltipStore.visible = true
-      if (tooltip) {
-        tooltip.open(evnt.currentTarget, content)
+      if ($tooltip) {
+        $tooltip.open(evnt.currentTarget, content)
       }
     }
   },
@@ -2598,7 +2609,7 @@ const Methods = {
     const { tooltipStore } = this
     const { column } = params
     const titleElem = evnt.currentTarget
-    this.handleTargetEnterEvent()
+    this.handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row)
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       this.handleTooltip(evnt, titleElem, titleElem, null, params)
     }
@@ -2611,7 +2622,7 @@ const Methods = {
     const { actived } = editStore
     const { row, column } = params
     const cell = evnt.currentTarget
-    this.handleTargetEnterEvent()
+    this.handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row !== row)
     if (isEnableConf(editConfig)) {
       if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
         return
@@ -2638,7 +2649,7 @@ const Methods = {
     const { column } = params
     const { tooltipStore } = this
     const cell = evnt.currentTarget
-    this.handleTargetEnterEvent()
+    this.handleTargetEnterEvent(true)
     if (tooltipStore.column !== column || !tooltipStore.visible) {
       this.handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') || cell.children[0], null, params)
     }

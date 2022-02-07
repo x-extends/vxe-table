@@ -137,6 +137,11 @@ export default {
       default: null
     }
   },
+  data () {
+    return {
+      itemConfig: null
+    }
+  },
   watch,
   mounted () {
     assemItem(this)

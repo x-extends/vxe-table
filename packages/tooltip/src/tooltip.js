@@ -26,6 +26,20 @@ function updateTipStyle (_vm) {
   }
 }
 
+function showTip (_vm) {
+  const { $el, tipStore, zIndex } = _vm
+  const parentNode = $el.parentNode
+  if (!parentNode) {
+    document.body.appendChild($el)
+  }
+  _vm.updateValue(true)
+  _vm.updateZindex()
+  tipStore.placement = 'top'
+  tipStore.style = { width: 'auto', left: 0, top: 0, zIndex: zIndex || _vm.tipZindex }
+  tipStore.arrowStyle = { left: '50%' }
+  return _vm.updatePlacement()
+}
+
 export default {
   name: 'VxeTooltip',
   mixins: [vSize],
@@ -38,15 +52,16 @@ export default {
     zIndex: [String, Number],
     isArrow: { type: Boolean, default: true },
     enterable: Boolean,
+    enterDelay: { type: Number, default: () => GlobalConfig.tooltip.enterDelay },
     leaveDelay: { type: Number, default: () => GlobalConfig.tooltip.leaveDelay },
     leaveMethod: Function
   },
   data () {
     return {
       isUpdate: false,
-      isHover: false,
       visible: false,
       message: '',
+      tipActive: false,
       tipTarget: null,
       tipZindex: 0,
       tipStore: {
@@ -66,6 +81,13 @@ export default {
       }
       this.isUpdate = false
     }
+  },
+  created () {
+    this.showDelayTip = XEUtils.debounce(() => {
+      if (this.tipActive) {
+        showTip(this)
+      }
+    }, this.enterDelay, { leading: false, trailing: true })
   },
   mounted () {
     const { $el, trigger, content, value } = this
@@ -111,7 +133,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, vSize, theme, message, isHover, isArrow, visible, tipStore, enterable } = this
+    const { $scopedSlots, vSize, theme, message, tipActive, isArrow, visible, tipStore, enterable } = this
     let on
     if (enterable) {
       on = {
@@ -126,7 +148,7 @@ export default {
         'is--enterable': enterable,
         'is--visible': visible,
         'is--arrow': isArrow,
-        'is--hover': isHover
+        'is--actived': tipActive
       }],
       style: tipStore.style,
       ref: 'tipWrapper',
@@ -147,15 +169,16 @@ export default {
     },
     close () {
       this.tipTarget = null
+      this.tipActive = false
       Object.assign(this.tipStore, {
         style: {},
         placement: '',
         arrowStyle: null
       })
-      this.update(false)
+      this.updateValue(false)
       return this.$nextTick()
     },
-    update (value) {
+    updateValue (value) {
       if (value !== this.visible) {
         this.visible = value
         this.isUpdate = true
@@ -170,23 +193,18 @@ export default {
       }
     },
     toVisible (target, message) {
-      this.targetActive = true
       if (target) {
-        const { $el, tipStore, zIndex } = this
-        const parentNode = $el.parentNode
-        if (!parentNode) {
-          document.body.appendChild($el)
-        }
+        const { trigger, enterDelay } = this
+        this.tipActive = true
+        this.tipTarget = target
         if (message) {
           this.message = message
         }
-        this.tipTarget = target
-        this.update(true)
-        this.updateZindex()
-        tipStore.placement = 'top'
-        tipStore.style = { width: 'auto', left: 0, top: 0, zIndex: zIndex || this.tipZindex }
-        tipStore.arrowStyle = { left: '50%' }
-        return this.updatePlacement()
+        if (enterDelay && trigger === 'hover') {
+          this.showDelayTip()
+        } else {
+          return showTip(this)
+        }
       }
       return this.$nextTick()
     },
@@ -199,6 +217,12 @@ export default {
         }
       })
     },
+    isActived () {
+      return this.tipActive
+    },
+    setActived (actived) {
+      this.tipActive = !!actived
+    },
     clickEvent () {
       this[this.visible ? 'close' : 'open']()
     },
@@ -207,10 +231,10 @@ export default {
     },
     targetMouseleaveEvent () {
       const { trigger, enterable, leaveDelay } = this
-      this.targetActive = false
+      this.tipActive = false
       if (enterable && trigger === 'hover') {
         setTimeout(() => {
-          if (!this.isHover) {
+          if (!this.tipActive) {
             this.close()
           }
         }, leaveDelay)
@@ -219,15 +243,15 @@ export default {
       }
     },
     wrapperMouseenterEvent () {
-      this.isHover = true
+      this.tipActive = true
     },
     wrapperMouseleaveEvent (evnt) {
       const { leaveMethod, trigger, enterable, leaveDelay } = this
-      this.isHover = false
+      this.tipActive = false
       if (!leaveMethod || leaveMethod({ $event: evnt }) !== false) {
         if (enterable && trigger === 'hover') {
           setTimeout(() => {
-            if (!this.targetActive) {
+            if (!this.tipActive) {
               this.close()
             }
           }, leaveDelay)
