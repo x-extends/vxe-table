@@ -7,6 +7,7 @@ function resolve (dir) {
 process.env.VUE_APP_VXE_TABLE_ENV = 'development'
 
 module.exports = {
+  productionSourceMap: false,
   pages: {
     index: {
       entry: 'examples/main.ts',
