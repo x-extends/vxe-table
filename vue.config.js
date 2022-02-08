@@ -8,6 +8,7 @@ function resolve (dir) {
 process.env[envs.join('_')] = !process || !process.env || !process.env.npm_lifecycle_event || process.env.npm_lifecycle_event.indexOf('lib:dev_pack') === 0 ? 'development' : process.env.NODE_ENV
 
 module.exports = {
+  productionSourceMap: false,
   pages: {
     index: {
       entry: 'examples/main.js',
