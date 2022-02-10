@@ -1,9 +1,11 @@
 const path = require('path')
+const pkg = require('./package.json')
 
 function resolve (dir) {
   return path.join(__dirname, '.', dir)
 }
 
+process.env.VUE_APP_VXE_TABLE_VERSION = pkg.version
 process.env.VUE_APP_VXE_TABLE_ENV = !process || !process.env || !process.env.npm_lifecycle_event || process.env.npm_lifecycle_event.indexOf('lib:dev_pack') === 0 ? 'development' : process.env.NODE_ENV
 
 module.exports = {

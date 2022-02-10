@@ -38,7 +38,15 @@ export type VXETableVersion = 'v1' | 'v2' | 'v3' | 'v4'
 export const v: VXETableVersion
 
 export interface VXETableCore {
+  /**
+   * 已被 version 替换
+   * @deprecated
+   */
   v: VXETableVersion;
+  /**
+   * 版本号
+   */
+  version: string;
   /**
    * 设置全局参数/获取所有参数
    */

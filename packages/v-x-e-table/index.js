@@ -88,6 +88,7 @@ export const v = 'v3'
 
 export const VXETable = {
   v,
+  version: process.env.VUE_APP_VXE_TABLE_VERSION,
   reg,
   use,
   setup,

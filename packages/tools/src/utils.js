@@ -170,7 +170,7 @@ export const UtilTools = {
   warn: outLog('warn'),
   error: outLog('error'),
   getLog (message, args) {
-    return `[vxe-table] ${GlobalConfig.i18n(message, args)}`
+    return `[vxe-table v${process.env.VUE_APP_VXE_TABLE_VERSION}] ${GlobalConfig.i18n(message, args)}`
   },
   getFuncText (content) {
     return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
