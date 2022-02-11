@@ -5,7 +5,7 @@ let zindexIndex = 0
 let lastZindex = 1
 
 export function getLog (message: string, params?: any) {
-  return `[vxe-table] ${GlobalConfig.i18n(message, params)}`
+  return `[vxe-table v${process.env.VUE_APP_VXE_TABLE_VERSION}] ${GlobalConfig.i18n(message, params)}`
 }
 
 function outLog (type: 'log' | 'warn' | 'error') {

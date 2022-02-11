@@ -77,6 +77,7 @@ export const v = 'v4'
 
 export const VXETable = {
   v,
+  version: process.env.VUE_APP_VXE_TABLE_VERSION,
   setup,
   interceptor,
   renderer,
