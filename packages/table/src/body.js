@@ -1,9 +1,9 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import UtilTools, { isEnableConf } from '../../tools/utils'
 import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener } from './util'
-import { setScrollTop } from '../../tools/src/dom'
+import DomTools from '../../tools/dom'
 
 const renderType = 'body'
 
@@ -83,7 +83,8 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
     editStore,
     validStore,
     tooltipConfig,
-    rowOpts
+    rowOpts,
+    columnOpts
   } = $xetable
   const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
@@ -267,7 +268,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
       'col--valid-error': hasValidError,
       'col--current': currentColumn === column
     }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
-    key: columnKey ? column.id : $columnIndex,
+    key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
       height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
@@ -343,7 +344,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
           rowid: rowid
         },
         style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-        key: rowKey || treeConfig ? rowid : $rowIndex,
+        key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         return renderColumn(h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
@@ -413,26 +414,26 @@ function syncBodyScroll (_vm, fixedType, scrollTop, elem1, elem2) {
     }
     clearTimeout(scrollProcessTimeout)
     scrollProcessTimeout = setTimeout(() => {
-      const { tableBody, leftBody, rightBody } = _vm.$refs
-      const bodyElem = tableBody.$el
-      const leftElem = leftBody ? leftBody.$el : null
-      const rightElem = rightBody ? rightBody.$el : null
+      // const { tableBody, leftBody, rightBody } = _vm.$refs
+      // const bodyElem = tableBody.$el
+      // const leftElem = leftBody ? leftBody.$el : null
+      // const rightElem = rightBody ? rightBody.$el : null
       restoreScrollListener(elem1)
       restoreScrollListener(elem2)
       // 检查滚动条是的同步
-      let targetTop = bodyElem.scrollTop
-      if (fixedType === 'left') {
-        if (leftElem) {
-          targetTop = leftElem.scrollTop
-        }
-      } else if (fixedType === 'right') {
-        if (rightElem) {
-          targetTop = rightElem.scrollTop
-        }
-      }
-      setScrollTop(bodyElem, targetTop)
-      setScrollTop(leftElem, targetTop)
-      setScrollTop(rightElem, targetTop)
+      // let targetTop = bodyElem.scrollTop
+      // if (fixedType === 'left') {
+      //   if (leftElem) {
+      //     targetTop = leftElem.scrollTop
+      //   }
+      // } else if (fixedType === 'right') {
+      //   if (rightElem) {
+      //     targetTop = rightElem.scrollTop
+      //   }
+      // }
+      // setScrollTop(bodyElem, targetTop)
+      // setScrollTop(leftElem, targetTop)
+      // setScrollTop(rightElem, targetTop)
     }, 300)
   }
 }

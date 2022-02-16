@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
-import { handleFieldOrColumn } from '../../table/src/util'
+import DomTools from '../../tools/dom'
+import { toFilters, handleFieldOrColumn } from '../../table/src/util'
 import VXETable from '../../v-x-e-table'
 
 export default {
@@ -32,7 +32,7 @@ export default {
     _setFilter (fieldOrColumn, options) {
       const column = handleFieldOrColumn(this, fieldOrColumn)
       if (column && column.filters && options) {
-        column.filters = UtilTools.getFilters(options)
+        column.filters = toFilters(options)
       }
       return this.$nextTick()
     },

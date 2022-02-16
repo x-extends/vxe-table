@@ -1,8 +1,9 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { GlobalEvent, createResizeEvent } from '../../tools'
-import { browse } from '../../tools/src/dom'
+import { createResizeEvent } from '../../tools/resize'
+import { GlobalEvent } from '../../tools/event'
+import { browse } from '../../tools/dom'
 
 export default {
   name: 'VxeList',

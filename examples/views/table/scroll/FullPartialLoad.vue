@@ -28,7 +28,7 @@
       show-header-overflow
       ref="xGrid"
       height="500"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :checkbox-config="{checkField: 'checked', labelField: 'id'}"
       :loading="loading">
     </vxe-grid>

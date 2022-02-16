@@ -1,4 +1,4 @@
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 
 export default {
   name: 'VxeTableContextMenu',
@@ -53,7 +53,7 @@ export default {
             }),
             h('span', {
               class: 'vxe-context-menu--link-content'
-            }, UtilTools.getFuncText(item.name)),
+            }, getFuncText(item.name)),
             h('i', {
               class: ['vxe-context-menu--link-suffix', hasChildMenus ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
             })
@@ -89,7 +89,7 @@ export default {
                 }),
                 h('span', {
                   class: 'vxe-context-menu--link-content'
-                }, UtilTools.getFuncText(child.name))
+                }, getFuncText(child.name))
               ])
             ])
           })) : null

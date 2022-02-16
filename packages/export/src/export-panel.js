@@ -5,7 +5,7 @@ import VxeInput from '../../input/src/input'
 import VxeCheckbox from '../../checkbox/src/checkbox'
 import VxeSelect from '../../select/src/select'
 import VxeOption from '../../select/src/option'
-import { UtilTools } from '../../tools'
+import UtilTools from '../../tools/utils'
 
 export default {
   name: 'VxeExportPanel',

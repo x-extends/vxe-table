@@ -1,7 +1,8 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools } from '../../tools'
+import UtilTools from '../../tools/utils'
+import DomTools from '../../tools/dom'
 
 function updateTipStyle (_vm) {
   const { $el: wrapperElem, tipTarget, tipStore } = _vm

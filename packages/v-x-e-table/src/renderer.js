@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { UtilTools } from '../../tools'
+import UtilTools, { getFuncText } from '../../tools/utils'
+import { warnLog } from '../../tools/log'
 
 const defaultCompProps = { transfer: true }
 
@@ -92,7 +93,7 @@ function getCellLabelVNs (h, renderOpts, params, cellLabel) {
     }, placeholder && isEmptyValue(cellLabel) ? [
       h('span', {
         class: 'vxe-cell--placeholder'
-      }, UtilTools.formatText(UtilTools.getFuncText(placeholder), 1))
+      }, UtilTools.formatText(getFuncText(placeholder), 1))
     ] : UtilTools.formatText(cellLabel, 1))
   ]
 }
@@ -672,7 +673,7 @@ export const renderer = {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           XEUtils.each(options, (val, key) => {
             if (!XEUtils.eqNull(renders[key]) && renders[key] !== val) {
-              UtilTools.warn('vxe.error.coverProp', [`Renderer.${name}`, key])
+              warnLog('vxe.error.coverProp', [`Renderer.${name}`, key])
             }
           })
         }

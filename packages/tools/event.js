@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { browse } from '../../tools/src/dom'
+import { browse } from './dom'
 
 export const EVENT_KEYS = {
   F2: 'F2',
@@ -80,5 +80,3 @@ if (browse.isDoc) {
   window.addEventListener('resize', GlobalEvent.trigger, false)
   window.addEventListener(wheelName, XEUtils.throttle(GlobalEvent.trigger, 100, { leading: true, trailing: false }), false)
 }
-
-export default GlobalEvent

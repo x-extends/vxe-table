@@ -1,6 +1,8 @@
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import UtilTools, { isEnableConf } from '../../tools/utils'
+import DomTools from '../../tools/dom'
 import VXETable from '../../v-x-e-table'
+import { warnLog } from '../../tools/log'
 
 export default {
   methods: {
@@ -104,7 +106,7 @@ export default {
             // 在 v4 中废弃事件 cell-context-menu、header-cell-context-menu、footer-cell-context-menu
             if (this.$listeners[`${typePrefix}cell-context-menu`]) {
               if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                UtilTools.warn('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
+                warnLog('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
               }
               this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
             } else {
@@ -255,7 +257,7 @@ export default {
         // 在 v4 中废弃事件 context-menu-click
         if (this.$listeners['context-menu-click']) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            UtilTools.warn('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
+            warnLog('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
           }
           this.emitEvent('context-menu-click', params, evnt)
         } else {

@@ -123,7 +123,7 @@
     <vxe-table
       border
       highlight-hover-row
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :data="tableData5"
       :checkbox-config="{checkRowKeys: defaultSelecteRows, highlight: true}"
       :radio-config="{labelField: 'name'}">

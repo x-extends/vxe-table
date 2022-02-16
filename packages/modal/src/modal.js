@@ -1,7 +1,10 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools, { getFuncText } from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
+import { errLog } from '../../tools/log'
 
 export const allActivedModals = []
 export const msgQueue = []
@@ -86,7 +89,7 @@ export default {
   },
   created () {
     if (this.storage && !this.id) {
-      UtilTools.error('vxe.error.reqProp', ['modal.id'])
+      errLog('vxe.error.reqProp', ['modal.id'])
     }
   },
   mounted () {
@@ -167,7 +170,7 @@ export default {
         }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : headerSlot.call(this, { $modal: this }, h)) : [
           titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
             class: 'vxe-modal--title'
-          }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
+          }, title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           showZoom ? h('i', {
             class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
             attrs: {
@@ -199,7 +202,7 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : UtilTools.getFuncText(content)),
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : getFuncText(content)),
           !isMsg ? h('div', {
             class: ['vxe-loading', {
               'is--visible': loading

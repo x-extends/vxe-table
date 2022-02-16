@@ -1,5 +1,5 @@
 import Cell from '../../table/src/cell'
-import { UtilTools } from '../../tools'
+import UtilTools from '../../tools/utils'
 
 const props = {
   // 列唯一主键

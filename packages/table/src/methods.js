@@ -2,11 +2,11 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
 import { clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq } from './util'
-import { eqEmptyValue, isEnableConf } from '../../tools/src/utils'
-import { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/src/dom'
+import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
+import DomTools, { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { formats } from '../../v-x-e-table/src/formats'
+import { warnLog, errLog } from '../../tools/log'
 
 const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { calcHeight, hasClass, addClass, removeClass, getEventTargetNode, isNodeElement } = DomTools
@@ -360,23 +360,23 @@ const Methods = {
       if (treeOpts.transform) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (!treeOpts.rowField) {
-            UtilTools.error('vxe.error.reqProp', ['table.tree-config.rowField'])
+            errLog('vxe.error.reqProp', ['table.tree-config.rowField'])
           }
           if (!treeOpts.parentField) {
-            UtilTools.error('vxe.error.reqProp', ['table.tree-config.parentField'])
+            errLog('vxe.error.reqProp', ['table.tree-config.parentField'])
           }
           if (!treeOpts.children) {
-            UtilTools.error('vxe.error.reqProp', ['tree-config.children'])
+            errLog('vxe.error.reqProp', ['tree-config.children'])
           }
           if (!treeOpts.mapChildren) {
-            UtilTools.error('vxe.error.reqProp', ['tree-config.mapChildren'])
+            errLog('vxe.error.reqProp', ['tree-config.mapChildren'])
           }
           if (treeOpts.children === treeOpts.mapChildren) {
-            UtilTools.error('vxe.error.errConflicts', ['tree-config.children', 'tree-config.mapChildren'])
+            errLog('vxe.error.errConflicts', ['tree-config.children', 'tree-config.mapChildren'])
           }
           fullData.forEach(row => {
             if (row[treeOpts.children] && row[treeOpts.children].length) {
-              UtilTools.warn('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+              warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
             }
           })
         }
@@ -413,13 +413,13 @@ const Methods = {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (sYLoad) {
         if (!(this.height || this.maxHeight)) {
-          UtilTools.error('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+          errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
         }
         if (!this.showOverflow) {
-          UtilTools.warn('vxe.error.reqProp', ['table.show-overflow'])
+          warnLog('vxe.error.reqProp', ['table.show-overflow'])
         }
         if (this.spanMethod) {
-          UtilTools.warn('vxe.error.scrollErrProp', ['table.span-method'])
+          warnLog('vxe.error.scrollErrProp', ['table.span-method'])
         }
       }
     }
@@ -520,7 +520,7 @@ const Methods = {
       this.tableData = tableData.slice(0)
     } else {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+        warnLog('vxe.error.reqProp', ['keep-source'])
       }
     }
     return this.$nextTick()
@@ -560,7 +560,7 @@ const Methods = {
     this.handleTableData(true)
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
-        UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+        warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
       }
     }
     return this.$nextTick().then(() => {
@@ -660,7 +660,7 @@ const Methods = {
       if (property) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (fullColumnFieldData[property]) {
-            UtilTools.warn('vxe.error.colRepet', ['field', property])
+            warnLog('vxe.error.colRepet', ['field', property])
           }
         }
         fullColumnFieldData[property] = rest
@@ -671,7 +671,7 @@ const Methods = {
       if (treeNode) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (treeNodeColumn) {
-            UtilTools.warn('vxe.error.colRepet', ['tree-node', treeNode])
+            warnLog('vxe.error.colRepet', ['tree-node', treeNode])
           }
         }
         if (!treeNodeColumn) {
@@ -680,7 +680,7 @@ const Methods = {
       } else if (type === 'expand') {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (expandColumn) {
-            UtilTools.warn('vxe.error.colRepet', ['type', type])
+            warnLog('vxe.error.colRepet', ['type', type])
           }
         }
         if (!expandColumn) {
@@ -690,14 +690,14 @@ const Methods = {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (type === 'checkbox') {
           if (checkboxColumn) {
-            UtilTools.warn('vxe.error.colRepet', ['type', type])
+            warnLog('vxe.error.colRepet', ['type', type])
           }
           if (!checkboxColumn) {
             checkboxColumn = column
           }
         } else if (type === 'radio') {
           if (radioColumn) {
-            UtilTools.warn('vxe.error.colRepet', ['type', type])
+            warnLog('vxe.error.colRepet', ['type', type])
           }
           if (!radioColumn) {
             radioColumn = column
@@ -706,20 +706,20 @@ const Methods = {
       }
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (this.showOverflow && column.showOverflow === false) {
-          UtilTools.warn('vxe.error.errConflicts', [`table.show-overflow=${this.showOverflow}`, `column.show-overflow=${column.showOverflow}`])
+          warnLog('vxe.error.errConflicts', [`table.show-overflow=${this.showOverflow}`, `column.show-overflow=${column.showOverflow}`])
         }
         if (this.showHeaderOverflow && column.showHeaderOverflow === false) {
-          UtilTools.warn('vxe.error.errConflicts', [`table.show-header-overflow=${this.showHeaderOverflow}`, `column.show-header-overflow=${column.showHeaderOverflow}`])
+          warnLog('vxe.error.errConflicts', [`table.show-header-overflow=${this.showHeaderOverflow}`, `column.show-header-overflow=${column.showHeaderOverflow}`])
         }
         if (this.showFooterOverflow && column.showFooterOverflow === false) {
-          UtilTools.warn('vxe.error.errConflicts', [`table.show-footer-overflow=${this.showFooterOverflow}`, `column.show-footer-overflow=${column.showFooterOverflow}`])
+          warnLog('vxe.error.errConflicts', [`table.show-footer-overflow=${this.showFooterOverflow}`, `column.show-footer-overflow=${column.showFooterOverflow}`])
         }
       }
       if (isAllOverflow && column.showOverflow === false) {
         isAllOverflow = false
       }
       if (fullColumnIdData[colid]) {
-        UtilTools.error('vxe.error.colRepet', ['colId', colid])
+        errLog('vxe.error.colRepet', ['colId', colid])
       }
       fullColumnIdData[colid] = rest
       fullColumnMap.set(column, rest)
@@ -736,7 +736,7 @@ const Methods = {
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (expandColumn && this.mouseOpts.area) {
-        UtilTools.error('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+        errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
     }
 
@@ -807,7 +807,7 @@ const Methods = {
   // 在 v3 中废弃
   _getRowIndex (row) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
+      warnLog('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
     }
     return this.getVTRowIndex(row)
   },
@@ -821,7 +821,7 @@ const Methods = {
   // 在 v3 中废弃
   $getRowIndex (row) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
+      warnLog('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
     }
     return this.getVMRowIndex(row)
   },
@@ -842,7 +842,7 @@ const Methods = {
   // 在 v3 中废弃
   _getColumnIndex (column) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
+      warnLog('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
     }
     return this.getVTColumnIndex(column)
   },
@@ -856,7 +856,7 @@ const Methods = {
   // 在 v3 中废弃
   $getColumnIndex (column) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
+      warnLog('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
     }
     return this.getVMColumnIndex(column)
   },
@@ -938,7 +938,7 @@ const Methods = {
     const { keepSource, tableSourceData, treeConfig } = this
     if (!keepSource) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+        warnLog('vxe.error.reqProp', ['keep-source'])
       }
       return this.$nextTick()
     }
@@ -1430,7 +1430,7 @@ const Methods = {
     if (customConfig && (isResizable || isVisible)) {
       const customMap = {}
       if (!id) {
-        UtilTools.error('vxe.error.reqProp', ['id'])
+        errLog('vxe.error.reqProp', ['id'])
         return
       }
       if (isResizable) {
@@ -1493,7 +1493,7 @@ const Methods = {
       const colHides = []
       const colShows = []
       if (!id) {
-        UtilTools.error('vxe.error.reqProp', ['id'])
+        errLog('vxe.error.reqProp', ['id'])
         return
       }
       XEUtils.eachTree(collectColumn, column => {
@@ -1524,7 +1524,7 @@ const Methods = {
       const columnWidthStorageMap = getCustomStorageMap(resizableStorageKey)
       let columnWidthStorage
       if (!id) {
-        UtilTools.error('vxe.error.reqProp', ['id'])
+        errLog('vxe.error.reqProp', ['id'])
         return
       }
       if (!isReset) {
@@ -1573,7 +1573,7 @@ const Methods = {
           column.fixed = parent.fixed
         }
         if (parent && column.fixed !== parent.fixed) {
-          UtilTools.error('vxe.error.groupFixed')
+          errLog('vxe.error.groupFixed')
         }
         if (isColGroup) {
           column.visible = !!XEUtils.findTree(column.children, subColumn => hasChildrenList(subColumn) ? null : subColumn.visible)
@@ -1620,22 +1620,22 @@ const Methods = {
     if (scrollXLoad && isGroup) {
       scrollXLoad = false
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        UtilTools.warn('vxe.error.scrollXNotGroup')
+        warnLog('vxe.error.scrollXNotGroup')
       }
     }
     if (scrollXLoad) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (this.showHeader && !this.showHeaderOverflow) {
-          UtilTools.warn('vxe.error.reqProp', ['show-header-overflow'])
+          warnLog('vxe.error.reqProp', ['show-header-overflow'])
         }
         if (this.showFooter && !this.showFooterOverflow) {
-          UtilTools.warn('vxe.error.reqProp', ['show-footer-overflow'])
+          warnLog('vxe.error.reqProp', ['show-footer-overflow'])
         }
         if (this.spanMethod) {
-          UtilTools.warn('vxe.error.scrollErrProp', ['span-method'])
+          warnLog('vxe.error.scrollErrProp', ['span-method'])
         }
         if (this.footerSpanMethod) {
-          UtilTools.warn('vxe.error.scrollErrProp', ['footer-span-method'])
+          warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
         }
       }
       const { visibleSize } = computeVirtualX(this)
@@ -2594,7 +2594,7 @@ const Methods = {
     if (titleHelp.content || titleHelp.message) {
       const { $refs, tooltipStore } = this
       const $tooltip = $refs.tooltip
-      const content = UtilTools.getFuncText(titleHelp.content || titleHelp.message)
+      const content = getFuncText(titleHelp.content || titleHelp.message)
       this.handleTargetEnterEvent(true)
       tooltipStore.visible = true
       if ($tooltip) {
@@ -2726,7 +2726,7 @@ const Methods = {
     return !this.isAllSelected && this.isIndeterminate
   },
   isCheckboxIndeterminate () {
-    UtilTools.warn('vxe.error.delFunc', ['isCheckboxIndeterminate', 'isAllCheckboxIndeterminate'])
+    warnLog('vxe.error.delFunc', ['isCheckboxIndeterminate', 'isAllCheckboxIndeterminate'])
     return this.isAllCheckboxIndeterminate()
   },
   /**
@@ -3634,7 +3634,7 @@ const Methods = {
   // 在 v3 中废弃
   getSortColumn () {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
+      warnLog('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     }
     return XEUtils.find(this.tableFullColumn, column => (column.sortable || column.remoteSort) && column.order)
   },
@@ -3717,7 +3717,7 @@ const Methods = {
   },
   reloadExpandContent (row) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
+      warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
     }
     // 即将废弃
     return this.reloadRowExpand(row)
@@ -3928,7 +3928,7 @@ const Methods = {
   },
   reloadTreeChilds (row) {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      UtilTools.warn('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
+      warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
     }
     // 即将废弃
     return this.reloadTreeExpand(row)
@@ -4489,7 +4489,7 @@ const Methods = {
    */
   setMergeCells (merges) {
     if (this.spanMethod) {
-      UtilTools.error('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+      errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
     }
     setMerges(this, merges, this.mergeList, this.afterFullData)
     return this.$nextTick().then(() => this.updateCellAreas())
@@ -4500,7 +4500,7 @@ const Methods = {
    */
   removeMergeCells (merges) {
     if (this.spanMethod) {
-      UtilTools.error('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+      errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
     }
     const rest = removeMerges(this, merges, this.mergeList, this.afterFullData)
     return this.$nextTick().then(() => {
@@ -4526,14 +4526,14 @@ const Methods = {
   },
   setMergeFooterItems (merges) {
     if (this.footerSpanMethod) {
-      UtilTools.error('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+      errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
     }
     setMerges(this, merges, this.mergeFooterList, null)
     return this.$nextTick().then(() => this.updateCellAreas())
   },
   removeMergeFooterItems (merges) {
     if (this.footerSpanMethod) {
-      UtilTools.error('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+      errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
     }
     const rest = removeMerges(this, merges, this.mergeFooterList, null)
     return this.$nextTick().then(() => {
@@ -4583,7 +4583,7 @@ const Methods = {
       $toolbar.syncUpdate({ collectColumn: this.collectColumn, $table: this })
       this.$toolbar = $toolbar
     } else {
-      UtilTools.error('vxe.error.barUnableLink')
+      errLog('vxe.error.barUnableLink')
     }
     return this.$nextTick()
   },
@@ -4654,9 +4654,9 @@ funcs.forEach(name => {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (!this[`_${name}`]) {
         if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
-          UtilTools.error('vxe.error.reqModule', ['Export'])
+          errLog('vxe.error.reqModule', ['Export'])
         } else if ('clearValidate,fullValidate,validate'.split(',').includes(name)) {
-          UtilTools.error('vxe.error.reqModule', ['Validator'])
+          errLog('vxe.error.reqModule', ['Validator'])
         }
       }
     }

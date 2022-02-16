@@ -10,7 +10,7 @@
       show-footer
       ref="xGrid"
       height="500"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :footer-method="footerMethod"
       :checkbox-config="{checkField: 'checked', labelField: 'id'}"
       :loading="loading">

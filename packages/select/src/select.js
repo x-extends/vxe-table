@@ -2,7 +2,9 @@ import XEUtils from 'xe-utils'
 import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools, { getFuncText } from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
 
 function isOptionVisible (option) {
   return option.visible !== false
@@ -146,7 +148,7 @@ export function renderOption (h, _vm, list, group) {
           }
         }
       }
-    }, defaultSlot ? _vm.callSlot(defaultSlot, { option, $select: _vm }, h) : UtilTools.formatText(UtilTools.getFuncText(option[labelField]))) : null
+    }, defaultSlot ? _vm.callSlot(defaultSlot, { option, $select: _vm }, h) : UtilTools.formatText(getFuncText(option[labelField]))) : null
   })
 }
 
@@ -168,7 +170,7 @@ export function renderOptgroup (h, _vm) {
     }, [
       h('div', {
         class: 'vxe-optgroup--title'
-      }, defaultSlot ? _vm.callSlot(defaultSlot, { option: group, $select: _vm }, h) : UtilTools.getFuncText(group[groupLabelField])),
+      }, defaultSlot ? _vm.callSlot(defaultSlot, { option: group, $select: _vm }, h) : getFuncText(group[groupLabelField])),
       h('div', {
         class: 'vxe-optgroup--wrapper'
       }, renderOption(h, _vm, group[groupOptionsField], group))

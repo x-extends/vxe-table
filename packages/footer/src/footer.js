@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
+import UtilTools from '../../tools/utils'
+import DomTools from '../../tools/dom'
 
 const cellType = 'footer'
 
@@ -61,6 +62,7 @@ export default {
       align: allAlign,
       scrollXLoad,
       columnKey,
+      columnOpts,
       showFooterOverflow: allColumnFooterOverflow,
       currentColumn,
       overflowX,
@@ -227,7 +229,7 @@ export default {
               attrs,
               style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
               on: tfOns,
-              key: columnKey ? column.id : $columnIndex
+              key: columnKey || columnOpts.useKey ? column.id : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

@@ -9,7 +9,7 @@
       resizable
       show-overflow
       highlight-hover-row
-      row-key
+      :row-config="{useKey: true}"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
       :data="tableData1"
       :scroll-y="{enabled: false}">
@@ -26,8 +26,8 @@
       show-overflow
       highlight-hover-row
       highlight-current-row
-      row-key
       size="medium"
+      :row-config="{useKey: true}"
       :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
       :checkbox-config="{labelField: 'name'}"
       :data="tableData2"
@@ -44,8 +44,8 @@
       resizable
       show-overflow
       highlight-hover-row
-      row-key
       size="small"
+      :row-config="{useKey: true}"
       :radio-config="{labelField: 'name'}"
       :tree-config="{accordion: true, line: true, iconOpen: 'vxe-icon--remove', iconClose: 'vxe-icon--circle-plus'}"
       :data="tableData3"
@@ -62,9 +62,9 @@
       resizable
       show-overflow
       highlight-hover-row
-      row-key
       ref="xTree"
       size="mini"
+      :row-config="{useKey: true}"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{line: true, iconOpen: 'vxe-icon--remove', iconClose: 'vxe-icon--circle-plus'}"
       :data="tableData4"

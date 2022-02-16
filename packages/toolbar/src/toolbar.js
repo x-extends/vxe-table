@@ -2,7 +2,10 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
+import { warnLog, errLog } from '../../tools/log'
 
 const renderDropdowns = (h, _vm, item, isBtn) => {
   const { _e } = _vm
@@ -313,7 +316,7 @@ export default {
     this.$nextTick(() => {
       const $xetable = this.fintTable()
       if (refresh && !this.$xegrid && !refreshOpts.query) {
-        UtilTools.warn('vxe.error.notFunc', ['query'])
+        warnLog('vxe.error.notFunc', ['query'])
       }
       if ($xetable) {
         $xetable.connect(this)
@@ -324,7 +327,7 @@ export default {
             const { buttonRender } = item
             const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
             if (compConf && compConf.renderButton) {
-              UtilTools.warn('vxe.error.delFunc', ['renderButton', 'renderToolbarButton'])
+              warnLog('vxe.error.delFunc', ['renderButton', 'renderToolbarButton'])
             }
           })
         }
@@ -434,7 +437,7 @@ export default {
       if (this.$xetable) {
         return true
       }
-      UtilTools.error('vxe.error.barUnableLink')
+      errLog('vxe.error.barUnableLink')
     },
     showCustom () {
       this.customStore.visible = true

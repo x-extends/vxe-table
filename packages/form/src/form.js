@@ -2,11 +2,11 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import { isEnableConf, eqEmptyValue, getFuncText } from '../../tools/utils'
+import DomTools, { browse } from '../../tools/dom'
 import { createItem, handleFieldOrItem } from './util'
 import { renderTitle } from './render'
-import { eqEmptyValue } from '../../tools/src/utils'
-import { browse } from '../../tools/src/dom'
+import { errLog } from '../../tools/log'
 
 class Rule {
   constructor (rule) {
@@ -24,7 +24,7 @@ class Rule {
   }
 
   get content () {
-    return UtilTools.getFuncText(this.$options.content || this.$options.message)
+    return getFuncText(this.$options.content || this.$options.message)
   }
 
   get message () {
@@ -136,7 +136,7 @@ function renderItems (h, _vm, itemList) {
             width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
           } : null,
           attrs: {
-            title: showTitle ? UtilTools.getFuncText(title) : null
+            title: showTitle ? getFuncText(title) : null
           },
           on: ons
         }, renderTitle(h, _vm, item)) : null,
@@ -239,7 +239,7 @@ export default {
       const { items } = this
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (this.customLayout && this.items) {
-          UtilTools.error('vxe.error.errConflicts', ['custom-layout', 'items'])
+          errLog('vxe.error.errConflicts', ['custom-layout', 'items'])
         }
       }
       if (items) {
@@ -308,7 +308,7 @@ export default {
             XEUtils.each(item.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!$scopedSlots[func]) {
-                  UtilTools.error('vxe.error.notSlot', [func])
+                  errLog('vxe.error.notSlot', [func])
                 }
               }
             })

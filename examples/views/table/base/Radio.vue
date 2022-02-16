@@ -74,7 +74,7 @@
     <vxe-table
       border
       height="300"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :data="tableData"
       :radio-config="{checkRowKey: defaultSelecteRow}">
       <vxe-column type="radio" width="60"></vxe-column>

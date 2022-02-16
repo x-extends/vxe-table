@@ -1,6 +1,8 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
 
 export default {
   name: 'VxePulldown',

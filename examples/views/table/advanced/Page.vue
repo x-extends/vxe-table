@@ -7,7 +7,7 @@
     <vxe-table
       show-overflow
       height="200"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :loading="loading1"
       :data="tableData1">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -40,8 +40,8 @@
       border
       show-overflow
       height="200"
-      row-id="id"
       size="medium"
+      :row-config="{keyField: 'id'}"
       :loading="loading2"
       :data="tableData2">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -76,8 +76,8 @@
       border
       show-overflow
       height="200"
-      row-id="id"
       size="small"
+      :row-config="{keyField: 'id'}"
       :loading="loading3"
       :data="tableData3">
       <vxe-column type="checkbox" width="60"></vxe-column>
@@ -125,8 +125,8 @@
       show-overflow
       ref="xTable4"
       height="200"
-      row-id="id"
       size="mini"
+      :row-config="{keyField: 'id'}"
       :loading="loading4"
       :seq-config="{startIndex: (tablePage4.currentPage - 1) * tablePage4.pageSize}"
       :checkbox-config="{reserve: true}"

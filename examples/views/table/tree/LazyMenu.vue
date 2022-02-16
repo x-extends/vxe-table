@@ -8,7 +8,7 @@
       border
       resizable
       ref="xTree"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :menu-config="{body: {options: bodyMenus}, visibleMethod}"
       :tree-config="{transform: true, lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData"

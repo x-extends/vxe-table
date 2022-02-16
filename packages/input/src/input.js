@@ -1,9 +1,12 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools, { getFuncText } from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
 import { toStringTimeDate, getDateQuarter } from './date'
 import { handleNumber, toFloatValueFixed } from './number'
+import { warnLog } from '../../tools/log'
 
 const yearSize = 20
 const monthSize = 20
@@ -962,7 +965,7 @@ export default {
     inpPlaceholder () {
       const { placeholder } = this
       if (placeholder) {
-        return UtilTools.getFuncText(placeholder)
+        return getFuncText(placeholder)
       }
       return ''
     },
@@ -1017,7 +1020,7 @@ export default {
   },
   mounted () {
     if (this.dateConfig) {
-      UtilTools.warn('vxe.error.removeProp', ['date-config'])
+      warnLog('vxe.error.removeProp', ['date-config'])
     }
     if (this.isDatePickerType) {
       if (this.transfer) {

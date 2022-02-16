@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, isEnableConf } from '../../tools'
+import { isEnableConf, getFuncText } from '../../tools/utils'
 import { createItem, destroyItem, assemItem } from './util'
 import { renderTitle } from './render'
 
@@ -93,7 +93,7 @@ const renderItem = (h, _vm, item, slots) => {
           width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
         } : null,
         attrs: {
-          title: showTitle ? UtilTools.getFuncText(title) : null
+          title: showTitle ? getFuncText(title) : null
         },
         on: ons
       }, renderTitle(h, _vm, item)) : null,

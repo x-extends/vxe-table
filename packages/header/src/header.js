@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
+import UtilTools from '../../tools/utils'
+import DomTools from '../../tools/dom'
 import { convertToRows } from './util'
 import { getColMinWidth } from '../../table/src/util'
 
@@ -163,7 +164,7 @@ export default {
               },
               style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,
-              key: columnKey || isColGroup ? column.id : $columnIndex
+              key: columnKey || columnOpts.useKey || isColGroup ? column.id : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

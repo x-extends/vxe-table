@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeModal from '../../modal/src/modal'
 import VxeRadio from '../../radio/src/radio'
-import { UtilTools } from '../../tools'
+import UtilTools from '../../tools/utils'
 
 export default {
   name: 'VxeImportPanel',

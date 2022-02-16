@@ -20,7 +20,7 @@
       resizable
       show-overflow
       height="500"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :loading="loading">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>

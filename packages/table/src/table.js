@@ -3,8 +3,11 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
 import vSize from '../../mixins/size'
-import { UtilTools, GlobalEvent, createResizeEvent, isEnableConf } from '../../tools'
+import { isEnableConf, getFuncText } from '../../tools/utils'
+import { createResizeEvent } from '../../tools/resize'
+import { GlobalEvent } from '../../tools/event'
 import methods from './methods'
+import { warnLog, errLog } from '../../tools/log'
 
 /**
  * 渲染浮固定列
@@ -67,7 +70,7 @@ function renderEmptyContenet (h, _vm) {
     if (renderEmpty) {
       emptyContent = renderEmpty.call(_vm, h, emptyOpts, params)
     } else {
-      emptyContent = UtilTools.getFuncText(_vm.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
+      emptyContent = getFuncText(_vm.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
     }
   }
   return emptyContent
@@ -92,7 +95,7 @@ export default {
     height: [Number, String],
     // 表格的最大高度
     maxHeight: [Number, String],
-    // 所有列是否允许拖动列宽调整大小
+    // （即将废弃）所有列是否允许拖动列宽调整大小
     resizable: { type: Boolean, default: () => GlobalConfig.table.resizable },
     // 是否带有斑马纹
     stripe: { type: Boolean, default: () => GlobalConfig.table.stripe },
@@ -168,9 +171,11 @@ export default {
     showFooterOverflow: { type: [Boolean, String], default: () => GlobalConfig.table.showFooterOverflow },
 
     /** 高级属性 */
-    // 主键配置
+    // （即将废弃）columnKey 已废弃，被 column-config.useKey 替换
     columnKey: Boolean,
+    // （即将废弃）rowKey 已废弃，被 row-config.useKey 替换
     rowKey: Boolean,
+    // （即将废弃）rowId 已废弃，被 row-config.keyField 替换
     rowId: { type: String, default: () => GlobalConfig.table.rowId },
     zIndex: Number,
     emptyText: { type: String, default: () => GlobalConfig.table.emptyText },
@@ -237,6 +242,7 @@ export default {
     scrollY: Object,
     // （即将废弃）优化相关
     animat: { type: Boolean, default: () => GlobalConfig.table.animat },
+    // （可能会被废弃的参数，不要使用）
     delayHover: { type: Number, default: () => GlobalConfig.table.delayHover },
     // 额外的参数
     params: Object
@@ -654,7 +660,7 @@ export default {
           this.handleInitDefaults()
         }
         if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
-          UtilTools.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }
         this.recalculate()
       })
@@ -700,7 +706,7 @@ export default {
     }
   },
   created () {
-    const { scrollXStore, sYOpts, scrollYStore, data, editOpts, treeOpts, treeConfig, showOverflow } = Object.assign(this, {
+    const { scrollXStore, sYOpts, scrollYStore, data, editOpts, treeOpts, treeConfig, showOverflow, rowOpts } = Object.assign(this, {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
@@ -750,65 +756,74 @@ export default {
     })
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (!this.rowId && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
-        UtilTools.warn('vxe.error.reqProp', ['row-id'])
+      // if (this.rowId) {
+      //   warnLog('vxe.error.delProp', ['rowId', 'row-config.keyField'])
+      // }
+      // if (this.rowKey) {
+      //   warnLog('vxe.error.delProp', ['rowId', 'row-config.useKey'])
+      // }
+      // if (this.columnKey) {
+      //   warnLog('vxe.error.delProp', ['rowId', 'column-config.useKey'])
+      // }
+      if (!(this.rowId || rowOpts.keyField) && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
+        warnLog('vxe.error.reqProp', ['row-config.keyField'])
       }
       if (this.editConfig && editOpts.showStatus && !this.keepSource) {
-        UtilTools.warn('vxe.error.reqProp', ['keep-source'])
+        warnLog('vxe.error.reqProp', ['keep-source'])
       }
-      if (treeConfig && treeOpts.line && (!this.rowKey || !showOverflow)) {
-        UtilTools.warn('vxe.error.reqProp', ['row-key | show-overflow'])
+      if (treeConfig && treeOpts.line && (!this.rowKey || !rowOpts.useKey || !showOverflow)) {
+        warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
       }
       if (this.showFooter && !this.footerMethod) {
-        UtilTools.warn('vxe.error.reqProp', ['footer-method'])
+        warnLog('vxe.error.reqProp', ['footer-method'])
       }
       if (treeConfig && this.stripe) {
-        UtilTools.warn('vxe.error.noTree', ['stripe'])
+        warnLog('vxe.error.noTree', ['stripe'])
       }
       if (this.tooltipOpts.enabled) {
-        UtilTools.warn('vxe.error.delProp', ['tooltip-config.enabled', 'tooltip-config.showAll'])
+        warnLog('vxe.error.delProp', ['tooltip-config.enabled', 'tooltip-config.showAll'])
       }
       // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
       const { exportConfig, exportOpts, importConfig, importOpts } = this
       if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {
-        UtilTools.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
+        warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(VXETable.config.importTypes, type)).join(',') || VXETable.config.importTypes.join(',')])
       }
       if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(VXETable.config.exportTypes, exportOpts.types)) {
-        UtilTools.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
+        warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(VXETable.config.exportTypes, type)).join(',') || VXETable.config.exportTypes.join(',')])
       }
     }
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const customOpts = this.customOpts
       if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-        UtilTools.error('vxe.error.reqProp', ['id'])
+        errLog('vxe.error.reqProp', ['id'])
       }
       if (this.treeConfig && this.checkboxOpts.range) {
-        UtilTools.error('vxe.error.noTree', ['checkbox-config.range'])
+        errLog('vxe.error.noTree', ['checkbox-config.range'])
       }
       if (this.rowOpts.height && !this.showOverflow) {
-        UtilTools.warn('vxe.error.notProp', ['table.show-overflow'])
+        warnLog('vxe.error.notProp', ['table.show-overflow'])
       }
       if (!this.handleUpdateCellAreas) {
         if (this.clipConfig) {
-          UtilTools.warn('vxe.error.notProp', ['clip-config'])
+          warnLog('vxe.error.notProp', ['clip-config'])
         }
         if (this.fnrConfig) {
-          UtilTools.warn('vxe.error.notProp', ['fnr-config'])
+          warnLog('vxe.error.notProp', ['fnr-config'])
         }
         if (this.mouseOpts.area) {
-          UtilTools.error('vxe.error.notProp', ['mouse-config.area'])
+          errLog('vxe.error.notProp', ['mouse-config.area'])
           return
         }
       }
       if (this.mouseOpts.area && this.mouseOpts.selected) {
-        UtilTools.warn('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+        warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
       }
       if (this.mouseOpts.area && this.checkboxOpts.range) {
-        UtilTools.warn('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+        warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
       }
       if (this.treeConfig && this.mouseOpts.area) {
-        UtilTools.error('vxe.error.noTree', ['mouse-config.area'])
+        errLog('vxe.error.noTree', ['mouse-config.area'])
       }
     }
 
@@ -816,50 +831,50 @@ export default {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       // 在 v3.0 中废弃 context-menu
       if (this.contextMenu) {
-        UtilTools.warn('vxe.error.delProp', ['context-menu', 'menu-config'])
+        warnLog('vxe.error.delProp', ['context-menu', 'menu-config'])
         if (!XEUtils.isObject(this.contextMenu)) {
-          UtilTools.warn('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
+          warnLog('vxe.error.errProp', [`table.context-menu=${this.contextMenu}`, 'table.context-menu={}'])
         }
       }
       if (this.menuConfig && !XEUtils.isObject(this.menuConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
+        warnLog('vxe.error.errProp', [`table.menu-config=${this.menuConfig}`, 'table.menu-config={}'])
       }
       if (this.exportConfig && !XEUtils.isObject(this.exportConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
+        warnLog('vxe.error.errProp', [`table.export-config=${this.exportConfig}`, 'table.export-config={}'])
       }
       if (this.importConfig && !XEUtils.isObject(this.importConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.import-config=${this.importConfig}`, 'table.import-config={}'])
+        warnLog('vxe.error.errProp', [`table.import-config=${this.importConfig}`, 'table.import-config={}'])
       }
       if (this.printConfig && !XEUtils.isObject(this.printConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.print-config=${this.printConfig}`, 'table.print-config={}'])
+        warnLog('vxe.error.errProp', [`table.print-config=${this.printConfig}`, 'table.print-config={}'])
       }
       if (this.treeConfig && !XEUtils.isObject(this.treeConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.tree-config=${this.treeConfig}`, 'table.tree-config={}'])
+        warnLog('vxe.error.errProp', [`table.tree-config=${this.treeConfig}`, 'table.tree-config={}'])
       }
       if (this.customConfig && !XEUtils.isObject(this.customConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.custom-config=${this.customConfig}`, 'table.custom-config={}'])
+        warnLog('vxe.error.errProp', [`table.custom-config=${this.customConfig}`, 'table.custom-config={}'])
       }
       if (this.editConfig && !XEUtils.isObject(this.editConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`table.edit-config=${this.editConfig}`, 'table.edit-config={}'])
+        warnLog('vxe.error.errProp', [`table.edit-config=${this.editConfig}`, 'table.edit-config={}'])
       }
       if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
-        UtilTools.warn('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
+        warnLog('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
       }
     }
 
     // 检查是否有安装需要的模块
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (this.editConfig && !this._insert) {
-        UtilTools.error('vxe.error.reqModule', ['Edit'])
+        errLog('vxe.error.reqModule', ['Edit'])
       }
       if (this.editRules && !this._validate) {
-        UtilTools.error('vxe.error.reqModule', ['Validator'])
+        errLog('vxe.error.reqModule', ['Validator'])
       }
       if ((this.checkboxOpts.range || this.keyboardConfig || this.mouseConfig) && !this.triggerCellMousedownEvent) {
-        UtilTools.error('vxe.error.reqModule', ['Keyboard'])
+        errLog('vxe.error.reqModule', ['Keyboard'])
       }
       if ((this.printConfig || this.importConfig || this.exportConfig) && !this._exportData) {
-        UtilTools.error('vxe.error.reqModule', ['Export'])
+        errLog('vxe.error.reqModule', ['Export'])
       }
     }
 
@@ -898,10 +913,10 @@ export default {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const { $listeners } = this
       if (!this.menuConfig && ($listeners['menu-click'] || $listeners['cell-menu'] || $listeners['header-cell-menu'] || $listeners['footer-cell-menu'])) {
-        UtilTools.warn('vxe.error.reqProp', ['menu-config'])
+        warnLog('vxe.error.reqProp', ['menu-config'])
       }
       if (!this.tooltipConfig && ($listeners['cell-mouseenter'] || $listeners['cell-mouseleave'])) {
-        UtilTools.warn('vxe.error.reqProp', ['tooltip-config'])
+        warnLog('vxe.error.reqProp', ['tooltip-config'])
       }
     }
     if (this.autoResize) {

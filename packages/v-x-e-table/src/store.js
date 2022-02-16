@@ -1,5 +1,5 @@
-import { UtilTools } from '../../tools'
 import XEUtils from 'xe-utils'
+import { warnLog } from '../../tools/log'
 
 /**
  * 创建数据仓库
@@ -22,7 +22,7 @@ class Store {
     // 检测是否覆盖
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (!XEUtils.eqNull(this.store[name]) && this.store[name] !== render) {
-        UtilTools.warn('vxe.error.coverProp', [this._name, name])
+        warnLog('vxe.error.coverProp', [this._name, name])
       }
     }
     this.store[name] = render

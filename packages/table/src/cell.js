@@ -1,8 +1,9 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { eqEmptyValue, isEnableConf } from '../../tools/src/utils'
+import DomTools from '../../tools/dom'
+import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
+import { getColumnConfig } from './util'
 
 function renderHelpIcon (h, params) {
   const { $table, column } = params
@@ -136,7 +137,7 @@ export const Cell = {
           renMaps.renderHeader = this.renderFilterHeader
         }
     }
-    return UtilTools.getColumnConfig($xetable, _vm, renMaps)
+    return getColumnConfig($xetable, _vm, renMaps)
   },
   /**
    * 单元格
@@ -182,7 +183,7 @@ export const Cell = {
         // 如果设置占位符
         h('span', {
           class: 'vxe-cell--placeholder'
-        }, UtilTools.formatText(UtilTools.getFuncText(cellPlaceholder), 1))
+        }, UtilTools.formatText(getFuncText(cellPlaceholder), 1))
       ] : UtilTools.formatText(cellValue, 1))
     ]
   },

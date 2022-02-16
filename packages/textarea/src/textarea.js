@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 
 let autoTxtElem
 
@@ -84,7 +84,7 @@ export default {
       cols
     }
     if (placeholder) {
-      attrs.placeholder = UtilTools.getFuncText(placeholder)
+      attrs.placeholder = getFuncText(placeholder)
     }
     return h('div', {
       class: ['vxe-textarea', className, {

@@ -1,7 +1,7 @@
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { browse } from '../../tools/src/dom'
+import { browse } from '../../tools/dom'
 
 export default {
   name: 'VxeSwitch',
@@ -30,10 +30,10 @@ export default {
       return this.value === this.openValue
     },
     onShowLabel () {
-      return UtilTools.getFuncText(this.openLabel)
+      return getFuncText(this.openLabel)
     },
     offShowLabel () {
-      return UtilTools.getFuncText(this.closeLabel)
+      return getFuncText(this.closeLabel)
     },
     styles () {
       return browse.msie && this.isChecked ? {

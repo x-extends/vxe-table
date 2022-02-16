@@ -3,8 +3,10 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
-import { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/src/dom'
+import UtilTools, { isEnableConf } from '../../tools/utils'
+import DomTools, { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
+import { warnLog, errLog } from '../../tools/log'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -59,7 +61,7 @@ function getFuncSlot (_vm, optSlots, slotKey) {
         return $scopedSlots[funcSlot]
       } else {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          UtilTools.error('vxe.error.notSlot', [funcSlot])
+          errLog('vxe.error.notSlot', [funcSlot])
         }
       }
     } else {
@@ -77,10 +79,10 @@ function getToolbarSlots (_vm) {
   const slots = {}
   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
     if ($scopedSlots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
-      UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
+      warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
     }
     if ($scopedSlots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
-      UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.tools'])
+      warnLog('vxe.error.reqProp', ['toolbar-config.slots.tools'])
     }
   }
   if (toolbarOptSlots) {
@@ -253,15 +255,15 @@ export default {
   created () {
     const { data, formOpts, proxyOpts, proxyConfig } = this
     if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-      UtilTools.error('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
+      errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
     }
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (this.toolbar) {
-        UtilTools.warn('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
+        warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
       }
       if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
+        warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
       }
     }
 
@@ -588,7 +590,7 @@ export default {
               })
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              UtilTools.error('vxe.error.notFunc', ['proxy-config.ajax.query'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
             }
           }
           break
@@ -614,7 +616,7 @@ export default {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
@@ -631,7 +633,7 @@ export default {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
@@ -643,7 +645,7 @@ export default {
                 // 检测弹窗模块
                 if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                   if (!VXETable.modal) {
-                    UtilTools.error('vxe.error.reqModule', ['Modal'])
+                    errLog('vxe.error.reqModule', ['Modal'])
                   }
                 }
                 VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
@@ -651,7 +653,7 @@ export default {
             }
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              UtilTools.error('vxe.error.notFunc', ['proxy-config.ajax.delete'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
             }
           }
           break
@@ -690,7 +692,7 @@ export default {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
@@ -707,7 +709,7 @@ export default {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
@@ -718,7 +720,7 @@ export default {
                   // 检测弹窗模块
                   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                     if (!VXETable.modal) {
-                      UtilTools.error('vxe.error.reqModule', ['Modal'])
+                      errLog('vxe.error.reqModule', ['Modal'])
                     }
                   }
                   VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
@@ -727,7 +729,7 @@ export default {
             })
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              UtilTools.error('vxe.error.notFunc', ['proxy-config.ajax.save'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
             }
           }
           break
@@ -762,7 +764,7 @@ export default {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!VXETable.modal) {
-              UtilTools.error('vxe.error.reqModule', ['Modal'])
+              errLog('vxe.error.reqModule', ['Modal'])
             }
           }
           VXETable.modal.message({ id: `msg_${code}`, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
@@ -817,7 +819,7 @@ export default {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!VXETable.modal) {
-              UtilTools.error('vxe.error.reqModule', ['Modal'])
+              errLog('vxe.error.reqModule', ['Modal'])
             }
           }
           VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
@@ -931,7 +933,7 @@ export default {
             XEUtils.each(column.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!$scopedSlots[func]) {
-                  UtilTools.error('vxe.error.notSlot', [func])
+                  errLog('vxe.error.notSlot', [func])
                 }
               }
             })

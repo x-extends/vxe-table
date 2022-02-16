@@ -26,6 +26,9 @@ export default {
     // emptyRender: {
     //   name: ''
     // },
+    // rowConfig: {
+    //   keyField: '_X_ID' // 行数据的唯一主键字段名
+    // },
     radioConfig: {
       // trigger: 'default'
       strict: true
@@ -49,7 +52,6 @@ export default {
     //  storage: false,
     //  checkMethod () {}
     // },
-    // rowId: '_X_ID', // 行数据的唯一主键字段名
     sortConfig: {
       // remote: false,
       // trigger: 'default',

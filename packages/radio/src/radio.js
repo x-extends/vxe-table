@@ -1,4 +1,4 @@
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 
@@ -63,7 +63,7 @@ export default {
       }),
       h('span', {
         class: 'vxe-radio--label'
-      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [UtilTools.getFuncText(content)])
+      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [getFuncText(content)])
     ])
   },
   methods: {

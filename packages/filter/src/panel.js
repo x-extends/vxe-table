@@ -1,6 +1,6 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools } from '../../tools'
+import UtilTools from '../../tools/utils'
 import XEUtils from 'xe-utils'
 
 export default {

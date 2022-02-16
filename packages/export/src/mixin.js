@@ -1,9 +1,10 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools } from '../../tools'
-import { mergeBodyMethod } from '../../table/src/util'
-import { browse } from '../../tools/src/dom'
+import UtilTools from '../../tools/utils'
+import { mergeBodyMethod, isColumnInfo } from '../../table/src/util'
+import { browse } from '../../tools/dom'
+import { warnLog, errLog } from '../../tools/log'
 
 const { formatText } = UtilTools
 
@@ -589,7 +590,7 @@ function downloadFile ($xetable, opts, content) {
       // 检测弹窗模块
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (!VXETable.modal) {
-          UtilTools.error('vxe.error.reqModule', ['Modal'])
+          errLog('vxe.error.reqModule', ['Modal'])
         }
       }
       VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.expSuccess'), status: 'success' })
@@ -816,7 +817,7 @@ function handleImport ($xetable, content, opts) {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!VXETable.modal) {
-              UtilTools.error('vxe.error.reqModule', ['Modal'])
+              errLog('vxe.error.reqModule', ['Modal'])
             }
           }
           VXETable.modal.message({ content: GlobalConfig.i18n('vxe.table.impSuccess', [rows.length]), status: 'success' })
@@ -831,7 +832,7 @@ function handleImport ($xetable, content, opts) {
     // 检测弹窗模块
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (!VXETable.modal) {
-        UtilTools.error('vxe.error.reqModule', ['Modal'])
+        errLog('vxe.error.reqModule', ['Modal'])
       }
     }
     VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.impFields'), status: 'error' })
@@ -851,7 +852,7 @@ function handleFileImport ($xetable, file, opts) {
       // 检测弹窗模块
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (!VXETable.modal) {
-          UtilTools.error('vxe.error.reqModule', ['Modal'])
+          errLog('vxe.error.reqModule', ['Modal'])
         }
       }
       VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [type]), status: 'error' })
@@ -889,7 +890,7 @@ function handleFileImport ($xetable, file, opts) {
         $xetable.preventEvent(null, 'event.import', { file, options, columns: $xetable.tableFullColumn }, () => {
           const reader = new FileReader()
           reader.onerror = () => {
-            UtilTools.error('vxe.error.notType', [type])
+            errLog('vxe.error.notType', [type])
             _importReject({ status: false })
           }
           reader.onload = (e) => {
@@ -901,7 +902,7 @@ function handleFileImport ($xetable, file, opts) {
     } else {
       // 不支持的浏览器
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        UtilTools.error('vxe.error.notExp')
+        errLog('vxe.error.notExp')
       }
       _importResolve({ status: true })
     }
@@ -959,7 +960,7 @@ export function readLocalFile (options = {}) {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!VXETable.modal) {
-              UtilTools.error('vxe.error.reqModule', ['Modal'])
+              errLog('vxe.error.reqModule', ['Modal'])
             }
           }
           VXETable.modal.message({ content: GlobalConfig.i18n('vxe.error.notType', [errType]), status: 'error' })
@@ -1053,7 +1054,7 @@ function handleExportAndPrint ($xetable, options, isPrint) {
     const isColGroup = column.children && column.children.length
     if (isColGroup || defaultFilterExportColumn(column)) {
       column.checked = columns ? columns.some((item) => {
-        if (UtilTools.isColumn(item)) {
+        if (isColumnInfo(item)) {
           return column === item
         } else if (XEUtils.isString(item)) {
           return column.field === item
@@ -1209,7 +1210,7 @@ export default {
           XEUtils.mapTree(customCols, item => {
             let targetColumn
             if (item) {
-              if (UtilTools.isColumn(item)) {
+              if (isColumnInfo(item)) {
                 targetColumn = item
               } else if (XEUtils.isString(item)) {
                 targetColumn = this.getColumnByField(item)
@@ -1233,7 +1234,7 @@ export default {
             children: 'childNodes',
             mapChildren: '_children'
           }),
-          (column, index) => UtilTools.isColumn(column) && (!columnFilterMethod || columnFilterMethod({ column, $columnIndex: index })),
+          (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ column, $columnIndex: index })),
           {
             children: '_children',
             mapChildren: 'childNodes',
@@ -1264,7 +1265,7 @@ export default {
       // 检查类型，如果为自定义导出，则不需要校验类型
       if (!opts.exportMethod && !XEUtils.includes(VXETable.config.exportTypes, type)) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          UtilTools.error('vxe.error.notType', [type])
+          errLog('vxe.error.notType', [type])
         }
         const params = { status: false }
         return Promise.reject(params)
@@ -1288,7 +1289,7 @@ export default {
         } else if (mode === 'all') {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!$xegrid) {
-              UtilTools.warn('vxe.error.errProp', ['all', 'mode=current,selected'])
+              warnLog('vxe.error.errProp', ['all', 'mode=current,selected'])
             }
           }
 
@@ -1298,7 +1299,7 @@ export default {
 
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
               if (!ajaxMethods) {
-                UtilTools.warn('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
+                warnLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
               }
             }
 
@@ -1397,7 +1398,7 @@ export default {
         return
       }
       if (!this.importConfig) {
-        UtilTools.error('vxe.error.reqProp', ['import-config'])
+        errLog('vxe.error.reqProp', ['import-config'])
       }
       // 处理类型
       const typeList = types.map(value => {
@@ -1427,7 +1428,7 @@ export default {
       const { exportOpts } = this
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (!this.exportConfig) {
-          UtilTools.error('vxe.error.reqProp', ['export-config'])
+          errLog('vxe.error.reqProp', ['export-config'])
         }
       }
       return handleExportAndPrint(this, Object.assign({}, exportOpts, options))
@@ -1436,7 +1437,7 @@ export default {
       const { printOpts } = this
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (!this.printConfig) {
-          UtilTools.error('vxe.error.reqProp', ['print-config'])
+          errLog('vxe.error.reqProp', ['print-config'])
         }
       }
       return handleExportAndPrint(this, Object.assign({}, printOpts, options), true)

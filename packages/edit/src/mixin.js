@@ -1,7 +1,8 @@
 import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { browse } from '../../tools/src/dom'
+import UtilTools, { isEnableConf } from '../../tools/utils'
+import DomTools, { browse } from '../../tools/dom'
+import { warnLog, errLog } from '../../tools/log'
 
 const { getRowid } = UtilTools
 
@@ -28,7 +29,7 @@ function insertTreeRow (_vm, newRecords, isAppend) {
     } else {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (parentRowId) {
-          UtilTools.warn('vxe.error.unableInsert')
+          warnLog('vxe.error.unableInsert')
         }
       }
       afterFullData[funcName](item)
@@ -110,7 +111,7 @@ export default {
                 if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                   if (item[treeOpts.parentField]) {
                     if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
-                      UtilTools.error('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
+                      errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
                     }
                   }
                 }
@@ -124,7 +125,7 @@ export default {
               })
             } else {
               if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                UtilTools.warn('vxe.error.unableInsert')
+                warnLog('vxe.error.unableInsert')
               }
               insertTreeRow(this, newRecords, true)
             }
@@ -142,7 +143,7 @@ export default {
               afIndex = afterFullData.indexOf(row)
             }
             if (afIndex === -1) {
-              throw new Error(UtilTools.error('vxe.error.unableInsert'))
+              throw new Error(errLog('vxe.error.unableInsert'))
             }
             afterFullData.splice(afIndex, 0, ...newRecords)
             tableFullData.splice(tableFullData.indexOf(row), 0, ...newRecords)

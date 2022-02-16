@@ -6,7 +6,8 @@ import { commands } from './src/commands'
 import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { setup } from './src/setup'
-import { UtilTools } from '../tools'
+import { UtilTools } from '../tools/utils'
+import { errLog } from '../tools/log'
 
 const installedPlugins = []
 
@@ -29,7 +30,7 @@ function reg (key) {
   // 检测安装顺序是否正确
   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
     if (VXETable.Table) {
-      UtilTools.error('vxe.error.useErr', [key])
+      errLog('vxe.error.useErr', [key])
     }
   }
   VXETable[`_${key}`] = 1

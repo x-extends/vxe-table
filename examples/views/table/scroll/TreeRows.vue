@@ -9,11 +9,11 @@
     <vxe-virtual-tree
       resizable
       show-overflow
-      row-key
       ref="xVTree"
       height="500"
       :loading="loading"
       :data="tableData"
+      :row-config="{useKey: true}"
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="{children: 'children'}"

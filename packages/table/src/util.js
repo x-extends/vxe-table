@@ -1,6 +1,7 @@
 import VXETable from '../../v-x-e-table'
 import XEUtils from 'xe-utils'
-import { DomTools } from '../../tools'
+import { ColumnInfo } from './columnInfo'
+import DomTools from '../../tools/dom'
 
 const lineOffsetSizes = {
   mini: 3,
@@ -65,6 +66,15 @@ export function handleFieldOrColumn (_vm, fieldOrColumn) {
 
 function queryCellElement (cell, selector) {
   return cell.querySelector('.vxe-cell' + selector)
+}
+
+export function toFilters (filters) {
+  if (filters && XEUtils.isArray(filters)) {
+    return filters.map(({ label, value, data, resetValue, checked }) => {
+      return { label, value, data, resetValue, checked: !!checked, _checked: !!checked }
+    })
+  }
+  return filters
 }
 
 export function getColMinWidth (params) {
@@ -186,4 +196,12 @@ export function clearTableAllStatus (_vm) {
     _vm.clearFilter()
   }
   return clearTableDefaultStatus(_vm)
+}
+
+export function isColumnInfo (column) {
+  return column instanceof ColumnInfo
+}
+
+export function getColumnConfig ($xetable, _vm, options) {
+  return isColumnInfo(_vm) ? _vm : new ColumnInfo($xetable, _vm, options)
 }

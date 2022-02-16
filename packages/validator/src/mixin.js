@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { UtilTools, DomTools } from '../../tools'
-import { eqEmptyValue } from '../../tools/src/utils'
+import { eqEmptyValue, getFuncText } from '../../tools/utils'
+import DomTools from '../../tools/dom'
 
 /**
  * 校验规则
@@ -26,7 +26,7 @@ class Rule {
    * 支持国际化翻译
    */
   get content () {
-    return UtilTools.getFuncText(this.$options.content || this.$options.message)
+    return getFuncText(this.$options.content || this.$options.message)
   }
 
   get message () {

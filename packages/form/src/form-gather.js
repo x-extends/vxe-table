@@ -1,5 +1,5 @@
 import VxeFormItem from './form-item'
-import { UtilTools } from '../../tools'
+import { errLog } from '../../tools/log'
 
 export default {
   name: 'VxeFormGather',
@@ -13,7 +13,7 @@ export default {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       this.$nextTick(() => {
         if (this.$xeform && this.$xeform.customLayout) {
-          UtilTools.error('vxe.error.errConflicts', ['custom-layout', '<form-gather ...>'])
+          errLog('vxe.error.errConflicts', ['custom-layout', '<form-gather ...>'])
         }
       })
     }

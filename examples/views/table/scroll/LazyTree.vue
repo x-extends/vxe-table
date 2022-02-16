@@ -9,7 +9,7 @@
       resizable
       height="400"
       ref="xTree"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :menu-config="{body: {options: bodyMenus}, visibleMethod}"
       :tree-config="{lazy: true, transform: true, rowField: 'id', parentField: 'parentId', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData"

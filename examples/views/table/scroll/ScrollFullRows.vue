@@ -23,12 +23,12 @@
       border
       resizable
       show-overflow
-      row-key
       show-header-overflow
       highlight-hover-row
       highlight-current-row
       ref="xTable"
       height="600"
+      :row-config="{useKey: true}"
       :export-config="{}"
       :loading="loading"
       :checkbox-config="{checkField: 'checked'}">
