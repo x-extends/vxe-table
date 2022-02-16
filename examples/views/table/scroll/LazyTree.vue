@@ -9,7 +9,7 @@
       resizable
       ref="xTree1"
       height="400"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :menu-config="demo1.tableMenu"
       :tree-config="demo1.treeConfig"
       :data="demo1.tableData"

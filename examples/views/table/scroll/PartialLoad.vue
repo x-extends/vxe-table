@@ -20,7 +20,7 @@
       resizable
       show-overflow
       height="500"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :loading="demo1.loading"
       :checkbox-config="{checkField: 'checked'}">
       <vxe-column type="checkbox" width="60"></vxe-column>

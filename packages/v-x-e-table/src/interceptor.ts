@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { warnLog } from '../../tools/utils'
+import { warnLog } from '../../tools/log'
 
 import { VxeGlobalInterceptor, VxeGlobalInterceptorHandles } from '../../../types/v-x-e-table'
 

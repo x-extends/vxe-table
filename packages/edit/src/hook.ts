@@ -1,9 +1,10 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { renderer } from '../../v-x-e-table'
-import { errLog, getLog, isEnableConf, warnLog } from '../../tools/utils'
+import { isEnableConf } from '../../tools/utils'
 import { getCellValue, setCellValue, getRowid } from '../../table/src/util'
 import { browse, removeClass, addClass } from '../../tools/dom'
+import { warnLog, errLog, getLog } from '../../tools/log'
 
 import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/all'
 

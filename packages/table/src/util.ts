@@ -44,14 +44,16 @@ export function getRowUniqueId () {
 // 行主键 key
 export function getRowkey ($xetable: VxeTableConstructor) {
   const { props } = $xetable
+  const { computeRowOpts } = $xetable.getComputeMaps()
   const { rowId } = props
-  return rowId || '_X_ID'
+  const rowOpts = computeRowOpts.value
+  return rowId || rowOpts.keyField || '_X_ID'
 }
 
 // 行主键 value
 export function getRowid ($xetable: VxeTableConstructor, row: any) {
-  const rowId = XEUtils.get(row, getRowkey($xetable))
-  return XEUtils.eqNull(rowId) ? '' : encodeURIComponent(rowId)
+  const rowid = XEUtils.get(row, getRowkey($xetable))
+  return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
 }
 
 export interface XEColumnInstance {

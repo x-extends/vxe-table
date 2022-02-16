@@ -16,7 +16,7 @@
       resizable
       keep-source
       ref="xTree1"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :tree-config="demo1.tableTree"
       :data="demo1.tableData">

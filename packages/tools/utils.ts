@@ -4,18 +4,6 @@ import GlobalConfig from '../v-x-e-table/src/conf'
 let zindexIndex = 0
 let lastZindex = 1
 
-export function getLog (message: string, params?: any) {
-  return `[vxe-table v${process.env.VUE_APP_VXE_TABLE_VERSION}] ${GlobalConfig.i18n(message, params)}`
-}
-
-function outLog (type: 'log' | 'warn' | 'error') {
-  return function (message: string, params?: any) {
-    const msg = getLog(message, params)
-    console[type](msg)
-    return msg
-  }
-}
-
 export function isEnableConf (conf: any): boolean {
   return conf && conf.enabled !== false
 }
@@ -40,9 +28,6 @@ export function nextZIndex () {
 export function getLastZIndex () {
   return lastZindex
 }
-
-export const warnLog = outLog('warn')
-export const errLog = outLog('error')
 
 export function hasChildrenList (item: any) {
   return item && item.children && item.children.length > 0

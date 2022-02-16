@@ -1223,6 +1223,7 @@ export namespace VxeTablePropTypes {
    * 列配置信息
    */
   export interface ColumnConfig {
+    useKey?: boolean;
     isCurrent?: boolean;
     isHover?: boolean;
     resizable?: VxeColumnPropTypes.Resizable;
@@ -1235,6 +1236,8 @@ export namespace VxeTablePropTypes {
    * 行配置信息
    */
   export interface RowConfig {
+    useKey?: boolean;
+    keyField?: string;
     isCurrent?: boolean;
     isHover?: boolean;
     height?: number;
@@ -1939,6 +1942,10 @@ export type VxeTableProps<D = any> = {
   data?: VxeTablePropTypes.Data<D>;
   height?: VxeTablePropTypes.Height;
   maxHeight?: VxeTablePropTypes.MaxHeight;
+  /**
+   * 不建议使用，后续废弃
+   * @deprecated
+   */
   resizable?: VxeTablePropTypes.Resizable;
   stripe?: VxeTablePropTypes.Stripe;
   round?: VxeTablePropTypes.Round;
@@ -1952,6 +1959,10 @@ export type VxeTableProps<D = any> = {
   highlightHoverRow?: VxeTablePropTypes.HighlightHoverRow;
   highlightCurrentColumn?: VxeTablePropTypes.HighlightCurrentColumn;
   highlightHoverColumn?: VxeTablePropTypes.HighlightHoverColumn;
+  /**
+   * 已废弃
+   * @deprecated
+   */
   highlightCell?: VxeTablePropTypes.HighlightCell;
   showFooter?: VxeTablePropTypes.ShowFooter;
   footerMethod?: VxeTablePropTypes.FooterMethod;
@@ -1974,8 +1985,20 @@ export type VxeTableProps<D = any> = {
   showOverflow?: VxeTablePropTypes.ShowOverflow;
   showHeaderOverflow?: VxeTablePropTypes.ShowHeaderOverflow;
   showFooterOverflow?: VxeTablePropTypes.ShowFooterOverflow;
+  /**
+   * 请使用 column-config.useKey
+   * @deprecated
+   */
   columnKey?: VxeTablePropTypes.ColumnKey;
+  /**
+   * 请使用 row-config.useKey
+   * @deprecated
+   */
   rowKey?: VxeTablePropTypes.RowKey;
+  /**
+   * 请使用 row-config.keyField
+   * @deprecated
+   */
   rowId?: VxeTablePropTypes.RowId;
   keepSource?: VxeTablePropTypes.KeepSource;
   autoResize?: VxeTablePropTypes.AutoResize;
@@ -2006,8 +2029,20 @@ export type VxeTableProps<D = any> = {
   editRules?: VxeTablePropTypes.EditRules;
   emptyText?: VxeTablePropTypes.EmptyText;
   emptyRender?: VxeTablePropTypes.EmptyRender;
+  /**
+   * 不建议使用，后续废弃
+   * @deprecated
+   */
   fit?: VxeTablePropTypes.Fit;
+  /**
+   * 不建议使用，后续废弃
+   * @deprecated
+   */
   animat?: VxeTablePropTypes.Animat;
+  /**
+   * 不建议使用，后续废弃
+   * @deprecated
+   */
   delayHover?: VxeTablePropTypes.DelayHover;
   scrollX?: VxeTablePropTypes.ScrollX;
   scrollY?: VxeTablePropTypes.ScrollY;

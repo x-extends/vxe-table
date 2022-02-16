@@ -1,7 +1,8 @@
 import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../tools/dom'
-import { warnLog, errLog, getLog, getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
+import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
+import { warnLog, errLog, getLog } from '../../tools/log'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { useSize } from '../../hooks/size'
@@ -5718,16 +5719,26 @@ export default defineComponent({
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const expandOpts = computeExpandOpts.value
+        const rowOpts = computeRowOpts.value
 
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          if (!props.rowId && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
-            warnLog('vxe.error.reqProp', ['row-id'])
+          // if (props.rowId) {
+          //   warnLog('vxe.error.delProp', ['rowId', 'row-config.keyField'])
+          // }
+          // if (props.rowKey) {
+          //   warnLog('vxe.error.delProp', ['rowId', 'row-config.useKey'])
+          // }
+          // if (props.columnKey) {
+          //   warnLog('vxe.error.delProp', ['rowId', 'column-config.useKey'])
+          // }
+          if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
+            warnLog('vxe.error.reqProp', ['row-config.keyField'])
           }
           if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
             warnLog('vxe.error.reqProp', ['keep-source'])
           }
-          if (treeConfig && treeOpts.line && (!props.rowKey || !showOverflow)) {
-            warnLog('vxe.error.reqProp', ['row-key | show-overflow'])
+          if (treeConfig && treeOpts.line && (!props.rowKey || !rowOpts.useKey || !showOverflow)) {
+            warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
           }
           if (treeConfig && props.stripe) {
             warnLog('vxe.error.noTree', ['stripe'])

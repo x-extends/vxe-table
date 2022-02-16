@@ -34,7 +34,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refTableHeader, refTableBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeTooltipOpts } = $xetable.getComputeMaps()
+    const { computeTooltipOpts, computeColumnOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterTable = ref() as Ref<HTMLTableElement>
@@ -106,6 +106,7 @@ export default defineComponent({
       const { visibleColumn } = tableInternalData
       const { scrollYLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
       const tooltipOpts = computeTooltipOpts.value
+      const columnOpts = computeColumnOpts.value
       // 如果是使用优化模式
       if (fixedType) {
         if (scrollYLoad || allColumnFooterOverflow) {
@@ -244,7 +245,7 @@ export default defineComponent({
                 ...attrs,
                 style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
                 ...tfOns,
-                key: columnKey ? column.id : $columnIndex
+                key: columnKey || columnOpts.useKey ? column.id : $columnIndex
               }, [
                 h('div', {
                   class: ['vxe-cell', {

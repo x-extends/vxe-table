@@ -2,7 +2,8 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { browse } from '../../tools/dom'
-import { getLog, parseFile, errLog } from '../../tools/utils'
+import { parseFile } from '../../tools/utils'
+import { errLog, getLog } from '../../tools/log'
 
 import { VxeTablePropTypes, SaveFileFunction, ReadFileFunction, VxeTableConstructor } from '../../../types/all'
 
@@ -22,11 +23,8 @@ export function createFrame (): HTMLIFrameElement {
   return frame
 }
 
-export function getExportBlobByContent (content: string, options: { type: string }): Blob | null {
-  if (window.Blob) {
-    return new Blob([content], { type: `text/${options.type};charset=utf-8;` })
-  }
-  return null
+export function getExportBlobByContent (content: string, options: { type: string }) {
+  return new Blob([content], { type: `text/${options.type};charset=utf-8;` })
 }
 
 export function createHtmlPage (opts: VxeTablePropTypes.PrintConfig, content: string): string {

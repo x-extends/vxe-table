@@ -16,7 +16,7 @@
       show-overflow
       keep-source
       ref="xTable"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :print-config="{}"
       :export-config="{}"
       :loading="demo1.loading"

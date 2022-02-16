@@ -19,7 +19,7 @@
       border
       resizable
       ref="xTree"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :tree-config="{lazy: true, hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -41,7 +41,7 @@
     <vxe-table
       border
       resizable
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :loading="demo2.loading"
       :checkbox-config="{labelField: 'name'}"
       :tree-config="demo2.tableTree"

@@ -12,7 +12,7 @@ export default {
   height: [Number, String] as PropType<VxeTablePropTypes.Height>,
   // 表格的最大高度
   maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
-  // 所有列是否允许拖动列宽调整大小
+  // （即将废弃）所有列是否允许拖动列宽调整大小
   resizable: { type: Boolean as PropType<VxeTablePropTypes.Resizable>, default: () => GlobalConfig.table.resizable },
   // 是否带有斑马纹
   stripe: { type: Boolean as PropType<VxeTablePropTypes.Stripe>, default: () => GlobalConfig.table.stripe },
@@ -88,9 +88,11 @@ export default {
   showFooterOverflow: { type: [Boolean, String] as PropType<VxeTablePropTypes.ShowFooterOverflow>, default: () => GlobalConfig.table.showFooterOverflow },
 
   /** 高级属性 */
-  // 主键配置
+  // （即将废弃）columnKey 已废弃，被 column-config.useKey 替换
   columnKey: Boolean as PropType<VxeTablePropTypes.ColumnKey>,
+  // （即将废弃）rowKey 已废弃，被 row-config.useKey 替换
   rowKey: Boolean as PropType<VxeTablePropTypes.RowKey>,
+  // （即将废弃）rowId 已废弃，被 row-config.keyField 替换
   rowId: { type: String as PropType<VxeTablePropTypes.RowId>, default: () => GlobalConfig.table.rowId },
   zIndex: Number as PropType<VxeTablePropTypes.ZIndex>,
   emptyText: { type: String as PropType<VxeTablePropTypes.EmptyText>, default: () => GlobalConfig.table.emptyText },
@@ -155,6 +157,7 @@ export default {
   scrollY: Object as PropType<VxeTablePropTypes.ScrollY>,
   // （即将废弃）优化相关
   animat: { type: Boolean as PropType<VxeTablePropTypes.Animat>, default: () => GlobalConfig.table.animat },
+  // （可能会被废弃的参数，不要使用）
   delayHover: { type: Number as PropType<VxeTablePropTypes.DelayHover>, default: () => GlobalConfig.table.delayHover as number },
   // 额外的参数
   params: Object as PropType<VxeTablePropTypes.Params>

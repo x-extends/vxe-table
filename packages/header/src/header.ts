@@ -263,7 +263,7 @@ export default defineComponent({
                 rowspan: column.rowSpan > 1 ? column.rowSpan : null,
                 style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
                 ...thOns,
-                key: columnKey || isColGroup ? column.id : $columnIndex
+                key: columnKey || columnOpts.useKey || isColGroup ? column.id : $columnIndex
               }, [
                 h('div', {
                   class: ['vxe-cell', {

@@ -2,7 +2,8 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { toFilters } from './util'
-import { warnLog, errLog, getFuncText } from '../../tools/utils'
+import { getFuncText } from '../../tools/utils'
+import { warnLog, errLog } from '../../tools/log'
 
 import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
 
@@ -143,10 +144,10 @@ export class ColumnInfo {
     // 不支持双向的属性
     if (name !== 'filters') {
       if (name === 'field') {
+        // 兼容旧属性
         this.property = value
-      } else {
-        this[name] = value
       }
+      this[name] = value
     }
   }
 

@@ -39,7 +39,7 @@
 
     <vxe-table
       resizable
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :tree-config="{transform: true, expandRowKeys: demo2.defaultExpandKeys}"
       :data="demo2.tableData">
       <vxe-column field="name" title="app.body.label.name" tree-node></vxe-column>
@@ -60,7 +60,7 @@
     <vxe-table
       border
       show-overflow
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :data="demo3.tableData"
       :tree-config="{transform: true, expandAll: true}">
       <vxe-column type="seq" width="180" title="序号" tree-node></vxe-column>

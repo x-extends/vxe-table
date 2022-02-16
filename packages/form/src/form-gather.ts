@@ -1,5 +1,5 @@
 import { defineComponent, h, onUnmounted, inject, ref, Ref, reactive, onMounted, provide, nextTick } from 'vue'
-import { errLog } from '../../tools/utils'
+import { errLog } from '../../tools/log'
 import { createItem, watchItem, destroyItem, assemItem, XEFormItemProvide } from './util'
 import { formItemProps } from './form-item'
 

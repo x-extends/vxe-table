@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { mergeBodyMethod, getRowid, getPropClass, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
-import { updateCellTitle, setScrollTop } from '../../tools/dom'
+import { updateCellTitle } from '../../tools/dom'
 import { isEnableConf } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
@@ -31,7 +31,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts } = $xetable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -131,6 +131,7 @@ export default defineComponent({
       const tooltipOpts = computeTooltipOpts.value
       const rowOpts = computeRowOpts.value
       const sYOpts = computeSYOpts.value
+      const columnOpts = computeColumnOpts.value
       const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
       const { actived } = editStore
       const { rHeight: scrollYRHeight } = sYOpts
@@ -295,7 +296,7 @@ export default defineComponent({
           'col--valid-error': hasValidError,
           'col--current': currentColumn === column
         }, getPropClass(className, params), getPropClass(cellClassName, params)],
-        key: columnKey ? column.id : $columnIndex,
+        key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
         ...attrs,
         style: Object.assign({
           height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
@@ -362,7 +363,7 @@ export default defineComponent({
             }, rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''],
             rowid: rowid,
             style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-            key: rowKey || treeConfig ? rowid : $rowIndex,
+            key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,
             ...trOn
           }, tableColumn.map((column: any, $columnIndex: any) => {
             return renderColumn(seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
@@ -430,28 +431,28 @@ export default defineComponent({
         }
         clearTimeout(scrollProcessTimeout)
         scrollProcessTimeout = setTimeout(() => {
-          const tableBody = refTableBody.value
-          const leftBody = refTableLeftBody.value
-          const rightBody = refTableRightBody.value
-          const bodyElem = tableBody.$el as XEBodyScrollElement
-          const leftElem = leftBody ? leftBody.$el as XEBodyScrollElement : null
-          const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
+          // const tableBody = refTableBody.value
+          // const leftBody = refTableLeftBody.value
+          // const rightBody = refTableRightBody.value
+          // const bodyElem = tableBody.$el as XEBodyScrollElement
+          // const leftElem = leftBody ? leftBody.$el as XEBodyScrollElement : null
+          // const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
           restoreScrollListener(elem1)
           restoreScrollListener(elem2)
           // 检查滚动条是的同步
-          let targetTop = bodyElem.scrollTop
-          if (fixedType === 'left') {
-            if (leftElem) {
-              targetTop = leftElem.scrollTop
-            }
-          } else if (fixedType === 'right') {
-            if (rightElem) {
-              targetTop = rightElem.scrollTop
-            }
-          }
-          setScrollTop(bodyElem, targetTop)
-          setScrollTop(leftElem, targetTop)
-          setScrollTop(rightElem, targetTop)
+          // let targetTop = bodyElem.scrollTop
+          // if (fixedType === 'left') {
+          //   if (leftElem) {
+          //     targetTop = leftElem.scrollTop
+          //   }
+          // } else if (fixedType === 'right') {
+          //   if (rightElem) {
+          //     targetTop = rightElem.scrollTop
+          //   }
+          // }
+          // setScrollTop(bodyElem, targetTop)
+          // setScrollTop(leftElem, targetTop)
+          // setScrollTop(rightElem, targetTop)
         }, 300)
       }
     }
