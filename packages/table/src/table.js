@@ -771,7 +771,7 @@ export default {
       if (this.editConfig && editOpts.showStatus && !this.keepSource) {
         warnLog('vxe.error.reqProp', ['keep-source'])
       }
-      if (treeConfig && treeOpts.line && (!this.rowKey || !rowOpts.useKey || !showOverflow)) {
+      if (treeConfig && treeOpts.line && (!(this.rowKey || rowOpts.useKey) || !showOverflow)) {
         warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
       }
       if (this.showFooter && !this.footerMethod) {

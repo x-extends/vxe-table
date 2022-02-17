@@ -276,6 +276,7 @@
       "content",
       "size",
       "disabled",
+      "strict",
       "name"
     ],
     "description": "单选框"
@@ -284,7 +285,8 @@
     "attributes": [
       "value",
       "size",
-      "disabled"
+      "disabled",
+      "strict"
     ],
     "subtags": [
       "vxe-radio",
@@ -297,7 +299,8 @@
       "value",
       "label",
       "content",
-      "disabled"
+      "disabled",
+      "strict"
     ],
     "description": "单选按钮"
   },
@@ -454,6 +457,7 @@
       "z-index",
       "is-arrow",
       "enterable",
+      "enter-delay",
       "leave-delay"
     ],
     "description": "工具提示"
@@ -572,6 +576,7 @@
   },
   "vxe-pulldown": {
     "attributes": [
+      "model-value",
       "size",
       "disabled",
       "placement",
