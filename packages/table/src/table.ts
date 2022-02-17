@@ -5737,7 +5737,7 @@ export default defineComponent({
           if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
             warnLog('vxe.error.reqProp', ['keep-source'])
           }
-          if (treeConfig && treeOpts.line && (!props.rowKey || !rowOpts.useKey || !showOverflow)) {
+          if (treeConfig && treeOpts.line && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
             warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
           }
           if (treeConfig && props.stripe) {

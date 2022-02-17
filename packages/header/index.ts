@@ -4,9 +4,10 @@ import { dynamicApp } from '../dynamics'
 
 export const Header = Object.assign(VxeTableHeader, {
   install (app: App) {
-    dynamicApp.component(VxeTableHeader.name, VxeTableHeader)
     app.component(VxeTableHeader.name, VxeTableHeader)
   }
 })
+
+dynamicApp.component(VxeTableHeader.name, VxeTableHeader)
 
 export default Header

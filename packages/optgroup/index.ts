@@ -4,9 +4,10 @@ import { dynamicApp } from '../dynamics'
 
 export const Optgroup = Object.assign(VxeOptgroupComponent, {
   install: function (app: App) {
-    dynamicApp.component(VxeOptgroupComponent.name, VxeOptgroupComponent)
     app.component(VxeOptgroupComponent.name, VxeOptgroupComponent)
   }
 })
+
+dynamicApp.component(VxeOptgroupComponent.name, VxeOptgroupComponent)
 
 export default Optgroup

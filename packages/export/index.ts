@@ -35,11 +35,12 @@ export const Export = {
       }
     })
     VXETable.hooks.add('$tableExport', exportHook)
-    dynamicApp.component(ExportPanelComponent.name, ExportPanelComponent)
-    dynamicApp.component(ImportPanelComponent.name, ImportPanelComponent)
     app.component(ExportPanelComponent.name, ExportPanelComponent)
     app.component(ImportPanelComponent.name, ImportPanelComponent)
   }
 }
+
+dynamicApp.component(ExportPanelComponent.name, ExportPanelComponent)
+dynamicApp.component(ImportPanelComponent.name, ImportPanelComponent)
 
 export default Export

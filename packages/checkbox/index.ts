@@ -4,9 +4,10 @@ import { dynamicApp } from '../dynamics'
 
 export const Checkbox = Object.assign(VxeCheckboxComponent, {
   install (app: App) {
-    dynamicApp.component(VxeCheckboxComponent.name, VxeCheckboxComponent)
     app.component(VxeCheckboxComponent.name, VxeCheckboxComponent)
   }
 })
+
+dynamicApp.component(VxeCheckboxComponent.name, VxeCheckboxComponent)
 
 export default Checkbox

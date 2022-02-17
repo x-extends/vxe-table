@@ -8,9 +8,10 @@ export const Menu = {
   Panel: PanelComponent,
   install (app: App) {
     VXETable.hooks.add('$tableMenu', menuHook)
-    dynamicApp.component(PanelComponent.name, PanelComponent)
     app.component(PanelComponent.name, PanelComponent)
   }
 }
+
+dynamicApp.component(PanelComponent.name, PanelComponent)
 
 export default Menu
