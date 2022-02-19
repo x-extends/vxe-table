@@ -69,9 +69,9 @@ const renderItem = (h, _vm, item, slots) => {
   }
   const ons = showTooltip ? {
     mouseenter (evnt) {
-      _vm.triggerHeaderHelpEvent(evnt, params)
+      _vm.triggerTitleTipEvent(evnt, params)
     },
-    mouseleave: _vm.handleTargetLeaveEvent
+    mouseleave: _vm.handleTitleTipLeaveEvent
   } : {}
   return h('div', {
     class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {

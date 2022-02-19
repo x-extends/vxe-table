@@ -23,7 +23,7 @@ function renderSuffixIcon (h, titleSuffix) {
 }
 
 export function renderTitle (h, _vm, item) {
-  const { data } = _vm
+  const { data, tooltipOpts } = _vm
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const params = { data, property: field, item, $form: _vm }
@@ -34,9 +34,9 @@ export function renderTitle (h, _vm, item) {
       (titlePrefix.content || titlePrefix.message)
         ? h('vxe-tooltip', {
           props: {
-            content: getFuncText(titlePrefix.content || titlePrefix.message),
-            enterable: titlePrefix.enterable,
-            theme: titlePrefix.theme
+            ...tooltipOpts,
+            ...titlePrefix,
+            content: getFuncText(titlePrefix.content || titlePrefix.message)
           }
         }, [
           renderPrefixIcon(h, titlePrefix)
@@ -60,9 +60,9 @@ export function renderTitle (h, _vm, item) {
       (titleSuffix.content || titleSuffix.message)
         ? h('vxe-tooltip', {
           props: {
-            content: getFuncText(titleSuffix.content || titleSuffix.message),
-            enterable: titleSuffix.enterable,
-            theme: titleSuffix.theme
+            ...tooltipOpts,
+            ...titlePrefix,
+            content: getFuncText(titleSuffix.content || titleSuffix.message)
           }
         }, [
           renderSuffixIcon(h, titleSuffix)

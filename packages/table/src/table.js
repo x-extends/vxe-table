@@ -389,6 +389,13 @@ export default {
         insertList: [],
         removeList: []
       },
+      // 存放 tooltip 相关信息
+      tooltipStore: {
+        row: null,
+        column: null,
+        visible: false,
+        currOpts: null
+      },
       // 存放数据校验相关信息
       validStore: {
         visible: false,
@@ -480,11 +487,10 @@ export default {
       return Object.assign({}, GlobalConfig.table.checkboxConfig, this.checkboxConfig)
     },
     tooltipOpts () {
-      const opts = Object.assign({ leaveDelay: 300 }, GlobalConfig.table.tooltipConfig, this.tooltipConfig)
-      if (opts.enterable) {
-        opts.leaveMethod = this.handleTooltipLeaveMethod
-      }
-      return opts
+      return Object.assign({}, GlobalConfig.tooltip, GlobalConfig.table.tooltipConfig, this.tooltipConfig)
+    },
+    tipConfig () {
+      return { ...this.tooltipOpts, ...this.tooltipStore.currOpts }
     },
     validTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)
@@ -598,54 +604,6 @@ export default {
       }
       return false
     }
-    // isMergeLeftFixedExceeded () {
-    //   const { mergeList, columnStore, visibleColumn } = this
-    //   const { leftList } = columnStore
-    //   const lastFCIndex = visibleColumn.indexOf(leftList[leftList.length - 1])
-    //   for (let i = 0, len = mergeList.length; i < len; i++) {
-    //     const item = mergeList[i]
-    //     if (item.col <= lastFCIndex && item.col + item.colspan > lastFCIndex) {
-    //       return true
-    //     }
-    //   }
-    //   return false
-    // },
-    // isMergeRightFixedExceeded () {
-    //   const { mergeList, columnStore, visibleColumn } = this
-    //   const { rightList } = columnStore
-    //   const firstFCIndex = visibleColumn.indexOf(rightList[0])
-    //   for (let i = 0, len = mergeList.length; i < len; i++) {
-    //     const item = mergeList[i]
-    //     if (item.col < firstFCIndex && item.col + item.colspan >= firstFCIndex) {
-    //       return true
-    //     }
-    //   }
-    //   return false
-    // },
-    // isMergeFooterLeftFixedExceeded () {
-    //   const { mergeFooterList, columnStore, visibleColumn } = this
-    //   const { leftList } = columnStore
-    //   const lastFCIndex = visibleColumn.indexOf(leftList[leftList.length - 1])
-    //   for (let i = 0, len = mergeFooterList.length; i < len; i++) {
-    //     const item = mergeFooterList[i]
-    //     if (item.col <= lastFCIndex && item.col + item.colspan > lastFCIndex) {
-    //       return true
-    //     }
-    //   }
-    //   return false
-    // },
-    // isMergeFooterRightFixedExceeded () {
-    //   const { mergeFooterList, columnStore, visibleColumn } = this
-    //   const { rightList } = columnStore
-    //   const firstFCIndex = visibleColumn.indexOf(rightList[0])
-    //   for (let i = 0, len = mergeFooterList.length; i < len; i++) {
-    //     const item = mergeFooterList[i]
-    //     if (item.col < firstFCIndex && item.col + item.colspan >= firstFCIndex) {
-    //       return true
-    //     }
-    //   }
-    //   return false
-    // }
   },
   watch: {
     data (value) {
@@ -713,8 +671,6 @@ export default {
       scrollXStore: {},
       // 存放纵向 Y 虚拟滚动相关信息
       scrollYStore: {},
-      // 存放 tooltip 相关信息
-      tooltipStore: {},
       // 表格宽度
       tableWidth: 0,
       // 表格高度
@@ -984,7 +940,6 @@ export default {
       highlightHoverColumn,
       editConfig,
       validTipOpts,
-      tooltipOpts,
       initStore,
       columnStore,
       filterStore,
@@ -1176,7 +1131,7 @@ export default {
        */
       hasTip ? h('vxe-tooltip', {
         ref: 'tooltip',
-        props: tooltipOpts
+        props: this.tipConfig
       }) : _e(),
       /**
        * 校验提示

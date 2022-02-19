@@ -41,6 +41,29 @@ function showTip (_vm) {
   return _vm.updatePlacement()
 }
 
+function renderContent (h, _vm) {
+  const { $scopedSlots, useHTML, tipContent } = _vm
+  if ($scopedSlots.content) {
+    return h('div', {
+      key: 1,
+      class: 'vxe-table--tooltip-content'
+    }, $scopedSlots.content.call(this, {}))
+  }
+  if (useHTML) {
+    return h('div', {
+      key: 2,
+      class: 'vxe-table--tooltip-content',
+      domProps: {
+        innerHTML: tipContent
+      }
+    })
+  }
+  return h('div', {
+    key: 3,
+    class: 'vxe-table--tooltip-content'
+  }, UtilTools.formatText(tipContent))
+}
+
 export default {
   name: 'VxeTooltip',
   mixins: [vSize],
@@ -49,19 +72,19 @@ export default {
     size: { type: String, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
     trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
     theme: { type: String, default: () => GlobalConfig.tooltip.theme },
-    content: [String, Number],
+    content: { type: [String, Number], default: null },
+    useHTML: Boolean,
     zIndex: [String, Number],
     isArrow: { type: Boolean, default: true },
     enterable: Boolean,
     enterDelay: { type: Number, default: () => GlobalConfig.tooltip.enterDelay },
-    leaveDelay: { type: Number, default: () => GlobalConfig.tooltip.leaveDelay },
-    leaveMethod: Function
+    leaveDelay: { type: Number, default: () => GlobalConfig.tooltip.leaveDelay }
   },
   data () {
     return {
       isUpdate: false,
       visible: false,
-      message: '',
+      tipContent: '',
       tipActive: false,
       tipTarget: null,
       tipZindex: 0,
@@ -74,7 +97,7 @@ export default {
   },
   watch: {
     content (value) {
-      this.message = value
+      this.tipContent = value
     },
     value (value) {
       if (!this.isUpdate) {
@@ -94,7 +117,7 @@ export default {
     const { $el, trigger, content, value } = this
     const parentNode = $el.parentNode
     let target
-    this.message = content
+    this.tipContent = content
     this.tipZindex = UtilTools.nextZIndex()
     XEUtils.arrayEach($el.children, (elem, index) => {
       if (index > 1) {
@@ -134,7 +157,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, vSize, theme, message, tipActive, isArrow, visible, tipStore, enterable } = this
+    const { $scopedSlots, vSize, theme, tipActive, isArrow, visible, tipStore, enterable } = this
     let on
     if (enterable) {
       on = {
@@ -155,9 +178,7 @@ export default {
       ref: 'tipWrapper',
       on
     }, [
-      h('div', {
-        class: 'vxe-table--tooltip-content'
-      }, $scopedSlots.content ? $scopedSlots.content.call(this, {}) : message),
+      renderContent(h, this),
       h('div', {
         class: 'vxe-table--tooltip-arrow',
         style: tipStore.arrowStyle
@@ -165,8 +186,8 @@ export default {
     ].concat($scopedSlots.default ? $scopedSlots.default.call(this, {}) : []))
   },
   methods: {
-    open (target, message) {
-      return this.toVisible(target || this.target, message)
+    open (target, content) {
+      return this.toVisible(target || this.target, content)
     },
     close () {
       this.tipTarget = null
@@ -193,13 +214,13 @@ export default {
         this.tipZindex = UtilTools.nextZIndex()
       }
     },
-    toVisible (target, message) {
+    toVisible (target, content) {
       if (target) {
         const { trigger, enterDelay } = this
         this.tipActive = true
         this.tipTarget = target
-        if (message) {
-          this.message = message
+        if (content) {
+          this.tipContent = content
         }
         if (enterDelay && trigger === 'hover') {
           this.showDelayTip()
@@ -246,17 +267,15 @@ export default {
     wrapperMouseenterEvent () {
       this.tipActive = true
     },
-    wrapperMouseleaveEvent (evnt) {
-      const { leaveMethod, trigger, enterable, leaveDelay } = this
+    wrapperMouseleaveEvent () {
+      const { trigger, enterable, leaveDelay } = this
       this.tipActive = false
-      if (!leaveMethod || leaveMethod({ $event: evnt }) !== false) {
-        if (enterable && trigger === 'hover') {
-          setTimeout(() => {
-            if (!this.tipActive) {
-              this.close()
-            }
-          }, leaveDelay)
-        }
+      if (enterable && trigger === 'hover') {
+        setTimeout(() => {
+          if (!this.tipActive) {
+            this.close()
+          }
+        }, leaveDelay)
       }
     }
   }

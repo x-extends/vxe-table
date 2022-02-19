@@ -37,10 +37,9 @@ export default {
       // trigger: 'default',
       strict: true
     },
-    // tooltipConfig: {
-    //   theme: 'dark',
-    //   enterable: false
-    // },
+    tooltipConfig: {
+      enterable: true
+    },
     validConfig: {
       showMessage: true,
       message: 'default'
@@ -244,12 +243,15 @@ export default {
   },
   form: {
     // preventSubmit: false,
+    // size: null,
+    // colon: false,
     validConfig: {
       showMessage: true,
       autoPos: true
     },
-    // size: null,
-    // colon: false,
+    tooltipConfig: {
+      enterable: true
+    },
     titleAsterisk: true
   },
   input: {

@@ -7,10 +7,10 @@ import { getColumnConfig } from './util'
 
 function renderHelpIcon (h, params) {
   const { $table, column } = params
-  const { titleHelp } = column
-  return titleHelp ? [
+  const titlePrefix = column.titlePrefix || column.titleHelp
+  return titlePrefix ? [
     h('i', {
-      class: ['vxe-cell-help-icon', titleHelp.icon || GlobalConfig.icon.TABLE_HELP],
+      class: ['vxe-cell-help-icon', titlePrefix.icon || GlobalConfig.icon.TABLE_HELP],
       on: {
         mouseenter (evnt) {
           $table.triggerHeaderHelpEvent(evnt, params)

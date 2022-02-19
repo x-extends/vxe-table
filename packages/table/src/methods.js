@@ -1902,10 +1902,6 @@ const Methods = {
       footerSpanMethod,
       isAllOverflow,
       visibleColumn
-      // isMergeLeftFixedExceeded,
-      // isMergeRightFixedExceeded,
-      // isMergeFooterLeftFixedExceeded,
-      // isMergeFooterRightFixedExceeded
     } = this
     const containerList = ['main', 'left', 'right']
     const emptyPlaceholderElem = $refs.emptyPlaceholder
@@ -2023,14 +2019,6 @@ const Methods = {
                 tableColumn = fixedColumn
               } else {
                 tableColumn = visibleColumn
-                // 检查固定列是否被合并，合并范围是否超出固定列
-                // if (mergeList.length && !isMergeLeftFixedExceeded && fixedType === 'left') {
-                //   tableColumn = fixedColumn
-                // } else if (mergeList.length && !isMergeRightFixedExceeded && fixedType === 'right') {
-                //   tableColumn = fixedColumn
-                // } else {
-                //   tableColumn = visibleColumn
-                // }
               }
             } else {
               tableColumn = visibleColumn
@@ -2056,14 +2044,6 @@ const Methods = {
                 tableColumn = fixedColumn
               } else {
                 tableColumn = visibleColumn
-                // 检查固定列是否被合并，合并范围是否超出固定列
-                // if (mergeFooterList.length && !isMergeFooterLeftFixedExceeded && fixedType === 'left') {
-                //   tableColumn = fixedColumn
-                // } else if (mergeFooterList.length && !isMergeFooterRightFixedExceeded && fixedType === 'right') {
-                //   tableColumn = fixedColumn
-                // } else {
-                //   tableColumn = visibleColumn
-                // }
               }
             } else {
               tableColumn = visibleColumn
@@ -2284,6 +2264,7 @@ const Methods = {
     const isEsc = keyCode === 27
     if (isEsc) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
+        this.emitEvent('keydown-start', {}, evnt)
         if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardEvent) {
           this.handleKeyboardEvent(evnt)
         } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
@@ -2304,6 +2285,7 @@ const Methods = {
           }
         }
         this.emitEvent('keydown', {}, evnt)
+        this.emitEvent('keydown-end', {}, evnt)
       })
     }
   },
@@ -2549,19 +2531,9 @@ const Methods = {
     this.updateCellAreas()
     this.recalculate(true)
   },
-  handleTooltipLeaveMethod () {
-    const tooltipOpts = this.tooltipOpts
-    setTimeout(() => {
-      if (!this.tooltipActive) {
-        this.closeTooltip()
-      }
-    }, tooltipOpts.leaveDelay)
-    return false
-  },
   handleTargetEnterEvent (isClear) {
     const $tooltip = this.$refs.tooltip
     clearTimeout(this.tooltipTimeout)
-    this.tooltipActive = true
     if (isClear) {
       this.closeTooltip()
     } else {
@@ -2573,7 +2545,6 @@ const Methods = {
   handleTargetLeaveEvent () {
     const tooltipOpts = this.tooltipOpts
     let $tooltip = this.$refs.tooltip
-    this.tooltipActive = false
     if ($tooltip) {
       $tooltip.setActived(false)
     }
@@ -2590,16 +2561,19 @@ const Methods = {
   },
   triggerHeaderHelpEvent (evnt, params) {
     const { column } = params
-    const { titleHelp } = column
-    if (titleHelp.content || titleHelp.message) {
+    const titlePrefix = column.titlePrefix || column.titleHelp
+    if (titlePrefix.content || titlePrefix.message) {
       const { $refs, tooltipStore } = this
-      const $tooltip = $refs.tooltip
-      const content = getFuncText(titleHelp.content || titleHelp.message)
+      const content = getFuncText(titlePrefix.content || titlePrefix.message)
       this.handleTargetEnterEvent(true)
       tooltipStore.visible = true
-      if ($tooltip) {
-        $tooltip.open(evnt.currentTarget, content)
-      }
+      tooltipStore.currOpts = { ...titlePrefix, content: null }
+      this.$nextTick(() => {
+        const $tooltip = $refs.tooltip
+        if ($tooltip) {
+          $tooltip.open(evnt.currentTarget, content)
+        }
+      })
     }
   },
   /**
@@ -2665,7 +2639,6 @@ const Methods = {
     const { $refs, tooltipOpts, tooltipStore } = this
     const { column, row } = params
     const { showAll, enabled, contentMethod } = tooltipOpts
-    const tooltip = $refs.tooltip
     const customContent = contentMethod ? contentMethod(params) : null
     const useCustom = contentMethod && !XEUtils.eqNull(customContent)
     const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
@@ -2674,11 +2647,15 @@ const Methods = {
       Object.assign(tooltipStore, {
         row,
         column,
-        visible: true
+        visible: true,
+        currOpts: null
       })
-      if (tooltip) {
-        tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), UtilTools.formatText(content))
-      }
+      this.$nextTick(() => {
+        const $tooltip = $refs.tooltip
+        if ($tooltip) {
+          $tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), UtilTools.formatText(content))
+        }
+      })
     }
     return this.$nextTick()
   },
@@ -2702,7 +2679,8 @@ const Methods = {
         row: null,
         column: null,
         content: null,
-        visible: false
+        visible: false,
+        currOpts: null
       })
       if (tooltip) {
         tooltip.close()

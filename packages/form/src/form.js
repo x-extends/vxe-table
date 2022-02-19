@@ -64,7 +64,7 @@ function getResetValue (value, resetValue) {
 
 function renderItems (h, _vm, itemList) {
   const { _e, rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
-  return itemList.map((item, index) => {
+  return itemList.map((item) => {
     const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const span = item.span || _vm.span
@@ -111,9 +111,9 @@ function renderItems (h, _vm, itemList) {
     }
     const ons = showTooltip ? {
       mouseenter (evnt) {
-        _vm.triggerHeaderHelpEvent(evnt, params)
+        _vm.triggerTitleTipEvent(evnt, params)
       },
-      mouseleave: _vm.handleTargetLeaveEvent
+      mouseleave: _vm.handleTitleTipLeaveEvent
     } : {}
     return h('div', {
       class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
@@ -123,7 +123,7 @@ function renderItems (h, _vm, itemList) {
         'is--active': !itemVisibleMethod || itemVisibleMethod(params),
         'is--error': showError
       }],
-      key: index
+      key: item.id
     }, [
       h('div', {
         class: 'vxe-form--item-inner'
@@ -190,6 +190,7 @@ export default {
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
     validConfig: Object,
+    tooltipConfig: Object,
     customLayout: { type: Boolean, default: () => GlobalConfig.form.customLayout }
   },
   data () {
@@ -199,7 +200,6 @@ export default {
       formItems: [],
 
       tooltipTimeout: null,
-      tooltipActive: false,
       tooltipStore: {
         item: null,
         visible: false
@@ -216,11 +216,7 @@ export default {
       return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
     },
     tooltipOpts () {
-      const opts = Object.assign({ leaveDelay: 300 }, GlobalConfig.form.tooltipConfig, this.tooltipConfig)
-      if (opts.enterable) {
-        opts.leaveMethod = this.handleTooltipLeaveMethod
-      }
-      return opts
+      return Object.assign({}, GlobalConfig.tooltip, GlobalConfig.form.tooltipConfig, this.tooltipConfig)
     }
   },
   watch: {
@@ -283,7 +279,7 @@ export default {
        */
       hasUseTooltip ? h('vxe-tooltip', {
         ref: 'tooltip',
-        ...tooltipOpts
+        props: tooltipOpts
       }) : _e()
     ])
   },
@@ -375,15 +371,6 @@ export default {
       this.reset()
       this.$emit('reset', { data: this.data, $form: this, $event: evnt })
     },
-    handleTooltipLeaveMethod () {
-      const { tooltipOpts } = this
-      setTimeout(() => {
-        if (!this.tooltipActive) {
-          this.closeTooltip()
-        }
-      }, tooltipOpts.leaveDelay)
-      return false
-    },
     closeTooltip () {
       const { tooltipStore } = this
       const $tooltip = this.$refs.tooltip
@@ -398,7 +385,7 @@ export default {
       }
       return this.$nextTick()
     },
-    triggerHeaderHelpEvent (evnt, params) {
+    triggerTitleTipEvent (evnt, params) {
       const { item } = params
       const { tooltipStore } = this
       const $tooltip = this.$refs.tooltip
@@ -406,8 +393,9 @@ export default {
       const content = (overflowElem.textContent || '').trim()
       const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
       clearTimeout(this.tooltipTimeout)
-      this.tooltipActive = true
-      this.closeTooltip()
+      if (tooltipStore.item !== item) {
+        this.closeTooltip()
+      }
       if (content && isCellOverflow) {
         Object.assign(tooltipStore, {
           item,
@@ -418,10 +406,9 @@ export default {
         }
       }
     },
-    handleTargetLeaveEvent () {
+    handleTitleTipLeaveEvent () {
       const { tooltipOpts } = this
       let $tooltip = this.$refs.tooltip
-      this.tooltipActive = false
       if ($tooltip) {
         $tooltip.setActived(false)
       }
