@@ -162,6 +162,14 @@ export default defineComponent({
         insertList: [],
         removeList: []
       },
+      // 存放 tooltip 相关信息
+      tooltipStore: {
+        row: null,
+        column: null,
+        content: null,
+        visible: false,
+        currOpts: null
+      },
       // 存放数据校验相关信息
       validStore: {
         visible: false,
@@ -234,8 +242,6 @@ export default defineComponent({
         startIndex: 0,
         endIndex: 0
       },
-      // 存放 tooltip 相关信息
-      tooltipStore: {},
       // 表格宽度
       tableWidth: 0,
       // 表格高度
@@ -281,7 +287,6 @@ export default defineComponent({
       fullColumnIdData: {},
       fullColumnFieldData: {},
       inited: false,
-      tooltipActive: false,
       tooltipTimeout: null,
       initStatus: false,
       isActivated: false
@@ -362,22 +367,17 @@ export default defineComponent({
 
     let computeTooltipOpts = ref() as ComputedRef<VxeTablePropTypes.TooltipOpts>
 
-    // const handleTooltipLeaveMethod = () => {
-    //   const tooltipOpts = computeTooltipOpts.value
-    //   setTimeout(() => {
-    //     if (!internalData.tooltipActive) {
-    //       tableMethods.closeTooltip()
-    //     }
-    //   }, tooltipOpts.leaveDelay)
-    //   return false
-    // }
-
     computeTooltipOpts = computed(() => {
-      const opts: VxeTablePropTypes.TooltipOpts = Object.assign({ leaveDelay: 300 }, GlobalConfig.table.tooltipConfig, props.tooltipConfig)
-      if (opts.enterable) {
-        // opts.leaveMethod = handleTooltipLeaveMethod
+      return Object.assign({}, GlobalConfig.tooltip, GlobalConfig.table.tooltipConfig, props.tooltipConfig)
+    })
+
+    const computeTipConfig = computed(() => {
+      const { tooltipStore } = reactData
+      const tooltipOpts = computeTooltipOpts.value
+      return {
+        ...tooltipOpts,
+        ...tooltipStore.currOpts
       }
-      return opts
     })
 
     const computeValidTipOpts = computed(() => {
@@ -1451,14 +1451,6 @@ export default defineComponent({
                   tableColumn = fixedColumn
                 } else {
                   tableColumn = visibleColumn
-                  // 检查固定列是否被合并，合并范围是否超出固定列
-                  // if (mergeList.length && !isMergeLeftFixedExceeded && fixedType === 'left') {
-                  //   tableColumn = fixedColumn
-                  // } else if (mergeList.length && !isMergeRightFixedExceeded && fixedType === 'right') {
-                  //   tableColumn = fixedColumn
-                  // } else {
-                  //   tableColumn = visibleColumn
-                  // }
                 }
               } else {
                 tableColumn = visibleColumn
@@ -1484,14 +1476,6 @@ export default defineComponent({
                   tableColumn = fixedColumn
                 } else {
                   tableColumn = visibleColumn
-                  // 检查固定列是否被合并，合并范围是否超出固定列
-                  // if (mergeFooterList.length && !isMergeFooterLeftFixedExceeded && fixedType === 'left') {
-                  //   tableColumn = fixedColumn
-                  // } else if (mergeFooterList.length && !isMergeFooterRightFixedExceeded && fixedType === 'right') {
-                  //   tableColumn = fixedColumn
-                  // } else {
-                  //   tableColumn = visibleColumn
-                  // }
                 }
               } else {
                 tableColumn = visibleColumn
@@ -2994,7 +2978,7 @@ export default defineComponent({
        * 关闭 tooltip
        */
       closeTooltip () {
-        const { tooltipStore } = internalData
+        const { tooltipStore } = reactData
         const $tooltip = refTooltip.value
         const $commTip = refCommTooltip.value
         if (tooltipStore.visible) {
@@ -4144,6 +4128,7 @@ export default defineComponent({
       const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
       if (isEsc) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
+          tableMethods.dispatchEvent('keydown-start', {}, evnt)
           if (keyboardConfig && mouseConfig && mouseOpts.area && $xetable.handleKeyboardEvent) {
             $xetable.handleKeyboardEvent(evnt)
           } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
@@ -4166,6 +4151,7 @@ export default defineComponent({
             }
           }
           tableMethods.dispatchEvent('keydown', {}, evnt)
+          tableMethods.dispatchEvent('keydown-end', {}, evnt)
         })
       }
     }
@@ -4464,7 +4450,6 @@ export default defineComponent({
     const handleTargetEnterEvent = (isClear: boolean) => {
       const $tooltip = refTooltip.value
       clearTimeout(internalData.tooltipTimeout)
-      internalData.tooltipActive = true
       if (isClear) {
         tableMethods.closeTooltip()
       } else {
@@ -4482,11 +4467,10 @@ export default defineComponent({
      */
     const handleTooltip = (evnt: MouseEvent, cell: any, overflowElem: any, tipElem: any, params: any) => {
       params.cell = cell
-      const { tooltipStore } = internalData
+      const { tooltipStore } = reactData
       const tooltipOpts = computeTooltipOpts.value
       const { column, row } = params
       const { showAll, contentMethod } = tooltipOpts
-      const $tooltip = refTooltip.value
       const customContent = contentMethod ? contentMethod(params) : null
       const useCustom = contentMethod && !XEUtils.eqNull(customContent)
       const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
@@ -4495,11 +4479,15 @@ export default defineComponent({
         Object.assign(tooltipStore, {
           row,
           column,
-          visible: true
+          visible: true,
+          currOpts: null
         })
-        if ($tooltip) {
-          $tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), formatText(content))
-        }
+        nextTick(() => {
+          const $tooltip = refTooltip.value
+          if ($tooltip) {
+            $tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), formatText(content))
+          }
+        })
       }
       return nextTick()
     }
@@ -4941,23 +4929,26 @@ export default defineComponent({
       },
       triggerHeaderHelpEvent (evnt, params) {
         const { column } = params
-        const { titleHelp } = column
-        if (titleHelp.content || titleHelp.message) {
-          const { tooltipStore } = internalData
-          const $tooltip = refTooltip.value
-          const content = getFuncText(titleHelp.content || titleHelp.message)
+        const titlePrefix = column.titlePrefix || column.titleHelp
+        if (titlePrefix.content || titlePrefix.message) {
+          const { tooltipStore } = reactData
+          const content = getFuncText(titlePrefix.content || titlePrefix.message)
           handleTargetEnterEvent(true)
           tooltipStore.visible = true
-          if ($tooltip) {
-            $tooltip.open(evnt.currentTarget, content)
-          }
+          tooltipStore.currOpts = { ...titlePrefix, content: null }
+          nextTick(() => {
+            const $tooltip = refTooltip.value
+            if ($tooltip) {
+              $tooltip.open(evnt.currentTarget, content)
+            }
+          })
         }
       },
       /**
        * 触发表头 tooltip 事件
        */
       triggerHeaderTooltipEvent (evnt, params) {
-        const { tooltipStore } = internalData
+        const { tooltipStore } = reactData
         const { column } = params
         const titleElem = evnt.currentTarget
         handleTargetEnterEvent(true)
@@ -4971,7 +4962,7 @@ export default defineComponent({
       triggerBodyTooltipEvent (evnt, params) {
         const { editConfig } = props
         const { editStore } = reactData
-        const { tooltipStore } = internalData
+        const { tooltipStore } = reactData
         const editOpts = computeEditOpts.value
         const { actived } = editStore
         const { row, column } = params
@@ -5001,7 +4992,7 @@ export default defineComponent({
        */
       triggerFooterTooltipEvent (evnt, params) {
         const { column } = params
-        const { tooltipStore } = internalData
+        const { tooltipStore } = reactData
         const cell = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
@@ -5011,7 +5002,6 @@ export default defineComponent({
       handleTargetLeaveEvent () {
         const tooltipOpts = computeTooltipOpts.value
         let $tooltip = refTooltip.value
-        internalData.tooltipActive = false
         if ($tooltip) {
           $tooltip.setActived(false)
         }
@@ -5890,7 +5880,7 @@ export default defineComponent({
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
       const { leftList, rightList } = columnStore
-      const tooltipOpts = computeTooltipOpts.value
+      const tipConfig = computeTipConfig.value
       const treeOpts = computeTreeOpts.value
       const rowOpts = computeRowOpts.value
       const columnOpts = computeColumnOpts.value
@@ -6066,7 +6056,7 @@ export default defineComponent({
          */
         hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
           ref: refTooltip,
-          ...tooltipOpts
+          ...tipConfig
         }) : createCommentVNode()
       ])
     }

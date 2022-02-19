@@ -113,9 +113,9 @@ export default defineComponent({
       }
       const ons = showTooltip ? {
         onMouseenter (evnt: MouseEvent) {
-          $xeform.triggerHeaderHelpEvent(evnt, params)
+          $xeform.triggerTitleTipEvent(evnt, params)
         },
-        onMouseleave: $xeform.handleTargetLeaveEvent
+        onMouseleave: $xeform.handleTitleTipLeaveEvent
       } : {}
       return h('div', {
         ref: refElem,

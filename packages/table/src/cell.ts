@@ -10,10 +10,10 @@ import { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '..
 
 function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params
-  const { titleHelp } = column
-  return titleHelp ? [
+  const titlePrefix = column.titlePrefix || column.titleHelp
+  return titlePrefix ? [
     h('i', {
-      class: ['vxe-cell-help-icon', titleHelp.icon || GlobalConfig.icon.TABLE_HELP],
+      class: ['vxe-cell-help-icon', titlePrefix.icon || GlobalConfig.icon.TABLE_HELP],
       onMouseenter (evnt: MouseEvent) {
         $table.triggerHeaderHelpEvent(evnt, params)
       },

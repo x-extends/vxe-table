@@ -13,44 +13,44 @@ import { VxeGlobalSetup } from './setup'
 
 export class VXETableConfig {
   clipboard: {
-    text: string;
-    html: string;
+    text: string
+    html: string
   }
-  get zIndex(): number;
-  get nextZIndex(): number;
+  get zIndex(): number
+  get nextZIndex(): number
   /**
    * 获取导出的所有文件类型
    */
-   get exportTypes(): string[];
+   get exportTypes(): string[]
   /**
     * 获取导入的所有文件类型
     */
-   get importTypes(): string[];
+   get importTypes(): string[]
 }
 
-export type VxeGlobalI18n = (key: string, args?: any) => string;
-export type VxeGlobalTranslate = (key: string, args?: any) => string;
-export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore;
+export type VxeGlobalI18n = (key: string, args?: any) => string
+export type VxeGlobalTranslate = (key: string, args?: any) => string
+export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore
 
-export const setup: VxeGlobalSetup;
-export const interceptor: VxeGlobalInterceptor;
-export const renderer: VxeGlobalRenderer;
-export const commands: VxeGlobalCommands;
-export const formats: VxeGlobalFormats;
-export const menus: VxeGlobalMenus;
-export const hooks: VxeGlobalHooks;
-export const modal: ModalController;
-export const saveFile: SaveFileFunction;
-export const readFile: ReadFileFunction;
-export const print: PrintFunction;
-export const config: VXETableConfig;
-export const t: VxeGlobalI18n;
-export const _t: VxeGlobalTranslate;
-export const use: VxeGlobalUse;
+export const setup: VxeGlobalSetup
+export const interceptor: VxeGlobalInterceptor
+export const renderer: VxeGlobalRenderer
+export const commands: VxeGlobalCommands
+export const formats: VxeGlobalFormats
+export const menus: VxeGlobalMenus
+export const hooks: VxeGlobalHooks
+export const modal: ModalController
+export const saveFile: SaveFileFunction
+export const readFile: ReadFileFunction
+export const print: PrintFunction
+export const config: VXETableConfig
+export const t: VxeGlobalI18n
+export const _t: VxeGlobalTranslate
+export const use: VxeGlobalUse
 
 export interface VXETablePluginObject {
-  install(vxetable: VXETableCore, ...options: any[]): void;
-  [key: string]: any;
+  install(vxetable: VXETableCore, ...options: any[]): void
+  [key: string]: any
 }
 
 export type VXETableVersion = 'v1' | 'v2' | 'v3' | 'v4'
@@ -58,75 +58,75 @@ export type VXETableVersion = 'v1' | 'v2' | 'v3' | 'v4'
 export const v: VXETableVersion
 
 export interface VXETableCore {
-  tooltip?: boolean;
+  tooltip?: boolean
   /**
    * 已被 version 替换
    * @deprecated
    */
-  v: VXETableVersion;
+  v: VXETableVersion
   /**
    * 版本号
    */
-  version: string;
+  version: string
   /**
    * 设置全局参数/获取所有参数
    */
-  setup: VxeGlobalSetup;
+  setup: VxeGlobalSetup
   /**
    * Table interceptor
    */
-  interceptor: VxeGlobalInterceptor;
+  interceptor: VxeGlobalInterceptor
   /**
    * Table renderer
    */
-  renderer: VxeGlobalRenderer;
+  renderer: VxeGlobalRenderer
   /**
    * Table commands
    */
-  commands: VxeGlobalCommands;
+  commands: VxeGlobalCommands
   /**
    * Table column formatter
    */
-  formats: VxeGlobalFormats;
+  formats: VxeGlobalFormats
   /**
    * Table context menu
    */
-  menus: VxeGlobalMenus;
+  menus: VxeGlobalMenus
   /**
    * Table VxeGlobalHooks API
    */
-  hooks: VxeGlobalHooks;
+  hooks: VxeGlobalHooks
   /**
    * 弹窗
    */
-  modal: ModalController;
+  modal: ModalController
   /**
    * 读取本地文件
    */
-  saveFile: SaveFileFunction;
+  saveFile: SaveFileFunction
   /**
    * 读取本地文件
    */
-  readFile: ReadFileFunction;
+  readFile: ReadFileFunction
   /**
    * 打印
    */
-  print: PrintFunction;
+  print: PrintFunction
   /**
    * 读取内置配置
    */
-  config: VXETableConfig;
+  config: VXETableConfig
   /**
    * 安装插件
    * @param plugin
    * @param options
    */
-  use: VxeGlobalUse;
+  use: VxeGlobalUse
   /**
    * 读取内置国际化
    */
-  t: VxeGlobalI18n;
-  _t: VxeGlobalTranslate;
+  t: VxeGlobalI18n
+  _t: VxeGlobalTranslate
 }
 
 /**

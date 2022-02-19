@@ -2,7 +2,9 @@ import { VxeTableEmits } from '../../../types/all'
 
 export default [
   'update:data',
+  'keydown-start',
   'keydown',
+  'keydown-end',
   'paste',
   'copy',
   'cut',
@@ -60,5 +62,7 @@ export default [
   'cell-area-extension-start',
   'cell-area-extension-end',
   'cell-area-arrows-start',
-  'cell-area-arrows-end'
+  'cell-area-arrows-end',
+  'active-cell-move-start',
+  'active-cell-move-end'
 ] as VxeTableEmits

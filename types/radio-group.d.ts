@@ -5,15 +5,15 @@ import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './c
  * 组件 - 单选框组
  * @example import { RadioGroup as VxeRadioGroup } from 'vxe-table'
  */
-export const RadioGroup: VXEComponent<VxeRadioGroupProps, VxeRadioGroupEventProps>;
+export const RadioGroup: VXEComponent<VxeRadioGroupProps, VxeRadioGroupEventProps>
 
-export type VxeRadioGroupInstance = ComponentPublicInstance<VxeRadioGroupProps, VxeRadioGroupConstructor>;
+export type VxeRadioGroupInstance = ComponentPublicInstance<VxeRadioGroupProps, VxeRadioGroupConstructor>
 
 export interface VxeRadioGroupConstructor extends VxeComponentBase, VxeRadioGroupMethods {
-  name: string;
-  props: VxeRadioGroupProps;
-  context: SetupContext<VxeRadioGroupEmits>;
-  renderVN: RenderFunction;
+  name: string
+  props: VxeRadioGroupProps
+  context: SetupContext<VxeRadioGroupEmits>
+  renderVN: RenderFunction
 }
 
 export type VxeRadioGroupEmits = [
@@ -22,29 +22,29 @@ export type VxeRadioGroupEmits = [
 ]
 
 export type VxeRadioGroupProps = {
-  size?: VxeRadioGroupPropTypes.Size;
+  size?: VxeRadioGroupPropTypes.Size
   /**
    * 严格模式，不允许取消
    */
-  strict?: VxeRadioGroupPropTypes.Strict;
-  modelValue?: VxeRadioGroupPropTypes.ModelValue;
-  disabled?: VxeRadioGroupPropTypes.Disabled;
+  strict?: VxeRadioGroupPropTypes.Strict
+  modelValue?: VxeRadioGroupPropTypes.ModelValue
+  disabled?: VxeRadioGroupPropTypes.Disabled
 }
 
 export namespace VxeRadioGroupPropTypes {
-  export type Size = SizeType;
-  export type ModelValue = any;
-  export type Strict = boolean;
-  export type Disabled = boolean;
+  export type Size = SizeType
+  export type ModelValue = any
+  export type Strict = boolean
+  export type Disabled = boolean
 }
 
 export interface RadioGroupMethods {
-  dispatchEvent(type: ValueOf<VxeRadioGroupEmits>, params: any, evnt?: Event): void;
+  dispatchEvent(type: ValueOf<VxeRadioGroupEmits>, params: any, evnt?: Event): void
 }
 export interface VxeRadioGroupMethods extends RadioGroupMethods { }
 
 export interface RadioGroupPrivateMethods {
-  handleChecked(params: { label: any }, evnt: Event): void;
+  handleChecked(params: { label: any }, evnt: Event): void
 }
 export interface VxeRadioGroupPrivateMethods extends RadioGroupPrivateMethods { }
 
@@ -54,19 +54,19 @@ export namespace VxeRadioGroupDefines {
   }
 
   export interface ChangeParams {
-    label: any;
+    label: any
   }
   export interface ChangeEventParams extends RadioGroupEventParams, ChangeParams { }
 }
 
 export type VxeRadioGroupEventProps = {
-  onChange?: VxeRadioGroupEvents.Change;
+  onChange?: VxeRadioGroupEvents.Change
 }
 
 export interface VxeRadioGroupListeners {
-  change?: VxeRadioGroupEvents.Change;
+  change?: VxeRadioGroupEvents.Change
 }
 
 export namespace VxeRadioGroupEvents {
-  export type Change = (params: VxeRadioGroupDefines.ChangeEventParams) => void;
+  export type Change = (params: VxeRadioGroupDefines.ChangeEventParams) => void
 }

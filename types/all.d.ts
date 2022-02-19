@@ -1,11 +1,11 @@
 import { App } from 'vue'
 import { VXETableSetupOptions, VXETableCore } from './v-x-e-table'
 
-export function install(app: App, options?: VXETableSetupOptions): void;
+export function install(app: App, options?: VXETableSetupOptions): void
 
 declare global {
   interface Window {
-    VXETable: VXETableCore;
+    VXETable: VXETableCore
   }
 }
 

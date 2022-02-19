@@ -67,8 +67,10 @@ export const columnProps = {
   exportMethod: Function as PropType<VxeColumnPropTypes.ExportMethod>,
   // 表尾单元格数据导出方法
   footerExportMethod: Function as PropType<VxeColumnPropTypes.FooterExportMethod>,
-  // 标题帮助图标配置项
+  // 已废弃，被 titlePrefix 替换
   titleHelp: Object as PropType<VxeColumnPropTypes.TitleHelp>,
+  // 标题帮助图标配置项
+  titlePrefix: Object as PropType<VxeColumnPropTypes.TitlePrefix>,
   // 单元格值类型
   cellType: String as PropType<VxeColumnPropTypes.CellType>,
   // 单元格渲染配置项

@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, ComputedRef, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, VNode, onMounted } from 'vue'
+import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, VNode, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -114,7 +114,6 @@ export default defineComponent({
 
     const internalData = reactive<FormInternalData>({
       tooltipTimeout: null,
-      tooltipActive: false,
       tooltipStore: {
         item: null,
         visible: false
@@ -130,24 +129,8 @@ export default defineComponent({
       return Object.assign({}, GlobalConfig.form.validConfig, props.validConfig)
     })
 
-    let computeTooltipOpts = ref() as ComputedRef<VxeFormPropTypes.TooltipOpts>
-
-    const handleTooltipLeaveMethod = () => {
-      const tooltipOpts = computeTooltipOpts.value
-      setTimeout(() => {
-        if (!internalData.tooltipActive) {
-          formMethods.closeTooltip()
-        }
-      }, tooltipOpts.leaveDelay)
-      return false
-    }
-
-    computeTooltipOpts = computed(() => {
-      const opts: VxeFormPropTypes.TooltipOpts = Object.assign({ leaveDelay: 300 }, GlobalConfig.form.tooltipConfig, props.tooltipConfig)
-      if (opts.enterable) {
-        opts.leaveMethod = handleTooltipLeaveMethod
-      }
-      return opts
+    const computeTooltipOpts = computed(() => {
+      return Object.assign({}, GlobalConfig.tooltip, GlobalConfig.form.tooltipConfig, props.tooltipConfig)
     })
 
     const refMaps: FormPrivateRef = {
@@ -464,7 +447,7 @@ export default defineComponent({
       return nextTick()
     }
 
-    const triggerHeaderHelpEvent = (evnt: MouseEvent, params: {
+    const triggerTitleTipEvent = (evnt: MouseEvent, params: {
       item: VxeFormDefines.ItemInfo;
     }) => {
       const { item } = params
@@ -474,8 +457,9 @@ export default defineComponent({
       const content = (overflowElem.textContent || '').trim()
       const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
       clearTimeout(internalData.tooltipTimeout)
-      internalData.tooltipActive = true
-      closeTooltip()
+      if (tooltipStore.item !== item) {
+        closeTooltip()
+      }
       if (content && isCellOverflow) {
         Object.assign(tooltipStore, {
           item,
@@ -487,10 +471,9 @@ export default defineComponent({
       }
     }
 
-    const handleTargetLeaveEvent = () => {
+    const handleTitleTipLeaveEvent = () => {
       const tooltipOpts = computeTooltipOpts.value
       let $tooltip = refTooltip.value
-      internalData.tooltipActive = false
       if ($tooltip) {
         $tooltip.setActived(false)
       }
@@ -532,7 +515,7 @@ export default defineComponent({
       const { data, rules, titleOverflow: allTitleOverflow } = props
       const { collapseAll } = reactData
       const validOpts = computeValidOpts.value
-      return itemList.map((item, index) => {
+      return itemList.map((item) => {
         const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
         const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
         const defaultSlot = slots ? slots.default : null
@@ -604,9 +587,9 @@ export default defineComponent({
         }
         const ons = showTooltip ? {
           onMouseenter (evnt: MouseEvent) {
-            triggerHeaderHelpEvent(evnt, params)
+            triggerTitleTipEvent(evnt, params)
           },
-          onMouseleave: handleTargetLeaveEvent
+          onMouseleave: handleTitleTipLeaveEvent
         } : {}
         return h('div', {
           class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
@@ -616,7 +599,7 @@ export default defineComponent({
             'is--active': !itemVisibleMethod || itemVisibleMethod(params),
             'is--error': showError
           }],
-          key: index
+          key: item.id
         }, [
           h('div', {
             class: 'vxe-form--item-inner'
@@ -657,8 +640,8 @@ export default defineComponent({
     const formPrivateMethods: VxeFormPrivateMethods = {
       callSlot,
       toggleCollapseEvent,
-      triggerHeaderHelpEvent,
-      handleTargetLeaveEvent
+      triggerTitleTipEvent,
+      handleTitleTipLeaveEvent
     }
 
     Object.assign($xeform, formMethods, formPrivateMethods)

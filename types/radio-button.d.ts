@@ -6,18 +6,18 @@ import { VxeRadioPropTypes } from './radio'
  * 组件 - 单选框按钮
  * @example import { RadioButton as VxeRadioButton } from 'vxe-table'
  */
-export const RadioButton: VXEComponent<VxeRadioButtonProps, VxeRadioButtonEventProps>;
+export const RadioButton: VXEComponent<VxeRadioButtonProps, VxeRadioButtonEventProps>
 
-export type VxeRadioButtonInstance = ComponentPublicInstance<VxeRadioButtonProps, VxeRadioButtonConstructor>;
+export type VxeRadioButtonInstance = ComponentPublicInstance<VxeRadioButtonProps, VxeRadioButtonConstructor>
 
 export interface VxeRadioButtonConstructor extends VxeComponentBase, VxeRadioButtonMethods {
-  props: VxeRadioButtonProps;
-  context: SetupContext<VxeRadioButtonEmits>;
-  renderVN: RenderFunction;
+  props: VxeRadioButtonProps
+  context: SetupContext<VxeRadioButtonEmits>
+  renderVN: RenderFunction
 }
 
 export interface RadioButtonMethods {
-  dispatchEvent(type: ValueOf<VxeRadioButtonEmits>, params: any, evnt: Event): void;
+  dispatchEvent(type: ValueOf<VxeRadioButtonEmits>, params: any, evnt: Event): void
 }
 export interface VxeRadioButtonMethods extends RadioButtonMethods { }
 
@@ -30,47 +30,47 @@ export type VxeRadioButtonEmits = [
 ]
 
 export type VxeRadioButtonProps = {
-  size?: VxeRadioButtonPropTypes.Size;
-  modelValue?: VxeRadioButtonPropTypes.ModelValue;
+  size?: VxeRadioButtonPropTypes.Size
+  modelValue?: VxeRadioButtonPropTypes.ModelValue
   /**
    * 严格模式，不允许取消
    */
-  strict?: VxeRadioButtonPropTypes.Strict;
-  label?: VxeRadioButtonPropTypes.Label;
-  title?: VxeRadioButtonPropTypes.Title;
-  content?: VxeRadioButtonPropTypes.Content;
-  disabled?: VxeRadioButtonPropTypes.Disabled;
+  strict?: VxeRadioButtonPropTypes.Strict
+  label?: VxeRadioButtonPropTypes.Label
+  title?: VxeRadioButtonPropTypes.Title
+  content?: VxeRadioButtonPropTypes.Content
+  disabled?: VxeRadioButtonPropTypes.Disabled
 }
 
 export namespace VxeRadioButtonPropTypes {
-  export type Size = VxeRadioPropTypes.Size;
-  export type ModelValue = any;
-  export type Strict = boolean;
-  export type Label = VxeRadioPropTypes.Label;
-  export type Title = string | number;
-  export type Content = string | number;
-  export type Disabled = boolean;
+  export type Size = VxeRadioPropTypes.Size
+  export type ModelValue = any
+  export type Strict = boolean
+  export type Label = VxeRadioPropTypes.Label
+  export type Title = string | number
+  export type Content = string | number
+  export type Disabled = boolean
 }
 
 export namespace VxeRadioButtonDefines {
   interface RadioButtonEventParams extends VxeEvent {
-    $radioButton: VxeRadioButtonConstructor;
+    $radioButton: VxeRadioButtonConstructor
   }
 
   export interface ChangeParams {
-    label: any;
+    label: any
   }
   export interface ChangeEventParams extends RadioButtonEventParams, ChangeParams { }
 }
 
 export type VxeRadioButtonEventProps = {
-  onChange?: VxeRadioButtonEvents.Change;
+  onChange?: VxeRadioButtonEvents.Change
 }
 
 export interface VxeRadioButtonListeners {
-  change?: VxeRadioButtonEvents.Change;
+  change?: VxeRadioButtonEvents.Change
 }
 
 export namespace VxeRadioButtonEvents {
-  export type Change = (params: VxeRadioButtonDefines.ChangeEventParams) => void;
+  export type Change = (params: VxeRadioButtonDefines.ChangeEventParams) => void
 }

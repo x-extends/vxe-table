@@ -6,47 +6,47 @@ import { VxeSelectConstructor } from './select'
  * 组件 - 下拉框选项
  * @example import { Option as VxeOption } from 'vxe-table'
  */
-export const Option: VXEComponent<VxeOptionProps>;
+export const Option: VXEComponent<VxeOptionProps>
 
 export type VxeOptionProps = {
   /**
    * 绑定值
    */
-  value?: VxeOptionPropTypes.Value;
+  value?: VxeOptionPropTypes.Value
   /**
    * 显示内容
    */
-  label?: VxeOptionPropTypes.Label;
+  label?: VxeOptionPropTypes.Label
   /**
    * 是否显示
    */
-  visible?: VxeOptionPropTypes.Visible;
-  className?: VxeOptionPropTypes.ClassName;
+  visible?: VxeOptionPropTypes.Visible
+  className?: VxeOptionPropTypes.ClassName
   /**
    * 是否禁用
    */
-  disabled?: VxeOptionPropTypes.Disabled;
+  disabled?: VxeOptionPropTypes.Disabled
   slots?: {
     default?: string | ((params: {
-      option: any;
-      $select: VxeSelectConstructor;
-    }) => JSX.Element[] | VNode[] | string[]) | null;
+      option: any
+      $select: VxeSelectConstructor
+    }) => JSX.Element[] | VNode[] | string[]) | null
   }
 }
 
 export namespace VxeOptionPropTypes {
-  export type Value = any;
-  export type Label = string | number | boolean;
-  export type Visible = boolean;
+  export type Value = any
+  export type Label = string | number | boolean
+  export type Visible = boolean
   export type ClassName = string | ((params: {
-    option: any;
-    $select: VxeSelectConstructor;
-  }) => string);
-  export type Disabled = boolean;
+    option: any
+    $select: VxeSelectConstructor
+  }) => string)
+  export type Disabled = boolean
   export type Slots = {
     default?: string | ((params: {
-      option: any;
-      $select: VxeSelectConstructor;
-    }) => JSX.Element[] | VNode[] | string[]) | null;
+      option: any
+      $select: VxeSelectConstructor
+    }) => JSX.Element[] | VNode[] | string[]) | null
   }
 }

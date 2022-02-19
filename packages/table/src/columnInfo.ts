@@ -93,6 +93,7 @@ export class ColumnInfo {
       exportMethod: _vm.exportMethod,
       footerExportMethod: _vm.footerExportMethod,
       titleHelp: _vm.titleHelp,
+      titlePrefix: _vm.titlePrefix,
       // 自定义参数
       params: _vm.params,
       // 渲染属性

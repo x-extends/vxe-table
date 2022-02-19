@@ -27,7 +27,9 @@ function renderSuffixIcon (titleSuffix: VxeFormItemPropTypes.TitleSuffix) {
 
 export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods, item: VxeFormDefines.ItemInfo) {
   const { data } = $xeform.props
+  const { computeTooltipOpts } = $xeform.getComputeMaps()
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
+  const tooltipOpts = computeTooltipOpts.value
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const params = { data, property: field, item, $form: $xeform }
   const titleSlot = slots ? slots.title : null
@@ -37,9 +39,9 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
     titVNs.push(
       (titlePrefix.content || titlePrefix.message)
         ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          content: getFuncText(titlePrefix.content || titlePrefix.message),
-          enterable: titlePrefix.enterable,
-          theme: titlePrefix.theme
+          ...tooltipOpts,
+          ...titlePrefix,
+          content: getFuncText(titlePrefix.content || titlePrefix.message)
         }, {
           default: () => renderPrefixIcon(titlePrefix)
         })
@@ -61,9 +63,9 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
     fixVNs.push(
       (titleSuffix.content || titleSuffix.message)
         ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          content: getFuncText(titleSuffix.content || titleSuffix.message),
-          enterable: titleSuffix.enterable,
-          theme: titleSuffix.theme
+          ...tooltipOpts,
+          ...titleSuffix,
+          content: getFuncText(titleSuffix.content || titleSuffix.message)
         }, {
           default: () => renderSuffixIcon(titleSuffix)
         })
