@@ -69,6 +69,7 @@ const styleCode = `require('./style.css')`
 
 gulp.task('build_modules', () => {
   return gulp.src('packages/**/*.js')
+    .pipe(replace('process.env.VUE_APP_VXE_TABLE_VERSION', `"${pack.version}"`))
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_ENV', 'process.env.NODE_ENV'))
     .pipe(babel({
       presets: ['@babel/env']

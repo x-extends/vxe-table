@@ -95,7 +95,7 @@ export default {
     height: [Number, String],
     // 表格的最大高度
     maxHeight: [Number, String],
-    // （即将废弃）所有列是否允许拖动列宽调整大小
+    // 已废弃，被 column-config.resizable 替换
     resizable: { type: Boolean, default: () => GlobalConfig.table.resizable },
     // 是否带有斑马纹
     stripe: { type: Boolean, default: () => GlobalConfig.table.stripe },
@@ -117,15 +117,15 @@ export default {
     footerAlign: { type: String, default: () => GlobalConfig.table.footerAlign },
     // 是否显示表头
     showHeader: { type: Boolean, default: () => GlobalConfig.table.showHeader },
-    // （即将废弃）是否要高亮当前选中行
+    // 已废弃，被 row-config.isCurrent 替换
     highlightCurrentRow: { type: Boolean, default: () => GlobalConfig.table.highlightCurrentRow },
-    // （即将废弃）鼠标移到行是否要高亮显示
+    // 已废弃，被 row-config.isHover 替换
     highlightHoverRow: { type: Boolean, default: () => GlobalConfig.table.highlightHoverRow },
-    // （即将废弃）是否要高亮当前选中列
+    // 已废弃，被 column-config.isCurrent 替换
     highlightCurrentColumn: { type: Boolean, default: () => GlobalConfig.table.highlightCurrentColumn },
-    // （即将废弃）鼠标移到列是否要高亮显示
+    // 已废弃，被 column-config.isHover 替换
     highlightHoverColumn: { type: Boolean, default: () => GlobalConfig.table.highlightHoverColumn },
-    // （即将废弃）激活单元格编辑时是否高亮显示
+    // 已废弃，直接删除
     highlightCell: Boolean,
     // 是否显示表尾合计
     showFooter: Boolean,

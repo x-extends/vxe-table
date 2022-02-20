@@ -37,6 +37,17 @@ export function restoreScrollListener (scrollElem) {
   }
 }
 
+// 行主键 key
+export function getRowkey ($xetable) {
+  return $xetable.rowOpts.keyField || $xetable.rowId || '_X_ROW_KEY'
+}
+
+// 行主键 value
+export function getRowid ($xetable, row) {
+  const rowid = XEUtils.get(row, getRowkey($xetable))
+  return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
+}
+
 function getPaddingLeftRightSize (elem) {
   if (elem) {
     const computedStyle = getComputedStyle(elem)

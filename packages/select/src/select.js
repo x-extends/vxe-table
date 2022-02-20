@@ -15,7 +15,8 @@ function getOptUniqueId () {
 }
 
 function getOptkey (_vm) {
-  return _vm.optionId || '_X_ID'
+  const { optionOpts } = _vm
+  return optionOpts.keyField || _vm.optionId || '_X_OPTION_KEY'
 }
 
 function getOptid (_vm, option) {
@@ -117,7 +118,8 @@ function getSelectLabel (_vm, value) {
 }
 
 export function renderOption (h, _vm, list, group) {
-  const { isGroup, labelField, valueField, optionKey, value, multiple, currentValue } = _vm
+  const { isGroup, labelField, valueField, optionKey, value, multiple, currentValue, optionOpts } = _vm
+  const { useKey } = optionOpts
   return list.map((option, cIndex) => {
     const { slots } = option
     const isVisible = !isGroup || isOptionVisible(option)
@@ -126,7 +128,7 @@ export function renderOption (h, _vm, list, group) {
     const optid = getOptid(_vm, option)
     const defaultSlot = slots ? slots.default : null
     return isVisible ? h('div', {
-      key: optionKey ? optid : cIndex,
+      key: useKey || optionKey ? optid : cIndex,
       class: ['vxe-select-option', option.className, {
         'is--disabled': isDisabled,
         'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
@@ -153,14 +155,15 @@ export function renderOption (h, _vm, list, group) {
 }
 
 export function renderOptgroup (h, _vm) {
-  const { optionKey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
+  const { optionKey, visibleGroupList, groupLabelField, groupOptionsField, optionOpts } = _vm
+  const { useKey } = optionOpts
   return visibleGroupList.map((group, gIndex) => {
     const { slots } = group
     const optid = getOptid(_vm, group)
     const isGroupDisabled = group.disabled
     const defaultSlot = slots ? slots.default : null
     return h('div', {
-      key: optionKey ? optid : gIndex,
+      key: useKey || optionKey ? optid : gIndex,
       class: ['vxe-optgroup', group.className, {
         'is--disabled': isGroupDisabled
       }],
@@ -213,10 +216,13 @@ export default {
     optionProps: Object,
     optionGroups: Array,
     optionGroupProps: Object,
+    optionConfig: Object,
     className: [String, Function],
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
     emptyText: String,
+    // 已废弃，被 option-config.keyField 替换
     optionId: { type: String, default: () => GlobalConfig.select.optionId },
+    // 已废弃，被 option-config.useKey 替换
     optionKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
@@ -263,6 +269,9 @@ export default {
     },
     groupOptionsField () {
       return this.groupPropsOpts.options || 'options'
+    },
+    optionOpts () {
+      return Object.assign({}, GlobalConfig.select.optionConfig, this.optionConfig)
     },
     isGroup () {
       return this.fullGroupList.some(item => item.options && item.options.length)

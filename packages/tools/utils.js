@@ -20,11 +20,6 @@ export function getFuncText (content) {
   return XEUtils.isFunction(content) ? content() : (GlobalConfig.translate ? GlobalConfig.translate(content) : content)
 }
 
-// 行主键 key
-export function getRowkey ($xetable) {
-  return $xetable.rowOpts.keyField || $xetable.rowId || '_X_ID'
-}
-
 // 获取所有的列，排除分组
 export function getColumnList (columns) {
   const result = []
@@ -41,12 +36,6 @@ export const UtilTools = {
   },
   getLastZIndex () {
     return lastZindex
-  },
-  getRowkey,
-  // 行主键 value
-  getRowid ($xetable, row) {
-    const rowid = XEUtils.get(row, getRowkey($xetable))
-    return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
   },
   getColumnList,
   getClass (property, params) {

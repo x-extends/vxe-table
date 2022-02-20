@@ -2,13 +2,13 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
-import { clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq } from './util'
+import { getRowid, getRowkey, clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq } from './util'
 import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
 import DomTools, { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { formats } from '../../v-x-e-table/src/formats'
 import { warnLog, errLog } from '../../tools/log'
 
-const { getRowid, getRowkey, setCellValue, hasChildrenList, getColumnList } = UtilTools
+const { setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { calcHeight, hasClass, addClass, removeClass, getEventTargetNode, isNodeElement } = DomTools
 
 const isWebkit = browse['-webkit'] && !browse.edge
