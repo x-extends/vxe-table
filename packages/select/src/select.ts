@@ -32,10 +32,13 @@ export default defineComponent({
     optionProps: Object as PropType<VxeSelectPropTypes.OptionProps>,
     optionGroups: Array as PropType<VxeSelectPropTypes.OptionGroups>,
     optionGroupProps: Object as PropType<VxeSelectPropTypes.OptionGroupProps>,
+    optionConfig: Object as PropType<VxeSelectPropTypes.OptionConfig>,
     className: [String, Function] as PropType<VxeSelectPropTypes.ClassName>,
     size: { type: String as PropType<VxeSelectPropTypes.Size>, default: () => GlobalConfig.select.size || GlobalConfig.size },
     emptyText: String as PropType<VxeSelectPropTypes.EmptyText>,
+    // 已废弃，被 option-config.keyField 替换
     optionId: { type: String as PropType<VxeSelectPropTypes.OptionId>, default: () => GlobalConfig.select.optionId },
+    // 已废弃，被 option-config.useKey 替换
     optionKey: Boolean as PropType<VxeSelectPropTypes.OptionKey>,
     transfer: { type: Boolean as PropType<VxeSelectPropTypes.Transfer>, default: () => GlobalConfig.select.transfer }
   },
@@ -114,6 +117,10 @@ export default defineComponent({
       return groupPropsOpts.options || 'options'
     })
 
+    const computeOptionOpts = computed(() => {
+      return Object.assign({}, GlobalConfig.select.optionConfig, props.optionConfig)
+    })
+
     const computeIsGroup = computed(() => {
       return reactData.fullGroupList.some((item) => item.options && item.options.length)
     })
@@ -176,7 +183,8 @@ export default defineComponent({
     })
 
     const getOptkey = () => {
-      return props.optionId || '_X_ID'
+      const optionOpts = computeOptionOpts.value
+      return optionOpts.keyField || props.optionId || '_X_OPTION_KEY'
     }
 
     const getOptid = (option: any) => {
@@ -567,9 +575,11 @@ export default defineComponent({
     const renderOption = (list: VxeOptionProps[], group?: VxeOptgroupProps) => {
       const { optionKey, modelValue, multiple } = props
       const { currentValue } = reactData
+      const optionOpts = computeOptionOpts.value
       const labelField = computeLabelField.value
       const valueField = computeValueField.value
       const isGroup = computeIsGroup.value
+      const { useKey } = optionOpts
       return list.map((option, cIndex) => {
         const { slots, className } = option
         const isVisible = !isGroup || isOptionVisible(option)
@@ -578,7 +588,7 @@ export default defineComponent({
         const optid = getOptid(option)
         const defaultSlot = slots ? slots.default : null
         return isVisible ? h('div', {
-          key: optionKey ? optid : cIndex,
+          key: useKey || optionKey ? optid : cIndex,
           class: ['vxe-select-option', className ? (XEUtils.isFunction(className) ? className({ option, $select: $xeselect }) : className) : '', {
             'is--disabled': isDisabled,
             'is--selected': multiple ? (modelValue && modelValue.indexOf(optionValue) > -1) : modelValue === optionValue,
@@ -610,15 +620,17 @@ export default defineComponent({
     const renderOptgroup = () => {
       const { optionKey } = props
       const { visibleGroupList } = reactData
+      const optionOpts = computeOptionOpts.value
       const groupLabelField = computeGroupLabelField.value
       const groupOptionsField = computeGroupOptionsField.value
+      const { useKey } = optionOpts
       return visibleGroupList.map((group, gIndex) => {
         const { slots, className } = group
         const optid = getOptid(group)
         const isGroupDisabled = group.disabled
         const defaultSlot = slots ? slots.default : null
         return h('div', {
-          key: optionKey ? optid : gIndex,
+          key: useKey || optionKey ? optid : gIndex,
           class: ['vxe-optgroup', className ? (XEUtils.isFunction(className) ? className({ option: group, $select: $xeselect }) : className) : '', {
             'is--disabled': isGroupDisabled
           }],

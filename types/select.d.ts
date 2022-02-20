@@ -57,8 +57,17 @@ export type VxeSelectProps = {
   optionProps?: VxeSelectPropTypes.OptionProps
   optionGroups?: VxeSelectPropTypes.OptionGroups
   optionGroupProps?: VxeSelectPropTypes.OptionGroupProps
+  optionConfig?: VxeSelectPropTypes.OptionConfig
   emptyText?: VxeSelectPropTypes.EmptyText
+  /**
+   * 已废弃，被 optionConfig.keyField 替换
+   * @deprecated
+   */
   optionId?: VxeSelectPropTypes.OptionId
+  /**
+   * 已废弃，被 optionConfig.useKey 替换
+   * @deprecated
+   */
   optionKey?: VxeSelectPropTypes.OptionKey
   transfer?: VxeSelectPropTypes.Transfer
 }
@@ -79,6 +88,13 @@ export namespace VxeSelectPropTypes {
   export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps
   export type OptionGroups = VxeSelectDefines.SelectOptgroups[]
   export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps
+  /**
+   * 选项配置项
+   */
+  export interface OptionConfig {
+    useKey?: boolean
+    keyField?: string
+  }
   export type EmptyText = string
   export type OptionId = string
   export type OptionKey = boolean

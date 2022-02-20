@@ -47,7 +47,7 @@ export function getRowkey ($xetable: VxeTableConstructor) {
   const { computeRowOpts } = $xetable.getComputeMaps()
   const { rowId } = props
   const rowOpts = computeRowOpts.value
-  return rowId || rowOpts.keyField || '_X_ID'
+  return rowId || rowOpts.keyField || '_X_ROW_KEY'
 }
 
 // 行主键 value

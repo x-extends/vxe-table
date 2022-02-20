@@ -29,7 +29,7 @@ const GlobalConfig: VXETableGlobalConfig = {
     //   name: ''
     // },
     // rowConfig: {
-    //   keyField: '_X_ID' // 行数据的唯一主键字段名
+    //   keyField: '_X_ROW_KEY' // 行数据的唯一主键字段名
     // },
     radioConfig: {
       // trigger: 'default'
@@ -279,6 +279,9 @@ const GlobalConfig: VXETableGlobalConfig = {
   select: {
     // size: null,
     // transfer: false,
+    // optionConfig: {
+    //   keyField: '_X_OPTION_KEY'
+    // },
     multiCharOverflow: 8
   },
   toolbar: {

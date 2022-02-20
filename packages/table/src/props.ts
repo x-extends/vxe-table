@@ -12,7 +12,7 @@ export default {
   height: [Number, String] as PropType<VxeTablePropTypes.Height>,
   // 表格的最大高度
   maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
-  // （即将废弃）所有列是否允许拖动列宽调整大小
+  // 已废弃，被 column-config.resizable 替换
   resizable: { type: Boolean as PropType<VxeTablePropTypes.Resizable>, default: () => GlobalConfig.table.resizable },
   // 是否带有斑马纹
   stripe: { type: Boolean as PropType<VxeTablePropTypes.Stripe>, default: () => GlobalConfig.table.stripe },
