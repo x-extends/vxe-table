@@ -672,6 +672,7 @@ export default defineComponent({
     const renderVN = () => {
       const { loading, className, data, titleColon, titleAsterisk, customLayout } = props
       const { formItems } = reactData
+      // const formItems: any[] = []
       const vSize = computeSize.value
       const tooltipOpts = computeTooltipOpts.value
       const defaultSlot = slots.default

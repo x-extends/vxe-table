@@ -310,7 +310,7 @@ export namespace VxeTableProDefines {
   }
   export interface CellAreaArrowsEndEventParams extends EventParams, CellAreaArrowsEndParams { }
 
-  export interface ActiveCellMoveStartParams {
+  export interface ActiveCellChangeStartParams {
     activeArea: VxeTableProDefines.MouseCellArea
     row: any
     column: VxeTableDefines.ColumnInfo
@@ -321,12 +321,12 @@ export namespace VxeTableProDefines {
     isRight: boolean
     isDown: boolean
   }
-  export interface ActiveCellMoveStartEventParams extends EventParams, ActiveCellMoveStartParams { }
+  export interface ActiveCellChangeStartEventParams extends EventParams, ActiveCellChangeStartParams { }
 
-  export interface ActiveCellMoveEndParams extends ActiveCellMoveStartParams {
+  export interface ActiveCellChangeEndParams extends ActiveCellChangeStartParams {
     targetActiveArea: VxeTableProDefines.MouseCellArea
   }
-  export interface ActiveCellMoveEndEventParams extends EventParams, ActiveCellMoveEndParams { }
+  export interface ActiveCellChangeEndEventParams extends EventParams, ActiveCellChangeEndParams { }
 }
 
 export type VxeTableProEmits = [
@@ -350,8 +350,8 @@ export type VxeTableProEmits = [
   'cell-area-extension-end',
   'cell-area-arrows-start',
   'cell-area-arrows-end',
-  'active-cell-move-start',
-  'active-cell-move-end'
+  'active-cell-change-start',
+  'active-cell-change-end'
 ]
 
 declare module '../table' {
@@ -374,6 +374,8 @@ declare module '../table' {
     onCellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd
     onCellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart
     onCellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd
+    onActiveCellChangeStart?: VxeTableEvents.ActiveCellChangeStart
+    onActiveCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd
   }
   interface VxeTableListeners {
     openFnr?: VxeTableEvents.OpenFnr
@@ -394,8 +396,8 @@ declare module '../table' {
     cellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd
     cellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart
     cellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd
-    activeCellMoveStart?: VxeTableEvents.ActiveCellMoveStart
-    activeCellMoveEnd?: VxeTableEvents.ActiveCellMoveEnd
+    activeCellChangeStart?: VxeTableEvents.ActiveCellChangeStart
+    activeCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd
   }
   namespace VxeTableEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void
@@ -416,8 +418,8 @@ declare module '../table' {
     export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void
     export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void
     export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void
-    export type ActiveCellMoveStart = (params: VxeTableProDefines.ActiveCellMoveStartEventParams) => void
-    export type ActiveCellMoveEnd = (params: VxeTableProDefines.ActiveCellMoveEndEventParams) => void
+    export type ActiveCellChangeStart = (params: VxeTableProDefines.ActiveCellChangeStartEventParams) => void
+    export type ActiveCellChangeEnd = (params: VxeTableProDefines.ActiveCellChangeEndEventParams) => void
   }
 }
 
@@ -441,8 +443,8 @@ declare module '../grid' {
     onCellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd
     onCellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart
     onCellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd
-    onActiveCellMoveStart?: VxeGridEvents.ActiveCellMoveStart
-    onActiveCellMoveEnd?: VxeGridEvents.ActiveCellMoveEnd
+    onActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart
+    onActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd
   }
   interface VxeGridListeners {
     openFnr?: VxeGridEvents.OpenFnr
@@ -462,8 +464,8 @@ declare module '../grid' {
     cellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd
     cellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart
     cellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd
-    ActiveCellMoveStart?: VxeGridEvents.ActiveCellMoveStart
-    ActiveCellMoveEnd?: VxeGridEvents.ActiveCellMoveEnd
+    ActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart
+    ActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd
   }
   namespace VxeGridEvents {
     export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void
@@ -484,7 +486,7 @@ declare module '../grid' {
     export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void
     export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void
     export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void
-    export type ActiveCellMoveStart = (params: VxeTableProDefines.ActiveCellMoveStartEventParams) => void
-    export type ActiveCellMoveEnd = (params: VxeTableProDefines.ActiveCellMoveEndEventParams) => void
+    export type ActiveCellChangeStart = (params: VxeTableProDefines.ActiveCellChangeStartEventParams) => void
+    export type ActiveCellChangeEnd = (params: VxeTableProDefines.ActiveCellChangeEndEventParams) => void
   }
 }

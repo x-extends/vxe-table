@@ -63,6 +63,6 @@ export default [
   'cell-area-extension-end',
   'cell-area-arrows-start',
   'cell-area-arrows-end',
-  'active-cell-move-start',
-  'active-cell-move-end'
+  'active-cell-change-start',
+  'active-cell-change-end'
 ] as VxeTableEmits

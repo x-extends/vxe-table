@@ -1,4 +1,4 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, onMounted, PropType, reactive } from 'vue'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, onMounted, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -34,7 +34,7 @@ export default defineComponent({
     const refElem = ref() as Ref<HTMLDivElement>
     const $xeform = inject('$xeform', {} as VxeFormConstructor & VxeFormPrivateMethods)
     const formGather = inject('xeformgather', null as XEFormItemProvide | null)
-    const formItem = reactive(createItem($xeform, props))
+    const formItem = createItem($xeform, props)
     formItem.slots = slots
 
     watchItem(props, formItem)

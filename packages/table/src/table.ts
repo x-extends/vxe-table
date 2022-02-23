@@ -5376,12 +5376,18 @@ export default defineComponent({
         nextTick(updateStyle)
       },
       updateScrollXData () {
-        handleTableColumn()
-        tablePrivateMethods.updateScrollXSpace()
+        reactData.tableColumn = []
+        nextTick(() => {
+          handleTableColumn()
+          tablePrivateMethods.updateScrollXSpace()
+        })
       },
       updateScrollYData () {
-        tablePrivateMethods.handleTableData()
-        tablePrivateMethods.updateScrollYSpace()
+        reactData.tableData = []
+        nextTick(() => {
+          tablePrivateMethods.handleTableData()
+          tablePrivateMethods.updateScrollYSpace()
+        })
       },
       /**
        * 处理固定列的显示状态
@@ -5713,13 +5719,13 @@ export default defineComponent({
 
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           // if (props.rowId) {
-          //   warnLog('vxe.error.delProp', ['rowId', 'row-config.keyField'])
+          //   warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
           // }
           // if (props.rowKey) {
-          //   warnLog('vxe.error.delProp', ['rowId', 'row-config.useKey'])
+          //   warnLog('vxe.error.delProp', ['row-id', 'row-config.useKey'])
           // }
           // if (props.columnKey) {
-          //   warnLog('vxe.error.delProp', ['rowId', 'column-config.useKey'])
+          //   warnLog('vxe.error.delProp', ['row-id', 'column-config.useKey'])
           // }
           if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
             warnLog('vxe.error.reqProp', ['row-config.keyField'])
@@ -5736,6 +5742,18 @@ export default defineComponent({
           if (props.showFooter && !props.footerMethod) {
             warnLog('vxe.error.reqProp', ['footer-method'])
           }
+          // if (props.highlightCurrentRow) {
+          //   warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
+          // }
+          // if (props.highlightHoverRow) {
+          //   warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
+          // }
+          // if (props.highlightCurrentColumn) {
+          //   warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
+          // }
+          // if (props.highlightHoverColumn) {
+          //   warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
+          // }
           // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
           const { exportConfig, importConfig } = props
           const exportOpts = computeExportOpts.value
