@@ -540,7 +540,7 @@ export declare class Table extends VXETableComponent {
    */
   clearCheckboxRow(): Promise<any>;
   /**
-   * 用于 highlight-current-row，设置某一行为高亮状态
+   * 用于 row-config.isCurrent，设置某一行为高亮状态
    * @param row 指定行
    */
   setCurrentRow(row: RowInfo): Promise<any>;
@@ -563,7 +563,7 @@ export declare class Table extends VXETableComponent {
    */
   clearMergeFooterItems(): Promise<any>;
   /**
-   * 用于 highlight-current-row，手动清空当前高亮的状态
+   * 用于 row-config.isCurrent，手动清空当前高亮的状态
    */
   clearCurrentRow(): Promise<any>;
   /**
@@ -579,11 +579,11 @@ export declare class Table extends VXETableComponent {
    */
   getMergeFooterItems(): MergeItem[];
   /**
-   * 用于 highlight-current-column，获取当前列
+   * 用于 column-config.isCurrent，获取当前列
    */
   getCurrentColumn(): ColumnInfo | null;
   /**
-   * 用于 highlight-current-row，获取当前行的行数据
+   * 用于 row-config.isCurrent，获取当前行的行数据
    */
   getCurrentRecord(): RowInfo;
   /**
@@ -591,12 +591,12 @@ export declare class Table extends VXETableComponent {
    */
   getRadioRecord(isFull?: boolean): RowInfo;
   /**
-   * 用于 highlight-current-column，设置某列行为高亮状态
+   * 用于 column-config.isCurrent，设置某列行为高亮状态
    * @param column 列对象
    */
   setCurrentColumn(column: ColumnInfo): Promise<any>;
   /**
-   * 用于 highlight-current-column，手动清空当前高亮的状态
+   * 用于 column-config.isCurrent，手动清空当前高亮的状态
    */
   clearCurrentColumn(): Promise<any>;
   /**

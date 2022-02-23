@@ -4246,8 +4246,11 @@ const Methods = {
     this.tableColumn = scrollXLoad ? visibleColumn.slice(scrollXStore.startIndex, scrollXStore.endIndex) : visibleColumn.slice(0)
   },
   updateScrollXData () {
-    this.handleTableColumn()
-    this.updateScrollXSpace()
+    this.tableColumn = []
+    this.$nextTick(() => {
+      this.handleTableColumn()
+      this.updateScrollXSpace()
+    })
   },
   // 更新横向 X 可视渲染上下剩余空间大小
   updateScrollXSpace () {
@@ -4286,8 +4289,11 @@ const Methods = {
     }
   },
   updateScrollYData () {
-    this.handleTableData()
-    this.updateScrollYSpace()
+    this.tableData = []
+    this.$nextTick(() => {
+      this.handleTableData()
+      this.updateScrollYSpace()
+    })
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace () {

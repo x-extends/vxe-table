@@ -713,13 +713,13 @@ export default {
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       // if (this.rowId) {
-      //   warnLog('vxe.error.delProp', ['rowId', 'row-config.keyField'])
+      //   warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
       // }
       // if (this.rowKey) {
-      //   warnLog('vxe.error.delProp', ['rowId', 'row-config.useKey'])
+      //   warnLog('vxe.error.delProp', ['row-id', 'row-config.useKey'])
       // }
       // if (this.columnKey) {
-      //   warnLog('vxe.error.delProp', ['rowId', 'column-config.useKey'])
+      //   warnLog('vxe.error.delProp', ['row-id', 'column-config.useKey'])
       // }
       if (!(this.rowId || rowOpts.keyField) && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
         warnLog('vxe.error.reqProp', ['row-config.keyField'])
@@ -739,6 +739,18 @@ export default {
       if (this.tooltipOpts.enabled) {
         warnLog('vxe.error.delProp', ['tooltip-config.enabled', 'tooltip-config.showAll'])
       }
+      // if (this.highlightCurrentRow) {
+      //   warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
+      // }
+      // if (this.highlightHoverRow) {
+      //   warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
+      // }
+      // if (this.highlightCurrentColumn) {
+      //   warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
+      // }
+      // if (this.highlightHoverColumn) {
+      //   warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
+      // }
       // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
       const { exportConfig, exportOpts, importConfig, importOpts } = this
       if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.config.importTypes, importOpts.types)) {

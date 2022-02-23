@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import UtilTools, { isEnableConf } from '../../tools/utils'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener } from './util'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener, getRowid } from './util'
 import DomTools from '../../tools/dom'
 
 const renderType = 'body'
@@ -16,7 +16,7 @@ function renderLine (h, _vm, $xetable, params) {
   const { row, column } = params
   const { treeOpts, treeConfig, fullAllDataRowIdData } = $xetable
   const { slots, treeNode } = column
-  const rowid = UtilTools.getRowid($xetable, row)
+  const rowid = getRowid($xetable, row)
   const rest = fullAllDataRowIdData[rowid]
   let rLevel = 0
   let rIndex = 0
@@ -322,7 +322,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
         $xetable.clearHoverRow()
       }
     }
-    const rowid = UtilTools.getRowid($xetable, row)
+    const rowid = getRowid($xetable, row)
     const rest = fullAllDataRowIdData[rowid]
     const rowLevel = rest ? rest.level : 0
     const seq = rest ? rest.seq : -1
