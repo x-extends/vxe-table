@@ -2074,6 +2074,7 @@ export type VxeTableEmits = [
   'cell-menu',
   'cell-mouseenter',
   'cell-mouseleave',
+  'cell-selected',
   'header-cell-click',
   'header-cell-dblclick',
   'header-cell-menu',

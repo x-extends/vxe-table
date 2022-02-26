@@ -690,6 +690,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                 editPrivateMethods.addCellSelectedClass()
               }
               $xetable.focus()
+              if (evnt) {
+                $xetable.dispatchEvent('cell-selected', params, evnt)
+              }
             }
           }
           return nextTick()
