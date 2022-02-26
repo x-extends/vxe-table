@@ -598,8 +598,7 @@ export default defineComponent({
         return true
       }
       if (XEUtils.isString(val1) || XEUtils.isNumber(val1)) {
-        /* eslint-disable eqeqeq */
-        return val1 == val2
+        return ('' + val1) === ('' + val2)
       }
       return XEUtils.isEqual(val1, val2)
     }
