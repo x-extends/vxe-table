@@ -1,6 +1,8 @@
 @import './variable.scss';
 
 body {
+  margin: 0;
+  padding: 0;
   color: #000;
   font-size: 14px;
   font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,\\5FAE\8F6F\96C5\9ED1,Arial,sans-serif;
@@ -110,13 +112,17 @@ body,
     color: #fff;
   }
   .left {
-    font-size: 22px;
-    padding: 5px 0;
+    display: flex;
+    align-items: center;
     flex-shrink: 0;
+    font-size: 22px;
     a {
       color: $themeColor;
       text-decoration: none;
       cursor: pointer;
+      img {
+        vertical-align: middle;
+      }
     }
   }
   .main {

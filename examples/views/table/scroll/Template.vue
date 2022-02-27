@@ -77,7 +77,7 @@ export default {
             },
             filter: ({ column, $panel }) => {
               return column.filters.map(option => {
-                return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
+                return <input type="type" v-model={ option.data } onInput={ event => this.changeFilterEvent(event, option, $panel) }/>
               })
             },
             edit: ({ row }) => {
@@ -199,7 +199,7 @@ export default {
                     },
                     filter: ({ column, $panel }) => {
                       return column.filters.map(option => {
-                        return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
+                        return <input type="type" v-model={ option.data } onInput={ event => this.changeFilterEvent(event, option, $panel) }/>
                       })
                     },
                     edit: ({ row }) => {
