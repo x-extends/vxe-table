@@ -617,9 +617,9 @@ export default defineComponent({
       return rest && rest._v === version ? rest : { _v: version }
     }
 
-    const getRecoverRow = (list: any) => {
+    const getRecoverRow = (list: any[]) => {
       const { fullAllDataRowIdData } = internalData
-      return list.filter((row: any) => {
+      return list.filter((row) => {
         const rowid = getRowid($xetable, row)
         return !!fullAllDataRowIdData[rowid]
       })
@@ -1209,7 +1209,7 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
       const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
-      const { remote: allRemoteSort, sortMethod: allSortMethod } = sortOpts
+      const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
       let tableData: any[] = []
       let tableTree: any[] = []
 
@@ -1220,12 +1220,7 @@ export default defineComponent({
           valueList: any[]
           itemList: VxeTableDefines.FilterOption[]
         }[] = []
-        const orderColumns: {
-          column: VxeTableDefines.ColumnInfo
-          field: string
-          property: string
-          order: VxeTablePropTypes.SortOrder
-        }[] = []
+        let orderColumns: VxeTableDefines.SortCheckedParams[] = []
         tableFullColumn.forEach((column) => {
           const { property, sortable, order, filters } = column
           if (!allRemoteFilter && filters && filters.length) {
@@ -1242,9 +1237,12 @@ export default defineComponent({
             }
           }
           if (!allRemoteSort && sortable && order) {
-            orderColumns.push({ column, field: property, property, order })
+            orderColumns.push({ column, field: property, property, order, sortTime: column.sortTime })
           }
         })
+        if (sortMultiple && chronological && orderColumns.length > 1) {
+          orderColumns = XEUtils.orderBy(orderColumns, 'sortTime')
+        }
 
         // 处理筛选
         // 支持单列、多列、组合筛选
@@ -1585,12 +1583,13 @@ export default defineComponent({
             defaultSort = [defaultSort]
           }
           if (defaultSort.length) {
-            (sortConfig.multiple ? defaultSort : defaultSort.slice(0, 1)).forEach((item: any) => {
+            (sortConfig.multiple ? defaultSort : defaultSort.slice(0, 1)).forEach((item: any, index: number) => {
               const { field, order } = item
               if (field && order) {
                 const column = tableMethods.getColumnByField(field)
                 if (column && column.sortable) {
                   column.order = order
+                  column.sortTime = Date.now() + index
                 }
               }
             })
@@ -3392,7 +3391,7 @@ export default defineComponent({
           if (!multiple) {
             clearAllSort()
           }
-          (multiple ? sortConfs : [sortConfs[0]]).forEach((confs: any) => {
+          (multiple ? sortConfs : [sortConfs[0]]).forEach((confs: any, index: number) => {
             let { field, order } = confs
             let column = field
             if (XEUtils.isString(field)) {
@@ -3405,7 +3404,7 @@ export default defineComponent({
               if (column.order !== order) {
                 column.order = order
               }
-              column.sortTime = Date.now()
+              column.sortTime = Date.now() + index
             }
           })
           // 如果是服务端排序，则跳过本地排序处理
@@ -3444,14 +3443,19 @@ export default defineComponent({
         return tableMethods.getSortColumns().length > 0
       },
       getSortColumns () {
+        const sortOpts = computeSortOpts.value
+        const { multiple, chronological } = sortOpts
         const sortList: VxeTableDefines.SortCheckedParams[] = []
         const { tableFullColumn } = internalData
         tableFullColumn.forEach((column) => {
           const { property, order } = column
           if (column.sortable && order) {
-            sortList.push({ column, field: property, property, order })
+            sortList.push({ column, field: property, property, order, sortTime: column.sortTime })
           }
         })
+        if (multiple && chronological && sortList.length > 1) {
+          return XEUtils.orderBy(sortList, 'sortTime')
+        }
         return sortList
       },
       /**

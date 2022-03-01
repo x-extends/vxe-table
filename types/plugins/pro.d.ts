@@ -12,9 +12,13 @@ export interface VxeTableProMethods {
    */
   getActiveCellArea(): VxeTableProDefines.MouseActiveCellArea | null
   /**
-   * 用于 mouse-config.area，用于获取标记为复制粘贴的区域
+   * @deprecated
    */
   getCopyCellArea(): VxeTableProDefines.MouseCellArea | null
+  /**
+   * 用于 mouse-config.area，用于获取标记为复制粘贴的区域
+   */
+  getCopyCellAreas(): VxeTableProDefines.MouseCellArea[]
   /**
    * 用于 mouse-config.area，复制指定区域，返回转换后的文本
    */
@@ -324,7 +328,7 @@ export namespace VxeTableProDefines {
   export interface ActiveCellChangeStartEventParams extends EventParams, ActiveCellChangeStartParams { }
 
   export interface ActiveCellChangeEndParams extends ActiveCellChangeStartParams {
-    targetActiveArea: VxeTableProDefines.MouseCellArea
+    beforeActiveArea: VxeTableProDefines.MouseCellArea
   }
   export interface ActiveCellChangeEndEventParams extends EventParams, ActiveCellChangeEndParams { }
 }

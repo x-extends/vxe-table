@@ -87,11 +87,17 @@
 
     <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段组合排序</p>
 
+    <vxe-toolbar>
+      <template #buttons>
+        按点击先后顺序排序：<vxe-switch v-model="isChronological4"></vxe-switch>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       highlight-hover-row
       height="300"
-      :sort-config="{multiple: true}"
+      :sort-config="{multiple: true, chronological: isChronological4}"
       :data="tableData4"
       @sort-change="sortChangeEvent3">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -246,6 +252,8 @@ export default defineComponent({
       }
     } as VxeTablePropTypes.SortConfig)
 
+    const isChronological4 = ref(false)
+
     const tableData4 = ref([
       { name: '小红', role: '前端', num: 7 },
       { name: '老王', role: '后端', num: 6 },
@@ -285,6 +293,7 @@ export default defineComponent({
       tableData3,
       tableSort3,
       tableData4,
+      isChronological4,
       sortChangeEvent3,
       sortChangeEvent4,
       demoCodes: [

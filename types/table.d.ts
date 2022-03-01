@@ -1310,6 +1310,7 @@ export namespace VxeTablePropTypes {
     }): any[]
     remote?: boolean
     multiple?: boolean
+    chronological?: boolean
     trigger?: 'default' | 'cell'
     showIcon?: boolean
     iconAsc?: string
@@ -2419,6 +2420,7 @@ export namespace VxeTableDefines {
     field: VxeColumnPropTypes.Field
     property: VxeColumnPropTypes.Field
     order: VxeTablePropTypes.SortOrder
+    sortTime: number
   }
   export interface SortChangeParams extends SortCheckedParams {
     sortList: SortCheckedParams[]

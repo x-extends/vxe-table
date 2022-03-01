@@ -904,7 +904,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
               reader.onload = (e: any) => {
                 handleImport(e.target.result, options)
               }
-              reader.readAsText(file, 'UTF-8')
+              reader.readAsText(file, options.encoding || 'UTF-8')
             })
           }
         } else {
