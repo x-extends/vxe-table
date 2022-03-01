@@ -79,7 +79,8 @@ export default {
       area: {
         mergeErr: 'The operation cannot be performed on merged cells',
         multiErr: 'The operation cannot be performed on multiple selection areas',
-        extendErr: 'If the extended area contains merged cells, all merged cells need to be the same size'
+        extendErr: 'If the extended area contains merged cells, all merged cells need to be the same size',
+        pasteMultiErr: 'Cannot paste, copied area and pasted area of the same size are required to perform this operation'
       },
       fnr: {
         title: 'Find and replace',

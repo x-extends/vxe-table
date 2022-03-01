@@ -896,7 +896,7 @@ function handleFileImport ($xetable, file, opts) {
           reader.onload = (e) => {
             handleImport($xetable, e.target.result, options)
           }
-          reader.readAsText(file, 'UTF-8')
+          reader.readAsText(file, options.encoding || 'UTF-8')
         })
       }
     } else {

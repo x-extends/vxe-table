@@ -1150,12 +1150,12 @@ const Methods = {
   updateAfterFullData () {
     const { tableFullColumn, tableFullData, filterOpts, sortOpts, treeConfig, treeOpts, tableFullTreeData } = this
     const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
-    const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple } = sortOpts
+    const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
     const { transform } = treeOpts
     let tableData = []
     let tableTree = []
     const filterColumns = []
-    const orderColumns = []
+    let orderColumns = []
     tableFullColumn.forEach(column => {
       const { property, sortable, order, filters } = column
       if (!allRemoteFilter && filters && filters.length) {
@@ -1172,9 +1172,12 @@ const Methods = {
         }
       }
       if (!allRemoteSort && sortable && order) {
-        orderColumns.push({ column, field: column.property, property, order })
+        orderColumns.push({ column, field: column.property, property, order, sortTime: column.sortTime })
       }
     })
+    if (sortMultiple && chronological && orderColumns.length > 1) {
+      orderColumns = XEUtils.orderBy(orderColumns, 'sortTime')
+    }
     if (filterColumns.length) {
       const handleFilter = (row) => {
         return filterColumns.every(({ column, valueList, itemList }) => {
@@ -3512,13 +3515,13 @@ const Methods = {
         defaultSort = [defaultSort]
       }
       if (defaultSort.length) {
-        (sortConfig.multiple ? defaultSort : defaultSort.slice(0, 1)).forEach((item) => {
+        (sortConfig.multiple ? defaultSort : defaultSort.slice(0, 1)).forEach((item, index) => {
           const { field, order } = item
           if (field && order) {
             const column = this.getColumnByField(field)
             if (column && column.sortable) {
               column.order = order
-              column.sortTime = Date.now()
+              column.sortTime = Date.now() + index
             }
           }
         })
@@ -3562,7 +3565,7 @@ const Methods = {
       if (!multiple) {
         clearAllSort(this)
       }
-      (multiple ? sortConfs : [sortConfs[0]]).forEach((confs) => {
+      (multiple ? sortConfs : [sortConfs[0]]).forEach((confs, index) => {
         let { field, order } = confs
         let column = field
         if (XEUtils.isString(field)) {
@@ -3578,6 +3581,7 @@ const Methods = {
           if (column.order !== order) {
             column.order = order
           }
+          column.sortTime = Date.now() + index
         }
       })
       // 如果是服务端排序，则跳过本地排序处理
@@ -3623,13 +3627,17 @@ const Methods = {
     return this.getSortColumns().length > 0
   },
   getSortColumns () {
+    const { multiple, chronological } = this.sortOpts
     const sortList = []
     this.tableFullColumn.forEach((column) => {
       const { property, order } = column
       if ((column.sortable || column.remoteSort) && order) {
-        sortList.push({ column, field: column.property, property, order })
+        sortList.push({ column, field: column.property, property, order, sortTime: column.sortTime })
       }
     })
+    if (multiple && chronological && sortList.length > 1) {
+      return XEUtils.orderBy(sortList, 'sortTime')
+    }
     return sortList
   },
   /**
@@ -4630,7 +4638,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,clearCopyCellArea,setCellAreas,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getActiveRecord,isActiveByRow,setActiveRow,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {
