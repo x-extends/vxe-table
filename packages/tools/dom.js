@@ -1,7 +1,4 @@
 import XEUtils from 'xe-utils'
-import UtilTools from './utils'
-
-const { getRowid } = UtilTools
 
 export const browse = XEUtils.browse()
 const reClsMap = {}
@@ -110,68 +107,6 @@ export const DomTools = {
     if (overflowElem.getAttribute('title') !== content) {
       overflowElem.setAttribute('title', content)
     }
-  },
-  rowToVisible ($xetable, row) {
-    const { tableBody } = $xetable.$refs
-    const bodyElem = tableBody ? tableBody.$el : null
-    if (bodyElem) {
-      const trElem = bodyElem.querySelector(`[rowid="${getRowid($xetable, row)}"]`)
-      if (trElem) {
-        const bodyHeight = bodyElem.clientHeight
-        const bodySrcollTop = bodyElem.scrollTop
-        const trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
-        const trHeight = trElem.clientHeight
-        // 检测行是否在可视区中
-        if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
-          // 向上定位
-          return $xetable.scrollTo(null, trOffsetTop)
-        } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
-          // 向下定位
-          return $xetable.scrollTo(null, bodySrcollTop + trHeight)
-        }
-      } else {
-        // 如果是虚拟渲染跨行滚动
-        if ($xetable.scrollYLoad) {
-          return $xetable.scrollTo(null, ($xetable.afterFullData.indexOf(row) - 1) * $xetable.scrollYStore.rowHeight)
-        }
-      }
-    }
-    return Promise.resolve()
-  },
-  colToVisible ($xetable, column) {
-    const { tableBody } = $xetable.$refs
-    const bodyElem = tableBody ? tableBody.$el : null
-    if (bodyElem) {
-      const tdElem = bodyElem.querySelector(`.${column.id}`)
-      if (tdElem) {
-        const bodyWidth = bodyElem.clientWidth
-        const bodySrcollLeft = bodyElem.scrollLeft
-        const tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
-        const tdWidth = tdElem.clientWidth
-        // 检测行是否在可视区中
-        if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
-          // 向左定位
-          return $xetable.scrollTo(tdOffsetLeft)
-        } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
-          // 向右定位
-          return $xetable.scrollTo(bodySrcollLeft + tdWidth)
-        }
-      } else {
-        // 如果是虚拟渲染跨行滚动
-        if ($xetable.scrollXLoad) {
-          const visibleColumn = $xetable.visibleColumn
-          let scrollLeft = 0
-          for (let index = 0; index < visibleColumn.length; index++) {
-            if (visibleColumn[index] === column) {
-              break
-            }
-            scrollLeft += visibleColumn[index].renderWidth
-          }
-          return $xetable.scrollTo(scrollLeft)
-        }
-      }
-    }
-    return Promise.resolve()
   },
   getDomNode,
   /**

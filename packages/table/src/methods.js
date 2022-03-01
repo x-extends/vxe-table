@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
-import { getRowid, getRowkey, clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq } from './util'
+import { getRowid, getRowkey, clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq, rowToVisible, colToVisible } from './util'
 import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
 import DomTools, { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { formats } from '../../v-x-e-table/src/formats'
@@ -4363,7 +4363,7 @@ const Methods = {
       if (this.treeConfig) {
         rest.push(this.scrollToTreeRow(row))
       } else {
-        rest.push(DomTools.rowToVisible(this, row))
+        rest.push(rowToVisible(this, row))
       }
     }
     if (fieldOrColumn) {
@@ -4378,7 +4378,7 @@ const Methods = {
   scrollToColumn (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
     if (column && this.fullColumnMap.has(column)) {
-      return DomTools.colToVisible(this, column)
+      return colToVisible(this, column)
     }
     return this.$nextTick()
   },
@@ -4401,7 +4401,7 @@ const Methods = {
         })
       }
     }
-    return Promise.all(rests).then(() => DomTools.rowToVisible(this, row))
+    return Promise.all(rests).then(() => rowToVisible(this, row))
   },
   /**
    * 手动清除滚动相关信息，还原到初始状态
