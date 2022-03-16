@@ -1,10 +1,9 @@
 import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
 import UtilTools, { isEnableConf } from '../../tools/utils'
+import { getRowid } from '../../table/src/util'
 import DomTools, { browse } from '../../tools/dom'
 import { warnLog, errLog } from '../../tools/log'
-
-const { getRowid } = UtilTools
 
 function insertTreeRow (_vm, newRecords, isAppend) {
   const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm

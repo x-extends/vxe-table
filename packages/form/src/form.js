@@ -341,10 +341,12 @@ export default {
       evnt.preventDefault()
       if (!this.preventSubmit) {
         this.clearValidate()
-        this.beginValidate(this.getItems()).then(() => {
-          this.$emit('submit', { data: this.data, $form: this, $event: evnt })
-        }).catch(errMap => {
-          this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt })
+        this.beginValidate(this.getItems()).then((errMap) => {
+          if (errMap) {
+            this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt })
+          } else {
+
+          }
         })
       }
     },
