@@ -1371,9 +1371,7 @@ export default defineComponent({
             if (isOptimize) {
               tableColumn = fixedColumn
             }
-            if (isOptimize || scrollXLoad) {
-              tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
-            }
+            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
 
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''

@@ -162,13 +162,13 @@ export default defineComponent({
     const renderVN = () => {
       let { fixedType, fixedColumn, tableColumn } = props
       const { resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { isGroup, currentColumn, scrollYLoad, overflowX, scrollbarWidth } = tableReactData
+      const { isGroup, currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
       const columnOpts = computeColumnOpts.value
       let headerGroups: VxeTableDefines.ColumnInfo[][] = headerColumn.value
       // 如果是使用优化模式
       if (!isGroup) {
         if (fixedType) {
-          if (scrollYLoad || allColumnHeaderOverflow) {
+          if (scrollXLoad || allColumnHeaderOverflow) {
             tableColumn = fixedColumn
           }
         }
@@ -233,8 +233,8 @@ export default defineComponent({
                 onClick: (evnt: MouseEvent) => $xetable.triggerHeaderCellClickEvent(evnt, params),
                 onDblclick: (evnt: MouseEvent) => $xetable.triggerHeaderCellDblclickEvent(evnt, params)
               }
-              // 纵向虚拟滚动不支持动态行高
-              if (scrollYLoad && !hasEllipsis) {
+              // 横向虚拟滚动不支持动态行高
+              if (scrollXLoad && !hasEllipsis) {
                 showEllipsis = hasEllipsis = true
               }
               // 按下事件处理

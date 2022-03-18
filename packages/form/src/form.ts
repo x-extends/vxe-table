@@ -350,7 +350,7 @@ export default defineComponent({
 
     let showErrTime: number
 
-    const beginValidate = (itemList: VxeFormDefines.ItemInfo[], type?: string, callback?: any) => {
+    const beginValidate = (itemList: VxeFormDefines.ItemInfo[], type?: string, callback?: any): Promise<any> => {
       const { data, rules: formRules } = props
       const validOpts = computeValidOpts.value
       const validRest: any = {}
@@ -424,10 +424,12 @@ export default defineComponent({
       evnt.preventDefault()
       if (!props.preventSubmit) {
         clearValidate()
-        beginValidate(getItems()).then(() => {
-          formMethods.dispatchEvent('submit', { data: props.data }, evnt)
-        }).catch(errMap => {
-          formMethods.dispatchEvent('submit-invalid', { data: props.data, errMap }, evnt)
+        beginValidate(getItems()).then((errMap) => {
+          if (errMap) {
+            formMethods.dispatchEvent('submit-invalid', { data: props.data, errMap }, evnt)
+          } else {
+            formMethods.dispatchEvent('submit', { data: props.data }, evnt)
+          }
         })
       }
     }
