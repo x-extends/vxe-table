@@ -164,7 +164,7 @@
   }
   .vxe-modal--box {
     visibility: hidden;
-    width: 420px;
+    min-width: 420px;
     background-color: $vxe-modal-body-background-color;
     border-radius: $vxe-border-radius;
     border: 1px solid $vxe-modal-border-color;
