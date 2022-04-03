@@ -759,6 +759,8 @@ export interface TableReactData {
   parentHeight: number
   // 是否使用分组表头
   isGroup: boolean
+  // 自定义表头单元格行数
+  useCustomHeaderRowSpan: boolean
   isAllOverflow: boolean
   // 复选框属性，是否全选
   isAllSelected: boolean
@@ -1940,6 +1942,7 @@ export namespace VxeTablePropTypes {
   }
 
   export type Params = any
+  export type UseCustomHeaderRowSpan = boolean
 }
 
 export type VxeTableProps<D = any> = {
@@ -2053,6 +2056,7 @@ export type VxeTableProps<D = any> = {
   scrollX?: VxeTablePropTypes.ScrollX
   scrollY?: VxeTablePropTypes.ScrollY
   params?: VxeTablePropTypes.Params
+  useCustomHeaderRowSpan?: VxeTablePropTypes.UseCustomHeaderRowSpan
 }
 
 export type VxeTableEmits = [

@@ -160,5 +160,7 @@ export default {
   // （可能会被废弃的参数，不要使用）
   delayHover: { type: Number as PropType<VxeTablePropTypes.DelayHover>, default: () => GlobalConfig.table.delayHover as number },
   // 额外的参数
-  params: Object as PropType<VxeTablePropTypes.Params>
+  params: Object as PropType<VxeTablePropTypes.Params>,
+  // 使用自定义表头单元格行数方式
+  useCustomHeaderRowSpan: { type: Boolean as PropType<VxeTablePropTypes.UseCustomHeaderRowSpan>, default: () => GlobalConfig.table.useCustomHeaderRowSpan }
 }

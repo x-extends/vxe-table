@@ -23,6 +23,7 @@ export namespace VxeColumnPropTypes {
   export type Align = 'left' | 'center' | 'right' | null
   export type HeaderAlign = Align
   export type FooterAlign = Align
+  export type CustomRowSpan = string | number
   export type ShowOverflow = VxeTablePropTypes.ShowOverflow
   export type ShowHeaderOverflow = ShowOverflow
   export type ShowFooterOverflow = ShowOverflow
@@ -159,7 +160,6 @@ export namespace VxeColumnPropTypes {
   }
 
   export type Params = any
-
   interface FilterSlotParams {
     $panel: VxeFilterPanel
     column: {
@@ -363,5 +363,9 @@ export type VxeColumnProps = {
   /**
    * 额外的参数
    */
-  params?: VxeColumnPropTypes.Params
+  params?: VxeColumnPropTypes.Params,
+  /**
+   * 定制单元格行高
+   */
+  customRowSpan?: VxeColumnPropTypes.CustomRowSpan,
 }

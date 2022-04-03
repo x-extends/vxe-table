@@ -75,6 +75,7 @@ export class ColumnInfo {
       className: _vm.className,
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
+      customRowSpan: _vm.customRowSpan,
       formatter: formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,

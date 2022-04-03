@@ -63,6 +63,7 @@ export default defineComponent({
       parentHeight: 0,
       // 是否使用分组表头
       isGroup: false,
+      useCustomHeaderRowSpan: false,
       isAllOverflow: false,
       // 复选框属性，是否全选
       isAllSelected: false,
@@ -892,6 +893,7 @@ export default defineComponent({
       const mouseOpts = computeMouseOpts.value
       const isGroup = collectColumn.some(hasChildrenList)
       let isAllOverflow = !!props.showOverflow
+      const useCustomHeaderRowSpan = !!props.useCustomHeaderRowSpan
       let expandColumn: any
       let treeNodeColumn: any
       let checkboxColumn: any
@@ -969,7 +971,7 @@ export default defineComponent({
           errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
         }
       }
-
+      reactData.useCustomHeaderRowSpan = useCustomHeaderRowSpan
       reactData.isGroup = isGroup
       reactData.treeNodeColumn = treeNodeColumn
       reactData.expandColumn = expandColumn
@@ -5897,7 +5899,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig } = props
-      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
+      const { isGroup, useCustomHeaderRowSpan, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
       const { leftList, rightList } = columnStore
       const tipConfig = computeTipConfig.value
       const treeOpts = computeTreeOpts.value
@@ -5956,7 +5958,8 @@ export default defineComponent({
               ref: refTableHeader,
               tableData,
               tableColumn,
-              tableGroupColumn
+              tableGroupColumn,
+              useCustomHeaderRowSpan
             }) : createCommentVNode(),
             /**
              * 表体

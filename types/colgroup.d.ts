@@ -65,6 +65,10 @@ export type VxeColgroupProps = {
    */
   visible?: VxeColumnPropTypes.Visible
   /**
+   * 定制行高
+   */
+  customRowSpan?: VxeColumnPropTypes.CustomRowSpan
+  /**
    * 额外的参数
    */
   params?: VxeColumnPropTypes.Params

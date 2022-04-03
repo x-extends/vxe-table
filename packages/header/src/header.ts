@@ -15,7 +15,8 @@ export default defineComponent({
     tableColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     tableGroupColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
-    fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
+    fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null },
+    useCustomHeaderRowSpan: { type: Boolean, default: false }
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
@@ -35,7 +36,7 @@ export default defineComponent({
 
     const uploadColumn = () => {
       const { isGroup } = tableReactData
-      headerColumn.value = isGroup ? convertToRows(props.tableGroupColumn) : []
+      headerColumn.value = isGroup ? convertToRows(props.tableGroupColumn, props.useCustomHeaderRowSpan) : []
     }
 
     const resizeMousedown = (evnt: MouseEvent, params: any) => {
