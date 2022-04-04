@@ -482,7 +482,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             $columnIndex: $xetable.getVMColumnIndex(column)
           }, evnt || null)
         }
-        return ($xetable.clearValidate ? $xetable.clearValidate() : nextTick()).then(() => $xetable.recalculate())
+        return $xetable.clearValidate ? $xetable.clearValidate() : nextTick()
       },
       /**
        * 清除所选中源状态
@@ -575,7 +575,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                 }
               }
               $xetable.closeTooltip()
-              editMethods.clearActived(evnt)
+              if (actived.column) {
+                editMethods.clearActived(evnt)
+              }
               type = 'edit-actived'
               column.renderHeight = cell.offsetHeight
               actived.args = params
