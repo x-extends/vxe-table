@@ -571,7 +571,7 @@ export default {
                 if (rest) {
                   if (isEnableConf(pagerConfig)) {
                     const total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
-                    tablePage.total = total
+                    tablePage.total = XEUtils.toNumber(total)
                     this.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
                     // 检验当前页码，不能超出当前最大页数
                     const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)

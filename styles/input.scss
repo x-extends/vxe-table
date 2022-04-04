@@ -741,7 +741,7 @@ $iconWidth: 1.6em;
   &.type--quarter,
   &.type--year {
     .vxe-input--panel-wrapper {
-      $widthList: 336px, 336px, 312px, 288px;
+      $widthList: 366px, 336px, 312px, 288px;
       width: nth($widthList, $sizeIndex);
     }
   }

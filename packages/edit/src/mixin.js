@@ -396,7 +396,9 @@ export default {
               this.clearCopyCellArea(evnt)
             }
             this.closeTooltip()
-            this.clearActived(evnt)
+            if (actived.column) {
+              this.clearActived(evnt)
+            }
             type = 'edit-actived'
             column.renderHeight = cell.offsetHeight
             actived.args = params
@@ -493,7 +495,7 @@ export default {
           $columnIndex: this.getVMColumnIndex(column)
         }, evnt)
       }
-      return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
+      return VXETable._valid ? this.clearValidate() : this.$nextTick()
     },
     _getActiveRecord () {
       const { $el, editStore, afterFullData } = this
