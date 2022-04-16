@@ -927,7 +927,9 @@ export interface TableReactData {
 
 export interface TableInternalData {
   tZindex: number
-  elemStore: any
+  elemStore: {
+    [key: string]: Ref<HTMLElement> | null
+  }
   // 存放横向 X 虚拟滚动相关的信息
   scrollXStore: {
     offsetSize: number

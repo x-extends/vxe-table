@@ -41,6 +41,15 @@
     </p>
 
     <p>
+      <vxe-input v-model="demo1.value800" placeholder="日期多选" type="date" multiple></vxe-input>
+      <vxe-input v-model="demo1.value801" placeholder="日期多选" type="month" multiple></vxe-input>
+      <vxe-input v-model="demo1.value802" placeholder="日期多选" type="quarter" multiple></vxe-input>
+      <vxe-input v-model="demo1.value803" placeholder="日期多选" type="year" multiple></vxe-input>
+      <vxe-input v-model="demo1.value804" placeholder="日期多选" type="week" multiple></vxe-input>
+      <vxe-input v-model="demo1.value805" placeholder="日期多选" type="datetime" multiple></vxe-input>
+    </p>
+
+    <p>
       <vxe-input v-model="demo1.value701" placeholder="周选择" type="week" :start-day="0" clearable></vxe-input>
       <vxe-input v-model="demo1.value702" placeholder="周选择" type="week" :start-day="1" clearable></vxe-input>
       <vxe-input v-model="demo1.value703" placeholder="周选择" type="week" :start-day="2" clearable></vxe-input>
@@ -160,7 +169,13 @@ export default defineComponent({
       value704: '2017-12-18',
       value705: '2017-12-18',
       value706: '2017-12-18',
-      value707: '2017-12-18'
+      value707: '2017-12-18',
+      value800: '',
+      value801: '',
+      value802: '',
+      value803: '',
+      value804: '',
+      value805: ''
     })
 
     const disabledDateMethod: VxeInputPropTypes.DisabledMethod = (params) => {

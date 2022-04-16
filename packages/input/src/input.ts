@@ -12,8 +12,10 @@ import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMe
 
 interface DateYearItem {
   date: Date;
+  isPrev: boolean;
   isCurrent: boolean;
   isNow: boolean;
+  isNext: boolean;
   year: number;
 }
 
@@ -50,7 +52,7 @@ interface DateHourMinuteSecondItem {
   label: string;
 }
 
-const yearSize = 20
+const yearSize = 12
 const monthSize = 20
 const quarterSize = 8
 
@@ -71,6 +73,7 @@ export default defineComponent({
     form: String as PropType<VxeInputPropTypes.Form>,
     className: String as PropType<VxeInputPropTypes.ClassName>,
     size: { type: String as PropType<VxeInputPropTypes.Size>, default: () => GlobalConfig.input.size || GlobalConfig.size },
+    multiple: Boolean as PropType<VxeInputPropTypes.Multiple>,
 
     // number、integer、float
     min: { type: [String, Number] as PropType<VxeInputPropTypes.Min>, default: null },
@@ -232,6 +235,38 @@ export default defineComponent({
       return props.maxDate ? XEUtils.toStringDate(props.maxDate) : null
     })
 
+    const computeSupportMultiples = computed(() => {
+      return ['date', 'week', 'month', 'quarter', 'year'].includes(props.type)
+    })
+
+    const computeDateListValue = computed(() => {
+      const { modelValue, multiple } = props
+      const isDatePickerType = computeIsDatePickerType.value
+      const dateValueFormat = computeDateValueFormat.value
+      if (multiple && modelValue && isDatePickerType) {
+        return XEUtils.toValueString(modelValue).split(',').map(item => {
+          const date = parseDate(item, dateValueFormat)
+          if (XEUtils.isValidDate(date)) {
+            return date
+          }
+          return null
+        })
+      }
+      return []
+    })
+
+    const computeDateMultipleValue = computed(() => {
+      const dateListValue = computeDateListValue.value
+      const dateValueFormat = computeDateValueFormat.value
+      return dateListValue.map(date => XEUtils.toDateString(date, dateValueFormat))
+    })
+
+    const computeDateMultipleLabel = computed(() => {
+      const dateListValue = computeDateListValue.value
+      const dateLabelFormat = computeDateLabelFormat.value
+      return dateListValue.map(date => XEUtils.toDateString(date, dateLabelFormat)).join(', ')
+    })
+
     const computeDateValueFormat = computed(() => {
       const { type } = props
       return type === 'time' ? 'HH:mm:ss' : (props.valueFormat || (type === 'datetime' ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'))
@@ -296,14 +331,17 @@ export default defineComponent({
       const years: DateYearItem[] = []
       if (selectMonth && currentDate) {
         const currFullYear = currentDate.getFullYear()
-        const startYear = new Date(XEUtils.toNumber(('' + selectMonth.getFullYear()).replace(/\d{1}$/, '0')), 0, 1)
-        for (let index = -10; index < yearSize - 10; index++) {
-          const date = XEUtils.getWhatYear(startYear, index, 'first')
+        const selectFullYear = selectMonth.getFullYear()
+        const startYearDate = new Date(selectFullYear - selectFullYear % yearSize, 0, 1)
+        for (let index = -4; index < yearSize + 4; index++) {
+          const date = XEUtils.getWhatYear(startYearDate, index, 'first')
           const itemFullYear = date.getFullYear()
           years.push({
             date,
             isCurrent: true,
+            isPrev: index < 0,
             isNow: currFullYear === itemFullYear,
+            isNext: index >= yearSize,
             year: itemFullYear
           })
         }
@@ -536,8 +574,8 @@ export default defineComponent({
     })
 
     const computeInpReadonly = computed(() => {
-      const { type, readonly, editable } = props
-      return readonly || !editable || type === 'week' || type === 'quarter'
+      const { type, readonly, editable, multiple } = props
+      return readonly || multiple || !editable || type === 'week' || type === 'quarter'
     })
 
     const computeInputType = computed(() => {
@@ -711,7 +749,7 @@ export default defineComponent({
       const { inputValue } = reactData
       if (isDatePickerType) {
         dateParseValue(inputValue)
-        reactData.inputValue = reactData.datePanelLabel
+        reactData.inputValue = props.multiple ? computeDateMultipleLabel.value : reactData.datePanelLabel
       }
     }
 
@@ -744,7 +782,7 @@ export default defineComponent({
     }
 
     const dateRevert = () => {
-      reactData.inputValue = reactData.datePanelLabel
+      reactData.inputValue = props.multiple ? computeDateMultipleLabel.value : reactData.datePanelLabel
     }
 
     const dateCheckMonth = (date: Date) => {
@@ -755,7 +793,7 @@ export default defineComponent({
     }
 
     const dateChange = (date: Date) => {
-      const { modelValue } = props
+      const { modelValue, multiple } = props
       const { datetimePanelValue } = reactData
       const isDateTimeType = computeIsDateTimeType.value
       const dateValueFormat = computeDateValueFormat.value
@@ -770,8 +808,36 @@ export default defineComponent({
       }
       const inpVal = XEUtils.toDateString(date, dateValueFormat, { firstDay: firstDayOfWeek })
       dateCheckMonth(date)
-      if (!XEUtils.isEqual(modelValue, inpVal)) {
-        emitModel(inpVal, { type: 'update' })
+      if (multiple) {
+        // 如果为多选
+        const dateMultipleValue = computeDateMultipleValue.value
+        if (isDateTimeType) {
+          // 如果是datetime特殊类型
+          const dateListValue = computeDateListValue.value
+          const datetimeRest = []
+          dateListValue.forEach(item => {
+            if (item && !XEUtils.isDateSame(date, item, 'yyyyMMdd')) {
+              item.setHours(datetimePanelValue.getHours())
+              item.setMinutes(datetimePanelValue.getMinutes())
+              item.setSeconds(datetimePanelValue.getSeconds())
+              datetimeRest.push(item)
+            }
+          })
+          datetimeRest.push(date)
+          emitModel(datetimeRest.map(date => XEUtils.toDateString(date, dateValueFormat)).join(','), { type: 'update' })
+        } else {
+          // 如果是日期类型
+          if (dateMultipleValue.some(val => XEUtils.isEqual(val, inpVal))) {
+            emitModel(dateMultipleValue.filter(val => !XEUtils.isEqual(val, inpVal)).join(','), { type: 'update' })
+          } else {
+            emitModel(dateMultipleValue.concat([inpVal]).join(','), { type: 'update' })
+          }
+        }
+      } else {
+        // 如果为单选
+        if (!XEUtils.isEqual(modelValue, inpVal)) {
+          emitModel(inpVal, { type: 'update' })
+        }
       }
     }
 
@@ -1048,8 +1114,10 @@ export default defineComponent({
 
     const dateTodayMonthEvent = (evnt: Event) => {
       dateNowHandle()
-      dateChange(reactData.currentDate)
-      hidePanel()
+      if (!props.multiple) {
+        dateChange(reactData.currentDate)
+        hidePanel()
+      }
       inputMethods.dispatchEvent('date-today', { type: props.type }, evnt)
     }
 
@@ -1086,7 +1154,7 @@ export default defineComponent({
     }
 
     const dateSelectItem = (date: Date) => {
-      const { type } = props
+      const { type, multiple } = props
       const { datePanelType } = reactData
       if (type === 'month') {
         if (datePanelType === 'year') {
@@ -1094,18 +1162,24 @@ export default defineComponent({
           dateCheckMonth(date)
         } else {
           dateChange(date)
-          hidePanel()
+          if (!multiple) {
+            hidePanel()
+          }
         }
       } else if (type === 'year') {
         dateChange(date)
-        hidePanel()
+        if (!multiple) {
+          hidePanel()
+        }
       } else if (type === 'quarter') {
         if (datePanelType === 'year') {
           reactData.datePanelType = 'quarter'
           dateCheckMonth(date)
         } else {
           dateChange(date)
-          hidePanel()
+          if (!multiple) {
+            hidePanel()
+          }
         }
       } else {
         if (datePanelType === 'month') {
@@ -1116,7 +1190,9 @@ export default defineComponent({
           dateCheckMonth(date)
         } else {
           dateChange(date)
-          hidePanel()
+          if (!multiple) {
+            hidePanel()
+          }
         }
       }
     }
@@ -1201,8 +1277,11 @@ export default defineComponent({
     }
 
     const dateConfirmEvent = () => {
+      const { type } = props
       const dateValue = computeDateValue.value
-      dateChange(dateValue || reactData.currentDate)
+      if (type === 'datetime') {
+        dateChange(dateValue || reactData.currentDate)
+      }
       hidePanel()
     }
 
@@ -1590,10 +1669,12 @@ export default defineComponent({
     }
 
     const renderDateDayTable = () => {
+      const { multiple } = props
       const { datePanelType, datePanelValue } = reactData
       const dateValue = computeDateValue.value
       const dateHeaders = computeDateHeaders.value
       const dayDatas = computeDayDatas.value
+      const dateListValue = computeDateListValue.value
       const matchFormat = 'yyyyMMdd'
       return [
         h('table', {
@@ -1616,7 +1697,7 @@ export default defineComponent({
                   'is--now': item.isNow,
                   'is--next': item.isNext,
                   'is--disabled': isDateDisabled(item),
-                  'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+                  'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
                   'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
                 },
                 onClick: () => dateSelectEvent(item),
@@ -1629,10 +1710,12 @@ export default defineComponent({
     }
 
     const renderDateWeekTable = () => {
+      const { multiple } = props
       const { datePanelType, datePanelValue } = reactData
       const dateValue = computeDateValue.value
       const weekHeaders = computeWeekHeaders.value
       const weekDates = computeWeekDates.value
+      const dateListValue = computeDateListValue.value
       const matchFormat = 'yyyyMMdd'
       return [
         h('table', {
@@ -1647,7 +1730,7 @@ export default defineComponent({
             }))
           ]),
           h('tbody', weekDates.map((rows) => {
-            const isSelected = rows.some((item) => XEUtils.isDateSame(dateValue, item.date, matchFormat))
+            const isSelected = multiple ? rows.some((item) => dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat))) : rows.some((item) => XEUtils.isDateSame(dateValue, item.date, matchFormat))
             const isHover = rows.some((item) => XEUtils.isDateSame(datePanelValue, item.date, matchFormat))
             return h('tr', rows.map((item) => {
               return h('td', {
@@ -1671,9 +1754,11 @@ export default defineComponent({
     }
 
     const renderDateMonthTable = () => {
+      const { multiple } = props
       const { datePanelType, datePanelValue } = reactData
       const dateValue = computeDateValue.value
       const monthDatas = computeMonthDatas.value
+      const dateListValue = computeDateListValue.value
       const matchFormat = 'yyyyMM'
       return [
         h('table', {
@@ -1691,7 +1776,7 @@ export default defineComponent({
                   'is--now': item.isNow,
                   'is--next': item.isNext,
                   'is--disabled': isDateDisabled(item),
-                  'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+                  'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
                   'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
                 },
                 onClick: () => dateSelectEvent(item),
@@ -1704,9 +1789,11 @@ export default defineComponent({
     }
 
     const renderDateQuarterTable = () => {
+      const { multiple } = props
       const { datePanelType, datePanelValue } = reactData
       const dateValue = computeDateValue.value
       const quarterDatas = computeQuarterDatas.value
+      const dateListValue = computeDateListValue.value
       const matchFormat = 'yyyyq'
       return [
         h('table', {
@@ -1724,7 +1811,7 @@ export default defineComponent({
                   'is--now': item.isNow,
                   'is--next': item.isNext,
                   'is--disabled': isDateDisabled(item),
-                  'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+                  'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
                   'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
                 },
                 onClick: () => dateSelectEvent(item),
@@ -1737,9 +1824,11 @@ export default defineComponent({
     }
 
     const renderDateYearTable = () => {
+      const { multiple } = props
       const { datePanelType, datePanelValue } = reactData
       const dateValue = computeDateValue.value
       const yearDatas = computeYearDatas.value
+      const dateListValue = computeDateListValue.value
       const matchFormat = 'yyyy'
       return [
         h('table', {
@@ -1752,10 +1841,12 @@ export default defineComponent({
             return h('tr', rows.map((item) => {
               return h('td', {
                 class: {
-                  'is--disabled': isDateDisabled(item),
+                  'is--prev': item.isPrev,
                   'is--current': item.isCurrent,
                   'is--now': item.isNow,
-                  'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+                  'is--next': item.isNext,
+                  'is--disabled': isDateDisabled(item),
+                  'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
                   'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
                 },
                 onClick: () => dateSelectEvent(item),
@@ -1783,6 +1874,7 @@ export default defineComponent({
     }
 
     const renderDatePanel = () => {
+      const { multiple } = props
       const { datePanelType } = reactData
       const isDisabledPrevDateBtn = computeIsDisabledPrevDateBtn.value
       const isDisabledNextDateBtn = computeIsDisabledNextDateBtn.value
@@ -1831,7 +1923,16 @@ export default defineComponent({
               h('i', {
                 class: 'vxe-icon--caret-right'
               })
-            ])
+            ]),
+            multiple && computeSupportMultiples.value ? h('span', {
+              class: 'vxe-input--date-picker-btn vxe-input--date-picker-confirm-btn'
+            }, [
+              h('button', {
+                class: 'vxe-input--date-picker-confirm',
+                type: 'button',
+                onClick: dateConfirmEvent
+              }, GlobalConfig.i18n('vxe.button.confirm'))
+            ]) : null
           ])
         ]),
         h('div', {
@@ -2138,7 +2239,7 @@ export default defineComponent({
       const isDatePickerType = computeIsDatePickerType.value
       if (isDatePickerType) {
         dateParseValue(reactData.datePanelValue)
-        reactData.inputValue = reactData.datePanelLabel
+        reactData.inputValue = props.multiple ? computeDateMultipleLabel.value : reactData.datePanelLabel
       }
     })
 

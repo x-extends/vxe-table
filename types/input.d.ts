@@ -55,6 +55,7 @@ export namespace VxeInputPropTypes {
   export type Disabled = boolean
   export type Placeholder = string
   export type Maxlength = string | number
+  export type Multiple = boolean
   export type Autocomplete = string
   export type Align = string
   export type Form = string
@@ -91,6 +92,7 @@ export type VxeInputProps = {
   disabled?: VxeInputPropTypes.Disabled
   placeholder?: VxeInputPropTypes.Placeholder
   maxlength?: VxeInputPropTypes.Maxlength
+  multiple?: VxeInputPropTypes.Multiple
   autocomplete?: VxeInputPropTypes.Autocomplete
   align?: VxeInputPropTypes.Align
   form?: VxeInputPropTypes.Form

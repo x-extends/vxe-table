@@ -136,12 +136,12 @@ export default defineComponent({
         const { internalData } = $xetable
         const { elemStore } = internalData
         const prefix = `${fixedType || 'main'}-header-`
-        elemStore[`${prefix}wrapper`] = refElem.value
-        elemStore[`${prefix}table`] = refHeaderTable.value
-        elemStore[`${prefix}colgroup`] = refHeaderColgroup.value
-        elemStore[`${prefix}list`] = refHeaderTHead.value
-        elemStore[`${prefix}xSpace`] = refHeaderXSpace.value
-        elemStore[`${prefix}repair`] = refHeaderBorderRepair.value
+        elemStore[`${prefix}wrapper`] = refElem
+        elemStore[`${prefix}table`] = refHeaderTable
+        elemStore[`${prefix}colgroup`] = refHeaderColgroup
+        elemStore[`${prefix}list`] = refHeaderTHead
+        elemStore[`${prefix}xSpace`] = refHeaderXSpace
+        elemStore[`${prefix}repair`] = refHeaderBorderRepair
         uploadColumn()
       })
     })

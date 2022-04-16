@@ -81,11 +81,11 @@ export default defineComponent({
         const { fixedType } = props
         const { elemStore } = tableInternalData
         const prefix = `${fixedType || 'main'}-footer-`
-        elemStore[`${prefix}wrapper`] = refElem.value
-        elemStore[`${prefix}table`] = refFooterTable.value
-        elemStore[`${prefix}colgroup`] = refFooterColgroup.value
-        elemStore[`${prefix}list`] = refFooterTFoot.value
-        elemStore[`${prefix}xSpace`] = refFooterXSpace.value
+        elemStore[`${prefix}wrapper`] = refElem
+        elemStore[`${prefix}table`] = refFooterTable
+        elemStore[`${prefix}colgroup`] = refFooterColgroup
+        elemStore[`${prefix}list`] = refFooterTFoot
+        elemStore[`${prefix}xSpace`] = refFooterXSpace
       })
     })
 

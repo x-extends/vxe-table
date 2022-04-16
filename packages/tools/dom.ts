@@ -154,6 +154,6 @@ export function triggerEvent (targetElem: Element, type: string) {
   }
 }
 
-export function isNodeElement (elem: Element) {
+export function isNodeElement (elem: any): elem is HTMLElement {
   return elem && elem.nodeType === 1
 }

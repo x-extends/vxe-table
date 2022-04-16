@@ -480,8 +480,10 @@ export default defineComponent({
       const bodyElem = tableBody.$el as XEBodyScrollElement
       const leftElem = leftBody ? leftBody.$el as XEBodyScrollElement : null
       const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
-      const bodyYElem = elemStore['main-body-ySpace']
-      const bodyXElem = elemStore['main-body-xSpace']
+      const bodyYRef = elemStore['main-body-ySpace']
+      const bodyYElem = bodyYRef ? bodyYRef.value : null
+      const bodyXRef = elemStore['main-body-xSpace']
+      const bodyXElem = bodyXRef ? bodyXRef.value : null
       const bodyHeight = scrollYLoad && bodyYElem ? bodyYElem.clientHeight : bodyElem.clientHeight
       const bodyWidth = scrollXLoad && bodyXElem ? bodyXElem.clientWidth : bodyElem.clientWidth
       let scrollTop = scrollBodyElem.scrollTop
@@ -554,8 +556,10 @@ export default defineComponent({
       const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
       const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
       const bodyElem = tableBody.$el as HTMLDivElement
-      const bodyYElem = elemStore['main-body-ySpace']
-      const bodyXElem = elemStore['main-body-xSpace']
+      const bodyYRef = elemStore['main-body-ySpace']
+      const bodyYElem = bodyYRef ? bodyYRef.value : null
+      const bodyXRef = elemStore['main-body-xSpace']
+      const bodyXElem = bodyXRef ? bodyXRef.value : null
       const bodyHeight = scrollYLoad && bodyYElem ? bodyYElem.clientHeight : bodyElem.clientHeight
       const bodyWidth = scrollXLoad && bodyXElem ? bodyXElem.clientWidth : bodyElem.clientWidth
       const remainSize = isPrevWheelTop === isTopWheel ? Math.max(0, wheelYSize - wheelYTotal) : 0
@@ -649,13 +653,13 @@ export default defineComponent({
         const { elemStore } = tableInternalData
         const prefix = `${fixedType || 'main'}-body-`
         const el = refElem.value
-        elemStore[`${prefix}wrapper`] = refElem.value
-        elemStore[`${prefix}table`] = refBodyTable.value
-        elemStore[`${prefix}colgroup`] = refBodyColgroup.value
-        elemStore[`${prefix}list`] = refBodyTBody.value
-        elemStore[`${prefix}xSpace`] = refBodyXSpace.value
-        elemStore[`${prefix}ySpace`] = refBodyYSpace.value
-        elemStore[`${prefix}emptyBlock`] = refBodyEmptyBlock.value
+        elemStore[`${prefix}wrapper`] = refElem
+        elemStore[`${prefix}table`] = refBodyTable
+        elemStore[`${prefix}colgroup`] = refBodyColgroup
+        elemStore[`${prefix}list`] = refBodyTBody
+        elemStore[`${prefix}xSpace`] = refBodyXSpace
+        elemStore[`${prefix}ySpace`] = refBodyYSpace
+        elemStore[`${prefix}emptyBlock`] = refBodyEmptyBlock
         el.onscroll = scrollEvent
         el._onscroll = scrollEvent
       })

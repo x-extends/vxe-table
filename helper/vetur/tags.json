@@ -134,6 +134,7 @@
       "export-method",
       "footer-export-method",
       "title-help",
+      "title-prefix",
       "cell-type",
       "cell-render",
       "edit-render",
@@ -354,6 +355,7 @@
       "placeholder",
       "autocomplete",
       "maxlength",
+      "multiple",
       "readonly",
       "disabled",
       "class-name",
@@ -397,6 +399,7 @@
       "option-props",
       "option-groups",
       "option-group-props",
+      "option-config",
       "option-id",
       "option-key",
       "transfer"

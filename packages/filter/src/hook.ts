@@ -189,9 +189,10 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
           const { elemStore } = internalData
           const { fixed } = column
           return $xetable.scrollToColumn(column).then(() => {
-            const headerWrapperElem = elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper']
+            const headerWrapperRef = elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper']
+            const headerWrapperElem = headerWrapperRef ? headerWrapperRef.value : null
             if (headerWrapperElem) {
-              const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-filter--btn`)
+              const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-filter--btn`) as HTMLElement
               triggerEvent(filterBtnElem, 'click')
             }
           })

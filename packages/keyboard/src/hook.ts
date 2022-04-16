@@ -66,8 +66,12 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
         const { elemStore } = internalData
         const disX = evnt.clientX
         const disY = evnt.clientY
-        const bodyWrapperElem = elemStore[`${column.fixed || 'main'}-body-wrapper`] || elemStore['main-body-wrapper']
-        const checkboxRangeElem = bodyWrapperElem.querySelector('.vxe-table--checkbox-range')
+        const bodyWrapperRef = elemStore[`${column.fixed || 'main'}-body-wrapper`] || elemStore['main-body-wrapper']
+        const bodyWrapperElem = bodyWrapperRef ? bodyWrapperRef.value : null
+        if (!bodyWrapperElem) {
+          return
+        }
+        const checkboxRangeElem = bodyWrapperElem.querySelector('.vxe-table--checkbox-range') as HTMLElement
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
         const trElem = cell.parentNode

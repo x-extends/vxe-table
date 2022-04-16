@@ -986,12 +986,17 @@ export default defineComponent({
      * 支持 px、%、固定 混合分配
      * 支持动态列表调整分配
      * 支持自动分配偏移量
-     * @param {Element} headerElem
-     * @param {Element} bodyElem
-     * @param {Element} footerElem
-     * @param {Number} bodyWidth
      */
-    const autoCellWidth = (headerElem: any, bodyElem: any, footerElem: any) => {
+    const autoCellWidth = () => {
+      const tableHeader = refTableHeader.value
+      const tableBody = refTableBody.value
+      const tableFooter = refTableFooter.value
+      const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+      const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+      const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+      if (!bodyElem) {
+        return
+      }
       let tableWidth = 0
       const minCellWidth = 40 // 列宽最少限制 40px
       const bodyWidth = bodyElem.clientWidth - 1
@@ -1331,7 +1336,8 @@ export default defineComponent({
       const cellOffsetWidth = computeCellOffsetWidth.value
       const mouseOpts = computeMouseOpts.value
       const keyboardOpts = computeKeyboardOpts.value
-      const bodyWrapperElem = elemStore['main-body-wrapper']
+      const bodyWrapperRef = elemStore['main-body-wrapper']
+      const bodyWrapperElem = bodyWrapperRef ? bodyWrapperRef.value : null
       if (emptyPlaceholderElem) {
         emptyPlaceholderElem.style.top = `${headerHeight}px`
         emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
@@ -1352,8 +1358,10 @@ export default defineComponent({
           fixedWrapperElem = isFixedLeft ? refLeftContainer.value : refRightContainer.value
         }
         layoutList.forEach(layout => {
-          const wrapperElem = elemStore[`${name}-${layout}-wrapper`]
-          const tableElem = elemStore[`${name}-${layout}-table`]
+          const wrapperRef = elemStore[`${name}-${layout}-wrapper`]
+          const wrapperElem = wrapperRef ? wrapperRef.value : null
+          const tableRef = elemStore[`${name}-${layout}-table`]
+          const tableElem = tableRef ? tableRef.value : null
           if (layout === 'header') {
             // 表头体样式处理
             // 横向滚动渲染
@@ -1383,12 +1391,14 @@ export default defineComponent({
               }
             }
 
-            const repairElem = elemStore[`${name}-${layout}-repair`]
+            const repairRef = elemStore[`${name}-${layout}-repair`]
+            const repairElem = repairRef ? repairRef.value : null
             if (repairElem) {
               repairElem.style.width = `${tableWidth}px`
             }
 
-            const listElem = elemStore[`${name}-${layout}-list`]
+            const listRef = elemStore[`${name}-${layout}-list`]
+            const listElem = listRef ? listRef.value : null
             if (isGroup && listElem) {
               XEUtils.arrayEach(listElem.querySelectorAll('.col--group'), (thElem: any) => {
                 const colNode = tableMethods.getColumnNode(thElem)
@@ -1415,7 +1425,8 @@ export default defineComponent({
               })
             }
           } else if (layout === 'body') {
-            const emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
+            const emptyBlockRef = elemStore[`${name}-${layout}-emptyBlock`]
+            const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
             if (isNodeElement(wrapperElem)) {
               if (customMaxHeight) {
                 wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
@@ -1489,7 +1500,8 @@ export default defineComponent({
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
             }
           }
-          const colgroupElem = elemStore[`${name}-${layout}-colgroup`]
+          const colgroupRef = elemStore[`${name}-${layout}-colgroup`]
+          const colgroupElem = colgroupRef ? colgroupRef.value : null
           if (colgroupElem) {
             XEUtils.arrayEach(colgroupElem.children, (colElem: any) => {
               const colid = colElem.getAttribute('name')
@@ -1512,7 +1524,8 @@ export default defineComponent({
                 const showTitle = cellOverflow === 'title'
                 const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
                 let hasEllipsis = showTitle || showTooltip || showEllipsis
-                const listElem = elemStore[`${name}-${layout}-list`]
+                const listRef = elemStore[`${name}-${layout}-list`]
+                const listElem = listRef ? listRef.value : null
                 // 纵向虚拟滚动不支持动态行高
                 if (scrollYLoad && !hasEllipsis) {
                   hasEllipsis = true
@@ -1771,7 +1784,7 @@ export default defineComponent({
               childRecords = []
             }
             if (childRecords) {
-              tableMethods.loadTreeChildren(row, childRecords).then(childRows => {
+              return tableMethods.loadTreeChildren(row, childRecords).then(childRows => {
                 if (childRows.length && $xetable.findRowIndexOf(treeExpandeds, row) === -1) {
                   treeExpandeds.push(row)
                 }
@@ -1779,17 +1792,18 @@ export default defineComponent({
                 if (!checkStrictly && tableMethods.isCheckedByCheckboxRow(row)) {
                   tableMethods.setCheckboxRow(childRows, true)
                 }
-                nextTick().then(() => {
+                return nextTick().then(() => {
                   if (transform) {
                     return tablePrivateMethods.handleTableData()
                   }
-                }).then(() => {
-                  return tableMethods.recalculate()
-                }).then(() => resolve())
+                })
               })
-            } else {
-              nextTick().then(() => tableMethods.recalculate()).then(() => resolve())
             }
+          }).catch(() => {
+            rest.treeLoaded = false
+            XEUtils.remove(treeLazyLoadeds, item => $xetable.eqRow(item, row))
+          }).finally(() => {
+            nextTick().then(() => tableMethods.recalculate()).then(() => resolve())
           })
         } else {
           resolve()
@@ -1811,18 +1825,20 @@ export default defineComponent({
     }
 
     const handleAsyncRowExpand = (row: any): Promise<void> => {
-      const { rowExpandeds, expandLazyLoadeds } = reactData
       const { fullAllDataRowIdData } = internalData
-      const rest = fullAllDataRowIdData[getRowid($xetable, row)]
       return new Promise(resolve => {
         const expandOpts = computeExpandOpts.value
         const { loadMethod } = expandOpts
         if (loadMethod) {
-          expandLazyLoadeds.push(row)
-          loadMethod({ $table: $xetable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).catch((e: any) => e).then(() => {
+          const rest = fullAllDataRowIdData[getRowid($xetable, row)]
+          reactData.expandLazyLoadeds.push(row)
+          loadMethod({ $table: $xetable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).then(() => {
             rest.expandLoaded = true
-            XEUtils.remove(expandLazyLoadeds, item => $xetable.eqRow(item, row))
-            rowExpandeds.push(row)
+            reactData.rowExpandeds.push(row)
+          }).catch(() => {
+            rest.expandLoaded = false
+          }).finally(() => {
+            XEUtils.remove(reactData.expandLazyLoadeds, item => $xetable.eqRow(item, row))
             resolve(nextTick().then(() => tableMethods.recalculate()))
           })
         } else {
@@ -2945,21 +2961,13 @@ export default defineComponent({
        * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
        */
       recalculate (refull?: boolean) {
-        const tableHeader = refTableHeader.value
-        const tableBody = refTableBody.value
-        const tableFooter = refTableFooter.value
-        const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-        const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-        const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-        if (bodyElem) {
-          autoCellWidth(headerElem, bodyElem, footerElem)
-          if (refull === true) {
-            // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-            return computeScrollLoad().then(() => {
-              autoCellWidth(headerElem, bodyElem, footerElem)
-              return computeScrollLoad()
-            })
-          }
+        autoCellWidth()
+        if (refull === true) {
+          // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
+          return computeScrollLoad().then(() => {
+            autoCellWidth()
+            return computeScrollLoad()
+          })
         }
         return computeScrollLoad()
       },
@@ -5338,7 +5346,8 @@ export default defineComponent({
           containerList.forEach(name => {
             const layoutList = ['header', 'body', 'footer']
             layoutList.forEach(layout => {
-              const xSpaceElem = elemStore[`${name}-${layout}-xSpace`]
+              const xSpaceRef = elemStore[`${name}-${layout}-xSpace`]
+              const xSpaceElem = xSpaceRef ? xSpaceRef.value : null
               if (xSpaceElem) {
                 xSpaceElem.style.width = scrollXLoad ? `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px` : ''
               }
@@ -5363,12 +5372,14 @@ export default defineComponent({
         }
         containerList.forEach(name => {
           const layoutList = ['header', 'body', 'footer']
-          const tableElem = elemStore[`${name}-body-table`]
+          const tableRef = elemStore[`${name}-body-table`]
+          const tableElem = tableRef ? tableRef.value : null
           if (tableElem) {
             tableElem.style.marginTop = marginTop
           }
           layoutList.forEach(layout => {
-            const ySpaceElem = elemStore[`${name}-${layout}-ySpace`]
+            const ySpaceRef = elemStore[`${name}-${layout}-ySpace`]
+            const ySpaceElem = ySpaceRef ? ySpaceRef.value : null
             if (ySpaceElem) {
               ySpaceElem.style.height = ySpaceHeight
             }
@@ -5377,14 +5388,14 @@ export default defineComponent({
         nextTick(updateStyle)
       },
       updateScrollXData () {
-        reactData.tableColumn = []
+        // reactData.tableColumn = []
         nextTick(() => {
           handleTableColumn()
           tablePrivateMethods.updateScrollXSpace()
         })
       },
       updateScrollYData () {
-        reactData.tableData = []
+        // reactData.tableData = []
         nextTick(() => {
           tablePrivateMethods.handleTableData()
           tablePrivateMethods.updateScrollYSpace()
