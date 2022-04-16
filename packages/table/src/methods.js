@@ -3757,10 +3757,13 @@ const Methods = {
     const rest = this.fullAllDataRowMap.get(row)
     return new Promise(resolve => {
       this.expandLazyLoadeds.push(row)
-      this.expandOpts.loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).catch(e => e).then(() => {
+      this.expandOpts.loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
         rest.expandLoaded = true
-        XEUtils.remove(this.expandLazyLoadeds, item => item === row)
         this.rowExpandeds.push(row)
+      }).catch(() => {
+        rest.expandLoaded = false
+      }).finally(() => {
+        XEUtils.remove(this.expandLazyLoadeds, item => item === row)
         resolve(this.$nextTick().then(this.recalculate))
       })
     })
@@ -3968,14 +3971,15 @@ const Methods = {
     const rest = fullAllDataRowMap.get(row)
     return new Promise(resolve => {
       treeLazyLoadeds.push(row)
-      loadMethod({ $table: this, row }).catch(() => []).then(childRecords => {
+      loadMethod({ $table: this, row }).then(childRecords => {
+        // 响应成功后则展开行，并将子节点挂载到该节点下
         rest.treeLoaded = true
         XEUtils.remove(treeLazyLoadeds, item => item === row)
         if (!XEUtils.isArray(childRecords)) {
           childRecords = []
         }
         if (childRecords) {
-          this.loadTreeChildren(row, childRecords).then(childRows => {
+          return this.loadTreeChildren(row, childRecords).then(childRows => {
             if (childRows.length && treeExpandeds.indexOf(row) === -1) {
               treeExpandeds.push(row)
             }
@@ -3983,17 +3987,19 @@ const Methods = {
             if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
               this.setCheckboxRow(childRows, true)
             }
-            this.$nextTick().then(() => {
+            return this.$nextTick().then(() => {
               if (transform) {
                 return this.handleTableData()
               }
-            }).then(() => {
-              return this.recalculate()
-            }).then(() => resolve())
+            })
           })
-        } else {
-          this.$nextTick().then(() => this.recalculate()).then(() => resolve())
         }
+      }).catch(() => {
+        // 如果响应异常，则不展开，再次点击后将重新触发懒加载
+        rest.treeLoaded = false
+        XEUtils.remove(treeLazyLoadeds, item => item === row)
+      }).finally(() => {
+        this.$nextTick().then(() => this.recalculate()).then(() => resolve())
       })
     })
   },
@@ -4253,7 +4259,7 @@ const Methods = {
     this.tableColumn = scrollXLoad ? visibleColumn.slice(scrollXStore.startIndex, scrollXStore.endIndex) : visibleColumn.slice(0)
   },
   updateScrollXData () {
-    this.tableColumn = []
+    // this.tableColumn = []
     this.$nextTick(() => {
       this.handleTableColumn()
       this.updateScrollXSpace()
@@ -4296,7 +4302,7 @@ const Methods = {
     }
   },
   updateScrollYData () {
-    this.tableData = []
+    // this.tableData = []
     this.$nextTick(() => {
       this.handleTableData()
       this.updateScrollYSpace()

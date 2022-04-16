@@ -8,7 +8,7 @@ import { toStringTimeDate, getDateQuarter } from './date'
 import { handleNumber, toFloatValueFixed } from './number'
 import { warnLog } from '../../tools/log'
 
-const yearSize = 20
+const yearSize = 12
 const monthSize = 20
 const quarterSize = 8
 
@@ -68,7 +68,7 @@ function isDateDisabled (_vm, item) {
 }
 
 function renderDateDayTable (h, _vm) {
-  const { datePanelType, dateValue, datePanelValue, dateHeaders, dayDatas } = _vm
+  const { datePanelType, dateValue, datePanelValue, dateHeaders, dayDatas, multiple, dateListValue } = _vm
   const matchFormat = 'yyyy-MM-dd'
   return [
     h('table', {
@@ -93,7 +93,7 @@ function renderDateDayTable (h, _vm) {
               'is--now': item.isNow,
               'is--next': item.isNext,
               'is--disabled': isDateDisabled(_vm, item),
-              'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+              'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
               'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
             },
             on: {
@@ -108,7 +108,7 @@ function renderDateDayTable (h, _vm) {
 }
 
 function renderDateWeekTable (h, _vm) {
-  const { datePanelType, dateValue, datePanelValue, weekHeaders, weekDates } = _vm
+  const { datePanelType, dateValue, datePanelValue, weekHeaders, weekDates, multiple, dateListValue } = _vm
   const matchFormat = 'yyyyMMdd'
   return [
     h('table', {
@@ -125,7 +125,7 @@ function renderDateWeekTable (h, _vm) {
         }))
       ]),
       h('tbody', weekDates.map(rows => {
-        const isSelected = rows.some(item => XEUtils.isDateSame(dateValue, item.date, matchFormat))
+        const isSelected = multiple ? rows.some((item) => dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat))) : rows.some(item => XEUtils.isDateSame(dateValue, item.date, matchFormat))
         const isHover = rows.some(item => XEUtils.isDateSame(datePanelValue, item.date, matchFormat))
         return h('tr', rows.map(item => {
           return h('td', {
@@ -150,7 +150,7 @@ function renderDateWeekTable (h, _vm) {
 }
 
 function renderDateMonthTable (h, _vm) {
-  const { dateValue, datePanelType, monthDatas, datePanelValue } = _vm
+  const { dateValue, datePanelType, monthDatas, datePanelValue, multiple, dateListValue } = _vm
   const matchFormat = 'yyyyMM'
   return [
     h('table', {
@@ -170,7 +170,7 @@ function renderDateMonthTable (h, _vm) {
               'is--now': item.isNow,
               'is--next': item.isNext,
               'is--disabled': isDateDisabled(_vm, item),
-              'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+              'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
               'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
             },
             on: {
@@ -185,7 +185,7 @@ function renderDateMonthTable (h, _vm) {
 }
 
 function renderDateQuarterTable (h, _vm) {
-  const { dateValue, datePanelType, quarterDatas, datePanelValue } = _vm
+  const { dateValue, datePanelType, quarterDatas, datePanelValue, multiple, dateListValue } = _vm
   const matchFormat = 'yyyyq'
   return [
     h('table', {
@@ -205,7 +205,7 @@ function renderDateQuarterTable (h, _vm) {
               'is--now': item.isNow,
               'is--next': item.isNext,
               'is--disabled': isDateDisabled(_vm, item),
-              'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+              'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
               'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
             },
             on: {
@@ -220,7 +220,7 @@ function renderDateQuarterTable (h, _vm) {
 }
 
 function renderDateYearTable (h, _vm) {
-  const { dateValue, datePanelType, yearDatas, datePanelValue } = _vm
+  const { dateValue, datePanelType, yearDatas, datePanelValue, multiple, dateListValue } = _vm
   const matchFormat = 'yyyy'
   return [
     h('table', {
@@ -235,10 +235,12 @@ function renderDateYearTable (h, _vm) {
         return h('tr', rows.map(item => {
           return h('td', {
             class: {
-              'is--disabled': isDateDisabled(_vm, item),
+              'is--prev': item.isPrev,
               'is--current': item.isCurrent,
               'is--now': item.isNow,
-              'is--selected': XEUtils.isDateSame(dateValue, item.date, matchFormat),
+              'is--next': item.isNext,
+              'is--disabled': isDateDisabled(item),
+              'is--selected': multiple ? dateListValue.some(val => XEUtils.isDateSame(val, item.date, matchFormat)) : XEUtils.isDateSame(dateValue, item.date, matchFormat),
               'is--hover': XEUtils.isDateSame(datePanelValue, item.date, matchFormat)
             },
             on: {
@@ -268,7 +270,7 @@ function renderDateTable (h, _vm) {
 }
 
 function renderDatePanel (h, _vm) {
-  const { datePanelType, selectDatePanelLabel, isDisabledPrevDateBtn, isDisabledNextDateBtn } = _vm
+  const { datePanelType, selectDatePanelLabel, isDisabledPrevDateBtn, isDisabledNextDateBtn, multiple, supportMultiples } = _vm
   return [
     h('div', {
       class: 'vxe-input--date-picker-header'
@@ -321,7 +323,20 @@ function renderDatePanel (h, _vm) {
           h('i', {
             class: 'vxe-icon--caret-right'
           })
-        ])
+        ]),
+        multiple && supportMultiples ? h('span', {
+          class: 'vxe-input--date-picker-btn vxe-input--date-picker-confirm-btn'
+        }, [
+          h('button', {
+            class: 'vxe-input--date-picker-confirm',
+            attrs: {
+              type: 'button'
+            },
+            on: {
+              click: _vm.dateConfirmEvent
+            }
+          }, GlobalConfig.i18n('vxe.button.confirm'))
+        ]) : null
       ])
     ]),
     h('div', {
@@ -612,6 +627,7 @@ export default {
     form: String,
     className: String,
     size: { type: String, default: () => GlobalConfig.input.size || GlobalConfig.size },
+    multiple: Boolean,
 
     // number、integer、float
     min: { type: [String, Number], default: null },
@@ -669,9 +685,9 @@ export default {
       return ['number', 'integer', 'float'].indexOf(this.type) > -1
     },
     isDatePickerType () {
-      return this.hasTime || ['date', 'week', 'month', 'quarter', 'year'].indexOf(this.type) > -1
+      return this.isDateTimeType || ['date', 'week', 'month', 'quarter', 'year'].indexOf(this.type) > -1
     },
-    hasTime () {
+    isDateTimeType () {
       const { type } = this
       return type === 'time' || type === 'datetime'
     },
@@ -716,6 +732,30 @@ export default {
     dateMaxTime () {
       return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
     },
+    supportMultiples () {
+      return ['date', 'week', 'month', 'quarter', 'year'].includes(this.type)
+    },
+    dateListValue () {
+      const { value, multiple, isDatePickerType, dateValueFormat } = this
+      if (multiple && value && isDatePickerType) {
+        return XEUtils.toValueString(value).split(',').map(item => {
+          const date = this.parseDate(item, dateValueFormat)
+          if (XEUtils.isValidDate(date)) {
+            return date
+          }
+          return null
+        })
+      }
+      return []
+    },
+    dateMultipleValue () {
+      const { dateListValue, dateValueFormat } = this
+      return dateListValue.map(date => XEUtils.toDateString(date, dateValueFormat))
+    },
+    dateMultipleLabel () {
+      const { dateListValue, dateLabelFormat } = this
+      return dateListValue.map(date => XEUtils.toDateString(date, dateLabelFormat)).join(', ')
+    },
     dateValue () {
       const { value, isDatePickerType, dateValueFormat } = this
       let val = null
@@ -736,7 +776,7 @@ export default {
     },
     hmsTime () {
       const { dateValue } = this
-      return dateValue && (this.hasTime) ? (dateValue.getHours() * 3600 + dateValue.getMinutes() * 60 + dateValue.getSeconds()) * 1000 : 0
+      return dateValue && (this.isDateTimeType) ? (dateValue.getHours() * 3600 + dateValue.getMinutes() * 60 + dateValue.getSeconds()) * 1000 : 0
     },
     dateLabelFormat () {
       if (this.isDatePickerType) {
@@ -810,14 +850,17 @@ export default {
       const months = []
       if (selectMonth && currentDate) {
         const currFullYear = currentDate.getFullYear()
-        const startYear = new Date(('' + selectMonth.getFullYear()).replace(/\d{1}$/, '0'), 0, 1)
-        for (let index = -10; index < yearSize - 10; index++) {
-          const date = XEUtils.getWhatYear(startYear, index, 'first')
+        const selectFullYear = selectMonth.getFullYear()
+        const startYearDate = new Date(selectFullYear - selectFullYear % yearSize, 0, 1)
+        for (let index = -4; index < yearSize + 4; index++) {
+          const date = XEUtils.getWhatYear(startYearDate, index, 'first')
           const itemFullYear = date.getFullYear()
           months.push({
             date,
             isCurrent: true,
+            isPrev: index < 0,
             isNow: currFullYear === itemFullYear,
+            isNext: index >= yearSize,
             year: itemFullYear
           })
         }
@@ -933,7 +976,7 @@ export default {
     },
     hourList () {
       const list = []
-      if (this.hasTime) {
+      if (this.isDateTimeType) {
         for (let index = 0; index < 24; index++) {
           list.push({
             value: index,
@@ -945,7 +988,7 @@ export default {
     },
     minuteList () {
       const list = []
-      if (this.hasTime) {
+      if (this.isDateTimeType) {
         for (let index = 0; index < 60; index++) {
           list.push({
             value: index,
@@ -982,8 +1025,8 @@ export default {
       return isNumType && !XEUtils.toNumber(maxlength) ? 16 : maxlength
     },
     inpReadonly () {
-      const { type, readonly, editable } = this
-      return readonly || !editable || (type === 'week' || type === 'quarter')
+      const { type, readonly, editable, multiple } = this
+      return readonly || multiple || !editable || (type === 'week' || type === 'quarter')
     }
   },
   watch: {
@@ -1007,7 +1050,7 @@ export default {
     dateLabelFormat () {
       if (this.isDatePickerType) {
         this.dateParseValue(this.datePanelValue)
-        this.inputValue = this.datePanelLabel
+        this.inputValue = this.multiple ? this.dateMultipleLabel : this.datePanelLabel
       }
     }
   },
@@ -1257,7 +1300,7 @@ export default {
     changeValue () {
       if (this.isDatePickerType) {
         this.dateParseValue(this.inputValue)
-        this.inputValue = this.datePanelLabel
+        this.inputValue = this.multiple ? this.dateMultipleLabel : this.datePanelLabel
       }
     },
     afterCheckValue () {
@@ -1471,8 +1514,10 @@ export default {
     },
     dateTodayMonthEvent (evnt) {
       this.dateNowHandle()
-      this.dateChange(this.currentDate)
-      this.hidePanel()
+      if (!this.multiple) {
+        this.dateChange(this.currentDate)
+        this.hidePanel()
+      }
       this.$emit('date-today', { type: this.type, $event: evnt })
     },
     dateNextEvent (evnt) {
@@ -1504,7 +1549,7 @@ export default {
       }
     },
     dateSelectItem (date) {
-      const { type, datePanelType } = this
+      const { type, datePanelType, multiple } = this
       const isWeekType = type === 'week'
       if (type === 'month') {
         if (datePanelType === 'year') {
@@ -1512,18 +1557,24 @@ export default {
           this.dateCheckMonth(date)
         } else {
           this.dateChange(date)
-          this.hidePanel()
+          if (!multiple) {
+            this.hidePanel()
+          }
         }
       } else if (type === 'year') {
-        this.hidePanel()
         this.dateChange(date)
+        if (!multiple) {
+          this.hidePanel()
+        }
       } else if (type === 'quarter') {
         if (datePanelType === 'year') {
           this.datePanelType = 'quarter'
           this.dateCheckMonth(date)
         } else {
           this.dateChange(date)
-          this.hidePanel()
+          if (!multiple) {
+            this.hidePanel()
+          }
         }
       } else {
         if (datePanelType === 'month') {
@@ -1534,7 +1585,9 @@ export default {
           this.dateCheckMonth(date)
         } else {
           this.dateChange(date)
-          this.hidePanel()
+          if (!multiple) {
+            this.hidePanel()
+          }
         }
       }
       if (isWeekType) {
@@ -1714,19 +1767,47 @@ export default {
       }
     },
     dateChange (date) {
-      const { value, datetimePanelValue, dateValueFormat, firstDayOfWeek } = this
+      const { value, datetimePanelValue, dateValueFormat, firstDayOfWeek, isDateTimeType, multiple } = this
       if (this.type === 'week') {
         const sWeek = XEUtils.toNumber(this.selectDay)
         date = XEUtils.getWhatWeek(date, 0, sWeek, firstDayOfWeek)
-      } else if (this.hasTime) {
+      } else if (isDateTimeType) {
         date.setHours(datetimePanelValue.getHours())
         date.setMinutes(datetimePanelValue.getMinutes())
         date.setSeconds(datetimePanelValue.getSeconds())
       }
       const inpVal = XEUtils.toDateString(date, dateValueFormat, { firstDay: firstDayOfWeek })
       this.dateCheckMonth(date)
-      if (!XEUtils.isEqual(value, inpVal)) {
-        this.emitModel(inpVal, { type: 'update' })
+      if (multiple) {
+        // 如果为多选
+        const { dateMultipleValue } = this
+        if (isDateTimeType) {
+          // 如果是datetime特殊类型
+          const { dateListValue } = this
+          const datetimeRest = []
+          dateListValue.forEach(item => {
+            if (item && !XEUtils.isDateSame(date, item, 'yyyyMMdd')) {
+              item.setHours(datetimePanelValue.getHours())
+              item.setMinutes(datetimePanelValue.getMinutes())
+              item.setSeconds(datetimePanelValue.getSeconds())
+              datetimeRest.push(item)
+            }
+          })
+          datetimeRest.push(date)
+          this.emitModel(datetimeRest.map(date => XEUtils.toDateString(date, dateValueFormat)).join(','), { type: 'update' })
+        } else {
+          // 如果是日期类型
+          if (dateMultipleValue.some(val => XEUtils.isEqual(val, inpVal))) {
+            this.emitModel(dateMultipleValue.filter(val => !XEUtils.isEqual(val, inpVal)).join(','), { type: 'update' })
+          } else {
+            this.emitModel(dateMultipleValue.concat([inpVal]).join(','), { type: 'update' })
+          }
+        }
+      } else {
+        // 如果为单选
+        if (!XEUtils.isEqual(value, inpVal)) {
+          this.emitModel(inpVal, { type: 'update' })
+        }
       }
     },
     dateCheckMonth (date) {
@@ -1749,7 +1830,7 @@ export default {
       } else {
         this.dateNowHandle()
       }
-      if (this.hasTime) {
+      if (this.isDateTimeType) {
         this.datetimePanelValue = this.datePanelValue || XEUtils.getWhatDay(Date.now(), 0, 'first')
         this.$nextTick(() => {
           XEUtils.arrayEach(this.$refs.timeBody.querySelectorAll('li.is--selected'), this.updateTimePos)
@@ -1757,7 +1838,7 @@ export default {
       }
     },
     dateRevert () {
-      this.inputValue = this.datePanelLabel
+      this.inputValue = this.multiple ? this.dateMultipleLabel : this.datePanelLabel
     },
     // 日期
 

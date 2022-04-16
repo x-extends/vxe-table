@@ -116,29 +116,31 @@ export default {
   mounted () {
     const { $el, trigger, content, value } = this
     const parentNode = $el.parentNode
-    let target
-    this.tipContent = content
-    this.tipZindex = UtilTools.nextZIndex()
-    XEUtils.arrayEach($el.children, (elem, index) => {
-      if (index > 1) {
-        parentNode.insertBefore(elem, $el)
-        if (!target) {
-          target = elem
+    if (parentNode) {
+      let target
+      this.tipContent = content
+      this.tipZindex = UtilTools.nextZIndex()
+      XEUtils.arrayEach($el.children, (elem, index) => {
+        if (index > 1) {
+          parentNode.insertBefore(elem, $el)
+          if (!target) {
+            target = elem
+          }
+        }
+      })
+      parentNode.removeChild($el)
+      this.target = target
+      if (target) {
+        if (trigger === 'hover') {
+          target.onmouseleave = this.targetMouseleaveEvent
+          target.onmouseenter = this.targetMouseenterEvent
+        } else if (trigger === 'click') {
+          target.onclick = this.clickEvent
         }
       }
-    })
-    parentNode.removeChild($el)
-    this.target = target
-    if (target) {
-      if (trigger === 'hover') {
-        target.onmouseleave = this.targetMouseleaveEvent
-        target.onmouseenter = this.targetMouseenterEvent
-      } else if (trigger === 'click') {
-        target.onclick = this.clickEvent
+      if (value) {
+        this.open()
       }
-    }
-    if (value) {
-      this.open()
     }
   },
   beforeDestroy () {

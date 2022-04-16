@@ -51,6 +51,15 @@
     </p>
 
     <p>
+      <vxe-input v-model="value800" placeholder="日期多选" type="date" multiple></vxe-input>
+      <vxe-input v-model="value801" placeholder="日期多选" type="month" multiple></vxe-input>
+      <vxe-input v-model="value802" placeholder="日期多选" type="quarter" multiple></vxe-input>
+      <vxe-input v-model="value803" placeholder="日期多选" type="year" multiple></vxe-input>
+      <vxe-input v-model="value804" placeholder="日期多选" type="week" multiple></vxe-input>
+      <vxe-input v-model="value805" placeholder="日期多选" type="datetime" multiple></vxe-input>
+    </p>
+
+    <p>
       <vxe-input v-model="value500" placeholder="数值类型" type="number"></vxe-input>
       <vxe-input v-model="value501" placeholder="数值间隔 1.4" type="number" step="1.4" clearable></vxe-input>
       <vxe-input v-model="value502" placeholder="数值范围限制 0-10" type="number" min="0" max="10" clearable></vxe-input>
@@ -159,6 +168,12 @@ export default {
       value705: '2017-12-18',
       value706: '2017-12-18',
       value707: '2017-12-18',
+      value800: '',
+      value801: '',
+      value802: '',
+      value803: '',
+      value804: '',
+      value805: '',
       noticeMaps: {
         20200910: {
           notice: true, // 显示小圆点事件通知
