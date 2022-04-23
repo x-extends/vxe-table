@@ -676,11 +676,14 @@ export default defineComponent({
 
     let hidePanelTimeout: number
 
-    const hidePanel = () => {
-      reactData.visiblePanel = false
-      hidePanelTimeout = window.setTimeout(() => {
-        reactData.animatVisible = false
-      }, 350)
+    const hidePanel = (): Promise<void> => {
+      return new Promise(resolve => {
+        reactData.visiblePanel = false
+        hidePanelTimeout = window.setTimeout(() => {
+          reactData.animatVisible = false
+          resolve()
+        }, 350)
+      })
     }
 
     const clearValueEvent = (evnt: Event, value: VxeInputPropTypes.ModelValue) => {
@@ -1491,8 +1494,9 @@ export default defineComponent({
           reactData.visiblePanel = true
         }, 10)
         updateZindex()
-        updatePlacement()
+        return updatePlacement()
       }
+      return nextTick()
     }
 
     const datePickerOpenEvent = (evnt: Event) => {
@@ -2211,7 +2215,10 @@ export default defineComponent({
         inputElem.blur()
         reactData.isActivated = false
         return nextTick()
-      }
+      },
+      showPanel,
+      hidePanel,
+      updatePlacement
     }
 
     Object.assign($xeinput, inputMethods)

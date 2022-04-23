@@ -142,6 +142,15 @@ export interface InputMethods {
    * 失去焦点
    */
   blur(): Promise<any>
+  /**
+   * 弹出面板，用于带下拉面板的功能，
+   */
+  showPanel(): Promise<any>
+  /**
+   * 关闭面板，用于带下拉面板的功能，
+   */
+  hidePanel(): Promise<any>
+  updatePlacement(): Promise<any>
 }
 export interface VxeInputMethods extends InputMethods { }
 
