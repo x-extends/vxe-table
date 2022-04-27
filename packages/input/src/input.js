@@ -1861,14 +1861,18 @@ export default {
           this.visiblePanel = true
         }, 10)
         this.updateZindex()
-        this.updatePlacement()
+        return this.updatePlacement()
       }
+      return this.$nextTick()
     },
     hidePanel () {
-      this.visiblePanel = false
-      this.hidePanelTimeout = setTimeout(() => {
-        this.animatVisible = false
-      }, 350)
+      return new Promise(resolve => {
+        this.visiblePanel = false
+        this.hidePanelTimeout = setTimeout(() => {
+          this.animatVisible = false
+          resolve()
+        }, 350)
+      })
     },
     updatePlacement () {
       return this.$nextTick().then(() => {

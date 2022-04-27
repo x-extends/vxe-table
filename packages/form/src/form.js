@@ -345,7 +345,7 @@ export default {
           if (errMap) {
             this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt })
           } else {
-
+            this.$emit('submit', { data: this.data, $event: evnt })
           }
         })
       }

@@ -130,7 +130,7 @@ export default {
             async loadList () {
               this.loading = true
               try {
-                const res = await fetch('https://api.xuliangzhan.com:10443/demo/api/pub/all').then(response => response.json())
+                const res = await fetch('https://api.vxetable.cn/demo/api/pub/all').then(response => response.json())
                 this.tableData = res
               } catch (e) {
                 this.tableData = []
@@ -157,7 +157,7 @@ export default {
               this.loading = true
               try {
                 const body = { removeRecords: checkboxRecords }
-                await XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+                await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
                 await this.loadList()
               } catch (e) {}
               this.loading = false
@@ -174,7 +174,7 @@ export default {
               this.loading = true
               try {
                 const body = { removeRecords: [row] }
-                await XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+                await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
                 await this.loadList()
               } catch (e) {}
             },
@@ -192,7 +192,7 @@ export default {
               this.loading = true
               try {
                 const body = { insertRecords, removeRecords, updateRecords }
-                await XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+                await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
                 await this.loadList()
                 this.$XModal.message({ content: \`操作成功，新增 \${insertRecords.length} 条，更新 \${updateRecords.length} 条，删除 \${removeRecords.length} 条\`, status: 'success' })
               } catch (e) {
@@ -220,7 +220,7 @@ export default {
     async loadList () {
       this.loading = true
       try {
-        const res = await fetch('https://api.xuliangzhan.com:10443/demo/api/pub/all').then(response => response.json())
+        const res = await fetch('https://api.vxetable.cn/demo/api/pub/all').then(response => response.json())
         this.tableData = res
       } catch (e) {
         this.tableData = []
@@ -247,7 +247,7 @@ export default {
       this.loading = true
       try {
         const body = { removeRecords: checkboxRecords }
-        await XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+        await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
         await this.loadList()
       } catch (e) {}
       this.loading = false
@@ -264,7 +264,7 @@ export default {
       this.loading = true
       try {
         const body = { removeRecords: [row] }
-        await XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+        await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
         await this.loadList()
       } catch (e) {}
     },
@@ -282,7 +282,7 @@ export default {
       this.loading = true
       try {
         const body = { insertRecords, removeRecords, updateRecords }
-        await XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+        await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
         await this.loadList()
         this.$XModal.message({ content: `操作成功，新增 ${insertRecords.length} 条，更新 ${updateRecords.length} 条，删除 ${removeRecords.length} 条`, status: 'success' })
       } catch (e) {

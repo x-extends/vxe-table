@@ -2151,7 +2151,7 @@ export default {
       setTimeout(() => this.defaultExpand(), 1500)
     },
     loadSponsors () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/pub/sponsors').then(data => {
+      XEAjax.get('https://api.vxetable.cn/demo/api/pub/sponsors').then(data => {
         this.sponsorList = data
       })
     },
@@ -2169,7 +2169,7 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
+      XEAjax.get('https://api.vxetable.cn/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
         this.apiLoading = true
         this.apiLoading = true
         this.disabledPlugin = dp
