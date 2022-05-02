@@ -120,10 +120,10 @@ export default defineComponent({
             filters.forEach(({ property, values }) => {
               queryParams[property] = values.join(',')
             })
-            return XEAjax.get(`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+            return XEAjax.get(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           },
           // 被某些特殊功能所触发，例如：导出数据 mode=all 时，会触发该方法并对返回的数据进行导出
-          queryAll: () => fetch('https://api.xuliangzhan.com:10443/demo/api/pub/all').then(response => response.json())
+          queryAll: () => fetch('https://api.vxetable.cn/demo/api/pub/all').then(response => response.json())
         }
       },
       toolbarConfig: {
@@ -297,10 +297,10 @@ export default defineComponent({
                     filters.forEach(({ property, values }) => {
                       queryParams[property] = values.join(',')
                     })
-                    return XEAjax.get(\`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                    return XEAjax.get(\`https://api.vxetable.cn/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   },
                   // 被某些特殊功能所触发，例如：导出数据 mode=all 时，会触发该方法并对返回的数据进行导出
-                  queryAll: () => fetch('https://api.xuliangzhan.com:10443/demo/api/pub/all').then(response => response.json())
+                  queryAll: () => fetch('https://api.vxetable.cn/demo/api/pub/all').then(response => response.json())
                 }
               },
               toolbarConfig: {

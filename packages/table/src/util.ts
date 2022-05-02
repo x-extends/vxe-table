@@ -1,4 +1,4 @@
-import { watch } from 'vue'
+import { watch, reactive } from 'vue'
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
 import { isPx, isScale } from '../../tools/dom'
@@ -179,7 +179,7 @@ export function isColumnInfo (column: any): column is ColumnInfo {
 }
 
 export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any) {
-  return isColumnInfo(options) ? options : new ColumnInfo($xetable, options, renderOptions)
+  return isColumnInfo(options) ? options : reactive(new ColumnInfo($xetable, options, renderOptions))
 }
 
 export function watchColumn (props: any, column: ColumnInfo) {

@@ -120,10 +120,10 @@ export default defineComponent({
             filters.forEach(({ property, values }) => {
               queryParams[property] = values.join(',')
             })
-            return XEAjax.get(`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+            return XEAjax.get(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
           },
-          delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body),
-          save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+          delete: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body),
+          save: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
         }
       },
       columns: [
@@ -194,7 +194,7 @@ export default defineComponent({
           const $grid = xGrid.value
           const formBody = new FormData()
           formBody.append('file', file)
-          return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/import', formBody).then(data => {
+          return XEAjax.post('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
             VXETable.modal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
             // 导入完成，刷新表格
             $grid.commitProxy('query')
@@ -228,11 +228,11 @@ export default defineComponent({
             })
           }
           // 开始服务端导出
-          return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/export', body).then(data => {
+          return XEAjax.post('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
             if (data.id) {
               VXETable.modal.message({ content: '导出成功，开始下载', status: 'success' })
               // 读取路径，请求文件
-              fetch(`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/${data.id}`).then(response => {
+              fetch(`https://api.vxetable.cn/demo/api/pub/export/download/${data.id}`).then(response => {
                 response.blob().then(blob => {
                   // 开始下载
                   VXETable.saveFile({ filename: '导出数据', type: 'xlsx', content: blob })
@@ -396,10 +396,10 @@ export default defineComponent({
                     filters.forEach(({ property, values }) => {
                       queryParams[property] = values.join(',')
                     })
-                    return XEAjax.get(\`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                    return XEAjax.get(\`https://api.vxetable.cn/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
                   },
-                  delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body),
-                  save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+                  delete: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body),
+                  save: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
                 }
               },
               columns: [
@@ -469,7 +469,7 @@ export default defineComponent({
                   const $grid = xGrid.value
                   const formBody = new FormData()
                   formBody.append('file', file)
-                  return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/import', formBody).then(data => {
+                  return XEAjax.post('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
                     VXETable.modal.message({ content: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                     // 导入完成，刷新表格
                     $grid.commitProxy('query')
@@ -503,11 +503,11 @@ export default defineComponent({
                     })
                   }
                   // 开始服务端导出
-                  return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/export', body).then(data => {
+                  return XEAjax.post('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
                     if (data.id) {
                       VXETable.modal.message({ content: '导出成功，开始下载', status: 'success' })
                       // 读取路径，请求文件
-                      fetch(\`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/\${data.id}\`).then(response => {
+                      fetch(\`https://api.vxetable.cn/demo/api/pub/export/download/\${data.id}\`).then(response => {
                         response.blob().then(blob => {
                           // 开始下载
                           VXETable.saveFile({ filename: '导出数据', type: 'xlsx', content: blob })

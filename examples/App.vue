@@ -1851,7 +1851,7 @@ export default defineComponent({
     })
 
     const getVersion = () => {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
+      XEAjax.get('https://api.vxetable.cn/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
         appData.apiLoading = true
         appData.disabledPlugin = dp
         appData.showPlugin = sp
@@ -2052,7 +2052,7 @@ export default defineComponent({
     }
 
     const loadSponsors = () => {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/pub/sponsors').then(data => {
+      XEAjax.get('https://api.vxetable.cn/demo/api/pub/sponsors').then(data => {
         appData.sponsorList = data
       })
     }
