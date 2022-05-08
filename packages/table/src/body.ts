@@ -347,16 +347,27 @@ export default defineComponent({
           _rowIndex = rest._index
         }
         const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+        // 行是否被展开
+        const isExpandRow = expandColumn && rowExpandeds.length && $xetable.findRowIndexOf(rowExpandeds, row) > -1
+        // 树节点是否被展开
+        let isExpandTree = false
+        let rowChildren = []
         // 处理新增状态
         let isNewRow = false
         if (editConfig) {
           isNewRow = $xetable.findRowIndexOf(editStore.insertList, row) > -1
         }
+        if (treeConfig && !scrollYLoad && !transform && treeExpandeds.length) {
+          rowChildren = row[treeOpts.children]
+          isExpandTree = rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1
+        }
         rows.push(
           h('tr', {
-            class: ['vxe-body--row', {
+            class: ['vxe-body--row', treeConfig ? `row--level-${rowLevel}` : '', {
               'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
               'is--new': isNewRow,
+              'is--expand-row': isExpandRow,
+              'is--expand-tree': isExpandTree,
               'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
               'row--radio': radioOpts.highlight && selectRow === row,
               'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
@@ -370,7 +381,7 @@ export default defineComponent({
           }))
         )
         // 如果行被展开了
-        if (expandColumn && rowExpandeds.length && $xetable.findRowIndexOf(rowExpandeds, row) > -1) {
+        if (isExpandRow) {
           let cellStyle
           if (treeConfig) {
             cellStyle = {

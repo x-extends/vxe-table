@@ -1,16 +1,14 @@
 <template>
   <div>
     <p class="tip">
-      实现树结构深层排序<br>
+      树结构排序<br>
     </p>
 
     <vxe-table
-      max-height="600"
+      height="600"
       :loading="demo1.loading"
       :data="demo1.tableData"
-      :sort-config="{remote: true}"
-      :tree-config="{children: 'children'}"
-      @sort-change="sortChangeEvent">
+      :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}">
       <vxe-column field="id" title="ID" width="80"></vxe-column>
       <vxe-column field="name" title="名称" tree-node></vxe-column>
       <vxe-column field="size" title="大小" width="140"></vxe-column>
@@ -29,15 +27,12 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-import { VxeTablePropTypes, VxeTableEvents } from '../../../../types/index'
-import XEUtils from 'xe-utils'
 
 export default defineComponent({
   setup () {
     const demo1 = reactive({
-      filterName: '',
       loading: false,
-      originData: [
+      tableData: [
         { id: 1000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
         { id: 1005, parentId: 1000, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
         { id: 24300, parentId: 1000, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
@@ -48,44 +43,18 @@ export default defineComponent({
         { id: 22200, parentId: 20045, name: 'Test7', type: 'js', size: 1024, date: '2021-06-01' },
         { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
         { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
-      ],
-      tableData: [] as any[]
+      ]
     })
-
-    // 模拟后台接口
-    const findList = (order?: VxeTablePropTypes.SortOrder) => {
-      demo1.loading = true
-      setTimeout(() => {
-        demo1.loading = false
-        // 将有关联的列表转成树结构
-        if (order === 'asc') {
-          demo1.tableData = XEUtils.toArrayTree(demo1.originData, { key: 'id', parentKey: 'parentId', sortKey: 'date', reverse: false })
-        } else if (order === 'desc') {
-          demo1.tableData = XEUtils.toArrayTree(demo1.originData, { key: 'id', parentKey: 'parentId', sortKey: 'date', reverse: true })
-        } else {
-          demo1.tableData = XEUtils.toArrayTree(demo1.originData, { key: 'id', parentKey: 'parentId' })
-        }
-      }, 300)
-    }
-
-    const sortChangeEvent: VxeTableEvents.SortChange = ({ order }) => {
-      findList(order)
-    }
-
-    findList()
 
     return {
       demo1,
-      sortChangeEvent,
       demoCodes: [
         `
         <vxe-table
-          max-height="600"
+          height="600"
           :loading="demo1.loading"
           :data="demo1.tableData"
-          :sort-config="{remote: true}"
-          :tree-config="{children: 'children'}"
-          @sort-change="sortChangeEvent">
+          :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}">
           <vxe-column field="id" title="ID" width="80"></vxe-column>
           <vxe-column field="name" title="名称" tree-node></vxe-column>
           <vxe-column field="size" title="大小" width="140"></vxe-column>
@@ -95,15 +64,12 @@ export default defineComponent({
         `,
         `
         import { defineComponent, reactive } from 'vue'
-        import { VxeTablePropTypes, VxeTableEvents } from 'vxe-table'
-        import XEUtils from 'xe-utils'
 
         export default defineComponent({
           setup () {
             const demo1 = reactive({
-              filterName: '',
               loading: false,
-              originData: [
+              tableData: [
                 { id: 1000, parentId: null, name: 'test abc1', type: 'mp3', size: 1024, date: '2020-08-01' },
                 { id: 1005, parentId: 1000, name: 'Test2', type: 'mp4', size: null, date: '2021-04-01' },
                 { id: 24300, parentId: 1000, name: 'Test3', type: 'avi', size: 1024, date: '2020-03-01' },
@@ -115,34 +81,10 @@ export default defineComponent({
                 { id: 23666, parentId: null, name: 'Test8', type: 'xlsx', size: 2048, date: '2020-11-01' },
                 { id: 24555, parentId: null, name: 'test abc9', type: 'avi', size: 224, date: '2020-10-01' }
               ],
-              tableData: [] as any[]
             })
 
-            // 模拟后台接口
-            const findList = (order?: VxeTablePropTypes.SortOrder) => {
-              demo1.loading = true
-              setTimeout(() => {
-                demo1.loading = false
-                // 将有关联的列表转成树结构
-                if (order === 'asc') {
-                  demo1.tableData = XEUtils.toArrayTree(demo1.originData, { key: 'id', parentKey: 'parentId', sortKey: 'date', reverse: false })
-                } else if (order === 'desc') {
-                  demo1.tableData = XEUtils.toArrayTree(demo1.originData, { key: 'id', parentKey: 'parentId', sortKey: 'date', reverse: true })
-                } else {
-                  demo1.tableData = XEUtils.toArrayTree(demo1.originData, { key: 'id', parentKey: 'parentId' })
-                }
-              }, 300)
-            }
-
-            const sortChangeEvent: VxeTableEvents.SortChange = ({ order }) => {
-              findList(order)
-            }
-
-            findList()
-
             return {
-              demo1,
-              sortChangeEvent
+              demo1
             }
           }
         })

@@ -281,6 +281,12 @@ export namespace VxeTableProDefines {
   }
   export interface CellAreaSelectionStartEventParams extends EventParams, CellAreaSelectionStartParams { }
 
+  export interface CellAreaSelectionDragParams {
+    rows: any[]
+    cols: VxeTableDefines.ColumnInfo[]
+  }
+  export interface CellAreaSelectionDragEventParams extends EventParams, CellAreaSelectionDragParams { }
+
   export interface CellAreaSelectionEndParams {
     rows: any[]
     cols: VxeTableDefines.ColumnInfo[]
@@ -289,6 +295,14 @@ export namespace VxeTableProDefines {
 
   export interface CellAreaExtensionStartParams extends CellAreaSelectionStartParams {}
   export interface CellAreaExtensionStartEventParams extends EventParams, CellAreaExtensionStartParams { }
+
+  export interface CellAreaExtensionDragParams {
+    rows: any[]
+    cols: VxeTableDefines.ColumnInfo[]
+    targetRows: any[]
+    targetCols: VxeTableDefines.ColumnInfo[]
+  }
+  export interface CellAreaExtensionDragEventParams extends EventParams, CellAreaExtensionDragParams { }
 
   export interface CellAreaExtensionEndParams {
     rows: any[]
@@ -349,8 +363,10 @@ export type VxeTableProEmits = [
   'clear-cell-area-merge',
   'header-cell-area-selection',
   'cell-area-selection-start',
+  'cell-area-selection-drag',
   'cell-area-selection-end',
   'cell-area-extension-start',
+  'cell-area-extension-drag',
   'cell-area-extension-end',
   'cell-area-arrows-start',
   'cell-area-arrows-end',
@@ -373,8 +389,10 @@ declare module '../table' {
     onClearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge
     onHeaderCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection
     onCellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart
+    onCellAreaSelectionDrag?: VxeTableEvents.CellAreaSelectionDrag
     onCellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd
     onCellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart
+    onCellAreaExtensionDrag?: VxeTableEvents.CellAreaExtensionDrag
     onCellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd
     onCellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart
     onCellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd
@@ -395,8 +413,10 @@ declare module '../table' {
     clearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge
     headerCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection
     cellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart
+    cellAreaSelectionDrag?: VxeTableEvents.CellAreaSelectionDrag
     cellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd
     cellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart
+    cellAreaExtensionDrag?: VxeTableEvents.CellAreaExtensionDrag
     cellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd
     cellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart
     cellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd
@@ -417,8 +437,10 @@ declare module '../table' {
     export type ClearCellAreaMerge = (params: VxeTableProDefines.ClearCellAreaMergeEventParams) => void
     export type HeaderCellAreaSelection = (params: VxeTableProDefines.HeaderCellAreaSelectionEventParams) => void
     export type CellAreaSelectionStart = (params: VxeTableProDefines.CellAreaSelectionStartEventParams) => void
+    export type CellAreaSelectionDrag = (params: VxeTableProDefines.CellAreaSelectionDragEventParams) => void
     export type CellAreaSelectionEnd = (params: VxeTableProDefines.CellAreaSelectionEndEventParams) => void
     export type CellAreaExtensionStart = (params: VxeTableProDefines.CellAreaExtensionStartEventParams) => void
+    export type CellAreaExtensionDrag = (params: VxeTableProDefines.CellAreaExtensionDragEventParams) => void
     export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void
     export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void
     export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void
@@ -442,8 +464,10 @@ declare module '../grid' {
     onClearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge
     onHeaderCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection
     onCellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart
+    onCellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionDrag
     onCellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd
     onCellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart
+    onCellAreaExtensionDrag?: VxeGridEvents.CellAreaExtensionDrag
     onCellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd
     onCellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart
     onCellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd
@@ -463,8 +487,10 @@ declare module '../grid' {
     clearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge
     headerCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection
     cellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart
-    cellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd
+    cellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionEnd
+    cellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionDrag
     cellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart
+    cellAreaExtensionDrag?: VxeGridEvents.CellAreaExtensionDrag
     cellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd
     cellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart
     cellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd
@@ -485,8 +511,10 @@ declare module '../grid' {
     export type ClearCellAreaMerge = (params: VxeTableProDefines.ClearCellAreaMergeParams) => void
     export type HeaderCellAreaSelection = (params: VxeTableProDefines.HeaderCellAreaSelectionParams) => void
     export type CellAreaSelectionStart = (params: VxeTableProDefines.CellAreaSelectionStartEventParams) => void
+    export type CellAreaSelectionDrag = (params: VxeTableProDefines.CellAreaSelectionDragEventParams) => void
     export type CellAreaSelectionEnd = (params: VxeTableProDefines.CellAreaSelectionEndEventParams) => void
     export type CellAreaExtensionStart = (params: VxeTableProDefines.CellAreaExtensionStartEventParams) => void
+    export type CellAreaExtensionDrag = (params: VxeTableProDefines.CellAreaExtensionDragEventParams) => void
     export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void
     export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void
     export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void
