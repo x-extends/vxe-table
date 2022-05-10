@@ -487,8 +487,8 @@ declare module '../grid' {
     clearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge
     headerCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection
     cellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart
-    cellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionEnd
-    cellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionDrag
+    cellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionDrag
+    cellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd
     cellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart
     cellAreaExtensionDrag?: VxeGridEvents.CellAreaExtensionDrag
     cellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd

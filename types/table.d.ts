@@ -1865,6 +1865,7 @@ export namespace VxeTablePropTypes {
    */
   export interface EditConfig {
     trigger?: 'manual' | 'click' | 'dblclick'
+    enabled?: boolean
     mode?: string
     icon?: string
     showIcon?: boolean
