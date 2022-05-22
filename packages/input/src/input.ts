@@ -1282,7 +1282,7 @@ export default defineComponent({
     const dateConfirmEvent = () => {
       const { type } = props
       const dateValue = computeDateValue.value
-      if (type === 'datetime') {
+      if (type === 'time' || type === 'datetime') {
         dateChange(dateValue || reactData.currentDate)
       }
       hidePanel()
