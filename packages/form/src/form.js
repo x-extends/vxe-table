@@ -71,6 +71,8 @@ function renderItems (h, _vm, itemList) {
     const align = item.align || _vm.align
     const titleAlign = item.titleAlign || _vm.titleAlign
     const titleWidth = item.titleWidth || _vm.titleWidth
+    const titleColon = item.titleColon === null ? _vm.titleColon : item.titleColon
+    const titleAsterisk = item.titleAsterisk === null ? _vm.titleAsterisk : item.titleAsterisk
     let itemVisibleMethod = visibleMethod
     const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
     const showEllipsis = itemOverflow === 'ellipsis'
@@ -118,6 +120,8 @@ function renderItems (h, _vm, itemList) {
     return h('div', {
       class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
         'is--title': title,
+        'is--colon': titleColon,
+        'is--asterisk': titleAsterisk,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,
         'is--active': !itemVisibleMethod || itemVisibleMethod(params),
@@ -208,7 +212,9 @@ export default {
   },
   provide () {
     return {
-      $xeform: this
+      $xeform: this,
+      $xeformgather: null,
+      $xeformitem: null
     }
   },
   computed: {
@@ -249,8 +255,6 @@ export default {
     return h('form', {
       class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
-        'is--colon': this.titleColon,
-        'is--asterisk': this.titleAsterisk,
         'is--loading': loading
       }],
       on: {

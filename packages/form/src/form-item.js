@@ -13,6 +13,14 @@ const props = {
   align: String,
   titleAlign: String,
   titleWidth: [String, Number],
+  titleColon: {
+    type: Boolean,
+    default: null
+  },
+  titleAsterisk: {
+    type: Boolean,
+    default: null
+  },
   className: [String, Function],
   titleOverflow: { type: [Boolean, String], default: null },
   titlePrefix: Object,
@@ -133,8 +141,13 @@ export default {
     $xeform: {
       default: null
     },
-    xeformgather: {
+    $xeformgather: {
       default: null
+    }
+  },
+  provide () {
+    return {
+      $xeformitem: this
     }
   },
   data () {

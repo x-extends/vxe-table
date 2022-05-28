@@ -69,14 +69,14 @@ export function destroyItem (_vm) {
 }
 
 export function assemItem (_vm) {
-  const { $el, $xeform, xeformgather, itemConfig } = _vm
-  const itemGather = xeformgather ? xeformgather.itemConfig : null
+  const { $el, $xeform, $xeformgather, itemConfig } = _vm
+  const itemGather = $xeformgather ? $xeformgather.itemConfig : null
   itemConfig.slots = _vm.$scopedSlots
   if (itemGather) {
     if (!itemGather.children) {
       itemGather.children = []
     }
-    itemGather.children.splice([].indexOf.call(xeformgather.$el.children, $el), 0, itemConfig)
+    itemGather.children.splice([].indexOf.call($xeformgather.$el.children, $el), 0, itemConfig)
   } else {
     $xeform.staticItems.splice([].indexOf.call($xeform.$refs.hideItem.children, $el), 0, itemConfig)
   }

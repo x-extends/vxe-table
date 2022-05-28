@@ -272,11 +272,6 @@ $btnThemeList: (
   }
 }
 .vxe-button--loading-icon,
-.vxe-button--icon,
-.vxe-button--content {
-  vertical-align: middle;
-}
-.vxe-button--loading-icon,
 .vxe-button--icon {
   min-width: $vxe-font-size;
   &+.vxe-button--content {

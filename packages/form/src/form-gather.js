@@ -6,7 +6,7 @@ export default {
   extends: VxeFormItem,
   provide () {
     return {
-      xeformgather: this
+      $xeformgather: this
     }
   },
   created () {

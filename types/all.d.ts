@@ -42,7 +42,6 @@ declare global {
 export * from './v-x-e-table'
 export * from './component'
 
-export * from './header'
 export * from './footer'
 export * from './icon'
 export * from './filter'

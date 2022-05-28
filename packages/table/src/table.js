@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
+import VxeTableHeader from '../../header'
 import vSize from '../../mixins/size'
 import { isEnableConf, getFuncText } from '../../tools/utils'
 import { createResizeEvent } from '../../tools/resize'
@@ -24,7 +25,7 @@ function renderFixed (h, $xetable, fixedType) {
     class: `vxe-table--fixed-${fixedType}-wrapper`,
     ref: `${fixedType}Container`
   }, [
-    showHeader ? h('vxe-table-header', {
+    showHeader ? h(VxeTableHeader, {
       props: {
         fixedType,
         tableData,
@@ -1007,7 +1008,7 @@ export default {
           /**
            * 表头
            */
-          showHeader ? h('vxe-table-header', {
+          showHeader ? h(VxeTableHeader, {
             ref: 'tableHeader',
             props: {
               tableData,
