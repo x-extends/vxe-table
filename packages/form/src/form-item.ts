@@ -15,6 +15,14 @@ export const formItemProps = {
   align: String as PropType<VxeFormItemPropTypes.Align>,
   titleAlign: String as PropType<VxeFormItemPropTypes.TitleAlign>,
   titleWidth: [String, Number] as PropType<VxeFormItemPropTypes.TitleWidth>,
+  titleColon: {
+    type: Boolean as PropType<VxeFormItemPropTypes.TitleColon>,
+    default: null
+  },
+  titleAsterisk: {
+    type: Boolean as PropType<VxeFormItemPropTypes.TitleAsterisk>,
+    default: null
+  },
   className: [String, Function] as PropType<VxeFormItemPropTypes.ClassName>,
   titleOverflow: { type: [Boolean, String] as PropType<VxeFormItemPropTypes.TitleOverflow>, default: null },
   titlePrefix: Object as PropType<VxeFormItemPropTypes.TitlePrefix>,
@@ -33,7 +41,7 @@ export default defineComponent({
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>
     const $xeform = inject('$xeform', {} as VxeFormConstructor & VxeFormPrivateMethods)
-    const formGather = inject('xeformgather', null as XEFormItemProvide | null)
+    const formGather = inject('$xeformgather', null as XEFormItemProvide | null)
     const formItem = createItem($xeform, props)
     formItem.slots = slots
 
@@ -154,6 +162,14 @@ export default defineComponent({
       })
     }
 
-    return renderVN
+    const $xeformitem = {
+      itemConfig: formItem,
+      renderVN
+    }
+
+    return $xeformitem
+  },
+  render () {
+    return this.renderVN()
   }
 })

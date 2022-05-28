@@ -106,22 +106,9 @@
       }
     }
   }
-  &.is--asterisk {
-    .vxe-form--item {
-      &.is--required {
-        .vxe-form--item-title-content {
-          &:before {
-            content: "*";
-            color: $vxe-form-validate-error-color;
-            font-family: Verdana,Arial,Tahoma;
-            margin-right: 0.2em;
-            font-weight: normal;
-            vertical-align: middle;
-          }
-        }
-      }
-    }
-  }
+}
+
+.vxe-form--item {
   &.is--colon {
     .vxe-form--item-title-postfix {
       &:after {
@@ -131,9 +118,20 @@
       }
     }
   }
-}
-
-.vxe-form--item {
+  &.is--asterisk {
+    &.is--required {
+      .vxe-form--item-title-content {
+        &:before {
+          content: "*";
+          color: $vxe-form-validate-error-color;
+          font-family: Verdana,Arial,Tahoma;
+          margin-right: 0.2em;
+          font-weight: normal;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
   &.is--span {
     .vxe-default-input:not([type="submit"]):not([type="reset"]),
     .vxe-default-textarea,

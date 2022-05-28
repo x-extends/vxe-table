@@ -440,6 +440,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         return []
       },
       getActiveRecord () {
+        return this.getEditRecord()
+      },
+      getEditRecord () {
         const { editStore } = reactData
         const { afterFullData } = internalData
         const el = refElem.value
@@ -460,10 +463,17 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         return null
       },
+      clearActived (evnt) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
+        // }
+        // 即将废弃
+        return this.clearEdit(evnt)
+      },
       /**
        * 清除激活的编辑
        */
-      clearActived (evnt) {
+      clearEdit (evnt) {
         const { editStore } = reactData
         const { actived } = editStore
         const { row, column } = actived
@@ -495,25 +505,46 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         removeCellSelectedClass()
         return nextTick()
       },
+      isActiveByRow (row) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
+        // }
+        // 即将废弃
+        return this.isEditByRow(row)
+      },
       /**
        * 判断行是否为激活编辑状态
        * @param {Row} row 行对象
        */
-      isActiveByRow (row) {
+      isEditByRow (row) {
         const { editStore } = reactData
         return editStore.actived.row === row
+      },
+      setActiveRow (row) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
+        // }
+        // 即将废弃
+        return editMethods.setEditRow(row)
       },
       /**
        * 激活行编辑
        */
-      setActiveRow (row) {
+      setEditRow (row) {
         const { visibleColumn } = internalData
         return $xetable.setActiveCell(row, XEUtils.find(visibleColumn, column => isEnableConf(column.editRender)))
+      },
+      setActiveCell (row, fieldOrColumn) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
+        // }
+        // 即将废弃
+        return editMethods.setEditCell(row, fieldOrColumn)
       },
       /**
        * 激活单元格编辑
        */
-      setActiveCell (row, fieldOrColumn) {
+      setEditCell (row, fieldOrColumn) {
         const { editConfig } = props
         const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
         if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {

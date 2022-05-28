@@ -10,6 +10,7 @@ import { VXETable } from '../../v-x-e-table'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import TableBodyComponent from './body'
+import TableHeaderComponent from '../../header'
 import tableProps from './props'
 import tableEmits from './emits'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
@@ -5569,7 +5570,7 @@ export default defineComponent({
         ref: isFixedLeft ? refLeftContainer : refRightContainer,
         class: `vxe-table--fixed-${fixedType}-wrapper`
       }, [
-        showHeader ? h(resolveComponent('vxe-table-header') as ComponentOptions, {
+        showHeader ? h(TableHeaderComponent, {
           ref: isFixedLeft ? refTableLeftHeader : refTableRightHeader,
           fixedType,
           tableData,
@@ -5963,7 +5964,7 @@ export default defineComponent({
             /**
              * 表头
              */
-            showHeader ? h(resolveComponent('vxe-table-header') as ComponentOptions, {
+            showHeader ? h(TableHeaderComponent, {
               ref: refTableHeader,
               tableData,
               tableColumn,

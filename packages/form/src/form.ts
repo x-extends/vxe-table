@@ -526,6 +526,8 @@ export default defineComponent({
         const align = item.align || props.align
         const titleAlign = item.titleAlign || props.titleAlign
         const titleWidth = item.titleWidth || props.titleWidth
+        const titleColon = item.titleColon === null ? props.titleColon : item.titleColon
+        const titleAsterisk = item.titleAsterisk === null ? props.titleAsterisk : item.titleAsterisk
         const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
         const showEllipsis = itemOverflow === 'ellipsis'
         const showTitle = itemOverflow === 'title'
@@ -596,11 +598,14 @@ export default defineComponent({
         return h('div', {
           class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
             'is--title': title,
+            'is--colon': titleColon,
+            'is--asterisk': titleAsterisk,
             'is--required': isRequired,
             'is--hidden': folding && collapseAll,
             'is--active': !itemVisibleMethod || itemVisibleMethod(params),
             'is--error': showError
           }],
+          itemConfig: item,
           key: item.id
         }, [
           h('div', {
@@ -672,7 +677,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { loading, className, data, titleColon, titleAsterisk, customLayout } = props
+      const { loading, className, data, customLayout } = props
       const { formItems } = reactData
       // const formItems: any[] = []
       const vSize = computeSize.value
@@ -682,8 +687,6 @@ export default defineComponent({
         ref: refElem,
         class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: $xeform }) : className) : '', {
           [`size--${vSize}`]: vSize,
-          'is--colon': titleColon,
-          'is--asterisk': titleAsterisk,
           'is--loading': loading
         }],
         onSubmit: submitEvent,
@@ -718,6 +721,8 @@ export default defineComponent({
     $xeform.renderVN = renderVN
 
     provide('$xeform', $xeform)
+    provide('$xeformgather', null)
+    provide('$xeformitem', null)
 
     return $xeform
   },

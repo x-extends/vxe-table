@@ -14,7 +14,6 @@ export * from './v-x-e-table'
 export * from './component'
 
 // Module
-export * from './header'
 export * from './footer'
 export * from './icon'
 export * from './filter'

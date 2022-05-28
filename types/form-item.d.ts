@@ -36,6 +36,14 @@ export interface VxeFormItemProps {
    */
   titleWidth?: VxeFormItemPropTypes.TitleWidth
   /**
+   * 是否显示标题冒号
+   */
+  titleColon?: VxeFormItemPropTypes.TitleColon
+  /**
+   * 是否显示必填字段的红色星号
+   */
+  titleAsterisk?: VxeFormItemPropTypes.TitleAsterisk
+  /**
    * 给表单项附加 className
    */
   className?: VxeFormItemPropTypes.ClassName
@@ -83,6 +91,8 @@ export namespace VxeFormItemPropTypes {
   export type Align = VxeFormPropTypes.Align
   export type TitleAlign = VxeFormPropTypes.TitleAlign
   export type TitleWidth = VxeFormPropTypes.TitleWidth
+  export type TitleColon = VxeFormPropTypes.TitleColon
+  export type TitleAsterisk = VxeFormPropTypes.TitleAsterisk
 
   interface ClassNameParams {
     $form: VxeFormConstructor

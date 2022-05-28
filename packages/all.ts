@@ -9,7 +9,6 @@ import { Edit } from './edit'
 import { Export } from './export'
 import { Keyboard } from './keyboard'
 import { Validator } from './validator'
-import { Header } from './header'
 import { Footer } from './footer'
 
 import { Column } from './column'
@@ -44,7 +43,6 @@ import zhCN from './locale/lang/zh-CN'
 // 按需加载的组件
 const components = [
   // 功能模块
-  Header,
   Footer,
   Icon,
   Filter,

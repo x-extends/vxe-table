@@ -194,6 +194,8 @@ export namespace VxeFormDefines {
     align: VxeFormItemPropTypes.Align
     titleAlign: VxeFormItemPropTypes.TitleAlign
     titleWidth: VxeFormItemPropTypes.TitleWidth
+    titleColon: VxeFormItemPropTypes.TitleColon
+    titleAsterisk: VxeFormItemPropTypes.TitleAsterisk
     titlePrefix: VxeFormItemPropTypes.TitlePrefix
     titleSuffix: VxeFormItemPropTypes.TitleSuffix
     titleOverflow: VxeFormItemPropTypes.TitleOverflow
