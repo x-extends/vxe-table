@@ -4,7 +4,7 @@ import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { VxeRadioButtonPropTypes, VxeRadioGroupConstructor, VxeRadioButtonConstructor, VxeRadioButtonEmits, VxeRadioGroupPrivateMethods, RadioButtonMethods } from '../../../types/all'
+import { VxeRadioButtonPropTypes, VxeRadioGroupConstructor, VxeRadioButtonConstructor, VxeRadioButtonEmits, VxeRadioGroupPrivateMethods, RadioButtonMethods, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeRadioButton',
@@ -23,6 +23,8 @@ export default defineComponent({
   ] as VxeRadioButtonEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -69,6 +71,10 @@ export default defineComponent({
       } else {
         emit('update:modelValue', label)
         radioButtonMethods.dispatchEvent('change', { label }, evnt)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, label)
+        }
       }
     }
 

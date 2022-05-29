@@ -4,7 +4,7 @@ import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { VxeCheckboxConstructor, VxeCheckboxGroupConstructor, VxeCheckboxEmits, VxeCheckboxGroupPrivateMethods, CheckboxMethods, VxeCheckboxPropTypes } from '../../../types/all'
+import { VxeCheckboxConstructor, VxeCheckboxGroupConstructor, VxeCheckboxEmits, VxeCheckboxGroupPrivateMethods, CheckboxMethods, VxeCheckboxPropTypes, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeCheckbox',
@@ -25,6 +25,8 @@ export default defineComponent({
   ] as VxeCheckboxEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -60,6 +62,10 @@ export default defineComponent({
         } else {
           emit('update:modelValue', value)
           checkboxMethods.dispatchEvent('change', params, evnt)
+          // 自动更新校验状态
+          if ($xeform && $xeformiteminfo) {
+            $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, value)
+          }
         }
       }
     }

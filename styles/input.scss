@@ -212,6 +212,10 @@ $iconWidth: 1.6em;
       &:active {
         color: $vxe-primary-color;
       }
+      &.is--disabled {
+        cursor: no-drop;
+        color: $vxe-input-number-disabled-color;
+      }
     }
   }
 }

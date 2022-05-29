@@ -1,9 +1,9 @@
-import { defineComponent, h, provide, PropType } from 'vue'
+import { defineComponent, h, provide, PropType, inject } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { VxeRadioGroupPropTypes, VxeRadioGroupConstructor, VxeRadioGroupEmits, VxeRadioGroupPrivateMethods, RadioGroupPrivateMethods, RadioGroupMethods } from '../../../types/all'
+import { VxeRadioGroupPropTypes, VxeRadioGroupConstructor, VxeRadioGroupEmits, VxeRadioGroupPrivateMethods, RadioGroupPrivateMethods, RadioGroupMethods, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeRadioGroup',
@@ -19,6 +19,8 @@ export default defineComponent({
   ] as VxeRadioGroupEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -34,9 +36,13 @@ export default defineComponent({
     useSize(props)
 
     const radioGroupPrivateMethods: RadioGroupPrivateMethods = {
-      handleChecked (params) {
+      handleChecked (params, evnt) {
         emit('update:modelValue', params.label)
         radioGroupMethods.dispatchEvent('change', params)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, params.label)
+        }
       }
     }
 

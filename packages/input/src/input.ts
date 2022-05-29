@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, watch, onUnmounted, PropType } from 'vue'
+import { defineComponent, h, Teleport, ref, Ref, computed, reactive, inject, nextTick, watch, onUnmounted, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -8,7 +8,7 @@ import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { toStringTimeDate, getDateQuarter } from './date'
 import { handleNumber, toFloatValueFixed } from './number'
 
-import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef } from '../../../types/all'
+import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 interface DateYearItem {
   date: Date;
@@ -130,6 +130,8 @@ export default defineComponent({
   ] as VxeInputEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -610,6 +612,40 @@ export default defineComponent({
       return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
     })
 
+    const computeNumValue = computed(() => {
+      const { type } = props
+      const { inputValue } = reactData
+      const isNumType = computeIsNumType.value
+      if (isNumType) {
+        return type === 'integer' ? XEUtils.toInteger(handleNumber(inputValue)) : XEUtils.toNumber(handleNumber(inputValue))
+      }
+      return 0
+    })
+
+    const computeIsDisabledSubtractNumber = computed(() => {
+      const { min } = props
+      const { inputValue } = reactData
+      const isNumType = computeIsNumType.value
+      const numValue = computeNumValue.value
+      // 当有值时再进行判断
+      if ((inputValue || inputValue === 0) && isNumType && min !== null) {
+        return numValue <= XEUtils.toNumber(min)
+      }
+      return false
+    })
+
+    const computeIsDisabledAddNumber = computed(() => {
+      const { max } = props
+      const { inputValue } = reactData
+      const isNumType = computeIsNumType.value
+      const numValue = computeNumValue.value
+      // 当有值时再进行判断
+      if ((inputValue || inputValue === 0) && isNumType && max !== null) {
+        return numValue >= XEUtils.toNumber(max)
+      }
+      return false
+    })
+
     const getNumberValue = (val: any) => {
       const { type, exponential } = props
       const inpMaxlength = computeInpMaxlength.value
@@ -632,6 +668,10 @@ export default defineComponent({
       inputMethods.dispatchEvent('input', { value }, evnt)
       if (XEUtils.toValueString(props.modelValue) !== value) {
         inputMethods.dispatchEvent('change', { value }, evnt)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, value)
+        }
       }
     }
 
@@ -959,8 +999,9 @@ export default defineComponent({
 
     const numberNextEvent = (evnt: Event) => {
       const { readonly, disabled } = props
+      const isDisabledSubtractNumber = computeIsDisabledSubtractNumber.value
       clearTimeout(downbumTimeout)
-      if (!disabled && !readonly) {
+      if (!disabled && !readonly && !isDisabledSubtractNumber) {
         numberChange(false, evnt)
       }
       inputMethods.dispatchEvent('next-number', {}, evnt)
@@ -975,8 +1016,9 @@ export default defineComponent({
 
     const numberPrevEvent = (evnt: Event) => {
       const { readonly, disabled } = props
+      const isDisabledAddNumber = computeIsDisabledAddNumber.value
       clearTimeout(downbumTimeout)
-      if (!disabled && !readonly) {
+      if (!disabled && !readonly && !isDisabledAddNumber) {
         numberChange(true, evnt)
       }
       inputMethods.dispatchEvent('prev-number', {}, evnt)
@@ -2059,11 +2101,15 @@ export default defineComponent({
     }
 
     const renderNumberIcon = () => {
+      const isDisabledAddNumber = computeIsDisabledAddNumber.value
+      const isDisabledSubtractNumber = computeIsDisabledSubtractNumber.value
       return h('span', {
         class: 'vxe-input--number-suffix'
       }, [
         h('span', {
-          class: 'vxe-input--number-prev is--prev',
+          class: ['vxe-input--number-prev is--prev', {
+            'is--disabled': isDisabledAddNumber
+          }],
           onMousedown: numberMousedownEvent,
           onMouseup: numberStopDown,
           onMouseleave: numberStopDown
@@ -2073,7 +2119,9 @@ export default defineComponent({
           })
         ]),
         h('span', {
-          class: 'vxe-input--number-next is--next',
+          class: ['vxe-input--number-next is--next', {
+            'is--disabled': isDisabledSubtractNumber
+          }],
           onMousedown: numberMousedownEvent,
           onMouseup: numberStopDown,
           onMouseleave: numberStopDown

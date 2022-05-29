@@ -150,9 +150,14 @@ export interface FormMethods {
   /**
    * 更新项状态
    * 当使用自定义渲染时可能会用到
-   * @param scope 插槽对象
+   * @param params 插槽对象
    */
-  updateStatus(scope: any, itemValue?: any): void
+  updateStatus(
+    params: {
+      field: VxeFormItemPropTypes.Field
+    },
+    itemValue?: any
+  ): void
   /**
    * 获取表单项列表
    */
@@ -176,6 +181,7 @@ export interface VxeFormMethods extends FormMethods { }
 
 export interface FormPrivateMethods {
   callSlot<T>(slotFunc: ((params: T) => any[]) | string | null, params: T): VNode[]
+  triggerItemEvent(evnt: Event | { type: string }, field: string, itemValue?: any): Promise<any>
   toggleCollapseEvent(evnt: Event): void
   triggerTitleTipEvent(evnt: MouseEvent, params: {
     item: VxeFormDefines.ItemInfo
@@ -262,6 +268,10 @@ export namespace VxeFormDefines {
      * 已废弃，该属性被 field 替换
      */
     property: string
+  }
+
+  export interface ProvideItemInfo {
+    itemConfig: ItemInfo
   }
 
   export interface ValidateErrorMapParams {

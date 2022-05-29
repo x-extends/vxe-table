@@ -6,8 +6,8 @@ import { getFuncText, isEnableConf, eqEmptyValue } from '../../tools/utils'
 import { errLog } from '../../tools/log'
 import { scrollToView } from '../../tools/dom'
 import { createItem, handleFieldOrItem } from './util'
-import { renderTitle } from './render'
 import { useSize } from '../../hooks/size'
+import VxeFormConfigItem from './form-config-item'
 
 import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes, VxeTooltipInstance, FormInternalData, VxeFormPrivateComputed } from '../../../types/all'
 
@@ -331,7 +331,7 @@ export default defineComponent({
                 }
               } else {
                 const isArrType = type === 'array'
-                const hasEmpty = isArrType ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
+                const hasEmpty = isArrType || XEUtils.isArray(itemValue) ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
                 if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
                   errorRules.push(new Rule(rule))
                 }
@@ -491,142 +491,31 @@ export default defineComponent({
       }
     }
 
-    /**
-     * 更新项状态
-     * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一项编辑状态
-     * 如果单元格配置了校验规则，则会进行校验
-     */
-    const updateStatus = (scope: any, itemValue?: any) => {
-      const { property } = scope
-      if (property) {
-        validItemRules('change', property, itemValue)
+    const triggerItemEvent = (evnt: Event, field: string, itemValue?: any) => {
+      if (field) {
+        return validItemRules(evnt ? evnt.type : 'all', field, itemValue)
           .then(() => {
-            clearValidate(property)
+            clearValidate(field)
           })
           .catch(({ rule }) => {
-            const item = getItemByField(property)
+            const item = getItemByField(field)
             if (item) {
               item.showError = true
               item.errRule = rule
             }
           })
       }
+      return nextTick()
     }
 
-    const renderItems = (itemList: VxeFormDefines.ItemInfo[]): VNode[] => {
-      const { data, rules, titleOverflow: allTitleOverflow } = props
-      const { collapseAll } = reactData
-      const validOpts = computeValidOpts.value
-      return itemList.map((item) => {
-        const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
-        const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-        const defaultSlot = slots ? slots.default : null
-        const titleSlot = slots ? slots.title : null
-        const span = item.span || props.span
-        const align = item.align || props.align
-        const titleAlign = item.titleAlign || props.titleAlign
-        const titleWidth = item.titleWidth || props.titleWidth
-        const titleColon = item.titleColon === null ? props.titleColon : item.titleColon
-        const titleAsterisk = item.titleAsterisk === null ? props.titleAsterisk : item.titleAsterisk
-        const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
-        const showEllipsis = itemOverflow === 'ellipsis'
-        const showTitle = itemOverflow === 'title'
-        const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
-        const hasEllipsis = showTitle || showTooltip || showEllipsis
-        let itemVisibleMethod = visibleMethod
-        const params = { data, field, property: field, item, $form: $xeform }
-        if (visible === false) {
-          return createCommentVNode()
-        }
-        let isRequired = false
-        if (rules) {
-          const itemRules = rules[field]
-          if (itemRules) {
-            isRequired = itemRules.some((rule) => rule.required)
-          }
-        }
-        // 如果为项集合
-        const isGather = children && children.length > 0
-        if (isGather) {
-          const childVNs = renderItems(item.children)
-          return childVNs.length ? h('div', {
-            class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
-          }, childVNs) : createCommentVNode()
-        }
-        if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-          itemVisibleMethod = compConf.itemVisibleMethod
-        }
-        let contentVNs: any[] = []
-        if (defaultSlot) {
-          contentVNs = callSlot(defaultSlot, params)
-        } else if (compConf && compConf.renderItemContent) {
-          contentVNs = compConf.renderItemContent(itemRender, params)
-        } else if (field) {
-          contentVNs = [`${XEUtils.get(data, field)}`]
-        }
-        if (collapseNode) {
-          contentVNs.push(
-            h('div', {
-              class: 'vxe-form--item-trigger-node',
-              onClick: toggleCollapseEvent
-            }, [
-              h('span', {
-                class: 'vxe-form--item-trigger-text'
-              }, collapseAll ? GlobalConfig.i18n('vxe.form.unfolding') : GlobalConfig.i18n('vxe.form.folding')),
-              h('i', {
-                class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
-              })
-            ])
-          )
-        }
-        if (errRule && validOpts.showMessage) {
-          contentVNs.push(
-            h('div', {
-              class: 'vxe-form--item-valid',
-              style: errRule.maxWidth ? {
-                width: `${errRule.maxWidth}px`
-              } : null
-            }, errRule.content)
-          )
-        }
-        const ons = showTooltip ? {
-          onMouseenter (evnt: MouseEvent) {
-            triggerTitleTipEvent(evnt, params)
-          },
-          onMouseleave: handleTitleTipLeaveEvent
-        } : {}
-        return h('div', {
-          class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
-            'is--title': title,
-            'is--colon': titleColon,
-            'is--asterisk': titleAsterisk,
-            'is--required': isRequired,
-            'is--hidden': folding && collapseAll,
-            'is--active': !itemVisibleMethod || itemVisibleMethod(params),
-            'is--error': showError
-          }],
-          itemConfig: item,
-          key: item.id
-        }, [
-          h('div', {
-            class: 'vxe-form--item-inner'
-          }, [
-            title || titleSlot ? h('div', {
-              class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null, {
-                'is--ellipsis': hasEllipsis
-              }],
-              style: titleWidth ? {
-                width: isNaN(titleWidth as number) ? titleWidth : `${titleWidth}px`
-              } : null,
-              title: showTitle ? getFuncText(title) : null,
-              ...ons
-            }, renderTitle($xeform, item)) : null,
-            h('div', {
-              class: ['vxe-form--item-content', align ? `align--${align}` : null]
-            }, contentVNs)
-          ])
-        ])
-      })
+    /**
+     * 更新项状态
+     * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一项编辑状态
+     * 如果单元格配置了校验规则，则会进行校验
+     */
+    const updateStatus = (scope: any, itemValue?: any) => {
+      const { field } = scope
+      return triggerItemEvent(new Event('change'), field, itemValue)
     }
 
     formMethods = {
@@ -646,6 +535,7 @@ export default defineComponent({
 
     const formPrivateMethods: VxeFormPrivateMethods = {
       callSlot,
+      triggerItemEvent,
       toggleCollapseEvent,
       triggerTitleTipEvent,
       handleTitleTipLeaveEvent
@@ -694,7 +584,13 @@ export default defineComponent({
       }, [
         h('div', {
           class: 'vxe-form--wrapper vxe-row'
-        }, customLayout ? (defaultSlot ? defaultSlot({}) : []) : renderItems(formItems)),
+        }, customLayout ? (defaultSlot ? defaultSlot({}) : []) : formItems.map((item, index) => {
+          return h(VxeFormConfigItem, {
+            key: index,
+            itemConfig2: item,
+            itemConfig: item
+          })
+        })),
         h('div', {
           class: 'vxe-form-slots',
           ref: 'hideItem'
@@ -723,6 +619,7 @@ export default defineComponent({
     provide('$xeform', $xeform)
     provide('$xeformgather', null)
     provide('$xeformitem', null)
+    provide('$xeformiteminfo', null)
 
     return $xeform
   },

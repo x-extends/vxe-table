@@ -135,7 +135,7 @@
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
           <template #default="params">
-            <vxe-select v-model="params.data.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(params)">
+            <vxe-select v-model="params.data.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
             </vxe-select>
@@ -143,7 +143,7 @@
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{autofocus:'input'}" title-overflow="title">
           <template #default="params">
-            <vxe-input v-model="params.data.age" type="integer" placeholder="请输入年龄" clearable @change="$refs.xForm.updateStatus(params)"></vxe-input>
+            <vxe-input v-model="params.data.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">

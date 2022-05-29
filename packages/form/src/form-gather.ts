@@ -15,9 +15,12 @@ export default defineComponent({
     const defaultSlot = slots.default
     const formItem = reactive(createItem($xeform, props))
     const xeformitem: XEFormItemProvide = { formItem }
+    const xeformiteminfo = { itemConfig: formItem }
     formItem.children = []
 
+    provide('$xeformiteminfo', xeformiteminfo)
     provide('$xeformgather', xeformitem)
+    provide('$xeformitem', null)
 
     watchItem(props, formItem)
 
@@ -44,7 +47,6 @@ export default defineComponent({
     }
 
     const $xeformgather = {
-      itemConfig: formItem,
       renderVN
     }
 

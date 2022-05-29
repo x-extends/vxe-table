@@ -1,10 +1,10 @@
-import { defineComponent, h, ref, Ref, computed, nextTick, watch, PropType, reactive } from 'vue'
+import { defineComponent, h, ref, Ref, computed, nextTick, watch, PropType, reactive, inject } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { getFuncText } from '../../tools/utils'
 import { useSize } from '../../hooks/size'
 
-import { VxeTextareaPropTypes, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef } from '../../../types/all'
+import { VxeTextareaPropTypes, TextareaReactData, TextareaMethods, VxeTextareaConstructor, VxeTextareaEmits, TextareaPrivateRef, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 let autoTxtElem: HTMLDivElement
 
@@ -40,6 +40,8 @@ export default defineComponent({
   ] as VxeTextareaEmits,
   setup (props, context) {
     const { emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -136,6 +138,10 @@ export default defineComponent({
       emit('update:modelValue', value)
       if (XEUtils.toValueString(props.modelValue) !== value) {
         textareaMethods.dispatchEvent('change', { value }, evnt)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, value)
+        }
       }
     }
 

@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, PropType, ref, Ref, VNode, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted } from 'vue'
+import { defineComponent, h, Teleport, PropType, ref, Ref, inject, VNode, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -6,7 +6,7 @@ import { getEventTargetNode, getAbsolutePos } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, getFuncText, formatText } from '../../tools/utils'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 
-import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps, VxeOptionProps } from '../../../types/all'
+import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps, VxeOptionProps, VxeFormDefines, VxeFormConstructor, VxeFormPrivateMethods } from '../../../types/all'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -49,6 +49,8 @@ export default defineComponent({
   ] as VxeSelectEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -370,6 +372,10 @@ export default defineComponent({
       if (selectValue !== props.modelValue) {
         emit('update:modelValue', selectValue)
         selectMethods.dispatchEvent('change', { value: selectValue }, evnt)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, selectValue)
+        }
       }
     }
 
