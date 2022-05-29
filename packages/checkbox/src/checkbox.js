@@ -20,6 +20,12 @@ export default {
   inject: {
     $xecheckboxgroup: {
       default: null
+    },
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
     }
   },
   computed: {
@@ -73,10 +79,14 @@ export default {
         const value = checked ? checkedValue : uncheckedValue
         const params = { checked, value, label, $event: evnt }
         if (isGroup) {
-          $xecheckboxgroup.handleChecked(params)
+          $xecheckboxgroup.handleChecked(params, evnt)
         } else {
           this.$emit('input', value)
           this.$emit('change', params)
+          // 自动更新校验状态
+          if (this.$xeform && this.$xeformiteminfo) {
+            this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, value)
+          }
         }
       }
     }

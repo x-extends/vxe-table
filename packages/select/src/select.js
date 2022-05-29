@@ -229,6 +229,14 @@ export default {
   components: {
     VxeInput
   },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
+  },
   provide () {
     return {
       $xeselect: this
@@ -483,6 +491,10 @@ export default {
       if (selectValue !== this.value) {
         this.$emit('input', selectValue)
         this.$emit('change', { value: selectValue, $event: evnt })
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, selectValue)
+        }
       }
     },
     mousedownOptionEvent (evnt) {

@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 组件 - 下拉容器
  */
-export interface Pulldown extends VXETableComponent {
+export declare class Pulldown extends VXETableComponent {
   /**
    * 是否禁用
    */

@@ -147,7 +147,10 @@ export default {
   },
   provide () {
     return {
-      $xeformitem: this
+      $xeformitem: this,
+      $xeformiteminfo: {
+        itemConfig: this.itemConfig
+      }
     }
   },
   data () {

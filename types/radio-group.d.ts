@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 组件 - 单选框组
  */
-export interface RadioGroup extends VXETableComponent {
+export declare class RadioGroup extends VXETableComponent {
   /**
    * 显示内容
    */

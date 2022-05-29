@@ -278,7 +278,7 @@ export default {
                 }
               } else {
                 const isArrType = type === 'array'
-                const hasEmpty = isArrType ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqEmptyValue(cellValue)
+                const hasEmpty = isArrType || XEUtils.isArray(cellValue) ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqEmptyValue(cellValue)
                 if (required ? (hasEmpty || validErrorRuleValue(rule, cellValue)) : (!hasEmpty && validErrorRuleValue(rule, cellValue))) {
                   this.validRuleErr = true
                   errorRules.push(new Rule(rule))

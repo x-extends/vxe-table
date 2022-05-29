@@ -30,6 +30,14 @@ export default {
     className: String,
     size: { type: String, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
   },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
+  },
   data () {
     return {
       inputValue: this.value
@@ -132,6 +140,10 @@ export default {
       this.$emit('modelValue', value)
       if (this.value !== value) {
         this.$emit('change', { value, $event: evnt })
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, value)
+        }
       }
     },
     inputEvent (evnt) {

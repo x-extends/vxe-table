@@ -18,6 +18,12 @@ export default {
   inject: {
     $xeradiogroup: {
       default: null
+    },
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
     }
   },
   computed: {
@@ -71,10 +77,14 @@ export default {
       const { $xeradiogroup } = this
       const params = { label, $event: evnt }
       if ($xeradiogroup) {
-        $xeradiogroup.handleChecked(params)
+        $xeradiogroup.handleChecked(params, evnt)
       } else {
         this.$emit('input', label)
         this.$emit('change', params)
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, label)
+        }
       }
     },
     changeEvent (evnt) {

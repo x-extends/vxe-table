@@ -5,8 +5,8 @@ import VXETable from '../../v-x-e-table'
 import { isEnableConf, eqEmptyValue, getFuncText } from '../../tools/utils'
 import DomTools, { browse } from '../../tools/dom'
 import { createItem, handleFieldOrItem } from './util'
-import { renderTitle } from './render'
 import { errLog } from '../../tools/log'
+import VxeFormConfigItem from './form-config-item'
 
 class Rule {
   constructor (rule) {
@@ -62,118 +62,6 @@ function getResetValue (value, resetValue) {
   return resetValue
 }
 
-function renderItems (h, _vm, itemList) {
-  const { _e, rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
-  return itemList.map((item) => {
-    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
-    const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-    const span = item.span || _vm.span
-    const align = item.align || _vm.align
-    const titleAlign = item.titleAlign || _vm.titleAlign
-    const titleWidth = item.titleWidth || _vm.titleWidth
-    const titleColon = item.titleColon === null ? _vm.titleColon : item.titleColon
-    const titleAsterisk = item.titleAsterisk === null ? _vm.titleAsterisk : item.titleAsterisk
-    let itemVisibleMethod = visibleMethod
-    const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
-    const showEllipsis = itemOverflow === 'ellipsis'
-    const showTitle = itemOverflow === 'title'
-    const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
-    const hasEllipsis = showTitle || showTooltip || showEllipsis
-    const params = { data, field, property: field, item, $form: _vm }
-    let isRequired
-    if (visible === false) {
-      return _e()
-    }
-    // 如果为项集合
-    const isGather = children && children.length > 0
-    if (isGather) {
-      const childVNs = renderItems(h, _vm, item.children)
-      return childVNs.length ? h('div', {
-        class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
-      }, childVNs) : _e()
-    }
-    if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-      itemVisibleMethod = compConf.itemVisibleMethod
-    }
-    if (rules) {
-      const itemRules = rules[field]
-      if (itemRules) {
-        isRequired = itemRules.some(rule => rule.required)
-      }
-    }
-    let contentVNs = []
-    if (slots && slots.default) {
-      contentVNs = _vm.callSlot(slots.default, params, h)
-    } else if (compConf && compConf.renderItemContent) {
-      contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
-    } else if (compConf && compConf.renderItem) {
-      contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
-    } else if (field) {
-      contentVNs = [`${XEUtils.get(data, field)}`]
-    }
-    const ons = showTooltip ? {
-      mouseenter (evnt) {
-        _vm.triggerTitleTipEvent(evnt, params)
-      },
-      mouseleave: _vm.handleTitleTipLeaveEvent
-    } : {}
-    return h('div', {
-      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
-        'is--title': title,
-        'is--colon': titleColon,
-        'is--asterisk': titleAsterisk,
-        'is--required': isRequired,
-        'is--hidden': folding && collapseAll,
-        'is--active': !itemVisibleMethod || itemVisibleMethod(params),
-        'is--error': showError
-      }],
-      key: item.id
-    }, [
-      h('div', {
-        class: 'vxe-form--item-inner'
-      }, [
-        title || (slots && slots.title) ? h('div', {
-          class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null, {
-            'is--ellipsis': hasEllipsis
-          }],
-          style: titleWidth ? {
-            width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
-          } : null,
-          attrs: {
-            title: showTitle ? getFuncText(title) : null
-          },
-          on: ons
-        }, renderTitle(h, _vm, item)) : null,
-        h('div', {
-          class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, contentVNs.concat(
-          [
-            collapseNode ? h('div', {
-              class: 'vxe-form--item-trigger-node',
-              on: {
-                click: _vm.toggleCollapseEvent
-              }
-            }, [
-              h('span', {
-                class: 'vxe-form--item-trigger-text'
-              }, collapseAll ? GlobalConfig.i18n('vxe.form.unfolding') : GlobalConfig.i18n('vxe.form.folding')),
-              h('i', {
-                class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
-              })
-            ]) : null,
-            errRule && validOpts.showMessage ? h('div', {
-              class: 'vxe-form--item-valid',
-              style: errRule.maxWidth ? {
-                width: `${errRule.maxWidth}px`
-              } : null
-            }, errRule.content) : null
-          ])
-        )
-      ])
-    ])
-  })
-}
-
 export default {
   name: 'VxeForm',
   mixins: [vSize],
@@ -214,7 +102,8 @@ export default {
     return {
       $xeform: this,
       $xeformgather: null,
-      $xeformitem: null
+      $xeformitem: null,
+      $xeformiteminfo: null
     }
   },
   computed: {
@@ -252,6 +141,7 @@ export default {
   render (h) {
     const { _e, loading, className, data, vSize, tooltipOpts, formItems, customLayout } = this
     const hasUseTooltip = VXETable._tooltip
+    const defaultSlot = this.$scopedSlots.default
     return h('form', {
       class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
@@ -264,11 +154,18 @@ export default {
     }, [
       h('div', {
         class: 'vxe-form--wrapper vxe-row'
-      }, customLayout ? this.$slots.default : renderItems(h, this, formItems)),
+      }, customLayout ? (defaultSlot ? defaultSlot.call(this, h, {}) : []) : formItems.map((item, index) => {
+        return h(VxeFormConfigItem, {
+          key: index,
+          props: {
+            itemConfig: item
+          }
+        })
+      })),
       h('div', {
         class: 'vxe-form-slots',
         ref: 'hideItem'
-      }, customLayout ? [] : this.$slots.default),
+      }, customLayout ? [] : (defaultSlot ? defaultSlot.call(this, h, {}) : [])),
       h('div', {
         class: ['vxe-loading', {
           'is--visible': loading
@@ -557,7 +454,7 @@ export default {
                 }
               } else {
                 const isArrType = type === 'array'
-                const hasEmpty = isArrType ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
+                const hasEmpty = isArrType || XEUtils.isArray(itemValue) ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
                 if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
                   errorRules.push(new Rule(rule))
                 }
@@ -606,26 +503,30 @@ export default {
         }
       })
     },
-    /**
-     * 更新项状态
-     * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一项编辑状态
-     * 如果单元格配置了校验规则，则会进行校验
-     */
-    updateStatus (scope, itemValue) {
-      const { property } = scope
-      if (property) {
-        this.validItemRules('change', property, itemValue)
+    triggerItemEvent (evnt, field, itemValue) {
+      if (field) {
+        return this.validItemRules(evnt ? evnt.type : 'all', field, itemValue)
           .then(() => {
-            this.clearValidate(property)
+            this.clearValidate(field)
           })
           .catch(({ rule }) => {
-            const item = this.getItemByField(property)
+            const item = this.getItemByField(field)
             if (item) {
               item.showError = true
               item.errRule = rule
             }
           })
       }
+      return this.$nextTick()
+    },
+    /**
+     * 更新项状态
+     * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一项编辑状态
+     * 如果单元格配置了校验规则，则会进行校验
+     */
+    updateStatus (scope, itemValue) {
+      const { field } = scope
+      return this.triggerItemEvent(new Event('change'), field, itemValue)
     }
   }
 }

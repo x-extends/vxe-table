@@ -325,10 +325,10 @@
   &:before {
     @extend %PseudoClass;
     content: "+";
-    left: -0.05em;
-    bottom: 0;
-    line-height: 0.9em;
-    font-size: 1.4em;
+    left: -0.12em;
+    bottom: -0.1em;
+    line-height: 1em;
+    font-size: 1.6em;
   }
 }
 
@@ -355,11 +355,12 @@
   @extend %DefaultWidthHeight;
   &:before {
     @extend %PseudoClass;
-    content: "\D7";
-    left: -0.05em;
-    bottom: 0;
-    line-height: 0.8em;
-    font-size: 1.4em;
+    content: "+";
+    left: -0.1em;
+    bottom: -0.16em;
+    line-height: 1em;
+    font-size: 1.8em;
+    transform: rotate(45deg);
   }
 }
 

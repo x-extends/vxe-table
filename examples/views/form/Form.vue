@@ -132,7 +132,7 @@
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
           <template #default="params">
-            <vxe-select v-model="params.data.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(params)">
+            <vxe-select v-model="params.data.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
             </vxe-select>
@@ -140,19 +140,19 @@
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{}" title-overflow="title">
           <template #default="params">
-            <vxe-input v-model="params.data.age" type="integer" placeholder="请输入年龄" clearable @input="$refs.xForm.updateStatus(params)"></vxe-input>
+            <vxe-input v-model="params.data.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
           <template #default="params">
-            <vxe-input v-model="params.data.date" type="date" placeholder="请选择日期" clearable @change="$refs.xForm.updateStatus(params)"></vxe-input>
+            <vxe-input v-model="params.data.date" type="date" placeholder="请选择日期" clearable></vxe-input>
           </template>
         </vxe-form-item>
       </vxe-form-gather>
       <vxe-form-gather span="12">
         <vxe-form-item title="标题貌似有点长呢标题貌似有点长呢" field="address" span="24" :item-render="{}">
           <template #default="params">
-            <vxe-textarea v-model="params.data.address" placeholder="请输入地址" :autosize="{minRows: 6, maxRows: 10}" clearable @input="$refs.xForm.updateStatus(params)"></vxe-textarea>
+            <vxe-textarea v-model="params.data.address" placeholder="请输入地址" :autosize="{minRows: 6, maxRows: 10}" clearable></vxe-textarea>
           </template>
         </vxe-form-item>
       </vxe-form-gather>

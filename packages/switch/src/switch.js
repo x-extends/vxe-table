@@ -18,6 +18,14 @@ export default {
     openIcon: String,
     closeIcon: String
   },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
+  },
   data () {
     return {
       isActivated: false,
@@ -107,6 +115,10 @@ export default {
         }
         this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, value)
+        }
         this.activeTimeout = setTimeout(() => {
           this.hasAnimat = false
         }, 400)

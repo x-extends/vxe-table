@@ -463,7 +463,9 @@ function renderNumberIcon (h, _vm) {
     class: 'vxe-input--number-suffix'
   }, [
     h('span', {
-      class: 'vxe-input--number-prev is--prev',
+      class: ['vxe-input--number-prev is--prev', {
+        'is--disabled': _vm.isDisabledAddNumber
+      }],
       on: {
         mousedown: _vm.numberMousedownEvent,
         mouseup: _vm.numberStopDown,
@@ -475,7 +477,9 @@ function renderNumberIcon (h, _vm) {
       })
     ]),
     h('span', {
-      class: 'vxe-input--number-next is--next',
+      class: ['vxe-input--number-next is--next', {
+        'is--disabled': _vm.isDisabledSubtractNumber
+      }],
       on: {
         mousedown: _vm.numberMousedownEvent,
         mouseup: _vm.numberStopDown,
@@ -661,6 +665,14 @@ export default {
     suffixIcon: String,
     placement: String,
     transfer: { type: Boolean, default: () => GlobalConfig.input.transfer }
+  },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
   },
   data () {
     return {
@@ -1027,6 +1039,29 @@ export default {
     inpReadonly () {
       const { type, readonly, editable, multiple } = this
       return readonly || multiple || !editable || (type === 'week' || type === 'quarter')
+    },
+    numValue () {
+      const { type, isNumType, inputValue } = this
+      if (isNumType) {
+        return type === 'integer' ? XEUtils.toInteger(handleNumber(inputValue)) : XEUtils.toNumber(handleNumber(inputValue))
+      }
+      return 0
+    },
+    isDisabledSubtractNumber () {
+      const { min, isNumType, inputValue, numValue } = this
+      // 当有值时再进行判断
+      if ((inputValue || inputValue === 0) && isNumType && min !== null) {
+        return numValue <= XEUtils.toNumber(min)
+      }
+      return false
+    },
+    isDisabledAddNumber () {
+      const { max, isNumType, inputValue, numValue } = this
+      // 当有值时再进行判断
+      if ((inputValue || inputValue === 0) && isNumType && max !== null) {
+        return numValue >= XEUtils.toNumber(max)
+      }
+      return false
     }
   },
   watch: {
@@ -1168,6 +1203,10 @@ export default {
       this.$emit('input', { value, $event: evnt })
       if (XEUtils.toValueString(this.value) !== value) {
         this.$emit('change', { value, $event: evnt })
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, value)
+        }
       }
     },
     emitInputEvent (value, evnt) {
@@ -1433,17 +1472,17 @@ export default {
       }
     },
     numberPrevEvent (evnt) {
-      const { disabled, readonly } = this
+      const { disabled, readonly, isDisabledAddNumber } = this
       clearTimeout(this.downbumTimeout)
-      if (!disabled && !readonly) {
+      if (!disabled && !readonly && !isDisabledAddNumber) {
         this.numberChange(true, evnt)
       }
       this.$emit('prev-number', { $event: evnt })
     },
     numberNextEvent (evnt) {
-      const { disabled, readonly } = this
+      const { disabled, readonly, isDisabledSubtractNumber } = this
       clearTimeout(this.downbumTimeout)
-      if (!disabled && !readonly) {
+      if (!disabled && !readonly && !isDisabledSubtractNumber) {
         this.numberChange(false, evnt)
       }
       this.$emit('next-number', { $event: evnt })

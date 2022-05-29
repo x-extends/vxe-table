@@ -9,6 +9,14 @@ export default {
     strict: { type: Boolean, default: () => GlobalConfig.radioGroup.strict },
     size: { type: String, default: () => GlobalConfig.radioGroup.size || GlobalConfig.size }
   },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
+  },
   provide () {
     return {
       $xeradiogroup: this
@@ -31,9 +39,13 @@ export default {
     }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [])
   },
   methods: {
-    handleChecked (params) {
+    handleChecked (params, evnt) {
       this.$emit('input', params.label)
       this.$emit('change', params)
+      // 自动更新校验状态
+      if (this.$xeform && this.$xeformiteminfo) {
+        this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, params.label)
+      }
     }
   }
 }

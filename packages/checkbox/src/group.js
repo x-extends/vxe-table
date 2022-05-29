@@ -7,6 +7,14 @@ export default {
     disabled: Boolean,
     size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
+  },
   provide () {
     return {
       $xecheckboxgroup: this
@@ -24,7 +32,7 @@ export default {
     }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [])
   },
   methods: {
-    handleChecked (params) {
+    handleChecked (params, evnt) {
       const { checked, label } = params
       const checklist = this.value || []
       const checkIndex = checklist.indexOf(label)
@@ -37,6 +45,10 @@ export default {
       }
       this.$emit('input', checklist)
       this.$emit('change', Object.assign({ checklist }, params))
+      // 自动更新校验状态
+      if (this.$xeform && this.$xeformiteminfo) {
+        this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, checklist)
+      }
     }
   }
 }
