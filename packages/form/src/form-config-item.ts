@@ -33,10 +33,10 @@ const VxeFormConfigItem = defineComponent({
       const titleSlot = slots ? slots.title : null
       const span = item.span || allSpan
       const align = item.align || allAlign
-      const titleAlign = item.titleAlign || allTitleAlign
-      const titleWidth = item.titleWidth || allTitleWidth
-      const titleColon = item.titleColon === null ? allTitleColon : item.titleColon
-      const titleAsterisk = item.titleAsterisk === null ? allTitleAsterisk : item.titleAsterisk
+      const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
+      const titleWidth = XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth
+      const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
+      const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
       const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
       const showEllipsis = itemOverflow === 'ellipsis'
       const showTitle = itemOverflow === 'title'
@@ -76,7 +76,7 @@ const VxeFormConfigItem = defineComponent({
       } else if (compConf && compConf.renderItemContent) {
         contentVNs = compConf.renderItemContent(itemRender, params)
       } else if (field) {
-        contentVNs = [`${XEUtils.get(data, field)}`]
+        contentVNs = [XEUtils.toValueString(XEUtils.get(data, field))]
       }
       if (collapseNode) {
         contentVNs.push(
