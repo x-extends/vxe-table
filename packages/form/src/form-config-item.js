@@ -27,15 +27,15 @@ const VxeFormConfigItem = {
   },
   render (h) {
     const { _e, $xeform, itemConfig: item } = this
-    const { rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = $xeform
+    const { rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = $xeform
     const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const span = item.span || $xeform.span
     const align = item.align || $xeform.align
-    const titleAlign = item.titleAlign || $xeform.titleAlign
-    const titleWidth = item.titleWidth || $xeform.titleWidth
-    const titleColon = item.titleColon === null ? $xeform.titleColon : item.titleColon
-    const titleAsterisk = item.titleAsterisk === null ? $xeform.titleAsterisk : item.titleAsterisk
+    const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
+    const titleWidth = XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth
+    const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
+    const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
     let itemVisibleMethod = visibleMethod
     const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
     const showEllipsis = itemOverflow === 'ellipsis'
@@ -79,7 +79,7 @@ const VxeFormConfigItem = {
     } else if (compConf && compConf.renderItem) {
       contentVNs = compConf.renderItem.call($xeform, h, itemRender, params)
     } else if (field) {
-      contentVNs = [`${XEUtils.get(data, field)}`]
+      contentVNs = [XEUtils.toValueString(XEUtils.get(data, field))]
     }
     const ons = showTooltip ? {
       mouseenter (evnt) {

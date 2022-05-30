@@ -581,7 +581,7 @@ export default {
      * 激活行编辑
      */
     _setEditRow (row) {
-      return this.setActiveCell(row, XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender)))
+      return this.setEditCell(row, XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender)))
     },
     _setActiveCell (row) {
       // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
