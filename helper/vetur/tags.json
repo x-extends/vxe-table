@@ -544,6 +544,8 @@
       "align",
       "title-align",
       "title-width",
+      "title-colon",
+      "title-asterisk",
       "title-overflow",
       "class-name",
       "visible",
