@@ -1,5 +1,8 @@
 export default {
   vxe: {
+    loading: {
+      text: '加载中'
+    },
     error: {
       groupFixed: '如果使用分组表头，固定列必须按组设置',
       groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',

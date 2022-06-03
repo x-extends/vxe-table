@@ -7,6 +7,7 @@ import DomTools, { browse } from '../../tools/dom'
 import { createItem, handleFieldOrItem } from './util'
 import { errLog } from '../../tools/log'
 import VxeFormConfigItem from './form-config-item'
+import VxeLoading from '../../loading/index'
 
 class Rule {
   constructor (rule) {
@@ -166,15 +167,15 @@ export default {
         class: 'vxe-form-slots',
         ref: 'hideItem'
       }, customLayout ? [] : (defaultSlot ? defaultSlot.call(this, h, {}) : [])),
-      h('div', {
-        class: ['vxe-loading', {
-          'is--visible': loading
-        }]
-      }, [
-        h('div', {
-          class: 'vxe-loading--spinner'
-        })
-      ]),
+      /**
+       * 加载中
+       */
+      h(VxeLoading, {
+        class: 'vxe-form--loading',
+        props: {
+          loading
+        }
+      }),
       /**
        * 工具提示
        */

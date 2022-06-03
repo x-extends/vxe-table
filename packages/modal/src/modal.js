@@ -5,6 +5,7 @@ import UtilTools, { getFuncText } from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import { GlobalEvent } from '../../tools/event'
 import { errLog } from '../../tools/log'
+import VxeLoading from '../../loading/index'
 
 export const allActivedModals = []
 export const msgQueue = []
@@ -68,7 +69,7 @@ export default {
       modalTop: 0,
       modalZindex: 0,
       zoomLocat: null,
-      firstOpen: false
+      firstOpen: true
     }
   },
   computed: {
@@ -163,7 +164,7 @@ export default {
       }, [
         this.showHeader ? h('div', {
           class: ['vxe-modal--header', {
-            'is--drag': draggable,
+            'is--draggable': draggable,
             'is--ellipsis': !isMsg && showTitleOverflow
           }],
           on: headerOns
@@ -203,15 +204,15 @@ export default {
           h('div', {
             class: 'vxe-modal--content'
           }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : getFuncText(content)),
-          !isMsg ? h('div', {
-            class: ['vxe-loading', {
-              'is--visible': loading
-            }]
-          }, [
-            h('div', {
-              class: 'vxe-loading--spinner'
-            })
-          ]) : null
+          /**
+           * 加载中
+           */
+          !isMsg ? h(VxeLoading, {
+            class: 'vxe-modal--loading',
+            props: {
+              loading
+            }
+          }) : null
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
@@ -346,16 +347,20 @@ export default {
         } else {
           this.$nextTick(() => {
             const { firstOpen, fullscreen } = this
-            if (!remember || !firstOpen) {
+            if (!remember || firstOpen) {
               this.updatePosition().then(() => {
                 setTimeout(() => this.updatePosition(), 20)
               })
             }
-            if (!firstOpen) {
-              this.firstOpen = true
+            if (firstOpen) {
+              this.firstOpen = false
               if (this.hasPosStorage()) {
                 this.restorePosStorage()
               } else if (fullscreen) {
+                this.$nextTick(() => this.maximize())
+              }
+            } else {
+              if (fullscreen) {
                 this.$nextTick(() => this.maximize())
               }
             }
@@ -575,6 +580,7 @@ export default {
           }
           modalBoxElem.style.left = `${left}px`
           modalBoxElem.style.top = `${top}px`
+          modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         }
         document.onmouseup = () => {
           document.onmousemove = domMousemove
@@ -584,6 +590,9 @@ export default {
               this.savePosStorage()
             })
           }
+          setTimeout(() => {
+            modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
+          }, 50)
         }
       }
     },

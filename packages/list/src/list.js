@@ -4,6 +4,7 @@ import vSize from '../../mixins/size'
 import { createResizeEvent } from '../../tools/resize'
 import { GlobalEvent } from '../../tools/event'
 import { browse } from '../../tools/dom'
+import VxeLoading from '../../loading/index'
 
 export default {
   name: 'VxeList',
@@ -113,15 +114,15 @@ export default {
           }
         }, $scopedSlots.default ? $scopedSlots.default.call(this, { items, $list: this }, h) : [])
       ]),
-      h('div', {
-        class: ['vxe-list--loading vxe-loading', {
-          'is--visible': loading
-        }]
-      }, [
-        h('div', {
-          class: 'vxe-loading--spinner'
-        })
-      ])
+      /**
+       * 加载中
+       */
+      h(VxeLoading, {
+        class: 'vxe-list--loading',
+        props: {
+          loading
+        }
+      })
     ])
   },
   methods: {

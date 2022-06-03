@@ -84,7 +84,7 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
               ]
-            }, 3000)
+            }, 60000)
           }
         }
         `,
@@ -124,7 +124,7 @@ export default {
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
               ]
               this.loading = false
-            }, 3000)
+            }, 60000)
           }
         }
         `
@@ -145,7 +145,7 @@ export default {
         { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
       ]
       this.loading = false
-    }, 3000)
+    }, 60000)
   }
 }
 </script>

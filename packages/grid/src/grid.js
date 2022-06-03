@@ -173,7 +173,7 @@ export default {
       tZindex: 0,
       tablePage: {
         total: 0,
-        pageSize: 10,
+        pageSize: GlobalConfig.pager.pageSize || 10,
         currentPage: 1
       }
     }

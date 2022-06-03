@@ -246,7 +246,7 @@
     background-color: $vxe-modal-header-background-color;
     border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;
-    &.is--drag {
+    &.is--draggable {
       cursor: move;
     }
     &.is--ellipsis {

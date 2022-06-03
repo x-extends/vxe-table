@@ -9,6 +9,7 @@ import { createResizeEvent } from '../../tools/resize'
 import { GlobalEvent } from '../../tools/event'
 import methods from './methods'
 import { warnLog, errLog } from '../../tools/log'
+import VxeLoading from '../../loading/index'
 
 /**
  * 渲染浮固定列
@@ -1083,15 +1084,12 @@ export default {
       /**
        * 加载中
        */
-      h('div', {
-        class: ['vxe-table--loading vxe-loading', {
-          'is--visible': loading
-        }]
-      }, [
-        h('div', {
-          class: 'vxe-loading--spinner'
-        })
-      ]),
+      h(VxeLoading, {
+        class: 'vxe-table--loading',
+        props: {
+          loading
+        }
+      }),
       /**
        * 筛选
        */
