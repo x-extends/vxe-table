@@ -13,6 +13,7 @@ import TableBodyComponent from './body'
 import TableHeaderComponent from '../../header'
 import tableProps from './props'
 import tableEmits from './emits'
+import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
@@ -6030,15 +6031,10 @@ export default defineComponent({
         /**
          * 加载中
          */
-        h('div', {
-          class: ['vxe-table--loading vxe-loading', {
-            'is--visible': loading
-          }]
-        }, [
-          h('div', {
-            class: 'vxe-loading--spinner'
-          })
-        ]),
+        h(VxeLoading, {
+          class: 'vxe-table--loading',
+          loading
+        }),
         /**
          * 筛选
          */

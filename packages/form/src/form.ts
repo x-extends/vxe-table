@@ -8,6 +8,7 @@ import { scrollToView } from '../../tools/dom'
 import { createItem, handleFieldOrItem } from './util'
 import { useSize } from '../../hooks/size'
 import VxeFormConfigItem from './form-config-item'
+import VxeLoading from '../../loading/index'
 
 import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes, VxeTooltipInstance, FormInternalData, VxeFormPrivateComputed } from '../../../types/all'
 
@@ -595,15 +596,13 @@ export default defineComponent({
           class: 'vxe-form-slots',
           ref: 'hideItem'
         }, customLayout ? [] : (defaultSlot ? defaultSlot({}) : [])),
-        h('div', {
-          class: ['vxe-loading', {
-            'is--visible': loading
-          }]
-        }, [
-          h('div', {
-            class: 'vxe-loading--spinner'
-          })
-        ]),
+        /**
+         * 加载中
+         */
+        h(VxeLoading, {
+          class: 'vxe-form--loading',
+          loading
+        }),
         /**
          * 工具提示
          */

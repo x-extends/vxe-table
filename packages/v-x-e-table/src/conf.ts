@@ -8,6 +8,7 @@ const GlobalConfig: VXETableGlobalConfig = {
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
   // resizeInterval: 500,
   emptyCell: '　',
+  loadingText: null, // 自定义loading提示内容，如果为null则不显示文本
   table: {
     fit: true,
     showHeader: true,
@@ -125,6 +126,9 @@ const GlobalConfig: VXETableGlobalConfig = {
     types: {}
   },
   icon: {
+    // loading
+    // LOADING: iconPrefix + 'refresh roll vxe-loading--default-icon',
+
     // table
     TABLE_SORT_ASC: iconPrefix + 'caret-top',
     TABLE_SORT_DESC: iconPrefix + 'caret-bottom',

@@ -1,5 +1,8 @@
 export default {
   vxe: {
+    loading: {
+      text: 'Loading'
+    },
     error: {
       groupFixed: 'グループのヘッダを使用すると、固定列はグループで設定しなければなりません',
       groupMouseRange: 'グループ化ヘッダーと「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',

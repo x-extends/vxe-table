@@ -7,6 +7,7 @@ import { errLog } from '../../tools/log'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeButtonConstructor from '../../button/src/button'
+import VxeLoading from '../../loading/index'
 
 import { VxeModalConstructor, VxeModalPropTypes, ModalReactData, VxeModalEmits, ModalEventTypes, VxeButtonInstance, ModalMethods, ModalPrivateRef, VxeModalMethods } from '../../../types/all'
 
@@ -85,7 +86,7 @@ export default defineComponent({
       modalTop: 0,
       modalZindex: 0,
       zoomLocat: null,
-      firstOpen: false
+      firstOpen: true
     })
 
     const refElem = ref() as Ref<HTMLDivElement>
@@ -361,16 +362,20 @@ export default defineComponent({
           nextTick(() => {
             const { fullscreen } = props
             const { firstOpen } = reactData
-            if (!remember || !firstOpen) {
+            if (!remember || firstOpen) {
               updatePosition().then(() => {
                 setTimeout(() => updatePosition(), 20)
               })
             }
-            if (!firstOpen) {
-              reactData.firstOpen = true
+            if (firstOpen) {
+              reactData.firstOpen = false
               if (hasPosStorage()) {
                 restorePosStorage()
               } else if (fullscreen) {
+                nextTick(() => maximize())
+              }
+            } else {
+              if (fullscreen) {
                 nextTick(() => maximize())
               }
             }
@@ -510,6 +515,7 @@ export default defineComponent({
           }
           boxElem.style.left = `${left}px`
           boxElem.style.top = `${top}px`
+          boxElem.className = boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         }
         document.onmouseup = () => {
           document.onmousemove = domMousemove
@@ -519,6 +525,9 @@ export default defineComponent({
               savePosStorage()
             })
           }
+          setTimeout(() => {
+            boxElem.className = boxElem.className.replace(/\s?is--drag/, '')
+          }, 50)
         }
       }
     }
@@ -723,7 +732,7 @@ export default defineComponent({
         headVNs.push(
           h('div', {
             class: ['vxe-modal--header', {
-              'is--drag': draggable,
+              'is--draggable': draggable,
               'is--ellipsis': !isMsg && props.showTitleOverflow
             }],
             ...headerOns
@@ -756,16 +765,14 @@ export default defineComponent({
         }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : getFuncText(content))
       )
       if (!isMsg) {
+        /**
+         * 加载中
+         */
         contVNs.push(
-          h('div', {
-            class: ['vxe-loading', {
-              'is--visible': props.loading
-            }]
-          }, [
-            h('div', {
-              class: 'vxe-loading--spinner'
-            })
-          ])
+          h(VxeLoading, {
+            class: 'vxe-modal--loading',
+            loading: props.loading
+          })
         )
       }
       return [

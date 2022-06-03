@@ -157,7 +157,7 @@
       </vxe-modal>
 
       <vxe-button content="最大化显示" @click="demo1.value9 = true"></vxe-button>
-      <vxe-modal v-model="demo1.value9" title="最大化显示" width="600" height="400" show-zoom resize remember fullscreen>
+      <vxe-modal v-model="demo1.value9" title="最大化显示" width="600" height="400" show-zoom resize fullscreen>
         <template #default>
           <div style="color: red">默认最大化显示</div>
           <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>
@@ -464,7 +464,7 @@ export default defineComponent({
           </vxe-modal>
 
           <vxe-button content="最大化显示" @click="demo1.value9 = true"></vxe-button>
-          <vxe-modal v-model="demo1.value9" title="最大化显示" width="600" height="400" show-zoom resize remember fullscreen>
+          <vxe-modal v-model="demo1.value9" title="最大化显示" width="600" height="400" show-zoom resize fullscreen>
             <template #default>
               <div style="color: red">默认最大化显示</div>
               <div style="color: red">按住头部移动！！！！！！！！！！！！！！！</div>

@@ -1,5 +1,8 @@
 export default {
   vxe: {
+    loading: {
+      text: 'Loading'
+    },
     error: {
       groupFixed: 'If you use group headers, the fixed columns must be set by group.',
       groupMouseRange: 'Grouping headers and "{0}" cannot be used at the same time, which may cause errors.',
