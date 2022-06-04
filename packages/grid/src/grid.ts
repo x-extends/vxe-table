@@ -226,8 +226,8 @@ export default defineComponent({
     }
 
     const initPages = () => {
-      const { pagerConfig } = props
       const { tablePage } = reactData
+      const { pagerConfig } = props
       const pagerOpts = computePagerOpts.value
       const { currentPage, pageSize } = pagerOpts
       if (pagerConfig) {
@@ -646,9 +646,11 @@ export default defineComponent({
           })
           reactData.formData = formData
         }
-        if (!proxyInited && proxyOpts.autoLoad !== false) {
+        if (!proxyInited) {
           reactData.proxyInited = true
-          nextTick(() => gridMethods.commitProxy('_init'))
+          if (proxyOpts.autoLoad !== false) {
+            nextTick(() => gridMethods.commitProxy('_init'))
+          }
         }
       }
     }
@@ -1075,12 +1077,12 @@ export default defineComponent({
       }
     })
 
-    watch(() => props.proxyConfig, () => {
-      initProxy()
-    })
-
     watch(() => props.pagerConfig, () => {
       initPages()
+    })
+
+    watch(() => props.proxyConfig, () => {
+      initProxy()
     })
 
     const handleGlobalKeydownEvent = (evnt: any) => {
@@ -1101,6 +1103,8 @@ export default defineComponent({
       }
     })
 
+    initPages()
+
     onMounted(() => {
       nextTick(() => {
         const { data, columns, proxyConfig } = props
@@ -1113,7 +1117,6 @@ export default defineComponent({
           $xegrid.loadColumn(columns)
         }
         initToolbar()
-        initPages()
         initProxy()
       })
       GlobalEvent.on($xegrid, 'keydown', handleGlobalKeydownEvent)
