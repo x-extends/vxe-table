@@ -478,7 +478,7 @@ export const Cell = {
   renderCheckboxCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
     const { treeConfig, treeIndeterminates } = $table
-    const { labelField, checkField: property, halfField, checkMethod, visibleMethod } = $table.checkboxOpts
+    const { labelField, checkField, halfField, checkMethod, visibleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
@@ -488,7 +488,7 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
-      isChecked = XEUtils.get(row, property)
+      isChecked = XEUtils.get(row, checkField)
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
@@ -712,7 +712,7 @@ export const Cell = {
     const { sortable, remoteSort, filters, editRender } = column
     let isRequired = false
     if (editRules) {
-      const columnRules = XEUtils.get(editRules, params.column.property)
+      const columnRules = XEUtils.get(editRules, column.field)
       if (columnRules) {
         isRequired = columnRules.some(rule => rule.required)
       }

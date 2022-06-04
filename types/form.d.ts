@@ -107,8 +107,11 @@ export interface FormValidErrParams {
   rule: FormRule;
   rules: FormRule[];
   data: any;
-  property: string;
-  field: string;
+  field: string
+  /**
+   * @deprecated
+   */
+  property: string
 }
 
 export interface FormValidErrMapParams {

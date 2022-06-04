@@ -351,7 +351,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas) {
-    const { keepSource, treeConfig, treeOpts, editStore, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad } = this
+    const { keepSource, treeConfig, treeOpts, editStore, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad, sXOpts, sYOpts } = this
     let treeData = []
     let fullData = datas ? datas.slice(0) : []
     if (treeConfig) {
@@ -446,11 +446,20 @@ const Methods = {
         this.$nextTick()
           .then(() => this.recalculate())
           .then(() => {
+            let targetScrollLeft = lastScrollLeft
+            let targetScrollTop = lastScrollTop
+            // 是否在更新数据之后自动滚动重置滚动条
+            if (sXOpts.scrollToLeftOnChange) {
+              targetScrollLeft = 0
+            }
+            if (sYOpts.scrollToTopOnChange) {
+              targetScrollTop = 0
+            }
             // 是否变更虚拟滚动
             if (oldScrollYLoad === sYLoad) {
-              restoreScrollLocation(this, lastScrollLeft, lastScrollTop).then(resolve)
+              restoreScrollLocation(this, targetScrollLeft, targetScrollTop).then(resolve)
             } else {
-              setTimeout(() => restoreScrollLocation(this, lastScrollLeft, lastScrollTop).then(resolve))
+              setTimeout(() => restoreScrollLocation(this, targetScrollLeft, targetScrollTop).then(resolve))
             }
           })
       })
@@ -654,15 +663,15 @@ const Methods = {
     let radioColumn
     let hasFixed
     const handleFunc = (column, index, items, path, parent) => {
-      const { id: colid, property, fixed, type, treeNode } = column
+      const { id: colid, field, fixed, type, treeNode } = column
       const rest = { column, colid, index, items, parent }
-      if (property) {
+      if (field) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          if (fullColumnFieldData[property]) {
-            warnLog('vxe.error.colRepet', ['field', property])
+          if (fullColumnFieldData[field]) {
+            warnLog('vxe.error.colRepet', ['field', field])
           }
         }
-        fullColumnFieldData[property] = rest
+        fullColumnFieldData[field] = rest
       }
       if (!hasFixed && fixed) {
         hasFixed = fixed
@@ -874,8 +883,8 @@ const Methods = {
     const { radioOpts, checkboxOpts, treeConfig, treeOpts, expandOpts } = this
     const rowkey = getRowkey(this)
     this.tableFullColumn.forEach(column => {
-      const { property, editRender } = column
-      if (property && !XEUtils.has(record, property)) {
+      const { field, editRender } = column
+      if (field && !XEUtils.has(record, field)) {
         let cellValue = null
         if (editRender) {
           const { defaultValue } = editRender
@@ -885,7 +894,7 @@ const Methods = {
             cellValue = defaultValue
           }
         }
-        XEUtils.set(record, property, cellValue)
+        XEUtils.set(record, field, cellValue)
       }
     })
     const otherFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
@@ -993,7 +1002,7 @@ const Methods = {
     } else {
       rows.forEach(row => {
         visibleColumn.forEach(column => {
-          if (column.property) {
+          if (column.field) {
             setCellValue(row, column, null)
           }
         })
@@ -1045,7 +1054,7 @@ const Methods = {
           return !eqCellValue(oRow, row, field)
         }
         for (let index = 0, len = visibleColumn.length; index < len; index++) {
-          property = visibleColumn[index].property
+          property = visibleColumn[index].field
           if (property && !eqCellValue(oRow, row, property)) {
             return true
           }
@@ -1103,14 +1112,14 @@ const Methods = {
   getCheckboxRecords (isFull) {
     const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts, tableFullTreeData, afterTreeFullData } = this
     const { transform, children, mapChildren } = treeOpts
-    const { checkField: property } = checkboxOpts
+    const { checkField } = checkboxOpts
     const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
     let rowList = []
-    if (property) {
+    if (checkField) {
       if (treeConfig) {
-        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), { children: transform ? mapChildren : children })
+        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildren : children })
       } else {
-        rowList = currTableData.filter(row => XEUtils.get(row, property))
+        rowList = currTableData.filter(row => XEUtils.get(row, checkField))
       }
     } else {
       const { selection } = this
@@ -1157,7 +1166,7 @@ const Methods = {
     const filterColumns = []
     let orderColumns = []
     tableFullColumn.forEach(column => {
-      const { property, sortable, order, filters } = column
+      const { field, sortable, order, filters } = column
       if (!allRemoteFilter && filters && filters.length) {
         const valueList = []
         const itemList = []
@@ -1172,7 +1181,7 @@ const Methods = {
         }
       }
       if (!allRemoteSort && sortable && order) {
-        orderColumns.push({ column, field: column.property, property, order, sortTime: column.sortTime })
+        orderColumns.push({ column, field, property: field, order, sortTime: column.sortTime })
       }
     })
     if (sortMultiple && chronological && orderColumns.length > 1) {
@@ -1182,7 +1191,7 @@ const Methods = {
       const handleFilter = (row) => {
         return filterColumns.every(({ column, valueList, itemList }) => {
           if (valueList.length && !allRemoteFilter) {
-            const { filterMethod, filterRender } = column
+            const { filterMethod, filterRender, field } = column
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
             const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
             const defaultFilterMethod = compConf ? compConf.defaultFilterMethod : null
@@ -1196,7 +1205,7 @@ const Methods = {
             } else if (defaultFilterMethod) {
               return itemList.some((item) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
             }
-            return valueList.indexOf(XEUtils.get(row, column.property)) > -1
+            return valueList.indexOf(XEUtils.get(row, field)) > -1
           }
           return true
         })
@@ -1232,7 +1241,7 @@ const Methods = {
         tableData = tableTree
       } else {
         if (allSortMethod) {
-          const sortRests = allSortMethod({ data: tableData, column: firstOrderColumn.column, property: firstOrderColumn.property, order: firstOrderColumn.order, sortList: orderColumns, $table: this })
+          const sortRests = allSortMethod({ data: tableData, column: firstOrderColumn.column, property: firstOrderColumn.field, field: firstOrderColumn.field, order: firstOrderColumn.order, sortList: orderColumns, $table: this })
           tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
         } else {
           // 兼容 v4
@@ -1312,8 +1321,9 @@ const Methods = {
    * 根据行的唯一主键获取行
    * @param {String/Number} rowid 行主键
    */
-  getRowById (rowid) {
+  getRowById (cellValue) {
     const fullDataRowIdData = this.fullDataRowIdData
+    const rowid = XEUtils.eqNull(cellValue) ? '' : encodeURIComponent(cellValue)
     return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
   },
   /**
@@ -2472,7 +2482,8 @@ const Methods = {
           // }
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
-            if (!editOpts.activeMethod || editOpts.activeMethod({ ...selected.args, $table: this })) {
+            const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+            if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: this })) {
               if (editMethod) {
                 editMethod({
                   row: selected.row,
@@ -2750,9 +2761,9 @@ const Methods = {
     return this.$nextTick()
   },
   isCheckedByCheckboxRow (row) {
-    const { checkField: property } = this.checkboxOpts
-    if (property) {
-      return XEUtils.get(row, property)
+    const { checkField } = this.checkboxOpts
+    if (checkField) {
+      return XEUtils.get(row, checkField)
     }
     return this.selection.indexOf(row) > -1
   },
@@ -2765,19 +2776,19 @@ const Methods = {
    */
   handleSelectRow ({ row }, value) {
     const { selection, afterFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
-    const { checkField: property, checkStrictly, checkMethod } = checkboxOpts
-    if (property) {
+    const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    if (checkField) {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
           if (treeIndeterminates.indexOf(row) === -1) {
             treeIndeterminates.push(row)
           }
-          XEUtils.set(row, property, false)
+          XEUtils.set(row, checkField, false)
         } else {
           // 更新子节点状态
           XEUtils.eachTree([row], (item) => {
             if (row === item || (!checkMethod || checkMethod({ row: item }))) {
-              XEUtils.set(item, property, value)
+              XEUtils.set(item, checkField, value)
               XEUtils.remove(treeIndeterminates, half => half === item)
               this.handleCheckboxReserveRow(row, value)
             }
@@ -2792,14 +2803,14 @@ const Methods = {
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
-            const selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
+            const selectItems = matchObj.items.filter(item => XEUtils.get(item, checkField))
             parentStatus = selectItems.filter(item => vItems.indexOf(item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
           }
           return this.handleSelectRow({ row: matchObj.parent }, parentStatus)
         }
       } else {
         if (!checkMethod || checkMethod({ row })) {
-          XEUtils.set(row, property, value)
+          XEUtils.set(row, checkField, value)
           this.handleCheckboxReserveRow(row, value)
         }
       }
@@ -2855,9 +2866,9 @@ const Methods = {
   },
   handleToggleCheckRowEvent (evnt, params) {
     const { selection, checkboxOpts } = this
-    const { checkField: property } = checkboxOpts
+    const { checkField } = checkboxOpts
     const { row } = params
-    const value = property ? !XEUtils.get(row, property) : selection.indexOf(row) === -1
+    const value = checkField ? !XEUtils.get(row, checkField) : selection.indexOf(row) === -1
     if (evnt) {
       this.triggerCheckRowEvent(evnt, params, value)
     } else {
@@ -2884,7 +2895,7 @@ const Methods = {
    */
   setAllCheckboxRow (value) {
     const { afterFullData, treeConfig, treeOpts, selection, checkboxReserveRowMap, checkboxOpts } = this
-    const { checkField: property, reserve, checkStrictly, checkMethod } = checkboxOpts
+    const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
     let selectRows = []
     const beforeSelection = treeConfig ? [] : selection.filter(row => afterFullData.indexOf(row) === -1)
     if (checkStrictly) {
@@ -2894,13 +2905,13 @@ const Methods = {
        * 绑定属性方式（高性能，有污染）
        * 必须在行数据存在对应的属性，否则将不响应
        */
-      if (property) {
+      if (checkField) {
         const checkValFn = (row) => {
           if (!checkMethod || checkMethod({ row })) {
             if (value) {
               selectRows.push(row)
             }
-            XEUtils.set(row, property, value)
+            XEUtils.set(row, checkField, value)
           }
         }
         // 如果存在选中方法
@@ -2972,7 +2983,7 @@ const Methods = {
           afterFullData.forEach(row => this.handleCheckboxReserveRow(row, false))
         }
       }
-      this.selection = property ? [] : beforeSelection.concat(selectRows)
+      this.selection = checkField ? [] : beforeSelection.concat(selectRows)
     }
     this.treeIndeterminates = []
     this.checkSelectionStatus()
@@ -3183,12 +3194,12 @@ const Methods = {
    */
   clearCheckboxRow () {
     const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
-    const { checkField: property, reserve } = checkboxOpts
-    if (property) {
+    const { checkField, reserve } = checkboxOpts
+    if (checkField) {
       if (treeConfig) {
-        XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
+        XEUtils.eachTree(tableFullData, item => XEUtils.set(item, checkField, false), treeOpts)
       } else {
-        tableFullData.forEach(item => XEUtils.set(item, property, false))
+        tableFullData.forEach(item => XEUtils.set(item, checkField, false))
       }
     }
     if (reserve) {
@@ -3536,14 +3547,14 @@ const Methods = {
    */
   triggerSortEvent (evnt, column, order) {
     const { sortOpts } = this
-    const property = column.property
-    if (column.sortable || column.remoteSort) {
+    const { field, sortable, remoteSort } = column
+    if (sortable || remoteSort) {
       if (!order || column.order === order) {
         this.clearSort(sortOpts.multiple ? column : null)
       } else {
-        this.sort({ field: property, order })
+        this.sort({ field, order })
       }
-      const params = { column, property, order: column.order, sortList: this.getSortColumns() }
+      const params = { column, field, property: field, order: column.order, sortList: this.getSortColumns() }
       this.emitEvent('sort-change', params, evnt)
     }
   },
@@ -3630,9 +3641,9 @@ const Methods = {
     const { multiple, chronological } = this.sortOpts
     const sortList = []
     this.tableFullColumn.forEach((column) => {
-      const { property, order } = column
+      const { field, order } = column
       if ((column.sortable || column.remoteSort) && order) {
-        sortList.push({ column, field: column.property, property, order, sortTime: column.sortTime })
+        sortList.push({ column, field, property: field, order, sortTime: column.sortTime })
       }
     })
     if (multiple && chronological && sortList.length > 1) {
@@ -3654,7 +3665,7 @@ const Methods = {
       visible: false
     })
     if (visible) {
-      this.emitEvent('filter-visible', { column, property: column.property, filterList: this.getCheckedFilters(), visible: false }, null)
+      this.emitEvent('filter-visible', { column, field: column.field, property: column.field, filterList: this.getCheckedFilters(), visible: false }, null)
     }
     return this.$nextTick()
   },

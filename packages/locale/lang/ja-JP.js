@@ -149,6 +149,8 @@ export default {
       operError: 'エラーが発生しました。操作が失敗しました'
     },
     select: {
+      search: 'Search',
+      loadingText: 'Loading',
       emptyText: 'データがありません'
     },
     pager: {

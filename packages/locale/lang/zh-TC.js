@@ -149,6 +149,8 @@ export default {
       operError: '發生錯誤，操作失敗！'
     },
     select: {
+      search: '蒐索',
+      loadingText: '加載中',
       emptyText: '暫無資料'
     },
     pager: {

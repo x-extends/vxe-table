@@ -45,7 +45,7 @@ export class FormItem extends VXETableComponent {
   /**
    * 该方法的返回值用来决定该项是否显示
    */
-  visibleMethod?(params: { data: any, property: string }): boolean;
+  visibleMethod?(params: { data: any, field: string }): boolean;
   /**
    * 默认收起
    */
@@ -100,7 +100,7 @@ export interface FormItemOptions {
   /**
    * 该方法的返回值用来决定该项是否显示
    */
-  visibleMethod?(params: { data: any, property: string }): boolean;
+  visibleMethod?(params: { data: any, field: string }): boolean;
   /**
    * 默认收起
    */
@@ -164,10 +164,11 @@ export interface FormItemRenderParams extends RenderParams {
    * 表单数据
    */
   data: any;
+  field: string
   /**
-   * 字段名
+   * @deprecated
    */
-  property: string;
+  property: string
 }
 
 /**
@@ -182,10 +183,11 @@ export interface FormItemVisibleParams extends RenderParams {
    * 表单数据
    */
   data: any;
+  field: string
   /**
-   * 字段名
+   * @deprecated
    */
-  property: string;
+  property: string
 }
 
 /**
@@ -200,8 +202,9 @@ export interface FormItemResetParams extends RenderParams {
    * 表单数据
    */
   data: any;
+  field: string
   /**
-   * 字段名
+   * @deprecated
    */
-  property: string;
+  property: string
 }

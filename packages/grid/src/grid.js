@@ -226,7 +226,7 @@ export default {
         }
       }
       if (editConfig) {
-        tableProps.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
+        tableProps.editConfig = Object.assign({}, editConfig, { beforeEditMethod: this.handleBeforeEditMethod })
       }
       return tableProps
     }
@@ -400,10 +400,13 @@ export default {
       clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
       return clss
     },
-    handleActiveMethod (params) {
+    handleBeforeEditMethod (params) {
       const { editConfig } = this
-      const activeMethod = editConfig ? editConfig.activeMethod : null
-      return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod({ ...params, $grid: this }))
+      const beforeEditMethod = editConfig ? (editConfig.beforeEditMethod || editConfig.activeMethod) : null
+      if (this.pendingRecords.indexOf(params.row) === -1) {
+        return !beforeEditMethod || beforeEditMethod({ ...params, $grid: this })
+      }
+      return false
     },
     initToolbar () {
       this.$nextTick(() => {

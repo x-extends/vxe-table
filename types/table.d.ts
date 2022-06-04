@@ -1426,6 +1426,11 @@ export interface TableEditConfig {
   /**
    * 该方法的返回值用来决定该单元格是否允许编辑
    */
+  beforeEditMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
+  /**
+   * 请使用 beforeEditMethod
+   * @deprecated
+   */
   activeMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
 }
 export interface EditConfig extends TableEditConfig {}

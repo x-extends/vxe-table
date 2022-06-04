@@ -19,7 +19,7 @@
 
 ## QQ 交流群
 
-![qq](https://gitee.com/xuliangzhan_admin/vxe-table/raw/master/public/static/donation/qq.png)
+![qq](https://vxetable.cn/static/donation/qq.png)
 
 ## 浏览器支持
 

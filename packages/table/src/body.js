@@ -205,7 +205,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   }
   // 如果编辑列开启显示状态
   if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
-    isDirty = $xetable.isUpdateByRow(row, column.property)
+    isDirty = $xetable.isUpdateByRow(row, column.field)
   }
   const tdVNs = []
   if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {

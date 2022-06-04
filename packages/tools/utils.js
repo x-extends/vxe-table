@@ -45,10 +45,10 @@ export const UtilTools = {
     return '' + (value === '' || value === null || value === undefined ? (placeholder ? GlobalConfig.emptyCell : '') : value)
   },
   getCellValue (row, column) {
-    return XEUtils.get(row, column.property)
+    return XEUtils.get(row, column.field)
   },
   setCellValue (row, column, value) {
-    return XEUtils.set(row, column.property, value)
+    return XEUtils.set(row, column.field, value)
   },
   // 组装列配置
   assemColumn (_vm) {

@@ -189,7 +189,7 @@ export default {
       const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, treeOpts } = this
       const { transform } = treeOpts
       const { actived, removeList, insertList } = editStore
-      const { checkField: property } = checkboxOpts
+      const { checkField } = checkboxOpts
       let rest = []
       if (!rows) {
         rows = tableFullData
@@ -203,7 +203,7 @@ export default {
         }
       })
       // 如果绑定了多选属性，则更新状态
-      if (!property) {
+      if (!checkField) {
         rows.forEach(row => {
           const sIndex = selection.indexOf(row)
           if (sIndex > -1) {
@@ -380,16 +380,17 @@ export default {
      */
     handleActived (params, evnt) {
       const { editStore, editOpts, tableColumn, editConfig, mouseConfig } = this
-      const { mode, activeMethod } = editOpts
+      const { mode } = editOpts
       const { actived } = editStore
       const { row, column } = params
       const { editRender } = column
       const cell = params.cell = (params.cell || this.getCell(row, column))
+      const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
       if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
         if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
-          if (!activeMethod || activeMethod({ ...params, $table: this })) {
+          if (!beforeEditMethod || beforeEditMethod({ ...params, $table: this })) {
             if (mouseConfig) {
               this.clearSelected(evnt)
               this.clearCellAreas(evnt)

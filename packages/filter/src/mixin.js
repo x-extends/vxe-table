@@ -130,13 +130,13 @@ export default {
           filterStore.maxHeight = maxHeight
         })
       }
-      this.emitEvent('filter-visible', { column, property: column.property, filterList: this.getCheckedFilters(), visible: filterStore.visible }, evnt)
+      this.emitEvent('filter-visible', { column, field: column.field, property: column.field, filterList: this.getCheckedFilters(), visible: filterStore.visible }, evnt)
     },
     _getCheckedFilters () {
       const { tableFullColumn } = this
       const filterList = []
       tableFullColumn.filter(column => {
-        const { property, filters } = column
+        const { field, filters } = column
         const valueList = []
         const dataList = []
         if (filters && filters.length) {
@@ -147,7 +147,7 @@ export default {
             }
           })
           if (valueList.length) {
-            filterList.push({ column, property, values: valueList, datas: dataList })
+            filterList.push({ column, field, property: field, values: valueList, datas: dataList })
           }
         }
       })
@@ -161,7 +161,7 @@ export default {
     confirmFilterEvent (evnt) {
       const { filterStore, filterOpts, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = this
       const { column } = filterStore
-      const { property } = column
+      const { field } = column
       const values = []
       const datas = []
       column.filters.forEach(item => {
@@ -176,7 +176,7 @@ export default {
         this.handleTableData(true)
         this.checkSelectionStatus()
       }
-      this.emitEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
+      this.emitEvent('filter-change', { column, field, property: field, values, datas, filters: filterList, filterList }, evnt)
       this.closeFilter()
       this.updateFooter().then(() => {
         const { scrollXLoad, scrollYLoad } = this

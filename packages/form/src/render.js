@@ -26,7 +26,7 @@ export function renderTitle (h, _vm, item) {
   const { data, tooltipOpts } = _vm
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-  const params = { data, property: field, item, $form: _vm }
+  const params = { data, field, property: field, item, $form: _vm }
   const contVNs = []
   const titVNs = []
   if (titlePrefix) {

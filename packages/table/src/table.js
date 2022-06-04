@@ -830,6 +830,9 @@ export default {
       if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
         warnLog('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
       }
+      // if (this.editConfig && this.editConfig.activeMethod) {
+      //   warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
+      // }
     }
 
     // 检查是否有安装需要的模块

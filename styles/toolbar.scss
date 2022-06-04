@@ -7,6 +7,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  padding: 0.6em 0;
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   background-color: $vxe-toolbar-background-color;
@@ -64,11 +65,18 @@
       justify-content: center;
     }
   }
+  .vxe-buttons--wrapper,
   .vxe-tools--wrapper,
   .vxe-tools--operate {
     display: flex;
-    flex-shrink: 0;
     align-items: center;
+  }
+  .vxe-buttons--wrapper,
+  .vxe-tools--wrapper {
+    flex-wrap: wrap;
+  }
+  .vxe-tools--operate {
+    flex-shrink: 0;
   }
   .vxe-custom--wrapper {
     position: relative;
@@ -171,7 +179,6 @@
 
 .vxe-toolbar {
   font-size: $vxe-font-size;
-  height: $vxe-toolbar-height-default;
   .vxe-custom--option {
     & > .vxe-checkbox--icon {
       font-size: $vxe-checkbox-font-size-default;
@@ -179,7 +186,6 @@
   }
   &.size--medium {
     font-size: $vxe-font-size-medium;
-    height: $vxe-toolbar-height-medium;
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-medium;
@@ -188,7 +194,6 @@
   }
   &.size--small {
     font-size: $vxe-font-size-small;
-    height: $vxe-toolbar-height-small;
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-small;
@@ -197,7 +202,6 @@
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
-    height: $vxe-toolbar-height-mini;
     .vxe-custom--option {
       & > .vxe-checkbox--icon {
         font-size: $vxe-checkbox-font-size-mini;
