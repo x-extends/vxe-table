@@ -899,16 +899,16 @@ export default defineComponent({
       let checkboxColumn: any
       let radioColumn: any
       let hasFixed: any
-      const handleFunc = (column: any, index: any, items: any, path?: any, parent?: any) => {
-        const { id: colid, property, fixed, type, treeNode } = column
+      const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parent?: VxeTableDefines.ColumnInfo) => {
+        const { id: colid, field, fixed, type, treeNode } = column
         const rest = { column, colid, index, items, parent }
-        if (property) {
+        if (field) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            if (fullColumnFieldData[property]) {
-              warnLog('vxe.error.colRepet', ['field', property])
+            if (fullColumnFieldData[field]) {
+              warnLog('vxe.error.colRepet', ['field', field])
             }
           }
-          fullColumnFieldData[property] = rest
+          fullColumnFieldData[field] = rest
         }
         if (!hasFixed && fixed) {
           hasFixed = fixed
@@ -958,7 +958,7 @@ export default defineComponent({
         fullColumnIdData[colid] = rest
       }
       if (isGroup) {
-        XEUtils.eachTree(collectColumn, (column: any, index, items, path, parent, nodes) => {
+        XEUtils.eachTree(collectColumn, (column, index, items, path, parent, nodes) => {
           column.level = nodes.length
           handleFunc(column, index, items, path, parent)
         })
@@ -1229,7 +1229,7 @@ export default defineComponent({
         }[] = []
         let orderColumns: VxeTableDefines.SortCheckedParams[] = []
         tableFullColumn.forEach((column) => {
-          const { property, sortable, order, filters } = column
+          const { field, sortable, order, filters } = column
           if (!allRemoteFilter && filters && filters.length) {
             const valueList: any[] = []
             const itemList: VxeTableDefines.FilterOption[] = []
@@ -1244,7 +1244,7 @@ export default defineComponent({
             }
           }
           if (!allRemoteSort && sortable && order) {
-            orderColumns.push({ column, field: property, property, order, sortTime: column.sortTime })
+            orderColumns.push({ column, field, property: field, order, sortTime: column.sortTime })
           }
         })
         if (sortMultiple && chronological && orderColumns.length > 1) {
@@ -1270,7 +1270,7 @@ export default defineComponent({
               } else if (defaultFilterMethod) {
                 return itemList.some((item) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
               }
-              return valueList.indexOf(XEUtils.get(row, column.property)) > -1
+              return valueList.indexOf(XEUtils.get(row, column.field)) > -1
             })
           }
           if (treeConfig && transform) {
@@ -1779,7 +1779,7 @@ export default defineComponent({
       return new Promise(resolve => {
         if (loadMethod) {
           treeLazyLoadeds.push(row)
-          loadMethod({ $table: $xetable, row }).catch(() => []).then((childRecords: any) => {
+          loadMethod({ $table: $xetable, row }).then((childRecords: any) => {
             rest.treeLoaded = true
             XEUtils.remove(treeLazyLoadeds, item => $xetable.eqRow(item, row))
             if (!XEUtils.isArray(childRecords)) {
@@ -2014,11 +2014,22 @@ export default defineComponent({
           nextTick()
             .then(() => tableMethods.recalculate())
             .then(() => {
+              let targetScrollLeft = lastScrollLeft
+              let targetScrollTop = lastScrollTop
+              const sXOpts = computeSXOpts.value
+              const sYOpts = computeSYOpts.value
+              // 是否在更新数据之后自动滚动重置滚动条
+              if (sXOpts.scrollToLeftOnChange) {
+                targetScrollLeft = 0
+              }
+              if (sYOpts.scrollToTopOnChange) {
+                targetScrollTop = 0
+              }
               // 是否变更虚拟滚动
               if (oldScrollYLoad === sYLoad) {
-                restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve)
+                restoreScrollLocation($xetable, targetScrollLeft, targetScrollTop).then(resolve)
               } else {
-                setTimeout(() => restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve))
+                setTimeout(() => restoreScrollLocation($xetable, targetScrollLeft, targetScrollTop).then(resolve))
               }
             })
         })
@@ -2689,7 +2700,7 @@ export default defineComponent({
         } else {
           rows.forEach((row: any) => {
             visibleColumn.forEach((column) => {
-              if (column.property) {
+              if (column.field) {
                 setCellValue(row, column, null)
               }
             })
@@ -2745,7 +2756,7 @@ export default defineComponent({
               return !eqCellValue(oRow, row, field as string)
             }
             for (let index = 0, len = visibleColumn.length; index < len; index++) {
-              property = visibleColumn[index].property
+              property = visibleColumn[index].field
               if (property && !eqCellValue(oRow, row, property)) {
                 return true
               }
@@ -2806,14 +2817,14 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const { transform, children, mapChildren } = treeOpts
-        const { checkField: property } = checkboxOpts
+        const { checkField } = checkboxOpts
         let rowList = []
         const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
-        if (property) {
+        if (checkField) {
           if (treeConfig) {
-            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, property), { children: transform ? mapChildren : children })
+            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildren : children })
           } else {
-            rowList = currTableData.filter((row) => XEUtils.get(row, property))
+            rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
           }
         } else {
           const { selection } = reactData
@@ -2848,8 +2859,9 @@ export default defineComponent({
        * 根据行的唯一主键获取行
        * @param {String/Number} rowid 行主键
        */
-      getRowById (rowid) {
+      getRowById (cellValue) {
         const { fullDataRowIdData } = internalData
+        const rowid = XEUtils.eqNull(cellValue) ? '' : encodeURIComponent(cellValue)
         return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
       },
       /**
@@ -3042,9 +3054,9 @@ export default defineComponent({
       isCheckedByCheckboxRow (row) {
         const { selection } = reactData
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField: property } = checkboxOpts
-        if (property) {
-          return XEUtils.get(row, property)
+        const { checkField } = checkboxOpts
+        if (checkField) {
+          return XEUtils.get(row, checkField)
         }
         return $xetable.findRowIndexOf(selection, row) > -1
       },
@@ -3069,7 +3081,7 @@ export default defineComponent({
         const { afterFullData, checkboxReserveRowMap } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField: property, reserve, checkStrictly, checkMethod } = checkboxOpts
+        const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
         let selectRows: any[] = []
         const beforeSelection = treeConfig ? [] : selection.filter((row) => $xetable.findRowIndexOf(afterFullData, row) === -1)
         if (checkStrictly) {
@@ -3079,13 +3091,13 @@ export default defineComponent({
            * 绑定属性方式（高性能，有污染）
            * 必须在行数据存在对应的属性，否则将不响应
            */
-          if (property) {
+          if (checkField) {
             const checkValFn = (row: any) => {
               if (!checkMethod || checkMethod({ row })) {
                 if (value) {
                   selectRows.push(row)
                 }
-                XEUtils.set(row, property, value)
+                XEUtils.set(row, checkField, value)
               }
             }
             // 如果存在选中方法
@@ -3157,7 +3169,7 @@ export default defineComponent({
               afterFullData.forEach((row) => handleCheckboxReserveRow(row, false))
             }
           }
-          reactData.selection = property ? [] : beforeSelection.concat(selectRows)
+          reactData.selection = checkField ? [] : beforeSelection.concat(selectRows)
         }
         reactData.treeIndeterminates = []
         tablePrivateMethods.checkSelectionStatus()
@@ -3253,12 +3265,12 @@ export default defineComponent({
         const { tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField: property, reserve } = checkboxOpts
-        if (property) {
+        const { checkField, reserve } = checkboxOpts
+        if (checkField) {
           if (treeConfig) {
-            XEUtils.eachTree(tableFullData, item => XEUtils.set(item, property, false), treeOpts)
+            XEUtils.eachTree(tableFullData, item => XEUtils.set(item, checkField, false), treeOpts)
           } else {
-            tableFullData.forEach((item) => XEUtils.set(item, property, false))
+            tableFullData.forEach((item) => XEUtils.set(item, checkField, false))
           }
         }
         if (reserve) {
@@ -3456,9 +3468,9 @@ export default defineComponent({
         const sortList: VxeTableDefines.SortCheckedParams[] = []
         const { tableFullColumn } = internalData
         tableFullColumn.forEach((column) => {
-          const { property, order } = column
+          const { field, order } = column
           if (column.sortable && order) {
-            sortList.push({ column, field: property, property, order, sortTime: column.sortTime })
+            sortList.push({ column, field, property: field, order, sortTime: column.sortTime })
           }
         })
         if (multiple && chronological && sortList.length > 1) {
@@ -3480,7 +3492,7 @@ export default defineComponent({
           visible: false
         })
         if (visible) {
-          $xetable.dispatchEvent('filter-visible', { column, property: column.property, filterList: $xetable.getCheckedFilters(), visible: false }, null)
+          $xetable.dispatchEvent('filter-visible', { column, property: column.field, field: column.field, filterList: $xetable.getCheckedFilters(), visible: false }, null)
         }
         return nextTick()
       },
@@ -4377,7 +4389,8 @@ export default defineComponent({
             // }
             // 如果是按下非功能键之外允许直接编辑
             if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
-              if (!editOpts.activeMethod || editOpts.activeMethod({ ...selected.args, $table: $xetable })) {
+              const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xetable })) {
                 if (editMethod) {
                   editMethod({
                     row: selected.row,
@@ -4566,8 +4579,8 @@ export default defineComponent({
         const checkboxOpts = computeCheckboxOpts.value
         const rowkey = getRowkey($xetable)
         internalData.tableFullColumn.forEach(column => {
-          const { property, editRender } = column
-          if (property && !XEUtils.has(record, property)) {
+          const { field, editRender } = column
+          if (field && !XEUtils.has(record, field)) {
             let cellValue = null
             if (editRender) {
               const { defaultValue } = editRender
@@ -4577,7 +4590,7 @@ export default defineComponent({
                 cellValue = defaultValue
               }
             }
-            XEUtils.set(record, property, cellValue)
+            XEUtils.set(record, field, cellValue)
           }
         })
         const otherFields: (string | undefined)[] = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
@@ -4850,19 +4863,19 @@ export default defineComponent({
         const { afterFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField: property, checkStrictly, checkMethod } = checkboxOpts
-        if (property) {
+        const { checkField, checkStrictly, checkMethod } = checkboxOpts
+        if (checkField) {
           if (treeConfig && !checkStrictly) {
             if (value === -1) {
               if ($xetable.findRowIndexOf(treeIndeterminates, row) === -1) {
                 treeIndeterminates.push(row)
               }
-              XEUtils.set(row, property, false)
+              XEUtils.set(row, checkField, false)
             } else {
               // 更新子节点状态
               XEUtils.eachTree([row], (item) => {
                 if ($xetable.eqRow(item, row) || (!checkMethod || checkMethod({ row: item }))) {
-                  XEUtils.set(item, property, value)
+                  XEUtils.set(item, checkField, value)
                   XEUtils.remove(treeIndeterminates, half => half === item)
                   handleCheckboxReserveRow(row, value)
                 }
@@ -4877,14 +4890,14 @@ export default defineComponent({
               if (indeterminatesItem) {
                 parentStatus = -1
               } else {
-                const selectItems = matchObj.items.filter(item => XEUtils.get(item, property))
+                const selectItems = matchObj.items.filter(item => XEUtils.get(item, checkField))
                 parentStatus = selectItems.filter(item => $xetable.findRowIndexOf(vItems, item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
               }
               return tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus)
             }
           } else {
             if (!checkMethod || checkMethod({ row })) {
-              XEUtils.set(row, property, value)
+              XEUtils.set(row, checkField, value)
               handleCheckboxReserveRow(row, value)
             }
           }
@@ -5153,9 +5166,9 @@ export default defineComponent({
       handleToggleCheckRowEvent (evnt, params) {
         const { selection } = reactData
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField: property } = checkboxOpts
+        const { checkField } = checkboxOpts
         const { row } = params
-        const value = property ? !XEUtils.get(row, property) : $xetable.findRowIndexOf(selection, row) === -1
+        const value = checkField ? !XEUtils.get(row, checkField) : $xetable.findRowIndexOf(selection, row) === -1
         if (evnt) {
           tablePrivateMethods.triggerCheckRowEvent(evnt, params, value)
         } else {
@@ -5265,14 +5278,14 @@ export default defineComponent({
        */
       triggerSortEvent (evnt, column, order) {
         const sortOpts = computeSortOpts.value
-        const property = column.property
-        if (column.sortable) {
+        const { field, sortable } = column
+        if (sortable) {
           if (!order || column.order === order) {
             tableMethods.clearSort(sortOpts.multiple ? column : null)
           } else {
-            tableMethods.sort({ field: property, order })
+            tableMethods.sort({ field, order })
           }
-          const params = { column, property, order: column.order, sortList: tableMethods.getSortColumns() }
+          const params = { column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns() }
           tableMethods.dispatchEvent('sort-change', params, evnt)
         }
       },
@@ -5814,6 +5827,9 @@ export default defineComponent({
           if (props.treeConfig && mouseOpts.area) {
             errLog('vxe.error.noTree', ['mouse-config.area'])
           }
+          // if (props.editConfig && props.editConfig.activeMethod) {
+          //   warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
+          // }
         }
 
         // 检查是否有安装需要的模块

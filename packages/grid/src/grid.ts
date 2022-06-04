@@ -177,12 +177,15 @@ export default defineComponent({
       return clss
     }
 
-    const handleActiveMethod = (params: any) => {
+    const handleBeforeEditMethod = (params: any) => {
       const { editConfig } = props
       const { pendingRecords } = reactData
       const $xetable = refTable.value
-      const activeMethod = editConfig ? editConfig.activeMethod : null
-      return $xetable.findRowIndexOf(pendingRecords, params.row) === -1 && (!activeMethod || activeMethod({ ...params, $grid: $xegrid }))
+      const beforeEditMethod = editConfig ? (editConfig.beforeEditMethod || editConfig.activeMethod) : null
+      if ($xetable.findRowIndexOf(pendingRecords, params.row) === -1) {
+        return !beforeEditMethod || beforeEditMethod({ ...params, $grid: $xegrid })
+      }
+      return false
     }
 
     const computeTableProps = computed(() => {
@@ -207,7 +210,7 @@ export default defineComponent({
         }
       }
       if (editConfig) {
-        tableProps.editConfig = Object.assign({}, editConfig, { activeMethod: handleActiveMethod })
+        tableProps.editConfig = Object.assign({}, editConfig, { beforeEditMethod: handleBeforeEditMethod })
       }
       return tableProps
     })

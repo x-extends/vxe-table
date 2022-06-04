@@ -149,6 +149,8 @@ export default {
       operError: 'Error occurred, operation failed!'
     },
     select: {
+      search: 'Search',
+      loadingText: 'Loading',
       emptyText: 'No Data'
     },
     pager: {

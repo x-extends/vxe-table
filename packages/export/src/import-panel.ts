@@ -1,10 +1,10 @@
 import { defineComponent, h, ref, Ref, computed, inject, reactive, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import VxeModalConstructor from '../../modal/src/modal'
-import VxeRadioGroupConstructor from '../../radio/src/group'
-import VxeRadioConstructor from '../../radio/src/radio'
-import VxeButtonConstructor from '../../button/src/button'
+import VxeModalComponent from '../../modal/src/modal'
+import VxeRadioGroupComponent from '../../radio/src/group'
+import VxeRadioComponent from '../../radio/src/radio'
+import VxeButtonComponent from '../../button/src/button'
 import { parseFile } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
@@ -93,7 +93,7 @@ export default defineComponent({
       const selectName = computeSelectName.value
       const hasFile = computeHasFile.value
       const parseTypeLabel = computeParseTypeLabel.value
-      return h(VxeModalConstructor, {
+      return h(VxeModalComponent, {
         modelValue: storeData.visible,
         title: GlobalConfig.i18n('vxe.import.impTitle'),
         width: 440,
@@ -144,13 +144,13 @@ export default defineComponent({
                 h('tr', [
                   h('td', GlobalConfig.i18n('vxe.import.impOpts')),
                   h('td', [
-                    h(VxeRadioGroupConstructor, {
+                    h(VxeRadioGroupComponent, {
                       modelValue: defaultOptions.mode,
                       'onUpdate:modelValue' (value: any) {
                         defaultOptions.mode = value
                       }
                     }, {
-                      default: () => storeData.modeList.map((item: any) => h(VxeRadioConstructor, { label: item.value, content: GlobalConfig.i18n(item.label) }))
+                      default: () => storeData.modeList.map((item: any) => h(VxeRadioComponent, { label: item.value, content: GlobalConfig.i18n(item.label) }))
                     })
                   ])
                 ])
@@ -159,11 +159,11 @@ export default defineComponent({
             h('div', {
               class: 'vxe-export--panel-btns'
             }, [
-              h(VxeButtonConstructor, {
+              h(VxeButtonComponent, {
                 content: GlobalConfig.i18n('vxe.import.impCancel'),
                 onClick: cancelEvent
               }),
-              h(VxeButtonConstructor, {
+              h(VxeButtonComponent, {
                 status: 'primary',
                 disabled: !hasFile,
                 content: GlobalConfig.i18n('vxe.import.impConfirm'),

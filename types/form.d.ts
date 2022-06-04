@@ -265,7 +265,7 @@ export namespace VxeFormDefines {
     data: any
     field: string
     /**
-     * 已废弃，该属性被 field 替换
+     * @deprecated
      */
     property: string
   }

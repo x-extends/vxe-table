@@ -31,7 +31,7 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
   const tooltipOpts = computeTooltipOpts.value
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-  const params = { data, property: field, item, $form: $xeform }
+  const params = { data, field, property: field, item, $form: $xeform }
   const titleSlot = slots ? slots.title : null
   const contVNs = []
   const titVNs = []

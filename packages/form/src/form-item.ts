@@ -81,7 +81,7 @@ export default defineComponent({
       const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
       const hasEllipsis = showTitle || showTooltip || showEllipsis
       let itemVisibleMethod = visibleMethod
-      const params = { data, property: field, item, $form: $xeform }
+      const params = { data, field, property: field, item, $form: $xeform }
       let isRequired = false
       if (rules) {
         const itemRules = rules[field]

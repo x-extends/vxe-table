@@ -98,6 +98,10 @@ export namespace VxeFormItemPropTypes {
     $form: VxeFormConstructor
     data: any
     item: VxeFormDefines.ItemInfo
+    field: string
+    /**
+     * @deprecated
+     */
     property: string
   }
   export type ClassName = string | ((params: ClassNameParams) => string)
@@ -164,6 +168,10 @@ export interface FormItemTitleRenderParams {
   $form: VxeFormConstructor
   data: any
   item: VxeFormDefines.ItemInfo
+  field: string
+  /**
+   * @deprecated
+   */
   property: string
 }
 
@@ -174,6 +182,10 @@ export interface FormItemContentRenderParams {
   $form: VxeFormConstructor
   data: any
   item: VxeFormDefines.ItemInfo
+  field: string
+  /**
+   * @deprecated
+   */
   property: string
 }
 
@@ -184,6 +196,10 @@ export interface FormItemVisibleParams {
   $form: VxeFormConstructor
   data: any
   item: VxeFormDefines.ItemInfo
+  field: string
+  /**
+   * @deprecated
+   */
   property: string
 }
 
@@ -196,7 +212,6 @@ export interface FormItemResetParams {
   item: VxeFormDefines.ItemInfo
   field: string
   /**
-   * 已废弃，该属性被 field 替换
    * @deprecated
    */
   property: string

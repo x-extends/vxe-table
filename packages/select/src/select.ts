@@ -1,12 +1,13 @@
-import { defineComponent, h, Teleport, PropType, ref, Ref, inject, VNode, resolveComponent, ComponentOptions, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted } from 'vue'
+import { defineComponent, h, Teleport, PropType, ref, Ref, inject, VNode, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted, createCommentVNode } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { getEventTargetNode, getAbsolutePos } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, getFuncText, formatText } from '../../tools/utils'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
+import VxeInputComponent from '../../input/src/input'
 
-import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeInputConstructor, VxeOptgroupProps, VxeOptionProps, VxeFormDefines, VxeFormConstructor, VxeFormPrivateMethods } from '../../../types/all'
+import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeInputConstructor, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeOptgroupProps, VxeOptionProps, VxeFormDefines, VxeFormConstructor, VxeFormPrivateMethods, VxeInputDefines } from '../../../types/all'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -35,6 +36,10 @@ export default defineComponent({
     optionConfig: Object as PropType<VxeSelectPropTypes.OptionConfig>,
     className: [String, Function] as PropType<VxeSelectPropTypes.ClassName>,
     size: { type: String as PropType<VxeSelectPropTypes.Size>, default: () => GlobalConfig.select.size || GlobalConfig.size },
+    filterable: Boolean as PropType<VxeSelectPropTypes.Filterable>,
+    filterMethod: Function as PropType<VxeSelectPropTypes.FilterMethod>,
+    remote: Boolean as PropType<VxeSelectPropTypes.Remote>,
+    remoteMethod: Function as PropType<VxeSelectPropTypes.RemoteMethod>,
     emptyText: String as PropType<VxeSelectPropTypes.EmptyText>,
     // 已废弃，被 option-config.keyField 替换
     optionId: { type: String as PropType<VxeSelectPropTypes.OptionId>, default: () => GlobalConfig.select.optionId },
@@ -63,17 +68,22 @@ export default defineComponent({
       fullOptionList: [],
       visibleGroupList: [],
       visibleOptionList: [],
+      remoteValueList: [],
       panelIndex: 0,
       panelStyle: {},
       panelPlacement: null,
+      currentOption: null,
       currentValue: null,
       visiblePanel: false,
       animatVisible: false,
-      isActivated: false
+      isActivated: false,
+      searchValue: '',
+      searchLoading: false
     })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refInput = ref() as Ref<VxeInputConstructor>
+    const refInpSearch = ref() as Ref<VxeInputConstructor>
     const refOptionWrapper = ref() as Ref<HTMLDivElement>
     const refOptionPanel = ref() as Ref<HTMLDivElement>
 
@@ -163,6 +173,14 @@ export default defineComponent({
       return fullOptionList.find((item) => optionValue === item[valueField])
     }
 
+    const getRemoteSelectLabel = (value: any) => {
+      const { remoteValueList } = reactData
+      const labelField = computeLabelField.value
+      const remoteItem = remoteValueList.find(item => value === item.key)
+      const item = remoteItem ? remoteItem.result : null
+      return XEUtils.toValueString(item ? item[labelField] : value)
+    }
+
     const getSelectLabel = (value: any) => {
       const labelField = computeLabelField.value
       const item = findOption(value)
@@ -170,16 +188,23 @@ export default defineComponent({
     }
 
     const computeSelectLabel = computed(() => {
-      const { modelValue, multiple } = props
+      const { modelValue, multiple, remote } = props
       const multiMaxCharNum = computeMultiMaxCharNum.value
       if (modelValue && multiple) {
-        return (XEUtils.isArray(modelValue) ? modelValue : [modelValue]).map((val) => {
+        const vals = XEUtils.isArray(modelValue) ? modelValue : [modelValue]
+        if (remote) {
+          return vals.map(val => getRemoteSelectLabel(val)).join(', ')
+        }
+        return vals.map((val) => {
           const label = getSelectLabel(val)
           if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
             return `${label.substring(0, multiMaxCharNum)}...`
           }
           return label
         }).join(', ')
+      }
+      if (remote) {
+        return getRemoteSelectLabel(modelValue)
       }
       return getSelectLabel(modelValue)
     })
@@ -198,12 +223,27 @@ export default defineComponent({
      * 刷新选项，当选项被动态显示/隐藏时可能会用到
      */
     const refreshOption = () => {
-      const { fullOptionList, fullGroupList } = reactData
+      const { filterable, filterMethod } = props
+      const { fullOptionList, fullGroupList, searchValue } = reactData
       const isGroup = computeIsGroup.value
+      const groupLabelField = computeGroupLabelField.value
+      const labelField = computeLabelField.value
       if (isGroup) {
-        reactData.visibleGroupList = fullGroupList.filter(isOptionVisible)
+        if (filterable && filterMethod) {
+          reactData.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && filterMethod({ group, option: null, searchValue }))
+        } else if (filterable) {
+          reactData.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && (!searchValue || `${group[groupLabelField]}`.indexOf(searchValue) > -1))
+        } else {
+          reactData.visibleGroupList = fullGroupList.filter(isOptionVisible)
+        }
       } else {
-        reactData.visibleOptionList = fullOptionList.filter(isOptionVisible)
+        if (filterable && filterMethod) {
+          reactData.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && filterMethod({ group: null, option, searchValue }))
+        } else if (filterable) {
+          reactData.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && (!searchValue || `${option[labelField]}`.indexOf(searchValue) > -1))
+        } else {
+          reactData.visibleOptionList = fullOptionList.filter(isOptionVisible)
+        }
       }
       return nextTick()
     }
@@ -233,6 +273,7 @@ export default defineComponent({
     const setCurrentOption = (option: any) => {
       const valueField = computeValueField.value
       if (option) {
+        reactData.currentOption = option
         reactData.currentValue = option[valueField]
       }
     }
@@ -339,7 +380,7 @@ export default defineComponent({
     let hidePanelTimeout: number
 
     const showOptionPanel = () => {
-      const { loading, disabled } = props
+      const { loading, disabled, filterable } = props
       if (!loading && !disabled) {
         clearTimeout(hidePanelTimeout)
         if (!reactData.inited) {
@@ -347,6 +388,9 @@ export default defineComponent({
         }
         reactData.isActivated = true
         reactData.animatVisible = true
+        if (filterable) {
+          refreshOption()
+        }
         setTimeout(() => {
           const { modelValue, multiple } = props
           const currOption = findOption(multiple && modelValue ? modelValue[0] : modelValue)
@@ -355,6 +399,7 @@ export default defineComponent({
             setCurrentOption(currOption)
             scrollToOption(currOption)
           }
+          handleFocusSearch()
         }, 10)
         updateZindex()
         updatePlacement()
@@ -362,6 +407,8 @@ export default defineComponent({
     }
 
     const hideOptionPanel = () => {
+      reactData.searchValue = ''
+      reactData.searchLoading = false
       reactData.visiblePanel = false
       hidePanelTimeout = window.setTimeout(() => {
         reactData.animatVisible = false
@@ -380,6 +427,7 @@ export default defineComponent({
     }
 
     const clearValueEvent = (evnt: Event, selectValue: any) => {
+      reactData.remoteValueList = []
       changeEvent(evnt, selectValue)
       selectMethods.dispatchEvent('clear', { value: selectValue }, evnt)
     }
@@ -389,8 +437,9 @@ export default defineComponent({
       hideOptionPanel()
     }
 
-    const changeOptionEvent = (evnt: Event, selectValue: any) => {
+    const changeOptionEvent = (evnt: Event, selectValue: any, option: any) => {
       const { modelValue, multiple } = props
+      const { remoteValueList } = reactData
       if (multiple) {
         let multipleValue
         if (modelValue) {
@@ -402,8 +451,15 @@ export default defineComponent({
         } else {
           multipleValue = [selectValue]
         }
+        const remoteItem = remoteValueList.find(item => item.key === selectValue)
+        if (remoteItem) {
+          remoteItem.result = option
+        } else {
+          remoteValueList.push({ key: selectValue, result: option })
+        }
         changeEvent(evnt, multipleValue)
       } else {
+        reactData.remoteValueList = [{ key: selectValue, result: option }]
         changeEvent(evnt, selectValue)
         hideOptionPanel()
       }
@@ -512,7 +568,7 @@ export default defineComponent({
 
     const handleGlobalKeydownEvent = (evnt: KeyboardEvent) => {
       const { clearable, disabled } = props
-      const { visiblePanel, currentValue } = reactData
+      const { visiblePanel, currentValue, currentOption } = reactData
       if (!disabled) {
         const isTab = hasEventKey(evnt, EVENT_KEYS.TAB)
         const isEnter = hasEventKey(evnt, EVENT_KEYS.ENTER)
@@ -530,7 +586,7 @@ export default defineComponent({
           } else if (isEnter) {
             evnt.preventDefault()
             evnt.stopPropagation()
-            changeOptionEvent(evnt, currentValue)
+            changeOptionEvent(evnt, currentValue, currentOption)
           } else if (isUpArrow || isDwArrow) {
             evnt.preventDefault()
             let { firstOption, offsetOption } = findOffsetOption(currentValue, isUpArrow)
@@ -558,6 +614,17 @@ export default defineComponent({
       hideOptionPanel()
     }
 
+    const handleFocusSearch = () => {
+      if (props.filterable) {
+        nextTick(() => {
+          const inpSearch = refInpSearch.value
+          if (inpSearch) {
+            inpSearch.focus()
+          }
+        })
+      }
+    }
+
     const focusEvent = () => {
       if (!props.disabled) {
         reactData.isActivated = true
@@ -567,6 +634,37 @@ export default defineComponent({
     const blurEvent = () => {
       reactData.isActivated = false
     }
+
+    const modelSearchEvent = (value: string) => {
+      reactData.searchValue = value
+    }
+
+    const focusSearchEvent = () => {
+      reactData.isActivated = true
+    }
+
+    const keydownSearchEvent = (params: VxeInputDefines.KeydownEventParams) => {
+      const { $event } = params
+      const isEnter = hasEventKey($event, EVENT_KEYS.ENTER)
+      if (isEnter) {
+        $event.preventDefault()
+        $event.stopPropagation()
+      }
+    }
+
+    const triggerSearchEvent = XEUtils.debounce(function () {
+      const { remote, remoteMethod } = props
+      const { searchValue } = reactData
+      if (remote && remoteMethod) {
+        reactData.searchLoading = true
+        Promise.resolve(remoteMethod({ searchValue })).then(() => nextTick()).catch(() => nextTick()).finally(() => {
+          reactData.searchLoading = false
+          refreshOption()
+        })
+      } else {
+        refreshOption()
+      }
+    }, 350, { trailing: true })
 
     const togglePanelEvent = (params: any) => {
       const { $event } = params
@@ -611,7 +709,7 @@ export default defineComponent({
           },
           onClick: (evnt: MouseEvent) => {
             if (!isDisabled) {
-              changeOptionEvent(evnt, optionValue)
+              changeOptionEvent(evnt, optionValue, option)
             }
           },
           onMouseenter: () => {
@@ -654,8 +752,22 @@ export default defineComponent({
     }
 
     const renderOpts = () => {
-      const { visibleGroupList, visibleOptionList } = reactData
+      const { visibleGroupList, visibleOptionList, searchLoading } = reactData
       const isGroup = computeIsGroup.value
+      if (searchLoading) {
+        return [
+          h('div', {
+            class: 'vxe-select--search-loading'
+          }, [
+            h('i', {
+              class: ['vxe-select--search-icon', GlobalConfig.icon.SELECT_LOADED]
+            }),
+            h('span', {
+              class: 'vxe-select--search-text'
+            }, GlobalConfig.i18n('vxe.select.loadingText'))
+          ])
+        ]
+      }
       if (isGroup) {
         if (visibleGroupList.length) {
           return renderOptgroup()
@@ -763,7 +875,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { className, transfer, disabled, loading } = props
+      const { className, transfer, disabled, loading, filterable } = props
       const { inited, isActivated, visiblePanel } = reactData
       const vSize = computeSize.value
       const selectLabel = computeSelectLabel.value
@@ -774,6 +886,7 @@ export default defineComponent({
           [`size--${vSize}`]: vSize,
           'is--visivle': visiblePanel,
           'is--disabled': disabled,
+          'is--filter': filterable,
           'is--loading': loading,
           'is--active': isActivated
         }]
@@ -782,7 +895,7 @@ export default defineComponent({
           class: 'vxe-select-slots',
           ref: 'hideOption'
         }, slots.default ? slots.default({}) : []),
-        h(resolveComponent('vxe-input') as ComponentOptions, {
+        h(VxeInputComponent, {
           ref: refInput,
           clearable: props.clearable,
           placeholder: props.placeholder,
@@ -815,6 +928,23 @@ export default defineComponent({
             placement: reactData.panelPlacement,
             style: reactData.panelStyle
           }, inited ? [
+            filterable ? h('div', {
+              class: 'vxe-select-filter--wrapper'
+            }, [
+              h(VxeInputComponent, {
+                ref: refInpSearch,
+                class: 'vxe-select-filter--input',
+                modelValue: reactData.searchValue,
+                clearable: true,
+                placeholder: GlobalConfig.i18n('vxe.select.search'),
+                prefixIcon: GlobalConfig.icon.INPUT_SEARCH,
+                'onUpdate:modelValue': modelSearchEvent,
+                onFocus: focusSearchEvent,
+                onKeydown: keydownSearchEvent,
+                onChange: triggerSearchEvent,
+                onSearch: triggerSearchEvent
+              })
+            ]) : createCommentVNode(),
             h('div', {
               ref: refOptionWrapper,
               class: 'vxe-select-option--wrapper'

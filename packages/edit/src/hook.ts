@@ -251,7 +251,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         const { actived, removeList, insertList } = editStore
-        const { checkField: property } = checkboxOpts
+        const { checkField } = checkboxOpts
         let rest: any[] = []
         if (!rows) {
           rows = tableFullData
@@ -265,7 +265,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           }
         })
         // 如果绑定了多选属性，则更新状态
-        if (!property) {
+        if (!checkField) {
           rows.forEach((row: any) => {
             const sIndex = $xetable.findRowIndexOf(selection, row)
             if (sIndex > -1) {
@@ -587,17 +587,18 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { editConfig, mouseConfig } = props
         const { editStore, tableColumn } = reactData
         const editOpts = computeEditOpts.value
-        const { mode, activeMethod } = editOpts
+        const { mode } = editOpts
         const { actived } = editStore
         const { row, column } = params
         const { editRender } = column
         const cell = (params.cell || $xetable.getCell(row, column))
+        const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
         params.cell = cell
         if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-actived' = 'edit-disabled'
-            if (!activeMethod || activeMethod({ ...params, $table: $xetable })) {
+            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xetable })) {
               if (mouseConfig) {
                 editMethods.clearSelected()
                 if ($xetable.clearCellAreas) {

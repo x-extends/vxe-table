@@ -509,7 +509,7 @@ export const Cell = {
     const { treeIndeterminates } = reactData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
-    const { labelField, checkField: property, halfField, checkMethod, visibleMethod } = checkboxOpts
+    const { labelField, checkField, halfField, checkMethod, visibleMethod } = checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
@@ -519,7 +519,7 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let ons
     if (!isHidden) {
-      isChecked = XEUtils.get(row, property as string)
+      isChecked = XEUtils.get(row, checkField as string)
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isDisabled && isVisible) {
@@ -742,7 +742,7 @@ export const Cell = {
     const { sortable, filters, editRender } = column
     let isRequired = false
     if (editRules) {
-      const columnRules = XEUtils.get(editRules, params.column.property) as VxeTableDefines.ValidatorRule[]
+      const columnRules = XEUtils.get(editRules, column.field) as VxeTableDefines.ValidatorRule[]
       if (columnRules) {
         isRequired = columnRules.some((rule) => rule.required)
       }

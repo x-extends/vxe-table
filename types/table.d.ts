@@ -1877,6 +1877,18 @@ export namespace VxeTablePropTypes {
     /**
      * 该方法的返回值用来决定该单元格是否允许编辑
      */
+    beforeEditMethod?(params: {
+      row: any
+      rowIndex: number
+      column: VxeTableDefines.ColumnInfo
+      columnIndex: number
+      $table: VxeTableConstructor & VxeTablePrivateMethods
+      $grid: VxeGridConstructor | null | undefined
+    }): boolean
+    /**
+     * 请使用 beforeEditMethod
+     * @deprecated
+     */
     activeMethod?(params: {
       row: any
       rowIndex: number
@@ -1920,6 +1932,7 @@ export namespace VxeTablePropTypes {
     gt?: number
     oSize?: number
     enabled?: boolean
+    scrollToLeftOnChange?: boolean
   }
   export interface SXOpts extends ScrollX {
     gt: number
@@ -1931,6 +1944,7 @@ export namespace VxeTablePropTypes {
     gt?: number
     oSize?: number
     enabled?: boolean
+    scrollToTopOnChange?: boolean
     /**
      * @deprecated 请使用 row-config.height
      */

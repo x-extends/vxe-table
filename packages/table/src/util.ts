@@ -104,12 +104,12 @@ export function toTreePathSeq (path: any[]) {
   return path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
 }
 
-export function getCellValue (row: any, column: any) {
-  return XEUtils.get(row, column.property)
+export function getCellValue (row: any, column: VxeTableDefines.ColumnInfo) {
+  return XEUtils.get(row, column.field)
 }
 
-export function setCellValue (row: any, column: any, value: any) {
-  return XEUtils.set(row, column.property, value)
+export function setCellValue (row: any, column: VxeTableDefines.ColumnInfo, value: any) {
+  return XEUtils.set(row, column.field, value)
 }
 
 export function getPropClass (property: any, params: any) {
