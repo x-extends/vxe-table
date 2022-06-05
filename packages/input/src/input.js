@@ -1652,7 +1652,9 @@ export default {
       this.dateTimeChangeEvent(evnt)
     },
     dateConfirmEvent () {
-      this.dateChange(this.dateValue || this.currentDate)
+      if (this.isDateTimeType || this.multiple) {
+        this.dateChange(this.dateValue || this.currentDate)
+      }
       this.hidePanel()
     },
     dateMinuteEvent (evnt, item) {

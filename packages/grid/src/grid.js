@@ -266,7 +266,7 @@ export default {
         warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
       }
     }
-
+    this.initPages()
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   mounted () {
@@ -274,7 +274,6 @@ export default {
       this.loadColumn(this.columns)
     }
     this.initToolbar()
-    this.initPages()
     this.initProxy()
   },
   destroyed () {
