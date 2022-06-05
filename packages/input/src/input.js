@@ -647,8 +647,10 @@ export default {
 
     // date、week、month、year
     dateConfig: Object,
-    minDate: { type: [String, Number, Date], default: () => GlobalConfig.input.minDate },
-    maxDate: { type: [String, Number, Date], default: () => GlobalConfig.input.maxDate },
+    startDate: { type: [String, Number, Date], default: () => GlobalConfig.input.startDate },
+    endDate: { type: [String, Number, Date], default: () => GlobalConfig.input.endDate },
+    minDate: [String, Number, Date],
+    maxDate: [String, Number, Date],
     // 已废弃 startWeek，被 startDay 替换
     startWeek: Number,
     startDay: { type: [String, Number], default: () => GlobalConfig.input.startDay },
@@ -725,24 +727,24 @@ export default {
       return this.clearable && (this.isPawdType || this.isNumType || this.isDatePickerType || this.type === 'text' || this.type === 'search')
     },
     isDisabledPrevDateBtn () {
-      const { selectMonth, dateMinTime } = this
+      const { selectMonth, dateStartTime } = this
       if (selectMonth) {
-        return selectMonth <= dateMinTime
+        return selectMonth <= dateStartTime
       }
       return false
     },
     isDisabledNextDateBtn () {
-      const { selectMonth, dateMaxTime } = this
+      const { selectMonth, dateEndTime } = this
       if (selectMonth) {
-        return selectMonth >= dateMaxTime
+        return selectMonth >= dateEndTime
       }
       return false
     },
-    dateMinTime () {
-      return this.minDate ? XEUtils.toStringDate(this.minDate) : null
+    dateStartTime () {
+      return this.startDate ? XEUtils.toStringDate(this.startDate) : null
     },
-    dateMaxTime () {
-      return this.maxDate ? XEUtils.toStringDate(this.maxDate) : null
+    dateEndTime () {
+      return this.endDate ? XEUtils.toStringDate(this.endDate) : null
     },
     supportMultiples () {
       return ['date', 'week', 'month', 'quarter', 'year'].includes(this.type)
@@ -948,9 +950,9 @@ export default {
         const selMonth = selectMonth.getMonth()
         const selDay = selectMonth.getDay()
         const prevOffsetDate = -weekDatas.indexOf(selDay)
-        const startDate = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDate).getTime() + hmsTime)
+        const startDayDate = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDate).getTime() + hmsTime)
         for (let index = 0; index < 42; index++) {
-          const date = XEUtils.getWhatDay(startDate, index)
+          const date = XEUtils.getWhatDay(startDayDate, index)
           const itemFullYear = date.getFullYear()
           const itemMonth = date.getMonth()
           const itemDate = date.getDate()
