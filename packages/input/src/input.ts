@@ -88,8 +88,10 @@ export default defineComponent({
     digits: { type: [String, Number] as PropType<VxeInputPropTypes.Digits>, default: () => GlobalConfig.input.digits },
 
     // date、week、month、quarter、year
-    minDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MinDate>, default: () => GlobalConfig.input.minDate },
-    maxDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>, default: () => GlobalConfig.input.maxDate },
+    startDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MinDate>, default: () => GlobalConfig.input.startDate },
+    endDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>, default: () => GlobalConfig.input.endDate },
+    minDate: [String, Number, Date] as PropType<VxeInputPropTypes.MinDate>,
+    maxDate: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>,
     // 已废弃 startWeek，被 startDay 替换
     startWeek: Number as PropType<VxeInputPropTypes.StartDay>,
     startDay: { type: [String, Number] as PropType<VxeInputPropTypes.StartDay>, default: () => GlobalConfig.input.startDay },
@@ -229,12 +231,12 @@ export default defineComponent({
       return props.clearable && (isPawdType || isNumType || isDatePickerType || type === 'text' || type === 'search')
     })
 
-    const computeDateMinTime = computed(() => {
-      return props.minDate ? XEUtils.toStringDate(props.minDate) : null
+    const computeDateStartTime = computed(() => {
+      return props.startDate ? XEUtils.toStringDate(props.startDate) : null
     })
 
-    const computeDateMaxTime = computed(() => {
-      return props.maxDate ? XEUtils.toStringDate(props.maxDate) : null
+    const computeDateEndTime = computed(() => {
+      return props.endDate ? XEUtils.toStringDate(props.endDate) : null
     })
 
     const computeSupportMultiples = computed(() => {
@@ -289,19 +291,19 @@ export default defineComponent({
     })
 
     const computeIsDisabledPrevDateBtn = computed(() => {
-      const dateMinTime = computeDateMinTime.value
+      const dateStartTime = computeDateStartTime.value
       const { selectMonth } = reactData
-      if (selectMonth && dateMinTime) {
-        return selectMonth <= dateMinTime
+      if (selectMonth && dateStartTime) {
+        return selectMonth <= dateStartTime
       }
       return false
     })
 
     const computeIsDisabledNextDateBtn = computed(() => {
-      const dateMaxTime = computeDateMaxTime.value
+      const dateEndTime = computeDateEndTime.value
       const { selectMonth } = reactData
-      if (selectMonth && dateMaxTime) {
-        return selectMonth >= dateMaxTime
+      if (selectMonth && dateEndTime) {
+        return selectMonth >= dateEndTime
       }
       return false
     })
@@ -499,9 +501,9 @@ export default defineComponent({
         const selMonth = selectMonth.getMonth()
         const selDay = selectMonth.getDay()
         const prevOffsetDate = -weekDatas.indexOf(selDay)
-        const startDate = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDate).getTime() + dateHMSTime)
+        const startDayDate = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDate).getTime() + dateHMSTime)
         for (let index = 0; index < 42; index++) {
-          const date = XEUtils.getWhatDay(startDate, index)
+          const date = XEUtils.getWhatDay(startDayDate, index)
           const itemFullYear = date.getFullYear()
           const itemMonth = date.getMonth()
           const itemDate = date.getDate()
@@ -1322,9 +1324,10 @@ export default defineComponent({
     }
 
     const dateConfirmEvent = () => {
-      const { type } = props
+      const { multiple } = props
       const dateValue = computeDateValue.value
-      if (type === 'time' || type === 'datetime') {
+      const isDateTimeType = computeIsDateTimeType.value
+      if (isDateTimeType || multiple) {
         dateChange(dateValue || reactData.currentDate)
       }
       hidePanel()
