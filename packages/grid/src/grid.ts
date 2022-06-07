@@ -1117,13 +1117,16 @@ export default defineComponent({
           $xegrid.loadColumn(columns)
         }
         initToolbar()
-        initProxy()
       })
       GlobalEvent.on($xegrid, 'keydown', handleGlobalKeydownEvent)
     })
 
     onUnmounted(() => {
       GlobalEvent.off($xegrid, 'keydown')
+    })
+
+    nextTick(() => {
+      initProxy()
     })
 
     const renderVN = () => {
