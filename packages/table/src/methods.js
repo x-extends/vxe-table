@@ -138,11 +138,11 @@ function calculateMergerOffserIndex (list, offsetItem, type) {
 function setMerges (_vm, merges, mList, rowList) {
   if (merges) {
     const { treeConfig, visibleColumn } = _vm
-    if (treeConfig) {
-      throw new Error(UtilTools.getLog('vxe.error.noTree', ['merge-footer-items']))
-    }
     if (!XEUtils.isArray(merges)) {
       merges = [merges]
+    }
+    if (treeConfig && merges.length) {
+      errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
     }
     merges.forEach(item => {
       let { row, col, rowspan, colspan } = item
@@ -187,11 +187,11 @@ function removeMerges (_vm, merges, mList, rowList) {
   const rest = []
   if (merges) {
     const { treeConfig, visibleColumn } = _vm
-    if (treeConfig) {
-      throw new Error(UtilTools.getLog('vxe.error.noTree', ['merge-cells']))
-    }
     if (!XEUtils.isArray(merges)) {
       merges = [merges]
+    }
+    if (treeConfig && merges.length) {
+      errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
     }
     merges.forEach(item => {
       let { row, col } = item
@@ -963,7 +963,7 @@ const Methods = {
         if (!this.isInsertByRow(row)) {
           const rowIndex = this.getRowIndex(row)
           if (treeConfig && rowIndex === -1) {
-            throw new Error(UtilTools.getLog('vxe.error.noTree', ['revertData']))
+            errLog('vxe.error.noTree', ['revertData'])
           }
           const oRow = tableSourceData[rowIndex]
           if (oRow && row) {

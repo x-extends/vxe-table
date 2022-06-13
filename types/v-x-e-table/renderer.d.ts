@@ -21,9 +21,19 @@ export interface VxeGlobalRenderer {
 }
 
 export interface RendererMapOptions {
-  // 筛选渲染
+  /**
+   * 请使用 filterClassName
+   * @deprecated
+   */
   className?: string;
+  /**
+   * 请使用 showFilterFooter
+   * @deprecated
+   */
   isFooter?: boolean;
+  // 筛选渲染
+  filterClassName?: string | ((params: ColumnFilterRenderParams) => string | { [key: string]: boolean })
+  showFilterFooter?: boolean;
   renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): VNode[] | string[];
   filterMethod?(params: ColumnFilterMethodParams): boolean;
   filterResetMethod?(params: ColumnFilterResetParams): void;
@@ -31,6 +41,7 @@ export interface RendererMapOptions {
   defaultFilterMethod?(params: ColumnFilterMethodParams): boolean;
 
   // 单元格渲染
+  cellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | { [key: string]: boolean })
   renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
   renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
   renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): VNode[] | string[];
@@ -50,6 +61,7 @@ export interface RendererMapOptions {
   renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): VNode[] | string[];
 
   // 表单-项渲染
+  itemClassName?: string | ((params: FormItemRenderParams) => string | { [key: string]: boolean })
   renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
   renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
   itemVisibleMethod?(params: FormItemVisibleParams): boolean;

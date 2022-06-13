@@ -3,7 +3,7 @@ import VXETable from '../../v-x-e-table'
 import UtilTools, { isEnableConf } from '../../tools/utils'
 import { getRowid } from '../../table/src/util'
 import DomTools, { browse } from '../../tools/dom'
-import { warnLog, errLog } from '../../tools/log'
+import { warnLog, errLog, getLog } from '../../tools/log'
 
 function insertTreeRow (_vm, newRecords, isAppend) {
   const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
@@ -130,7 +130,7 @@ export default {
             }
           } else {
             if (treeConfig) {
-              throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
+              throw new Error(getLog('vxe.error.noTree', ['insert']))
             }
             let afIndex = -1
             // 如果是可视索引

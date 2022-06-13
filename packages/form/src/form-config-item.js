@@ -30,6 +30,7 @@ const VxeFormConfigItem = {
     const { rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = $xeform
     const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+    const itemClassName = compConf ? compConf.itemClassName : ''
     const span = item.span || $xeform.span
     const align = item.align || $xeform.align
     const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
@@ -88,15 +89,22 @@ const VxeFormConfigItem = {
       mouseleave: $xeform.handleTitleTipLeaveEvent
     } : {}
     return h('div', {
-      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
-        'is--title': title,
-        'is--colon': titleColon,
-        'is--asterisk': titleAsterisk,
-        'is--required': isRequired,
-        'is--hidden': folding && collapseAll,
-        'is--active': !itemVisibleMethod || itemVisibleMethod(params),
-        'is--error': showError
-      }],
+      class: [
+        'vxe-form--item',
+        item.id,
+        span ? `vxe-col--${span} is--span` : null,
+        className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
+        itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : className) : '',
+        {
+          'is--title': title,
+          'is--colon': titleColon,
+          'is--asterisk': titleAsterisk,
+          'is--required': isRequired,
+          'is--hidden': folding && collapseAll,
+          'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+          'is--error': showError
+        }
+      ],
       props: {
         itemConfig: item
       },

@@ -16,15 +16,22 @@ export default {
   },
   render (h) {
     const { $parent: $xetable, filterStore } = this
-    const { column } = filterStore
+    const { args, column } = filterStore
     const filterRender = column ? column.filterRender : null
     const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+    const filterClassName = compConf ? compConf.filterClassName : ''
     return h('div', {
-      class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
-        'is--animat': $xetable.animat,
-        'is--multiple': filterStore.multiple,
-        'is--active': filterStore.visible
-      }],
+      class: [
+        'vxe-table--filter-wrapper',
+        'filter--prevent-default',
+        compConf && compConf.className ? compConf.className : '',
+        UtilTools.getClass(filterClassName, Object.assign({ $panel: this }, args)),
+        {
+          'is--animat': $xetable.animat,
+          'is--multiple': filterStore.multiple,
+          'is--active': filterStore.visible
+        }
+      ],
       style: filterStore.style
     }, filterStore.visible ? this.renderOptions(h, filterRender, compConf).concat(this.renderFooter(h)) : [])
   },

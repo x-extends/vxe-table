@@ -44,6 +44,7 @@ const renderItem = (h, _vm, item, slots) => {
   const { rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
   const { title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+  const itemClassName = compConf ? compConf.itemClassName : ''
   const span = item.span || _vm.span
   const align = item.align || _vm.align
   const titleAlign = item.titleAlign || _vm.titleAlign
@@ -82,13 +83,20 @@ const renderItem = (h, _vm, item, slots) => {
     mouseleave: _vm.handleTitleTipLeaveEvent
   } : {}
   return h('div', {
-    class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
-      'is--title': title,
-      'is--required': isRequired,
-      'is--hidden': visible === false || (folding && collapseAll),
-      'is--active': !itemVisibleMethod || itemVisibleMethod(params),
-      'is--error': showError
-    }]
+    class: [
+      'vxe-form--item',
+      item.id,
+      span ? `vxe-col--${span} is--span` : '',
+      className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
+      itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : className) : '',
+      {
+        'is--title': title,
+        'is--required': isRequired,
+        'is--hidden': visible === false || (folding && collapseAll),
+        'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+        'is--error': showError
+      }
+    ]
   }, [
     h('div', {
       class: 'vxe-form--item-inner'

@@ -66,7 +66,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
     isAllOverflow,
     align: allAlign,
     currentColumn,
-    cellClassName,
+    cellClassName: allCellClassName,
     cellStyle,
     mergeList,
     spanMethod,
@@ -90,6 +90,9 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   const { actived } = editStore
   const { rHeight: scrollYRHeight } = sYOpts
   const { height: rowHeight } = rowOpts
+  const renderOpts = editRender || cellRender
+  const compConf = renderOpts ? VXETable.renderer.get(renderOpts.name) : null
+  const cellClassName = compConf ? compConf.cellClassName : ''
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -255,19 +258,26 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
     }
   }
   return h('td', {
-    class: ['vxe-body--column', column.id, {
-      [`col--${cellAlign}`]: cellAlign,
-      [`col--${type}`]: type,
-      'col--last': $columnIndex === columns.length - 1,
-      'col--tree-node': treeNode,
-      'col--edit': isEdit,
-      'col--ellipsis': hasEllipsis,
-      'fixed--hidden': fixedHiddenColumn,
-      'col--dirty': isDirty,
-      'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
-      'col--valid-error': hasValidError,
-      'col--current': currentColumn === column
-    }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
+    class: [
+      'vxe-body--column',
+      column.id,
+      {
+        [`col--${cellAlign}`]: cellAlign,
+        [`col--${type}`]: type,
+        'col--last': $columnIndex === columns.length - 1,
+        'col--tree-node': treeNode,
+        'col--edit': isEdit,
+        'col--ellipsis': hasEllipsis,
+        'fixed--hidden': fixedHiddenColumn,
+        'col--dirty': isDirty,
+        'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
+        'col--valid-error': hasValidError,
+        'col--current': currentColumn === column
+      },
+      UtilTools.getClass(cellClassName, params),
+      UtilTools.getClass(className, params),
+      UtilTools.getClass(allCellClassName, params)
+    ],
     key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
@@ -343,15 +353,20 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     }
     rows.push(
       h('tr', {
-        class: ['vxe-body--row', treeConfig ? `row--level-${rowLevel}` : '', {
-          'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
-          'is--new': isNewRow,
-          'is--expand-row': isExpandRow,
-          'is--expand-tree': isExpandTree,
-          'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-          'row--radio': radioOpts.highlight && $xetable.selectRow === row,
-          'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
-        }, rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''],
+        class: [
+          'vxe-body--row',
+          treeConfig ? `row--level-${rowLevel}` : '',
+          {
+            'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
+            'is--new': isNewRow,
+            'is--expand-row': isExpandRow,
+            'is--expand-tree': isExpandTree,
+            'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
+            'row--radio': radioOpts.highlight && $xetable.selectRow === row,
+            'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
+          },
+          rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
+        ],
         attrs: {
           rowid: rowid
         },

@@ -4,7 +4,7 @@ import VXETable from '../../v-x-e-table'
 import UtilTools from '../../tools/utils'
 import { mergeBodyMethod, isColumnInfo } from '../../table/src/util'
 import { browse } from '../../tools/dom'
-import { warnLog, errLog } from '../../tools/log'
+import { warnLog, errLog, getLog } from '../../tools/log'
 
 const { formatText } = UtilTools
 
@@ -576,7 +576,7 @@ export function saveLocalFile (options) {
     }
     return Promise.resolve()
   }
-  return Promise.reject(new Error(UtilTools.getLog('vxe.error.notExp')))
+  return Promise.reject(new Error(getLog('vxe.error.notExp')))
 }
 
 function downloadFile ($xetable, opts, content) {
