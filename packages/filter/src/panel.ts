@@ -2,6 +2,7 @@ import { defineComponent, h, computed, inject } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { formatText } from '../../tools/utils'
+import { getPropClass } from '../../tools/dom'
 
 import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/all'
 
@@ -213,12 +214,20 @@ export default defineComponent({
       const { column } = filterStore
       const filterRender = column ? column.filterRender : null
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+      const filterClassName = compConf ? compConf.filterClassName : ''
+      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xetable })
       return h('div', {
-        class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
-          'is--animat': $xetable.props.animat,
-          'is--multiple': filterStore.multiple,
-          'is--active': filterStore.visible
-        }],
+        class: [
+          'vxe-table--filter-wrapper',
+          'filter--prevent-default',
+          compConf && compConf.className ? compConf.className : '',
+          getPropClass(filterClassName, params),
+          {
+            'is--animat': $xetable.props.animat,
+            'is--multiple': filterStore.multiple,
+            'is--active': filterStore.visible
+          }
+        ],
         style: filterStore.style
       }, initStore.filter && filterStore.visible ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
     }

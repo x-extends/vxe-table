@@ -1,7 +1,6 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { getPropClass } from '../../table/src/util'
-import { updateCellTitle } from '../../tools/dom'
+import { updateCellTitle, getPropClass } from '../../tools/dom'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types/all'
 

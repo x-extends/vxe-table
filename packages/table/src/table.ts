@@ -2,7 +2,7 @@ import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPu
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
-import { warnLog, errLog, getLog } from '../../tools/log'
+import { warnLog, errLog } from '../../tools/log'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { useSize } from '../../hooks/size'
@@ -714,12 +714,11 @@ export default defineComponent({
       if (merges) {
         const { treeConfig } = props
         const { visibleColumn } = internalData
-        if (treeConfig) {
-          errLog('vxe.error.noTree', ['merge-footer-items'])
-          return
-        }
         if (!XEUtils.isArray(merges)) {
           merges = [merges]
+        }
+        if (treeConfig && merges.length) {
+          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
         merges.forEach((item: any) => {
           let { row, col, rowspan, colspan }: any = item
@@ -765,11 +764,11 @@ export default defineComponent({
       if (merges) {
         const { treeConfig } = props
         const { visibleColumn } = internalData
-        if (treeConfig) {
-          throw new Error(getLog('vxe.error.noTree', ['merge-cells']))
-        }
         if (!XEUtils.isArray(merges)) {
           merges = [merges]
+        }
+        if (treeConfig && merges.length) {
+          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
         merges.forEach((item: any) => {
           let { row, col }: any = item

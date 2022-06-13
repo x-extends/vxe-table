@@ -112,10 +112,6 @@ export function setCellValue (row: any, column: VxeTableDefines.ColumnInfo, valu
   return XEUtils.set(row, column.field, value)
 }
 
-export function getPropClass (property: any, params: any) {
-  return property ? XEUtils.isFunction(property) ? property(params) : property : ''
-}
-
 export function getColMinWidth (params: {
   $table: VxeTableConstructor & VxeTablePrivateMethods;
   column: VxeTableDefines.ColumnInfo;

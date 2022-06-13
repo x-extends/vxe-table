@@ -11,6 +11,7 @@ type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResul
 export interface DefineRendererOption<T> {
   // 筛选渲染
   className?: string
+  filterClassName?: string | ((params: VxeGlobalRendererHandles.RenderFilterParams) => string | { [key: string]: boolean })
   showFilterFooter?: boolean
   renderFilter?(renderOpts: VxeGlobalRendererHandles.RenderFilterOptions, params: VxeGlobalRendererHandles.RenderFilterParams): T
   filterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
@@ -21,6 +22,7 @@ export interface DefineRendererOption<T> {
   defaultFilterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
 
   // 单元格渲染
+  cellClassName?: string | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => string | { [key: string]: boolean })
   renderHeader?(renderOpts: VxeGlobalRendererHandles.RenderHeaderOptions, params: VxeGlobalRendererHandles.RenderHeaderParams): T
   renderDefault?(renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions, params: VxeGlobalRendererHandles.RenderDefaultParams): T
   renderFooter?(renderOpts: VxeGlobalRendererHandles.RenderFooterOptions, params: VxeGlobalRendererHandles.RenderFooterParams): T
@@ -40,6 +42,7 @@ export interface DefineRendererOption<T> {
   renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams): T
 
   // 表单-项渲染
+  itemClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | { [key: string]: boolean })
   renderItemTitle?(renderOpts: VxeGlobalRendererHandles.RenderItemTitleOptions, params: VxeGlobalRendererHandles.RenderItemTitleParams): T
   renderItemContent?(renderOpts: VxeGlobalRendererHandles.RenderItemContentOptions, params: VxeGlobalRendererHandles.RenderItemContentParams): T
   itemVisibleMethod?(params: VxeGlobalRendererHandles.ItemVisibleMethodParams): boolean

@@ -29,6 +29,7 @@ const VxeFormConfigItem = defineComponent({
       const validOpts = computeValidOpts.value
       const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+      const itemClassName = compConf ? compConf.itemClassName : ''
       const defaultSlot = slots ? slots.default : null
       const titleSlot = slots ? slots.title : null
       const span = item.span || allSpan
@@ -110,15 +111,22 @@ const VxeFormConfigItem = defineComponent({
         onMouseleave: $xeform.handleTitleTipLeaveEvent
       } : {}
       return h('div', {
-        class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
-          'is--title': title,
-          'is--colon': titleColon,
-          'is--asterisk': titleAsterisk,
-          'is--required': isRequired,
-          'is--hidden': folding && collapseAll,
-          'is--active': !itemVisibleMethod || itemVisibleMethod(params),
-          'is--error': showError
-        }],
+        class: [
+          'vxe-form--item',
+          item.id,
+          span ? `vxe-col--${span} is--span` : '',
+          className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
+          itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
+          {
+            'is--title': title,
+            'is--colon': titleColon,
+            'is--asterisk': titleAsterisk,
+            'is--required': isRequired,
+            'is--hidden': folding && collapseAll,
+            'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+            'is--error': showError
+          }
+        ],
         itemConfig: item,
         key: item.id
       }, [

@@ -2,8 +2,8 @@ import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nex
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
-import { mergeBodyMethod, getRowid, getPropClass, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
-import { updateCellTitle } from '../../tools/dom'
+import { mergeBodyMethod, getRowid, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
+import { updateCellTitle, getPropClass } from '../../tools/dom'
 import { isEnableConf } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
@@ -122,7 +122,7 @@ export default defineComponent({
      * 渲染列
      */
     const renderColumn = (seq: number | string, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
-      const { columnKey, height, showOverflow: allColumnOverflow, cellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
+      const { columnKey, height, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
       const { tableData, overflowX, scrollYLoad, currentColumn, mergeList, editStore, validStore, isAllOverflow } = tableReactData
       const { afterFullData } = tableInternalData
       const validOpts = computeValidOpts.value
@@ -136,6 +136,9 @@ export default defineComponent({
       const { actived } = editStore
       const { rHeight: scrollYRHeight } = sYOpts
       const { height: rowHeight } = rowOpts
+      const renderOpts = editRender || cellRender
+      const compConf = renderOpts ? VXETable.renderer.get(renderOpts.name) : null
+      const cellClassName = compConf ? compConf.cellClassName : ''
       const showAllTip = tooltipOpts.showAll
       const columnIndex = $xetable.getColumnIndex(column)
       const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -283,19 +286,26 @@ export default defineComponent({
       }
 
       return h('td', {
-        class: ['vxe-body--column', column.id, {
-          [`col--${cellAlign}`]: cellAlign,
-          [`col--${type}`]: type,
-          'col--last': $columnIndex === columns.length - 1,
-          'col--tree-node': treeNode,
-          'col--edit': isEdit,
-          'col--ellipsis': hasEllipsis,
-          'fixed--hidden': fixedHiddenColumn,
-          'col--dirty': isDirty,
-          'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
-          'col--valid-error': hasValidError,
-          'col--current': currentColumn === column
-        }, getPropClass(className, params), getPropClass(cellClassName, params)],
+        class: [
+          'vxe-body--column',
+          column.id,
+          {
+            [`col--${cellAlign}`]: cellAlign,
+            [`col--${type}`]: type,
+            'col--last': $columnIndex === columns.length - 1,
+            'col--tree-node': treeNode,
+            'col--edit': isEdit,
+            'col--ellipsis': hasEllipsis,
+            'fixed--hidden': fixedHiddenColumn,
+            'col--dirty': isDirty,
+            'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
+            'col--valid-error': hasValidError,
+            'col--current': currentColumn === column
+          },
+          getPropClass(cellClassName, params),
+          getPropClass(className, params),
+          getPropClass(allCellClassName, params)
+        ],
         key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
         ...attrs,
         style: Object.assign({
@@ -363,15 +373,20 @@ export default defineComponent({
         }
         rows.push(
           h('tr', {
-            class: ['vxe-body--row', treeConfig ? `row--level-${rowLevel}` : '', {
-              'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
-              'is--new': isNewRow,
-              'is--expand-row': isExpandRow,
-              'is--expand-tree': isExpandTree,
-              'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-              'row--radio': radioOpts.highlight && selectRow === row,
-              'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
-            }, rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''],
+            class: [
+              'vxe-body--row',
+              treeConfig ? `row--level-${rowLevel}` : '',
+              {
+                'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
+                'is--new': isNewRow,
+                'is--expand-row': isExpandRow,
+                'is--expand-tree': isExpandTree,
+                'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
+                'row--radio': radioOpts.highlight && selectRow === row,
+                'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
+              },
+              getPropClass(rowClassName, params)
+            ],
             rowid: rowid,
             style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
             key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,
