@@ -31,6 +31,7 @@ export interface RendererMapOptions {
    * @deprecated
    */
   isFooter?: boolean;
+
   // 筛选渲染
   filterClassName?: string | ((params: ColumnFilterRenderParams) => string | { [key: string]: boolean })
   showFilterFooter?: boolean;
@@ -49,7 +50,7 @@ export interface RendererMapOptions {
   footerExportMethod?(params: ColumnExportFooterRenderParams): string;
 
   // 编辑渲染
-  autofocus?: string;
+  autofocus?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => HTMLElement | null);
   renderEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
   renderCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
 

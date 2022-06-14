@@ -88,7 +88,7 @@ const renderItem = (h, _vm, item, slots) => {
       item.id,
       span ? `vxe-col--${span} is--span` : '',
       className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
-      itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : className) : '',
+      itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
       {
         'is--title': title,
         'is--required': isRequired,

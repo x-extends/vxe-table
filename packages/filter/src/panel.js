@@ -25,7 +25,7 @@ export default {
         'vxe-table--filter-wrapper',
         'filter--prevent-default',
         compConf && compConf.className ? compConf.className : '',
-        UtilTools.getClass(filterClassName, Object.assign({ $panel: this }, args)),
+        UtilTools.getClass(filterClassName, Object.assign({ $panel: this, $table: $xetable }, args)),
         {
           'is--animat': $xetable.animat,
           'is--multiple': filterStore.multiple,

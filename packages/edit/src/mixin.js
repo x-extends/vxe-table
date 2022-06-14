@@ -543,18 +543,21 @@ export default {
       const { editRender } = column
       if (isEnableConf(editRender)) {
         const compRender = VXETable.renderer.get(editRender.name)
-        const { autofocus, autoselect } = editRender
+        let { autofocus, autoselect } = editRender
         let inputElem
-        // 如果指定了聚焦 class
-        if (autofocus) {
-          inputElem = cell.querySelector(autofocus)
+        if (!autofocus && compRender) {
+          autofocus = compRender.autofocus
         }
-        // 渲染器的聚焦处理
-        if (!inputElem && compRender && compRender.autofocus) {
-          inputElem = cell.querySelector(compRender.autofocus)
+        // 如果指定了聚焦 class
+        if (XEUtils.isFunction(autofocus)) {
+          inputElem = autofocus.call(this, params)
+        } else if (autofocus) {
+          inputElem = cell.querySelector(autofocus)
+          if (inputElem) {
+            inputElem.focus()
+          }
         }
         if (inputElem) {
-          inputElem.focus()
           if (autoselect) {
             inputElem.select()
           } else {
