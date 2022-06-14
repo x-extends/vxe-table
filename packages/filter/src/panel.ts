@@ -220,7 +220,6 @@ export default defineComponent({
         class: [
           'vxe-table--filter-wrapper',
           'filter--prevent-default',
-          compConf && compConf.className ? compConf.className : '',
           getPropClass(filterClassName, params),
           {
             'is--animat': $xetable.props.animat,

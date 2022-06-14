@@ -30,7 +30,7 @@ export interface DefineRendererOption<T> {
   footerExportMethod?(params: VxeGlobalRendererHandles.FooterExportMethodParams): string
 
   // 编辑渲染
-  autofocus?: string
+  autofocus?: string | ((params: VxeGlobalRendererHandles.RenderEditParams | VxeGlobalRendererHandles.RenderCellParams) => HTMLElement | null)
   renderEdit?(renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams): T
   renderCell?(renderOpts: VxeGlobalRendererHandles.RenderCellOptions, params: VxeGlobalRendererHandles.RenderCellParams): T
 
