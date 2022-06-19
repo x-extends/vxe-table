@@ -298,6 +298,12 @@ export default defineComponent({
             class: ['vxe-button--loading-icon', GlobalConfig.icon.BUTTON_LOADING]
           })
         )
+      } else if (slots.icon) {
+        contVNs.push(
+          h('span', {
+            class: 'vxe-button--custom-icon'
+          }, slots.icon({}))
+        )
       } else if (icon) {
         contVNs.push(
           h('i', {

@@ -5,7 +5,7 @@ import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf, eqEmptyValue } from '../../tools/utils'
 import { errLog } from '../../tools/log'
 import { scrollToView } from '../../tools/dom'
-import { createItem, handleFieldOrItem } from './util'
+import { createItem, handleFieldOrItem, isHiddenItem, isActivetem } from './util'
 import { useSize } from '../../hooks/size'
 import VxeFormConfigItem from './form-config-item'
 import VxeLoading from '../../loading/index'
@@ -361,7 +361,7 @@ export default defineComponent({
       if (data && formRules) {
         itemList.forEach((item) => {
           const { field } = item
-          if (field) {
+          if (field && !isHiddenItem($xeform, item) && isActivetem($xeform, item)) {
             itemValids.push(
               validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
@@ -494,7 +494,7 @@ export default defineComponent({
 
     const triggerItemEvent = (evnt: Event, field: string, itemValue?: any) => {
       if (field) {
-        return validItemRules(evnt ? evnt.type : 'all', field, itemValue)
+        return validItemRules(evnt ? (['blur'].includes(evnt.type) ? 'blur' : 'change') : 'all', field, itemValue)
           .then(() => {
             clearValidate(field)
           })

@@ -2466,7 +2466,9 @@ export namespace VxeTableDefines {
   export interface FilterVisibleEventParams extends TableEventParams, FilterVisibleParams { }
 
   export interface ResizableChangeParams extends TableBaseHeaderCellParams { }
-  export interface ResizableChangeEventParams extends TableEventParams, ResizableChangeParams { }
+  export interface ResizableChangeEventParams extends TableEventParams, ResizableChangeParams {
+    resizeWidth: number
+  }
 
   export interface ToggleRowExpandParams extends TableBaseCellParams { }
   export interface ToggleRowExpandEventParams extends TableEventParams, ToggleRowExpandParams { }

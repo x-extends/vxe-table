@@ -1,9 +1,9 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, provide, onMounted, PropType } from 'vue'
+import { defineComponent, h, onUnmounted, inject, ref, Ref, provide, onMounted, PropType, createCommentVNode, reactive } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf } from '../../tools/utils'
-import { createItem, watchItem, destroyItem, assemItem, XEFormItemProvide } from './util'
+import { createItem, watchItem, destroyItem, assemItem, XEFormItemProvide, isActivetem } from './util'
 import { renderTitle } from './render'
 
 import { VxeFormConstructor, VxeFormDefines, VxeFormItemPropTypes, VxeFormPrivateMethods } from '../../../types/all'
@@ -42,7 +42,7 @@ export default defineComponent({
     const refElem = ref() as Ref<HTMLDivElement>
     const $xeform = inject('$xeform', {} as VxeFormConstructor & VxeFormPrivateMethods)
     const formGather = inject('$xeformgather', null as XEFormItemProvide | null)
-    const formItem = createItem($xeform, props)
+    const formItem = reactive(createItem($xeform, props))
     const xeformitem: XEFormItemProvide = { formItem }
     const xeformiteminfo = { itemConfig: formItem }
     formItem.slots = slots
@@ -67,7 +67,7 @@ export default defineComponent({
       const { collapseAll } = reactData
       const { computeValidOpts } = $xeform.getComputeMaps()
       const validOpts = computeValidOpts.value
-      const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
+      const { slots, title, visible, folding, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const itemClassName = compConf ? compConf.itemClassName : ''
       const defaultSlot = slots ? slots.default : null
@@ -81,17 +81,16 @@ export default defineComponent({
       const showTitle = itemOverflow === 'title'
       const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
       const hasEllipsis = showTitle || showTooltip || showEllipsis
-      let itemVisibleMethod = visibleMethod
       const params = { data, field, property: field, item, $form: $xeform }
       let isRequired = false
+      if (visible === false) {
+        return createCommentVNode()
+      }
       if (rules) {
         const itemRules = rules[field]
         if (itemRules) {
           isRequired = itemRules.some((rule) => rule.required)
         }
-      }
-      if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-        itemVisibleMethod = compConf.itemVisibleMethod
       }
       let contentVNs: any[] = []
       if (defaultSlot) {
@@ -143,8 +142,8 @@ export default defineComponent({
           {
             'is--title': title,
             'is--required': isRequired,
-            'is--hidden': visible === false || (folding && collapseAll),
-            'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+            'is--hidden': folding && collapseAll,
+            'is--active': isActivetem($xeform, item),
             'is--error': showError
           }
         ]

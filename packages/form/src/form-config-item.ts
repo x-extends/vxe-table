@@ -4,6 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf } from '../../tools/utils'
 import { renderTitle } from './render'
+import { isActivetem } from './util'
 
 import { VxeFormConstructor, VxeFormDefines, VxeFormPrivateMethods } from '../../../types/all'
 
@@ -27,7 +28,7 @@ const VxeFormConfigItem = defineComponent({
       const item = props.itemConfig as VxeFormDefines.ItemInfo
       const { collapseAll } = reactData
       const validOpts = computeValidOpts.value
-      const { slots, title, visible, folding, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
+      const { slots, title, visible, folding, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const itemClassName = compConf ? compConf.itemClassName : ''
       const defaultSlot = slots ? slots.default : null
@@ -43,7 +44,6 @@ const VxeFormConfigItem = defineComponent({
       const showTitle = itemOverflow === 'title'
       const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
       const hasEllipsis = showTitle || showTooltip || showEllipsis
-      let itemVisibleMethod = visibleMethod
       const params = { data, field, property: field, item, $form: $xeform }
       if (visible === false) {
         return createCommentVNode()
@@ -67,9 +67,6 @@ const VxeFormConfigItem = defineComponent({
         return childVNs.length ? h('div', {
           class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
         }, childVNs) : createCommentVNode()
-      }
-      if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-        itemVisibleMethod = compConf.itemVisibleMethod
       }
       let contentVNs: any[] = []
       if (defaultSlot) {
@@ -123,7 +120,7 @@ const VxeFormConfigItem = defineComponent({
             'is--asterisk': titleAsterisk,
             'is--required': isRequired,
             'is--hidden': folding && collapseAll,
-            'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+            'is--active': isActivetem($xeform, item),
             'is--error': showError
           }
         ],

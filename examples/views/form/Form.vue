@@ -223,8 +223,8 @@
         <div>
           <vxe-form-item align="center" collapse-node>
             <template #default>
-              <vxe-button status="primary" content="手动提交方式" @click="searchEvent"></vxe-button>
-              <vxe-button content="重置" @click="resetEvent"></vxe-button>
+              <vxe-button status="primary" content="手动提交方式" @click="searchEvent3"></vxe-button>
+              <vxe-button content="重置" @click="resetEvent3"></vxe-button>
             </template>
           </vxe-form-item>
         </div>
@@ -313,6 +313,9 @@ export default defineComponent({
         ],
         nickname: [
           { required: true, message: '请输入' }
+        ],
+        date: [
+          { required: true, message: '请输入' }
         ]
       }
     })
@@ -365,6 +368,14 @@ export default defineComponent({
     }
 
     const searchEvent: VxeFormEvents.Submit = async () => {
+      VXETable.modal.message({ content: '查询事件', status: 'info' })
+    }
+
+    const resetEvent: VxeFormEvents.Reset = () => {
+      VXETable.modal.message({ content: '重置事件', status: 'info' })
+    }
+
+    const searchEvent3: VxeFormEvents.Submit = async () => {
       const $form = xForm3.value
       const errMap = await $form.validate()
       if (errMap) {
@@ -373,7 +384,9 @@ export default defineComponent({
       VXETable.modal.message({ content: '查询事件', status: 'info' })
     }
 
-    const resetEvent: VxeFormEvents.Reset = () => {
+    const resetEvent3: VxeFormEvents.Reset = () => {
+      const $form = xForm3.value
+      $form.reset()
       VXETable.modal.message({ content: '重置事件', status: 'info' })
     }
 
@@ -383,6 +396,8 @@ export default defineComponent({
       submitEvent2,
       xForm3,
       demo3,
+      searchEvent3,
+      resetEvent3,
       demo4,
       searchEvent,
       resetEvent
