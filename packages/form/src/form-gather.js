@@ -8,9 +8,7 @@ export default {
     return {
       $xeformgather: this,
       xeformitem: null,
-      $xeformiteminfo: {
-        itemConfig: this.itemConfig
-      }
+      $xeformiteminfo: this
     }
   },
   created () {

@@ -220,8 +220,8 @@
         <div>
           <vxe-form-item align="center" collapse-node>
             <template #default>
-              <vxe-button status="primary" content="手动提交方式" @click="searchEvent"></vxe-button>
-              <vxe-button content="重置" @click="resetEvent"></vxe-button>
+              <vxe-button status="primary" content="手动提交方式" @click="searchEvent3"></vxe-button>
+              <vxe-button content="重置" @click="resetEvent3"></vxe-button>
             </template>
           </vxe-form-item>
         </div>
@@ -304,6 +304,9 @@ export default {
         ],
         nickname: [
           { required: true, message: '请输入' }
+        ],
+        date: [
+          { required: true, message: '请输入' }
         ]
       },
       formData4: {
@@ -352,7 +355,13 @@ export default {
         this.$XModal.message({ message: '保存成功', status: 'success' })
       }, 1000)
     },
-    async searchEvent () {
+    searchEvent () {
+      this.$XModal.message({ message: '查询事件', status: 'info' })
+    },
+    resetEvent () {
+      this.$XModal.message({ message: '重置事件', status: 'info' })
+    },
+    async searchEvent3 () {
       const $form = this.$refs.xForm3
       const errMap = await $form.validate()
       if (errMap) {
@@ -360,7 +369,9 @@ export default {
       }
       this.$XModal.message({ message: '查询事件', status: 'info' })
     },
-    resetEvent () {
+    resetEvent3 () {
+      const $form = this.$refs.xForm3
+      $form.reset()
       this.$XModal.message({ message: '重置事件', status: 'info' })
     }
   }

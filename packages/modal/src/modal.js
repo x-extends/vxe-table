@@ -5,6 +5,7 @@ import UtilTools, { getFuncText } from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import { GlobalEvent } from '../../tools/event'
 import { errLog } from '../../tools/log'
+import { getSlotVNs } from '../../tools/vn'
 import VxeLoading from '../../loading/index'
 
 export const allActivedModals = []
@@ -168,8 +169,8 @@ export default {
             'is--ellipsis': !isMsg && showTitleOverflow
           }],
           on: headerOns
-        }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : headerSlot.call(this, { $modal: this }, h)) : [
-          titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
+        }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(headerSlot.call(this, { $modal: this }, h))) : [
+          titleSlot ? getSlotVNs(titleSlot.call(this, { $modal: this }, h)) : h('span', {
             class: 'vxe-modal--title'
           }, title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
           showZoom ? h('i', {
@@ -203,7 +204,7 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : getFuncText(content)),
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs.call(defaultSlot(this, { $modal: this }, h))) : getFuncText(content)),
           /**
            * 加载中
            */
@@ -216,7 +217,7 @@ export default {
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : footerSlot.call(this, { $modal: this }, h)) : [
+        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs.call(footerSlot(this, { $modal: this }, h))) : [
           type === 'confirm' ? h('vxe-button', {
             ref: 'cancelBtn',
             on: {

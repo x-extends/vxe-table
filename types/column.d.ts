@@ -1,5 +1,5 @@
 import { CreateElement, VNode } from 'vue'
-import { VXETableComponent } from './component'
+import { VXETableComponent, SlotVNodeType } from './component'
 import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './filter'
 import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './header'
@@ -292,13 +292,13 @@ export interface ColumnOptions {
   params?: any;
 
   slots?: {
-    default?(params: ColumnDefaultSlotParams, h: CreateElement): VNode[] | string[];
-    header?(params: ColumnHeaderSlotParams, h: CreateElement): VNode[] | string[];
-    footer?(params: ColumnFooterSlotParams, h: CreateElement): VNode[] | string[];
-    content?(params: ColumnContentSlotParams, h: CreateElement): VNode[] | string[];
-    filter?(params: ColumnFilterSlotParams, h: CreateElement): VNode[] | string[];
-    edit?(params: ColumnEditSlotParams, h: CreateElement): VNode[] | string[];
-    icon?(params: ColumnIconSlotParams, h: CreateElement): VNode[] | string[];
+    default?(params: ColumnDefaultSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    header?(params: ColumnHeaderSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    footer?(params: ColumnFooterSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    content?(params: ColumnContentSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    filter?(params: ColumnFilterSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    edit?(params: ColumnEditSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    icon?(params: ColumnIconSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
   };
 }
 

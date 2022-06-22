@@ -2,8 +2,9 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { isEnableConf, getFuncText } from '../../tools/utils'
-import { createItem, destroyItem, assemItem } from './util'
+import { createItem, destroyItem, assemItem, isActivetem } from './util'
 import { renderTitle } from './render'
+import { getSlotVNs } from '../../tools/vn'
 
 const props = {
   title: String,
@@ -41,15 +42,14 @@ Object.keys(props).forEach(name => {
 })
 
 const renderItem = (h, _vm, item, slots) => {
-  const { rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
-  const { title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
+  const { _e, rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
+  const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const itemClassName = compConf ? compConf.itemClassName : ''
   const span = item.span || _vm.span
   const align = item.align || _vm.align
   const titleAlign = item.titleAlign || _vm.titleAlign
   const titleWidth = item.titleWidth || _vm.titleWidth
-  let itemVisibleMethod = visibleMethod
   const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
   const showEllipsis = itemOverflow === 'ellipsis'
   const showTitle = itemOverflow === 'title'
@@ -57,8 +57,8 @@ const renderItem = (h, _vm, item, slots) => {
   const hasEllipsis = showTitle || showTooltip || showEllipsis
   const params = { data, field, property: field, item, $form: _vm }
   let isRequired
-  if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-    itemVisibleMethod = compConf.itemVisibleMethod
+  if (visible === false) {
+    return _e()
   }
   if (rules) {
     const itemRules = rules[field]
@@ -70,9 +70,9 @@ const renderItem = (h, _vm, item, slots) => {
   if (slots && slots.default) {
     contentVNs = _vm.callSlot(slots.default, params, h)
   } else if (compConf && compConf.renderItemContent) {
-    contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
+    contentVNs = getSlotVNs(compConf.renderItemContent.call(_vm, h, itemRender, params))
   } else if (compConf && compConf.renderItem) {
-    contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
+    contentVNs = getSlotVNs(compConf.renderItem.call(_vm, h, itemRender, params))
   } else if (field) {
     contentVNs = [`${XEUtils.get(data, field)}`]
   }
@@ -92,8 +92,8 @@ const renderItem = (h, _vm, item, slots) => {
       {
         'is--title': title,
         'is--required': isRequired,
-        'is--hidden': visible === false || (folding && collapseAll),
-        'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+        'is--hidden': folding && collapseAll,
+        'is--active': isActivetem(_vm, item),
         'is--error': showError
       }
     ]
@@ -156,9 +156,7 @@ export default {
   provide () {
     return {
       $xeformitem: this,
-      $xeformiteminfo: {
-        itemConfig: this.itemConfig
-      }
+      $xeformiteminfo: this
     }
   },
   data () {

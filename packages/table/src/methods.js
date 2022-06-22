@@ -7,6 +7,7 @@ import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/
 import DomTools, { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { formats } from '../../v-x-e-table/src/formats'
 import { warnLog, errLog } from '../../tools/log'
+import { getSlotVNs } from '../../tools/vn'
 
 const { setCellValue, hasChildrenList, getColumnList } = UtilTools
 const { calcHeight, hasClass, addClass, removeClass, getEventTargetNode, isNodeElement } = DomTools
@@ -245,7 +246,7 @@ const Methods = {
         return $xegrid.callSlot(slotFunc, params, h, vNodes)
       }
       if (XEUtils.isFunction(slotFunc)) {
-        return slotFunc.call(this, params, h, vNodes)
+        return getSlotVNs(slotFunc.call(this, params, h, vNodes))
       }
     }
     return []

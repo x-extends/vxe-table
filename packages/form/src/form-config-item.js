@@ -3,6 +3,8 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { isEnableConf, getFuncText } from '../../tools/utils'
 import { renderTitle } from './render'
+import { isActivetem } from './util'
+import { getSlotVNs } from '../../tools/vn'
 
 /**
  * 配置式项
@@ -20,15 +22,13 @@ const VxeFormConfigItem = {
   provide () {
     return {
       $xeformgather: null,
-      $xeformiteminfo: {
-        itemConfig: this.itemConfig
-      }
+      $xeformiteminfo: this
     }
   },
   render (h) {
     const { _e, $xeform, itemConfig: item } = this
     const { rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = $xeform
-    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
+    const { slots, title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const itemClassName = compConf ? compConf.itemClassName : ''
     const span = item.span || $xeform.span
@@ -37,7 +37,6 @@ const VxeFormConfigItem = {
     const titleWidth = XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth
     const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
     const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
-    let itemVisibleMethod = visibleMethod
     const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
     const showEllipsis = itemOverflow === 'ellipsis'
     const showTitle = itemOverflow === 'title'
@@ -63,9 +62,6 @@ const VxeFormConfigItem = {
         class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
       }, childVNs) : _e()
     }
-    if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-      itemVisibleMethod = compConf.itemVisibleMethod
-    }
     if (rules) {
       const itemRules = rules[field]
       if (itemRules) {
@@ -76,9 +72,9 @@ const VxeFormConfigItem = {
     if (slots && slots.default) {
       contentVNs = $xeform.callSlot(slots.default, params, h)
     } else if (compConf && compConf.renderItemContent) {
-      contentVNs = compConf.renderItemContent.call($xeform, h, itemRender, params)
+      contentVNs = getSlotVNs(compConf.renderItemContent.call($xeform, h, itemRender, params))
     } else if (compConf && compConf.renderItem) {
-      contentVNs = compConf.renderItem.call($xeform, h, itemRender, params)
+      contentVNs = getSlotVNs(compConf.renderItem.call($xeform, h, itemRender, params))
     } else if (field) {
       contentVNs = [XEUtils.toValueString(XEUtils.get(data, field))]
     }
@@ -94,14 +90,14 @@ const VxeFormConfigItem = {
         item.id,
         span ? `vxe-col--${span} is--span` : null,
         className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
-        itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : className) : '',
+        itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
         {
           'is--title': title,
           'is--colon': titleColon,
           'is--asterisk': titleAsterisk,
           'is--required': isRequired,
           'is--hidden': folding && collapseAll,
-          'is--active': !itemVisibleMethod || itemVisibleMethod(params),
+          'is--active': isActivetem($xeform, item),
           'is--error': showError
         }
       ],

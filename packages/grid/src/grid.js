@@ -7,6 +7,7 @@ import UtilTools, { isEnableConf } from '../../tools/utils'
 import DomTools, { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/dom'
 import { GlobalEvent } from '../../tools/event'
 import { warnLog, errLog } from '../../tools/log'
+import { getSlotVNs } from '../../tools/vn'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -372,7 +373,7 @@ export default {
           slotFunc = $scopedSlots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params, h, vNodes)
+          return getSlotVNs(slotFunc.call(this, params, h, vNodes))
         }
       }
       return []

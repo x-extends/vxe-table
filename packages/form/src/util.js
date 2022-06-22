@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
 import { warnLog } from '../../tools/log'
+import { isEnableConf } from '../../tools/utils'
 
 class ItemConfig {
   constructor ($xeform, item) {
@@ -56,6 +57,28 @@ export const handleFieldOrItem = ($xeform, fieldOrItem) => {
     return XEUtils.isString(fieldOrItem) ? $xeform.getItemByField(fieldOrItem) : fieldOrItem
   }
   return null
+}
+
+export function isHiddenItem ($xeform, formItem) {
+  const { collapseAll } = $xeform
+  const { folding, visible } = formItem
+  return visible === false || (folding && collapseAll)
+}
+
+export function isActivetem ($xeform, formItem) {
+  let { visibleMethod, itemRender, visible, field } = formItem
+  if (visible === false) {
+    return visible
+  }
+  const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+  if (!visibleMethod && compConf && compConf.itemVisibleMethod) {
+    visibleMethod = compConf.itemVisibleMethod
+  }
+  if (!visibleMethod) {
+    return true
+  }
+  const { data } = $xeform
+  return visibleMethod({ data, field, property: field, item: formItem, $form: $xeform })
 }
 
 export function createItem ($xeform, _vm) {

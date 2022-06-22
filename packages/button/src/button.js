@@ -140,6 +140,12 @@ export default {
             class: ['vxe-button--loading-icon', GlobalConfig.icon.BUTTON_LOADING]
           })
         )
+      } else if ($scopedSlots.icon) {
+        contents.push(
+          h('span', {
+            class: 'vxe-button--custom-icon'
+          }, $scopedSlots.icon.call(this, {}))
+        )
       } else if (icon) {
         contents.push(
           h('i', {
@@ -151,7 +157,7 @@ export default {
         contents.push(
           h('span', {
             class: 'vxe-button--content'
-          }, $scopedSlots.default.call(this))
+          }, $scopedSlots.default.call(this, {}))
         )
       } else if (content) {
         contents.push(

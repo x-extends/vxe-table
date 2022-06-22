@@ -5,6 +5,7 @@ import vSize from '../../mixins/size'
 import UtilTools, { getFuncText } from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
+import { getSlotVNs } from '../../tools/vn'
 
 function isOptionVisible (option) {
   return option.visible !== false
@@ -474,7 +475,7 @@ export default {
           slotFunc = $scopedSlots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params, h)
+          return getSlotVNs(slotFunc.call(this, params, h))
         }
       }
       return []

@@ -4,10 +4,11 @@ import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
 import { isEnableConf, eqEmptyValue, getFuncText } from '../../tools/utils'
 import DomTools, { browse } from '../../tools/dom'
-import { createItem, handleFieldOrItem } from './util'
+import { createItem, handleFieldOrItem, isHiddenItem, isActivetem } from './util'
 import { errLog } from '../../tools/log'
 import VxeFormConfigItem from './form-config-item'
 import VxeLoading from '../../loading/index'
+import { getSlotVNs } from '../../tools/vn'
 
 class Rule {
   constructor (rule) {
@@ -79,6 +80,7 @@ export default {
     titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String], default: null },
     className: [String, Function],
+    readonly: Boolean,
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
@@ -193,7 +195,7 @@ export default {
           slotFunc = $scopedSlots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params, h)
+          return getSlotVNs(slotFunc.call(this, params, h))
         }
       }
       return []
@@ -357,7 +359,7 @@ export default {
       if (data && formRules) {
         itemList.forEach(item => {
           const { field } = item
-          if (field) {
+          if (field && !isHiddenItem(this, item) && isActivetem(this, item)) {
             itemValids.push(
               this.validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
@@ -506,7 +508,7 @@ export default {
     },
     triggerItemEvent (evnt, field, itemValue) {
       if (field) {
-        return this.validItemRules(evnt ? evnt.type : 'all', field, itemValue)
+        return this.validItemRules(evnt ? (['blur'].includes(evnt.type) ? 'blur' : 'change') : 'all', field, itemValue)
           .then(() => {
             this.clearValidate(field)
           })
