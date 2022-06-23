@@ -204,7 +204,7 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs.call(defaultSlot(this, { $modal: this }, h))) : getFuncText(content)),
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(defaultSlot.call(this, { $modal: this }, h))) : getFuncText(content)),
           /**
            * 加载中
            */
@@ -217,7 +217,7 @@ export default {
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs.call(footerSlot(this, { $modal: this }, h))) : [
+        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(footerSlot.call(this, { $modal: this }, h))) : [
           type === 'confirm' ? h('vxe-button', {
             ref: 'cancelBtn',
             on: {
