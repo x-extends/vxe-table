@@ -2228,7 +2228,7 @@ const Methods = {
                     // 如果点击了当前表格之外
                     !getEventTargetNode(evnt, $el).flag
                 ) {
-                  setTimeout(() => this.clearActived(evnt))
+                  setTimeout(() => this.clearEdit(evnt))
                 }
               })
             }
@@ -2289,7 +2289,7 @@ const Methods = {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               const params = actived.args
-              this.clearActived(evnt)
+              this.clearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
               if (mouseConfig && mouseOpts.selected) {
                 this.$nextTick(() => this.handleSelected(params, evnt))
@@ -2378,7 +2378,7 @@ const Methods = {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               params = actived.args
-              this.clearActived(evnt)
+              this.clearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
               if (mouseConfig && mouseOpts.selected) {
                 this.$nextTick(() => this.handleSelected(params, evnt))
