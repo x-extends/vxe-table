@@ -4646,6 +4646,18 @@ const Methods = {
     }
     return cellLabel
   },
+  findRowIndexOf (list, row) {
+    return row ? XEUtils.findIndexOf(list, item => this.eqRow(item, row)) : -1
+  },
+  eqRow (row1, row2) {
+    if (row1 && row2) {
+      if (row1 === row2) {
+        return true
+      }
+      return getRowid(this, row1) === getRowid(this, row2)
+    }
+    return false
+  },
   /*************************
    * Publish methods
    *************************/
