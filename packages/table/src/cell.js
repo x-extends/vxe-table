@@ -217,9 +217,9 @@ export const Cell = {
       return $table.callSlot(slots.icon, params, h, cellVNodes)
     }
     if (!isHidden) {
-      isAceived = treeExpandeds.indexOf(row) > -1
+      isAceived = $table.findRowIndexOf(treeExpandeds, row) > -1
       if (lazy) {
-        isLazyLoaded = treeLazyLoadeds.indexOf(row) > -1
+        isLazyLoaded = $table.findRowIndexOf(treeLazyLoadeds, row) > -1
         hasLazyChilds = row[hasChild]
       }
     }
@@ -411,7 +411,7 @@ export const Cell = {
   },
   renderCheckboxCell (h, params) {
     const { $table, row, column, isHidden } = params
-    const { treeConfig, treeIndeterminates } = $table
+    const { treeConfig, treeIndeterminates, selection } = $table
     const { labelField, checkMethod, visibleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
@@ -422,7 +422,7 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
-      isChecked = $table.selection.indexOf(row) > -1
+      isChecked = $table.findRowIndexOf(selection, row) > -1
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
@@ -434,7 +434,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        indeterminate = $table.findRowIndexOf(treeIndeterminates, row) > -1
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
@@ -501,7 +501,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        indeterminate = $table.findRowIndexOf(treeIndeterminates, row) > -1
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
@@ -559,9 +559,9 @@ export const Cell = {
       return $table.callSlot(slots.icon, params, h)
     }
     if (!isHidden) {
-      isAceived = rowExpandeds.indexOf(params.row) > -1
+      isAceived = $table.findRowIndexOf(rowExpandeds, params.row) > -1
       if (lazy) {
-        isLazyLoaded = expandLazyLoadeds.indexOf(row) > -1
+        isLazyLoaded = $table.findRowIndexOf(expandLazyLoadeds, row) > -1
       }
     }
     return [
