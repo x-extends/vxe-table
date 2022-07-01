@@ -2919,7 +2919,7 @@ export default defineComponent({
           if (opts.resizable) {
             column.resizeWidth = 0
           }
-          if (!checkMethod || checkMethod({ column })) {
+          if (opts.resizable && (!checkMethod || checkMethod({ column }))) {
             column.visible = column.defaultVisible
           }
         })
