@@ -2919,8 +2919,8 @@ export default defineComponent({
           if (opts.resizable) {
             column.resizeWidth = 0
           }
-          if (!checkMethod || checkMethod({ column })) {
             column.visible = column.defaultVisible
+          if (opts.visible && (!checkMethod || checkMethod({ column }))) {
           }
         })
         if (opts.resizable) {
