@@ -139,13 +139,13 @@ export default {
                 afIndex = row
               }
             } else {
-              afIndex = afterFullData.indexOf(row)
+              afIndex = this.findRowIndexOf(afterFullData, row)
             }
             if (afIndex === -1) {
               throw new Error(errLog('vxe.error.unableInsert'))
             }
             afterFullData.splice(afIndex, 0, ...newRecords)
-            tableFullData.splice(tableFullData.indexOf(row), 0, ...newRecords)
+            tableFullData.splice(this.findRowIndexOf(tableFullData, row), 0, ...newRecords)
             // 刷新单元格合并
             mergeList.forEach(mergeItem => {
               const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
@@ -205,7 +205,7 @@ export default {
       // 如果绑定了多选属性，则更新状态
       if (!checkField) {
         rows.forEach(row => {
-          const sIndex = selection.indexOf(row)
+          const sIndex = this.findRowIndexOf(selection, row)
           if (sIndex > -1) {
             selection.splice(sIndex, 1)
           }
@@ -227,19 +227,19 @@ export default {
               const rItems = matchObj.items.splice(matchObj.index, 1)
               rest.push(rItems[0])
             }
-            const afIndex = afterFullData.indexOf(row)
+            const afIndex = this.findRowIndexOf(afterFullData, row)
             if (afIndex > -1) {
               afterFullData.splice(afIndex, 1)
             }
           })
         } else {
           rows.forEach(row => {
-            const tfIndex = tableFullData.indexOf(row)
+            const tfIndex = this.findRowIndexOf(tableFullData, row)
             if (tfIndex > -1) {
               const rItems = tableFullData.splice(tfIndex, 1)
               rest.push(rItems[0])
             }
-            const afIndex = afterFullData.indexOf(row)
+            const afIndex = this.findRowIndexOf(afterFullData, row)
             if (afIndex > -1) {
               // 刷新单元格合并
               mergeList.forEach(mergeItem => {
@@ -256,12 +256,12 @@ export default {
         }
       }
       // 如果当前行被激活编辑，则清除激活状态
-      if (actived.row && rows.indexOf(actived.row) > -1) {
+      if (actived.row && this.findRowIndexOf(rows, actived.row) > -1) {
         this.clearActived()
       }
       // 从新增中移除已删除的数据
       rows.forEach(row => {
-        const iIndex = insertList.indexOf(row)
+        const iIndex = this.findRowIndexOf(insertList, row)
         if (iIndex > -1) {
           insertList.splice(iIndex, 1)
         }
@@ -516,7 +516,7 @@ export default {
       const { $el, editStore, afterFullData } = this
       const { actived } = editStore
       const { args, row } = actived
-      if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
+      if (args && this.findRowIndexOf(afterFullData, row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
         return Object.assign({}, args)
       }
       return null
@@ -618,7 +618,7 @@ export default {
       const { tableData, editOpts, visibleColumn } = this
       const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
       if (row && column && editOpts.trigger !== 'manual') {
-        const rowIndex = tableData.indexOf(row)
+        const rowIndex = this.findRowIndexOf(tableData, row)
         if (rowIndex > -1) {
           const cell = this.getCell(row, column)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
