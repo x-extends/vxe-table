@@ -105,6 +105,7 @@ export namespace VxeFormItemPropTypes {
     property: string
   }
   export type ClassName = string | ((params: ClassNameParams) => string)
+  export type Readonly = boolean
 
   interface PrefixOption {
     useHTML?: VxeTooltipPropTypes.UseHTML

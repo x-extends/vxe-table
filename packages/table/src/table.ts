@@ -15,6 +15,7 @@ import tableProps from './props'
 import tableEmits from './emits'
 import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
 
@@ -4088,7 +4089,7 @@ export default defineComponent({
                       // 如果点击了当前表格之外
                       !getEventTargetNode(evnt, el).flag
                   ) {
-                    setTimeout(() => $xetable.clearActived(evnt))
+                    setTimeout(() => $xetable.clearEdit(evnt))
                   }
                 })
               }
@@ -4164,7 +4165,7 @@ export default defineComponent({
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
-                $xetable.clearActived(evnt)
+                $xetable.clearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
                   nextTick(() => $xetable.handleSelected(params, evnt))
@@ -4237,7 +4238,7 @@ export default defineComponent({
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
-                $xetable.clearActived(evnt)
+                $xetable.clearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
                   nextTick(() => $xetable.handleSelected(params, evnt))
@@ -4273,7 +4274,7 @@ export default defineComponent({
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 params = actived.args
-                $xetable.clearActived(evnt)
+                $xetable.clearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
                   nextTick(() => $xetable.handleSelected(params, evnt))
@@ -4529,7 +4530,7 @@ export default defineComponent({
             return $xegrid.callSlot(slotFunc, params)
           }
           if (XEUtils.isFunction(slotFunc)) {
-            return slotFunc(params)
+            return getSlotVNs(slotFunc(params))
           }
         }
         return []
@@ -4875,7 +4876,7 @@ export default defineComponent({
               XEUtils.eachTree([row], (item) => {
                 if ($xetable.eqRow(item, row) || (!checkMethod || checkMethod({ row: item }))) {
                   XEUtils.set(item, checkField, value)
-                  XEUtils.remove(treeIndeterminates, half => half === item)
+                  XEUtils.remove(treeIndeterminates, half => $xetable.eqRow(half, item))
                   handleCheckboxReserveRow(row, value)
                 }
               }, treeOpts)
@@ -4914,9 +4915,9 @@ export default defineComponent({
                   if (value) {
                     selection.push(item)
                   } else {
-                    XEUtils.remove(selection, select => select === item)
+                    XEUtils.remove(selection, select => $xetable.eqRow(select, item))
                   }
-                  XEUtils.remove(treeIndeterminates, half => half === item)
+                  XEUtils.remove(treeIndeterminates, half => $xetable.eqRow(half, item))
                   handleCheckboxReserveRow(row, value)
                 }
               }, treeOpts)

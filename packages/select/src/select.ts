@@ -6,6 +6,7 @@ import { getEventTargetNode, getAbsolutePos } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, getFuncText, formatText } from '../../tools/utils'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import VxeInputComponent from '../../input/src/input'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeInputConstructor, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeOptgroupProps, VxeOptionProps, VxeFormDefines, VxeFormConstructor, VxeFormPrivateMethods, VxeInputDefines } from '../../../types/all'
 
@@ -147,7 +148,7 @@ export default defineComponent({
           slotFunc = slots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc(params)
+          return getSlotVNs(slotFunc(params))
         }
       }
       return []

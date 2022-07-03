@@ -3,10 +3,11 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf } from '../../tools/utils'
+import { getSlotVNs } from '../../tools/vn'
 import { createItem, watchItem, destroyItem, assemItem, XEFormItemProvide, isActivetem } from './util'
 import { renderTitle } from './render'
 
-import { VxeFormConstructor, VxeFormDefines, VxeFormItemPropTypes, VxeFormPrivateMethods } from '../../../types/all'
+import { SlotVNodeType, VxeFormConstructor, VxeFormDefines, VxeFormItemPropTypes, VxeFormPrivateMethods } from '../../../types/all'
 
 export const formItemProps = {
   title: String as PropType<VxeFormItemPropTypes.Title>,
@@ -92,11 +93,11 @@ export default defineComponent({
           isRequired = itemRules.some((rule) => rule.required)
         }
       }
-      let contentVNs: any[] = []
+      let contentVNs: SlotVNodeType[] = []
       if (defaultSlot) {
         contentVNs = $xeform.callSlot(defaultSlot, params)
       } else if (compConf && compConf.renderItemContent) {
-        contentVNs = compConf.renderItemContent(itemRender, params)
+        contentVNs = getSlotVNs(compConf.renderItemContent(itemRender, params))
       } else if (field) {
         contentVNs = [`${XEUtils.get(data, field)}`]
       }

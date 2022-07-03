@@ -3,7 +3,7 @@ import { VxeFormInstance, VxeFormProps, VxeFormDefines } from './form'
 import { VxeFormItemProps } from './form-item'
 import { VxeToolbarInstance, VxeToolbarProps, VxeToolbarPropTypes } from './toolbar'
 import { VxePagerInstance, VxePagerProps, VxePagerDefines } from './pager'
-import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, SlotVNodeType } from './component'
 import { VxeTableInstance, VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /**
@@ -126,7 +126,7 @@ export interface GridPublicMethods {
 export interface VxeGridMethods extends GridMethods, TablePublicMethods { }
 
 export interface GridPrivateMethods {
-  callSlot<T>(slotFunc: ((params: T) => any[]) | string | null, params: T): VNode[]
+  callSlot<T>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T): SlotVNodeType[]
   extendTableMethods<T>(methodKeys: T[]): any
   triggerToolbarBtnEvent(button: VxeToolbarPropTypes.ButtonConfig, evnt: Event): void
   triggerToolbarTolEvent(button: VxeToolbarPropTypes.ToolConfig, evnt: Event): void
@@ -232,8 +232,8 @@ export namespace VxeGridPropTypes {
       iconOut?: string
     }
     slots?: {
-      buttons?: string | ((params: {}) => VNode[] | string[] | JSX.Element[])
-      tools?: string | ((params: {}) => VNode[] | string[] | JSX.Element[])
+      buttons?: string | ((params: {}) => VNode[] | string[] | JSX.Element | JSX.Element[])
+      tools?: string | ((params: {}) => VNode[] | string[] | JSX.Element | JSX.Element[])
     }
   }
 

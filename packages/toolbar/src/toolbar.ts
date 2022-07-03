@@ -7,6 +7,7 @@ import { getEventTargetNode } from '../../tools/dom'
 import { formatText } from '../../tools/utils'
 import { warnLog, errLog } from '../../tools/log'
 import { GlobalEvent } from '../../tools/event'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines } from '../../../types/all'
 
@@ -374,7 +375,7 @@ export default defineComponent({
       const { buttons } = props
       const buttonsSlot = slots.buttons
       if (buttonsSlot) {
-        return buttonsSlot({ $grid: $xegrid, $table: $xetable })
+        return getSlotVNs(buttonsSlot({ $grid: $xegrid, $table: $xetable }))
       }
       const btnVNs: VNode[] = []
       if (buttons) {
@@ -421,7 +422,7 @@ export default defineComponent({
       const { tools } = props
       const toolsSlot = slots.tools
       if (toolsSlot) {
-        return toolsSlot({ $grid: $xegrid, $table: $xetable })
+        return getSlotVNs(toolsSlot({ $grid: $xegrid, $table: $xetable }))
       }
       const btnVNs: VNode[] = []
       if (tools) {

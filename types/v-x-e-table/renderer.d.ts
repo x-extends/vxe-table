@@ -1,4 +1,5 @@
 import { VNode } from 'vue'
+import { SlotVNodeType } from '../component'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
@@ -6,7 +7,7 @@ import { VxeFilterPanel } from '../filter'
 import { VxeToolbarPropTypes } from '../toolbar'
 import { FormItemRenderOptions, FormItemTitleRenderParams, FormItemContentRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 
-type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResult | JSX.Element[]>
+type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResult>
 
 export interface DefineRendererOption<T> {
   // 筛选渲染
@@ -53,7 +54,7 @@ export interface DefineRendererOption<T> {
 }
 
 export namespace VxeGlobalRendererHandles {
-  export type RenderResult = VNode[] | string[]
+  export type RenderResult = SlotVNodeType | SlotVNodeType[]
 
   export interface RenderFilterOptions extends VxeColumnPropTypes.FilterRender {}
 

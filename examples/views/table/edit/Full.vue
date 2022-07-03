@@ -145,7 +145,7 @@ export default defineComponent({
         await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
         await loadList()
         VXETable.modal.message({ content: `操作成功，新增 ${insertRecords.length} 条，更新 ${updateRecords.length} 条，删除 ${removeRecords.length} 条`, status: 'success' })
-      } catch (e) {
+      } catch (e: any) {
         if (e && e.message) {
           VXETable.modal.message({ content: e.message, status: 'error' })
         }

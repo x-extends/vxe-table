@@ -319,7 +319,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         // 如果当前行被激活编辑，则清除激活状态
         if (actived.row && $xetable.findRowIndexOf(rows, actived.row) > -1) {
-          editMethods.clearActived()
+          editMethods.clearEdit()
         }
         // 从新增中移除已删除的数据
         rows.forEach((row: any) => {
@@ -551,7 +551,14 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           return $xetable.scrollToRow(row, column).then(() => {
             const cell = $xetable.getCell(row, column)
             if (cell) {
-              editPrivateMethods.handleActived({ row, rowIndex: $xetable.getRowIndex(row), column, columnIndex: $xetable.getColumnIndex(column), cell, $table: $xetable })
+              editPrivateMethods.handleActived({
+                row,
+                rowIndex: $xetable.getRowIndex(row),
+                column,
+                columnIndex: $xetable.getColumnIndex(column),
+                cell,
+                $table: $xetable
+              })
               internalData._lastCallTime = Date.now()
             }
             return nextTick()
@@ -564,14 +571,19 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       setSelectCell (row, fieldOrColumn) {
         const { tableData } = reactData
-        const { visibleColumn } = internalData
         const editOpts = computeEditOpts.value
         const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
         if (row && column && editOpts.trigger !== 'manual') {
           const rowIndex = $xetable.findRowIndexOf(tableData, row)
           if (rowIndex > -1 && column) {
             const cell = $xetable.getCell(row, column)
-            const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
+            const params = {
+              row,
+              rowIndex,
+              column,
+              columnIndex: $xetable.getColumnIndex(column),
+              cell
+            }
             $xetable.handleSelected(params, {})
           }
         }
@@ -608,7 +620,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               }
               $xetable.closeTooltip()
               if (actived.column) {
-                editMethods.clearActived(evnt)
+                editMethods.clearEdit(evnt)
               }
               type = 'edit-actived'
               column.renderHeight = cell.offsetHeight
@@ -714,7 +726,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const selectMethod = () => {
           if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
             if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
-              editMethods.clearActived(evnt)
+              editMethods.clearEdit(evnt)
               editMethods.clearSelected()
               if ($xetable.clearCellAreas) {
                 $xetable.clearCellAreas()

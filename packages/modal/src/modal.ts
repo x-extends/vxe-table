@@ -8,6 +8,7 @@ import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeButtonConstructor from '../../button/src/button'
 import VxeLoading from '../../loading/index'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeModalConstructor, VxeModalPropTypes, ModalReactData, VxeModalEmits, ModalEventTypes, VxeButtonInstance, ModalMethods, ModalPrivateRef, VxeModalMethods } from '../../../types/all'
 
@@ -687,7 +688,7 @@ export default defineComponent({
       const { slots: propSlots = {}, showClose, showZoom, title } = props
       const { zoomLocat } = reactData
       const titleSlot = slots.title || propSlots.title
-      const titVNs: VNode[] = titleSlot ? titleSlot({ $modal: $xemodal }) as VNode[] : [
+      const titVNs = titleSlot ? getSlotVNs(titleSlot({ $modal: $xemodal })) : [
         h('span', {
           class: 'vxe-modal--title'
         }, title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))
@@ -736,7 +737,7 @@ export default defineComponent({
               'is--ellipsis': !isMsg && props.showTitleOverflow
             }],
             ...headerOns
-          }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : headerSlot({ $modal: $xemodal })) as VNode[] : renderTitles())
+          }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : getSlotVNs(headerSlot({ $modal: $xemodal }))) : renderTitles())
         )
       }
       return headVNs
@@ -762,7 +763,7 @@ export default defineComponent({
       contVNs.push(
         h('div', {
           class: 'vxe-modal--content'
-        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : getFuncText(content))
+        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : getSlotVNs(defaultSlot({ $modal: $xemodal }))) as VNode[] : getFuncText(content))
       )
       if (!isMsg) {
         /**
@@ -814,7 +815,7 @@ export default defineComponent({
         footVNs.push(
           h('div', {
             class: 'vxe-modal--footer'
-          }, footerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : footerSlot({ $modal: $xemodal })) as VNode[] : renderBtns())
+          }, footerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : getSlotVNs(footerSlot({ $modal: $xemodal }))) as VNode[] : renderBtns())
         )
       }
       if (!isMsg && props.resize) {

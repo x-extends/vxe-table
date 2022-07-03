@@ -3,10 +3,11 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf } from '../../tools/utils'
+import { getSlotVNs } from '../../tools/vn'
 import { renderTitle } from './render'
 import { isActivetem } from './util'
 
-import { VxeFormConstructor, VxeFormDefines, VxeFormPrivateMethods } from '../../../types/all'
+import { VxeFormConstructor, VxeFormDefines, VxeFormPrivateMethods, SlotVNodeType } from '../../../types/all'
 
 const VxeFormConfigItem = defineComponent({
   name: 'VxeFormConfigItem',
@@ -68,11 +69,11 @@ const VxeFormConfigItem = defineComponent({
           class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
         }, childVNs) : createCommentVNode()
       }
-      let contentVNs: any[] = []
+      let contentVNs: SlotVNodeType[] = []
       if (defaultSlot) {
         contentVNs = $xeform.callSlot(defaultSlot, params)
       } else if (compConf && compConf.renderItemContent) {
-        contentVNs = compConf.renderItemContent(itemRender, params)
+        contentVNs = getSlotVNs(compConf.renderItemContent(itemRender, params))
       } else if (field) {
         contentVNs = [XEUtils.toValueString(XEUtils.get(data, field))]
       }

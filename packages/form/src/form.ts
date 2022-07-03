@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, VNode, onMounted } from 'vue'
+import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -9,6 +9,7 @@ import { createItem, handleFieldOrItem, isHiddenItem, isActivetem } from './util
 import { useSize } from '../../hooks/size'
 import VxeFormConfigItem from './form-config-item'
 import VxeLoading from '../../loading/index'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes, VxeTooltipInstance, FormInternalData, VxeFormPrivateComputed } from '../../../types/all'
 
@@ -83,6 +84,7 @@ export default defineComponent({
     titleAsterisk: { type: Boolean as PropType<VxeFormPropTypes.TitleAsterisk>, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String] as PropType<VxeFormPropTypes.TitleOverflow>, default: null },
     className: [String, Function] as PropType<VxeFormPropTypes.ClassName>,
+    readonly: Boolean as PropType<VxeFormPropTypes.Readonly>,
     items: Array as PropType<VxeFormPropTypes.Items>,
     rules: Object as PropType<VxeFormPropTypes.Rules>,
     preventSubmit: { type: Boolean as PropType<VxeFormPropTypes.PreventSubmit>, default: () => GlobalConfig.form.preventSubmit },
@@ -153,13 +155,13 @@ export default defineComponent({
       getComputeMaps: () => computeMaps
     } as unknown as VxeFormConstructor & VxeFormPrivateMethods
 
-    const callSlot = (slotFunc: ((params: any) => any) | string | null, params: any): VNode[] => {
+    const callSlot = (slotFunc: ((params: any) => any) | string | null, params: any) => {
       if (slotFunc) {
         if (XEUtils.isString(slotFunc)) {
           slotFunc = slots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc(params)
+          return getSlotVNs(slotFunc(params))
         }
       }
       return []

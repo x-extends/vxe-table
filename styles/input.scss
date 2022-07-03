@@ -676,6 +676,7 @@ $iconWidth: 1.6em;
 .vxe-input {
   font-size: $vxe-font-size;
   height: $vxe-input-height-default;
+  line-height: $vxe-input-height-default;
   .vxe-input--inner {
     &[type="date"]::-webkit-inner-spin-button,
     &[type="month"]::-webkit-inner-spin-button,
@@ -692,6 +693,7 @@ $iconWidth: 1.6em;
   &.size--medium {
     font-size: $vxe-font-size-medium;
     height: $vxe-input-height-medium;
+    line-height: $vxe-input-height-medium;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,
@@ -703,6 +705,7 @@ $iconWidth: 1.6em;
   &.size--small {
     font-size: $vxe-font-size-small;
     height: $vxe-input-height-small;
+    line-height: $vxe-input-height-small;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,
@@ -714,6 +717,7 @@ $iconWidth: 1.6em;
   &.size--mini {
     font-size: $vxe-font-size-mini;
     height: $vxe-input-height-mini;
+    line-height: $vxe-input-height-mini;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,

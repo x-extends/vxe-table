@@ -1,4 +1,4 @@
-import { App, ComponentPublicInstance } from 'vue'
+import { App, ComponentPublicInstance, VNode } from 'vue'
 
 export type SizeType = null | 'medium' | 'small' | 'mini'
 export type ValueOf<T> = T extends any[] ? T[number] : T[keyof T]
@@ -27,3 +27,5 @@ export interface VxeEvent {
 export type VNodeStyle = {
   [key: string]: string | number
 }
+
+export type SlotVNodeType = JSX.Element | VNode | string | number

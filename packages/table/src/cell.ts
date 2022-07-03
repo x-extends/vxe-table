@@ -5,8 +5,9 @@ import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
 import { updateCellTitle } from '../../tools/dom'
 import { createColumn } from './util'
+import { getSlotVNs } from '../../tools/vn'
 
-import { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
+import { SlotVNodeType, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
 
 function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params
@@ -24,7 +25,7 @@ function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   ] : []
 }
 
-function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: VNode[] | string[] | string) {
+function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: SlotVNodeType[]) {
   const { $table, column } = params
   const { props, internalData } = $table
   const { computeTooltipOpts } = $table.getComputeMaps()
@@ -81,7 +82,7 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams) {
   if (renderOpts) {
     const compConf = VXETable.renderer.get(renderOpts.name)
     if (compConf && compConf.renderFooter) {
-      return compConf.renderFooter(renderOpts, params)
+      return getSlotVNs(compConf.renderFooter(renderOpts, params))
     }
   }
   return [formatText(items[_columnIndex], 1)]
@@ -160,10 +161,10 @@ export const Cell = {
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderHeader) {
-        return renderTitleContent(params, compConf.renderHeader(renderOpts, params))
+        return renderTitleContent(params, getSlotVNs(compConf.renderHeader(renderOpts, params)))
       }
     }
-    return renderTitleContent(params, formatText(column.getTitle(), 1))
+    return renderTitleContent(params, [formatText(column.getTitle(), 1)])
   },
   renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams) {
     return renderHelpIcon(params).concat(Cell.renderHeaderTitle(params))
@@ -181,7 +182,7 @@ export const Cell = {
       const compConf = VXETable.renderer.get(renderOpts.name)
       const compFn = compConf ? compConf[funName] : null
       if (compFn) {
-        return compFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))
+        return getSlotVNs(compFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
       }
     }
     const cellValue = $table.getCellLabel(row, column)
@@ -211,7 +212,7 @@ export const Cell = {
   /**
    * 树节点
    */
-  renderTreeIcon (params: VxeTableDefines.CellRenderBodyParams, cellVNodes: VNode[]) {
+  renderTreeIcon (params: VxeTableDefines.CellRenderBodyParams, cellVNodes: SlotVNodeType[]) {
     const { $table, isHidden } = params
     const { reactData } = $table
     const { computeTreeOpts } = $table.getComputeMaps()
@@ -272,7 +273,7 @@ export const Cell = {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
-    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : formatText(column.getTitle(), 1))
+    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : [formatText(column.getTitle(), 1)])
   },
   renderSeqCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, column } = params
@@ -626,7 +627,7 @@ export const Cell = {
     if (contentRender) {
       const compConf = VXETable.renderer.get(contentRender.name)
       if (compConf && compConf.renderExpand) {
-        return compConf.renderExpand(contentRender, params)
+        return getSlotVNs(compConf.renderExpand(contentRender, params))
       }
     }
     return []
@@ -792,7 +793,10 @@ export const Cell = {
       if (editSlot) {
         return $table.callSlot(editSlot, params)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit(editRender, Object.assign({ $type: 'edit' }, params)) : []
+      if (compConf && compConf.renderEdit) {
+        return getSlotVNs(compConf.renderEdit(editRender, Object.assign({ $type: 'edit' }, params)))
+      }
+      return []
     }
     if (defaultSlot) {
       return $table.callSlot(defaultSlot, params)

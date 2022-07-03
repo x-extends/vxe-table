@@ -9,6 +9,7 @@ import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
+import { getSlotVNs } from '../../tools/vn'
 
 import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps, VxeGridProps } from '../../../types/all'
 
@@ -1024,7 +1025,7 @@ export default defineComponent({
             slotFunc = slots[slotFunc] || null
           }
           if (XEUtils.isFunction(slotFunc)) {
-            return slotFunc(params)
+            return getSlotVNs(slotFunc(params))
           }
         }
         return []

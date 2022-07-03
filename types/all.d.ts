@@ -61,6 +61,12 @@ declare module 'vue' {
   }
 }
 
+declare global {
+  interface Window {
+    VXETable: VXETableCore;
+  }
+}
+
 // Constructor
 export * from './v-x-e-table'
 export * from './component'

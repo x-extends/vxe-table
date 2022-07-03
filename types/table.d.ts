@@ -1,5 +1,5 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
-import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle, SlotVNodeType } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnPropTypes, VxeColumnProps } from './column'
 import { VXETableSetupOptions, VxeGlobalRendererHandles } from './v-x-e-table'
@@ -675,7 +675,7 @@ export interface VxeTableMethods extends TableMethods { }
 export interface TablePrivateMethods {
   getSetupOptions(): VXETableSetupOptions
   updateAfterDataIndex(): void
-  callSlot<T>(slotFunc: ((params: T) => any[]) | string | null, params: T): VNode[]
+  callSlot<T>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T): SlotVNodeType[]
   getParentElem(): Element | null
   getParentHeight(): number
   getExcludeHeight(): number
