@@ -10,6 +10,7 @@ import { GlobalEvent } from '../../tools/event'
 import methods from './methods'
 import { warnLog, errLog } from '../../tools/log'
 import VxeLoading from '../../loading/index'
+import VxeTooltip from '../../tooltip/index'
 
 /**
  * 渲染浮固定列
@@ -250,7 +251,8 @@ export default {
     params: Object
   },
   components: {
-    VxeTableBody
+    VxeTableBody,
+    VxeTooltip
   },
   provide () {
     return {
@@ -522,7 +524,7 @@ export default {
       return Object.assign({}, GlobalConfig.table.fnrConfig, this.fnrConfig)
     },
     hasTip () {
-      return VXETable._tooltip
+      return true // VXETable._tooltip
     },
     headerCtxMenu () {
       const headerOpts = this.ctxMenuOpts.header
