@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import { browse } from './dom'
+import throttle from './throttle.utils'
 
 export const EVENT_KEYS = {
   F2: 'F2',
@@ -78,5 +79,5 @@ if (browse.isDoc) {
   window.addEventListener('mousedown', GlobalEvent.trigger, false)
   window.addEventListener('blur', GlobalEvent.trigger, false)
   window.addEventListener('resize', GlobalEvent.trigger, false)
-  window.addEventListener(wheelName, XEUtils.throttle(GlobalEvent.trigger, 100, { leading: true, trailing: false }), false)
+  window.addEventListener(wheelName, throttle(GlobalEvent.trigger, 100, { leading: true, trailing: false }), false)
 }
