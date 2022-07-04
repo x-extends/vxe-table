@@ -8,6 +8,7 @@
     "build": "vue-cli-service build",
     "lib:modules": "gulp build",
     "lib:pack": "vue-cli-service build --target lib --name index --dest lib_temp index.js",
+    "lib:table": "vue-cli-service build --target lib --name index --dest lib_temp packages/table/index.js",
     "lib": "npm run lib:pack && npm run lib:modules",
     "format": "eslint --fix examples/**/*.{js,ts,vue}"
   },

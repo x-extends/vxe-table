@@ -11,6 +11,7 @@ import methods from './methods'
 import { warnLog, errLog } from '../../tools/log'
 import VxeLoading from '../../loading/index'
 import VxeTooltip from '../../tooltip/index'
+import '../../../styles/table.scss'
 
 /**
  * 渲染浮固定列
