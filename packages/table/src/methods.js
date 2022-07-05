@@ -343,7 +343,7 @@ const Methods = {
   updateScrollYStatus (fullData) {
     const { treeConfig, treeOpts, sYOpts } = this
     const { transform } = treeOpts
-    const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < fullData.length
+    const scrollYLoad = (transform || !treeConfig) && (!!sYOpts.enabled || (sYOpts.gt > -1 && sYOpts.gt < fullData.length))
     this.scrollYLoad = scrollYLoad
     return scrollYLoad
   },
@@ -2225,8 +2225,8 @@ const Methods = {
                 }
                 if (
                   isClearActived ||
-                    // 如果点击了当前表格之外
-                    !getEventTargetNode(evnt, $el).flag
+                  // 如果点击了当前表格之外
+                  !getEventTargetNode(evnt, $el).flag
                 ) {
                   setTimeout(() => this.clearActived(evnt))
                 }
