@@ -2619,7 +2619,7 @@ export default defineComponent({
       createData (records) {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
-        const handleRrecord = (record: any) => reactive(tablePrivateMethods.defineField(Object.assign({}, record)))
+        const handleRrecord = (record: any) => reactive(tablePrivateMethods.defineField(record || {}))
         const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
         return nextTick().then(() => rows)
       },
@@ -4580,7 +4580,7 @@ export default defineComponent({
         const rowkey = getRowkey($xetable)
         internalData.tableFullColumn.forEach(column => {
           const { field, editRender } = column
-          if (field && !XEUtils.has(record, field)) {
+          if (field && !XEUtils.has(record, field) && !record[field]) {
             let cellValue = null
             if (editRender) {
               const { defaultValue } = editRender
