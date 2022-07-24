@@ -335,10 +335,12 @@
   .vxe-sort--asc-btn,
   .vxe-sort--desc-btn {
     position: absolute;
-    left: 0.35em;
+    left: 0.1em;
     color: $vxe-table-column-icon-border-color;
     width: 1em;
     text-align: center;
+    height: 0.8em;
+    line-height: 0.8em;
     cursor: pointer;
     &:hover {
       color: $vxe-table-font-color;
@@ -348,10 +350,10 @@
     }
   }
   .vxe-sort--asc-btn {
-    top: -0.15em;
+    top: -0.2em;
   }
   .vxe-sort--desc-btn {
-    bottom: -0.15em;
+    bottom: -0.2em;
   }
 }
 

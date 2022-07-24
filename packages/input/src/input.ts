@@ -1952,7 +1952,7 @@ export default defineComponent({
               onClick: datePrevEvent
             }, [
               h('i', {
-                class: 'vxe-icon--caret-left'
+                class: 'vxe-icon-caret-left'
               })
             ]),
             h('span', {
@@ -1960,7 +1960,7 @@ export default defineComponent({
               onClick: dateTodayMonthEvent
             }, [
               h('i', {
-                class: 'vxe-icon--dot'
+                class: 'vxe-icon-dot'
               })
             ]),
             h('span', {
@@ -1970,7 +1970,7 @@ export default defineComponent({
               onClick: dateNextEvent
             }, [
               h('i', {
-                class: 'vxe-icon--caret-right'
+                class: 'vxe-icon-caret-right'
               })
             ]),
             multiple && computeSupportMultiples.value ? h('span', {

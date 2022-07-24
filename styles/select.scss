@@ -29,6 +29,7 @@
   & > .vxe-input {
     width: 100%;
     .vxe-input--suffix-icon {
+      display: inline-block;
       @include animatTransition(transform, .2s);
     }
   }

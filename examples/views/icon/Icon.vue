@@ -1,12 +1,12 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.icon') }}</h2>
-    <p class="tip">内置轻量级的 css 图标，可以通过 <router-link class="link" :to="{name: 'StartIcons'}">setup</router-link> 替换为 font 图标，例如第三方图标库：font-awesome、inconfont</p>
+    <p class="tip">内置字体图标，可以通过 <router-link class="link" :to="{name: 'StartIcons'}">setup</router-link> 替换为 font 图标，例如第三方图标库：font-awesome、inconfont</p>
 
     <ul class="vxe-row icon-list" title="点击复制内容">
-      <li class="vxe-col--4" v-for="item in list" :key="item.icon" @click="copyEvent(item)">
-        <i :class="item.icon"></i>
-        <div class="title">{{ item.icon }}</div>
+      <li class="vxe-col--4" v-for="name in iconList" :key="name">
+        <i :class="`${prefixClass}${name}`"></i>
+        <div class="title">{{ prefixClass }}{{ name }}</div>
       </li>
     </ul>
 
@@ -20,135 +20,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { VXETable } from '../../../packages/all'
-
-interface ItemVO {
-  icon: string;
-}
 
 export default defineComponent({
   setup () {
-    const copyEvent = () => {
-      VXETable.modal.message({ content: '已复制到剪贴板！', status: 'success' })
-    }
     return {
-      list: [
-        {
-          icon: 'vxe-icon--caret-top'
-        },
-        {
-          icon: 'vxe-icon--caret-bottom'
-        },
-        {
-          icon: 'vxe-icon--caret-left'
-        },
-        {
-          icon: 'vxe-icon--caret-right'
-        },
-        {
-          icon: 'vxe-icon--arrow-top'
-        },
-        {
-          icon: 'vxe-icon--arrow-bottom'
-        },
-        {
-          icon: 'vxe-icon--arrow-left'
-        },
-        {
-          icon: 'vxe-icon--arrow-right'
-        },
-        {
-          icon: 'vxe-icon--d-arrow-left'
-        },
-        {
-          icon: 'vxe-icon--d-arrow-right'
-        },
-        {
-          icon: 'vxe-icon--menu'
-        },
-        {
-          icon: 'vxe-icon--edit-outline'
-        },
-        {
-          icon: 'vxe-icon--more'
-        },
-        {
-          icon: 'vxe-icon--check'
-        },
-        {
-          icon: 'vxe-icon--close'
-        },
-        {
-          icon: 'vxe-icon--plus'
-        },
-        {
-          icon: 'vxe-icon--minus'
-        },
-        {
-          icon: 'vxe-icon--refresh'
-        },
-        {
-          icon: 'vxe-icon--refresh roll'
-        },
-        {
-          icon: 'vxe-icon--funnel'
-        },
-        {
-          icon: 'vxe-icon--question'
-        },
-        {
-          icon: 'vxe-icon--info'
-        },
-        {
-          icon: 'vxe-icon--warning'
-        },
-        {
-          icon: 'vxe-icon--success'
-        },
-        {
-          icon: 'vxe-icon--error'
-        },
-        {
-          icon: 'vxe-icon--remove'
-        },
-        {
-          icon: 'vxe-icon--circle-plus'
-        },
-        {
-          icon: 'vxe-icon--zoomin'
-        },
-        {
-          icon: 'vxe-icon--zoomout'
-        },
-        {
-          icon: 'vxe-icon--upload'
-        },
-        {
-          icon: 'vxe-icon--download'
-        },
-        {
-          icon: 'vxe-icon--eye'
-        },
-        {
-          icon: 'vxe-icon--eye-slash'
-        },
-        {
-          icon: 'vxe-icon--calendar'
-        },
-        {
-          icon: 'vxe-icon--dot'
-        },
-        {
-          icon: 'vxe-icon--print'
-        },
-        {
-          icon: 'vxe-icon--search'
-        }
-      ] as ItemVO[],
-      copyEvent,
+      prefixClass: 'vxe-icon-',
+      iconList: ['fullscreen', 'minimize', 'print', 'upload', 'download', 'cloud-upload', 'cloud-download', 'spinner', 'close', 'custom-column', 'edit', 'refresh', 'zoom-in', 'caret-down', 'caret-up', 'caret-right', 'caret-left', 'square-checked-fill', 'square-close', 'square-down', 'square-left', 'square-caret-right', 'square-minus', 'square-plus', 'square-right', 'square-up', 'square-checked', 'square-down-fill', 'square-minus-fill', 'square-close-fill', 'square-left-fill', 'square-caret-right-fill', 'square-up-fill', 'square-right-fill', 'square-plus-fill', 'square-plus-square', 'square-fill', 'square-square', 'sort-alpha-desc', 'sort-alpha-asc', 'sort-numeric-asc', 'sort-numeric-desc', 'star-fill', 'star', 'star-half', 'lock-fill', 'unlock-fill', 'question', 'exclamation', 'information', 'ellipsis-h', 'ellipsis-v', 'save', 'setting', 'setting-fill', 'user-fill', 'link', 'user', 'sort', 'chart-pie', 'chart-line', 'swap', 'num-list', 'copy', 'company', 'swap-right', 'swap-left', 'table', 'merge-cells', 'paste', 'cut', 'lock', 'unlock', 'chart-bar', 'fixed-fill', 'fixed', 'square', 'check', 'question-circle-fill', 'info-circle-fill', 'error-circle-fill', 'delete', 'dot', 'success-circle', 'delete-fill', 'minus', 'maximize', 'info-circle', 'question-circle', 'warning-circle', 'warnion-circle-fill', 'eye-fill', 'search', 'funnel', 'eye-fill-close', 'search-zoom-in', 'arrow-right', 'arrow-left', 'arrow-up', 'calendar', 'arrow-down', 'warning-triangle', 'add', 'arrow-double-left', 'arrow-double-right', 'menu', 'repeat', 'warning-triangle-fill', 'error-circle', 'zoom-out', 'success-circle-fill', 'radio-checked', 'checkbox-unchecked', 'checkbox-checked', 'checkbox-indeterminate', 'radio-unchecked'],
       demoCodes: [
         `
-        <i class="vxe-icon--caret-top"></i>
+        <i class="vxe-icon-delete"></i>
         `
       ]
     }

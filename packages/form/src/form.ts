@@ -243,7 +243,7 @@ export default defineComponent({
             if (compConf && compConf.itemResetMethod) {
               compConf.itemResetMethod({ data, field, property: field, item, $form: $xeform })
             } else if (field) {
-              XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
+              XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : XEUtils.clone(resetValue, true))
             }
           }
         })

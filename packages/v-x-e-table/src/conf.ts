@@ -1,6 +1,6 @@
 import { VXETableGlobalConfig } from '../../../types/all'
 
-const iconPrefix = 'vxe-icon--'
+const iconPrefix = 'vxe-icon-'
 
 const GlobalConfig: VXETableGlobalConfig = {
   size: null, // 全局尺寸
@@ -8,7 +8,7 @@ const GlobalConfig: VXETableGlobalConfig = {
   version: 0, // 版本号，对于某些带数据缓存的功能有用到，上升版本号可以用于重置数据
   // resizeInterval: 500,
   emptyCell: '　',
-  loadingText: null, // 自定义loading提示内容，如果为null则不显示文本
+  // loadingText: null, // 自定义loading提示内容，如果为null则不显示文本
   table: {
     fit: true,
     showHeader: true,
@@ -127,73 +127,73 @@ const GlobalConfig: VXETableGlobalConfig = {
   },
   icon: {
     // loading
-    // LOADING: iconPrefix + 'refresh roll vxe-loading--default-icon',
+    LOADING: iconPrefix + 'spinner roll vxe-loading--default-icon',
 
     // table
-    TABLE_SORT_ASC: iconPrefix + 'caret-top',
-    TABLE_SORT_DESC: iconPrefix + 'caret-bottom',
+    TABLE_SORT_ASC: iconPrefix + 'caret-up',
+    TABLE_SORT_DESC: iconPrefix + 'caret-down',
     TABLE_FILTER_NONE: iconPrefix + 'funnel',
     TABLE_FILTER_MATCH: iconPrefix + 'funnel',
-    TABLE_EDIT: iconPrefix + 'edit-outline',
-    TABLE_HELP: iconPrefix + 'question',
-    TABLE_TREE_LOADED: iconPrefix + 'refresh roll',
+    TABLE_EDIT: iconPrefix + 'edit',
+    TABLE_HELP: iconPrefix + 'question-circle-fill',
+    TABLE_TREE_LOADED: iconPrefix + 'spinner roll',
     TABLE_TREE_OPEN: iconPrefix + 'caret-right rotate90',
     TABLE_TREE_CLOSE: iconPrefix + 'caret-right',
-    TABLE_EXPAND_LOADED: iconPrefix + 'refresh roll',
+    TABLE_EXPAND_LOADED: iconPrefix + 'spinner roll',
     TABLE_EXPAND_OPEN: iconPrefix + 'arrow-right rotate90',
     TABLE_EXPAND_CLOSE: iconPrefix + 'arrow-right',
 
     // button
-    BUTTON_DROPDOWN: iconPrefix + 'arrow-bottom',
-    BUTTON_LOADING: iconPrefix + 'refresh roll',
+    BUTTON_DROPDOWN: iconPrefix + 'arrow-down',
+    BUTTON_LOADING: iconPrefix + 'spinner roll',
 
     // select
-    SELECT_LOADED: iconPrefix + 'refresh roll',
-    SELECT_OPEN: iconPrefix + 'caret-bottom rotate180',
-    SELECT_CLOSE: iconPrefix + 'caret-bottom',
+    SELECT_LOADED: iconPrefix + 'spinner roll',
+    SELECT_OPEN: iconPrefix + 'caret-down rotate180',
+    SELECT_CLOSE: iconPrefix + 'caret-down',
 
     // pager
-    PAGER_JUMP_PREV: iconPrefix + 'd-arrow-left',
-    PAGER_JUMP_NEXT: iconPrefix + 'd-arrow-right',
+    PAGER_JUMP_PREV: iconPrefix + 'arrow-double-left',
+    PAGER_JUMP_NEXT: iconPrefix + 'arrow-double-right',
     PAGER_PREV_PAGE: iconPrefix + 'arrow-left',
     PAGER_NEXT_PAGE: iconPrefix + 'arrow-right',
-    PAGER_JUMP_MORE: iconPrefix + 'more',
+    PAGER_JUMP_MORE: iconPrefix + 'ellipsis-h',
 
     // input
-    INPUT_CLEAR: iconPrefix + 'close',
-    INPUT_PWD: iconPrefix + 'eye-slash',
-    INPUT_SHOW_PWD: iconPrefix + 'eye',
-    INPUT_PREV_NUM: iconPrefix + 'caret-top',
-    INPUT_NEXT_NUM: iconPrefix + 'caret-bottom',
+    INPUT_CLEAR: iconPrefix + 'error-circle-fill',
+    INPUT_PWD: iconPrefix + 'eye-fill',
+    INPUT_SHOW_PWD: iconPrefix + 'eye-fill-close',
+    INPUT_PREV_NUM: iconPrefix + 'caret-up',
+    INPUT_NEXT_NUM: iconPrefix + 'caret-down',
     INPUT_DATE: iconPrefix + 'calendar',
     INPUT_SEARCH: iconPrefix + 'search',
 
     // modal
     MODAL_ZOOM_IN: iconPrefix + 'square',
-    MODAL_ZOOM_OUT: iconPrefix + 'zoomout',
+    MODAL_ZOOM_OUT: iconPrefix + 'maximize',
     MODAL_CLOSE: iconPrefix + 'close',
-    MODAL_INFO: iconPrefix + 'info',
-    MODAL_SUCCESS: iconPrefix + 'success',
-    MODAL_WARNING: iconPrefix + 'warning',
-    MODAL_ERROR: iconPrefix + 'error',
-    MODAL_QUESTION: iconPrefix + 'question',
-    MODAL_LOADING: iconPrefix + 'refresh roll',
+    MODAL_INFO: iconPrefix + 'info-circle-fill',
+    MODAL_SUCCESS: iconPrefix + 'success-circle-fill',
+    MODAL_WARNING: iconPrefix + 'warnion-circle-fill',
+    MODAL_ERROR: iconPrefix + 'error-circle-fill',
+    MODAL_QUESTION: iconPrefix + 'question-circle-fill',
+    MODAL_LOADING: iconPrefix + 'spinner roll',
 
     // toolbar
-    TOOLBAR_TOOLS_REFRESH: iconPrefix + 'refresh',
-    TOOLBAR_TOOLS_REFRESH_LOADING: iconPrefix + 'refresh roll',
+    TOOLBAR_TOOLS_REFRESH: iconPrefix + 'repeat',
+    TOOLBAR_TOOLS_REFRESH_LOADING: iconPrefix + 'repeat roll',
     TOOLBAR_TOOLS_IMPORT: iconPrefix + 'upload',
     TOOLBAR_TOOLS_EXPORT: iconPrefix + 'download',
     TOOLBAR_TOOLS_PRINT: iconPrefix + 'print',
-    TOOLBAR_TOOLS_ZOOM_IN: iconPrefix + 'zoomin',
-    TOOLBAR_TOOLS_ZOOM_OUT: iconPrefix + 'zoomout',
-    TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'menu',
+    TOOLBAR_TOOLS_FULLSCREEN: iconPrefix + 'fullscreen',
+    TOOLBAR_TOOLS_MINIMIZE: iconPrefix + 'minimize',
+    TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'custom-column',
 
     // form
-    FORM_PREFIX: iconPrefix + 'question',
-    FORM_SUFFIX: iconPrefix + 'question',
-    FORM_FOLDING: iconPrefix + 'arrow-top rotate180',
-    FORM_UNFOLDING: iconPrefix + 'arrow-top'
+    FORM_PREFIX: iconPrefix + 'question-circle-fill',
+    FORM_SUFFIX: iconPrefix + 'question-circle-fill',
+    FORM_FOLDING: iconPrefix + 'arrow-up rotate180',
+    FORM_UNFOLDING: iconPrefix + 'arrow-up'
   },
   grid: {
     // size: null,
