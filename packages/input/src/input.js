@@ -299,7 +299,7 @@ function renderDatePanel (h, _vm) {
           }
         }, [
           h('i', {
-            class: 'vxe-icon--caret-left'
+            class: 'vxe-icon-caret-left'
           })
         ]),
         h('span', {
@@ -309,7 +309,7 @@ function renderDatePanel (h, _vm) {
           }
         }, [
           h('i', {
-            class: 'vxe-icon--dot'
+            class: 'vxe-icon-dot'
           })
         ]),
         h('span', {
@@ -321,7 +321,7 @@ function renderDatePanel (h, _vm) {
           }
         }, [
           h('i', {
-            class: 'vxe-icon--caret-right'
+            class: 'vxe-icon-caret-right'
           })
         ]),
         multiple && supportMultiples ? h('span', {

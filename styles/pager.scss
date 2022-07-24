@@ -39,6 +39,7 @@
   .vxe-pager--jump-next {
     color: inherit;
     outline: 0;
+    padding: 0;
     border: 1px solid transparent;
     &:not(.is--disabled) {
       &:focus {
@@ -153,6 +154,7 @@
   .vxe-pager--jump .vxe-pager--goto,
   .vxe-pager--sizes > .vxe-input {
     height: 2.15em;
+    line-height: 2.15em;
   }
   .vxe-pager--sizes > .vxe-select--panel .vxe-select-option {
     text-align: center;

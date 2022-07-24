@@ -28,7 +28,7 @@
       highlight-current-row
       size="medium"
       :row-config="{useKey: true}"
-      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-caret-right rotate45', iconClose: 'vxe-icon-caret-right'}"
       :checkbox-config="{labelField: 'name'}"
       :data="tableData2"
       :scroll-y="{enabled: false}">
@@ -47,7 +47,7 @@
       size="small"
       :row-config="{useKey: true}"
       :radio-config="{labelField: 'name'}"
-      :tree-config="{accordion: true, line: true, iconOpen: 'vxe-icon--remove', iconClose: 'vxe-icon--circle-plus'}"
+      :tree-config="{accordion: true, line: true, iconOpen: 'vxe-icon-minus', iconClose: 'vxe-icon-add'}"
       :data="tableData3"
       :scroll-y="{enabled: false}">
       <vxe-column type="radio" title="Name" tree-node></vxe-column>
@@ -66,7 +66,7 @@
       size="mini"
       :row-config="{useKey: true}"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{line: true, iconOpen: 'vxe-icon--remove', iconClose: 'vxe-icon--circle-plus'}"
+      :tree-config="{line: true, iconOpen: 'vxe-icon-minus', iconClose: 'vxe-icon-add'}"
       :data="tableData4"
       :scroll-y="{enabled: false}">
       <vxe-column type="checkbox" title="Name" tree-node>

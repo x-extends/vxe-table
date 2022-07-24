@@ -237,6 +237,9 @@ $iconWidth: 1.6em;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    &[class*="vxe-icon-"] {
+      font-size: 1.5em;
+    }
   }
 
   .vxe-input--date-picker-suffix {
@@ -258,6 +261,7 @@ $iconWidth: 1.6em;
   }
   .vxe-input--number-prev-icon,
   .vxe-input--number-next-icon {
+    line-height: 0.8em;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
