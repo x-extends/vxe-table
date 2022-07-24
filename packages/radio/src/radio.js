@@ -34,10 +34,13 @@ export default {
     isStrict () {
       const { $xeradiogroup } = this
       return $xeradiogroup ? $xeradiogroup.strict : this.strict
+    },
+    isChecked () {
+      return this.$xeradiogroup ? this.$xeradiogroup.value === this.label : this.value === this.label
     }
   },
   render (h) {
-    const { $scopedSlots, $xeradiogroup, isDisabled, title, vSize, value, label, name, content } = this
+    const { $scopedSlots, $xeradiogroup, isDisabled, isChecked, title, vSize, name, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -45,6 +48,7 @@ export default {
     return h('label', {
       class: ['vxe-radio', {
         [`size--${vSize}`]: vSize,
+        'is--checked': isChecked,
         'is--disabled': isDisabled
       }],
       attrs
@@ -57,7 +61,7 @@ export default {
           disabled: isDisabled
         },
         domProps: {
-          checked: $xeradiogroup ? $xeradiogroup.value === label : value === label
+          checked: isChecked
         },
         on: {
           change: this.changeEvent,
@@ -65,7 +69,7 @@ export default {
         }
       }),
       h('span', {
-        class: 'vxe-radio--icon'
+        class: ['vxe-radio--icon', isChecked ? 'vxe-icon-radio-checked' : 'vxe-icon-radio-unchecked']
       }),
       h('span', {
         class: 'vxe-radio--label'

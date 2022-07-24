@@ -42,11 +42,13 @@ export default {
     if (title) {
       attrs.title = title
     }
+    const isChecked = isGroup ? XEUtils.includes($xecheckboxgroup.value, label) : value === checkedValue
     return h('label', {
       class: ['vxe-checkbox', {
         [`size--${vSize}`]: vSize,
         'is--indeterminate': indeterminate,
-        'is--disabled': isDisabled
+        'is--disabled': isDisabled,
+        'is--checked': isChecked
       }],
       attrs
     }, [
@@ -57,14 +59,14 @@ export default {
           disabled: isDisabled
         },
         domProps: {
-          checked: isGroup ? XEUtils.includes($xecheckboxgroup.value, label) : value === checkedValue
+          checked: isChecked
         },
         on: {
           change: this.changeEvent
         }
       }),
       h('span', {
-        class: 'vxe-checkbox--icon'
+        class: ['vxe-checkbox--icon', indeterminate ? 'vxe-icon-checkbox-indeterminate' : (isChecked ? 'vxe-icon-checkbox-checked' : 'vxe-icon-checkbox-unchecked')]
       }),
       h('span', {
         class: 'vxe-checkbox--label'

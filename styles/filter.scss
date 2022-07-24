@@ -8,7 +8,7 @@
   vertical-align: middle;
   display: inline-block;
   line-height: 0;
-  &.col--active {
+  &.col--filter {
     .vxe-filter--btn {
       color: $vxe-table-font-color;
     }
@@ -80,7 +80,7 @@
   &.is--multiple {
     & > ul {
       & > li {
-        padding: 0.25em 0.8em 0.25em 2.3em;
+        padding: 0.25em 0.8em 0.25em 1em;
       }
     }
   }
@@ -109,11 +109,7 @@
 }
 
 .vxe-table--filter-option {
-  @extend %XECheckbox;
-  .vxe-checkbox--icon {
-    left: 0.6em;
-    top: 0.38em;
-  }
+  @extend %XECheckboxIcon;
 }
 
 .vxe-table {

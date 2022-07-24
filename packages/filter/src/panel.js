@@ -53,14 +53,16 @@ export default {
           }, compConf.renderFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args)))
         ]
       }
+      const isAllChecked = multiple ? filterStore.isAllSelected : !filterStore.options.some(item => item._checked)
+      const isAllIndeterminate = multiple && filterStore.isIndeterminate
       return [
         h('ul', {
           class: 'vxe-table--filter-header'
         }, [
           h('li', {
             class: ['vxe-table--filter-option', {
-              'is--checked': multiple ? filterStore.isAllSelected : !filterStore.options.some(item => item._checked),
-              'is--indeterminate': multiple && filterStore.isIndeterminate
+              'is--checked': isAllChecked,
+              'is--indeterminate': isAllIndeterminate
             }],
             attrs: {
               title: GlobalConfig.i18n(multiple ? 'vxe.table.allTitle' : 'vxe.table.allFilter')
@@ -72,13 +74,7 @@ export default {
             }
           }, (multiple ? [
             h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+              class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
             })
           ] : []).concat([
             h('span', {
@@ -92,9 +88,11 @@ export default {
             maxHeight: `${maxHeight}px`
           } : {}
         }, filterStore.options.map(item => {
+          const isChecked = item._checked
+          const isIndeterminate = false
           return h('li', {
             class: ['vxe-table--filter-option', {
-              'is--checked': item._checked
+              'is--checked': isChecked
             }],
             attrs: {
               title: item.label
@@ -106,13 +104,7 @@ export default {
             }
           }, (multiple ? [
             h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+              class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
             })
           ] : []).concat([
             h('span', {
