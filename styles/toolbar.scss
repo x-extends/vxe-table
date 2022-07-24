@@ -120,7 +120,7 @@
       & > li {
         max-width: 16em;
         min-width: 12.5em;
-        padding: 0.2em 1em 0.2em 2.3em;
+        padding: 0.2em 1em 0.2em 1em;
         @for $i from 2 through 8 {
           $interval: $i - 1 + 0.2;
           &.level--#{$i}{
@@ -170,11 +170,7 @@
 }
 
 .vxe-custom--option {
-  @extend %XECheckbox;
-  .vxe-checkbox--icon {
-    left: 0.6em;
-    top: 0.38em;
-  }
+  @extend %XECheckboxIcon;
 }
 
 .vxe-toolbar {

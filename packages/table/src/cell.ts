@@ -343,10 +343,7 @@ export const Cell = {
     if (isVisible) {
       radioVNs.push(
         h('span', {
-          class: 'vxe-radio--icon vxe-radio--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-radio--icon vxe-radio--unchecked-icon'
+          class: ['vxe-radio--icon', isChecked ? GlobalConfig.icon.TABLE_RADIO_CHECKED : GlobalConfig.icon.TABLE_RADIO_UNCHECKED]
         })
       )
     }
@@ -417,13 +414,7 @@ export const Cell = {
         ...ons
       }, [
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       ].concat(titleSlot || headerTitle ? [
         h('span', {
@@ -472,13 +463,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       )
     }
@@ -543,13 +528,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       )
       if (defaultSlot || labelField) {

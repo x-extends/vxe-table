@@ -81,11 +81,14 @@ export default defineComponent({
     const renderVN = () => {
       const vSize = computeSize.value
       const isDisabled = computeDisabled.value
+      const isChecked = computeChecked.value
+      const indeterminate = props.indeterminate
       return h('label', {
         class: ['vxe-checkbox', {
           [`size--${vSize}`]: vSize,
-          'is--indeterminate': props.indeterminate,
-          'is--disabled': isDisabled
+          'is--indeterminate': indeterminate,
+          'is--disabled': isDisabled,
+          'is--checked': isChecked
         }],
         title: props.title
       }, [
@@ -93,11 +96,11 @@ export default defineComponent({
           class: 'vxe-checkbox--input',
           type: 'checkbox',
           disabled: isDisabled,
-          checked: computeChecked.value,
+          checked: isChecked,
           onChange: changeEvent
         }),
         h('span', {
-          class: 'vxe-checkbox--icon'
+          class: ['vxe-checkbox--icon', indeterminate ? 'vxe-icon-checkbox-indeterminate' : (isChecked ? 'vxe-icon-checkbox-checked' : 'vxe-icon-checkbox-unchecked')]
         }),
         h('span', {
           class: 'vxe-checkbox--label'

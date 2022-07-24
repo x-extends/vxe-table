@@ -142,6 +142,11 @@ const GlobalConfig: VXETableGlobalConfig = {
     TABLE_EXPAND_LOADED: iconPrefix + 'spinner roll',
     TABLE_EXPAND_OPEN: iconPrefix + 'arrow-right rotate90',
     TABLE_EXPAND_CLOSE: iconPrefix + 'arrow-right',
+    TABLE_CHECKBOX_CHECKED: iconPrefix + 'checkbox-checked',
+    TABLE_CHECKBOX_UNCHECKED: iconPrefix + 'checkbox-unchecked',
+    TABLE_CHECKBOX_INDETERMINATE: iconPrefix + 'checkbox-indeterminate',
+    TABLE_RADIO_CHECKED: iconPrefix + 'radio-checked',
+    TABLE_RADIO_UNCHECKED: iconPrefix + 'radio-unchecked',
 
     // button
     BUTTON_DROPDOWN: iconPrefix + 'arrow-down',

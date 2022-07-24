@@ -1,6 +1,7 @@
 /**Variable**/
 @import './helpers/mixin.scss';
 @import './base/common.scss';
+@import './base/checked.scss';
 
 /*checkbox-group*/
 .vxe-checkbox-group {
@@ -11,13 +12,11 @@
 
 /*checkbox*/
 .vxe-checkbox {
+  @extend %XECheckboxIcon;
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
-  user-select: none;
   line-height: 1;
-  cursor: pointer;
-  color: $vxe-font-color;
   &+.vxe-checkbox {
     margin-left: 10px;
   }
@@ -29,53 +28,12 @@
       border: 0;
       appearance: none;
     }
-    &+.vxe-checkbox--icon {
-      position: relative;
-      display: inline-block;
-      width: 1em;
-      height: 1em;
-      background-color: $vxe-checkbox-icon-background-color;
-      vertical-align: middle;
-      border-radius: $vxe-checkbox-border-radius;
-      border: $vxe-checkbox-border-width solid $vxe-input-border-color;
-      &:before {
-        content: "";
-        position: absolute;
-      }
-    }
-    &:checked+.vxe-checkbox--icon {
-      background-color: $vxe-primary-color;
-      border-color: $vxe-primary-color;
-      &:before {
-        height: $vxe-checkbox-checked-height;
-        width: $vxe-checkbox-checked-width;
-        left: 50%;
-        top: 50%;
-        border: $vxe-checkbox-border-width solid $vxe-checkbox-checked-icon-border-color;
-        border-left: 0;
-        border-top: 0;
-        transform: translate(-50%, -50%) rotate(45deg);
-      }
-      &+.vxe-checkbox--label {
-        color: $vxe-primary-color;
-      }
-    }
   }
   &.is--indeterminate {
     > input {
       &:not(:checked) {
         &+.vxe-checkbox--icon {
-          background-color: $vxe-primary-color;
-          border-color: $vxe-primary-color;
-          &:before {
-            border: 0;
-            left: 50%;
-            top: 50%;
-            height: $vxe-checkbox-indeterminate-height;
-            width: $vxe-checkbox-indeterminate-width;
-            background-color: $vxe-checkbox-indeterminate-icon-background-color;
-            transform: translate(-50%, -50%);
-          }
+          color: $vxe-primary-color;
         }
       }
     }
@@ -84,7 +42,7 @@
     & > input {
       &:focus {
         &+.vxe-checkbox--icon {
-          border-color: $vxe-primary-color;
+          color: $vxe-primary-color;
           box-shadow: 0 0 0.2em 0 $vxe-primary-color;
         }
       }
@@ -101,18 +59,13 @@
     cursor: not-allowed;
     > input {
       &+.vxe-checkbox--icon {
-        border-color: $vxe-input-disabled-color;
-        background-color: $vxe-input-disabled-background-color;
-        &:before {
-          border-color: $vxe-primary-disabled-color;
-        }
+        color: $vxe-input-disabled-color;
         &+.vxe-checkbox--label {
           color: $vxe-disabled-color;
         }
       }
       &:checked+.vxe-checkbox--icon {
-        border-color: $vxe-input-disabled-color;
-        background-color: $vxe-input-disabled-background-color;
+        color: $vxe-input-disabled-color;
       }
     }
   }
@@ -127,25 +80,13 @@
 
 .vxe-checkbox {
   font-size: $vxe-font-size;
-  .vxe-checkbox--icon {
-    font-size: $vxe-checkbox-font-size-default;
-  }
   &.size--medium {
     font-size: $vxe-font-size-medium;
-    .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-medium;
-    }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
-    .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-small;
-    }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
-    .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-mini;
-    }
   }
 }

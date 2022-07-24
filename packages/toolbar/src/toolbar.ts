@@ -499,12 +499,14 @@ export default defineComponent({
         const isColGroup = column.children && column.children.length
         const isDisabled = checkMethod ? !checkMethod({ column }) : false
         if (isColGroup || colKey) {
+          const isChecked = column.visible
+          const isIndeterminate = column.halfVisible
           colVNs.push(
             h('li', {
               class: ['vxe-custom--option', `level--${column.level}`, {
                 'is--group': isColGroup,
-                'is--checked': column.visible,
-                'is--indeterminate': column.halfVisible,
+                'is--checked': isChecked,
+                'is--indeterminate': isIndeterminate,
                 'is--disabled': isDisabled
               }],
               title: colTitle,
@@ -515,13 +517,7 @@ export default defineComponent({
               }
             }, [
               h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+                class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
               }),
               h('span', {
                 class: 'vxe-checkbox--label'
@@ -530,6 +526,8 @@ export default defineComponent({
           )
         }
       })
+      const isAllChecked = customStore.isAll
+      const isAllIndeterminate = customStore.isIndeterminate
       return h('div', {
         class: ['vxe-custom--wrapper', {
           'is--active': customStore.visible
@@ -550,20 +548,14 @@ export default defineComponent({
           }, [
             h('li', {
               class: ['vxe-custom--option', {
-                'is--checked': customStore.isAll,
-                'is--indeterminate': customStore.isIndeterminate
+                'is--checked': isAllChecked,
+                'is--indeterminate': isAllIndeterminate
               }],
               title: GlobalConfig.i18n('vxe.table.allTitle'),
               onClick: allCustomEvent
             }, [
               h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+                class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
               }),
               h('span', {
                 class: 'vxe-checkbox--label'

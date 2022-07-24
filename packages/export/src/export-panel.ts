@@ -153,7 +153,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { defaultOptions, storeData } = props
-      const { isAll, isIndeterminate } = reactData
+      const { isAll: isAllChecked, isIndeterminate: isAllIndeterminate } = reactData
       const { hasTree, hasMerge, isPrint, hasColgroup } = storeData
       const { isHeader } = defaultOptions
       const cols: any[] = []
@@ -164,12 +164,14 @@ export default defineComponent({
       XEUtils.eachTree(storeData.columns, (column: any) => {
         const colTitle = formatText(column.getTitle(), 1)
         const isColGroup = column.children && column.children.length
+        const isChecked = column.checked
+        const indeterminate = column.halfChecked
         cols.push(
           h('li', {
             class: ['vxe-export--panel-column-option', `level--${column.level}`, {
               'is--group': isColGroup,
-              'is--checked': column.checked,
-              'is--indeterminate': column.halfChecked,
+              'is--checked': isChecked,
+              'is--indeterminate': indeterminate,
               'is--disabled': column.disabled
             }],
             title: colTitle,
@@ -180,13 +182,7 @@ export default defineComponent({
             }
           }, [
             h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+              class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
             }),
             h('span', {
               class: 'vxe-checkbox--label'
@@ -295,20 +291,14 @@ export default defineComponent({
                         }, [
                           h('li', {
                             class: ['vxe-export--panel-column-option', {
-                              'is--checked': isAll,
-                              'is--indeterminate': isIndeterminate
+                              'is--checked': isAllChecked,
+                              'is--indeterminate': isAllIndeterminate
                             }],
                             title: GlobalConfig.i18n('vxe.table.allTitle'),
                             onClick: allColumnEvent
                           }, [
                             h('span', {
-                              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-                            }),
-                            h('span', {
-                              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-                            }),
-                            h('span', {
-                              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+                              class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
                             }),
                             h('span', {
                               class: 'vxe-checkbox--label'
