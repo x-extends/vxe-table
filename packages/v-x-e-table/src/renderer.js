@@ -94,7 +94,7 @@ function getCellLabelVNs (h, renderOpts, params, cellLabel) {
       h('span', {
         class: 'vxe-cell--placeholder'
       }, UtilTools.formatText(getFuncText(placeholder), 1))
-    ] : UtilTools.formatText(cellLabel, 1))
+    ] : [cellLabel])
   ]
 }
 
@@ -350,12 +350,13 @@ function handleFilterMethod ({ option, row, column }) {
 
 function nativeSelectEditRender (h, renderOpts, params) {
   return [
-    h('select', {
-      class: 'vxe-default-select',
-      attrs: getNativeAttrs(renderOpts),
-      on: getNativeEditOns(renderOpts, params)
-    },
-    renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
+    h('select',
+      {
+        class: 'vxe-default-select',
+        attrs: getNativeAttrs(renderOpts),
+        on: getNativeEditOns(renderOpts, params)
+      },
+      renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
   ]
 }
 
@@ -540,24 +541,26 @@ const renderMap = {
     renderFilter (h, renderOpts, params) {
       const { column } = params
       return column.filters.map((option, oIndex) => {
-        return h('select', {
-          key: oIndex,
-          class: 'vxe-default-select',
-          attrs: getNativeAttrs(renderOpts),
-          on: getNativeFilterOns(renderOpts, params, option)
-        },
-        renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
+        return h('select',
+          {
+            key: oIndex,
+            class: 'vxe-default-select',
+            attrs: getNativeAttrs(renderOpts),
+            on: getNativeFilterOns(renderOpts, params, option)
+          },
+          renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
       })
     },
     defaultFilterMethod: handleFilterMethod,
     renderItemContent (h, renderOpts, params) {
       return [
-        h('select', {
-          class: 'vxe-default-select',
-          attrs: getNativeAttrs(renderOpts),
-          on: getNativeItemOns(renderOpts, params)
-        },
-        renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeFormOptions) : renderNativeFormOptions(h, renderOpts.options, renderOpts, params))
+        h('select',
+          {
+            class: 'vxe-default-select',
+            attrs: getNativeAttrs(renderOpts),
+            on: getNativeItemOns(renderOpts, params)
+          },
+          renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeFormOptions) : renderNativeFormOptions(h, renderOpts.options, renderOpts, params))
       ]
     },
     cellExportMethod: handleExportSelectMethod
