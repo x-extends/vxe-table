@@ -859,41 +859,79 @@ export declare class Table extends VXETableComponent {
    */
   getUpdateRecords(): RowInfo[];
   /**
-   * 手动清除单元格激活状态
+   * 请使用 clearEdit
+   * @deprecated
    */
-  clearActived(): Promise<any>;
+  clearActived(evnt?: Event): Promise<any>
+   /**
+    * 手动清除单元格激活状态
+    */
+  clearEdit(evnt?: Event): Promise<any>
   /**
    * 用于 mouse-config.area，用于清除鼠标选择的区域，可以指定清除的区域
    */
   clearCellAreas(area?: number | MouseCellArea): Promise<any>;
   /**
-   * 用于 edit-config，获取已激活的行数据
+   * 请使用 getEditRecord
+   * @deprecated
    */
   getActiveRecord(): {
-    row: RowInfo;
-    rowIndex: number;
-    $rowIndex: number;
-    column: ColumnInfo;
-    columnIndex: number;
-    $columnIndex: number;
-    cell: HTMLElement;
-  };
+    row: any
+    rowIndex: number
+    $rowIndex: number
+    column: ColumnInfo
+    columnIndex: number
+    $columnIndex: number
+    cell: HTMLElement
+  }
   /**
-   * 用于 edit-config，判断行是否为激活编辑状态
-   * @param row 指定行
+   * 用于 edit-config，获取已激活的行数据
    */
-  isActiveByRow(row: RowInfo): boolean;
+  getEditRecord(): {
+    row: any
+    rowIndex: number
+    $rowIndex: number
+    column: ColumnInfo
+    columnIndex: number
+    $columnIndex: number
+    cell: HTMLElement
+  }
+  /**
+   * 请使用 isEditByRow
+   * @deprecated
+   */
+  isActiveByRow(row: any): boolean
+   /**
+    * 用于 edit-config，判断行是否为激活编辑状态
+    * @param row 指定行
+    */
+  isEditByRow(row: any): boolean
   /**
    * 用于 edit-config，激活行编辑并激活第一个单元格
    * @param row 指定行
    */
   setActiveRow(row: RowInfo): Promise<any>;
   /**
-   * 用于 edit-config，激活单元格编辑
-   * @param row 指定行
-   * @param field 字段名
+   * 请使用 setEditRow
+   * @deprecated
    */
-  setActiveCell(row: RowInfo, field: string): Promise<any>;
+  setActiveRow(row: any): Promise<any>
+   /**
+    * 用于 edit-config，激活行编辑并激活第一个单元格
+    * @param row 指定行
+    */
+  setEditRow(row: any): Promise<any>
+   /**
+    * 请使用 setEditCell
+    * @deprecated
+    */
+  setActiveCell(row: any, fieldOrColumn: string | ColumnInfo): Promise<any>
+   /**
+    * 用于 edit-config，激活单元格编辑
+    * @param row 指定行
+    * @param field 字段名
+    */
+  setEditCell(row: any, fieldOrColumn: string | ColumnInfo): Promise<any>
   /**
    * 用于 mouse-config.mouse-config，选中某个单元格
    * @param row 指定行
