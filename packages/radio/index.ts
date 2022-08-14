@@ -2,12 +2,14 @@ import { App } from 'vue'
 import VxeRadioComponent from './src/radio'
 import { dynamicApp } from '../dynamics'
 
-export const Radio = Object.assign(VxeRadioComponent, {
+export const VxeRadio = Object.assign(VxeRadioComponent, {
   install: function (app: App) {
     app.component(VxeRadioComponent.name, VxeRadioComponent)
   }
 })
 
+export const Radio = VxeRadio
+
 dynamicApp.component(VxeRadioComponent.name, VxeRadioComponent)
 
-export default Radio
+export default VxeRadio

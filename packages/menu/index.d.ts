@@ -1,4 +1,4 @@
-import { Menu } from '../../types/menu'
+import { VxeModuleMenu } from '../../types/menu'
 
 export * from '../../types/menu'
-export default Menu
+export default VxeModuleMenu

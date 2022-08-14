@@ -3,7 +3,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 开关
- * @example import { Switch as VxeSwitch } from 'vxe-table'
+ * @example import { VxeSwitch } from 'vxe-table'
+ */
+export const VxeSwitch: VXEComponent<VxeSwitchProps, VxeSwitchEventProps>
+/**
+ * 组件 - 开关
  */
 export const Switch: VXEComponent<VxeSwitchProps, VxeSwitchEventProps>
 

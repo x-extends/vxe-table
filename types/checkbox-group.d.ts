@@ -4,7 +4,11 @@ import { VxeCheckboxEvents, VxeCheckboxPropTypes } from './checkbox'
 
 /**
  * 组件 - 复选框组
- * @example import { CheckboxGroup as VxeCheckboxGroup } from 'vxe-table'
+ * @example import { VxeCheckboxGroup } from 'vxe-table'
+ */
+export const VxeCheckboxGroup: VXEComponent<VxeCheckboxGroupProps, VxeCheckboxGroupEventProps>
+/**
+ * 组件 - 复选框组
  */
 export const CheckboxGroup: VXEComponent<VxeCheckboxGroupProps, VxeCheckboxGroupEventProps>
 

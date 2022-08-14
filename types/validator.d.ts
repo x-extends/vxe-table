@@ -4,6 +4,10 @@ import { VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateM
 /**
  * 表格扩展 - 校验模块
  */
+export const VxeModuleValidator: VXEComponent<{}>
+/**
+ * 表格扩展 - 校验模块
+ */
 export const Validator: VXEComponent<{}>
 
 export interface TableValidatorMethods {

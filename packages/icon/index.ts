@@ -1,6 +1,8 @@
-export const Icon = {
+export const VxeIcon = {
   /* eslint-disable @typescript-eslint/no-empty-function */
   install () {}
 }
 
-export default Icon
+export const Icon = VxeIcon
+
+export default VxeIcon

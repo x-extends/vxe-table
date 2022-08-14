@@ -11,6 +11,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import TableBodyComponent from './body'
 import TableHeaderComponent from '../../header'
+import TableFooterComponent from '../../footer'
 import tableProps from './props'
 import tableEmits from './emits'
 import VxeLoading from '../../loading/index'
@@ -5599,7 +5600,7 @@ export default defineComponent({
           tableColumn,
           fixedColumn
         }),
-        showFooter ? h(resolveComponent('vxe-table-footer') as ComponentOptions, {
+        showFooter ? h(TableFooterComponent, {
           ref: isFixedLeft ? refTableLeftFooter : refTableRightFooter,
           footerTableData,
           tableColumn,
@@ -5998,7 +5999,7 @@ export default defineComponent({
             /**
              * 表尾
              */
-            showFooter ? h(resolveComponent('vxe-table-footer') as ComponentOptions, {
+            showFooter ? h(TableFooterComponent, {
               ref: refTableFooter,
               footerTableData,
               tableColumn

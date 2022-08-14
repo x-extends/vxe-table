@@ -17,7 +17,7 @@ export const print: PrintFunction = (options) => {
   handlePrint(null, opts, opts.content)
 }
 
-export const Export = {
+export const VxeModuleExport = {
   ExportPanel: ExportPanelComponent,
   ImportPanel: ImportPanelComponent,
   install (app: App) {
@@ -40,7 +40,9 @@ export const Export = {
   }
 }
 
+export const Export = VxeModuleExport
+
 dynamicApp.component(ExportPanelComponent.name, ExportPanelComponent)
 dynamicApp.component(ImportPanelComponent.name, ImportPanelComponent)
 
-export default Export
+export default VxeModuleExport

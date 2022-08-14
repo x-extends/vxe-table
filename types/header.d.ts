@@ -1,6 +1,7 @@
 import { VXEComponent } from './component'
 
 /**
- * 表格扩展 - 表头
+ * 已废弃
+ * @deprecated
  */
 export const Header: VXEComponent<{}>

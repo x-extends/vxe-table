@@ -96,13 +96,15 @@ const ModalController = {
 
 export const modal = ModalController
 
-export const Modal = Object.assign(VxeModalComponent, {
+export const VxeModal = Object.assign(VxeModalComponent, {
   install: function (app: App) {
     app.component(VxeModalComponent.name, VxeModalComponent)
     VXETable.modal = ModalController
   }
 })
 
+export const Modal = VxeModal
+
 dynamicApp.component(VxeModalComponent.name, VxeModalComponent)
 
-export default Modal
+export default VxeModal

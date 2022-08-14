@@ -4,6 +4,10 @@ import { VxeTableMethods, VxeTablePrivateMethods } from './table'
 /**
  * 表格扩展 - 键盘导航
  */
+export const VxeModuleKeyboard: VXEComponent<{}>
+/**
+ * 表格扩展 - 键盘导航
+ */
 export const Keyboard: VXEComponent<{}>
 
 export interface TableKeyboardMethods {}

@@ -6,7 +6,11 @@ import { VxeOptionProps, VxeOptionPropTypes } from './option'
 
 /**
  * 组件 - 下拉框
- * @example import { Select as VxeSelect } from 'vxe-table'
+ * @example import { VxeSelect } from 'vxe-table'
+ */
+export const VxeSelect: VXEComponent<VxeSelectProps, VxeSelectEventProps>
+/**
+ * 组件 - 下拉框
  */
 export const Select: VXEComponent<VxeSelectProps, VxeSelectEventProps>
 

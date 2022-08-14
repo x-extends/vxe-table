@@ -2,84 +2,81 @@ import { App } from 'vue'
 import XEUtils from 'xe-utils'
 import { setup } from './v-x-e-table'
 
-import { Icon } from './icon'
-import { Filter } from './filter'
-import { Menu } from './menu'
-import { Edit } from './edit'
-import { Export } from './export'
-import { Keyboard } from './keyboard'
-import { Validator } from './validator'
-import { Footer } from './footer'
+import { VxeModuleFilter } from './filter'
+import { VxeModuleMenu } from './menu'
+import { VxeModuleEdit } from './edit'
+import { VxeModuleExport } from './export'
+import { VxeModuleKeyboard } from './keyboard'
+import { VxeModuleValidator } from './validator'
 
-import { Column } from './column'
-import { Colgroup } from './colgroup'
-import { Grid } from './grid'
-import { Toolbar } from './toolbar'
-import { Pager } from './pager'
-import { Checkbox } from './checkbox'
-import { CheckboxGroup } from './checkbox-group'
-import { Radio } from './radio'
-import { RadioGroup } from './radio-group'
-import { RadioButton } from './radio-button'
-import { Input } from './input'
-import { Textarea } from './textarea'
-import { Button } from './button'
-import { Modal } from './modal'
-import { Tooltip } from './tooltip'
-import { Form } from './form'
-import { FormItem } from './form-item'
-import { FormGather } from './form-gather'
-import { Select } from './select'
-import { Optgroup } from './optgroup'
-import { Option } from './option'
-import { Switch } from './switch'
-import { List } from './list'
-import { Pulldown } from './pulldown'
-
-import { Table } from './table'
+import { VxeIcon } from './icon'
+import { VxeColumn } from './column'
+import { VxeColgroup } from './colgroup'
+import { VxeGrid } from './grid'
+import { VxeToolbar } from './toolbar'
+import { VxePager } from './pager'
+import { VxeCheckbox } from './checkbox'
+import { VxeCheckboxGroup } from './checkbox-group'
+import { VxeRadio } from './radio'
+import { VxeRadioGroup } from './radio-group'
+import { VxeRadioButton } from './radio-button'
+import { VxeInput } from './input'
+import { VxeTextarea } from './textarea'
+import { VxeButton } from './button'
+import { VxeModal } from './modal'
+import { VxeTooltip } from './tooltip'
+import { VxeForm } from './form'
+import { VxeFormItem } from './form-item'
+import { VxeFormGather } from './form-gather'
+import { VxeSelect } from './select'
+import { VxeOptgroup } from './optgroup'
+import { VxeOption } from './option'
+import { VxeSwitch } from './switch'
+import { VxeList } from './list'
+import { VxePulldown } from './pulldown'
+import { VxeTable } from './table'
 
 import zhCN from './locale/lang/zh-CN'
 
 // 按需加载的组件
 const components = [
   // 功能模块
-  Footer,
-  Icon,
-  Filter,
-  Menu,
-  Edit,
-  Export,
-  Keyboard,
-  Validator,
+  VxeModuleFilter,
+  VxeModuleMenu,
+  VxeModuleEdit,
+  VxeModuleExport,
+  VxeModuleKeyboard,
+  VxeModuleValidator,
 
   // 可选组件
-  Column,
-  Colgroup,
-  Grid,
-  Toolbar,
-  Pager,
-  Checkbox,
-  CheckboxGroup,
-  Radio,
-  RadioGroup,
-  RadioButton,
-  Input,
-  Textarea,
-  Button,
-  Modal,
-  Tooltip,
-  Form,
-  FormItem,
-  FormGather,
-  Select,
-  Optgroup,
-  Option,
-  Switch,
-  List,
-  Pulldown,
+  VxeIcon,
+  VxeColumn,
+  VxeColgroup,
+  VxeGrid,
+  VxeToolbar,
+  VxePager,
+  VxeCheckbox,
+  VxeCheckboxGroup,
+  VxeRadio,
+  VxeRadioGroup,
+  VxeRadioButton,
+  VxeInput,
+  VxeTextarea,
+  VxeButton,
+  VxeModal,
+  VxeTooltip,
+  VxeForm,
+  VxeFormItem,
+  VxeFormGather,
+  VxeSelect,
+  VxeOptgroup,
+  VxeOption,
+  VxeSwitch,
+  VxeList,
+  VxePulldown,
 
   // 核心
-  Table
+  VxeTable
 ]
 
 // 默认中文
@@ -104,7 +101,6 @@ export * from './export'
 export * from './keyboard'
 export * from './validator'
 export * from './header'
-export * from './footer'
 
 export * from './column'
 export * from './colgroup'

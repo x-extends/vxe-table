@@ -4,7 +4,7 @@ import PanelComponent from './src/panel'
 import filterHook from './src/hook'
 import { dynamicApp } from '../dynamics'
 
-export const Filter = {
+export const VxeModuleFilter = {
   Panel: PanelComponent,
   install (app: App) {
     VXETable.hooks.add('$tableFilter', filterHook)
@@ -12,6 +12,8 @@ export const Filter = {
   }
 }
 
+export const Filter = VxeModuleFilter
+
 dynamicApp.component(PanelComponent.name, PanelComponent)
 
-export default Filter
+export default VxeModuleFilter

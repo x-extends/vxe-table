@@ -6,7 +6,11 @@ import { VxeGlobalRendererHandles } from './v-x-e-table'
 
 /**
  * 组件 - 表单项
- * @example import { FormItem as VxeFormItem } from 'vxe-table'
+ * @example import { VxeFormItem } from 'vxe-table'
+ */
+export const VxeFormItem: VXEComponent<VxeFormItemProps>
+/**
+ * 组件 - 表单项
  */
 export const FormItem: VXEComponent<VxeFormItemProps>
 

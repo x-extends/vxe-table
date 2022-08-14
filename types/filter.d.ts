@@ -5,6 +5,10 @@ import { VxeColumnPropTypes } from './column'
 /**
  * 表格扩展 - 筛选
  */
+export const VxeModuleFilter: VXEComponent<{}>
+/**
+ * 表格扩展 - 筛选
+ */
 export const Filter: VXEComponent<{}>
 
 export interface VxeFilterPanel {

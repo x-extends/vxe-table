@@ -3,7 +3,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 虚拟列表
- * @example import { List as VxeList } from 'vxe-table'
+ * @example import { VxeList } from 'vxe-table'
+ */
+export const VxeList: VXEComponent<VxeListProps, VxeListEventProps>
+/**
+ * 组件 - 虚拟列表
  */
 export const List: VXEComponent<VxeListProps, VxeListEventProps>
 
