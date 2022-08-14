@@ -108,7 +108,7 @@ $vxe-table-menu-item-width: 178px !default;
 $vxe-table-menu-background-color: #fff !default;
 
 /*loading*/
-$vxe-loading-background-color: rgba(0, 0, 0, 0.2) !default;
+$vxe-loading-background-color: rgba(0, 0, 0, 0.3) !default;
 $vxe-loading-z-index: 999 !default;
 
 /*validate*/
@@ -121,10 +121,6 @@ $vxe-grid-maximize-background-color: #fff !default;
 
 /*toolbar*/
 $vxe-toolbar-background-color: #fff !default;
-$vxe-toolbar-height-default: 52px !default;
-$vxe-toolbar-height-medium: 50px !default;
-$vxe-toolbar-height-small: 48px !default;
-$vxe-toolbar-height-mini: 46px !default;
 $vxe-toolbar-custom-active-background-color: #D9DADB !default;
 $vxe-toolbar-panel-background-color: #fff !default;
 
@@ -146,10 +142,10 @@ $vxe-modal-body-background-color: #fff !default;
 $vxe-modal-border-color: #ebeef5 !default;
 
 /*checkbox*/
-$vxe-checkbox-font-size-default: 16px !default;
-$vxe-checkbox-font-size-medium: 15px !default;
-$vxe-checkbox-font-size-small: 14px !default;
-$vxe-checkbox-font-size-mini: 14px !default;
+$vxe-checkbox-font-size-default: 15px !default;
+$vxe-checkbox-font-size-medium: 14px !default;
+$vxe-checkbox-font-size-small: 13px !default;
+$vxe-checkbox-font-size-mini: 12px !default;
 $vxe-checkbox-checked-width: 0.32em !default;
 $vxe-checkbox-checked-height: 0.64em !default;
 $vxe-checkbox-indeterminate-width: 0.6em !default;
@@ -187,6 +183,7 @@ $vxe-button-round-border-radius-mini: 14px !default;
 /*input*/
 $vxe-input-background-color: #fff !default;
 $vxe-input-panel-background-color: $vxe-input-background-color !default;
+$vxe-input-number-disabled-color: #e4e7ed !default;
 $vxe-input-date-festival-color: #999999 !default;
 $vxe-input-date-festival-important-color: $vxe-primary-color !default;
 $vxe-input-date-notice-background-color: #FF0000 !default;

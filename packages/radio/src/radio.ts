@@ -4,7 +4,7 @@ import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { VxeRadioPropTypes, VxeRadioConstructor, VxeRadioEmits, VxeRadioGroupConstructor, VxeRadioGroupPrivateMethods, RadioMethods } from '../../../types/all'
+import { VxeRadioPropTypes, VxeRadioConstructor, VxeRadioEmits, VxeRadioGroupConstructor, VxeRadioGroupPrivateMethods, RadioMethods, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeRadio',
@@ -24,6 +24,8 @@ export default defineComponent({
   ] as VxeRadioEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -62,6 +64,10 @@ export default defineComponent({
       } else {
         emit('update:modelValue', label)
         radioMethods.dispatchEvent('change', { label }, evnt)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, label)
+        }
       }
     }
 
@@ -94,10 +100,11 @@ export default defineComponent({
       const vSize = computeSize.value
       const isDisabled = computeDisabled.value
       const name = computeName.value
-      const checked = computeChecked.value
+      const isChecked = computeChecked.value
       return h('label', {
         class: ['vxe-radio', {
           [`size--${vSize}`]: vSize,
+          'is--checked': isChecked,
           'is--disabled': isDisabled
         }],
         title: props.title
@@ -106,13 +113,13 @@ export default defineComponent({
           class: 'vxe-radio--input',
           type: 'radio',
           name,
-          checked,
+          checked: isChecked,
           disabled: isDisabled,
           onChange: changeEvent,
           onClick: clickEvent
         }),
         h('span', {
-          class: 'vxe-radio--icon'
+          class: ['vxe-radio--icon', isChecked ? 'vxe-icon-radio-checked' : 'vxe-icon-radio-unchecked']
         }),
         h('span', {
           class: 'vxe-radio--label'

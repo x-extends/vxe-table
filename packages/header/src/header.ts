@@ -110,7 +110,8 @@ export default defineComponent({
       document.onmouseup = function (evnt) {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
-        column.resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
+        const resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
+        column.resizeWidth = resizeWidth
         resizeBarElem.style.display = 'none'
         tableInternalData._isResize = false
         tableInternalData._lastResizeTime = Date.now()
@@ -118,7 +119,7 @@ export default defineComponent({
         $xetable.recalculate(true).then(() => {
           $xetable.saveCustomResizable()
           $xetable.updateCellAreas()
-          $xetable.dispatchEvent('resizable-change', params, evnt)
+          $xetable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
         })
         removeClass(tableEl, 'drag--resize')
       }

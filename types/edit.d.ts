@@ -60,9 +60,22 @@ export interface TableEditMethods {
    */
   getUpdateRecords(): any[]
   /**
-   * 用于 edit-config，获取已激活的行数据
+   * 请使用 getEditRecord
+   * @deprecated
    */
   getActiveRecord(): {
+    row: any
+    rowIndex: number
+    $rowIndex: number
+    column: VxeTableDefines.ColumnInfo
+    columnIndex: number
+    $columnIndex: number
+    cell: HTMLElement
+  }
+  /**
+   * 用于 edit-config，获取已激活的行数据
+   */
+  getEditRecord(): {
     row: any
     rowIndex: number
     $rowIndex: number
@@ -79,29 +92,49 @@ export interface TableEditMethods {
     column: VxeTableDefines.ColumnInfo
   }
   /**
-   * 手动清除单元格激活状态
+   * 请使用 clearEdit
+   * @deprecated
    */
   clearActived(evnt?: Event): Promise<any>
+  /**
+   * 手动清除单元格激活状态
+   */
+  clearEdit(evnt?: Event): Promise<any>
   /**
    * 手动清除单元格选中状态
    */
   clearSelected(): Promise<any>
   /**
+   * 请使用 isEditByRow
+   * @deprecated
+   */
+  isActiveByRow(row: any): boolean
+  /**
    * 用于 edit-config，判断行是否为激活编辑状态
    * @param row 指定行
    */
-  isActiveByRow(row: any): boolean
+  isEditByRow(row: any): boolean
+  /**
+   * 请使用 setEditRow
+   * @deprecated
+   */
+  setActiveRow(row: any): Promise<any>
   /**
    * 用于 edit-config，激活行编辑并激活第一个单元格
    * @param row 指定行
    */
-  setActiveRow(row: any): Promise<any>
+  setEditRow(row: any): Promise<any>
+  /**
+   * 请使用 setEditCell
+   * @deprecated
+   */
+  setActiveCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>
   /**
    * 用于 edit-config，激活单元格编辑
    * @param row 指定行
    * @param field 字段名
    */
-  setActiveCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>
+  setEditCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>
   /**
    * 用于 mouse-config.mouse-config，选中某个单元格
    * @param row 指定行

@@ -21,13 +21,17 @@ export class Store {
   }
 
   add (name: string, render: any): Store {
+    const conf = this.store[name]
     // 检测是否覆盖
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (!XEUtils.eqNull(this.store[name]) && this.store[name] !== render) {
-        warnLog('vxe.error.coverProp', [(this as any)._name, name])
-      }
+      const confKeys = XEUtils.keys(conf)
+      XEUtils.each(render, (item, key) => {
+        if (confKeys.includes(key)) {
+          warnLog('vxe.error.coverProp', [name, key])
+        }
+      })
     }
-    this.store[name] = render
+    this.store[name] = conf ? XEUtils.merge(conf, render) : render
     return this
   }
 

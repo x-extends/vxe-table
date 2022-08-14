@@ -4,7 +4,7 @@ import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 
-import { VxeCheckboxConstructor, VxeCheckboxGroupConstructor, VxeCheckboxEmits, VxeCheckboxGroupPrivateMethods, CheckboxMethods, VxeCheckboxPropTypes } from '../../../types/all'
+import { VxeCheckboxConstructor, VxeCheckboxGroupConstructor, VxeCheckboxEmits, VxeCheckboxGroupPrivateMethods, CheckboxMethods, VxeCheckboxPropTypes, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeCheckbox',
@@ -25,6 +25,8 @@ export default defineComponent({
   ] as VxeCheckboxEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -60,6 +62,10 @@ export default defineComponent({
         } else {
           emit('update:modelValue', value)
           checkboxMethods.dispatchEvent('change', params, evnt)
+          // 自动更新校验状态
+          if ($xeform && $xeformiteminfo) {
+            $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, value)
+          }
         }
       }
     }
@@ -75,11 +81,14 @@ export default defineComponent({
     const renderVN = () => {
       const vSize = computeSize.value
       const isDisabled = computeDisabled.value
+      const isChecked = computeChecked.value
+      const indeterminate = props.indeterminate
       return h('label', {
         class: ['vxe-checkbox', {
           [`size--${vSize}`]: vSize,
-          'is--indeterminate': props.indeterminate,
-          'is--disabled': isDisabled
+          'is--indeterminate': indeterminate,
+          'is--disabled': isDisabled,
+          'is--checked': isChecked
         }],
         title: props.title
       }, [
@@ -87,11 +96,11 @@ export default defineComponent({
           class: 'vxe-checkbox--input',
           type: 'checkbox',
           disabled: isDisabled,
-          checked: computeChecked.value,
+          checked: isChecked,
           onChange: changeEvent
         }),
         h('span', {
-          class: 'vxe-checkbox--icon'
+          class: ['vxe-checkbox--icon', indeterminate ? 'vxe-icon-checkbox-indeterminate' : (isChecked ? 'vxe-icon-checkbox-checked' : 'vxe-icon-checkbox-unchecked')]
         }),
         h('span', {
           class: 'vxe-checkbox--label'

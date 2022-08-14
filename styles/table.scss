@@ -2,7 +2,6 @@
 @import './helpers/mixin.scss';
 @import './base/checked.scss';
 @import './base/common.scss';
-@import './base/loading.scss';
 
 %DefaultColumnHeight {
   height: $vxe-table-row-height-default;
@@ -308,6 +307,142 @@
           }
         }
       }
+    }
+  }
+}
+
+/*header*/
+.vxe-table {
+  .vxe-table--header-wrapper {
+    color: $vxe-table-header-font-color;
+    .vxe-table--header-border-line {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 0;
+      border-bottom: $vxe-table-border-width solid $vxe-table-border-color;
+    }
+  }
+  /*排序*/
+  .vxe-cell--sort {
+    width: 1.5em;
+    height: 1.35em;
+    vertical-align: middle;
+    text-align: center;
+    display: inline-block;
+    position: relative;
+  }
+  .vxe-sort--asc-btn,
+  .vxe-sort--desc-btn {
+    position: absolute;
+    left: 0.2em;
+    color: $vxe-table-column-icon-border-color;
+    width: 1em;
+    text-align: center;
+    height: 0.8em;
+    line-height: 0.8em;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-table-font-color;
+    }
+    &.sort--active {
+      color: $vxe-primary-color;
+    }
+  }
+  .vxe-sort--asc-btn {
+    top: -0.1em;
+  }
+  .vxe-sort--desc-btn {
+    bottom: -0.2em;
+  }
+}
+
+.vxe-header--column {
+  position: relative;
+  font-weight: $vxe-table-header-font-weight;
+  // user-select: none;
+  &.col--ellipsis {
+    & > .vxe-cell {
+      display: flex;
+      align-items: center;
+      .vxe-cell--title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      & > i,
+      & > span {
+        &:not(.vxe-cell--title) {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+  .vxe-cell--required-icon {
+    display: inline-block;
+    color: $vxe-table-validate-error-color;
+    width: 0.8em;
+    height: 1em;
+    line-height: 1em;
+    font-family: $vxe-icon-font-family;
+    font-weight: normal;
+    position: relative;
+    &:before {
+      content: "*";
+      position: absolute;
+      left: 0;
+      top: 0.2em;
+    }
+  }
+  // .vxe-cell--required-icon,
+  // .vxe-cell--edit-icon,
+  // .vxe-cell-help-icon,
+  // .vxe-cell--title {
+  //   vertical-align: middle;
+  // }
+  .vxe-cell--required-icon {
+    margin-right: 0.1em;
+  }
+  .vxe-cell--edit-icon,
+  .vxe-cell-help-icon {
+    margin-right: 0.2em;
+  }
+  .vxe-cell-help-icon {
+    cursor: help;
+  }
+  .vxe-resizable {
+    position: absolute;
+    right: -7px;
+    bottom: 0;
+    width: 14px;
+    height: 100%;
+    text-align: center;
+    z-index: 1;
+    cursor: col-resize;
+    &.is--line {
+      &:before,
+      &:after {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+      }
+      &:before {
+        width: 1px;
+        height: 50%;
+        background-color: $vxe-table-resizable-line-color;
+      }
+      &:after {
+        width: 0;
+        height: 100%;
+      }
+    }
+  }
+}
+.vxe-table--fixed-right-wrapper {
+  .vxe-header--column {
+    .vxe-resizable {
+      right: auto;
+      left: -7px;
     }
   }
 }
@@ -691,23 +826,10 @@
 
   // 单选框和复选框
   .vxe-cell--radio {
-    @extend %XERadio;
+    @extend %XERadioIcon;
   }
   .vxe-cell--checkbox {
-    @extend %XECheckbox;
-  }
-  .vxe-cell--radio .vxe-radio--icon,
-  .vxe-cell--checkbox .vxe-checkbox--icon {
-    left: 0;
-    top: 0.1em;
-  }
-  .vxe-cell--radio .vxe-radio--label,
-  .vxe-cell--checkbox .vxe-checkbox--label {
-    padding-left: 0.5em;
-  }
-  .vxe-cell--radio,
-  .vxe-cell--checkbox {
-    padding-left: 1.2em;
+    @extend %XECheckboxIcon;
   }
 
   .fixed--hidden {
@@ -959,10 +1081,10 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon {
+    .vxe-cell--checkbox {
       font-size: $vxe-checkbox-font-size-medium;
     }
-    .vxe-cell--radio .vxe-radio--icon {
+    .vxe-cell--radio {
       font-size: $vxe-radio-font-size-medium;
     }
   }
@@ -977,10 +1099,10 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon {
+    .vxe-cell--checkbox {
       font-size: $vxe-checkbox-font-size-small;
     }
-    .vxe-cell--radio .vxe-radio--icon {
+    .vxe-cell--radio {
       font-size: $vxe-radio-font-size-small;
     }
   }
@@ -995,10 +1117,10 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon {
+    .vxe-cell--checkbox {
       font-size: $vxe-checkbox-font-size-mini;
     }
-    .vxe-cell--radio .vxe-radio--icon {
+    .vxe-cell--radio {
       font-size: $vxe-radio-font-size-mini;
     }
   }

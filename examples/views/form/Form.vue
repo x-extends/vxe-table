@@ -135,7 +135,7 @@
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="sex" span="24" :item-render="{}" title-overflow>
           <template #default="params">
-            <vxe-select v-model="params.data.sex" placeholder="请选择性别" clearable @change="$refs.xForm.updateStatus(params)">
+            <vxe-select v-model="params.data.sex" placeholder="请选择性别" clearable>
               <vxe-option value="1" label="女"></vxe-option>
               <vxe-option value="2" label="男"></vxe-option>
             </vxe-select>
@@ -143,7 +143,7 @@
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="age" span="24" :item-render="{autofocus:'input'}" title-overflow="title">
           <template #default="params">
-            <vxe-input v-model="params.data.age" type="integer" placeholder="请输入年龄" clearable @change="$refs.xForm.updateStatus(params)"></vxe-input>
+            <vxe-input v-model="params.data.age" type="integer" placeholder="请输入年龄" clearable></vxe-input>
           </template>
         </vxe-form-item>
         <vxe-form-item title="标题貌似有点长呢" field="date" span="24" :item-render="{}" title-overflow="ellipsis">
@@ -223,8 +223,8 @@
         <div>
           <vxe-form-item align="center" collapse-node>
             <template #default>
-              <vxe-button status="primary" content="手动提交方式" @click="searchEvent"></vxe-button>
-              <vxe-button content="重置" @click="resetEvent"></vxe-button>
+              <vxe-button status="primary" content="手动提交方式" @click="searchEvent3"></vxe-button>
+              <vxe-button content="重置" @click="resetEvent3"></vxe-button>
             </template>
           </vxe-form-item>
         </div>
@@ -313,6 +313,9 @@ export default defineComponent({
         ],
         nickname: [
           { required: true, message: '请输入' }
+        ],
+        date: [
+          { required: true, message: '请输入' }
         ]
       }
     })
@@ -365,6 +368,14 @@ export default defineComponent({
     }
 
     const searchEvent: VxeFormEvents.Submit = async () => {
+      VXETable.modal.message({ content: '查询事件', status: 'info' })
+    }
+
+    const resetEvent: VxeFormEvents.Reset = () => {
+      VXETable.modal.message({ content: '重置事件', status: 'info' })
+    }
+
+    const searchEvent3: VxeFormEvents.Submit = async () => {
       const $form = xForm3.value
       const errMap = await $form.validate()
       if (errMap) {
@@ -373,7 +384,9 @@ export default defineComponent({
       VXETable.modal.message({ content: '查询事件', status: 'info' })
     }
 
-    const resetEvent: VxeFormEvents.Reset = () => {
+    const resetEvent3: VxeFormEvents.Reset = () => {
+      const $form = xForm3.value
+      $form.reset()
       VXETable.modal.message({ content: '重置事件', status: 'info' })
     }
 
@@ -383,6 +396,8 @@ export default defineComponent({
       submitEvent2,
       xForm3,
       demo3,
+      searchEvent3,
+      resetEvent3,
       demo4,
       searchEvent,
       resetEvent

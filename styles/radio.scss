@@ -1,6 +1,7 @@
 /**Variable**/
 @import './helpers/mixin.scss';
 @import './base/common.scss';
+@import './base/checked.scss';
 
 /*radio-group*/
 .vxe-radio-group {
@@ -15,13 +16,11 @@
 
 /*radio*/
 .vxe-radio {
+  @extend %XERadioIcon;
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
-  user-select: none;
   line-height: 1;
-  cursor: pointer;
-  color: $vxe-font-color;
   > input {
     &[type="radio"] {
       position: absolute;
@@ -30,74 +29,19 @@
       border: 0;
       appearance: none;
     }
-    &+.vxe-radio--icon {
-      position: relative;
-      display: inline-block;
-      width: 1em;
-      height: 1em;
-      border: $vxe-radio-border-width solid $vxe-input-border-color;
-      background-color: $vxe-radio-icon-background-color;
-      vertical-align: middle;
-      border-radius: 50%;
-    }
-    &:checked+.vxe-radio--icon {
-      background-color: $vxe-primary-color;
-      border-color: $vxe-primary-color;
-      &:before {
-        content: "";
-        position: absolute;
-        background-color: $vxe-radio-checked-icon-background-color;
-        border-radius: 50%;
-        height: 0.25em;
-        width: 0.25em;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-      }
-      &+.vxe-radio--label {
-        color: $vxe-primary-color;
-      }
-    }
-  }
-  &:not(.is--disabled) {
-    & > input {
-      &:focus {
-        &+.vxe-radio--icon {
-          border-color: $vxe-primary-color;
-          box-shadow: 0 0 0.2em 0 $vxe-primary-color;
-        }
-      }
-    }
-    &:hover {
-      > input {
-        &+.vxe-radio--icon {
-          border-color: $vxe-primary-color;
-        }
-      }
-    }
-  }
-  &.is--disabled {
-    cursor: not-allowed;
-    > input {
-      &+.vxe-radio--icon {
-        border-color: $vxe-input-disabled-color;
-        background-color: $vxe-input-disabled-background-color;
-        &:before {
-          border-color: $vxe-primary-disabled-color;
-          background-color: $vxe-primary-disabled-color;
-        }
-        &+.vxe-radio--label {
-          color: $vxe-disabled-color;
-        }
-      }
-    }
   }
   .vxe-radio--label {
-    padding-left: 0.5em;
     vertical-align: middle;
     display: inline-block;
     max-width: 50em;
     @extend %TextEllipsis;
+  }
+  &:not(.is--disabled) {
+    > input {
+      &:focus+.vxe-radio--icon {
+        color: $vxe-primary-color;
+      }
+    }
   }
   &:not(.vxe-radio-button) {
     &+.vxe-radio {
@@ -192,25 +136,13 @@
 
 .vxe-radio {
   font-size: $vxe-font-size;
-  .vxe-radio--icon {
-    font-size: $vxe-radio-font-size-default;
-  }
   &.size--medium {
     font-size: $vxe-font-size-medium;
-    .vxe-radio--icon {
-      font-size: $vxe-radio-font-size-medium;
-    }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
-    .vxe-radio--icon {
-      font-size: $vxe-radio-font-size-small;
-    }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
-    .vxe-radio--icon {
-      font-size: $vxe-radio-font-size-mini;
-    }
   }
 }

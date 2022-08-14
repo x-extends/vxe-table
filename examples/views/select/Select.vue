@@ -22,8 +22,11 @@
       <vxe-select v-model="demo1.value20" placeholder="请选择" prefix-icon="fa fa-user-o">
         <vxe-option v-for="num in 3" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="demo1.value21" placeholder="可清除" clearable>
-        <vxe-option v-for="num in 5" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
+      <vxe-select v-model="demo1.value21" placeholder="可搜索" filterable clearable>
+        <vxe-option v-for="num in 11" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
+      </vxe-select>
+      <vxe-select v-model="demo1.value24" placeholder="远程搜索" filterable clearable remote :remote-method="remoteMethod24">
+        <vxe-option v-for="(item, index) in demo1.list24" :key="index" :value="item.value" :label="item.label"></vxe-option>
       </vxe-select>
       <vxe-select v-model="demo1.value22" placeholder="自定义选项样式" clearable>
         <vxe-option value="1" label="选项1"></vxe-option>
@@ -201,6 +204,13 @@ export default defineComponent({
       value21: null,
       value22: null,
       value23: null,
+      value24: null,
+      list24: [
+        { value: 11, label: '111' },
+        { value: 22, label: '131' },
+        { value: 33, label: '561' },
+        { value: 44, label: '467' }
+      ],
       value30: null,
       value31: null,
       value32: null,
@@ -293,8 +303,33 @@ export default defineComponent({
         { label: '6666', value: '6' }
       ]
     })
+
+    const remoteMethod24 = ({ searchValue }: any): Promise<void> => {
+      return new Promise(resolve => {
+        const list = [
+          { value: 1001, label: 'table' },
+          { value: 1002, label: 'grid' },
+          { value: 1003, label: 'button' },
+          { value: 1004, label: 'toolbar' },
+          { value: 1005, label: 'tooltip' },
+          { value: 1006, label: 'pager' },
+          { value: 1007, label: 'print' },
+          { value: 1008, label: 'export' },
+          { value: 1009, label: 'import' },
+          { value: 1010, label: 'select' },
+          { value: 1012, label: 'checkbox' },
+          { value: 1013, label: 'group' }
+        ]
+        setTimeout(() => {
+          demo1.list24 = list.filter(item => item.label.indexOf(searchValue) > -1)
+          resolve()
+        }, 500)
+      })
+    }
+
     return {
       demo1,
+      remoteMethod24,
       demoCodes: [
         `
         <p>

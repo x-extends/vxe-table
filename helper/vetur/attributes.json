@@ -1675,6 +1675,14 @@
     "type": "string | number",
     "description": "标题宽度"
   },
+  "vxe-form-item/title-colon": {
+    "type": "boolean",
+    "description": "是否显示标题冒号"
+  },
+  "vxe-form-item/title-asterisk": {
+    "type": "boolean",
+    "description": "是否显示必填字段的红色星号"
+  },
   "vxe-form-item/title-overflow": {
     "type": "string | boolean",
     "description": "标题内容过长时显示为省略号"

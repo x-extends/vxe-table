@@ -2,11 +2,11 @@ import { defineComponent, h, createCommentVNode, ref, Ref, computed, reactive, i
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { formatText } from '../../tools/utils'
-import VxeModalConstructor from '../../modal/src/modal'
-import VxeInputConstructor from '../../input/src/input'
-import VxeCheckboxConstructor from '../../checkbox/src/checkbox'
-import VxeSelectConstructor from '../../select/src/select'
-import VxeButtonConstructor from '../../button/src/button'
+import VxeModalComponent from '../../modal/src/modal'
+import VxeInputComponent from '../../input/src/input'
+import VxeCheckboxComponent from '../../checkbox/src/checkbox'
+import VxeSelectComponent from '../../select/src/select'
+import VxeButtonComponent from '../../button/src/button'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
 
@@ -153,7 +153,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { defaultOptions, storeData } = props
-      const { isAll, isIndeterminate } = reactData
+      const { isAll: isAllChecked, isIndeterminate: isAllIndeterminate } = reactData
       const { hasTree, hasMerge, isPrint, hasColgroup } = storeData
       const { isHeader } = defaultOptions
       const cols: any[] = []
@@ -164,12 +164,14 @@ export default defineComponent({
       XEUtils.eachTree(storeData.columns, (column: any) => {
         const colTitle = formatText(column.getTitle(), 1)
         const isColGroup = column.children && column.children.length
+        const isChecked = column.checked
+        const indeterminate = column.halfChecked
         cols.push(
           h('li', {
             class: ['vxe-export--panel-column-option', `level--${column.level}`, {
               'is--group': isColGroup,
-              'is--checked': column.checked,
-              'is--indeterminate': column.halfChecked,
+              'is--checked': isChecked,
+              'is--indeterminate': indeterminate,
               'is--disabled': column.disabled
             }],
             title: colTitle,
@@ -180,13 +182,7 @@ export default defineComponent({
             }
           }, [
             h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+              class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
             }),
             h('span', {
               class: 'vxe-checkbox--label'
@@ -194,7 +190,7 @@ export default defineComponent({
           ])
         )
       })
-      return h(VxeModalConstructor, {
+      return h(VxeModalComponent, {
         modelValue: storeData.visible,
         title: GlobalConfig.i18n(isPrint ? 'vxe.export.printTitle' : 'vxe.export.expTitle'),
         width: 660,
@@ -223,7 +219,7 @@ export default defineComponent({
                   isPrint ? createCommentVNode() : h('tr', [
                     h('td', GlobalConfig.i18n('vxe.export.expName')),
                     h('td', [
-                      h(VxeInputConstructor, {
+                      h(VxeInputComponent, {
                         ref: xInputFilename,
                         modelValue: defaultOptions.filename,
                         type: 'text',
@@ -238,7 +234,7 @@ export default defineComponent({
                   isPrint ? createCommentVNode() : h('tr', [
                     h('td', GlobalConfig.i18n('vxe.export.expType')),
                     h('td', [
-                      h(VxeSelectConstructor, {
+                      h(VxeSelectComponent, {
                         modelValue: defaultOptions.type,
                         options: storeData.typeList.map((item: any) => {
                           return {
@@ -255,7 +251,7 @@ export default defineComponent({
                   isPrint || showSheet ? h('tr', [
                     h('td', GlobalConfig.i18n('vxe.export.expSheetName')),
                     h('td', [
-                      h(VxeInputConstructor, {
+                      h(VxeInputComponent, {
                         ref: xInputSheetname,
                         modelValue: defaultOptions.sheetName,
                         type: 'text',
@@ -270,7 +266,7 @@ export default defineComponent({
                   h('tr', [
                     h('td', GlobalConfig.i18n('vxe.export.expMode')),
                     h('td', [
-                      h(VxeSelectConstructor, {
+                      h(VxeSelectComponent, {
                         modelValue: defaultOptions.mode,
                         options: storeData.modeList.map((item: any) => {
                           return {
@@ -295,20 +291,14 @@ export default defineComponent({
                         }, [
                           h('li', {
                             class: ['vxe-export--panel-column-option', {
-                              'is--checked': isAll,
-                              'is--indeterminate': isIndeterminate
+                              'is--checked': isAllChecked,
+                              'is--indeterminate': isAllIndeterminate
                             }],
                             title: GlobalConfig.i18n('vxe.table.allTitle'),
                             onClick: allColumnEvent
                           }, [
                             h('span', {
-                              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-                            }),
-                            h('span', {
-                              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-                            }),
-                            h('span', {
-                              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+                              class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
                             }),
                             h('span', {
                               class: 'vxe-checkbox--label'
@@ -327,7 +317,7 @@ export default defineComponent({
                       h('div', {
                         class: 'vxe-export--panel-option-row'
                       }, [
-                        h(VxeCheckboxConstructor, {
+                        h(VxeCheckboxComponent, {
                           modelValue: defaultOptions.isHeader,
                           title: GlobalConfig.i18n('vxe.export.expHeaderTitle'),
                           content: GlobalConfig.i18n('vxe.export.expOptHeader'),
@@ -335,7 +325,7 @@ export default defineComponent({
                             defaultOptions.isHeader = value
                           }
                         }),
-                        h(VxeCheckboxConstructor, {
+                        h(VxeCheckboxComponent, {
                           modelValue: defaultOptions.isFooter,
                           disabled: !storeData.hasFooter,
                           title: GlobalConfig.i18n('vxe.export.expFooterTitle'),
@@ -344,7 +334,7 @@ export default defineComponent({
                             defaultOptions.isFooter = value
                           }
                         }),
-                        h(VxeCheckboxConstructor, {
+                        h(VxeCheckboxComponent, {
                           modelValue: defaultOptions.original,
                           title: GlobalConfig.i18n('vxe.export.expOriginalTitle'),
                           content: GlobalConfig.i18n('vxe.export.expOptOriginal'),
@@ -356,7 +346,7 @@ export default defineComponent({
                       h('div', {
                         class: 'vxe-export--panel-option-row'
                       }, [
-                        h(VxeCheckboxConstructor, {
+                        h(VxeCheckboxComponent, {
                           modelValue: isHeader && hasColgroup && supportMerge ? defaultOptions.isColgroup : false,
                           title: GlobalConfig.i18n('vxe.export.expColgroupTitle'),
                           disabled: !isHeader || !hasColgroup || !supportMerge,
@@ -365,7 +355,7 @@ export default defineComponent({
                             defaultOptions.isColgroup = value
                           }
                         }),
-                        h(VxeCheckboxConstructor, {
+                        h(VxeCheckboxComponent, {
                           modelValue: hasMerge && supportMerge && checkedAll ? defaultOptions.isMerge : false,
                           title: GlobalConfig.i18n('vxe.export.expMergeTitle'),
                           disabled: !hasMerge || !supportMerge || !checkedAll,
@@ -374,7 +364,7 @@ export default defineComponent({
                             defaultOptions.isMerge = value
                           }
                         }),
-                        isPrint ? createCommentVNode() : h(VxeCheckboxConstructor, {
+                        isPrint ? createCommentVNode() : h(VxeCheckboxComponent, {
                           modelValue: supportStyle ? defaultOptions.useStyle : false,
                           disabled: !supportStyle,
                           title: GlobalConfig.i18n('vxe.export.expUseStyleTitle'),
@@ -383,7 +373,7 @@ export default defineComponent({
                             defaultOptions.useStyle = value
                           }
                         }),
-                        h(VxeCheckboxConstructor, {
+                        h(VxeCheckboxComponent, {
                           modelValue: hasTree ? defaultOptions.isAllExpand : false,
                           disabled: !hasTree,
                           title: GlobalConfig.i18n('vxe.export.expAllExpandTitle'),
@@ -401,11 +391,11 @@ export default defineComponent({
             h('div', {
               class: 'vxe-export--panel-btns'
             }, [
-              h(VxeButtonConstructor, {
+              h(VxeButtonComponent, {
                 content: GlobalConfig.i18n('vxe.export.expCancel'),
                 onClick: cancelEvent
               }),
-              h(VxeButtonConstructor, {
+              h(VxeButtonComponent, {
                 ref: xButtonConfirm,
                 status: 'primary',
                 content: GlobalConfig.i18n(isPrint ? 'vxe.export.expPrint' : 'vxe.export.expConfirm'),

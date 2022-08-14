@@ -111,12 +111,6 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
     menuPrivateMethods = {
       /**
        * 处理菜单的移动
-       * @param evnt
-       * @param ctxMenuStore
-       * @param property
-       * @param hasOper
-       * @param operRest
-       * @param menuList
        */
       moveCtxMenu (evnt, ctxMenuStore, property, hasOper, operRest, menuList) {
         let selectItem

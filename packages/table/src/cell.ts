@@ -5,8 +5,9 @@ import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
 import { updateCellTitle } from '../../tools/dom'
 import { createColumn } from './util'
+import { getSlotVNs } from '../../tools/vn'
 
-import { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
+import { SlotVNodeType, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
 
 function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params
@@ -24,7 +25,7 @@ function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   ] : []
 }
 
-function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: VNode[] | string[] | string) {
+function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: SlotVNodeType[]) {
   const { $table, column } = params
   const { props, internalData } = $table
   const { computeTooltipOpts } = $table.getComputeMaps()
@@ -81,7 +82,7 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams) {
   if (renderOpts) {
     const compConf = VXETable.renderer.get(renderOpts.name)
     if (compConf && compConf.renderFooter) {
-      return compConf.renderFooter(renderOpts, params)
+      return getSlotVNs(compConf.renderFooter(renderOpts, params))
     }
   }
   return [formatText(items[_columnIndex], 1)]
@@ -160,10 +161,10 @@ export const Cell = {
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
       if (compConf && compConf.renderHeader) {
-        return renderTitleContent(params, compConf.renderHeader(renderOpts, params))
+        return renderTitleContent(params, getSlotVNs(compConf.renderHeader(renderOpts, params)))
       }
     }
-    return renderTitleContent(params, formatText(column.getTitle(), 1))
+    return renderTitleContent(params, [formatText(column.getTitle(), 1)])
   },
   renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams) {
     return renderHelpIcon(params).concat(Cell.renderHeaderTitle(params))
@@ -181,7 +182,7 @@ export const Cell = {
       const compConf = VXETable.renderer.get(renderOpts.name)
       const compFn = compConf ? compConf[funName] : null
       if (compFn) {
-        return compFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))
+        return getSlotVNs(compFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
       }
     }
     const cellValue = $table.getCellLabel(row, column)
@@ -211,7 +212,7 @@ export const Cell = {
   /**
    * 树节点
    */
-  renderTreeIcon (params: VxeTableDefines.CellRenderBodyParams, cellVNodes: VNode[]) {
+  renderTreeIcon (params: VxeTableDefines.CellRenderBodyParams, cellVNodes: SlotVNodeType[]) {
     const { $table, isHidden } = params
     const { reactData } = $table
     const { computeTreeOpts } = $table.getComputeMaps()
@@ -272,7 +273,7 @@ export const Cell = {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
-    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : formatText(column.getTitle(), 1))
+    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : [formatText(column.getTitle(), 1)])
   },
   renderSeqCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, column } = params
@@ -342,10 +343,7 @@ export const Cell = {
     if (isVisible) {
       radioVNs.push(
         h('span', {
-          class: 'vxe-radio--icon vxe-radio--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-radio--icon vxe-radio--unchecked-icon'
+          class: ['vxe-radio--icon', isChecked ? GlobalConfig.icon.TABLE_RADIO_CHECKED : GlobalConfig.icon.TABLE_RADIO_UNCHECKED]
         })
       )
     }
@@ -416,13 +414,7 @@ export const Cell = {
         ...ons
       }, [
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       ].concat(titleSlot || headerTitle ? [
         h('span', {
@@ -471,13 +463,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       )
     }
@@ -509,7 +495,7 @@ export const Cell = {
     const { treeIndeterminates } = reactData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
-    const { labelField, checkField: property, halfField, checkMethod, visibleMethod } = checkboxOpts
+    const { labelField, checkField, halfField, checkMethod, visibleMethod } = checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
@@ -519,7 +505,7 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let ons
     if (!isHidden) {
-      isChecked = XEUtils.get(row, property as string)
+      isChecked = XEUtils.get(row, checkField as string)
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isDisabled && isVisible) {
@@ -542,13 +528,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       )
       if (defaultSlot || labelField) {
@@ -626,7 +606,7 @@ export const Cell = {
     if (contentRender) {
       const compConf = VXETable.renderer.get(contentRender.name)
       if (compConf && compConf.renderExpand) {
-        return compConf.renderExpand(contentRender, params)
+        return getSlotVNs(compConf.renderExpand(contentRender, params))
       }
     }
     return []
@@ -742,7 +722,7 @@ export const Cell = {
     const { sortable, filters, editRender } = column
     let isRequired = false
     if (editRules) {
-      const columnRules = XEUtils.get(editRules, params.column.property) as VxeTableDefines.ValidatorRule[]
+      const columnRules = XEUtils.get(editRules, column.field) as VxeTableDefines.ValidatorRule[]
       if (columnRules) {
         isRequired = columnRules.some((rule) => rule.required)
       }
@@ -792,7 +772,10 @@ export const Cell = {
       if (editSlot) {
         return $table.callSlot(editSlot, params)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit(editRender, Object.assign({ $type: 'edit' }, params)) : []
+      if (compConf && compConf.renderEdit) {
+        return getSlotVNs(compConf.renderEdit(editRender, Object.assign({ $type: 'edit' }, params)))
+      }
+      return []
     }
     if (defaultSlot) {
       return $table.callSlot(defaultSlot, params)

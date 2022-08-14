@@ -5,6 +5,7 @@ import { useSize } from '../../hooks/size'
 import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
 import { browse } from '../../tools/dom'
 import { GlobalEvent } from '../../tools/event'
+import VxeLoading from '../../loading/index'
 
 import { VxeListConstructor, VxeListPropTypes, VxeListEmits, ListReactData, ListInternalData, ListMethods, ListPrivateRef, VxeListMethods } from '../../../types/all'
 
@@ -333,15 +334,13 @@ export default defineComponent({
             }
           }, slots.default ? slots.default({ items, $list: $xelist }) : [])
         ]),
-        h('div', {
-          class: ['vxe-list--loading vxe-loading', {
-            'is--visible': loading
-          }]
-        }, [
-          h('div', {
-            class: 'vxe-loading--spinner'
-          })
-        ])
+        /**
+         * 加载中
+         */
+        h(VxeLoading, {
+          class: 'vxe-list--loading',
+          loading
+        })
       ])
     }
 

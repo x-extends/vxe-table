@@ -1,0 +1,713 @@
+@import './variable.scss';
+@import './helpers/mixin.scss';
+
+[class*="vxe-icon--"] {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  direction: ltr;
+  font-family: $vxe-icon-font-family;
+  font-weight: normal;
+  user-select: none;
+  &.rotate45 {
+    transform: rotate(45deg);
+  }
+  &.rotate90 {
+    transform: rotate(90deg);
+  }
+  &.rotate180 {
+    transform: rotate(180deg);
+  }
+}
+
+%DefaultWidthHeight {
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+}
+
+%PseudoClass {
+  content: "";
+  position: absolute;
+}
+
+.vxe-icon--square {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    left: 0.05em;
+    top: 0.05em;
+    width: 0.9em;
+    height: 0.9em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+  }
+}
+
+.vxe-icon--zoomin {
+  @extend %DefaultWidthHeight;
+  border-width: 0.1em;
+  border-style: solid;
+  border-color: inherit;
+  background-color: $vxe-icon-background-color;
+  &:before,
+  &:after {
+    @extend %PseudoClass;
+    background-color: inherit;
+  }
+  &:before {
+    left: -0.1em;
+    top: 0.2em;
+    width: 1.1em;
+    height: 0.4em;
+  }
+  &:after {
+    top: -0.1em;
+    left: 0.2em;
+    width: 0.4em;
+    height: 1.1em;
+  }
+}
+
+.vxe-icon--zoomout {
+  @extend %DefaultWidthHeight;
+  position: relative;
+  &:before {
+    @extend %PseudoClass;
+    right: 0;
+    top: 0;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+  }
+  &:after {
+    @extend %PseudoClass;
+    left: 0.1em;
+    bottom: 0.1em;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+    background-color: $vxe-icon-background-color;
+  }
+}
+
+.vxe-icon--menu {
+  $yOffset: 0.36em;
+  @extend %DefaultWidthHeight;
+  &:before {
+    content: "";
+    display: inline-block;
+    width: 0.22em;
+    height: 0.22em;
+    box-shadow: 0 -#{$yOffset} 0, -#{$yOffset} -#{$yOffset} 0, #{$yOffset} -#{$yOffset} 0, 0 0 0 1em inset, -#{$yOffset} 0 0, #{$yOffset} 0 0, 0 #{$yOffset} 0, -#{$yOffset} #{$yOffset} 0, #{$yOffset} #{$yOffset} 0;
+    margin: 0.26em;
+  }
+}
+
+%Caret {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    border-width: 0.4em;
+    border-style: solid;
+    border-color: transparent;
+  }
+}
+
+.vxe-icon--caret-top {
+  @extend %Caret;
+  &:before {
+    left: 0.1em;
+    bottom: 0.3em;
+    border-bottom-color: inherit;
+  }
+}
+
+.vxe-icon--caret-bottom {
+  @extend %Caret;
+  &:before {
+    left: 0.1em;
+    top: 0.3em;
+    border-top-color: inherit;
+  }
+}
+
+.vxe-icon--caret-left {
+  @extend %Caret;
+  &:before {
+    right: 0.3em;
+    bottom: 0.1em;
+    border-right-color: inherit;
+  }
+}
+
+.vxe-icon--caret-right {
+  @extend %Caret;
+  &:before {
+    left: 0.3em;
+    bottom: 0.1em;
+    border-left-color: inherit;
+  }
+}
+
+%BeforeArrowTop {
+  &:before {
+    @extend %PseudoClass;
+    top: 0.32em;
+    left: 0.12em;
+    width: 0.6em;
+    height: 0.6em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+}
+
+.vxe-icon--arrow-top {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0.4em;
+    left: 0.14em;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    border-radius: 0.15em;
+    transform: rotate(-45deg);
+  }
+}
+
+.vxe-icon--arrow-bottom {
+  @extend .vxe-icon--arrow-top;
+  &:before {
+    top: 0;
+    left: 0.14em;
+    transform: rotate(135deg);
+  }
+}
+
+.vxe-icon--arrow-left {
+  @extend .vxe-icon--arrow-top;
+  &:before {
+    top: 0.18em;
+    left: 0.35em;
+    transform: rotate(-135deg);
+  }
+}
+
+.vxe-icon--arrow-right {
+  @extend .vxe-icon--arrow-top;
+  &:before {
+    top: 0.18em;
+    left: 0;
+    transform: rotate(45deg);
+  }
+}
+
+.vxe-icon--d-arrow-left {
+  @extend %DefaultWidthHeight;
+  &:before {
+    left: 0.15em;
+  }
+  &:after {
+    left: 0.58em;
+  }
+  &:before,
+  &:after {
+    @extend %PseudoClass;
+    top: 0.18em;
+    width: 0.7em;
+    height: 0.7em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: inherit;
+    border-radius: 0.15em;
+    transform: rotate(-45deg);
+  }
+}
+
+.vxe-icon--d-arrow-right {
+  @extend .vxe-icon--d-arrow-left;
+  &:before,
+  &:after {
+    transform: rotate(135deg);
+  }
+  &:before {
+    left: -0.25em;
+  }
+  &:after {
+    left: 0.18em;
+  }
+}
+
+.vxe-icon--funnel {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0.05em;
+    left: 0;
+    border-width: 0.5em;
+    border-style: solid;
+    border-top-color: inherit;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &:after {
+    @extend %PseudoClass;
+    left: 0.41em;
+    top: 0.4em;
+    width: 0;
+    height: 0.5em;
+    border-width: 0 0.2em 0 0;
+    border-style: solid;
+    border-right-color: inherit;
+  }
+}
+
+.vxe-icon--edit-outline {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    height: 0.84em;
+    width: 0.86em;
+    top: 0.1em;
+    left: 0.02em;
+    border-radius: 0.2em;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+  }
+  &:after {
+    @extend %PseudoClass;
+    left: 0.6em;
+    bottom: 0.2em;
+    width: 0;
+    height: 0.8em;
+    border-radius: 0 0 80% 80%;
+    border-width: 0 0 0 0.22em;
+    border-style: solid;
+    border-color: inherit;
+    transform: rotate(45deg);
+  }
+}
+
+.vxe-icon--more {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    content: "...";
+    top: 0;
+    left: 0.1em;
+    line-height: 0.5em;
+    font-weight: 700;
+  }
+}
+
+.vxe-icon--plus {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    content: "+";
+    left: -0.12em;
+    bottom: -0.1em;
+    line-height: 1em;
+    font-size: 1.6em;
+  }
+}
+
+.vxe-icon--check {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    left: 0.25em;
+    bottom: 0.2em;
+    width: 0.5em;
+    height: 0.9em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-top-color: transparent;
+    border-right-color: inherit;
+    border-bottom-color: inherit;
+    border-radius: 0.15em;
+    border-left-color: transparent;
+    transform: rotate(45deg);
+  }
+}
+
+.vxe-icon--close {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    content: "+";
+    left: -0.1em;
+    bottom: -0.16em;
+    line-height: 1em;
+    font-size: 1.8em;
+    transform: rotate(45deg);
+  }
+}
+
+.vxe-icon--minus {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    content: "\2500";
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 0.9em;
+    font-size: 1.2em;
+  }
+}
+
+.vxe-icon--refresh {
+  @extend %DefaultWidthHeight;
+  border-width: 0.1em;
+  border-style: solid;
+  border-radius: 50%;
+  border-right-color: transparent !important;
+  border-left-color: transparent !important;
+  &:before {
+    left: 50%;
+    top: 0;
+    transform: translateX(50%) rotate(-45deg);
+  }
+  &:after {
+    right: 50%;
+    bottom: 0;
+    transform: translateX(-50%) rotate(135deg);
+  }
+  &:before,
+  &:after {
+    @extend %PseudoClass;
+    width: 0;
+    height: 0;
+    border-width: 0.25em;
+    border-style: solid;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+  }
+  &.roll {
+    animation: rollCircle 1s infinite linear;
+  }
+}
+
+@keyframes rollCircle {
+  0% { 
+    transform: rotate(0deg);
+  }
+  100% { 
+    transform: rotate(360deg);
+  }
+}
+ 
+%BeforeSolidRadius {
+  content: "";
+  border-radius: 50%;
+  border-width: 0.5em;
+  border-style: solid;
+  border-color: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: scale(0.95);
+}
+
+%QuestionAndInfoWarning {
+  &:after {
+    @extend %PseudoClass;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: $vxe-icon-background-color;
+    transform: rotate(-10deg) scale(0.75);
+  }
+}
+
+.vxe-icon--question {
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    content: "\3F";
+  }
+}
+
+.vxe-icon--info {
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    content: "\A1";
+  }
+}
+
+.vxe-icon--warning {
+  @extend %DefaultWidthHeight, %QuestionAndInfoWarning;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    content: "\21";
+  }
+}
+
+.vxe-icon--success {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    @extend %PseudoClass;
+    content: "\2713";
+    left: 0.25em;
+    bottom: 0;
+    color: $vxe-icon-background-color;
+    font-size: 0.65em;
+  }
+}
+
+.vxe-icon--circle-plus {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    @extend %PseudoClass;
+    content: "+";
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: $vxe-icon-background-color;
+    line-height: 1.4em;
+    font-size: 0.8em;
+  }
+}
+
+.vxe-icon--remove {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    @extend %PseudoClass;
+    content: "\2500";
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    line-height: 1.5em;
+    color: $vxe-icon-background-color;
+    font-size: 0.7em;
+  }
+}
+
+.vxe-icon--error {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %BeforeSolidRadius;
+  }
+  &:after {
+    @extend %PseudoClass;
+    content: "\D7";
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    line-height: 1.4em;
+    text-align: center;
+    color: $vxe-icon-background-color;
+    font-size: 0.8em;
+  }
+}
+
+.vxe-icon--upload,
+.vxe-icon--download {
+  @extend %DefaultWidthHeight;
+  overflow: hidden;
+  &:before {
+    @extend %PseudoClass;
+    left: 0;
+    width: 1em;
+    border-width: 0;
+    border-style: solid;
+    border-color: inherit;
+  }
+  &:after {
+    @extend %PseudoClass;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+  }
+}
+
+.vxe-icon--upload {
+  &:before {
+    top: 0.1em;
+    border-top-width: 0.1em;
+  }
+  &:after {
+    content: "\2191";
+    left: 0;
+    top: 0.15em;
+  }
+}
+
+.vxe-icon--download {
+  &:before {
+    bottom: 0.05em;
+    border-bottom-width: 0.1em;
+  }
+  &:after {
+    content: "\2191";
+    left: 0;
+    bottom: 0.15em;
+    transform: rotate(180deg);
+  }
+}
+
+.vxe-icon--eye,
+.vxe-icon--eye-slash {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    content: "\25CF";
+    top: 0.16em;
+    left: 0;
+    width: 1em;
+    height: 0.68em;
+    line-height: 0.25em;
+    border-radius: 50%;
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: inherit;
+    text-align: center;
+  }
+}
+
+.vxe-icon--eye-slash {
+  &:after {
+    @extend %PseudoClass;
+    top: -0.1em;
+    left: 0.45em;
+    width: 0;
+    height: 1.2em;
+    border-width: 0;
+    border-style: solid;
+    border-color: inherit;
+    border-left-width: 0.1em;
+    transform: rotate(45deg);
+  }
+}
+
+.vxe-icon--calendar {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0.15em;
+    left: 0;
+    width: 1em;
+    height: 0.8em;
+    border-width: 0.2em 0.1em 0.1em 0.1em;
+    border-radius: 0.1em 0.1em 0 0;
+    border-style: solid;
+    border-color: inherit;
+  }
+  &:after {
+    @extend %PseudoClass;
+    left: 0.2em;
+    top: 0;
+    width: 0.6em;
+    height: 0.3em;
+    border-width: 0 0.1em;
+    border-style: solid;
+    border-color: inherit;
+  }
+}
+
+.vxe-icon--dot {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0.25em;
+    left: 0.25em;
+    border-radius: 50%;
+    border-width: 0.25em;
+    border-style: solid;
+    border-color: inherit;
+  }
+}
+
+.vxe-icon--print {
+  @extend %DefaultWidthHeight;
+  box-shadow: inset 0 0 0 0.1em;
+  border-width: 0.2em 0;
+  border-style: solid;
+  border-color: transparent !important;
+  border-radius: 0.3em 0.3em 0 0;
+  &:before {
+    @extend %PseudoClass;
+    width: 0.6em;
+    height: 0.3em;
+    top: -0.2em;
+    left: 0.2em;
+    box-shadow: inset 0 0 0 0.1em;
+  }
+  &:after {
+    @extend %PseudoClass;
+    width: 0.6em;
+    height: 0.6em;
+    left: 0.2em;
+    bottom: -0.2em;
+    box-shadow: inset 0 0 0 0.1em;
+    background-color: $vxe-icon-background-color;
+  }
+}
+
+.vxe-icon--search {
+  @extend %DefaultWidthHeight;
+  &:before {
+    @extend %PseudoClass;
+    top: 0;
+    left: 0;
+    width: 0.8em;
+    height: 0.8em;
+    border-width: 0.15em;
+    border-style: solid;
+    border-color: inherit;
+    border-radius: 50%;
+  }
+  &:after {
+    @extend %PseudoClass;
+    top: 0.75em;
+    left: 0.6em;
+    width: 0.35em;
+    height: 0;
+    border-width: 0.15em 0 0 0;
+    border-style: solid;
+    border-color: inherit;
+    transform: rotate(45deg);
+  }
+}

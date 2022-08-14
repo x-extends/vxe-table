@@ -1,5 +1,5 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
-import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle, SlotVNodeType } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnPropTypes, VxeColumnProps } from './column'
 import { VXETableSetupOptions, VxeGlobalRendererHandles } from './v-x-e-table'
@@ -675,7 +675,7 @@ export interface VxeTableMethods extends TableMethods { }
 export interface TablePrivateMethods {
   getSetupOptions(): VXETableSetupOptions
   updateAfterDataIndex(): void
-  callSlot<T>(slotFunc: ((params: T) => any[]) | string | null, params: T): VNode[]
+  callSlot<T>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T): SlotVNodeType[]
   getParentElem(): Element | null
   getParentHeight(): number
   getExcludeHeight(): number
@@ -1877,6 +1877,18 @@ export namespace VxeTablePropTypes {
     /**
      * 该方法的返回值用来决定该单元格是否允许编辑
      */
+    beforeEditMethod?(params: {
+      row: any
+      rowIndex: number
+      column: VxeTableDefines.ColumnInfo
+      columnIndex: number
+      $table: VxeTableConstructor & VxeTablePrivateMethods
+      $grid: VxeGridConstructor | null | undefined
+    }): boolean
+    /**
+     * 请使用 beforeEditMethod
+     * @deprecated
+     */
     activeMethod?(params: {
       row: any
       rowIndex: number
@@ -1920,6 +1932,7 @@ export namespace VxeTablePropTypes {
     gt?: number
     oSize?: number
     enabled?: boolean
+    scrollToLeftOnChange?: boolean
   }
   export interface SXOpts extends ScrollX {
     gt: number
@@ -1931,6 +1944,7 @@ export namespace VxeTablePropTypes {
     gt?: number
     oSize?: number
     enabled?: boolean
+    scrollToTopOnChange?: boolean
     /**
      * @deprecated 请使用 row-config.height
      */
@@ -2452,7 +2466,9 @@ export namespace VxeTableDefines {
   export interface FilterVisibleEventParams extends TableEventParams, FilterVisibleParams { }
 
   export interface ResizableChangeParams extends TableBaseHeaderCellParams { }
-  export interface ResizableChangeEventParams extends TableEventParams, ResizableChangeParams { }
+  export interface ResizableChangeEventParams extends TableEventParams, ResizableChangeParams {
+    resizeWidth: number
+  }
 
   export interface ToggleRowExpandParams extends TableBaseCellParams { }
   export interface ToggleRowExpandEventParams extends TableEventParams, ToggleRowExpandParams { }

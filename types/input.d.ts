@@ -65,6 +65,8 @@ export namespace VxeInputPropTypes {
   export type Exponential = boolean
   export type Controls = boolean
   export type Digits = string | number
+  export type StartDate = string | number | Date
+  export type EndDate = string | number | Date
   export type MinDate = string | number | Date
   export type MaxDate = string | number | Date
   export type StartDay = 0 | 1 | 2 | 3 | 4 | 5 | 6
@@ -110,6 +112,8 @@ export type VxeInputProps = {
   digits?: VxeInputPropTypes.Digits
 
   // date、week、month、quarter、year
+  startDate?: VxeInputPropTypes.StartDate
+  endDate?: VxeInputPropTypes.EndDate
   minDate?: VxeInputPropTypes.MinDate
   maxDate?: VxeInputPropTypes.MaxDate
   /**

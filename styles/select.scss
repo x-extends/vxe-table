@@ -1,6 +1,5 @@
 /**Variable**/
 @import './helpers/mixin.scss';
-@import './base/loading.scss';
 
 .vxe-select {
   position: relative;
@@ -30,13 +29,16 @@
   & > .vxe-input {
     width: 100%;
     .vxe-input--suffix-icon {
+      display: inline-block;
       @include animatTransition(transform, .2s);
     }
   }
   &.is--active {
-    & > .vxe-input {
-      .vxe-input--inner {
-        border: 1px solid $vxe-primary-color;
+    &:not(.is--filter) {
+      & > .vxe-input {
+        .vxe-input--inner {
+          border: 1px solid $vxe-primary-color;
+        }
       }
     }
   }
@@ -77,7 +79,15 @@
   }
 }
 
+.vxe-select-filter--wrapper {
+  display: block;
+  .vxe-select-filter--input {
+    width: 100%;
+  }
+}
+
 .vxe-select-option--wrapper {
+  position: relative;
   overflow-x: hidden;
   overflow-y: auto;
   padding: 4px 0;
@@ -103,7 +113,7 @@
 }
 
 .vxe-select-option {
-  padding: 0 10px;
+  padding: 0 0.6em;
   max-width: 600px;
   white-space: nowrap;
   overflow: hidden;
@@ -126,8 +136,13 @@
   }
 }
 
+.vxe-select--search-icon {
+  margin-right: 0.5em;
+}
+
+.vxe-select--search-loading,
 .vxe-select--empty-placeholder {
-  padding: 0 10px;
+  padding: 0 0.6em;
   text-align: center;
   color: $vxe-select-empty-color;
 }
@@ -153,6 +168,7 @@
   }
   .vxe-optgroup--title,
   .vxe-select-option,
+  .vxe-select--search-loading,
   .vxe-select--empty-placeholder {
     line-height: $vxe-select-option-height-default;
   }
@@ -163,6 +179,7 @@
     }
     .vxe-optgroup--title,
     .vxe-select-option,
+    .vxe-select--search-loading,
     .vxe-select--empty-placeholder {
       line-height: $vxe-select-option-height-medium;
     }
@@ -174,6 +191,7 @@
     }
     .vxe-optgroup--title,
     .vxe-select-option,
+    .vxe-select--search-loading,
     .vxe-select--empty-placeholder {
       line-height: $vxe-select-option-height-small;
     }
@@ -185,6 +203,7 @@
     }
     .vxe-optgroup--title,
     .vxe-select-option,
+    .vxe-select--search-loading,
     .vxe-select--empty-placeholder {
       line-height: $vxe-select-option-height-mini;
     }

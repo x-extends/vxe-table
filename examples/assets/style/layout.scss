@@ -304,7 +304,7 @@ body,
         }
       }
       .nav-link-icon {
-        font-size: 14px;
+        display: inline-block;
         margin-right: 5px;
         transition: transform 0.2s ease-in-out;
       }
@@ -596,15 +596,5 @@ body,
   font-size: 12px;
   & > li {
     padding: 0 5px 0 20px;
-  }
-}
-
-/*toolbar*/
-.vxe-toolbar {
-  .vxe-buttons--wrapper {
-    margin-bottom: 0.8em;
-    .vxe-input,.vxe-button,.vxe-button--dropdown{
-      margin: 0em 0.8em 0em 0em;
-    }
   }
 }

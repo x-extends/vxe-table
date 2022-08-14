@@ -212,6 +212,10 @@ $iconWidth: 1.6em;
       &:active {
         color: $vxe-primary-color;
       }
+      &.is--disabled {
+        cursor: no-drop;
+        color: $vxe-input-number-disabled-color;
+      }
     }
   }
 }
@@ -233,6 +237,9 @@ $iconWidth: 1.6em;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    &[class*="vxe-icon-"] {
+      font-size: 1.5em;
+    }
   }
 
   .vxe-input--date-picker-suffix {
@@ -254,6 +261,7 @@ $iconWidth: 1.6em;
   }
   .vxe-input--number-prev-icon,
   .vxe-input--number-next-icon {
+    line-height: 0.8em;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -672,6 +680,7 @@ $iconWidth: 1.6em;
 .vxe-input {
   font-size: $vxe-font-size;
   height: $vxe-input-height-default;
+  line-height: $vxe-input-height-default;
   .vxe-input--inner {
     &[type="date"]::-webkit-inner-spin-button,
     &[type="month"]::-webkit-inner-spin-button,
@@ -688,6 +697,7 @@ $iconWidth: 1.6em;
   &.size--medium {
     font-size: $vxe-font-size-medium;
     height: $vxe-input-height-medium;
+    line-height: $vxe-input-height-medium;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,
@@ -699,6 +709,7 @@ $iconWidth: 1.6em;
   &.size--small {
     font-size: $vxe-font-size-small;
     height: $vxe-input-height-small;
+    line-height: $vxe-input-height-small;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,
@@ -710,6 +721,7 @@ $iconWidth: 1.6em;
   &.size--mini {
     font-size: $vxe-font-size-mini;
     height: $vxe-input-height-mini;
+    line-height: $vxe-input-height-mini;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,

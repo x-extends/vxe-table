@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, watch, onUnmounted, PropType } from 'vue'
+import { defineComponent, h, Teleport, ref, Ref, computed, reactive, inject, nextTick, watch, onUnmounted, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -8,7 +8,7 @@ import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { toStringTimeDate, getDateQuarter } from './date'
 import { handleNumber, toFloatValueFixed } from './number'
 
-import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef } from '../../../types/all'
+import { VNodeStyle, VxeInputConstructor, VxeInputEmits, InputReactData, InputMethods, VxeInputPropTypes, InputPrivateRef, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 interface DateYearItem {
   date: Date;
@@ -88,8 +88,10 @@ export default defineComponent({
     digits: { type: [String, Number] as PropType<VxeInputPropTypes.Digits>, default: () => GlobalConfig.input.digits },
 
     // date、week、month、quarter、year
-    minDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MinDate>, default: () => GlobalConfig.input.minDate },
-    maxDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>, default: () => GlobalConfig.input.maxDate },
+    startDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MinDate>, default: () => GlobalConfig.input.startDate },
+    endDate: { type: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>, default: () => GlobalConfig.input.endDate },
+    minDate: [String, Number, Date] as PropType<VxeInputPropTypes.MinDate>,
+    maxDate: [String, Number, Date] as PropType<VxeInputPropTypes.MaxDate>,
     // 已废弃 startWeek，被 startDay 替换
     startWeek: Number as PropType<VxeInputPropTypes.StartDay>,
     startDay: { type: [String, Number] as PropType<VxeInputPropTypes.StartDay>, default: () => GlobalConfig.input.startDay },
@@ -130,6 +132,8 @@ export default defineComponent({
   ] as VxeInputEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -227,12 +231,12 @@ export default defineComponent({
       return props.clearable && (isPawdType || isNumType || isDatePickerType || type === 'text' || type === 'search')
     })
 
-    const computeDateMinTime = computed(() => {
-      return props.minDate ? XEUtils.toStringDate(props.minDate) : null
+    const computeDateStartTime = computed(() => {
+      return props.startDate ? XEUtils.toStringDate(props.startDate) : null
     })
 
-    const computeDateMaxTime = computed(() => {
-      return props.maxDate ? XEUtils.toStringDate(props.maxDate) : null
+    const computeDateEndTime = computed(() => {
+      return props.endDate ? XEUtils.toStringDate(props.endDate) : null
     })
 
     const computeSupportMultiples = computed(() => {
@@ -287,19 +291,19 @@ export default defineComponent({
     })
 
     const computeIsDisabledPrevDateBtn = computed(() => {
-      const dateMinTime = computeDateMinTime.value
+      const dateStartTime = computeDateStartTime.value
       const { selectMonth } = reactData
-      if (selectMonth && dateMinTime) {
-        return selectMonth <= dateMinTime
+      if (selectMonth && dateStartTime) {
+        return selectMonth <= dateStartTime
       }
       return false
     })
 
     const computeIsDisabledNextDateBtn = computed(() => {
-      const dateMaxTime = computeDateMaxTime.value
+      const dateEndTime = computeDateEndTime.value
       const { selectMonth } = reactData
-      if (selectMonth && dateMaxTime) {
-        return selectMonth >= dateMaxTime
+      if (selectMonth && dateEndTime) {
+        return selectMonth >= dateEndTime
       }
       return false
     })
@@ -497,9 +501,9 @@ export default defineComponent({
         const selMonth = selectMonth.getMonth()
         const selDay = selectMonth.getDay()
         const prevOffsetDate = -weekDatas.indexOf(selDay)
-        const startDate = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDate).getTime() + dateHMSTime)
+        const startDayDate = new Date(XEUtils.getWhatDay(selectMonth, prevOffsetDate).getTime() + dateHMSTime)
         for (let index = 0; index < 42; index++) {
-          const date = XEUtils.getWhatDay(startDate, index)
+          const date = XEUtils.getWhatDay(startDayDate, index)
           const itemFullYear = date.getFullYear()
           const itemMonth = date.getMonth()
           const itemDate = date.getDate()
@@ -610,6 +614,40 @@ export default defineComponent({
       return immediate || !(type === 'text' || type === 'number' || type === 'integer' || type === 'float')
     })
 
+    const computeNumValue = computed(() => {
+      const { type } = props
+      const { inputValue } = reactData
+      const isNumType = computeIsNumType.value
+      if (isNumType) {
+        return type === 'integer' ? XEUtils.toInteger(handleNumber(inputValue)) : XEUtils.toNumber(handleNumber(inputValue))
+      }
+      return 0
+    })
+
+    const computeIsDisabledSubtractNumber = computed(() => {
+      const { min } = props
+      const { inputValue } = reactData
+      const isNumType = computeIsNumType.value
+      const numValue = computeNumValue.value
+      // 当有值时再进行判断
+      if ((inputValue || inputValue === 0) && isNumType && min !== null) {
+        return numValue <= XEUtils.toNumber(min)
+      }
+      return false
+    })
+
+    const computeIsDisabledAddNumber = computed(() => {
+      const { max } = props
+      const { inputValue } = reactData
+      const isNumType = computeIsNumType.value
+      const numValue = computeNumValue.value
+      // 当有值时再进行判断
+      if ((inputValue || inputValue === 0) && isNumType && max !== null) {
+        return numValue >= XEUtils.toNumber(max)
+      }
+      return false
+    })
+
     const getNumberValue = (val: any) => {
       const { type, exponential } = props
       const inpMaxlength = computeInpMaxlength.value
@@ -632,6 +670,10 @@ export default defineComponent({
       inputMethods.dispatchEvent('input', { value }, evnt)
       if (XEUtils.toValueString(props.modelValue) !== value) {
         inputMethods.dispatchEvent('change', { value }, evnt)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, value)
+        }
       }
     }
 
@@ -959,8 +1001,9 @@ export default defineComponent({
 
     const numberNextEvent = (evnt: Event) => {
       const { readonly, disabled } = props
+      const isDisabledSubtractNumber = computeIsDisabledSubtractNumber.value
       clearTimeout(downbumTimeout)
-      if (!disabled && !readonly) {
+      if (!disabled && !readonly && !isDisabledSubtractNumber) {
         numberChange(false, evnt)
       }
       inputMethods.dispatchEvent('next-number', {}, evnt)
@@ -975,8 +1018,9 @@ export default defineComponent({
 
     const numberPrevEvent = (evnt: Event) => {
       const { readonly, disabled } = props
+      const isDisabledAddNumber = computeIsDisabledAddNumber.value
       clearTimeout(downbumTimeout)
-      if (!disabled && !readonly) {
+      if (!disabled && !readonly && !isDisabledAddNumber) {
         numberChange(true, evnt)
       }
       inputMethods.dispatchEvent('prev-number', {}, evnt)
@@ -1280,9 +1324,10 @@ export default defineComponent({
     }
 
     const dateConfirmEvent = () => {
-      const { type } = props
+      const { multiple } = props
       const dateValue = computeDateValue.value
-      if (type === 'time' || type === 'datetime') {
+      const isDateTimeType = computeIsDateTimeType.value
+      if (isDateTimeType || multiple) {
         dateChange(dateValue || reactData.currentDate)
       }
       hidePanel()
@@ -1907,7 +1952,7 @@ export default defineComponent({
               onClick: datePrevEvent
             }, [
               h('i', {
-                class: 'vxe-icon--caret-left'
+                class: 'vxe-icon-caret-left'
               })
             ]),
             h('span', {
@@ -1915,7 +1960,7 @@ export default defineComponent({
               onClick: dateTodayMonthEvent
             }, [
               h('i', {
-                class: 'vxe-icon--dot'
+                class: 'vxe-icon-dot'
               })
             ]),
             h('span', {
@@ -1925,7 +1970,7 @@ export default defineComponent({
               onClick: dateNextEvent
             }, [
               h('i', {
-                class: 'vxe-icon--caret-right'
+                class: 'vxe-icon-caret-right'
               })
             ]),
             multiple && computeSupportMultiples.value ? h('span', {
@@ -2059,11 +2104,15 @@ export default defineComponent({
     }
 
     const renderNumberIcon = () => {
+      const isDisabledAddNumber = computeIsDisabledAddNumber.value
+      const isDisabledSubtractNumber = computeIsDisabledSubtractNumber.value
       return h('span', {
         class: 'vxe-input--number-suffix'
       }, [
         h('span', {
-          class: 'vxe-input--number-prev is--prev',
+          class: ['vxe-input--number-prev is--prev', {
+            'is--disabled': isDisabledAddNumber
+          }],
           onMousedown: numberMousedownEvent,
           onMouseup: numberStopDown,
           onMouseleave: numberStopDown
@@ -2073,7 +2122,9 @@ export default defineComponent({
           })
         ]),
         h('span', {
-          class: 'vxe-input--number-next is--next',
+          class: ['vxe-input--number-next is--next', {
+            'is--disabled': isDisabledSubtractNumber
+          }],
           onMousedown: numberMousedownEvent,
           onMouseup: numberStopDown,
           onMouseleave: numberStopDown

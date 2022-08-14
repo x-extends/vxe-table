@@ -7,6 +7,7 @@ import { getEventTargetNode } from '../../tools/dom'
 import { formatText } from '../../tools/utils'
 import { warnLog, errLog } from '../../tools/log'
 import { GlobalEvent } from '../../tools/event'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines } from '../../../types/all'
 
@@ -374,7 +375,7 @@ export default defineComponent({
       const { buttons } = props
       const buttonsSlot = slots.buttons
       if (buttonsSlot) {
-        return buttonsSlot({ $grid: $xegrid, $table: $xetable })
+        return getSlotVNs(buttonsSlot({ $grid: $xegrid, $table: $xetable }))
       }
       const btnVNs: VNode[] = []
       if (buttons) {
@@ -421,7 +422,7 @@ export default defineComponent({
       const { tools } = props
       const toolsSlot = slots.tools
       if (toolsSlot) {
-        return toolsSlot({ $grid: $xegrid, $table: $xetable })
+        return getSlotVNs(toolsSlot({ $grid: $xegrid, $table: $xetable }))
       }
       const btnVNs: VNode[] = []
       if (tools) {
@@ -498,12 +499,14 @@ export default defineComponent({
         const isColGroup = column.children && column.children.length
         const isDisabled = checkMethod ? !checkMethod({ column }) : false
         if (isColGroup || colKey) {
+          const isChecked = column.visible
+          const isIndeterminate = column.halfVisible
           colVNs.push(
             h('li', {
               class: ['vxe-custom--option', `level--${column.level}`, {
                 'is--group': isColGroup,
-                'is--checked': column.visible,
-                'is--indeterminate': column.halfVisible,
+                'is--checked': isChecked,
+                'is--indeterminate': isIndeterminate,
                 'is--disabled': isDisabled
               }],
               title: colTitle,
@@ -514,13 +517,7 @@ export default defineComponent({
               }
             }, [
               h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+                class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
               }),
               h('span', {
                 class: 'vxe-checkbox--label'
@@ -529,6 +526,8 @@ export default defineComponent({
           )
         }
       })
+      const isAllChecked = customStore.isAll
+      const isAllIndeterminate = customStore.isIndeterminate
       return h('div', {
         class: ['vxe-custom--wrapper', {
           'is--active': customStore.visible
@@ -549,20 +548,14 @@ export default defineComponent({
           }, [
             h('li', {
               class: ['vxe-custom--option', {
-                'is--checked': customStore.isAll,
-                'is--indeterminate': customStore.isIndeterminate
+                'is--checked': isAllChecked,
+                'is--indeterminate': isAllIndeterminate
               }],
               title: GlobalConfig.i18n('vxe.table.allTitle'),
               onClick: allCustomEvent
             }, [
               h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-              }),
-              h('span', {
-                class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+                class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
               }),
               h('span', {
                 class: 'vxe-checkbox--label'
@@ -671,7 +664,7 @@ export default defineComponent({
           }) : createCommentVNode(),
           zoom && $xegrid ? h(resolveComponent('vxe-button') as ComponentOptions, {
             circle: true,
-            icon: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN),
+            icon: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_FULLSCREEN),
             title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`),
             onClick: zoomEvent
           }) : createCommentVNode(),

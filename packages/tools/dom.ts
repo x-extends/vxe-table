@@ -4,6 +4,10 @@ const reClsMap: { [key: string]: any } = {}
 
 export const browse = XEUtils.browse()
 
+export function getPropClass (property: any, params: any) {
+  return property ? XEUtils.isFunction(property) ? property(params) : property : ''
+}
+
 function getClsRE (cls: any) {
   if (!reClsMap[cls]) {
     reClsMap[cls] = new RegExp(`(?:^|\\s)${cls}(?!\\S)`, 'g')

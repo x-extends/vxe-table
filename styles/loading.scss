@@ -12,13 +12,26 @@
   &.is--visible {
     display: block;
   }
-  .vxe-loading--spinner {
-    width: 56px;
-    height: 56px;
+  & > .vxe-loading--chunk {
+    width: 100%;
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    color: $vxe-primary-color;
+  }
+  .vxe-loading--default-icon {
+    font-size: 1.2em;
+  }
+  .vxe-loading--text {
+    padding: 0.4em 0;
+  }
+  .vxe-loading--spinner {
+    display: inline-block;
+    position: relative;
+    width: 56px;
+    height: 56px;
     &:before,
     &:after {
       content: "";

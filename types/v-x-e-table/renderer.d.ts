@@ -1,4 +1,5 @@
 import { VNode } from 'vue'
+import { SlotVNodeType } from '../component'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
@@ -6,11 +7,12 @@ import { VxeFilterPanel } from '../filter'
 import { VxeToolbarPropTypes } from '../toolbar'
 import { FormItemRenderOptions, FormItemTitleRenderParams, FormItemContentRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 
-type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResult | JSX.Element[]>
+type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResult>
 
 export interface DefineRendererOption<T> {
   // 筛选渲染
   className?: string
+  filterClassName?: string | ((params: VxeGlobalRendererHandles.RenderFilterParams) => string | { [key: string]: boolean })
   showFilterFooter?: boolean
   renderFilter?(renderOpts: VxeGlobalRendererHandles.RenderFilterOptions, params: VxeGlobalRendererHandles.RenderFilterParams): T
   filterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
@@ -21,6 +23,7 @@ export interface DefineRendererOption<T> {
   defaultFilterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
 
   // 单元格渲染
+  cellClassName?: string | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => string | { [key: string]: boolean })
   renderHeader?(renderOpts: VxeGlobalRendererHandles.RenderHeaderOptions, params: VxeGlobalRendererHandles.RenderHeaderParams): T
   renderDefault?(renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions, params: VxeGlobalRendererHandles.RenderDefaultParams): T
   renderFooter?(renderOpts: VxeGlobalRendererHandles.RenderFooterOptions, params: VxeGlobalRendererHandles.RenderFooterParams): T
@@ -28,7 +31,7 @@ export interface DefineRendererOption<T> {
   footerExportMethod?(params: VxeGlobalRendererHandles.FooterExportMethodParams): string
 
   // 编辑渲染
-  autofocus?: string
+  autofocus?: string | ((params: VxeGlobalRendererHandles.RenderEditParams | VxeGlobalRendererHandles.RenderCellParams) => HTMLElement | null)
   renderEdit?(renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams): T
   renderCell?(renderOpts: VxeGlobalRendererHandles.RenderCellOptions, params: VxeGlobalRendererHandles.RenderCellParams): T
 
@@ -40,6 +43,7 @@ export interface DefineRendererOption<T> {
   renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams): T
 
   // 表单-项渲染
+  itemClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | { [key: string]: boolean })
   renderItemTitle?(renderOpts: VxeGlobalRendererHandles.RenderItemTitleOptions, params: VxeGlobalRendererHandles.RenderItemTitleParams): T
   renderItemContent?(renderOpts: VxeGlobalRendererHandles.RenderItemContentOptions, params: VxeGlobalRendererHandles.RenderItemContentParams): T
   itemVisibleMethod?(params: VxeGlobalRendererHandles.ItemVisibleMethodParams): boolean
@@ -50,7 +54,7 @@ export interface DefineRendererOption<T> {
 }
 
 export namespace VxeGlobalRendererHandles {
-  export type RenderResult = VNode[] | string[]
+  export type RenderResult = SlotVNodeType | SlotVNodeType[]
 
   export interface RenderFilterOptions extends VxeColumnPropTypes.FilterRender {}
 

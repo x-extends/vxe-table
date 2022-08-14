@@ -110,7 +110,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
             filterStore.maxHeight = maxHeight
           })
         }
-        $xetable.dispatchEvent('filter-visible', { column, property: column.property, filterList: $xetable.getCheckedFilters(), visible: filterStore.visible }, evnt)
+        $xetable.dispatchEvent('filter-visible', { column, field: column.field, property: column.field, filterList: $xetable.getCheckedFilters(), visible: filterStore.visible }, evnt)
       },
       handleClearFilter (column) {
         if (column) {
@@ -140,7 +140,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
         const { filterStore, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
         const filterOpts = computeFilterOpts.value
         const { column } = filterStore
-        const { property } = column
+        const { field } = column
         const values: any[] = []
         const datas: any[] = []
         column.filters.forEach((item: any) => {
@@ -155,7 +155,7 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
           $xetable.handleTableData(true)
           $xetable.checkSelectionStatus()
         }
-        $xetable.dispatchEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
+        $xetable.dispatchEvent('filter-change', { column, field, property: field, values, datas, filters: filterList, filterList }, evnt)
         $xetable.closeFilter()
         $xetable.updateFooter().then(() => {
           const { scrollXLoad, scrollYLoad } = reactData
@@ -248,19 +248,19 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
       getCheckedFilters () {
         const { tableFullColumn } = internalData
         const filterList: any[] = []
-        tableFullColumn.filter((column: any) => {
-          const { property, filters } = column
+        tableFullColumn.filter((column) => {
+          const { field, filters } = column
           const valueList: any[] = []
           const dataList: any[] = []
           if (filters && filters.length) {
-            filters.forEach((item: any) => {
+            filters.forEach((item) => {
               if (item.checked) {
                 valueList.push(item.value)
                 dataList.push(item.data)
               }
             })
             if (valueList.length) {
-              filterList.push({ column, property, values: valueList, datas: dataList })
+              filterList.push({ column, field, property: field, values: valueList, datas: dataList })
             }
           }
         })

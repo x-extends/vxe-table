@@ -4,6 +4,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { getLastZIndex, nextZIndex, formatText } from '../../tools/utils'
 import { getAbsolutePos, getDomNode } from '../../tools/dom'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeTooltipPropTypes, VxeTooltipConstructor, VxeTooltipEmits, TooltipReactData, TooltipMethods, TooltipPrivateRef } from '../../../types/all'
 
@@ -292,11 +293,12 @@ export default defineComponent({
     const renderContent = () => {
       const { useHTML } = props
       const { tipContent } = reactData
-      if (slots.content) {
+      const contentSlot = slots.content
+      if (contentSlot) {
         return h('div', {
           key: 1,
           class: 'vxe-table--tooltip-content'
-        }, slots.content({}))
+        }, getSlotVNs(contentSlot({})))
       }
       if (useHTML) {
         return h('div', {
@@ -314,6 +316,7 @@ export default defineComponent({
     const renderVN = () => {
       const { theme, isArrow, enterable } = props
       const { tipActive, visible, tipStore } = reactData
+      const defaultSlot = slots.default
       const vSize = computeSize.value
       let ons
       if (enterable) {
@@ -339,8 +342,9 @@ export default defineComponent({
         h('div', {
           class: 'vxe-table--tooltip-arrow',
           style: tipStore.arrowStyle
-        })
-      ].concat(slots.default ? slots.default({}) : []))
+        }),
+        ...(defaultSlot ? getSlotVNs(defaultSlot({})) : [])
+      ])
     }
 
     $xetooltip.renderVN = renderVN

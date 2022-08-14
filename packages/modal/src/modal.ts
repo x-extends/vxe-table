@@ -7,6 +7,8 @@ import { errLog } from '../../tools/log'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeButtonConstructor from '../../button/src/button'
+import VxeLoading from '../../loading/index'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeModalConstructor, VxeModalPropTypes, ModalReactData, VxeModalEmits, ModalEventTypes, VxeButtonInstance, ModalMethods, ModalPrivateRef, VxeModalMethods } from '../../../types/all'
 
@@ -85,7 +87,7 @@ export default defineComponent({
       modalTop: 0,
       modalZindex: 0,
       zoomLocat: null,
-      firstOpen: false
+      firstOpen: true
     })
 
     const refElem = ref() as Ref<HTMLDivElement>
@@ -361,16 +363,20 @@ export default defineComponent({
           nextTick(() => {
             const { fullscreen } = props
             const { firstOpen } = reactData
-            if (!remember || !firstOpen) {
+            if (!remember || firstOpen) {
               updatePosition().then(() => {
                 setTimeout(() => updatePosition(), 20)
               })
             }
-            if (!firstOpen) {
-              reactData.firstOpen = true
+            if (firstOpen) {
+              reactData.firstOpen = false
               if (hasPosStorage()) {
                 restorePosStorage()
               } else if (fullscreen) {
+                nextTick(() => maximize())
+              }
+            } else {
+              if (fullscreen) {
                 nextTick(() => maximize())
               }
             }
@@ -510,6 +516,7 @@ export default defineComponent({
           }
           boxElem.style.left = `${left}px`
           boxElem.style.top = `${top}px`
+          boxElem.className = boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         }
         document.onmouseup = () => {
           document.onmousemove = domMousemove
@@ -519,6 +526,9 @@ export default defineComponent({
               savePosStorage()
             })
           }
+          setTimeout(() => {
+            boxElem.className = boxElem.className.replace(/\s?is--drag/, '')
+          }, 50)
         }
       }
     }
@@ -678,7 +688,7 @@ export default defineComponent({
       const { slots: propSlots = {}, showClose, showZoom, title } = props
       const { zoomLocat } = reactData
       const titleSlot = slots.title || propSlots.title
-      const titVNs: VNode[] = titleSlot ? titleSlot({ $modal: $xemodal }) as VNode[] : [
+      const titVNs = titleSlot ? getSlotVNs(titleSlot({ $modal: $xemodal })) : [
         h('span', {
           class: 'vxe-modal--title'
         }, title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))
@@ -723,11 +733,11 @@ export default defineComponent({
         headVNs.push(
           h('div', {
             class: ['vxe-modal--header', {
-              'is--drag': draggable,
+              'is--draggable': draggable,
               'is--ellipsis': !isMsg && props.showTitleOverflow
             }],
             ...headerOns
-          }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : headerSlot({ $modal: $xemodal })) as VNode[] : renderTitles())
+          }, headerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : getSlotVNs(headerSlot({ $modal: $xemodal }))) : renderTitles())
         )
       }
       return headVNs
@@ -753,19 +763,17 @@ export default defineComponent({
       contVNs.push(
         h('div', {
           class: 'vxe-modal--content'
-        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : defaultSlot({ $modal: $xemodal })) as VNode[] : getFuncText(content))
+        }, defaultSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : getSlotVNs(defaultSlot({ $modal: $xemodal }))) as VNode[] : getFuncText(content))
       )
       if (!isMsg) {
+        /**
+         * 加载中
+         */
         contVNs.push(
-          h('div', {
-            class: ['vxe-loading', {
-              'is--visible': props.loading
-            }]
-          }, [
-            h('div', {
-              class: 'vxe-loading--spinner'
-            })
-          ])
+          h(VxeLoading, {
+            class: 'vxe-modal--loading',
+            loading: props.loading
+          })
         )
       }
       return [
@@ -807,7 +815,7 @@ export default defineComponent({
         footVNs.push(
           h('div', {
             class: 'vxe-modal--footer'
-          }, footerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : footerSlot({ $modal: $xemodal })) as VNode[] : renderBtns())
+          }, footerSlot ? (!reactData.inited || (props.destroyOnClose && !reactData.visible) ? [] : getSlotVNs(footerSlot({ $modal: $xemodal }))) as VNode[] : renderBtns())
         )
       }
       if (!isMsg && props.resize) {

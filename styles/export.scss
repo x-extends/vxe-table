@@ -50,7 +50,7 @@
     user-select: none;
     & > ul {
       & > li {
-        padding: 0.2em 1em 0.2em 2.3em;
+        padding: 0.2em 1em 0.2em 1em;
         @for $i from 2 through 8 {
           $interval: $i - 1 + 0.2;
           &.level--#{$i}{
@@ -121,14 +121,7 @@
 }
 
 .vxe-export--panel-column-option {
-  @extend %XECheckbox;
-  .vxe-checkbox--icon {
-    left: 0.6em;
-    top: 0.38em;
-  }
-  &:hover {
-    background-color: $vxe-table-row-hover-background-color;
-  }
+  @extend %XECheckboxIcon;
 }
 
 .vxe-modal--wrapper {

@@ -246,7 +246,7 @@
     background-color: $vxe-modal-header-background-color;
     border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;
-    &.is--drag {
+    &.is--draggable {
       cursor: move;
     }
     &.is--ellipsis {
@@ -259,7 +259,6 @@
   .vxe-modal--close-btn {
     position: absolute;
     right: 14px;
-    top: 0.85em;
     z-index: 1;
     cursor: pointer;
     &:hover {

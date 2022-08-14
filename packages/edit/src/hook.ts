@@ -8,7 +8,7 @@ import { warnLog, errLog, getLog } from '../../tools/log'
 
 import { VxeGlobalHooksHandles, TableEditMethods, TableEditPrivateMethods } from '../../../types/all'
 
-const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getActiveRecord', 'getSelectedCell', 'clearActived', 'clearSelected', 'isActiveByRow', 'setActiveRow', 'setActiveCell', 'setSelectCell']
+const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
 
 const editHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
@@ -251,7 +251,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         const { actived, removeList, insertList } = editStore
-        const { checkField: property } = checkboxOpts
+        const { checkField } = checkboxOpts
         let rest: any[] = []
         if (!rows) {
           rows = tableFullData
@@ -265,7 +265,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           }
         })
         // 如果绑定了多选属性，则更新状态
-        if (!property) {
+        if (!checkField) {
           rows.forEach((row: any) => {
             const sIndex = $xetable.findRowIndexOf(selection, row)
             if (sIndex > -1) {
@@ -319,7 +319,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         // 如果当前行被激活编辑，则清除激活状态
         if (actived.row && $xetable.findRowIndexOf(rows, actived.row) > -1) {
-          editMethods.clearActived()
+          editMethods.clearEdit()
         }
         // 从新增中移除已删除的数据
         rows.forEach((row: any) => {
@@ -440,6 +440,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         return []
       },
       getActiveRecord () {
+        return this.getEditRecord()
+      },
+      getEditRecord () {
         const { editStore } = reactData
         const { afterFullData } = internalData
         const el = refElem.value
@@ -460,10 +463,17 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         return null
       },
+      clearActived (evnt) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
+        // }
+        // 即将废弃
+        return this.clearEdit(evnt)
+      },
       /**
        * 清除激活的编辑
        */
-      clearActived (evnt) {
+      clearEdit (evnt) {
         const { editStore } = reactData
         const { actived } = editStore
         const { row, column } = actived
@@ -495,32 +505,60 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         removeCellSelectedClass()
         return nextTick()
       },
+      isActiveByRow (row) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
+        // }
+        // 即将废弃
+        return this.isEditByRow(row)
+      },
       /**
        * 判断行是否为激活编辑状态
        * @param {Row} row 行对象
        */
-      isActiveByRow (row) {
+      isEditByRow (row) {
         const { editStore } = reactData
         return editStore.actived.row === row
+      },
+      setActiveRow (row) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
+        // }
+        // 即将废弃
+        return editMethods.setEditRow(row)
       },
       /**
        * 激活行编辑
        */
-      setActiveRow (row) {
+      setEditRow (row) {
         const { visibleColumn } = internalData
-        return $xetable.setActiveCell(row, XEUtils.find(visibleColumn, column => isEnableConf(column.editRender)))
+        return $xetable.setEditCell(row, XEUtils.find(visibleColumn, column => isEnableConf(column.editRender)))
+      },
+      setActiveCell (row, fieldOrColumn) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
+        // }
+        // 即将废弃
+        return editMethods.setEditCell(row, fieldOrColumn)
       },
       /**
        * 激活单元格编辑
        */
-      setActiveCell (row, fieldOrColumn) {
+      setEditCell (row, fieldOrColumn) {
         const { editConfig } = props
         const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
         if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
           return $xetable.scrollToRow(row, column).then(() => {
             const cell = $xetable.getCell(row, column)
             if (cell) {
-              editPrivateMethods.handleActived({ row, rowIndex: $xetable.getRowIndex(row), column, columnIndex: $xetable.getColumnIndex(column), cell, $table: $xetable })
+              editPrivateMethods.handleActived({
+                row,
+                rowIndex: $xetable.getRowIndex(row),
+                column,
+                columnIndex: $xetable.getColumnIndex(column),
+                cell,
+                $table: $xetable
+              })
               internalData._lastCallTime = Date.now()
             }
             return nextTick()
@@ -533,14 +571,19 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       setSelectCell (row, fieldOrColumn) {
         const { tableData } = reactData
-        const { visibleColumn } = internalData
         const editOpts = computeEditOpts.value
         const column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
         if (row && column && editOpts.trigger !== 'manual') {
           const rowIndex = $xetable.findRowIndexOf(tableData, row)
           if (rowIndex > -1 && column) {
             const cell = $xetable.getCell(row, column)
-            const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
+            const params = {
+              row,
+              rowIndex,
+              column,
+              columnIndex: $xetable.getColumnIndex(column),
+              cell
+            }
             $xetable.handleSelected(params, {})
           }
         }
@@ -556,17 +599,18 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { editConfig, mouseConfig } = props
         const { editStore, tableColumn } = reactData
         const editOpts = computeEditOpts.value
-        const { mode, activeMethod } = editOpts
+        const { mode } = editOpts
         const { actived } = editStore
         const { row, column } = params
         const { editRender } = column
         const cell = (params.cell || $xetable.getCell(row, column))
+        const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
         params.cell = cell
         if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-actived' = 'edit-disabled'
-            if (!activeMethod || activeMethod({ ...params, $table: $xetable })) {
+            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xetable })) {
               if (mouseConfig) {
                 editMethods.clearSelected()
                 if ($xetable.clearCellAreas) {
@@ -576,7 +620,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               }
               $xetable.closeTooltip()
               if (actived.column) {
-                editMethods.clearActived(evnt)
+                editMethods.clearEdit(evnt)
               }
               type = 'edit-actived'
               column.renderHeight = cell.offsetHeight
@@ -637,18 +681,21 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { editRender } = column
         if (isEnableConf(editRender)) {
           const compRender = renderer.get(editRender.name)
-          const { autofocus, autoselect } = editRender
+          let { autofocus, autoselect } = editRender
           let inputElem
-          // 如果指定了聚焦 class
-          if (autofocus) {
-            inputElem = cell.querySelector(autofocus)
+          if (!autofocus && compRender) {
+            autofocus = compRender.autofocus
           }
-          // 渲染器的聚焦处理
-          if (!inputElem && compRender && compRender.autofocus) {
-            inputElem = cell.querySelector(compRender.autofocus)
+          // 如果指定了聚焦 class
+          if (XEUtils.isFunction(autofocus)) {
+            inputElem = autofocus.call(this, params)
+          } else if (autofocus) {
+            inputElem = cell.querySelector(autofocus)
+            if (inputElem) {
+              inputElem.focus()
+            }
           }
           if (inputElem) {
-            inputElem.focus()
             if (autoselect) {
               inputElem.select()
             } else {
@@ -679,7 +726,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const selectMethod = () => {
           if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
             if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
-              editMethods.clearActived(evnt)
+              editMethods.clearEdit(evnt)
               editMethods.clearSelected()
               if ($xetable.clearCellAreas) {
                 $xetable.clearCellAreas()

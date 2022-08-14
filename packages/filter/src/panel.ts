@@ -2,6 +2,7 @@ import { defineComponent, h, computed, inject } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { formatText } from '../../tools/utils'
+import { getPropClass } from '../../tools/dom'
 
 import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/all'
 
@@ -120,14 +121,16 @@ export default defineComponent({
           }, compConf.renderFilter(filterRender, params))
         ]
       }
+      const isAllChecked = multiple ? filterStore.isAllSelected : !filterStore.options.some((item: any) => item._checked)
+      const isAllIndeterminate = multiple && filterStore.isIndeterminate
       return [
         h('ul', {
           class: 'vxe-table--filter-header'
         }, [
           h('li', {
             class: ['vxe-table--filter-option', {
-              'is--checked': multiple ? filterStore.isAllSelected : !filterStore.options.some((item: any) => item._checked),
-              'is--indeterminate': multiple && filterStore.isIndeterminate
+              'is--checked': isAllChecked,
+              'is--indeterminate': isAllIndeterminate
             }],
             title: GlobalConfig.i18n(multiple ? 'vxe.table.allTitle' : 'vxe.table.allFilter'),
             onClick: (evnt: MouseEvent) => {
@@ -135,13 +138,7 @@ export default defineComponent({
             }
           }, (multiple ? [
             h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+              class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
             })
           ] : []).concat([
             h('span', {
@@ -155,6 +152,8 @@ export default defineComponent({
             maxHeight: `${maxHeight}px`
           } : {}
         }, filterStore.options.map((item: any) => {
+          const isChecked = item._checked
+          const isIndeterminate = false
           return h('li', {
             class: ['vxe-table--filter-option', {
               'is--checked': item._checked
@@ -165,13 +164,7 @@ export default defineComponent({
             }
           }, (multiple ? [
             h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-            }),
-            h('span', {
-              class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+              class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
             })
           ] : []).concat([
             h('span', {
@@ -213,12 +206,19 @@ export default defineComponent({
       const { column } = filterStore
       const filterRender = column ? column.filterRender : null
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+      const filterClassName = compConf ? compConf.filterClassName : ''
+      const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xetable })
       return h('div', {
-        class: ['vxe-table--filter-wrapper', 'filter--prevent-default', compConf && compConf.className ? compConf.className : '', {
-          'is--animat': $xetable.props.animat,
-          'is--multiple': filterStore.multiple,
-          'is--active': filterStore.visible
-        }],
+        class: [
+          'vxe-table--filter-wrapper',
+          'filter--prevent-default',
+          getPropClass(filterClassName, params),
+          {
+            'is--animat': $xetable.props.animat,
+            'is--multiple': filterStore.multiple,
+            'is--active': filterStore.visible
+          }
+        ],
         style: filterStore.style
       }, initStore.filter && filterStore.visible ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
     }

@@ -58,11 +58,6 @@ $btnThemeList: (
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
-    .vxe-button--icon {
-      &.vxe-icon--zoomin {
-        border-color: $vxe-font-color;
-      }
-    }
   }
   &.is--loading {
     cursor: progress;
@@ -80,11 +75,6 @@ $btnThemeList: (
   }
   &.is--disabled {
     color: $vxe-disabled-color;
-    .vxe-button--icon {
-      &.vxe-icon--zoomin {
-        border-color: $vxe-disabled-color;
-      }
-    }
     &:not(.is--loading) {
       cursor: no-drop;
     }
@@ -140,11 +130,6 @@ $btnThemeList: (
     &:not(.is--disabled) {
       &:hover {
         color: lighten($vxe-primary-color, 6%);
-        .vxe-button--icon {
-          &.vxe-icon--zoomin {
-            border-color: lighten($vxe-primary-color, 6%);
-          }
-        }
       }
       &:focus {
         border-color: $vxe-primary-color;
@@ -154,16 +139,6 @@ $btnThemeList: (
         color: darken($vxe-primary-color, 3%);
         border-color: darken($vxe-primary-color, 3%);
         background-color: darken($vxe-button-default-background-color, 3%);
-        .vxe-button--icon {
-          &.vxe-icon--zoomin {
-            background-color: darken($vxe-button-default-background-color, 3%);
-          }
-          &.vxe-icon--zoomout {
-            &:after {
-              background-color: darken($vxe-button-default-background-color, 3%);
-            }
-          }
-        }
       }
     }
     @for $index from 0 to length($btnThemeList) {
@@ -172,11 +147,6 @@ $btnThemeList: (
       $btnBackground: map-get($item, btnBackground);
       &.theme--#{map-get($item, name)} {
         color: $btnColor;
-        .vxe-button--icon {
-          &.vxe-icon--zoomin {
-            border-color: $btnColor;
-          }
-        }
         &:not(.is--disabled) {
           border-color: $btnBackground;
           background-color: $btnBackground;
@@ -184,24 +154,11 @@ $btnThemeList: (
             color: $btnColor;
             background-color: lighten($btnBackground, 6%);
             border-color: lighten($btnBackground, 6%);
-            .vxe-button--icon {
-              &.vxe-icon--zoomin {
-                border-color: lighten($btnBackground, 6%);
-              }
-            }
           }
           &:active {
             color: $btnColor;
             background-color: darken($btnBackground, 3%);
             border-color: darken($btnBackground, 3%);
-            &.vxe-icon--zoomin {
-              background-color: darken($btnBackground, 3%);
-            }
-            &.vxe-icon--zoomout {
-              &:after {
-                background-color: darken($btnBackground, 3%);
-              }
-            }
           }
         }
         &.is--disabled {
@@ -272,11 +229,6 @@ $btnThemeList: (
   }
 }
 .vxe-button--loading-icon,
-.vxe-button--icon,
-.vxe-button--content {
-  vertical-align: middle;
-}
-.vxe-button--loading-icon,
 .vxe-button--icon {
   min-width: $vxe-font-size;
   &+.vxe-button--content {
@@ -338,6 +290,7 @@ $btnThemeList: (
 }
 
 .vxe-button--dropdown-arrow {
+  display: inline-block;
   font-size: 12px;
   margin-left: 4px;
   @include animatTransition(transform, .2s);

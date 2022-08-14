@@ -1,9 +1,9 @@
-import { defineComponent, h, provide, PropType } from 'vue'
+import { defineComponent, h, provide, PropType, inject } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 
-import { VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods, VxeCheckboxGroupPropTypes } from '../../../types/all'
+import { VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods, VxeCheckboxGroupPropTypes, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeCheckboxGroup',
@@ -18,6 +18,8 @@ export default defineComponent({
   ] as VxeCheckboxGroupEmits,
   setup (props, context) {
     const { slots, emit } = context
+    const $xeform = inject<VxeFormConstructor & VxeFormPrivateMethods | null>('$xeform', null)
+    const $xeformiteminfo = inject<VxeFormDefines.ProvideItemInfo | null>('$xeformiteminfo', null)
 
     const xID = XEUtils.uniqueId()
 
@@ -49,6 +51,10 @@ export default defineComponent({
         }
         emit('update:modelValue', checklist)
         $xecheckboxgroup.dispatchEvent('change', Object.assign({ checklist }, params), evnt)
+        // 自动更新校验状态
+        if ($xeform && $xeformiteminfo) {
+          $xeform.triggerItemEvent(evnt, $xeformiteminfo.itemConfig.field, checklist)
+        }
       }
     }
 
