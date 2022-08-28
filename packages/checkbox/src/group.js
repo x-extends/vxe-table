@@ -1,3 +1,4 @@
+import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 
 export default {
@@ -5,6 +6,7 @@ export default {
   props: {
     value: Array,
     disabled: Boolean,
+    max: [String, Number],
     size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   inject: {
@@ -23,6 +25,13 @@ export default {
   computed: {
     vSize () {
       return this.size || this.$parent.size || this.$parent.vSize
+    },
+    isMaximize () {
+      const { value, max } = this
+      if (max) {
+        return value.length >= XEUtils.toNumber(max)
+      }
+      return false
     }
   },
   render (h) {

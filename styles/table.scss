@@ -1030,6 +1030,9 @@
   .vxe-body--expanded-cell {
     position: relative;
     z-index: 1;
+    &.is--ellipsis {
+      overflow: auto;
+    }
   }
 
   /*设置列高度*/

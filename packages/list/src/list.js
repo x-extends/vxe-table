@@ -120,7 +120,7 @@ export default {
       h(VxeLoading, {
         class: 'vxe-list--loading',
         props: {
-          loading
+          value: loading
         }
       })
     ])

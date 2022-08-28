@@ -1274,6 +1274,7 @@ export interface TableExpandConfig {
   accordion?: boolean;
   trigger?: 'default' | 'cell' | 'row';
   lazy?: boolean;
+  height?: number
   loadMethod?(params: { row: RowInfo, rowIndex: number, $rowIndex: number }): Promise<any>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   visibleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;

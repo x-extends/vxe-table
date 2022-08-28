@@ -4,6 +4,7 @@
 
     <vxe-table
       border
+      loading
       highlight-hover-row
       height="300"
       :data="tableData">
@@ -28,7 +29,8 @@
       highlight-hover-row
       height="300"
       :loading="loading"
-      :data="tableData">
+      :data="tableData"
+      :loading-config="{icon: 'vxe-icon-indicator roll', text: '正在拼命加载中...'}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>
@@ -55,6 +57,7 @@ export default {
         `
         <vxe-table
           border
+          loading
           highlight-hover-row
           height="300"
           :data="tableData">
@@ -94,7 +97,8 @@ export default {
           highlight-hover-row
           height="300"
           :loading="loading"
-          :data="tableData">
+          :data="tableData"
+          :loading-config="{icon: 'vxe-icon-indicator roll', text: '正在拼命加载中...'}">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
           <vxe-column field="sex" title="Sex"></vxe-column>

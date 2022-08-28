@@ -74,7 +74,7 @@
     <vxe-table
       border
       :row-config="{keyField: 'id'}"
-      :expand-config="{expandRowKeys: ['10003']}"
+      :expand-config="{height: 60, expandRowKeys: ['10003']}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="expand" width="60">

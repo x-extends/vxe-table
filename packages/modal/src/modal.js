@@ -219,7 +219,7 @@ export default {
           !isMsg ? h(VxeLoading, {
             class: 'vxe-modal--loading',
             props: {
-              loading
+              value: loading
             }
           }) : null
         ]),

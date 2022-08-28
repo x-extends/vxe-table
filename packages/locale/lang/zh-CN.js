@@ -1,7 +1,7 @@
 export default {
   vxe: {
     loading: {
-      text: '加载中'
+      text: '加载中...'
     },
     error: {
       groupFixed: '如果使用分组表头，固定列必须按组设置',

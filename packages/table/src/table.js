@@ -234,6 +234,8 @@ export default {
     validConfig: Object,
     // 校验规则配置项
     editRules: Object,
+    // 加载中配置项
+    loadingConfig: Object,
     // 空内容渲染配置项
     emptyRender: [Boolean, Object],
     // 自定义列配置项
@@ -568,6 +570,9 @@ export default {
     },
     emptyOpts () {
       return Object.assign({}, GlobalConfig.table.emptyRender, this.emptyRender)
+    },
+    loadingOpts () {
+      return Object.assign({}, GlobalConfig.table.loadingConfig, this.loadingConfig)
     },
     cellOffsetWidth () {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
@@ -965,7 +970,8 @@ export default {
       footerTableData,
       hasTip,
       columnOpts,
-      rowOpts
+      rowOpts,
+      loadingOpts
     } = this
     const { leftList, rightList } = columnStore
     return h('div', {
@@ -1090,7 +1096,9 @@ export default {
       h(VxeLoading, {
         class: 'vxe-table--loading',
         props: {
-          loading
+          value: loading,
+          icon: loadingOpts.icon,
+          text: loadingOpts.text
         }
       }),
       /**

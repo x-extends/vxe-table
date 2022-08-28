@@ -1,7 +1,7 @@
 export default {
   vxe: {
     loading: {
-      text: 'Loading'
+      text: 'Loading...'
     },
     error: {
       groupFixed: 'If you use group headers, the fixed columns must be set by group.',

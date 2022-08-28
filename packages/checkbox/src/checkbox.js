@@ -32,17 +32,29 @@ export default {
     isGroup () {
       return this.$xecheckboxgroup
     },
+    isMaximize () {
+      return this.isGroup && this.$xecheckboxgroup.props.isMaximize
+    },
     isDisabled () {
-      return this.disabled || (this.isGroup && this.$xecheckboxgroup.disabled)
+      if (this.disabled) {
+        return true
+      }
+      if (this.isGroup) {
+        const { disabled, isMaximize } = this.$xecheckboxgroup
+        return disabled || (isMaximize && !this.isChecked)
+      }
+      return false
+    },
+    isChecked () {
+      return this.isGroup ? XEUtils.includes(this.$xecheckboxgroup.value, this.label) : this.value === this.checkedValue
     }
   },
   render (h) {
-    const { $scopedSlots, $xecheckboxgroup, isGroup, isDisabled, title, vSize, indeterminate, value, label, content, checkedValue } = this
+    const { $scopedSlots, isDisabled, title, vSize, indeterminate, content, isChecked } = this
     const attrs = {}
     if (title) {
       attrs.title = title
     }
-    const isChecked = isGroup ? XEUtils.includes($xecheckboxgroup.value, label) : value === checkedValue
     return h('label', {
       class: ['vxe-checkbox', {
         [`size--${vSize}`]: vSize,

@@ -175,7 +175,7 @@ export default {
       h(VxeLoading, {
         class: 'vxe-form--loading',
         props: {
-          loading
+          value: loading
         }
       }),
       /**

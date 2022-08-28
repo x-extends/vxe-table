@@ -298,6 +298,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     showOverflow: allColumnOverflow,
     treeConfig,
     treeOpts,
+    expandOpts,
     editOpts,
     treeExpandeds,
     scrollYLoad,
@@ -379,11 +380,13 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     )
     // 如果行被展开了
     if (isExpandRow) {
-      let cellStyle
+      const { height: expandHeight } = expandOpts
+      const cellStyle = {}
+      if (expandHeight) {
+        cellStyle.height = `${expandHeight}px`
+      }
       if (treeConfig) {
-        cellStyle = {
-          paddingLeft: `${(rowLevel * treeOpts.indent) + 30}px`
-        }
+        cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
       }
       const { showOverflow } = expandColumn
       const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
@@ -396,16 +399,20 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
           on: trOn
         }, [
           h('td', {
-            class: ['vxe-body--expanded-column', {
+            class: {
+              'vxe-body--expanded-column': 1,
               'fixed--hidden': fixedType && !hasFixedColumn,
               'col--ellipsis': hasEllipsis
-            }],
+            },
             attrs: {
               colspan: tableColumn.length
             }
           }, [
             h('div', {
-              class: 'vxe-body--expanded-cell',
+              class: {
+                'vxe-body--expanded-cell': 1,
+                'is--ellipsis': expandHeight
+              },
               style: cellStyle
             }, [
               expandColumn.renderData(h, expandParams)

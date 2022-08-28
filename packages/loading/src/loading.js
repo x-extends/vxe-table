@@ -3,28 +3,37 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 export default {
   name: 'VxeLoading',
   props: {
-    loading: Boolean
+    value: Boolean,
+    icon: String,
+    text: String
+  },
+  computed: {
+    loadingIcon () {
+      return this.icon || GlobalConfig.icon.LOADING
+    },
+    loadingText () {
+      const loadingText = GlobalConfig.loadingText
+      return this.text || (loadingText === null ? loadingText : GlobalConfig.i18n('vxe.loading.text'))
+    }
   },
   render (h) {
-    const icon = GlobalConfig.icon.LOADING
-    const loadingText = GlobalConfig.loadingText
-    const text = loadingText === null ? loadingText : GlobalConfig.i18n('vxe.loading.text')
+    const { loadingIcon, loadingText } = this
     return h('div', {
       class: ['vxe-loading', {
-        'is--visible': this.loading
+        'is--visible': this.value
       }]
     }, [
       h('div', {
         class: 'vxe-loading--chunk'
       }, [
-        icon ? h('i', {
-          class: icon
+        loadingIcon ? h('i', {
+          class: loadingIcon
         }) : h('div', {
           class: 'vxe-loading--spinner'
         }),
-        text ? h('div', {
+        loadingText ? h('div', {
           class: 'vxe-loading--text'
-        }, `${text}`) : null
+        }, `${loadingText}`) : null
       ])
     ])
   }

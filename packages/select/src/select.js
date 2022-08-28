@@ -125,21 +125,35 @@ function getSelectLabel (_vm, value) {
   return XEUtils.toValueString(item ? item[_vm.labelField] : value)
 }
 
+function checkOptionDisabled (_vm, isSelected, option, group) {
+  if (option.disabled) {
+    return true
+  }
+  if (group && group.disabled) {
+    return true
+  }
+  if (_vm.isMaximize && !isSelected) {
+    return true
+  }
+  return false
+}
+
 export function renderOption (h, _vm, list, group) {
   const { isGroup, labelField, valueField, optionKey, value, multiple, currentValue, optionOpts } = _vm
   const { useKey } = optionOpts
   return list.map((option, cIndex) => {
     const { slots } = option
-    const isVisible = !isGroup || isOptionVisible(option)
-    const isDisabled = (group && group.disabled) || option.disabled
     const optionValue = option[valueField]
+    const isSelected = multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue
+    const isVisible = !isGroup || isOptionVisible(option)
+    const isDisabled = checkOptionDisabled(_vm, isSelected, option, group)
     const optid = getOptid(_vm, option)
     const defaultSlot = slots ? slots.default : null
     return isVisible ? h('div', {
       key: useKey || optionKey ? optid : cIndex,
       class: ['vxe-select-option', option.className, {
         'is--disabled': isDisabled,
-        'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
+        'is--selected': isSelected,
         'is--hover': currentValue === optionValue
       }],
       attrs: {
@@ -240,6 +254,7 @@ export default {
     optionGroupProps: Object,
     optionConfig: Object,
     className: [String, Function],
+    max: [String, Number],
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
     filterable: Boolean,
     filterMethod: Function,
@@ -336,6 +351,13 @@ export default {
         return getRemoteSelectLabel(this, value)
       }
       return getSelectLabel(this, value)
+    },
+    isMaximize () {
+      const { value, multiple, max } = this
+      if (multiple && max) {
+        return (value ? value.length : 0) >= XEUtils.toNumber(max)
+      }
+      return false
     }
   },
   watch: {

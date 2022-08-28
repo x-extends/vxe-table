@@ -108,7 +108,8 @@ $vxe-table-menu-item-width: 178px !default;
 $vxe-table-menu-background-color: #fff !default;
 
 /*loading*/
-$vxe-loading-background-color: rgba(0, 0, 0, 0.2) !default;
+$vxe-loading-color: $vxe-primary-color !default;
+$vxe-loading-background-color: rgba(255, 255, 255, 0.5) !default;
 $vxe-loading-z-index: 999 !default;
 
 /*validate*/
