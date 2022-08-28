@@ -339,7 +339,7 @@ export default defineComponent({
          */
         h(VxeLoading, {
           class: 'vxe-list--loading',
-          loading
+          modelValue: loading
         })
       ])
     }

@@ -1,7 +1,7 @@
 export default {
   vxe: {
     loading: {
-      text: 'Loading'
+      text: 'Loading...'
     },
     error: {
       groupFixed: 'グループのヘッダを使用すると、固定列はグループで設定しなければなりません',

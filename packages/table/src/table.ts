@@ -486,6 +486,10 @@ export default defineComponent({
       return Object.assign({}, GlobalConfig.table.emptyRender, props.emptyRender) as VxeTablePropTypes.EmptyOpts
     })
 
+    const computeLoadingOpts = computed(() => {
+      return Object.assign({}, GlobalConfig.table.loadingConfig, props.loadingConfig) as VxeTablePropTypes.LoadingOpts
+    })
+
     const computeCellOffsetWidth = computed(() => {
       return props.border ? Math.max(2, Math.ceil(reactData.scrollbarWidth / reactData.tableColumn.length)) : 1
     })
@@ -578,6 +582,7 @@ export default defineComponent({
       computeExpandOpts,
       computeTreeOpts,
       computeEmptyOpts,
+      computeLoadingOpts,
       computeCustomOpts,
       computeIsAllCheckboxDisabled
     }
@@ -5938,6 +5943,7 @@ export default defineComponent({
       const mouseOpts = computeMouseOpts.value
       const validOpts = computeValidOpts.value
       const validTipOpts = computeValidTipOpts.value
+      const loadingOpts = computeLoadingOpts.value
       const isMenu = computeIsMenu.value
       return h('div', {
         ref: refElem,
@@ -6050,7 +6056,9 @@ export default defineComponent({
          */
         h(VxeLoading, {
           class: 'vxe-table--loading',
-          loading
+          modelValue: loading,
+          icon: loadingOpts.icon,
+          text: loadingOpts.text
         }),
         /**
          * 筛选

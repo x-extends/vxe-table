@@ -6,6 +6,7 @@
       border
       highlight-hover-row
       height="300"
+      :loading="demo1.loading"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -28,7 +29,8 @@
       highlight-hover-row
       height="300"
       :loading="demo2.loading"
-      :data="demo2.tableData">
+      :data="demo2.tableData"
+      :loading-config="{icon: 'vxe-icon-indicator roll', text: '正在拼命加载中...'}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>
@@ -51,6 +53,7 @@ import { defineComponent, reactive } from 'vue'
 export default defineComponent({
   setup () {
     const demo1 = reactive({
+      loading: true,
       tableData: [] as any[]
     })
 
@@ -96,6 +99,7 @@ export default defineComponent({
           border
           highlight-hover-row
           height="300"
+          :loading="demo1.loading"
           :data="demo1.tableData">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -110,6 +114,7 @@ export default defineComponent({
         export default defineComponent({
           setup () {
             const demo1 = reactive({
+              loading: true,
               tableData: [] as any[]
             })
 
@@ -138,7 +143,8 @@ export default defineComponent({
           highlight-hover-row
           height="300"
           :loading="demo2.loading"
-          :data="demo2.tableData">
+          :data="demo2.tableData"
+          :loading-config="{icon: 'vxe-icon-indicator roll', text: '正在拼命加载中...'}">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
           <vxe-column field="sex" title="Sex"></vxe-column>

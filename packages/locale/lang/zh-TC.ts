@@ -1,7 +1,7 @@
 export default {
   vxe: {
     loading: {
-      text: '加載中'
+      text: '加載中...'
     },
     error: {
       groupFixed: '如果使用分組表頭，固定列必須按組設定',

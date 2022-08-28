@@ -786,7 +786,7 @@ export default defineComponent({
         contVNs.push(
           h(VxeLoading, {
             class: 'vxe-modal--loading',
-            loading: props.loading
+            modelValue: props.loading
           })
         )
       }

@@ -1,15 +1,16 @@
-import { defineComponent, h, provide, PropType, inject } from 'vue'
+import { defineComponent, h, provide, PropType, computed, inject } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 
-import { VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxGroupMethods, VxeCheckboxGroupPropTypes, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
+import { VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxPrivateComputed, CheckboxGroupMethods, VxeCheckboxGroupPropTypes, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeCheckboxGroup',
   props: {
     modelValue: Array as PropType<VxeCheckboxGroupPropTypes.ModelValue>,
     disabled: Boolean as PropType<VxeCheckboxGroupPropTypes.Disabled>,
+    max: { type: [String, Number] as PropType<VxeCheckboxGroupPropTypes.Max>, default: null },
     size: { type: String as PropType<VxeCheckboxGroupPropTypes.Size>, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
   },
   emits: [
@@ -23,10 +24,24 @@ export default defineComponent({
 
     const xID = XEUtils.uniqueId()
 
+    const computeIsMaximize = computed(() => {
+      const { modelValue, max } = props
+      if (max) {
+        return (modelValue ? modelValue.length : 0) >= XEUtils.toNumber(max)
+      }
+      return false
+    })
+
+    const computeMaps: CheckboxPrivateComputed = {
+      computeIsMaximize
+    }
+
     const $xecheckboxgroup = {
       xID,
       props,
-      context
+      context,
+
+      getComputeMaps: () => computeMaps
     } as unknown as VxeCheckboxGroupConstructor & VxeCheckboxGroupPrivateMethods
 
     useSize(props)
