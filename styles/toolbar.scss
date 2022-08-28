@@ -175,33 +175,13 @@
 
 .vxe-toolbar {
   font-size: $vxe-font-size;
-  .vxe-custom--option {
-    & > .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-default;
-    }
-  }
   &.size--medium {
     font-size: $vxe-font-size-medium;
-    .vxe-custom--option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-medium;
-      }
-    }
   }
   &.size--small {
     font-size: $vxe-font-size-small;
-    .vxe-custom--option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-small;
-      }
-    }
   }
   &.size--mini {
     font-size: $vxe-font-size-mini;
-    .vxe-custom--option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-mini;
-      }
-    }
   }
 }

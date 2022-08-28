@@ -127,6 +127,7 @@ export default {
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
     const titleSlot = $scopedSlots.title || slots.title
+    const cornerSlot = $scopedSlots.corner || slots.corner
     const headerOns = {}
     if (draggable) {
       headerOns.mousedown = this.mousedownEvent
@@ -170,27 +171,34 @@ export default {
           }],
           on: headerOns
         }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(headerSlot.call(this, { $modal: this }, h))) : [
-          titleSlot ? getSlotVNs(titleSlot.call(this, { $modal: this }, h)) : h('span', {
-            class: 'vxe-modal--title'
-          }, title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
-          showZoom ? h('i', {
-            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
-            attrs: {
-              title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
-            },
-            on: {
-              click: this.toggleZoomEvent
-            }
-          }) : _e(),
-          showClose ? h('i', {
-            class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
-            attrs: {
-              title: GlobalConfig.i18n('vxe.modal.close')
-            },
-            on: {
-              click: this.closeEvent
-            }
-          }) : _e()
+          h('div', {
+            class: 'vxe-modal--header-title'
+          }, titleSlot ? getSlotVNs(titleSlot.call(this, { $modal: this }, h)) : (title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))),
+          h('div', {
+            class: 'vxe-modal--header-right'
+          }, [
+            cornerSlot ? h('span', {
+              class: 'vxe-modal--corner-warpper'
+            }, getSlotVNs(cornerSlot({ $modal: this }))) : _e(),
+            showZoom ? h('i', {
+              class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
+              attrs: {
+                title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
+              },
+              on: {
+                click: this.toggleZoomEvent
+              }
+            }) : _e(),
+            showClose ? h('i', {
+              class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
+              attrs: {
+                title: GlobalConfig.i18n('vxe.modal.close')
+              },
+              on: {
+                click: this.closeEvent
+              }
+            }) : _e()
+          ])
         ]) : null,
         h('div', {
           class: 'vxe-modal--body'
