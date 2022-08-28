@@ -1,4 +1,10 @@
 {
+  "vxe-icon": {
+    "attributes": [
+      "name"
+    ],
+    "description": "图标"
+  },
   "vxe-table": {
     "attributes": [
       "id",
@@ -368,8 +374,8 @@
       "align",
       "exponential",
       "controls",
-      "min-date",
-      "max-date",
+      "start-date",
+      "end-date",
       "start-week",
       "start-day",
       "select-day",
@@ -402,6 +408,8 @@
       "option-config",
       "option-id",
       "option-key",
+      "filterable",
+      "filter-method",
       "transfer"
     ],
     "subtags": [
