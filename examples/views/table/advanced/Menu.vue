@@ -68,10 +68,10 @@ export default defineComponent({
         body: {
           options: [
             [
-              { code: 'copy', name: 'app.body.label.copy', prefixIcon: 'fa fa-copy', className: 'my-copy-item' }
+              { code: 'copy', name: '复制', prefixIcon: 'vxe-icon-copy', className: 'my-copy-item' }
             ],
             [
-              { code: 'remove', name: '删除', prefixIcon: 'fa fa-trash-o color-red' },
+              { code: 'remove', name: '删除', prefixIcon: 'vxe-icon-delete-fill' },
               {
                 name: '筛选',
                 children: [

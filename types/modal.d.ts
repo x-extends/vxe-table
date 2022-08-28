@@ -212,6 +212,7 @@ export type ModalSlots = {
   default?(params: ModalDefaultSlotParams): JSX.Element[] | VNode[] | string[]
   header?(params: ModalHeaderSlotParams): JSX.Element[] | VNode[] | string[]
   title?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
+  corner?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
   footer?(params: ModalFooterSlotParams): JSX.Element[] | VNode[] | string[]
 }
 

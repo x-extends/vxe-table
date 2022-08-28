@@ -688,13 +688,22 @@ export default defineComponent({
       const { slots: propSlots = {}, showClose, showZoom, title } = props
       const { zoomLocat } = reactData
       const titleSlot = slots.title || propSlots.title
-      const titVNs = titleSlot ? getSlotVNs(titleSlot({ $modal: $xemodal })) : [
-        h('span', {
-          class: 'vxe-modal--title'
-        }, title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))
+      const cornerSlot = slots.corner || propSlots.corner
+      const titVNs = [
+        h('div', {
+          class: 'vxe-modal--header-title'
+        }, titleSlot ? getSlotVNs(titleSlot({ $modal: $xemodal })) : (title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')))
       ]
+      const rightVNs = []
+      if (cornerSlot) {
+        rightVNs.push(
+          h('span', {
+            class: 'vxe-modal--corner-warpper'
+          }, getSlotVNs(cornerSlot({ $modal: $xemodal })))
+        )
+      }
       if (showZoom) {
-        titVNs.push(
+        rightVNs.push(
           h('i', {
             class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
             title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`),
@@ -703,7 +712,7 @@ export default defineComponent({
         )
       }
       if (showClose) {
-        titVNs.push(
+        rightVNs.push(
           h('i', {
             class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
             title: GlobalConfig.i18n('vxe.modal.close'),
@@ -711,6 +720,11 @@ export default defineComponent({
           })
         )
       }
+      titVNs.push(
+        h('div', {
+          class: 'vxe-modal--header-right'
+        }, rightVNs)
+      )
       return titVNs
     }
 
