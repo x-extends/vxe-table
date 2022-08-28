@@ -1,4 +1,8 @@
 {
+  "vxe-icon/name": {
+    "type": "string",
+    "description": "图标名称"
+  },
   "vxe-table/id": {
     "type": "string",
     "description": "唯一标识（被某些特定的功能所依赖）"
@@ -1171,13 +1175,13 @@
     "type": "boolean",
     "description": "只对 type=number|integer|float 有效，是否显示控制按钮"
   },
-  "vxe-input/min-date": {
+  "vxe-input/start-date": {
     "type": "number | string | date",
-    "description": "只对 type=date|datetime|week|month|quarter|year 有效，设置日期可选范围的最小值"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，设置面板起始日期"
   },
-  "vxe-input/max-date": {
+  "vxe-input/end-date": {
     "type": "number | string | date",
-    "description": "只对 type=date|datetime|week|month|quarter|year 有效，设置日期可选范围的最大值"
+    "description": "只对 type=date|datetime|week|month|quarter|year 有效，设置面板结束日期"
   },
   "vxe-input/start-week": {
     "type": "number | string",
@@ -1286,6 +1290,14 @@
   "vxe-select/option-key": {
     "type": "boolean",
     "description": "已废弃，被 option-config.useKey 替换"
+  },
+  "vxe-select/filterable": {
+    "type": "boolean",
+    "description": "是否启用下拉过滤功能"
+  },
+  "vxe-select/filter-method": {
+    "type": "({ searchvalue, option, group }) => boolean",
+    "description": "自定义过滤方法"
   },
   "vxe-select/transfer": {
     "type": "boolean",
@@ -1557,7 +1569,7 @@
   },
   "vxe-modal/fullscreen": {
     "type": "boolean",
-    "description": "默认最大化显示"
+    "description": "窗口打开时自动最大化显示"
   },
   "vxe-modal/draggable": {
     "type": "boolean",
