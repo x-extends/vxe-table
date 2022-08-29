@@ -71,6 +71,7 @@
   user-select: none;
   cursor: pointer;
   .vxe-form--item-trigger-icon {
+    display: inline-block;
     margin: 0 0.25em;
     transition: all 0.1s;
   }
