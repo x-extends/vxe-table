@@ -268,11 +268,11 @@ export default defineComponent({
       const { isRefresh } = reactData
       const refreshOpts = computeRefreshOpts.value
       if (!isRefresh) {
-        const { query } = refreshOpts
-        if (query) {
+        const queryMethod = refreshOpts.queryMethod || refreshOpts.query
+        if (queryMethod) {
           reactData.isRefresh = true
           try {
-            Promise.resolve(query({})).catch((e) => e).then(() => {
+            Promise.resolve(queryMethod({})).catch((e) => e).then(() => {
               reactData.isRefresh = false
             })
           } catch (e) {
@@ -280,7 +280,7 @@ export default defineComponent({
           }
         } else if ($xegrid) {
           reactData.isRefresh = true
-          $xegrid.commitProxy('reload').catch((e) => e).then(() => {
+          $xegrid.commitProxy(refreshOpts.code || 'reload').catch((e) => e).then(() => {
             reactData.isRefresh = false
           })
         }
@@ -608,8 +608,9 @@ export default defineComponent({
     nextTick(() => {
       const { refresh } = props
       const refreshOpts = computeRefreshOpts.value
-      if (refresh && !$xegrid && !refreshOpts.query) {
-        warnLog('vxe.error.notFunc', ['query'])
+      const queryMethod = refreshOpts.queryMethod || refreshOpts.query
+      if (refresh && !$xegrid && !queryMethod) {
+        warnLog('vxe.error.notFunc', ['queryMethod'])
       }
     })
 

@@ -41,9 +41,14 @@ export namespace VxeToolbarPropTypes {
   export interface ResizableOpts extends ResizableConfig { }
 
   interface RefreshConfig {
-    query?(params: {}): Promise<any>
+    queryMethod?(params: {}): Promise<any>
+    code?: 'query' | 'reload'
     icon?: string
     iconLoading?: string
+    /**
+     * @deprecated 请使用 queryMethod
+     */
+    query?(params: {}): Promise<any>
   }
   export type Refresh = boolean | RefreshConfig
   export interface RefreshOpts extends RefreshConfig { }
