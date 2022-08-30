@@ -307,8 +307,9 @@ export default {
     const { refresh, refreshOpts } = this
     this.$nextTick(() => {
       const $xetable = this.fintTable()
-      if (refresh && !this.$xegrid && !refreshOpts.query) {
-        warnLog('vxe.error.notFunc', ['query'])
+      const queryMethod = refreshOpts.queryMethod || refreshOpts.query
+      if (refresh && !this.$xegrid && !queryMethod) {
+        warnLog('vxe.error.notFunc', ['queryMethod'])
       }
       if ($xetable) {
         $xetable.connect(this)
@@ -573,10 +574,11 @@ export default {
     refreshEvent () {
       const { $xegrid, refreshOpts, isRefresh } = this
       if (!isRefresh) {
-        if (refreshOpts.query) {
+        const queryMethod = refreshOpts.queryMethod || refreshOpts.query
+        if (queryMethod) {
           this.isRefresh = true
           try {
-            Promise.resolve(refreshOpts.query()).catch(e => e).then(() => {
+            Promise.resolve(queryMethod({})).catch(e => e).then(() => {
               this.isRefresh = false
             })
           } catch (e) {
@@ -584,7 +586,7 @@ export default {
           }
         } else if ($xegrid) {
           this.isRefresh = true
-          $xegrid.commitProxy('reload').catch(e => e).then(() => {
+          $xegrid.commitProxy(refreshOpts.code || 'reload').catch(e => e).then(() => {
             this.isRefresh = false
           })
         }

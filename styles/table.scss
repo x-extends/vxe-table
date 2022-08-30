@@ -1004,6 +1004,7 @@
   .vxe-table--expanded {
     cursor: pointer;
     .vxe-table--expand-btn {
+      display: inline-block;
       width: 1em;
       height: 1em;
       text-align: center;
