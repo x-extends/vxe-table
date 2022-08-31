@@ -27,6 +27,8 @@ export const columnProps = {
   headerAlign: String as PropType<VxeColumnPropTypes.HeaderAlign>,
   // 表尾列的对齐方式
   footerAlign: String as PropType<VxeColumnPropTypes.FooterAlign>,
+  // 定制行高
+  customRowSpan: { type: [Number, String] as PropType<VxeColumnPropTypes.CustomRowSpan>, default: 1 },
   // 当内容过长时显示为省略号
   showOverflow: { type: [Boolean, String] as PropType<VxeColumnPropTypes.ShowOverflow>, default: null },
   // 当表头内容过长时显示为省略号

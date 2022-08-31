@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <p class="tip">当数据结构比较复杂的时候，可以使用多级表头来更加直观的显示数据</p>
 
     <vxe-table
@@ -76,6 +77,76 @@
       <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
     </pre>
+
+    <hr>
+
+    <p class="tip">定制表头单元格所占的行</p>
+
+    <vxe-toolbar>
+      <template #buttons>
+        <vxe-button @click="toggleFixedColumn3('group0', 'left')">切换第一列固定</vxe-button>
+        <vxe-button @click="toggleFixedColumn3('group1', 'left')">切换第二列固定</vxe-button>
+        <vxe-button @click="toggleFixedColumn3('group3', 'right')">切换第四列固定</vxe-button>
+        <vxe-button @click="toggleFixedColumn3('group4', 'right')">切换第五列固定</vxe-button>
+      </template>
+    </vxe-toolbar>
+
+    <vxe-table
+      border
+      ref="xTable3"
+      height="400"
+      useCustomHeaderRowSpan=true
+      :data="tableData3">
+      <vxe-colgroup title="基本信息" customRowSpan="2">
+        <vxe-colgroup title="序号">
+          <vxe-column type="seq" title="1" width="60"></vxe-column>
+        </vxe-colgroup>
+        <vxe-colgroup title="姓名">
+          <vxe-column field="name" title="2" width="80"></vxe-column>
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-colgroup title="分类信息1" customRowSpan="2">
+        <vxe-colgroup title="年龄">
+          <vxe-column field="age" title="3" width="100"></vxe-column>
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-colgroup title="更多信息">
+        <vxe-colgroup title="角色"  customRowSpan="2">
+          <vxe-column field="role" title="4" width="60"></vxe-column>
+        </vxe-colgroup>
+        <vxe-colgroup title="Attr1"  customRowSpan="2">
+          <vxe-column field="attr1" title="5" width="60"></vxe-column>
+        </vxe-colgroup>
+        <vxe-colgroup title="详细信息">
+          <vxe-colgroup title="Sex" >
+            <vxe-column field="sex" title="6" width="60"></vxe-column>
+          </vxe-colgroup>
+          <vxe-colgroup title="Num">
+          <vxe-column field="num" title="7" width="60"></vxe-column>
+          </vxe-colgroup>
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-colgroup title="分类信息2"  customRowSpan="2">
+        <vxe-colgroup title="Attr6">
+          <vxe-column field="attr6" title="8" width="120"></vxe-column>
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-colgroup title="额外信息"  customRowSpan="2">
+        <vxe-colgroup title="Date">
+          <vxe-column field="date3" title="9" width="140"></vxe-column>
+        </vxe-colgroup>
+        <vxe-colgroup title="Address">
+          <vxe-column field="address" title="10" width="200" show-overflow></vxe-column>
+        </vxe-colgroup>
+      </vxe-colgroup>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[4] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[5] }}</pre-code>
+    </pre>
   </div>
 </template>
 
@@ -123,11 +194,39 @@ export default defineComponent({
       }
     }
 
+    const xTable3 = ref({} as VxeTableInstance)
+    const tableData3 = ref([
+      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
+      { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+      { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc' },
+      { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
+      { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
+    ])
+
+    const toggleFixedColumn3 = (field: string, type: VxeColumnPropTypes.Fixed) => {
+      const $table = xTable3.value
+      const column = $table.getColumnByField(field)
+      if (column) {
+        const groupFixed = column.fixed ? null : type
+        // 将分组整体设置固定列
+        XEUtils.eachTree([column], column => {
+          column.fixed = groupFixed
+        })
+        // 刷新列
+        $table.refreshColumn()
+      }
+    }
     return {
       tableData1,
       xTable2,
       tableData2,
       toggleFixedColumn,
+      xTable3,
+      tableData3,
+      toggleFixedColumn3,
       demoCodes: [
         `
         <vxe-table
@@ -250,6 +349,108 @@ export default defineComponent({
               xTable2,
               tableData2,
               toggleFixedColumn
+            }
+          }
+        }
+        `,
+        `
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button @click="toggleFixedColumn3('group0', 'left')">切换第一列固定</vxe-button>
+            <vxe-button @click="toggleFixedColumn3('group1', 'left')">切换第二列固定</vxe-button>
+            <vxe-button @click="toggleFixedColumn3('group3', 'right')">切换第四列固定</vxe-button>
+            <vxe-button @click="toggleFixedColumn3('group4', 'right')">切换第五列固定</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <vxe-table
+          border
+          ref="xTable3"
+          height="400"
+          useCustomHeaderRowSpan=true
+          :data="tableData3">
+          <vxe-colgroup title="基本信息" customRowSpan="2">
+            <vxe-colgroup title="序号">
+              <vxe-column type="seq" title="1" width="60"></vxe-column>
+            </vxe-colgroup>
+            <vxe-colgroup title="姓名">
+              <vxe-column field="name" title="2" width="80"></vxe-column>
+            </vxe-colgroup>
+          </vxe-colgroup>
+          <vxe-colgroup title="分类信息1" customRowSpan="2">
+            <vxe-colgroup title="年龄">
+              <vxe-column field="age" title="3" width="100"></vxe-column>
+            </vxe-colgroup>
+          </vxe-colgroup>
+          <vxe-colgroup title="更多信息">
+            <vxe-colgroup title="角色"  customRowSpan="2">
+              <vxe-column field="role" title="4" width="60"></vxe-column>
+            </vxe-colgroup>
+            <vxe-colgroup title="Attr1"  customRowSpan="2">
+              <vxe-column field="attr1" title="5" width="60"></vxe-column>
+            </vxe-colgroup>
+            <vxe-colgroup title="详细信息">
+              <vxe-colgroup title="Sex" >
+                <vxe-column field="sex" title="6" width="60"></vxe-column>
+              </vxe-colgroup>
+              <vxe-colgroup title="Num">
+              <vxe-column field="num" title="7" width="60"></vxe-column>
+              </vxe-colgroup>
+            </vxe-colgroup>
+          </vxe-colgroup>
+          <vxe-colgroup title="分类信息2"  customRowSpan="2">
+            <vxe-colgroup title="Attr6">
+              <vxe-column field="attr6" title="8" width="120"></vxe-column>
+            </vxe-colgroup>
+          </vxe-colgroup>
+          <vxe-colgroup title="额外信息"  customRowSpan="2">
+            <vxe-colgroup title="Date">
+              <vxe-column field="date3" title="9" width="140"></vxe-column>
+            </vxe-colgroup>
+            <vxe-colgroup title="Address">
+              <vxe-column field="address" title="10" width="200" show-overflow></vxe-column>
+            </vxe-colgroup>
+          </vxe-colgroup>
+        </vxe-table>
+        `,
+        `
+        import { defineComponent, ref } from 'vue'
+        import { VxeTableInstance, VxeColumnPropTypes } from 'vxe-table'
+        import XEUtils from 'xe-utils'
+
+        export default defineComponent({
+          setup () {
+            const xTable3 = ref({} as VxeTableInstance)
+
+            const tableData3 = ref([
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+              { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 23, address: 'test abc' },
+              { id: 10005, name: 'Test5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+              { id: 10006, name: 'Test6', role: 'Designer', sex: 'Women', age: 21, address: 'test abc' },
+              { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
+              { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
+            ])
+
+            const toggleFixedColumn3 = (field: string, type: VxeColumnPropTypes.Fixed) => {
+              const $table = xTable3.value
+              const column = $table.getColumnByField(field)
+              if (column) {
+                const groupFixed = column.fixed ? null : type
+                // 将分组整体设置固定列
+                XEUtils.eachTree([column], column => {
+                  column.fixed = groupFixed
+                })
+                // 刷新列
+                $table.refreshColumn()
+              }
+            }
+
+            return {
+              xTable3,
+              tableData3,
+              toggleFixedColumn3
             }
           }
         }

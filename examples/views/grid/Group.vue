@@ -10,6 +10,17 @@
       <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
       <pre-code class="typescript">{{ demoCodes[1] }}</pre-code>
     </pre>
+
+    <p class="tip">定制表头单元格所占的行</p>
+    <vxe-grid v-bind="gridOptions2"></vxe-grid>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="typescript">{{ demoCodes[3] }}</pre-code>
+    </pre>
+
   </div>
 </template>
 
@@ -53,9 +64,49 @@ export default defineComponent({
         { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'Shenzhen' }
       ]
     })
-
+    const gridOptions2 = reactive<VxeGridProps>({
+      border: true,
+      stripe: true,
+      resizable: true,
+      useCustomHeaderRowSpan: true,
+      height: 500,
+      columns: [
+        {
+          title: '序号',
+          customRowSpan: 3,
+          fixed: 'left',
+          children: [{ type: 'seq', title: '1' }]
+        },
+        {
+          title: '基本信息',
+          children: [
+            { title: 'Name', customRowSpan: 2, children: [{ field: 'name', title: '2' }] },
+            {
+              title: '其他信息',
+              children: [
+                { title: 'Nickname', children: [{ field: 'nickname', title: '3' }] },
+                { title: 'Age', children: [{ field: 'age', title: '4' }] }
+              ]
+            },
+            { title: 'Sex', customRowSpan: 2, children: [{ field: 'sex', title: '5' }] }
+          ]
+        },
+        { title: 'Address', customRowSpan: 3, children: [{ field: 'address', title: '6', showOverflow: true }] }
+      ],
+      data: [
+        { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
+        { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'Shenzhen' },
+        { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'Shenzhen' },
+        { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'Shenzhen' }
+      ]
+    })
     return {
       gridOptions,
+      gridOptions2,
       demoCodes: [
         `
         <vxe-grid v-bind="gridOptions"></vxe-grid>
@@ -88,6 +139,62 @@ export default defineComponent({
                   ]
                 },
                 { field: 'address', title: 'Address', sortable: true, showOverflow: true }
+              ],
+              data: [
+                { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
+                { id: 10002, name: 'Test2', nickname: 'T2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', nickname: 'T3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', nickname: 'T4', role: 'Designer', sex: 'Women', age: 23, address: 'Shenzhen' },
+                { id: 10005, name: 'Test5', nickname: 'T5', role: 'Develop', sex: 'Women', age: 30, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', nickname: 'T6', role: 'Designer', sex: 'Women', age: 21, address: 'Shenzhen' },
+                { id: 10007, name: 'Test7', nickname: 'T7', role: 'Test', sex: 'Man', age: 29, address: 'Shenzhen' },
+                { id: 10008, name: 'Test8', nickname: 'T8', role: 'Develop', sex: 'Man', age: 35, address: 'Shenzhen' }
+              ]
+            })
+
+            return {
+              gridOptions
+            }
+          }
+        })
+        `,
+        `
+        <vxe-grid v-bind="gridOptions"></vxe-grid>
+        `,
+        `
+        import { defineComponent, reactive } from 'vue'
+        import { VxeGridProps } from 'vxe-table'
+
+        export default defineComponent({
+          setup () {
+            const gridOptions = reactive<VxeGridProps>({
+              border: true,
+              stripe: true,
+              resizable: true,
+              useCustomHeaderRowSpan: true,
+              height: 500,
+              columns: [
+                {
+                  title: '序号',
+                  customRowSpan: 3,
+                  fixed: 'left',
+                  children: [{ type: 'seq', title: '1' }]
+                },
+                {
+                  title: '基本信息',
+                  children: [
+                    { title: 'Name', customRowSpan: 2, children: [{ field: 'name', title: '2' }] },
+                    {
+                      title: '其他信息',
+                      children: [
+                        { title: 'Nickname', children: [{ field: 'nickname', title: '3' }] },
+                        { title: 'Age', children: [{ field: 'age', title: '4' }] }
+                      ]
+                    },
+                    { title: 'Sex', customRowSpan: 2, children: [{ field: 'sex', title: '5' }] }
+                  ]
+                },
+                { title: 'Address', customRowSpan: 3, children: [{ field: 'address', title: '6', showOverflow: true }] }
               ],
               data: [
                 { id: 10001, name: 'Test1', nickname: 'T1', role: 'Develop', sex: 'Man', age: 28, address: 'Shenzhen' },
