@@ -14,8 +14,14 @@ export const formItemProps = {
   field: String as PropType<VxeFormItemPropTypes.Field>,
   span: [String, Number] as PropType<VxeFormItemPropTypes.Span>,
   align: String as PropType<VxeFormItemPropTypes.Align>,
-  titleAlign: String as PropType<VxeFormItemPropTypes.TitleAlign>,
-  titleWidth: [String, Number] as PropType<VxeFormItemPropTypes.TitleWidth>,
+  titleAlign: {
+    type: String as PropType<VxeFormItemPropTypes.TitleAlign>,
+    default: null
+  },
+  titleWidth: {
+    type: [String, Number] as PropType<VxeFormItemPropTypes.TitleWidth>,
+    default: null
+  },
   titleColon: {
     type: Boolean as PropType<VxeFormItemPropTypes.TitleColon>,
     default: null
@@ -25,7 +31,10 @@ export const formItemProps = {
     default: null
   },
   className: [String, Function] as PropType<VxeFormItemPropTypes.ClassName>,
-  titleOverflow: { type: [Boolean, String] as PropType<VxeFormItemPropTypes.TitleOverflow>, default: null },
+  titleOverflow: {
+    type: [Boolean, String] as PropType<VxeFormItemPropTypes.TitleOverflow>,
+    default: null
+  },
   titlePrefix: Object as PropType<VxeFormItemPropTypes.TitlePrefix>,
   titleSuffix: Object as PropType<VxeFormItemPropTypes.TitleSuffix>,
   resetValue: { default: null },
@@ -64,7 +73,7 @@ export default defineComponent({
 
     const renderItem = ($xeform: VxeFormConstructor & VxeFormPrivateMethods, item: VxeFormDefines.ItemInfo) => {
       const { props, reactData } = $xeform
-      const { data, rules, titleOverflow: allTitleOverflow } = props
+      const { data, rules, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = props
       const { collapseAll } = reactData
       const { computeValidOpts } = $xeform.getComputeMaps()
       const validOpts = computeValidOpts.value
@@ -75,8 +84,10 @@ export default defineComponent({
       const titleSlot = slots ? slots.title : null
       const span = item.span || props.span
       const align = item.align || props.align
-      const titleAlign = item.titleAlign || props.titleAlign
-      const titleWidth = item.titleWidth || props.titleWidth
+      const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
+      const titleWidth = XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth
+      const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
+      const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
       const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
       const showEllipsis = itemOverflow === 'ellipsis'
       const showTitle = itemOverflow === 'title'
@@ -142,6 +153,8 @@ export default defineComponent({
           itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
           {
             'is--title': title,
+            'is--colon': titleColon,
+            'is--asterisk': titleAsterisk,
             'is--required': isRequired,
             'is--hidden': folding && collapseAll,
             'is--active': isActivetem($xeform, item),

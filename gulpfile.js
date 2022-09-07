@@ -27,6 +27,7 @@ const moduleList = [
 
 const componentList = [
   'icon',
+  'loading',
   'column',
   'colgroup',
   'toolbar',
