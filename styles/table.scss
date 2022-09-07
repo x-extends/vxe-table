@@ -2,6 +2,7 @@
 @import './helpers/mixin.scss';
 @import './base/checked.scss';
 @import './base/common.scss';
+@import './loading.scss';
 
 %DefaultColumnHeight {
   height: $vxe-table-row-height-default;
@@ -1296,6 +1297,29 @@
       padding: 0;
       &.col--actived {
         padding: 0;
+      }
+    }
+  }
+}
+
+/*footer*/
+.vxe-table--footer-wrapper {
+  color: $vxe-table-footer-font-color;
+  margin-top: -1px;
+  &.body--wrapper{
+    overflow-x: auto;
+  }
+}
+
+.vxe-footer--column {
+  &.col--ellipsis {
+    & > .vxe-cell {
+      display: flex;
+      align-items: center;
+      .vxe-cell--item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

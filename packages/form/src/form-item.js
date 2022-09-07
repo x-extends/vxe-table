@@ -12,8 +12,14 @@ const props = {
   size: String,
   span: [String, Number],
   align: String,
-  titleAlign: String,
-  titleWidth: [String, Number],
+  titleAlign: {
+    type: String,
+    default: null
+  },
+  titleWidth: {
+    type: [String, Number],
+    default: null
+  },
   titleColon: {
     type: Boolean,
     default: null
@@ -23,7 +29,10 @@ const props = {
     default: null
   },
   className: [String, Function],
-  titleOverflow: { type: [Boolean, String], default: null },
+  titleOverflow: {
+    type: [Boolean, String],
+    default: null
+  },
   titlePrefix: Object,
   titleSuffix: Object,
   resetValue: { default: null },
@@ -42,14 +51,16 @@ Object.keys(props).forEach(name => {
 })
 
 const renderItem = (h, _vm, item, slots) => {
-  const { _e, rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
+  const { _e, rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = _vm
   const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const itemClassName = compConf ? compConf.itemClassName : ''
   const span = item.span || _vm.span
   const align = item.align || _vm.align
-  const titleAlign = item.titleAlign || _vm.titleAlign
-  const titleWidth = item.titleWidth || _vm.titleWidth
+  const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
+  const titleWidth = XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth
+  const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
+  const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
   const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
   const showEllipsis = itemOverflow === 'ellipsis'
   const showTitle = itemOverflow === 'title'
@@ -91,6 +102,8 @@ const renderItem = (h, _vm, item, slots) => {
       itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
       {
         'is--title': title,
+        'is--colon': titleColon,
+        'is--asterisk': titleAsterisk,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,
         'is--active': isActivetem(_vm, item),

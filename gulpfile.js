@@ -17,7 +17,6 @@ const components = [
   'v-x-e-table',
   'vxe-table',
 
-  'icon',
   'filter',
   'menu',
   'edit',
@@ -27,6 +26,8 @@ const components = [
   'header',
   'footer',
 
+  'icon',
+  'loading',
   'column',
   'colgroup',
   'toolbar',
