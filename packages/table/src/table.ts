@@ -1337,7 +1337,7 @@ export default defineComponent({
 
     const updateStyle = () => {
       const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod, keyboardConfig } = props
-      let { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore, mergeList, mergeFooterList, isAllOverflow } = reactData
+      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore, mergeList, mergeFooterList, isAllOverflow } = reactData
       let { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMaxHeight } = internalData
       const containerList = ['main', 'left', 'right']
       const emptyPlaceholderElem = refEmptyPlaceholder.value
@@ -1374,20 +1374,20 @@ export default defineComponent({
             // 表头体样式处理
             // 横向滚动渲染
             let tWidth = tableWidth
+            let renderColumnList = tableColumn
 
-            // 如果是使用优化模式
-            let isOptimize = false
-            if (!isGroup) {
+            if (isGroup) {
+              renderColumnList = visibleColumn
+            } else {
+              // 如果是使用优化模式
               if (fixedType) {
                 if (scrollXLoad || allColumnHeaderOverflow) {
-                  isOptimize = true
+                  renderColumnList = fixedColumn
                 }
               }
             }
-            if (isOptimize) {
-              tableColumn = fixedColumn
-            }
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+
+            tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
@@ -1457,20 +1457,21 @@ export default defineComponent({
             }
 
             let tWidth = tableWidth
+            let renderColumnList = tableColumn
 
             // 如果是使用优化模式
             if (fixedType) {
               if (scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
                 if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-                  tableColumn = fixedColumn
+                  renderColumnList = fixedColumn
                 } else {
-                  tableColumn = visibleColumn
+                  renderColumnList = visibleColumn
                 }
               } else {
-                tableColumn = visibleColumn
+                renderColumnList = visibleColumn
               }
             }
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth}px` : ''
@@ -1483,19 +1484,20 @@ export default defineComponent({
           } else if (layout === 'footer') {
             let tWidth = tableWidth
 
+            let renderColumnList = tableColumn
             // 如果是使用优化模式
             if (fixedType) {
               if (scrollXLoad || allColumnFooterOverflow) {
                 if (!mergeFooterList.length || !footerSpanMethod) {
-                  tableColumn = fixedColumn
+                  renderColumnList = fixedColumn
                 } else {
-                  tableColumn = visibleColumn
+                  renderColumnList = visibleColumn
                 }
               } else {
-                tableColumn = visibleColumn
+                renderColumnList = visibleColumn
               }
             }
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+            tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
             if (isNodeElement(wrapperElem)) {
               // 如果是固定列
@@ -2168,15 +2170,9 @@ export default defineComponent({
         })
       }
       const visibleColumn = leftList.concat(centerList).concat(rightList)
-      let scrollXLoad = !!sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+      const scrollXLoad = !!sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
-      if (scrollXLoad && isGroup) {
-        scrollXLoad = false
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          warnLog('vxe.error.scrollXNotGroup')
-        }
-      }
       if (scrollXLoad) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (props.showHeader && !props.showHeaderOverflow) {
@@ -5339,7 +5335,7 @@ export default defineComponent({
       },
       // 更新横向 X 可视渲染上下剩余空间大小
       updateScrollXSpace () {
-        const { scrollXLoad, scrollbarWidth } = reactData
+        const { isGroup, scrollXLoad, scrollbarWidth } = reactData
         const { visibleColumn, scrollXStore, elemStore, tableWidth } = internalData
         const tableHeader = refTableHeader.value
         const tableBody = refTableBody.value
@@ -5357,7 +5353,7 @@ export default defineComponent({
             marginLeft = `${leftSpaceWidth}px`
           }
           if (headerElem) {
-            headerElem.style.marginLeft = marginLeft
+            headerElem.style.marginLeft = isGroup ? '' : marginLeft
           }
           bodyElem.style.marginLeft = marginLeft
           if (footerElem) {

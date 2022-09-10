@@ -48,7 +48,7 @@ export default defineComponent({
       const { clientX: dragClientX } = evnt
       const wrapperElem = refElem.value
       const dragBtnElem = evnt.target as HTMLDivElement
-      const cell = params.cell = dragBtnElem.parentNode as HTMLTableHeaderCellElement
+      const cell = params.cell = dragBtnElem.parentNode as HTMLTableCellElement
       let dragLeft = 0
       const tableBodyElem = tableBody.$el as HTMLDivElement
       const pos = getOffsetPos(dragBtnElem, wrapperElem)
@@ -67,14 +67,14 @@ export default defineComponent({
       let fixedOffsetWidth = 0
       if (isLeftFixed || isRightFixed) {
         const siblingProp = isLeftFixed ? 'nextElementSibling' : 'previousElementSibling'
-        let tempCellElem = cell[siblingProp] as HTMLTableHeaderCellElement
+        let tempCellElem = cell[siblingProp] as HTMLTableCellElement
         while (tempCellElem) {
           if (hasClass(tempCellElem, 'fixed--hidden')) {
             break
           } else if (!hasClass(tempCellElem, 'col--group')) {
             fixedOffsetWidth += tempCellElem.offsetWidth
           }
-          tempCellElem = tempCellElem[siblingProp] as HTMLTableHeaderCellElement
+          tempCellElem = tempCellElem[siblingProp] as HTMLTableCellElement
         }
         if (isRightFixed && rightContainerElem) {
           dragPosLeft = rightContainerElem.offsetLeft + fixedOffsetWidth
@@ -161,19 +161,23 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      let { fixedType, fixedColumn, tableColumn } = props
+      const { fixedType, fixedColumn, tableColumn } = props
       const { resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { isGroup, currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
+      const { visibleColumn } = tableInternalData
       const columnOpts = computeColumnOpts.value
       let headerGroups: VxeTableDefines.ColumnInfo[][] = headerColumn.value
-      // 如果是使用优化模式
-      if (!isGroup) {
+      let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
+      if (isGroup) {
+        renderColumnList = visibleColumn
+      } else {
+        // 如果是使用优化模式
         if (fixedType) {
           if (scrollXLoad || allColumnHeaderOverflow) {
-            tableColumn = fixedColumn
+            renderColumnList = fixedColumn as VxeTableDefines.ColumnInfo[]
           }
         }
-        headerGroups = [tableColumn as VxeTableDefines.ColumnInfo[]]
+        headerGroups = [renderColumnList]
       }
       return h('div', {
         ref: refElem,
@@ -197,7 +201,7 @@ export default defineComponent({
            */
           h('colgroup', {
             ref: refHeaderColgroup
-          }, (tableColumn as VxeTableDefines.ColumnInfo[]).map((column, $columnIndex) => {
+          }, renderColumnList.map((column, $columnIndex) => {
             return h('col', {
               name: column.id,
               key: $columnIndex

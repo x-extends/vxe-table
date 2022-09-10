@@ -103,12 +103,12 @@ export default defineComponent({
       let { fixedType, fixedColumn, tableColumn, footerTableData } = props
       const { footerRowClassName, footerCellClassName, footerRowStyle, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { visibleColumn } = tableInternalData
-      const { scrollYLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
+      const { scrollXLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
       const tooltipOpts = computeTooltipOpts.value
       const columnOpts = computeColumnOpts.value
       // 如果是使用优化模式
       if (fixedType) {
-        if (scrollYLoad || allColumnFooterOverflow) {
+        if (scrollXLoad || allColumnFooterOverflow) {
           if (!mergeFooterList.length || !footerSpanMethod) {
             tableColumn = fixedColumn
           } else {
@@ -179,7 +179,7 @@ export default defineComponent({
               const itemIndex = _columnIndex
               const params: VxeTableDefines.CellRenderFooterParams = { $table: $xetable, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: renderType, data: footerTableData }
               // 纵向虚拟滚动不支持动态行高
-              if (scrollYLoad && !hasEllipsis) {
+              if (scrollXLoad && !hasEllipsis) {
                 showEllipsis = hasEllipsis = true
               }
               if (showTitle || showTooltip || showAllTip) {
