@@ -1627,15 +1627,9 @@ const Methods = {
       })
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
-    let scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+    const scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
     this.hasFixedColumn = leftList.length > 0 || rightList.length > 0
     Object.assign(columnStore, { leftList, centerList, rightList })
-    if (scrollXLoad && isGroup) {
-      scrollXLoad = false
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        warnLog('vxe.error.scrollXNotGroup')
-      }
-    }
     if (scrollXLoad) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (this.showHeader && !this.showHeaderOverflow) {
@@ -1940,22 +1934,20 @@ const Methods = {
           // 表头体样式处理
           // 横向滚动渲染
           let tWidth = tableWidth
+          let renderColumnList = tableColumn
 
-          // 如果是使用优化模式
-          let isOptimize = false
-          if (!isGroup) {
+          if (isGroup) {
+            renderColumnList = visibleColumn
+          } else {
+            // 如果是使用优化模式
             if (fixedType) {
               if (scrollXLoad || allColumnHeaderOverflow) {
-                isOptimize = true
+                renderColumnList = fixedColumn
               }
             }
           }
-          if (isOptimize) {
-            tableColumn = fixedColumn
-          }
-          if (isOptimize || scrollXLoad) {
-            tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
-          }
+
+          tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
           if (tableElem) {
             tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
@@ -2024,20 +2016,21 @@ const Methods = {
           }
 
           let tWidth = tableWidth
+          let renderColumnList = tableColumn
 
           // 如果是使用优化模式
           if (fixedType) {
             if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
               if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-                tableColumn = fixedColumn
+                renderColumnList = fixedColumn
               } else {
-                tableColumn = visibleColumn
+                renderColumnList = visibleColumn
               }
             } else {
-              tableColumn = visibleColumn
+              renderColumnList = visibleColumn
             }
           }
-          tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+          tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
           if (tableElem) {
             tableElem.style.width = tWidth ? `${tWidth}px` : ''
@@ -2049,20 +2042,21 @@ const Methods = {
           }
         } else if (layout === 'footer') {
           let tWidth = tableWidth
+          let renderColumnList = tableColumn
 
           // 如果是使用优化模式
           if (fixedType) {
             if (scrollXLoad || allColumnFooterOverflow) {
               if (!mergeFooterList.length || !footerSpanMethod) {
-                tableColumn = fixedColumn
+                renderColumnList = fixedColumn
               } else {
-                tableColumn = visibleColumn
+                renderColumnList = visibleColumn
               }
             } else {
-              tableColumn = visibleColumn
+              renderColumnList = visibleColumn
             }
           }
-          tWidth = tableColumn.reduce((previous, column) => previous + column.renderWidth, 0)
+          tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
           if (isNodeElement(wrapperElem)) {
             // 如果是固定列
@@ -4287,7 +4281,7 @@ const Methods = {
   },
   // 更新横向 X 可视渲染上下剩余空间大小
   updateScrollXSpace () {
-    const { $refs, elemStore, visibleColumn, scrollXStore, scrollXLoad, tableWidth, scrollbarWidth } = this
+    const { $refs, isGroup, elemStore, visibleColumn, scrollXStore, scrollXLoad, tableWidth, scrollbarWidth } = this
     const { tableHeader, tableBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
     if (tableBodyElem) {
@@ -4302,7 +4296,7 @@ const Methods = {
         marginLeft = `${leftSpaceWidth}px`
       }
       if (headerElem) {
-        headerElem.style.marginLeft = marginLeft
+        headerElem.style.marginLeft = isGroup ? '' : marginLeft
       }
       bodyElem.style.marginLeft = marginLeft
       if (footerElem) {

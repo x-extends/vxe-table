@@ -52,18 +52,20 @@ export default {
     elemStore[`${prefix}repair`] = null
   },
   render (h) {
-    const { _e, $parent: $xetable, fixedType, headerColumn, fixedColumn } = this
-    const { $listeners: tableListeners, tId, isGroup, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable
-    let { tableColumn } = this
+    const { _e, $parent: $xetable, fixedType, headerColumn, tableColumn, fixedColumn } = this
+    const { $listeners: tableListeners, tId, isGroup, visibleColumn, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable
     let headerGroups = headerColumn
-    // 如果是使用优化模式
-    if (!isGroup) {
+    let renderColumnList = tableColumn
+    if (isGroup) {
+      renderColumnList = visibleColumn
+    } else {
+      // 如果是使用优化模式
       if (fixedType) {
         if (scrollXLoad || allColumnHeaderOverflow) {
-          tableColumn = fixedColumn
+          renderColumnList = fixedColumn
         }
       }
-      headerGroups = [tableColumn]
+      headerGroups = [renderColumnList]
     }
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
@@ -90,7 +92,7 @@ export default {
          */
         h('colgroup', {
           ref: 'colgroup'
-        }, tableColumn.map((column, $columnIndex) => {
+        }, renderColumnList.map((column, $columnIndex) => {
           return h('col', {
             attrs: {
               name: column.id
