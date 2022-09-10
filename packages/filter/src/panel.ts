@@ -3,6 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { formatText } from '../../tools/utils'
 import { getPropClass } from '../../tools/dom'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/all'
 
@@ -118,7 +119,7 @@ export default defineComponent({
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, compConf.renderFilter(filterRender, params))
+          }, getSlotVNs(compConf.renderFilter(filterRender, params)))
         ]
       }
       const isAllChecked = multiple ? filterStore.isAllSelected : !filterStore.options.some((item: any) => item._checked)

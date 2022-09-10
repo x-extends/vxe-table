@@ -686,6 +686,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           if (!autofocus && compRender) {
             autofocus = compRender.autofocus
           }
+          if (!autoselect && compRender) {
+            autoselect = compRender.autoselect
+          }
           // 如果指定了聚焦 class
           if (XEUtils.isFunction(autofocus)) {
             inputElem = autofocus.call(this, params)

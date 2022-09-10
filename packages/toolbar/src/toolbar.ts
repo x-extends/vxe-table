@@ -387,7 +387,7 @@ export default defineComponent({
               btnVNs.push(
                 h('span', {
                   class: 'vxe-button--item'
-                }, compConf.renderToolbarButton(buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
+                }, getSlotVNs(compConf.renderToolbarButton(buttonRender, { $grid: $xegrid, $table: $xetable, button: item })))
               )
             } else {
               btnVNs.push(
@@ -434,7 +434,7 @@ export default defineComponent({
               btnVNs.push(
                 h('span', {
                   class: 'vxe-tool--item'
-                }, compConf.renderToolbarTool(toolRender, { $grid: $xegrid, $table: $xetable, tool: item }))
+                }, getSlotVNs(compConf.renderToolbarTool(toolRender, { $grid: $xegrid, $table: $xetable, tool: item })))
               )
             } else {
               btnVNs.push(

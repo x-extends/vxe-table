@@ -5,6 +5,7 @@ import { VXETable } from '../../v-x-e-table'
 import { mergeBodyMethod, getRowid, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
 import { updateCellTitle, getPropClass } from '../../tools/dom'
 import { isEnableConf } from '../../tools/utils'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
 
@@ -757,7 +758,7 @@ export default defineComponent({
         const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
         const renderEmpty = compConf ? compConf.renderEmpty : null
         if (renderEmpty) {
-          emptyContent = renderEmpty(emptyOpts, { $table: $xetable })
+          emptyContent = getSlotVNs(renderEmpty(emptyOpts, { $table: $xetable }))
         } else {
           emptyContent = tableProps.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
         }

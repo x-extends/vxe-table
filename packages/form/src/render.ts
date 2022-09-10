@@ -2,6 +2,7 @@ import { ComponentOptions, h, resolveComponent } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf } from '../../tools/utils'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeFormConstructor, VxeFormDefines, VxeFormItemPropTypes, VxeFormPrivateMethods } from '../../../types/all'
 
@@ -51,7 +52,7 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
   titVNs.push(
     h('span', {
       class: 'vxe-form--item-title-label'
-    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (titleSlot ? $xeform.callSlot(titleSlot, params) : getFuncText(item.title)))
+    }, compConf && compConf.renderItemTitle ? getSlotVNs(compConf.renderItemTitle(itemRender, params)) : (titleSlot ? $xeform.callSlot(titleSlot, params) : getFuncText(item.title)))
   )
   contVNs.push(
     h('div', {

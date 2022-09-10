@@ -5624,7 +5624,7 @@ export default defineComponent({
         const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
         const renderEmpty = compConf ? compConf.renderEmpty : null
         if (renderEmpty) {
-          return renderEmpty(emptyOpts, params)
+          return getSlotVNs(renderEmpty(emptyOpts, params))
         }
       }
       return getFuncText(props.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
