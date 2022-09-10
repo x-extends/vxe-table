@@ -56,6 +56,7 @@ export default {
       },
       combination: {
         menus: {
+          clearSort: '清除排序',
           sortAsc: '升序',
           sortDesc: '降序',
           fixedColumn: '锁定列',

@@ -4,6 +4,7 @@ import VXETable from '../../v-x-e-table'
 import UtilTools, { isEnableConf } from '../../tools/utils'
 import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener, getRowid } from './util'
 import DomTools from '../../tools/dom'
+import { getSlotVNs } from '../../tools/vn'
 
 const renderType = 'body'
 
@@ -547,7 +548,7 @@ export default {
       const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
       const renderEmpty = compConf ? compConf.renderEmpty : null
       if (renderEmpty) {
-        emptyContent = renderEmpty.call(this, h, emptyOpts, { $table: $xetable })
+        emptyContent = getSlotVNs(renderEmpty.call(this, h, emptyOpts, { $table: $xetable }))
       } else {
         emptyContent = $xetable.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
       }

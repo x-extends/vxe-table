@@ -1,6 +1,7 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import { isEnableConf, getFuncText } from '../../tools/utils'
+import { getSlotVNs } from '../../tools/vn'
 
 function renderPrefixIcon (h, titlePrefix) {
   return h('span', {
@@ -47,7 +48,7 @@ export function renderTitle (h, _vm, item) {
   titVNs.push(
     h('span', {
       class: 'vxe-form--item-title-label'
-    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? _vm.callSlot(slots.title, params, h) : getFuncText(item.title)))
+    }, compConf && compConf.renderItemTitle ? getSlotVNs(compConf.renderItemTitle(itemRender, params)) : (slots && slots.title ? _vm.callSlot(slots.title, params, h) : getFuncText(item.title)))
   )
   contVNs.push(
     h('div', {

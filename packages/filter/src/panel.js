@@ -2,6 +2,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import UtilTools from '../../tools/utils'
 import XEUtils from 'xe-utils'
+import { getSlotVNs } from '../../tools/vn'
 
 export default {
   name: 'VxeTableFilter',
@@ -50,7 +51,7 @@ export default {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, compConf.renderFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args)))
+          }, getSlotVNs(compConf.renderFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args))))
         ]
       }
       const isAllChecked = multiple ? filterStore.isAllSelected : !filterStore.options.some(item => item._checked)

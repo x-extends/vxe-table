@@ -1,5 +1,5 @@
 import { CreateElement, VNode } from 'vue'
-import { RowInfo } from '../component'
+import { SlotVNodeType, RowInfo } from '../component'
 import { Table } from '../table'
 import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
@@ -35,7 +35,7 @@ export interface RendererMapOptions {
   // 筛选渲染
   filterClassName?: string | ((params: ColumnFilterRenderParams) => string | { [key: string]: boolean })
   showFilterFooter?: boolean;
-  renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): VNode[] | string[];
+  renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): SlotVNodeType | SlotVNodeType[];
   filterMethod?(params: ColumnFilterMethodParams): boolean;
   filterResetMethod?(params: ColumnFilterResetParams): void;
   // 默认行为
@@ -43,33 +43,33 @@ export interface RendererMapOptions {
 
   // 单元格渲染
   cellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | { [key: string]: boolean })
-  renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
-  renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
-  renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): VNode[] | string[];
+  renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): SlotVNodeType | SlotVNodeType[];
   exportMethod?(params: ColumnExportCellRenderParams): string;
   footerExportMethod?(params: ColumnExportFooterRenderParams): string;
 
   // 编辑渲染
   autofocus?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => HTMLElement | null);
-  renderEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
-  renderCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  renderEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
 
   // 内容渲染
-  renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
 
   // 工具栏-按钮渲染
-  renderToolbarButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): VNode[] | string[];
-  renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): VNode[] | string[];
+  renderToolbarButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): SlotVNodeType | SlotVNodeType[];
 
   // 表单-项渲染
   itemClassName?: string | ((params: FormItemRenderParams) => string | { [key: string]: boolean })
-  renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
-  renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
+  renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
   itemVisibleMethod?(params: FormItemVisibleParams): boolean;
   itemResetMethod?(params: FormItemResetParams): void;
 
   // 空内容渲染
-  renderEmpty?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): VNode[] | string[];
+  renderEmpty?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): SlotVNodeType | SlotVNodeType[];
 
   [key: string]: any;
 }

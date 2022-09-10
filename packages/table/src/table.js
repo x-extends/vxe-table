@@ -7,6 +7,7 @@ import vSize from '../../mixins/size'
 import { isEnableConf, getFuncText } from '../../tools/utils'
 import { createResizeEvent } from '../../tools/resize'
 import { GlobalEvent } from '../../tools/event'
+import { getSlotVNs } from '../../tools/vn'
 import methods from './methods'
 import { warnLog, errLog } from '../../tools/log'
 import VxeLoading from '../../loading/index'
@@ -70,7 +71,7 @@ function renderEmptyContenet (h, _vm) {
     const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
     const renderEmpty = compConf ? compConf.renderEmpty : null
     if (renderEmpty) {
-      emptyContent = renderEmpty.call(_vm, h, emptyOpts, params)
+      emptyContent = getSlotVNs(renderEmpty.call(_vm, h, emptyOpts, params))
     } else {
       emptyContent = getFuncText(_vm.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
     }

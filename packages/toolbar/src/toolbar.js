@@ -4,6 +4,7 @@ import VXETable from '../../v-x-e-table'
 import vSize from '../../mixins/size'
 import UtilTools from '../../tools/utils'
 import DomTools from '../../tools/dom'
+import { getSlotVNs } from '../../tools/vn'
 import { GlobalEvent } from '../../tools/event'
 import { warnLog, errLog } from '../../tools/log'
 
@@ -52,7 +53,7 @@ function renderBtns (h, _vm) {
       if (renderToolbarButton) {
         return h('span', {
           class: 'vxe-button--item'
-        }, renderToolbarButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
+        }, getSlotVNs(renderToolbarButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item })))
       }
     }
     return h('vxe-button', {
@@ -99,7 +100,7 @@ function renderRightTools (h, _vm) {
       if (renderToolbarTool) {
         return h('span', {
           class: 'vxe-tool--item'
-        }, renderToolbarTool.call(_vm, h, toolRender, { $grid: $xegrid, $table: $xetable, tool: item }))
+        }, getSlotVNs(renderToolbarTool.call(_vm, h, toolRender, { $grid: $xegrid, $table: $xetable, tool: item })))
       }
     }
     return h('vxe-button', {

@@ -56,6 +56,7 @@ export default {
       },
       combination: {
         menus: {
+          clearSort: 'Clear sort',
           sortAsc: 'Ascending order',
           sortDesc: 'Descending order',
           fixedColumn: 'Fixed column',
