@@ -1300,15 +1300,6 @@
       }
     }
   }
-
-  /*隐藏右侧悬浮列里面的展开行内容*/
-  .vxe-table--body-wrapper {
-    &.fixed-right--wrapper {
-      .expand-wrapper{
-        visibility: hidden;
-      }
-    }
-  }
 }
 
 /*footer*/
