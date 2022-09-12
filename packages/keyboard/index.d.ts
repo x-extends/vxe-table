@@ -1,4 +1,4 @@
-import { Keyboard } from '../../types/keyboard'
+import { VxeModuleKeyboard } from '../../types/keyboard'
 
 export * from '../../types/keyboard'
-export default Keyboard
+export default VxeModuleKeyboard

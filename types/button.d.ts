@@ -3,7 +3,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle
 
 /**
  * 组件 - 按钮
- * @example import { Button as VxeButton } from 'vxe-table'
+ * @example import { VxeButton } from 'vxe-table'
+ */
+export const VxeButton: VXEComponent<VxeButtonProps, VxeButtonEventProps>
+/**
+ * 组件 - 按钮
  */
 export const Button: VXEComponent<VxeButtonProps, VxeButtonEventProps>
 

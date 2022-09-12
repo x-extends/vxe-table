@@ -3,9 +3,13 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
 
 /**
  * 组件 - 弹窗
- * @example import { Modal as VxeModal } from 'vxe-table'
+ * @example import { VxeModal } from 'vxe-table'
  */
-export const Modal: VXEComponent<VxeModalProps, VxeModalEventProps>
+export const VxeModal: VXEComponent<VxeModalProps, VxeModalEventProps>
+/**
+ * 组件 - 弹窗
+ */
+ export const Modal: VXEComponent<VxeModalProps, VxeModalEventProps>
 
 export type VxeModalInstance = ComponentPublicInstance<VxeModalProps, VxeModalConstructor>
 
@@ -208,6 +212,7 @@ export type ModalSlots = {
   default?(params: ModalDefaultSlotParams): JSX.Element[] | VNode[] | string[]
   header?(params: ModalHeaderSlotParams): JSX.Element[] | VNode[] | string[]
   title?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
+  corner?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
   footer?(params: ModalFooterSlotParams): JSX.Element[] | VNode[] | string[]
 }
 

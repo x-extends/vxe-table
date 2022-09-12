@@ -86,7 +86,7 @@ $btnThemeList: (
     background-color: transparent;
     &:not(.is--disabled) {
       &:focus {
-        box-shadow: 0 0 0.25em 0 $vxe-primary-color;
+        color: darken($vxe-font-color, 20%);
       }
       &:hover {
         color: lighten($vxe-primary-color, 10%);
@@ -98,6 +98,9 @@ $btnThemeList: (
       &.theme--#{map-get($item, name)} {
         color: $textColor;
         &:not(.is--disabled) {
+          &:focus {
+            color: darken($textColor, 10%);
+          }
           &:hover {
             color: lighten($textColor, 10%);
           }
@@ -133,7 +136,6 @@ $btnThemeList: (
       }
       &:focus {
         border-color: $vxe-primary-color;
-        box-shadow: 0 0 0.25em 0 $vxe-primary-color;
       }
       &:active {
         color: darken($vxe-primary-color, 3%);

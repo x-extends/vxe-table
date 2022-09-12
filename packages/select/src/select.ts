@@ -36,6 +36,7 @@ export default defineComponent({
     optionGroupProps: Object as PropType<VxeSelectPropTypes.OptionGroupProps>,
     optionConfig: Object as PropType<VxeSelectPropTypes.OptionConfig>,
     className: [String, Function] as PropType<VxeSelectPropTypes.ClassName>,
+    max: { type: [String, Number] as PropType<VxeSelectPropTypes.Max>, default: null },
     size: { type: String as PropType<VxeSelectPropTypes.Size>, default: () => GlobalConfig.select.size || GlobalConfig.size },
     filterable: Boolean as PropType<VxeSelectPropTypes.Filterable>,
     filterMethod: Function as PropType<VxeSelectPropTypes.FilterMethod>,
@@ -128,6 +129,14 @@ export default defineComponent({
     const computeGroupOptionsField = computed(() => {
       const groupPropsOpts = computeGroupPropsOpts.value
       return groupPropsOpts.options || 'options'
+    })
+
+    const computeIsMaximize = computed(() => {
+      const { modelValue, multiple, max } = props
+      if (multiple && max) {
+        return (modelValue ? modelValue.length : 0) >= XEUtils.toNumber(max)
+      }
+      return false
     })
 
     const computeOptionOpts = computed(() => {
@@ -677,6 +686,20 @@ export default defineComponent({
       }
     }
 
+    const checkOptionDisabled = (isSelected: any, option: VxeOptionProps, group?: VxeOptgroupProps) => {
+      if (option.disabled) {
+        return true
+      }
+      if (group && group.disabled) {
+        return true
+      }
+      const isMaximize = computeIsMaximize.value
+      if (isMaximize && !isSelected) {
+        return true
+      }
+      return false
+    }
+
     const renderOption = (list: VxeOptionProps[], group?: VxeOptgroupProps) => {
       const { optionKey, modelValue, multiple } = props
       const { currentValue } = reactData
@@ -687,16 +710,17 @@ export default defineComponent({
       const { useKey } = optionOpts
       return list.map((option, cIndex) => {
         const { slots, className } = option
-        const isVisible = !isGroup || isOptionVisible(option)
-        const isDisabled = (group && group.disabled) || option.disabled
         const optionValue = option[valueField as 'value']
+        const isSelected = multiple ? (modelValue && modelValue.indexOf(optionValue) > -1) : modelValue === optionValue
+        const isVisible = !isGroup || isOptionVisible(option)
+        const isDisabled = checkOptionDisabled(isSelected, option, group)
         const optid = getOptid(option)
         const defaultSlot = slots ? slots.default : null
         return isVisible ? h('div', {
           key: useKey || optionKey ? optid : cIndex,
           class: ['vxe-select-option', className ? (XEUtils.isFunction(className) ? className({ option, $select: $xeselect }) : className) : '', {
             'is--disabled': isDisabled,
-            'is--selected': multiple ? (modelValue && modelValue.indexOf(optionValue) > -1) : modelValue === optionValue,
+            'is--selected': isSelected,
             'is--hover': currentValue === optionValue
           }],
           // attrs

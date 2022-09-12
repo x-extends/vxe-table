@@ -5,6 +5,10 @@ import { VXEComponent, VxeComponentBase, SizeType, VNodeStyle, VxeEvent, ValueOf
  * 组件 - 下拉容器
  * @example import { Pulldown as VxePulldown } from 'vxe-table'
  */
+export const VxePulldown: VXEComponent<VxePulldownProps, VxePulldownEventProps>
+/**
+ * 组件 - 下拉容器
+ */
 export const Pulldown: VXEComponent<VxePulldownProps, VxePulldownEventProps>
 
 export type VxePulldownInstance = ComponentPublicInstance<VxePulldownProps, VxePulldownConstructor>

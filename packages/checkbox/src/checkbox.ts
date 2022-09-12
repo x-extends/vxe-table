@@ -42,17 +42,30 @@ export default defineComponent({
 
     const $xecheckboxgroup = inject('$xecheckboxgroup', null as (VxeCheckboxGroupConstructor & VxeCheckboxGroupPrivateMethods) | null)
 
-    const computeDisabled = computed(() => {
-      return props.disabled || ($xecheckboxgroup && $xecheckboxgroup.props.disabled)
+    const computeIsChecked = computed(() => {
+      if ($xecheckboxgroup) {
+        return XEUtils.includes($xecheckboxgroup.props.modelValue, props.label)
+      }
+      return props.modelValue === props.checkedValue
     })
 
-    const computeChecked = computed(() => {
-      return $xecheckboxgroup ? XEUtils.includes($xecheckboxgroup.props.modelValue, props.label) : props.modelValue === props.checkedValue
+    const computeIsDisabled = computed(() => {
+      if (props.disabled) {
+        return true
+      }
+      if ($xecheckboxgroup) {
+        const { props: groupProps } = $xecheckboxgroup
+        const { computeIsMaximize } = $xecheckboxgroup.getComputeMaps()
+        const isMaximize = computeIsMaximize.value
+        const isChecked = computeIsChecked.value
+        return groupProps.disabled || (isMaximize && !isChecked)
+      }
+      return false
     })
 
     const changeEvent = (evnt: Event & { target: { checked: boolean } }) => {
       const { checkedValue, uncheckedValue } = props
-      const isDisabled = computeDisabled.value
+      const isDisabled = computeIsDisabled.value
       if (!isDisabled) {
         const checked = evnt.target.checked
         const value = checked ? checkedValue : uncheckedValue
@@ -80,8 +93,8 @@ export default defineComponent({
 
     const renderVN = () => {
       const vSize = computeSize.value
-      const isDisabled = computeDisabled.value
-      const isChecked = computeChecked.value
+      const isDisabled = computeIsDisabled.value
+      const isChecked = computeIsChecked.value
       const indeterminate = props.indeterminate
       return h('label', {
         class: ['vxe-checkbox', {

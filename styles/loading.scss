@@ -1,3 +1,5 @@
+/**Variable**/
+
 /*加载中*/
 .vxe-loading {
   display: none;
@@ -19,10 +21,10 @@
     left: 0;
     transform: translateY(-50%);
     text-align: center;
-    color: $vxe-primary-color;
+    color: $vxe-loading-color;
   }
   .vxe-loading--default-icon {
-    font-size: 1.2em;
+    font-size: 1.4em;
   }
   .vxe-loading--text {
     padding: 0.4em 0;

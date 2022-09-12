@@ -6,7 +6,11 @@ import { VxeOptionProps, VxeOptionPropTypes } from './option'
 
 /**
  * 组件 - 下拉框
- * @example import { Select as VxeSelect } from 'vxe-table'
+ * @example import { VxeSelect } from 'vxe-table'
+ */
+export const VxeSelect: VXEComponent<VxeSelectProps, VxeSelectEventProps>
+/**
+ * 组件 - 下拉框
  */
 export const Select: VXEComponent<VxeSelectProps, VxeSelectEventProps>
 
@@ -70,6 +74,7 @@ export type VxeSelectProps = {
   filterMethod?: VxeSelectPropTypes.FilterMethod
   remote?: VxeSelectPropTypes.Remote
   remoteMethod?: VxeSelectPropTypes.RemoteMethod
+  max?: VxeSelectPropTypes.Max
   /**
    * 已废弃，被 optionConfig.keyField 替换
    * @deprecated
@@ -103,6 +108,7 @@ export namespace VxeSelectPropTypes {
   export type FilterMethod = (params: { group: any, option: any, searchValue: string }) => boolean
   export type Remote = boolean
   export type RemoteMethod = (params: { searchValue: string }) => Promise<void> | void
+  export type Max = number | string
   /**
    * 选项配置项
    */

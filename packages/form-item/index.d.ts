@@ -1,4 +1,4 @@
-import { FormItem } from '../../types/form-item'
+import { VxeFormItem } from '../../types/form-item'
 
 export * from '../../types/form-item'
-export default FormItem
+export default VxeFormItem

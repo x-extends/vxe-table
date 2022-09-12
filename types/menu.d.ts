@@ -5,7 +5,11 @@ import { VxeGlobalRendererHandles } from './v-x-e-table'
 /**
  * 表格扩展 - 快捷菜单
  */
-export const Menu: VXEComponent<{}>
+export const VxeModuleMenu: VXEComponent<{}>
+/**
+ * 表格扩展 - 快捷菜单
+ */
+ export const Menu: VXEComponent<{}>
 
 export type VxeMenuPanelInstance = ComponentPublicInstance<VxeMenuPanelProps, VxeMenuPanelConstructor>
 

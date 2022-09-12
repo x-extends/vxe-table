@@ -10,7 +10,11 @@ import { VxeMenuPanelInstance } from './menu'
 
 /**
  * 组件 - 表格
- * @example import { Table as VxeTable } from 'vxe-table'
+ * @example import { VxeTable } from 'vxe-table'
+ */
+export const VxeTable: VXEComponent<VxeTableProps, VxeTableEventProps>
+/**
+ * 组件 - 表格
  */
 export const Table: VXEComponent<VxeTableProps, VxeTableEventProps>
 
@@ -81,6 +85,7 @@ export interface TablePrivateComputed {
   computeExpandOpts: ComputedRef<VxeTablePropTypes.ExpandOpts>
   computeTreeOpts: ComputedRef<VxeTablePropTypes.TreeOpts>
   computeEmptyOpts: ComputedRef<VxeTablePropTypes.EmptyOpts>
+  computeLoadingOpts: ComputedRef<VxeTablePropTypes.LoadingOpts>
   computeCustomOpts: ComputedRef<VxeTablePropTypes.CustomOpts>
   computeIsAllCheckboxDisabled: ComputedRef<boolean>
 }
@@ -1422,6 +1427,7 @@ export namespace VxeTablePropTypes {
     trigger?: 'default' | 'cell' | 'row'
     lazy?: boolean
     reserve?: boolean
+    height?: number
     loadMethod?(params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods
       row: any
@@ -1921,6 +1927,12 @@ export namespace VxeTablePropTypes {
   export type ZIndex = number
   export type EmptyText = string
 
+  export interface LoadingConfig {
+    icon?: string
+    text?: string
+  }
+  export interface LoadingOpts extends LoadingConfig { }
+
   export interface EmptyRender extends VxeGlobalRendererHandles.RenderOptions { }
   export interface EmptyOpts extends EmptyRender { }
 
@@ -2052,6 +2064,7 @@ export type VxeTableProps<D = any> = {
   editRules?: VxeTablePropTypes.EditRules
   emptyText?: VxeTablePropTypes.EmptyText
   emptyRender?: VxeTablePropTypes.EmptyRender
+  loadingConfig?: VxeTablePropTypes.LoadingConfig
   /**
    * 不建议使用，后续废弃
    * @deprecated

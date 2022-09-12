@@ -7,7 +7,11 @@ import { VxeTooltipPropTypes } from './tooltip'
 
 /**
  * 组件 - 表格列
- * @example import { Column as VxeColumn } from 'vxe-table'
+ * @example import { VxeColumn } from 'vxe-table'
+ */
+export const VxeColumn: VXEComponent<VxeColumnProps>
+/**
+ * 组件 - 表格列
  */
 export const Column: VXEComponent<VxeColumnProps>
 
@@ -41,7 +45,7 @@ export namespace VxeColumnPropTypes {
     row: any
     column: VxeTableDefines.ColumnInfo
   }) => string | number)
-  export type SortType = 'string' | 'number' | null
+  export type SortType = 'auto' | 'string' | 'number' | null
 
   export interface Filter {
     label?: string | number

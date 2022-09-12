@@ -4,7 +4,11 @@ import { VxeSelectConstructor } from './select'
 
 /**
  * 组件 - 下拉框选项
- * @example import { Option as VxeOption } from 'vxe-table'
+ * @example import { VxeOption } from 'vxe-table'
+ */
+export const VxeOption: VXEComponent<VxeOptionProps>
+/**
+ * 组件 - 下拉框选项
  */
 export const Option: VXEComponent<VxeOptionProps>
 

@@ -5,6 +5,7 @@ import { VXETable } from '../../v-x-e-table'
 import { mergeBodyMethod, getRowid, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
 import { updateCellTitle, getPropClass } from '../../tools/dom'
 import { isEnableConf } from '../../tools/utils'
+import { getSlotVNs } from '../../tools/vn'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
 
@@ -31,7 +32,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xetable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -397,11 +398,14 @@ export default defineComponent({
         )
         // 如果行被展开了
         if (isExpandRow) {
-          let cellStyle
+          const expandOpts = computeExpandOpts.value
+          const { height: expandHeight } = expandOpts
+          const cellStyle: any = {}
+          if (expandHeight) {
+            cellStyle.height = `${expandHeight}px`
+          }
           if (treeConfig) {
-            cellStyle = {
-              paddingLeft: `${(rowLevel * treeOpts.indent) + 30}px`
-            }
+            cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
           }
           const { showOverflow } = expandColumn
           const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
@@ -414,14 +418,18 @@ export default defineComponent({
               ...trOn
             }, [
               h('td', {
-                class: ['vxe-body--expanded-column', {
+                class: {
+                  'vxe-body--expanded-column': 1,
                   'fixed--hidden': fixedType && !hasFixedColumn,
                   'col--ellipsis': hasEllipsis
-                }],
+                },
                 colspan: tableColumn.length
               }, [
                 h('div', {
-                  class: 'vxe-body--expanded-cell',
+                  class: {
+                    'vxe-body--expanded-cell': 1,
+                    'is--ellipsis': expandHeight
+                  },
                   style: cellStyle
                 }, [
                   expandColumn.renderData(expandParams)
@@ -750,7 +758,7 @@ export default defineComponent({
         const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
         const renderEmpty = compConf ? compConf.renderEmpty : null
         if (renderEmpty) {
-          emptyContent = renderEmpty(emptyOpts, { $table: $xetable })
+          emptyContent = getSlotVNs(renderEmpty(emptyOpts, { $table: $xetable }))
         } else {
           emptyContent = tableProps.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
         }

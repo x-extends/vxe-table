@@ -3,7 +3,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle
 
 /**
  * 组件 - 工具提示
- * @example import { Tooltip as VxeTooltip } from 'vxe-table'
+ * @example import { VxeTooltip } from 'vxe-table'
+ */
+export const VxeTooltip: VXEComponent<VxeTooltipProps, VxeTooltipEventProps>
+/**
+ * 组件 - 工具提示
  */
 export const Tooltip: VXEComponent<VxeTooltipProps, VxeTooltipEventProps>
 

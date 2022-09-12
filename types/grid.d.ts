@@ -8,7 +8,11 @@ import { VxeTableInstance, VxeTableDefines, VxeTableEmits, VxeTableConstructor, 
 
 /**
  * 组件 - 高级表格
- * @example import { Grid as VxeGrid } from 'vxe-table'
+ * @example import { VxeGrid } from 'vxe-table'
+ */
+export const VxeGrid: VXEComponent<VxeGridProps, VxeGridEventProps>
+/**
+ * 组件 - 高级表格
  */
 export const Grid: VXEComponent<VxeGridProps, VxeGridEventProps>
 

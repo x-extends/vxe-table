@@ -12,18 +12,18 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、贼灵活的配置项、扩展接口等...  
+一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、贼灵活的配置项等...  
 
 * 设计理念
   * 面向现代浏览器，高效的简洁 API 设计
-  * 模块化表格、按需加载、扩展接口
+  * 模块化表格、按需加载
   * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能
 
 * 计划
   * [x] v1.0 基于 vue2.6+，支持所有主流的浏览器，实现表格的一切实用的功能
   * [x] v2.0 基于 vue2.6+，支持所有主流的浏览器，同时兼具功能与性能
   * [x] v3.0 基于 vue2.6+，支持现代浏览器并保留兼容 IE11，提升渲染性能
-  * [x] v4.0 基于 vue3.0+，只支持现代浏览器，不支持 IE
+  * [x] v4.0 基于 vue3.2+，只支持现代浏览器，不支持 IE
   * [ ] 下一阶段：sticky 渲染模式、css 变量主题、将虚拟滚动提升到极致、虚拟滚动动态行高、数据图表可视化
 
 ## QQ 交流群

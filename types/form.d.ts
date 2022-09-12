@@ -4,7 +4,11 @@ import { VxeFormItemProps, VxeFormItemPropTypes } from './form-item'
 
 /**
  * 组件 - 表单
- * @example import { Form as VxeForm } from 'vxe-table'
+ * @example import { VxeForm } from 'vxe-table'
+ */
+export const VxeForm: VXEComponent<VxeFormProps, VxeFormEventProps>
+/**
+ * 组件 - 表单
  */
 export const Form: VXEComponent<VxeFormProps, VxeFormEventProps>
 

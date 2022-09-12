@@ -3,7 +3,11 @@ import { VxeOptionProps, VxeOptionPropTypes } from './option'
 
 /**
  * 组件 - 下拉框选项分组
- * @example import { Optgroup as VxeOptgroup } from 'vxe-table'
+ * @example import { VxeOptgroup } from 'vxe-table'
+ */
+export const VxeOptgroup: VXEComponent<VxeOptgroupProps>
+/**
+ * 组件 - 下拉框选项分组
  */
 export const Optgroup: VXEComponent<VxeOptgroupProps>
 

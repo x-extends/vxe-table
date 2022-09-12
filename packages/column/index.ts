@@ -2,7 +2,7 @@ import { App } from 'vue'
 import VxeTableColumnComponent from '../table/src/column'
 import { dynamicApp } from '../dynamics'
 
-export const Column = Object.assign(VxeTableColumnComponent, {
+export const VxeColumn = Object.assign(VxeTableColumnComponent, {
   install (app: App) {
     app.component(VxeTableColumnComponent.name, VxeTableColumnComponent)
     // 兼容旧用法
@@ -10,8 +10,10 @@ export const Column = Object.assign(VxeTableColumnComponent, {
   }
 })
 
+export const Column = VxeColumn
+
 dynamicApp.component(VxeTableColumnComponent.name, VxeTableColumnComponent)
 // 兼容旧用法
 dynamicApp.component('VxeTableColumn', VxeTableColumnComponent)
 
-export default Column
+export default VxeColumn

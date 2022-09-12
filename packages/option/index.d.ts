@@ -1,4 +1,4 @@
-import { Select } from '../../types/select'
+import { VxeSelect } from '../../types/select'
 
 export * from '../../types/select'
-export default Select
+export default VxeSelect

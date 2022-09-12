@@ -18,42 +18,40 @@ import VirtualTreeAPILink from './components/VirtualTreeAPILink.vue'
 import {
   VXETable,
 
-  Icon,
-  Filter,
-  Menu,
-  Edit,
-  Export,
-  Keyboard,
-  Validator,
-  Header,
-  Footer,
+  VxeModuleFilter,
+  VxeModuleMenu,
+  VxeModuleEdit,
+  VxeModuleExport,
+  VxeModuleKeyboard,
+  VxeModuleValidator,
 
-  Column,
-  Colgroup,
-  Grid,
-  Toolbar,
-  Pager,
-  Checkbox,
-  CheckboxGroup,
-  Radio,
-  RadioGroup,
-  RadioButton,
-  Input,
-  Textarea,
-  Button,
-  Modal,
-  Tooltip,
-  Form,
-  FormItem,
-  FormGather,
-  Select,
-  Optgroup,
-  Option,
-  Switch,
-  List,
-  Pulldown,
+  VxeIcon,
+  VxeColumn,
+  VxeColgroup,
+  VxeGrid,
+  VxeToolbar,
+  VxePager,
+  VxeCheckbox,
+  VxeCheckboxGroup,
+  VxeRadio,
+  VxeRadioGroup,
+  VxeRadioButton,
+  VxeInput,
+  VxeTextarea,
+  VxeButton,
+  VxeModal,
+  VxeTooltip,
+  VxeForm,
+  VxeFormItem,
+  VxeFormGather,
+  VxeSelect,
+  VxeOptgroup,
+  VxeOption,
+  VxeSwitch,
+  VxeList,
+  VxePulldown,
 
-  Table
+  VxeTable
 } from '../packages/all'
 
 const app = createApp(App)
@@ -66,42 +64,39 @@ app.component(ToolbarAPILink.name, ToolbarAPILink)
 app.component(PagerAPILink.name, PagerAPILink)
 app.component(VirtualTreeAPILink.name, VirtualTreeAPILink)
 
-app.use(Icon)
-app.use(Filter)
-app.use(Menu)
-app.use(Edit)
-app.use(Export)
-app.use(Keyboard)
-app.use(Validator)
-app.use(Header)
-app.use(Footer)
+app.use(VxeModuleFilter)
+app.use(VxeModuleMenu)
+app.use(VxeModuleEdit)
+app.use(VxeModuleExport)
+app.use(VxeModuleKeyboard)
+app.use(VxeModuleValidator)
 
-app.use(Column)
-app.use(Colgroup)
-app.use(Grid)
-app.use(Toolbar)
-app.use(Pager)
-app.use(Checkbox)
-app.use(CheckboxGroup)
-app.use(Radio)
-app.use(RadioGroup)
-app.use(RadioButton)
-app.use(Input)
-app.use(Textarea)
-app.use(Button)
-app.use(Modal)
-app.use(Select)
-app.use(Optgroup)
-app.use(Option)
-app.use(Switch)
-app.use(Tooltip)
-app.use(Form)
-app.use(FormItem)
-app.use(FormGather)
-app.use(List)
-app.use(Pulldown)
-
-app.use(Table)
+app.use(VxeIcon)
+app.use(VxeColumn)
+app.use(VxeColgroup)
+app.use(VxeGrid)
+app.use(VxeToolbar)
+app.use(VxePager)
+app.use(VxeCheckbox)
+app.use(VxeCheckboxGroup)
+app.use(VxeRadio)
+app.use(VxeRadioGroup)
+app.use(VxeRadioButton)
+app.use(VxeInput)
+app.use(VxeTextarea)
+app.use(VxeButton)
+app.use(VxeModal)
+app.use(VxeSelect)
+app.use(VxeOptgroup)
+app.use(VxeOption)
+app.use(VxeSwitch)
+app.use(VxeTooltip)
+app.use(VxeForm)
+app.use(VxeFormItem)
+app.use(VxeFormGather)
+app.use(VxeList)
+app.use(VxePulldown)
+app.use(VxeTable)
 
 app.use(store)
 app.use(router)

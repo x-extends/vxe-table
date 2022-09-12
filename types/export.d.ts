@@ -5,6 +5,10 @@ import { VxeGridConstructor } from './grid'
 /**
  * 表格扩展 - 导出、导入、打印
  */
+export const VxeModuleExport: VXEComponent<{}>
+/**
+ * 表格扩展 - 导出、导入、打印
+ */
 export const Export: VXEComponent<{}>
 
 export interface TableExportMethods {

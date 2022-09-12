@@ -603,7 +603,7 @@ export default defineComponent({
          */
         h(VxeLoading, {
           class: 'vxe-form--loading',
-          loading
+          modelValue: loading
         }),
         /**
          * 工具提示

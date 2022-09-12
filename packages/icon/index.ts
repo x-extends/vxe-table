@@ -1,6 +1,15 @@
-export const Icon = {
-  /* eslint-disable @typescript-eslint/no-empty-function */
-  install () {}
-}
+import { App } from 'vue'
+import VxeIconComponent from './src/icon'
+import { dynamicApp } from '../dynamics'
 
-export default Icon
+export const VxeIcon = Object.assign(VxeIconComponent, {
+  install (app: App) {
+    app.component(VxeIconComponent.name, VxeIconComponent)
+  }
+})
+
+export const Icon = VxeIcon
+
+dynamicApp.component(VxeIcon.name, VxeIcon)
+
+export default VxeIcon

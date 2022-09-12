@@ -108,6 +108,22 @@
         <vxe-option value="13" label="选项13"></vxe-option>
         <vxe-option value="14" label="选项14"></vxe-option>
       </vxe-select>
+      <vxe-select v-model="demo1.value36" placeholder="多选限制数量" :max="3" multiple clearable>
+        <vxe-option value="1" label="选项1"></vxe-option>
+        <vxe-option value="2" label="选项2"></vxe-option>
+        <vxe-option value="3" label="选项3"></vxe-option>
+        <vxe-option value="4" label="选项4"></vxe-option>
+        <vxe-option value="5" label="选项5"></vxe-option>
+        <vxe-option value="6" label="选项6"></vxe-option>
+        <vxe-option value="7" label="选项7"></vxe-option>
+        <vxe-option value="8" label="选项8"></vxe-option>
+        <vxe-option value="9" label="选项9"></vxe-option>
+        <vxe-option value="10" label="选项10"></vxe-option>
+        <vxe-option value="11" label="选项11"></vxe-option>
+        <vxe-option value="12" label="选项12"></vxe-option>
+        <vxe-option value="13" label="选项13"></vxe-option>
+        <vxe-option value="14" label="选项14"></vxe-option>
+      </vxe-select>
       <vxe-select v-model="demo1.value35" placeholder="自定义模板" clearable>
         <vxe-option value="1" label="选项1"></vxe-option>
         <vxe-option value="2" label="选项2"></vxe-option>
@@ -217,6 +233,7 @@ export default defineComponent({
       value33: null,
       value34: ['9', '11'],
       value35: null,
+      value36: null,
       value40: null,
       list40: [],
       value41: null,

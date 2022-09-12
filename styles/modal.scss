@@ -150,11 +150,6 @@
     }
   }
 
-  &.type--modal {
-    .vxe-modal--header {
-      padding: 0.6em 4.6em 0.6em 1em;
-    }
-  }
   &.type--alert,
   &.type--confirm {
     .vxe-modal--status-wrapper {
@@ -238,35 +233,43 @@
     flex-grow: 1;
   }
   .vxe-modal--header {
+    display: flex;
+    flex-direction: row;
     flex-shrink: 0;
     font-size: 1.1em;
     font-weight: 700;
-    padding: 0.6em 2.8em 0.6em 1em;
     border-bottom: 1px solid $vxe-modal-border-color;
     background-color: $vxe-modal-header-background-color;
     border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;
     &.is--draggable {
-      cursor: move;
+      .vxe-modal--header-title {
+        cursor: move;
+      }
     }
     &.is--ellipsis {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      .vxe-modal--header-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
+  }
+  .vxe-modal--header-title {
+    flex-grow: 1;
+    padding: 0.6em 0 0.6em 1em;
+  }
+  .vxe-modal--header-right {
+    flex-shrink: 0;
+    padding: 0.6em 1em 0.6em 0;
   }
   .vxe-modal--zoom-btn,
   .vxe-modal--close-btn {
-    position: absolute;
-    right: 14px;
-    z-index: 1;
     cursor: pointer;
+    margin-left: 0.6em;
     &:hover {
       color: $vxe-primary-color;
     }
-  }
-  .vxe-modal--zoom-btn {
-    right: 44px;
   }
   .vxe-modal--footer {
     flex-shrink: 0;

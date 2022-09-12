@@ -1,4 +1,4 @@
-import { Textarea } from '../../types/textarea'
+import { VxeTextarea } from '../../types/textarea'
 
 export * from '../../types/textarea'
-export default Textarea
+export default VxeTextarea

@@ -111,32 +111,3 @@
 .vxe-table--filter-option {
   @extend %XECheckboxIcon;
 }
-
-.vxe-table {
-  .vxe-table--filter-option {
-    & > .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-default;
-    }
-  }
-  &.size--medium {
-    .vxe-table--filter-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-medium;
-      }
-    }
-  }
-  &.size--small {
-    .vxe-table--filter-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-small;
-      }
-    }
-  }
-  &.size--mini {
-    .vxe-table--filter-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-mini;
-      }
-    }
-  }
-}

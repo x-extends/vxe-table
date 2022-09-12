@@ -6,7 +6,11 @@ import { VxeButtonProps } from './button'
 
 /**
  * 组件 - 工具栏
- * @example import { Toolbar as VxeToolbar } from 'vxe-table'
+ * @example import { VxeToolbar } from 'vxe-table'
+ */
+export const VxeToolbar: VXEComponent<VxeToolbarProps, VxeToolbarEventProps>
+/**
+ * 组件 - 工具栏
  */
 export const Toolbar: VXEComponent<VxeToolbarProps, VxeToolbarEventProps>
 
@@ -37,9 +41,14 @@ export namespace VxeToolbarPropTypes {
   export interface ResizableOpts extends ResizableConfig { }
 
   interface RefreshConfig {
-    query?(params: {}): Promise<any>
+    queryMethod?(params: {}): Promise<any>
+    code?: 'query' | 'reload'
     icon?: string
     iconLoading?: string
+    /**
+     * @deprecated 请使用 queryMethod
+     */
+    query?(params: {}): Promise<any>
   }
   export type Refresh = boolean | RefreshConfig
   export interface RefreshOpts extends RefreshConfig { }

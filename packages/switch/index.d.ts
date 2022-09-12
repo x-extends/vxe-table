@@ -1,4 +1,4 @@
-import { Switch } from '../../types/switch'
+import { VxeSwitch } from '../../types/switch'
 
 export * from '../../types/switch'
-export default Switch
+export default VxeSwitch

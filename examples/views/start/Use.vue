@@ -35,48 +35,46 @@
         import { App, createApp } = 'vue'
         import 'xe-utils'
         import {
-          // 核心
+          // 实例对象
           VXETable,
 
           // 表格功能
-          Header,
-          // Footer,
-          // Icon,
-          // Filter,
-          // Edit,
-          // Menu,
-          // Export,
-          // Keyboard,
-          // Validator,
+          // VxeModuleFilter,
+          // VxeModuleEdit,
+          // VxeModuleMenu,
+          // VxeModuleExport,
+          // VxeModuleKeyboard,
+          // VxeModuleValidator,
 
           // 可选组件
-          Column,
-          // Colgroup,
-          // Grid,
-          // Tooltip,
-          // Toolbar,
-          // Pager,
-          // Form,
-          // FormItem,
-          // FormGather,
-          // Checkbox,
-          // CheckboxGroup,
-          // Radio,
-          // RadioGroup,
-          // RadioButton,
-          // Switch,
-          // Input,
-          // Select,
-          // Optgroup,
-          // Option,
-          // Textarea,
-          // Button,
-          // Modal,
-          // List,
-          // Pulldown,
+          VxeIcon,
+          VxeColumn,
+          // VxeColgroup,
+          // VxeGrid,
+          // VxeTooltip,
+          // VxeToolbar,
+          // VxePager,
+          // VxeForm,
+          // VxeFormItem,
+          // VxeFormGather,
+          // VxeCheckbox,
+          // VxeCheckboxGroup,
+          // VxeRadio,
+          // VxeRadioGroup,
+          // VxeRadioButton,
+          // VxeSwitch,
+          // VxeInput,
+          // VxeSelect,
+          // VxeOptgroup,
+          // VxeOption,
+          // VxeTextarea,
+          // VxeButton,
+          // VxeModal,
+          // VxeList,
+          // VxePulldown,
 
           // 表格
-          Table
+          VxeTable
         } from 'vxe-table'
         import zhCN from 'vxe-table/es/locale/lang/zh-CN'
 
@@ -87,44 +85,42 @@
 
         function useTable (app: App) {
           // 表格功能
-          app.use(Header)
-          // .use(Footer)
-          // .use(Icon)
-          // .use(Filter)
-          // .use(Edit)
-          // .use(Menu)
-          // .use(Export)
-          // .use(Keyboard)
-          // .use(Validator)
+          app.use(VxeModuleFilter)
+          // .use(VxeModuleEdit)
+          // .use(VxeModuleMenu)
+          // .use(VxeModuleExport)
+          // .use(VxeModuleKeyboard)
+          // .use(VxeModuleValidator)
 
           // 可选组件
-          .use(Column)
-          // .use(Colgroup)
-          // .use(Grid)
-          // .use(Tooltip)
-          // .use(Toolbar)
-          // .use(Pager)
-          // .use(Form)
-          // .use(FormItem)
-          // .use(FormGather)
-          // .use(Checkbox)
-          // .use(CheckboxGroup)
-          // .use(Radio)
-          // .use(RadioGroup)
-          // .use(RadioButton)
-          // .use(Switch)
-          // .use(Input)
-          // .use(Select)
-          // .use(Optgroup)
-          // .use(Option)
-          // .use(Textarea)
-          // .use(Button)
-          // .use(Modal)
-          // .use(List)
-          // .use(Pulldown)
+          .use(VxeIcon)
+          .use(VxeColumn)
+          // .use(VxeColgroup)
+          // .use(VxeGrid)
+          // .use(VxeTooltip)
+          // .use(VxeToolbar)
+          // .use(VxePager)
+          // .use(VxeForm)
+          // .use(VxeFormItem)
+          // .use(VxeFormGather)
+          // .use(VxeCheckbox)
+          // .use(VxeCheckboxGroup)
+          // .use(VxeRadio)
+          // .use(VxeRadioGroup)
+          // .use(VxeRadioButton)
+          // .use(VxeSwitch)
+          // .use(VxeInput)
+          // .use(VxeSelect)
+          // .use(VxeOptgroup)
+          // .use(VxeOption)
+          // .use(VxeTextarea)
+          // .use(VxeButton)
+          // .use(VxeModal)
+          // .use(VxeList)
+          // .use(VxePulldown)
 
           // 安装表格
-          .use(Table)
+          .use(VxeTable)
 
           // 给 vue 实例挂载内部对象，例如：
           // app.config.globalProperties.$XModal = VXETable.modal

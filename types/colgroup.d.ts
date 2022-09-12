@@ -3,7 +3,11 @@ import { VxeColumnPropTypes } from './column'
 
 /**
  * 组件 - 表格分组列
- * @example import { Colgroup as VxeColgroup } from 'vxe-table'
+ * @example import { VxeColgroup } from 'vxe-table'
+ */
+export const VxeColgroup: VXEComponent<VxeColgroupProps>
+/**
+ * 组件 - 表格分组列
  */
 export const Colgroup: VXEComponent<VxeColgroupProps>
 

@@ -147,6 +147,8 @@ export default {
   validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
   // 校验规则配置项
   editRules: Object as PropType<VxeTablePropTypes.EditRules>,
+  // 加载中配置项
+  loadingConfig: Object as PropType<VxeTablePropTypes.LoadingConfig>,
   // 空内容渲染配置项
   emptyRender: Object as PropType<VxeTablePropTypes.EmptyRender>,
   // 自定义列配置项

@@ -1,6 +1,7 @@
 import { App } from 'vue'
 import { VXETableSetupOptions, VXETableCore } from './v-x-e-table'
 
+import { Icon } from './icon'
 import { Table } from './table'
 import { Column } from './column'
 import { Colgroup } from './colgroup'
@@ -33,6 +34,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     VXETable: VXETableCore
 
+    VxeIcon: typeof Icon
     VxeTable: typeof Table
     VxeColumn: typeof Column
     VxeColgroup: typeof Colgroup
@@ -72,8 +74,6 @@ export * from './v-x-e-table'
 export * from './component'
 
 // Module
-export * from './footer'
-export * from './icon'
 export * from './filter'
 export * from './menu'
 export * from './edit'
@@ -82,6 +82,8 @@ export * from './keyboard'
 export * from './validator'
 
 // Component
+export * from './icon'
+export * from './loading'
 export * from './table'
 export * from './column'
 export * from './colgroup'

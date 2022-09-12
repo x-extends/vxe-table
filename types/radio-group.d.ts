@@ -3,7 +3,11 @@ import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './c
 
 /**
  * 组件 - 单选框组
- * @example import { RadioGroup as VxeRadioGroup } from 'vxe-table'
+ * @example import { VxeRadioGroup } from 'vxe-table'
+ */
+export const VxeRadioGroup: VXEComponent<VxeRadioGroupProps, VxeRadioGroupEventProps>
+/**
+ * 组件 - 单选框组
  */
 export const RadioGroup: VXEComponent<VxeRadioGroupProps, VxeRadioGroupEventProps>
 

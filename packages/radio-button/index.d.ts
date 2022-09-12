@@ -1,4 +1,4 @@
-import { RadioButton } from '../../types/radio-button'
+import { VxeRadioButton } from '../../types/radio-button'
 
 export * from '../../types/radio-button'
-export default RadioButton
+export default VxeRadioButton

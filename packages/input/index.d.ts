@@ -1,4 +1,4 @@
-import { Input } from '../../types/input'
+import { VxeInput } from '../../types/input'
 
 export * from '../../types/input'
-export default Input
+export default VxeInput

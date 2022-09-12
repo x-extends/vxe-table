@@ -1,4 +1,4 @@
-import { Button } from '../../types/button'
+import { VxeButton } from '../../types/button'
 
 export * from '../../types/button'
-export default Button
+export default VxeButton

@@ -1,32 +1,44 @@
-import { defineComponent, h } from 'vue'
+import { defineComponent, h, computed } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 
 export default defineComponent({
   name: 'VxeLoading',
   props: {
-    loading: Boolean
+    modelValue: Boolean,
+    icon: String,
+    text: String
   },
-  render () {
-    const icon = GlobalConfig.icon.LOADING
-    const loadingText = GlobalConfig.loadingText
-    const text = loadingText === null ? loadingText : GlobalConfig.i18n('vxe.loading.text')
-    return h('div', {
-      class: ['vxe-loading', {
-        'is--visible': this.loading
-      }]
-    }, [
-      h('div', {
-        class: 'vxe-loading--chunk'
+  setup (props) {
+    const computeLoadingIcon = computed(() => {
+      return props.icon || GlobalConfig.icon.LOADING
+    })
+
+    const computeLoadingText = computed(() => {
+      const loadingText = GlobalConfig.loadingText
+      return props.text || (loadingText === null ? loadingText : GlobalConfig.i18n('vxe.loading.text'))
+    })
+
+    return () => {
+      const loadingIcon = computeLoadingIcon.value
+      const loadingText = computeLoadingText.value
+      return h('div', {
+        class: ['vxe-loading', {
+          'is--visible': props.modelValue
+        }]
       }, [
-        icon ? h('i', {
-          class: icon
-        }) : h('div', {
-          class: 'vxe-loading--spinner'
-        }),
-        text ? h('div', {
-          class: 'vxe-loading--text'
-        }, `${text}`) : null
+        h('div', {
+          class: 'vxe-loading--chunk'
+        }, [
+          loadingIcon ? h('i', {
+            class: loadingIcon
+          }) : h('div', {
+            class: 'vxe-loading--spinner'
+          }),
+          loadingText ? h('div', {
+            class: 'vxe-loading--text'
+          }, `${loadingText}`) : null
+        ])
       ])
-    ])
+    }
   }
 })

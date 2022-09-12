@@ -1,4 +1,4 @@
-import { Tooltip } from '../../types/tooltip'
+import { VxeTooltip } from '../../types/tooltip'
 
 export * from '../../types/tooltip'
-export default Tooltip
+export default VxeTooltip

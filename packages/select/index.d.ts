@@ -1,4 +1,4 @@
-import { Optgroup } from '../../types/optgroup'
+import { VxeOptgroup } from '../../types/optgroup'
 
 export * from '../../types/optgroup'
-export default Optgroup
+export default VxeOptgroup

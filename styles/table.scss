@@ -2,6 +2,7 @@
 @import './helpers/mixin.scss';
 @import './base/checked.scss';
 @import './base/common.scss';
+@import './loading.scss';
 
 %DefaultColumnHeight {
   height: $vxe-table-row-height-default;
@@ -1004,6 +1005,7 @@
   .vxe-table--expanded {
     cursor: pointer;
     .vxe-table--expand-btn {
+      display: inline-block;
       width: 1em;
       height: 1em;
       text-align: center;
@@ -1030,6 +1032,9 @@
   .vxe-body--expanded-cell {
     position: relative;
     z-index: 1;
+    &.is--ellipsis {
+      overflow: auto;
+    }
   }
 
   /*设置列高度*/
@@ -1301,6 +1306,29 @@
     &.fixed-right--wrapper {
       .expand-wrapper{
         visibility: hidden;
+      }
+    }
+  }
+}
+
+/*footer*/
+.vxe-table--footer-wrapper {
+  color: $vxe-table-footer-font-color;
+  margin-top: -1px;
+  &.body--wrapper{
+    overflow-x: auto;
+  }
+}
+
+.vxe-footer--column {
+  &.col--ellipsis {
+    & > .vxe-cell {
+      display: flex;
+      align-items: center;
+      .vxe-cell--item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

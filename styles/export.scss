@@ -123,32 +123,3 @@
 .vxe-export--panel-column-option {
   @extend %XECheckboxIcon;
 }
-
-.vxe-modal--wrapper {
-  .vxe-export--panel-column-option {
-    & > .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-default;
-    }
-  }
-  &.size--medium {
-    .vxe-export--panel-column-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-medium;
-      }
-    }
-  }
-  &.size--small {
-    .vxe-export--panel-column-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-small;
-      }
-    }
-  }
-  &.size--mini {
-    .vxe-export--panel-column-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-mini;
-      }
-    }
-  }
-}

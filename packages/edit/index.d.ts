@@ -1,4 +1,4 @@
-import { Edit } from '../../types/edit'
+import { VxeModuleEdit } from '../../types/edit'
 
 export * from '../../types/edit'
-export default Edit
+export default VxeModuleEdit
