@@ -45,7 +45,7 @@ export namespace VxeColumnPropTypes {
     row: any
     column: VxeTableDefines.ColumnInfo
   }) => string | number)
-  export type SortType = 'string' | 'number' | null
+  export type SortType = 'auto' | 'string' | 'number' | null
 
   export interface Filter {
     label?: string | number

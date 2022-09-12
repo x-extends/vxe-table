@@ -174,7 +174,7 @@ export function isColumnInfo (column: any): column is ColumnInfo {
   return column && (column.constructor === ColumnInfo || column instanceof ColumnInfo)
 }
 
-export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any) {
+export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any): any {
   return isColumnInfo(options) ? options : reactive(new ColumnInfo($xetable, options, renderOptions))
 }
 

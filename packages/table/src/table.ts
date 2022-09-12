@@ -18,7 +18,7 @@ import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps } from '../../../types/all'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes } from '../../../types/all'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -698,7 +698,7 @@ export default defineComponent({
       return { rowHeight: 0, visibleSize: 8 }
     }
 
-    const calculateMergerOffserIndex = (list: any, offsetItem: any, type: 'row' | 'col') => {
+    const calculateMergerOffserIndex = (list: any[], offsetItem: any, type: 'row' | 'col') => {
       for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
         const mergeItem = list[mcIndex]
         const { startIndex, endIndex } = offsetItem
@@ -727,8 +727,8 @@ export default defineComponent({
         if (treeConfig && merges.length) {
           errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
-        merges.forEach((item: any) => {
-          let { row, col, rowspan, colspan }: any = item
+        merges.forEach((item) => {
+          let { row, col, rowspan, colspan } = item
           if (rowList && XEUtils.isNumber(row)) {
             row = rowList[row]
           }
@@ -739,7 +739,7 @@ export default defineComponent({
             rowspan = XEUtils.toNumber(rowspan) || 1
             colspan = XEUtils.toNumber(colspan) || 1
             if (rowspan > 1 || colspan > 1) {
-              const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && (item._col.id === col || item._col.id === col.id))
+              const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && ((item as any)._col.id === col || item._col.id === (col as VxeTableDefines.ColumnInfo).id))
               const mergeItem = mList[mcIndex]
               if (mergeItem) {
                 mergeItem.rowspan = rowspan
@@ -767,7 +767,7 @@ export default defineComponent({
     }
 
     const removeMerges = (merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[], mList: VxeTableDefines.MergeItem[], rowList?: any) => {
-      const rest: any[] = []
+      const rest: VxeTableDefines.MergeItem[] = []
       if (merges) {
         const { treeConfig } = props
         const { visibleColumn } = internalData
@@ -777,15 +777,15 @@ export default defineComponent({
         if (treeConfig && merges.length) {
           errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
-        merges.forEach((item: any) => {
-          let { row, col }: any = item
+        merges.forEach((item) => {
+          let { row, col } = item
           if (rowList && XEUtils.isNumber(row)) {
             row = rowList[row]
           }
           if (XEUtils.isNumber(col)) {
             col = visibleColumn[col]
           }
-          const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && (item._col.id === col || item._col.id === col.id))
+          const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && ((item as any)._col.id === col || item._col.id === (col as VxeTableDefines.ColumnInfo).id))
           if (mcIndex > -1) {
             const rItems = mList.splice(mcIndex, 1)
             rest.push(rItems[0])
@@ -797,7 +797,7 @@ export default defineComponent({
 
     const clearAllSort = () => {
       const { tableFullColumn } = internalData
-      tableFullColumn.forEach((column: any) => {
+      tableFullColumn.forEach((column) => {
         column.order = null
       })
     }
@@ -833,7 +833,13 @@ export default defineComponent({
       const isResizable = storage === true || (storage && storage.resizable)
       const isVisible = storage === true || (storage && storage.visible)
       if (customConfig && (isResizable || isVisible)) {
-        const customMap: any = {}
+        const customMap: {
+          [key: string]: {
+            field?: VxeColumnPropTypes.Field
+            resizeWidth?: number
+            visible?: boolean
+          }
+        } = {}
         if (!id) {
           errLog('vxe.error.reqProp', ['id'])
           return
@@ -841,7 +847,7 @@ export default defineComponent({
         if (isResizable) {
           const columnWidthStorage = getCustomStorageMap(resizableStorageKey)[id]
           if (columnWidthStorage) {
-            XEUtils.each(columnWidthStorage, (resizeWidth, field) => {
+            XEUtils.each(columnWidthStorage, (resizeWidth: number, field) => {
               customMap[field] = { field, resizeWidth }
             })
           }
@@ -850,16 +856,16 @@ export default defineComponent({
           const columnVisibleStorage = getCustomStorageMap(visibleStorageKey)[id]
           if (columnVisibleStorage) {
             const colVisibles = columnVisibleStorage.split('|')
-            const colHides = colVisibles[0] ? colVisibles[0].split(',') : []
-            const colShows = colVisibles[1] ? colVisibles[1].split(',') : []
-            colHides.forEach((field: any) => {
+            const colHides: string[] = colVisibles[0] ? colVisibles[0].split(',') : []
+            const colShows: string[] = colVisibles[1] ? colVisibles[1].split(',') : []
+            colHides.forEach((field) => {
               if (customMap[field]) {
                 customMap[field].visible = false
               } else {
                 customMap[field] = { field, visible: false }
               }
             })
-            colShows.forEach((field: any) => {
+            colShows.forEach((field) => {
               if (customMap[field]) {
                 customMap[field].visible = true
               } else {
@@ -868,8 +874,10 @@ export default defineComponent({
             })
           }
         }
-        const keyMap: any = {}
-        XEUtils.eachTree(collectColumn, (column: any) => {
+        const keyMap: {
+          [key: string]: VxeTableDefines.ColumnInfo
+        } = {}
+        XEUtils.eachTree(collectColumn, (column) => {
           const colKey = column.getKey()
           if (colKey) {
             keyMap[colKey] = column
@@ -900,11 +908,11 @@ export default defineComponent({
       const mouseOpts = computeMouseOpts.value
       const isGroup = collectColumn.some(hasChildrenList)
       let isAllOverflow = !!props.showOverflow
-      let expandColumn: any
-      let treeNodeColumn: any
-      let checkboxColumn: any
-      let radioColumn: any
-      let hasFixed: any
+      let expandColumn: VxeTableDefines.ColumnInfo | undefined
+      let treeNodeColumn: VxeTableDefines.ColumnInfo | undefined
+      let checkboxColumn: VxeTableDefines.ColumnInfo | undefined
+      let radioColumn: VxeTableDefines.ColumnInfo | undefined
+      let hasFixed: VxeColumnPropTypes.Fixed | undefined
       const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parent?: VxeTableDefines.ColumnInfo) => {
         const { id: colid, field, fixed, type, treeNode } = column
         const rest = { column, colid, index, items, parent }
@@ -1014,32 +1022,32 @@ export default defineComponent({
       const { columnStore } = reactData
       const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
       // 最小宽
-      pxMinList.forEach((column: any) => {
-        const minWidth = parseInt(column.minWidth)
+      pxMinList.forEach((column) => {
+        const minWidth = XEUtils.toInteger(column.minWidth)
         tableWidth += minWidth
         column.renderWidth = minWidth
       })
       // 最小百分比
-      scaleMinList.forEach((column: any) => {
-        const scaleWidth = Math.floor(parseInt(column.minWidth) * meanWidth)
+      scaleMinList.forEach((column) => {
+        const scaleWidth = Math.floor(XEUtils.toInteger(column.minWidth) * meanWidth)
         tableWidth += scaleWidth
         column.renderWidth = scaleWidth
       })
       // 固定百分比
-      scaleList.forEach((column: any) => {
-        const scaleWidth = Math.floor(parseInt(column.width) * meanWidth)
+      scaleList.forEach((column) => {
+        const scaleWidth = Math.floor(XEUtils.toInteger(column.width) * meanWidth)
         tableWidth += scaleWidth
         column.renderWidth = scaleWidth
       })
       // 固定宽
-      pxList.forEach((column: any) => {
-        const width = parseInt(column.width)
+      pxList.forEach((column) => {
+        const width = XEUtils.toInteger(column.width)
         tableWidth += width
         column.renderWidth = width
       })
       // 调整了列宽
-      resizeList.forEach((column: any) => {
-        const width = parseInt(column.resizeWidth)
+      resizeList.forEach((column) => {
+        const width = XEUtils.toInteger(column.resizeWidth)
         tableWidth += width
         column.renderWidth = width
       })
@@ -1047,7 +1055,7 @@ export default defineComponent({
       meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoList.length)) : 0
       if (fit) {
         if (remainWidth > 0) {
-          scaleMinList.concat(pxMinList).forEach((column: any) => {
+          scaleMinList.concat(pxMinList).forEach((column) => {
             tableWidth += meanWidth
             column.renderWidth += meanWidth
           })
@@ -1056,7 +1064,7 @@ export default defineComponent({
         meanWidth = minCellWidth
       }
       // 自适应
-      autoList.forEach((column: any) => {
+      autoList.forEach((column) => {
         const width = Math.max(meanWidth, minCellWidth)
         column.renderWidth = width
         tableWidth += width
@@ -1126,7 +1134,7 @@ export default defineComponent({
       }
     }
 
-    const getOrderField = (column: any) => {
+    const getOrderField = (column: VxeTableDefines.ColumnInfo) => {
       const { sortBy, sortType } = column
       return (row: any) => {
         let cellValue
@@ -1195,7 +1203,7 @@ export default defineComponent({
       const { treeExpandeds } = reactData
       const treeOpts = computeTreeOpts.value
       if (treeConfig && treeOpts.transform) {
-        const fullData: any = []
+        const fullData: any[] = []
         const expandMaps: Map<any, number> = new Map()
         XEUtils.eachTree(internalData.afterTreeFullData, (row, index, items, path, parent) => {
           if (!parent || (expandMaps.has(parent) && $xetable.findRowIndexOf(treeExpandeds, parent) > -1)) {
@@ -1391,12 +1399,6 @@ export default defineComponent({
 
             if (tableElem) {
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
-              // 修复 IE 中高度无法自适应问题
-              if (browse.msie) {
-                XEUtils.arrayEach(tableElem.querySelectorAll('.vxe-resizable'), (resizeElem: any) => {
-                  resizeElem.style.height = `${resizeElem.parentNode.offsetHeight}px`
-                })
-              }
             }
 
             const repairRef = elemStore[`${name}-${layout}-repair`]
@@ -1894,7 +1896,7 @@ export default defineComponent({
         // 计算 X 逻辑
         if (scrollXLoad) {
           const { visibleSize: visibleXSize } = computeVirtualX()
-          const offsetXSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
+          const offsetXSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : (browse.edge ? 5 : 0)
           scrollXStore.offsetSize = offsetXSize
           scrollXStore.visibleSize = visibleXSize
           scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
@@ -1906,7 +1908,7 @@ export default defineComponent({
         const { rowHeight, visibleSize: visibleYSize } = computeVirtualY()
         scrollYStore.rowHeight = rowHeight
         if (scrollYLoad) {
-          const offsetYSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
+          const offsetYSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : (browse.edge ? 10 : 0)
           scrollYStore.offsetSize = offsetYSize
           scrollYStore.visibleSize = visibleYSize
           scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
@@ -2102,26 +2104,26 @@ export default defineComponent({
     }
 
     // 获取所有的列，排除分组
-    const getColumnList = (columns: any) => {
-      const result: any[] = []
-      columns.forEach((column: any) => {
+    const getColumnList = (columns: VxeTableDefines.ColumnInfo[]) => {
+      const result: VxeTableDefines.ColumnInfo[] = []
+      columns.forEach((column) => {
         result.push(...(column.children && column.children.length ? getColumnList(column.children) : [column]))
       })
       return result
     }
 
     const parseColumns = () => {
-      const leftList: any[] = []
-      const centerList: any[] = []
-      const rightList: any[] = []
+      const leftList: VxeTableDefines.ColumnInfo[] = []
+      const centerList: VxeTableDefines.ColumnInfo[] = []
+      const rightList: VxeTableDefines.ColumnInfo[] = []
       const { isGroup, columnStore } = reactData
       const sXOpts = computeSXOpts.value
       const { collectColumn, tableFullColumn, scrollXStore, fullColumnIdData } = internalData
       // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
       if (isGroup) {
-        const leftGroupList: any[] = []
-        const centerGroupList: any[] = []
-        const rightGroupList: any[] = []
+        const leftGroupList: VxeTableDefines.ColumnInfo[] = []
+        const centerGroupList: VxeTableDefines.ColumnInfo[] = []
+        const rightGroupList: VxeTableDefines.ColumnInfo[] = []
         XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
           const isColGroup = hasChildrenList(column)
           // 如果是分组，必须按组设置固定列，不允许给子列设置固定
@@ -2217,7 +2219,7 @@ export default defineComponent({
       })
     }
 
-    const handleColumn = (collectColumn: any) => {
+    const handleColumn = (collectColumn: VxeTableDefines.ColumnInfo[]) => {
       internalData.collectColumn = collectColumn
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
@@ -2690,7 +2692,7 @@ export default defineComponent({
        * @param {Array/Row} rows 行数据
        * @param {String} field 字段名
        */
-      clearData (rows: any, field: any) {
+      clearData (rows: any, field: string) {
         const { tableFullData, visibleColumn } = internalData
         if (!arguments.length) {
           rows = tableFullData
@@ -3046,11 +3048,11 @@ export default defineComponent({
        * @param {Array/Row} rows 行数据
        * @param {Boolean} value 是否选中
        */
-      setCheckboxRow (rows, value) {
+      setCheckboxRow (rows: any, value) {
         if (rows && !XEUtils.isArray(rows)) {
           rows = [rows]
         }
-        (rows as any[]).forEach((row) => tablePrivateMethods.handleSelectRow({ row }, !!value))
+        rows.forEach((row: any) => tablePrivateMethods.handleSelectRow({ row }, !!value))
         return nextTick()
       },
       isCheckedByCheckboxRow (row) {
@@ -3396,7 +3398,7 @@ export default defineComponent({
         reactData.currentColumn = null
         return nextTick()
       },
-      sort (sortConfs: any, sortOrder?: any) {
+      sort (sortConfs: any, sortOrder?: VxeTablePropTypes.SortOrder) {
         const sortOpts = computeSortOpts.value
         const { multiple, remote, orders } = sortOpts
         if (sortConfs) {
@@ -4491,7 +4493,7 @@ export default defineComponent({
      * @param {ColumnInfo} column 列配置
      * @param {Row} row 行对象
      */
-    const handleTooltip = (evnt: MouseEvent, cell: any, overflowElem: any, tipElem: any, params: any) => {
+    const handleTooltip = (evnt: MouseEvent, cell: HTMLTableCellElement, overflowElem: HTMLElement, tipElem: HTMLElement | null, params: any) => {
       params.cell = cell
       const { tooltipStore } = reactData
       const tooltipOpts = computeTooltipOpts.value
@@ -4499,7 +4501,7 @@ export default defineComponent({
       const { showAll, contentMethod } = tooltipOpts
       const customContent = contentMethod ? contentMethod(params) : null
       const useCustom = contentMethod && !XEUtils.eqNull(customContent)
-      const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
+      const content = useCustom ? customContent : XEUtils.toString(column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
       const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
       if (content && (showAll || useCustom || isCellOverflow)) {
         Object.assign(tooltipStore, {
@@ -4976,7 +4978,7 @@ export default defineComponent({
       triggerHeaderTooltipEvent (evnt, params) {
         const { tooltipStore } = reactData
         const { column } = params
-        const titleElem = evnt.currentTarget
+        const titleElem = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(true)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           handleTooltip(evnt, titleElem, titleElem, null, params)
@@ -5008,9 +5010,9 @@ export default defineComponent({
               tipElem = cell.querySelector('.vxe-cell--html')
             }
           } else {
-            tipElem = cell.querySelector(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label')
+            tipElem = cell.querySelector(column.type === 'html' ? '.vxe-cell--html' : '.vxe-cell--label') as HTMLElement
           }
-          handleTooltip(evnt, cell, overflowElem || cell.children[0], tipElem, params)
+          handleTooltip(evnt, cell, (overflowElem || cell.children[0]) as HTMLElement, tipElem as HTMLElement, params)
         }
       },
       /**
@@ -5022,7 +5024,7 @@ export default defineComponent({
         const cell = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
-          handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') || cell.children[0], null, params)
+          handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') as HTMLElement || cell.children[0], null, params)
         }
       },
       handleTargetLeaveEvent () {
@@ -5150,16 +5152,16 @@ export default defineComponent({
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
             if (editOpts.mode === 'row') {
               checkValidate('blur')
-                .catch((e: any) => e)
+                .catch((e) => e)
                 .then(() => {
                   $xetable.handleActived(params, evnt)
                     .then(() => checkValidate('change'))
-                    .catch((e: any) => e)
+                    .catch((e) => e)
                 })
             } else if (editOpts.mode === 'cell') {
               $xetable.handleActived(params, evnt)
                 .then(() => checkValidate('change'))
-                .catch((e: any) => e)
+                .catch((e) => e)
             }
           }
         }
