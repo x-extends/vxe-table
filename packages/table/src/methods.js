@@ -2110,7 +2110,7 @@ const Methods = {
                   let colWidth = column.renderWidth
                   if (cellElem) {
                     if (colspan > 1) {
-                      const columnIndex = this.getColumnIndex(column)
+                      const columnIndex = this.getVTColumnIndex(column)
                       for (let index = 1; index < colspan; index++) {
                         const nextColumn = this.getColumns(columnIndex + index)
                         if (nextColumn) {
