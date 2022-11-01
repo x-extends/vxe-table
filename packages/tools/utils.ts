@@ -47,3 +47,16 @@ export function formatText (value: any, placeholder?: any) {
 export function eqEmptyValue (cellValue: any) {
   return cellValue === '' || XEUtils.eqNull(cellValue)
 }
+
+/**
+ * 当处于 iframe 中时, preventDefault 会导致 mouseup 事件无法触发
+ * 此时拖动效果无法清除
+ */
+export function clearIframeMouseMoveEffect () {
+  if (window.self !== window.top) {
+    document.addEventListener('mouseleave', () => {
+      const event = new MouseEvent('mouseup')
+      document.dispatchEvent(event)
+    }, { once: true })
+  }
+}

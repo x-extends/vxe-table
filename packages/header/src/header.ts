@@ -3,6 +3,7 @@ import XEUtils from 'xe-utils'
 import { convertToRows } from './util'
 import { getColMinWidth } from '../../table/src/util'
 import { hasClass, getOffsetPos, addClass, removeClass } from '../../tools/dom'
+import { clearIframeMouseMoveEffect } from '../../tools/utils'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types/all'
 
@@ -107,6 +108,7 @@ export default defineComponent({
       addClass(tableEl, 'drag--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
+      clearIframeMouseMoveEffect()
       document.onmouseup = function (evnt) {
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
