@@ -7,11 +7,14 @@ const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
 const replace = require('gulp-replace')
 const clean = require('gulp-clean')
-const sass = require('gulp-sass')
+const dartSass = require('sass')
+const gulpSass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 const merge = require('merge-stream')
 const pack = require('./package.json')
+
+const sass = gulpSass(dartSass)
 
 const components = [
   'v-x-e-table',
