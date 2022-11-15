@@ -1440,6 +1440,10 @@ export default defineComponent({
             if (isNodeElement(wrapperElem)) {
               if (customMaxHeight) {
                 wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
+                //如果同时设置了高度和最大高度，则高度作为最低高度使用
+                if(customHeight>0){
+                    wrapperElem.style.minHeight = "".concat(fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight, "px");
+                }
               } else {
                 if (customHeight > 0) {
                   wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
@@ -1454,7 +1458,13 @@ export default defineComponent({
               if (isNodeElement(wrapperElem)) {
                 wrapperElem.style.top = `${headerHeight}px`
               }
-              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
+              //如果设置了最大高度，则高度随着表格的高度自动增长
+              if(customMaxHeight){
+                  fixedWrapperElem.style.height = "".concat(wrapperElem.clientHeight + headerHeight + footerHeight, 'px') ;
+              }
+              else {
+                  fixedWrapperElem.style.height = "".concat((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1), "px");
+              }
               fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isFixedLeft ? 0 : scrollbarWidth)}px`
             }
 
