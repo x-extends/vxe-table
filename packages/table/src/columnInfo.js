@@ -61,6 +61,7 @@ export class ColumnInfo {
       title: _vm.title,
       width: _vm.width,
       minWidth: _vm.minWidth,
+      maxWidth: _vm.maxWidth,
       resizable: _vm.resizable,
       fixed: _vm.fixed,
       align: _vm.align,

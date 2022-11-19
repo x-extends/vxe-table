@@ -135,7 +135,7 @@ export default {
     _getCheckedFilters () {
       const { tableFullColumn } = this
       const filterList = []
-      tableFullColumn.filter(column => {
+      tableFullColumn.forEach(column => {
         const { field, filters } = column
         const valueList = []
         const dataList = []

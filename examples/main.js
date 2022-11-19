@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import i18n from './i18n'
 
-import './assets/style/index.scss'
+import './style/index.scss'
 import './plugins'
 import XEUtils from 'xe-utils'
 

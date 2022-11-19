@@ -134,7 +134,6 @@
 <script>
 import { mapMutations } from 'vuex'
 import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 
 export default {
   data () {
@@ -2151,7 +2150,7 @@ export default {
       setTimeout(() => this.defaultExpand(), 1500)
     },
     loadSponsors () {
-      XEAjax.get('https://api.vxetable.cn/demo/api/pub/sponsors').then(data => {
+      fetch('https://api.vxetable.cn/demo/api/pub/sponsors').then(response => response.json()).then(data => {
         this.sponsorList = data
       })
     },
@@ -2169,7 +2168,7 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.vxetable.cn/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
+      fetch('https://api.vxetable.cn/demo/api/npm/versions/vxe-table').then(response => response.json()).then(({ sp, dp, ss, time, tags, versions }) => {
         this.apiLoading = true
         this.apiLoading = true
         this.disabledPlugin = dp

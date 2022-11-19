@@ -6,7 +6,6 @@ const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
 const replace = require('gulp-replace')
-const clean = require('gulp-clean')
 const dartSass = require('sass')
 const gulpSass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
@@ -69,7 +68,7 @@ const languages = [
   'ja-JP'
 ]
 
-const styleCode = `require('./style.css')`
+const styleCode = 'require(\'./style.css\')'
 
 gulp.task('build_modules', () => {
   return gulp.src('packages/**/*.js')
@@ -126,7 +125,21 @@ gulp.task('copy_ts', () => {
     .pipe(gulp.dest('lib'))
 })
 
+// eslint-disable-next-line no-control-regex
+const unicodeRE = /[^\x00-\xff]/g
+const contentRE = /(?<!-)content\s*:\s*([^;}]+)/g
+
+function toCSSUnicode (css) {
+  return css.replace(contentRE, (u) => {
+    return u.replace(unicodeRE, (m) => {
+      return '\\' + m.charCodeAt(0).toString(16)
+    })
+  })
+}
+
 gulp.task('build_lib', () => {
+  const styleStr = fs.readFileSync('lib_temp/index.css', 'utf-8')
+  fs.writeFileSync('lib_temp/index.css', toCSSUnicode(styleStr))
   return merge(
     gulp.src('lib_temp/index.umd.js')
       .pipe(gulp.dest('lib')),
@@ -148,17 +161,41 @@ gulp.task('build_lib', () => {
   )
 })
 
+gulp.task('build_icon', () => {
+  const timeNow = Date.now()
+  return merge(
+    gulp.src('lib_temp/index.css')
+      .pipe(replace(' format("woff2")', ` format("woff2"),url("./iconfont.${timeNow}.woff") format("woff"),url("./iconfont.${timeNow}.ttf") format("truetype")`))
+      .pipe(gulp.dest('lib_temp')),
+    gulp.src('lib/icon/style/style.css')
+      .pipe(replace(' format("woff2")', ` format("woff2"),url("./iconfont.${timeNow}.woff") format("woff"),url("./iconfont.${timeNow}.ttf") format("truetype")`))
+      .pipe(gulp.dest('lib/icon/style'))
+      .pipe(rename({
+        basename: 'style',
+        suffix: '.min',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest('lib/icon/style')),
+    gulp.src('styles/icon/*')
+      .pipe(rename({
+        suffix: `.${timeNow}`
+      }))
+      .pipe(gulp.dest('lib'))
+      .pipe(gulp.dest('lib/icon/style'))
+  )
+})
+
 gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
   const rest = components.map(name => {
-   return gulp.src(`styles/${name}.scss`)
-     .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';\n`))
-     .pipe(sass())
-     .pipe(prefixer({
-       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
-       cascade: true,
-       remove: true
-     }))
-     .pipe(rename({
+    return gulp.src(`styles/${name}.scss`)
+      .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\';\n'))
+      .pipe(sass())
+      .pipe(prefixer({
+        borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
+        cascade: true,
+        remove: true
+      }))
+      .pipe(rename({
         basename: 'style',
         extname: '.css'
       }))
@@ -170,15 +207,15 @@ gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', (
         extname: '.css'
       }))
       .pipe(gulp.dest(`lib/${name}/style`))
- })
- return merge(...rest)
+  })
+  return merge(...rest)
 }))
 
 gulp.task('build_clean', () => {
   return del('lib')
 })
 
-gulp.task('build', gulp.series('build_clean', 'build_style', 'build_lib', () => {
+gulp.task('build', gulp.series('build_clean', 'build_style', 'build_icon', 'build_lib', () => {
   components.forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
   })

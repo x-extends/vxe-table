@@ -475,14 +475,15 @@ export default {
     },
     handleFocus (fields) {
       const { $el } = this
-      fields.some((property, index) => {
+      for (let i = 0; i < fields.length; i++) {
+        const property = fields[i]
         const item = this.getItemByField(property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem
           // 定位到第一个
-          if (!index) {
+          if (!i) {
             DomTools.scrollToView($el.querySelector(`.${item.id}`))
           }
           // 如果指定了聚焦 class
@@ -501,10 +502,10 @@ export default {
               textRange.collapse(false)
               textRange.select()
             }
-            return true
+            break
           }
         }
-      })
+      }
     },
     triggerItemEvent (evnt, field, itemValue) {
       if (field) {

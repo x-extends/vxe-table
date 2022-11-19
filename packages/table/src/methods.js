@@ -3003,16 +3003,16 @@ const Methods = {
         isAllResolve = afterFullData.every(
           checkMethod
             ? (row) => {
-              if (!checkMethod({ row })) {
-                disableRows.push(row)
-                return true
+                if (!checkMethod({ row })) {
+                  disableRows.push(row)
+                  return true
+                }
+                if (XEUtils.get(row, checkField)) {
+                  checkRows.push(row)
+                  return true
+                }
+                return false
               }
-              if (XEUtils.get(row, checkField)) {
-                checkRows.push(row)
-                return true
-              }
-              return false
-            }
             : row => XEUtils.get(row, checkField)
         )
         isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
@@ -3033,16 +3033,16 @@ const Methods = {
         isAllResolve = afterFullData.every(
           checkMethod
             ? (row) => {
-              if (!checkMethod({ row })) {
-                disableRows.push(row)
-                return true
+                if (!checkMethod({ row })) {
+                  disableRows.push(row)
+                  return true
+                }
+                if (this.findRowIndexOf(selection, row) > -1) {
+                  checkRows.push(row)
+                  return true
+                }
+                return false
               }
-              if (this.findRowIndexOf(selection, row) > -1) {
-                checkRows.push(row)
-                return true
-              }
-              return false
-            }
             : row => this.findRowIndexOf(selection, row) > -1
         )
         isAllSelected = isAllResolve && afterFullData.length !== disableRows.length

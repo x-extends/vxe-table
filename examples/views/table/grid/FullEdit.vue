@@ -20,8 +20,21 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import XEUtils from 'xe-utils'
+
+function postMock (url, body) {
+  return new Promise((resolve) => {
+    console.log(`模拟提交${url}：${JSON.stringify(body)}`)
+    setTimeout(() => {
+      resolve({
+        code: 200,
+        result: {
+          insertRows: 0
+        }
+      })
+    }, 300)
+  })
+}
 
 export default {
   data () {
@@ -111,10 +124,10 @@ export default {
               filters.forEach(({ property, values }) => {
                 queryParams[property] = values.join(',')
               })
-              return XEAjax.get(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+              return fetch(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}?${XEUtils.serialize(queryParams)}`).then(response => response.json())
             },
-            delete: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body),
-            save: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+            delete: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body),
+            save: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body)
           }
         },
         columns: [
@@ -192,6 +205,20 @@ export default {
         `,
         `
         import XEUtils from 'xe-utils'
+
+        function postMock (url, body) {
+          return new Promise((resolve) => {
+            console.log(\`模拟提交\${url}：\${JSON.stringify(body)}\`)
+            setTimeout(() => {
+              resolve({
+                code: 200,
+                result: {
+                  insertRows: 0
+                }
+              })
+            }, 300)
+          })
+        }
         
         export default {
           data () {
@@ -281,10 +308,10 @@ export default {
                       filters.forEach(({ property, values }) => {
                         queryParams[property] = values.join(',')
                       })
-                      return XEAjax.get(\`https://api.vxetable.cn/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                      return fetch(\`https://api.vxetable.cn/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}?\${XEUtils.serialize(queryParams)}\`).then(response => response.json())
                     },
-                    delete: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body),
-                    save: ({ body }) => XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+                    delete: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body),
+                    save: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body)
                   }
                 },
                 columns: [
@@ -397,7 +424,7 @@ export default {
               const formBody = new FormData()
               formBody.append('file', file)
               // 上传文件
-              return XEAjax.post('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
+              return postMock('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
                 const $grid = this.$refs.xGrid
                 this.$XModal.message({ content: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                 // 导入完成，刷新表格
@@ -427,7 +454,7 @@ export default {
                 })
               }
               // 开始服务端导出
-              return XEAjax.post('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
+              return postMock('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
                 if (data.id) {
                   this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
                   // 读取路径，请求文件
@@ -488,7 +515,7 @@ export default {
       const formBody = new FormData()
       formBody.append('file', file)
       // 上传文件
-      return XEAjax.post('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
+      return postMock('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
         const $grid = this.$refs.xGrid
         this.$XModal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
         // 导入完成，刷新表格
@@ -518,7 +545,7 @@ export default {
         })
       }
       // 开始服务端导出
-      return XEAjax.post('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
+      return postMock('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
         if (data.id) {
           this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
           // 读取路径，请求文件

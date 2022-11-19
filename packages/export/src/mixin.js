@@ -179,7 +179,7 @@ function getLabelData ($xetable, opts, columns, datas) {
             item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
             item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
             break
-          default:
+          default :
             if (opts.original) {
               cellValue = UtilTools.getCellValue(row, column)
             } else {
@@ -1072,6 +1072,7 @@ function handleExportAndPrint ($xetable, options, isPrint) {
             return column.type === type
           }
         }
+        return false
       }) : column.visible
       column.halfChecked = false
       column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)

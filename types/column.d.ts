@@ -32,6 +32,7 @@ export declare class Column extends VXETableComponent {
    * 列最小宽度，把剩余宽度按比例分配
    */
   minWidth?: number | string;
+  maxWidth?: number | string;
   /**
    * 是否允许拖动列宽调整大小
    */
@@ -174,6 +175,7 @@ export interface ColumnOptions {
    * 列最小宽度，把剩余宽度按比例分配
    */
   minWidth?: number | string;
+  maxWidth?: number | string;
   /**
    * 是否允许拖动列宽调整大小
    */
@@ -316,6 +318,7 @@ export class ColumnInfo {
   title: string;
   width: number | string;
   minWidth: number | string;
+  maxWidth: number | string;
   resizable: boolean;
   fixed: string;
   align: ColumnAlign;

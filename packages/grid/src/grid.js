@@ -314,12 +314,12 @@ export default {
       }, $scopedSlots.toolbar
         ? $scopedSlots.toolbar.call(this, { $grid: this }, h)
         : [
-          h('vxe-toolbar', {
-            props: this.toolbarOpts,
-            ref: 'xToolbar',
-            scopedSlots: getToolbarSlots(this)
-          })
-        ]
+            h('vxe-toolbar', {
+              props: this.toolbarOpts,
+              ref: 'xToolbar',
+              scopedSlots: getToolbarSlots(this)
+            })
+          ]
       ) : null,
       /**
        * 渲染表格顶部区域
@@ -353,14 +353,14 @@ export default {
       }, $scopedSlots.pager
         ? $scopedSlots.pager.call(this, { $grid: this }, h)
         : [
-          h('vxe-pager', {
-            props: { ...this.pagerOpts, ...(this.proxyConfig ? this.tablePage : {}) },
-            on: {
-              'page-change': this.pageChangeEvent
-            },
-            scopedSlots: getPagerSlots(this)
-          })
-        ]
+            h('vxe-pager', {
+              props: { ...this.pagerOpts, ...(this.proxyConfig ? this.tablePage : {}) },
+              on: {
+                'page-change': this.pageChangeEvent
+              },
+              scopedSlots: getPagerSlots(this)
+            })
+          ]
       ) : null
     ])
   },
