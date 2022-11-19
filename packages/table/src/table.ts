@@ -3827,7 +3827,13 @@ export default defineComponent({
           setScrollTop(rightBodyElem || tableBodyElem, scrollTop)
         }
         if (reactData.scrollXLoad || reactData.scrollYLoad) {
-          return new Promise(resolve => setTimeout(() => resolve(nextTick()), 50))
+          return new Promise(resolve => {
+            setTimeout(() => {
+              nextTick(() => {
+                resolve()
+              })
+            }, 50)
+          })
         }
         return nextTick()
       },
@@ -4804,16 +4810,16 @@ export default defineComponent({
             isAllResolve = afterFullData.every(
               checkMethod
                 ? (row) => {
-                  if (!checkMethod({ row })) {
-                    disableRows.push(row)
-                    return true
+                    if (!checkMethod({ row })) {
+                      disableRows.push(row)
+                      return true
+                    }
+                    if (XEUtils.get(row, checkField)) {
+                      checkRows.push(row)
+                      return true
+                    }
+                    return false
                   }
-                  if (XEUtils.get(row, checkField)) {
-                    checkRows.push(row)
-                    return true
-                  }
-                  return false
-                }
                 : row => XEUtils.get(row, checkField)
             )
             isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
@@ -4834,16 +4840,16 @@ export default defineComponent({
             isAllResolve = afterFullData.every(
               checkMethod
                 ? (row) => {
-                  if (!checkMethod({ row })) {
-                    disableRows.push(row)
-                    return true
+                    if (!checkMethod({ row })) {
+                      disableRows.push(row)
+                      return true
+                    }
+                    if ($xetable.findRowIndexOf(selection, row) > -1) {
+                      checkRows.push(row)
+                      return true
+                    }
+                    return false
                   }
-                  if ($xetable.findRowIndexOf(selection, row) > -1) {
-                    checkRows.push(row)
-                    return true
-                  }
-                  return false
-                }
                 : row => $xetable.findRowIndexOf(selection, row) > -1
             )
             isAllSelected = isAllResolve && afterFullData.length !== disableRows.length

@@ -6,7 +6,6 @@ const babel = require('gulp-babel')
 const uglify = require('gulp-uglify')
 const rename = require('gulp-rename')
 const replace = require('gulp-replace')
-const clean = require('gulp-clean')
 const dartSass = require('sass')
 const gulpSass = require('gulp-sass')
 const cleanCSS = require('gulp-clean-css')
@@ -25,7 +24,7 @@ const moduleList = [
   'edit',
   'export',
   'keyboard',
-  'validator',
+  'validator'
 ]
 
 const componentList = [
@@ -68,7 +67,7 @@ const languages = [
   'ja-JP'
 ]
 
-const styleCode = `require('./style.css')`
+const styleCode = 'require(\'./style.css\')'
 
 function toExportName (name) {
   const str = XEUtils.camelCase(name)
@@ -81,14 +80,14 @@ gulp.task('build_modules', () => {
     const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
     fs.mkdirSync(`packages_temp/vxe-module-${name}`)
     fs.writeFileSync(`packages_temp/vxe-module-${name}/index.ts`, esCode)
-    fs.writeFileSync(`packages_temp/vxe-module-${name}/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`))
+    fs.writeFileSync(`packages_temp/vxe-module-${name}/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
   })
   componentList.forEach(name => {
     const exportName = `Vxe${toExportName(name)}`
     const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
     fs.mkdirSync(`packages_temp/vxe-${name}`)
     fs.writeFileSync(`packages_temp/vxe-${name}/index.ts`, esCode)
-    fs.writeFileSync(`packages_temp/vxe-${name}/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`))
+    fs.writeFileSync(`packages_temp/vxe-${name}/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
   })
 
   return gulp.src('packages_temp/**/*.ts')
@@ -120,8 +119,8 @@ gulp.task('build_modules', () => {
 
 gulp.task('build_i18n', () => {
   languages.forEach(code => {
-    fs.writeFileSync(`lib/locale/lang/${code}.d.ts`, `declare const langMsgs: { [key: string]: any }\nexport default langMsgs`)
-    fs.writeFileSync(`es/locale/lang/${code}.d.ts`, `declare const langMsgs: { [key: string]: any }\nexport default langMsgs`)
+    fs.writeFileSync(`lib/locale/lang/${code}.d.ts`, 'declare const langMsgs: { [key: string]: any }\nexport default langMsgs')
+    fs.writeFileSync(`es/locale/lang/${code}.d.ts`, 'declare const langMsgs: { [key: string]: any }\nexport default langMsgs')
   })
   const rest = languages.map(code => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
@@ -174,7 +173,21 @@ gulp.task('copy_ts', () => {
     .pipe(gulp.dest('lib'))
 })
 
+// eslint-disable-next-line no-control-regex
+const unicodeRE = /[^\x00-\xff]/g
+const contentRE = /(?<!-)content\s*:\s*([^;}]+)/g
+
+function toCSSUnicode (css) {
+  return css.replace(contentRE, (u) => {
+    return u.replace(unicodeRE, (m) => {
+      return '\\' + m.charCodeAt(0).toString(16)
+    })
+  })
+}
+
 gulp.task('build_lib', () => {
+  const styleStr = fs.readFileSync('lib_temp/index.css', 'utf-8')
+  fs.writeFileSync('lib_temp/index.css', toCSSUnicode(styleStr))
   return merge(
     gulp.src('es/index.common.js')
       .pipe(rename({
@@ -204,9 +217,36 @@ gulp.task('build_lib', () => {
   )
 })
 
+gulp.task('build_icon', () => {
+  const timeNow = Date.now()
+  return merge(
+    gulp.src('lib_temp/index.css')
+      .pipe(replace(' format("woff2")', ` format("woff2"),url("./iconfont.${timeNow}.woff") format("woff"),url("./iconfont.${timeNow}.ttf") format("truetype")`))
+      .pipe(gulp.dest('lib_temp')),
+    gulp.src('lib/icon/style/style.css')
+      .pipe(replace(' format("woff2")', ` format("woff2"),url("./iconfont.${timeNow}.woff") format("woff"),url("./iconfont.${timeNow}.ttf") format("truetype")`))
+      .pipe(gulp.dest('lib/icon/style'))
+      .pipe(gulp.dest('es/icon'))
+      .pipe(rename({
+        basename: 'style',
+        suffix: '.min',
+        extname: '.css'
+      }))
+      .pipe(gulp.dest('lib/icon/style')),
+    gulp.src('styles/icon/*')
+      .pipe(rename({
+        suffix: `.${timeNow}`
+      }))
+      .pipe(gulp.dest('lib'))
+      .pipe(gulp.dest('lib/icon/style'))
+      .pipe(gulp.dest('es'))
+      .pipe(gulp.dest('es/icon/style'))
+  )
+})
+
 function buildStyle (name, dirName) {
   return gulp.src(`styles/${name}.scss`)
-    .pipe(replace(/(\/\*\*Variable\*\*\/)/, `@import './variable.scss';\n`))
+    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\';\n'))
     .pipe(sass())
     .pipe(prefixer({
       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
@@ -249,7 +289,7 @@ gulp.task('build_clean', () => {
   return del(['lib', 'es'])
 })
 
-gulp.task('build', gulp.series('build_clean', 'copy_pack', 'build_modules', 'build_i18n', 'copy_ts', 'build_style', 'build_lib', () => {
+gulp.task('build', gulp.series('build_clean', 'copy_pack', 'build_modules', 'build_i18n', 'copy_ts', 'build_style', 'build_icon', 'build_lib', () => {
   [coreName].forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
   })

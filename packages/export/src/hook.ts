@@ -979,6 +979,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
                 return column.type === type
               }
             }
+            return false
           }) : column.visible
           column.halfChecked = false
           column.disabled = (parent && parent.disabled) || (checkMethod ? !checkMethod({ column }) : false)

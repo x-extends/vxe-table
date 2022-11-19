@@ -259,14 +259,15 @@ export default defineComponent({
 
     const handleFocus = (fields: string[]) => {
       const el = refElem.value
-      fields.some((property, index) => {
+      for (let i = 0; i < fields.length; i++) {
+        const property = fields[i]
         const item = getItemByField(property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem: HTMLInputElement | null = null
           // 定位到第一个
-          if (!index) {
+          if (!i) {
             scrollToView(el.querySelector(`.${item.id}`))
           }
           // 如果指定了聚焦 class
@@ -279,10 +280,10 @@ export default defineComponent({
           }
           if (inputElem) {
             inputElem.focus()
-            return true
+            break
           }
         }
-      })
+      }
     }
 
     /**

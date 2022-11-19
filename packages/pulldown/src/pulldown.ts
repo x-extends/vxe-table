@@ -147,7 +147,7 @@ export default defineComponent({
     /**
      * 显示下拉面板
      */
-    const showPanel = () => {
+    const showPanel = (): Promise<void> => {
       if (!reactData.inited) {
         reactData.inited = true
       }
@@ -166,7 +166,9 @@ export default defineComponent({
           }, 10)
           updateZindex()
         } else {
-          resolve(nextTick())
+          nextTick(() => {
+            resolve()
+          })
         }
       })
     }
@@ -174,17 +176,21 @@ export default defineComponent({
     /**
      * 隐藏下拉面板
      */
-    const hidePanel = () => {
+    const hidePanel = (): Promise<void> => {
       reactData.visiblePanel = false
       emit('update:modelValue', false)
       return new Promise(resolve => {
         if (reactData.animatVisible) {
           hidePanelTimeout = window.setTimeout(() => {
             reactData.animatVisible = false
-            resolve(nextTick())
+            nextTick(() => {
+              resolve()
+            })
           }, 350)
         } else {
-          resolve(nextTick())
+          nextTick(() => {
+            resolve()
+          })
         }
       })
     }

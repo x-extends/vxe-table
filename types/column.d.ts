@@ -22,6 +22,7 @@ export namespace VxeColumnPropTypes {
   export type Title = string
   export type Width = number | string
   export type MinWidth = number | string
+  export type MaxWidth = number | string
   export type Resizable = boolean
   export type Fixed = 'left' | 'right' | null
   export type Align = 'left' | 'center' | 'right' | null
@@ -247,6 +248,10 @@ export type VxeColumnProps = {
    * 列最小宽度，把剩余宽度按比例分配
    */
   minWidth?: VxeColumnPropTypes.MinWidth
+  /**
+   * 列最大宽度
+   */
+  maxWidth?: VxeColumnPropTypes.MaxWidth
   /**
    * 是否允许拖动列宽调整大小
    */

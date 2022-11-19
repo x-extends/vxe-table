@@ -4,9 +4,9 @@ module.exports = {
     node: true
   },
   extends: [
-    "plugin:vue/vue3-essential",
-    "@vue/standard",
-    "@vue/typescript/recommended"
+    'plugin:vue/vue3-essential',
+    '@vue/standard',
+    '@vue/typescript/recommended'
   ],
   parserOptions: {
     ecmaVersion: 2020
@@ -15,6 +15,9 @@ module.exports = {
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'off'
+    '@typescript-eslint/no-explicit-any': 'off',
+    'vue/multi-word-component-names': 'off',
+    'vue/multi-word-component': 'off',
+    'multiline-ternary': 'off'
   }
 }

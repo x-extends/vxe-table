@@ -1,5 +1,6 @@
 const path = require('path')
 const pkg = require('./package.json')
+const { defineConfig } = require('@vue/cli-service')
 
 function resolve (dir) {
   return path.join(__dirname, '.', dir)
@@ -8,7 +9,8 @@ function resolve (dir) {
 process.env.VUE_APP_VXE_TABLE_VERSION = pkg.version
 process.env.VUE_APP_VXE_TABLE_ENV = 'development'
 
-module.exports = {
+module.exports = defineConfig({
+  transpileDependencies: true,
   productionSourceMap: false,
   pages: {
     index: {
@@ -49,4 +51,4 @@ module.exports = {
       }
     }
   }
-}
+})

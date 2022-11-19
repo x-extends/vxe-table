@@ -613,7 +613,7 @@ export interface TablePublicMethods {
    * @param scrollLeft 左边距离
    * @param scrollTop 顶部距离
    */
-  scrollTo(scrollLeft: number | null, scrollTop?: number | null): Promise<any>
+  scrollTo(scrollLeft: number | null, scrollTop?: number | null): Promise<void>
   /**
    * 如果有滚动条，则滚动到对应的行
    * @param row 指定行
@@ -1241,6 +1241,7 @@ export namespace VxeTablePropTypes {
     resizable?: VxeColumnPropTypes.Resizable
     width?: VxeColumnPropTypes.Width
     minWidth?: VxeColumnPropTypes.MinWidth
+    maxWidth?: VxeColumnPropTypes.MaxWidth
   }
   export interface ColumnOpts extends ColumnConfig { }
 
@@ -1273,6 +1274,14 @@ export namespace VxeTablePropTypes {
    */
   export interface ResizableConfig {
     minWidth?: number | string | ((params: {
+      $table: VxeTableConstructor & VxeTablePrivateMethods
+      column: VxeTableDefines.ColumnInfo
+      columnIndex: number
+      $columnIndex: number
+      $rowIndex: number
+      cell: HTMLElement
+    }) => number | string)
+    maxWidth?: number | string | ((params: {
       $table: VxeTableConstructor & VxeTablePrivateMethods
       column: VxeTableDefines.ColumnInfo
       columnIndex: number
@@ -2182,6 +2191,7 @@ export namespace VxeTableDefines {
     title: VxeColumnPropTypes.Title
     width: VxeColumnPropTypes.Width
     minWidth: VxeColumnPropTypes.MinWidth
+    maxWidth: VxeColumnPropTypes.MaxWidth
     resizable: VxeColumnPropTypes.Resizable
     fixed: VxeColumnPropTypes.Fixed
     align: VxeColumnPropTypes.Align

@@ -160,7 +160,7 @@ export default defineComponent({
      * @param {Number} scrollLeft 左距离
      * @param {Number} scrollTop 上距离
      */
-    const scrollTo = (scrollLeft: number | null, scrollTop?: number | null) => {
+    const scrollTo = (scrollLeft: number | null, scrollTop?: number | null): Promise<void> => {
       const scrollBodyElem = refVirtualWrapper.value
       if (XEUtils.isNumber(scrollLeft)) {
         scrollBodyElem.scrollLeft = scrollLeft
@@ -169,7 +169,13 @@ export default defineComponent({
         scrollBodyElem.scrollTop = scrollTop
       }
       if (reactData.scrollYLoad) {
-        return new Promise(resolve => setTimeout(() => resolve(nextTick()), 50))
+        return new Promise(resolve => {
+          setTimeout(() => {
+            nextTick(() => {
+              resolve()
+            })
+          }, 50)
+        })
       }
       return nextTick()
     }

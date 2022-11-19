@@ -17,6 +17,8 @@ export const columnProps = {
   width: [Number, String] as PropType<VxeColumnPropTypes.Width>,
   // 列最小宽度，把剩余宽度按比例分配
   minWidth: [Number, String] as PropType<VxeColumnPropTypes.MinWidth>,
+  // 列最大宽度
+  maxWidth: [Number, String] as PropType<VxeColumnPropTypes.MaxWidth>,
   // 是否允许拖动列宽调整大小
   resizable: { type: Boolean as PropType<VxeColumnPropTypes.Resizable>, default: null },
   // 将列固定在左侧或者右侧

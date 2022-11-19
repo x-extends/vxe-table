@@ -50,12 +50,25 @@
 import { defineComponent, reactive, ref, nextTick } from 'vue'
 import { VXETable } from '../../../../packages/all'
 import { VxeTableInstance, VxeToolbarInstance } from '../../../../types/index'
-import XEAjax from 'xe-ajax'
 
 export default defineComponent({
   setup () {
     const xToolbar = ref({} as VxeToolbarInstance)
     const xTable = ref({} as VxeTableInstance)
+
+    const postMock = (url:string, body: any): Promise<any> => {
+      return new Promise((resolve) => {
+        console.log(`模拟提交${url}：${JSON.stringify(body)}`)
+        setTimeout(() => {
+          resolve({
+            code: 200,
+            result: {
+              insertRows: 0
+            }
+          })
+        }, 300)
+      })
+    }
 
     const demo1 = reactive({
       loading: false,
@@ -104,7 +117,7 @@ export default defineComponent({
       demo1.loading = true
       try {
         const body = { removeRecords: checkboxRecords }
-        await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+        await postMock('https://api.vxetable.cn/demo/api/pub/save', body)
         await loadList()
       } catch (e) {}
       demo1.loading = false
@@ -123,7 +136,7 @@ export default defineComponent({
       demo1.loading = true
       try {
         const body = { removeRecords: [row] }
-        await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+        await postMock('https://api.vxetable.cn/demo/api/pub/save', body)
         await loadList()
       } catch (e) {}
     }
@@ -142,7 +155,7 @@ export default defineComponent({
       demo1.loading = true
       try {
         const body = { insertRecords, removeRecords, updateRecords }
-        await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+        await postMock('https://api.vxetable.cn/demo/api/pub/save', body)
         await loadList()
         VXETable.modal.message({ content: `操作成功，新增 ${insertRecords.length} 条，更新 ${updateRecords.length} 条，删除 ${removeRecords.length} 条`, status: 'success' })
       } catch (e: any) {
@@ -211,12 +224,25 @@ export default defineComponent({
         `
         import { defineComponent, reactive, ref, nextTick } from 'vue'
         import { VXETable, VxeTableInstance, VxeToolbarInstance } from 'vxe-table'
-        import XEAjax from 'xe-ajax'
 
         export default defineComponent({
           setup () {
             const xToolbar = ref({} as VxeToolbarInstance)
             const xTable = ref({} as VxeTableInstance)
+
+            const postMock = (url:string, body: any): Promise<any> => {
+              return new Promise((resolve) => {
+                console.log(\`模拟提交\${url}：\${JSON.stringify(body)}\`)
+                setTimeout(() => {
+                  resolve({
+                    code: 200,
+                    result: {
+                      insertRows: 0
+                    }
+                  })
+                }, 300)
+              })
+            }
 
             const demo1 = reactive({
               loading: false,
@@ -265,7 +291,7 @@ export default defineComponent({
               demo1.loading = true
               try {
                 const body = { removeRecords: checkboxRecords }
-                await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+                await postMock('https://api.vxetable.cn/demo/api/pub/save', body)
                 await loadList()
               } catch (e) {}
               demo1.loading = false
@@ -284,7 +310,7 @@ export default defineComponent({
               demo1.loading = true
               try {
                 const body = { removeRecords: [row] }
-                await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+                await postMock('https://api.vxetable.cn/demo/api/pub/save', body)
                 await loadList()
               } catch (e) {}
             }
@@ -303,7 +329,7 @@ export default defineComponent({
               demo1.loading = true
               try {
                 const body = { insertRecords, removeRecords, updateRecords }
-                await XEAjax.post('https://api.vxetable.cn/demo/api/pub/save', body)
+                await postMock('https://api.vxetable.cn/demo/api/pub/save', body)
                 await loadList()
                 VXETable.modal.message({ content: \`操作成功，新增 \${insertRecords.length} 条，更新 \${updateRecords.length} 条，删除 \${removeRecords.length} 条\`, status: 'success' })
               } catch (e) {

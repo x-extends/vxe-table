@@ -65,24 +65,24 @@ export interface ListMethods {
   /**
    * 重新计算列表
    */
-  recalculate(): Promise<any>
+  recalculate(): Promise<void>
 
   /**
    * 如果有滚动条，则滚动到对应的位置
    * @param scrollLeft 左边距离
    * @param scrollTop 顶部距离
    */
-  scrollTo(scrollLeft: number | null, scrollTop?: number | null): Promise<any>
+  scrollTo(scrollLeft: number | null, scrollTop?: number | null): Promise<void>
 
   /**
    * 刷新滚动操作，手动同步滚动相关位置
    */
-  refreshScroll(): Promise<any>
+  refreshScroll(): Promise<void>
 
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
-  clearScroll(): Promise<any>
+  clearScroll(): Promise<void>
 }
 export interface VxeListMethods extends ListMethods { }
 

@@ -116,7 +116,6 @@ import { useStore } from 'vuex'
 import i18n from './i18n'
 import router from './router'
 import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 
 export default defineComponent({
   setup () {
@@ -1851,7 +1850,7 @@ export default defineComponent({
     })
 
     const getVersion = () => {
-      XEAjax.get('https://api.vxetable.cn/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
+      fetch('https://api.vxetable.cn/demo/api/npm/versions/vxe-table').then(response => response.json()).then(({ sp, dp, ss, time, tags, versions }) => {
         appData.apiLoading = true
         appData.disabledPlugin = dp
         appData.showPlugin = sp
@@ -2052,7 +2051,7 @@ export default defineComponent({
     }
 
     const loadSponsors = () => {
-      XEAjax.get('https://api.vxetable.cn/demo/api/pub/sponsors').then(data => {
+      fetch('https://api.vxetable.cn/demo/api/pub/sponsors').then(response => response.json()).then(data => {
         appData.sponsorList = data
       })
     }
