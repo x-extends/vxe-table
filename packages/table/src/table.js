@@ -936,6 +936,7 @@ export default {
   render (h) {
     const {
       _e,
+      $scopedSlots,
       tId,
       tableData,
       tableColumn,
@@ -1101,7 +1102,7 @@ export default {
           icon: loadingOpts.icon,
           text: loadingOpts.text
         }
-      }),
+      }, this.callSlot($scopedSlots.loading, {})),
       /**
        * 筛选
        */

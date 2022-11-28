@@ -13,6 +13,10 @@
       <vxe-column field="sex" title="Sex"></vxe-column>
       <vxe-column field="age" title="Age"></vxe-column>
       <vxe-column field="address" title="Address" show-overflow></vxe-column>
+
+      <template #loading>
+        <div>xxxxxxxxxxxxx</div>
+      </template>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>

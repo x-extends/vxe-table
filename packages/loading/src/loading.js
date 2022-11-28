@@ -17,12 +17,17 @@ export default {
     }
   },
   render (h) {
-    const { loadingIcon, loadingText } = this
+    const { $scopedSlots, loadingIcon, loadingText } = this
+    const defaultSlot = $scopedSlots.default
     return h('div', {
       class: ['vxe-loading', {
         'is--visible': this.value
       }]
-    }, [
+    }, defaultSlot ? [
+      h('div', {
+        class: 'vxe-loading-warpper'
+      }, defaultSlot.call(this, {}))
+    ] : [
       h('div', {
         class: 'vxe-loading--chunk'
       }, [

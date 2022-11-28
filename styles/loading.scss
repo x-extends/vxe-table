@@ -14,7 +14,8 @@
   &.is--visible {
     display: block;
   }
-  & > .vxe-loading--chunk {
+  & > .vxe-loading--chunk,
+  & > .vxe-loading-warpper {
     width: 100%;
     position: absolute;
     top: 50%;
