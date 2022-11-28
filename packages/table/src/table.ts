@@ -5938,6 +5938,7 @@ export default defineComponent({
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
       const { leftList, rightList } = columnStore
+      const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
       const treeOpts = computeTreeOpts.value
       const rowOpts = computeRowOpts.value
@@ -6063,7 +6064,9 @@ export default defineComponent({
           modelValue: loading,
           icon: loadingOpts.icon,
           text: loadingOpts.text
-        }),
+        }, loadingSlot ? {
+          default: () => loadingSlot({})
+        } : {}),
         /**
          * 筛选
          */

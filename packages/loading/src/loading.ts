@@ -8,7 +8,7 @@ export default defineComponent({
     icon: String,
     text: String
   },
-  setup (props) {
+  setup (props, { slots }) {
     const computeLoadingIcon = computed(() => {
       return props.icon || GlobalConfig.icon.LOADING
     })
@@ -25,7 +25,11 @@ export default defineComponent({
         class: ['vxe-loading', {
           'is--visible': props.modelValue
         }]
-      }, [
+      }, slots.default ? [
+        h('div', {
+          class: 'vxe-loading-warpper'
+        }, slots.default({}))
+      ] : [
         h('div', {
           class: 'vxe-loading--chunk'
         }, [
