@@ -30,6 +30,10 @@
 
 ![qq](https://vxetable.cn/static/donation/qq.png)
 
+## 在 Cloud IDE 中预览
+
+[https://idegithub.com/x-extends/vxe-table](https://idegithub.com/x-extends/vxe-table)
+
 ## 浏览器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
