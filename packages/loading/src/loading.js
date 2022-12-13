@@ -25,7 +25,7 @@ export default {
       }]
     }, defaultSlot ? [
       h('div', {
-        class: 'vxe-loading-warpper'
+        class: 'vxe-loading--warpper'
       }, defaultSlot.call(this, {}))
     ] : [
       h('div', {

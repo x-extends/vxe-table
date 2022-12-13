@@ -88,7 +88,7 @@ export function toFilters (filters) {
   return filters
 }
 
-export function getColMinWidth (params) {
+export function getColReMinWidth (params) {
   const { $table, column, cell } = params
   const { showHeaderOverflow: allColumnHeaderOverflow, resizableOpts } = $table
   const { minWidth } = resizableOpts
