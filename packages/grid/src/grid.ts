@@ -86,7 +86,9 @@ export default defineComponent({
       methodKeys.forEach(name => {
         funcs[name] = (...args: any[]) => {
           const $xetable: any = refTable.value
-          return $xetable && $xetable[name](...args)
+          if ($xetable && $xetable[name]) {
+            return $xetable[name](...args)
+          }
         }
       })
       return funcs
@@ -97,7 +99,9 @@ export default defineComponent({
     tableComponentMethodKeys.forEach(name => {
       gridExtendTableMethods[name] = (...args: any[]) => {
         const $xetable: any = refTable.value
-        return $xetable && $xetable[name](...args)
+        if ($xetable && $xetable[name]) {
+          return $xetable && $xetable[name](...args)
+        }
       }
     })
 
@@ -543,6 +547,7 @@ export default defineComponent({
       const proxyOpts = computeProxyOpts.value
       const tableOns = Object.assign({}, tableCompEvents)
       const emptySlot = slots.empty
+      const loadingSlot = slots.loading
       if (proxyConfig) {
         if (proxyOpts.sort) {
           tableOns.onSortChange = sortChangeEvent
@@ -551,14 +556,22 @@ export default defineComponent({
           tableOns.onFilterChange = filterChangeEvent
         }
       }
+      const slotObj: {
+        empty?(params: any): any
+        loading?(params: any): any
+      } = {}
+      if (emptySlot) {
+        slotObj.empty = () => emptySlot({})
+      }
+      if (loadingSlot) {
+        slotObj.loading = () => loadingSlot({})
+      }
       return [
         h(resolveComponent('vxe-table') as ComponentOptions, {
           ref: refTable,
           ...tableProps,
           ...tableOns
-        }, emptySlot ? {
-          empty: () => emptySlot({})
-        } : {})
+        }, slotObj)
       ]
     }
 

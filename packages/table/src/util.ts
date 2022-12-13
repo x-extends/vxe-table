@@ -112,7 +112,39 @@ export function setCellValue (row: any, column: VxeTableDefines.ColumnInfo, valu
   return XEUtils.set(row, column.field, value)
 }
 
-export function getColMinWidth (params: {
+/**
+ * 列宽拖动最大宽度
+ * @param params
+ * @returns
+ */
+export function getColReMaxWidth (params: {
+  $table: VxeTableConstructor & VxeTablePrivateMethods;
+  column: VxeTableDefines.ColumnInfo;
+  columnIndex: number;
+  $columnIndex: number;
+  $rowIndex: number;
+  cell: HTMLTableCellElement;
+}) {
+  const { $table } = params
+  const { computeResizableOpts } = $table.getComputeMaps()
+  const resizableOpts = computeResizableOpts.value
+  const { maxWidth: reMaxWidth } = resizableOpts
+  // 如果自定义调整宽度逻辑
+  if (reMaxWidth) {
+    const customMaxWidth = XEUtils.isFunction(reMaxWidth) ? reMaxWidth(params) : reMaxWidth
+    if (customMaxWidth !== 'auto') {
+      return Math.max(1, XEUtils.toNumber(customMaxWidth))
+    }
+  }
+  return -1
+}
+
+/**
+ * 列宽拖动最小宽度
+ * @param params
+ * @returns
+ */
+export function getColReMinWidth (params: {
   $table: VxeTableConstructor & VxeTablePrivateMethods;
   column: VxeTableDefines.ColumnInfo;
   columnIndex: number;

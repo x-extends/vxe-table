@@ -27,7 +27,7 @@ export default defineComponent({
         }]
       }, slots.default ? [
         h('div', {
-          class: 'vxe-loading-warpper'
+          class: 'vxe-loading--warpper'
         }, slots.default({}))
       ] : [
         h('div', {
