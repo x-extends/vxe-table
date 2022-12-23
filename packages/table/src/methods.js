@@ -4003,9 +4003,9 @@ const Methods = {
             if (childRows.length && treeExpandeds.indexOf(row) === -1) {
               treeExpandeds.push(row)
             }
-            // 如果当前节点已选中，则展开后子节点也被选中
+            // 如果当前节点已选中，则展开后可以允许选择的子节点也被选中
             if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
-              this.setCheckboxRow(childRows, true)
+              this.setCheckboxRow(row, true)
             }
             return this.$nextTick().then(() => {
               if (transform) {
