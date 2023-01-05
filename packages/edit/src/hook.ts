@@ -192,18 +192,20 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                 throw new Error(getLog('vxe.error.noTree', ['insert']))
               }
               let afIndex = -1
+              let fullIndex = -1
               // 如果是可视索引
               if (XEUtils.isNumber(row)) {
                 if (row < afterFullData.length) {
                   afIndex = row
+                  fullIndex = row
                 }
               } else {
                 afIndex = $xetable.findRowIndexOf(afterFullData, row)
+                fullIndex = $xetable.findRowIndexOf(tableFullData, row)
               }
-              if (afIndex === -1) {
+              if (afIndex === -1 || fullIndex === -1) {
                 throw new Error(errLog('vxe.error.unableInsert'))
               }
-              let fullIndex = $xetable.findRowIndexOf(tableFullData, row)
               if (isNext) {
                 afIndex = afIndex + 1
                 fullIndex = fullIndex + 1
