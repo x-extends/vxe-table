@@ -666,7 +666,8 @@ export default defineComponent({
       const isRollY = scrollTop !== lastScrollTop
 
       // 用于鼠标纵向滚轮处理
-      if (isRollY) {
+      // 如果按住了SHIFT,不拦截原生事件 https://github.com/x-extends/vxe-table/issues/1828
+      if (isRollY && !evnt.shiftKey) {
         evnt.preventDefault()
         tableInternalData.lastScrollTop = scrollTop
         tableInternalData.lastScrollLeft = scrollLeft
