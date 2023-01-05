@@ -112,8 +112,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        * 如果 row 为有效行则插入到该行的位置，如果为树结构，则有插入到效的目标节点该行的位置
        * @param {Object/Array} records 新的数据
        * @param {Row} row 指定行
+       * @param {Boolean} isNext 指定行下面添加
        */
-      insertAt (records: any, row: any) {
+      insertAt (records: any, row: any, isNext: Boolean = false) {
         const { treeConfig } = props
         const { mergeList, editStore } = reactData
         const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
@@ -202,8 +203,13 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               if (afIndex === -1) {
                 throw new Error(errLog('vxe.error.unableInsert'))
               }
+              let fullIndex = $xetable.findRowIndexOf(tableFullData, row)
+              if (isNext) {
+                afIndex = afIndex + 1
+                fullIndex = fullIndex + 1
+              }
               afterFullData.splice(afIndex, 0, ...newRecords)
-              tableFullData.splice($xetable.findRowIndexOf(tableFullData, row), 0, ...newRecords)
+              tableFullData.splice(fullIndex, 0, ...newRecords)
               // 刷新单元格合并
               mergeList.forEach((mergeItem: any) => {
                 const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
