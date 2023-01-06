@@ -1654,8 +1654,30 @@ export default {
       this.dateTimeChangeEvent(evnt)
     },
     dateConfirmEvent () {
-      if (this.isDateTimeType || this.multiple) {
-        this.dateChange(this.dateValue || this.currentDate)
+      const { datetimePanelValue, isDateTimeType, dateValueFormat, dateMultipleValue } = this
+      if (this.isDateTimeType) {
+        if (this.multiple) {
+          // 如果为多选
+          if (isDateTimeType) {
+            // 如果是datetime特殊类型
+            const { dateListValue } = this
+            const datetimeRest = []
+            dateListValue.forEach(item => {
+              if (item) {
+                item.setHours(datetimePanelValue.getHours())
+                item.setMinutes(datetimePanelValue.getMinutes())
+                item.setSeconds(datetimePanelValue.getSeconds())
+                datetimeRest.push(item)
+              }
+            })
+            this.emitModel(datetimeRest.map(date => XEUtils.toDateString(date, dateValueFormat)).join(','), { type: 'update' })
+          } else {
+            // 如果是日期类型
+            this.emitModel(dateMultipleValue.join(','), { type: 'update' })
+          }
+        } else {
+          this.dateChange(this.dateValue || this.currentDate)
+        }
       }
       this.hidePanel()
     },
@@ -1828,15 +1850,20 @@ export default {
           // 如果是datetime特殊类型
           const { dateListValue } = this
           const datetimeRest = []
+          const eqIndex = XEUtils.findIndexOf(dateListValue, val => XEUtils.isDateSame(date, val, 'yyyyMMdd'))
+          if (eqIndex === -1) {
+            dateListValue.push(date)
+          } else {
+            dateListValue.splice(eqIndex, 1)
+          }
           dateListValue.forEach(item => {
-            if (item && !XEUtils.isDateSame(date, item, 'yyyyMMdd')) {
+            if (item) {
               item.setHours(datetimePanelValue.getHours())
               item.setMinutes(datetimePanelValue.getMinutes())
               item.setSeconds(datetimePanelValue.getSeconds())
               datetimeRest.push(item)
             }
           })
-          datetimeRest.push(date)
           this.emitModel(datetimeRest.map(date => XEUtils.toDateString(date, dateValueFormat)).join(','), { type: 'update' })
         } else {
           // 如果是日期类型
