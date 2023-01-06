@@ -369,7 +369,7 @@ export default defineComponent({
               validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
               }).catch(({ rule, rules }) => {
-                const rest = { rule, rules, data, field, property: field, $form: $xeform }
+                const rest: any = { rule, rules, data, field, property: field, $form: $xeform }
                 if (!validRest[field]) {
                   validRest[field] = []
                 }

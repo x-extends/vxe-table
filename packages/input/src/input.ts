@@ -858,17 +858,22 @@ export default defineComponent({
         const dateMultipleValue = computeDateMultipleValue.value
         if (isDateTimeType) {
           // 如果是datetime特殊类型
-          const dateListValue = computeDateListValue.value
-          const datetimeRest = []
+          const dateListValue = [...computeDateListValue.value]
+          const datetimeRest: Date[] = []
+          const eqIndex = XEUtils.findIndexOf(dateListValue, val => XEUtils.isDateSame(date, val, 'yyyyMMdd'))
+          if (eqIndex === -1) {
+            dateListValue.push(date)
+          } else {
+            dateListValue.splice(eqIndex, 1)
+          }
           dateListValue.forEach(item => {
-            if (item && !XEUtils.isDateSame(date, item, 'yyyyMMdd')) {
+            if (item) {
               item.setHours(datetimePanelValue.getHours())
               item.setMinutes(datetimePanelValue.getMinutes())
               item.setSeconds(datetimePanelValue.getSeconds())
               datetimeRest.push(item)
             }
           })
-          datetimeRest.push(date)
           emitModel(datetimeRest.map(date => XEUtils.toDateString(date, dateValueFormat)).join(','), { type: 'update' })
         } else {
           // 如果是日期类型
@@ -1325,10 +1330,34 @@ export default defineComponent({
 
     const dateConfirmEvent = () => {
       const { multiple } = props
+      const { datetimePanelValue } = reactData
       const dateValue = computeDateValue.value
       const isDateTimeType = computeIsDateTimeType.value
-      if (isDateTimeType || multiple) {
-        dateChange(dateValue || reactData.currentDate)
+      if (isDateTimeType) {
+        const dateValueFormat = computeDateValueFormat.value
+        if (multiple) {
+          // 如果为多选
+          const dateMultipleValue = computeDateMultipleValue.value
+          if (isDateTimeType) {
+            // 如果是datetime特殊类型
+            const dateListValue = [...computeDateListValue.value]
+            const datetimeRest: Date[] = []
+            dateListValue.forEach(item => {
+              if (item) {
+                item.setHours(datetimePanelValue.getHours())
+                item.setMinutes(datetimePanelValue.getMinutes())
+                item.setSeconds(datetimePanelValue.getSeconds())
+                datetimeRest.push(item)
+              }
+            })
+            emitModel(datetimeRest.map(date => XEUtils.toDateString(date, dateValueFormat)).join(','), { type: 'update' })
+          } else {
+            // 如果是日期类型
+            emitModel(dateMultipleValue.join(','), { type: 'update' })
+          }
+        } else {
+          dateChange(dateValue || reactData.currentDate)
+        }
       }
       hidePanel()
     }

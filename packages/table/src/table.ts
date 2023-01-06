@@ -5002,8 +5002,14 @@ export default defineComponent({
         const { row, column } = params
         const cell = evnt.currentTarget as HTMLTableCellElement
         handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row !== row)
-        if (isEnableConf(editConfig)) {
-          if ((editOpts.mode === 'row' && actived.row === row) || (actived.row === row && actived.column === column)) {
+        // 单元格处于编辑状态时不触发提示框
+        if (column.editRender && isEnableConf(editConfig)) {
+          // 如果是行编辑模式
+          if (editOpts.mode === 'row' && actived.row === row) {
+            return
+          }
+          // 如果是单元格编辑模式
+          if (actived.row === row && actived.column === column) {
             return
           }
         }
