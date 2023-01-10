@@ -165,8 +165,14 @@ export default defineComponent({
     const pageSizeEvent: VxeSelectEvents.Change = (params) => {
       const { value } = params
       const pageSize = XEUtils.toNumber(value)
+      const pageCount = getPageCount(props.total, pageSize)
+      let currentPage = props.currentPage
+      if (currentPage > pageCount) {
+        currentPage = pageCount
+        emit('update:currentPage', pageCount)
+      }
       emit('update:pageSize', pageSize)
-      pagerMethods.dispatchEvent('page-change', { type: 'size', pageSize, currentPage: Math.min(props.currentPage, getPageCount(props.total, pageSize)) })
+      pagerMethods.dispatchEvent('page-change', { type: 'size', pageSize, currentPage })
     }
 
     const jumpInputEvent = (evnt: KeyboardEvent) => {
