@@ -376,13 +376,14 @@ export default {
       }
     },
     pageSizeEvent (pageSize) {
-      this.changePageSize(pageSize)
-    },
-    changePageSize (pageSize) {
-      if (pageSize !== this.pageSize) {
-        this.$emit('update:pageSize', pageSize)
-        this.$emit('page-change', { type: 'size', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) })
+      const pageCount = this.getPageCount(this.total, pageSize)
+      let currentPage = this.currentPage
+      if (currentPage > pageCount) {
+        currentPage = pageCount
+        this.$emit('update:currentPage', pageCount)
       }
+      this.$emit('update:pageSize', pageSize)
+      this.$emit('page-change', { type: 'size', pageSize, currentPage })
     },
     jumpInputEvent (evnt) {
       this.inpCurrPage = evnt.target.value
