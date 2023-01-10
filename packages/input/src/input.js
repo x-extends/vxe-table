@@ -1234,6 +1234,10 @@ export default {
     },
     focusEvent (evnt) {
       this.isActivated = true
+      const { isDatePickerType } = this
+      if (isDatePickerType) {
+        this.datePickerOpenEvent(evnt)
+      }
       this.triggerEvent(evnt)
     },
     blurEvent (evnt) {
@@ -1279,10 +1283,6 @@ export default {
       this.triggerEvent(evnt)
     },
     clickEvent (evnt) {
-      const { isDatePickerType } = this
-      if (isDatePickerType) {
-        this.datePickerOpenEvent(evnt)
-      }
       this.triggerEvent(evnt)
     },
     clickPrefixEvent (evnt) {
