@@ -25,7 +25,7 @@ function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   ] : []
 }
 
-function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: SlotVNodeType[]) {
+function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: SlotVNodeType | SlotVNodeType[]) {
   const { $table, column } = params
   const { props, internalData } = $table
   const { computeTooltipOpts } = $table.getComputeMaps()
@@ -164,7 +164,7 @@ export const Cell = {
         return renderTitleContent(params, getSlotVNs(compConf.renderHeader(renderOpts, params)))
       }
     }
-    return renderTitleContent(params, [formatText(column.getTitle(), 1)])
+    return renderTitleContent(params, formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams) {
     return renderHelpIcon(params).concat(Cell.renderHeaderTitle(params))
@@ -273,7 +273,7 @@ export const Cell = {
     const { $table, column } = params
     const { slots } = column
     const headerSlot = slots ? slots.header : null
-    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : [formatText(column.getTitle(), 1)])
+    return renderTitleContent(params, headerSlot ? $table.callSlot(headerSlot, params) : formatText(column.getTitle(), 1))
   },
   renderSeqCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, column } = params
