@@ -705,6 +705,10 @@ export default defineComponent({
 
     const focusEvent = (evnt: Event & { type: 'focus' }) => {
       reactData.isActivated = true
+      const isDatePickerType = computeIsDatePickerType.value
+      if (isDatePickerType) {
+        datePickerOpenEvent(evnt)
+      }
       triggerEvent(evnt)
     }
 
@@ -1582,10 +1586,6 @@ export default defineComponent({
     }
 
     const clickEvent = (evnt: Event & { type: 'click' }) => {
-      const isDatePickerType = computeIsDatePickerType.value
-      if (isDatePickerType) {
-        datePickerOpenEvent(evnt)
-      }
       triggerEvent(evnt)
     }
 
