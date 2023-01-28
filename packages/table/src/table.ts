@@ -3294,7 +3294,7 @@ export default defineComponent({
         const rowOpts = computeRowOpts.value
         const el = refElem.value
         tableMethods.clearCurrentRow()
-        tableMethods.clearCurrentColumn()
+        // tableMethods.clearCurrentColumn()
         reactData.currentRow = row
         if (rowOpts.isCurrent || props.highlightCurrentRow) {
           if (el) {
@@ -3385,7 +3385,7 @@ export default defineComponent({
       setCurrentColumn (fieldOrColumn) {
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
         if (column) {
-          tableMethods.clearCurrentRow()
+          // tableMethods.clearCurrentRow()
           tableMethods.clearCurrentColumn()
           reactData.currentColumn = column
         }

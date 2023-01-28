@@ -25,6 +25,9 @@ const gridComponentEmits: VxeGridEmits = [
   'form-reset',
   'form-collapse',
   'form-toggle-collapse',
+  'proxy-query',
+  'proxy-delete',
+  'proxy-save',
   'toolbar-button-click',
   'toolbar-tool-click',
   'zoom'
@@ -296,7 +299,7 @@ export default defineComponent({
         if (selectRecords.length) {
           return VXETable.modal.confirm({ id: `cfm_${code}`, content: GlobalConfig.i18n(alertKey), escClosable: true }).then((type) => {
             if (type === 'confirm') {
-              callback()
+              return callback()
             }
           })
         } else {
@@ -324,7 +327,9 @@ export default defineComponent({
       tablePage.pageSize = pageSize
       gridMethods.dispatchEvent('page-change', params)
       if (proxyConfig) {
-        gridMethods.commitProxy('query')
+        gridMethods.commitProxy('query').then((rest) => {
+          gridMethods.dispatchEvent('proxy-query', rest, params.$event)
+        })
       }
     }
 
@@ -338,7 +343,9 @@ export default defineComponent({
         reactData.sortData = params.sortList
         if (proxyConfig) {
           reactData.tablePage.currentPage = 1
-          gridMethods.commitProxy('query')
+          gridMethods.commitProxy('query').then((rest) => {
+            gridMethods.dispatchEvent('proxy-query', rest, params.$event)
+          })
         }
       }
       gridMethods.dispatchEvent('sort-change', params)
@@ -354,7 +361,9 @@ export default defineComponent({
         reactData.filterData = params.filterList
         if (proxyConfig) {
           reactData.tablePage.currentPage = 1
-          gridMethods.commitProxy('query')
+          gridMethods.commitProxy('query').then((rest) => {
+            gridMethods.dispatchEvent('proxy-query', rest, params.$event)
+          })
         }
       }
       gridMethods.dispatchEvent('filter-change', params)
@@ -363,7 +372,9 @@ export default defineComponent({
     const submitFormEvent: VxeFormEvents.Submit = (params) => {
       const { proxyConfig } = props
       if (proxyConfig) {
-        gridMethods.commitProxy('reload')
+        gridMethods.commitProxy('reload').then((rest) => {
+          gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
+        })
       }
       gridMethods.dispatchEvent('form-submit', params)
     }
@@ -371,7 +382,9 @@ export default defineComponent({
     const resetFormEvent: VxeFormEvents.Reset = (params) => {
       const { proxyConfig } = props
       if (proxyConfig) {
-        gridMethods.commitProxy('reload')
+        gridMethods.commitProxy('reload').then((rest) => {
+          gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
+        })
       }
       gridMethods.dispatchEvent('form-reset', params)
     }
@@ -663,7 +676,9 @@ export default defineComponent({
         if (!proxyInited) {
           reactData.proxyInited = true
           if (proxyOpts.autoLoad !== false) {
-            nextTick(() => gridMethods.commitProxy('_init'))
+            nextTick().then(() => gridMethods.commitProxy('_init')).then((rest) => {
+              gridMethods.dispatchEvent('proxy-query', { ...rest, isInited: true }, new Event('init'))
+            })
           }
         }
       }
@@ -699,11 +714,9 @@ export default defineComponent({
         const btnParams = button ? button.params : null
         switch (code) {
           case 'insert':
-            $xetable.insert({})
-            break
+            return $xetable.insert({})
           case 'insert_actived':
-            $xetable.insert({}).then(({ row }) => $xetable.setActiveRow(row))
-            break
+            return $xetable.insert({}).then(({ row }) => $xetable.setEditRow(row))
           case 'mark_cancel':
             triggerPendingEvent(code)
             break
@@ -722,8 +735,7 @@ export default defineComponent({
             $xetable.openExport(btnParams)
             break
           case 'reset_custom':
-            $xetable.resetColumn(true)
-            break
+            return $xetable.resetColumn(true)
           case '_init':
           case 'reload':
           case 'query': {
@@ -769,9 +781,11 @@ export default defineComponent({
                   filterList = $xetable.getCheckedFilters()
                 }
               }
-              const params: any = {
+              const commitParams = {
                 code,
                 button,
+                isInited,
+                isReload,
                 $grid: $xegrid,
                 page: pageParams,
                 sort: sortList.length ? sortList[0] : {},
@@ -783,9 +797,8 @@ export default defineComponent({
               reactData.sortData = sortList
               reactData.filterData = filterList
               reactData.tableLoading = true
-              const applyArgs = [params].concat(args)
+              const applyArgs = [commitParams].concat(args)
               return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
-                .catch(e => e)
                 .then(rest => {
                   reactData.tableLoading = false
                   if (rest) {
@@ -807,6 +820,9 @@ export default defineComponent({
                   if (afterQuery) {
                     afterQuery(...applyArgs)
                   }
+                  return { status: true }
+                }).catch(() => {
+                  return { status: false }
                 })
             } else {
               if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -821,7 +837,8 @@ export default defineComponent({
               const selectRecords = gridExtendTableMethods.getCheckboxRecords()
               const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
               const body = { removeRecords }
-              const applyArgs = [{ $grid: $xegrid, code, button, body, options: ajaxMethods }].concat(args)
+              const commitParams = { $grid: $xegrid, code, button, body, options: ajaxMethods }
+              const applyArgs = [commitParams].concat(args)
               if (selectRecords.length) {
                 return handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                   if (!removeRecords.length) {
@@ -846,6 +863,7 @@ export default defineComponent({
                       } else {
                         gridMethods.commitProxy('query')
                       }
+                      return { status: true }
                     })
                     .catch(rest => {
                       reactData.tableLoading = false
@@ -857,6 +875,7 @@ export default defineComponent({
                         }
                         VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
+                      return { status: false }
                     })
                 })
               } else {
@@ -882,7 +901,8 @@ export default defineComponent({
             if (ajaxMethods) {
               const body = Object.assign({ pendingRecords: reactData.pendingRecords }, $xetable.getRecordset())
               const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-              const applyArgs = [{ $grid: $xegrid, code, button, body, options: ajaxMethods }].concat(args)
+              const commitParams = { $grid: $xegrid, code, button, body, options: ajaxMethods }
+              const applyArgs = [commitParams].concat(args)
               // 排除掉新增且标记为删除的数据
               if (insertRecords.length) {
                 body.pendingRecords = pendingRecords.filter((row) => $xetable.findRowIndexOf(insertRecords, row) === -1)
@@ -921,6 +941,7 @@ export default defineComponent({
                       } else {
                         gridMethods.commitProxy('query')
                       }
+                      return { status: true }
                     })
                     .catch(rest => {
                       reactData.tableLoading = false
@@ -933,6 +954,7 @@ export default defineComponent({
                         }
                         VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
+                      return { status: false }
                     })
                 } else {
                   if (isMsg) {
@@ -1065,12 +1087,20 @@ export default defineComponent({
         }
         return 0
       },
+      triggerToolbarCommitEvent (params, evnt) {
+        const { code } = params
+        return gridMethods.commitProxy(params, evnt).then((rest) => {
+          if (code && rest && rest.status && ['query', 'reload', 'delete', 'save'].includes(code)) {
+            gridMethods.dispatchEvent(code === 'delete' || code === 'save' ? `proxy-${code as 'delete' | 'save'}` : 'proxy-query', { ...rest, isReload: code === 'reload' }, evnt)
+          }
+        })
+      },
       triggerToolbarBtnEvent (button, evnt) {
-        gridMethods.commitProxy(button, evnt)
+        gridPrivateMethods.triggerToolbarCommitEvent(button, evnt)
         gridMethods.dispatchEvent('toolbar-button-click', { code: button.code, button }, evnt)
       },
       triggerToolbarTolEvent (tool, evnt) {
-        gridMethods.commitProxy(tool, evnt)
+        gridPrivateMethods.triggerToolbarCommitEvent(tool, evnt)
         gridMethods.dispatchEvent('toolbar-tool-click', { code: tool.code, tool, $event: evnt })
       },
       triggerZoomEvent (evnt) {

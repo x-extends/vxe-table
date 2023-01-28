@@ -264,7 +264,7 @@ export default defineComponent({
       }, 300)
     }
 
-    const refreshEvent = () => {
+    const refreshEvent = (evnt: KeyboardEvent) => {
       const { isRefresh } = reactData
       const refreshOpts = computeRefreshOpts.value
       if (!isRefresh) {
@@ -280,7 +280,7 @@ export default defineComponent({
           }
         } else if ($xegrid) {
           reactData.isRefresh = true
-          $xegrid.commitProxy(refreshOpts.code || 'reload').catch((e) => e).then(() => {
+          $xegrid.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, evnt).catch((e) => e).then(() => {
             reactData.isRefresh = false
           })
         }

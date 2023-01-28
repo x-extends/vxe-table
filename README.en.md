@@ -20,9 +20,9 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * Designed for single row table editing, supports addition, deletion, modification and query as well as more expansion, with powerful functions and performance at the same time.
 
 * Plan
-  * [x] v1.0 Based on vue2.6+, Support for all major browsers.
-  * [x] v2.0 Based on vue2.6+, Support for all major browsers.
-  * [x] v3.0 Support modern browser and keep IE11 compatible to improve rendering performance.
+  * [x] ~~v1.0 Based on vue2.6+, Support for all major browsers.~~
+  * [x] ~~v2.0 Based on vue2.6+, Support for all major browsers.~~
+  * [x] v3.0 Based on vue2.6+, supports modern browsers and retains compatibility with IE11.
   * [x] v4.0 Based on vue3.2+, Only support modern browser, not IE.
 
 ## Browser Support

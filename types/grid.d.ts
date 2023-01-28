@@ -73,6 +73,9 @@ export type VxeGridEmits = [
   'form-reset',
   'form-collapse',
   'form-toggle-collapse',
+  'proxy-query',
+  'proxy-delete',
+  'proxy-save',
   'toolbar-button-click',
   'toolbar-tool-click',
   'zoom'
@@ -132,6 +135,7 @@ export interface VxeGridMethods extends GridMethods, TablePublicMethods { }
 export interface GridPrivateMethods {
   callSlot<T>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T): SlotVNodeType[]
   extendTableMethods<T>(methodKeys: T[]): any
+  triggerToolbarCommitEvent(params: VxeToolbarPropTypes.ButtonConfig | VxeToolbarPropTypes.ToolConfig, evnt: Event): Promise<any>
   triggerToolbarBtnEvent(button: VxeToolbarPropTypes.ButtonConfig, evnt: Event): void
   triggerToolbarTolEvent(button: VxeToolbarPropTypes.ToolConfig, evnt: Event): void
   triggerZoomEvent(evnt: Event): void
