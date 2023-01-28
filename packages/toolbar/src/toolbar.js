@@ -572,7 +572,7 @@ export default {
         }
       }, 300)
     },
-    refreshEvent () {
+    refreshEvent (evnt) {
       const { $xegrid, refreshOpts, isRefresh } = this
       if (!isRefresh) {
         const queryMethod = refreshOpts.queryMethod || refreshOpts.query
@@ -587,7 +587,7 @@ export default {
           }
         } else if ($xegrid) {
           this.isRefresh = true
-          $xegrid.commitProxy(refreshOpts.code || 'reload').catch(e => e).then(() => {
+          $xegrid.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, evnt).catch(e => e).then(() => {
             this.isRefresh = false
           })
         }

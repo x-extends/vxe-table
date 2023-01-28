@@ -3272,7 +3272,7 @@ const Methods = {
   setCurrentRow (row) {
     const { $el, rowOpts } = this
     this.clearCurrentRow()
-    this.clearCurrentColumn()
+    // this.clearCurrentColumn()
     this.currentRow = row
     if (rowOpts.isCurrent || this.highlightCurrentRow) {
       if ($el) {
@@ -3400,7 +3400,7 @@ const Methods = {
   setCurrentColumn (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
     if (column) {
-      this.clearCurrentRow()
+      // this.clearCurrentRow()
       this.clearCurrentColumn()
       this.currentColumn = column
     }

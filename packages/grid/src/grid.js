@@ -452,7 +452,9 @@ export default {
         }
         if (!proxyInited && proxyOpts.autoLoad !== false) {
           this.proxyInited = true
-          this.$nextTick(() => this.commitProxy('_init'))
+          this.$nextTick().then(() => this.commitProxy('_init')).then((rest) => {
+            this.$emit('proxy-query', { ...rest, isInited: true, $grid: this, $event: new Event('init') })
+          })
         }
       }
     },
@@ -483,11 +485,9 @@ export default {
       const btnParams = button ? button.params : null
       switch (code) {
         case 'insert':
-          this.insert()
-          break
+          return this.insert()
         case 'insert_actived':
-          this.insert().then(({ row }) => this.setActiveRow(row))
-          break
+          return this.insert().then(({ row }) => this.setActiveRow(row))
         case 'mark_cancel':
           this.triggerPendingEvent(code)
           break
@@ -555,6 +555,8 @@ export default {
             const params = {
               code,
               button,
+              isInited,
+              isReload,
               $grid: this,
               page: pageParams,
               sort: sortList.length ? sortList[0] : {},
@@ -568,7 +570,6 @@ export default {
             this.tableLoading = true
             const applyArgs = [params].concat(args)
             return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
-              .catch(e => e)
               .then(rest => {
                 this.tableLoading = false
                 if (rest) {
@@ -590,6 +591,9 @@ export default {
                 if (afterQuery) {
                   afterQuery(...applyArgs)
                 }
+                return { status: true }
+              }).catch(() => {
+                return { status: false }
               })
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -629,6 +633,7 @@ export default {
                     } else {
                       this.commitProxy('query')
                     }
+                    return { status: true }
                   })
                   .catch(rest => {
                     this.tableLoading = false
@@ -641,6 +646,7 @@ export default {
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
+                    return { status: false }
                   })
               })
             } else {
@@ -705,6 +711,7 @@ export default {
                     } else {
                       this.commitProxy('query')
                     }
+                    return { status: true }
                   })
                   .catch(rest => {
                     this.tableLoading = false
@@ -717,6 +724,7 @@ export default {
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
+                    return { status: false }
                   })
               } else {
                 if (isMsg) {
@@ -760,7 +768,7 @@ export default {
         if (selectRecords.length) {
           return VXETable.modal.confirm({ id: `cfm_${code}`, content: GlobalConfig.i18n(alertKey), escClosable: true }).then(type => {
             if (type === 'confirm') {
-              callback()
+              return callback()
             }
           })
         } else {
@@ -790,12 +798,20 @@ export default {
     getPendingRecords () {
       return this.pendingRecords
     },
+    triggerToolbarCommitEvent (params, evnt) {
+      const { code } = params
+      return this.commitProxy(params, evnt).then((rest) => {
+        if (code && rest && rest.status && ['query', 'reload', 'delete', 'save'].includes(code)) {
+          this.$emit(code === 'delete' || code === 'save' ? `proxy-${code}` : 'proxy-query', { ...rest, isReload: code === 'reload', $grid: this, $event: evnt })
+        }
+      })
+    },
     triggerToolbarBtnEvent (button, evnt) {
-      this.commitProxy(button, evnt)
-      this.$emit('toolbar-button-click', { code: button.code, button, $grid: this, $event: evnt })
+      this.triggerToolbarCommitEvent(button, evnt)
+      this.$emit('toolbar-button-click', { code: button.code, $grid: this, $event: evnt })
     },
     triggerToolbarTolEvent (tool, evnt) {
-      this.commitProxy(tool, evnt)
+      this.triggerToolbarCommitEvent(tool, evnt)
       this.$emit('toolbar-tool-click', { code: tool.code, tool, $grid: this, $event: evnt })
     },
     triggerPendingEvent (code) {
@@ -836,7 +852,9 @@ export default {
       tablePage.pageSize = pageSize
       this.$emit('page-change', Object.assign({ $grid: this }, params))
       if (proxyConfig) {
-        this.commitProxy('query')
+        this.commitProxy('query').then((rest) => {
+          this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+        })
       }
     },
     sortChangeEvent (params) {
@@ -847,7 +865,9 @@ export default {
         this.sortData = sortList
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
-          this.commitProxy('query')
+          this.commitProxy('query').then((rest) => {
+            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+          })
         }
       }
       this.$emit('sort-change', Object.assign({ $grid: this }, params))
@@ -859,7 +879,9 @@ export default {
         this.filterData = filterList
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
-          this.commitProxy('query')
+          this.commitProxy('query').then((rest) => {
+            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+          })
         }
       }
       this.$emit('filter-change', Object.assign({ $grid: this }, params))
@@ -867,14 +889,18 @@ export default {
     submitEvent (params) {
       const { proxyConfig } = this
       if (proxyConfig) {
-        this.commitProxy('reload')
+        this.commitProxy('reload').then((rest) => {
+          this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
+        })
       }
       this.$emit('form-submit', Object.assign({ $grid: this }, params))
     },
     resetEvent (params) {
       const { proxyConfig } = this
       if (proxyConfig) {
-        this.commitProxy('reload')
+        this.commitProxy('reload').then((rest) => {
+          this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
+        })
       }
       this.$emit('form-reset', Object.assign({ $grid: this }, params))
     },
