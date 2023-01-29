@@ -101,7 +101,7 @@ export default defineComponent({
 
     const triggerJumpEvent = (evnt: Event) => {
       const inputElem: HTMLInputElement = evnt.target as HTMLInputElement
-      const inpValue = XEUtils.toNumber(inputElem.value)
+      const inpValue = Math.trunc(XEUtils.toNumber(inputElem.value))
       const pageCount = computePageCount.value
       const current = inpValue <= 0 ? 1 : inpValue >= pageCount ? pageCount : inpValue
       inputElem.value = XEUtils.toValueString(current)
