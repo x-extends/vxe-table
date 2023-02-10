@@ -1,4 +1,4 @@
-import { defineComponent, h, PropType, ref, Ref, computed, onUnmounted, watch, reactive, nextTick } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, onUnmounted, watch, reactive, nextTick, onActivated } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -285,6 +285,10 @@ export default defineComponent({
         recalculate()
         nextTick(() => setTimeout(() => recalculate()))
       }
+    })
+
+    onActivated(() => {
+      recalculate().then(() => refreshScroll())
     })
 
     let resizeObserver: XEResizeObserver

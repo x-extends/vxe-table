@@ -691,7 +691,7 @@ export interface TablePrivateMethods {
   saveCustomVisible(): void
   analyColumnWidth(): void
   checkSelectionStatus(): void
-  handleSelectRow(params: any, value: any): void
+  handleSelectRow(params: any, value: any, isForce?: boolean): void
   handleCustom(): Promise<any>
   preventEvent(evnt: any, type: any, args?: any, next?: any, end?: any): any
   triggerHeaderHelpEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams): void
