@@ -76,6 +76,9 @@ export default {
       this.$resize = resizeObserver
     }
   },
+  activated () {
+    this.recalculate().then(() => this.refreshScroll())
+  },
   beforeDestroy () {
     if (this.$resize) {
       this.$resize.disconnect()

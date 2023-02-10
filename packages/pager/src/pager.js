@@ -400,7 +400,7 @@ export default {
       }
     },
     triggerJumpEvent (evnt) {
-      const value = XEUtils.toNumber(evnt.target.value)
+      const value = XEUtils.toInteger(evnt.target.value)
       const current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
       evnt.target.value = current
       this.jumpPage(current)
