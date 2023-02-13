@@ -104,7 +104,7 @@ const VxeFormConfigItem = {
       props: {
         itemConfig: item
       },
-      key: item.id
+      key: item.field // item.id 改为 item.field 确保唯一。优化由于formConfig赋值变化引起item.id变化，导致表单重复渲染
     }, [
       h('div', {
         class: 'vxe-form--item-inner'
