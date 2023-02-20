@@ -2291,7 +2291,8 @@ export default defineComponent({
         })
       }
       const visibleColumn = leftList.concat(centerList).concat(rightList)
-      const scrollXLoad = !!sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+      // 如果gt为0，则总是启用
+      const scrollXLoad = !!sXOpts.enabled && sXOpts.gt > -1 && (sXOpts.gt === 0 || sXOpts.gt < tableFullColumn.length)
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad) {
@@ -2370,7 +2371,8 @@ export default defineComponent({
       const sYOpts = computeSYOpts.value
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
-      const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < fullData.length
+      // 如果gt为0，则总是启用
+      const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt < fullData.length)
       reactData.scrollYLoad = scrollYLoad
       return scrollYLoad
     }
@@ -2499,7 +2501,7 @@ export default defineComponent({
 
     tableMethods = {
       dispatchEvent (type, params, evnt) {
-        emit(type, Object.assign({ $table: $xetable, $event: evnt }, params))
+        emit(type, Object.assign({ $table: $xetable, $grid: $xegrid, $event: evnt }, params))
       },
       /**
        * 重置表格的一切数据状态

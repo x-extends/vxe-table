@@ -254,7 +254,8 @@ export default defineComponent({
           visibleSize: 0
         })
         internalData.fullData = fullData
-        reactData.scrollYLoad = !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
+        // 如果gt为0，则总是启用
+        reactData.scrollYLoad = !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt <= fullData.length)
         handleData()
         return computeScrollLoad().then(() => {
           refreshScroll()

@@ -12,7 +12,6 @@ import { VxeFormConstructor, VxeFormDefines, VxeFormPrivateMethods, SlotVNodeTyp
 const VxeFormConfigItem = defineComponent({
   name: 'VxeFormConfigItem',
   props: {
-    itemConfig2: Object,
     itemConfig: Object as PropType<VxeFormDefines.ItemInfo>
   },
   setup (props) {
@@ -124,9 +123,7 @@ const VxeFormConfigItem = defineComponent({
             'is--active': isActivetem($xeform, item),
             'is--error': showError
           }
-        ],
-        itemConfig: item,
-        key: item.id
+        ]
       }, [
         h('div', {
           class: 'vxe-form--item-inner'

@@ -591,7 +591,6 @@ export default defineComponent({
         }, customLayout ? (defaultSlot ? defaultSlot({}) : []) : formItems.map((item, index) => {
           return h(VxeFormConfigItem, {
             key: index,
-            itemConfig2: item,
             itemConfig: item
           })
         })),
