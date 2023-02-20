@@ -343,7 +343,8 @@ const Methods = {
   updateScrollYStatus (fullData) {
     const { treeConfig, treeOpts, sYOpts } = this
     const { transform } = treeOpts
-    const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt < fullData.length
+    // 如果gt为0，则总是启用
+    const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt <= fullData.length)
     this.scrollYLoad = scrollYLoad
     return scrollYLoad
   },
@@ -1627,7 +1628,8 @@ const Methods = {
       })
     }
     const visibleColumn = leftList.concat(centerList).concat(rightList)
-    const scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && sXOpts.gt < tableFullColumn.length
+    // 如果gt为0，则总是启用
+    const scrollXLoad = sXOpts.enabled && sXOpts.gt > -1 && (sXOpts.gt === 0 || sXOpts.gt <= tableFullColumn.length)
     this.hasFixedColumn = leftList.length > 0 || rightList.length > 0
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad) {

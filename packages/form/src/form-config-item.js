@@ -100,11 +100,7 @@ const VxeFormConfigItem = {
           'is--active': isActivetem($xeform, item),
           'is--error': showError
         }
-      ],
-      props: {
-        itemConfig: item
-      },
-      key: item.id
+      ]
     }, [
       h('div', {
         class: 'vxe-form--item-inner'

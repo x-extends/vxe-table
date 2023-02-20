@@ -145,7 +145,8 @@ export default {
         visibleSize: 0
       })
       this.fullData = fullData
-      this.scrollYLoad = sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
+      // 如果gt为0，则总是启用
+      this.scrollYLoad = sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt <= fullData.length)
       this.handleData()
       return this.computeScrollLoad().then(() => {
         this.refreshScroll()
