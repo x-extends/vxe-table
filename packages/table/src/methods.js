@@ -2832,7 +2832,7 @@ const Methods = {
         } else {
           // 更新子节点状态
           XEUtils.eachTree([row], (item) => {
-            if (this.eqRow(item, row) || (isForce && (!checkMethod || checkMethod({ row: item })))) {
+            if (this.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
               if (value) {
                 selection.push(item)
               } else {
