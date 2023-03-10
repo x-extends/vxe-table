@@ -66,13 +66,13 @@ export interface VxeTableProMethods {
    */
   closeFNR(): Promise<any>
 }
-export interface VxeProPluginMethods extends VxeTableProMethods { }
+export type VxeProPluginMethods = VxeTableProMethods
 
 export interface VxeTableProPrivateMethods {
   handleKeyboardEvent(evnt: KeyboardEvent): void
   handleHeaderCellAreaEvent(evnt: KeyboardEvent, params: VxeTableDefines.HeaderCellClickEventParams): void
   handleCellAreaEvent(evnt: MouseEvent, params: VxeTableDefines.CellClickEventParams): void
-  handleUpdateCellAreas(): void
+  handleUpdateCellAreas(): any
   handleCopyCellAreaEvent(evnt: ClipboardEvent): void
   handlePasteCellAreaEvent(evnt: ClipboardEvent): void
   handleCutCellAreaEvent(evnt: ClipboardEvent): void
@@ -82,7 +82,7 @@ export interface VxeTableProPrivateMethods {
   triggerPasteCellAreaEvent(evnt: MouseEvent): void
   triggerFNROpenEvent(evnt: MouseEvent, tab: 'find' | 'replace'): void
 }
-export interface VxeProPluginPrivateMethods extends VxeTableProPrivateMethods { }
+export type VxeProPluginPrivateMethods = VxeTableProPrivateMethods
 
 declare module '../table' {
   interface VxeTableMethods extends VxeTableProMethods { }
@@ -193,7 +193,7 @@ export namespace VxeTableProDefines {
   }
   export interface OpenFnrEventParams extends EventParams, OpenFnrParams { }
 
-  export interface FnrChangeParams extends OpenFnrParams { }
+  export type FnrChangeParams = OpenFnrParams
   export interface FnrChangeEventParams extends EventParams, FnrChangeParams { }
 
   export interface FnrFindParams {
@@ -201,7 +201,7 @@ export namespace VxeTableProDefines {
     row: any
     column: VxeTableDefines.ColumnInfo
   }
-  export interface FnrFindEventParams extends FnrFindParams { }
+  export type FnrFindEventParams = FnrFindParams
 
   export interface FindAndReplaceResult {
     row: any
@@ -214,7 +214,7 @@ export namespace VxeTableProDefines {
     findValue: string
     result: FindAndReplaceResult[]
   }
-  export interface FnrFindAllEventParams extends FnrFindAllParams { }
+  export type FnrFindAllEventParams = FnrFindAllParams
 
   export interface FnrReplaceParams {
     findValue: string
@@ -222,14 +222,14 @@ export namespace VxeTableProDefines {
     row: any
     column: VxeTableDefines.ColumnInfo
   }
-  export interface FnrReplaceEventParams extends FnrReplaceParams { }
+  export type FnrReplaceEventParams = FnrReplaceParams
 
   export interface FnrReplaceAllParams {
     findValue: string
     replaceValue: string
     result: FindAndReplaceResult[]
   }
-  export interface FnrReplaceAllEventParams extends FnrReplaceAllParams { }
+  export type FnrReplaceAllEventParams = FnrReplaceAllParams
 
   export interface CellAreaCopyParams {
     status: boolean
@@ -293,7 +293,7 @@ export namespace VxeTableProDefines {
   }
   export interface CellAreaSelectionEndEventParams extends EventParams, CellAreaSelectionEndParams { }
 
-  export interface CellAreaExtensionStartParams extends CellAreaSelectionStartParams {}
+  export type CellAreaExtensionStartParams = CellAreaSelectionStartParams
   export interface CellAreaExtensionStartEventParams extends EventParams, CellAreaExtensionStartParams { }
 
   export interface CellAreaExtensionDragParams {

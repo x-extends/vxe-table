@@ -2334,7 +2334,7 @@ export default defineComponent({
       return tableMethods.updateFooter().then(() => {
         return tableMethods.recalculate()
       }).then(() => {
-        tablePrivateMethods.updateCellAreas()
+        tableMethods.updateCellAreas()
         return tableMethods.recalculate()
       })
     }
@@ -2539,7 +2539,7 @@ export default defineComponent({
             return tableMethods.refreshScroll()
           }
         }).then(() => {
-          tablePrivateMethods.updateCellAreas()
+          tableMethods.updateCellAreas()
           return tableMethods.recalculate(true)
         }).then(() => {
           // 存在滚动行为未结束情况
@@ -3157,10 +3157,13 @@ export default defineComponent({
        */
       getCheckboxIndeterminateRecords (isFull) {
         const { treeConfig } = props
-        const { afterFullData } = internalData
+        const { fullDataRowIdData } = internalData
         const { treeIndeterminates } = reactData
         if (treeConfig) {
-          return isFull ? treeIndeterminates.slice(0) : treeIndeterminates.filter(row => $xetable.findRowIndexOf(afterFullData, row) > -1)
+          return isFull ? treeIndeterminates.slice(0) : treeIndeterminates.filter(row => {
+            const rowid = getRowid($xetable, row)
+            return fullDataRowIdData[rowid]
+          })
         }
         return []
       },
@@ -3969,7 +3972,7 @@ export default defineComponent({
           errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
         setMerges(merges, reactData.mergeList, internalData.afterFullData)
-        return nextTick().then(() => tablePrivateMethods.updateCellAreas())
+        return nextTick().then(() => tableMethods.updateCellAreas())
       },
       /**
        * 移除单元格合并
@@ -3981,7 +3984,7 @@ export default defineComponent({
         }
         const rest = removeMerges(merges, reactData.mergeList, internalData.afterFullData)
         return nextTick().then(() => {
-          tablePrivateMethods.updateCellAreas()
+          tableMethods.updateCellAreas()
           return rest
         })
       },
@@ -4003,7 +4006,7 @@ export default defineComponent({
           errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
         }
         setMerges(merges, reactData.mergeFooterList)
-        return nextTick().then(() => tablePrivateMethods.updateCellAreas())
+        return nextTick().then(() => tableMethods.updateCellAreas())
       },
       removeMergeFooterItems (merges) {
         if (props.footerSpanMethod) {
@@ -4011,7 +4014,7 @@ export default defineComponent({
         }
         const rest = removeMerges(merges, reactData.mergeFooterList)
         return nextTick().then(() => {
-          tablePrivateMethods.updateCellAreas()
+          tableMethods.updateCellAreas()
           return rest
         })
       },
@@ -4026,6 +4029,14 @@ export default defineComponent({
        */
       clearMergeFooterItems () {
         reactData.mergeFooterList = []
+        return nextTick()
+      },
+      updateCellAreas () {
+        const { mouseConfig } = props
+        const mouseOpts = computeMouseOpts.value
+        if (mouseConfig && mouseOpts.area && $xetable.handleUpdateCellAreas) {
+          return $xetable.handleUpdateCellAreas()
+        }
         return nextTick()
       },
       focus () {
@@ -4495,7 +4506,7 @@ export default defineComponent({
       if ($xetable.closeMenu) {
         $xetable.closeMenu()
       }
-      tablePrivateMethods.updateCellAreas()
+      tableMethods.updateCellAreas()
       tableMethods.recalculate(true)
     }
 
@@ -5480,13 +5491,6 @@ export default defineComponent({
           internalData.tZindex = props.zIndex
         } else if (internalData.tZindex < getLastZIndex()) {
           internalData.tZindex = nextZIndex()
-        }
-      },
-      updateCellAreas () {
-        const { mouseConfig } = props
-        const mouseOpts = computeMouseOpts.value
-        if (mouseConfig && mouseOpts.area && $xetable.handleUpdateCellAreas) {
-          $xetable.handleUpdateCellAreas()
         }
       },
       /**

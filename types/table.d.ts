@@ -661,6 +661,10 @@ export interface TablePublicMethods {
    */
   setMergeFooterItems(merges: VxeTableDefines.MergeOptions | VxeTableDefines.MergeOptions[]): Promise<any>
   /**
+   * 用于 mouse-config.area，更新已选区域的单元格样式
+   */
+  updateCellAreas(): Promise<void>
+  /**
    * 连接工具栏
    * @param toolbar 工具栏组件实例
    */
@@ -725,7 +729,6 @@ export interface TablePrivateMethods {
   updateScrollYData(): void
   checkScrolling(): void
   updateZindex(): void
-  updateCellAreas(): void
   triggerHoverEvent(evnt: any, params: any): void
   setHoverRow(row: any): void
   clearHoverRow(): void
@@ -1609,6 +1612,10 @@ export namespace VxeTablePropTypes {
      * 是否开启回车移动上下行移动
      */
     isEnter?: boolean
+    /**
+     * 如果功能被支持，用于 mouse-config.area，开启同时按住方向键以活动区域为起始，向指定方向延伸单元格区域
+     */
+    isShift?: boolean
     /**
      * 是否开启TAB键左右移动功能
      */
