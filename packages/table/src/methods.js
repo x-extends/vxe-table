@@ -2727,9 +2727,12 @@ const Methods = {
    * 获取复选框半选状态的行数据
    */
   getCheckboxIndeterminateRecords (isFull) {
-    const { treeConfig, treeIndeterminates, afterFullData } = this
+    const { treeConfig, treeIndeterminates, fullDataRowIdData } = this
     if (treeConfig) {
-      return isFull ? treeIndeterminates.slice(0) : treeIndeterminates.filter(row => this.findRowIndexOf(afterFullData, row) > -1)
+      return isFull ? treeIndeterminates.slice(0) : treeIndeterminates.filter(row => {
+        const rowid = getRowid(this, row)
+        return fullDataRowIdData[rowid]
+      })
     }
     return []
   },
@@ -4595,8 +4598,9 @@ const Methods = {
   },
   updateCellAreas () {
     if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
-      this.handleUpdateCellAreas()
+      return this.handleUpdateCellAreas()
     }
+    return this.$nextTick()
   },
   emitEvent (type, params, evnt) {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))

@@ -246,6 +246,7 @@ export declare class Table extends VXETableComponent {
     oSize?: number;
     [key: string]: any;
   };
+
   /**
    * 纵向虚拟滚动配置
    */
@@ -260,6 +261,7 @@ export declare class Table extends VXETableComponent {
     oSize?: number;
     [key: string]: any;
   };
+
   // 额外的参数
   params?: any;
 
@@ -318,6 +320,7 @@ export declare class Table extends VXETableComponent {
     index: number;
     parent?: RowInfo;
   };
+
   /**
    * 根据 th/td 元素获取对应的 column 信息
    * @param cell 单元格节点元素
@@ -329,6 +332,7 @@ export declare class Table extends VXETableComponent {
     index: number;
     parent?: ColumnInfo;
   };
+
   /**
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
@@ -418,6 +422,7 @@ export declare class Table extends VXETableComponent {
     visibleColumn: ColumnInfo[];
     tableColumn: ColumnInfo[];
   };
+
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
@@ -441,6 +446,7 @@ export declare class Table extends VXETableComponent {
     tableData: RowInfo[];
     footerData: any[][];
   };
+
   /**
    * 隐藏指定列
    * @param column 列对象
@@ -608,7 +614,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 手动清空排序条件，数据会恢复成未排序的状态
    */
-   clearSort(fieldOrColumn?: string | ColumnInfo | null): Promise<any>;
+  clearSort(fieldOrColumn?: string | ColumnInfo | null): Promise<any>;
   /**
    * 获取当前排序的 column 信息
    */
@@ -719,6 +725,7 @@ export declare class Table extends VXETableComponent {
     scrollTop: number;
     scrollLeft: number;
   };
+
   /**
    * 如果有滚动条，则滚动到对应的位置
    * @param scrollLeft 左边距离
@@ -754,6 +761,7 @@ export declare class Table extends VXETableComponent {
       column: ColumnInfo;
     }
   ): Promise<any>;
+
   /**
    * 用于 filters，修改筛选列表
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
@@ -778,6 +786,7 @@ export declare class Table extends VXETableComponent {
     row: RowInfo;
     column: ColumnInfo;
   };
+
   /**
    * 用于 mouse-config.area，用于获取鼠标选择的区域
    */
@@ -846,6 +855,7 @@ export declare class Table extends VXETableComponent {
     removeRecords: RowInfo[];
     updateRecords: RowInfo[];
   };
+
   /**
    * 用于 edit-config，获取新增的临时数据
    */
@@ -863,7 +873,7 @@ export declare class Table extends VXETableComponent {
    * @deprecated
    */
   clearActived(evnt?: Event): Promise<any>
-   /**
+  /**
     * 手动清除单元格激活状态
     */
   clearEdit(evnt?: Event): Promise<any>
@@ -884,6 +894,7 @@ export declare class Table extends VXETableComponent {
     $columnIndex: number
     cell: HTMLElement
   }
+
   /**
    * 用于 edit-config，获取已激活的行数据
    */
@@ -896,12 +907,13 @@ export declare class Table extends VXETableComponent {
     $columnIndex: number
     cell: HTMLElement
   }
+
   /**
    * 请使用 isEditByRow
    * @deprecated
    */
   isActiveByRow(row: any): boolean
-   /**
+  /**
     * 用于 edit-config，判断行是否为激活编辑状态
     * @param row 指定行
     */
@@ -916,17 +928,17 @@ export declare class Table extends VXETableComponent {
    * @deprecated
    */
   setActiveRow(row: any): Promise<any>
-   /**
+  /**
     * 用于 edit-config，激活行编辑并激活第一个单元格
     * @param row 指定行
     */
   setEditRow(row: any): Promise<any>
-   /**
+  /**
     * 请使用 setEditCell
     * @deprecated
     */
   setActiveCell(row: any, fieldOrColumn: string | ColumnInfo): Promise<any>
-   /**
+  /**
     * 用于 edit-config，激活单元格编辑
     * @param row 指定行
     * @param field 字段名
@@ -947,6 +959,7 @@ export declare class Table extends VXETableComponent {
     column?: number | ColumnInfo;
     row?: number | RowInfo;
   }): Promise<any>;
+
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
    * @param activeArea
@@ -956,6 +969,7 @@ export declare class Table extends VXETableComponent {
     column: number | ColumnInfo;
     row: number | RowInfo;
   }): Promise<any>;
+
   /**
    * 临时合并单元格，如果为数组则合并多个
    */
@@ -1002,7 +1016,7 @@ export declare class Table extends VXETableComponent {
   importData(options?: TableImportConfig): Promise<any>;
   /**
    * 保存文件到本地
-   * @param options 
+   * @param options
    */
   saveFile(options: SaveFileOptions): Promise<any>;
   /**
@@ -1033,6 +1047,10 @@ export declare class Table extends VXETableComponent {
    */
   closeFNR(): Promise<any>;
   /**
+   * 用于 mouse-config.area，更新已选区域的单元格样式
+   */
+  updateCellAreas(): Promise<void>;
+  /**
    * 连接工具栏
    * @param toolbar 工具栏组件实例
    */
@@ -1059,10 +1077,10 @@ export interface TableFooterMethodParams {
 }
 export function TableFooterMethod(params: TableFooterMethodParams): Array<string | number | null>[];
 
-export interface TableSpanMethodParams extends ColumnCellRenderParams {}
+export type TableSpanMethodParams = ColumnCellRenderParams
 export function TableSpanMethod(params: TableSpanMethodParams): { rowspan: number, colspan: number }
 
-export interface TableFooterSpanMethodParams extends ColumnFooterRenderParams {}
+export type TableFooterSpanMethodParams = ColumnFooterRenderParams
 export function TableFooterSpanMethod(params: TableFooterSpanMethodParams): { rowspan: number, colspan: number }
 
 export interface TableOptions {
@@ -1160,7 +1178,7 @@ export interface TableColumnConfig {
   width?: number;
   minWidth?: number;
 }
-export interface ColumnDefaultConfig extends TableColumnConfig {}
+export type ColumnDefaultConfig = TableColumnConfig
 
 /**
  * 自定义列配置项
@@ -1172,7 +1190,7 @@ export interface TableCustomConfig {
   };
   checkMethod?(params: { column: ColumnInfo }): boolean;
 }
-export interface CustomConfig extends TableCustomConfig {}
+export type CustomConfig = TableCustomConfig
 
 /**
  * 序号配置项
@@ -1181,7 +1199,7 @@ export interface TableSeqConfig {
   startIndex?: number;
   seqMethod?(params: ColumnCellRenderParams): number;
 }
-export interface SeqConfig extends TableSeqConfig {}
+export type SeqConfig = TableSeqConfig
 
 export interface TableSortConfs {
   field: string;
@@ -1206,7 +1224,7 @@ export interface TableSortConfig {
   iconAsc?: string;
   iconDesc?: string;
 }
-export interface SortConfig extends TableSortConfig {}
+export type SortConfig = TableSortConfig
 
 /**
  * 筛选配置项
@@ -1217,7 +1235,7 @@ export interface TableFilterConfig {
   iconNone?: string;
   iconMatch?: string;
 }
-export interface FilterConfig extends TableFilterConfig {}
+export type FilterConfig = TableFilterConfig
 
 /**
  * 单选框配置
@@ -1230,7 +1248,7 @@ export interface TableRadioConfig {
   trigger?: 'default' | 'cell' | 'row';
   highlight?: boolean;
 }
-export interface RadioConfig extends TableRadioConfig {}
+export type RadioConfig = TableRadioConfig
 
 /**
  * 复选框配置项
@@ -1250,7 +1268,7 @@ export interface TableCheckboxConfig {
   highlight?: boolean;
   range?: boolean;
 }
-export interface CheckboxConfig extends TableCheckboxConfig {}
+export type CheckboxConfig = TableCheckboxConfig
 
 /**
  * 提示信息配置项
@@ -1262,7 +1280,7 @@ export interface TableTooltipConfig {
   leaveDelay?: number;
   contentMethod?(params: { items: any[], row: RowInfo, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
 }
-export interface TooltipConfig extends TableTooltipConfig {}
+export type TooltipConfig = TableTooltipConfig
 
 /**
  * 展开行配置项
@@ -1283,7 +1301,7 @@ export interface TableExpandConfig {
   iconClose?: string;
   iconLoaded?: string;
 }
-export interface ExpandConfig extends TableExpandConfig {}
+export type ExpandConfig = TableExpandConfig
 
 /**
  * 树形结构配置项
@@ -1305,7 +1323,7 @@ export interface TableTreeConfig {
   iconClose?: string;
   iconLoaded?: string;
 }
-export interface TreeConfig extends TableTreeConfig {}
+export type TreeConfig = TableTreeConfig
 
 export interface TreeOpts {
   children: string;
@@ -1336,8 +1354,8 @@ export interface TableMenuConfig {
   visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: RowInfo, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
   className?: string;
 }
-export interface TableContextMenu extends TableMenuConfig {}
-export interface ContextMenuConfig extends TableContextMenu {}
+export type TableContextMenu = TableMenuConfig
+export type ContextMenuConfig = TableContextMenu
 
 /**
  * 鼠标配置项
@@ -1349,7 +1367,7 @@ export interface TableMouseConfig {
    */
   area?: boolean;
 }
-export interface MouseConfig extends TableMouseConfig {}
+export type MouseConfig = TableMouseConfig
 
 export interface MouseCellArea {
   main: boolean;
@@ -1377,7 +1395,7 @@ export interface TableMergeConfig {
   rowspan: number;
   colspan: number;
 }
-export interface MergeOptions extends TableMergeConfig {}
+export type MergeOptions = TableMergeConfig
 
 export interface MergeItem {
   row: number;
@@ -1404,6 +1422,10 @@ export interface TableKeyboardConfig {
    */
   isEnter?: boolean;
   /**
+   * 如果功能被支持，用于 mouse-config.area，开启同时按住方向键以活动区域为起始，向指定方向延伸单元格区域
+   */
+  isShift?: boolean
+  /**
    * 是否开启TAB键左右移动功能
    */
   isTab?: boolean;
@@ -1428,7 +1450,7 @@ export interface TableKeyboardConfig {
    */
   editMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
 }
-export interface KeyboardConfig extends TableKeyboardConfig {}
+export type KeyboardConfig = TableKeyboardConfig
 
 /**
  * 复制粘贴配置项
@@ -1472,7 +1494,7 @@ export interface TableEditConfig {
    */
   activeMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
 }
-export interface EditConfig extends TableEditConfig {}
+export type EditConfig = TableEditConfig
 
 /**
  * 校验配置项
@@ -1482,7 +1504,7 @@ export interface TableValidConfig {
   message?: string;
   maxWidth?: number;
 }
-export interface ValidConfig extends TableValidConfig {}
+export type ValidConfig = TableValidConfig
 
 /**
  * 校验规则配置项
@@ -1490,4 +1512,4 @@ export interface ValidConfig extends TableValidConfig {}
 export interface EditVaildRules {
   [field: string]: ColumnEditRule[];
 }
-export interface VaildRules extends EditVaildRules {}
+export type VaildRules = EditVaildRules
