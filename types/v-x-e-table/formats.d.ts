@@ -1,5 +1,7 @@
 import { VxeTableDefines } from '../table'
 
+/* eslint-disable no-use-before-define */
+
 export namespace VxeGlobalFormatsHandles {
   export type FormatsCallback = (params: FormatsParams, ...args: any[]) => string | number
   export interface FormatsParams {

@@ -1,15 +1,17 @@
 import { SetupContext } from 'vue'
 import { VXEComponent, VxeComponentBase } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 图标
  * @example import { VxeIcon } from 'vxe-table'
  */
-export const VxeIcon: VXEComponent<{}>
+export const VxeIcon: VXEComponent<{ [key: string]: any }>
 /**
  * 组件 - 图标
  */
-export const Icon: VXEComponent<{}>
+export const Icon: VXEComponent<{ [key: string]: any }>
 
 export interface VxeIconConstructor extends VxeComponentBase, VxeIconMethods {
   props: VxeIconProps
@@ -29,7 +31,6 @@ export namespace VxeIconPropTypes {
   export type Name = string
   export type Roll = boolean
 }
-
 
 export type VxeIconEmits = [
   'click'

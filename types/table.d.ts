@@ -1,5 +1,5 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
-import { VXEComponent, VxeComponentBase, VxeEvent, RecordInfo, SizeType, ValueOf, VNodeStyle, SlotVNodeType } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle, SlotVNodeType } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnPropTypes, VxeColumnProps } from './column'
 import { VXETableSetupOptions, VxeGlobalRendererHandles } from './v-x-e-table'
@@ -7,6 +7,8 @@ import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
 import { VxeGridConstructor } from './grid'
 import { VxeMenuPanelInstance } from './menu'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 表格
@@ -30,7 +32,7 @@ export interface VxeTableConstructor extends VxeComponentBase, VxeTableMethods {
   getComputeMaps(): TablePrivateComputed
   renderVN: RenderFunction
 
-  xegrid?: VxeGridConstructor | null | undefined
+  xegrid: VxeGridConstructor | null
 }
 
 export interface TablePrivateRef {
@@ -90,7 +92,7 @@ export interface TablePrivateComputed {
   computeIsAllCheckboxDisabled: ComputedRef<boolean>
 }
 
-export interface VxeTablePrivateComputed extends TablePrivateComputed { }
+export type VxeTablePrivateComputed = TablePrivateComputed
 
 export interface TableMethods extends TablePublicMethods {
   dispatchEvent(type: ValueOf<VxeTableEmits>, params: any, evnt: Event | null): void
@@ -1059,8 +1061,8 @@ export interface TableInternalData {
   _isResize?: boolean
   _keyCtx?: any
   _lastCallTime?: any
-  _importResolve?: Function | null
-  _importReject?: Function | null
+  _importResolve?: ((...args: any[]) => any) | null
+  _importReject?: ((...args: any[]) => any) | null
   _currFilterParams?: any
   _currMenuParams?: any
 }
@@ -1074,9 +1076,9 @@ export namespace VxeTablePropTypes {
   export type Resizable = boolean
   export type Stripe = boolean
   export type Round = boolean
-  export type Border = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none'
+  export type Border = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none' | ''
   export type Loading = boolean
-  export type Align = 'left' | 'center' | 'right' | null
+  export type Align = 'left' | 'center' | 'right' | '' | null
   export type HeaderAlign = Align
   export type FooterAlign = Align
   export type ShowHeader = boolean
@@ -1224,7 +1226,7 @@ export namespace VxeTablePropTypes {
     data: any[][]
   }) => void | { rowspan: number, colspan: number }
 
-  export type ShowOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null
+  export type ShowOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | '' | null
   export type ShowHeaderOverflow = ShowOverflow
   export type ShowFooterOverflow = ShowOverflow
   export type ColumnKey = boolean
@@ -1335,7 +1337,7 @@ export namespace VxeTablePropTypes {
     iconAsc?: string
     iconDesc?: string
   }
-  export type SortOrder = 'asc' | 'desc' | null
+  export type SortOrder = 'asc' | 'desc' | '' | null
   export interface SortOpts extends SortConfig {
     orders: SortOrder[]
   }
@@ -1371,7 +1373,7 @@ export namespace VxeTablePropTypes {
     visibleMethod?(params: {
       row: any
     }): boolean
-    trigger?: 'default' | 'cell' | 'row'
+    trigger?: 'default' | 'cell' | 'row' | '' | null
     highlight?: boolean
     strict?: boolean
   }
@@ -1396,7 +1398,7 @@ export namespace VxeTablePropTypes {
     visibleMethod?(params: {
       row: any
     }): boolean
-    trigger?: 'default' | 'cell' | 'row'
+    trigger?: 'default' | 'cell' | 'row' | '' | null
     highlight?: boolean
     range?: boolean
   }
@@ -1407,7 +1409,7 @@ export namespace VxeTablePropTypes {
    */
   export interface TooltipConfig {
     showAll?: boolean
-    theme?: 'dark' | 'light'
+    theme?: 'dark' | 'light' | '' | null
     enterable?: boolean
     enterDelay?: number
     leaveDelay?: number
@@ -1421,7 +1423,7 @@ export namespace VxeTablePropTypes {
       columnIndex: number
       $columnIndex: number
       _columnIndex: number
-      type: 'header' | 'body' | 'footer'
+      type: 'header' | 'body' | 'footer' | '' | null
       cell: HTMLElement
       $event: any
     }): string | null | void
@@ -1436,7 +1438,7 @@ export namespace VxeTablePropTypes {
     expandAll?: boolean
     expandRowKeys?: string[] | number[]
     accordion?: boolean
-    trigger?: 'default' | 'cell' | 'row'
+    trigger?: 'default' | 'cell' | 'row' | '' | null
     lazy?: boolean
     reserve?: boolean
     height?: number
@@ -1478,7 +1480,7 @@ export namespace VxeTablePropTypes {
     expandAll?: boolean
     expandRowKeys?: string[] | number[]
     accordion?: boolean
-    trigger?: 'default' | 'cell' | 'row'
+    trigger?: 'default' | 'cell' | 'row' | '' | null
     lazy?: boolean
     hasChild?: string
     reserve?: boolean
@@ -1518,7 +1520,7 @@ export namespace VxeTablePropTypes {
     header?: VxeTableDefines.MenuOptions
     body?: VxeTableDefines.MenuOptions
     footer?: VxeTableDefines.MenuOptions
-    trigger?: 'default' | 'cell'
+    trigger?: 'default' | 'cell' | '' | null
     className?: string
     visibleMethod?(params: {
       type: string
@@ -1886,7 +1888,7 @@ export namespace VxeTablePropTypes {
    * 编辑配置项
    */
   export interface EditConfig {
-    trigger?: 'manual' | 'click' | 'dblclick'
+    trigger?: 'manual' | 'click' | 'dblclick' | '' | null
     enabled?: boolean
     mode?: string
     icon?: string
@@ -2258,6 +2260,7 @@ export namespace VxeTableDefines {
       update: boolean
       value: any
     }
+
     children: ColumnInfo[]
 
     renderHeader(params: CellRenderHeaderParams): VNode[]
@@ -2270,6 +2273,7 @@ export namespace VxeTableDefines {
   }
   export interface CellRenderHeaderParams {
     $table: VxeTableConstructor & VxeTablePrivateMethods
+    $grid: VxeGridConstructor | null
     $rowIndex: number
     column: ColumnInfo
     columnIndex: number
@@ -2282,6 +2286,7 @@ export namespace VxeTableDefines {
   }
   export interface CellRenderBodyParams {
     $table: VxeTableConstructor & VxeTablePrivateMethods
+    $grid: VxeGridConstructor | null
     seq: string | number
     rowid: string
     row: any
@@ -2306,6 +2311,7 @@ export namespace VxeTableDefines {
 
   export interface CellRenderFooterParams {
     $table: VxeTableConstructor & VxeTablePrivateMethods
+    $grid: VxeGridConstructor | null
     _rowIndex: number
     $rowIndex: number
     column: ColumnInfo

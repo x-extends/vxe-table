@@ -45,7 +45,7 @@ export function isActivetem ($xeform: VxeFormConstructor, formItem: VxeFormDefin
     return true
   }
   const { data } = $xeform.props
-  return visibleMethod({ data, field, property: field, item: formItem, $form: $xeform })
+  return visibleMethod({ data, field, property: field, item: formItem, $form: $xeform, $grid: $xeform.xegrid })
 }
 
 export function watchItem (props: any, formItem: ItemInfo) {

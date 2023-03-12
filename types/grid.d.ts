@@ -4,7 +4,9 @@ import { VxeFormItemProps } from './form-item'
 import { VxeToolbarInstance, VxeToolbarProps, VxeToolbarPropTypes } from './toolbar'
 import { VxePagerInstance, VxePagerProps, VxePagerDefines } from './pager'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, SlotVNodeType } from './component'
-import { VxeTableInstance, VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, VxeTablePropTypes, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
+import { VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 高级表格
@@ -123,7 +125,7 @@ export interface GridPublicMethods {
     data: any[]
     filter: any
     form: any
-    sort: VxeTableDefines.SortCheckedParams | {}
+    sort: VxeTableDefines.SortCheckedParams | { [key: string]: any }
     sorts: VxeTableDefines.SortCheckedParams[]
     pager: any
     pendingRecords: any[]
@@ -240,8 +242,8 @@ export namespace VxeGridPropTypes {
       iconOut?: string
     }
     slots?: {
-      buttons?: string | ((params: {}) => VNode[] | string[] | JSX.Element | JSX.Element[])
-      tools?: string | ((params: {}) => VNode[] | string[] | JSX.Element | JSX.Element[])
+      buttons?: string | ((params: { [key: string]: any }) => VNode[] | string[] | JSX.Element | JSX.Element[])
+      tools?: string | ((params: { [key: string]: any }) => VNode[] | string[] | JSX.Element | JSX.Element[])
     }
   }
 
@@ -308,7 +310,6 @@ export namespace VxeGridDefines {
   export interface ValidErrorEventParams extends GridEventParams, VxeTableDefines.ValidErrorEventParams { }
   export interface ScrollEventParams extends GridEventParams, VxeTableDefines.ScrollEventParams { }
   export interface CustomEventParams extends GridEventParams, VxeTableDefines.CustomEventParams { }
-
 
   export interface PageChangeEventParams extends GridEventParams, VxePagerDefines.PageChangeEventParams { }
   export interface FormSubmitEventParams extends GridEventParams, VxeFormDefines.SubmitEventParams { }

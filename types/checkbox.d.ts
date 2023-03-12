@@ -1,6 +1,8 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 复选框
  * @example import { VxeCheckbox } from 'vxe-table'

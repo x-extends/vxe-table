@@ -1,6 +1,7 @@
 import { VXEComponent } from './component'
-import { VxeFormPropTypes } from './form'
 import { VxeFormItemPropTypes } from './form-item'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 表单项集合

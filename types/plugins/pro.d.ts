@@ -1,6 +1,8 @@
 import { VxeEvent } from '../component'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from '../table'
-import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
+import { VxeGridConstructor } from '../grid'
+
+/* eslint-disable no-use-before-define */
 
 export interface VxeTableProMethods {
   /**

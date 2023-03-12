@@ -1,15 +1,17 @@
 import { VXEComponent } from './component'
-import { VxeTableDefines, VxeTableMethods, VxeTablePrivateMethods } from './table'
+import { VxeTableDefines } from './table'
 import { VxeColumnPropTypes } from './column'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 表格扩展 - 筛选
  */
-export const VxeModuleFilter: VXEComponent<{}>
+export const VxeModuleFilter: VXEComponent<{ [key: string]: any }>
 /**
  * 表格扩展 - 筛选
  */
-export const Filter: VXEComponent<{}>
+export const Filter: VXEComponent<{ [key: string]: any }>
 
 export interface VxeFilterPanel {
   /**
@@ -38,7 +40,7 @@ export interface VxeFilterPanel {
 export interface TableFilterMethods {
   /**
    * 手动弹出筛选
-   * @param fieldOrColumn 
+   * @param fieldOrColumn
    */
   openFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo):Promise<any>
   /**

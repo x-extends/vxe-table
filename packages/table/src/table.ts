@@ -321,7 +321,7 @@ export default defineComponent({
     const refCellResizeBar = ref() as Ref<HTMLDivElement>
     const refEmptyPlaceholder = ref() as Ref<HTMLDivElement>
 
-    const $xegrid = inject('$xegrid', null as (VxeGridConstructor & VxeGridPrivateMethods) | null)
+    const $xegrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xegrid', null)
     let $xetoolbar: VxeToolbarConstructor
 
     const computeValidOpts = computed(() => {
@@ -5682,6 +5682,11 @@ export default defineComponent({
           handleInitDefaults()
         }
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          const checkboxOpts = computeCheckboxOpts.value
+          const checkboxColumn = internalData.tableFullColumn.find(column => column.type === 'checkbox')
+          if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
+            warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
+          }
           if ((scrollXLoad || scrollYLoad) && expandColumn) {
             warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
           }

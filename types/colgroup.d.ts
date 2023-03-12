@@ -1,6 +1,8 @@
 import { VXEComponent } from './component'
 import { VxeColumnPropTypes } from './column'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 表格分组列
  * @example import { VxeColgroup } from 'vxe-table'

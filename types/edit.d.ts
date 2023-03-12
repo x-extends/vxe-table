@@ -1,14 +1,16 @@
 import { VXEComponent, RecordInfo } from './component'
 import { VxeTableDefines } from './table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 表格扩展 - 编辑
  */
-export const VxeModuleEdit: VXEComponent<{}>
+export const VxeModuleEdit: VXEComponent<{ [key: string]: any }>
 /**
  * 表格扩展 - 编辑
  */
-export const Edit: VXEComponent<{}>
+export const Edit: VXEComponent<{ [key: string]: any }>
 
 export interface TableEditMethods {
   /**

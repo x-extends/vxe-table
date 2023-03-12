@@ -1,15 +1,16 @@
 import { RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase } from './component'
-import { VxeGlobalRendererHandles } from './v-x-e-table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 表格扩展 - 快捷菜单
  */
-export const VxeModuleMenu: VXEComponent<{}>
+export const VxeModuleMenu: VXEComponent<{ [key: string]: any }>
 /**
  * 表格扩展 - 快捷菜单
  */
- export const Menu: VXEComponent<{}>
+export const Menu: VXEComponent<{ [key: string]: any }>
 
 export type VxeMenuPanelInstance = ComponentPublicInstance<VxeMenuPanelProps, VxeMenuPanelConstructor>
 
@@ -27,7 +28,9 @@ export interface VxeMenuPanelPrivateRef extends MenuPanelPrivateRef { }
 
 export interface VxeMenuPanelMethods { }
 
-export type VxeMenuPanelProps = { }
+export type VxeMenuPanelProps = {
+  [key: string]: any
+}
 
 export interface TableMenuMethods {
   /**

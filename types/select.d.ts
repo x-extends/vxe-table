@@ -4,6 +4,8 @@ import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeOptgroupProps } from './optgroup'
 import { VxeOptionProps, VxeOptionPropTypes } from './option'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 下拉框
  * @example import { VxeSelect } from 'vxe-table'

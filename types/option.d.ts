@@ -2,6 +2,8 @@ import { VNode } from 'vue'
 import { VXEComponent } from './component'
 import { VxeSelectConstructor } from './select'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 下拉框选项
  * @example import { VxeOption } from 'vxe-table'

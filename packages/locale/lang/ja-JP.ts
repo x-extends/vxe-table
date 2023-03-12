@@ -22,6 +22,7 @@ export default {
       notSlot: 'slot "{0}" はありません',
       noTree: 'Tree structureは "{0}" をサポートしていません',
       notProp: 'サポートされていないパラメータ "{0}"',
+      checkProp: '当数据量过大时可能会导致复选框卡顿，建议设置参数 "{0}" 提升渲染速度',
       coverProp: '"{0}" 的参数 "{1}" 被覆盖，这可能会出现错误',
       delFunc: '"{0}" functionは非推奨です、"{1}"を使用してください',
       delProp: '"{0}" propertyは非推奨です、"{1}"を使用してください',

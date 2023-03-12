@@ -1,6 +1,8 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
-import { SizeType, VXEComponent, VxeComponentBase, VxeEvent, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, VxeEvent, ValueOf } from './component'
 import { VxeRadioPropTypes } from './radio'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 单选框按钮

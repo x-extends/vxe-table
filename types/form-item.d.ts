@@ -1,8 +1,11 @@
 import { VNode } from 'vue'
 import { VXEComponent } from './component'
 import { VxeFormConstructor, VxeFormDefines, VxeFormPropTypes } from './form'
+import { VxeGridConstructor } from './grid'
 import { VxeTooltipPropTypes } from './tooltip'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 表单项
@@ -171,6 +174,7 @@ export interface FormItemRenderOptions extends VxeGlobalRendererHandles.RenderOp
  */
 export interface FormItemTitleRenderParams {
   $form: VxeFormConstructor
+  $grid: VxeGridConstructor | null
   data: any
   item: VxeFormDefines.ItemInfo
   field: string
@@ -185,6 +189,7 @@ export interface FormItemTitleRenderParams {
  */
 export interface FormItemContentRenderParams {
   $form: VxeFormConstructor
+  $grid: VxeGridConstructor | null
   data: any
   item: VxeFormDefines.ItemInfo
   field: string
@@ -199,6 +204,7 @@ export interface FormItemContentRenderParams {
  */
 export interface FormItemVisibleParams {
   $form: VxeFormConstructor
+  $grid: VxeGridConstructor | null
   data: any
   item: VxeFormDefines.ItemInfo
   field: string
@@ -213,6 +219,7 @@ export interface FormItemVisibleParams {
  */
 export interface FormItemResetParams {
   $form: VxeFormConstructor
+  $grid: VxeGridConstructor | null
   data: any
   item: VxeFormDefines.ItemInfo
   field: string

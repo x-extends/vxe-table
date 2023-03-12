@@ -1,5 +1,7 @@
 import { VXEComponent } from './component'
-import { VxeOptionProps, VxeOptionPropTypes } from './option'
+import { VxeOptionPropTypes } from './option'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 下拉框选项分组

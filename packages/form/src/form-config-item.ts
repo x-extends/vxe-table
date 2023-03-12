@@ -44,7 +44,7 @@ const VxeFormConfigItem = defineComponent({
       const showTitle = itemOverflow === 'title'
       const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
       const hasEllipsis = showTitle || showTooltip || showEllipsis
-      const params = { data, field, property: field, item, $form: $xeform }
+      const params = { data, field, property: field, item, $form: $xeform, $grid: $xeform.xegrid }
       if (visible === false) {
         return createCommentVNode()
       }

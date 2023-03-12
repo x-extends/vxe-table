@@ -1,14 +1,15 @@
 import { VXEComponent } from './component'
-import { VxeTableMethods, VxeTablePrivateMethods } from './table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 表格扩展 - 键盘导航
  */
-export const VxeModuleKeyboard: VXEComponent<{}>
+export const VxeModuleKeyboard: VXEComponent<{ [key: string]: any }>
 /**
  * 表格扩展 - 键盘导航
  */
-export const Keyboard: VXEComponent<{}>
+export const Keyboard: VXEComponent<{ [key: string]: any }>
 
 export interface TableKeyboardMethods {}
 

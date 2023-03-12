@@ -1,6 +1,8 @@
 import { SetupContext, RenderFunction, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 工具提示
  * @example import { VxeTooltip } from 'vxe-table'
@@ -44,7 +46,7 @@ export interface TooltipReactData {
 export namespace VxeTooltipPropTypes {
   export type Size = SizeType
   export type ModelValue = boolean
-  export type Trigger = 'hover' | 'click'
+  export type Trigger = 'hover' | 'click' | '' | null
   export type Theme = string
   export type Content = string | number
   export type UseHTML = boolean
@@ -103,7 +105,9 @@ export namespace VxeTooltipDefines {
   }
 }
 
-export type VxeTooltipEventProps = {}
+export type VxeTooltipEventProps = {
+  [key: string]: any
+}
 
 export interface VxeTooltipListeners { }
 

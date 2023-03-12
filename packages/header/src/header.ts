@@ -233,7 +233,7 @@ export default defineComponent({
               const hasFilter = column.filters && column.filters.some((item) => item.checked)
               const columnIndex = $xetable.getColumnIndex(column)
               const _columnIndex = $xetable.getVTColumnIndex(column)
-              const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xetable, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+              const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xetable, $grid: $xetable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
               const thOns: any = {
                 onClick: (evnt: MouseEvent) => $xetable.triggerHeaderCellClickEvent(evnt, params),
                 onDblclick: (evnt: MouseEvent) => $xetable.triggerHeaderCellDblclickEvent(evnt, params)

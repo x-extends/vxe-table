@@ -5,6 +5,8 @@ import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeFilterPanel } from './filter'
 import { VxeTooltipPropTypes } from './tooltip'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 表格列
  * @example import { VxeColumn } from 'vxe-table'

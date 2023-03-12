@@ -1,6 +1,8 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 文本域
  * @example import {  VxeTextarea } from 'vxe-table'
@@ -158,7 +160,7 @@ export namespace VxeTextareaDefines {
 
   export interface KeydownParams extends InputParams {}
   export interface KeydownEventParams extends TextareaEventParams, KeydownParams { }
-  
+
   export interface ClickParams extends InputParams {}
   export interface ClickEventParams extends TextareaEventParams, ClickParams { }
 

@@ -1,6 +1,8 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, ComputedRef } from 'vue'
 import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
-import { VxeCheckboxEvents, VxeCheckboxPropTypes } from './checkbox'
+import { VxeCheckboxPropTypes } from './checkbox'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 复选框组

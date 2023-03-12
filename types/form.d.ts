@@ -1,6 +1,9 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref, ComputedRef, VNode } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, SlotVNodeType } from './component'
 import { VxeFormItemProps, VxeFormItemPropTypes } from './form-item'
+import { VxeGridConstructor } from './grid'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 表单
@@ -22,6 +25,8 @@ export interface VxeFormConstructor extends VxeComponentBase, VxeFormMethods {
   getRefMaps(): FormPrivateRef
   getComputeMaps(): FormPrivateComputed
   renderVN: RenderFunction
+
+  xegrid: VxeGridConstructor | null
 }
 
 export interface FormPrivateRef {
@@ -65,12 +70,12 @@ export namespace VxeFormPropTypes {
   export type Loading = boolean
   export type Data = any
   export type Span = string | number
-  export type Align = 'left' | 'center' | 'right' | null
+  export type Align = 'left' | 'center' | 'right' | '' | null
   export type TitleAlign = Align
   export type TitleWidth = string | number
   export type TitleColon = boolean
   export type TitleAsterisk = boolean
-  export type TitleOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null
+  export type TitleOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | '' | null
 
   interface ClassNameParams {
     $form: VxeFormConstructor
@@ -172,7 +177,7 @@ export interface FormMethods {
   /**
    * 根据列的字段名获取表单项
    * @param field 字段名
-   * 
+   *
    */
   getItemByField(field: VxeFormItemPropTypes.Field): VxeFormDefines.ItemInfo | null
   /**
@@ -243,7 +248,7 @@ export namespace VxeFormDefines {
     /**
      * 数据类型
      */
-    type?: 'number' | 'string' | 'array'
+    type?: 'number' | 'string' | 'array' | '' | null
     /**
      * 使用正则表达式校验
      */
@@ -257,7 +262,7 @@ export namespace VxeFormDefines {
      * 提示消息
      */
     content?: string
-    trigger?: 'change'
+    trigger?: 'change' | '' | null
     maxWidth?: number
     /**
      * @deprecated 已废弃，请使用 content

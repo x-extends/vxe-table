@@ -1,6 +1,8 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 虚拟列表
  * @example import { VxeList } from 'vxe-table'

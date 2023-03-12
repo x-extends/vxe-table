@@ -1,8 +1,10 @@
-import { VNode, RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
+import { RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from './table'
 import { VxeButtonProps } from './button'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 工具栏
@@ -41,14 +43,14 @@ export namespace VxeToolbarPropTypes {
   export interface ResizableOpts extends ResizableConfig { }
 
   interface RefreshConfig {
-    queryMethod?(params: {}): Promise<any>
-    code?: 'query' | 'reload'
+    queryMethod?(params: { [key: string]: any }): Promise<any>
+    code?: 'query' | 'reload' | '' | null
     icon?: string
     iconLoading?: string
     /**
      * @deprecated 请使用 queryMethod
      */
-    query?(params: {}): Promise<any>
+    query?(params: { [key: string]: any }): Promise<any>
   }
   export type Refresh = boolean | RefreshConfig
   export interface RefreshOpts extends RefreshConfig { }
@@ -83,7 +85,7 @@ export namespace VxeToolbarPropTypes {
     immediate?: boolean
     storage?: boolean
     checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean
-    isFooter?: Boolean
+    isFooter?: boolean
     icon?: string
   }
   export type Custom = boolean | CustomConfig
@@ -186,7 +188,9 @@ export namespace VxeToolbarDefines {
   }
 }
 
-export type VxeToolbarEventProps = {}
+export type VxeToolbarEventProps = {
+  [key: string]: any
+}
 
 export interface VxeToolbarListeners { }
 

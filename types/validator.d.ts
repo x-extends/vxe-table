@@ -1,14 +1,16 @@
 import { VXEComponent } from './component'
-import { VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from './table'
+import { VxeTableDefines, VxeTableConstructor } from './table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 表格扩展 - 校验模块
  */
-export const VxeModuleValidator: VXEComponent<{}>
+export const VxeModuleValidator: VXEComponent<{ [key: string]: any }>
 /**
  * 表格扩展 - 校验模块
  */
-export const Validator: VXEComponent<{}>
+export const Validator: VXEComponent<{ [key: string]: any }>
 
 export interface TableValidatorMethods {
   /**
@@ -61,7 +63,7 @@ declare module './table' {
       /**
        * 数据类型
        */
-      type?: 'number' | 'string' | 'array'
+      type?: 'number' | 'string' | 'array' | '' | null
       /**
        * 使用正则表达式校验
        */
@@ -75,7 +77,7 @@ declare module './table' {
        * 提示消息
        */
       content?: string
-      trigger?: 'blur' | 'change' | 'manual'
+      trigger?: 'blur' | 'change' | 'manual' | '' | null
       maxWidth?: number
       /**
        * @deprecated 已废弃，请使用 content

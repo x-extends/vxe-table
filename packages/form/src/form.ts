@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, reactive, watch, nextTick, PropType, onMounted } from 'vue'
+import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, inject, reactive, watch, nextTick, PropType, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -11,7 +11,7 @@ import VxeFormConfigItem from './form-config-item'
 import VxeLoading from '../../loading/index'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes, VxeTooltipInstance, FormInternalData, VxeFormPrivateComputed } from '../../../types/all'
+import { VxeFormConstructor, VxeFormPropTypes, VxeFormEmits, FormReactData, FormMethods, FormPrivateRef, VxeFormPrivateMethods, VxeFormDefines, VxeFormItemPropTypes, VxeTooltipInstance, FormInternalData, VxeFormPrivateComputed, VxeGridConstructor, VxeGridPrivateMethods } from '../../../types/all'
 
 class Rule {
   constructor (rule: any) {
@@ -123,6 +123,8 @@ export default defineComponent({
       }
     })
 
+    const $xegrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xegrid', null)
+
     const refElem = ref() as Ref<HTMLFormElement>
     const refTooltip = ref() as Ref<VxeTooltipInstance>
 
@@ -151,6 +153,8 @@ export default defineComponent({
       props,
       context,
       reactData,
+
+      xegrid: $xegrid,
       getRefMaps: () => refMaps,
       getComputeMaps: () => computeMaps
     } as unknown as VxeFormConstructor & VxeFormPrivateMethods
@@ -241,7 +245,7 @@ export default defineComponent({
           if (isEnableConf(itemRender)) {
             const compConf = VXETable.renderer.get(itemRender.name)
             if (compConf && compConf.itemResetMethod) {
-              compConf.itemResetMethod({ data, field, property: field, item, $form: $xeform })
+              compConf.itemResetMethod({ data, field, property: field, item, $form: $xeform, $grid: $xeform.xegrid })
             } else if (field) {
               XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : XEUtils.clone(resetValue, true))
             }
@@ -524,7 +528,7 @@ export default defineComponent({
 
     formMethods = {
       dispatchEvent (type, params, evnt) {
-        emit(type, Object.assign({ $form: $xeform, $event: evnt }, params))
+        emit(type, Object.assign({ $form: $xeform, $grid: $xegrid, $event: evnt }, params))
       },
       reset,
       validate,

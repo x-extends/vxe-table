@@ -1,12 +1,14 @@
 import { VxeGridConstructor } from '../grid'
 import { VxeToolbarPropTypes } from '../toolbar'
-import { VxeTableConstructor, VxeTablePrivateMethods } from '../table'
+import { VxeTableConstructor } from '../table'
+
+/* eslint-disable no-use-before-define */
 
 export namespace VxeGlobalCommandsHandles {
   export type CommandsCallback = (params: CommandsOptions, ...args: any[]) => any
   export interface CommandsOptions {
-    $grid?: VxeGridConstructor
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $grid: VxeGridConstructor | null
+    $table: VxeTableConstructor
     code: string
     button?: VxeToolbarPropTypes.ButtonConfig | null
   }

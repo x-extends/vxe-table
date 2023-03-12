@@ -300,7 +300,7 @@ export default defineComponent({
           $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
           const commandMethod = VXETable.commands.get(code)
-          const params = { code, button: item, $table: $xetable, $event: evnt }
+          const params = { code, button: item, $table: $xetable, $grid: $xetable.xegrid, $event: evnt }
           if (commandMethod) {
             commandMethod(params, evnt)
           }
@@ -316,7 +316,7 @@ export default defineComponent({
           $xegrid.triggerToolbarTolEvent(item, evnt)
         } else {
           const commandMethod = VXETable.commands.get(code)
-          const params = { code, tool: item, $table: $xetable, $event: evnt }
+          const params = { code, tool: item, $table: $xetable, $grid: $xetable.xegrid, $event: evnt }
           if (commandMethod) {
             commandMethod(params, evnt)
           }

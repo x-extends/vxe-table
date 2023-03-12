@@ -1,6 +1,8 @@
 import { VNode, RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 弹窗
  * @example import { VxeModal } from 'vxe-table'
@@ -9,7 +11,7 @@ export const VxeModal: VXEComponent<VxeModalProps, VxeModalEventProps>
 /**
  * 组件 - 弹窗
  */
- export const Modal: VXEComponent<VxeModalProps, VxeModalEventProps>
+export const Modal: VXEComponent<VxeModalProps, VxeModalEventProps>
 
 export type VxeModalInstance = ComponentPublicInstance<VxeModalProps, VxeModalConstructor>
 

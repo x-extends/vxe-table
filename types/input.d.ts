@@ -1,5 +1,7 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
-import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, VNodeStyle, ValueOf } from './component'
+import { VXEComponent, VxeComponentBase, SizeType, VNodeStyle, ValueOf } from './component'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 输入框
@@ -248,10 +250,10 @@ export namespace VxeInputDefines {
 
   export interface KeydownParams extends InputParams {}
   export interface KeydownEventParams extends InputKeyboardEventParams, KeydownParams { }
-  
+
   export interface ClickParams extends InputParams {}
   export interface ClickEventParams extends InputKeyboardEventParams, ClickParams { }
-  
+
   export interface FocusParams extends InputParams {}
   export interface FocusEventParams extends InputKeyboardEventParams, FocusParams { }
 

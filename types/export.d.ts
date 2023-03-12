@@ -1,15 +1,17 @@
 import { VXEComponent } from './component'
-import { VxeTablePropTypes, VxeTableDefines, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from './table'
+import { VxeTablePropTypes, VxeTableConstructor } from './table'
 import { VxeGridConstructor } from './grid'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 表格扩展 - 导出、导入、打印
  */
-export const VxeModuleExport: VXEComponent<{}>
+export const VxeModuleExport: VXEComponent<{ [key: string]: any }>
 /**
  * 表格扩展 - 导出、导入、打印
  */
-export const Export: VXEComponent<{}>
+export const Export: VXEComponent<{ [key: string]: any }>
 
 export interface TableExportMethods {
   /**

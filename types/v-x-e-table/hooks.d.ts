@@ -1,4 +1,3 @@
-import { Ref, ComputedRef } from 'vue'
 import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../table'
 import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 

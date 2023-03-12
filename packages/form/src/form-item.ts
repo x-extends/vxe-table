@@ -93,7 +93,7 @@ export default defineComponent({
       const showTitle = itemOverflow === 'title'
       const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
       const hasEllipsis = showTitle || showTooltip || showEllipsis
-      const params = { data, field, property: field, item, $form: $xeform }
+      const params = { data, field, property: field, item, $form: $xeform, $grid: $xeform.xegrid }
       let isRequired = false
       if (visible === false) {
         return createCommentVNode()

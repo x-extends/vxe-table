@@ -1,6 +1,8 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 单选框组
  * @example import { VxeRadioGroup } from 'vxe-table'

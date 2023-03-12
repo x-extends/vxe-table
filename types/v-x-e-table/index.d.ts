@@ -1,5 +1,3 @@
-import { App } from 'vue'
-
 import { ModalController } from '../modal'
 import { SaveFileFunction, ReadFileFunction, PrintFunction } from '../export'
 
@@ -11,21 +9,24 @@ import { VxeGlobalMenus } from './menus'
 import { VxeGlobalHooks } from './hooks'
 import { VxeGlobalSetup } from './setup'
 
+/* eslint-disable no-use-before-define */
+
 export class VXETableConfig {
   clipboard: {
     text: string
     html: string
   }
+
   get zIndex(): number
   get nextZIndex(): number
   /**
    * 获取导出的所有文件类型
    */
-   get exportTypes(): string[]
+  get exportTypes(): string[]
   /**
     * 获取导入的所有文件类型
     */
-   get importTypes(): string[]
+  get importTypes(): string[]
 }
 
 export type VxeGlobalI18n = (key: string, args?: any) => string
@@ -130,7 +131,7 @@ export interface VXETableCore {
 }
 
 /**
- * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、弹窗、自定义模板、渲染器、贼灵活的配置项等...  
+ * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、弹窗、自定义模板、渲染器、贼灵活的配置项等...
  */
 export const VXETable: VXETableCore
 

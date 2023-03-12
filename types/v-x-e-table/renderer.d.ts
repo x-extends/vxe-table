@@ -1,11 +1,12 @@
-import { VNode } from 'vue'
 import { SlotVNodeType } from '../component'
-import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes } from '../table'
+import { VxeTableDefines, VxeTableConstructor, VxeTablePropTypes } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
 import { VxeFilterPanel } from '../filter'
 import { VxeToolbarPropTypes } from '../toolbar'
 import { FormItemRenderOptions, FormItemTitleRenderParams, FormItemContentRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
+
+/* eslint-disable no-use-before-define */
 
 type RendererOptions = DefineRendererOption<VxeGlobalRendererHandles.RenderResult>
 
@@ -62,7 +63,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderParams {}
 
   export type RenderFilterParams = {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     $panel: VxeFilterPanel
     column: {
       filters: VxeTableDefines.FilterOption[]
@@ -73,7 +74,7 @@ export namespace VxeGlobalRendererHandles {
   }
 
   export type FilterMethodParams = {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     value: any
     option: VxeTableDefines.FilterOption
     cellValue: any
@@ -82,17 +83,17 @@ export namespace VxeGlobalRendererHandles {
   }
 
   export interface FilterRemoteMethod extends VxeTableDefines.FilterChangeParams {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
   }
 
   export interface FilterResetMethodParams {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     options: VxeTableDefines.FilterOption[]
     column: VxeTableDefines.ColumnInfo
   }
 
   export interface FilterRecoverMethodParams {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     option: VxeTableDefines.FilterOption
     column: VxeTableDefines.ColumnInfo
   }
@@ -100,7 +101,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderHeaderOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
   export interface RenderHeaderParams {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     column: VxeTableDefines.ColumnInfo
     columnIndex: number
     $columnIndex: number
@@ -113,7 +114,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderFooterOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
   export interface RenderFooterParams {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     column: VxeTableDefines.ColumnInfo
     columnIndex: number
     _columnIndex: number
@@ -139,7 +140,8 @@ export namespace VxeGlobalRendererHandles {
   export type RenderEditOptions = VxeColumnPropTypes.EditRender
 
   export interface RenderEditParams {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
+    $grid: VxeGridConstructor | null
     column: VxeTableDefines.ColumnInfo
     columnIndex: number
     $columnIndex: number
@@ -154,7 +156,8 @@ export namespace VxeGlobalRendererHandles {
 
   export type RenderCellOptions = VxeColumnPropTypes.EditRender
   export type RenderCellParams = {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
+    $grid: VxeGridConstructor | null
     column: VxeTableDefines.ColumnInfo
     columnIndex: number
     $columnIndex: number
@@ -173,14 +176,14 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderButtonOptions extends VxeGlobalRendererHandles.RenderOptions { }
   export interface RenderButtonParams {
     $grid: VxeGridConstructor | null
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     button: VxeToolbarPropTypes.ButtonConfig
   }
 
   export interface RenderToolOptions extends VxeGlobalRendererHandles.RenderOptions { }
   export interface RenderToolParams {
     $grid: VxeGridConstructor | null
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
     tool: VxeToolbarPropTypes.ToolConfig
   }
 
@@ -194,7 +197,7 @@ export namespace VxeGlobalRendererHandles {
   export type RenderEmptyOptions = VxeTablePropTypes.EmptyRender
 
   export interface RenderEmptyParams {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $table: VxeTableConstructor
   }
 
   /**
@@ -216,7 +219,7 @@ export namespace VxeGlobalRendererHandles {
     /**
      * 目标组件渲染的事件
      */
-    events?: { [key: string]: Function }
+    events?: { [key: string]: (...args: any[]) => any }
     /**
      * 多目标渲染
      */

@@ -156,7 +156,7 @@ export default defineComponent({
       const hasValidError = validStore.row === row && validStore.column === column
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
       const attrs: any = { colid: column.id }
-      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, $grid: $xetable.xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
       if (scrollYLoad && !hasEllipsis) {
         showEllipsis = hasEllipsis = true

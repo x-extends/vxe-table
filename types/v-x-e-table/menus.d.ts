@@ -1,13 +1,15 @@
-import { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../table'
-import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
+import { VxeTableConstructor, VxeTableDefines } from '../table'
+import { VxeGridConstructor } from '../grid'
 import { VxeGlobalRendererHandles } from './renderer'
+
+/* eslint-disable no-use-before-define */
 
 export namespace VxeGlobalMenusHandles {
   export type MenusCallback = (params: MenusCallbackParams, event: Event) => any
 
   interface MenusParams {
-    $grid?: VxeGridConstructor & VxeGridPrivateMethods
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $grid: VxeGridConstructor | null
+    $table: VxeTableConstructor
   }
   export interface MenusCallbackParams extends MenusParams, VxeGlobalRendererHandles.RenderCellParams {
     $event: MouseEvent
