@@ -23,7 +23,7 @@ export interface ColumnEditRule {
   /**
    * 数据类型
    */
-  type?: 'number' | 'string';
+  type?: 'number' | 'string' | '' | null;
   /**
    * 使用正则表达式校验
    */
@@ -37,7 +37,7 @@ export interface ColumnEditRule {
    * 提示消息
    */
   message?: string;
-  trigger?: 'blur' | 'change' | 'manual';
+  trigger?: 'blur' | 'change' | 'manual' | '' | null;
   maxWidth?: number;
 }
 

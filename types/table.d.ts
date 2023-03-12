@@ -1066,9 +1066,9 @@ export declare class Table extends VXETableComponent {
   [key: string]: any;
 }
 
-export type TableBorder = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
-export type TableAlign = 'left' | 'center' | 'right' | null;
-export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null;
+export type TableBorder = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none' | '';
+export type TableAlign = 'left' | 'center' | 'right' | '' | null;
+export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | '' | null;
 
 export interface TableFooterMethodParams {
   $table: Table;
@@ -1206,7 +1206,7 @@ export interface TableSortConfs {
   order?: TableSortOrder;
 }
 
-export type TableSortOrder = 'asc' | 'desc' | null;
+export type TableSortOrder = 'asc' | 'desc' | '' | null;
 
 /**
  * 排序配置项
@@ -1245,7 +1245,7 @@ export interface TableRadioConfig {
   labelField?: string;
   checkRowKey?: string | number;
   checkMethod?(params: { row: RowInfo }): boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   highlight?: boolean;
 }
 export type RadioConfig = TableRadioConfig
@@ -1264,7 +1264,7 @@ export interface TableCheckboxConfig {
   checkStrictly?: boolean;
   strict?: boolean;
   checkMethod?(params: { row: RowInfo }): boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   highlight?: boolean;
   range?: boolean;
 }
@@ -1275,7 +1275,7 @@ export type CheckboxConfig = TableCheckboxConfig
  */
 export interface TableTooltipConfig {
   enabled?: boolean;
-  theme?: 'dark' | 'light';
+  theme?: 'dark' | 'light' | '';
   enterable?: boolean;
   leaveDelay?: number;
   contentMethod?(params: { items: any[], row: RowInfo, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
@@ -1290,7 +1290,7 @@ export interface TableExpandConfig {
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
   accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
   height?: number
   loadMethod?(params: { row: RowInfo, rowIndex: number, $rowIndex: number }): Promise<any>;
@@ -1313,7 +1313,7 @@ export interface TableTreeConfig {
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
   accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
   hasChild?: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
@@ -1332,7 +1332,7 @@ export interface TreeOpts {
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
   accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
   hasChild: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
@@ -1350,7 +1350,7 @@ export interface TableMenuConfig {
   header?: MenuOptions;
   body?: MenuOptions;
   footer?: MenuOptions;
-  trigger?: 'default' | 'cell';
+  trigger?: 'default' | 'cell' | '';
   visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: RowInfo, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
   className?: string;
 }

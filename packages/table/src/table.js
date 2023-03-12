@@ -625,6 +625,10 @@ export default {
         if (!inited) {
           this.handleInitDefaults()
         }
+        const checkboxColumn = this.tableFullColumn.find(column => column.type === 'checkbox')
+        if (checkboxColumn && this.tableFullData.length > 300 && !this.checkboxOpts.checkField) {
+          warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
+        }
         if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
           warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }

@@ -66,7 +66,7 @@ const renderItem = (h, _vm, item, slots) => {
   const showTitle = itemOverflow === 'title'
   const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
   const hasEllipsis = showTitle || showTooltip || showEllipsis
-  const params = { data, field, property: field, item, $form: _vm }
+  const params = { data, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
   let isRequired
   if (visible === false) {
     return _e()

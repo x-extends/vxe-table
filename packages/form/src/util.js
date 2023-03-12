@@ -78,7 +78,7 @@ export function isActivetem ($xeform, formItem) {
     return true
   }
   const { data } = $xeform
-  return visibleMethod({ data, field, property: field, item: formItem, $form: $xeform })
+  return visibleMethod({ data, field, property: field, item: formItem, $form: $xeform, $grid: $xeform.xegrid })
 }
 
 export function createItem ($xeform, _vm) {

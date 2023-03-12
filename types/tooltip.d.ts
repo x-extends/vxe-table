@@ -11,11 +11,11 @@ export declare class Tooltip extends VXETableComponent {
   /**
    * 触发方式
    */
-  trigger?: 'manual' | 'hover' | 'click';
+  trigger?: 'manual' | 'hover' | 'click' | '' | null;
   /**
    * 主题样式
    */
-  theme?: 'dark' | 'light';
+  theme?: 'dark' | 'light' | '' | null;
   /**
    * 显示内容
    */

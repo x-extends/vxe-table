@@ -150,7 +150,7 @@ export default {
 安装依赖
 
 ```shell
-npm install
+npm run update
 ```
 
 启动本地调试

@@ -88,6 +88,11 @@ export default {
     tooltipConfig: Object,
     customLayout: { type: Boolean, default: () => GlobalConfig.form.customLayout }
   },
+  inject: {
+    $xegrid: {
+      default: null
+    }
+  },
   data () {
     return {
       collapseAll: this.collapseStatus,
@@ -110,6 +115,9 @@ export default {
     }
   },
   computed: {
+    xegrid () {
+      return this.$xegrid
+    },
     validOpts () {
       return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
     },
@@ -188,6 +196,9 @@ export default {
     ])
   },
   methods: {
+    dispatchEvent (type, params, evnt) {
+      this.$emit(type, Object.assign({ $form: this, $grid: this.xegrid, $event: evnt }, params))
+    },
     callSlot (slotFunc, params, h) {
       if (slotFunc) {
         const { $scopedSlots } = this
@@ -238,8 +249,8 @@ export default {
     toggleCollapseEvent (evnt) {
       this.toggleCollapse()
       const status = this.collapseAll
-      this.$emit('toggle-collapse', { status, collapse: status, data: this.data, $form: this, $event: evnt }, evnt)
-      this.$emit('collapse', { status, collapse: status, data: this.data, $form: this, $event: evnt }, evnt)
+      this.dispatchEvent('toggle-collapse', { status, collapse: status, data: this.data }, evnt)
+      this.dispatchEvent('collapse', { status, collapse: status, data: this.data }, evnt)
     },
     submitEvent (evnt) {
       evnt.preventDefault()
@@ -247,9 +258,9 @@ export default {
         this.clearValidate()
         this.beginValidate(this.getItems()).then((errMap) => {
           if (errMap) {
-            this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt })
+            this.dispatchEvent('submit-invalid', { data: this.data, errMap }, evnt)
           } else {
-            this.$emit('submit', { data: this.data, $event: evnt })
+            this.dispatchEvent('submit', { data: this.data }, evnt)
           }
         })
       }
@@ -263,7 +274,7 @@ export default {
           if (isEnableConf(itemRender)) {
             const compConf = VXETable.renderer.get(itemRender.name)
             if (compConf && compConf.itemResetMethod) {
-              compConf.itemResetMethod({ data, field, property: field, item, $form: this })
+              compConf.itemResetMethod({ data, field, property: field, item, $form: this, $grid: this.xegrid })
             } else if (field) {
               XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : XEUtils.clone(resetValue, true))
             }
@@ -275,7 +286,7 @@ export default {
     resetEvent (evnt) {
       evnt.preventDefault()
       this.reset()
-      this.$emit('reset', { data: this.data, $form: this, $event: evnt })
+      this.dispatchEvent('reset', { data: this.data }, evnt)
     },
     closeTooltip () {
       const { tooltipStore } = this

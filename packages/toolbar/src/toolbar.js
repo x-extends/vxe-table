@@ -84,10 +84,10 @@ function renderBtns (h, _vm) {
  * 渲染右侧工具
  */
 function renderRightTools (h, _vm) {
-  const { _e, $scopedSlots, $xegrid, $xetable, tools = [] } = _vm
+  const { _e, $scopedSlots, $xetable, tools = [] } = _vm
   const toolsSlot = $scopedSlots.tools
   if (toolsSlot) {
-    return toolsSlot.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
+    return toolsSlot.call(_vm, { $table: $xetable, $grid: $xetable.xegrid }, h)
   }
   return tools.map(item => {
     const { dropdowns, toolRender } = item
@@ -100,7 +100,7 @@ function renderRightTools (h, _vm) {
       if (renderToolbarTool) {
         return h('span', {
           class: 'vxe-tool--item'
-        }, getSlotVNs(renderToolbarTool.call(_vm, h, toolRender, { $grid: $xegrid, $table: $xetable, tool: item })))
+        }, getSlotVNs(renderToolbarTool.call(_vm, h, toolRender, { $table: $xetable, $grid: $xetable.xegrid, tool: item })))
       }
     }
     return h('vxe-button', {
@@ -601,7 +601,7 @@ export default {
           $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
           const commandMethod = VXETable.commands.get(code)
-          const params = { code, button: item, $xegrid, $table: $xetable, $event: evnt }
+          const params = { code, button: item, $table: $xetable, $grid: $xetable.xegrid, $event: evnt }
           if (commandMethod) {
             commandMethod.call(this, params, evnt)
           }
