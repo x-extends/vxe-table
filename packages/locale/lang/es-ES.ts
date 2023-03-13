@@ -1,4 +1,4 @@
-{
+export default {
     "vxe": {
         "loading": {
             "text": "Cargando..."
