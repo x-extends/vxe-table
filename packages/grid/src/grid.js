@@ -808,7 +808,7 @@ export default {
     },
     triggerToolbarBtnEvent (button, evnt) {
       this.triggerToolbarCommitEvent(button, evnt)
-      this.$emit('toolbar-button-click', { code: button.code, $grid: this, $event: evnt })
+      this.$emit('toolbar-button-click', { code: button.code, button, $grid: this, $event: evnt })
     },
     triggerToolbarTolEvent (tool, evnt) {
       this.triggerToolbarCommitEvent(tool, evnt)
