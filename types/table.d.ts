@@ -63,6 +63,7 @@ export interface TablePrivateComputed {
   computeSYOpts: ComputedRef<VxeTablePropTypes.SYOpts>
   computeColumnOpts: ComputedRef<VxeTablePropTypes.ColumnOpts>
   computeRowOpts: ComputedRef<VxeTablePropTypes.RowOpts>
+  computeResizeleOpts: ComputedRef<VxeTablePropTypes.ResizeOpts>
   computeResizableOpts: ComputedRef<VxeTablePropTypes.ResizableOpts>
   computeSeqOpts: ComputedRef<VxeTablePropTypes.SeqOpts>
   computeRadioOpts: ComputedRef<VxeTablePropTypes.RadioOpts>
@@ -1237,6 +1238,14 @@ export namespace VxeTablePropTypes {
   export type SyncResize = boolean | string | number
 
   /**
+   * 响应式布局配置项
+   */
+  export interface ResizeConfig {
+    refreshDelay?: number
+  }
+  export interface ResizeOpts extends ResizeConfig { }
+
+  /**
    * 列配置信息
    */
   export interface ColumnConfig {
@@ -2059,6 +2068,7 @@ export type VxeTableProps<D = any> = {
   columnConfig?: VxeTablePropTypes.ColumnConfig
   rowConfig?: VxeTablePropTypes.RowConfig
   customConfig?: VxeTablePropTypes.CustomConfig
+  resizeConfig?: VxeTablePropTypes.ResizeConfig
   resizableConfig?: VxeTablePropTypes.ResizableConfig
   seqConfig?: VxeTablePropTypes.SeqConfig
   sortConfig?: VxeTablePropTypes.SortConfig

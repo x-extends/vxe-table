@@ -551,12 +551,26 @@ export default defineComponent({
 
     Object.assign($xeform, formMethods, formPrivateMethods)
 
-    watch(() => reactData.staticItems, (value) => {
-      reactData.formItems = value
+    const staticItemFlag = ref(0)
+    watch(() => reactData.staticItems.length, () => {
+      staticItemFlag.value++
+    })
+    watch(() => reactData.staticItems, () => {
+      staticItemFlag.value++
+    })
+    watch(staticItemFlag, () => {
+      reactData.formItems = reactData.staticItems
     })
 
-    watch(() => props.items, (value) => {
-      loadItem(value || [])
+    const itemFlag = ref(0)
+    watch(() => props.items ? props.items.length : -1, () => {
+      itemFlag.value++
+    })
+    watch(() => props.items, () => {
+      itemFlag.value++
+    })
+    watch(itemFlag, () => {
+      loadItem(props.items || [])
     })
 
     watch(() => props.collapseStatus, (value) => {

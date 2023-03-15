@@ -1111,8 +1111,15 @@ export default defineComponent({
 
     Object.assign($xegrid, gridExtendTableMethods, gridMethods, gridPrivateMethods)
 
-    watch(() => props.columns, (value) => {
-      nextTick(() => $xegrid.loadColumn(value || []))
+    const columnFlag = ref(0)
+    watch(() => props.columns ? props.columns.length : -1, () => {
+      columnFlag.value++
+    })
+    watch(() => props.columns, () => {
+      columnFlag.value++
+    })
+    watch(columnFlag, () => {
+      nextTick(() => $xegrid.loadColumn(props.columns || []))
     })
 
     watch(() => props.toolbarConfig, (value) => {

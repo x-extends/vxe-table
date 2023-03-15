@@ -353,6 +353,10 @@ export default defineComponent({
       return Object.assign({}, GlobalConfig.table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
     })
 
+    const computeResizeleOpts = computed(() => {
+      return Object.assign({}, GlobalConfig.table.resizeConfig, props.resizeConfig) as VxeTablePropTypes.ResizeOpts
+    })
+
     const computeResizableOpts = computed(() => {
       return Object.assign({}, GlobalConfig.table.resizableConfig, props.resizableConfig) as VxeTablePropTypes.ResizableOpts
     })
@@ -558,6 +562,7 @@ export default defineComponent({
       computeSYOpts,
       computeColumnOpts,
       computeRowOpts,
+      computeResizeleOpts,
       computeResizableOpts,
       computeSeqOpts,
       computeRadioOpts,
@@ -5669,9 +5674,16 @@ export default defineComponent({
       }
     }
 
-    watch(() => props.data, (value) => {
+    const dataFlag = ref(0)
+    watch(() => props.data ? props.data.length : -1, () => {
+      dataFlag.value++
+    })
+    watch(() => props.data, () => {
+      dataFlag.value++
+    })
+    watch(dataFlag, () => {
       const { inited, initStatus } = internalData
-      loadTableData(value || []).then(() => {
+      loadTableData(props.data || []).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         internalData.inited = true
         internalData.initStatus = true
@@ -5695,11 +5707,25 @@ export default defineComponent({
       })
     })
 
-    watch(() => reactData.staticColumns, (value) => {
-      handleColumn(value)
+    const staticColumnFlag = ref(0)
+    watch(() => reactData.staticColumns.length, () => {
+      staticColumnFlag.value++
+    })
+    watch(() => reactData.staticColumns, () => {
+      staticColumnFlag.value++
+    })
+    watch(staticColumnFlag, () => {
+      handleColumn(reactData.staticColumns)
     })
 
+    const tableColumnFlag = ref(0)
+    watch(() => reactData.tableColumn.length, () => {
+      tableColumnFlag.value++
+    })
     watch(() => reactData.tableColumn, () => {
+      tableColumnFlag.value++
+    })
+    watch(tableColumnFlag, () => {
       tablePrivateMethods.analyColumnWidth()
     })
 
@@ -5733,20 +5759,34 @@ export default defineComponent({
       }
     })
 
-    watch(() => props.mergeCells, (value) => {
+    const mergeCellFlag = ref(0)
+    watch(() => props.mergeCells ? props.mergeCells.length : -1, () => {
+      mergeCellFlag.value++
+    })
+    watch(() => props.mergeCells, () => {
+      mergeCellFlag.value++
+    })
+    watch(mergeCellFlag, () => {
       tableMethods.clearMergeCells()
       nextTick(() => {
-        if (value) {
-          tableMethods.setMergeCells(value)
+        if (props.mergeCells) {
+          tableMethods.setMergeCells(props.mergeCells)
         }
       })
     })
 
-    watch(() => props.mergeFooterItems, (value) => {
+    const mergeFooterItemFlag = ref(0)
+    watch(() => props.mergeFooterItems ? props.mergeFooterItems.length : -1, () => {
+      mergeFooterItemFlag.value++
+    })
+    watch(() => props.mergeFooterItems, () => {
+      mergeFooterItemFlag.value++
+    })
+    watch(mergeFooterItemFlag, () => {
       tableMethods.clearMergeFooterItems()
       nextTick(() => {
-        if (value) {
-          tableMethods.setMergeFooterItems(value)
+        if (props.mergeFooterItems) {
+          tableMethods.setMergeFooterItems(props.mergeFooterItems)
         }
       })
     })
@@ -5914,9 +5954,12 @@ export default defineComponent({
         })
 
         if (props.autoResize) {
+          const resizeOpts = computeResizeleOpts.value
           const el = refElem.value
           const parentEl = tablePrivateMethods.getParentElem()
-          resizeObserver = createResizeEvent(() => {
+          resizeObserver = createResizeEvent(resizeOpts.refreshDelay ? XEUtils.throttle(() => {
+            tableMethods.recalculate(true)
+          }, resizeOpts.refreshDelay, { leading: true, trailing: true }) : () => {
             if (props.autoResize) {
               tableMethods.recalculate(true)
             }

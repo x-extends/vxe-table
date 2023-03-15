@@ -277,8 +277,15 @@ export default defineComponent({
 
     Object.assign($xelist, listMethods)
 
-    watch(() => props.data, (value) => {
-      listMethods.loadData(value || [])
+    const dataFlag = ref(0)
+    watch(() => props.data ? props.data.length : -1, () => {
+      dataFlag.value++
+    })
+    watch(() => props.data, () => {
+      dataFlag.value++
+    })
+    watch(dataFlag, () => {
+      listMethods.loadData(props.data || [])
     })
 
     watch(() => props.syncResize, (value) => {
