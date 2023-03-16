@@ -187,6 +187,8 @@ export default {
     autoResize: { type: Boolean, default: () => GlobalConfig.table.autoResize },
     // 是否自动根据状态属性去更新响应式表格宽高
     syncResize: [Boolean, String, Number],
+    // 响应式布局配置项
+    resizeConfig: Object,
     // 列配置信息
     columnConfig: Object,
     // 行配置信息
@@ -478,6 +480,9 @@ export default {
     },
     rowOpts () {
       return Object.assign({}, GlobalConfig.table.rowConfig, this.rowConfig)
+    },
+    resizeOpts () {
+      return Object.assign({}, GlobalConfig.table.resizeConfig, this.resizeConfig)
     },
     resizableOpts () {
       return Object.assign({}, GlobalConfig.table.resizableConfig, this.resizableConfig)
@@ -903,7 +908,11 @@ export default {
       }
     }
     if (this.autoResize) {
-      const resizeObserver = createResizeEvent(() => this.recalculate(true))
+      const resizeObserver = createResizeEvent(this.resizeOpts.refreshDelay ? XEUtils.throttle(() => {
+        this.recalculate(true)
+      }, this.resizeOpts.refreshDelay, { leading: true, trailing: true }) : () => {
+        this.recalculate(true)
+      })
       resizeObserver.observe(this.$el)
       resizeObserver.observe(this.getParentElem())
       this.$resize = resizeObserver

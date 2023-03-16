@@ -1091,11 +1091,9 @@ function handleExportAndPrint ($xetable, options, isPrint) {
     visible: true
   })
   // 默认参数
-  if (!initStore.export) {
-    Object.assign(exportParams, {
-      mode: selectRecords.length ? 'selected' : 'current'
-    }, defOpts)
-  }
+  Object.assign(exportParams, {
+    mode: selectRecords.length ? 'selected' : 'current'
+  }, defOpts)
   if (modes.indexOf(exportParams.mode) === -1) {
     exportParams.mode = modes[0]
   }

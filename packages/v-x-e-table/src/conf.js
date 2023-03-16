@@ -30,6 +30,9 @@ export default {
     // rowConfig: {
     //   keyField: '_X_ROW_KEY' // 行数据的唯一主键字段名
     // },
+    resizeConfig: {
+      refreshDelay: 250
+    },
     radioConfig: {
       // trigger: 'default'
       strict: true
