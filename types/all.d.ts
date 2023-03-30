@@ -30,7 +30,7 @@ import { Pulldown } from './pulldown'
 
 export function install(app: App, options?: VXETableSetupOptions): void
 
-declare module 'vue' {
+declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     VXETable: VXETableCore
 
