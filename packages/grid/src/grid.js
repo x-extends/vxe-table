@@ -593,6 +593,7 @@ export default {
                 }
                 return { status: true }
               }).catch(() => {
+                this.tableLoading = false
                 return { status: false }
               })
           } else {
