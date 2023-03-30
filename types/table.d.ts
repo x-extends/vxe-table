@@ -315,6 +315,12 @@ export interface TablePublicMethods {
    */
   showColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): Promise<any>
   /**
+   * 设置列宽
+   * @param fieldOrColumn 列对象或字段名
+   * @param width 宽度 %，px
+   */
+  setColumnWidth(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo, width: number | string): Promise<any>
+  /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
