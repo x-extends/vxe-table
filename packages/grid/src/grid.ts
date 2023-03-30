@@ -822,6 +822,7 @@ export default defineComponent({
                   }
                   return { status: true }
                 }).catch(() => {
+                  reactData.tableLoading = false
                   return { status: false }
                 })
             } else {
