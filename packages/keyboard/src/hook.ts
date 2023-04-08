@@ -134,7 +134,7 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
               })
             } else {
               $xetable.setAllCheckboxRow(false)
-              $xetable.setCheckboxRow(rangeRows, true)
+              $xetable.handleCheckedCheckboxRow(rangeRows, true, false)
             }
             triggerEvent('change', evnt)
           }

@@ -64,6 +64,8 @@ export default [
   'cell-area-extension-start',
   'cell-area-extension-drag',
   'cell-area-extension-end',
+  'cell-area-selection-all-start',
+  'cell-area-selection-all-end',
   'cell-area-arrows-start',
   'cell-area-arrows-end',
   'active-cell-change-start',

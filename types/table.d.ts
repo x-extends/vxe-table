@@ -321,6 +321,11 @@ export interface TablePublicMethods {
    */
   setColumnWidth(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo, width: number | string): Promise<any>
   /**
+   * 获取列宽
+   * @param fieldOrColumn 列对象或字段名
+   */
+  getColumnWidth(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo): number;
+  /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
@@ -738,6 +743,7 @@ export interface TablePrivateMethods {
   updateScrollYData(): void
   checkScrolling(): void
   updateZindex(): void
+  handleCheckedCheckboxRow(rows: any, value: boolean, isForce?: boolean): Promise<any>
   triggerHoverEvent(evnt: any, params: any): void
   setHoverRow(row: any): void
   clearHoverRow(): void

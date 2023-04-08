@@ -3040,16 +3040,23 @@ export default defineComponent({
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
         if (column) {
           const colWidth = XEUtils.toInteger(width)
+          let rdWidth = colWidth
           if (isScale(width)) {
             const tableBody = refTableBody.value
             const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
             const bodyWidth = bodyElem ? bodyElem.clientWidth - 1 : 0
-            column.renderWidth = Math.floor(colWidth * bodyWidth)
-          } else {
-            column.renderWidth = colWidth
+            rdWidth = Math.floor(colWidth * bodyWidth)
           }
+          column.renderWidth = rdWidth
         }
         return nextTick()
+      },
+      getColumnWidth (fieldOrColumn) {
+        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        if (column) {
+          return column.renderWidth
+        }
+        return 0
       },
       /**
        * 手动重置列的显示隐藏、列宽拖动的状态；
@@ -5513,6 +5520,7 @@ export default defineComponent({
           internalData.tZindex = nextZIndex()
         }
       },
+      handleCheckedCheckboxRow,
       /**
        * 行 hover 事件
        */
