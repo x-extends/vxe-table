@@ -1409,16 +1409,23 @@ const Methods = {
     const column = handleFieldOrColumn(this, fieldOrColumn)
     if (column) {
       const colWidth = XEUtils.toInteger(width)
+      let rdWidth = colWidth
       if (DomTools.isScale(width)) {
         const { tableBody } = this.$refs
         const tableBodyElem = tableBody ? tableBody.$el : null
         const bodyWidth = tableBodyElem ? tableBodyElem.clientWidth - 1 : 0
-        column.renderWidth = Math.floor(colWidth * bodyWidth)
-      } else {
-        column.renderWidth = colWidth
+        rdWidth = Math.floor(colWidth * bodyWidth)
       }
+      column.renderWidth = rdWidth
     }
     return this.$nextTick()
+  },
+  getColumnWidth (fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (column) {
+      return column.renderWidth
+    }
+    return 0
   },
   /**
    * 手动重置列的显示隐藏、列宽拖动的状态；

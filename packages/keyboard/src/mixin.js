@@ -278,7 +278,7 @@ export default {
               })
             } else {
               this.setAllCheckboxRow(false)
-              this.setCheckboxRow(rangeRows, true)
+              this.handleCheckedCheckboxRow(rangeRows, true, false)
             }
             triggerEvent('change', evnt)
           }

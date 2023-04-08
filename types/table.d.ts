@@ -457,7 +457,8 @@ export declare class Table extends VXETableComponent {
    * @param column 列对象
    */
   showColumn(column: ColumnInfo): Promise<any>;
-  setColumnWidth(column: ColumnInfo, width: number | string): Promise<any>;
+  setColumnWidth(column: ColumnInfo | string, width: number | string): Promise<any>;
+  getColumnWidth(column: ColumnInfo | string): number;
   /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
