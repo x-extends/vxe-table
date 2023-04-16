@@ -112,7 +112,7 @@ export function updateCellTitle (overflowElem: any, column: any) {
  */
 export function getEventTargetNode (evnt: any, container: any, queryCls?: string, queryMethod?: (target: Element) => boolean) {
   let targetElem
-  let target =(evnt.target.shadowRoot && evnt.composed) ? (evnt.composedPath()[0] || evnt.target) : evnt.target
+  let target = (evnt.target.shadowRoot && evnt.composed) ? (evnt.composedPath()[0] || evnt.target) : evnt.target
   while (target && target.nodeType && target !== document) {
     if (queryCls && hasClass(target, queryCls) && (!queryMethod || queryMethod(target))) {
       targetElem = target
