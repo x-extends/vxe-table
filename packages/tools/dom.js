@@ -114,7 +114,7 @@ export const DomTools = {
    */
   getEventTargetNode (evnt, container, queryCls, queryMethod) {
     let targetElem
-    let target = evnt.target
+    let target = (evnt.target.shadowRoot && evnt.composed) ? (evnt.composedPath()[0] || evnt.target) : evnt.target
     while (target && target.nodeType && target !== document) {
       if (queryCls && hasClass(target, queryCls) && (!queryMethod || queryMethod(target))) {
         targetElem = target
