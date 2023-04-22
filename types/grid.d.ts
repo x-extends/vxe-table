@@ -311,6 +311,17 @@ export namespace VxeGridDefines {
   export interface ScrollEventParams extends GridEventParams, VxeTableDefines.ScrollEventParams { }
   export interface CustomEventParams extends GridEventParams, VxeTableDefines.CustomEventParams { }
 
+  export interface ProxyQueryEventParams extends GridEventParams {
+    status: boolean
+    isReload: boolean
+    isInited: boolean
+  }
+  export interface ProxyDeleteEventParams extends GridEventParams {
+    status: boolean
+  }
+  export interface ProxySaveEventParams extends GridEventParams {
+    status: boolean
+  }
   export interface PageChangeEventParams extends GridEventParams, VxePagerDefines.PageChangeEventParams { }
   export interface FormSubmitEventParams extends GridEventParams, VxeFormDefines.SubmitEventParams { }
   export interface FormSubmitInvalidEventParams extends GridEventParams, VxeFormDefines.SubmitInvalidParams { }
@@ -373,6 +384,9 @@ export interface VxeGridEventProps {
   onCustom?: VxeGridEvents.Custom
 
   // grid
+  onProxyQuery?: VxeGridEvents.ProxyQuery
+  onProxyDelete?: VxeGridEvents.ProxyDelete
+  onProxySave?: VxeGridEvents.ProxySave
   onPageChange?: VxeGridEvents.PageChange
   onFormSubmit?: VxeGridEvents.FormSubmit
   onFormSubmitInvalid?: VxeGridEvents.FormSubmitInvalid
@@ -421,6 +435,9 @@ export interface VxeGridListeners {
   custom?: VxeGridEvents.Custom
 
   // grid
+  proxyQuery?: VxeGridEvents.ProxyQuery
+  proxyDelete?: VxeGridEvents.ProxyDelete
+  proxySave?: VxeGridEvents.ProxySave
   pageChange?: VxeGridEvents.PageChange
   formSubmit?: VxeGridEvents.FormSubmit
   formSubmitInvalid?: VxeGridEvents.FormSubmitInvalid
@@ -468,6 +485,9 @@ export namespace VxeGridEvents {
   export type Scroll = (params: VxeGridDefines.ScrollEventParams) => void
   export type Custom = (params: VxeGridDefines.CustomEventParams) => void
 
+  export type ProxyQuery = (params: VxeGridDefines.ProxyQueryEventParams) => void
+  export type ProxyDelete = (params: VxeGridDefines.ProxyDeleteEventParams) => void
+  export type ProxySave = (params: VxeGridDefines.ProxySaveEventParams) => void
   export type PageChange = (params: VxeGridDefines.PageChangeEventParams) => void
   export type FormSubmit = (params: VxeGridDefines.FormSubmitEventParams) => void
   export type FormSubmitInvalid = (params: VxeGridDefines.FormSubmitInvalidEventParams) => void
