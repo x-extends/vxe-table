@@ -8,7 +8,7 @@ import { formatText } from '../../tools/utils'
 import { warnLog, errLog } from '../../tools/log'
 import { GlobalEvent } from '../../tools/event'
 import { getSlotVNs } from '../../tools/vn'
-
+import draggable from 'vuedraggable'
 import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines } from '../../../types/all'
 
 export default defineComponent({
@@ -465,7 +465,7 @@ export default defineComponent({
     const renderCustoms = () => {
       const { columns } = reactData
       const customOpts = computeCustomOpts.value
-      const colVNs: VNode[] = []
+      // const colVNs: VNode[] = []
       const customBtnOns: {
         onClick?: typeof handleClickSettingEvent;
         onMouseenter?: typeof handleMouseenterSettingEvent;
@@ -493,39 +493,92 @@ export default defineComponent({
         // 点击触发
         customBtnOns.onClick = handleClickSettingEvent
       }
-      XEUtils.eachTree(columns, (column) => {
-        const colTitle = formatText(column.getTitle(), 1)
-        const colKey = column.getKey()
-        const isColGroup = column.children && column.children.length
-        const isDisabled = checkMethod ? !checkMethod({ column }) : false
-        if (isColGroup || colKey) {
-          const isChecked = column.visible
-          const isIndeterminate = column.halfVisible
-          colVNs.push(
-            h('li', {
-              class: ['vxe-custom--option', `level--${column.level}`, {
-                'is--group': isColGroup,
-                'is--checked': isChecked,
-                'is--indeterminate': isIndeterminate,
-                'is--disabled': isDisabled
-              }],
-              title: colTitle,
-              onClick: () => {
-                if (!isDisabled) {
-                  changeCustomOption(column)
-                }
-              }
-            }, [
-              h('span', {
-                class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-              }),
-              h('span', {
-                class: 'vxe-checkbox--label'
-              }, colTitle)
-            ])
-          )
-        }
-      })
+      // XEUtils.eachTree(columns, (column) => {
+      //   const colTitle = formatText(column.getTitle(), 1)
+      //   const colKey = column.getKey()
+      //   const isColGroup = column.children && column.children.length
+      //   const isDisabled = checkMethod ? !checkMethod({ column }) : false
+      //   if (isColGroup || colKey) {
+      //     const isChecked = column.visible
+      //     const isIndeterminate = column.halfVisible
+      //     colVNs.push(
+      //       h('li', {
+      //         class: ['vxe-custom--option', `level--${column.level}`, {
+      //           'is--group': isColGroup,
+      //           'is--checked': isChecked,
+      //           'is--indeterminate': isIndeterminate,
+      //           'is--disabled': isDisabled
+      //         }],
+      //         title: colTitle,
+      //         onClick: () => {
+      //           if (!isDisabled) {
+      //             changeCustomOption(column)
+      //           }
+      //         }
+      //       }, [
+      //         h('div', {
+      //           class: {
+      //             'vxe-custom--option-left': true,
+      //             'is--disabled': isDisabled
+      //           }
+      //         }, [
+      //           h('i', {
+      //             class: 'vxe-icon-custom-column',
+      //             async onClick (e: Event) {
+      //               e.stopPropagation()
+      //             }
+      //           })
+      //         ]),
+      //         h('div', {
+      //           class: 'vxe-custom--option-center'
+      //         }, [
+      //           h('span', {
+      //             class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+      //           }),
+      //           h('span', {
+      //             class: 'vxe-checkbox--label'
+      //           }, colTitle)
+      //         ]),
+      //         h('div', {
+      //           class: 'vxe-custom--option-right'
+      //         }, [
+      //           h('span', {
+      //             class: {
+      //               'vxe-icon-arrow-left': true,
+      //               'is--active': column.fixed === 'left',
+      //               'is--disabled': isDisabled
+      //             },
+      //             async onClick (e: Event) {
+      //               e.stopPropagation()
+      //               if (isDisabled) {
+      //                 return
+      //               }
+      //               column.fixed = 'left'
+      //               await nextTick()
+      //               $xegrid?.refreshColumn()
+      //             }
+      //           }),
+      //           h('span', {
+      //             class: {
+      //               'vxe-icon-arrow-right': true,
+      //               'is--active': column.fixed === 'right',
+      //               'is--disabled': isDisabled
+      //             },
+      //             async onClick (e: Event) {
+      //               e.stopPropagation()
+      //               if (isDisabled) {
+      //                 return
+      //               }
+      //               column.fixed = 'right'
+      //               await nextTick()
+      //               $xegrid?.refreshColumn()
+      //             }
+      //           })
+      //         ])
+      //       ])
+      //     )
+      //   }
+      // })
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
       return h('div', {
@@ -562,10 +615,33 @@ export default defineComponent({
               }, GlobalConfig.i18n('vxe.toolbar.customAll'))
             ])
           ]),
-          h('ul', {
-            class: 'vxe-custom--body',
-            ...customWrapperOns
-          }, colVNs),
+          // h('ul', {
+          //   class: 'vxe-custom--body',
+          //   ...customWrapperOns
+          // }, colVNs),
+          h(
+            draggable,
+            {
+              tag: 'ul',
+              itemKey: 'title',
+              handle: '.vxe-custom--option-left',
+              group: 'level--top',
+              modelValue: columns,
+              'onUpdate:modelValue': async (value: any) => {
+                reactData.columns = value
+                await nextTick()
+                // 刷新列
+                $xegrid?.loadColumn(reactData.columns)
+              },
+              class: 'vxe-custom--body',
+              ...customWrapperOns
+            },
+            {
+              item: (items: any) => [
+                h('li', draggableRender(items.element, checkMethod))
+              ]
+            }
+          ),
           customOpts.isFooter === false ? null : h('div', {
             class: 'vxe-custom--footer'
           }, [
@@ -580,6 +656,91 @@ export default defineComponent({
           ])
         ])
       ])
+    }
+
+    const draggableRender = (column: any, checkMethod: any) => {
+      const colTitle = formatText(column.getTitle(), 1)
+      const colKey = column.getKey()
+      const isColGroup = column.children && column.children.length
+      const isDisabled = checkMethod ? !checkMethod({ column }) : false
+      if (isColGroup || colKey) {
+        const isChecked = column.visible
+        const isIndeterminate = column.halfVisible
+        return h('li', {
+          class: ['vxe-custom--option', `level--${column.level}`, {
+            'is--group': isColGroup,
+            'is--checked': isChecked,
+            'is--indeterminate': isIndeterminate,
+            'is--disabled': isDisabled
+          }],
+          title: colTitle,
+          onClick: () => {
+            if (!isDisabled) {
+              changeCustomOption(column)
+            }
+          }
+        }, [
+          h('div', {
+            class: {
+              'vxe-custom--option-left': true,
+              'is--disabled': isDisabled
+            }
+          }, [
+            h('i', {
+              class: 'vxe-icon-custom-column',
+              async onClick (e: Event) {
+                e.stopPropagation()
+              }
+            })
+          ]),
+          h('div', {
+            class: 'vxe-custom--option-center'
+          }, [
+            h('span', {
+              class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+            }),
+            h('span', {
+              class: 'vxe-checkbox--label'
+            }, colTitle)
+          ]),
+          h('div', {
+            class: 'vxe-custom--option-right'
+          }, [
+            h('span', {
+              class: {
+                'vxe-icon-arrow-left': true,
+                'is--active': column.fixed === 'left',
+                'is--disabled': isDisabled
+              },
+              async onClick (e: Event) {
+                e.stopPropagation()
+                if (isDisabled) {
+                  return
+                }
+                column.fixed = column.fixed === 'left' ? undefined : 'left'
+                await nextTick()
+                $xegrid?.refreshColumn()
+              }
+            }),
+            h('span', {
+              class: {
+                'vxe-icon-arrow-right': true,
+                'is--active': column.fixed === 'right',
+                'is--disabled': isDisabled
+              },
+              async onClick (e: Event) {
+                e.stopPropagation()
+                if (isDisabled) {
+                  return
+                }
+                column.fixed = column.fixed === 'right' ? undefined : 'right'
+                await nextTick()
+                $xegrid?.refreshColumn()
+              }
+            })
+          ])
+        ])
+      }
     }
 
     toolbarMethods = {
@@ -675,7 +836,6 @@ export default defineComponent({
     }
 
     $xetoolbar.renderVN = renderVN
-
     return $xetoolbar
   },
   render () {

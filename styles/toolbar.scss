@@ -113,6 +113,29 @@
         &:hover {
           background-color: $vxe-table-row-hover-background-color;
         }
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        [class^="vxe-custom--option-left"] {
+          margin-right: 11px;
+          color: $vxe-font-color;
+         
+        }
+        [class^="vxe-custom--option-right"] {
+          margin-left: 11px;
+          color: $vxe-font-color;
+          .vxe-icon-arrow-left, .vxe-icon-arrow-right{
+            &.is--active {
+              color: $vxe-primary-color;
+            }
+            &.is--disabled {
+              color: $vxe-disabled-color;
+            }
+          }
+        }
+        [class^="vxe-custom--option-center"] {
+          flex: 1;
+        }
       }
     }
     .vxe-custom--header,
