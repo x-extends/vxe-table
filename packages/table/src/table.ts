@@ -1468,7 +1468,8 @@ export default defineComponent({
 
             // 如果是使用优化模式
             if (fixedType) {
-              if (scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+              // 如果存在展开行使用全量渲染
+              if (!reactData.expandColumn && (scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
                 if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
                   renderColumnList = fixedColumn
                 } else {
@@ -1494,7 +1495,8 @@ export default defineComponent({
             let renderColumnList = tableColumn
             // 如果是使用优化模式
             if (fixedType) {
-              if (scrollXLoad || allColumnFooterOverflow) {
+              // 如果存在展开行使用全量渲染
+              if (!reactData.expandColumn && (scrollXLoad || allColumnFooterOverflow)) {
                 if (!mergeFooterList.length || !footerSpanMethod) {
                   renderColumnList = fixedColumn
                 } else {
