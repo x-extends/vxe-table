@@ -122,7 +122,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         if (!XEUtils.isArray(records)) {
           records = [records]
         }
-        const newRecords: any[] = records.map((record: any) => $xetable.defineField(Object.assign({}, record)))
+        const newRecords: any[] = $xetable.defineField(records.map((record: any) => Object.assign({}, record)))
         if (!row) {
           // 如果为虚拟树
           if (treeConfig && transform) {
@@ -216,13 +216,19 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }
         }
-        editStore.insertList.unshift(...newRecords)
-        $xetable.updateFooter()
+        const { insertList, insertMaps } = editStore
+        newRecords.forEach(newRow => {
+          const rowid = getRowid($xetable, newRow)
+          insertMaps[rowid] = newRow
+        })
+        insertList.unshift(...newRecords)
         $xetable.cacheRowMap()
+        $xetable.updateScrollYStatus()
         $xetable.handleTableData(treeConfig && transform)
         if (!(treeConfig && transform)) {
           $xetable.updateAfterDataIndex()
         }
+        $xetable.updateFooter()
         $xetable.checkSelectionStatus()
         if (reactData.scrollYLoad) {
           $xetable.updateScrollYSpace()
@@ -250,7 +256,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
-        const { actived, removeList, insertList } = editStore
+        const { actived, removeList, insertList, insertMaps } = editStore
         const { checkField } = checkboxOpts
         let rest: any[] = []
         if (!rows) {
@@ -323,10 +329,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         }
         // 从新增中移除已删除的数据
         rows.forEach((row: any) => {
+          const rowid = getRowid($xetable, row)
           const iIndex = $xetable.findRowIndexOf(insertList, row)
           if (iIndex > -1) {
             insertList.splice(iIndex, 1)
           }
+          delete insertMaps[rowid]
         })
         $xetable.updateFooter()
         $xetable.cacheRowMap()
@@ -388,30 +396,16 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        * 获取新增的临时数据
        */
       getInsertRecords () {
-        const { treeConfig } = props
         const { editStore } = reactData
-        const { tableFullTreeData, tableFullData } = internalData
-        const treeOpts = computeTreeOpts.value
+        const { fullAllDataRowIdData } = internalData
         const insertList = editStore.insertList
         const insertRecords: any[] = []
-        if (insertList.length) {
-          // 如果为虚拟树
-          if (treeConfig && treeOpts.transform) {
-            insertList.forEach(row => {
-              const rowid = getRowid($xetable, row)
-              const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid($xetable, item), treeOpts)
-              if (matchObj) {
-                insertRecords.push(row)
-              }
-            })
-          } else {
-            insertList.forEach(row => {
-              if ($xetable.findRowIndexOf(tableFullData, row) > -1) {
-                insertRecords.push(row)
-              }
-            })
+        insertList.forEach(row => {
+          const rowid = getRowid($xetable, row)
+          if (fullAllDataRowIdData[rowid]) {
+            insertRecords.push(row)
           }
-        }
+        })
         return insertRecords
       },
       /**

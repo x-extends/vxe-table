@@ -106,6 +106,7 @@ export interface TablePublicMethods {
    */
   clearAll(): Promise<any>
   /**
+   * 该方法已废弃！！！
    * 同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
    * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
    * @deprecated
@@ -702,7 +703,7 @@ export interface TablePrivateMethods {
   getParentElem(): Element | null
   getParentHeight(): number
   getExcludeHeight(): number
-  defineField(record: any): any
+  defineField(records: any[]): any
   handleTableData(force?: boolean): Promise<any>
   cacheRowMap(isSource?: boolean): void
   saveCustomResizable(isReset?: boolean): void
@@ -737,6 +738,7 @@ export interface TablePrivateMethods {
   triggerScrollXEvent(evnt: Event): void
   triggerScrollYEvent(evnt: Event): void
   scrollToTreeRow(row: any): Promise<any>
+  updateScrollYStatus(fullData?: any[]): boolean
   updateScrollXSpace(): void
   updateScrollYSpace(): void
   updateScrollXData(): void
@@ -884,7 +886,13 @@ export interface TableReactData {
       [key: string]: any
     },
     insertList: any[]
+    insertMaps: {
+      [key: string]: any
+    }
     removeList: any[]
+    removeMaps: {
+      [key: string]: any
+    }
   },
   // 存放 tooltip 相关信息
   tooltipStore: {

@@ -164,7 +164,9 @@ export default defineComponent({
           column: null
         },
         insertList: [],
-        removeList: []
+        insertMaps: {},
+        removeList: [],
+        removeMaps: {}
       },
       // 存放 tooltip 相关信息
       tooltipStore: {
@@ -2099,7 +2101,9 @@ export default defineComponent({
       scrollXStore.startIndex = 0
       scrollXStore.endIndex = 1
       editStore.insertList = []
+      editStore.insertMaps = {}
       editStore.removeList = []
+      editStore.removeMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
       reactData.scrollYLoad = sYLoad
       // 全量数据
@@ -2373,13 +2377,14 @@ export default defineComponent({
       })
     }
 
-    const updateScrollYStatus = (fullData: any[]) => {
+    const updateScrollYStatus = (fullData?: any[]) => {
       const { treeConfig } = props
       const sYOpts = computeSYOpts.value
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
+      const allList = fullData || internalData.tableFullData
       // 如果gt为0，则总是启用
-      const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt < fullData.length)
+      const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt < allList.length)
       reactData.scrollYLoad = scrollYLoad
       return scrollYLoad
     }
@@ -2846,7 +2851,8 @@ export default defineComponent({
        */
       isInsertByRow (row) {
         const { editStore } = reactData
-        return $xetable.findRowIndexOf(editStore.insertList, row) > -1
+        const rowid = getRowid($xetable, row)
+        return editStore.insertList.length && editStore.insertMaps[rowid]
       },
       /**
        * 删除所有新增的临时数据
@@ -4637,44 +4643,49 @@ export default defineComponent({
       },
       /**
        * 定义行数据中的列属性，如果不存在则定义
-       * @param {Row} record 行数据
+       * @param {Row} records 行数据
        */
-      defineField (record) {
+      defineField (records) {
         const { treeConfig } = props
         const expandOpts = computeExpandOpts.value
         const treeOpts = computeTreeOpts.value
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const rowkey = getRowkey($xetable)
-        internalData.tableFullColumn.forEach(column => {
-          const { field, editRender } = column
-          if (field && !XEUtils.has(record, field) && !record[field]) {
-            let cellValue = null
-            if (editRender) {
-              const { defaultValue } = editRender
-              if (XEUtils.isFunction(defaultValue)) {
-                cellValue = defaultValue({ column })
-              } else if (!XEUtils.isUndefined(defaultValue)) {
-                cellValue = defaultValue
+        if (!XEUtils.isArray(records)) {
+          records = [records]
+        }
+        return records.map(record => {
+          internalData.tableFullColumn.forEach(column => {
+            const { field, editRender } = column
+            if (field && !XEUtils.has(record, field) && !record[field]) {
+              let cellValue = null
+              if (editRender) {
+                const { defaultValue } = editRender
+                if (XEUtils.isFunction(defaultValue)) {
+                  cellValue = defaultValue({ column })
+                } else if (!XEUtils.isUndefined(defaultValue)) {
+                  cellValue = defaultValue
+                }
               }
+              XEUtils.set(record, field, cellValue)
             }
-            XEUtils.set(record, field, cellValue)
+          })
+          const otherFields: (string | undefined)[] = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
+          otherFields.forEach((key) => {
+            if (key && eqEmptyValue(XEUtils.get(record, key))) {
+              XEUtils.set(record, key, null)
+            }
+          })
+          if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
+            record[treeOpts.children] = null
           }
-        })
-        const otherFields: (string | undefined)[] = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
-        otherFields.forEach((key) => {
-          if (key && eqEmptyValue(XEUtils.get(record, key))) {
-            XEUtils.set(record, key, null)
+          // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
+          if (eqEmptyValue(XEUtils.get(record, rowkey))) {
+            XEUtils.set(record, rowkey, getRowUniqueId())
           }
+          return record
         })
-        if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
-          record[treeOpts.children] = null
-        }
-        // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
-        if (eqEmptyValue(XEUtils.get(record, rowkey))) {
-          XEUtils.set(record, rowkey, getRowUniqueId())
-        }
-        return record
       },
       handleTableData (force?: boolean) {
         const { scrollYLoad } = reactData
@@ -5405,6 +5416,7 @@ export default defineComponent({
         }
         return Promise.all(rests).then(() => rowToVisible($xetable, row))
       },
+      updateScrollYStatus,
       // 更新横向 X 可视渲染上下剩余空间大小
       updateScrollXSpace () {
         const { isGroup, scrollXLoad, scrollbarWidth } = reactData

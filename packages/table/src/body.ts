@@ -318,7 +318,7 @@ export default defineComponent({
 
     const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandeds, scrollYLoad, editStore, rowExpandeds, expandColumn, selectRow } = tableReactData
+      const { hasFixedColumn, treeExpandeds, scrollYLoad, rowExpandeds, expandColumn, selectRow } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -366,7 +366,7 @@ export default defineComponent({
         // 处理新增状态
         let isNewRow = false
         if (editConfig) {
-          isNewRow = $xetable.findRowIndexOf(editStore.insertList, row) > -1
+          isNewRow = $xetable.isInsertByRow(row)
         }
         if (treeConfig && !scrollYLoad && !transform && treeExpandeds.length) {
           rowChildren = row[treeOpts.children]
