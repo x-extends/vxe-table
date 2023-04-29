@@ -83,6 +83,7 @@
                   <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
                     <li v-for="(child, cIndex) in item.children" :key="cIndex" :class="{'is-donation': ['Donation'].includes(child.locat.name)}">
                       <a class="nav-link disabled" v-if="child.disabled" :title="$t('app.body.other.newFunc')" v-html="child.label"></a>
+<!--eslint-disable-next-line-->
                       <router-link v-else class="nav-link" :to="child.locat" :title="child.label" v-html="child.label"></router-link>
                     </li>
                   </ul>
@@ -99,7 +100,7 @@
         <vxe-button class="oper-btn" :icon="appData.showLeft ? 'vxe-icon-arrow-left' : 'vxe-icon-arrow-right'" @click="appData.showLeft = !appData.showLeft"></vxe-button>
       </div>
       <div class="body">
-        <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name)}">
+        <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name as string)}">
           <template v-if="!/\/start|\/module|\/api/.test($route.path)">
             <a v-if="demoLink" class="link todemo" :href="demoLink" target="_blank"><i class="fa fa-bug"></i>{{ $t('app.body.button.runDemo') }}</a>
           </template>

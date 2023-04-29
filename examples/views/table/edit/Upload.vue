@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p class="tip">文件上传，可以通过调用 <table-api-link prop="readFile"/> 读取本地文件<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
+    <p class="tip">文件上传，可以通过调用
+      <table-api-link prop="readFile"/>
+      读取本地文件<span class="red">（具体请自行实现，该示例仅供参考）</span></p>
 
     <vxe-toolbar ref="xToolbar">
       <template #buttons>
@@ -54,9 +56,9 @@ export default defineComponent({
         const name = ns.slice(0, ns.length - 1).join('')
         const type = ns[ns.length - 1]
         return {
-          name: name,
+          name,
           size: file.size,
-          type: type,
+          type,
           date: XEUtils.toDateString(new Date())
         }
       })

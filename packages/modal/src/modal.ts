@@ -839,7 +839,7 @@ export default defineComponent({
           }, ['wl', 'wr', 'swst', 'sest', 'st', 'swlb', 'selb', 'sb'].map(type => {
             return h('span', {
               class: `${type}-resize`,
-              type: type,
+              type,
               onMousedown: dragEvent
             })
           }))

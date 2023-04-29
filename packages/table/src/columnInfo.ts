@@ -76,7 +76,7 @@ export class ColumnInfo {
       className: _vm.className,
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
-      formatter: formatter,
+      formatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
       sortType: _vm.sortType,
@@ -121,7 +121,7 @@ export class ColumnInfo {
       renderHeader: renderHeader || _vm.renderHeader,
       renderCell: renderCell || _vm.renderCell,
       renderFooter: renderFooter || _vm.renderFooter,
-      renderData: renderData,
+      renderData,
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots
     })
