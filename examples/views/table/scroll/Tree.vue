@@ -15,6 +15,10 @@
       ref="xTable"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
       :scroll-y="{gt: 0}"
+      :mouse-config="{selected: true}"
+      :checkbox-config="{checkField: 'checked'}"
+      :edit-config="{trigger: 'dblclick', mode: 'cell', showStatus: true}"
+      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="200" tree-node></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>
