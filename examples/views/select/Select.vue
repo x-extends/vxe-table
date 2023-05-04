@@ -49,6 +49,17 @@
           <vxe-option value="3-2" label="选项3-2"></vxe-option>
         </vxe-optgroup>
       </vxe-select>
+      <vxe-select v-model="demo1.value23" placeholder="分组搜索" filterable clearable transfer>
+        <vxe-optgroup label="选项2">
+          <vxe-option value="2-1" label="选项2-1"></vxe-option>
+          <vxe-option value="2-2" label="选项2-2"></vxe-option>
+          <vxe-option value="2-3" label="选项2-3"></vxe-option>
+        </vxe-optgroup>
+        <vxe-optgroup label="选项3">
+          <vxe-option value="3-1" label="选项3-1"></vxe-option>
+          <vxe-option value="3-2" label="选项3-2"></vxe-option>
+        </vxe-optgroup>
+      </vxe-select>
     </p>
 
     <p>

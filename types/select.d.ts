@@ -34,7 +34,7 @@ export interface VxeSelectPrivateRef extends SelectPrivateRef { }
 export interface SelectReactData {
   inited: boolean
   staticOptions: VxeSelectDefines.OptionInfo[]
-  fullGroupList: any[]
+  fullGroupList: CustomizeOptionGroups
   fullOptionList: any[]
   visibleGroupList: any[]
   visibleOptionList: any[]
@@ -50,7 +50,6 @@ export interface SelectReactData {
   visiblePanel: boolean
   animatVisible: boolean
   isActivated: boolean
-  searchValue: string,
   searchLoading: boolean
 }
 
@@ -104,7 +103,7 @@ export namespace VxeSelectPropTypes {
   export type Placement = string
   export type Options = VxeSelectDefines.SelectOptions[]
   export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps
-  export type OptionGroups = VxeSelectDefines.SelectOptgroups[]
+  export type OptionGroups = Array<VxeSelectDefines.SelectOptgroups[]| VxeSelectDefines.CustomizeOptionGroups>
   export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps
   export type Filterable = boolean
   export type FilterMethod = (params: { group: any, option: any, searchValue: string }) => boolean
@@ -166,7 +165,21 @@ export type VxeSelectEmits = [
   'clear'
 ]
 
+export type CustomizeOptionGroups =Array<{
+  isCreated?: boolean
+  /**
+   * 是否禁用
+   */
+  visible?: VxeOptionPropTypes.Visible
+  className?: VxeOptionPropTypes.ClassName
+  /**
+   * 是否禁用
+   */
+  disabled?: VxeOptionPropTypes.Disabled
+  slots?: VxeOptionPropTypes.Slots
+}& Record<string, VxeOptionPropTypes.Label>& Record<string, VxeOptionProps[]>>
 export namespace VxeSelectDefines {
+  export type CustomizeOptionGroups = CustomizeOptionGroups
   export class OptionInfo {
     id: string
 
@@ -187,7 +200,6 @@ export namespace VxeSelectDefines {
     options?: VxeOptionProps[]
     slots?: VxeOptionPropTypes.Slots
   }
-
   interface SelectEventParams extends VxeEvent {
     $select: VxeSelectConstructor
   }
