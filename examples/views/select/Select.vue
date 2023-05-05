@@ -49,7 +49,7 @@
           <vxe-option value="3-2" label="选项3-2"></vxe-option>
         </vxe-optgroup>
       </vxe-select>
-      <vxe-select v-model="demo1.value23" placeholder="分组搜索" filterable clearable transfer>
+      <vxe-select v-model="demo1.value47" placeholder="多选分组搜索" multiple filterable clearable transfer>
         <vxe-optgroup label="选项2">
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -231,6 +231,7 @@ export default defineComponent({
       value21: null,
       value22: null,
       value23: null,
+      value47: null,
       value24: null,
       list24: [
         { value: 11, label: '111' },

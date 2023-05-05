@@ -298,7 +298,6 @@ export default defineComponent({
       const isGroup = computeIsGroup.value
       const groupLabelField = computeGroupLabelField.value
       const labelField = computeLabelField.value
-      const valueField = computeValueField.value
       const _filterMethod:VxeSelectPropTypes.FilterMethod = filterMethod && isFunction(filterMethod) ? filterMethod
         : ({ group, option, searchValue }) =>
             (group && group[groupLabelField].indexOf(searchValue) > -1) ||
@@ -318,7 +317,7 @@ export default defineComponent({
                 option,
                 searchValue: displaySelectLabel.value
               }))) : []
-            }))
+            })).filter(f => f.options && f.options.length > 0)
         } else {
           reactData.visibleGroupList = fullGroupList.filter(isOptionVisible).map(group => ({
             ...group,
@@ -479,6 +478,7 @@ export default defineComponent({
         }
         reactData.isActivated = true
         reactData.animatVisible = true
+        displaySelectLabel.value = ''
         if (remote && remoteMethod) {
           reactData.searchLoading = true
           Promise.resolve(remoteMethod({ searchValue: displaySelectLabel.value })).then(() => nextTick()).catch(() => nextTick()).finally(() => {
