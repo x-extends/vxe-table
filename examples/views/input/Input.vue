@@ -152,7 +152,7 @@ export default defineComponent({
       value500: '22',
       value501: '',
       value502: '',
-      value503: '33.33',
+      value503: 33.33,
       value504: '',
       value505: '',
       value506: '44',
