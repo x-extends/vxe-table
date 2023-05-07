@@ -70,11 +70,11 @@
           <div class="docs">
             <template v-if="appData.apiList.length">
               <ul class="nav-menu">
-                <li class="is-warn">
+                <!-- <li class="is-warn">
                   <router-link class="nav-link" :to="{name: 'StartUpgrade'}">
                     <span>注意事项</span>
                   </router-link>
-                </li>
+                </li> -->
                 <li v-for="(item, index) in appData.apiList" :key="index" :class="{expand: item.expand}">
                   <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
                     <i class="vxe-icon-arrow-right nav-link-icon"></i>

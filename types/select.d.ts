@@ -163,7 +163,9 @@ export interface VxeSelectPrivateMethods extends SelectPrivateMethods { }
 export type VxeSelectEmits = [
   'update:modelValue',
   'change',
-  'clear'
+  'clear',
+  'blur',
+  'focus'
 ]
 
 export namespace VxeSelectDefines {
@@ -196,16 +198,33 @@ export namespace VxeSelectDefines {
     value: any
   }
   export interface ChangeEventParams extends SelectEventParams, ChangeParams { }
+
+  export interface ClearParams {
+    value: any
+  }
+  export interface ClearEventParams extends SelectEventParams, ClearParams { }
+
+  export interface FocusEventParams extends SelectEventParams { }
+  export interface BlurEventParams extends SelectEventParams { }
 }
 
 export type VxeSelectEventProps = {
   onChange?: VxeSelectEvents.Change
+  onClear?: VxeSelectEvents.Clear
+  onFocus?: VxeSelectEvents.Focus
+  onBlur?: VxeSelectEvents.Blur
 }
 
 export interface VxeSelectListeners {
   change?: VxeSelectEvents.Change
+  clear?: VxeSelectEvents.Clear
+  focus?: VxeSelectEvents.Focus
+  blur?: VxeSelectEvents.Blur
 }
 
 export namespace VxeSelectEvents {
   export type Change = (params: VxeSelectDefines.ChangeEventParams) => void
+  export type Clear = (params: VxeSelectDefines.ClearEventParams) => void
+  export type Focus = (params: VxeSelectDefines.FocusEventParams) => void
+  export type Blur = (params: VxeSelectDefines.BlurEventParams) => void
 }

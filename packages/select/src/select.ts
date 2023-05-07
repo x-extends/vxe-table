@@ -52,7 +52,9 @@ export default defineComponent({
   emits: [
     'update:modelValue',
     'change',
-    'clear'
+    'clear',
+    'blur',
+    'focus'
   ] as VxeSelectEmits,
   setup (props, context) {
     const { slots, emit } = context
@@ -635,14 +637,16 @@ export default defineComponent({
       }
     }
 
-    const focusEvent = () => {
+    const focusEvent = (evnt: FocusEvent) => {
       if (!props.disabled) {
         reactData.isActivated = true
       }
+      selectMethods.dispatchEvent('focus', {}, evnt)
     }
 
-    const blurEvent = () => {
+    const blurEvent = (evnt: FocusEvent) => {
       reactData.isActivated = false
+      selectMethods.dispatchEvent('blur', {}, evnt)
     }
 
     const modelSearchEvent = (value: string) => {

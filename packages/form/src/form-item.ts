@@ -80,6 +80,7 @@ export default defineComponent({
       const { slots, title, visible, folding, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const itemClassName = compConf ? compConf.itemClassName : ''
+      const itemStyle = compConf ? compConf.itemStyle : null
       const defaultSlot = slots ? slots.default : null
       const titleSlot = slots ? slots.title : null
       const span = item.span || props.span
@@ -160,7 +161,8 @@ export default defineComponent({
             'is--active': isActivetem($xeform, item),
             'is--error': showError
           }
-        ]
+        ],
+        style: XEUtils.isFunction(itemStyle) ? itemStyle(params) : itemStyle
       }, [
         h('div', {
           class: 'vxe-form--item-inner'
