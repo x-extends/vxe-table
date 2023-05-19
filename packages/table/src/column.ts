@@ -42,7 +42,7 @@ export const columnProps = {
   // 给表尾单元格附加 className
   footerClassName: [String, Function] as PropType<VxeColumnPropTypes.FooterClassName>,
   // 格式化显示内容
-  formatter: [Function, Array, String] as PropType<VxeColumnPropTypes.Formatter>,
+  formatter: [Function, Array, String] as PropType<VxeColumnPropTypes.Formatter<any>>,
   // 是否允许排序
   sortable: Boolean as PropType<VxeColumnPropTypes.Sortable>,
   // 自定义排序的属性
@@ -54,7 +54,7 @@ export const columnProps = {
   // 筛选是否允许多选
   filterMultiple: { type: Boolean as PropType<VxeColumnPropTypes.FilterMultiple>, default: true },
   // 自定义筛选方法
-  filterMethod: Function as PropType<VxeColumnPropTypes.FilterMethod>,
+  filterMethod: Function as PropType<VxeColumnPropTypes.FilterMethod<any>>,
   // 筛选重置方法
   filterResetMethod: Function as PropType<VxeColumnPropTypes.FilterResetMethod>,
   // 筛选复原方法
@@ -76,7 +76,7 @@ export const columnProps = {
   // 单元格值类型
   cellType: String as PropType<VxeColumnPropTypes.CellType>,
   // 单元格渲染配置项
-  cellRender: Object as PropType<VxeColumnPropTypes.CellRender>,
+  cellRender: Object as PropType<VxeColumnPropTypes.CellRender<any>>,
   // 单元格编辑渲染配置项
   editRender: Object as PropType<VxeColumnPropTypes.EditRender>,
   // 内容渲染配置项

@@ -81,6 +81,8 @@ export default defineComponent({
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const itemClassName = compConf ? compConf.itemClassName : ''
       const itemStyle = compConf ? compConf.itemStyle : null
+      const itemContentClassName = compConf ? compConf.itemContentClassName : ''
+      const itemContentStyle = compConf ? compConf.itemContentStyle : null
       const defaultSlot = slots ? slots.default : null
       const titleSlot = slots ? slots.title : null
       const span = item.span || props.span
@@ -178,7 +180,8 @@ export default defineComponent({
             ...ons
           }, renderTitle($xeform, item)) : null,
           h('div', {
-            class: ['vxe-form--item-content', align ? `align--${align}` : null]
+            class: ['vxe-form--item-content', align ? `align--${align}` : '', itemContentClassName ? (XEUtils.isFunction(itemContentClassName) ? itemContentClassName(params) : itemContentClassName) : ''],
+            style: XEUtils.isFunction(itemContentStyle) ? itemContentStyle(params) : itemContentStyle
           }, contentVNs)
         ])
       ])

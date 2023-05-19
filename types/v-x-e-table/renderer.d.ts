@@ -1,5 +1,5 @@
 import { SlotVNodeType, VNodeStyle } from '../component'
-import { VxeTableDefines, VxeTableConstructor, VxeTablePropTypes } from '../table'
+import { VxeTableDefines, VxeTableConstructor, VxeTablePropTypes, VxeTableDataRow } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
 import { VxeFilterPanel } from '../filter'
@@ -37,10 +37,10 @@ export interface DefineRendererOption<T> {
   footerExportMethod?(params: VxeGlobalRendererHandles.FooterExportMethodParams): string
 
   // 编辑渲染
-  autofocus?: string | ((params: VxeGlobalRendererHandles.RenderEditParams | VxeGlobalRendererHandles.RenderCellParams) => HTMLElement | null)
+  autofocus?: string | ((params: VxeGlobalRendererHandles.RenderEditParams | VxeGlobalRendererHandles.RenderCellParams<any>) => HTMLElement | null)
   autoselect?: boolean
   renderEdit?(renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams): T
-  renderCell?(renderOpts: VxeGlobalRendererHandles.RenderCellOptions, params: VxeGlobalRendererHandles.RenderCellParams): T
+  renderCell?(renderOpts: VxeGlobalRendererHandles.RenderCellOptions, params: VxeGlobalRendererHandles.RenderCellParams<any>): T
 
   // 内容渲染
   renderExpand?(renderOpts: VxeGlobalRendererHandles.RenderExpandOptions, params: VxeGlobalRendererHandles.RenderExpandParams): T
@@ -50,8 +50,10 @@ export interface DefineRendererOption<T> {
   renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams): T
 
   // 表单-项渲染
-  itemClassName?: VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | { [key: string]: boolean })
+  itemClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | { [key: string]: boolean })
   itemStyle?: string | VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeStyle)
+  itemContentClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | { [key: string]: boolean })
+  itemContentStyle?: string | VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeStyle)
   renderItemTitle?(renderOpts: VxeGlobalRendererHandles.RenderItemTitleOptions, params: VxeGlobalRendererHandles.RenderItemTitleParams): T
   renderItemContent?(renderOpts: VxeGlobalRendererHandles.RenderItemContentOptions, params: VxeGlobalRendererHandles.RenderItemContentParams): T
   itemVisibleMethod?(params: VxeGlobalRendererHandles.ItemVisibleMethodParams): boolean
@@ -68,91 +70,91 @@ export namespace VxeGlobalRendererHandles {
 
   export interface RenderParams {}
 
-  export type RenderFilterParams = {
-    $table: VxeTableConstructor
+  export type RenderFilterParams<D = VxeTableDataRow> = {
+    $table: VxeTableConstructor<D>
     $panel: VxeFilterPanel
     column: {
       filters: VxeTableDefines.FilterOption[]
-    } & VxeTableDefines.ColumnInfo
+    } & VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     $rowIndex: number
   }
 
-  export type FilterMethodParams = {
-    $table: VxeTableConstructor
+  export type FilterMethodParams<D = VxeTableDataRow> = {
+    $table: VxeTableConstructor<D>
     value: any
     option: VxeTableDefines.FilterOption
     cellValue: any
     row: any
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
   }
 
-  export interface FilterRemoteMethod extends VxeTableDefines.FilterChangeParams {
-    $table: VxeTableConstructor
+  export interface FilterRemoteMethod<D = VxeTableDataRow> extends VxeTableDefines.FilterChangeParams<D> {
+    $table: VxeTableConstructor<D>
   }
 
-  export interface FilterResetMethodParams {
-    $table: VxeTableConstructor
+  export interface FilterResetMethodParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>
     options: VxeTableDefines.FilterOption[]
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
   }
 
-  export interface FilterRecoverMethodParams {
-    $table: VxeTableConstructor
+  export interface FilterRecoverMethodParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>
     option: VxeTableDefines.FilterOption
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
   }
 
   export interface RenderHeaderOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
-  export interface RenderHeaderParams {
-    $table: VxeTableConstructor
-    column: VxeTableDefines.ColumnInfo
+  export interface RenderHeaderParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     $rowIndex: number
   }
 
-  export type RenderDefaultOptions = VxeColumnPropTypes.EditRender
+  export type RenderDefaultOptions<D = VxeTableDataRow> = VxeColumnPropTypes.EditRender<D>
   export type RenderDefaultParams = RenderEditParams
 
   export interface RenderFooterOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
-  export interface RenderFooterParams {
-    $table: VxeTableConstructor
-    column: VxeTableDefines.ColumnInfo
+  export interface RenderFooterParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     _columnIndex: number
     $columnIndex: number
     $rowIndex: number
     items: any[]
-    data: any[][]
+    data: D[][]
   }
 
-  export interface ExportMethodParams {
-    row: any
-    column: VxeTableDefines.ColumnInfo
+  export interface ExportMethodParams<D = VxeTableDataRow> {
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
     options: VxeTablePropTypes.ExportHandleOptions
   }
 
-  export interface FooterExportMethodParams {
+  export interface FooterExportMethodParams<D = VxeTableDataRow> {
     items: any[]
     _columnIndex: number
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
     options: VxeTablePropTypes.ExportHandleOptions
   }
 
   export type RenderEditOptions = VxeColumnPropTypes.EditRender
 
-  export interface RenderEditParams {
-    $table: VxeTableConstructor
-    $grid: VxeGridConstructor | null
-    column: VxeTableDefines.ColumnInfo
+  export interface RenderEditParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     rowid: string
-    row: any
+    row: D
     rowIndex: number
     $rowIndex: number
     isHidden: boolean
@@ -160,15 +162,15 @@ export namespace VxeGlobalRendererHandles {
     type: string
   }
 
-  export type RenderCellOptions = VxeColumnPropTypes.EditRender
-  export type RenderCellParams = {
-    $table: VxeTableConstructor
-    $grid: VxeGridConstructor | null
-    column: VxeTableDefines.ColumnInfo
+  export type RenderCellOptions<D = VxeTableDataRow> = VxeColumnPropTypes.EditRender<D>
+  export type RenderCellParams<D = VxeTableDataRow> = {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     rowid: string
-    row: any
+    row: D
     rowIndex: number
     $rowIndex: number
     isHidden: boolean

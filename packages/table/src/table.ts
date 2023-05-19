@@ -18,7 +18,7 @@ import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes } from '../../../types/all'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow } from '../../../types/all'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -420,7 +420,7 @@ export default defineComponent({
     })
 
     const computeClipOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.clipConfig, props.clipConfig) as VxeTablePropTypes.ClipOpts
+      return Object.assign({}, GlobalConfig.table.clipConfig, props.clipConfig)
     })
 
     const computeFNROpts = computed(() => {
@@ -3116,7 +3116,7 @@ export default defineComponent({
         return new Promise(resolve => {
           // 还原滚动条位置
           if (lastScrollLeft || lastScrollTop) {
-            return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve).then(() => {
+            return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then().then(() => {
               // 存在滚动行为未结束情况
               setTimeout(resolve, 30)
             })
@@ -3560,12 +3560,15 @@ export default defineComponent({
        * 判断指定列是否为筛选状态，如果为空则判断所有列
        * @param {String} fieldOrColumn 字段名
        */
-      isFilter (fieldOrColumn) {
+      isActiveFilterByColumn (fieldOrColumn) {
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
         if (column) {
           return column.filters && column.filters.some((option) => option.checked)
         }
         return $xetable.getCheckedFilters().length > 0
+      },
+      isFilter (fieldOrColumn) {
+        return tableMethods.isActiveFilterByColumn(fieldOrColumn)
       },
       /**
        * 判断展开行是否懒加载完成
@@ -4413,7 +4416,7 @@ export default defineComponent({
               if (keyboardOpts.isDel && (selected.row || selected.column)) {
                 if (delMethod) {
                   delMethod({
-                    row: selected.row,
+                    row: selected.row as VxeTableDataRow,
                     rowIndex: tableMethods.getRowIndex(selected.row),
                     column: selected.column,
                     columnIndex: tableMethods.getColumnIndex(selected.column),
@@ -4425,7 +4428,7 @@ export default defineComponent({
                 if (isBack) {
                   if (backMethod) {
                     backMethod({
-                      row: selected.row,
+                      row: selected.row as VxeTableDataRow,
                       rowIndex: tableMethods.getRowIndex(selected.row),
                       column: selected.column,
                       columnIndex: tableMethods.getColumnIndex(selected.column),
@@ -5103,7 +5106,7 @@ export default defineComponent({
         const { column } = params
         const { tooltipStore } = reactData
         const cell = evnt.currentTarget as HTMLTableCellElement
-        handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row)
+        handleTargetEnterEvent(tooltipStore.column !== column || !!tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') as HTMLElement || cell.children[0], null, params)
         }

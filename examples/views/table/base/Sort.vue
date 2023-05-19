@@ -85,7 +85,7 @@
       <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
-    <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段组合排序</p>
+    <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段排序</p>
 
     <vxe-toolbar>
       <template #buttons>
@@ -234,7 +234,7 @@ export default defineComponent({
         const sortItem = sortList[0]
         // 取出第一个排序的列
         const { property, order } = sortItem
-        let list = []
+        let list: any[] = []
         if (order === 'asc' || order === 'desc') {
           if (property === 'name') {
             // 例如：实现中英文混排，按照字母排序

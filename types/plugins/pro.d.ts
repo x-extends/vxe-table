@@ -1,10 +1,10 @@
 import { VxeEvent } from '../component'
-import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods } from '../table'
+import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTableDataRow } from '../table'
 import { VxeGridConstructor } from '../grid'
 
 /* eslint-disable no-use-before-define */
 
-export interface VxeTableProMethods {
+export interface VxeTableProMethods<D = VxeTableDataRow> {
   /**
    * 用于 mouse-config.area，用于获取鼠标选择的区域
    */
@@ -46,9 +46,9 @@ export interface VxeTableProMethods {
    * @param areaConfigs 指定区域
    */
   setCellAreas(areaConfigs: VxeTableProDefines.CellAreaConfig[], activeArea?: {
-    area?: number | VxeTableProDefines.CellAreaConfig
-    column?: number | VxeTableDefines.ColumnInfo
-    row?: any
+    area?: number | VxeTableProDefines.CellAreaConfig<D>
+    column?: number | VxeTableDefines.ColumnInfo<D>
+    row?: D | number
   }): Promise<any>
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
@@ -68,12 +68,12 @@ export interface VxeTableProMethods {
    */
   closeFNR(): Promise<any>
 }
-export type VxeProPluginMethods = VxeTableProMethods
+export type VxeProPluginMethods<D = VxeTableDataRow> = VxeTableProMethods<D>
 
-export interface VxeTableProPrivateMethods {
+export interface VxeTableProPrivateMethods<D = VxeTableDataRow> {
   handleKeyboardEvent(evnt: KeyboardEvent): void
-  handleHeaderCellAreaEvent(evnt: KeyboardEvent, params: VxeTableDefines.HeaderCellClickEventParams): void
-  handleCellAreaEvent(evnt: MouseEvent, params: VxeTableDefines.CellClickEventParams): void
+  handleHeaderCellAreaEvent(evnt: KeyboardEvent, params: VxeTableDefines.HeaderCellClickEventParams<D>): void
+  handleCellAreaEvent(evnt: MouseEvent, params: VxeTableDefines.CellClickEventParams<D>): void
   handleUpdateCellAreas(): any
   handleCopyCellAreaEvent(evnt: ClipboardEvent): void
   handlePasteCellAreaEvent(evnt: ClipboardEvent): void
@@ -84,16 +84,16 @@ export interface VxeTableProPrivateMethods {
   triggerPasteCellAreaEvent(evnt: MouseEvent): void
   triggerFNROpenEvent(evnt: MouseEvent, tab: 'find' | 'replace'): void
 }
-export type VxeProPluginPrivateMethods = VxeTableProPrivateMethods
+export type VxeProPluginPrivateMethods<D = VxeTableDataRow> = VxeTableProPrivateMethods<D>
 
 declare module '../table' {
-  interface VxeTableMethods extends VxeTableProMethods { }
-  interface VxeTablePrivateMethods extends VxeTableProPrivateMethods { }
+  interface VxeTableMethods<D = VxeTableDataRow> extends VxeTableProMethods<D> { }
+  interface VxeTablePrivateMethods<D = VxeTableDataRow> extends VxeTableProPrivateMethods<D> { }
 }
 
 declare module '../grid' {
-  interface VxeGridMethods extends VxeTableProMethods { }
-  interface VxeGridPrivateMethods extends VxeTableProPrivateMethods { }
+  interface VxeGridMethods<D = VxeTableDataRow> extends VxeTableProMethods<D> { }
+  interface VxeGridPrivateMethods<D = VxeTableDataRow> extends VxeTableProPrivateMethods<D> { }
 }
 
 export interface VXETableProClipboard {
@@ -109,9 +109,9 @@ declare module '../vxe-table' {
 }
 
 export namespace VxeTableProDefines {
-  export interface CellAreaParams {
-    cols: VxeTableDefines.ColumnInfo[]
-    rows: any
+  export interface CellAreaParams<D = VxeTableDataRow> {
+    cols: VxeTableDefines.ColumnInfo<D>[]
+    rows: D[]
   }
 
   export interface FNRTab {
@@ -127,25 +127,25 @@ export namespace VxeTableProDefines {
     value: string
   }
 
-  export interface MouseActiveCellArea {
+  export interface MouseActiveCellArea<D = VxeTableDataRow> {
     el?: HTMLElement | null
     type: CELL_AREA_TYPE
-    area: MouseCellArea
+    area: MouseCellArea<D>
     row: any
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
     top: number
     left: number
     width: number
     height: number
   }
 
-  export interface MouseCellArea {
+  export interface MouseCellArea<D = VxeTableDataRow> {
     el?: HTMLElement | null
     leftEl?: HTMLElement | null
     rightEl?: HTMLElement | null
     type: CELL_AREA_TYPE
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
     top: number
     left: number
     width: number
@@ -154,196 +154,196 @@ export namespace VxeTableProDefines {
 
   export type CELL_AREA_TYPE = 'main' | 'copy' | 'extend' | 'multi' | 'active'
 
-  export interface CellAreaConfig {
+  export interface CellAreaConfig<D = VxeTableDataRow> {
     type?: CELL_AREA_TYPE
-    startColumn: VxeTableDefines.ColumnInfo | number
-    endColumn: VxeTableDefines.ColumnInfo | number
-    startRow: any
-    endRow: any
+    startColumn: VxeTableDefines.ColumnInfo<D> | number
+    endColumn: VxeTableDefines.ColumnInfo<D> | number
+    startRow: D | number
+    endRow: D | number
   }
 
-  export interface ActiveCellAreaConfig {
-    area: VxeTableProDefines.MouseCellArea | number
-    column: VxeTableDefines.ColumnInfo | number
-    row: any
+  export interface ActiveCellAreaConfig<D = VxeTableDataRow> {
+    area: VxeTableProDefines.MouseCellArea<D> | number
+    column: VxeTableDefines.ColumnInfo<D> | number
+    row: D | number
   }
 
   export type ExtendCellAreaDirection = 'up' | 'down' | 'left' | 'right'
 
-  export interface ExtendCellAreaCalcBaseParams {
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
+  export interface ExtendCellAreaCalcBaseParams<D = VxeTableDataRow> {
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
     targetValues: any[][]
     targetRows: any[]
-    targetCols: VxeTableDefines.ColumnInfo[]
+    targetCols: VxeTableDefines.ColumnInfo<D>[]
     extendRows: any[]
-    extendCols: VxeTableDefines.ColumnInfo[]
+    extendCols: VxeTableDefines.ColumnInfo<D>[]
     direction: ExtendCellAreaDirection
-    $table: VxeTableConstructor & VxeTablePrivateMethods
-    $grid: VxeGridConstructor | null | undefined
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
+    $grid: VxeGridConstructor<D> | null | undefined
   }
 
-  interface EventParams extends VxeEvent {
-    $table: VxeTableConstructor & VxeTablePrivateMethods
-    $grid: VxeGridConstructor | null | undefined
+  interface EventParams<D = VxeTableDataRow> extends VxeEvent {
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
+    $grid: VxeGridConstructor<D> | null | undefined
   }
 
   type FnrTab = 'find' | 'replace'
 
-  export interface OpenFnrParams {
+  export interface OpenFnrParams<D = VxeTableDataRow> {
     tab: FnrTab
   }
-  export interface OpenFnrEventParams extends EventParams, OpenFnrParams { }
+  export interface OpenFnrEventParams<D = VxeTableDataRow> extends EventParams<D>, OpenFnrParams { }
 
-  export type FnrChangeParams = OpenFnrParams
-  export interface FnrChangeEventParams extends EventParams, FnrChangeParams { }
+  export type FnrChangeParams<D = VxeTableDataRow> = OpenFnrParams<D>
+  export interface FnrChangeEventParams<D = VxeTableDataRow> extends EventParams<D>, FnrChangeParams { }
 
-  export interface FnrFindParams {
+  export interface FnrFindParams<D = VxeTableDataRow> {
     findValue: string
-    row: any
-    column: VxeTableDefines.ColumnInfo
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
   }
-  export type FnrFindEventParams = FnrFindParams
+  export type FnrFindEventParams<D = VxeTableDataRow> = FnrFindParams<D>
 
-  export interface FindAndReplaceResult {
-    row: any
+  export interface FindAndReplaceResult<D = VxeTableDataRow> {
+    row: D
     _rowIndex: number
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
     _columnIndex: number
   }
 
-  export interface FnrFindAllParams {
+  export interface FnrFindAllParams<D = VxeTableDataRow> {
     findValue: string
-    result: FindAndReplaceResult[]
+    result: FindAndReplaceResult<D>[]
   }
-  export type FnrFindAllEventParams = FnrFindAllParams
+  export type FnrFindAllEventParams<D = VxeTableDataRow> = FnrFindAllParams<D>
 
-  export interface FnrReplaceParams {
+  export interface FnrReplaceParams<D = VxeTableDataRow> {
     findValue: string
     replaceValue: string
     row: any
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
   }
-  export type FnrReplaceEventParams = FnrReplaceParams
+  export type FnrReplaceEventParams<D = VxeTableDataRow> = FnrReplaceParams<D>
 
-  export interface FnrReplaceAllParams {
+  export interface FnrReplaceAllParams<D = VxeTableDataRow> {
     findValue: string
     replaceValue: string
-    result: FindAndReplaceResult[]
+    result: FindAndReplaceResult<D>[]
   }
-  export type FnrReplaceAllEventParams = FnrReplaceAllParams
+  export type FnrReplaceAllEventParams<D = VxeTableDataRow> = FnrReplaceAllParams<D>
 
-  export interface CellAreaCopyParams {
+  export interface CellAreaCopyParams<D = VxeTableDataRow> {
     status: boolean
-    targetAreas: VxeTableProDefines.CellAreaParams[]
+    targetAreas: VxeTableProDefines.CellAreaParams<D>[]
     cellValues: string[][]
   }
-  export interface CellAreaCopyEventParams extends EventParams, CellAreaCopyParams { }
+  export interface CellAreaCopyEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaCopyParams<D> { }
 
-  export interface CellAreaCutParams {
+  export interface CellAreaCutParams<D = VxeTableDataRow> {
     status: boolean
-    targetAreas: VxeTableProDefines.CellAreaParams[]
+    targetAreas: VxeTableProDefines.CellAreaParams<D>[]
     cellValues: string[][]
   }
-  export interface CellAreaCutEventParams extends EventParams, CellAreaCutParams { }
+  export interface CellAreaCutEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaCutParams<D> { }
 
-  export interface CellAreaPasteParams {
+  export interface CellAreaPasteParams<D = VxeTableDataRow> {
     status: boolean
-    targetAreas: VxeTableProDefines.CellAreaParams[]
+    targetAreas: VxeTableProDefines.CellAreaParams<D>[]
   }
-  export interface CellAreaPasteEventParams extends EventParams, CellAreaPasteParams { }
+  export interface CellAreaPasteEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaPasteParams<D> { }
 
-  export interface CellAreaMergeParams {
+  export interface CellAreaMergeParams<D = VxeTableDataRow> {
     status: boolean
-    targetAreas: VxeTableProDefines.CellAreaParams[]
+    targetAreas: VxeTableProDefines.CellAreaParams<D>[]
   }
-  export interface CellAreaMergeEventParams extends EventParams, CellAreaMergeParams { }
+  export interface CellAreaMergeEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaMergeParams<D> { }
 
-  export interface ClearCellAreaMergeParams {
+  export interface ClearCellAreaMergeParams<D = VxeTableDataRow> {
     mergeCells: VxeTableDefines.MergeInfo[]
   }
-  export interface ClearCellAreaMergeEventParams extends EventParams, ClearCellAreaMergeParams { }
+  export interface ClearCellAreaMergeEventParams<D = VxeTableDataRow> extends EventParams<D>, ClearCellAreaMergeParams<D> { }
 
-  export interface HeaderCellAreaSelectionParams {
-    targetRows: any[]
-    targetCols: VxeTableDefines.ColumnInfo[]
-    column: VxeTableDefines.ColumnInfo
+  export interface HeaderCellAreaSelectionParams<D = VxeTableDataRow> {
+    targetRows: D[]
+    targetCols: VxeTableDefines.ColumnInfo<D>[]
+    column: VxeTableDefines.ColumnInfo<D>
     _columnIndex: number
   }
-  export interface HeaderCellAreaSelectionEventParams extends EventParams, HeaderCellAreaSelectionParams { }
+  export interface HeaderCellAreaSelectionEventParams<D = VxeTableDataRow> extends EventParams<D>, HeaderCellAreaSelectionParams<D> { }
 
-  export interface CellAreaSelectionStartParams {
-    row: any
+  export interface CellAreaSelectionStartParams<D = VxeTableDataRow> {
+    row: D
     _rowIndex: number
     $rowIndex: number
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
     _columnIndex: number
     $columnIndex: number
     cell: HTMLElement
   }
-  export interface CellAreaSelectionStartEventParams extends EventParams, CellAreaSelectionStartParams { }
+  export interface CellAreaSelectionStartEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaSelectionStartParams<D> { }
 
-  export interface CellAreaSelectionDragParams {
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
+  export interface CellAreaSelectionDragParams<D = VxeTableDataRow> {
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
   }
-  export interface CellAreaSelectionDragEventParams extends EventParams, CellAreaSelectionDragParams { }
+  export interface CellAreaSelectionDragEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaSelectionDragParams<D> { }
 
-  export interface CellAreaSelectionEndParams {
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
+  export interface CellAreaSelectionEndParams<D = VxeTableDataRow> {
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
   }
-  export interface CellAreaSelectionEndEventParams extends EventParams, CellAreaSelectionEndParams { }
+  export interface CellAreaSelectionEndEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaSelectionEndParams<D> { }
 
-  export type CellAreaExtensionStartParams = CellAreaSelectionStartParams
-  export interface CellAreaExtensionStartEventParams extends EventParams, CellAreaExtensionStartParams { }
+  export type CellAreaExtensionStartParams<D = VxeTableDataRow> = CellAreaSelectionStartParams<D>
+  export interface CellAreaExtensionStartEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaExtensionStartParams<D> { }
 
-  export interface CellAreaExtensionDragParams {
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
-    targetRows: any[]
-    targetCols: VxeTableDefines.ColumnInfo[]
+  export interface CellAreaExtensionDragParams<D = VxeTableDataRow> {
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
+    targetRows: D[]
+    targetCols: VxeTableDefines.ColumnInfo<D>[]
   }
-  export interface CellAreaExtensionDragEventParams extends EventParams, CellAreaExtensionDragParams { }
+  export interface CellAreaExtensionDragEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaExtensionDragParams<D> { }
 
-  export interface CellAreaExtensionEndParams {
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
-    targetRows: any[]
-    targetCols: VxeTableDefines.ColumnInfo[]
+  export interface CellAreaExtensionEndParams<D = VxeTableDataRow> {
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
+    targetRows: D[]
+    targetCols: VxeTableDefines.ColumnInfo<D>[]
   }
-  export interface CellAreaExtensionEndEventParams extends EventParams, CellAreaExtensionEndParams { }
+  export interface CellAreaExtensionEndEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaExtensionEndParams<D> { }
 
   export interface CellAreaSelectionAllStartParams {
   }
-  export interface CellAreaSelectionAllStartEventParams extends EventParams, CellAreaSelectionAllStartParams { }
+  export interface CellAreaSelectionAllStartEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaSelectionAllStartParams { }
 
-  export interface CellAreaSelectionAllEndParams {
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
+  export interface CellAreaSelectionAllEndParams<D = VxeTableDataRow> {
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
   }
-  export interface CellAreaSelectionAllEndEventParams extends EventParams, CellAreaSelectionAllEndParams { }
+  export interface CellAreaSelectionAllEndEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaSelectionAllEndParams<D> { }
 
-  export interface CellAreaArrowsStartParams {
-    rows: any[]
-    cols: VxeTableDefines.ColumnInfo[]
+  export interface CellAreaArrowsStartParams<D = VxeTableDataRow> {
+    rows: D[]
+    cols: VxeTableDefines.ColumnInfo<D>[]
     isLeft: boolean
     isUp: boolean
     isRight: boolean
     isDown: boolean
   }
-  export interface CellAreaArrowsStartEventParams extends EventParams, CellAreaArrowsStartParams { }
+  export interface CellAreaArrowsStartEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaArrowsStartParams<D> { }
 
-  export interface CellAreaArrowsEndParams extends CellAreaArrowsStartParams {
-    targetRows: any[]
-    targetCols: VxeTableDefines.ColumnInfo[]
+  export interface CellAreaArrowsEndParams<D = VxeTableDataRow> extends CellAreaArrowsStartParams<D> {
+    targetRows: D[]
+    targetCols: VxeTableDefines.ColumnInfo<D>[]
   }
-  export interface CellAreaArrowsEndEventParams extends EventParams, CellAreaArrowsEndParams { }
+  export interface CellAreaArrowsEndEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaArrowsEndParams<D> { }
 
-  export interface ActiveCellChangeStartParams {
+  export interface ActiveCellChangeStartParams<D = VxeTableDataRow> {
     activeArea: VxeTableProDefines.MouseCellArea
-    row: any
-    column: VxeTableDefines.ColumnInfo
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
     isTab: boolean
     isEnter: boolean
     isLeft: boolean
@@ -351,12 +351,12 @@ export namespace VxeTableProDefines {
     isRight: boolean
     isDown: boolean
   }
-  export interface ActiveCellChangeStartEventParams extends EventParams, ActiveCellChangeStartParams { }
+  export interface ActiveCellChangeStartEventParams<D = VxeTableDataRow> extends EventParams<D>, ActiveCellChangeStartParams<D> { }
 
-  export interface ActiveCellChangeEndParams extends ActiveCellChangeStartParams {
+  export interface ActiveCellChangeEndParams<D = VxeTableDataRow> extends ActiveCellChangeStartParams<D> {
     beforeActiveArea: VxeTableProDefines.MouseCellArea
   }
-  export interface ActiveCellChangeEndEventParams extends EventParams, ActiveCellChangeEndParams { }
+  export interface ActiveCellChangeEndEventParams<D = VxeTableDataRow> extends EventParams<D>, ActiveCellChangeEndParams<D> { }
 }
 
 export type VxeTableProEmits = [
@@ -389,162 +389,162 @@ export type VxeTableProEmits = [
 ]
 
 declare module '../table' {
-  interface VxeTableEventProps {
-    onOpenFnr?: VxeTableEvents.OpenFnr
-    onFnrChange?: VxeTableEvents.FnrChange
-    onFnrFind?: VxeTableEvents.FnrFind
-    onFnrFindAll?: VxeTableEvents.FnrFindAll
-    onFnrReplace?: VxeTableEvents.FnrReplace
-    onFnrReplaceAll?: VxeTableEvents.FnrReplaceAll
-    onCellAreaCopy?: VxeTableEvents.CellAreaCopy
-    onCellAreaCut?: VxeTableEvents.CellAreaCut
-    onCellAreaPaste?: VxeTableEvents.CellAreaPaste
-    onCellAreaMerge?: VxeTableEvents.CellAreaMerge
-    onClearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge
-    onHeaderCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection
-    onCellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart
-    onCellAreaSelectionDrag?: VxeTableEvents.CellAreaSelectionDrag
-    onCellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd
-    onCellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart
-    onCellAreaExtensionDrag?: VxeTableEvents.CellAreaExtensionDrag
-    onCellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd
-    onCellAreaSelectionAllStart?: VxeTableEvents.CellAreaSelectionAllStart
-    onCellAreaSelectionAllEnd?: VxeTableEvents.CellAreaSelectionAllEnd
-    onCellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart
-    onCellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd
-    onActiveCellChangeStart?: VxeTableEvents.ActiveCellChangeStart
-    onActiveCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd
+  interface VxeTableEventProps<D = VxeTableDataRow> {
+    onOpenFnr?: VxeTableEvents.OpenFnr<D>
+    onFnrChange?: VxeTableEvents.FnrChange<D>
+    onFnrFind?: VxeTableEvents.FnrFind<D>
+    onFnrFindAll?: VxeTableEvents.FnrFindAll<D>
+    onFnrReplace?: VxeTableEvents.FnrReplace<D>
+    onFnrReplaceAll?: VxeTableEvents.FnrReplaceAll<D>
+    onCellAreaCopy?: VxeTableEvents.CellAreaCopy<D>
+    onCellAreaCut?: VxeTableEvents.CellAreaCut<D>
+    onCellAreaPaste?: VxeTableEvents.CellAreaPaste<D>
+    onCellAreaMerge?: VxeTableEvents.CellAreaMerge<D>
+    onClearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge<D>
+    onHeaderCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection<D>
+    onCellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart<D>
+    onCellAreaSelectionDrag?: VxeTableEvents.CellAreaSelectionDrag<D>
+    onCellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd<D>
+    onCellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart<D>
+    onCellAreaExtensionDrag?: VxeTableEvents.CellAreaExtensionDrag<D>
+    onCellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd<D>
+    onCellAreaSelectionAllStart?: VxeTableEvents.CellAreaSelectionAllStart<D>
+    onCellAreaSelectionAllEnd?: VxeTableEvents.CellAreaSelectionAllEnd<D>
+    onCellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart<D>
+    onCellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd<D>
+    onActiveCellChangeStart?: VxeTableEvents.ActiveCellChangeStart<D>
+    onActiveCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd<D>
   }
-  interface VxeTableListeners {
-    openFnr?: VxeTableEvents.OpenFnr
-    fnrChange?: VxeTableEvents.FnrChange
-    fnrFind?: VxeTableEvents.FnrFind
-    fnrFindAll?: VxeTableEvents.FnrFindAll
-    fnrReplace?: VxeTableEvents.FnrReplace
-    fnrReplaceAll?: VxeTableEvents.FnrReplaceAll
-    cellAreaCopy?: VxeTableEvents.CellAreaCopy
-    cellAreaCut?: VxeTableEvents.CellAreaCut
-    cellAreaPaste?: VxeTableEvents.CellAreaPaste
-    cellAreaMerge?: VxeTableEvents.CellAreaMerge
-    clearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge
-    headerCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection
-    cellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart
-    cellAreaSelectionDrag?: VxeTableEvents.CellAreaSelectionDrag
-    cellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd
-    cellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart
-    cellAreaExtensionDrag?: VxeTableEvents.CellAreaExtensionDrag
-    cellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd
-    cellAreaSelectionAllStart?: VxeTableEvents.CellAreaSelectionAllStart
-    cellAreaSelectionAllEnd?: VxeTableEvents.CellAreaSelectionAllEnd
-    cellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart
-    cellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd
-    activeCellChangeStart?: VxeTableEvents.ActiveCellChangeStart
-    activeCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd
+  interface VxeTableListeners<D = VxeTableDataRow> {
+    openFnr?: VxeTableEvents.OpenFnr<D>
+    fnrChange?: VxeTableEvents.FnrChange<D>
+    fnrFind?: VxeTableEvents.FnrFind<D>
+    fnrFindAll?: VxeTableEvents.FnrFindAll<D>
+    fnrReplace?: VxeTableEvents.FnrReplace<D>
+    fnrReplaceAll?: VxeTableEvents.FnrReplaceAll<D>
+    cellAreaCopy?: VxeTableEvents.CellAreaCopy<D>
+    cellAreaCut?: VxeTableEvents.CellAreaCut<D>
+    cellAreaPaste?: VxeTableEvents.CellAreaPaste<D>
+    cellAreaMerge?: VxeTableEvents.CellAreaMerge<D>
+    clearCellAreaMerge?: VxeTableEvents.ClearCellAreaMerge<D>
+    headerCellAreaSelection?: VxeTableEvents.HeaderCellAreaSelection<D>
+    cellAreaSelectionStart?: VxeTableEvents.CellAreaSelectionStart<D>
+    cellAreaSelectionDrag?: VxeTableEvents.CellAreaSelectionDrag<D>
+    cellAreaSelectionEnd?: VxeTableEvents.CellAreaSelectionEnd<D>
+    cellAreaExtensionStart?: VxeTableEvents.CellAreaExtensionStart<D>
+    cellAreaExtensionDrag?: VxeTableEvents.CellAreaExtensionDrag<D>
+    cellAreaExtensionEnd?: VxeTableEvents.CellAreaExtensionEnd<D>
+    cellAreaSelectionAllStart?: VxeTableEvents.CellAreaSelectionAllStart<D>
+    cellAreaSelectionAllEnd?: VxeTableEvents.CellAreaSelectionAllEnd<D>
+    cellAreaArrowsStart?: VxeTableEvents.CellAreaArrowsStart<D>
+    cellAreaArrowsEnd?: VxeTableEvents.CellAreaArrowsEnd<D>
+    activeCellChangeStart?: VxeTableEvents.ActiveCellChangeStart<D>
+    activeCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd<D>
   }
   namespace VxeTableEvents {
-    export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void
-    export type FnrChange = (params: VxeTableProDefines.FnrChangeParams) => void
-    export type FnrFind = (params: VxeTableProDefines.FnrFindParams) => void
-    export type FnrFindAll = (params: VxeTableProDefines.FnrFindAllParams) => void
-    export type FnrReplace = (params: VxeTableProDefines.FnrReplaceParams) => void
-    export type FnrReplaceAll = (params: VxeTableProDefines.FnrReplaceAllParams) => void
-    export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void
-    export type CellAreaCut = (params: VxeTableProDefines.CellAreaCutParams) => void
-    export type CellAreaPaste = (params: VxeTableProDefines.CellAreaPasteParams) => void
-    export type CellAreaMerge = (params: VxeTableProDefines.CellAreaMergeEventParams) => void
-    export type ClearCellAreaMerge = (params: VxeTableProDefines.ClearCellAreaMergeEventParams) => void
-    export type HeaderCellAreaSelection = (params: VxeTableProDefines.HeaderCellAreaSelectionEventParams) => void
-    export type CellAreaSelectionStart = (params: VxeTableProDefines.CellAreaSelectionStartEventParams) => void
-    export type CellAreaSelectionDrag = (params: VxeTableProDefines.CellAreaSelectionDragEventParams) => void
-    export type CellAreaSelectionEnd = (params: VxeTableProDefines.CellAreaSelectionEndEventParams) => void
-    export type CellAreaExtensionStart = (params: VxeTableProDefines.CellAreaExtensionStartEventParams) => void
-    export type CellAreaExtensionDrag = (params: VxeTableProDefines.CellAreaExtensionDragEventParams) => void
-    export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void
-    export type CellAreaSelectionAllStart = (params: VxeTableProDefines.CellAreaSelectionAllStartEventParams) => void
-    export type CellAreaSelectionAllEnd = (params: VxeTableProDefines.CellAreaSelectionAllEndEventParams) => void
-    export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void
-    export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void
-    export type ActiveCellChangeStart = (params: VxeTableProDefines.ActiveCellChangeStartEventParams) => void
-    export type ActiveCellChangeEnd = (params: VxeTableProDefines.ActiveCellChangeEndEventParams) => void
+    export type OpenFnr<D = any> = (params: VxeTableProDefines.OpenFnrParams<D>) => void
+    export type FnrChange<D = any> = (params: VxeTableProDefines.FnrChangeParams<D>) => void
+    export type FnrFind<D = any> = (params: VxeTableProDefines.FnrFindParams<D>) => void
+    export type FnrFindAll<D = any> = (params: VxeTableProDefines.FnrFindAllParams<D>) => void
+    export type FnrReplace<D = any> = (params: VxeTableProDefines.FnrReplaceParams<D>) => void
+    export type FnrReplaceAll<D = any> = (params: VxeTableProDefines.FnrReplaceAllParams<D>) => void
+    export type CellAreaCopy<D = any> = (params: VxeTableProDefines.CellAreaCopyParams<D>) => void
+    export type CellAreaCut<D = any> = (params: VxeTableProDefines.CellAreaCutParams<D>) => void
+    export type CellAreaPaste<D = any> = (params: VxeTableProDefines.CellAreaPasteParams<D>) => void
+    export type CellAreaMerge<D = any> = (params: VxeTableProDefines.CellAreaMergeEventParams<D>) => void
+    export type ClearCellAreaMerge<D = any> = (params: VxeTableProDefines.ClearCellAreaMergeEventParams<D>) => void
+    export type HeaderCellAreaSelection<D = any> = (params: VxeTableProDefines.HeaderCellAreaSelectionEventParams<D>) => void
+    export type CellAreaSelectionStart<D = any> = (params: VxeTableProDefines.CellAreaSelectionStartEventParams<D>) => void
+    export type CellAreaSelectionDrag<D = any> = (params: VxeTableProDefines.CellAreaSelectionDragEventParams<D>) => void
+    export type CellAreaSelectionEnd<D = any> = (params: VxeTableProDefines.CellAreaSelectionEndEventParams<D>) => void
+    export type CellAreaExtensionStart<D = any> = (params: VxeTableProDefines.CellAreaExtensionStartEventParams<D>) => void
+    export type CellAreaExtensionDrag<D = any> = (params: VxeTableProDefines.CellAreaExtensionDragEventParams<D>) => void
+    export type CellAreaExtensionEnd<D = any> = (params: VxeTableProDefines.CellAreaExtensionEndEventParams<D>) => void
+    export type CellAreaSelectionAllStart<D = any> = (params: VxeTableProDefines.CellAreaSelectionAllStartEventParams<D>) => void
+    export type CellAreaSelectionAllEnd<D = any> = (params: VxeTableProDefines.CellAreaSelectionAllEndEventParams<D>) => void
+    export type CellAreaArrowsStart<D = any> = (params: VxeTableProDefines.CellAreaArrowsStartEventParams<D>) => void
+    export type CellAreaArrowsEnd<D = any> = (params: VxeTableProDefines.CellAreaArrowsEndEventParams<D>) => void
+    export type ActiveCellChangeStart<D = any> = (params: VxeTableProDefines.ActiveCellChangeStartEventParams<D>) => void
+    export type ActiveCellChangeEnd<D = any> = (params: VxeTableProDefines.ActiveCellChangeEndEventParams<D>) => void
   }
 }
 
 declare module '../grid' {
-  interface VxeGridEventProps {
-    onOpenFnr?: VxeGridEvents.OpenFnr
-    onFnrChange?: VxeGridEvents.FnrChange
-    onFnrFind?: VxeGridEvents.FnrFind
-    onFnrFindAll?: VxeGridEvents.FnrFindAll
-    onFnrReplace?: VxeGridEvents.FnrReplace
-    onFnrReplaceAll?: VxeGridEvents.FnrReplaceAll
-    onCellAreaCopy?: VxeGridEvents.CellAreaCopy
-    onCellAreaCut?: VxeGridEvents.CellAreaCut
-    onCellAreaPaste?: VxeGridEvents.CellAreaPaste
-    onCellAreaMerge?: VxeGridEvents.CellAreaMerge
-    onClearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge
-    onHeaderCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection
-    onCellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart
-    onCellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionDrag
-    onCellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd
-    onCellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart
-    onCellAreaExtensionDrag?: VxeGridEvents.CellAreaExtensionDrag
-    onCellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd
-    onCellAreaSelectionAllStart?: VxeGridEvents.CellAreaSelectionAllStart
-    onCellAreaSelectionAllEnd?: VxeGridEvents.CellAreaSelectionAllEnd
-    onCellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart
-    onCellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd
-    onActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart
-    onActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd
+  interface VxeGridEventProps<D = VxeTableDataRow> {
+    onOpenFnr?: VxeGridEvents.OpenFnr<D>
+    onFnrChange?: VxeGridEvents.FnrChange<D>
+    onFnrFind?: VxeGridEvents.FnrFind<D>
+    onFnrFindAll?: VxeGridEvents.FnrFindAll<D>
+    onFnrReplace?: VxeGridEvents.FnrReplace<D>
+    onFnrReplaceAll?: VxeGridEvents.FnrReplaceAll<D>
+    onCellAreaCopy?: VxeGridEvents.CellAreaCopy<D>
+    onCellAreaCut?: VxeGridEvents.CellAreaCut<D>
+    onCellAreaPaste?: VxeGridEvents.CellAreaPaste<D>
+    onCellAreaMerge?: VxeGridEvents.CellAreaMerge<D>
+    onClearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge<D>
+    onHeaderCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection<D>
+    onCellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart<D>
+    onCellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionDrag<D>
+    onCellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd<D>
+    onCellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart<D>
+    onCellAreaExtensionDrag?: VxeGridEvents.CellAreaExtensionDrag<D>
+    onCellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd<D>
+    onCellAreaSelectionAllStart?: VxeGridEvents.CellAreaSelectionAllStart<D>
+    onCellAreaSelectionAllEnd?: VxeGridEvents.CellAreaSelectionAllEnd<D>
+    onCellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart<D>
+    onCellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd<D>
+    onActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart<D>
+    onActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd<D>
   }
-  interface VxeGridListeners {
-    openFnr?: VxeGridEvents.OpenFnr
-    changeFnr?: VxeGridEvents.FnrChange
-    fnrFind?: VxeGridEvents.FnrFind
-    fnrFindAll?: VxeGridEvents.FnrFindAll
-    fnrReplace?: VxeGridEvents.FnrReplace
-    fnrReplaceAll?: VxeGridEvents.FnrReplaceAll
-    cellAreaCopy?: VxeGridEvents.CellAreaCopy
-    cellAreaCut?: VxeGridEvents.CellAreaCut
-    cellAreaMerge?: VxeGridEvents.CellAreaMerge
-    clearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge
-    headerCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection
-    cellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart
-    cellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionDrag
-    cellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd
-    cellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart
-    cellAreaExtensionDrag?: VxeGridEvents.CellAreaExtensionDrag
-    cellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd
-    cellAreaSelectionAllStart?: VxeGridEvents.CellAreaSelectionAllStart
-    cellAreaSelectionAllEnd?: VxeGridEvents.CellAreaSelectionAllEnd
-    cellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart
-    cellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd
-    ActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart
-    ActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd
+  interface VxeGridListeners<D = VxeTableDataRow> {
+    openFnr?: VxeGridEvents.OpenFnr<D>
+    changeFnr?: VxeGridEvents.FnrChange<D>
+    fnrFind?: VxeGridEvents.FnrFind<D>
+    fnrFindAll?: VxeGridEvents.FnrFindAll<D>
+    fnrReplace?: VxeGridEvents.FnrReplace<D>
+    fnrReplaceAll?: VxeGridEvents.FnrReplaceAll<D>
+    cellAreaCopy?: VxeGridEvents.CellAreaCopy<D>
+    cellAreaCut?: VxeGridEvents.CellAreaCut<D>
+    cellAreaMerge?: VxeGridEvents.CellAreaMerge<D>
+    clearCellAreaMerge?: VxeGridEvents.ClearCellAreaMerge<D>
+    headerCellAreaSelection?: VxeGridEvents.HeaderCellAreaSelection<D>
+    cellAreaSelectionStart?: VxeGridEvents.CellAreaSelectionStart<D>
+    cellAreaSelectionDrag?: VxeGridEvents.CellAreaSelectionDrag<D>
+    cellAreaSelectionEnd?: VxeGridEvents.CellAreaSelectionEnd<D>
+    cellAreaExtensionStart?: VxeGridEvents.CellAreaExtensionStart<D>
+    cellAreaExtensionDrag?: VxeGridEvents.CellAreaExtensionDrag<D>
+    cellAreaExtensionEnd?: VxeGridEvents.CellAreaExtensionEnd<D>
+    cellAreaSelectionAllStart?: VxeGridEvents.CellAreaSelectionAllStart<D>
+    cellAreaSelectionAllEnd?: VxeGridEvents.CellAreaSelectionAllEnd<D>
+    cellAreaArrowsStart?: VxeGridEvents.CellAreaArrowsStart<D>
+    cellAreaArrowsEnd?: VxeGridEvents.CellAreaArrowsEnd<D>
+    ActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart<D>
+    ActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd<D>
   }
   namespace VxeGridEvents {
-    export type OpenFnr = (params: VxeTableProDefines.OpenFnrParams) => void
-    export type FnrChange = (params: VxeTableProDefines.FnrChangeParams) => void
-    export type FnrFind = (params: VxeTableProDefines.FnrFindParams) => void
-    export type FnrFindAll = (params: VxeTableProDefines.FnrFindAllParams) => void
-    export type FnrReplace = (params: VxeTableProDefines.FnrReplaceParams) => void
-    export type FnrReplaceAll = (params: VxeTableProDefines.FnrReplaceAllParams) => void
-    export type CellAreaCopy = (params: VxeTableProDefines.CellAreaCopyParams) => void
-    export type CellAreaCut = (params: VxeTableProDefines.CellAreaCutParams) => void
-    export type CellAreaPaste = (params: VxeTableProDefines.CellAreaPasteParams) => void
-    export type CellAreaMerge = (params: VxeTableProDefines.CellAreaMergeParams) => void
-    export type ClearCellAreaMerge = (params: VxeTableProDefines.ClearCellAreaMergeParams) => void
-    export type HeaderCellAreaSelection = (params: VxeTableProDefines.HeaderCellAreaSelectionParams) => void
-    export type CellAreaSelectionStart = (params: VxeTableProDefines.CellAreaSelectionStartEventParams) => void
-    export type CellAreaSelectionDrag = (params: VxeTableProDefines.CellAreaSelectionDragEventParams) => void
-    export type CellAreaSelectionEnd = (params: VxeTableProDefines.CellAreaSelectionEndEventParams) => void
-    export type CellAreaExtensionStart = (params: VxeTableProDefines.CellAreaExtensionStartEventParams) => void
-    export type CellAreaExtensionDrag = (params: VxeTableProDefines.CellAreaExtensionDragEventParams) => void
-    export type CellAreaExtensionEnd = (params: VxeTableProDefines.CellAreaExtensionEndEventParams) => void
-    export type CellAreaArrowsStart = (params: VxeTableProDefines.CellAreaArrowsStartEventParams) => void
-    export type CellAreaSelectionAllStart = (params: VxeTableProDefines.CellAreaSelectionAllStartEventParams) => void
-    export type CellAreaSelectionAllEnd = (params: VxeTableProDefines.CellAreaSelectionAllEndEventParams) => void
-    export type CellAreaArrowsEnd = (params: VxeTableProDefines.CellAreaArrowsEndEventParams) => void
-    export type ActiveCellChangeStart = (params: VxeTableProDefines.ActiveCellChangeStartEventParams) => void
-    export type ActiveCellChangeEnd = (params: VxeTableProDefines.ActiveCellChangeEndEventParams) => void
+    export type OpenFnr<D = any> = (params: VxeTableProDefines.OpenFnrParams<D>) => void
+    export type FnrChange<D = any> = (params: VxeTableProDefines.FnrChangeParams<D>) => void
+    export type FnrFind<D = any> = (params: VxeTableProDefines.FnrFindParams<D>) => void
+    export type FnrFindAll<D = any> = (params: VxeTableProDefines.FnrFindAllParams<D>) => void
+    export type FnrReplace<D = any> = (params: VxeTableProDefines.FnrReplaceParams<D>) => void
+    export type FnrReplaceAll<D = any> = (params: VxeTableProDefines.FnrReplaceAllParams<D>) => void
+    export type CellAreaCopy<D = any> = (params: VxeTableProDefines.CellAreaCopyParams<D>) => void
+    export type CellAreaCut<D = any> = (params: VxeTableProDefines.CellAreaCutParams<D>) => void
+    export type CellAreaPaste<D = any> = (params: VxeTableProDefines.CellAreaPasteParams<D>) => void
+    export type CellAreaMerge<D = any> = (params: VxeTableProDefines.CellAreaMergeParams<D>) => void
+    export type ClearCellAreaMerge<D = any> = (params: VxeTableProDefines.ClearCellAreaMergeParams<D>) => void
+    export type HeaderCellAreaSelection<D = any> = (params: VxeTableProDefines.HeaderCellAreaSelectionParams<D>) => void
+    export type CellAreaSelectionStart<D = any> = (params: VxeTableProDefines.CellAreaSelectionStartEventParams<D>) => void
+    export type CellAreaSelectionDrag<D = any> = (params: VxeTableProDefines.CellAreaSelectionDragEventParams<D>) => void
+    export type CellAreaSelectionEnd<D = any> = (params: VxeTableProDefines.CellAreaSelectionEndEventParams<D>) => void
+    export type CellAreaExtensionStart<D = any> = (params: VxeTableProDefines.CellAreaExtensionStartEventParams<D>) => void
+    export type CellAreaExtensionDrag<D = any> = (params: VxeTableProDefines.CellAreaExtensionDragEventParams<D>) => void
+    export type CellAreaExtensionEnd<D = any> = (params: VxeTableProDefines.CellAreaExtensionEndEventParams<D>) => void
+    export type CellAreaArrowsStart<D = any> = (params: VxeTableProDefines.CellAreaArrowsStartEventParams<D>) => void
+    export type CellAreaSelectionAllStart<D = any> = (params: VxeTableProDefines.CellAreaSelectionAllStartEventParams<D>) => void
+    export type CellAreaSelectionAllEnd<D = any> = (params: VxeTableProDefines.CellAreaSelectionAllEndEventParams<D>) => void
+    export type CellAreaArrowsEnd<D = any> = (params: VxeTableProDefines.CellAreaArrowsEndEventParams<D>) => void
+    export type ActiveCellChangeStart<D = any> = (params: VxeTableProDefines.ActiveCellChangeStartEventParams<D>) => void
+    export type ActiveCellChangeEnd<D = any> = (params: VxeTableProDefines.ActiveCellChangeEndEventParams<D>) => void
   }
 }
