@@ -710,7 +710,7 @@ export interface TablePrivateMethods<D = VxeTableDataRow> {
   getParentElem(): Element | null
   getParentHeight(): number
   getExcludeHeight(): number
-  defineField(records: any[]): any
+  defineField(records: any[]): any[]
   handleTableData(force?: boolean): Promise<any>
   cacheRowMap(isSource?: boolean): void
   saveCustomResizable(isReset?: boolean): void
@@ -2244,7 +2244,7 @@ export namespace VxeTableDefines {
 
   export interface ColumnOptions<D = VxeTableDataRow> extends VxeColumnProps<D> {
     children?: ColumnOptions<D>[]
-    slots?: VxeColumnPropTypes.Slots<any>
+    slots?: VxeColumnPropTypes.Slots<D>
   }
 
   /**

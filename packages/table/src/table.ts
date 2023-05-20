@@ -913,12 +913,15 @@ export default defineComponent({
       const fullColumnIdData: any = internalData.fullColumnIdData = {}
       const fullColumnFieldData: any = internalData.fullColumnFieldData = {}
       const mouseOpts = computeMouseOpts.value
+      const columnOpts = computeColumnOpts.value
+      const rowOpts = computeRowOpts.value
       const isGroup = collectColumn.some(hasChildrenList)
       let isAllOverflow = !!props.showOverflow
       let expandColumn: VxeTableDefines.ColumnInfo | undefined
       let treeNodeColumn: VxeTableDefines.ColumnInfo | undefined
       let checkboxColumn: VxeTableDefines.ColumnInfo | undefined
       let radioColumn: VxeTableDefines.ColumnInfo | undefined
+      let htmlColumn: VxeTableDefines.ColumnInfo | undefined
       let hasFixed: VxeColumnPropTypes.Fixed | undefined
       const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parent?: VxeTableDefines.ColumnInfo) => {
         const { id: colid, field, fixed, type, treeNode } = column
@@ -933,6 +936,9 @@ export default defineComponent({
         }
         if (!hasFixed && fixed) {
           hasFixed = fixed
+        }
+        if (!htmlColumn && type === 'html') {
+          htmlColumn = column
         }
         if (treeNode) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -990,6 +996,17 @@ export default defineComponent({
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (expandColumn && mouseOpts.area) {
           errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+        }
+      }
+
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (htmlColumn) {
+          if (!columnOpts.useKey) {
+            errLog('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
+          }
+          if (!rowOpts.useKey) {
+            errLog('vxe.error.reqProp', ['row-config.useKey', 'column.type=html'])
+          }
         }
       }
 
@@ -2754,11 +2771,9 @@ export default defineComponent({
        * @param {Array} records 新数据
        */
       createData (records) {
-        const { treeConfig } = props
-        const treeOpts = computeTreeOpts.value
-        const handleRrecord = (record: any) => reactive(tablePrivateMethods.defineField(record || {}))
-        const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
-        return nextTick().then(() => rows)
+        return nextTick().then(() => {
+          return reactive(tablePrivateMethods.defineField(records))
+        })
       },
       /**
        * 创建 Row|Rows 对象
@@ -2768,9 +2783,9 @@ export default defineComponent({
       createRow (records) {
         const isArr = XEUtils.isArray(records)
         if (!isArr) {
-          records = [records]
+          records = [records || {}]
         }
-        return nextTick().then(() => tableMethods.createData(records).then((rows) => isArr ? rows : rows[0]))
+        return tableMethods.createData(records).then((rows) => isArr ? rows : rows[0])
       },
       /**
        * 还原数据
