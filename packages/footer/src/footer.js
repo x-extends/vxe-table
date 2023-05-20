@@ -68,11 +68,13 @@ export default {
       overflowX,
       scrollbarWidth,
       tooltipOpts,
-      visibleColumn
+      visibleColumn,
+      expandColumn
     } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
-      if (scrollXLoad || allColumnFooterOverflow) {
+      // 如果存在展开行使用全量渲染
+      if (!expandColumn && (scrollXLoad || allColumnFooterOverflow)) {
         if (!mergeFooterList.length || !footerSpanMethod) {
           tableColumn = fixedColumn
         } else {

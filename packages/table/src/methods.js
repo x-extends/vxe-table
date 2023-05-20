@@ -343,8 +343,9 @@ const Methods = {
   updateScrollYStatus (fullData) {
     const { treeConfig, treeOpts, sYOpts } = this
     const { transform } = treeOpts
+    const allList = fullData || this.tableFullData
     // 如果gt为0，则总是启用
-    const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt <= fullData.length)
+    const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt <= allList.length)
     this.scrollYLoad = scrollYLoad
     return scrollYLoad
   },
@@ -397,7 +398,9 @@ const Methods = {
     scrollXStore.startIndex = 0
     scrollXStore.endIndex = 1
     editStore.insertList = []
+    editStore.insertMaps = {}
     editStore.removeList = []
+    editStore.removeMaps = {}
     const sYLoad = this.updateScrollYStatus(fullData)
     this.scrollYLoad = sYLoad
     // 全量数据
@@ -654,7 +657,7 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheColumnMap () {
-    const { tableFullColumn, collectColumn, fullColumnMap, showOverflow } = this
+    const { tableFullColumn, collectColumn, fullColumnMap, showOverflow, columnOpts, rowOpts } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
     const isGroup = collectColumn.some(hasChildrenList)
@@ -663,6 +666,7 @@ const Methods = {
     let treeNodeColumn
     let checkboxColumn
     let radioColumn
+    let htmlColumn
     let hasFixed
     const handleFunc = (column, index, items, path, parent) => {
       const { id: colid, field, fixed, type, treeNode } = column
@@ -675,9 +679,14 @@ const Methods = {
         }
         fullColumnFieldData[field] = rest
       }
+
       if (!hasFixed && fixed) {
         hasFixed = fixed
       }
+      if (!htmlColumn && type === 'html') {
+        htmlColumn = column
+      }
+
       if (treeNode) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (treeNodeColumn) {
@@ -725,6 +734,18 @@ const Methods = {
           warnLog('vxe.error.errConflicts', [`table.show-footer-overflow=${this.showFooterOverflow}`, `column.show-footer-overflow=${column.showFooterOverflow}`])
         }
       }
+
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (htmlColumn) {
+          if (!columnOpts.useKey) {
+            errLog('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
+          }
+          if (!rowOpts.useKey) {
+            errLog('vxe.error.reqProp', ['row-config.useKey', 'column.type=html'])
+          }
+        }
+      }
+
       if (isAllOverflow && column.showOverflow === false) {
         isAllOverflow = false
       }
@@ -879,40 +900,45 @@ const Methods = {
   },
   /**
    * 定义行数据中的列属性，如果不存在则定义
-   * @param {Row} record 行数据
+   * @param {Row} records 行数据
    */
-  defineField (record) {
+  defineField (records) {
     const { radioOpts, checkboxOpts, treeConfig, treeOpts, expandOpts } = this
     const rowkey = getRowkey(this)
-    this.tableFullColumn.forEach(column => {
-      const { field, editRender } = column
-      if (field && !XEUtils.has(record, field)) {
-        let cellValue = null
-        if (editRender) {
-          const { defaultValue } = editRender
-          if (XEUtils.isFunction(defaultValue)) {
-            cellValue = defaultValue({ column })
-          } else if (!XEUtils.isUndefined(defaultValue)) {
-            cellValue = defaultValue
+    if (!XEUtils.isArray(records)) {
+      records = [records || {}]
+    }
+    return records.map(record => {
+      this.tableFullColumn.forEach(column => {
+        const { field, editRender } = column
+        if (field && !XEUtils.has(record, field)) {
+          let cellValue = null
+          if (editRender) {
+            const { defaultValue } = editRender
+            if (XEUtils.isFunction(defaultValue)) {
+              cellValue = defaultValue({ column })
+            } else if (!XEUtils.isUndefined(defaultValue)) {
+              cellValue = defaultValue
+            }
           }
+          XEUtils.set(record, field, cellValue)
         }
-        XEUtils.set(record, field, cellValue)
+      })
+      const otherFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
+      otherFields.forEach((key) => {
+        if (key && eqEmptyValue(XEUtils.get(record, key))) {
+          XEUtils.set(record, key, null)
+        }
+      })
+      if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
+        record[treeOpts.children] = null
       }
-    })
-    const otherFields = [radioOpts.labelField, checkboxOpts.checkField, checkboxOpts.labelField, expandOpts.labelField]
-    otherFields.forEach((key) => {
-      if (key && eqEmptyValue(XEUtils.get(record, key))) {
-        XEUtils.set(record, key, null)
+      // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
+      if (eqEmptyValue(XEUtils.get(record, rowkey))) {
+        XEUtils.set(record, rowkey, getRowUniqueId())
       }
+      return record
     })
-    if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
-      record[treeOpts.children] = null
-    }
-    // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
-    if (eqEmptyValue(XEUtils.get(record, rowkey))) {
-      XEUtils.set(record, rowkey, getRowUniqueId())
-    }
-    return record
   },
   /**
    * 创建 data 对象
@@ -920,10 +946,9 @@ const Methods = {
    * @param {Array} records 新数据
    */
   createData (records) {
-    const { treeConfig, treeOpts } = this
-    const handleRrecord = record => this.defineField(Object.assign({}, record))
-    const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
-    return this.$nextTick().then(() => rows)
+    return this.$nextTick().then(() => {
+      return this.defineField(records)
+    })
   },
   /**
    * 创建 Row|Rows 对象
@@ -935,7 +960,7 @@ const Methods = {
     if (!isArr) {
       records = [records]
     }
-    return this.$nextTick().then(() => this.createData(records).then(rows => isArr ? rows : rows[0]))
+    return this.createData(records).then(rows => isArr ? rows : rows[0])
   },
   /**
    * 还原数据
@@ -1017,7 +1042,9 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isInsertByRow (row) {
-    return this.editStore.insertList.indexOf(row) > -1
+    const { editStore } = this
+    const rowid = getRowid(this, row)
+    return editStore.insertList.length && editStore.insertMaps[rowid]
   },
   /**
    * 删除所有新增的临时数据
@@ -2044,7 +2071,8 @@ const Methods = {
 
           // 如果是使用优化模式
           if (fixedType) {
-            if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+            // 如果存在展开行使用全量渲染
+            if (!this.expandColumn && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
               if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
                 renderColumnList = fixedColumn
               } else {
@@ -2070,7 +2098,8 @@ const Methods = {
 
           // 如果是使用优化模式
           if (fixedType) {
-            if (scrollXLoad || allColumnFooterOverflow) {
+            // 如果存在展开行使用全量渲染
+            if (!this.expandColumn && (scrollXLoad || allColumnFooterOverflow)) {
               if (!mergeFooterList.length || !footerSpanMethod) {
                 renderColumnList = fixedColumn
               } else {
@@ -3721,12 +3750,16 @@ const Methods = {
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param {String} fieldOrColumn 字段名
    */
-  isFilter (fieldOrColumn) {
+  isActiveFilterByColumn (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
     if (column) {
       return column.filters && column.filters.some(option => option.checked)
     }
     return this.getCheckedFilters().length > 0
+  },
+  // 已废弃
+  isFilter (fieldOrColumn) {
+    return this.isActiveFilterByColumn(fieldOrColumn)
   },
   /**
    * 判断展开行是否懒加载完成

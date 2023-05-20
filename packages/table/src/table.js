@@ -394,7 +394,9 @@ export default {
           column: null
         },
         insertList: [],
-        removeList: []
+        insertMaps: {},
+        removeList: [],
+        removeMaps: {}
       },
       // 存放 tooltip 相关信息
       tooltipStore: {

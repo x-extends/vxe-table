@@ -93,7 +93,8 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   const { height: rowHeight } = rowOpts
   const renderOpts = editRender || cellRender
   const compConf = renderOpts ? VXETable.renderer.get(renderOpts.name) : null
-  const cellClassName = compConf ? compConf.cellClassName : ''
+  const compCellClassName = compConf ? compConf.cellClassName : ''
+  const compCellStyle = compConf ? compConf.cellStyle : ''
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -275,7 +276,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
         'col--valid-error': hasValidError,
         'col--current': currentColumn === column
       },
-      UtilTools.getClass(cellClassName, params),
+      UtilTools.getClass(compCellClassName, params),
       UtilTools.getClass(className, params),
       UtilTools.getClass(allCellClassName, params)
     ],
@@ -283,7 +284,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
     attrs,
     style: Object.assign({
       height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
-    }, cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null),
+    }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
     on: tdOns
   }, tdVNs)
 }
@@ -303,7 +304,6 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     editOpts,
     treeExpandeds,
     scrollYLoad,
-    editStore,
     rowExpandeds,
     radioOpts,
     checkboxOpts,
@@ -347,7 +347,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     // 是否新增行
     let isNewRow = false
     if (editConfig) {
-      isNewRow = editStore.insertList.indexOf(row) > -1
+      isNewRow = $xetable.isInsertByRow(row)
     }
     if (treeConfig && !scrollYLoad && !treeOpts.transform && treeExpandeds.length) {
       rowChildren = row[treeOpts.children]
@@ -520,10 +520,11 @@ export default {
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
-      if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+      // 如果存在展开行使用全量渲染
+      if (!expandColumn && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
         if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
           tableColumn = fixedColumn
         } else {

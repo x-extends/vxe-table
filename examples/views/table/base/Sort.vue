@@ -85,7 +85,7 @@
       <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
-    <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段组合排序</p>
+    <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段排序</p>
 
     <vxe-table
       border

@@ -1,5 +1,5 @@
-import { CreateElement, VNode } from 'vue'
-import { SlotVNodeType, RowInfo } from '../component'
+import { CreateElement } from 'vue'
+import { SlotVNodeType, RowInfo, VNodeStyle } from '../component'
 import { Table } from '../table'
 import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
@@ -43,6 +43,7 @@ export interface RendererMapOptions {
 
   // 单元格渲染
   cellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | { [key: string]: boolean })
+  cellStyle?: string | VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | VNodeStyle)
   renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
   renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
   renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): SlotVNodeType | SlotVNodeType[];
@@ -63,6 +64,9 @@ export interface RendererMapOptions {
 
   // 表单-项渲染
   itemClassName?: string | ((params: FormItemRenderParams) => string | { [key: string]: boolean })
+  itemStyle?: string | VNodeStyle | ((params: FormItemRenderParams) => string | VNodeStyle)
+  itemContentClassName?: string | ((params: FormItemRenderParams) => string | { [key: string]: boolean })
+  itemContentStyle?: string | VNodeStyle | ((params: FormItemRenderParams) => string | VNodeStyle)
   renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
   renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
   itemVisibleMethod?(params: FormItemVisibleParams): boolean;
@@ -178,9 +182,9 @@ export class GridRenderParams extends TableRenderParams {
 
 export class EmptyRenderParams extends TableRenderParams { }
 
-export interface ColumnDefaultSlotParams extends ColumnCellRenderParams { }
-export interface ColumnContentSlotParams extends ColumnContentRenderParams { }
-export interface ColumnIconSlotParams extends ColumnIconRenderParams { }
+export type ColumnDefaultSlotParams = ColumnCellRenderParams
+export type ColumnContentSlotParams = ColumnContentRenderParams
+export type ColumnIconSlotParams = ColumnIconRenderParams
 
-export interface ColumnContentRenderParams extends ColumnCellRenderParams { }
-export interface ColumnIconRenderParams extends ColumnCellRenderParams { }
+export type ColumnContentRenderParams = ColumnCellRenderParams
+export type ColumnIconRenderParams = ColumnCellRenderParams

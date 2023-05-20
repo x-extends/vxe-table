@@ -7,6 +7,8 @@
 
     <vxe-table
       border
+      :column-config="{useKey: true}"
+      :row-config="{useKey: true}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>

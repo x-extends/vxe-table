@@ -31,6 +31,9 @@ const VxeFormConfigItem = {
     const { slots, title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const itemClassName = compConf ? compConf.itemClassName : ''
+    const itemStyle = compConf ? compConf.itemStyle : null
+    const itemContentClassName = compConf ? compConf.itemContentClassName : ''
+    const itemContentStyle = compConf ? compConf.itemContentStyle : null
     const span = item.span || $xeform.span
     const align = item.align || $xeform.align
     const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
@@ -100,7 +103,8 @@ const VxeFormConfigItem = {
           'is--active': isActivetem($xeform, item),
           'is--error': showError
         }
-      ]
+      ],
+      style: XEUtils.isFunction(itemStyle) ? itemStyle(params) : itemStyle
     }, [
       h('div', {
         class: 'vxe-form--item-inner'
@@ -118,7 +122,8 @@ const VxeFormConfigItem = {
           on: ons
         }, renderTitle(h, $xeform, item)) : null,
         h('div', {
-          class: ['vxe-form--item-content', align ? `align--${align}` : null]
+          class: ['vxe-form--item-content', align ? `align--${align}` : '', itemContentClassName ? (XEUtils.isFunction(itemContentClassName) ? itemContentClassName(params) : itemContentClassName) : ''],
+          style: XEUtils.isFunction(itemContentStyle) ? itemContentStyle(params) : itemContentStyle
         }, contentVNs.concat(
           [
             collapseNode ? h('div', {

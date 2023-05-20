@@ -64,7 +64,7 @@ export default {
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      const newRecords = records.map(record => this.defineField(Object.assign({}, record)))
+      const newRecords = this.defineField(records.map(record => Object.assign({}, record)))
       if (!row) {
         // 如果为虚拟树
         if (treeConfig && transform) {
@@ -158,13 +158,19 @@ export default {
           }
         }
       }
-      editStore.insertList.unshift(...newRecords)
+      const { insertList, insertMaps } = editStore
+      newRecords.forEach(newRow => {
+        const rowid = getRowid(this, newRow)
+        insertMaps[rowid] = newRow
+      })
+      insertList.unshift(...newRecords)
+      this.cacheRowMap()
+      this.updateScrollYStatus()
       this.handleTableData(treeConfig && transform)
       if (!(treeConfig && transform)) {
         this.updateAfterDataIndex()
       }
       this.updateFooter()
-      this.cacheRowMap()
       this.checkSelectionStatus()
       if (this.scrollYLoad) {
         this.updateScrollYSpace()
@@ -188,7 +194,7 @@ export default {
     _remove (rows) {
       const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, treeOpts } = this
       const { transform } = treeOpts
-      const { actived, removeList, insertList } = editStore
+      const { actived, removeList, insertList, insertMaps } = editStore
       const { checkField } = checkboxOpts
       let rest = []
       if (!rows) {
@@ -261,10 +267,12 @@ export default {
       }
       // 从新增中移除已删除的数据
       rows.forEach(row => {
+        const rowid = getRowid(this, row)
         const iIndex = this.findRowIndexOf(insertList, row)
         if (iIndex > -1) {
           insertList.splice(iIndex, 1)
         }
+        delete insertMaps[rowid]
       })
       this.handleTableData(treeConfig && transform)
       if (!(treeConfig && transform)) {
@@ -326,27 +334,15 @@ export default {
      * 获取新增的临时数据
      */
     _getInsertRecords () {
-      const { treeConfig, tableFullTreeData, tableFullData, treeOpts } = this
+      const { fullAllDataRowIdData } = this
       const insertList = this.editStore.insertList
       const insertRecords = []
-      if (insertList.length) {
-        // 如果为虚拟树
-        if (treeConfig && treeOpts.transform) {
-          insertList.forEach(row => {
-            const rowid = getRowid(this, row)
-            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), treeOpts)
-            if (matchObj) {
-              insertRecords.push(row)
-            }
-          })
-        } else {
-          insertList.forEach(row => {
-            if (tableFullData.indexOf(row) > -1) {
-              insertRecords.push(row)
-            }
-          })
+      insertList.forEach(row => {
+        const rowid = getRowid(this, row)
+        if (fullAllDataRowIdData[rowid]) {
+          insertRecords.push(row)
         }
-      }
+      })
       return insertRecords
     },
     /**

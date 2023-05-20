@@ -272,6 +272,7 @@ export declare class Table extends VXETableComponent {
    */
   clearAll(): Promise<any>;
   /**
+   * 该方法已废弃！！！
    * 同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
    * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
    * @deprecated
@@ -628,6 +629,11 @@ export declare class Table extends VXETableComponent {
   /**
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param column 列对象
+   */
+  isActiveFilterByColumn(column: ColumnInfo): boolean;
+  /**
+   * 已废弃，请使用 isFilterByColumn
+   * @deprecated
    */
   isFilter(column: ColumnInfo): boolean;
   /**

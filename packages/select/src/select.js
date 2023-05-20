@@ -706,13 +706,15 @@ export default {
         })
       }
     },
-    focusEvent () {
+    focusEvent (evnt) {
       if (!this.disabled) {
         this.isActivated = true
       }
+      this.$emit('focus', { $event: evnt })
     },
-    blurEvent () {
+    blurEvent (evnt) {
       this.isActivated = false
+      this.$emit('blur', { $event: evnt })
     },
     modelSearchEvent (value) {
       this.searchValue = value
