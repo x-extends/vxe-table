@@ -93,14 +93,22 @@
 
 .vxe-form {
   .vxe-form--gather {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+  .vxe-form--wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
   .vxe-form--item {
     display: none;
     padding: 0.5em 0.8em 0.5em 0;
     &.is--active {
       &:not(.is--hidden) {
-        display: inline-block;
+        display: inline-flex;
       }
     }
   }
@@ -169,6 +177,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex-grow: 1;
     .vxe-form--item-title {
       flex-shrink: 0;
     }

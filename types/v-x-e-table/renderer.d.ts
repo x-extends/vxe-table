@@ -1,4 +1,4 @@
-import { SlotVNodeType, VNodeStyle } from '../component'
+import { SlotVNodeType, VNodeStyle, VNodeClassName } from '../component'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePropTypes, VxeTableDataRow } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
@@ -17,7 +17,7 @@ export interface DefineRendererOption<T> {
   className?: string
 
   // 筛选渲染
-  filterClassName?: string | ((params: VxeGlobalRendererHandles.RenderFilterParams) => string | { [key: string]: boolean })
+  filterClassName?: string | ((params: VxeGlobalRendererHandles.RenderFilterParams) => string | VNodeClassName)
   showFilterFooter?: boolean
   renderFilter?(renderOpts: VxeGlobalRendererHandles.RenderFilterOptions, params: VxeGlobalRendererHandles.RenderFilterParams): T
   filterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
@@ -28,8 +28,8 @@ export interface DefineRendererOption<T> {
   defaultFilterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
 
   // 单元格渲染
-  cellClassName?: string | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => string | { [key: string]: boolean })
-  cellStyle?: string | VNodeStyle | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => string | VNodeStyle)
+  cellClassName?: string | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => string | VNodeClassName)
+  cellStyle?: VNodeStyle | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => VNodeStyle)
   renderHeader?(renderOpts: VxeGlobalRendererHandles.RenderHeaderOptions, params: VxeGlobalRendererHandles.RenderHeaderParams): T
   renderDefault?(renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions, params: VxeGlobalRendererHandles.RenderDefaultParams): T
   renderFooter?(renderOpts: VxeGlobalRendererHandles.RenderFooterOptions, params: VxeGlobalRendererHandles.RenderFooterParams): T
@@ -50,10 +50,12 @@ export interface DefineRendererOption<T> {
   renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams): T
 
   // 表单-项渲染
-  itemClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | { [key: string]: boolean })
-  itemStyle?: string | VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeStyle)
-  itemContentClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | { [key: string]: boolean })
-  itemContentStyle?: string | VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeStyle)
+  itemClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeClassName)
+  itemStyle?: VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => VNodeStyle)
+  itemContentClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeClassName)
+  itemContentStyle?: VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => VNodeStyle)
+  itemTitleClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeClassName)
+  itemTitleStyle?: VNodeStyle | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => VNodeStyle)
   renderItemTitle?(renderOpts: VxeGlobalRendererHandles.RenderItemTitleOptions, params: VxeGlobalRendererHandles.RenderItemTitleParams): T
   renderItemContent?(renderOpts: VxeGlobalRendererHandles.RenderItemContentOptions, params: VxeGlobalRendererHandles.RenderItemContentParams): T
   itemVisibleMethod?(params: VxeGlobalRendererHandles.ItemVisibleMethodParams): boolean

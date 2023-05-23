@@ -1,5 +1,5 @@
 import { VNode } from 'vue'
-import { VXEComponent } from './component'
+import { VXEComponent, VNodeStyle } from './component'
 import { VxeFormConstructor, VxeFormDefines, VxeFormPropTypes } from './form'
 import { VxeGridConstructor } from './grid'
 import { VxeTooltipPropTypes } from './tooltip'
@@ -51,9 +51,29 @@ export interface VxeFormItemProps {
    */
   titleAsterisk?: VxeFormItemPropTypes.TitleAsterisk
   /**
+   * 是否显示标题
+   */
+  showTitle?: VxeFormItemPropTypes.ShowTitle
+  /**
    * 给表单项附加 className
    */
   className?: VxeFormItemPropTypes.ClassName
+  /**
+   * 给表单项内容附加 className
+   */
+  contentClassName?: VxeFormItemPropTypes.ContentClassName
+  /**
+   * 给表单项内容附加样式
+   */
+  contentStyle?: VxeFormItemPropTypes.ContentStyle
+  /**
+   * 给表单项标题附加 className
+   */
+  titleClassName?: VxeFormItemPropTypes.TitleClassName
+  /**
+   * 给表单项标题附加样式
+   */
+  titleStyle?: VxeFormItemPropTypes.TitleStyle
   /**
    * 前缀配置项
    */
@@ -100,6 +120,7 @@ export namespace VxeFormItemPropTypes {
   export type TitleWidth = VxeFormPropTypes.TitleWidth
   export type TitleColon = VxeFormPropTypes.TitleColon
   export type TitleAsterisk = VxeFormPropTypes.TitleAsterisk
+  export type ShowTitle = boolean
 
   interface ClassNameParams {
     $form: VxeFormConstructor
@@ -112,6 +133,19 @@ export namespace VxeFormItemPropTypes {
     property: string
   }
   export type ClassName = string | ((params: ClassNameParams) => string)
+
+  interface ContentClassNameParams extends ClassNameParams{}
+  export type ContentClassName = string | ((params: ContentClassNameParams) => string)
+
+  interface ContentStyleParams extends ClassNameParams{}
+  export type ContentStyle = VNodeStyle | ((params: ContentStyleParams) => VNodeStyle)
+
+  interface TitleClassNameParams extends ClassNameParams{}
+  export type TitleClassName = string | ((params: TitleClassNameParams) => string)
+
+  interface TitleStyleParams extends ClassNameParams{}
+  export type TitleStyle = VNodeStyle | ((params: TitleStyleParams) => VNodeStyle)
+
   export type Readonly = boolean
 
   interface PrefixOption {
