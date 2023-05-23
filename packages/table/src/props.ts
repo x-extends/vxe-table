@@ -138,13 +138,13 @@ export default {
   // 区域配置项
   areaConfig: Object as PropType<VxeTablePropTypes.AreaConfig>,
   // 按键配置项
-  keyboardConfig: Object as PropType<VxeTablePropTypes.KeyboardConfig>,
+  keyboardConfig: Object as PropType<VxeTablePropTypes.KeyboardConfig<any>>,
   // 复制粘/贴配置项
-  clipConfig: Object as PropType<VxeTablePropTypes.ClipConfig>,
+  clipConfig: Object as PropType<VxeTablePropTypes.ClipConfig<any>>,
   // 查找/替换配置项
   fnrConfig: Object as PropType<VxeTablePropTypes.FNRConfig>,
   // 编辑配置项
-  editConfig: Object as PropType<VxeTablePropTypes.EditConfig>,
+  editConfig: Object as PropType<VxeTablePropTypes.EditConfig<any>>,
   // 校验配置项
   validConfig: Object as PropType<VxeTablePropTypes.ValidConfig>,
   // 校验规则配置项

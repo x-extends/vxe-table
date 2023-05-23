@@ -1,5 +1,5 @@
-import { VXEComponent, RecordInfo } from './component'
-import { VxeTableDefines } from './table'
+import { VXEComponent } from './component'
+import { VxeTableDataRow, VxeTableDefines } from './table'
 
 /* eslint-disable no-use-before-define */
 
@@ -12,12 +12,12 @@ export const VxeModuleEdit: VXEComponent<{ [key: string]: any }>
  */
 export const Edit: VXEComponent<{ [key: string]: any }>
 
-export interface TableEditMethods {
+export interface TableEditMethods<DT = VxeTableDataRow> {
   /**
    * 往表格插入临时数据，从第一行新增一行或多行新数据
    * @param records 新数据
    */
-  insert(records: RecordInfo | RecordInfo[]): Promise<{ row: any, rows: any[] }>
+  insert(records: any): Promise<{ row: DT, rows: DT[] }>
   /**
    * 往表格指定行中插入临时数据
    * 如果 row 为空则从插入到顶部，如果为树结构，则插入到目标节点顶部
@@ -26,51 +26,51 @@ export interface TableEditMethods {
    * @param {Object/Array} records 新的数据
    * @param {Row} row 指定行
    */
-  insertAt(records: RecordInfo | RecordInfo[], row: any | -1 | null): Promise<{ row: any, rows: any[] }>
+  insertAt(records: any, row: any | -1 | null): Promise<{ row: DT, rows: DT[] }>
   /**
    * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
    * @param rows 指定行
    */
-  remove(rows?: any | any[]): Promise<{ row: any, rows: any[] }>
+  remove(rows?: any | any[]): Promise<{ row: DT, rows: DT[] }>
   /**
    * 删除复选框选中的行数据
    */
-  removeCheckboxRow(): Promise<{ row: any, rows: any[] }>
+  removeCheckboxRow(): Promise<{ row: DT, rows: DT[] }>
   /**
    * 删除单选框选中的行数据
    */
-  removeRadioRow(): Promise<{ row: any, rows: any[] }>
+  removeRadioRow(): Promise<{ row: DT, rows: DT[] }>
   /**
    * 删除当前行选中的行数据
    */
-  removeCurrentRow(): Promise<{ row: any, rows: any[] }>
+  removeCurrentRow(): Promise<{ row: DT, rows: DT[] }>
   /**
    * 获取表格数据集
    * 获取新增、删除、更改的数据
    */
   getRecordset(): {
-    insertRecords: any[]
-    removeRecords: any[]
-    updateRecords: any[]
+    insertRecords: DT[]
+    removeRecords: DT[]
+    updateRecords: DT[]
   }
   /**
    * 用于 edit-config，获取新增的临时数据
    */
-  getInsertRecords(): any[]
+  getInsertRecords(): DT[]
   /**
    * 获取已删除的数据
    */
-  getRemoveRecords(): any[]
+  getRemoveRecords(): DT[]
   /**
    * 用于 edit-config，获取已修改的数据
    */
-  getUpdateRecords(): any[]
+  getUpdateRecords(): DT[]
   /**
    * 请使用 getEditRecord
    * @deprecated
    */
   getActiveRecord(): {
-    row: any
+    row: DT
     rowIndex: number
     $rowIndex: number
     column: VxeTableDefines.ColumnInfo
@@ -82,7 +82,7 @@ export interface TableEditMethods {
    * 用于 edit-config，获取已激活的行数据
    */
   getEditRecord(): {
-    row: any
+    row: DT
     rowIndex: number
     $rowIndex: number
     column: VxeTableDefines.ColumnInfo
@@ -94,7 +94,7 @@ export interface TableEditMethods {
    * 用于 mouse-config.selected，获取选中的单元格信息
    */
   getSelectedCell(): {
-    row: any
+    row: DT
     column: VxeTableDefines.ColumnInfo
   }
   /**
@@ -149,7 +149,7 @@ export interface TableEditMethods {
   setSelectCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>
 }
 
-export interface TableEditPrivateMethods {
+export interface TableEditPrivateMethods<D = VxeTableDataRow> {
   handleActived(params: any, evnt?: any): Promise<any>
   handleFocus(params: any, evnt?: any): void
   handleSelected(params: any, evnt: any): Promise<any>
@@ -157,10 +157,10 @@ export interface TableEditPrivateMethods {
 }
 
 declare module './grid' {
-  interface VxeGridMethods extends TableEditMethods { }
+  interface VxeGridMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
 }
 
 declare module './table' {
-  interface VxeTableMethods extends TableEditMethods { }
-  interface VxeTablePrivateMethods extends TableEditPrivateMethods { }
+  interface VxeTableMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
+  interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableEditPrivateMethods<D> { }
 }

@@ -217,12 +217,17 @@ export namespace VxeFormDefines {
     titlePrefix: VxeFormItemPropTypes.TitlePrefix
     titleSuffix: VxeFormItemPropTypes.TitleSuffix
     titleOverflow: VxeFormItemPropTypes.TitleOverflow
+    showTitle: VxeFormItemPropTypes.ShowTitle
     resetValue: VxeFormItemPropTypes.ResetValue
     visibleMethod: VxeFormItemPropTypes.VisibleMethod
     visible: VxeFormItemPropTypes.Visible
     folding: VxeFormItemPropTypes.Folding
     collapseNode: VxeFormItemPropTypes.CollapseNode
     className: VxeFormItemPropTypes.ClassName
+    contentClassName: VxeFormItemPropTypes.ContentClassName
+    contentStyle: VxeFormItemPropTypes.ContentStyle
+    titleClassName: VxeFormItemPropTypes.TitleClassName
+    titleStyle: VxeFormItemPropTypes.TitleStyle
     readonly: VxeFormItemPropTypes.Readonly
     itemRender: VxeFormItemPropTypes.ItemRender
     // 渲染属性

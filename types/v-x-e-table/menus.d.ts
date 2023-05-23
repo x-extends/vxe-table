@@ -1,17 +1,17 @@
-import { VxeTableConstructor, VxeTableDefines } from '../table'
+import { VxeTableConstructor, VxeTableDefines, VxeTableDataRow } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeGlobalRendererHandles } from './renderer'
 
 /* eslint-disable no-use-before-define */
 
 export namespace VxeGlobalMenusHandles {
-  export type MenusCallback = (params: MenusCallbackParams, event: Event) => any
+  export type MenusCallback<D = VxeTableDataRow> = (params: MenusCallbackParams<D>, event: Event) => any
 
-  interface MenusParams {
-    $grid: VxeGridConstructor | null
-    $table: VxeTableConstructor
+  interface MenusParams<D = VxeTableDataRow> {
+    $grid: VxeGridConstructor<D> | null
+    $table: VxeTableConstructor<D>
   }
-  export interface MenusCallbackParams extends MenusParams, VxeGlobalRendererHandles.RenderCellParams {
+  export interface MenusCallbackParams<D = VxeTableDataRow> extends MenusParams<D>, VxeGlobalRendererHandles.RenderCellParams<D> {
     $event: MouseEvent
     menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption
   }
@@ -22,11 +22,11 @@ export namespace VxeGlobalMenusHandles {
  */
 export interface VxeGlobalMenus {
   mixin(options: {
-    [code: string]: VxeGlobalMenusHandles.MenusCallback
+    [code: string]: VxeGlobalMenusHandles.MenusCallback<any>
   }): VxeGlobalMenus
   has(code: string): boolean
-  get(code: string): VxeGlobalMenusHandles.MenusCallback
-  add(code: string, callback: VxeGlobalMenusHandles.MenusCallback): VxeGlobalMenus
+  get(code: string): VxeGlobalMenusHandles.MenusCallback<any>
+  add(code: string, callback: VxeGlobalMenusHandles.MenusCallback<any>): VxeGlobalMenus
   delete(code: string): void
-  forEach(callback: (options: VxeGlobalMenusHandles.MenusCallback, code: string) => void): void
+  forEach(callback: (options: VxeGlobalMenusHandles.MenusCallback<any>, code: string) => void): void
 }

@@ -4,7 +4,7 @@ import { VxeFormItemProps } from './form-item'
 import { VxeToolbarInstance, VxeToolbarProps, VxeToolbarPropTypes } from './toolbar'
 import { VxePagerInstance, VxePagerProps, VxePagerDefines } from './pager'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, SlotVNodeType } from './component'
-import { VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
+import { VxeTableDataRow, VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, TablePublicMethods, VxeTableMethods, VxeTablePrivateMethods } from './table'
 
 /* eslint-disable no-use-before-define */
 
@@ -12,32 +12,32 @@ import { VxeTableDefines, VxeTableEmits, VxeTableConstructor, VxeTableProps, Tab
  * 组件 - 高级表格
  * @example import { VxeGrid } from 'vxe-table'
  */
-export const VxeGrid: VXEComponent<VxeGridProps, VxeGridEventProps>
+export const VxeGrid: VXEComponent<VxeGridProps<any>, VxeGridEventProps<any>>
 /**
  * 组件 - 高级表格
  */
-export const Grid: VXEComponent<VxeGridProps, VxeGridEventProps>
+export const Grid: VXEComponent<VxeGridProps<any>, VxeGridEventProps<any>>
 
-export type VxeGridInstance = ComponentPublicInstance<VxeGridProps, VxeGridConstructor>
+export type VxeGridInstance<D = any> = ComponentPublicInstance<VxeGridProps<D>, VxeGridConstructor<D>>
 
-export interface VxeGridConstructor extends VxeComponentBase, VxeGridMethods {
-  props: Readonly<VxeGridProps>
+export interface VxeGridConstructor<D = any> extends VxeComponentBase, VxeGridMethods<D> {
+  props: Readonly<VxeGridProps<D>>
   context: SetupContext<VxeGridEmits>
   instance: ComponentInternalInstance
-  reactData: GridReactData
-  getRefMaps(): GridPrivateRef
+  reactData: GridReactData<D>
+  getRefMaps(): GridPrivateRef<D>
   getComputeMaps(): GridPrivateComputed
   renderVN: RenderFunction
 }
 
-export interface GridPrivateRef {
+export interface GridPrivateRef<D = VxeTableDataRow> {
   refElem: Ref<HTMLDivElement>
-  refTable: Ref<ComponentPublicInstance<VxeTableProps, VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>>
+  refTable: Ref<ComponentPublicInstance<VxeTableProps<D>, VxeTableConstructor<D> & VxeTableMethods<D> & VxeTablePrivateMethods<D>>>
   refForm: Ref<VxeFormInstance>
   refToolbar: Ref<VxeToolbarInstance>
   refPager: Ref<VxePagerInstance>
 }
-export interface VxeGridPrivateRef extends GridPrivateRef { }
+export interface VxeGridPrivateRef<D = VxeTableDataRow> extends GridPrivateRef<D> { }
 
 export interface GridPrivateComputed {
   computeProxyOpts: ComputedRef<VxeGridPropTypes.ProxyOpts>
@@ -49,15 +49,15 @@ export interface GridPrivateComputed {
 
 export interface VxeGridPrivateComputed extends GridPrivateComputed { }
 
-export interface GridReactData {
+export interface GridReactData<D = VxeTableDataRow> {
   tableLoading: boolean
   proxyInited: boolean
   isZMax: boolean
-  tableData: any[]
-  pendingRecords: any[]
-  filterData: VxeTableDefines.FilterCheckedParams[]
+  tableData: D[]
+  pendingRecords: D[]
+  filterData: VxeTableDefines.FilterCheckedParams<D>[]
   formData: any
-  sortData: VxeTableDefines.SortCheckedParams[]
+  sortData: VxeTableDefines.SortCheckedParams<D>[]
   tZindex: number
   tablePage: {
     total: number
@@ -83,11 +83,11 @@ export type VxeGridEmits = [
   'zoom'
 ]
 
-export interface GridMethods extends GridPublicMethods {
+export interface GridMethods<D = VxeTableDataRow> extends GridPublicMethods<D> {
   dispatchEvent(type: ValueOf<VxeGridEmits>, params: any, evnt?: Event): void
 }
 
-export interface GridPublicMethods {
+export interface GridPublicMethods<D = VxeTableDataRow> {
   /**
    * 给数据代理提交指令
    * @param code 指令编码
@@ -101,7 +101,7 @@ export interface GridPublicMethods {
   /**
    * 获取已标记删除的数据
    */
-  getPendingRecords(): any[]
+  getPendingRecords(): D[]
   /**
    * 切换表格最大化/还原
    */
@@ -122,20 +122,24 @@ export interface GridPublicMethods {
    * 获取数据代理信息
    */
   getProxyInfo(): {
-    data: any[]
+    data: D[]
     filter: any
     form: any
-    sort: VxeTableDefines.SortCheckedParams | { [key: string]: any }
-    sorts: VxeTableDefines.SortCheckedParams[]
-    pager: any
-    pendingRecords: any[]
+    sort: VxeTableDefines.SortCheckedParams<D> | { [key: string]: any }
+    sorts: VxeTableDefines.SortCheckedParams<D>[]
+    pager: {
+      total: number
+      pageSize: number
+      currentPage: number
+    }
+    pendingRecords: D[]
   } | null
 }
 
-export interface VxeGridMethods extends GridMethods, TablePublicMethods { }
+export interface VxeGridMethods<D = VxeTableDataRow> extends GridMethods<D>, TablePublicMethods<D> { }
 
-export interface GridPrivateMethods {
-  callSlot<T>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T): SlotVNodeType[]
+export interface GridPrivateMethods<D = VxeTableDataRow> {
+  callSlot<T = any>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T): SlotVNodeType[]
   extendTableMethods<T>(methodKeys: T[]): any
   triggerToolbarCommitEvent(params: VxeToolbarPropTypes.ButtonConfig | VxeToolbarPropTypes.ToolConfig, evnt: Event): Promise<any>
   triggerToolbarBtnEvent(button: VxeToolbarPropTypes.ButtonConfig, evnt: Event): void
@@ -145,12 +149,12 @@ export interface GridPrivateMethods {
   getExcludeHeight(): number
 }
 
-export interface VxeGridPrivateMethods extends GridPrivateMethods { }
+export interface VxeGridPrivateMethods<D = VxeTableDataRow> extends GridPrivateMethods<D> { }
 
 export namespace VxeGridPropTypes {
   export type Size = SizeType
 
-  export type Columns = VxeTableDefines.ColumnOptions[]
+  export type Columns<D = VxeTableDataRow> = VxeTableDefines.ColumnOptions<D>[]
 
   export interface PagerConfig extends VxePagerProps {
     enabled?: boolean
@@ -164,51 +168,55 @@ export namespace VxeGridPropTypes {
     currentPage: number
   }
 
-  interface ProxyAjaxQuerySortCheckedParams {
-    column: VxeTableDefines.ColumnInfo
+  interface ProxyAjaxQuerySortCheckedParams<D = VxeTableDataRow> {
+    column: VxeTableDefines.ColumnInfo<D>
     order: string
     sortBy: string
     field: string
     property: string
   }
 
-  interface ProxyAjaxQueryParams {
-    $grid: VxeGridConstructor
+  interface ProxyAjaxQueryParams<D = VxeTableDataRow> {
+    $grid: VxeGridConstructor<D>
     page: ProxyAjaxQueryPageParams
-    sort: ProxyAjaxQuerySortCheckedParams
-    sorts: ProxyAjaxQuerySortCheckedParams[]
+    sort: ProxyAjaxQuerySortCheckedParams<D>
+    sorts: ProxyAjaxQuerySortCheckedParams<D>[]
     filters: VxeTableDefines.FilterCheckedParams[]
-    form: any
+    form: {
+      [key: string]: any
+    }
   }
 
-  interface ProxyAjaxQueryAllParams {
-    $table: VxeTableConstructor
-    $grid: VxeGridConstructor
-    sort: ProxyAjaxQuerySortCheckedParams
-    sorts: ProxyAjaxQuerySortCheckedParams[]
+  interface ProxyAjaxQueryAllParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D>
+    sort: ProxyAjaxQuerySortCheckedParams<D>
+    sorts: ProxyAjaxQuerySortCheckedParams<D>[]
     filters: VxeTableDefines.FilterCheckedParams[]
-    form: any
+    form: {
+      [key: string]: any
+    }
     options: any
   }
 
-  interface ProxyAjaxDeleteParams {
-    $grid: VxeGridConstructor
+  interface ProxyAjaxDeleteParams<D = VxeTableDataRow> {
+    $grid: VxeGridConstructor<D>
     body: {
-      removeRecords: any[]
+      removeRecords: D[]
     }
   }
 
-  interface ProxyAjaxSaveParams {
-    $grid: VxeGridConstructor
+  interface ProxyAjaxSaveParams<D = VxeTableDataRow> {
+    $grid: VxeGridConstructor<D>
     body: {
-      insertRecords: any[]
-      updateRecords: any[]
-      removeRecords: any[]
-      pendingRecords: any[]
+      insertRecords: D[]
+      updateRecords: D[]
+      removeRecords: D[]
+      pendingRecords: D[]
     }
   }
 
-  export interface ProxyConfig {
+  export interface ProxyConfig<D = VxeTableDataRow> {
     enabled?: boolean
     autoLoad?: boolean
     message?: boolean
@@ -223,14 +231,14 @@ export namespace VxeGridPropTypes {
       message?: string
     }
     ajax?: {
-      query?(params: ProxyAjaxQueryParams, ...args: any[]): Promise<any>
-      queryAll?(params: ProxyAjaxQueryAllParams, ...args: any[]): Promise<any>
-      delete?(params: ProxyAjaxDeleteParams, ...args: any[]): Promise<any>
-      save?(params: ProxyAjaxSaveParams, ...args: any[]): Promise<any>
+      query?(params: ProxyAjaxQueryParams<D>, ...args: any[]): Promise<any>
+      queryAll?(params: ProxyAjaxQueryAllParams<D>, ...args: any[]): Promise<any>
+      delete?(params: ProxyAjaxDeleteParams<D>, ...args: any[]): Promise<any>
+      save?(params: ProxyAjaxSaveParams<D>, ...args: any[]): Promise<any>
     }
     [key: string]: any
   }
-  export interface ProxyOpts extends ProxyConfig { }
+  export interface ProxyOpts<D = VxeTableDataRow> extends ProxyConfig<D> { }
 
   export interface ToolbarOpts extends ToolbarConfig { }
   export interface ToolbarConfig extends VxeToolbarProps {
@@ -261,239 +269,239 @@ export namespace VxeGridPropTypes {
   export interface ZoomOpts extends ZoomConfig { }
 }
 
-export type VxeGridProps<D = any> = VxeTableProps<D> & {
-  columns?: VxeGridPropTypes.Columns
+export type VxeGridProps<D = VxeTableDataRow> = VxeTableProps<D> & {
+  columns?: VxeGridPropTypes.Columns<D>
   pagerConfig?: VxeGridPropTypes.PagerConfig
-  proxyConfig?: VxeGridPropTypes.ProxyConfig
+  proxyConfig?: VxeGridPropTypes.ProxyConfig<D>
   toolbarConfig?: VxeGridPropTypes.ToolbarConfig
   formConfig?: VxeGridPropTypes.FormConfig
   zoomConfig?: VxeGridPropTypes.ZoomConfig
 }
 
 export namespace VxeGridDefines {
-  interface GridEventParams extends VxeEvent {
-    $grid: VxeGridConstructor
+  interface GridEventParams<D = VxeTableDataRow> extends VxeEvent {
+    $grid: VxeGridConstructor<D>
   }
 
-  export interface KeydownEventParams extends GridEventParams, VxeTableDefines.KeydownEventParams { }
-  export interface PasteEventParams extends GridEventParams, VxeTableDefines.PasteEventParams { }
-  export interface CopyEventParams extends GridEventParams, VxeTableDefines.CopyEventParams { }
-  export interface CutEventParams extends GridEventParams, VxeTableDefines.CutEventParams { }
-  export interface CurrentChangeEventParams extends GridEventParams, VxeTableDefines.CurrentChangeEventParams { }
-  export interface RadioChangeEventParams extends GridEventParams, VxeTableDefines.RadioChangeEventParams { }
-  export interface CheckboxChangeEventParams extends GridEventParams, VxeTableDefines.CheckboxChangeEventParams { }
-  export interface CheckboxAllEventParams extends GridEventParams, VxeTableDefines.CheckboxAllEventParams { }
-  export interface CheckboxRangeStartEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeStartEventParams { }
-  export interface CheckboxRangeChangeEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeChangeEventParams { }
-  export interface CheckboxRangeEndEventParams extends GridEventParams, VxeTableDefines.CheckboxRangeEndEventParams { }
-  export interface CellClickEventParams extends GridEventParams, VxeTableDefines.CellClickEventParams { }
-  export interface CellDblclickEventParams extends GridEventParams, VxeTableDefines.CellDblclickEventParams { }
-  export interface CellMenuEventParams extends GridEventParams, VxeTableDefines.CellMenuEventParams { }
-  export interface CellMouseenterEventParams extends GridEventParams, VxeTableDefines.CellMouseenterEventParams { }
-  export interface CellMouseleaveEventParams extends GridEventParams, VxeTableDefines.CellMouseleaveEventParams { }
-  export interface HeaderCellClickEventParams extends GridEventParams, VxeTableDefines.HeaderCellClickEventParams { }
-  export interface HeaderCellDblclickEventParams extends GridEventParams, VxeTableDefines.HeaderCellDblclickEventParams { }
-  export interface HeaderCellMenuEventParams extends GridEventParams, VxeTableDefines.HeaderCellMenuEventParams { }
-  export interface FooterCellClickEventParams extends GridEventParams, VxeTableDefines.FooterCellClickEventParams { }
-  export interface FooterCellDblclickEventParams extends GridEventParams, VxeTableDefines.FooterCellDblclickEventParams { }
-  export interface FooterCellMenuEventParams extends GridEventParams, VxeTableDefines.FooterCellMenuEventParams { }
-  export interface SortChangeEventParams extends GridEventParams, VxeTableDefines.SortChangeEventParams { }
-  export interface FilterChangeEventParams extends GridEventParams, VxeTableDefines.FilterChangeEventParams { }
-  export interface FilterVisibleEventParams extends GridEventParams, VxeTableDefines.FilterVisibleEventParams { }
-  export interface ResizableChangeEventParams extends GridEventParams, VxeTableDefines.ResizableChangeEventParams { }
-  export interface ToggleRowExpandEventParams extends GridEventParams, VxeTableDefines.ToggleRowExpandEventParams { }
-  export interface ToggleTreeExpandEventParams extends GridEventParams, VxeTableDefines.ToggleTreeExpandEventParams { }
-  export interface MenuClickEventParams extends GridEventParams, VxeTableDefines.MenuClickEventParams { }
-  export interface EditClosedEventParams extends GridEventParams, VxeTableDefines.EditClosedEventParams { }
-  export interface EditActivedEventParams extends GridEventParams, VxeTableDefines.EditActivedEventParams { }
-  export interface EditDisabledEventParams extends GridEventParams, VxeTableDefines.EditDisabledEventParams { }
-  export interface ValidErrorEventParams extends GridEventParams, VxeTableDefines.ValidErrorEventParams { }
-  export interface ScrollEventParams extends GridEventParams, VxeTableDefines.ScrollEventParams { }
-  export interface CustomEventParams extends GridEventParams, VxeTableDefines.CustomEventParams { }
+  export interface KeydownEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.KeydownEventParams<D> { }
+  export interface PasteEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.PasteEventParams<D> { }
+  export interface CopyEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CopyEventParams<D> { }
+  export interface CutEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CutEventParams<D> { }
+  export interface CurrentChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CurrentChangeEventParams<D> { }
+  export interface RadioChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.RadioChangeEventParams<D> { }
+  export interface CheckboxChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CheckboxChangeEventParams<D> { }
+  export interface CheckboxAllEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CheckboxAllEventParams<D> { }
+  export interface CheckboxRangeStartEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CheckboxRangeStartEventParams<D> { }
+  export interface CheckboxRangeChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CheckboxRangeChangeEventParams<D> { }
+  export interface CheckboxRangeEndEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CheckboxRangeEndEventParams<D> { }
+  export interface CellClickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CellClickEventParams<D> { }
+  export interface CellDblclickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CellDblclickEventParams<D> { }
+  export interface CellMenuEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CellMenuEventParams<D> { }
+  export interface CellMouseenterEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CellMouseenterEventParams<D> { }
+  export interface CellMouseleaveEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CellMouseleaveEventParams<D> { }
+  export interface HeaderCellClickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.HeaderCellClickEventParams<D> { }
+  export interface HeaderCellDblclickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.HeaderCellDblclickEventParams<D> { }
+  export interface HeaderCellMenuEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.HeaderCellMenuEventParams<D> { }
+  export interface FooterCellClickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.FooterCellClickEventParams<D> { }
+  export interface FooterCellDblclickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.FooterCellDblclickEventParams<D> { }
+  export interface FooterCellMenuEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.FooterCellMenuEventParams<D> { }
+  export interface SortChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.SortChangeEventParams<D> { }
+  export interface FilterChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.FilterChangeEventParams<D> { }
+  export interface FilterVisibleEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.FilterVisibleEventParams<D> { }
+  export interface ResizableChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.ResizableChangeEventParams<D> { }
+  export interface ToggleRowExpandEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.ToggleRowExpandEventParams<D> { }
+  export interface ToggleTreeExpandEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.ToggleTreeExpandEventParams<D> { }
+  export interface MenuClickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.MenuClickEventParams<D> { }
+  export interface EditClosedEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.EditClosedEventParams<D> { }
+  export interface EditActivedEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.EditActivedEventParams<D> { }
+  export interface EditDisabledEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.EditDisabledEventParams<D> { }
+  export interface ValidErrorEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.ValidErrorEventParams<D> { }
+  export interface ScrollEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.ScrollEventParams<D> { }
+  export interface CustomEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeTableDefines.CustomEventParams<D> { }
 
-  export interface ProxyQueryEventParams extends GridEventParams {
+  export interface ProxyQueryEventParams<D = VxeTableDataRow> extends GridEventParams<D> {
     status: boolean
     isReload: boolean
     isInited: boolean
   }
-  export interface ProxyDeleteEventParams extends GridEventParams {
+  export interface ProxyDeleteEventParams<D = VxeTableDataRow> extends GridEventParams<D> {
     status: boolean
   }
-  export interface ProxySaveEventParams extends GridEventParams {
+  export interface ProxySaveEventParams<D = VxeTableDataRow> extends GridEventParams<D> {
     status: boolean
   }
-  export interface PageChangeEventParams extends GridEventParams, VxePagerDefines.PageChangeEventParams { }
-  export interface FormSubmitEventParams extends GridEventParams, VxeFormDefines.SubmitEventParams { }
-  export interface FormSubmitInvalidEventParams extends GridEventParams, VxeFormDefines.SubmitInvalidParams { }
-  export interface FormResetEventParams extends GridEventParams, VxeFormDefines.ResetEventParams { }
-  export interface FormCollapseEventParams extends GridEventParams, VxeFormDefines.CollapseEventParams { }
+  export interface PageChangeEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxePagerDefines.PageChangeEventParams { }
+  export interface FormSubmitEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeFormDefines.SubmitEventParams { }
+  export interface FormSubmitInvalidEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeFormDefines.SubmitInvalidParams { }
+  export interface FormResetEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeFormDefines.ResetEventParams { }
+  export interface FormCollapseEventParams<D = VxeTableDataRow> extends GridEventParams<D>, VxeFormDefines.CollapseEventParams { }
 
   export interface ToolbarButtonClickParams {
     code: string
     button: VxeToolbarPropTypes.ButtonConfig
   }
-  export interface ToolbarButtonClickEventParams extends GridEventParams, ToolbarButtonClickParams { }
+  export interface ToolbarButtonClickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, ToolbarButtonClickParams { }
 
   export interface ToolbarToolClickParams {
     code: string
     tool: VxeToolbarPropTypes.ToolConfig
   }
-  export interface ToolbarToolClickEventParams extends GridEventParams, ToolbarToolClickParams { }
+  export interface ToolbarToolClickEventParams<D = VxeTableDataRow> extends GridEventParams<D>, ToolbarToolClickParams { }
 
   export interface ZoomParams {
     type: 'max' | 'revert'
   }
-  export interface ZoomEventParams extends GridEventParams, ZoomParams { }
+  export interface ZoomEventParams<D = VxeTableDataRow> extends GridEventParams<D>, ZoomParams { }
 }
 
-export interface VxeGridEventProps {
-  onKeydown?: VxeGridEvents.Keydown
-  onPaste?: VxeGridEvents.Paste
-  onCopy?: VxeGridEvents.Copy
-  onCut?: VxeGridEvents.Cut
-  onCurrentChange?: VxeGridEvents.CurrentChange
-  onRadioChange?: VxeGridEvents.RadioChange
-  onCheckboxChange?: VxeGridEvents.CheckboxChange
-  onCheckboxAll?: VxeGridEvents.CheckboxAll
-  onCheckboxRangeStart?: VxeGridEvents.CheckboxRangeStart
-  onCheckboxRangeChange?: VxeGridEvents.CheckboxRangeChange
-  onCheckboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd
-  onCellClick?: VxeGridEvents.CellClick
-  onCellDblclick?: VxeGridEvents.CellDblclick
-  onCellMenu?: VxeGridEvents.CellMenu
-  onCellMouseenter?: VxeGridEvents.CellMouseenter
-  onCellMouseleave?: VxeGridEvents.CellMouseleave
-  onHeaderCellClick?: VxeGridEvents.HeaderCellClick
-  onHeaderCellDblclick?: VxeGridEvents.HeaderCellDblclick
-  onHeaderCellMenu?: VxeGridEvents.HeaderCellMenu
-  onFooterCellClick?: VxeGridEvents.FooterCellClick
-  onFooterCellDblclick?: VxeGridEvents.FooterCellDblclick
-  onFooterCellMenu?: VxeGridEvents.FooterCellMenu
-  onSortChange?: VxeGridEvents.SortChange
-  onFilterChange?: VxeGridEvents.FilterChange
-  onFilterVisible?: VxeGridEvents.FilterVisible
-  onResizableChange?: VxeGridEvents.ResizableChange
-  onToggleRowExpand?: VxeGridEvents.ToggleRowExpand
-  onToggleTreeExpand?: VxeGridEvents.ToggleTreeExpand
-  onMenuClick?: VxeGridEvents.MenuClick
-  onEditClosed?: VxeGridEvents.EditClosed
-  onEditActived?: VxeGridEvents.EditActived
-  onEditDisabled?: VxeGridEvents.EditDisabled
-  onValidError?: VxeGridEvents.ValidError
-  onScroll?: VxeGridEvents.Scroll
-  onCustom?: VxeGridEvents.Custom
+export interface VxeGridEventProps<D = VxeTableDataRow> {
+  onKeydown?: VxeGridEvents.Keydown<D>
+  onPaste?: VxeGridEvents.Paste<D>
+  onCopy?: VxeGridEvents.Copy<D>
+  onCut?: VxeGridEvents.Cut<D>
+  onCurrentChange?: VxeGridEvents.CurrentChange<D>
+  onRadioChange?: VxeGridEvents.RadioChange<D>
+  onCheckboxChange?: VxeGridEvents.CheckboxChange<D>
+  onCheckboxAll?: VxeGridEvents.CheckboxAll<D>
+  onCheckboxRangeStart?: VxeGridEvents.CheckboxRangeStart<D>
+  onCheckboxRangeChange?: VxeGridEvents.CheckboxRangeChange<D>
+  onCheckboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd<D>
+  onCellClick?: VxeGridEvents.CellClick<D>
+  onCellDblclick?: VxeGridEvents.CellDblclick<D>
+  onCellMenu?: VxeGridEvents.CellMenu<D>
+  onCellMouseenter?: VxeGridEvents.CellMouseenter<D>
+  onCellMouseleave?: VxeGridEvents.CellMouseleave<D>
+  onHeaderCellClick?: VxeGridEvents.HeaderCellClick<D>
+  onHeaderCellDblclick?: VxeGridEvents.HeaderCellDblclick<D>
+  onHeaderCellMenu?: VxeGridEvents.HeaderCellMenu<D>
+  onFooterCellClick?: VxeGridEvents.FooterCellClick<D>
+  onFooterCellDblclick?: VxeGridEvents.FooterCellDblclick<D>
+  onFooterCellMenu?: VxeGridEvents.FooterCellMenu<D>
+  onSortChange?: VxeGridEvents.SortChange<D>
+  onFilterChange?: VxeGridEvents.FilterChange<D>
+  onFilterVisible?: VxeGridEvents.FilterVisible<D>
+  onResizableChange?: VxeGridEvents.ResizableChange<D>
+  onToggleRowExpand?: VxeGridEvents.ToggleRowExpand<D>
+  onToggleTreeExpand?: VxeGridEvents.ToggleTreeExpand<D>
+  onMenuClick?: VxeGridEvents.MenuClick<D>
+  onEditClosed?: VxeGridEvents.EditClosed<D>
+  onEditActived?: VxeGridEvents.EditActived<D>
+  onEditDisabled?: VxeGridEvents.EditDisabled<D>
+  onValidError?: VxeGridEvents.ValidError<D>
+  onScroll?: VxeGridEvents.Scroll<D>
+  onCustom?: VxeGridEvents.Custom<D>
 
   // grid
-  onProxyQuery?: VxeGridEvents.ProxyQuery
-  onProxyDelete?: VxeGridEvents.ProxyDelete
-  onProxySave?: VxeGridEvents.ProxySave
-  onPageChange?: VxeGridEvents.PageChange
-  onFormSubmit?: VxeGridEvents.FormSubmit
-  onFormSubmitInvalid?: VxeGridEvents.FormSubmitInvalid
-  onFormReset?: VxeGridEvents.FormReset
-  onFormCollapse?: VxeGridEvents.FormCollapse
-  onToolbarButtonClick?: VxeGridEvents.ToolbarButtonClick
-  onToolbarToolClick?: VxeGridEvents.ToolbarToolClick
-  onZoom?: VxeGridEvents.Zoom
+  onProxyQuery?: VxeGridEvents.ProxyQuery<D>
+  onProxyDelete?: VxeGridEvents.ProxyDelete<D>
+  onProxySave?: VxeGridEvents.ProxySave<D>
+  onPageChange?: VxeGridEvents.PageChange<D>
+  onFormSubmit?: VxeGridEvents.FormSubmit<D>
+  onFormSubmitInvalid?: VxeGridEvents.FormSubmitInvalid<D>
+  onFormReset?: VxeGridEvents.FormReset<D>
+  onFormCollapse?: VxeGridEvents.FormCollapse<D>
+  onToolbarButtonClick?: VxeGridEvents.ToolbarButtonClick<D>
+  onToolbarToolClick?: VxeGridEvents.ToolbarToolClick<D>
+  onZoom?: VxeGridEvents.Zoom<D>
 }
 
-export interface VxeGridListeners {
-  keydown?: VxeGridEvents.Keydown
-  paste?: VxeGridEvents.Paste
-  copy?: VxeGridEvents.Copy
-  cut?: VxeGridEvents.Cut
-  currentChange?: VxeGridEvents.CurrentChange
-  radioChange?: VxeGridEvents.RadioChange
-  checkboxChange?: VxeGridEvents.CheckboxChange
-  checkboxAll?: VxeGridEvents.CheckboxAll
-  checkboxRangeStart?: VxeGridEvents.CheckboxRangeStart
-  checkboxRangeChange?: VxeGridEvents.CheckboxRangeChange
-  checkboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd
-  cellClick?: VxeGridEvents.CellClick
-  cellDblclick?: VxeGridEvents.CellDblclick
-  cellMenu?: VxeGridEvents.CellMenu
-  cellMouseenter?: VxeGridEvents.CellMouseenter
-  cellMouseleave?: VxeGridEvents.CellMouseleave
-  headerCellClick?: VxeGridEvents.HeaderCellClick
-  headerCellDblclick?: VxeGridEvents.HeaderCellDblclick
-  headerCellMenu?: VxeGridEvents.HeaderCellMenu
-  footerCellClick?: VxeGridEvents.FooterCellClick
-  footerCellDblclick?: VxeGridEvents.FooterCellDblclick
-  footerCellMenu?: VxeGridEvents.FooterCellMenu
-  sortChange?: VxeGridEvents.SortChange
-  filterChange?: VxeGridEvents.FilterChange
-  filterVisible?: VxeGridEvents.FilterVisible
-  resizableChange?: VxeGridEvents.ResizableChange
-  toggleRowExpand?: VxeGridEvents.ToggleRowExpand
-  toggleTreeExpand?: VxeGridEvents.ToggleTreeExpand
-  menuClick?: VxeGridEvents.MenuClick
-  editClosed?: VxeGridEvents.EditClosed
-  editActived?: VxeGridEvents.EditActived
-  editDisabled?: VxeGridEvents.EditDisabled
-  validError?: VxeGridEvents.ValidError
-  scroll?: VxeGridEvents.Scroll
-  custom?: VxeGridEvents.Custom
+export interface VxeGridListeners<D = VxeTableDataRow> {
+  keydown?: VxeGridEvents.Keydown<D>
+  paste?: VxeGridEvents.Paste<D>
+  copy?: VxeGridEvents.Copy<D>
+  cut?: VxeGridEvents.Cut<D>
+  currentChange?: VxeGridEvents.CurrentChange<D>
+  radioChange?: VxeGridEvents.RadioChange<D>
+  checkboxChange?: VxeGridEvents.CheckboxChange<D>
+  checkboxAll?: VxeGridEvents.CheckboxAll<D>
+  checkboxRangeStart?: VxeGridEvents.CheckboxRangeStart<D>
+  checkboxRangeChange?: VxeGridEvents.CheckboxRangeChange<D>
+  checkboxRangeEnd?: VxeGridEvents.CheckboxRangeEnd<D>
+  cellClick?: VxeGridEvents.CellClick<D>
+  cellDblclick?: VxeGridEvents.CellDblclick<D>
+  cellMenu?: VxeGridEvents.CellMenu<D>
+  cellMouseenter?: VxeGridEvents.CellMouseenter<D>
+  cellMouseleave?: VxeGridEvents.CellMouseleave<D>
+  headerCellClick?: VxeGridEvents.HeaderCellClick<D>
+  headerCellDblclick?: VxeGridEvents.HeaderCellDblclick<D>
+  headerCellMenu?: VxeGridEvents.HeaderCellMenu<D>
+  footerCellClick?: VxeGridEvents.FooterCellClick<D>
+  footerCellDblclick?: VxeGridEvents.FooterCellDblclick<D>
+  footerCellMenu?: VxeGridEvents.FooterCellMenu<D>
+  sortChange?: VxeGridEvents.SortChange<D>
+  filterChange?: VxeGridEvents.FilterChange<D>
+  filterVisible?: VxeGridEvents.FilterVisible<D>
+  resizableChange?: VxeGridEvents.ResizableChange<D>
+  toggleRowExpand?: VxeGridEvents.ToggleRowExpand<D>
+  toggleTreeExpand?: VxeGridEvents.ToggleTreeExpand<D>
+  menuClick?: VxeGridEvents.MenuClick<D>
+  editClosed?: VxeGridEvents.EditClosed<D>
+  editActived?: VxeGridEvents.EditActived<D>
+  editDisabled?: VxeGridEvents.EditDisabled<D>
+  validError?: VxeGridEvents.ValidError<D>
+  scroll?: VxeGridEvents.Scroll<D>
+  custom?: VxeGridEvents.Custom<D>
 
   // grid
-  proxyQuery?: VxeGridEvents.ProxyQuery
-  proxyDelete?: VxeGridEvents.ProxyDelete
-  proxySave?: VxeGridEvents.ProxySave
-  pageChange?: VxeGridEvents.PageChange
-  formSubmit?: VxeGridEvents.FormSubmit
-  formSubmitInvalid?: VxeGridEvents.FormSubmitInvalid
-  formReset?: VxeGridEvents.FormReset
-  formCollapse?: VxeGridEvents.FormCollapse
-  toolbarButtonClick?: VxeGridEvents.ToolbarButtonClick
-  toolbarToolClick?: VxeGridEvents.ToolbarToolClick
-  zoom?: VxeGridEvents.Zoom
+  proxyQuery?: VxeGridEvents.ProxyQuery<D>
+  proxyDelete?: VxeGridEvents.ProxyDelete<D>
+  proxySave?: VxeGridEvents.ProxySave<D>
+  pageChange?: VxeGridEvents.PageChange<D>
+  formSubmit?: VxeGridEvents.FormSubmit<D>
+  formSubmitInvalid?: VxeGridEvents.FormSubmitInvalid<D>
+  formReset?: VxeGridEvents.FormReset<D>
+  formCollapse?: VxeGridEvents.FormCollapse<D>
+  toolbarButtonClick?: VxeGridEvents.ToolbarButtonClick<D>
+  toolbarToolClick?: VxeGridEvents.ToolbarToolClick<D>
+  zoom?: VxeGridEvents.Zoom<D>
 }
 
 export namespace VxeGridEvents {
-  export type Keydown = (params: VxeGridDefines.KeydownEventParams) => void
-  export type Paste = (params: VxeGridDefines.PasteEventParams) => void
-  export type Copy = (params: VxeGridDefines.CopyEventParams) => void
-  export type Cut = (params: VxeGridDefines.CutEventParams) => void
-  export type CurrentChange = (params: VxeGridDefines.CurrentChangeEventParams) => void
-  export type RadioChange = (params: VxeGridDefines.RadioChangeEventParams) => void
-  export type CheckboxChange = (params: VxeGridDefines.CheckboxChangeEventParams) => void
-  export type CheckboxAll = (params: VxeGridDefines.CheckboxAllEventParams) => void
-  export type CheckboxRangeStart = (params: VxeGridDefines.CheckboxRangeStartEventParams) => void
-  export type CheckboxRangeChange = (params: VxeGridDefines.CheckboxRangeChangeEventParams) => void
-  export type CheckboxRangeEnd = (params: VxeGridDefines.CheckboxRangeEndEventParams) => void
-  export type CellClick = (params: VxeGridDefines.CellClickEventParams) => void
-  export type CellDblclick = (params: VxeGridDefines.CellDblclickEventParams) => void
-  export type CellMenu = (params: VxeGridDefines.CellMenuEventParams) => void
-  export type CellMouseenter = (params: VxeGridDefines.CellMouseenterEventParams) => void
-  export type CellMouseleave = (params: VxeGridDefines.CellMouseleaveEventParams) => void
-  export type HeaderCellClick = (params: VxeGridDefines.HeaderCellClickEventParams) => void
-  export type HeaderCellDblclick = (params: VxeGridDefines.HeaderCellDblclickEventParams) => void
-  export type HeaderCellMenu = (params: VxeGridDefines.HeaderCellMenuEventParams) => void
-  export type FooterCellClick = (params: VxeGridDefines.FooterCellClickEventParams) => void
-  export type FooterCellDblclick = (params: VxeGridDefines.FooterCellDblclickEventParams) => void
-  export type FooterCellMenu = (params: VxeGridDefines.FooterCellMenuEventParams) => void
-  export type SortChange = (params: VxeGridDefines.SortChangeEventParams) => void
-  export type FilterChange = (params: VxeGridDefines.FilterChangeEventParams) => void
-  export type FilterVisible = (params: VxeGridDefines.FilterVisibleEventParams) => void
-  export type ResizableChange = (params: VxeGridDefines.ResizableChangeEventParams) => void
-  export type ToggleRowExpand = (params: VxeGridDefines.ToggleRowExpandEventParams) => void
-  export type ToggleTreeExpand = (params: VxeGridDefines.ToggleTreeExpandEventParams) => void
-  export type MenuClick = (params: VxeGridDefines.MenuClickEventParams) => void
-  export type EditClosed = (params: VxeGridDefines.EditClosedEventParams) => void
-  export type EditActived = (params: VxeGridDefines.EditActivedEventParams) => void
-  export type EditDisabled = (params: VxeGridDefines.EditDisabledEventParams) => void
-  export type ValidError = (params: VxeGridDefines.ValidErrorEventParams) => void
-  export type Scroll = (params: VxeGridDefines.ScrollEventParams) => void
-  export type Custom = (params: VxeGridDefines.CustomEventParams) => void
+  export type Keydown<D = any> = (params: VxeGridDefines.KeydownEventParams<D>) => void
+  export type Paste<D = any> = (params: VxeGridDefines.PasteEventParams<D>) => void
+  export type Copy<D = any> = (params: VxeGridDefines.CopyEventParams<D>) => void
+  export type Cut<D = any> = (params: VxeGridDefines.CutEventParams<D>) => void
+  export type CurrentChange<D = any> = (params: VxeGridDefines.CurrentChangeEventParams<D>) => void
+  export type RadioChange<D = any> = (params: VxeGridDefines.RadioChangeEventParams<D>) => void
+  export type CheckboxChange<D = any> = (params: VxeGridDefines.CheckboxChangeEventParams<D>) => void
+  export type CheckboxAll<D = any> = (params: VxeGridDefines.CheckboxAllEventParams<D>) => void
+  export type CheckboxRangeStart<D = any> = (params: VxeGridDefines.CheckboxRangeStartEventParams<D>) => void
+  export type CheckboxRangeChange<D = any> = (params: VxeGridDefines.CheckboxRangeChangeEventParams<D>) => void
+  export type CheckboxRangeEnd<D = any> = (params: VxeGridDefines.CheckboxRangeEndEventParams<D>) => void
+  export type CellClick<D = any> = (params: VxeGridDefines.CellClickEventParams<D>) => void
+  export type CellDblclick<D = any> = (params: VxeGridDefines.CellDblclickEventParams<D>) => void
+  export type CellMenu<D = any> = (params: VxeGridDefines.CellMenuEventParams<D>) => void
+  export type CellMouseenter<D = any> = (params: VxeGridDefines.CellMouseenterEventParams<D>) => void
+  export type CellMouseleave<D = any> = (params: VxeGridDefines.CellMouseleaveEventParams<D>) => void
+  export type HeaderCellClick<D = any> = (params: VxeGridDefines.HeaderCellClickEventParams<D>) => void
+  export type HeaderCellDblclick<D = any> = (params: VxeGridDefines.HeaderCellDblclickEventParams<D>) => void
+  export type HeaderCellMenu<D = any> = (params: VxeGridDefines.HeaderCellMenuEventParams<D>) => void
+  export type FooterCellClick<D = any> = (params: VxeGridDefines.FooterCellClickEventParams<D>) => void
+  export type FooterCellDblclick<D = any> = (params: VxeGridDefines.FooterCellDblclickEventParams<D>) => void
+  export type FooterCellMenu<D = any> = (params: VxeGridDefines.FooterCellMenuEventParams<D>) => void
+  export type SortChange<D = any> = (params: VxeGridDefines.SortChangeEventParams<D>) => void
+  export type FilterChange<D = any> = (params: VxeGridDefines.FilterChangeEventParams<D>) => void
+  export type FilterVisible<D = any> = (params: VxeGridDefines.FilterVisibleEventParams<D>) => void
+  export type ResizableChange<D = any> = (params: VxeGridDefines.ResizableChangeEventParams<D>) => void
+  export type ToggleRowExpand<D = any> = (params: VxeGridDefines.ToggleRowExpandEventParams<D>) => void
+  export type ToggleTreeExpand<D = any> = (params: VxeGridDefines.ToggleTreeExpandEventParams<D>) => void
+  export type MenuClick<D = any> = (params: VxeGridDefines.MenuClickEventParams<D>) => void
+  export type EditClosed<D = any> = (params: VxeGridDefines.EditClosedEventParams<D>) => void
+  export type EditActived<D = any> = (params: VxeGridDefines.EditActivedEventParams<D>) => void
+  export type EditDisabled<D = any> = (params: VxeGridDefines.EditDisabledEventParams<D>) => void
+  export type ValidError<D = any> = (params: VxeGridDefines.ValidErrorEventParams<D>) => void
+  export type Scroll<D = any> = (params: VxeGridDefines.ScrollEventParams<D>) => void
+  export type Custom<D = any> = (params: VxeGridDefines.CustomEventParams<D>) => void
 
-  export type ProxyQuery = (params: VxeGridDefines.ProxyQueryEventParams) => void
-  export type ProxyDelete = (params: VxeGridDefines.ProxyDeleteEventParams) => void
-  export type ProxySave = (params: VxeGridDefines.ProxySaveEventParams) => void
-  export type PageChange = (params: VxeGridDefines.PageChangeEventParams) => void
-  export type FormSubmit = (params: VxeGridDefines.FormSubmitEventParams) => void
-  export type FormSubmitInvalid = (params: VxeGridDefines.FormSubmitInvalidEventParams) => void
-  export type FormReset = (params: VxeGridDefines.FormResetEventParams) => void
-  export type FormCollapse = (params: VxeGridDefines.FormCollapseEventParams) => void
-  export type ToolbarButtonClick = (params: VxeGridDefines.ToolbarButtonClickEventParams) => void
-  export type ToolbarToolClick = (params: VxeGridDefines.ToolbarToolClickEventParams) => void
-  export type Zoom = (params: VxeGridDefines.ZoomEventParams) => void
+  export type ProxyQuery<D = any> = (params: VxeGridDefines.ProxyQueryEventParams<D>) => void
+  export type ProxyDelete<D = any> = (params: VxeGridDefines.ProxyDeleteEventParams<D>) => void
+  export type ProxySave<D = any> = (params: VxeGridDefines.ProxySaveEventParams<D>) => void
+  export type PageChange<D = any> = (params: VxeGridDefines.PageChangeEventParams<D>) => void
+  export type FormSubmit<D = any> = (params: VxeGridDefines.FormSubmitEventParams<D>) => void
+  export type FormSubmitInvalid<D = any> = (params: VxeGridDefines.FormSubmitInvalidEventParams<D>) => void
+  export type FormReset<D = any> = (params: VxeGridDefines.FormResetEventParams<D>) => void
+  export type FormCollapse<D = any> = (params: VxeGridDefines.FormCollapseEventParams<D>) => void
+  export type ToolbarButtonClick<D = any> = (params: VxeGridDefines.ToolbarButtonClickEventParams<D>) => void
+  export type ToolbarToolClick<D = any> = (params: VxeGridDefines.ToolbarToolClickEventParams<D>) => void
+  export type Zoom<D = any> = (params: VxeGridDefines.ZoomEventParams<D>) => void
 }

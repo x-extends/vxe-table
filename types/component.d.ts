@@ -15,17 +15,12 @@ export interface VxeComponentBase {
   xID: string
 }
 
-export interface RecordInfo {
-  [key: string]: any
-}
-
 export interface VxeEvent {
   $event: Event
   [key: string]: any
 }
 
-export type VNodeStyle = {
-  [key: string]: string | number
-}
+export type VNodeStyle = Record<string, string | number>
+export type VNodeClassName = Record<string, boolean>
 
 export type SlotVNodeType = JSX.Element | VNode | string | number

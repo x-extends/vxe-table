@@ -130,27 +130,24 @@ createApp(App).use(VXETable).mount('#app')
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup () {
-    const tableData = ref([
-      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
-      { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
-      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
-    ])
-    return {
-      tableData
-    }
-  }
-})
+const tableData = ref([
+  { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+  { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+  { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+])
 </script>
 ```
 
-## 檔案
+## 線上檔案
 
-👉 [查看檔案](https://vxetable.cn)  
+👉 [官網檔案](https://vxetable.cn)  
+
+參與檔案完善、補充詳細檔案  
+
+💡 [官網檔案源碼](https://github.com/x-extends/vxe-table-docs)
 
 ## 運行項目
 

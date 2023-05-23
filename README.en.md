@@ -131,27 +131,24 @@ Remember to lock the version number by using CDN to avoid being affected by inco
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
+<script lang="ts" setup>
+import { ref } from 'vue'
 
-export default defineComponent({
-  setup () {
-    const tableData = ref([
-      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
-      { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
-      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
-    ])
-    return {
-      tableData
-    }
-  }
-})
+const tableData = ref([
+  { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+  { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+  { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+])
 </script>
 ```
 
-## Docs
+## Online Documents
 
 👉 [Document](https://vxetable.cn)  
+
+Participate in document improvement and supplement detailed documents.  
+
+💡 [Document source code](https://github.com/x-extends/vxe-table-docs)
 
 ## Run the project
 

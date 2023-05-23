@@ -18,7 +18,7 @@ import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes } from '../../../types/all'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow } from '../../../types/all'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -420,7 +420,7 @@ export default defineComponent({
     })
 
     const computeClipOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.clipConfig, props.clipConfig) as VxeTablePropTypes.ClipOpts
+      return Object.assign({}, GlobalConfig.table.clipConfig, props.clipConfig)
     })
 
     const computeFNROpts = computed(() => {
@@ -913,12 +913,15 @@ export default defineComponent({
       const fullColumnIdData: any = internalData.fullColumnIdData = {}
       const fullColumnFieldData: any = internalData.fullColumnFieldData = {}
       const mouseOpts = computeMouseOpts.value
+      const columnOpts = computeColumnOpts.value
+      const rowOpts = computeRowOpts.value
       const isGroup = collectColumn.some(hasChildrenList)
       let isAllOverflow = !!props.showOverflow
       let expandColumn: VxeTableDefines.ColumnInfo | undefined
       let treeNodeColumn: VxeTableDefines.ColumnInfo | undefined
       let checkboxColumn: VxeTableDefines.ColumnInfo | undefined
       let radioColumn: VxeTableDefines.ColumnInfo | undefined
+      let htmlColumn: VxeTableDefines.ColumnInfo | undefined
       let hasFixed: VxeColumnPropTypes.Fixed | undefined
       const handleFunc = (column: VxeTableDefines.ColumnInfo, index: number, items: VxeTableDefines.ColumnInfo[], path?: string[], parent?: VxeTableDefines.ColumnInfo) => {
         const { id: colid, field, fixed, type, treeNode } = column
@@ -933,6 +936,9 @@ export default defineComponent({
         }
         if (!hasFixed && fixed) {
           hasFixed = fixed
+        }
+        if (!htmlColumn && type === 'html') {
+          htmlColumn = column
         }
         if (treeNode) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -990,6 +996,17 @@ export default defineComponent({
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (expandColumn && mouseOpts.area) {
           errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+        }
+      }
+
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (htmlColumn) {
+          if (!columnOpts.useKey) {
+            errLog('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
+          }
+          if (!rowOpts.useKey) {
+            errLog('vxe.error.reqProp', ['row-config.useKey', 'column.type=html'])
+          }
         }
       }
 
@@ -2754,11 +2771,9 @@ export default defineComponent({
        * @param {Array} records 新数据
        */
       createData (records) {
-        const { treeConfig } = props
-        const treeOpts = computeTreeOpts.value
-        const handleRrecord = (record: any) => reactive(tablePrivateMethods.defineField(record || {}))
-        const rows = treeConfig ? XEUtils.mapTree(records, handleRrecord, treeOpts) : records.map(handleRrecord)
-        return nextTick().then(() => rows)
+        return nextTick().then(() => {
+          return reactive(tablePrivateMethods.defineField(records))
+        })
       },
       /**
        * 创建 Row|Rows 对象
@@ -2768,9 +2783,9 @@ export default defineComponent({
       createRow (records) {
         const isArr = XEUtils.isArray(records)
         if (!isArr) {
-          records = [records]
+          records = [records || {}]
         }
-        return nextTick().then(() => tableMethods.createData(records).then((rows) => isArr ? rows : rows[0]))
+        return tableMethods.createData(records).then((rows) => isArr ? rows : rows[0])
       },
       /**
        * 还原数据
@@ -3116,7 +3131,7 @@ export default defineComponent({
         return new Promise(resolve => {
           // 还原滚动条位置
           if (lastScrollLeft || lastScrollTop) {
-            return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then(resolve).then(() => {
+            return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then().then(() => {
               // 存在滚动行为未结束情况
               setTimeout(resolve, 30)
             })
@@ -3560,12 +3575,15 @@ export default defineComponent({
        * 判断指定列是否为筛选状态，如果为空则判断所有列
        * @param {String} fieldOrColumn 字段名
        */
-      isFilter (fieldOrColumn) {
+      isActiveFilterByColumn (fieldOrColumn) {
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
         if (column) {
           return column.filters && column.filters.some((option) => option.checked)
         }
         return $xetable.getCheckedFilters().length > 0
+      },
+      isFilter (fieldOrColumn) {
+        return tableMethods.isActiveFilterByColumn(fieldOrColumn)
       },
       /**
        * 判断展开行是否懒加载完成
@@ -4413,7 +4431,7 @@ export default defineComponent({
               if (keyboardOpts.isDel && (selected.row || selected.column)) {
                 if (delMethod) {
                   delMethod({
-                    row: selected.row,
+                    row: selected.row as VxeTableDataRow,
                     rowIndex: tableMethods.getRowIndex(selected.row),
                     column: selected.column,
                     columnIndex: tableMethods.getColumnIndex(selected.column),
@@ -4425,7 +4443,7 @@ export default defineComponent({
                 if (isBack) {
                   if (backMethod) {
                     backMethod({
-                      row: selected.row,
+                      row: selected.row as VxeTableDataRow,
                       rowIndex: tableMethods.getRowIndex(selected.row),
                       column: selected.column,
                       columnIndex: tableMethods.getColumnIndex(selected.column),
@@ -5103,7 +5121,7 @@ export default defineComponent({
         const { column } = params
         const { tooltipStore } = reactData
         const cell = evnt.currentTarget as HTMLTableCellElement
-        handleTargetEnterEvent(tooltipStore.column !== column || tooltipStore.row)
+        handleTargetEnterEvent(tooltipStore.column !== column || !!tooltipStore.row)
         if (tooltipStore.column !== column || !tooltipStore.visible) {
           handleTooltip(evnt, cell, cell.querySelector('.vxe-cell--item') as HTMLElement || cell.children[0], null, params)
         }

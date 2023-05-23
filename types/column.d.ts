@@ -1,6 +1,5 @@
-import { VNode } from 'vue'
 import { VXEComponent, SlotVNodeType } from './component'
-import { VxeTableConstructor, VxeTableDefines, VxeTablePropTypes } from './table'
+import { VxeTableConstructor, VxeTableDataRow, VxeTableDefines, VxeTablePropTypes } from './table'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeFilterPanel } from './filter'
 import { VxeTooltipPropTypes } from './tooltip'
@@ -11,11 +10,11 @@ import { VxeTooltipPropTypes } from './tooltip'
  * 组件 - 表格列
  * @example import { VxeColumn } from 'vxe-table'
  */
-export const VxeColumn: VXEComponent<VxeColumnProps>
+export const VxeColumn: VXEComponent<VxeColumnProps<any>>
 /**
  * 组件 - 表格列
  */
-export const Column: VXEComponent<VxeColumnProps>
+export const Column: VXEComponent<VxeColumnProps<any>>
 
 export namespace VxeColumnPropTypes {
   export type ColId = string | number
@@ -33,20 +32,20 @@ export namespace VxeColumnPropTypes {
   export type ShowOverflow = VxeTablePropTypes.ShowOverflow
   export type ShowHeaderOverflow = ShowOverflow
   export type ShowFooterOverflow = ShowOverflow
-  export type ClassName = string | ((params: VxeGlobalRendererHandles.RenderCellParams) => string | any[] | { [key: string]: boolean })
-  export type HeaderClassName = string | ((params: VxeGlobalRendererHandles.RenderHeaderParams) => string | any[] | { [key: string]: boolean })
-  export type FooterClassName = string | ((params: VxeGlobalRendererHandles.RenderFooterParams) => string | any[] | { [key: string]: boolean })
+  export type ClassName<D = VxeTableDataRow> = string | ((params: VxeGlobalRendererHandles.RenderCellParams<D>) => string | any[] | { [key: string]: boolean })
+  export type HeaderClassName<D = VxeTableDataRow> = string | ((params: VxeGlobalRendererHandles.RenderHeaderParams<D>) => string | any[] | { [key: string]: boolean })
+  export type FooterClassName<D = VxeTableDataRow> = string | ((params: VxeGlobalRendererHandles.RenderFooterParams<D>) => string | any[] | { [key: string]: boolean })
 
-  export type Formatter = ((params: {
+  export type Formatter<D = VxeTableDataRow> = ((params: {
     cellValue: any
-    column: VxeTableDefines.ColumnInfo
-    row: any
+    column: VxeTableDefines.ColumnInfo<D>
+    row: D
   }) => string | number) | any[] | string
 
   export type Sortable = boolean
-  export type SortBy = string | ((params: {
-    row: any
-    column: VxeTableDefines.ColumnInfo
+  export type SortBy<D = VxeTableDataRow> = string | ((params: {
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
   }) => string | number)
   export type SortType = 'auto' | 'string' | 'number' | null
 
@@ -61,27 +60,27 @@ export namespace VxeColumnPropTypes {
 
   export type FilterMultiple = boolean
 
-  interface FilterMethodParams {
-    $table: VxeTableConstructor,
+  interface FilterMethodParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>,
     value: any
     option: VxeTableDefines.FilterOption
     cellValue: any
-    row: any
-    column: VxeTableDefines.ColumnInfo
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
   }
-  export type FilterMethod = (params: FilterMethodParams) => boolean
+  export type FilterMethod<D = VxeTableDataRow> = (params: FilterMethodParams<D>) => boolean
 
-  interface FilterResetMethodParams {
+  interface FilterResetMethodParams<D = VxeTableDataRow> {
     options: VxeTableDefines.FilterOption[]
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
   }
   export type FilterResetMethod = (params: FilterResetMethodParams) => void
 
-  interface FilterRecoverMethodParams {
+  interface FilterRecoverMethodParams<D = VxeTableDataRow> {
     option: VxeTableDefines.FilterOption
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
   }
-  export type FilterRecoverMethod = (params: FilterRecoverMethodParams) => void
+  export type FilterRecoverMethod<D = VxeTableDataRow> = (params: FilterRecoverMethodParams<D>) => void
 
   /**
    * 筛选渲染配置项
@@ -97,20 +96,20 @@ export namespace VxeColumnPropTypes {
   export type TreeNode = boolean
   export type Visible = boolean
 
-  interface ExportMethodParams {
-    $table: VxeTableConstructor,
-    row: any
-    column: VxeTableDefines.ColumnInfo
+  interface ExportMethodParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>,
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
   }
-  export type ExportMethod = (params: ExportMethodParams) => string | number
+  export type ExportMethod<D = VxeTableDataRow> = (params: ExportMethodParams<D>) => string | number
 
-  interface FooterExportParams {
-    $table: VxeTableConstructor,
+  interface FooterExportParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>,
     items: any[]
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<D>
     _columnIndex: number
   }
-  export type FooterExportMethod = (params: FooterExportParams) => string | number
+  export type FooterExportMethod<D = VxeTableDataRow> = (params: FooterExportParams<D>) => string | number
 
   export interface TitlePrefix {
     useHTML?: VxeTooltipPropTypes.UseHTML
@@ -128,8 +127,8 @@ export namespace VxeColumnPropTypes {
 
   export type CellType = 'auto' | 'number' | 'string'
 
-  export interface CellRender extends VxeGlobalRendererHandles.RenderOptions {
-    events?: { [key: string]: (cellParams: DefaultSlotParams, ...args: any[]) => any }
+  export interface CellRender<D = VxeTableDataRow> extends VxeGlobalRendererHandles.RenderOptions {
+    events?: { [key: string]: (cellParams: DefaultSlotParams<D>, ...args: any[]) => any }
     options?: any[]
     optionProps?: VxeGlobalRendererHandles.RenderOptionProps
     optionGroups?: any[]
@@ -140,7 +139,7 @@ export namespace VxeColumnPropTypes {
   /**
    * 编辑渲染配置项
    */
-  export interface EditRender extends VxeGlobalRendererHandles.RenderOptions {
+  export interface EditRender<D = VxeTableDataRow> extends VxeGlobalRendererHandles.RenderOptions {
     events?: { [key: string]: (cellParams: EditSlotParams, ...args: any[]) => any }
     enabled?: boolean
     options?: any[]
@@ -149,7 +148,7 @@ export namespace VxeColumnPropTypes {
     optionGroupProps?: VxeGlobalRendererHandles.RenderOptionGroupProps
     autofocus?: string
     autoselect?: boolean
-    defaultValue?: ((params: { column: VxeTableDefines.ColumnInfo }) => any) | null | undefined | string | number | RegExp | object | any[] | Date
+    defaultValue?: ((params: { column: VxeTableDefines.ColumnInfo<D> }) => any) | null | undefined | string | number | RegExp | object | any[] | Date
     immediate?: boolean
     content?: string
     placeholder?: string
@@ -167,42 +166,42 @@ export namespace VxeColumnPropTypes {
 
   export type Params = any
 
-  interface FilterSlotParams {
+  interface FilterSlotParams<D = VxeTableDataRow> {
     $panel: VxeFilterPanel
     column: {
       filters: VxeTableDefines.FilterOption[]
-    } & VxeTableDefines.ColumnInfo
+    } & VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     $rowIndex: number
   }
 
-  interface EditSlotParams {
-    column: VxeTableDefines.ColumnInfo
+  interface EditSlotParams<D = VxeTableDataRow> {
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
-    row: any
+    row: D
     rowIndex: number
     $rowIndex: number
   }
 
-  interface FooterSlotParams {
-    column: VxeTableDefines.ColumnInfo
+  interface FooterSlotParams<D = VxeTableDataRow> {
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     _columnIndex: number
     $columnIndex: number
     $rowIndex: number
     items: any[]
-    data: any[][]
+    data: D[][]
   }
 
-  interface HeaderSlotParams extends VxeTableDefines.CellRenderHeaderParams { }
+  interface HeaderSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderHeaderParams<D> { }
 
-  interface ContentSlotParams {
-    column: VxeTableDefines.ColumnInfo
+  interface ContentSlotParams<D = VxeTableDataRow> {
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
-    row: any
+    row: D
     rowIndex: number
     $rowIndex: number
     isHidden: boolean
@@ -210,25 +209,25 @@ export namespace VxeColumnPropTypes {
     type: string
   }
 
-  interface DefaultSlotParams extends VxeTableDefines.CellRenderBodyParams { }
+  interface DefaultSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderBodyParams<D> { }
 
-  interface IconSlotParams extends DefaultSlotParams { }
+  interface IconSlotParams<D = VxeTableDataRow> extends DefaultSlotParams<D> { }
 
-  export type Slots = {
-    title?: string | ((params: HeaderSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    radio?: string | ((params: DefaultSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    checkbox?: string | ((params: DefaultSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    default?: string | ((params: DefaultSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    header?: string | ((params: HeaderSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    footer?: string | ((params: FooterSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    content?: string | ((params: ContentSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    filter?: string | ((params: FilterSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    edit?: string | ((params: EditSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
-    icon?: string | ((params: IconSlotParams) => SlotVNodeType[] | SlotVNodeType) | null
+  export type Slots<D = VxeTableDataRow> = {
+    title?: string | ((params: HeaderSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    radio?: string | ((params: DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    checkbox?: string | ((params: DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    default?: string | ((params: DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    header?: string | ((params: HeaderSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    footer?: string | ((params: FooterSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    content?: string | ((params: ContentSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    filter?: string | ((params: FilterSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    edit?: string | ((params: EditSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    icon?: string | ((params: IconSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
   }
 }
 
-export type VxeColumnProps = {
+export type VxeColumnProps<D = VxeTableDataRow> = {
   colId?: VxeColumnPropTypes.ColId
   /**
    * 渲染类型
@@ -289,19 +288,19 @@ export type VxeColumnProps = {
   /**
    * 给单元格附加 className
    */
-  className?: VxeColumnPropTypes.ClassName
+  className?: VxeColumnPropTypes.ClassName<D>
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: VxeColumnPropTypes.HeaderClassName
+  headerClassName?: VxeColumnPropTypes.HeaderClassName<D>
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: VxeColumnPropTypes.FooterClassName
+  footerClassName?: VxeColumnPropTypes.FooterClassName<D>
   /**
    * 格式化显示内容
    */
-  formatter?: VxeColumnPropTypes.Formatter
+  formatter?: VxeColumnPropTypes.Formatter<D>
   /**
    * 是否允许排序
    */
@@ -309,7 +308,7 @@ export type VxeColumnProps = {
   /**
    * 自定义排序的属性
    */
-  sortBy?: VxeColumnPropTypes.SortBy
+  sortBy?: VxeColumnPropTypes.SortBy<D>
   /**
    * 排序的字段类型，比如字符串转数值等
    */
@@ -325,7 +324,7 @@ export type VxeColumnProps = {
   /**
    * 自定义筛选方法
    */
-  filterMethod?: VxeColumnPropTypes.FilterMethod
+  filterMethod?: VxeColumnPropTypes.FilterMethod<D>
   /**
    * 筛选模板配置项
    */
@@ -341,11 +340,11 @@ export type VxeColumnProps = {
   /**
    * 自定义单元格数据导出方法
    */
-  exportMethod?: VxeColumnPropTypes.ExportMethod
+  exportMethod?: VxeColumnPropTypes.ExportMethod<D>
   /**
    * 自定义表尾单元格数据导出方法
    */
-  footerExportMethod?: VxeColumnPropTypes.FooterExportMethod
+  footerExportMethod?: VxeColumnPropTypes.FooterExportMethod<D>
   /**
    * 已废弃，被 titlePrefix 替换
    * @deprecated
@@ -362,11 +361,11 @@ export type VxeColumnProps = {
   /**
    * 单元格渲染配置项
    */
-  cellRender?: VxeColumnPropTypes.CellRender
+  cellRender?: VxeColumnPropTypes.CellRender<D>
   /**
    * 单元格编辑渲染配置项
    */
-  editRender?: VxeColumnPropTypes.EditRender
+  editRender?: VxeColumnPropTypes.EditRender<D>
   /**
    * 内容渲染配置项
    */

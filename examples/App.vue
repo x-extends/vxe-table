@@ -4,16 +4,7 @@
       <div class="left">
         <a href="/vxe-table/">
           <img src="/vxe-table/logo.png" width="18">
-          <span class="title">vxe-table</span>
-        </a>
-        <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
-          <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=gvp' alt='star'>
-        </a>
-        <a href="https://github.com/x-extends/vxe-table/stargazers">
-          <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
-        </a>
-        <a href="http://npm-stat.com/charts.html?package=vxe-table">
-          <img src="https://img.shields.io/npm/dm/vxe-table.svg">
+          <span class="title">该文档已废弃，官网文档地址：<a href="https://github.com/x-extends/vxe-table-docs">https://github.com/x-extends/vxe-table-docs</a></span>
         </a>
       </div>
       <div class="right">
@@ -70,11 +61,11 @@
           <div class="docs">
             <template v-if="appData.apiList.length">
               <ul class="nav-menu">
-                <li class="is-warn">
+                <!-- <li class="is-warn">
                   <router-link class="nav-link" :to="{name: 'StartUpgrade'}">
                     <span>注意事项</span>
                   </router-link>
-                </li>
+                </li> -->
                 <li v-for="(item, index) in appData.apiList" :key="index" :class="{expand: item.expand}">
                   <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
                     <i class="vxe-icon-arrow-right nav-link-icon"></i>

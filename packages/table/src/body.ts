@@ -139,7 +139,8 @@ export default defineComponent({
       const { height: rowHeight } = rowOpts
       const renderOpts = editRender || cellRender
       const compConf = renderOpts ? VXETable.renderer.get(renderOpts.name) : null
-      const cellClassName = compConf ? compConf.cellClassName : ''
+      const compCellClassName = compConf ? compConf.cellClassName : ''
+      const compCellStyle = compConf ? compConf.cellStyle : ''
       const showAllTip = tooltipOpts.showAll
       const columnIndex = $xetable.getColumnIndex(column)
       const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -303,7 +304,7 @@ export default defineComponent({
             'col--valid-error': hasValidError,
             'col--current': currentColumn === column
           },
-          getPropClass(cellClassName, params),
+          getPropClass(compCellClassName, params),
           getPropClass(className, params),
           getPropClass(allCellClassName, params)
         ],
@@ -311,7 +312,7 @@ export default defineComponent({
         ...attrs,
         style: Object.assign({
           height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
-        }, cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null),
+        }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
         ...tdOns
       }, tdVNs)
     }
