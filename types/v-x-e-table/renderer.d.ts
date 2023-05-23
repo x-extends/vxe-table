@@ -1,5 +1,5 @@
 import { CreateElement } from 'vue'
-import { SlotVNodeType, RowInfo, VNodeStyle } from '../component'
+import { SlotVNodeType, RowInfo, VNodeStyle, VNodeClassName } from '../component'
 import { Table } from '../table'
 import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
@@ -33,7 +33,7 @@ export interface RendererMapOptions {
   isFooter?: boolean;
 
   // 筛选渲染
-  filterClassName?: string | ((params: ColumnFilterRenderParams) => string | { [key: string]: boolean })
+  filterClassName?: string | ((params: ColumnFilterRenderParams) => string | VNodeClassName)
   showFilterFooter?: boolean;
   renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): SlotVNodeType | SlotVNodeType[];
   filterMethod?(params: ColumnFilterMethodParams): boolean;
@@ -42,8 +42,8 @@ export interface RendererMapOptions {
   defaultFilterMethod?(params: ColumnFilterMethodParams): boolean;
 
   // 单元格渲染
-  cellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | { [key: string]: boolean })
-  cellStyle?: string | VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | VNodeStyle)
+  cellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | VNodeClassName)
+  cellStyle?:  VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => VNodeStyle)
   renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
   renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
   renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): SlotVNodeType | SlotVNodeType[];
@@ -63,10 +63,12 @@ export interface RendererMapOptions {
   renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): SlotVNodeType | SlotVNodeType[];
 
   // 表单-项渲染
-  itemClassName?: string | ((params: FormItemRenderParams) => string | { [key: string]: boolean })
-  itemStyle?: string | VNodeStyle | ((params: FormItemRenderParams) => string | VNodeStyle)
-  itemContentClassName?: string | ((params: FormItemRenderParams) => string | { [key: string]: boolean })
-  itemContentStyle?: string | VNodeStyle | ((params: FormItemRenderParams) => string | VNodeStyle)
+  itemClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+  itemStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+  itemContentClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+  itemContentStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+  itemTitleClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+  itemTitleStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
   renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
   renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
   itemVisibleMethod?(params: FormItemVisibleParams): boolean;

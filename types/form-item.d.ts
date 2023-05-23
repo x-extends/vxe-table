@@ -38,6 +38,7 @@ export class FormItem extends VXETableComponent {
    * 后缀配置项
    */
   titleSuffix?: FormItemTitleOptions;
+  showTitle?: boolean
   /**
    * 重置时的默认值
    */
@@ -93,6 +94,7 @@ export interface FormItemOptions {
    * 后缀配置项
    */
   titleSuffix?: FormItemTitleOptions;
+  showTitle?: boolean
   /**
    * 重置时的默认值
    */

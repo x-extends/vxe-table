@@ -23,4 +23,7 @@ export interface RowInfo {
   [key: string]: any;
 }
 
+export type VNodeStyle = Record<string, string | number>
+export type VNodeClassName = Record<string, boolean>
+
 export type SlotVNodeType = VNode | string | number
