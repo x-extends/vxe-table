@@ -467,33 +467,33 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
   /**
    * 用于 row-config.isCurrent，获取当前行的行数据
    */
-  getCurrentRecord(): any
+  getCurrentRecord(): DT | null
   /**
    * 用于 type=radio，获取当已选中的行数据
    */
-  getRadioRecord(isFull?: boolean): any
+  getRadioRecord(isFull?: boolean): DT | null
   /**
    * 用于 column-config.isCurrent，设置某列行为高亮状态
    * @param columnOrField 列对象或字段名
    */
-  setCurrentColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>): Promise<any>
+  setCurrentColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>): Promise<void>
   /**
    * 用于 column-config.isCurrent，手动清空当前高亮的状态
    */
-  clearCurrentColumn(): Promise<any>
+  clearCurrentColumn(): Promise<void>
   /**
    * 手动对表格进行排序
    * @param sortConfs 字段名、多列排序
    * @param order 排序方式
    */
-  sort(field: string, order?: VxeTablePropTypes.SortOrder): Promise<any>
-  sort(sortConfs: VxeTableDefines.SortConfs, order?: VxeTablePropTypes.SortOrder): Promise<any>
-  sort(sortConfs: VxeTableDefines.SortConfs[], order?: VxeTablePropTypes.SortOrder): Promise<any>
+  sort(field: string, order?: VxeTablePropTypes.SortOrder): Promise<void>
+  sort(sortConfs: VxeTableDefines.SortConfs, order?: VxeTablePropTypes.SortOrder): Promise<void>
+  sort(sortConfs: VxeTableDefines.SortConfs[], order?: VxeTablePropTypes.SortOrder): Promise<void>
   /**
    * 手动清空排序条件，数据会恢复成未排序的状态
    * @param columnOrField 列对象或字段名
    */
-  clearSort(fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null): Promise<any>
+  clearSort(fieldOrColumn?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null): Promise<void>
   /**
    * 判断指定列是否为排序状态，如果为空则判断所有列
    * @param columnOrField 列对象或字段名
@@ -2441,13 +2441,13 @@ export namespace VxeTableDefines {
     newValue: any
     oldValue: any
   }
-  export interface CurrentChangeEventParams<D = VxeTableDataRow> extends TableEventParams<D>, CurrentChangeParams { }
+  export interface CurrentChangeEventParams<D = VxeTableDataRow> extends TableEventParams<D>, CurrentChangeParams<D> { }
 
   export interface RadioChangeParams<D = VxeTableDataRow> extends TableBaseCellParams<D> {
     newValue: any
     oldValue: any
   }
-  export interface RadioChangeEventParams<D = VxeTableDataRow> extends TableEventParams<D>, RadioChangeParams { }
+  export interface RadioChangeEventParams<D = VxeTableDataRow> extends TableEventParams<D>, RadioChangeParams<D> { }
 
   export interface CheckboxChangeParams<D = VxeTableDataRow> extends TableBaseCellParams<D> {
     checked: boolean
