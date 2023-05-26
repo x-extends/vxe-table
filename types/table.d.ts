@@ -1598,6 +1598,10 @@ export namespace VxeTablePropTypes {
    */
   export interface AreaConfig<D = VxeTableDataRow> {
     /**
+     * 只对 mouse-config.area 启用后有效，启用多区域选取功能
+     */
+    multiple?: boolean
+    /**
      * 只对 mouse-config.area 启用后有效，点击列头是否选取当前列的所有单元格
      */
     selectCellByHeader?: boolean

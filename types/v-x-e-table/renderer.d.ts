@@ -1,5 +1,5 @@
 import { SlotVNodeType, VNodeStyle, VNodeClassName } from '../component'
-import { VxeTableDefines, VxeTableConstructor, VxeTablePropTypes, VxeTableDataRow } from '../table'
+import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, VxeTableDataRow } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
 import { VxeFilterPanel } from '../filter'
@@ -46,8 +46,8 @@ export interface DefineRendererOption<T> {
   renderExpand?(renderOpts: VxeGlobalRendererHandles.RenderExpandOptions, params: VxeGlobalRendererHandles.RenderExpandParams): T
 
   // 工具栏-按钮渲染
-  renderToolbarButton?(renderOpts: VxeGlobalRendererHandles.RenderButtonOptions, params: VxeGlobalRendererHandles.RenderButtonParams): T
-  renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams): T
+  renderToolbarButton?(renderOpts: VxeGlobalRendererHandles.RenderButtonOptions, params: VxeGlobalRendererHandles.RenderButtonParams<any>): T
+  renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams<any>): T
 
   // 表单-项渲染
   itemClassName?: string | ((params: VxeGlobalRendererHandles.RenderItemTitleParams) => string | VNodeClassName)
@@ -73,7 +73,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderParams {}
 
   export type RenderFilterParams<D = VxeTableDataRow> = {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     $panel: VxeFilterPanel
     column: {
       filters: VxeTableDefines.FilterOption[]
@@ -84,7 +84,7 @@ export namespace VxeGlobalRendererHandles {
   }
 
   export type FilterMethodParams<D = VxeTableDataRow> = {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     value: any
     option: VxeTableDefines.FilterOption
     cellValue: any
@@ -93,17 +93,17 @@ export namespace VxeGlobalRendererHandles {
   }
 
   export interface FilterRemoteMethod<D = VxeTableDataRow> extends VxeTableDefines.FilterChangeParams<D> {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
   }
 
   export interface FilterResetMethodParams<D = VxeTableDataRow> {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     options: VxeTableDefines.FilterOption[]
     column: VxeTableDefines.ColumnInfo<D>
   }
 
   export interface FilterRecoverMethodParams<D = VxeTableDataRow> {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     option: VxeTableDefines.FilterOption
     column: VxeTableDefines.ColumnInfo<D>
   }
@@ -111,7 +111,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderHeaderOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
   export interface RenderHeaderParams<D = VxeTableDataRow> {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
@@ -124,7 +124,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderFooterOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
   export interface RenderFooterParams<D = VxeTableDataRow> {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     _columnIndex: number
@@ -150,7 +150,7 @@ export namespace VxeGlobalRendererHandles {
   export type RenderEditOptions = VxeColumnPropTypes.EditRender
 
   export interface RenderEditParams<D = VxeTableDataRow> {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     $grid: VxeGridConstructor<D> | null
     column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
@@ -166,7 +166,7 @@ export namespace VxeGlobalRendererHandles {
 
   export type RenderCellOptions<D = VxeTableDataRow> = VxeColumnPropTypes.EditRender<D>
   export type RenderCellParams<D = VxeTableDataRow> = {
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     $grid: VxeGridConstructor<D> | null
     column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
@@ -181,19 +181,19 @@ export namespace VxeGlobalRendererHandles {
   }
 
   export interface RenderExpandOptions extends VxeColumnPropTypes.ContentRender { }
-  export type RenderExpandParams = RenderEditParams
+  export type RenderExpandParams<D = VxeTableDataRow> = RenderEditParams<D>
 
   export interface RenderButtonOptions extends VxeGlobalRendererHandles.RenderOptions { }
-  export interface RenderButtonParams {
+  export interface RenderButtonParams<D = VxeTableDataRow> {
     $grid: VxeGridConstructor | null
-    $table: VxeTableConstructor
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     button: VxeToolbarPropTypes.ButtonConfig
   }
 
   export interface RenderToolOptions extends VxeGlobalRendererHandles.RenderOptions { }
-  export interface RenderToolParams {
+  export interface RenderToolParams<D = VxeTableDataRow> {
     $grid: VxeGridConstructor | null
-    $table: VxeTableConstructor
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     tool: VxeToolbarPropTypes.ToolConfig
   }
 
@@ -206,8 +206,8 @@ export namespace VxeGlobalRendererHandles {
 
   export type RenderEmptyOptions = VxeTablePropTypes.EmptyRender
 
-  export interface RenderEmptyParams {
-    $table: VxeTableConstructor
+  export interface RenderEmptyParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
   }
 
   /**
