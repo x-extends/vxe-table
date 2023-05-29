@@ -241,6 +241,7 @@ export default {
   props: {
     value: null,
     clearable: Boolean,
+    name: String,
     placeholder: String,
     loading: Boolean,
     disabled: Boolean,
@@ -429,6 +430,7 @@ export default {
         props: {
           clearable: this.clearable,
           placeholder: this.placeholder,
+          name: this.name,
           readonly: true,
           disabled: disabled,
           type: 'text',

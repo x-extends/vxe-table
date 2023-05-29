@@ -4,16 +4,16 @@
     <p class="tip">下拉框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
 
     <p>
-      <vxe-select v-model="value10" placeholder="默认尺寸">
+      <vxe-select v-model="value10" name="value10" placeholder="默认尺寸">
         <vxe-option v-for="num in 15" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value11" placeholder="中等尺寸" size="medium">
+      <vxe-select v-model="value11" name="value11" placeholder="中等尺寸" size="medium">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value12" placeholder="小型尺寸" size="small">
+      <vxe-select v-model="value12" name="value12" placeholder="小型尺寸" size="small">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="value13" placeholder="超小尺寸" size="mini">
+      <vxe-select v-model="value13" name="value13" placeholder="超小尺寸" size="mini">
         <vxe-option v-for="num in 10" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
     </p>
