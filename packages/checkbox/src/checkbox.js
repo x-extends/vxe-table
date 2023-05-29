@@ -9,6 +9,7 @@ export default {
   props: {
     value: [String, Number, Boolean],
     label: [String, Number],
+    name: String,
     indeterminate: Boolean,
     title: [String, Number],
     content: [String, Number],
@@ -68,7 +69,8 @@ export default {
         class: 'vxe-checkbox--input',
         attrs: {
           type: 'checkbox',
-          disabled: isDisabled
+          disabled: isDisabled,
+          name: this.name
         },
         domProps: {
           checked: isChecked
