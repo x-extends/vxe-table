@@ -6,37 +6,73 @@ $btnThemeList: (
     name: "primary",
     textColor: var(--vxe-primary-color),
     btnColor: #fff,
-    btnBackground: var(--vxe-primary-color)
+    btnBackground: var(--vxe-primary-color),
+    focusColor: var(--vxe-primary-d10-color),
+    activeBackground: var(--vxe-primary-d3-color),
+    hoverColor: var(--vxe-primary-l10-color),
+    hoverBackground: var(--vxe-primary-l6-color),
+    disableColor: var(--vxe-primary-l20-color),
+    disableBackground: var(--vxe-primary-l20-color),
   ),
   (
     name: "success",
     textColor: var(--vxe-success-color),
     btnColor: #fff,
-    btnBackground: var(--vxe-success-color)
+    btnBackground: var(--vxe-success-color),
+    focusColor: var(--vxe-success-d10-color),
+    activeBackground: var(--vxe-success-d3-color),
+    hoverColor: var(--vxe-success-l10-color),
+    hoverBackground: var(--vxe-success-l6-color),
+    disableColor: var(--vxe-success-l20-color),
+    disableBackground: var(--vxe-success-l20-color),
   ),
   (
     name: "info",
     textColor: var(--vxe-info-color),
     btnColor: #fff,
-    btnBackground: var(--vxe-info-color)
+    btnBackground: var(--vxe-info-color),
+    focusColor: var(--vxe-info-d10-color),
+    activeBackground: var(--vxe-info-d3-color),
+    hoverColor: var(--vxe-info-l10-color),
+    hoverBackground: var(--vxe-info-l6-color),
+    disableColor: var(--vxe-info-l20-color),
+    disableBackground: var(--vxe-info-l20-color),
   ),
   (
     name: "warning",
     textColor: var(--vxe-warning-color),
     btnColor: #fff,
-    btnBackground: var(--vxe-warning-color)
+    btnBackground: var(--vxe-warning-color),
+    focusColor: var(--vxe-warning-d10-color),
+    activeBackground: var(--vxe-warning-d3-color),
+    hoverColor: var(--vxe-warning-l10-color),
+    hoverBackground: var(--vxe-warning-l6-color),
+    disableColor: var(--vxe-warning-l20-color),
+    disableBackground: var(--vxe-warning-l20-color),
   ),
   (
     name: "danger",
     textColor: var(--vxe-danger-color),
     btnColor: #fff,
-    btnBackground: var(--vxe-danger-color)
+    btnBackground: var(--vxe-danger-color),
+    focusColor: var(--vxe-danger-d10-color),
+    activeBackground: var(--vxe-danger-d3-color),
+    hoverColor: var(--vxe-danger-l10-color),
+    hoverBackground: var(--danger-l6-color),
+    disableColor: var(--vxe-danger-l20-color),
+    disableBackground: var(--vxe-danger-l20-color),
   ),
   (
     name: "perfect",
     textColor: var(--vxe-table-header-background-color),
     btnColor: var(--vxe-font-color),
-    btnBackground: var(--vxe-table-header-background-color)
+    btnBackground: var(--vxe-table-header-background-color),
+    focusColor: var(--vxe-rever-d10-color),
+    activeBackground: var(--vxe-rever-d3-color),
+    hoverColor: var(--vxe-rever-l10-color),
+    hoverBackground: var(--rever-l6-color),
+    disableColor: var(--vxe-rever-l20-color),
+    disableBackground: var(--vxe-rever-l20-color),
   )
 );
 
@@ -94,18 +130,21 @@ $btnThemeList: (
     @for $index from 0 to length($btnThemeList) {
       $item: nth($btnThemeList, $index + 1);
       $textColor: map-get($item, textColor);
+      $focusColor: map-get($item, focusColor);
+      $hoverColor: map-get($item, hoverColor);
+      $disableColor: map-get($item, disableColor);
       &.theme--#{map-get($item, name)} {
         color: $textColor;
         &:not(.is--disabled) {
           &:focus {
-            color: darken($textColor, 10%);
+            color: $focusColor;
           }
           &:hover {
-            color: lighten($textColor, 10%);
+            color: $hoverColor;
           }
         }
         &.is--disabled {
-          color: lighten($textColor, 20%);
+          color: $disableColor;
         }
       }
     }
@@ -146,6 +185,9 @@ $btnThemeList: (
       $item: nth($btnThemeList, $index + 1);
       $btnColor: map-get($item, btnColor);
       $btnBackground: map-get($item, btnBackground);
+      $hoverBackground: map-get($item, hoverBackground);
+      $activeBackground: map-get($item, activeBackground);
+      $disableBackground: map-get($item, disableBackground);
       &.theme--#{map-get($item, name)} {
         color: $btnColor;
         &:not(.is--disabled) {
@@ -153,18 +195,18 @@ $btnThemeList: (
           background-color: $btnBackground;
           &:hover {
             color: $btnColor;
-            background-color: lighten($btnBackground, 6%);
-            border-color: lighten($btnBackground, 6%);
+            background-color: $hoverBackground;
+            border-color: $hoverBackground;
           }
           &:active {
             color: $btnColor;
-            background-color: darken($btnBackground, 3%);
-            border-color: darken($btnBackground, 3%);
+            background-color: $activeBackground;
+            border-color: $activeBackground;
           }
         }
         &.is--disabled {
-          border-color: lighten($btnBackground, 20%);
-          background-color: lighten($btnBackground, 20%);
+          border-color: $disableBackground;
+          background-color: $disableBackground;
         }
         &.is--loading {
           border-color: $btnBackground;
@@ -265,9 +307,9 @@ $btnThemeList: (
       &.type--text {
         @for $index from 0 to length($btnThemeList) {
           $item: nth($btnThemeList, $index + 1);
-          $textColor: map-get($item, textColor);
+          $hoverColor: map-get($item, hoverColor);
           &.theme--#{map-get($item, name)} {
-            color: lighten($textColor, 10%);
+            color: $hoverColor;
           }
         }
       }
@@ -275,11 +317,11 @@ $btnThemeList: (
         @for $index from 0 to length($btnThemeList) {
           $item: nth($btnThemeList, $index + 1);
           $btnColor: map-get($item, btnColor);
-          $btnBackground: map-get($item, btnBackground);
+          $hoverBackground: map-get($item, hoverBackground);
           &.theme--#{map-get($item, name)} {
             color: $btnColor;
-            background-color: lighten($btnBackground, 6%);
-            border-color: lighten($btnBackground, 6%);
+            background-color: $hoverBackground;
+            border-color: $hoverBackground;
           }
         }
       }

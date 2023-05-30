@@ -735,6 +735,7 @@ $iconWidth: 1.6em;
 @mixin getPanelStyle ($sizeIndex) {
   $fontSizeList: var(--vxe-font-size), var(--vxe-font-size-medium), var(--vxe-font-size-small), var(--vxe-font-size-mini);
   $timeWeekRowHeightList: var(--vxe-input-date-time-week-row-height-default), var(--vxe-input-date-time-week-row-height-medium), var(--vxe-input-date-time-week-row-height-small), var(--vxe-input-date-time-week-row-height-mini);
+  $timePickerBodyHeightList: var(--vxe-date-time-picker-body-height-default), var(--vxe-date-time-picker-body-height-medium), var(--vxe-date-time-picker-body-height-small), var(--vxe-date-time-picker-body-height-mini);
   $monthYearRowHeightList: var(--vxe-input-date-month-year-row-height-default), var(--vxe-input-date-month-year-row-height-medium), var(--vxe-input-date-month-year-row-height-small), var(--vxe-input-date-month-year-row-height-mini);
   $quarterRowHeightList: var(--vxe-input-date-quarter-row-height-default), var(--vxe-input-date-quarter-row-height-medium), var(--vxe-input-date-quarter-row-height-small), var(--vxe-input-date-quarter-row-height-mini);
   $titleRowHeightList: var(--vxe-input-date-title-height-default), var(--vxe-input-date-title-height-medium), var(--vxe-input-date-title-height-small), var(--vxe-input-date-title-height-mini);
@@ -819,7 +820,7 @@ $iconWidth: 1.6em;
   }
   .vxe-input--date-picker-body table,
   .vxe-input--time-picker-body {
-    height: nth($timeWeekRowHeightList, $sizeIndex) * 6 + nth($titleRowHeightList, $sizeIndex);
+    height: nth($timePickerBodyHeightList, $sizeIndex);
   }
   .vxe-input--time-picker-body {
     $ulWidthList: 48px, 48px, 44px, 42px;

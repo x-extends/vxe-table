@@ -8,7 +8,23 @@ import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import VxeInputComponent from '../../input/src/input'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeInputConstructor, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeOptgroupProps, VxeOptionProps, VxeFormDefines, VxeFormConstructor, VxeFormPrivateMethods, VxeInputDefines } from '../../../types/all'
+import {
+  VxeSelectPropTypes,
+  VxeSelectConstructor,
+  SelectReactData,
+  VxeSelectEmits,
+  VxeInputConstructor,
+  SelectMethods,
+  SelectPrivateRef,
+  VxeSelectMethods,
+  VxeOptgroupProps,
+  VxeOptionProps,
+  VxeFormDefines,
+  VxeFormConstructor,
+  VxeFormPrivateMethods,
+  VxeInputDefines,
+  CustomizeOptionGroups
+} from '../../../types/all'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -242,11 +258,11 @@ export default defineComponent({
       const labelField = computeLabelField.value
       if (isGroup) {
         if (filterable && filterMethod) {
-          reactData.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && filterMethod({ group, option: null, searchValue }))
+          reactData.visibleGroupList = (fullGroupList as CustomizeOptionGroups).filter(group => isOptionVisible(group) && filterMethod({ group, option: null, searchValue }))
         } else if (filterable) {
-          reactData.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && (!searchValue || `${group[groupLabelField]}`.indexOf(searchValue) > -1))
+          reactData.visibleGroupList = (fullGroupList as CustomizeOptionGroups).filter(group => isOptionVisible(group) && (!searchValue || `${group[groupLabelField]}`.indexOf(searchValue) > -1))
         } else {
-          reactData.visibleGroupList = fullGroupList.filter(isOptionVisible)
+          reactData.visibleGroupList = (fullGroupList as CustomizeOptionGroups).filter(isOptionVisible)
         }
       } else {
         if (filterable && filterMethod) {
@@ -728,7 +744,7 @@ export default defineComponent({
             'is--hover': currentValue === optionValue
           }],
           // attrs
-          optid: optid,
+          optid,
           // event
           onMousedown: (evnt: MouseEvent) => {
             const isLeftBtn = evnt.button === 0
@@ -768,7 +784,7 @@ export default defineComponent({
             'is--disabled': isGroupDisabled
           }],
           // attrs
-          optid: optid
+          optid
         }, [
           h('div', {
             class: 'vxe-optgroup--title'
@@ -929,7 +945,7 @@ export default defineComponent({
           clearable: props.clearable,
           placeholder: props.placeholder,
           readonly: true,
-          disabled: disabled,
+          disabled,
           type: 'text',
           prefixIcon: props.prefixIcon,
           suffixIcon: loading ? GlobalConfig.icon.SELECT_LOADED : (visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE),

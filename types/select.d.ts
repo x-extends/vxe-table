@@ -30,11 +30,11 @@ export interface SelectPrivateRef {
   refElem: Ref<HTMLDivElement>
 }
 export interface VxeSelectPrivateRef extends SelectPrivateRef { }
-
+export type GroupOptionList = CustomizeOptionGroups|VxeSelectDefines.OptionInfo[]
 export interface SelectReactData {
   inited: boolean
   staticOptions: VxeSelectDefines.OptionInfo[]
-  fullGroupList: CustomizeOptionGroups
+  fullGroupList: GroupOptionList
   fullOptionList: any[]
   visibleGroupList: any[]
   visibleOptionList: any[]
@@ -49,6 +49,7 @@ export interface SelectReactData {
   currentValue: any
   visiblePanel: boolean
   animatVisible: boolean
+  searchValue: string
   isActivated: boolean
   searchLoading: boolean
 }
