@@ -25,8 +25,8 @@ export namespace VxeColumnPropTypes {
   export type MinWidth = number | string
   export type MaxWidth = number | string
   export type Resizable = boolean
-  export type Fixed = 'left' | 'right' | null
-  export type Align = 'left' | 'center' | 'right' | null
+  export type Fixed = 'left' | 'right' | '' | null
+  export type Align = 'left' | 'center' | 'right' | '' | null
   export type HeaderAlign = Align
   export type FooterAlign = Align
   export type ShowOverflow = VxeTablePropTypes.ShowOverflow
