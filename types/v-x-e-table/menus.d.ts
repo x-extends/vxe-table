@@ -1,4 +1,4 @@
-import { VxeTableConstructor, VxeTableDefines, VxeTableDataRow } from '../table'
+import { VxeTableConstructor, VxeTableDefines, VxeTableDataRow, VxeTablePrivateMethods } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeGlobalRendererHandles } from './renderer'
 
@@ -9,9 +9,11 @@ export namespace VxeGlobalMenusHandles {
 
   interface MenusParams<D = VxeTableDataRow> {
     $grid: VxeGridConstructor<D> | null
-    $table: VxeTableConstructor<D>
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
   }
   export interface MenusCallbackParams<D = VxeTableDataRow> extends MenusParams<D>, VxeGlobalRendererHandles.RenderCellParams<D> {
+    $grid: VxeGridConstructor<D> | null
+    $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     $event: MouseEvent
     menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption
   }
