@@ -12,33 +12,32 @@
 }
 
 .vxe-textarea--inner {
-  border-radius: $vxe-border-radius;
+  border-radius: var(--vxe-border-radius);
   outline: 0;
   font-size: inherit;
-  padding: 0 0.6em;
-  color: $vxe-font-color;
+  color: var(--vxe-font-color);
   line-height: inherit;
-  border: 1px solid $vxe-input-border-color;
-  background-color: $vxe-textarea-background-color;
+  border: 1px solid var(--vxe-input-border-color);
+  background-color: var(--vxe-textarea-background-color);
   display: block;
   padding: 0.3em 0.6em;
   &::placeholder {
-    color: $vxe-input-placeholder-color;
+    color: var(--vxe-input-placeholder-color);
   }
   &:focus {
-    border: 1px solid $vxe-primary-color;
+    border: 1px solid var(--vxe-primary-color);
   }
   &[disabled] {
     cursor: not-allowed;
-    background-color: $vxe-input-disabled-background-color;
+    background-color: var(--vxe-input-disabled-background-color);
   }
 }
 
 .vxe-textarea--inner,
 .vxe-textarea--autosize {
-  line-height: $vxe-textarea-line-height;
-  color: $vxe-font-color;
-  font-family: $vxe-font-family;
+  line-height: var(--vxe-textarea-line-height);
+  color: var(--vxe-font-color);
+  font-family: var(--vxe-font-family);
 }
 
 .vxe-textarea--autosize {
@@ -60,45 +59,45 @@
   bottom: 0.2em;
   right: 1.4em;
   padding-left: 0.2em;
-  color: $vxe-textarea-count-color;
-  background-color: $vxe-textarea-count-background-color;
+  color: var(--vxe-textarea-count-color);
+  background-color: var(--vxe-textarea-count-background-color);
   &.is--error {
-    color: $vxe-textarea-count-error-color;
+    color: var(--vxe-textarea-count-error-color);
   }
 }
 
 .vxe-textarea,
 .vxe-textarea--autosize {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }
 
 .vxe-textarea {
   &:not(.is--autosize) {
-    min-height: $vxe-input-height-default;
+    min-height: var(--vxe-input-height-default);
   }
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
     &:not(.is--autosize) {
-      min-height: $vxe-input-height-medium;
+      min-height: var(--vxe-input-height-medium);
     }
   }
   &.size--small {
     &:not(.is--autosize) {
-      min-height: $vxe-input-height-small;
+      min-height: var(--vxe-input-height-small);
     }
   }
   &.size--mini {
     &:not(.is--autosize) {
-      min-height: $vxe-input-height-mini;
+      min-height: var(--vxe-input-height-mini);
     }
   }
 }

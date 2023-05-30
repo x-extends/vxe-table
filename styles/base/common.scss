@@ -19,22 +19,22 @@
 }
 
 .vxe-primary-color {
-  color: $vxe-primary-color;
+  color: var(--vxe-primary-color);
 }
 .vxe-success-color {
-  color: $vxe-success-color;
+  color: var(--vxe-success-color);
 }
 .vxe-info-color {
-  color: $vxe-info-color;
+  color: var(--vxe-info-color);
 }
 .vxe-warning-color {
-  color: $vxe-warning-color;
+  color: var(--vxe-warning-color);
 }
 .vxe-danger-color {
-  color: $vxe-danger-color;
+  color: var(--vxe-danger-color);
 }
 .vxe-perfect-color {
-  color: $vxe-table-header-background-color;
+  color: var(--vxe-table-header-background-color);
 }
 
 // 24 栅格布局

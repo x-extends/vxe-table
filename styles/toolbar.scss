@@ -8,9 +8,9 @@
   flex-direction: row;
   align-items: center;
   padding: 0.6em 0;
-  color: $vxe-font-color;
-  font-family: $vxe-font-family;
-  background-color: $vxe-toolbar-background-color;
+  color: var(--vxe-font-color);
+  font-family: var(--vxe-font-family);
+  background-color: var(--vxe-toolbar-background-color);
   &:after {
     content: "";
     display: block;
@@ -20,9 +20,9 @@
     visibility: hidden;
   }
   &.is--perfect {
-    border: 1px solid $vxe-table-border-color;
+    border: 1px solid var(--vxe-table-border-color);
     border-bottom-width: 0;
-    background-color: $vxe-table-header-background-color;
+    background-color: var(--vxe-table-header-background-color);
   }
   &.is--loading {
     &:before {
@@ -32,9 +32,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: $vxe-loading-z-index;
+      z-index: var(--vxe-loading-z-index);
       user-select: none;
-      background-color: $vxe-loading-background-color;
+      background-color: var(--vxe-loading-background-color);
     }
   }
   .vxe-buttons--wrapper {
@@ -83,7 +83,7 @@
     margin-left: 0.8em;
     &.is--active {
       & > .vxe-button {
-        background-color: $vxe-toolbar-custom-active-background-color;
+        background-color: var(--vxe-toolbar-custom-active-background-color);
         border-radius: 50%;
       }
       .vxe-custom--option-wrapper {
@@ -96,22 +96,22 @@
     position: absolute;
     right: 2px;
     text-align: left;
-    background-color: $vxe-toolbar-panel-background-color;
+    background-color: var(--vxe-toolbar-panel-background-color);
     z-index: 19;
-    border: 1px solid $vxe-table-border-color;
-    border-radius: $vxe-border-radius;
+    border: 1px solid var(--vxe-table-border-color);
+    border-radius: var(--vxe-border-radius);
     box-shadow: 0 1px 6px rgba(0,0,0,.2);
     .vxe-custom--header {
       padding: 0.28em 0;
       font-weight: 700;
-      border-bottom: 1px solid $vxe-table-popup-border-color;
+      border-bottom: 1px solid var(--vxe-table-popup-border-color);
     }
     .vxe-custom--body {
       padding: 0.2em 0;
       max-height: 17.6em;
       .vxe-custom--option {
         &:hover {
-          background-color: $vxe-table-row-hover-background-color;
+          background-color: var(--vxe-table-row-hover-background-color);
         }
       }
     }
@@ -133,21 +133,21 @@
       }
     }
     .vxe-custom--footer {
-      border-top: 1px solid $vxe-table-popup-border-color;
+      border-top: 1px solid var(--vxe-table-popup-border-color);
       text-align: right;
       button {
         background-color: transparent;
         width: 50%;
         height: 2.5em;
         border: 0;
-        color: $vxe-font-color;
+        color: var(--vxe-font-color);
         text-align: center;
         cursor: pointer;
         &:focus {
           outline: none;
         }
         &:hover {
-          color: $vxe-primary-color;
+          color: var(--vxe-primary-color);
         }
       }
     }
@@ -174,14 +174,14 @@
 }
 
 .vxe-toolbar {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }

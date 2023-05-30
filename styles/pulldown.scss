@@ -5,7 +5,7 @@
 .vxe-pulldown {
   position: relative;
   display: inline-block;
-  color: $vxe-font-color;
+  color: var(--vxe-font-color);
   text-align: left;
 }
 
@@ -14,7 +14,7 @@
   position: absolute;
   left: 0;
   padding: 4px 0;
-  color: $vxe-font-color;
+  color: var(--vxe-font-color);
   text-align: left;
   &:not(.is--transfer) {
     min-width: 100%;
@@ -39,19 +39,19 @@
   }
 }
 .vxe-pulldown--wrapper {
-  background-color: $vxe-pulldown-panel-background-color;
+  background-color: var(--vxe-pulldown-panel-background-color);
 }
 
 .vxe-pulldown,
 .vxe-pulldown--panel {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }

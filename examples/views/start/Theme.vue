@@ -5,10 +5,10 @@
     <pre>
       <pre-code class="scss">
         // 修改样式变量
-        $vxe-font-size: 14px;
-        $vxe-font-color: #666;
-        $vxe-primary-color: #409eff;
-        $vxe-table-font-color: $vxe-font-color;
+        var(--vxe-font-size): 14px;
+        var(--vxe-font-color): #666;
+        var(--vxe-primary-color): #409eff;
+        $vxe-table-font-color: var(--vxe-font-color);
         $vxe-table-border-color: #e8eaec;
         $vxe-table-border-radius: 4px;
         // ...
@@ -22,10 +22,10 @@
         @import 'vxe-table/styles/variable.scss';
 
         // 修改样式变量
-        $vxe-font-size: 14px;
-        $vxe-font-color: #666;
-        $vxe-primary-color: #409eff;
-        $vxe-table-font-color: $vxe-font-color;
+        var(--vxe-font-size): 14px;
+        var(--vxe-font-color): #666;
+        var(--vxe-primary-color): #409eff;
+        $vxe-table-font-color: var(--vxe-font-color);
         $vxe-table-border-color: #e8eaec;
         $vxe-table-border-radius: 4px;
         // ...
@@ -39,10 +39,10 @@
         @import 'vxe-table/styles/variable.scss';
 
         // 修改样式变量
-        $vxe-font-size: 14px;
-        $vxe-font-color: #666;
-        $vxe-primary-color: #409eff;
-        $vxe-table-font-color: $vxe-font-color;
+        var(--vxe-font-size): 14px;
+        var(--vxe-font-color): #666;
+        var(--vxe-primary-color): #409eff;
+        $vxe-table-font-color: var(--vxe-font-color);
         $vxe-table-border-color: #e8eaec;
         $vxe-table-border-radius: 4px;
         // ...

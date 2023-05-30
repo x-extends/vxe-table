@@ -4,7 +4,7 @@
   position: relative;
   display: block;
   padding: 0;
-  color: $vxe-font-color;
+  color: var(--vxe-font-color);
   direction: ltr;
   .vxe-list--virtual-wrapper {
     position: relative;

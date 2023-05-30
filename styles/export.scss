@@ -44,9 +44,9 @@
   }
   .vxe-export--panel-column {
     width: 80%;
-    border: 1px solid $vxe-input-border-color;
+    border: 1px solid var(--vxe-input-border-color);
     margin: 3px 0;
-    border-radius: $vxe-border-radius;
+    border-radius: var(--vxe-border-radius);
     user-select: none;
     & > ul {
       & > li {
@@ -64,9 +64,9 @@
     }
     .vxe-export--panel-column-header {
       padding: 0.1em 0;
-      background-color: $vxe-table-header-background-color;
+      background-color: var(--vxe-table-header-background-color);
       font-weight: 700;
-      border-bottom: 1px solid $vxe-table-border-color;
+      border-bottom: 1px solid var(--vxe-table-border-color);
     }
     .vxe-export--panel-column-body {
       padding: 0.2em 0;
@@ -94,24 +94,24 @@
       & > i {
         display: block;
       }
-      color: $vxe-primary-color;
+      color: var(--vxe-primary-color);
     }
   }
   .vxe-import-select--file {
-    border: 1px dashed $vxe-input-border-color;
+    border: 1px dashed var(--vxe-input-border-color);
     padding: 6px 34px;
     outline: 0;
-    border-radius: $vxe-border-radius;
-    background-color: $vxe-input-background-color;
+    border-radius: var(--vxe-border-radius);
+    background-color: var(--vxe-input-background-color);
     user-select: none;
     cursor: pointer;
     &:focus {
-      border-color: $vxe-primary-color;
-      box-shadow: 0 0 0.25em 0 $vxe-primary-color;
+      border-color: var(--vxe-primary-color);
+      box-shadow: 0 0 0.25em 0 var(--vxe-primary-color);
     }
     &:hover {
-      color: $vxe-primary-color;
-      border-color: $vxe-primary-color;
+      color: var(--vxe-primary-color);
+      border-color: var(--vxe-primary-color);
     }
   }
   .vxe-export--panel-btns {
