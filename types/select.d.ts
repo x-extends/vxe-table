@@ -104,7 +104,7 @@ export namespace VxeSelectPropTypes {
   export type Placement = string
   export type Options = VxeSelectDefines.SelectOptions[]
   export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps
-  export type OptionGroups = Array<VxeSelectDefines.SelectOptgroups[]| VxeSelectDefines.CustomizeOptionGroups>
+  export type OptionGroups = Array<VxeSelectDefines.SelectOptgroups[]| VxeSelectDefines.ICustomizeOptionGroups>
   export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps
   export type Filterable = boolean
   export type FilterMethod = (params: { group: any, option: any, searchValue: string }) => boolean
@@ -167,7 +167,7 @@ export type VxeSelectEmits = [
   'blur',
   'focus'
 ]
-
+declare type Recordable<T = any> = Record<string, T>;
 export type CustomizeOptionGroups =Array<{
   isCreated?: boolean
   /**
@@ -180,9 +180,10 @@ export type CustomizeOptionGroups =Array<{
    */
   disabled?: VxeOptionPropTypes.Disabled
   slots?: VxeOptionPropTypes.Slots
-}& Record<string, VxeOptionPropTypes.Label>& Record<string, VxeOptionProps[]>>
+}& Record<string, VxeOptionPropTypes.Label>& Record<string, VxeOptionProps[]>& Recordable>
 export namespace VxeSelectDefines {
-  export class OptionInfo {
+  export type ICustomizeOptionGroups = CustomizeOptionGroups
+  export class OptionInfo implements Recordable {
     id: string
 
     value: any

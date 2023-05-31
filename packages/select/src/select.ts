@@ -23,7 +23,7 @@ import {
   VxeFormConstructor,
   VxeFormPrivateMethods,
   VxeInputDefines,
-  CustomizeOptionGroups
+  CustomizeOptionGroups, Recordable
 } from '../../../types/all'
 
 function isOptionVisible (option: any) {
@@ -892,7 +892,7 @@ export default defineComponent({
 
     watch(() => props.optionGroups, (value) => {
       reactData.fullOptionList = []
-      reactData.fullGroupList = value || []
+      reactData.fullGroupList = (value || []) as Recordable[]
       cacheItemMap()
     })
 
