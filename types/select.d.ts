@@ -182,7 +182,6 @@ export type CustomizeOptionGroups =Array<{
   slots?: VxeOptionPropTypes.Slots
 }& Record<string, VxeOptionPropTypes.Label>& Record<string, VxeOptionProps[]>>
 export namespace VxeSelectDefines {
-  export type CustomizeOptionGroups = CustomizeOptionGroups
   export class OptionInfo {
     id: string
 
