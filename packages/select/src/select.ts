@@ -1,5 +1,22 @@
-import { defineComponent, h, Teleport, PropType, ref, Ref, inject, VNode, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted, createCommentVNode } from 'vue'
-import XEUtils from 'xe-utils'
+import {
+  defineComponent,
+  h,
+  Teleport,
+  PropType,
+  ref,
+  Ref,
+  inject,
+  VNode,
+  computed,
+  provide,
+  onUnmounted,
+  reactive,
+  nextTick,
+  watch,
+  onMounted,
+  watchEffect
+} from 'vue'
+import XEUtils, { isFunction } from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { getEventTargetNode, getAbsolutePos } from '../../tools/dom'
@@ -21,9 +38,7 @@ import {
   VxeOptionProps,
   VxeFormDefines,
   VxeFormConstructor,
-  VxeFormPrivateMethods,
-  VxeInputDefines,
-  CustomizeOptionGroups, Recordable
+  VxeFormPrivateMethods, VxeSelectDefines
 } from '../../../types/all'
 
 function isOptionVisible (option: any) {
@@ -43,7 +58,10 @@ export default defineComponent({
     loading: Boolean as PropType<VxeSelectPropTypes.Loading>,
     disabled: Boolean as PropType<VxeSelectPropTypes.Disabled>,
     multiple: Boolean as PropType<VxeSelectPropTypes.Multiple>,
-    multiCharOverflow: { type: [Number, String] as PropType<VxeSelectPropTypes.MultiCharOverflow>, default: () => GlobalConfig.select.multiCharOverflow },
+    multiCharOverflow: {
+      type: [Number, String] as PropType<VxeSelectPropTypes.MultiCharOverflow>,
+      default: () => GlobalConfig.select.multiCharOverflow
+    },
     prefixIcon: String as PropType<VxeSelectPropTypes.PrefixIcon>,
     placement: String as PropType<VxeSelectPropTypes.Placement>,
     options: Array as PropType<VxeSelectPropTypes.Options>,
@@ -53,7 +71,10 @@ export default defineComponent({
     optionConfig: Object as PropType<VxeSelectPropTypes.OptionConfig>,
     className: [String, Function] as PropType<VxeSelectPropTypes.ClassName>,
     max: { type: [String, Number] as PropType<VxeSelectPropTypes.Max>, default: null },
-    size: { type: String as PropType<VxeSelectPropTypes.Size>, default: () => GlobalConfig.select.size || GlobalConfig.size },
+    size: {
+      type: String as PropType<VxeSelectPropTypes.Size>,
+      default: () => GlobalConfig.select.size || GlobalConfig.size
+    },
     filterable: Boolean as PropType<VxeSelectPropTypes.Filterable>,
     filterMethod: Function as PropType<VxeSelectPropTypes.FilterMethod>,
     remote: Boolean as PropType<VxeSelectPropTypes.Remote>,
@@ -68,9 +89,7 @@ export default defineComponent({
   emits: [
     'update:modelValue',
     'change',
-    'clear',
-    'blur',
-    'focus'
+    'clear'
   ] as VxeSelectEmits,
   setup (props, context) {
     const { slots, emit } = context
@@ -97,13 +116,11 @@ export default defineComponent({
       visiblePanel: false,
       animatVisible: false,
       isActivated: false,
-      searchValue: '',
       searchLoading: false
     })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refInput = ref() as Ref<VxeInputConstructor>
-    const refInpSearch = ref() as Ref<VxeInputConstructor>
     const refOptionWrapper = ref() as Ref<HTMLDivElement>
     const refOptionPanel = ref() as Ref<HTMLDivElement>
 
@@ -169,7 +186,7 @@ export default defineComponent({
       return XEUtils.toNumber(props.multiCharOverflow)
     })
 
-    const callSlot = <T>(slotFunc: ((params: T) => JSX.Element[] | VNode[] | string[]) | string | null, params: T) => {
+    const callSlot = <T> (slotFunc: ((params: T) => JSX.Element[] | VNode[] | string[]) | string | null, params: T) => {
       if (slotFunc) {
         if (XEUtils.isString(slotFunc)) {
           slotFunc = slots[slotFunc] || null
@@ -215,7 +232,7 @@ export default defineComponent({
       return XEUtils.toValueString(item ? item[labelField as 'label'] : value)
     }
 
-    const computeSelectLabel = computed(() => {
+    /* const computeSelectLabel = computed(() => {
       const { modelValue, multiple, remote } = props
       const multiMaxCharNum = computeMultiMaxCharNum.value
       if (modelValue && multiple) {
@@ -235,8 +252,33 @@ export default defineComponent({
         return getRemoteSelectLabel(modelValue)
       }
       return getSelectLabel(modelValue)
-    })
-
+    }) */
+    const displaySelectLabel = ref('')
+    const calculateLabel = () => {
+      const { modelValue, multiple, remote } = props
+      const multiMaxCharNum = computeMultiMaxCharNum.value
+      if (modelValue && multiple) {
+        const vals = XEUtils.isArray(modelValue) ? modelValue : [modelValue]
+        if (remote) {
+          displaySelectLabel.value = vals.map(val => getRemoteSelectLabel(val)).join(', ')
+        } else {
+          displaySelectLabel.value = vals.map((val) => {
+            const label = getSelectLabel(val)
+            if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
+              return `${label.substring(0, multiMaxCharNum)}...`
+            }
+            return label
+          }).join(', ')
+        }
+      } else {
+        if (remote) {
+          displaySelectLabel.value = getRemoteSelectLabel(modelValue)
+        } else {
+          displaySelectLabel.value = getSelectLabel(modelValue)
+        }
+      }
+    }
+    watchEffect(calculateLabel)
     const getOptkey = () => {
       const optionOpts = computeOptionOpts.value
       return optionOpts.keyField || props.optionId || '_X_OPTION_KEY'
@@ -252,23 +294,44 @@ export default defineComponent({
      */
     const refreshOption = () => {
       const { filterable, filterMethod } = props
-      const { fullOptionList, fullGroupList, searchValue } = reactData
+      const { fullOptionList, fullGroupList } = reactData
       const isGroup = computeIsGroup.value
       const groupLabelField = computeGroupLabelField.value
       const labelField = computeLabelField.value
+      const valueField = computeValueField.value
+      const _filterMethod: VxeSelectPropTypes.FilterMethod = filterMethod && isFunction(filterMethod) ? filterMethod
+        : ({ group, option, searchValue }) =>
+            (group && group[groupLabelField].indexOf(searchValue) > -1) ||
+          (option && option[labelField].indexOf(searchValue) > -1)
       if (isGroup) {
-        if (filterable && filterMethod) {
-          reactData.visibleGroupList = (fullGroupList as CustomizeOptionGroups).filter(group => isOptionVisible(group) && filterMethod({ group, option: null, searchValue }))
-        } else if (filterable) {
-          reactData.visibleGroupList = (fullGroupList as CustomizeOptionGroups).filter(group => isOptionVisible(group) && (!searchValue || `${group[groupLabelField]}`.indexOf(searchValue) > -1))
+        // todo 没有filter methods的逻辑
+        if (filterable) {
+          /* group级别 能查找到 该级别全部展现。若不能则看children内是否有满足条件的，有则过滤后展现 */
+          reactData.visibleGroupList = fullGroupList.map(group => isOptionVisible(group) && (!displaySelectLabel.value || _filterMethod({
+            group,
+            option: null,
+            searchValue: displaySelectLabel.value
+          })) ? group : ({
+              ...group,
+              options: group.options ? group.options.filter(option => isOptionVisible(option) && (!displaySelectLabel.value || _filterMethod({
+                group: null,
+                option,
+                searchValue: displaySelectLabel.value
+              }))) : []
+            }))
         } else {
-          reactData.visibleGroupList = (fullGroupList as CustomizeOptionGroups).filter(isOptionVisible)
+          reactData.visibleGroupList = fullGroupList.filter(isOptionVisible).map(group => ({
+            ...group,
+            options: group.options ? group.options.filter(isOptionVisible) : []
+          }))
         }
       } else {
-        if (filterable && filterMethod) {
-          reactData.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && filterMethod({ group: null, option, searchValue }))
-        } else if (filterable) {
-          reactData.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && (!searchValue || `${option[labelField]}`.indexOf(searchValue) > -1))
+        if (filterable) {
+          reactData.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && _filterMethod({
+            group: null,
+            option,
+            searchValue: displaySelectLabel.value
+          }))
         } else {
           reactData.visibleOptionList = fullOptionList.filter(isOptionVisible)
         }
@@ -408,7 +471,7 @@ export default defineComponent({
     let hidePanelTimeout: number
 
     const showOptionPanel = () => {
-      const { loading, disabled, filterable } = props
+      const { loading, remote, remoteMethod, disabled, filterable } = props
       if (!loading && !disabled) {
         clearTimeout(hidePanelTimeout)
         if (!reactData.inited) {
@@ -416,7 +479,13 @@ export default defineComponent({
         }
         reactData.isActivated = true
         reactData.animatVisible = true
-        if (filterable) {
+        if (remote && remoteMethod) {
+          reactData.searchLoading = true
+          Promise.resolve(remoteMethod({ searchValue: displaySelectLabel.value })).then(() => nextTick()).catch(() => nextTick()).finally(() => {
+            reactData.searchLoading = false
+            refreshOption()
+          })
+        } else if (filterable) {
           refreshOption()
         }
         setTimeout(() => {
@@ -427,7 +496,7 @@ export default defineComponent({
             setCurrentOption(currOption)
             scrollToOption(currOption)
           }
-          handleFocusSearch()
+          // handleFocusSearch()
         }, 10)
         updateZindex()
         updatePlacement()
@@ -435,7 +504,7 @@ export default defineComponent({
     }
 
     const hideOptionPanel = () => {
-      reactData.searchValue = ''
+      calculateLabel()
       reactData.searchLoading = false
       reactData.visiblePanel = false
       hidePanelTimeout = window.setTimeout(() => {
@@ -642,52 +711,22 @@ export default defineComponent({
       hideOptionPanel()
     }
 
-    const handleFocusSearch = () => {
-      if (props.filterable) {
-        nextTick(() => {
-          const inpSearch = refInpSearch.value
-          if (inpSearch) {
-            inpSearch.focus()
-          }
-        })
-      }
-    }
-
-    const focusEvent = (evnt: FocusEvent) => {
+    const focusEvent = () => {
       if (!props.disabled) {
         reactData.isActivated = true
+        showOptionPanel()
       }
-      selectMethods.dispatchEvent('focus', {}, evnt)
     }
 
-    const blurEvent = (evnt: FocusEvent) => {
+    const blurEvent = () => {
       reactData.isActivated = false
-      selectMethods.dispatchEvent('blur', {}, evnt)
     }
 
-    const modelSearchEvent = (value: string) => {
-      reactData.searchValue = value
-    }
-
-    const focusSearchEvent = () => {
-      reactData.isActivated = true
-    }
-
-    const keydownSearchEvent = (params: VxeInputDefines.KeydownEventParams) => {
-      const { $event } = params
-      const isEnter = hasEventKey($event, EVENT_KEYS.ENTER)
-      if (isEnter) {
-        $event.preventDefault()
-        $event.stopPropagation()
-      }
-    }
-
-    const triggerSearchEvent = XEUtils.debounce(function () {
+    const debounceChangeFilterEvent = XEUtils.debounce(function () {
       const { remote, remoteMethod } = props
-      const { searchValue } = reactData
       if (remote && remoteMethod) {
         reactData.searchLoading = true
-        Promise.resolve(remoteMethod({ searchValue })).then(() => nextTick()).catch(() => nextTick()).finally(() => {
+        Promise.resolve(remoteMethod({ searchValue: displaySelectLabel.value })).then(() => nextTick()).catch(() => nextTick()).finally(() => {
           reactData.searchLoading = false
           refreshOption()
         })
@@ -695,7 +734,6 @@ export default defineComponent({
         refreshOption()
       }
     }, 350, { trailing: true })
-
     const togglePanelEvent = (params: any) => {
       const { $event } = params
       $event.preventDefault()
@@ -705,7 +743,6 @@ export default defineComponent({
         showOptionPanel()
       }
     }
-
     const checkOptionDisabled = (isSelected: any, option: VxeOptionProps, group?: VxeOptgroupProps) => {
       if (option.disabled) {
         return true
@@ -720,7 +757,7 @@ export default defineComponent({
       return false
     }
 
-    const renderOption = (list: VxeOptionProps[], group?: VxeOptgroupProps) => {
+    const renderOption = (list: Array<VxeOptionProps & { __creating: boolean }>, group?: VxeOptgroupProps) => {
       const { optionKey, modelValue, multiple } = props
       const { currentValue } = reactData
       const optionOpts = computeOptionOpts.value
@@ -738,7 +775,10 @@ export default defineComponent({
         const defaultSlot = slots ? slots.default : null
         return isVisible ? h('div', {
           key: useKey || optionKey ? optid : cIndex,
-          class: ['vxe-select-option', className ? (XEUtils.isFunction(className) ? className({ option, $select: $xeselect }) : className) : '', {
+          class: ['vxe-select-option', className ? (XEUtils.isFunction(className) ? className({
+            option,
+            $select: $xeselect
+          }) : className) : '', {
             'is--disabled': isDisabled,
             'is--selected': isSelected,
             'is--hover': currentValue === optionValue
@@ -762,7 +802,10 @@ export default defineComponent({
               setCurrentOption(option)
             }
           }
-        }, defaultSlot ? callSlot(defaultSlot, { option, $select: $xeselect }) : formatText(getFuncText(option[labelField as 'label']))) : null
+        }, defaultSlot ? callSlot(defaultSlot, {
+          option,
+          $select: $xeselect
+        }) : formatText(getFuncText(option[labelField as 'label']))) : null
       })
     }
 
@@ -780,7 +823,10 @@ export default defineComponent({
         const defaultSlot = slots ? slots.default : null
         return h('div', {
           key: useKey || optionKey ? optid : gIndex,
-          class: ['vxe-optgroup', className ? (XEUtils.isFunction(className) ? className({ option: group, $select: $xeselect }) : className) : '', {
+          class: ['vxe-optgroup', className ? (XEUtils.isFunction(className) ? className({
+            option: group,
+            $select: $xeselect
+          }) : className) : '', {
             'is--disabled': isGroupDisabled
           }],
           // attrs
@@ -788,7 +834,10 @@ export default defineComponent({
         }, [
           h('div', {
             class: 'vxe-optgroup--title'
-          }, defaultSlot ? callSlot(defaultSlot, { option: group, $select: $xeselect }) : getFuncText(group[groupLabelField as 'label'])),
+          }, defaultSlot ? callSlot(defaultSlot, {
+            option: group,
+            $select: $xeselect
+          }) : getFuncText(group[groupLabelField as 'label'])),
           h('div', {
             class: 'vxe-optgroup--wrapper'
           }, renderOption(group[groupOptionsField as 'options'] || [], group))
@@ -876,7 +925,7 @@ export default defineComponent({
     watch(() => reactData.staticOptions, (value) => {
       if (value.some((item) => item.options && item.options.length)) {
         reactData.fullOptionList = []
-        reactData.fullGroupList = value
+        reactData.fullGroupList = value as VxeSelectDefines.CustomizeOptionGroups[]
       } else {
         reactData.fullGroupList = []
         reactData.fullOptionList = value || []
@@ -892,7 +941,7 @@ export default defineComponent({
 
     watch(() => props.optionGroups, (value) => {
       reactData.fullOptionList = []
-      reactData.fullGroupList = (value || []) as Recordable[]
+      reactData.fullGroupList = value || [] as VxeSelectDefines.CustomizeOptionGroups[]
       cacheItemMap()
     })
 
@@ -923,7 +972,6 @@ export default defineComponent({
       const { className, transfer, disabled, loading, filterable } = props
       const { inited, isActivated, visiblePanel } = reactData
       const vSize = computeSize.value
-      const selectLabel = computeSelectLabel.value
       const prefixSlot = slots.prefix
       return h('div', {
         ref: refElem,
@@ -944,16 +992,18 @@ export default defineComponent({
           ref: refInput,
           clearable: props.clearable,
           placeholder: props.placeholder,
-          readonly: true,
+          readonly: !filterable,
           disabled,
           type: 'text',
           prefixIcon: props.prefixIcon,
           suffixIcon: loading ? GlobalConfig.icon.SELECT_LOADED : (visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE),
-          modelValue: selectLabel,
+          modelValue: displaySelectLabel.value,
+          onInput: ({ $event: { target } }) => { displaySelectLabel.value = target.value },
           onClear: clearEvent,
-          onClick: togglePanelEvent,
+          onMouseUp: togglePanelEvent,
           onFocus: focusEvent,
           onBlur: blurEvent,
+          onChange: debounceChangeFilterEvent,
           onSuffixClick: togglePanelEvent
         }, prefixSlot ? {
           prefix: () => prefixSlot({})
@@ -973,23 +1023,6 @@ export default defineComponent({
             placement: reactData.panelPlacement,
             style: reactData.panelStyle
           }, inited ? [
-            filterable ? h('div', {
-              class: 'vxe-select-filter--wrapper'
-            }, [
-              h(VxeInputComponent, {
-                ref: refInpSearch,
-                class: 'vxe-select-filter--input',
-                modelValue: reactData.searchValue,
-                clearable: true,
-                placeholder: GlobalConfig.i18n('vxe.select.search'),
-                prefixIcon: GlobalConfig.icon.INPUT_SEARCH,
-                'onUpdate:modelValue': modelSearchEvent,
-                onFocus: focusSearchEvent,
-                onKeydown: keydownSearchEvent,
-                onChange: triggerSearchEvent,
-                onSearch: triggerSearchEvent
-              })
-            ]) : createCommentVNode(),
             h('div', {
               ref: refOptionWrapper,
               class: 'vxe-select-option--wrapper'

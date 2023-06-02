@@ -22,19 +22,22 @@ export interface VxeSelectConstructor extends VxeComponentBase, VxeSelectMethods
   props: VxeSelectProps
   context: SetupContext<VxeSelectEmits>
   reactData: SelectReactData
-  getRefMaps(): SelectPrivateRef
+
+  getRefMaps (): SelectPrivateRef
+
   renderVN: RenderFunction
 }
 
 export interface SelectPrivateRef {
   refElem: Ref<HTMLDivElement>
 }
-export interface VxeSelectPrivateRef extends SelectPrivateRef { }
-export type GroupOptionList = CustomizeOptionGroups|VxeSelectDefines.OptionInfo[]
+
+export interface VxeSelectPrivateRef extends SelectPrivateRef {}
+
 export interface SelectReactData {
   inited: boolean
   staticOptions: VxeSelectDefines.OptionInfo[]
-  fullGroupList: GroupOptionList
+  fullGroupList: CustomizeOptionGroups
   fullOptionList: any[]
   visibleGroupList: any[]
   visibleOptionList: any[]
@@ -49,7 +52,6 @@ export interface SelectReactData {
   currentValue: any
   visiblePanel: boolean
   animatVisible: boolean
-  searchValue: string
   isActivated: boolean
   searchLoading: boolean
 }
@@ -104,13 +106,14 @@ export namespace VxeSelectPropTypes {
   export type Placement = string
   export type Options = VxeSelectDefines.SelectOptions[]
   export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps
-  export type OptionGroups = Array<VxeSelectDefines.SelectOptgroups[]| VxeSelectDefines.ICustomizeOptionGroups>
+  export type OptionGroups = Array<VxeSelectDefines.SelectOptgroups[] | VxeSelectDefines.CustomizeOptionGroups>
   export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps
   export type Filterable = boolean
   export type FilterMethod = (params: { group: any, option: any, searchValue: string }) => boolean
   export type Remote = boolean
   export type RemoteMethod = (params: { searchValue: string }) => Promise<void> | void
   export type Max = number | string
+
   /**
    * 选项配置项
    */
@@ -118,6 +121,7 @@ export namespace VxeSelectPropTypes {
     useKey?: boolean
     keyField?: string
   }
+
   export type EmptyText = string
   export type OptionId = string
   export type OptionKey = boolean
@@ -125,50 +129,57 @@ export namespace VxeSelectPropTypes {
 }
 
 export interface SelectMethods {
-  dispatchEvent(type: ValueOf<VxeSelectEmits>, params: any, evnt?: Event): void
+  dispatchEvent (type: ValueOf<VxeSelectEmits>, params: any, evnt?: Event): void
+
   /**
    * 判断下拉面板是否可视
    */
-  isPanelVisible(): boolean
+  isPanelVisible (): boolean
+
   /**
    * 切换下拉面板
    */
-  togglePanel(): Promise<any>
+  togglePanel (): Promise<any>
+
   /**
    * 显示下拉面板
    */
-  showPanel(): Promise<any>
+  showPanel (): Promise<any>
+
   /**
    * 隐藏下拉面板
    */
-  hidePanel(): Promise<any>
+  hidePanel (): Promise<any>
+
   /**
    * 刷新选项，当选项被动态显示/隐藏时可能会用到
    */
-  refreshOption(): Promise<any>
+  refreshOption (): Promise<any>
+
   /**
    * 获取焦点
    */
-  focus(): Promise<any>
+  focus (): Promise<any>
+
   /**
    * 失去焦点
    */
-  blur(): Promise<any>
+  blur (): Promise<any>
 }
-export interface VxeSelectMethods extends SelectMethods { }
 
-export interface SelectPrivateMethods { }
-export interface VxeSelectPrivateMethods extends SelectPrivateMethods { }
+export interface VxeSelectMethods extends SelectMethods {}
+
+export interface SelectPrivateMethods {}
+
+export interface VxeSelectPrivateMethods extends SelectPrivateMethods {}
 
 export type VxeSelectEmits = [
   'update:modelValue',
   'change',
-  'clear',
-  'blur',
-  'focus'
+  'clear'
 ]
-declare type Recordable<T = any> = Record<string, T>;
-export type CustomizeOptionGroups =Array<{
+
+export type CustomizeOptionGroups = Array<{
   isCreated?: boolean
   /**
    * 是否禁用
@@ -180,10 +191,11 @@ export type CustomizeOptionGroups =Array<{
    */
   disabled?: VxeOptionPropTypes.Disabled
   slots?: VxeOptionPropTypes.Slots
-}& Record<string, VxeOptionPropTypes.Label>& Record<string, VxeOptionProps[]>& Recordable>
+} & Record<string, VxeOptionPropTypes.Label> & Record<string, VxeOptionProps[]>>
 export namespace VxeSelectDefines {
-  export type ICustomizeOptionGroups = CustomizeOptionGroups
-  export class OptionInfo implements Recordable {
+  export type CustomizeOptionGroups = CustomizeOptionGroups
+
+  export class OptionInfo {
     id: string
 
     value: any
@@ -203,6 +215,7 @@ export namespace VxeSelectDefines {
     options?: VxeOptionProps[]
     slots?: VxeOptionPropTypes.Slots
   }
+
   interface SelectEventParams extends VxeEvent {
     $select: VxeSelectConstructor
   }
@@ -210,34 +223,18 @@ export namespace VxeSelectDefines {
   export interface ChangeParams {
     value: any
   }
-  export interface ChangeEventParams extends SelectEventParams, ChangeParams { }
 
-  export interface ClearParams {
-    value: any
-  }
-  export interface ClearEventParams extends SelectEventParams, ClearParams { }
-
-  export interface FocusEventParams extends SelectEventParams { }
-  export interface BlurEventParams extends SelectEventParams { }
+  export interface ChangeEventParams extends SelectEventParams, ChangeParams {}
 }
 
 export type VxeSelectEventProps = {
   onChange?: VxeSelectEvents.Change
-  onClear?: VxeSelectEvents.Clear
-  onFocus?: VxeSelectEvents.Focus
-  onBlur?: VxeSelectEvents.Blur
 }
 
 export interface VxeSelectListeners {
   change?: VxeSelectEvents.Change
-  clear?: VxeSelectEvents.Clear
-  focus?: VxeSelectEvents.Focus
-  blur?: VxeSelectEvents.Blur
 }
 
 export namespace VxeSelectEvents {
   export type Change = (params: VxeSelectDefines.ChangeEventParams) => void
-  export type Clear = (params: VxeSelectDefines.ClearEventParams) => void
-  export type Focus = (params: VxeSelectDefines.FocusEventParams) => void
-  export type Blur = (params: VxeSelectDefines.BlurEventParams) => void
 }

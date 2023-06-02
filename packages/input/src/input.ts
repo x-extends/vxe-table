@@ -1,5 +1,5 @@
 import { defineComponent, h, Teleport, ref, Ref, computed, reactive, inject, nextTick, watch, onUnmounted, PropType } from 'vue'
-import XEUtils from 'xe-utils'
+import XEUtils, { toNumber } from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { getFuncText, getLastZIndex, nextZIndex } from '../../tools/utils'
@@ -666,7 +666,7 @@ export default defineComponent({
 
     const emitModel = (value: string, evnt: Event | { type: string }) => {
       reactData.inputValue = value
-      emit('update:modelValue', value)
+      emit('update:modelValue', (['number', 'integer', 'float'].includes(props.type) ? toNumber(value) : value))
       inputMethods.dispatchEvent('input', { value }, evnt)
       if (XEUtils.toValueString(props.modelValue) !== value) {
         inputMethods.dispatchEvent('change', { value }, evnt)
