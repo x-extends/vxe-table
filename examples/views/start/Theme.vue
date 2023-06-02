@@ -6,19 +6,19 @@
       <pre-code type="css" class="scss">
         // 比如 scss 常用的 html[theme="light"]， 下文是以class为主题划分的例子 完整自定义请查看variable.scss
         .gay-theme {
-        --vxe-font-size: 14px;
-        --vxe-font-color: #666;
-        --vxe-primary-color: #9660ee;
-        --vxe-primary-l6-color: lighten(#9660ee, 6%);
-        --vxe-primary-l10-color: lighten(#9660ee, 10%);
-        --vxe-primary-l20-color: lighten(#9660ee, 20%);
-        --vxe-primary-d2-color: darken(#9660ee, 2%);
-        --vxe-primary-d3-color: darken(#9660ee, 3%);
-        --vxe-primary-d10-color: darken(#9660ee, 10%);
-        --vxe-primary-d20-color: darken(#9660ee, 20%);
-        --vxe-table-font-color: var(--vxe-font-color);
-        --vxe-table-border-color: #e8eaec;
-        --vxe-table-border-radius: 4px;
+        	--vxe-font-size: 14px;
+          --vxe-font-color: #666;
+          --vxe-primary-color: #9660ee;
+          --vxe-primary-l6-color: #a87cf1;
+          --vxe-primary-l10-color: #b48ef3;
+          --vxe-primary-l20-color: #d3bcf8;
+          --vxe-primary-d2-color: #9057ed;
+          --vxe-primary-d3-color: #8d52ed;
+          --vxe-primary-d10-color: #7832e9;
+          --vxe-primary-d20-color: #5e16d2;
+          --vxe-table-font-color: var(--vxe-font-color);
+          --vxe-table-border-color: #e8eaec;
+          --vxe-table-border-radius: 4px;
         }
       </pre-code>
       <div>
@@ -32,19 +32,19 @@
   </div>
 </template>
 <style lang="scss" scoped>
-    .gay-theme{
-      --vxe-font-size: 14px;
-      --vxe-font-color: #666;
-      --vxe-primary-color: #9660ee;
-      --vxe-primary-l6-color: lighten(#9660ee, 6%);
-      --vxe-primary-l10-color: lighten(#9660ee, 10%);
-      --vxe-primary-l20-color: lighten(#9660ee, 20%);
-      --vxe-primary-d2-color: darken(#9660ee, 2%);
-      --vxe-primary-d3-color: darken(#9660ee, 3%);
-      --vxe-primary-d10-color: darken(#9660ee, 10%);
-      --vxe-primary-d20-color: darken(#9660ee, 20%);
-      --vxe-table-font-color: var(--vxe-font-color);
-      --vxe-table-border-color: #e8eaec;
-      --vxe-table-border-radius: 4px;
-    }
+.gay-theme {
+  --vxe-font-size: 14px;
+  --vxe-font-color: #666;
+  --vxe-primary-color: #9660ee;
+  --vxe-primary-l6-color: #a87cf1;
+  --vxe-primary-l10-color: #b48ef3;
+  --vxe-primary-l20-color: #d3bcf8;
+  --vxe-primary-d2-color: #9057ed;
+  --vxe-primary-d3-color: #8d52ed;
+  --vxe-primary-d10-color: #7832e9;
+  --vxe-primary-d20-color: #5e16d2;
+  --vxe-table-font-color: var(--vxe-font-color);
+  --vxe-table-border-color: #e8eaec;
+  --vxe-table-border-radius: 4px;
+}
 </style>
