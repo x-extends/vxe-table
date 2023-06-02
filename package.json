@@ -1,6 +1,6 @@
 {
   "name": "vxe-table-demonic",
-  "version": "4.4.3",
+  "version": "4.4.4",
   "description": "修复vxe类型错误、包错误、样式变量化的魔改版",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
