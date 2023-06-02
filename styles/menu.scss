@@ -13,20 +13,20 @@
   top: 0;
   left: 0;
   font-size: 12px;
-  border: 1px solid $vxe-table-popup-border-color;
+  border: 1px solid var(--vxe-table-popup-border-color);
   box-shadow: 3px 3px 4px -2px rgba(0,0,0,.6);
   padding: 0 1px;
   user-select: none;
-  color: $vxe-table-font-color;
-  font-family: $vxe-font-family;
-  background-color: $vxe-table-menu-background-color;
+  color: var(--vxe-table-font-color);
+  font-family: var(--vxe-font-family);
+  background-color: var(--vxe-table-menu-background-color);
 }
 .vxe-context-menu--link {
   display: block;
   padding: 0 2.5em;
-  width: $vxe-table-menu-item-width;
+  width: var(--vxe-table-menu-item-width);
   line-height: 26px;
-  color: $vxe-table-font-color;
+  color: var(--vxe-table-font-color);
   cursor: pointer;
   .vxe-context-menu--link-prefix,
   .vxe-context-menu--link-suffix {
@@ -84,7 +84,7 @@
     }
     &.link--disabled {
       & > .vxe-context-menu--link {
-        color: $vxe-disabled-color;
+        color: var(--vxe-disabled-color);
         cursor: no-drop;
       }
       &.link--active {

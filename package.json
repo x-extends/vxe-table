@@ -1,7 +1,7 @@
 {
-  "name": "vxe-table",
-  "version": "4.4.1",
-  "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器等...",
+  "name": "vxe-table-demonic",
+  "version": "4.4.2",
+  "description": "修复vxe类型错误、包错误、样式变量化的魔改版",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
     "serve": "vue-cli-service serve",
@@ -83,7 +83,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/x-extends/vxe-table.git"
+    "url": "git+https://github.com/adoin/vxe-table.git"
   },
   "keywords": [
     "vxe-table",
@@ -92,12 +92,11 @@
     "vue grid"
   ],
   "author": {
-    "name": "Xu Liangzhan",
-    "email": "xu_liangzhan@163.com"
+    "name": "Adoin",
+    "email": "adoin@qq.com"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/x-extends/vxe-table/issues"
-  },
-  "homepage": "https://vxetable.cn/"
+    "url": "https://github.com/adoin/vxe-table/issues"
+  }
 }

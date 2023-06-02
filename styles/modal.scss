@@ -9,8 +9,8 @@
   line-height: 1.5;
   width: calc(100% + 18px);
   height: calc(100% + 18px);
-  color: $vxe-font-color;
-  font-family: $vxe-font-family;
+  color: var(--vxe-font-color);
+  font-family: var(--vxe-font-family);
   transition: top .4s ease-in-out;
   &.is--active {
     display: block;
@@ -36,7 +36,7 @@
     .vxe-modal--header,
     .vxe-modal--footer {
       position: relative;
-      border-bottom-color: $vxe-loading-background-color;
+      border-bottom-color: var(--vxe-loading-background-color);
       &:before {
         content: "";
         position: absolute;
@@ -46,7 +46,7 @@
         height: 100%;
         z-index: 1;
         user-select: none;
-        background-color: $vxe-loading-background-color;
+        background-color: var(--vxe-loading-background-color);
       }
     }
   }
@@ -160,9 +160,9 @@
   .vxe-modal--box {
     visibility: hidden;
     width: 420px;
-    background-color: $vxe-modal-body-background-color;
-    border-radius: $vxe-border-radius;
-    border: 1px solid $vxe-modal-border-color;
+    background-color: var(--vxe-modal-body-background-color);
+    border-radius: var(--vxe-border-radius);
+    border: 1px solid var(--vxe-modal-border-color);
     text-align: left;
     pointer-events: auto;
     opacity: 0;
@@ -189,28 +189,28 @@
   }
   &.status--info {
     .vxe-modal--status-wrapper {
-      color: $vxe-info-color;
+      color: var(--vxe-info-color);
     }
   }
   &.status--warning,
   &.status--question {
     .vxe-modal--status-wrapper {
-      color: $vxe-warning-color;
+      color: var(--vxe-warning-color);
     }
   }
   &.status--success {
     .vxe-modal--status-wrapper {
-      color: $vxe-success-color;
+      color: var(--vxe-success-color);
     }
   }
   &.status--error {
     .vxe-modal--status-wrapper {
-      color: $vxe-danger-color;
+      color: var(--vxe-danger-color);
     }
   }
   &.status--loading {
     .vxe-modal--status-wrapper {
-      color: $vxe-disabled-color;
+      color: var(--vxe-disabled-color);
     }
   }
   .vxe-modal--status-wrapper {
@@ -238,9 +238,9 @@
     flex-shrink: 0;
     font-size: 1.1em;
     font-weight: 700;
-    border-bottom: 1px solid $vxe-modal-border-color;
-    background-color: $vxe-modal-header-background-color;
-    border-radius: $vxe-border-radius $vxe-border-radius 0 0;
+    border-bottom: 1px solid var(--vxe-modal-border-color);
+    background-color: var(--vxe-modal-header-background-color);
+    border-radius: var(--vxe-border-radius) var(--vxe-border-radius) 0 0;
     user-select: none;
     &.is--draggable {
       .vxe-modal--header-title {
@@ -268,7 +268,7 @@
     cursor: pointer;
     margin-left: 0.6em;
     &:hover {
-      color: $vxe-primary-color;
+      color: var(--vxe-primary-color);
     }
   }
   .vxe-modal--footer {
@@ -371,14 +371,14 @@
 }
 
 .vxe-modal--wrapper {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }

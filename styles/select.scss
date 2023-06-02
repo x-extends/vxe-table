@@ -5,7 +5,7 @@
   position: relative;
   display: inline-block;
   width: 180px;
-  color: $vxe-font-color;
+  color: var(--vxe-font-color);
   text-align: left;
   & > .vxe-input {
     .vxe-input--inner {
@@ -37,7 +37,7 @@
     &:not(.is--filter) {
       & > .vxe-input {
         .vxe-input--inner {
-          border: 1px solid $vxe-primary-color;
+          border: 1px solid var(--vxe-primary-color);
         }
       }
     }
@@ -53,7 +53,7 @@
   position: absolute;
   left: 0;
   padding: 4px 0;
-  color: $vxe-font-color;
+  color: var(--vxe-font-color);
   text-align: left;
   &:not(.is--transfer) {
     min-width: 100%;
@@ -92,16 +92,16 @@
   overflow-y: auto;
   padding: 4px 0;
   max-height: 200px;
-  border-radius: $vxe-border-radius;
-  border: 1px solid $vxe-table-popup-border-color;
+  border-radius: var(--vxe-border-radius);
+  border: 1px solid var(--vxe-table-popup-border-color);
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
-  background-color: $vxe-select-panel-background-color;
+  background-color: var(--vxe-select-panel-background-color);
 }
 
 .vxe-optgroup {
   .vxe-optgroup--title {
     padding: 0 6px;
-    color: $vxe-optgroup-title-color;
+    color: var(--vxe-optgroup-title-color);
     font-size: 12px;
   }
 }
@@ -118,20 +118,19 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   user-select: none;
   &.is--selected {
     font-weight: 700;
-    color: $vxe-primary-color;
+    color: var(--vxe-primary-color);
   }
   &:not(.is--disabled) {
     cursor: pointer;
     &.is--hover {
-      background-color: $vxe-select-option-hover-background-color;
+      background-color: var(--vxe-select-option-hover-background-color);
     }
   }
   &.is--disabled {
-    color: $vxe-disabled-color;
+    color: var(--vxe-disabled-color);
     cursor: no-drop;
   }
 }
@@ -144,68 +143,68 @@
 .vxe-select--empty-placeholder {
   padding: 0 0.6em;
   text-align: center;
-  color: $vxe-select-empty-color;
+  color: var(--vxe-select-empty-color);
 }
 
 .vxe-select,
 .vxe-select--panel {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }
 
 .vxe-select--panel {
   .vxe-optgroup--title,
   .vxe-select-option {
-    height: $vxe-select-option-height-default;
+    height: var(--vxe-select-option-height-default);
   }
   .vxe-optgroup--title,
   .vxe-select-option,
   .vxe-select--search-loading,
   .vxe-select--empty-placeholder {
-    line-height: $vxe-select-option-height-default;
+    line-height: var(--vxe-select-option-height-default);
   }
   &.size--medium {
     .vxe-optgroup--title,
     .vxe-select-option {
-      height: $vxe-select-option-height-medium;
+      height: var(--vxe-select-option-height-medium);
     }
     .vxe-optgroup--title,
     .vxe-select-option,
     .vxe-select--search-loading,
     .vxe-select--empty-placeholder {
-      line-height: $vxe-select-option-height-medium;
+      line-height: var(--vxe-select-option-height-medium);
     }
   }
   &.size--small {
     .vxe-optgroup--title,
     .vxe-select-option {
-      height: $vxe-select-option-height-small;
+      height: var(--vxe-select-option-height-small);
     }
     .vxe-optgroup--title,
     .vxe-select-option,
     .vxe-select--search-loading,
     .vxe-select--empty-placeholder {
-      line-height: $vxe-select-option-height-small;
+      line-height: var(--vxe-select-option-height-small);
     }
   }
   &.size--mini {
     .vxe-optgroup--title,
     .vxe-select-option {
-      height: $vxe-select-option-height-mini;
+      height: var(--vxe-select-option-height-mini);
     }
     .vxe-optgroup--title,
     .vxe-select-option,
     .vxe-select--search-loading,
     .vxe-select--empty-placeholder {
-      line-height: $vxe-select-option-height-mini;
+      line-height: var(--vxe-select-option-height-mini);
     }
   }
 }

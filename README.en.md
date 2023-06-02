@@ -24,6 +24,8 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add,
   * [x] ~~v2.0 Based on vue2.6+, Support for all major browsers.~~
   * [x] v3.0 Based on vue2.6+, supports modern browsers and retains compatibility with IE11.
   * [x] v4.0 Based on vue3.2+, Only support modern browser, not IE.
+  * [x] css variable
+  * [ ] Next stage: Sticky rendering mode, elevating virtual scrolling to the extreme, dynamic row height of virtual scrolling, and visualization of data charts
 
 ## Browser Support
 

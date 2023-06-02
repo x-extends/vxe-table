@@ -1,7 +1,12 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.select') }}</h2>
-    <p class="tip">下拉框，查看 <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link>，可以通过 <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link> 设置全局参数</p>
+    <p class="tip">下拉框，查看
+      <router-link class="link" :to="{name: 'VXEAPI', params: {name: 'select'}}">API</router-link>
+      ，可以通过
+      <router-link class="link" :to="{name: 'StartGlobal'}">setup</router-link>
+      设置全局参数
+    </p>
 
     <p>
       <vxe-select v-model="demo1.value10" placeholder="默认尺寸">
@@ -25,8 +30,10 @@
       <vxe-select v-model="demo1.value21" placeholder="可搜索" filterable clearable>
         <vxe-option v-for="num in 11" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
-      <vxe-select v-model="demo1.value24" placeholder="远程搜索" filterable clearable remote :remote-method="remoteMethod24">
-        <vxe-option v-for="(item, index) in demo1.list24" :key="index" :value="item.value" :label="item.label"></vxe-option>
+      <vxe-select v-model="demo1.value24" placeholder="远程搜索" filterable clearable remote
+                  :remote-method="remoteMethod24">
+        <vxe-option v-for="(item, index) in demo1.list24" :key="index" :value="item.value"
+                    :label="item.label"></vxe-option>
       </vxe-select>
       <vxe-select v-model="demo1.value22" placeholder="自定义选项样式" clearable>
         <vxe-option value="1" label="选项1"></vxe-option>
@@ -49,7 +56,7 @@
           <vxe-option value="3-2" label="选项3-2"></vxe-option>
         </vxe-optgroup>
       </vxe-select>
-      <vxe-select v-model="demo1.value47" placeholder="多选分组搜索" multiple filterable clearable transfer>
+      <vxe-select v-model="demo1.value23" placeholder="分组搜索" filterable clearable transfer>
         <vxe-optgroup label="选项2">
           <vxe-option value="2-1" label="选项2-1"></vxe-option>
           <vxe-option value="2-2" label="选项2-2"></vxe-option>
@@ -172,7 +179,8 @@
       <vxe-select v-model="demo1.value41" placeholder="分组配置式" :option-groups="demo1.list41"></vxe-select>
       <vxe-select v-model="demo1.value42" placeholder="禁用选项" :options="demo1.list42"></vxe-select>
       <vxe-select v-model="demo1.value43" placeholder="禁用分组" :option-groups="demo1.list43" transfer></vxe-select>
-      <vxe-select v-model="demo1.value44" placeholder="多选" :options="demo1.list44" multiple clearable transfer></vxe-select>
+      <vxe-select v-model="demo1.value44" placeholder="多选" :options="demo1.list44" multiple clearable
+                  transfer></vxe-select>
       <vxe-select v-model="demo1.value46" placeholder="自定义模板" :options="demo1.list46" multiple clearable transfer>
         <template #opt3="{ option }">
           <span style="color: red">
@@ -231,7 +239,6 @@ export default defineComponent({
       value21: null,
       value22: null,
       value23: null,
-      value47: null,
       value24: null,
       list24: [
         { value: 11, label: '111' },
