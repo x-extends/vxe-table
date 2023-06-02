@@ -38,7 +38,7 @@ import {
   VxeOptionProps,
   VxeFormDefines,
   VxeFormConstructor,
-  VxeFormPrivateMethods, VxeSelectDefines
+  VxeFormPrivateMethods, VxeSelectDefines, Recordable
 } from '../../../types/all'
 
 function isOptionVisible (option: any) {
@@ -925,7 +925,7 @@ export default defineComponent({
     watch(() => reactData.staticOptions, (value) => {
       if (value.some((item) => item.options && item.options.length)) {
         reactData.fullOptionList = []
-        reactData.fullGroupList = value as VxeSelectDefines.ICustomizeOptionGroups[]
+        reactData.fullGroupList = value as Recordable[]
       } else {
         reactData.fullGroupList = []
         reactData.fullOptionList = value || []
@@ -941,7 +941,7 @@ export default defineComponent({
 
     watch(() => props.optionGroups, (value) => {
       reactData.fullOptionList = []
-      reactData.fullGroupList = value || [] as VxeSelectDefines.ICustomizeOptionGroups[]
+      reactData.fullGroupList = value || [] as Recordable[]
       cacheItemMap()
     })
 
@@ -949,7 +949,7 @@ export default defineComponent({
       nextTick(() => {
         const { options, optionGroups } = props
         if (optionGroups) {
-          reactData.fullGroupList = optionGroups
+          reactData.fullGroupList = optionGroups as Recordable[]
         } else if (options) {
           reactData.fullOptionList = options
         }

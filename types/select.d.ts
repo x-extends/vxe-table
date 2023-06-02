@@ -178,7 +178,7 @@ export type VxeSelectEmits = [
   'change',
   'clear'
 ]
-
+declare type Recordable<T = any> = Record<string, T>
 export type CustomizeOptionGroups = Array<{
   isCreated?: boolean
   /**
@@ -195,7 +195,7 @@ export type CustomizeOptionGroups = Array<{
 export namespace VxeSelectDefines {
   export type ICustomizeOptionGroups = CustomizeOptionGroups
 
-  export class OptionInfo {
+  export class OptionInfo implements Recordable {
     id: string
 
     value: any
