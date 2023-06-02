@@ -1402,6 +1402,10 @@ export default defineComponent({
           const wrapperElem = wrapperRef ? wrapperRef.value : null
           const tableRef = elemStore[`${name}-${layout}-table`]
           const tableElem = tableRef ? tableRef.value : null
+
+          // fix：同时存在height和max-height的兼容判断
+          const customHeightProp = customHeight - (showFooter ? scrollbarHeight : 0)
+          const useMaxHeight = customMaxHeight && (!(customHeightProp > 0) || customMaxHeight < customHeightProp)
           if (layout === 'header') {
             // 表头体样式处理
             // 横向滚动渲染
@@ -1462,7 +1466,7 @@ export default defineComponent({
             const emptyBlockRef = elemStore[`${name}-${layout}-emptyBlock`]
             const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
             if (isNodeElement(wrapperElem)) {
-              if (customMaxHeight) {
+              if (useMaxHeight) {
                 wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
               } else {
                 if (customHeight > 0) {
@@ -1478,7 +1482,7 @@ export default defineComponent({
               if (isNodeElement(wrapperElem)) {
                 wrapperElem.style.top = `${headerHeight}px`
               }
-              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
+              fixedWrapperElem.style.height = `${((!useMaxHeight && customHeight > 0) ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
               fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isFixedLeft ? 0 : scrollbarWidth)}px`
             }
 
@@ -1530,7 +1534,7 @@ export default defineComponent({
             if (isNodeElement(wrapperElem)) {
               // 如果是固定列
               if (fixedWrapperElem) {
-                wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
+                wrapperElem.style.top = `${(!useMaxHeight && customHeight > 0) ? customHeight - footerHeight : tableHeight + headerHeight}px`
               }
               wrapperElem.style.marginTop = `${-Math.max(1, scrollbarHeight)}px`
             }
