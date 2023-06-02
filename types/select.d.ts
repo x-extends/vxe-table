@@ -106,7 +106,7 @@ export namespace VxeSelectPropTypes {
   export type Placement = string
   export type Options = VxeSelectDefines.SelectOptions[]
   export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps
-  export type OptionGroups = Array<VxeSelectDefines.SelectOptgroups[] | VxeSelectDefines.CustomizeOptionGroups>
+  export type OptionGroups = Array<VxeSelectDefines.SelectOptgroups[] | VxeSelectDefines.ICustomizeOptionGroups>
   export type OptionGroupProps = VxeGlobalRendererHandles.RenderOptionGroupProps
   export type Filterable = boolean
   export type FilterMethod = (params: { group: any, option: any, searchValue: string }) => boolean
@@ -193,7 +193,7 @@ export type CustomizeOptionGroups = Array<{
   slots?: VxeOptionPropTypes.Slots
 } & Record<string, VxeOptionPropTypes.Label> & Record<string, VxeOptionProps[]>>
 export namespace VxeSelectDefines {
-  export type CustomizeOptionGroups = CustomizeOptionGroups
+  export type ICustomizeOptionGroups = CustomizeOptionGroups
 
   export class OptionInfo {
     id: string

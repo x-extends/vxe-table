@@ -925,7 +925,7 @@ export default defineComponent({
     watch(() => reactData.staticOptions, (value) => {
       if (value.some((item) => item.options && item.options.length)) {
         reactData.fullOptionList = []
-        reactData.fullGroupList = value as VxeSelectDefines.CustomizeOptionGroups[]
+        reactData.fullGroupList = value as VxeSelectDefines.ICustomizeOptionGroups[]
       } else {
         reactData.fullGroupList = []
         reactData.fullOptionList = value || []
@@ -941,7 +941,7 @@ export default defineComponent({
 
     watch(() => props.optionGroups, (value) => {
       reactData.fullOptionList = []
-      reactData.fullGroupList = value || [] as VxeSelectDefines.CustomizeOptionGroups[]
+      reactData.fullGroupList = value || [] as VxeSelectDefines.ICustomizeOptionGroups[]
       cacheItemMap()
     })
 
