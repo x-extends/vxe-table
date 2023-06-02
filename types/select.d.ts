@@ -10,11 +10,11 @@ import { VxeOptionProps, VxeOptionPropTypes } from './option'
  * 组件 - 下拉框
  * @example import { VxeSelect } from 'vxe-table'
  */
-export const VxeSelect: VXEComponent<VxeSelectProps, VxeSelectEventProps>
+export const VxeSelect: VXEComponent<VxeSelectProps, VxeSelectEventProps, VxeSelectSlots>
 /**
  * 组件 - 下拉框
  */
-export const Select: VXEComponent<VxeSelectProps, VxeSelectEventProps>
+export const Select: typeof VxeSelect
 
 export type VxeSelectInstance = ComponentPublicInstance<VxeSelectProps, VxeSelectConstructor>
 
@@ -227,4 +227,13 @@ export namespace VxeSelectEvents {
   export type Clear = (params: VxeSelectDefines.ClearEventParams) => void
   export type Focus = (params: VxeSelectDefines.FocusEventParams) => void
   export type Blur = (params: VxeSelectDefines.BlurEventParams) => void
+}
+
+export interface VxeSelectSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

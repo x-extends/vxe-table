@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
  * 组件 - 弹窗
  * @example import { VxeModal } from 'vxe-table'
  */
-export const VxeModal: VXEComponent<VxeModalProps, VxeModalEventProps>
+export const VxeModal: VXEComponent<VxeModalProps, VxeModalEventProps, VxeModalSlots>
 /**
  * 组件 - 弹窗
  */
-export const Modal: VXEComponent<VxeModalProps, VxeModalEventProps>
+export const Modal: typeof VxeModal
 
 export type VxeModalInstance = ComponentPublicInstance<VxeModalProps, VxeModalConstructor>
 
@@ -211,10 +211,25 @@ export type VxeModalProps = {
 }
 
 export type ModalSlots = {
+  /**
+   * 自定义窗口内容模板
+   */
   default?(params: ModalDefaultSlotParams): JSX.Element[] | VNode[] | string[]
+  /**
+   * 自定义窗口头部的模板
+   */
   header?(params: ModalHeaderSlotParams): JSX.Element[] | VNode[] | string[]
+  /**
+   * 自定义窗口标题的模板（如果使用了 header 插槽，则该插槽无效）
+   */
   title?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
+  /**
+   * 自定义窗口右上角的模板
+   */
   corner?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
+  /**
+   * 自定义窗口底部的模板
+   */
   footer?(params: ModalFooterSlotParams): JSX.Element[] | VNode[] | string[]
 }
 
@@ -359,4 +374,27 @@ export namespace VxeModalEvents {
   export type Cancel = (params: VxeModalDefines.CancelEventParams) => void
   export type Close = (params: VxeModalDefines.CloseEventParams) => void
   export type Zoom = (params: VxeModalDefines.ZoomEventParams) => void
+}
+
+export interface VxeModalSlots {
+  /**
+   * 自定义窗口内容模板
+   */
+  default: (params: ModalDefaultSlotParams) => any
+  /**
+   * 自定义窗口头部的模板
+   */
+  header: (params: ModalHeaderSlotParams) => any
+  /**
+   * 自定义窗口标题的模板（如果使用了 header 插槽，则该插槽无效）
+   */
+  title: (params: ModalTitleSlotParams) => any
+  /**
+   * 自定义窗口右上角的模板
+   */
+  corner: (params: ModalTitleSlotParams) => any
+  /**
+   * 自定义窗口底部的模板
+   */
+  footer: (params: ModalFooterSlotParams) => any
 }

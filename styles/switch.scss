@@ -2,7 +2,7 @@
 
 .vxe-switch {
   display: inline-block;
-  color: $vxe-font-color;
+  color: var(--vxe-font-color);
   vertical-align: middle;
   padding: 0.4em;
   user-select: none;
@@ -18,7 +18,7 @@
   &.is--on {
     .vxe-switch--button {
       padding-right: 1.7em;
-      background-color: $vxe-switch-open-background-color;
+      background-color: var(--vxe-switch-open-background-color);
     }
     .vxe-switch--icon {
       left: 100%;
@@ -28,7 +28,7 @@
   &.is--off {
     .vxe-switch--button {
       padding-left: 1.7em;
-      background-color: $vxe-switch-close-background-color;
+      background-color: var(--vxe-switch-close-background-color);
     }
     .vxe-switch--icon {
       left: 0.2em;
@@ -51,7 +51,7 @@
     .vxe-switch--button {
       cursor: pointer;
       &:focus {
-        box-shadow: 0 0 0.4em 0 $vxe-primary-color;
+        box-shadow: 0 0 0.4em 0 var(--vxe-primary-color);
       }
     }
   }
@@ -66,7 +66,7 @@
     }
     &.is--off {
       .vxe-switch--button {
-        background-color: $vxe-switch-disabled-background-color;
+        background-color: var(--vxe-switch-disabled-background-color);
       }
     }
   }
@@ -84,7 +84,7 @@
   .vxe-switch--label {
     opacity: 0;
     display: block;
-    color: $vxe-switch-font-color;
+    color: var(--vxe-switch-font-color);
     font-size: 0.8em;
   }
   .vxe-switch--icon {
@@ -94,7 +94,7 @@
     width: 1.2em;
     height: 1.2em;
     border-radius: 50%;
-    background-color: $vxe-switch-icon-background-color;
+    background-color: var(--vxe-switch-icon-background-color);
   }
   .vxe-switch--label-icon {
     margin-right: 0.25em;
@@ -102,14 +102,14 @@
 }
 
 .vxe-switch {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }

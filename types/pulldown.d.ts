@@ -1,6 +1,18 @@
 import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
 import { VXEComponent, VxeComponentBase, SizeType, VNodeStyle, VxeEvent, ValueOf } from './component'
 
+/* eslint-disable no-use-before-define */
+
+/**
+ * 组件 - 下拉容器
+ * @example import { Pulldown as VxePulldown } from 'vxe-table'
+ */
+export const VxePulldown: VXEComponent<VxePulldownProps, VxePulldownEventProps, VxePulldownSlots>
+/**
+  * 组件 - 下拉容器
+  */
+export const Pulldown: typeof VxePulldown
+
 export type VxePulldownEmits = [
   'update:modelValue',
   'hide-panel'
@@ -109,12 +121,17 @@ export interface VxePulldownListeners {
   hidePanel?: VxePulldownEvents.HidePanel
 }
 
-/**
- * 组件 - 下拉容器
- * @example import { Pulldown as VxePulldown } from 'vxe-table'
- */
-export const VxePulldown: VXEComponent<VxePulldownProps, VxePulldownEventProps>
-/**
-  * 组件 - 下拉容器
-  */
-export const Pulldown: VXEComponent<VxePulldownProps, VxePulldownEventProps>
+export interface VxePulldownSlots {
+  /**
+   * 自定义显示的内容
+   */
+  default: (params: {
+    [key: string]: any
+  }) => any
+  /**
+   * 自定义下拉面板显示的内容
+   */
+  dropdown: (params: {
+    [key: string]: any
+  }) => any
+}

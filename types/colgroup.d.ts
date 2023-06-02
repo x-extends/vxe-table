@@ -1,5 +1,6 @@
 import { VXEComponent } from './component'
-import { VxeColumnPropTypes } from './column'
+import { VxeTableDataRow } from './table'
+import { VxeColumnPropTypes, VxeColumnSlotTypes } from './column'
 
 /* eslint-disable no-use-before-define */
 
@@ -7,11 +8,11 @@ import { VxeColumnPropTypes } from './column'
  * 组件 - 表格分组列
  * @example import { VxeColgroup } from 'vxe-table'
  */
-export const VxeColgroup: VXEComponent<VxeColgroupProps>
+export const VxeColgroup: VXEComponent<VxeColgroupProps, VxeColgroupEventProps, VxeColgroupSlots<any>>
 /**
  * 组件 - 表格分组列
  */
-export const Colgroup: VXEComponent<VxeColgroupProps>
+export const Colgroup: typeof VxeColgroup
 
 export type VxeColgroupProps = {
   /**
@@ -74,4 +75,19 @@ export type VxeColgroupProps = {
    * 额外的参数
    */
   params?: VxeColumnPropTypes.Params
+}
+
+export type VxeColgroupEventProps = {
+  //
+}
+
+export interface VxeColgroupSlots<D = VxeTableDataRow> {
+  /**
+   * 自定义表头内容的模板
+   */
+  header: (params: VxeColumnSlotTypes.HeaderSlotParams<D>) => any
+  /**
+   * 只对 type=checkbox,radio 有效，自定义标题模板
+   */
+  title: (params: VxeColumnSlotTypes.HeaderSlotParams<D>) => any
 }

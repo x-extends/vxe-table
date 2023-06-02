@@ -43,10 +43,10 @@ $btnThemeList: (
 .vxe-button {
   position: relative;
   text-align: center;
-  background-color: $vxe-button-default-background-color;
+  background-color: var(--vxe-button-default-background-color);
   outline: 0;
-  font-size: $vxe-font-size;
-  max-width: $vxe-button-max-width;
+  font-size: var(--vxe-font-size);
+  max-width: var(--vxe-button-max-width);
   line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -56,7 +56,7 @@ $btnThemeList: (
   appearance: none;
   @include animatTransition(border, .2s);
   &:not(.is--disabled) {
-    color: $vxe-font-color;
+    color: var(--vxe-font-color);
     cursor: pointer;
   }
   &.is--loading {
@@ -74,7 +74,7 @@ $btnThemeList: (
     }
   }
   &.is--disabled {
-    color: $vxe-disabled-color;
+    color: var(--vxe-disabled-color);
     &:not(.is--loading) {
       cursor: no-drop;
     }
@@ -113,18 +113,18 @@ $btnThemeList: (
   }
   &.type--button {
     font-family: inherit;
-    height: $vxe-button-height-default;
+    height: var(--vxe-button-height-default);
     line-height: 1;
-    border: 1px solid $vxe-input-border-color;
+    border: 1px solid var(--vxe-input-border-color);
     &.is--round {
-      border-radius: $vxe-button-round-border-radius-default;
+      border-radius: var(--vxe-button-round-border-radius-default);
     }
     &:not(.is--round) {
-      border-radius: $vxe-border-radius;
+      border-radius: var(--vxe-border-radius);
     }
     &.is--circle {
       padding: 0 0.5em;
-      min-width: $vxe-button-height-default;
+      min-width: var(--vxe-button-height-default);
       border-radius: 50%;
     }
     &:not(.is--circle) {
@@ -135,7 +135,7 @@ $btnThemeList: (
         color: lighten($vxe-primary-color, 6%);
       }
       &:focus {
-        border-color: $vxe-primary-color;
+        border-color: var(--vxe-primary-color);
       }
       &:active {
         color: darken($vxe-primary-color, 3%);
@@ -175,51 +175,51 @@ $btnThemeList: (
     }
   }
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
     &.type--button {
-      height: $vxe-button-height-medium;
+      height: var(--vxe-button-height-medium);
       &.is--circle {
-        min-width: $vxe-button-height-medium;
+        min-width: var(--vxe-button-height-medium);
       }
       &.is--round {
-        border-radius: $vxe-button-round-border-radius-medium;
+        border-radius: var(--vxe-button-round-border-radius-medium);
       }
     }
     .vxe-button--loading-icon,
     .vxe-button--icon {
-      min-width: $vxe-font-size-medium;
+      min-width: var(--vxe-font-size-medium);
     }
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
     &.type--button {
-      height: $vxe-button-height-small;
+      height: var(--vxe-button-height-small);
       &.is--circle {
-        min-width: $vxe-button-height-small;
+        min-width: var(--vxe-button-height-small);
       }
       &.is--round {
-        border-radius: $vxe-button-round-border-radius-small;
+        border-radius: var(--vxe-button-round-border-radius-small);
       }
     }
     .vxe-button--loading-icon,
     .vxe-button--icon {
-      min-width: $vxe-font-size-small;
+      min-width: var(--vxe-font-size-small);
     }
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
     &.type--button {
-      height: $vxe-button-height-mini;
+      height: var(--vxe-button-height-mini);
       &.is--circle {
-        min-width: $vxe-button-height-mini;
+        min-width: var(--vxe-button-height-mini);
       }
       &.is--round {
-        border-radius: $vxe-button-round-border-radius-mini;
+        border-radius: var(--vxe-button-round-border-radius-mini);
       }
     }
     .vxe-button--loading-icon,
     .vxe-button--icon {
-      min-width: $vxe-font-size-mini;
+      min-width: var(--vxe-font-size-mini);
     }
   }
 }
@@ -232,7 +232,7 @@ $btnThemeList: (
 }
 .vxe-button--loading-icon,
 .vxe-button--icon {
-  min-width: $vxe-font-size;
+  min-width: var(--vxe-font-size);
   &+.vxe-button--content {
     margin-left: 4px;
   }

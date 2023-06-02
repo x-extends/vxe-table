@@ -10,11 +10,11 @@ import { VxeTooltipPropTypes } from './tooltip'
  * 组件 - 表格列
  * @example import { VxeColumn } from 'vxe-table'
  */
-export const VxeColumn: VXEComponent<VxeColumnProps<any>>
+export const VxeColumn: VXEComponent<VxeColumnProps<any>, VxeColumnEventProps, VxeColumnSlots<any>>
 /**
  * 组件 - 表格列
  */
-export const Column: VXEComponent<VxeColumnProps<any>>
+export const Column: typeof VxeColumn
 
 export namespace VxeColumnPropTypes {
   export type ColId = string | number
@@ -128,7 +128,7 @@ export namespace VxeColumnPropTypes {
   export type CellType = 'auto' | 'number' | 'string'
 
   export interface CellRender<D = VxeTableDataRow> extends VxeGlobalRendererHandles.RenderOptions {
-    events?: { [key: string]: (cellParams: DefaultSlotParams<D>, ...args: any[]) => any }
+    events?: { [key: string]: (cellParams: VxeColumnSlotTypes.DefaultSlotParams<D>, ...args: any[]) => any }
     options?: any[]
     optionProps?: VxeGlobalRendererHandles.RenderOptionProps
     optionGroups?: any[]
@@ -140,7 +140,7 @@ export namespace VxeColumnPropTypes {
    * 编辑渲染配置项
    */
   export interface EditRender<D = VxeTableDataRow> extends VxeGlobalRendererHandles.RenderOptions {
-    events?: { [key: string]: (cellParams: EditSlotParams, ...args: any[]) => any }
+    events?: { [key: string]: (cellParams: VxeColumnSlotTypes.EditSlotParams, ...args: any[]) => any }
     enabled?: boolean
     options?: any[]
     optionProps?: VxeGlobalRendererHandles.RenderOptionProps
@@ -166,64 +166,48 @@ export namespace VxeColumnPropTypes {
 
   export type Params = any
 
-  interface FilterSlotParams<D = VxeTableDataRow> {
-    $panel: VxeFilterPanel
-    column: {
-      filters: VxeTableDefines.FilterOption[]
-    } & VxeTableDefines.ColumnInfo<D>
-    columnIndex: number
-    $columnIndex: number
-    $rowIndex: number
-  }
-
-  interface EditSlotParams<D = VxeTableDataRow> {
-    column: VxeTableDefines.ColumnInfo<D>
-    columnIndex: number
-    $columnIndex: number
-    row: D
-    rowIndex: number
-    $rowIndex: number
-  }
-
-  interface FooterSlotParams<D = VxeTableDataRow> {
-    column: VxeTableDefines.ColumnInfo<D>
-    columnIndex: number
-    _columnIndex: number
-    $columnIndex: number
-    $rowIndex: number
-    items: any[]
-    data: D[][]
-  }
-
-  interface HeaderSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderHeaderParams<D> { }
-
-  interface ContentSlotParams<D = VxeTableDataRow> {
-    column: VxeTableDefines.ColumnInfo<D>
-    columnIndex: number
-    $columnIndex: number
-    row: D
-    rowIndex: number
-    $rowIndex: number
-    isHidden: boolean
-    fixed: VxeColumnPropTypes.Fixed
-    type: string
-  }
-
-  interface DefaultSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderBodyParams<D> { }
-
-  interface IconSlotParams<D = VxeTableDataRow> extends DefaultSlotParams<D> { }
-
   export type Slots<D = VxeTableDataRow> = {
-    title?: string | ((params: HeaderSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    radio?: string | ((params: DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    checkbox?: string | ((params: DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    default?: string | ((params: DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    header?: string | ((params: HeaderSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    footer?: string | ((params: FooterSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    content?: string | ((params: ContentSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    filter?: string | ((params: FilterSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    edit?: string | ((params: EditSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
-    icon?: string | ((params: IconSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 只对 type=checkbox,radio 有效，自定义标题模板
+     */
+    title?: string | ((params: VxeColumnSlotTypes.HeaderSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 只对 type=radio 有效，自定义单选框模板
+     */
+    radio?: string | ((params: VxeColumnSlotTypes.DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 只对 type=checkbox 有效，自定义复选框模板
+     */
+    checkbox?: string | ((params: VxeColumnSlotTypes.DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 自定义显示内容模板
+     */
+    default?: string | ((params: VxeColumnSlotTypes.DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 自定义表头内容的模板
+     */
+    header?: string | ((params: VxeColumnSlotTypes.HeaderSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 自定义表尾内容的模板
+     */
+    footer?: string | ((params: VxeColumnSlotTypes.FooterSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 只对 type=expand 有效，自定义展开后的内容模板
+     */
+    content?: string | ((params: VxeColumnSlotTypes.ContentSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 只对 filter-render 启用时有效，自定义筛选模板
+     */
+    filter?: string | ((params: VxeColumnSlotTypes.FilterSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 只对 edit-render 启用时有效，自定义可编辑组件模板
+     */
+    edit?: string | ((params: VxeColumnSlotTypes.EditSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    /**
+     * 已废弃
+     * @deprecated
+     */
+    icon?: string | ((params: VxeColumnSlotTypes.IconSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
   }
 }
 
@@ -374,4 +358,101 @@ export type VxeColumnProps<D = VxeTableDataRow> = {
    * 额外的参数
    */
   params?: VxeColumnPropTypes.Params
+}
+
+export type VxeColumnEventProps = {
+  //
+}
+
+export namespace VxeColumnSlotTypes {
+  export interface FilterSlotParams<D = VxeTableDataRow> {
+    $panel: VxeFilterPanel
+    column: {
+      filters: VxeTableDefines.FilterOption[]
+    } & VxeTableDefines.ColumnInfo<D>
+    columnIndex: number
+    $columnIndex: number
+    $rowIndex: number
+  }
+
+  export interface EditSlotParams<D = VxeTableDataRow> {
+    column: VxeTableDefines.ColumnInfo<D>
+    columnIndex: number
+    $columnIndex: number
+    row: D
+    rowIndex: number
+    $rowIndex: number
+  }
+
+  export interface FooterSlotParams<D = VxeTableDataRow> {
+    column: VxeTableDefines.ColumnInfo<D>
+    columnIndex: number
+    _columnIndex: number
+    $columnIndex: number
+    $rowIndex: number
+    items: any[]
+    data: D[][]
+  }
+
+  export interface HeaderSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderHeaderParams<D> { }
+
+  export interface ContentSlotParams<D = VxeTableDataRow> {
+    column: VxeTableDefines.ColumnInfo<D>
+    columnIndex: number
+    $columnIndex: number
+    row: D
+    rowIndex: number
+    $rowIndex: number
+    isHidden: boolean
+    fixed: VxeColumnPropTypes.Fixed
+    type: string
+  }
+
+  export interface DefaultSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderBodyParams<D> { }
+
+  export interface IconSlotParams<D = VxeTableDataRow> extends DefaultSlotParams<D> { }
+}
+
+export interface VxeColumnSlots<D = VxeTableDataRow> {
+  /**
+   * 自定义显示内容模板
+   */
+  default: (params: VxeColumnSlotTypes.DefaultSlotParams<D>) => any
+  /**
+   * 自定义表头内容的模板
+   */
+  header: (params: VxeColumnSlotTypes.HeaderSlotParams<D>) => any
+  /**
+   * 自定义表尾内容的模板
+   */
+  footer: (params: VxeColumnSlotTypes.FooterSlotParams<D>) => any
+  /**
+   * 只对 type=checkbox,radio 有效，自定义标题模板
+   */
+  title: (params: VxeColumnSlotTypes.HeaderSlotParams<D>) => any
+  /**
+   * 只对 type=checkbox 有效，自定义复选框模板
+   */
+  checkbox: (params: VxeColumnSlotTypes.DefaultSlotParams<D>) => any
+  /**
+   * 只对 type=radio 有效，自定义单选框模板
+   */
+  radio: (params: VxeColumnSlotTypes.DefaultSlotParams<D>) => any
+  /**
+   * 只对 type=expand 有效，自定义展开后的内容模板
+   */
+  content: (params: VxeColumnSlotTypes.ContentSlotParams<D>) => any
+  /**
+   * 只对 filter-render 启用时有效，自定义筛选模板
+   */
+  filter: (params: VxeColumnSlotTypes.FilterSlotParams<D>) => any
+  /**
+   * 只对 edit-render 启用时有效，自定义可编辑组件模板
+   */
+  edit: (params: VxeColumnSlotTypes.EditSlotParams<D>) => any
+  /**
+   * 已废弃
+   * @deprecated
+   */
+  icon: (params: VxeColumnSlotTypes.IconSlotParams<D>) => any
 }

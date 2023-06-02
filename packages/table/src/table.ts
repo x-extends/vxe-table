@@ -6196,7 +6196,7 @@ export default defineComponent({
           icon: loadingOpts.icon,
           text: loadingOpts.text
         }, loadingSlot ? {
-          default: () => loadingSlot({})
+          default: () => loadingSlot({ $table: $xetable, $grid: $xegrid })
         } : {}),
         /**
          * 筛选

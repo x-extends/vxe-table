@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle
  * 组件 - 工具提示
  * @example import { VxeTooltip } from 'vxe-table'
  */
-export const VxeTooltip: VXEComponent<VxeTooltipProps, VxeTooltipEventProps>
+export const VxeTooltip: VXEComponent<VxeTooltipProps, VxeTooltipEventProps, VxeTooltipSlots>
 /**
  * 组件 - 工具提示
  */
-export const Tooltip: VXEComponent<VxeTooltipProps, VxeTooltipEventProps>
+export const Tooltip: typeof VxeTooltip
 
 export type VxeTooltipInstance = ComponentPublicInstance<VxeTooltipProps, VxeTooltipConstructor>
 
@@ -112,3 +112,12 @@ export type VxeTooltipEventProps = {
 export interface VxeTooltipListeners { }
 
 export namespace VxeTooltipEvents { }
+
+export interface VxeTooltipSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
+}

@@ -10,21 +10,21 @@
   line-height: 0;
   &.col--filter {
     .vxe-filter--btn {
-      color: $vxe-table-font-color;
+      color: var(--vxe-table-font-color);
     }
   }
   .vxe-filter--btn {
-    color: $vxe-table-column-icon-border-color;
+    color: var(--vxe-table-column-icon-border-color);
     cursor: pointer;
     &:hover {
-      color: $vxe-table-font-color;
+      color: var(--vxe-table-font-color);
     }
   }
 }
 .is--filter-active {
   .vxe-cell--filter {
     .vxe-filter--btn {
-      color: $vxe-primary-color;
+      color: var(--vxe-primary-color);
     }
   }
 }
@@ -35,9 +35,9 @@
   position: absolute;
   top: 0;
   min-width: 100px;
-  border-radius: $vxe-border-radius;
-  background-color: $vxe-table-filter-panel-background-color;
-  border: 1px solid $vxe-table-popup-border-color;
+  border-radius: var(--vxe-border-radius);
+  background-color: var(--vxe-table-filter-panel-background-color);
+  border: 1px solid var(--vxe-table-popup-border-color);
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   z-index: 10;
   &:not(.is--multiple) {
@@ -56,10 +56,10 @@
       padding: 0.25em 0.8em;
       cursor: pointer;
       &.is--checked {
-        color: $vxe-primary-color;
+        color: var(--vxe-primary-color);
       }
       &:hover {
-        background-color: $vxe-table-row-hover-background-color;
+        background-color: var(--vxe-table-row-hover-background-color);
       }
     }
   }
@@ -85,23 +85,23 @@
     }
   }
   .vxe-table--filter-footer {
-    border-top: 1px solid $vxe-table-popup-border-color;
+    border-top: 1px solid var(--vxe-table-popup-border-color);
     padding: 0.6em;
     user-select: none;
     button {
       background-color: transparent;
       padding: 0 0.4em;
       border: 0;
-      color: $vxe-table-font-color;
+      color: var(--vxe-table-font-color);
       cursor: pointer;
       &:focus {
         outline: none;
       }
       &:hover {
-        color: $vxe-primary-color;
+        color: var(--vxe-primary-color);
       }
       &.is--disabled {
-        color: $vxe-disabled-color;
+        color: var(--vxe-disabled-color);
         cursor: not-allowed;
       }
     }

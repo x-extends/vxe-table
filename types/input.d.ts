@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, SizeType, VNodeStyle, ValueOf } from '.
  * 组件 - 输入框
  * @example import { VxeInput } from 'vxe-table'
  */
-export const VxeInput: VXEComponent<VxeInputProps, VxeInputEventProps>
+export const VxeInput: VXEComponent<VxeInputProps, VxeInputEventProps, VxeInputSlots>
 /**
  * 组件 - 输入框
  */
-export const Input: VXEComponent<VxeInputProps, VxeInputEventProps>
+export const Input: typeof VxeInput
 
 export type VxeInputInstance = ComponentPublicInstance<VxeInputProps, VxeInputConstructor>
 
@@ -349,4 +349,13 @@ export namespace VxeInputEvents {
   export type DatePrev = (params: VxeInputDefines.DatePrevEventParams) => void
   export type DateToday = (params: VxeInputDefines.DateTodayEventParams) => void
   export type DateNext = (params: VxeInputDefines.DateNextEventParams) => void
+}
+
+export interface VxeInputSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

@@ -39,7 +39,7 @@
   &:not(.is--disabled) {
     > input {
       &:focus+.vxe-radio--icon {
-        color: $vxe-primary-color;
+        color: var(--vxe-primary-color);
       }
     }
   }
@@ -52,32 +52,32 @@
 
 .vxe-radio-button {
   .vxe-radio--label {
-    background-color: $vxe-radio-button-default-background-color;
+    background-color: var(--vxe-radio-button-default-background-color);
   }
   &:first-child {
     .vxe-radio--label {
-      border-left: 1px solid $vxe-input-border-color;
-      border-radius: $vxe-border-radius 0 0 $vxe-border-radius;
+      border-left: 1px solid var(--vxe-input-border-color);
+      border-radius: var(--vxe-border-radius) 0 0 var(--vxe-border-radius);
     }
   }
   &:last-child {
     .vxe-radio--label {
-      border-radius: 0 $vxe-border-radius $vxe-border-radius 0;
+      border-radius: 0 var(--vxe-border-radius) var(--vxe-border-radius) 0;
     }
   }
   > input {
     &:checked+.vxe-radio--label {
       color: #fff;
-      background-color: $vxe-primary-color;
-      border-color: $vxe-primary-color;
+      background-color: var(--vxe-primary-color);
+      border-color: var(--vxe-primary-color);
     }
   }
   .vxe-radio--label {
     padding: 0 1em;
-    line-height: $vxe-button-height-default - 2;
+    line-height: var(--vxe-button-height-default) - 2;
     display: inline-block;
     border-style: solid;
-    border-color: $vxe-input-border-color;
+    border-color: var(--vxe-input-border-color);
     border-width: 1px 1px 1px 0;
     max-width: 50em;
     @extend %TextEllipsis;
@@ -87,7 +87,7 @@
     > input {
       &:not(:checked) {
         &+.vxe-radio--label {
-          color: $vxe-input-disabled-color;
+          color: var(--vxe-input-disabled-color);
         }
       }
       &:checked {
@@ -102,8 +102,8 @@
     & > input {
       &:focus {
         &+.vxe-radio--label {
-          border-color: $vxe-primary-color;
-          box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+          border-color: var(--vxe-primary-color);
+          box-shadow: 0 0 0.2em 0 var(--vxe-primary-color);
         }
       }
     }
@@ -111,7 +111,7 @@
       > input {
         &:not(:checked) {
           &+.vxe-radio--label {
-            color: $vxe-primary-color;
+            color: var(--vxe-primary-color);
           }
         }
       }
@@ -119,30 +119,30 @@
   }
   &.size--medium {
     .vxe-radio--label {
-      line-height: $vxe-button-height-medium - 2;
+      line-height: var(--vxe-button-height-medium) - 2;
     }
   }
   &.size--small {
     .vxe-radio--label {
-      line-height: $vxe-button-height-small - 2;
+      line-height: var(--vxe-button-height-small) - 2;
     }
   }
   &.size--mini {
     .vxe-radio--label {
-      line-height: $vxe-button-height-mini - 2;
+      line-height: var(--vxe-button-height-mini) - 2;
     }
   }
 }
 
 .vxe-radio {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }

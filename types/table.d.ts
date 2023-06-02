@@ -14,11 +14,11 @@ import { VxeMenuPanelInstance } from './menu'
  * 组件 - 表格
  * @example import { VxeTable } from 'vxe-table'
  */
-export const VxeTable: VXEComponent<VxeTableProps<any>, VxeTableEventProps<any>>
+export const VxeTable: VXEComponent<VxeTableProps<any>, VxeTableEventProps<any>, VxeTableSlots<any>>
 /**
  * 组件 - 表格
  */
-export const Table: VXEComponent<VxeTableProps<any>, VxeTableEventProps<any>>
+export const Table: typeof VxeTable
 
 export type VxeTableInstance<D = any> = ComponentPublicInstance<VxeTableProps<D>, VxeTableConstructor<D>>
 
@@ -34,7 +34,7 @@ export interface VxeTableConstructor<D = any> extends VxeComponentBase, VxeTable
   getComputeMaps(): TablePrivateComputed<D>
   renderVN: RenderFunction
 
-  xegrid: VxeGridConstructor | null
+  xegrid: VxeGridConstructor<D> | null
 }
 
 export interface TablePrivateRef {
@@ -2741,4 +2741,21 @@ export namespace VxeTableEvents {
   export type ValidError<D = any> = (params: VxeTableDefines.ValidErrorEventParams<D>) => void
   export type Scroll<D = any> = (params: VxeTableDefines.ScrollEventParams<D>) => void
   export type Custom<D = any> = (params: VxeTableDefines.CustomEventParams<D>) => void
+}
+
+export interface VxeTableSlots<D = VxeTableDataRow> {
+  /**
+   * 自定义空数据时显示模板
+   */
+  empty?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+  /**
+   * 自定义加载中模板
+   */
+  loading?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
 }

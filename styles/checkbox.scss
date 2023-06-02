@@ -33,7 +33,7 @@
     > input {
       &:not(:checked) {
         &+.vxe-checkbox--icon {
-          color: $vxe-primary-color;
+          color: var(--vxe-primary-color);
         }
       }
     }
@@ -42,15 +42,15 @@
     & > input {
       &:focus {
         &+.vxe-checkbox--icon {
-          color: $vxe-primary-color;
-          box-shadow: 0 0 0.2em 0 $vxe-primary-color;
+          color: var(--vxe-primary-color);
+          box-shadow: 0 0 0.2em 0 var(--vxe-primary-color);
         }
       }
     }
     &:hover {
       > input {
         &+.vxe-checkbox--icon {
-          border-color: $vxe-primary-color;
+          border-color: var(--vxe-primary-color);
         }
       }
     }
@@ -59,13 +59,13 @@
     cursor: not-allowed;
     > input {
       &+.vxe-checkbox--icon {
-        color: $vxe-input-disabled-color;
+        color: var(--vxe-input-disabled-color);
         &+.vxe-checkbox--label {
-          color: $vxe-disabled-color;
+          color: var(--vxe-disabled-color);
         }
       }
       &:checked+.vxe-checkbox--icon {
-        color: $vxe-input-disabled-color;
+        color: var(--vxe-input-disabled-color);
       }
     }
   }
@@ -79,14 +79,14 @@
 }
 
 .vxe-checkbox {
-  font-size: $vxe-font-size;
+  font-size: var(--vxe-font-size);
   &.size--medium {
-    font-size: $vxe-font-size-medium;
+    font-size: var(--vxe-font-size-medium);
   }
   &.size--small {
-    font-size: $vxe-font-size-small;
+    font-size: var(--vxe-font-size-small);
   }
   &.size--mini {
-    font-size: $vxe-font-size-mini;
+    font-size: var(--vxe-font-size-mini);
   }
 }

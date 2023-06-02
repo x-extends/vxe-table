@@ -13,7 +13,7 @@ export const VxeForm: VXEComponent<VxeFormProps, VxeFormEventProps>
 /**
  * 组件 - 表单
  */
-export const Form: VXEComponent<VxeFormProps, VxeFormEventProps>
+export const Form: typeof VxeForm
 
 export type VxeFormInstance = ComponentPublicInstance<VxeFormProps, VxeFormConstructor>
 
@@ -336,4 +336,13 @@ export namespace VxeFormEvents {
   export type Submit = (params: VxeFormDefines.SubmitEventParams) => void
   export type SubmitInvalid = (params: VxeFormDefines.SubmitInvalidEventParams) => void
   export type Reset = (params: VxeFormDefines.ResetEventParams) => void
+}
+
+export interface VxeFormSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }
