@@ -11,7 +11,7 @@ export const VxeOptgroup: VXEComponent<VxeOptgroupProps>
 /**
  * 组件 - 下拉框选项分组
  */
-export const Optgroup: VXEComponent<VxeOptgroupProps>
+export const Optgroup: typeof VxeOptgroup
 
 export type VxeOptgroupProps = {
   /**
@@ -27,4 +27,13 @@ export type VxeOptgroupProps = {
    * 是否禁用
    */
   disabled?: VxeOptionPropTypes.Disabled
+}
+
+export interface VxeOptgroupSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

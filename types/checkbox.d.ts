@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
  * 组件 - 复选框
  * @example import { VxeCheckbox } from 'vxe-table'
  */
-export const VxeCheckbox: VXEComponent<VxeCheckboxProps, VxeCheckboxEventProps>
+export const VxeCheckbox: VXEComponent<VxeCheckboxProps, VxeCheckboxEventProps, VxeCheckboxSlots>
 /**
  * 组件 - 复选框
  */
-export const Checkbox: VXEComponent<VxeCheckboxProps, VxeCheckboxEventProps>
+export const Checkbox: typeof VxeCheckbox
 
 export type VxeCheckboxInstance = ComponentPublicInstance<VxeCheckboxProps, VxeCheckboxConstructor>
 
@@ -98,4 +98,13 @@ export interface VxeCheckboxListeners {
 
 export namespace VxeCheckboxEvents {
   export type Change = (params: VxeCheckboxDefines.ChangeEventParams) => void
+}
+
+export interface VxeCheckboxSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

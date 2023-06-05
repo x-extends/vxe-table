@@ -226,7 +226,7 @@
   }
   .vxe-default-input[type="submit"],
   .vxe-default-input[type="reset"] {
-    line-height: var(--vxe-button-height-medium);
+    line-height: var(--vxe-button-height-default) - 2px;
     background-color: #fff;
     cursor: pointer;
     &:hover {
@@ -284,7 +284,7 @@
     }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
-      line-height: var(--vxe-input-medium-line-height);
+      line-height: calc(var(--vxe-button-height-medium) - 2px);
     }
     .vxe-default-input,
     .vxe-default-input,
@@ -299,7 +299,7 @@
     }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
-      line-height:var(--vxe-input-small-line-height);
+      line-height: calc(var(--vxe-button-height-small) - 2px);
     }
     .vxe-default-input,
     .vxe-default-input,
@@ -314,7 +314,7 @@
     }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
-      line-height: var(--vxe-input-mini-line-height);
+      line-height: calc(var(--vxe-button-height-mini) - 2px);
     }
     .vxe-default-input,
     .vxe-default-input,

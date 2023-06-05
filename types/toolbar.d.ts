@@ -10,11 +10,11 @@ import { VxeButtonProps } from './button'
  * 组件 - 工具栏
  * @example import { VxeToolbar } from 'vxe-table'
  */
-export const VxeToolbar: VXEComponent<VxeToolbarProps, VxeToolbarEventProps>
+export const VxeToolbar: VXEComponent<VxeToolbarProps, VxeToolbarEventProps, VxeToolbarSlots>
 /**
  * 组件 - 工具栏
  */
-export const Toolbar: VXEComponent<VxeToolbarProps, VxeToolbarEventProps>
+export const Toolbar: typeof VxeToolbar
 
 export type VxeToolbarInstance = ComponentPublicInstance<VxeToolbarProps, VxeToolbarConstructor>
 
@@ -195,3 +195,18 @@ export type VxeToolbarEventProps = {
 export interface VxeToolbarListeners { }
 
 export namespace VxeToolbarEvents { }
+
+export interface VxeToolbarSlots {
+  /**
+   * 自定义左侧按钮列表
+   */
+  buttons: (params: {
+    [key: string]: any
+  }) => any
+  /**
+   * 自定义右侧工具列表
+   */
+  tools: ((params: {
+    [key: string]: any
+  }) => any) | undefined
+}

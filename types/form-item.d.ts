@@ -15,7 +15,7 @@ export const VxeFormItem: VXEComponent<VxeFormItemProps>
 /**
  * 组件 - 表单项
  */
-export const FormItem: VXEComponent<VxeFormItemProps>
+export const FormItem: typeof VxeFormItem
 
 export interface VxeFormItemProps {
   /**
@@ -261,4 +261,19 @@ export interface FormItemResetParams {
    * @deprecated
    */
   property: string
+}
+
+export interface VxeFormItemSlots {
+  /**
+   * 自定义内容模板
+   */
+  default: (params: {
+    [key: string]: any
+  }) => any
+  /**
+   * 自定义标题模板
+   */
+  title: (params: {
+    [key: string]: any
+  }) => any
 }

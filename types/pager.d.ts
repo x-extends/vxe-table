@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
  * 组件 - 分页
  * @example import { VxePager } from 'vxe-table'
  */
-export const VxePager: VXEComponent<VxePagerProps, VxePagerEventProps>
+export const VxePager: VXEComponent<VxePagerProps, VxePagerEventProps, VxePagerSlots>
 /**
  * 组件 - 分页
  */
-export const Pager: VXEComponent<VxePagerProps, VxePagerEventProps>
+export const Pager: typeof VxePager
 
 export type VxePagerInstance = ComponentPublicInstance<VxePagerProps, VxePagerConstructor>
 
@@ -181,4 +181,19 @@ export interface VxePagerListeners {
 
 export namespace VxePagerEvents {
   export type PageChange = (params: VxePagerDefines.PageChangeEventParams) => void
+}
+
+export interface VxePagerSlots {
+  /**
+   * 自定义左侧模板
+   */
+  left: (params: {
+    [key: string]: any
+  }) => any
+  /**
+   * 自定义右侧模板
+   */
+  right: (params: {
+    [key: string]: any
+  }) => any
 }

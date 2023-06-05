@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
  * 组件 - 单选框
  * @example import { VxeRadio } from 'vxe-table'
  */
-export const VxeRadio: VXEComponent<VxeRadioProps, VxeRadioEventProps>
+export const VxeRadio: VXEComponent<VxeRadioProps, VxeRadioEventProps, VxeRadioSlots>
 /**
  * 组件 - 单选框
  */
-export const Radio: VXEComponent<VxeRadioProps, VxeRadioEventProps>
+export const Radio: typeof VxeRadio
 
 export type VxeRadioInstance = ComponentPublicInstance<VxeRadioProps, VxeRadioConstructor>
 
@@ -98,4 +98,13 @@ export interface VxeRadioListeners {
 
 export namespace VxeRadioEvents {
   export type Change = (params: VxeRadioDefines.ChangeEventParams) => void
+}
+
+export interface VxeRadioSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
  * 组件 - 开关
  * @example import { VxeSwitch } from 'vxe-table'
  */
-export const VxeSwitch: VXEComponent<VxeSwitchProps, VxeSwitchEventProps>
+export const VxeSwitch: VXEComponent<VxeSwitchProps, VxeSwitchEventProps, VxeSwitchSlots>
 /**
  * 组件 - 开关
  */
-export const Switch: VXEComponent<VxeSwitchProps, VxeSwitchEventProps>
+export const Switch: typeof VxeSwitch
 
 export type VxeSwitchInstance = ComponentPublicInstance<VxeSwitchProps, VxeSwitchConstructor>
 
@@ -101,4 +101,13 @@ export namespace VxeSwitchEvents {
   export type Change = (params: VxeSwitchDefines.ChangeEventParams) => void
   export type Focus = (params: VxeSwitchDefines.FocusEventParams) => void
   export type Blur = (params: VxeSwitchDefines.BlurEventParams) => void
+}
+
+export interface VxeSwitchSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

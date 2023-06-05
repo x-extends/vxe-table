@@ -8,11 +8,11 @@ import { VxeCheckboxPropTypes } from './checkbox'
  * 组件 - 复选框组
  * @example import { VxeCheckboxGroup } from 'vxe-table'
  */
-export const VxeCheckboxGroup: VXEComponent<VxeCheckboxGroupProps, VxeCheckboxGroupEventProps>
+export const VxeCheckboxGroup: VXEComponent<VxeCheckboxGroupProps, VxeCheckboxGroupEventProps, VxeCheckboxGroupSlots>
 /**
  * 组件 - 复选框组
  */
-export const CheckboxGroup: VXEComponent<VxeCheckboxGroupProps, VxeCheckboxGroupEventProps>
+export const CheckboxGroup: typeof VxeCheckboxGroup
 
 export type VxeCheckboxGroupInstance = ComponentPublicInstance<VxeCheckboxGroupProps, VxeCheckboxGroupConstructor>
 
@@ -87,4 +87,13 @@ export interface VxeCheckboxGroupListeners {
 
 export namespace VxeCheckboxGroupEvents {
   export type Change = (params: VxeCheckboxGroupDefines.ChangeEventParams) => void
+}
+
+export interface VxeCheckboxGroupSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

@@ -62,7 +62,7 @@
     color: var(--vxe-table-font-color);
     border-radius: var(--vxe-border-radius);
     border: 1px solid var(--vxe-input-border-color);
-    
+
     &:focus {
       border: 1px solid var(--vxe-primary-color);
     }
@@ -237,39 +237,30 @@
 
 /*圆角*/
 
-.vxe-table--render-default {
-  &.is--round {
-    %AllRadius {
-      border-radius: var(--vxe-table-border-radius);
-    }
-    
-    %TopRadius {
-      border-radius: var(--vxe-table-border-radius) var(--vxe-table-border-radius) 0 0;
-    }
-    
-    %TopLeftRadius {
-      border-radius: var(--vxe-table-border-radius) 0 0 0;
-    }
-    
-    %TopRightRadius {
-      border-radius: 0 var(--vxe-table-border-radius) 0 0;
-    }
-    
-    %BottomRadius {
-      border-radius: 0 0 var(--vxe-table-border-radius) var(--vxe-table-border-radius);
-    }
-    
-    %BottomLeftRadius {
-      border-radius: 0 0 0 var(--vxe-table-border-radius);
-    }
-    
-    %BottomRightRadius {
-      border-radius: 0 0 var(--vxe-table-border-radius) 0;
-    }
-    
-    @extend %AllRadius;
-    
-    .vxe-table--border-line {
+@if $vxe-table-border-radius {
+  .vxe-table--render-default {
+    &.is--round {
+      %AllRadius {
+        border-radius: var(--vxe-table-border-radius);
+      }
+      %TopRadius {
+        border-radius: var(--vxe-table-border-radius) var(--vxe-table-border-radius) 0 0;
+      }
+      %TopLeftRadius {
+        border-radius: var(--vxe-table-border-radius) 0 0 0;
+      }
+      %TopRightRadius {
+        border-radius: 0 var(--vxe-table-border-radius) 0 0;
+      }
+      %BottomRadius {
+        border-radius: 0 0 var(--vxe-table-border-radius) var(--vxe-table-border-radius);
+      }
+      %BottomLeftRadius {
+        border-radius: 0 0 0 var(--vxe-table-border-radius);
+      }
+      %BottomRightRadius {
+        border-radius: 0 0 var(--vxe-table-border-radius) 0;
+      }
       @extend %AllRadius;
     }
     
@@ -354,7 +345,7 @@
 .vxe-table {
   .vxe-table--header-wrapper {
     color: var(--vxe-table-header-font-color);
-    
+
     .vxe-table--header-border-line {
       position: absolute;
       left: 0;
@@ -565,7 +556,7 @@
     
     &.row--hover {
       background-color: var(--vxe-table-row-hover-background-color);
-      
+
       &.row--stripe {
         background-color: var(--vxe-table-row-hover-striped-background-color);
       }
@@ -778,7 +769,8 @@
     
     .vxe-table--fixed-left-wrapper {
       // border-right: 1px solid var(--vxe-table-border-color);
-      .vxe-body--column {
+
+      .vxe-body--column{
         border-right-color: var(--vxe-table-border-color);
       }
     }
@@ -831,7 +823,7 @@
   
   &.size--medium {
     font-size: var(--vxe-font-size-medium);
-    
+
     .vxe-table--empty-placeholder,
     .vxe-table--empty-block {
       min-height: var(--vxe-table-row-height-medium);
@@ -862,7 +854,7 @@
   
   &.size--small {
     font-size: var(--vxe-font-size-small);
-    
+
     .vxe-table--empty-placeholder,
     .vxe-table--empty-block {
       min-height: var(--vxe-table-row-height-small);
@@ -893,7 +885,7 @@
   
   &.size--mini {
     font-size: var(--vxe-font-size-mini);
-    
+
     .vxe-table--empty-placeholder,
     .vxe-table--empty-block {
       min-height: var(--vxe-table-row-height-mini);
@@ -1159,7 +1151,7 @@
   
   .vxe-body--expanded-column {
     border-bottom: var(--vxe-table-border-width) solid var(--vxe-table-border-color);
-    
+
     &.col--ellipsis {
       & > .vxe-body--expanded-cell {
         overflow: hidden;
@@ -1436,7 +1428,7 @@
       .vxe-body--column {
         &.col--actived {
           box-shadow: inset 0px 0px 0px 2px var(--vxe-primary-color);
-          
+
           &.col--valid-error {
             box-shadow: inset 0px 0px 0px 2px var(--vxe-table-validate-error-color);
           }
@@ -1461,7 +1453,7 @@
             
             .vxe-textarea {
               height: var(--vxe-table-row-line-height) - 1;
-              
+
               .vxe-textarea--inner {
                 border: 0;
               }

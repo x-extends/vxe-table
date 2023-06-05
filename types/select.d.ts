@@ -10,11 +10,11 @@ import { VxeOptionProps, VxeOptionPropTypes } from './option'
  * 组件 - 下拉框
  * @example import { VxeSelect } from 'vxe-table'
  */
-export const VxeSelect: VXEComponent<VxeSelectProps, VxeSelectEventProps>
+export const VxeSelect: VXEComponent<VxeSelectProps, VxeSelectEventProps, VxeSelectSlots>
 /**
  * 组件 - 下拉框
  */
-export const Select: VXEComponent<VxeSelectProps, VxeSelectEventProps>
+export const Select: typeof VxeSelect
 
 export type VxeSelectInstance = ComponentPublicInstance<VxeSelectProps, VxeSelectConstructor>
 
@@ -237,4 +237,13 @@ export interface VxeSelectListeners {
 
 export namespace VxeSelectEvents {
   export type Change = (params: VxeSelectDefines.ChangeEventParams) => void
+}
+
+export interface VxeSelectSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

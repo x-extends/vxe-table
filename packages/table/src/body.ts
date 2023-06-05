@@ -755,7 +755,7 @@ export default defineComponent({
       }
       let emptyContent: string | VxeGlobalRendererHandles.RenderResult
       if (slots.empty) {
-        emptyContent = $xetable.callSlot(slots.empty, { $table: $xetable })
+        emptyContent = $xetable.callSlot(slots.empty, { $table: $xetable, $grid: $xetable.xegrid })
       } else {
         const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
         const renderEmpty = compConf ? compConf.renderEmpty : null

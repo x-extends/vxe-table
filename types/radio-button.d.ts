@@ -8,11 +8,11 @@ import { VxeRadioPropTypes } from './radio'
  * 组件 - 单选框按钮
  * @example import { VxeRadioButton } from 'vxe-table'
  */
-export const VxeRadioButton: VXEComponent<VxeRadioButtonProps, VxeRadioButtonEventProps>
+export const VxeRadioButton: VXEComponent<VxeRadioButtonProps, VxeRadioButtonEventProps, VxeRadioButtonSlots>
 /**
  * 组件 - 单选框按钮
  */
-export const RadioButton: VXEComponent<VxeRadioButtonProps, VxeRadioButtonEventProps>
+export const RadioButton: typeof VxeRadioButton
 
 export type VxeRadioButtonInstance = ComponentPublicInstance<VxeRadioButtonProps, VxeRadioButtonConstructor>
 
@@ -79,4 +79,13 @@ export interface VxeRadioButtonListeners {
 
 export namespace VxeRadioButtonEvents {
   export type Change = (params: VxeRadioButtonDefines.ChangeEventParams) => void
+}
+
+export interface VxeRadioButtonSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

@@ -12,11 +12,11 @@ import { VxeTableDataRow, VxeTableDefines, VxeTableEmits, VxeTableConstructor, V
  * 组件 - 高级表格
  * @example import { VxeGrid } from 'vxe-table'
  */
-export const VxeGrid: VXEComponent<VxeGridProps<any>, VxeGridEventProps<any>>
+export const VxeGrid: VXEComponent<VxeGridProps<any>, VxeGridEventProps<any>, VxeGridSlots<any>>
 /**
  * 组件 - 高级表格
  */
-export const Grid: VXEComponent<VxeGridProps<any>, VxeGridEventProps<any>>
+export const Grid: typeof VxeGrid
 
 export type VxeGridInstance<D = any> = ComponentPublicInstance<VxeGridProps<D>, VxeGridConstructor<D>>
 
@@ -504,4 +504,74 @@ export namespace VxeGridEvents {
   export type ToolbarButtonClick<D = any> = (params: VxeGridDefines.ToolbarButtonClickEventParams<D>) => void
   export type ToolbarToolClick<D = any> = (params: VxeGridDefines.ToolbarToolClickEventParams<D>) => void
   export type Zoom<D = any> = (params: VxeGridDefines.ZoomEventParams<D>) => void
+}
+
+export interface VxeGridSlots<D = VxeTableDataRow> {
+  /**
+   * 自定义空数据时显示模板
+   */
+  empty?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+  /**
+   * 自定义加载中模板
+   */
+  loading?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+  /**
+   * 自定义表单模板
+   */
+  form?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+  /**
+   * 自定义工具栏模板
+   */
+  toolbar?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+  /**
+   * 自定义表格顶部模板
+   */
+  top?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+  /**
+   * 表格底部模板
+   */
+  bottom?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+  /**
+   * 自定义分页模板
+   */
+  pager?(params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+  }): any
+
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    $table: VxeTableConstructor<D>
+    $grid: VxeGridConstructor<D> | null | undefined
+    row: D
+    rowIndex: number
+    $rowIndex: number
+    _rowIndex: number
+    column: VxeTableDefines.ColumnInfo<D>
+    columnIndex: number
+    $columnIndex: number
+    _columnIndex: number
+
+    [key: string]: any
+  }) => any) | undefined
 }

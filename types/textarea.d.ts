@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
  * 组件 - 文本域
  * @example import {  VxeTextarea } from 'vxe-table'
  */
-export const VxeTextarea: VXEComponent<VxeTextareaProps, VxeTextareaEventProps>
+export const VxeTextarea: VXEComponent<VxeTextareaProps, VxeTextareaEventProps, VxeTextareaSlots>
 /**
  * 组件 - 文本域
  */
-export const Textarea: VXEComponent<VxeTextareaProps, VxeTextareaEventProps>
+export const Textarea: typeof VxeTextarea
 
 export type VxeTextareaInstance = ComponentPublicInstance<VxeTextareaProps, VxeTextareaConstructor>
 
@@ -199,4 +199,13 @@ export namespace VxeTextareaEvents {
   export type Click = (params: VxeTextareaDefines.ClickEventParams) => void
   export type Focus = (params: VxeTextareaDefines.FocusEventParams) => void
   export type Blur = (params: VxeTextareaDefines.BlurEventParams) => void
+}
+
+export interface VxeTextareaSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

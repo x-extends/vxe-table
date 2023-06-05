@@ -12,7 +12,7 @@ export const VxeOption: VXEComponent<VxeOptionProps>
 /**
  * 组件 - 下拉框选项
  */
-export const Option: VXEComponent<VxeOptionProps>
+export const Option: typeof VxeOption
 
 export type VxeOptionProps = {
   /**
@@ -55,4 +55,13 @@ export namespace VxeOptionPropTypes {
       $select: VxeSelectConstructor
     }) => JSX.Element[] | VNode[] | string[]) | null
   }
+}
+
+export interface VxeOptionSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }

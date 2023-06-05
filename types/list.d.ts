@@ -7,11 +7,11 @@ import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './c
  * 组件 - 虚拟列表
  * @example import { VxeList } from 'vxe-table'
  */
-export const VxeList: VXEComponent<VxeListProps, VxeListEventProps>
+export const VxeList: VXEComponent<VxeListProps, VxeListEventProps, VxeListSlots>
 /**
  * 组件 - 虚拟列表
  */
-export const List: VXEComponent<VxeListProps, VxeListEventProps>
+export const List: typeof VxeList
 
 export type VxeListInstance = ComponentPublicInstance<VxeListProps, VxeListConstructor>
 
@@ -155,4 +155,13 @@ export interface VxeListListeners {
 
 export namespace VxeListEvents {
   export type Scroll = (params: VxeListDefines.ScrollEventParams) => void
+}
+
+export interface VxeListSlots {
+  /**
+   * 自定义插槽模板
+   */
+  [key: string]: ((params: {
+    [key: string]: any
+  }) => any) | undefined
 }
