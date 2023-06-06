@@ -24,6 +24,8 @@ const isWebkit = browse['-webkit'] && !browse.edge
 
 const resizableStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_WIDTH'
 const visibleStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE'
+const fixedStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_FIXED'
+const orderStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_ORDER'
 
 export default defineComponent({
   name: 'VxeTable',
@@ -837,9 +839,11 @@ export default defineComponent({
       const { collectColumn } = internalData
       const customOpts = computeCustomOpts.value
       const { storage } = customOpts
-      const isResizable = storage === true || (storage && storage.resizable)
-      const isVisible = storage === true || (storage && storage.visible)
-      if (customConfig && (isResizable || isVisible)) {
+      const isCustomResizable = storage === true || (storage && storage.resizable)
+      const isCustomVisible = storage === true || (storage && storage.visible)
+      const isCustomFixed = storage === true || (storage && storage.fixed)
+      const isCustomOrder = storage === true || (storage && storage.order)
+      if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomOrder)) {
         const customMap: {
           [key: string]: {
             field?: VxeColumnPropTypes.Field
@@ -851,7 +855,8 @@ export default defineComponent({
           errLog('vxe.error.reqProp', ['id'])
           return
         }
-        if (isResizable) {
+        // 自定义列宽
+        if (isCustomResizable) {
           const columnWidthStorage = getCustomStorageMap(resizableStorageKey)[id]
           if (columnWidthStorage) {
             XEUtils.each(columnWidthStorage, (resizeWidth: number, field) => {
@@ -859,7 +864,22 @@ export default defineComponent({
             })
           }
         }
-        if (isVisible) {
+        // 自定义固定列
+        if (isCustomFixed) {
+          const columnFixedStorage = getCustomStorageMap(fixedStorageKey)[id]
+          if (columnFixedStorage) {
+            // 开发中...
+          }
+        }
+        // 自定义顺序
+        if (isCustomOrder) {
+          const columnOrderStorage = getCustomStorageMap(orderStorageKey)[id]
+          if (columnOrderStorage) {
+            // 开发中...
+          }
+        }
+        // 自定义隐藏列
+        if (isCustomVisible) {
           const columnVisibleStorage = getCustomStorageMap(visibleStorageKey)[id]
           if (columnVisibleStorage) {
             const colVisibles = columnVisibleStorage.split('|')

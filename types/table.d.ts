@@ -333,7 +333,12 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
    */
-  resetColumn(options?: boolean | { visible?: boolean, resizable?: boolean }): Promise<void>
+  resetColumn(options?: boolean | {
+    visible?: boolean
+    resizable?: boolean
+    fixed?: boolean
+    order?: boolean
+  }): Promise<void>
   /**
    * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
@@ -1311,6 +1316,8 @@ export namespace VxeTablePropTypes {
     storage?: boolean | {
       visible?: boolean
       resizable?: boolean
+      fixed?: boolean
+      order?: boolean
     }
     checkMethod?(params: {
       column: VxeTableDefines.ColumnInfo<D>

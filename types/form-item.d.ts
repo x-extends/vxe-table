@@ -199,7 +199,7 @@ export interface FormItemRenderOptions extends VxeGlobalRendererHandles.RenderOp
    * 渲染组件的内容（需要渲染器支持）
    */
   content?: string
-  autofocus?: boolean
+  autofocus?: string
   defaultValue?: ((params: { item: VxeFormItemProps }) => any) | null | undefined | string | number | RegExp | object | any[] | Date
 }
 
