@@ -74,7 +74,7 @@
   }
   .vxe-radio--label {
     padding: 0 1em;
-    line-height: var(--vxe-button-height-default) - 2;
+    line-height: calc(var(--vxe-button-height-default) - 2px);
     display: inline-block;
     border-style: solid;
     border-color: var(--vxe-input-border-color);
@@ -119,17 +119,17 @@
   }
   &.size--medium {
     .vxe-radio--label {
-      line-height: var(--vxe-button-height-medium) - 2;
+      line-height: calc(var(--vxe-button-height-medium) - 2px);
     }
   }
   &.size--small {
     .vxe-radio--label {
-      line-height: var(--vxe-button-height-small) - 2;
+      line-height: calc(var(--vxe-button-height-small) - 2px);
     }
   }
   &.size--mini {
     .vxe-radio--label {
-      line-height: var(--vxe-button-height-mini) - 2;
+      line-height: calc(var(--vxe-button-height-mini) - 2px);
     }
   }
 }

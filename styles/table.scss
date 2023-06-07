@@ -1284,7 +1284,7 @@
               }
             }
             .vxe-textarea {
-              height: var(--vxe-table-row-line-height) - 1;
+              height: calc(var(--vxe-table-row-line-height) - 1px);
               .vxe-textarea--inner {
                 border: 0;
               }

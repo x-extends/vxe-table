@@ -67,7 +67,7 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
     }) : h('span', {
       class: 'vxe-cell--title',
       ...ons
-    }, content)
+    }, getSlotVNs(content))
   ]
 }
 

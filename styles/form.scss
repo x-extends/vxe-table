@@ -226,7 +226,7 @@
   }
   .vxe-default-input[type="submit"],
   .vxe-default-input[type="reset"] {
-    line-height: var(--vxe-button-height-default) - 2px;
+    line-height: calc(var(--vxe-button-height-default) - 2px);
     background-color: #fff;
     cursor: pointer;
     &:hover {
