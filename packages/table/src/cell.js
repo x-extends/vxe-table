@@ -65,7 +65,7 @@ function renderTitleContent (h, params, content) {
     }) : h('span', {
       class: 'vxe-cell--title',
       on: ons
-    }, content)
+    }, getSlotVNs(content))
   ]
 }
 

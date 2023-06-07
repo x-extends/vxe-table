@@ -61,22 +61,27 @@ export declare class Table extends VXETableComponent {
   showHeader?: boolean;
   /**
    * 是否要高亮当前选中行
+   * @deprecated
    */
   highlightCurrentRow?: boolean;
   /**
    * 鼠标移到行是否要高亮显示
+   * @deprecated
    */
   highlightHoverRow?: boolean;
   /**
    * 是否要高亮当前选中列
+   * @deprecated
    */
   highlightCurrentColumn?: boolean;
   /**
    * 鼠标移到列是否要高亮显示
+   * @deprecated
    */
   highlightHoverColumn?: boolean;
   /**
    * 激活单元格编辑时是否高亮显示
+   * @deprecated
    */
   highlightCell?: boolean;
   /**
@@ -166,8 +171,16 @@ export declare class Table extends VXETableComponent {
 
   /** 高级属性 */
   // 主键配置
+
+  /**
+   * @deprecated
+   */
   columnKey?: boolean;
+  /**
+   * @deprecated
+   */
   rowKey?: boolean;
+
   rowId?: string;
   zIndex?: number;
   keepSource?: boolean;
@@ -175,6 +188,8 @@ export declare class Table extends VXETableComponent {
   autoResize?: boolean;
   // 是否自动根据状态属性去更新响应式表格宽高
   syncResize?: boolean | string | number;
+  // 列的默认参数
+  rowConfig?: TableRowConfig;
   // 列的默认参数
   columnConfig?: TableColumnConfig;
   // 序号配置项
@@ -465,7 +480,12 @@ export declare class Table extends VXETableComponent {
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
    */
-  resetColumn(options: boolean | { visible?: boolean, resizable?: boolean }): Promise<any>;
+  resetColumn(options: boolean | {
+    visible?: boolean
+    resizable?: boolean
+    fixed?: boolean
+    order?: boolean
+   }): Promise<any>;
   /**
    * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
@@ -1104,10 +1124,30 @@ export interface TableOptions {
   headerAlign?: TableAlign;
   footerAlign?: TableAlign;
   showHeader?: boolean;
+  /**
+   * 不建议使用，被 row-config.isCurrent 替换
+   * @deprecated
+   */
   highlightCurrentRow?: boolean;
+  /**
+   * 不建议使用，被 row-config.isHover 替换
+   * @deprecated
+   */
   highlightHoverRow?: boolean;
+  /**
+   * 不建议使用，被 column-config.isCurrent 替换
+   * @deprecated
+   */
   highlightCurrentColumn?: boolean;
+  /**
+   * 不建议使用，被 column-config.isHover 替换
+   * @deprecated
+   */
   highlightHoverColumn?: boolean;
+  /**
+   * 不建议使用
+   * @deprecated
+   */
   highlightCell?: boolean;
   showFooter?: boolean;
   footerMethod?: typeof TableFooterMethod;
@@ -1136,6 +1176,7 @@ export interface TableOptions {
   keepSource?: boolean;
   autoResize?: boolean;
   syncResize?: boolean | string | number;
+  rowConfig?: TableRowConfig;
   columnConfig?: TableColumnConfig;
   customConfig?: TableCustomConfig;
   seqConfig?: TableSeqConfig;
@@ -1179,12 +1220,26 @@ export interface TableOptions {
   [key: string]: any;
 }
 
+export interface TableRowConfig {
+  useKey?: boolean
+  keyField?: string
+  isCurrent?: boolean
+  isHover?: boolean
+  height?: number
+}
+export type RowDefaultConfig = TableRowConfig
+
 /**
  * 列的默认配置
  */
 export interface TableColumnConfig {
-  width?: number;
-  minWidth?: number;
+  useKey?: boolean
+  isCurrent?: boolean
+  isHover?: boolean
+  resizable?: boolean
+  width?: number
+  minWidth?: number
+  maxWidth?: number
 }
 export type ColumnDefaultConfig = TableColumnConfig
 
@@ -1195,6 +1250,8 @@ export interface TableCustomConfig {
   storage?: boolean | {
     visible?: boolean;
     resizable?: boolean;
+    fixed?: boolean
+    order?: boolean
   };
   checkMethod?(params: { column: ColumnInfo }): boolean;
 }

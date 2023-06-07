@@ -17,6 +17,8 @@ const debounceScrollYDuration = browse.msie ? 80 : 20
 
 const resizableStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_WIDTH'
 const visibleStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE'
+const fixedStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_FIXED'
+const orderStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_ORDER'
 
 /**
  * 生成行的唯一主键
@@ -1488,15 +1490,17 @@ const Methods = {
     const { id, collectColumn, customConfig, customOpts } = this
     const { storage } = customOpts
     const isAllStorage = customOpts.storage === true
-    const isResizable = isAllStorage || (storage && storage.resizable)
-    const isVisible = isAllStorage || (storage && storage.visible)
-    if (customConfig && (isResizable || isVisible)) {
+    const isCustomResizable = isAllStorage || (storage && storage.resizable)
+    const isCustomVisible = isAllStorage || (storage && storage.visible)
+    const isCustomFixed = storage === true || (storage && storage.fixed)
+    const isCustomOrder = storage === true || (storage && storage.order)
+    if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomOrder)) {
       const customMap = {}
       if (!id) {
         errLog('vxe.error.reqProp', ['id'])
         return
       }
-      if (isResizable) {
+      if (isCustomResizable) {
         const columnWidthStorage = getCustomStorageMap(resizableStorageKey)[id]
         if (columnWidthStorage) {
           XEUtils.each(columnWidthStorage, (resizeWidth, field) => {
@@ -1504,7 +1508,21 @@ const Methods = {
           })
         }
       }
-      if (isVisible) {
+      // 自定义固定列
+      if (isCustomFixed) {
+        const columnFixedStorage = getCustomStorageMap(fixedStorageKey)[id]
+        if (columnFixedStorage) {
+          // 开发中...
+        }
+      }
+      // 自定义顺序
+      if (isCustomOrder) {
+        const columnOrderStorage = getCustomStorageMap(orderStorageKey)[id]
+        if (columnOrderStorage) {
+          // 开发中...
+        }
+      }
+      if (isCustomVisible) {
         const columnVisibleStorage = getCustomStorageMap(visibleStorageKey)[id]
         if (columnVisibleStorage) {
           const colVisibles = columnVisibleStorage.split('|')
