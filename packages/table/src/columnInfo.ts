@@ -104,6 +104,7 @@ export class ColumnInfo {
       // 内部属性（一旦被使用，将导致不可升级版本）
       halfVisible: false,
       defaultVisible: visible,
+      defaultFixed: _vm.fixed,
       checked: false,
       halfChecked: false,
       disabled: false,

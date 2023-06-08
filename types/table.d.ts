@@ -308,6 +308,16 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
     footerData: DT[][]
   }
   /**
+   * 设置指定列为固定列
+   * @param columnOrField 列对象或字段名
+   */
+  setColumnFixed(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, fixed: VxeColumnPropTypes.Fixed): Promise<void>
+  /**
+   * 取消指定的固定列
+   * @param columnOrField 列对象或字段名
+   */
+  clearColumnFixed(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>): Promise<void>
+  /**
    * 隐藏指定列
    * @param columnOrField 列对象或字段名
    */
@@ -720,6 +730,7 @@ export interface TablePrivateMethods<D = VxeTableDataRow> {
   cacheRowMap(isSource?: boolean): void
   saveCustomResizable(isReset?: boolean): void
   saveCustomVisible(): void
+  saveCustomFixed(): void
   analyColumnWidth(): void
   checkSelectionStatus(): void
   handleSelectRow(params: any, value: any, isForce?: boolean): void
@@ -2324,6 +2335,7 @@ export namespace VxeTableDefines {
     colSpan: number
     halfVisible: boolean
     defaultVisible: any
+    defaultFixed: any
     checked: boolean
     halfChecked: boolean
     disabled: boolean

@@ -1,0 +1,52 @@
+name: Bug report
+description: 反馈问题
+labels: bug
+body:
+- type: input
+  id: issue_link
+  attributes:
+    label: "可复现的链接："
+    description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。如何创建，点击 v3：[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsfiddle](https://jsfiddle.net/86p7Ltny/)、[jsrun](https://jsrun.net/vIyKp/edit) 或 v4：[codesandbox](https://codesandbox.io/s/vxe-table-wentiyanshi-forked-54v2j)、[jsfiddle](https://jsfiddle.net/9qoghkbj/)、[jsrun](https://jsrun.net/K5IKp/edit)，将代码示例编辑后保存。"
+  validations:
+    required: true
+- type: textarea
+  id: issue_describe
+  attributes:
+    label: "问题描述与截图："
+  validations:
+    required: true
+- type: markdown
+  attributes:
+    value: "在发布问题之前，请仔细阅读所填写的步骤，以确保是详细和清晰的。"
+- type: input
+  id: issue_expect
+  attributes:
+    label: "期望的结果："
+- type: input
+  id: issue_os_version
+  attributes:
+    label: "操作系统："
+    placeholder: "例如：window10"
+  validations:
+    required: true
+- type: input
+  id: issue_browser_version
+  attributes:
+    label: "浏览器版本："
+    placeholder: "例如：chrome 95.0.4638.69"
+  validations:
+    required: true
+- type: input
+  id: issue_vue_version
+  attributes:
+    label: "vue 版本："
+    placeholder: "例如：2.6.0"
+  validations:
+    required: true
+- type: input
+  id: issue_vxe_version
+  attributes:
+    label: "vxe-table 版本："
+    placeholder: "例如：3.4.0"
+  validations:
+    required: true
