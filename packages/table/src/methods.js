@@ -1415,24 +1415,54 @@ const Methods = {
     }
   },
   /**
+   * 设置为固定列
+   */
+  setColumnFixed (fieldOrColumn, fixed) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (column && column.fixed !== fixed) {
+      XEUtils.eachTree([column], (column) => {
+        column.fixed = fixed
+      })
+      this.saveCustomFixed()
+      return this.refreshColumn()
+    }
+    return this.$nextTick()
+  },
+  /**
+   * 取消指定固定列
+   */
+  clearColumnFixed (fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (column && column.fixed) {
+      XEUtils.eachTree([column], (column) => {
+        column.fixed = null
+      })
+      this.saveCustomFixed()
+      return this.refreshColumn()
+    }
+    return this.$nextTick()
+  },
+  /**
    * 隐藏指定列
    */
   hideColumn (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column) {
+    if (column && column.visible) {
       column.visible = false
+      return this.handleCustom()
     }
-    return this.handleCustom()
+    return this.$nextTick()
   },
   /**
    * 显示指定列
    */
   showColumn (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column) {
+    if (column & !column.visible) {
       column.visible = true
+      return this.handleCustom()
     }
-    return this.handleCustom()
+    return this.$nextTick()
   },
   setColumnWidth (fieldOrColumn, width) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
@@ -1512,7 +1542,15 @@ const Methods = {
       if (isCustomFixed) {
         const columnFixedStorage = getCustomStorageMap(fixedStorageKey)[id]
         if (columnFixedStorage) {
-          // 开发中...
+          const colFixeds = columnFixedStorage.split(',')
+          colFixeds.forEach((fixConf) => {
+            const [field, fixed] = fixConf.split('|')
+            if (customMap[field]) {
+              customMap[field].fixed = fixed
+            } else {
+              customMap[field] = { field, fixed }
+            }
+          })
         }
       }
       // 自定义顺序
@@ -1551,7 +1589,7 @@ const Methods = {
           keyMap[colKey] = column
         }
       })
-      XEUtils.each(customMap, ({ visible, resizeWidth }, field) => {
+      XEUtils.each(customMap, ({ visible, resizeWidth, fixed }, field) => {
         const column = keyMap[field]
         if (column) {
           if (XEUtils.isNumber(resizeWidth)) {
@@ -1560,16 +1598,43 @@ const Methods = {
           if (XEUtils.isBoolean(visible)) {
             column.visible = visible
           }
+          if (fixed) {
+            column.fixed = fixed
+          }
         }
       })
+    }
+  },
+  saveCustomFixed () {
+    const { id, collectColumn, customConfig, customOpts } = this
+    const { storage } = customOpts
+    const isAllStorage = customOpts.storage === true
+    const isCustomFixed = isAllStorage || (storage && storage.fixed)
+    if (customConfig && isCustomFixed) {
+      const columnFixedStorageMap = getCustomStorageMap(fixedStorageKey)
+      const colFixeds = []
+      if (!id) {
+        errLog('vxe.error.reqProp', ['id'])
+        return
+      }
+      XEUtils.eachTree(collectColumn, (column) => {
+        if (column.fixed && column.fixed !== column.defaultFixed) {
+          const colKey = column.getKey()
+          if (colKey) {
+            colFixeds.push(`${colKey}|${column.fixed}`)
+          }
+        }
+      })
+      columnFixedStorageMap[id] = colFixeds.join(',') || undefined
+      localStorage.setItem(fixedStorageKey, XEUtils.toJSONString(columnFixedStorageMap))
     }
   },
   saveCustomVisible () {
     const { id, collectColumn, customConfig, customOpts } = this
     const { checkMethod, storage } = customOpts
     const isAllStorage = customOpts.storage === true
-    const isVisible = isAllStorage || (storage && storage.visible)
-    if (customConfig && isVisible) {
+    const isCustomVisible = isAllStorage || (storage && storage.visible)
+    if (customConfig && isCustomVisible) {
       const columnVisibleStorageMap = getCustomStorageMap(visibleStorageKey)
       const colHides = []
       const colShows = []

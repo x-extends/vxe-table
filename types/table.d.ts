@@ -464,6 +464,16 @@ export declare class Table extends VXETableComponent {
   };
 
   /**
+   * 设置指定列为固定列
+   * @param columnOrField 列对象或字段名
+   */
+  setColumnFixed(column: ColumnInfo, fixed: string): Promise<void>
+  /**
+   * 取消指定的固定列
+   * @param columnOrField 列对象或字段名
+   */
+  clearColumnFixed(column: ColumnInfo): Promise<void>
+  /**
    * 隐藏指定列
    * @param column 列对象
    */
