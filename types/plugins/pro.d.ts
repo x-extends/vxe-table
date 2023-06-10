@@ -341,7 +341,7 @@ export namespace VxeTableProDefines {
   export interface CellAreaArrowsEndEventParams<D = VxeTableDataRow> extends EventParams<D>, CellAreaArrowsEndParams<D> { }
 
   export interface ActiveCellChangeStartParams<D = VxeTableDataRow> {
-    activeArea: VxeTableProDefines.MouseCellArea
+    activeArea: VxeTableProDefines.MouseActiveCellArea
     row: D
     column: VxeTableDefines.ColumnInfo<D>
     isTab: boolean
@@ -354,7 +354,7 @@ export namespace VxeTableProDefines {
   export interface ActiveCellChangeStartEventParams<D = VxeTableDataRow> extends EventParams<D>, ActiveCellChangeStartParams<D> { }
 
   export interface ActiveCellChangeEndParams<D = VxeTableDataRow> extends ActiveCellChangeStartParams<D> {
-    beforeActiveArea: VxeTableProDefines.MouseCellArea
+    beforeActiveArea: VxeTableProDefines.MouseActiveCellArea
   }
   export interface ActiveCellChangeEndEventParams<D = VxeTableDataRow> extends EventParams<D>, ActiveCellChangeEndParams<D> { }
 }
