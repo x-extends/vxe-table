@@ -4,39 +4,51 @@
 $btnThemeList: (
   (
     name: "primary",
-    textColor: $vxe-primary-color,
+    textColor: var(--vxe-primary-color),
     btnColor: #fff,
-    btnBackground: $vxe-primary-color
+    btnLightenColor: var(--vxe-primary-lighten-color),
+    btnDarkenColor: var(--vxe-primary-darken-color),
+    btnDisabledColor: var(--vxe-primary-disabled-color)
   ),
   (
     name: "success",
-    textColor: $vxe-success-color,
+    textColor: var(--vxe-success-color),
     btnColor: #fff,
-    btnBackground: $vxe-success-color
+    btnLightenColor: var(--vxe-success-lighten-color),
+    btnDarkenColor: var(--vxe-success-darken-color),
+    btnDisabledColor: var(--vxe-success-disabled-color)
   ),
   (
     name: "info",
-    textColor: $vxe-info-color,
+    textColor: var(--vxe-info-color),
     btnColor: #fff,
-    btnBackground: $vxe-info-color
+    btnLightenColor: var(--vxe-info-lighten-color),
+    btnDarkenColor: var(--vxe-info-darken-color),
+    btnDisabledColor: var(--vxe-info-disabled-color)
   ),
   (
     name: "warning",
-    textColor: $vxe-warning-color,
+    textColor: var(--vxe-warning-color),
     btnColor: #fff,
-    btnBackground: $vxe-warning-color
+    btnLightenColor: var(--vxe-warning-lighten-color),
+    btnDarkenColor: var(--vxe-warning-darken-color),
+    btnDisabledColor: var(--vxe-warning-disabled-color)
   ),
   (
     name: "danger",
-    textColor: $vxe-danger-color,
+    textColor: var(--vxe-danger-color),
     btnColor: #fff,
-    btnBackground: $vxe-danger-color
+    btnLightenColor: var(--vxe-danger-lighten-color),
+    btnDarkenColor: var(--vxe-danger-darken-color),
+    btnDisabledColor: var(--vxe-danger-disabled-color)
   ),
   (
     name: "perfect",
-    textColor: $vxe-table-header-background-color,
-    btnColor: $vxe-font-color,
-    btnBackground: $vxe-table-header-background-color
+    textColor: var(--vxe-table-header-background-color),
+    btnColor: var(--vxe-font-color),
+    btnLightenColor: var(--vxe-table-header-background-color),
+    btnDarkenColor: var(--vxe-table-header-background-color),
+    btnDisabledColor: var(--vxe-table-header-background-color)
   )
 );
 
@@ -74,7 +86,7 @@ $btnThemeList: (
     }
   }
   &.is--disabled {
-    color: var(--vxe-disabled-color);
+    color: var(--vxe-font-disabled-color);
     &:not(.is--loading) {
       cursor: no-drop;
     }
@@ -86,27 +98,26 @@ $btnThemeList: (
     background-color: transparent;
     &:not(.is--disabled) {
       &:focus {
-        color: darken($vxe-font-color, 20%);
+        color: var(--vxe-font-darken-color);
       }
       &:hover {
-        color: lighten($vxe-primary-color, 10%);
+        color: var(--vxe-primary-lighten-color);
       }
     }
     @for $index from 0 to length($btnThemeList) {
       $item: nth($btnThemeList, $index + 1);
-      $textColor: map-get($item, textColor);
       &.theme--#{map-get($item, name)} {
-        color: $textColor;
+        color: map-get($item, textColor);
         &:not(.is--disabled) {
           &:focus {
-            color: darken($textColor, 10%);
+            color: map-get($item, btnDarkenColor);
           }
           &:hover {
-            color: lighten($textColor, 10%);
+            color: map-get($item, btnLightenColor);
           }
         }
         &.is--disabled {
-          color: lighten($textColor, 20%);
+          color: map-get($item, btnDisabledColor);
         }
       }
     }
@@ -132,44 +143,43 @@ $btnThemeList: (
     }
     &:not(.is--disabled) {
       &:hover {
-        color: lighten($vxe-primary-color, 6%);
+        color: var(--vxe-primary-lighten-color);
       }
       &:focus {
         border-color: var(--vxe-primary-color);
       }
       &:active {
-        color: darken($vxe-primary-color, 3%);
-        border-color: darken($vxe-primary-color, 3%);
-        background-color: darken($vxe-button-default-background-color, 3%);
+        color: var(--vxe-primary-darken-color);
+        border-color: var(--vxe-primary-darken-color);
+        background-color: var(--vxe-button-default-background-color);
       }
     }
     @for $index from 0 to length($btnThemeList) {
       $item: nth($btnThemeList, $index + 1);
       $btnColor: map-get($item, btnColor);
-      $btnBackground: map-get($item, btnBackground);
       &.theme--#{map-get($item, name)} {
         color: $btnColor;
         &:not(.is--disabled) {
-          border-color: $btnBackground;
-          background-color: $btnBackground;
+          border-color: $btnColor;
+          background-color: $btnColor;
           &:hover {
             color: $btnColor;
-            background-color: lighten($btnBackground, 6%);
-            border-color: lighten($btnBackground, 6%);
+            background-color: map-get($item, btnLightenColor);
+            border-color: map-get($item, btnLightenColor);
           }
           &:active {
             color: $btnColor;
-            background-color: darken($btnBackground, 3%);
-            border-color: darken($btnBackground, 3%);
+            background-color: map-get($item, btnDarkenColor);
+            border-color: map-get($item, btnDarkenColor);
           }
         }
         &.is--disabled {
-          border-color: lighten($btnBackground, 20%);
-          background-color: lighten($btnBackground, 20%);
+          border-color: map-get($item, btnDisabledColor);
+          background-color: map-get($item, btnDisabledColor);
         }
         &.is--loading {
-          border-color: $btnBackground;
-          background-color: $btnBackground;
+          border-color: $btnColor;
+          background-color: $btnColor;
         }
       }
     }
@@ -261,26 +271,23 @@ $btnThemeList: (
   &.is--active {
     & > .vxe-button {
       &:not(.is--disabled) {
-        color: lighten($vxe-primary-color, 6%);
+        color: var(--vxe-primary-lighten-color);
       }
       &.type--text {
         @for $index from 0 to length($btnThemeList) {
           $item: nth($btnThemeList, $index + 1);
-          $textColor: map-get($item, textColor);
           &.theme--#{map-get($item, name)} {
-            color: lighten($textColor, 10%);
+            color: map-get($item, btnLightenColor);
           }
         }
       }
       &.type--button {
         @for $index from 0 to length($btnThemeList) {
           $item: nth($btnThemeList, $index + 1);
-          $btnColor: map-get($item, btnColor);
-          $btnBackground: map-get($item, btnBackground);
           &.theme--#{map-get($item, name)} {
-            color: $btnColor;
-            background-color: lighten($btnBackground, 6%);
-            border-color: lighten($btnBackground, 6%);
+            color: map-get($item, btnColor);
+            background-color: map-get($item, btnLightenColor);
+            border-color: map-get($item, btnLightenColor);
           }
         }
       }
@@ -322,9 +329,9 @@ $btnThemeList: (
 }
 .vxe-button--dropdown-wrapper {
   padding: 5px;
-  background-color: $vxe-button-dropdown-panel-background-color;
-  border-radius: $vxe-border-radius;
-  border: 1px solid $vxe-input-border-color;
+  background-color: --vxe-button-dropdown-panel-background-color;
+  border-radius: --vxe-border-radius;
+  border: 1px solid --vxe-input-border-color;
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   & > .vxe-button {
     margin-left: 0;

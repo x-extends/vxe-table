@@ -92,8 +92,8 @@
       }
       &:checked {
         &+.vxe-radio--label {
-          border-color: lighten($vxe-primary-color, 20%);
-          background-color: lighten($vxe-primary-color, 20%);
+          border-color: var(--vxe-primary-lighten-color);
+          background-color: var(--vxe-primary-lighten-color);
         }
       }
     }

@@ -24,7 +24,7 @@
     }
   }
   &.is--disabled {
-    color: var(--vxe-disabled-color);
+    color: var(--vxe-font-disabled-color);
     cursor: not-allowed;
     .vxe-checkbox--icon {
       color: var(--vxe-input-disabled-color);
@@ -62,7 +62,7 @@
     }
   }
   &.is--disabled {
-    color: var(--vxe-disabled-color);
+    color: var(--vxe-font-disabled-color);
     cursor: not-allowed;
     .vxe-radio--icon {
       color: var(--vxe-input-disabled-color);

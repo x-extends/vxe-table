@@ -3,7 +3,6 @@
 :root {
   /*font*/
   --vxe-font-family: #{$vxe-font-family};
-  --vxe-font-color: #{$vxe-font-color};
   --vxe-font-size: #{$vxe-font-size};
   --vxe-font-size-medium: #{$vxe-font-size-medium};
   --vxe-font-size-small: #{$vxe-font-size-small};
@@ -17,13 +16,33 @@
   --vxe-icon-background-color: #{$vxe-icon-background-color};
 
   /*color*/
+  --vxe-font-color: #{$vxe-font-color};
   --vxe-primary-color: #{$vxe-primary-color};
   --vxe-success-color: #{$vxe-success-color};
   --vxe-info-color: #{$vxe-info-color};
   --vxe-warning-color: #{$vxe-warning-color};
   --vxe-danger-color: #{$vxe-danger-color};
-  --vxe-disabled-color: #{$vxe-disabled-color};
+
+  --vxe-font-lighten-color: #{$vxe-font-lighten-color};
+  --vxe-primary-lighten-color: #{$vxe-primary-lighten-color};
+  --vxe-success-lighten-color: #{$vxe-success-lighten-color};
+  --vxe-info-lighten-color: #{$vxe-info-lighten-color};
+  --vxe-warning-lighten-color: #{$vxe-warning-lighten-color};
+  --vxe-danger-lighten-color: #{$vxe-danger-lighten-color};
+
+  --vxe-font-darken-color: #{$vxe-font-darken-color};
+  --vxe-primary-darken-color: #{$vxe-primary-darken-color};
+  --vxe-success-darken-color: #{$vxe-success-darken-color};
+  --vxe-info-darken-color: #{$vxe-info-darken-color};
+  --vxe-warning-darken-color: #{$vxe-warning-darken-color};
+  --vxe-danger-darken-color: #{$vxe-danger-darken-color};
+
+  --vxe-font-disabled-color: #{$vxe-font-disabled-color};
   --vxe-primary-disabled-color: #{$vxe-primary-disabled-color};
+  --vxe-success-disabled-color: #{$vxe-success-disabled-color};
+  --vxe-info-disabled-color: #{$vxe-info-disabled-color};
+  --vxe-warning-disabled-color: #{$vxe-warning-disabled-color};
+  --vxe-danger-disabled-color: #{$vxe-danger-disabled-color};
 
   /*input/radio/checkbox*/
   --vxe-input-border-color: #{$vxe-input-border-color};
@@ -35,7 +54,6 @@
   --vxe-table-popup-border-color: #{$vxe-table-popup-border-color};
 
   /*table*/
-  --vxe-table-font-color: #{$vxe-table-font-color};
   --vxe-table-header-font-color: #{$vxe-table-header-font-color};
   --vxe-table-footer-font-color: #{$vxe-table-footer-font-color};
   --vxe-table-border-radius: #{$vxe-table-border-radius};
@@ -173,7 +191,6 @@
 
   /*button*/
   --vxe-button-max-width: #{$vxe-button-max-width};
-  --vxe-button-default-background-color: #{$vxe-button-default-background-color};
   --vxe-button-dropdown-panel-background-color: #{$vxe-button-dropdown-panel-background-color};
   --vxe-button-height-default: #{$vxe-button-height-default};
   --vxe-button-height-medium: #{$vxe-button-height-medium};

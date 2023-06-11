@@ -35,7 +35,7 @@ $iconWidth: 1.6em;
   }
   &[disabled] {
     cursor: not-allowed;
-    color: var(--vxe-disabled-color);
+    color: var(--vxe-font-disabled-color);
     background-color: var(--vxe-input-disabled-background-color);
   }
 }
@@ -399,12 +399,12 @@ $iconWidth: 1.6em;
   border-color: var(--vxe-primary-color);
   background-color: var(--vxe-primary-color);
   &:hover {
-    background-color: lighten($vxe-primary-color, 6%);
-    border-color: lighten($vxe-primary-color, 6%);
+    background-color: var(--vxe-primary-lighten-color);
+    border-color: var(--vxe-primary-lighten-color);
   }
   &:active {
-    background-color: darken($vxe-primary-color, 3%);
-    border-color: darken($vxe-primary-color, 3%);
+    background-color: var(--vxe-primary-darken-color);
+    border-color: var(--vxe-primary-darken-color);
   }
 }
 
@@ -446,16 +446,16 @@ $iconWidth: 1.6em;
 }
 .vxe-input--date-picker-btn {
   &.is--disabled {
-    color: var(--vxe-disabled-color);
+    color: var(--vxe-font-disabled-color);
     cursor: no-drop;
   }
   &:not(.is--disabled) {
     cursor: pointer;
     &:hover {
-      background-color: lighten($vxe-button-default-background-color, 6%);
+      background-color: #fff;
     }
     &:active {
-      background-color: darken($vxe-button-default-background-color, 3%);
+      background-color: #fff;
     }
   }
 }
@@ -481,10 +481,10 @@ $iconWidth: 1.6em;
   td {
     &.is--prev,
     &.is--next {
-      color: var(--vxe-disabled-color);
+      color: var(--vxe-font-disabled-color);
       .vxe-input--date-label,
       .vxe-input--date-festival {
-        color: var(--vxe-disabled-color);
+        color: var(--vxe-font-disabled-color);
       }
     }
     &.is--now {
@@ -507,7 +507,7 @@ $iconWidth: 1.6em;
       background-color: var(--vxe-primary-color);
       &.is--prev,
       &.is--next {
-        background-color: lighten($vxe-primary-color, 10%);
+        background-color: var(--vxe-primary-lighten-color);
       }
       .vxe-input--date-label,
       .vxe-input--date-festival {
@@ -733,11 +733,11 @@ $iconWidth: 1.6em;
 }
 
 @mixin getPanelStyle ($sizeIndex) {
-  $fontSizeList: $vxe-font-size, $vxe-font-size-medium, $vxe-font-size-small, $vxe-font-size-mini;
-  $timeWeekRowHeightList: $vxe-input-date-time-week-row-height-default, $vxe-input-date-time-week-row-height-medium, $vxe-input-date-time-week-row-height-small, $vxe-input-date-time-week-row-height-mini;
-  $monthYearRowHeightList: $vxe-input-date-month-year-row-height-default, $vxe-input-date-month-year-row-height-medium, $vxe-input-date-month-year-row-height-small, $vxe-input-date-month-year-row-height-mini;
-  $quarterRowHeightList: $vxe-input-date-quarter-row-height-default, $vxe-input-date-quarter-row-height-medium, $vxe-input-date-quarter-row-height-small, $vxe-input-date-quarter-row-height-mini;
-  $titleRowHeightList: $vxe-input-date-title-height-default, $vxe-input-date-title-height-medium, $vxe-input-date-title-height-small, $vxe-input-date-title-height-mini;
+  $fontSizeList: var(--vxe-font-size), var(--vxe-font-size-medium), var(--vxe-font-size-small), var(--vxe-font-size-mini);
+  $timeWeekRowHeightList: var(--vxe-input-date-time-week-row-height-default), var(--vxe-input-date-time-week-row-height-medium), var(--vxe-input-date-time-week-row-height-small), var(--vxe-input-date-time-week-row-height-mini);
+  $monthYearRowHeightList: var(--vxe-input-date-month-year-row-height-default), var(--vxe-input-date-month-year-row-height-medium), var(--vxe-input-date-month-year-row-height-small), var(--vxe-input-date-month-year-row-height-mini);
+  $quarterRowHeightList: var(--vxe-input-date-quarter-row-height-default), var(--vxe-input-date-quarter-row-height-medium), var(--vxe-input-date-quarter-row-height-small), var(--vxe-input-date-quarter-row-height-mini);
+  $titleRowHeightList: var(--vxe-input-date-title-height-default), var(--vxe-input-date-title-height-medium), var(--vxe-input-date-title-height-small), var(--vxe-input-date-title-height-mini);
   
   font-size: nth($fontSizeList, $sizeIndex);
   .vxe-input--panel-wrapper {
@@ -819,7 +819,7 @@ $iconWidth: 1.6em;
   }
   .vxe-input--date-picker-body table,
   .vxe-input--time-picker-body {
-    height: nth($timeWeekRowHeightList, $sizeIndex) * 6 + nth($titleRowHeightList, $sizeIndex);
+    height: calc(nth($timeWeekRowHeightList, $sizeIndex) * 6 + nth($titleRowHeightList, $sizeIndex));
   }
   .vxe-input--time-picker-body {
     $ulWidthList: 48px, 48px, 44px, 42px;
@@ -839,7 +839,7 @@ $iconWidth: 1.6em;
       left: nth($ulWidthList, $sizeIndex);
     }
     .vxe-input--time-picker-second-list {
-      left: nth($ulWidthList, $sizeIndex) * 2;
+      left: calc(nth($ulWidthList, $sizeIndex) * 2);
     }
   }
   .vxe-input--date-day-view,
@@ -870,7 +870,7 @@ $iconWidth: 1.6em;
     padding: 0 10px - $sizeIndex;
   }
   .vxe-input--date-label {
-    line-height: nth($fontSizeList, $sizeIndex) + 1;
+    line-height: calc(nth($fontSizeList, $sizeIndex) + 1px);
   }
 }
 

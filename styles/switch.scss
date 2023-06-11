@@ -61,7 +61,7 @@
     }
     &.is--on {
       .vxe-switch--button {
-        background-color: lighten($vxe-primary-color, 20%);
+        background-color: var(--vxe-primary-lighten-color);
       }
     }
     &.is--off {

@@ -1,6 +1,5 @@
 /*font*/
 $vxe-font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol !default;
-$vxe-font-color: #606266 !default;
 $vxe-font-size: 14px !default;
 $vxe-font-size-medium: 14px !default;
 $vxe-font-size-small: 13px !default;
@@ -14,13 +13,33 @@ $vxe-icon-font-family: Verdana,Arial,Tahoma !default;
 $vxe-icon-background-color: #fff !default;
 
 /*color*/
+$vxe-font-color: #606266 !default;
 $vxe-primary-color: #409eff !default;
 $vxe-success-color: #67c23a !default;
 $vxe-info-color: #909399 !default;
 $vxe-warning-color: #e6a23c !default;
 $vxe-danger-color: #f56c6c !default;
-$vxe-disabled-color: #BFBFBF !default;
-$vxe-primary-disabled-color: #c0c4cc !default;
+
+$vxe-font-lighten-color: lighten($vxe-font-color, 10%) !default;
+$vxe-primary-lighten-color: lighten($vxe-primary-color, 10%) !default;
+$vxe-success-lighten-color: lighten($vxe-success-color, 10%) !default;
+$vxe-info-lighten-color: lighten($vxe-info-color, 10%) !default;
+$vxe-warning-lighten-color: lighten($vxe-warning-color, 10%) !default;
+$vxe-danger-lighten-color: lighten($vxe-danger-color, 10%) !default;
+
+$vxe-font-darken-color: darken($vxe-font-color, 10%) !default;
+$vxe-primary-darken-color: darken($vxe-primary-color, 10%) !default;
+$vxe-success-darken-color: darken($vxe-success-color, 10%) !default;
+$vxe-info-darken-color: darken($vxe-info-color, 10%) !default;
+$vxe-warning-darken-color: darken($vxe-warning-color, 10%) !default;
+$vxe-danger-darken-color: darken($vxe-danger-color, 10%) !default;
+
+$vxe-font-disabled-color: #BFBFBF !default;
+$vxe-primary-disabled-color: lighten($vxe-primary-color, 20%) !default;
+$vxe-success-disabled-color: lighten($vxe-success-color, 20%) !default;
+$vxe-info-disabled-color: lighten($vxe-info-color, 20%) !default;
+$vxe-warning-disabled-color: lighten($vxe-warning-color, 20%) !default;
+$vxe-danger-disabled-color: lighten($vxe-danger-color, 20%) !default;
 
 /*input/radio/checkbox*/
 $vxe-input-border-color: #dcdfe6 !default;
@@ -32,7 +51,6 @@ $vxe-input-placeholder-color: #C0C4CC !default;
 $vxe-table-popup-border-color: #DADCE0 !default;
 
 /*table*/
-$vxe-table-font-color: $vxe-font-color !default;
 $vxe-table-header-font-color: $vxe-font-color !default;
 $vxe-table-footer-font-color: $vxe-font-color !default;
 $vxe-table-border-radius: $vxe-border-radius !default;
@@ -170,7 +188,6 @@ $vxe-radio-button-default-background-color: #fff !default;
 
 /*button*/
 $vxe-button-max-width: 500px !default;
-$vxe-button-default-background-color: #fff !default;
 $vxe-button-dropdown-panel-background-color: #fff !default;
 $vxe-button-height-default: 34px !default;
 $vxe-button-height-medium: 32px !default;

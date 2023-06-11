@@ -47,10 +47,10 @@
         box-shadow: 0 0 0.25em 0 var(--vxe-primary-color);
       }
       &:hover {
-        color: lighten($vxe-primary-color, 6%);
+        color: var(--vxe-primary-lighten-color);
       }
       &:active {
-        background-color: darken($vxe-button-default-background-color, 3%);
+        background-color: #fff;
       }
     }
   }
@@ -83,14 +83,14 @@
           color: #fff;
           background-color: var(--vxe-primary-color);
           &:hover {
-            background-color: lighten($vxe-primary-color, 6%);
+            background-color: var(--vxe-primary-lighten-color);
           }
           &:focus {
             border-color: var(--vxe-primary-color);
           }
           &:active {
-            border-color: darken($vxe-primary-color, 3%);
-            background-color: darken($vxe-primary-color, 3%);
+            border-color: var(--vxe-primary-darken-color);
+            background-color: var(--vxe-primary-darken-color);
           }
         }
       }
@@ -200,21 +200,21 @@
     background-color: var(--vxe-pager-background-color);
     &:not(.is--disabled) {
       &:hover {
-        color: lighten($vxe-primary-color, 6%);
+        color: var(--vxe-primary-lighten-color);
       }
       &.is--active,
       &:focus {
         color: var(--vxe-primary-color);
       }
       &:active {
-        color: darken($vxe-primary-color, 3%);
+        color: var(--vxe-primary-darken-color);
       }
     }
     &.is--disabled {
       cursor: no-drop;
-      color: var(--vxe-disabled-color);
+      color: var(--vxe-font-disabled-color);
       &:hover {
-        color: var(--vxe-disabled-color);
+        color: var(--vxe-font-disabled-color);
       }
     }
   }

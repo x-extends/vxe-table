@@ -1,7 +1,7 @@
 /**Variable**/
 %ButtonHover {
-  color: lighten($vxe-primary-color, 6%);
-  border-color: lighten($vxe-primary-color, 10%);
+  color: var(--vxe-primary-lighten-color);
+  border-color: var(--vxe-primary-lighten-color);
 }
 
 .vxe-form {
@@ -233,8 +233,8 @@
       @extend %ButtonHover;
     }
     &:active {
-      color: darken($vxe-primary-color, 2%);
-      border-color: darken($vxe-primary-color, 2%);
+      color: var(--vxe-primary-darken-color);
+      border-color: var(--vxe-primary-darken-color);
     }
   }
   .vxe-default-input {

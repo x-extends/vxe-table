@@ -57,7 +57,7 @@
     outline: 0;
     padding: 0 2px;
     width: 100%;
-    color: var(--vxe-table-font-color);
+    color: var(--vxe-font-color);
     border-radius: var(--vxe-border-radius);
     border: 1px solid var(--vxe-input-border-color);
     &:focus {
@@ -199,11 +199,11 @@
 }
 
 .vxe-table--cell-copy-area {
-  background: linear-gradient(0deg, transparent 6px, $vxe-table-cell-copy-area-border-color 6px) repeat-y,
-              linear-gradient(0deg, transparent 50%, $vxe-table-cell-copy-area-border-color 0) repeat-y,
-              linear-gradient(90deg, transparent 50%, $vxe-table-cell-copy-area-border-color 0) repeat-x,
-              linear-gradient(90deg, transparent 50%, $vxe-table-cell-copy-area-border-color 0) repeat-x;
-  background-size: $vxe-table-cell-copy-area-border-width 12px, $vxe-table-cell-copy-area-border-width 12px, 12px $vxe-table-cell-copy-area-border-width, 12px $vxe-table-cell-copy-area-border-width;
+  background: linear-gradient(0deg, transparent 6px, var(--vxe-table-cell-copy-area-border-color) 6px) repeat-y,
+              linear-gradient(0deg, transparent 50%, var(--vxe-table-cell-copy-area-border-color) 0) repeat-y,
+              linear-gradient(90deg, transparent 50%, var(--vxe-table-cell-copy-area-border-color) 0) repeat-x,
+              linear-gradient(90deg, transparent 50%, var(--vxe-table-cell-copy-area-border-color) 0) repeat-x;
+  background-size: var(--vxe-table-cell-copy-area-border-width) 12px, var(--vxe-table-cell-copy-area-border-width) 12px, 12px var(--vxe-table-cell-copy-area-border-width), 12px var(--vxe-table-cell-copy-area-border-width);
   background-position: 0 0, 100% 0, 0 0, 0 100%;
   animation: moveCopyCellBorder .5s infinite linear;
 }
@@ -219,84 +219,36 @@
 }
 
 /*圆角*/
-@if $vxe-table-border-radius {
-  .vxe-table--render-default {
-    &.is--round {
-      %AllRadius {
-        border-radius: var(--vxe-table-border-radius);
-      }
-      %TopRadius {
-        border-radius: var(--vxe-table-border-radius) var(--vxe-table-border-radius) 0 0;
-      }
-      %TopLeftRadius {
-        border-radius: var(--vxe-table-border-radius) 0 0 0;
-      }
-      %TopRightRadius {
-        border-radius: 0 var(--vxe-table-border-radius) 0 0;
-      }
-      %BottomRadius {
-        border-radius: 0 0 var(--vxe-table-border-radius) var(--vxe-table-border-radius);
-      }
-      %BottomLeftRadius {
-        border-radius: 0 0 0 var(--vxe-table-border-radius);
-      }
-      %BottomRightRadius {
-        border-radius: 0 0 var(--vxe-table-border-radius) 0;
-      }
+.vxe-table--render-default {
+  &.is--round {
+    %AllRadius {
+      border-radius: var(--vxe-table-border-radius);
+    }
+    %TopRadius {
+      border-radius: var(--vxe-table-border-radius) var(--vxe-table-border-radius) 0 0;
+    }
+    %TopLeftRadius {
+      border-radius: var(--vxe-table-border-radius) 0 0 0;
+    }
+    %TopRightRadius {
+      border-radius: 0 var(--vxe-table-border-radius) 0 0;
+    }
+    %BottomRadius {
+      border-radius: 0 0 var(--vxe-table-border-radius) var(--vxe-table-border-radius);
+    }
+    %BottomLeftRadius {
+      border-radius: 0 0 0 var(--vxe-table-border-radius);
+    }
+    %BottomRightRadius {
+      border-radius: 0 0 var(--vxe-table-border-radius) 0;
+    }
+    @extend %AllRadius;
+    .vxe-table--border-line {
       @extend %AllRadius;
-      .vxe-table--border-line {
-        @extend %AllRadius;
-      }
-      &.is--header {
-        &:not(.is--footer) {
-          .vxe-table--body-wrapper {
-            &.fixed-left--wrapper {
-              @extend %BottomLeftRadius;
-            }
-            &.body--wrapper {
-              @extend %BottomRadius;
-            }
-            &.fixed-right--wrapper {
-              @extend %BottomRightRadius;
-            }
-          }
-        }
-        .vxe-table--header-wrapper {
-          &.fixed-left--wrapper {
-            @extend %TopLeftRadius;
-          }
-          &.body--wrapper {
-            @extend %TopRadius;
-          }
-          &.fixed-right--wrapper {
-            @extend %TopRightRadius;
-          }
-        }
-      }
-      &:not(.is--header) {
-        &:not(.is--footer) {
-          .vxe-table--body-wrapper {
-            &.body--wrapper {
-              @extend %AllRadius;
-            }
-          }
-        }
-      }
-      &.is--footer {
-        &:not(.is--header) {
-          .vxe-table--body-wrapper {
-            &.fixed-left--wrapper {
-              @extend %BottomLeftRadius;
-            }
-            &.body--wrapper {
-              @extend %TopRadius;
-            }
-            &.fixed-right--wrapper {
-              @extend %BottomRightRadius;
-            }
-          }
-        }
-        .vxe-table--footer-wrapper {
+    }
+    &.is--header {
+      &:not(.is--footer) {
+        .vxe-table--body-wrapper {
           &.fixed-left--wrapper {
             @extend %BottomLeftRadius;
           }
@@ -306,6 +258,52 @@
           &.fixed-right--wrapper {
             @extend %BottomRightRadius;
           }
+        }
+      }
+      .vxe-table--header-wrapper {
+        &.fixed-left--wrapper {
+          @extend %TopLeftRadius;
+        }
+        &.body--wrapper {
+          @extend %TopRadius;
+        }
+        &.fixed-right--wrapper {
+          @extend %TopRightRadius;
+        }
+      }
+    }
+    &:not(.is--header) {
+      &:not(.is--footer) {
+        .vxe-table--body-wrapper {
+          &.body--wrapper {
+            @extend %AllRadius;
+          }
+        }
+      }
+    }
+    &.is--footer {
+      &:not(.is--header) {
+        .vxe-table--body-wrapper {
+          &.fixed-left--wrapper {
+            @extend %BottomLeftRadius;
+          }
+          &.body--wrapper {
+            @extend %TopRadius;
+          }
+          &.fixed-right--wrapper {
+            @extend %BottomRightRadius;
+          }
+        }
+      }
+      .vxe-table--footer-wrapper {
+        &.fixed-left--wrapper {
+          @extend %BottomLeftRadius;
+        }
+        &.body--wrapper {
+          @extend %BottomRadius;
+        }
+        &.fixed-right--wrapper {
+          @extend %BottomRightRadius;
         }
       }
     }
@@ -344,7 +342,7 @@
     line-height: 0.8em;
     cursor: pointer;
     &:hover {
-      color: var(--vxe-table-font-color);
+      color: var(--vxe-font-color);
     }
     &.sort--active {
       color: var(--vxe-primary-color);
@@ -452,7 +450,7 @@
 .vxe-table--render-default {
   position: relative;
   font-size: var(--vxe-font-size);
-  color: var(--vxe-table-font-color);
+  color: var(--vxe-font-color);
   font-family: var(--vxe-font-family);
   direction: ltr;
   .vxe-table--body-wrapper {
@@ -673,7 +671,7 @@
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
-      background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
+      background-image: linear-gradient(var(--vxe-table-border-color), var(--vxe-table-border-color));
       background-repeat: no-repeat;
       background-size: 100% var(--vxe-table-border-width);
       background-position: right bottom;
@@ -683,7 +681,7 @@
     .vxe-header--column,
     .vxe-body--column,
     .vxe-footer--column {
-      background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color), linear-gradient($vxe-table-border-color, $vxe-table-border-color);
+      background-image: linear-gradient(var(--vxe-table-border-color), var(--vxe-table-border-color)), linear-gradient(var(--vxe-table-border-color), var(--vxe-table-border-color));
       background-repeat: no-repeat;
       background-size: var(--vxe-table-border-width) 100%, 100% var(--vxe-table-border-width);
       background-position: right top, right bottom;
@@ -703,7 +701,7 @@
       .vxe-header--row {
         &:last-child {
           .vxe-header--gutter {
-            background-image: linear-gradient($vxe-table-border-color, $vxe-table-border-color);
+            background-image: linear-gradient(var(--vxe-table-border-color), var(--vxe-table-border-color));
             background-repeat: no-repeat;
             background-size: 100% var(--vxe-table-border-width);
             background-position: right bottom;
@@ -980,9 +978,9 @@
   }
   .vxe-tree--node-btn {
     display: block;
-    color: lighten($vxe-table-font-color, 20%);
+    color: var(--vxe-font-lighten-color);
     &:hover {
-      color: var(--vxe-table-font-color);
+      color: var(--vxe-font-color);
     }
   }
   .vxe-tree-cell {
@@ -1010,9 +1008,9 @@
       height: 1em;
       text-align: center;
       user-select: none;
-      color: lighten($vxe-table-font-color, 20%);
+      color: var(--vxe-font-lighten-color);
       &:hover {
-        color: var(--vxe-table-font-color);
+        color: var(--vxe-font-color);
       }
     }
     &+.vxe-table--expand-label {
