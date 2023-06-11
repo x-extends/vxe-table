@@ -156,12 +156,13 @@ $btnThemeList: (
     }
     @for $index from 0 to length($btnThemeList) {
       $item: nth($btnThemeList, $index + 1);
+      $textColor: map-get($item, textColor);
       $btnColor: map-get($item, btnColor);
       &.theme--#{map-get($item, name)} {
         color: $btnColor;
         &:not(.is--disabled) {
-          border-color: $btnColor;
-          background-color: $btnColor;
+          border-color: $textColor;
+          background-color: $textColor;
           &:hover {
             color: $btnColor;
             background-color: map-get($item, btnLightenColor);
@@ -178,8 +179,8 @@ $btnThemeList: (
           background-color: map-get($item, btnDisabledColor);
         }
         &.is--loading {
-          border-color: $btnColor;
-          background-color: $btnColor;
+          border-color: $textColor;
+          background-color: $textColor;
         }
       }
     }
@@ -329,9 +330,9 @@ $btnThemeList: (
 }
 .vxe-button--dropdown-wrapper {
   padding: 5px;
-  background-color: --vxe-button-dropdown-panel-background-color;
-  border-radius: --vxe-border-radius;
-  border: 1px solid --vxe-input-border-color;
+  background-color: var(--vxe-button-dropdown-panel-background-color);
+  border-radius: var(--vxe-border-radius);
+  border: 1px solid var(--vxe-input-border-color);
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
   & > .vxe-button {
     margin-left: 0;
