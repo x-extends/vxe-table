@@ -243,7 +243,6 @@ export namespace VxeGridPropTypes {
   export interface ToolbarOpts extends ToolbarConfig { }
   export interface ToolbarConfig extends VxeToolbarProps {
     enabled?: boolean
-    buttons?: any[]
     zoom?: boolean | {
       escRestore?: boolean
       iconIn?: string

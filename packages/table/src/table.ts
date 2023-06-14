@@ -1495,7 +1495,7 @@ export default defineComponent({
             const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
             if (isNodeElement(wrapperElem)) {
               if (customMaxHeight) {
-                wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight}px`
+                wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight - footerHeight}px`
               } else {
                 if (customHeight > 0) {
                   wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`

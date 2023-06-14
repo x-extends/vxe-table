@@ -34,7 +34,7 @@
       border
       show-footer
       class="mytable-footer"
-      height="400"
+      max-height="400"
       :footer-method="footerMethod"
       :footer-cell-class-name="footerCellClassName2"
       :data="demo2.tableData">
