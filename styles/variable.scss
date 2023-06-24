@@ -188,7 +188,8 @@ $vxe-radio-button-default-background-color: #fff !default;
 
 /*button*/
 $vxe-button-max-width: 500px !default;
-$vxe-button-dropdown-panel-background-color: #fff !default;
+$vxe-button-default-background-color: #fff !default;
+$vxe-button-dropdown-panel-background-color: $vxe-button-default-background-color !default;
 $vxe-button-height-default: 34px !default;
 $vxe-button-height-medium: 32px !default;
 $vxe-button-height-small: 30px !default;

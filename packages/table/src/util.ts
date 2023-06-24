@@ -210,10 +210,18 @@ export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMet
   return isColumnInfo(options) ? options : reactive(new ColumnInfo($xetable, options, renderOptions))
 }
 
-export function watchColumn (props: any, column: ColumnInfo) {
+export function watchColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, props: any, column: ColumnInfo) {
   Object.keys(props).forEach(name => {
     watch(() => props[name], (value: any) => {
       column.update(name, value)
+      if ($xetable) {
+        if (name === 'filters') {
+          $xetable.setFilter(column as any, value)
+          $xetable.handleUpdateDataQueue()
+        } else if (['visible', 'fixed', 'width', 'minWidth', 'maxWidth'].includes(name)) {
+          $xetable.handleRefreshColumnQueue()
+        }
+      }
     })
   })
 }

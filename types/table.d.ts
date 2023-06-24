@@ -735,6 +735,8 @@ export interface TablePrivateMethods<D = VxeTableDataRow> {
   checkSelectionStatus(): void
   handleSelectRow(params: any, value: any, isForce?: boolean): void
   handleCustom(): Promise<void>
+  handleUpdateDataQueue(): void
+  handleRefreshColumnQueue(): void
   preventEvent(evnt: any, type: any, args?: any, next?: any, end?: any): any
   triggerHeaderHelpEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams<any>): void
   triggerHeaderTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams<any>): void
@@ -841,6 +843,10 @@ export interface TableReactData<D = VxeTableDataRow> {
   mergeList: VxeTableDefines.MergeItem<D>[]
   // 合并表尾数据的对象集
   mergeFooterList: VxeTableDefines.MergeItem<D>[]
+  // 刷新列标识，当列筛选被改变时，触发表格刷新数据
+  upDataFlag: number
+  // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
+  reColumnFlag: number
   // 初始化标识
   initStore: {
     filter: boolean

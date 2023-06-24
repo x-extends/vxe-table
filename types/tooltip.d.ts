@@ -46,7 +46,7 @@ export interface TooltipReactData {
 export namespace VxeTooltipPropTypes {
   export type Size = SizeType
   export type ModelValue = boolean
-  export type Trigger = 'hover' | 'click' | '' | null
+  export type Trigger = 'hover' | 'click' | 'manual' | '' | null
   export type Theme = string
   export type Content = string | number
   export type UseHTML = boolean

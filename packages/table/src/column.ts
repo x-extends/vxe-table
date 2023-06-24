@@ -97,7 +97,7 @@ export default defineComponent({
 
     provide('$xegrid', null)
 
-    watchColumn(props, column)
+    watchColumn($xetable, props, column)
 
     onMounted(() => {
       assemColumn($xetable, refElem.value, column, colgroup)

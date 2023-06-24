@@ -176,7 +176,7 @@
       </vxe-modal>
 
       <vxe-button content="阻止关闭" @click="demo1.value10 = true"></vxe-button>
-      <vxe-modal v-model="demo1.value10" title="阻止关闭" width="800" height="400" :before-hide-method="beforeHideMethod" show-zoom resize>
+      <vxe-modal v-model="demo1.value10" title="阻止关闭" width="800" height="400" :before-hide-method="beforeHideMethod" e show-zoom resize>
         <template #default>
           <vxe-table
             border

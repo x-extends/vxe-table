@@ -103,6 +103,10 @@ export default defineComponent({
       mergeList: [],
       // 合并表尾数据的对象集
       mergeFooterList: [],
+      // 刷新列标识，当列筛选被改变时，触发表格刷新数据
+      upDataFlag: 0,
+      // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
+      reColumnFlag: 0,
       // 初始化标识
       initStore: {
         filter: false,
@@ -4955,6 +4959,12 @@ export default defineComponent({
         tablePrivateMethods.analyColumnWidth()
         return tableMethods.refreshColumn()
       },
+      handleUpdateDataQueue () {
+        reactData.upDataFlag++
+      },
+      handleRefreshColumnQueue () {
+        reactData.reColumnFlag++
+      },
       preventEvent (evnt, type, args, next, end) {
         const evntList = VXETable.interceptor.get(type)
         let rest
@@ -5869,6 +5879,18 @@ export default defineComponent({
     })
     watch(tableColumnFlag, () => {
       tablePrivateMethods.analyColumnWidth()
+    })
+
+    watch(() => reactData.upDataFlag, () => {
+      nextTick(() => {
+        tableMethods.updateData()
+      })
+    })
+
+    watch(() => reactData.reColumnFlag, () => {
+      nextTick(() => {
+        tableMethods.refreshColumn()
+      })
     })
 
     watch(() => props.showHeader, () => {
