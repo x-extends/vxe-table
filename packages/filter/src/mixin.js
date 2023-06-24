@@ -31,8 +31,8 @@ export default {
      */
     _setFilter (fieldOrColumn, options) {
       const column = handleFieldOrColumn(this, fieldOrColumn)
-      if (column && column.filters && options) {
-        column.filters = toFilters(options)
+      if (column && column.filters) {
+        column.filters = toFilters(options || [])
       }
       return this.$nextTick()
     },

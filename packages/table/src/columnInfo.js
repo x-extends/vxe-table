@@ -139,7 +139,7 @@ export class ColumnInfo {
   }
 
   update (name, value) {
-    // 不支持双向的属性
+    // 不支持直接修改的属性
     if (name !== 'filters') {
       if (name === 'field') {
         // 兼容旧属性

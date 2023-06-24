@@ -10,14 +10,14 @@
   line-height: 0;
   &.col--filter {
     .vxe-filter--btn {
-      color: $vxe-table-font-color;
+      color: $vxe-font-color;
     }
   }
   .vxe-filter--btn {
     color: $vxe-table-column-icon-border-color;
     cursor: pointer;
     &:hover {
-      color: $vxe-table-font-color;
+      color: $vxe-font-color;
     }
   }
 }
@@ -92,7 +92,7 @@
       background-color: transparent;
       padding: 0 0.4em;
       border: 0;
-      color: $vxe-table-font-color;
+      color: $vxe-font-color;
       cursor: pointer;
       &:focus {
         outline: none;
@@ -101,7 +101,7 @@
         color: $vxe-primary-color;
       }
       &.is--disabled {
-        color: $vxe-disabled-color;
+        color: $vxe-font-disabled-color;
         cursor: not-allowed;
       }
     }

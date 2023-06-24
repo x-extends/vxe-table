@@ -61,7 +61,7 @@
       &+.vxe-checkbox--icon {
         color: $vxe-input-disabled-color;
         &+.vxe-checkbox--label {
-          color: $vxe-disabled-color;
+          color: $vxe-font-disabled-color;
         }
       }
       &:checked+.vxe-checkbox--icon {

@@ -337,6 +337,10 @@ export default {
         import: false,
         export: false
       },
+      // 刷新列标识，当列筛选被改变时，触发表格刷新数据
+      upDataFlag: 0,
+      // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
+      reColumnFlag: 0,
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -647,6 +651,12 @@ export default {
     },
     tableColumn () {
       this.analyColumnWidth()
+    },
+    upDataFlag () {
+      this.$nextTick().then(() => this.updateData())
+    },
+    reColumnFlag () {
+      this.$nextTick().then(() => this.refreshColumn())
     },
     showHeader () {
       this.$nextTick(() => {

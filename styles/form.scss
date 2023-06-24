@@ -1,7 +1,7 @@
 /**Variable**/
 %ButtonHover {
-  color: lighten($vxe-primary-color, 6%);
-  border-color: lighten($vxe-primary-color, 10%);
+  color: $vxe-primary-lighten-color;
+  border-color: $vxe-primary-lighten-color;
 }
 
 .vxe-form {
@@ -226,15 +226,15 @@
   }
   .vxe-default-input[type="submit"],
   .vxe-default-input[type="reset"] {
-    line-height: $vxe-button-height-default - 2px;
+    line-height: calc($vxe-button-height-default - 2px);
     background-color: #fff;
     cursor: pointer;
     &:hover {
       @extend %ButtonHover;
     }
     &:active {
-      color: darken($vxe-primary-color, 2%);
-      border-color: darken($vxe-primary-color, 2%);
+      color: $vxe-primary-darken-color;
+      border-color: $vxe-primary-darken-color;
     }
   }
   .vxe-default-input {
@@ -284,7 +284,7 @@
     }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
-      line-height: $vxe-button-height-medium - 2px;
+      line-height: calc($vxe-button-height-medium - 2px);
     }
     .vxe-default-input,
     .vxe-default-input,
@@ -299,7 +299,7 @@
     }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
-      line-height: $vxe-button-height-small - 2px;
+      line-height: calc($vxe-button-height-small - 2px);
     }
     .vxe-default-input,
     .vxe-default-input,
@@ -314,7 +314,7 @@
     }
     .vxe-default-input[type="submit"],
     .vxe-default-input[type="reset"] {
-      line-height: $vxe-button-height-mini - 2px;
+      line-height: calc($vxe-button-height-mini - 2px);
     }
     .vxe-default-input,
     .vxe-default-input,

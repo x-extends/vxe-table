@@ -90,6 +90,14 @@ const watch = {}
 Object.keys(props).forEach(name => {
   watch[name] = function (value) {
     this.columnConfig.update(name, value)
+    if (this.$xetable) {
+      if (name === 'filters') {
+        this.$xetable.setFilter(this.columnConfig, value)
+        this.$xetable.handleUpdateDataQueue()
+      } else if (['visible', 'fixed', 'width', 'minWidth', 'maxWidth'].includes(name)) {
+        this.$xetable.handleRefreshColumnQueue()
+      }
+    }
   }
 })
 
