@@ -98,5 +98,8 @@
   "bugs": {
     "url": "https://github.com/x-extends/vxe-table/issues"
   },
-  "homepage": "https://vxetable.cn/"
+  "homepage": "https://vxetable.cn/",
+  "dependencies": {
+    "vuedraggable": "^4.1.0"
+  }
 }
