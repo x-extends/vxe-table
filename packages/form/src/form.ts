@@ -339,7 +339,15 @@ export default defineComponent({
                 }
               } else {
                 const isArrType = type === 'array'
-                const hasEmpty = isArrType || XEUtils.isArray(itemValue) ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
+                const isArrVal = XEUtils.isArray(itemValue)
+                let hasEmpty = true
+                if (isArrType || isArrVal) {
+                  hasEmpty = !isArrVal || !itemValue.length
+                } else if (XEUtils.isString(itemValue)) {
+                  hasEmpty = eqEmptyValue(itemValue.trim())
+                } else {
+                  hasEmpty = eqEmptyValue(itemValue)
+                }
                 if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
                   errorRules.push(new Rule(rule))
                 }
