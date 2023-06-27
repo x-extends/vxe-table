@@ -17,36 +17,38 @@ export interface DefineRendererOption<T> {
   className?: string
 
   // 筛选渲染
-  filterClassName?: string | ((params: VxeGlobalRendererHandles.RenderFilterParams) => string | VNodeClassName)
+  filterClassName?: string | ((params: VxeGlobalRendererHandles.RenderFilterParams<any>) => string | VNodeClassName)
   showFilterFooter?: boolean
-  renderFilter?(renderOpts: VxeGlobalRendererHandles.RenderFilterOptions, params: VxeGlobalRendererHandles.RenderFilterParams): T
-  filterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
-  filterRemoteMethod?(params: VxeGlobalRendererHandles.FilterRemoteMethod): boolean
-  filterResetMethod?(params: VxeGlobalRendererHandles.FilterResetMethodParams): void
-  filterRecoverMethod?(params: VxeGlobalRendererHandles.FilterRecoverMethodParams): void
+  renderFilter?(renderOpts: VxeGlobalRendererHandles.RenderFilterOptions, params: VxeGlobalRendererHandles.RenderFilterParams<any>): T
+  filterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams<any>): boolean
+  filterRemoteMethod?(params: VxeGlobalRendererHandles.FilterRemoteMethod<any>): boolean
+  filterResetMethod?(params: VxeGlobalRendererHandles.FilterResetMethodParams<any>): void
+  filterRecoverMethod?(params: VxeGlobalRendererHandles.FilterRecoverMethodParams<any>): void
   // 默认行为
-  defaultFilterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams): boolean
+  defaultFilterMethod?(params: VxeGlobalRendererHandles.FilterMethodParams<any>): boolean
 
   // 单元格渲染
-  cellClassName?: string | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => string | VNodeClassName)
-  cellStyle?: VNodeStyle | ((params: VxeGlobalRendererHandles.RenderDefaultParams) => VNodeStyle)
-  renderHeader?(renderOpts: VxeGlobalRendererHandles.RenderHeaderOptions, params: VxeGlobalRendererHandles.RenderHeaderParams): T
-  renderDefault?(renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions, params: VxeGlobalRendererHandles.RenderDefaultParams): T
-  renderFooter?(renderOpts: VxeGlobalRendererHandles.RenderFooterOptions, params: VxeGlobalRendererHandles.RenderFooterParams): T
-  exportMethod?(params: VxeGlobalRendererHandles.ExportMethodParams): string
-  footerExportMethod?(params: VxeGlobalRendererHandles.FooterExportMethodParams): string
+  cellClassName?: string | ((params: VxeGlobalRendererHandles.RenderDefaultParams<any>) => string | VNodeClassName)
+  cellStyle?: VNodeStyle | ((params: VxeGlobalRendererHandles.RenderDefaultParams<any>) => VNodeStyle)
+  renderHeader?(renderOpts: VxeGlobalRendererHandles.RenderHeaderOptions, params: VxeGlobalRendererHandles.RenderHeaderParams<any>): T
+  renderDefault?(renderOpts: VxeGlobalRendererHandles.RenderDefaultOptions, params: VxeGlobalRendererHandles.RenderDefaultParams<any>): T
+  renderFooter?(renderOpts: VxeGlobalRendererHandles.RenderFooterOptions, params: VxeGlobalRendererHandles.RenderFooterParams<any>): T
+  exportMethod?(params: VxeGlobalRendererHandles.ExportMethodParams<any>): string
+  footerExportMethod?(params: VxeGlobalRendererHandles.FooterExportMethodParams<any>): string
 
   // 编辑渲染
-  autofocus?: string | ((params: VxeGlobalRendererHandles.RenderEditParams | VxeGlobalRendererHandles.RenderCellParams<any>) => HTMLElement | null)
+  autofocus?: string | ((params: VxeGlobalRendererHandles.RenderEditParams<any> | VxeGlobalRendererHandles.RenderCellParams<any>) => HTMLElement | null)
   autoselect?: boolean
-  renderEdit?(renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams): T
-  renderCell?(renderOpts: VxeGlobalRendererHandles.RenderCellOptions, params: VxeGlobalRendererHandles.RenderCellParams<any>): T
+  renderEdit?(renderOpts: VxeGlobalRendererHandles.RenderEditOptions<any>, params: VxeGlobalRendererHandles.RenderEditParams<any>): T
+  renderCell?(renderOpts: VxeGlobalRendererHandles.RenderCellOptions<any>, params: VxeGlobalRendererHandles.RenderCellParams<any>): T
 
   // 内容渲染
-  renderExpand?(renderOpts: VxeGlobalRendererHandles.RenderExpandOptions, params: VxeGlobalRendererHandles.RenderExpandParams): T
+  renderExpand?(renderOpts: VxeGlobalRendererHandles.RenderExpandOptions, params: VxeGlobalRendererHandles.RenderExpandParams<any>): T
 
   // 工具栏-按钮渲染
+  toolbarButtonClassName?: string | ((params: VxeGlobalRendererHandles.RenderButtonParams<any>) => string | VNodeClassName)
   renderToolbarButton?(renderOpts: VxeGlobalRendererHandles.RenderButtonOptions, params: VxeGlobalRendererHandles.RenderButtonParams<any>): T
+  toolbarToolClassName?: string | ((params: VxeGlobalRendererHandles.RenderToolParams<any>) => string | VNodeClassName)
   renderToolbarTool?(renderOpts: VxeGlobalRendererHandles.RenderToolOptions, params: VxeGlobalRendererHandles.RenderToolParams<any>): T
 
   // 表单-项渲染
