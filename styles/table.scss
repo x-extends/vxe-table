@@ -1282,7 +1282,7 @@
               }
             }
             .vxe-textarea {
-              height: calc($vxe-table-row-line-height - 1px);
+              height: $vxe-table-row-line-height - 1px;
               .vxe-textarea--inner {
                 border: 0;
               }

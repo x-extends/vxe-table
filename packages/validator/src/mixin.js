@@ -278,7 +278,15 @@ export default {
                 }
               } else {
                 const isArrType = type === 'array'
-                const hasEmpty = isArrType || XEUtils.isArray(cellValue) ? (!XEUtils.isArray(cellValue) || !cellValue.length) : eqEmptyValue(cellValue)
+                const isArrVal = XEUtils.isArray(cellValue)
+                let hasEmpty = true
+                if (isArrType || isArrVal) {
+                  hasEmpty = !isArrVal || !cellValue.length
+                } else if (XEUtils.isString(cellValue)) {
+                  hasEmpty = eqEmptyValue(cellValue.trim())
+                } else {
+                  hasEmpty = eqEmptyValue(cellValue)
+                }
                 if (required ? (hasEmpty || validErrorRuleValue(rule, cellValue)) : (!hasEmpty && validErrorRuleValue(rule, cellValue))) {
                   this.validRuleErr = true
                   errorRules.push(new Rule(rule))

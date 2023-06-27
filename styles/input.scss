@@ -819,7 +819,7 @@ $iconWidth: 1.6em;
   }
   .vxe-input--date-picker-body table,
   .vxe-input--time-picker-body {
-    height: calc(nth($timeWeekRowHeightList, $sizeIndex) * 6 + nth($titleRowHeightList, $sizeIndex));
+    height: nth($timeWeekRowHeightList, $sizeIndex) * 6 + nth($titleRowHeightList, $sizeIndex);
   }
   .vxe-input--time-picker-body {
     $ulWidthList: 48px, 48px, 44px, 42px;
@@ -839,7 +839,7 @@ $iconWidth: 1.6em;
       left: nth($ulWidthList, $sizeIndex);
     }
     .vxe-input--time-picker-second-list {
-      left: calc(nth($ulWidthList, $sizeIndex) * 2);
+      left: nth($ulWidthList, $sizeIndex) * 2;
     }
   }
   .vxe-input--date-day-view,
@@ -870,7 +870,7 @@ $iconWidth: 1.6em;
     padding: 0 10px - $sizeIndex;
   }
   .vxe-input--date-label {
-    line-height: calc(nth($fontSizeList, $sizeIndex) + 1px);
+    line-height: nth($fontSizeList, $sizeIndex) + 1px;
   }
 }
 

@@ -59,7 +59,9 @@ export interface RendererMapOptions {
   renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
 
   // 工具栏-按钮渲染
+  toolbarButtonClassName?: string | ((params: ToolbarButtonRenderParams) => string | VNodeClassName)
   renderToolbarButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): SlotVNodeType | SlotVNodeType[];
+  toolbarToolClassName?: string | ((params: ToolbarToolRenderParams) => string | VNodeClassName)
   renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): SlotVNodeType | SlotVNodeType[];
 
   // 表单-项渲染
