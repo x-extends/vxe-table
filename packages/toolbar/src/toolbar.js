@@ -50,10 +50,12 @@ function renderBtns (h, _vm) {
     }
     if (compConf) {
       const renderToolbarButton = compConf.renderToolbarButton || compConf.renderButton
+      const toolbarButtonClassName = compConf.toolbarButtonClassName
+      const params = { $grid: $xegrid, $table: $xetable, button: item }
       if (renderToolbarButton) {
         return h('span', {
-          class: 'vxe-button--item'
-        }, getSlotVNs(renderToolbarButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item })))
+          class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
+        }, getSlotVNs(renderToolbarButton.call(_vm, h, buttonRender, params)))
       }
     }
     return h('vxe-button', {
@@ -98,9 +100,11 @@ function renderRightTools (h, _vm) {
     if (compConf) {
       const { renderToolbarTool } = compConf
       if (renderToolbarTool) {
+        const toolbarToolClassName = compConf.toolbarToolClassName
+        const params = { $table: $xetable, $grid: $xegrid, tool: item }
         return h('span', {
-          class: 'vxe-tool--item'
-        }, getSlotVNs(renderToolbarTool.call(_vm, h, toolRender, { $table: $xetable, $grid: $xegrid, tool: item })))
+          class: ['vxe-tool--item', toolbarToolClassName ? (XEUtils.isFunction(toolbarToolClassName) ? toolbarToolClassName(params) : toolbarToolClassName) : '']
+        }, getSlotVNs(renderToolbarTool.call(_vm, h, toolRender, params)))
       }
     }
     return h('vxe-button', {
