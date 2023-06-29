@@ -138,7 +138,7 @@ export default {
       customTitle: '列設定',
       customAll: '全部',
       customConfirm: '確認',
-      customRestore: '還原'
+      customRestore: '重置'
     },
     grid: {
       selectOneRecord: '請至少選擇一條記錄！',

@@ -121,7 +121,7 @@ export namespace VxeGlobalRendererHandles {
   }
 
   export type RenderDefaultOptions<D = VxeTableDataRow> = VxeColumnPropTypes.EditRender<D>
-  export type RenderDefaultParams = RenderEditParams
+  export type RenderDefaultParams<D = VxeTableDataRow> = RenderEditParams<D>
 
   export interface RenderFooterOptions extends VxeGlobalRendererHandles.RenderOptions { }
 
@@ -149,7 +149,7 @@ export namespace VxeGlobalRendererHandles {
     options: VxeTablePropTypes.ExportHandleOptions
   }
 
-  export type RenderEditOptions = VxeColumnPropTypes.EditRender
+  export type RenderEditOptions<D = VxeTableDataRow> = VxeColumnPropTypes.EditRender<D>
 
   export interface RenderEditParams<D = VxeTableDataRow> {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>

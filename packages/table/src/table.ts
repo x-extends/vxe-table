@@ -3148,7 +3148,7 @@ export default defineComponent({
         return 0
       },
       /**
-       * 手动重置列的显示隐藏、列宽拖动的状态；
+       * 手动重置列的显示隐藏、列宽拖动的状态、固定列、排序列；
        * 如果为 true 则重置所有状态
        * 如果已关联工具栏，则会同步更新
        */
@@ -3156,10 +3156,17 @@ export default defineComponent({
         const { tableFullColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod } = customOpts
-        const opts = Object.assign({ visible: true, resizable: options === true }, options)
+        const opts = Object.assign({
+          visible: true,
+          resizable: options === true,
+          fixed: options === true
+        }, options)
         tableFullColumn.forEach((column) => {
           if (opts.resizable) {
             column.resizeWidth = 0
+          }
+          if (opts.fixed) {
+            column.fixed = column.defaultFixed
           }
           if (!checkMethod || checkMethod({ column })) {
             column.visible = column.defaultVisible
@@ -3167,6 +3174,9 @@ export default defineComponent({
         })
         if (opts.resizable) {
           tablePrivateMethods.saveCustomResizable(true)
+        }
+        if (opts.fixed) {
+          tablePrivateMethods.saveCustomFixed()
         }
         return tablePrivateMethods.handleCustom()
       },

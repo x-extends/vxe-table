@@ -138,7 +138,7 @@ export default {
       customTitle: 'Column settings',
       customAll: 'All',
       customConfirm: 'Confirm',
-      customRestore: 'Restore'
+      customRestore: 'Reset'
     },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',

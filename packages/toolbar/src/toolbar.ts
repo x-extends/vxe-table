@@ -158,18 +158,7 @@ export default defineComponent({
     }
 
     const resetCustomEvent = (evnt: Event) => {
-      const { columns } = reactData
-      const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
-      const tableCustomOpts = computeTableCustomOpts.value
-      const { checkMethod } = tableCustomOpts
-      XEUtils.eachTree(columns, (column) => {
-        if (!checkMethod || checkMethod({ column })) {
-          column.visible = column.defaultVisible
-          column.halfVisible = false
-        }
-        column.resizeWidth = 0
-      })
-      $xetable.saveCustomResizable(true)
+      $xetable.resetColumn(true)
       closeCustom()
       emitCustomEvent('reset', evnt)
     }

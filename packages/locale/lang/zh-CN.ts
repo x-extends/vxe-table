@@ -247,7 +247,7 @@ export default {
       custom: '列设置',
       customAll: '全部',
       customConfirm: '确认',
-      customRestore: '还原'
+      customRestore: '重置'
     },
     input: {
       date: {
