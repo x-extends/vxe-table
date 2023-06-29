@@ -471,16 +471,8 @@ export default {
       }
     },
     resetCustomEvent (evnt) {
-      const { $xetable, columns } = this
-      const checkMethod = $xetable.customOpts.checkMethod
-      XEUtils.eachTree(columns, column => {
-        if (!checkMethod || checkMethod({ column })) {
-          column.visible = column.defaultVisible
-          column.halfVisible = false
-        }
-        column.resizeWidth = 0
-      })
-      $xetable.saveCustomResizable(true)
+      const { $xetable } = this
+      $xetable.resetColumn(true)
       this.closeCustom()
       this.emitCustomEvent('reset', evnt)
     },

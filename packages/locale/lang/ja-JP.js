@@ -138,7 +138,7 @@ export default {
       customTitle: '列设置',
       customAll: '全部',
       customConfirm: '确认',
-      customRestore: '还原'
+      customRestore: 'リセット'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください',

@@ -1494,10 +1494,17 @@ const Methods = {
   resetColumn (options) {
     const { customOpts } = this
     const { checkMethod } = customOpts
-    const opts = Object.assign({ visible: true, resizable: options === true }, options)
+    const opts = Object.assign({
+      visible: true,
+      resizable: options === true,
+      fixed: options === true
+    }, options)
     this.tableFullColumn.forEach(column => {
       if (opts.resizable) {
         column.resizeWidth = 0
+      }
+      if (opts.fixed) {
+        column.fixed = column.defaultFixed
       }
       if (!checkMethod || checkMethod({ column })) {
         column.visible = column.defaultVisible
@@ -1505,6 +1512,9 @@ const Methods = {
     })
     if (opts.resizable) {
       this.saveCustomResizable(true)
+    }
+    if (opts.fixed) {
+      this.saveCustomFixed()
     }
     return this.handleCustom()
   },
