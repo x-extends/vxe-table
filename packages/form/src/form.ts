@@ -222,12 +222,20 @@ export default defineComponent({
       formMethods.dispatchEvent('collapse', { status, collapse: status, data: props.data }, evnt)
     }
 
-    const clearValidate = (fieldOrItem?: VxeFormItemPropTypes.Field | VxeFormDefines.ItemInfo) => {
+    const clearValidate = (fieldOrItem?: VxeFormItemPropTypes.Field | VxeFormItemPropTypes.Field[] | VxeFormDefines.ItemInfo | VxeFormDefines.ItemInfo[]) => {
       if (fieldOrItem) {
-        const item = handleFieldOrItem($xeform, fieldOrItem)
-        if (item) {
-          item.showError = false
+        let fields: any = fieldOrItem
+        if (!XEUtils.isArray(fieldOrItem)) {
+          fields = [fieldOrItem]
         }
+        fields.forEach((field: any) => {
+          if (field) {
+            const item = handleFieldOrItem($xeform, field)
+            if (item) {
+              item.showError = false
+            }
+          }
+        })
       } else {
         getItems().forEach((item) => {
           item.showError = false
@@ -304,62 +312,81 @@ export default defineComponent({
      *  validator=Function({ itemValue, rule, rules, data, property }) 自定义校验，接收一个 Promise
      *  trigger=change 触发方式
      */
-    const validItemRules = (validType: string, property: string, val?: any) => {
+    const validItemRules = (validType: string, fields: string | string[], val?: any): Promise<VxeFormDefines.ValidateErrorMapParams | undefined> => {
       const { data, rules: formRules } = props
-      const errorRules: Rule[] = []
-      const syncVailds: Promise<any>[] = []
-      if (property && formRules) {
-        const rules = XEUtils.get(formRules, property)
-        if (rules) {
-          const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
-          rules.forEach((rule) => {
-            const { type, trigger, required } = rule
-            if (validType === 'all' || !trigger || validType === trigger) {
-              if (XEUtils.isFunction(rule.validator)) {
-                const customValid = rule.validator({
-                  itemValue,
-                  rule,
-                  rules,
-                  data,
-                  field: property,
-                  property,
-                  $form: $xeform
-                })
-                if (customValid) {
-                  if (XEUtils.isError(customValid)) {
-                    errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
-                  } else if (customValid.catch) {
-                    // 如果为异步校验（注：异步校验是并发无序的）
-                    syncVailds.push(
-                      customValid.catch((e: any) => {
-                        errorRules.push(new Rule({ type: 'custom', trigger, content: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
-                      })
-                    )
+      const errorMaps: VxeFormDefines.ValidateErrorMapParams = {}
+      if (!XEUtils.isArray(fields)) {
+        fields = [fields]
+      }
+      return Promise.all(
+        fields.map((property) => {
+          const errorRules: Rule[] = []
+          const syncVailds: Promise<any>[] = []
+          if (property && formRules) {
+            const rules = XEUtils.get(formRules, property)
+            if (rules) {
+              const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
+              rules.forEach((rule) => {
+                const { type, trigger, required } = rule
+                if (validType === 'all' || !trigger || validType === trigger) {
+                  if (XEUtils.isFunction(rule.validator)) {
+                    const customValid = rule.validator({
+                      itemValue,
+                      rule,
+                      rules,
+                      data,
+                      field: property,
+                      property,
+                      $form: $xeform
+                    })
+                    if (customValid) {
+                      if (XEUtils.isError(customValid)) {
+                        errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
+                      } else if (customValid.catch) {
+                        // 如果为异步校验（注：异步校验是并发无序的）
+                        syncVailds.push(
+                          customValid.catch((e: any) => {
+                            errorRules.push(new Rule({ type: 'custom', trigger, content: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
+                          })
+                        )
+                      }
+                    }
+                  } else {
+                    const isArrType = type === 'array'
+                    const isArrVal = XEUtils.isArray(itemValue)
+                    let hasEmpty = true
+                    if (isArrType || isArrVal) {
+                      hasEmpty = !isArrVal || !itemValue.length
+                    } else if (XEUtils.isString(itemValue)) {
+                      hasEmpty = eqEmptyValue(itemValue.trim())
+                    } else {
+                      hasEmpty = eqEmptyValue(itemValue)
+                    }
+                    if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
+                      errorRules.push(new Rule(rule))
+                    }
                   }
                 }
-              } else {
-                const isArrType = type === 'array'
-                const isArrVal = XEUtils.isArray(itemValue)
-                let hasEmpty = true
-                if (isArrType || isArrVal) {
-                  hasEmpty = !isArrVal || !itemValue.length
-                } else if (XEUtils.isString(itemValue)) {
-                  hasEmpty = eqEmptyValue(itemValue.trim())
-                } else {
-                  hasEmpty = eqEmptyValue(itemValue)
+              })
+            }
+          }
+          return Promise.all(syncVailds).then(() => {
+            if (errorRules.length) {
+              errorMaps[property] = errorRules.map(rule => {
+                return {
+                  $form: $xeform,
+                  rule,
+                  data,
+                  field: property,
+                  property
                 }
-                if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
-                  errorRules.push(new Rule(rule))
-                }
-              }
+              })
             }
           })
-        }
-      }
-      return Promise.all(syncVailds).then(() => {
-        if (errorRules.length) {
-          const rest = { rules: errorRules, rule: errorRules[0] }
-          return Promise.reject(rest)
+        })
+      ).then(() => {
+        if (!XEUtils.isEmpty(errorMaps)) {
+          return Promise.reject(errorMaps)
         }
       })
     }
@@ -380,14 +407,14 @@ export default defineComponent({
             itemValids.push(
               validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
-              }).catch(({ rule, rules }) => {
-                const rest: any = { rule, rules, data, field, property: field, $form: $xeform }
+              }).catch((errorMaps: VxeFormDefines.ValidateErrorMapParams) => {
+                const rest = errorMaps[field]
                 if (!validRest[field]) {
                   validRest[field] = []
                 }
                 validRest[field].push(rest)
                 validFields.push(field)
-                item.errRule = rule
+                item.errRule = rest[0].rule
                 return Promise.reject(rest)
               })
             )
@@ -431,9 +458,12 @@ export default defineComponent({
       return beginValidate(getItems(), '', callback)
     }
 
-    const validateField = (fieldOrItem: VxeFormItemPropTypes.Field | VxeFormDefines.ItemInfo, callback: any) => {
-      const item = handleFieldOrItem($xeform, fieldOrItem)
-      return beginValidate(item ? [item] : [], '', callback)
+    const validateField = (fieldOrItem: VxeFormItemPropTypes.Field | VxeFormItemPropTypes.Field[] | VxeFormDefines.ItemInfo | VxeFormDefines.ItemInfo[], callback: any) => {
+      let fields: any[] = []
+      if (!XEUtils.isArray(fieldOrItem)) {
+        fields = [fieldOrItem]
+      }
+      return beginValidate(fields.map(field => handleFieldOrItem($xeform, field) as VxeFormDefines.ItemInfo), '', callback)
     }
 
     const submitEvent = (evnt: Event) => {
@@ -513,11 +543,12 @@ export default defineComponent({
           .then(() => {
             clearValidate(field)
           })
-          .catch(({ rule }) => {
+          .catch((errorMaps: VxeFormDefines.ValidateErrorMapParams) => {
+            const rest = errorMaps[field]
             const item = getItemByField(field)
-            if (item) {
+            if (rest && item) {
               item.showError = true
-              item.errRule = rule
+              item.errRule = rest[0].rule
             }
           })
       }

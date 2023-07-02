@@ -30,7 +30,7 @@ import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   setup () {
-    const allAlign = ref(null)
+    const allAlign = ref('')
 
     const tableData1 = ref([
       { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },

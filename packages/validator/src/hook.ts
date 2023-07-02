@@ -44,7 +44,6 @@ const tableValidatorMethodKeys: (keyof TableValidatorMethods)[] = ['fullValidate
 const validatorHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
     const { props, reactData, internalData } = $xetable
-    const { refValidTooltip } = $xetable.getRefMaps()
     const { computeValidOpts, computeTreeOpts, computeEditOpts } = $xetable.getComputeMaps()
 
     let validatorMethods = {} as TableValidatorMethods
@@ -221,7 +220,6 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       },
       clearValidate () {
         const { validStore } = reactData
-        const validTip = refValidTooltip.value
         Object.assign(validStore, {
           visible: false,
           row: null,
@@ -229,9 +227,6 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           content: '',
           rule: null
         })
-        if (validTip && validTip.reactData.visible) {
-          validTip.close()
-        }
         return nextTick()
       }
     }
@@ -276,13 +271,13 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
        */
       validCellRules (validType, row, column, val) {
         const { editRules } = props
-        const { property } = column
+        const { field } = column
         const errorRules: Rule[] = []
         const syncVailds: Promise<any>[] = []
-        if (property && editRules) {
-          const rules = XEUtils.get(editRules, property)
+        if (field && editRules) {
+          const rules = XEUtils.get(editRules, field)
           if (rules) {
-            const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
+            const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, field) : val
             rules.forEach((rule) => {
               const { type, trigger, required } = rule
               if (validType === 'all' || !trigger || validType === trigger) {
@@ -382,11 +377,8 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
        * 弹出校验错误提示
        */
       showValidTooltip (params) {
-        const { height } = props
-        const { tableData, validStore } = reactData
-        const validOpts = computeValidOpts.value
-        const { rule, row, column, cell } = params
-        const validTip = refValidTooltip.value
+        const { validStore } = reactData
+        const { rule, row, column } = params
         const content = rule.content
         return nextTick().then(() => {
           Object.assign(validStore, {
@@ -397,9 +389,6 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             visible: true
           })
           $xetable.dispatchEvent('valid-error', params, null)
-          if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
-            return validTip.open(cell, content)
-          }
         })
       }
     }

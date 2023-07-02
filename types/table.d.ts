@@ -40,7 +40,6 @@ export interface VxeTableConstructor<D = any> extends VxeComponentBase, VxeTable
 export interface TablePrivateRef {
   refElem: Ref<HTMLDivElement>
   refTooltip: Ref<VxeTooltipInstance>
-  refValidTooltip: Ref<VxeTooltipInstance>
   refTableFilter: Ref<ComponentPublicInstance>
   refTableMenu: Ref<VxeMenuPanelInstance>
   refTableHeader: Ref<ComponentPublicInstance>

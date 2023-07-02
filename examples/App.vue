@@ -4,28 +4,28 @@
       <div class="left">
         <a href="/vxe-table/">
           <img src="/vxe-table/logo.png" width="18">
-          <span class="title">该文档已废弃，官网文档地址：<a href="https://github.com/x-extends/vxe-table-docs">https://github.com/x-extends/vxe-table-docs</a></span>
+          <span class="title">官网文档地址：<a href="https://github.com/x-extends/vxe-table-docs">https://github.com/x-extends/vxe-table-docs</a></span>
         </a>
       </div>
       <div class="right">
         <div class="content">
           <span v-if="appData.usedJSHeapSize && appData.usedJSHeapSize !== '0'" class="performance">Memory used: {{ appData.usedJSHeapSize }} MB.</span>
-          <span>{{ $t('app.body.label.translations') }}:</span>
-          <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
+          <!-- <span>{{ $t('app.body.label.translations') }}:</span> -->
+          <!-- <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
             <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
-            <vxe-option value="en_US" label="English"></vxe-option>
+            <vxe-option value="en_US" label="English"></vxe-option> -->
             <!-- <vxe-option value="ja_JP" label="ジャパン"></vxe-option> -->
-          </vxe-select>
-          <span>{{ $t('app.body.label.version') }}: </span>
-          <vxe-select class="version-switch" size="mini" v-model="appData.version" @change="vChangeEvent">
+          <!-- </vxe-select> -->
+          <!-- <span>{{ $t('app.body.label.version') }}: </span> -->
+          <!-- <vxe-select class="version-switch" size="mini" v-model="appData.version" @change="vChangeEvent"> -->
             <!-- <vxe-option value="4.5" :label="$t('app.body.other.v4d5')" disabled></vxe-option> -->
-            <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
+            <!-- <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option> -->
             <!-- <vxe-option value="3.5" :label="$t('app.body.other.v3d5')" disabled></vxe-option> -->
-            <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
+            <!-- <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
             <vxe-option value="2" :label="$t('app.body.other.v2')" class-name="due-to-stop"></vxe-option>
             <vxe-option value="1" :label="$t('app.body.other.v1')" class-name="end-of-life"></vxe-option>
-          </vxe-select>
+          </vxe-select> -->
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
           <template v-if="appData.apiLoading && appData.showPlugin">
             <a v-if="appData.disabledPlugin" class="link support" href="/vxe-table/plugins" target="_blank">💡插件</a>
@@ -36,7 +36,7 @@
     </header>
     <div class="page-container">
       <div class="aside" :class="{visible: appData.showLeft}">
-        <div class="header">
+        <!-- <div class="header">
           <div class="version-list">
             <template v-if="appData.stableVersionList.length">
               <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
@@ -48,16 +48,16 @@
             </template>
           </div>
           <vxe-input clearable v-model="appData.filterName" type="search" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
-        </div>
+        </div> -->
         <div class="body">
-          <div class="sponsors" v-if="appData.sponsorList.length">
+          <!-- <div class="sponsors" v-if="appData.sponsorList.length">
             <h4 class="title">赞助商</h4>
             <div v-for="(item, index) in appData.sponsorList" :key="index">
               <a :href="item.url" :title="item.title" target="_blank">
                 <img :src="item.img" :style="{width: item.width, height: item.height}">
               </a>
             </div>
-          </div>
+          </div> -->
           <div class="docs">
             <template v-if="appData.apiList.length">
               <ul class="nav-menu">
@@ -139,44 +139,44 @@ export default defineComponent({
               locat: {
                 name: 'StartInstall'
               }
-            },
-            {
-              label: 'app.aside.nav.use',
-              locat: {
-                name: 'StartUse'
-              }
-            },
-            {
-              label: 'app.aside.nav.quick',
-              locat: {
-                name: 'StartQuick'
-              }
-            },
-            {
-              label: 'app.aside.nav.global',
-              locat: {
-                name: 'StartGlobal'
-              }
-            },
-            {
-              label: 'app.aside.nav.icons',
-              locat: {
-                name: 'StartIcons'
-              }
-            },
-            {
-              label: 'app.aside.nav.theme',
-              locat: {
-                name: 'StartTheme'
-              }
-            },
-            {
-              label: 'app.aside.nav.i18n',
-              demoUrl: 'https://jsrun.pro/SbfKp/edit',
-              locat: {
-                name: 'StartI18n'
-              }
             }
+            // {
+            //   label: 'app.aside.nav.use',
+            //   locat: {
+            //     name: 'StartUse'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.quick',
+            //   locat: {
+            //     name: 'StartQuick'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.global',
+            //   locat: {
+            //     name: 'StartGlobal'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.icons',
+            //   locat: {
+            //     name: 'StartIcons'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.theme',
+            //   locat: {
+            //     name: 'StartTheme'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.i18n',
+            //   demoUrl: 'https://jsrun.pro/SbfKp/edit',
+            //   locat: {
+            //     name: 'StartI18n'
+            //   }
+            // }
           ]
         },
         {

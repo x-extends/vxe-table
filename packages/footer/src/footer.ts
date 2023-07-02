@@ -32,7 +32,7 @@ export default defineComponent({
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
-    const { refTableHeader, refTableBody, refValidTooltip } = $xetable.getRefMaps()
+    const { refTableHeader, refTableBody } = $xetable.getRefMaps()
     const { computeTooltipOpts, computeColumnOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
@@ -50,7 +50,6 @@ export default defineComponent({
       const { fixedType } = props
       const { scrollXLoad } = tableReactData
       const { lastScrollLeft } = tableInternalData
-      const validTip = refValidTooltip.value
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
@@ -68,9 +67,6 @@ export default defineComponent({
       }
       if (scrollXLoad && isX) {
         $xetable.triggerScrollXEvent(evnt)
-      }
-      if (isX && validTip && validTip.reactData.visible) {
-        validTip.updatePlacement()
       }
       $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }

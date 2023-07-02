@@ -31,7 +31,7 @@ export default defineComponent({
     const xesize = inject('xesize', null as ComputedRef<SizeType> | null)
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
-    const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
+    const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody } = $xetable.getRefMaps()
     const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
@@ -123,7 +123,7 @@ export default defineComponent({
      * 渲染列
      */
     const renderColumn = (seq: number | string, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
-      const { columnKey, height, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
+      const { columnKey, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
       const { tableData, overflowX, scrollYLoad, currentColumn, mergeList, editStore, validStore, isAllOverflow } = tableReactData
       const { afterFullData } = tableInternalData
       const validOpts = computeValidOpts.value
@@ -155,7 +155,7 @@ export default defineComponent({
       const tdOns: any = {}
       const cellAlign = align || allAlign
       const hasValidError = validStore.row === row && validStore.column === column
-      const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
+      const showValidTip = editRules && validOpts.showMessage
       const attrs: any = { colid: column.id }
       const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, $grid: $xetable.xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
@@ -508,7 +508,6 @@ export default defineComponent({
       const tableFooter = refTableFooter.value
       const leftBody = refTableLeftBody.value
       const rightBody = refTableRightBody.value
-      const validTip = refValidTooltip.value
       const scrollBodyElem = refElem.value
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
@@ -558,9 +557,6 @@ export default defineComponent({
       }
       if (scrollYLoad && isRollY) {
         $xetable.triggerScrollYEvent(evnt)
-      }
-      if (isRollX && validTip && validTip.reactData.visible) {
-        validTip.updatePlacement()
       }
       $xetable.dispatchEvent('scroll', {
         type: renderType,

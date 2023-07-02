@@ -1177,8 +1177,9 @@
       .vxe-cell--valid {
         width: 320px;
         position: absolute;
-        bottom: calc(100% + 4px);
         left: 50%;
+        font-size: 12px;
+        line-height: 1.2em;
         transform: translateX(-50%);
         text-align: center;
         pointer-events: none;
@@ -1186,9 +1187,7 @@
         .vxe-cell--valid-msg {
           display: inline-block;
           border-radius: var(--vxe-border-radius);
-          padding: 8px 12px;
-          color: var(--vxe-table-validate-tooltip-error-color);
-          background-color: var(--vxe-table-validate-tooltip-error-background-color);
+          color: var(--vxe-table-validate-error-color);
           pointer-events: auto;
         }
       }
@@ -1206,10 +1205,16 @@
     }
   }
   .vxe-body--row {
-    &:first-child {
+    &:last-child {
       .vxe-cell--valid {
-        bottom: auto;
-        top: calc(100% + 4px);
+        top: -1.3em;
+      }
+    }
+    &:first-child {
+      &:last-child {
+        .vxe-cell--valid {
+          top: calc(100% - 1.3em);
+        }
       }
     }
   }
