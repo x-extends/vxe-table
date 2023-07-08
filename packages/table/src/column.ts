@@ -65,6 +65,8 @@ export const columnProps = {
   treeNode: Boolean as PropType<VxeColumnPropTypes.TreeNode>,
   // 是否可视
   visible: { type: Boolean as PropType<VxeColumnPropTypes.Visible>, default: null },
+  // 表头单元格数据导出方法
+  headerExportMethod: Function as PropType<VxeColumnPropTypes.HeaderExportMethod>,
   // 单元格数据导出方法
   exportMethod: Function as PropType<VxeColumnPropTypes.ExportMethod>,
   // 表尾单元格数据导出方法

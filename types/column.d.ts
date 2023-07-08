@@ -103,6 +103,12 @@ export namespace VxeColumnPropTypes {
   }
   export type ExportMethod<D = VxeTableDataRow> = (params: ExportMethodParams<D>) => string | number
 
+  interface HeaderExportParams<D = VxeTableDataRow> {
+    $table: VxeTableConstructor<D>,
+    column: VxeTableDefines.ColumnInfo<D>
+  }
+  export type HeaderExportMethod<D = VxeTableDataRow> = (params: HeaderExportParams<D>) => string | number
+
   interface FooterExportParams<D = VxeTableDataRow> {
     $table: VxeTableConstructor<D>,
     items: any[]
@@ -321,6 +327,10 @@ export type VxeColumnProps<D = VxeTableDataRow> = {
    * 是否可视
    */
   visible?: VxeColumnPropTypes.Visible
+  /**
+   * 自定义表尾单元格数据导出方法
+   */
+  headerExportMethod?: VxeColumnPropTypes.HeaderExportMethod<D>
   /**
    * 自定义单元格数据导出方法
    */

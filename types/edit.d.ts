@@ -73,7 +73,7 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
     row: DT
     rowIndex: number
     $rowIndex: number
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<DT>
     columnIndex: number
     $columnIndex: number
     cell: HTMLElement
@@ -85,7 +85,7 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
     row: DT
     rowIndex: number
     $rowIndex: number
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<DT>
     columnIndex: number
     $columnIndex: number
     cell: HTMLElement
@@ -95,7 +95,7 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
    */
   getSelectedCell(): {
     row: DT
-    column: VxeTableDefines.ColumnInfo
+    column: VxeTableDefines.ColumnInfo<DT>
   }
   /**
    * 请使用 clearEdit
@@ -134,19 +134,19 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
    * 请使用 setEditCell
    * @deprecated
    */
-  setActiveCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>
+  setActiveCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<any>
   /**
    * 用于 edit-config，激活单元格编辑
    * @param row 指定行
    * @param field 字段名
    */
-  setEditCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>
+  setEditCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<any>
   /**
    * 用于 mouse-config.mouse-config，选中某个单元格
    * @param row 指定行
    * @param field 字段名
    */
-  setSelectCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo): Promise<any>
+  setSelectCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<any>
 }
 
 export interface TableEditPrivateMethods<D = VxeTableDataRow> {

@@ -90,10 +90,6 @@ function getBooleanValue (cellValue: any) {
   return cellValue === 'TRUE' || cellValue === 'true' || cellValue === true
 }
 
-function getHeaderTitle (opts: any, column: any) {
-  return (opts.original ? column.property : column.getTitle()) || ''
-}
-
 function getFooterData (opts: any, footerTableData: any) {
   const { footerFilterMethod } = opts
   return footerFilterMethod ? footerTableData.filter((items: any, index: any) => footerFilterMethod({ items, $rowIndex: index })) : footerTableData
@@ -310,6 +306,11 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         })
       }
       return $xetable.getRowSeq(row)
+    }
+
+    function getHeaderTitle (opts: any, column: any) {
+      const { headerExportMethod } = column
+      return headerExportMethod ? headerExportMethod({ column, $table: $xetable }) : ((opts.original ? column.property : column.getTitle()) || '')
     }
 
     const toBooleanValue = (cellValue: any) => {
@@ -1057,6 +1058,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
           columnFilterMethod = original ? ({ column }: any) => column.property : ({ column }: any) => defaultFilterExportColumn(column)
         }
         if (customCols) {
+          opts._isCustomColumn = true
           groups = XEUtils.searchTree(
             XEUtils.mapTree(customCols, (item: any) => {
               let targetColumn

@@ -1,5 +1,5 @@
-import { VNode, RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
-import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf } from './component'
+import { RenderFunction, SetupContext, ComponentPublicInstance, Ref } from 'vue'
+import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, SlotVNodeType } from './component'
 
 /* eslint-disable no-use-before-define */
 
@@ -214,23 +214,23 @@ export type ModalSlots = {
   /**
    * 自定义窗口内容模板
    */
-  default?(params: ModalDefaultSlotParams): JSX.Element[] | VNode[] | string[]
+  default?(params: ModalDefaultSlotParams): SlotVNodeType[] | SlotVNodeType
   /**
    * 自定义窗口头部的模板
    */
-  header?(params: ModalHeaderSlotParams): JSX.Element[] | VNode[] | string[]
+  header?(params: ModalHeaderSlotParams): SlotVNodeType[] | SlotVNodeType
   /**
    * 自定义窗口标题的模板（如果使用了 header 插槽，则该插槽无效）
    */
-  title?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
+  title?(params: ModalTitleSlotParams): SlotVNodeType[] | SlotVNodeType
   /**
    * 自定义窗口右上角的模板
    */
-  corner?(params: ModalTitleSlotParams): JSX.Element[] | VNode[] | string[]
+  corner?(params: ModalTitleSlotParams): SlotVNodeType[] | SlotVNodeType
   /**
    * 自定义窗口底部的模板
    */
-  footer?(params: ModalFooterSlotParams): JSX.Element[] | VNode[] | string[]
+  footer?(params: ModalFooterSlotParams): SlotVNodeType[] | SlotVNodeType
 }
 
 export type VxeModalEmits = [
