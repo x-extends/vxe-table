@@ -66,6 +66,8 @@ const props = {
   treeNode: Boolean,
   // 是否可视
   visible: { type: Boolean, default: null },
+  // 表头单元格数据导出方法
+  headerExportMethod: Function,
   // 单元格数据导出方法
   exportMethod: Function,
   // 表尾单元格数据导出方法

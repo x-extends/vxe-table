@@ -81,6 +81,7 @@ export interface TableExportConfig {
    * 是否服务端导出
    */
   remote?: boolean;
+
   /**
    * 只对 remote=true 有效，用于自定义导出逻辑
    */
@@ -226,6 +227,10 @@ export interface ColumnExportCellRenderParams extends GridRenderParams {
   row: RowInfo;
   column: ColumnInfo;
   options: ExportParams;
+}
+
+export interface ColumnExportHeaderRenderParams extends GridRenderParams {
+  column: ColumnInfo;
 }
 
 export interface ColumnExportFooterRenderParams extends GridRenderParams {

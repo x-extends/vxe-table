@@ -215,8 +215,9 @@ function getBooleanValue (cellValue) {
   return cellValue === 'TRUE' || cellValue === 'true' || cellValue === true
 }
 
-function getHeaderTitle (opts, column) {
-  return (opts.original ? column.property : column.getTitle()) || ''
+function getHeaderTitle ($xetable, opts, column) {
+  const { headerExportMethod } = column
+  return headerExportMethod ? headerExportMethod({ column, $table: $xetable }) : ((opts.original ? column.property : column.getTitle()) || '')
 }
 
 function getFooterCellValue ($xetable, opts, items, column) {
@@ -271,7 +272,7 @@ function toTxtCellLabel (val) {
 function toCsv ($xetable, opts, columns, datas) {
   let content = csvBOM
   if (opts.isHeader) {
-    content += columns.map(column => toTxtCellLabel(getHeaderTitle(opts, column))).join(',') + enterSymbol
+    content += columns.map(column => toTxtCellLabel(getHeaderTitle($xetable, opts, column))).join(',') + enterSymbol
   }
   datas.forEach(row => {
     content += columns.map(column => toTxtCellLabel(getCsvCellTypeLabel(column, row[column.id]))).join(',') + enterSymbol
@@ -289,7 +290,7 @@ function toCsv ($xetable, opts, columns, datas) {
 function toTxt ($xetable, opts, columns, datas) {
   let content = ''
   if (opts.isHeader) {
-    content += columns.map(column => toTxtCellLabel(getHeaderTitle(opts, column))).join('\t') + enterSymbol
+    content += columns.map(column => toTxtCellLabel(getHeaderTitle($xetable, opts, column))).join('\t') + enterSymbol
   }
   datas.forEach(row => {
     content += columns.map(column => toTxtCellLabel(row[column.id])).join('\t') + enterSymbol
@@ -355,7 +356,7 @@ function toHtml ($xetable, opts, columns, datas) {
           `<tr>${cols.map(column => {
             const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
             const classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
-            const cellTitle = getHeaderTitle(opts, column)
+            const cellTitle = getHeaderTitle($xetable, opts, column)
             let childWidth = 0
             let countChild = 0
             XEUtils.eachTree([column], item => {
@@ -380,7 +381,7 @@ function toHtml ($xetable, opts, columns, datas) {
         `<tr>${columns.map(column => {
           const headAlign = column.headerAlign || column.align || allHeaderAlign || allAlign
           const classNames = hasEllipsis($xetable, column, 'showHeaderOverflow', allColumnHeaderOverflow) ? ['col--ellipsis'] : []
-          const cellTitle = getHeaderTitle(opts, column)
+          const cellTitle = getHeaderTitle($xetable, opts, column)
           if (headAlign) {
             classNames.push(`col--${headAlign}`)
           }
@@ -516,7 +517,7 @@ function toXML ($xetable, opts, columns, datas) {
     columns.map(column => `<Column ss:Width="${column.renderWidth}"/>`).join('')
   ].join('')
   if (opts.isHeader) {
-    xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getHeaderTitle(opts, column)}</Data></Cell>`).join('')}</Row>`
+    xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getHeaderTitle($xetable, opts, column)}</Data></Cell>`).join('')}</Row>`
   }
   datas.forEach(row => {
     xml += '<Row>' + columns.map(column => `<Cell><Data ss:Type="String">${row[column.id]}</Data></Cell>`).join('') + '</Row>'
@@ -1205,6 +1206,7 @@ export default {
         columnFilterMethod = original ? ({ column }) => column.property : ({ column }) => defaultFilterExportColumn(column)
       }
       if (customCols) {
+        opts._isCustomColumn = true
         groups = XEUtils.searchTree(
           XEUtils.mapTree(customCols, item => {
             let targetColumn

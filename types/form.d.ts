@@ -33,12 +33,12 @@ export declare class Form extends VXETableComponent {
    * 对表单执行项进行校验，参数为一个回调函数。该回调函数会在校验结束后被调用 callback(errMap)。若不传入回调函数，则会返回一个 promise
    * @param callback 回调函数
    */
-  validateField(callback?: (errMap?: FormValidErrMapParams) => void): Promise<any>;
+  validateField(field?: string | string[], callback?: (errMap?: FormValidErrMapParams) => void): Promise<any>;
   /**
    * 手动清除校验状态，如果指定 field 则清除指定的项，否则清除整个表单
    * @param field 字段名
    */
-  clearValidate(field?: string): Promise<any>;
+  clearValidate(field?: string | string[]): Promise<any>;
   /**
    * 更新项状态
    * 当使用自定义渲染时可能会用到
@@ -55,10 +55,6 @@ export declare class Form extends VXETableComponent {
   toggleCollapse(): Promise<any>;
   [key: string]: any;
 }
-
-export function FormValidatorMethod(params: FormValidErrParams): void;
-export function FormValidatorMethod(params: FormValidErrParams): Error;
-export function FormValidatorMethod(params: FormValidErrParams): Promise<any>;
 
 export interface FormRule {
   /**
@@ -85,7 +81,18 @@ export interface FormRule {
    * 使用自定义校验函数，接收一个 Promise
    * @param params 参数
    */
-  validator?: typeof FormValidatorMethod;
+  validator?(params: {
+    $form: Form,
+    itemValue: any,
+    rule: FormRule;
+    rules: FormRule[];
+    data: any;
+    field: string
+    /**
+     * @deprecated
+     */
+    property: string
+  }): void | Error | Promise<any>
   /**
    * 提示消息
    */
@@ -105,7 +112,6 @@ export interface FormValidErrParams {
   $form: Form,
   itemValue: any,
   rule: FormRule;
-  rules: FormRule[];
   data: any;
   field: string
   /**

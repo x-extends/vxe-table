@@ -224,7 +224,10 @@ export const Cell = {
       }
     }
     if (!trigger || trigger === 'default') {
-      on.click = evnt => $table.triggerTreeExpandEvent(evnt, params)
+      on.click = evnt => {
+        evnt.stopPropagation()
+        $table.triggerTreeExpandEvent(evnt, params)
+      }
     }
     return [
       h('div', {
@@ -305,6 +308,7 @@ export const Cell = {
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
+            evnt.stopPropagation()
             $table.triggerRadioRowEvent(evnt, params)
           }
         }
@@ -362,6 +366,7 @@ export const Cell = {
       on = {
         click (evnt) {
           if (!isAllCheckboxDisabled) {
+            evnt.stopPropagation()
             $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
           }
         }
@@ -417,6 +422,7 @@ export const Cell = {
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
+            evnt.stopPropagation()
             $table.triggerCheckRowEvent(evnt, params, !isChecked)
           }
         }
@@ -478,6 +484,7 @@ export const Cell = {
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
+            evnt.stopPropagation()
             $table.triggerCheckRowEvent(evnt, params, !isChecked)
           }
         }
@@ -550,6 +557,7 @@ export const Cell = {
         }],
         on: {
           click (evnt) {
+            evnt.stopPropagation()
             $table.triggerRowExpandEvent(evnt, params)
           }
         }

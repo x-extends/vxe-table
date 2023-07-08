@@ -90,6 +90,7 @@ export class ColumnInfo {
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,
       contentRender: _vm.contentRender,
+      headerExportMethod: _vm.headerExportMethod,
       exportMethod: _vm.exportMethod,
       footerExportMethod: _vm.footerExportMethod,
       titleHelp: _vm.titleHelp,

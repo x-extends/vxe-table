@@ -342,10 +342,18 @@ export default {
     },
     clearValidate (fieldOrItem) {
       if (fieldOrItem) {
-        const item = handleFieldOrItem(this, fieldOrItem)
-        if (item) {
-          item.showError = false
+        let fields = fieldOrItem
+        if (!XEUtils.isArray(fieldOrItem)) {
+          fields = [fieldOrItem]
         }
+        fields.forEach((field) => {
+          if (field) {
+            const item = handleFieldOrItem(this, field)
+            if (item) {
+              item.showError = false
+            }
+          }
+        })
       } else {
         this.getItems().forEach(item => {
           item.showError = false
@@ -358,8 +366,11 @@ export default {
       return this.beginValidate(this.getItems(), '', callback)
     },
     validateField (fieldOrItem, callback) {
-      const item = handleFieldOrItem(this, fieldOrItem)
-      return this.beginValidate(item ? [item] : [], '', callback)
+      let fields = []
+      if (!XEUtils.isArray(fieldOrItem)) {
+        fields = [fieldOrItem]
+      }
+      return this.beginValidate(fields.map(field => handleFieldOrItem(this, field)), '', callback)
     },
     beginValidate (itemList, type, callback) {
       const { data, rules: formRules, validOpts } = this
@@ -374,14 +385,14 @@ export default {
             itemValids.push(
               this.validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
-              }).catch(({ rule, rules }) => {
-                const rest = { rule, rules, data, field, property: field, $form: this }
+              }).catch((errorMaps) => {
+                const rest = errorMaps[field]
                 if (!validRest[field]) {
                   validRest[field] = []
                 }
                 validRest[field].push(rest)
                 validFields.push(field)
-                item.errRule = rule
+                item.errRule = rest[0].rule
                 return Promise.reject(rest)
               })
             )
@@ -433,62 +444,81 @@ export default {
      *  validator=Function({ itemValue, rule, rules, data, property }) 自定义校验，接收一个 Promise
      *  trigger=change 触发方式
      */
-    validItemRules (validType, property, val) {
+    validItemRules (validType, fields, val) {
       const { data, rules: formRules } = this
-      const errorRules = []
-      const syncVailds = []
-      if (property && formRules) {
-        const rules = XEUtils.get(formRules, property)
-        if (rules) {
-          const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
-          rules.forEach(rule => {
-            const { type, trigger, required } = rule
-            if (validType === 'all' || !trigger || validType === rule.trigger) {
-              if (XEUtils.isFunction(rule.validator)) {
-                const customValid = rule.validator({
-                  itemValue,
-                  rule,
-                  rules,
-                  data,
-                  field: property,
-                  property,
-                  $form: this
-                })
-                if (customValid) {
-                  if (XEUtils.isError(customValid)) {
-                    errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
-                  } else if (customValid.catch) {
-                    // 如果为异步校验（注：异步校验是并发无序的）
-                    syncVailds.push(
-                      customValid.catch(e => {
-                        errorRules.push(new Rule({ type: 'custom', trigger, content: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
-                      })
-                    )
+      const errorMaps = {}
+      if (!XEUtils.isArray(fields)) {
+        fields = [fields]
+      }
+      return Promise.all(
+        fields.map((property) => {
+          const syncVailds = []
+          const errorRules = []
+          if (property && formRules) {
+            const rules = XEUtils.get(formRules, property)
+            if (rules) {
+              const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
+              rules.forEach(rule => {
+                const { type, trigger, required } = rule
+                if (validType === 'all' || !trigger || validType === rule.trigger) {
+                  if (XEUtils.isFunction(rule.validator)) {
+                    const customValid = rule.validator({
+                      itemValue,
+                      rule,
+                      rules,
+                      data,
+                      field: property,
+                      property,
+                      $form: this
+                    })
+                    if (customValid) {
+                      if (XEUtils.isError(customValid)) {
+                        errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
+                      } else if (customValid.catch) {
+                        // 如果为异步校验（注：异步校验是并发无序的）
+                        syncVailds.push(
+                          customValid.catch(e => {
+                            errorRules.push(new Rule({ type: 'custom', trigger, content: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
+                          })
+                        )
+                      }
+                    }
+                  } else {
+                    const isArrType = type === 'array'
+                    const isArrVal = XEUtils.isArray(itemValue)
+                    let hasEmpty = true
+                    if (isArrType || isArrVal) {
+                      hasEmpty = !isArrVal || !itemValue.length
+                    } else if (XEUtils.isString(itemValue)) {
+                      hasEmpty = eqEmptyValue(itemValue.trim())
+                    } else {
+                      hasEmpty = eqEmptyValue(itemValue)
+                    }
+                    if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
+                      errorRules.push(new Rule(rule))
+                    }
                   }
                 }
-              } else {
-                const isArrType = type === 'array'
-                const isArrVal = XEUtils.isArray(itemValue)
-                let hasEmpty = true
-                if (isArrType || isArrVal) {
-                  hasEmpty = !isArrVal || !itemValue.length
-                } else if (XEUtils.isString(itemValue)) {
-                  hasEmpty = eqEmptyValue(itemValue.trim())
-                } else {
-                  hasEmpty = eqEmptyValue(itemValue)
+              })
+            }
+          }
+          return Promise.all(syncVailds).then(() => {
+            if (errorRules.length) {
+              errorMaps[property] = errorRules.map(rule => {
+                return {
+                  $form: this,
+                  rule,
+                  data,
+                  field: property,
+                  property
                 }
-                if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
-                  errorRules.push(new Rule(rule))
-                }
-              }
+              })
             }
           })
-        }
-      }
-      return Promise.all(syncVailds).then(() => {
-        if (errorRules.length) {
-          const rest = { rules: errorRules, rule: errorRules[0] }
-          return Promise.reject(rest)
+        })
+      ).then(() => {
+        if (!XEUtils.isEmpty(errorMaps)) {
+          return Promise.reject(errorMaps)
         }
       })
     },
@@ -532,11 +562,12 @@ export default {
           .then(() => {
             this.clearValidate(field)
           })
-          .catch(({ rule }) => {
+          .catch((errorMaps) => {
+            const rest = errorMaps[field]
             const item = this.getItemByField(field)
-            if (item) {
+            if (item && rest) {
               item.showError = true
-              item.errRule = rule
+              item.errRule = rest[0].rule
             }
           })
       }

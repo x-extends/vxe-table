@@ -5,7 +5,7 @@ import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, 
 import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './header'
 import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './footer'
 import { ColumnEditRenderOptions, ColumnEditSlotParams } from './edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams, ColumnExportHeaderRenderParams } from './export'
 import { TableOverflow } from './table'
 
 /**
@@ -121,6 +121,7 @@ export declare class Column extends VXETableComponent {
    * 是否可视
    */
   visible?: boolean;
+  headerExportMethod?(params: ColumnExportHeaderRenderParams): string | number;
   /**
    * 自定义单元格数据导出方法
    */
