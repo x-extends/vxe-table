@@ -347,6 +347,8 @@ export class ColumnInfo {
   halfChecked: boolean;
   disabled: boolean;
   order: string;
+  sortTime: number
+  customOrder: number
   renderWidth: number;
   renderHeight: number;
   resizeWidth: number;

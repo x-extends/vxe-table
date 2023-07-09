@@ -48,6 +48,9 @@ export default {
       showMessage: true,
       message: 'default'
     },
+    columnConfig: {
+      maxFixedSize: 4
+    },
     // menuConfig: {
     //   visibleMethod () {}
     // },
@@ -194,6 +197,10 @@ export default {
     TOOLBAR_TOOLS_FULLSCREEN: iconPrefix + 'fullscreen',
     TOOLBAR_TOOLS_MINIMIZE: iconPrefix + 'minimize',
     TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'custom-column',
+    TOOLBAR_TOOLS_FIXED_LEFT: iconPrefix + 'fixed-left',
+    TOOLBAR_TOOLS_FIXED_LEFT_ACTIVED: iconPrefix + 'fixed-left-fill',
+    TOOLBAR_TOOLS_FIXED_RIGHT: iconPrefix + 'fixed-right',
+    TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVED: iconPrefix + 'fixed-right-fill',
 
     // form
     FORM_PREFIX: iconPrefix + 'question-circle-fill',
@@ -302,9 +309,10 @@ export default {
     // export: {
     //   types: ['csv', 'html', 'xml', 'txt']
     // },
-    // custom: {
-    //   isFooter: true
-    // },
+    custom: {
+      allowFixed: true,
+      showFooter: true
+    }
     // buttons: []
   },
   button: {

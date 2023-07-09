@@ -1246,8 +1246,8 @@
       position: relative;
       &:before {
         content: "";
-        top: $vxe-table-cell-dirty-width;
-        left: $vxe-table-cell-dirty-width;
+        top: calc($vxe-table-cell-dirty-width * -1);
+        left: calc($vxe-table-cell-dirty-width * -1);
         position: absolute;
         border-width: $vxe-table-cell-dirty-width;
         border-style: solid;

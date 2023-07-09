@@ -2,7 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import Cell from './cell'
 import VXETable from '../../v-x-e-table'
-import { getRowid, getRowkey, clearTableAllStatus, handleFieldOrColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq, rowToVisible, colToVisible } from './util'
+import { getRowid, getRowkey, clearTableAllStatus, handleFieldOrColumn, getRootColumn, restoreScrollLocation, restoreScrollListener, toTreePathSeq, rowToVisible, colToVisible } from './util'
 import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
 import DomTools, { browse, getPaddingTopBottomSize, setScrollTop, setScrollLeft } from '../../tools/dom'
 import { formats } from '../../v-x-e-table/src/formats'
@@ -1061,7 +1061,7 @@ const Methods = {
    * @param {String} field 字段名
    */
   isUpdateByRow (row, field) {
-    const { visibleColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
+    const { tableFullColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
     if (keepSource) {
       let oRow, property
       const rowid = getRowid(this, row)
@@ -1084,8 +1084,8 @@ const Methods = {
         if (arguments.length > 1) {
           return !eqCellValue(oRow, row, field)
         }
-        for (let index = 0, len = visibleColumn.length; index < len; index++) {
-          property = visibleColumn[index].field
+        for (let index = 0, len = tableFullColumn.length; index < len; index++) {
+          property = tableFullColumn[index].field
           if (property && !eqCellValue(oRow, row, property)) {
             return true
           }
@@ -1419,8 +1419,9 @@ const Methods = {
    */
   setColumnFixed (fieldOrColumn, fixed) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column && column.fixed !== fixed) {
-      XEUtils.eachTree([column], (column) => {
+    const targetColumn = getRootColumn(this, column)
+    if (targetColumn && targetColumn.fixed !== fixed) {
+      XEUtils.eachTree([targetColumn], (column) => {
         column.fixed = fixed
       })
       this.saveCustomFixed()
@@ -1433,8 +1434,9 @@ const Methods = {
    */
   clearColumnFixed (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column && column.fixed) {
-      XEUtils.eachTree([column], (column) => {
+    const targetColumn = getRootColumn(this, column)
+    if (targetColumn && targetColumn.fixed) {
+      XEUtils.eachTree([targetColumn], (column) => {
         column.fixed = null
       })
       this.saveCustomFixed()
@@ -1492,14 +1494,14 @@ const Methods = {
    * 如果已关联工具栏，则会同步更新
    */
   resetColumn (options) {
-    const { customOpts } = this
+    const { collectColumn, customOpts } = this
     const { checkMethod } = customOpts
     const opts = Object.assign({
       visible: true,
       resizable: options === true,
       fixed: options === true
     }, options)
-    this.tableFullColumn.forEach(column => {
+    XEUtils.eachTree(collectColumn, (column) => {
       if (opts.resizable) {
         column.resizeWidth = 0
       }
@@ -1567,7 +1569,15 @@ const Methods = {
       if (isCustomOrder) {
         const columnOrderStorage = getCustomStorageMap(orderStorageKey)[id]
         if (columnOrderStorage) {
-          // 开发中...
+          // const colOrderSeqs = columnOrderStorage.split(',')
+          // colOrderSeqs.forEach((orderConf) => {
+          //   const [colKey, order] = orderConf.split('|')
+          //   if (customMap[colKey]) {
+          //     customMap[colKey].order = order
+          //   } else {
+          //     customMap[colKey] = { order }
+          //   }
+          // })
         }
       }
       if (isCustomVisible) {
@@ -1599,7 +1609,7 @@ const Methods = {
           keyMap[colKey] = column
         }
       })
-      XEUtils.each(customMap, ({ visible, resizeWidth, fixed }, field) => {
+      XEUtils.each(customMap, ({ visible, resizeWidth, fixed, order }, field) => {
         const column = keyMap[field]
         if (column) {
           if (XEUtils.isNumber(resizeWidth)) {
@@ -1610,6 +1620,9 @@ const Methods = {
           }
           if (fixed) {
             column.fixed = fixed
+          }
+          if (order) {
+            column.colSeq = order
           }
         }
       })

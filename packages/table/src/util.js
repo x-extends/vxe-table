@@ -75,6 +75,22 @@ export function handleFieldOrColumn (_vm, fieldOrColumn) {
   return null
 }
 
+export function getRootColumn ($xetable, column) {
+  const fullColumnIdData = $xetable.fullColumnIdData
+  if (!column) {
+    return null
+  }
+  let parentColId = column.parentId
+  while (fullColumnIdData[parentColId]) {
+    const column = fullColumnIdData[parentColId].column
+    parentColId = column.parentId
+    if (!parentColId) {
+      return column
+    }
+  }
+  return column
+}
+
 function queryCellElement (cell, selector) {
   return cell.querySelector('.vxe-cell' + selector)
 }

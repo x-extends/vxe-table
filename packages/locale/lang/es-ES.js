@@ -138,7 +138,8 @@ export default {
       customTitle: 'Configuraciones de columna',
       customAll: 'Todo',
       customConfirm: 'Confirmar',
-      customRestore: 'Restaurar'
+      customRestore: 'Restaurar',
+      maxFixedCol: '最大固定列的数量不能超过 {0} 个'
     },
     grid: {
       selectOneRecord: '¡Seleccione al menos un registro!',
@@ -244,10 +245,13 @@ export default {
       actualizar: 'Actualizar',
       zoomIn: 'Pantalla completa',
       zoomOut: 'Reducción',
-      personalizado: 'Configuración de columna',
-      personalizadoTodo: 'Todo',
-      personalizadoConfirmar: 'Confirmar',
-      personalizadoRestaurar: 'Restaurar'
+      custom: 'Configuración de columna',
+      customAll: 'Todo',
+      customConfirm: 'Confirmar',
+      customRestore: 'Restaurar',
+      fixedLeft: '固定在左侧',
+      fixedRight: '固定在右侧',
+      cancelfixed: '取消固定'
     },
     entrada: {
       fecha: {

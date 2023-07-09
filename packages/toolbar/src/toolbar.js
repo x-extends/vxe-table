@@ -133,6 +133,7 @@ function renderRightTools (h, _vm) {
 
 function renderCustoms (h, _vm) {
   const { $xetable, customStore, customOpts, columns } = _vm
+  const isMaxFixedColumn = $xetable ? $xetable.isMaxFixedColumn : true
   const cols = []
   const customBtnOns = {}
   const customWrapperOns = {}
@@ -149,7 +150,7 @@ function renderCustoms (h, _vm) {
     // 点击触发
     customBtnOns.click = _vm.handleClickSettingEvent
   }
-  XEUtils.eachTree(columns, (column) => {
+  XEUtils.eachTree(columns, (column, index, items, path, parent) => {
     const colTitle = UtilTools.formatText(column.getTitle(), 1)
     const colKey = column.getKey()
     const isColGroup = column.children && column.children.length
@@ -160,28 +161,66 @@ function renderCustoms (h, _vm) {
       cols.push(
         h('li', {
           class: ['vxe-custom--option', `level--${column.level}`, {
-            'is--group': isColGroup,
-            'is--checked': isChecked,
-            'is--indeterminate': isIndeterminate,
-            'is--disabled': isDisabled
-          }],
-          attrs: {
-            title: colTitle
-          },
-          on: {
-            click: () => {
-              if (!isDisabled) {
-                _vm.changeCustomOption(column)
+            'is--group': isColGroup
+          }]
+        }, [
+          h('div', {
+            title: colTitle,
+            class: ['vxe-custom--checkbox-option', {
+              'is--checked': isChecked,
+              'is--indeterminate': isIndeterminate,
+              'is--disabled': isDisabled
+            }],
+            attrs: {
+              title: colTitle
+            },
+            on: {
+              click: () => {
+                if (!isDisabled) {
+                  _vm.changeCustomOption(column)
+                }
               }
             }
-          }
-        }, [
-          h('span', {
-            class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-          }),
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, colTitle)
+          }, [
+            h('span', {
+              class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+            }),
+            h('span', {
+              class: 'vxe-checkbox--label'
+            }, colTitle)
+          ]),
+          !parent && customOpts.allowFixed ? h('div', {
+            class: 'vxe-custom--fixed-option'
+          }, [
+            h('span', {
+              class: ['vxe-custom--fixed-left-option', column.fixed === 'left' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT_ACTIVED : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT, {
+                'is--checked': column.fixed === 'left',
+                'is--disabled': isMaxFixedColumn && !column.fixed
+              }],
+              attrs: {
+                title: GlobalConfig.i18n(column.fixed === 'left' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedLeft')
+              },
+              on: {
+                click: () => {
+                  _vm.changeFixedOption(column, 'left')
+                }
+              }
+            }),
+            h('span', {
+              class: ['vxe-custom--fixed-right-option', column.fixed === 'right' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVED : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT, {
+                'is--checked': column.fixed === 'right',
+                'is--disabled': isMaxFixedColumn && !column.fixed
+              }],
+              attrs: {
+                title: GlobalConfig.i18n(column.fixed === 'right' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedRight')
+              },
+              on: {
+                click: () => {
+                  _vm.changeFixedOption(column, 'right')
+                }
+              }
+            })
+          ]) : null
         ])
       )
     }
@@ -211,45 +250,49 @@ function renderCustoms (h, _vm) {
         class: 'vxe-custom--header'
       }, [
         h('li', {
-          class: ['vxe-custom--option', {
-            'is--checked': isAllChecked,
-            'is--indeterminate': isAllIndeterminate
-          }],
-          attrs: {
-            title: GlobalConfig.i18n('vxe.table.allTitle')
-          },
-          on: {
-            click: _vm.allCustomEvent
-          }
+          class: 'vxe-custom--option'
         }, [
-          h('span', {
-            class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-          }),
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+          h('div', {
+            class: ['vxe-custom--checkbox-option', {
+              'is--checked': isAllChecked,
+              'is--indeterminate': isAllIndeterminate
+            }],
+            attrs: {
+              title: GlobalConfig.i18n('vxe.table.allTitle')
+            },
+            on: {
+              click: _vm.allCustomEvent
+            }
+          }, [
+            h('span', {
+              class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+            }),
+            h('span', {
+              class: 'vxe-checkbox--label'
+            }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+          ])
         ])
       ]),
       h('ul', {
         class: 'vxe-custom--body',
         on: customWrapperOns
       }, cols),
-      customOpts.isFooter === false ? null : h('div', {
+      customOpts.showFooter || customOpts.isFooter ? h('div', {
         class: 'vxe-custom--footer'
       }, [
-        h('button', {
-          class: 'btn--confirm',
-          on: {
-            click: _vm.confirmCustomEvent
-          }
-        }, GlobalConfig.i18n('vxe.toolbar.customConfirm')),
         h('button', {
           class: 'btn--reset',
           on: {
             click: _vm.resetCustomEvent
           }
-        }, GlobalConfig.i18n('vxe.toolbar.customRestore'))
-      ])
+        }, customOpts.resetButtonText || GlobalConfig.i18n('vxe.toolbar.customRestore')),
+        h('button', {
+          class: 'btn--confirm',
+          on: {
+            click: _vm.confirmCustomEvent
+          }
+        }, customOpts.confirmButtonText || GlobalConfig.i18n('vxe.toolbar.customConfirm'))
+      ]) : null
     ])
   ])
 }
@@ -492,6 +535,16 @@ export default {
         this.handleTableCustom()
       }
       this.checkCustomStatus()
+    },
+    changeFixedOption (column, colFixed) {
+      const { $xetable } = this
+      if (column.fixed === colFixed) {
+        $xetable.clearColumnFixed(column)
+      } else {
+        if (!$xetable.isMaxFixedColumn || column.fixed) {
+          $xetable.setColumnFixed(column, colFixed)
+        }
+      }
     },
     handleOptionCheck (column) {
       const matchObj = XEUtils.findTree(this.columns, item => item === column)

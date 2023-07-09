@@ -592,6 +592,23 @@ export default {
     customOpts () {
       return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig)
     },
+    fixedColumnSize () {
+      const { tableFullColumn } = this
+      let fixedSize = 0
+      tableFullColumn.forEach((column) => {
+        if (column.fixed) {
+          fixedSize++
+        }
+      })
+      return fixedSize
+    },
+    isMaxFixedColumn () {
+      const { maxFixedSize } = this.columnOpts
+      if (maxFixedSize) {
+        return this.fixedColumnSize >= maxFixedSize
+      }
+      return false
+    },
     tableBorder () {
       const { border } = this
       if (border === true) {

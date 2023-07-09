@@ -113,6 +113,7 @@ export class ColumnInfo {
       colSpan: 1,
       order: null,
       sortTime: 0,
+      customOrder: 0,
       renderWidth: 0,
       renderHeight: 0,
       resizeWidth: 0,
