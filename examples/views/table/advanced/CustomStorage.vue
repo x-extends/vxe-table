@@ -7,8 +7,8 @@
 
     <vxe-toolbar ref="xToolbar" custom>
       <template #buttons>
-        <vxe-button>按钮1</vxe-button>
-        <vxe-button>按钮2</vxe-button>
+        <vxe-button @click="$refs.xTable.setColumnFixed('xx4x', 'left')">按钮1</vxe-button>
+        <vxe-button @click="$refs.xTable.setColumnFixed('b56', 'left')">按钮2</vxe-button>
       </template>
     </vxe-toolbar>
 
@@ -20,10 +20,21 @@
       :custom-config="{storage: true}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name"></vxe-column>
-      <vxe-column field="role" title="Role"></vxe-column>
-      <vxe-column field="sex" title="Sex"></vxe-column>
-      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-colgroup field="xx4x">
+        <vxe-column field="name" title="Name" width="200"></vxe-column>
+        <vxe-column field="role" title="Role" width="200"></vxe-column>
+      </vxe-colgroup>
+      <vxe-column field="sex" title="Sex" width="200"></vxe-column>
+      <vxe-column field="age" title="Age" width="200"></vxe-column>
+      <vxe-column field="z1" title="Age" width="200"></vxe-column>
+      <vxe-colgroup field="vvb5">
+        <vxe-column field="jk7" title="Age" width="200"></vxe-column>
+        <vxe-colgroup field="vv5">
+          <vxe-column field="b56" title="Age" width="200"></vxe-column>
+          <vxe-column field="m77" title="Age" width="200"></vxe-column>
+        </vxe-colgroup>
+      </vxe-colgroup>
+      <vxe-column field="j7" title="Age" width="200"></vxe-column>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>

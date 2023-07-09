@@ -85,8 +85,16 @@ export namespace VxeToolbarPropTypes {
     immediate?: boolean
     storage?: boolean
     checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean
-    isFooter?: boolean
+    showFooter?: boolean
     icon?: string
+    allowFixed?: boolean
+    resetButtonText?: string
+    confirmButtonText?: string
+    /**
+     * 已废弃，请使用 showFooter
+     * @deprecated
+     */
+    isFooter?: boolean
   }
   export type Custom = boolean | CustomConfig
   export interface CustomOpts extends CustomConfig { }

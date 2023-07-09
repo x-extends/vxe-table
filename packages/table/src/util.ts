@@ -248,6 +248,23 @@ export function destroyColumn ($xetable: VxeTableConstructor & VxeTablePrivateMe
   reactData.staticColumns = staticColumns.slice(0)
 }
 
+export function getRootColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: ColumnInfo) {
+  const { internalData } = $xetable
+  const { fullColumnIdData } = internalData
+  if (!column) {
+    return null
+  }
+  let parentColId = column.parentId
+  while (fullColumnIdData[parentColId]) {
+    const column = fullColumnIdData[parentColId].column
+    parentColId = column.parentId
+    if (!parentColId) {
+      return column
+    }
+  }
+  return column
+}
+
 export function mergeBodyMethod (mergeList: VxeTableDefines.MergeItem[], _rowIndex: number, _columnIndex: number) {
   for (let mIndex = 0; mIndex < mergeList.length; mIndex++) {
     const { row: mergeRowIndex, col: mergeColIndex, rowspan: mergeRowspan, colspan: mergeColspan } = mergeList[mIndex]

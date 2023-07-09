@@ -9,7 +9,7 @@ import { warnLog, errLog } from '../../tools/log'
 import { GlobalEvent } from '../../tools/event'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines } from '../../../types/all'
+import { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeTableDefines, VxeColumnPropTypes } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeToolbar',
@@ -176,7 +176,7 @@ export default defineComponent({
       }
     }
 
-    const changeCustomOption = (column: VxeTableDefines.ColumnInfo) => {
+    const changeCheckboxOption = (column: VxeTableDefines.ColumnInfo) => {
       const isChecked = !column.visible
       const customOpts = computeCustomOpts.value
       XEUtils.eachTree([column], (item) => {
@@ -188,6 +188,18 @@ export default defineComponent({
         handleTableCustom()
       }
       checkCustomStatus()
+    }
+
+    const changeFixedOption = (column: VxeTableDefines.ColumnInfo, colFixed: VxeColumnPropTypes.Fixed) => {
+      const { computeIsMaxFixedColumn } = $xetable.getComputeMaps()
+      const isMaxFixedColumn = computeIsMaxFixedColumn.value
+      if (column.fixed === colFixed) {
+        $xetable.clearColumnFixed(column)
+      } else {
+        if (!isMaxFixedColumn || column.fixed) {
+          $xetable.setColumnFixed(column, colFixed)
+        }
+      }
     }
 
     const allCustomEvent = () => {
@@ -458,6 +470,7 @@ export default defineComponent({
     const renderCustoms = () => {
       const { columns } = reactData
       const customOpts = computeCustomOpts.value
+      let isMaxFixedColumn = true
       const colVNs: VNode[] = []
       const customBtnOns: {
         onClick?: typeof handleClickSettingEvent;
@@ -470,9 +483,10 @@ export default defineComponent({
       } = {}
       let checkMethod: ((params: { column: VxeTableDefines.ColumnInfo }) => boolean) | undefined
       if ($xetable) {
-        const { computeCustomOpts: computeTableCustomOpts } = $xetable.getComputeMaps()
+        const { computeCustomOpts: computeTableCustomOpts, computeIsMaxFixedColumn } = $xetable.getComputeMaps()
         const tableCustomOpts = computeTableCustomOpts.value
         checkMethod = tableCustomOpts.checkMethod
+        isMaxFixedColumn = computeIsMaxFixedColumn.value
       }
       if (customOpts.trigger === 'manual') {
         // 手动触发
@@ -486,7 +500,7 @@ export default defineComponent({
         // 点击触发
         customBtnOns.onClick = handleClickSettingEvent
       }
-      XEUtils.eachTree(columns, (column) => {
+      XEUtils.eachTree(columns, (column, index, items, path, parent) => {
         const colTitle = formatText(column.getTitle(), 1)
         const colKey = column.getKey()
         const isColGroup = column.children && column.children.length
@@ -497,24 +511,53 @@ export default defineComponent({
           colVNs.push(
             h('li', {
               class: ['vxe-custom--option', `level--${column.level}`, {
-                'is--group': isColGroup,
-                'is--checked': isChecked,
-                'is--indeterminate': isIndeterminate,
-                'is--disabled': isDisabled
-              }],
-              title: colTitle,
-              onClick: () => {
-                if (!isDisabled) {
-                  changeCustomOption(column)
-                }
-              }
+                'is--group': isColGroup
+              }]
             }, [
-              h('span', {
-                class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-              }),
-              h('span', {
-                class: 'vxe-checkbox--label'
-              }, colTitle)
+              h('div', {
+                title: colTitle,
+                class: ['vxe-custom--checkbox-option', {
+                  'is--checked': isChecked,
+                  'is--indeterminate': isIndeterminate,
+                  'is--disabled': isDisabled
+                }],
+                onClick: () => {
+                  if (!isDisabled) {
+                    changeCheckboxOption(column)
+                  }
+                }
+              }, [
+                h('span', {
+                  class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+                }),
+                h('span', {
+                  class: 'vxe-checkbox--label'
+                }, colTitle)
+              ]),
+              !parent && customOpts.allowFixed ? h('div', {
+                class: 'vxe-custom--fixed-option'
+              }, [
+                h('span', {
+                  class: ['vxe-custom--fixed-left-option', column.fixed === 'left' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT_ACTIVED : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT, {
+                    'is--checked': column.fixed === 'left',
+                    'is--disabled': isMaxFixedColumn && !column.fixed
+                  }],
+                  title: GlobalConfig.i18n(column.fixed === 'left' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedLeft'),
+                  onClick: () => {
+                    changeFixedOption(column, 'left')
+                  }
+                }),
+                h('span', {
+                  class: ['vxe-custom--fixed-right-option', column.fixed === 'right' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVED : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT, {
+                    'is--checked': column.fixed === 'right',
+                    'is--disabled': isMaxFixedColumn && !column.fixed
+                  }],
+                  title: GlobalConfig.i18n(column.fixed === 'right' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedRight'),
+                  onClick: () => {
+                    changeFixedOption(column, 'right')
+                  }
+                })
+              ]) : null
             ])
           )
         }
@@ -540,37 +583,41 @@ export default defineComponent({
             class: 'vxe-custom--header'
           }, [
             h('li', {
-              class: ['vxe-custom--option', {
-                'is--checked': isAllChecked,
-                'is--indeterminate': isAllIndeterminate
-              }],
-              title: GlobalConfig.i18n('vxe.table.allTitle'),
-              onClick: allCustomEvent
+              class: 'vxe-custom--option'
             }, [
-              h('span', {
-                class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-              }),
-              h('span', {
-                class: 'vxe-checkbox--label'
-              }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+              h('div', {
+                class: ['vxe-custom--checkbox-option', {
+                  'is--checked': isAllChecked,
+                  'is--indeterminate': isAllIndeterminate
+                }],
+                title: GlobalConfig.i18n('vxe.table.allTitle'),
+                onClick: allCustomEvent
+              }, [
+                h('span', {
+                  class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+                }),
+                h('span', {
+                  class: 'vxe-checkbox--label'
+                }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+              ])
             ])
           ]),
           h('ul', {
             class: 'vxe-custom--body',
             ...customWrapperOns
           }, colVNs),
-          customOpts.isFooter === false ? null : h('div', {
+          customOpts.showFooter || customOpts.isFooter ? h('div', {
             class: 'vxe-custom--footer'
           }, [
             h('button', {
-              class: 'btn--confirm',
-              onClick: confirmCustomEvent
-            }, GlobalConfig.i18n('vxe.toolbar.customConfirm')),
-            h('button', {
               class: 'btn--reset',
               onClick: resetCustomEvent
-            }, GlobalConfig.i18n('vxe.toolbar.customRestore'))
-          ])
+            }, customOpts.resetButtonText || GlobalConfig.i18n('vxe.toolbar.customRestore')),
+            h('button', {
+              class: 'btn--confirm',
+              onClick: confirmCustomEvent
+            }, customOpts.confirmButtonText || GlobalConfig.i18n('vxe.toolbar.customConfirm'))
+          ]) : null
         ])
       ])
     }

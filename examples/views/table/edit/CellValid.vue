@@ -12,6 +12,7 @@
         <vxe-button @click="validEvent">快速校验</vxe-button>
         <vxe-button @click="fullValidEvent">完整快速校验</vxe-button>
         <vxe-button @click="validAllEvent">全量数据校验</vxe-button>
+        <vxe-button @click="fullValidAllEvent">完整全量数据校验</vxe-button>
         <vxe-button @click="selectValidEvent">选中行校验</vxe-button>
         <vxe-button @click="getSelectEvent">获取选中</vxe-button>
         <vxe-button @click="getInsertEvent">获取新增</vxe-button>
@@ -159,6 +160,16 @@ export default defineComponent({
       }
     }
 
+    const fullValidAllEvent = async () => {
+      const $table = xTable.value
+      const errMap = await $table.fullValidate(true).catch(errMap => errMap)
+      if (errMap) {
+        VXETable.modal.message({ status: 'error', content: '校验不通过！' })
+      } else {
+        VXETable.modal.message({ status: 'success', content: '校验成功！' })
+      }
+    }
+
     const selectValidEvent = async () => {
       const $table = xTable.value
       const selectRecords = $table.getCheckboxRecords()
@@ -215,6 +226,7 @@ export default defineComponent({
       validEvent,
       fullValidEvent,
       validAllEvent,
+      fullValidAllEvent,
       selectValidEvent,
       insertEvent,
       getSelectEvent,

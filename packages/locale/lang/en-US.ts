@@ -138,7 +138,8 @@ export default {
       customTitle: 'Column settings',
       customAll: 'All',
       customConfirm: 'Confirm',
-      customRestore: 'Reset'
+      customRestore: 'Reset',
+      maxFixedCol: 'The maximum number of fixed columns cannot exceed {0}'
     },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',
@@ -247,7 +248,10 @@ export default {
       custom: 'Column settings',
       customAll: 'All',
       customConfirm: 'Confirm',
-      customRestore: 'Restore'
+      customRestore: 'Reset',
+      fixedLeft: 'Fixed on the left side',
+      fixedRight: 'Fixed on the right side',
+      cancelfixed: 'Unfixed'
     },
     input: {
       date: {

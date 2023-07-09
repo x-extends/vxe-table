@@ -109,7 +109,7 @@
     .vxe-custom--body {
       padding: 0.2em 0;
       max-height: 17.6em;
-      .vxe-custom--option {
+      .vxe-custom--checkbox-option {
         &:hover {
           background-color: var(--vxe-table-row-hover-background-color);
         }
@@ -118,8 +118,8 @@
     .vxe-custom--header,
     .vxe-custom--body {
       & > li {
-        max-width: 16em;
-        min-width: 12.5em;
+        max-width: 18em;
+        min-width: 14em;
         padding: 0.2em 1em 0.2em 1em;
         @for $i from 2 through 8 {
           $interval: $i - 1 + 0.2;
@@ -154,6 +154,11 @@
   }
 }
 
+.vxe-custom--option {
+  display: flex;
+  flex-direction: row;
+}
+
 .vxe-custom--option-wrapper .vxe-custom--header,
 .vxe-custom--option-wrapper .vxe-custom--body {
   list-style-type: none;
@@ -162,15 +167,37 @@
   margin: 0;
   padding: 0;
   user-select: none;
-  & > li {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
 }
 
-.vxe-custom--option {
+.vxe-custom--checkbox-option {
   @extend %XECheckboxIcon;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1;
+}
+
+.vxe-custom--fixed-option {
+  flex-shrink: 0;
+  padding-left: 0.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .vxe-custom--fixed-left-option,
+  .vxe-custom--fixed-right-option {
+    line-height: 1.34em;
+    font-size: 1.1em;
+    padding: 0 0.2em;
+    cursor: pointer;
+    &.is--checked,
+    &:hover {
+      color: var(--vxe-primary-color);
+    }
+    &.is--disabled {
+      cursor: no-drop;
+      color: var(--vxe-input-disabled-color);
+    }
+  }
 }
 
 .vxe-toolbar {

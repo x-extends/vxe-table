@@ -486,7 +486,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             $columnIndex: $xetable.getVMColumnIndex(column)
           }, evnt || null)
         }
-        return $xetable.clearValidate ? $xetable.clearValidate() : nextTick()
+        return nextTick()
       },
       /**
        * 清除所选中源状态
@@ -653,7 +653,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
                 setCellValue(row, oldColumn, oldModel.value)
               }
               if ($xetable.clearValidate) {
-                $xetable.clearValidate()
+                $xetable.clearValidate(row, column)
               }
             }
             column.renderHeight = cell.offsetHeight

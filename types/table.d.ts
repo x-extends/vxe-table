@@ -91,6 +91,8 @@ export interface TablePrivateComputed<D = VxeTableDataRow> {
   computeEmptyOpts: ComputedRef<VxeTablePropTypes.EmptyOpts>
   computeLoadingOpts: ComputedRef<VxeTablePropTypes.LoadingOpts>
   computeCustomOpts: ComputedRef<VxeTablePropTypes.CustomOpts<D>>
+  computeFixedColumnSize: ComputedRef<number>
+  computeIsMaxFixedColumn: ComputedRef<boolean>
   computeIsAllCheckboxDisabled: ComputedRef<boolean>
 }
 
@@ -933,11 +935,14 @@ export interface TableReactData<D = VxeTableDataRow> {
   // 存放数据校验相关信息
   validStore: {
     visible: boolean
-    row: D | null
-    column: any
-    content: any
-    rule: any
-    isArrow: boolean
+  },
+  validErrorMaps: {
+    [key: string]: {
+      row: D | null
+      column: any
+      rule: any
+      content: any
+    }
   },
   // 导入相关信息
   importStore: {
@@ -1309,7 +1314,8 @@ export namespace VxeTablePropTypes {
     resizable?: VxeColumnPropTypes.Resizable
     width?: VxeColumnPropTypes.Width
     minWidth?: VxeColumnPropTypes.MinWidth
-    maxWidth?: VxeColumnPropTypes.MaxWidth
+    maxWidth?: VxeColumnPropTypes.MaxWidth,
+    maxFixedSize?: number
   }
   export interface ColumnOpts extends ColumnConfig { }
 
@@ -2347,6 +2353,7 @@ export namespace VxeTableDefines {
     disabled: boolean
     order: VxeTablePropTypes.SortOrder
     sortTime: number
+    customOrder: number
     renderWidth: number
     renderHeight: number
     resizeWidth: number

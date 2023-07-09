@@ -138,7 +138,8 @@ export default {
       customTitle: '列設定',
       customAll: '全部',
       customConfirm: '確認',
-      customRestore: '重置'
+      customRestore: '重置',
+      maxFixedCol: '最大固定列的數量不能超過 {0} 個'
     },
     grid: {
       selectOneRecord: '請至少選擇一條記錄！',
@@ -247,7 +248,10 @@ export default {
       custom: '列設定',
       customAll: '全部',
       customConfirm: '確認',
-      customRestore: '還原'
+      customRestore: '重置',
+      fixedLeft: '固定在左側',
+      fixedRight: '固定在右側',
+      cancelfixed: '取消固定'
     },
     input: {
       date: {

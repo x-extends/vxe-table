@@ -3,6 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
 import { getFuncText, eqEmptyValue } from '../../tools/utils'
 import { scrollToView } from '../../tools/dom'
+import { handleFieldOrColumn, getRowid } from '../../table/src/util'
 
 import { VxeGlobalHooksHandles, TableValidatorMethods, TableValidatorPrivateMethods, VxeTableDefines } from '../../../types/all'
 
@@ -62,9 +63,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           resolve()
         } else {
           $xetable.handleActived(params, { type: 'valid-error', trigger: 'call' }).then(() => {
-            setTimeout(() => {
-              resolve(validatorPrivateMethods.showValidTooltip(params))
-            }, 10)
+            resolve(validatorPrivateMethods.showValidTooltip(params))
           })
         }
       })
@@ -106,6 +105,14 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       internalData._lastCallTime = Date.now()
       validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
       validatorMethods.clearValidate()
+      const validErrMaps: {
+        [key: string]: {
+          row: any;
+          column: any;
+          rule: any,
+          content: any;
+        }
+      } = {}
       if (editRules) {
         const columns = $xetable.getColumns()
         const handleVaild = (row: any) => {
@@ -129,6 +136,12 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                       if (!validRest[column.property]) {
                         validRest[column.property] = []
                       }
+                      validErrMaps[`${getRowid($xetable, row)}:${column.id}`] = {
+                        column,
+                        row,
+                        rule,
+                        content: rule.content
+                      }
                       validRest[column.property].push(rest)
                       if (!isFull) {
                         validRuleErr = true
@@ -148,6 +161,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         }
         return Promise.all(rowValids).then(() => {
           const ruleProps = Object.keys(validRest)
+          reactData.validErrorMaps = validErrMaps
           return nextTick().then(() => {
             if (ruleProps.length) {
               return Promise.reject(validRest[ruleProps[0]][0])
@@ -186,6 +200,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             const row = firstErrParams.row
             const rowIndex = afterFullData.indexOf(row)
             const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+            reactData.validErrorMaps = validErrMaps
             if (validOpts.autoPos === false) {
               finish()
             } else {
@@ -198,6 +213,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           })
         })
       }
+      // reactData.validErrorMaps = validErrMaps
       return nextTick().then(() => {
         if (cb) {
           cb()
@@ -218,15 +234,43 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       validate (rows, cb) {
         return beginValidate(rows, cb)
       },
-      clearValidate () {
-        const { validStore } = reactData
-        Object.assign(validStore, {
-          visible: false,
-          row: null,
-          column: null,
-          content: '',
-          rule: null
-        })
+      clearValidate (rows, fieldOrColumn) {
+        const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
+        const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : []).map(column => handleFieldOrColumn($xetable, column))) as VxeTableDefines.ColumnInfo<any>[]
+        let validErrMaps: {
+          [key: string]: {
+            row: any;
+            column: any;
+            rule: any;
+            content: any;
+          }
+        } = {}
+        if (rowList.length && colList.length) {
+          validErrMaps = Object.assign({}, reactData.validErrorMaps)
+          rowList.forEach(row => {
+            colList.forEach((column) => {
+              const vaildKey = `${getRowid($xetable, row)}:${column.id}`
+              if (validErrMaps[vaildKey]) {
+                delete validErrMaps[vaildKey]
+              }
+            })
+          })
+        } else if (rowList.length) {
+          const rowidList = rowList.map(row => `${getRowid($xetable, row)}`)
+          XEUtils.each(reactData.validErrorMaps, (item, key) => {
+            if (rowidList.indexOf(key.split(':')[0]) > -1) {
+              validErrMaps[key] = item
+            }
+          })
+        } else if (colList.length) {
+          const colidList = colList.map(column => `${column.id}`)
+          XEUtils.each(reactData.validErrorMaps, (item, key) => {
+            if (colidList.indexOf(key.split(':')[1]) > -1) {
+              validErrMaps[key] = item
+            }
+          })
+        }
+        reactData.validErrorMaps = validErrMaps
         return nextTick()
       }
     }
@@ -336,9 +380,9 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       },
       hasCellRules (type, row, column) {
         const { editRules } = props
-        const { property } = column
-        if (property && editRules) {
-          const rules = XEUtils.get(editRules, property)
+        const { field } = column
+        if (field && editRules) {
+          const rules = XEUtils.get(editRules, field)
           return rules && !!XEUtils.find(rules, rule => type === 'all' || !rule.trigger || type === rule.trigger)
         }
         return false
@@ -348,7 +392,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
        */
       triggerValidate (type) {
         const { editConfig, editRules } = props
-        const { editStore, validStore } = reactData
+        const { editStore } = reactData
         const { actived } = editStore
         const editOpts = computeEditOpts.value
         if (editConfig && editRules && actived.row) {
@@ -356,9 +400,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           if (validatorPrivateMethods.hasCellRules(type, row, column)) {
             return validatorPrivateMethods.validCellRules(type, row, column).then(() => {
               if (editOpts.mode === 'row') {
-                if (validStore.visible && validStore.row === row && validStore.column === column) {
-                  validatorMethods.clearValidate()
-                }
+                validatorMethods.clearValidate(row, column)
               }
             }).catch(({ rule }: any) => {
               // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
@@ -378,18 +420,17 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
        */
       showValidTooltip (params) {
         const { validStore } = reactData
-        const { rule, row, column } = params
-        const content = rule.content
-        return nextTick().then(() => {
-          Object.assign(validStore, {
-            row,
-            column,
-            rule,
-            content,
-            visible: true
-          })
-          $xetable.dispatchEvent('valid-error', params, null)
+        validStore.visible = true
+        reactData.validErrorMaps = Object.assign({}, reactData.validErrorMaps, {
+          [`${getRowid($xetable, params.row)}:${params.column.id}`]: {
+            column: params.column,
+            row: params.row,
+            rule: params.rule,
+            content: params.rule.content
+          }
         })
+        $xetable.dispatchEvent('valid-error', params, null)
+        return nextTick()
       }
     }
 

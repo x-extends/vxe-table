@@ -124,7 +124,7 @@ export default defineComponent({
      */
     const renderColumn = (seq: number | string, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
       const { columnKey, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
-      const { tableData, overflowX, scrollYLoad, currentColumn, mergeList, editStore, validStore, isAllOverflow } = tableReactData
+      const { tableData, overflowX, scrollYLoad, currentColumn, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData } = tableInternalData
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
@@ -154,7 +154,7 @@ export default defineComponent({
       let isDirty
       const tdOns: any = {}
       const cellAlign = align || allAlign
-      const hasValidError = validStore.row === row && validStore.column === column
+      const errorValidItem = validErrorMaps[`${rowid}:${column.id}`]
       const showValidTip = editRules && validOpts.showMessage
       const attrs: any = { colid: column.id }
       const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, $grid: $xetable.xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
@@ -271,17 +271,17 @@ export default defineComponent({
             title: showTitle ? $xetable.getCellLabel(row, column) : null
           }, column.renderCell(params))
         )
-        if (showValidTip && hasValidError) {
+        if (showValidTip && errorValidItem) {
           tdVNs.push(
             h('div', {
               class: 'vxe-cell--valid',
-              style: validStore.rule && validStore.rule.maxWidth ? {
-                width: `${validStore.rule.maxWidth}px`
+              style: errorValidItem.rule && errorValidItem.rule.maxWidth ? {
+                width: `${errorValidItem.rule.maxWidth}px`
               } : null
             }, [
               h('span', {
                 class: 'vxe-cell--valid-msg'
-              }, validStore.content)
+              }, errorValidItem.content)
             ])
           )
         }
@@ -301,7 +301,7 @@ export default defineComponent({
             'fixed--hidden': fixedHiddenColumn,
             'col--dirty': isDirty,
             'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
-            'col--valid-error': hasValidError,
+            'col--valid-error': !!errorValidItem,
             'col--current': currentColumn === column
           },
           getPropClass(compCellClassName, params),

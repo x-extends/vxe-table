@@ -15,7 +15,7 @@ import TableFooterComponent from '../../footer'
 import tableProps from './props'
 import tableEmits from './emits'
 import VxeLoading from '../../loading/index'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement, getRootColumn } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow } from '../../../types/all'
@@ -184,13 +184,9 @@ export default defineComponent({
       },
       // 存放数据校验相关信息
       validStore: {
-        visible: false,
-        row: null,
-        column: null,
-        content: '',
-        rule: null,
-        isArrow: false
+        visible: false
       },
+      validErrorMaps: {},
       // 导入相关信息
       importStore: {
         inited: false,
@@ -504,6 +500,27 @@ export default defineComponent({
       return Object.assign({}, GlobalConfig.table.customConfig, props.customConfig)
     })
 
+    const computeFixedColumnSize = computed(() => {
+      const { tableFullColumn } = internalData
+      let fixedSize = 0
+      tableFullColumn.forEach((column) => {
+        if (column.fixed) {
+          fixedSize++
+        }
+      })
+      return fixedSize
+    })
+
+    const computeIsMaxFixedColumn = computed(() => {
+      const fixedColumnSize = computeFixedColumnSize.value
+      const columnOpts = computeColumnOpts.value
+      const { maxFixedSize } = columnOpts
+      if (maxFixedSize) {
+        return fixedColumnSize >= maxFixedSize
+      }
+      return false
+    })
+
     const computeTableBorder = computed(() => {
       const { border } = props
       if (border === true) {
@@ -590,6 +607,8 @@ export default defineComponent({
       computeEmptyOpts,
       computeLoadingOpts,
       computeCustomOpts,
+      computeFixedColumnSize,
+      computeIsMaxFixedColumn,
       computeIsAllCheckboxDisabled
     }
 
@@ -847,6 +866,7 @@ export default defineComponent({
             resizeWidth?: number
             visible?: boolean
             fixed?: string
+            order?: number
           }
         } = {}
         if (!id) {
@@ -857,8 +877,8 @@ export default defineComponent({
         if (isCustomResizable) {
           const columnWidthStorage = getCustomStorageMap(resizableStorageKey)[id]
           if (columnWidthStorage) {
-            XEUtils.each(columnWidthStorage, (resizeWidth: number, field) => {
-              customMap[field] = { field, resizeWidth }
+            XEUtils.each(columnWidthStorage, (resizeWidth: number, colKey) => {
+              customMap[colKey] = { resizeWidth }
             })
           }
         }
@@ -868,11 +888,11 @@ export default defineComponent({
           if (columnFixedStorage) {
             const colFixeds = columnFixedStorage.split(',')
             colFixeds.forEach((fixConf: any) => {
-              const [field, fixed] = fixConf.split('|')
-              if (customMap[field]) {
-                customMap[field].fixed = fixed
+              const [colKey, fixed] = fixConf.split('|')
+              if (customMap[colKey]) {
+                customMap[colKey].fixed = fixed
               } else {
-                customMap[field] = { field, fixed }
+                customMap[colKey] = { fixed }
               }
             })
           }
@@ -881,7 +901,15 @@ export default defineComponent({
         if (isCustomOrder) {
           const columnOrderStorage = getCustomStorageMap(orderStorageKey)[id]
           if (columnOrderStorage) {
-            // 开发中...
+            // const colOrderSeqs = columnOrderStorage.split(',')
+            // colOrderSeqs.forEach((orderConf: any) => {
+            //   const [colKey, order] = orderConf.split('|')
+            //   if (customMap[colKey]) {
+            //     customMap[colKey].order = order
+            //   } else {
+            //     customMap[colKey] = { order }
+            //   }
+            // })
           }
         }
         // 自定义隐藏列
@@ -891,18 +919,18 @@ export default defineComponent({
             const colVisibles = columnVisibleStorage.split('|')
             const colHides: string[] = colVisibles[0] ? colVisibles[0].split(',') : []
             const colShows: string[] = colVisibles[1] ? colVisibles[1].split(',') : []
-            colHides.forEach((field) => {
-              if (customMap[field]) {
-                customMap[field].visible = false
+            colHides.forEach((colKey) => {
+              if (customMap[colKey]) {
+                customMap[colKey].visible = false
               } else {
-                customMap[field] = { field, visible: false }
+                customMap[colKey] = { visible: false }
               }
             })
-            colShows.forEach((field) => {
-              if (customMap[field]) {
-                customMap[field].visible = true
+            colShows.forEach((colKey) => {
+              if (customMap[colKey]) {
+                customMap[colKey].visible = true
               } else {
-                customMap[field] = { field, visible: true }
+                customMap[colKey] = { visible: true }
               }
             })
           }
@@ -916,8 +944,8 @@ export default defineComponent({
             keyMap[colKey] = column
           }
         })
-        XEUtils.each(customMap, ({ visible, resizeWidth, fixed }, field) => {
-          const column = keyMap[field]
+        XEUtils.each(customMap, ({ visible, resizeWidth, fixed, order }, colKey) => {
+          const column = keyMap[colKey]
           if (column) {
             if (XEUtils.isNumber(resizeWidth)) {
               column.resizeWidth = resizeWidth
@@ -927,6 +955,9 @@ export default defineComponent({
             }
             if (fixed) {
               column.fixed = fixed
+            }
+            if (order) {
+              column.customOrder = order
             }
           }
         })
@@ -2913,7 +2944,7 @@ export default defineComponent({
        */
       isUpdateByRow (row, field) {
         const { keepSource, treeConfig } = props
-        const { visibleColumn, tableSourceData, fullDataRowIdData } = internalData
+        const { tableFullColumn, tableSourceData, fullDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         if (keepSource) {
           let oRow, property
@@ -2937,8 +2968,8 @@ export default defineComponent({
             if (arguments.length > 1) {
               return !eqCellValue(oRow, row, field as string)
             }
-            for (let index = 0, len = visibleColumn.length; index < len; index++) {
-              property = visibleColumn[index].field
+            for (let index = 0, len = tableFullColumn.length; index < len; index++) {
+              property = tableFullColumn[index].field
               if (property && !eqCellValue(oRow, row, property)) {
                 return true
               }
@@ -3073,8 +3104,20 @@ export default defineComponent({
        */
       setColumnFixed (fieldOrColumn, fixed) {
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
-        if (column && column.fixed !== fixed) {
-          XEUtils.eachTree([column], (column) => {
+        const targetColumn = getRootColumn($xetable, column as any)
+        const isMaxFixedColumn = computeIsMaxFixedColumn.value
+        if (targetColumn && targetColumn.fixed !== fixed) {
+          // 是否超过最大固定列数量
+          if (!targetColumn.fixed && isMaxFixedColumn) {
+            if (VXETable.modal) {
+              VXETable.modal.message({
+                status: 'error',
+                content: GlobalConfig.i18n('vxe.table.maxFixedCol')
+              })
+            }
+            return nextTick()
+          }
+          XEUtils.eachTree([targetColumn], (column) => {
             column.fixed = fixed
           })
           tablePrivateMethods.saveCustomFixed()
@@ -3087,8 +3130,9 @@ export default defineComponent({
        */
       clearColumnFixed (fieldOrColumn) {
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
-        if (column && column.fixed) {
-          XEUtils.eachTree([column], (column) => {
+        const targetColumn = getRootColumn($xetable, column as any)
+        if (targetColumn && targetColumn.fixed) {
+          XEUtils.eachTree([targetColumn], (column) => {
             column.fixed = null
           })
           tablePrivateMethods.saveCustomFixed()
@@ -3146,7 +3190,7 @@ export default defineComponent({
        * 如果已关联工具栏，则会同步更新
        */
       resetColumn (options) {
-        const { tableFullColumn } = internalData
+        const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod } = customOpts
         const opts = Object.assign({
@@ -3154,7 +3198,7 @@ export default defineComponent({
           resizable: options === true,
           fixed: options === true
         }, options)
-        tableFullColumn.forEach((column) => {
+        XEUtils.eachTree(collectColumn, (column) => {
           if (opts.resizable) {
             column.resizeWidth = 0
           }
@@ -4071,7 +4115,7 @@ export default defineComponent({
                       if (customVal && validStore.visible) {
                         setCellValue(row, column, cellValue)
                       }
-                      $xetable.clearValidate()
+                      $xetable.clearValidate(row, column)
                     })
                     .catch(({ rule }) => {
                       if (customVal) {
