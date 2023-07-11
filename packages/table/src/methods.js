@@ -590,8 +590,8 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheRowMap (source) {
-    const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap, tableFullTreeData } = this
-    let { fullDataRowIdData, fullAllDataRowIdData } = this
+    const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap, tableFullTreeData, tableSourceData } = this
+    let { fullDataRowIdData, fullAllDataRowIdData, sourceDataRowIdData } = this
     const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
     const handleCache = (row, index, items, path, parent, nodes) => {
@@ -618,11 +618,30 @@ const Methods = {
       fullDataRowMap.clear()
     }
     fullAllDataRowIdData = this.fullAllDataRowIdData = {}
+    sourceDataRowIdData = this.sourceDataRowIdData = {}
     fullAllDataRowMap.clear()
     if (treeConfig) {
       XEUtils.eachTree(tableFullTreeData, handleCache, treeOpts)
     } else {
       tableFullData.forEach(handleCache)
+    }
+
+    const handleSourceRow = (row) => {
+      let rowid = getRowid(this, row)
+      if (eqEmptyValue(rowid)) {
+        rowid = getRowUniqueId()
+        XEUtils.set(row, rowkey, rowid)
+      }
+      sourceDataRowIdData[rowid] = {
+        row,
+        rowid
+      }
+    }
+    // 源数据缓存
+    if (treeConfig && !treeOpts.transform) {
+      XEUtils.eachTree(tableSourceData, handleSourceRow, treeOpts)
+    } else {
+      tableSourceData.forEach(handleSourceRow)
     }
   },
   loadTreeChildren (row, childRecords) {
@@ -1460,7 +1479,7 @@ const Methods = {
    */
   showColumn (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column & !column.visible) {
+    if (column && column.visible) {
       column.visible = true
       return this.handleCustom()
     }
