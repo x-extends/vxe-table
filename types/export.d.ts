@@ -231,6 +231,7 @@ export interface ColumnExportCellRenderParams extends GridRenderParams {
 
 export interface ColumnExportHeaderRenderParams extends GridRenderParams {
   column: ColumnInfo;
+  options: ExportParams;
 }
 
 export interface ColumnExportFooterRenderParams extends GridRenderParams {

@@ -77,7 +77,7 @@ function toBooleanValue (cellValue) {
 
 function getLabelData ($xetable, opts, columns, datas) {
   const { isAllExpand, mode } = opts
-  const { treeConfig, treeOpts, radioOpts, checkboxOpts } = $xetable
+  const { treeConfig, treeOpts, radioOpts, checkboxOpts, columnOpts } = $xetable
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
   }
@@ -99,15 +99,18 @@ function getLabelData ($xetable, opts, columns, datas) {
         columns.forEach((column, $columnIndex) => {
           let cellValue = ''
           const renderOpts = column.editRender || column.cellRender
-          let exportLabelMethod = column.exportMethod
-          if (!exportLabelMethod && renderOpts && renderOpts.name) {
+          let bodyExportMethod = column.exportMethod
+          if (!bodyExportMethod && renderOpts && renderOpts.name) {
             const compConf = VXETable.renderer.get(renderOpts.name)
             if (compConf) {
-              exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
+              bodyExportMethod = compConf.exportMethod || compConf.cellExportMethod
             }
           }
-          if (exportLabelMethod) {
-            cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
+          if (!bodyExportMethod) {
+            bodyExportMethod = columnOpts.exportMethod
+          }
+          if (bodyExportMethod) {
+            cellValue = bodyExportMethod({ $table: $xetable, row, column, options: opts })
           } else {
             switch (column.type) {
               case 'seq':
@@ -216,21 +219,26 @@ function getBooleanValue (cellValue) {
 }
 
 function getHeaderTitle ($xetable, opts, column) {
-  const { headerExportMethod } = column
-  return headerExportMethod ? headerExportMethod({ column, $table: $xetable }) : ((opts.original ? column.property : column.getTitle()) || '')
+  const { columnOpts } = $xetable
+  const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
+  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xetable }) : ((opts.original ? column.property : column.getTitle()) || '')
 }
 
 function getFooterCellValue ($xetable, opts, items, column) {
+  const { columnOpts } = $xetable
   const renderOpts = column.editRender || column.cellRender
-  let exportLabelMethod = column.footerExportMethod
-  if (!exportLabelMethod && renderOpts && renderOpts.name) {
+  let footLabelMethod = column.footerExportMethod
+  if (!footLabelMethod && renderOpts && renderOpts.name) {
     const compConf = VXETable.renderer.get(renderOpts.name)
     if (compConf) {
-      exportLabelMethod = compConf.footerExportMethod || compConf.footerCellExportMethod
+      footLabelMethod = compConf.footerExportMethod || compConf.footerCellExportMethod
     }
   }
+  if (!footLabelMethod) {
+    footLabelMethod = columnOpts.footerExportMethod
+  }
   const _columnIndex = $xetable.getVTColumnIndex(column)
-  const cellValue = exportLabelMethod ? exportLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
+  const cellValue = footLabelMethod ? footLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
   return cellValue
 }
 

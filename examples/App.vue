@@ -1658,365 +1658,365 @@ export default {
             //   }
             }
           ]
-        },
-        {
-          label: 'app.aside.nav.formats',
-          value: 'formats',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'FormatsAPI'
-              },
-              keywords: ['formats']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.commands',
-          value: 'commands',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'CommandsAPI'
-              },
-              keywords: ['commands']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.menus',
-          value: 'menus',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'MenusAPI'
-              },
-              keywords: ['menus']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.renderer',
-          value: 'renderer',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'RendererAPI'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererFilter',
-              locat: {
-                name: 'RendererFilter'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererDefault',
-              locat: {
-                name: 'RendererDefault'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererEdit',
-              locat: {
-                name: 'RendererEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererExpand',
-              locat: {
-                name: 'RendererExpand'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererToolbar',
-              locat: {
-                name: 'RendererToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererForm',
-              locat: {
-                name: 'RendererForm'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererEmpty',
-              locat: {
-                name: 'RendererEmpty'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.interceptor',
-          value: 'interceptor',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'InterceptorAPI'
-              },
-              keywords: ['interceptor']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.api',
-          value: 'api',
-          expand: false,
-          children: [
-            // {
-            //   label: 'app.footer.donation',
-            //   locat: {
-            //     name: 'Donation'
-            //   }
-            // },
-            {
-              label: 'app.aside.nav.vxeTable',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'table'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeTableColgroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'colgroup'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeTableColumn',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'column'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeGrid',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'grid'
-                }
-              }
-            },
-            // {
-            //   label: 'app.aside.nav.vxeVirtualTree',
-            //   locat: {
-            //     name: 'VXEAPI',
-            //     params: {
-            //       name: 'virtual-tree'
-            //     }
-            //   }
-            // },
-            {
-              label: 'app.aside.nav.vxeToolbar',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'toolbar'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxePager',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'pager'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeRadio',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'radio'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeRadioGroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'radio-group'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeRadioButton',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'radio-button'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeCheckbox',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'checkbox'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeCheckboxGroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'checkbox-group'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeSwitch',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'switch'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeInput',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'input'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeSelect',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'select'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeOptgroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'optgroup'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeOption',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'option'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeTextarea',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'textarea'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeButton',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'button'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeModal',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'modal'
-                }
-              }
-            },
-            // {
-            //   label: 'app.aside.nav.vxeTooltip',
-            //   locat: {
-            //     name: 'VXEAPI',
-            //     params: {
-            //       name: 'tooltip'
-            //     }
-            //   }
-            // },
-            {
-              label: 'app.aside.nav.vxeForm',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'form'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeFormGather',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'form-gather'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeFormItem',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'form-item'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeList',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'list'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxePulldown',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'pulldown'
-                }
-              }
-            }
-          ]
         }
+        // {
+        //   label: 'app.aside.nav.formats',
+        //   value: 'formats',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'FormatsAPI'
+        //       },
+        //       keywords: ['formats']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.commands',
+        //   value: 'commands',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'CommandsAPI'
+        //       },
+        //       keywords: ['commands']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.menus',
+        //   value: 'menus',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'MenusAPI'
+        //       },
+        //       keywords: ['menus']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.renderer',
+        //   value: 'renderer',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'RendererAPI'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererFilter',
+        //       locat: {
+        //         name: 'RendererFilter'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererDefault',
+        //       locat: {
+        //         name: 'RendererDefault'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererEdit',
+        //       locat: {
+        //         name: 'RendererEdit'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererExpand',
+        //       locat: {
+        //         name: 'RendererExpand'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererToolbar',
+        //       locat: {
+        //         name: 'RendererToolbar'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererForm',
+        //       locat: {
+        //         name: 'RendererForm'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererEmpty',
+        //       locat: {
+        //         name: 'RendererEmpty'
+        //       }
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.interceptor',
+        //   value: 'interceptor',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'InterceptorAPI'
+        //       },
+        //       keywords: ['interceptor']
+        //     }
+        //   ]
+        // }
+        // {
+        //   label: 'app.aside.nav.api',
+        //   value: 'api',
+        //   expand: false,
+        //   children: [
+        //     // {
+        //     //   label: 'app.footer.donation',
+        //     //   locat: {
+        //     //     name: 'Donation'
+        //     //   }
+        //     // },
+        //     {
+        //       label: 'app.aside.nav.vxeTable',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'table'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeTableColgroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'colgroup'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeTableColumn',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'column'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeGrid',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'grid'
+        //         }
+        //       }
+        //     },
+        //     // {
+        //     //   label: 'app.aside.nav.vxeVirtualTree',
+        //     //   locat: {
+        //     //     name: 'VXEAPI',
+        //     //     params: {
+        //     //       name: 'virtual-tree'
+        //     //     }
+        //     //   }
+        //     // },
+        //     {
+        //       label: 'app.aside.nav.vxeToolbar',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'toolbar'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxePager',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'pager'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeRadio',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'radio'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeRadioGroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'radio-group'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeRadioButton',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'radio-button'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeCheckbox',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'checkbox'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeCheckboxGroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'checkbox-group'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeSwitch',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'switch'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeInput',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'input'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeSelect',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'select'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeOptgroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'optgroup'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeOption',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'option'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeTextarea',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'textarea'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeButton',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'button'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeModal',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'modal'
+        //         }
+        //       }
+        //     },
+        //     // {
+        //     //   label: 'app.aside.nav.vxeTooltip',
+        //     //   locat: {
+        //     //     name: 'VXEAPI',
+        //     //     params: {
+        //     //       name: 'tooltip'
+        //     //     }
+        //     //   }
+        //     // },
+        //     {
+        //       label: 'app.aside.nav.vxeForm',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'form'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeFormGather',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'form-gather'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeFormItem',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'form-item'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeList',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'list'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxePulldown',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'pulldown'
+        //         }
+        //       }
+        //     }
+        //   ]
+        // }
       ]
     }
   },

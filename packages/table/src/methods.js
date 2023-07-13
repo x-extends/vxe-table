@@ -414,7 +414,7 @@ const Methods = {
     this.tableSynchData = datas
     // 克隆原数据，用于显示编辑状态，与编辑值做对比
     if (keepSource) {
-      this.tableSourceData = XEUtils.clone(fullData, true)
+      this.cacheSourceMap(fullData)
     }
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (sYLoad) {
@@ -590,8 +590,8 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheRowMap (source) {
-    const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap, tableFullTreeData, tableSourceData } = this
-    let { fullDataRowIdData, fullAllDataRowIdData, sourceDataRowIdData } = this
+    const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap, tableFullTreeData } = this
+    let { fullDataRowIdData, fullAllDataRowIdData } = this
     const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
     const handleCache = (row, index, items, path, parent, nodes) => {
@@ -618,14 +618,18 @@ const Methods = {
       fullDataRowMap.clear()
     }
     fullAllDataRowIdData = this.fullAllDataRowIdData = {}
-    sourceDataRowIdData = this.sourceDataRowIdData = {}
     fullAllDataRowMap.clear()
     if (treeConfig) {
       XEUtils.eachTree(tableFullTreeData, handleCache, treeOpts)
     } else {
       tableFullData.forEach(handleCache)
     }
-
+  },
+  cacheSourceMap (fullData) {
+    let { treeConfig, treeOpts, sourceDataRowIdData } = this
+    const sourceData = XEUtils.clone(fullData, true)
+    const rowkey = getRowkey(this)
+    sourceDataRowIdData = this.sourceDataRowIdData = {}
     const handleSourceRow = (row) => {
       let rowid = getRowid(this, row)
       if (eqEmptyValue(rowid)) {
@@ -639,10 +643,11 @@ const Methods = {
     }
     // 源数据缓存
     if (treeConfig && !treeOpts.transform) {
-      XEUtils.eachTree(tableSourceData, handleSourceRow, treeOpts)
+      XEUtils.eachTree(sourceData, handleSourceRow, treeOpts)
     } else {
-      tableSourceData.forEach(handleSourceRow)
+      sourceData.forEach(handleSourceRow)
     }
+    this.tableSourceData = sourceData
   },
   loadTreeChildren (row, childRecords) {
     const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
@@ -1080,31 +1085,21 @@ const Methods = {
    * @param {String} field 字段名
    */
   isUpdateByRow (row, field) {
-    const { tableFullColumn, keepSource, treeConfig, treeOpts, tableSourceData, fullDataRowIdData } = this
+    const { tableFullColumn, keepSource, sourceDataRowIdData, fullDataRowIdData } = this
     if (keepSource) {
-      let oRow, property
       const rowid = getRowid(this, row)
       // 新增的数据不需要检测
       if (!fullDataRowIdData[rowid]) {
         return false
       }
-      if (treeConfig) {
-        const children = treeOpts.children
-        const matchObj = XEUtils.findTree(tableSourceData, item => rowid === getRowid(this, item), treeOpts)
-        row = Object.assign({}, row, { [children]: null })
-        if (matchObj) {
-          oRow = Object.assign({}, matchObj.item, { [children]: null })
-        }
-      } else {
-        const oRowIndex = fullDataRowIdData[rowid].index
-        oRow = tableSourceData[oRowIndex]
-      }
-      if (oRow) {
+      const oldRest = sourceDataRowIdData[rowid]
+      if (oldRest) {
+        const oRow = oldRest.row
         if (arguments.length > 1) {
           return !eqCellValue(oRow, row, field)
         }
         for (let index = 0, len = tableFullColumn.length; index < len; index++) {
-          property = tableFullColumn[index].field
+          const property = tableFullColumn[index].field
           if (property && !eqCellValue(oRow, row, property)) {
             return true
           }
@@ -3807,7 +3802,10 @@ const Methods = {
       if (!remote || (firstSortColumn && firstSortColumn.remoteSort)) {
         this.handleTableData(true)
       }
-      return this.$nextTick().then(this.updateStyle)
+      return this.$nextTick().then(() => {
+        this.updateCellAreas()
+        return this.updateStyle()
+      })
     }
     return this.$nextTick()
   },

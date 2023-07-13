@@ -1250,6 +1250,7 @@ export interface TableColumnConfig {
   width?: number
   minWidth?: number
   maxWidth?: number
+  headerExportMethod?(params: any): string | number
 }
 export type ColumnDefaultConfig = TableColumnConfig
 
