@@ -1640,7 +1640,7 @@ export default defineComponent({
             //   }
             }
           ]
-        },
+        }
         // {
         //   label: 'app.aside.nav.virtualTree',
         //   value: 'virtualTree',
@@ -1726,117 +1726,117 @@ export default defineComponent({
         //     }
         //   ]
         // },
-        {
-          label: 'app.aside.nav.formats',
-          value: 'formats',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'FormatsAPI'
-              },
-              keywords: ['formats']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.commands',
-          value: 'commands',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'CommandsAPI'
-              },
-              keywords: ['commands']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.menus',
-          value: 'menus',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'MenusAPI'
-              },
-              keywords: ['menus']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.renderer',
-          value: 'renderer',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'RendererAPI'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererFilter',
-              locat: {
-                name: 'RendererFilter'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererDefault',
-              locat: {
-                name: 'RendererDefault'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererEdit',
-              locat: {
-                name: 'RendererEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererExpand',
-              locat: {
-                name: 'RendererExpand'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererToolbar',
-              locat: {
-                name: 'RendererToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererForm',
-              locat: {
-                name: 'RendererForm'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererEmpty',
-              locat: {
-                name: 'RendererEmpty'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.interceptor',
-          value: 'interceptor',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'InterceptorAPI'
-              },
-              keywords: ['interceptor']
-            }
-          ]
-        }
+        // {
+        //   label: 'app.aside.nav.formats',
+        //   value: 'formats',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'FormatsAPI'
+        //       },
+        //       keywords: ['formats']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.commands',
+        //   value: 'commands',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'CommandsAPI'
+        //       },
+        //       keywords: ['commands']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.menus',
+        //   value: 'menus',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'MenusAPI'
+        //       },
+        //       keywords: ['menus']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.renderer',
+        //   value: 'renderer',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'RendererAPI'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererFilter',
+        //       locat: {
+        //         name: 'RendererFilter'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererDefault',
+        //       locat: {
+        //         name: 'RendererDefault'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererEdit',
+        //       locat: {
+        //         name: 'RendererEdit'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererExpand',
+        //       locat: {
+        //         name: 'RendererExpand'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererToolbar',
+        //       locat: {
+        //         name: 'RendererToolbar'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererForm',
+        //       locat: {
+        //         name: 'RendererForm'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererEmpty',
+        //       locat: {
+        //         name: 'RendererEmpty'
+        //       }
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.interceptor',
+        //   value: 'interceptor',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'InterceptorAPI'
+        //       },
+        //       keywords: ['interceptor']
+        //     }
+        //   ]
+        // }
       ]
     })
 

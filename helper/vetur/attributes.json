@@ -3,6 +3,10 @@
     "type": "string",
     "description": "图标名称"
   },
+  "vxe-icon/roll": {
+    "type": "boolean",
+    "description": "旋转动画"
+  },
   "vxe-table/id": {
     "type": "string",
     "description": "唯一标识（被某些特定的功能所依赖）"
@@ -191,6 +195,10 @@
     "type": "any",
     "description": "行配置信息"
   },
+  "vxe-table/resize-config": {
+    "type": "object",
+    "description": "响应式布局配置项"
+  },
   "vxe-table/resizable-config": {
     "type": "object",
     "description": "列宽拖动配置项"
@@ -241,7 +249,7 @@
   },
   "vxe-table/menu-config": {
     "type": "any",
-    "description": "快捷菜单配置项"
+    "description": "右键菜单配置项"
   },
   "vxe-table/clip-config": {
     "type": "any",
@@ -282,6 +290,10 @@
   "vxe-table/empty-render": {
     "type": "any",
     "description": "空内容渲染配置项，empty-render 的优先级大于 empty-text"
+  },
+  "vxe-table/loading-config": {
+    "type": "any",
+    "description": "加载中配置项"
   },
   "vxe-table/custom-config": {
     "type": "any",
@@ -349,7 +361,7 @@
   },
   "vxe-column/type": {
     "type": "string",
-    "description": "列的类型"
+    "description": "列的类型（部分功能需要设置 column-config.useKey"
   },
   "vxe-column/field": {
     "type": "string",
@@ -421,46 +433,50 @@
   },
   "vxe-column/sortable": {
     "type": "boolean",
-    "description": "是否允许列排序"
+    "description": "数据排序，是否允许列排序"
   },
   "vxe-column/sort-by": {
     "type": "string | (({ row, column }) => string | number)",
-    "description": "只对 sortable 有效，指定排序的字段（当值 formatter 格式化后，可以设置该字段，使用值进行排序）"
+    "description": "数据排序，只对 sortable 有效，指定排序的字段（当值 formatter 格式化后，可以设置该字段，使用值进行排序）"
   },
   "vxe-column/sort-type": {
     "type": "string",
-    "description": "排序的字段类型，比如字符串转数值等"
+    "description": "数据排序，排序的字段类型，比如字符串转数值等"
   },
   "vxe-column/filters": {
     "type": "any[]",
-    "description": "配置筛选条件（注：筛选只能用于列表，如果是树结构则过滤根节点）"
+    "description": "数据筛选，配置筛选条件（注：筛选只能用于列表，如果是树结构则过滤根节点）"
   },
   "vxe-column/filter-multiple": {
     "type": "boolean",
-    "description": "只对 filters 有效，筛选是否允许多选"
+    "description": "数据筛选，只对 filters 有效，筛选是否允许多选"
   },
   "vxe-column/filter-method": {
     "type": "({ value, option, cellvalue, row, column }) => boolean",
-    "description": "只对 filters 有效，列的筛选方法，该方法的返回值用来决定该行是否显示"
+    "description": "数据筛选，只对 filters 有效，列的筛选方法，该方法的返回值用来决定该行是否显示"
   },
   "vxe-column/filter-reset-method": {
     "type": "({ options, column }) => void",
-    "description": "只对 filters 有效，自定义筛选重置方法"
+    "description": "数据筛选，只对 filters 有效，自定义筛选重置方法"
   },
   "vxe-column/filter-recover-method": {
     "type": "({ option, column }) => void",
-    "description": "只对 filters 有效，自定义筛选复原方法（使用自定义筛选时可能会用到）"
+    "description": "数据筛选，只对 filters 有效，自定义筛选复原方法（使用自定义筛选时可能会用到）"
   },
   "vxe-column/filter-render": {
     "type": "any",
-    "description": "筛选渲染器配置项"
+    "description": "数据筛选，筛选渲染器配置项"
+  },
+  "vxe-column/header-export-method": {
+    "type": "({ column, options }) => string",
+    "description": "自定义表头单元格数据导出方法，返回自定义的标题"
   },
   "vxe-column/export-method": {
-    "type": "({ row, column }) => string",
+    "type": "({ row, column, options }) => string",
     "description": "自定义单元格数据导出方法，返回自定义的值"
   },
   "vxe-column/footer-export-method": {
-    "type": "({ items, _columnindex }) => string",
+    "type": "({ items, _columnindex, options }) => string",
     "description": "自定义表尾单元格数据导出方法，返回自定义的值"
   },
   "vxe-column/title-help": {
@@ -497,7 +513,7 @@
   },
   "vxe-column/col-id": {
     "type": "string | number",
-    "description": "自定义列的唯一主键（注：99%的场景不应该设置，操作不正确将导致出现问题）"
+    "description": "自定义列的唯一主键（注：列主键必须确保唯一，操作不正确将导致出现问题）"
   },
   "vxe-grid/id": {
     "type": "string",
@@ -691,6 +707,10 @@
     "type": "any",
     "description": "行配置信息"
   },
+  "vxe-grid/resize-config": {
+    "type": "object",
+    "description": "响应式布局配置项"
+  },
   "vxe-grid/resizable-config": {
     "type": "object",
     "description": "列宽拖动配置项"
@@ -741,7 +761,7 @@
   },
   "vxe-grid/menu-config": {
     "type": "any",
-    "description": "快捷菜单配置项"
+    "description": "右键菜单配置项"
   },
   "vxe-grid/clip-config": {
     "type": "any",
@@ -782,6 +802,10 @@
   "vxe-grid/empty-render": {
     "type": "any",
     "description": "空内容渲染配置项，empty-render 的优先级大于 empty-text"
+  },
+  "vxe-grid/loading-config": {
+    "type": "any",
+    "description": "加载中配置项"
   },
   "vxe-grid/custom-config": {
     "type": "any",
@@ -1043,6 +1067,10 @@
     "type": "any[]",
     "description": "v-model 绑定值"
   },
+  "vxe-checkbox-group/max": {
+    "type": "string, number",
+    "description": "限制最大可选数量，默认无限制"
+  },
   "vxe-checkbox-group/size": {
     "type": "string",
     "description": "尺寸"
@@ -1222,6 +1250,10 @@
   "vxe-select/model-value": {
     "type": "any",
     "description": "v-model 绑定值"
+  },
+  "vxe-select/max": {
+    "type": "string, number",
+    "description": "限制最大可选数量，默认无限制"
   },
   "vxe-select/size": {
     "type": "string",
@@ -1699,9 +1731,21 @@
     "type": "string | boolean",
     "description": "标题内容过长时显示为省略号"
   },
+  "vxe-form-item/show-title": {
+    "type": "boolean",
+    "description": "是否显示标题"
+  },
   "vxe-form-item/class-name": {
     "type": "string, ({ field, data }) => string",
     "description": "给表单项附加 className"
+  },
+  "vxe-form-item/content-class-name": {
+    "type": "string, ({ field, data }) => string",
+    "description": "给表单项内容附加 className"
+  },
+  "vxe-form-item/content-style": {
+    "type": "{ [name: string]: string }, ({ field, data }) => string",
+    "description": "给表单项内容附加样式"
   },
   "vxe-form-item/visible": {
     "type": "boolean",

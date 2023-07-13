@@ -1,7 +1,8 @@
 {
   "vxe-icon": {
     "attributes": [
-      "name"
+      "name",
+      "roll"
     ],
     "description": "图标"
   },
@@ -54,6 +55,7 @@
       "keep-source",
       "column-config",
       "row-config",
+      "resize-config",
       "resizable-config",
       "seq-config",
       "sort-config",
@@ -77,6 +79,7 @@
       "edit-rules",
       "empty-text",
       "empty-render",
+      "loading-config",
       "custom-config",
       "scroll-x",
       "scroll-y",
@@ -137,6 +140,7 @@
       "filter-reset-method",
       "filter-recover-method",
       "filter-render",
+      "header-export-method",
       "export-method",
       "footer-export-method",
       "title-help",
@@ -201,6 +205,7 @@
       "keep-source",
       "column-config",
       "row-config",
+      "resize-config",
       "resizable-config",
       "seq-config",
       "sort-config",
@@ -224,6 +229,7 @@
       "edit-rules",
       "empty-text",
       "empty-render",
+      "loading-config",
       "custom-config",
       "scroll-x",
       "scroll-y",
@@ -328,6 +334,7 @@
   "vxe-checkbox-group": {
     "attributes": [
       "model-value",
+      "max",
       "size",
       "disabled"
     ],
@@ -391,6 +398,7 @@
   "vxe-select": {
     "attributes": [
       "model-value",
+      "max",
       "size",
       "multiple",
       "multi-char-overflow",
@@ -555,7 +563,10 @@
       "title-colon",
       "title-asterisk",
       "title-overflow",
+      "show-title",
       "class-name",
+      "content-class-name",
+      "content-style",
       "visible",
       "visible-method",
       "folding",

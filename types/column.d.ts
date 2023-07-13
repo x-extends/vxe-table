@@ -105,6 +105,7 @@ export namespace VxeColumnPropTypes {
 
   interface HeaderExportParams<D = VxeTableDataRow> {
     $table: VxeTableConstructor<D>,
+    options: VxeTablePropTypes.ExportConfig
     column: VxeTableDefines.ColumnInfo<D>
   }
   export type HeaderExportMethod<D = VxeTableDataRow> = (params: HeaderExportParams<D>) => string | number

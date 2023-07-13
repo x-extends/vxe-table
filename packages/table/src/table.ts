@@ -291,6 +291,7 @@ export default defineComponent({
       // 总的缓存数据集
       fullAllDataRowIdData: {},
       // 渲染中缓存数据
+      sourceDataRowIdData: {},
       fullDataRowIdData: {},
       fullColumnIdData: {},
       fullColumnFieldData: {},
@@ -2192,7 +2193,7 @@ export default defineComponent({
       internalData.tableSynchData = datas
       // 克隆原数据，用于显示编辑状态，与编辑值做对比
       if (keepSource) {
-        internalData.tableSourceData = XEUtils.clone(fullData, true)
+        tablePrivateMethods.cacheSourceMap(fullData)
       }
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (sYLoad) {
@@ -2943,33 +2944,22 @@ export default defineComponent({
        * @param {String} field 字段名
        */
       isUpdateByRow (row, field) {
-        const { keepSource, treeConfig } = props
-        const { tableFullColumn, tableSourceData, fullDataRowIdData } = internalData
-        const treeOpts = computeTreeOpts.value
+        const { keepSource } = props
+        const { tableFullColumn, fullDataRowIdData, sourceDataRowIdData } = internalData
         if (keepSource) {
-          let oRow, property
           const rowid = getRowid($xetable, row)
           // 新增的数据不需要检测
           if (!fullDataRowIdData[rowid]) {
             return false
           }
-          if (treeConfig) {
-            const children = treeOpts.children
-            const matchObj = XEUtils.findTree(tableSourceData, item => rowid === getRowid($xetable, item), treeOpts)
-            row = Object.assign({}, row, { [children]: null })
-            if (matchObj) {
-              oRow = Object.assign({}, matchObj.item, { [children]: null })
-            }
-          } else {
-            const oRowIndex = fullDataRowIdData[rowid].index
-            oRow = tableSourceData[oRowIndex]
-          }
-          if (oRow) {
+          const oldRest = sourceDataRowIdData[rowid]
+          if (oldRest) {
+            const oRow = oldRest.row
             if (arguments.length > 1) {
               return !eqCellValue(oRow, row, field as string)
             }
             for (let index = 0, len = tableFullColumn.length; index < len; index++) {
-              property = tableFullColumn[index].field
+              const property = tableFullColumn[index].field
               if (property && !eqCellValue(oRow, row, property)) {
                 return true
               }
@@ -3619,7 +3609,10 @@ export default defineComponent({
           if (!remote) {
             tablePrivateMethods.handleTableData(true)
           }
-          return nextTick().then(updateStyle)
+          return nextTick().then(() => {
+            tableMethods.updateCellAreas()
+            return updateStyle()
+          })
         }
         return nextTick()
       },
@@ -4847,7 +4840,7 @@ export default defineComponent({
         let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
         const rowkey = getRowkey($xetable)
         const isLazy = treeConfig && treeOpts.lazy
-        const handleCache = (row: any, index: any, items: any, path?: any[], parent?: any, nodes?: any[]) => {
+        const handleRow = (row: any, index: any, items: any, path?: any[], parent?: any, nodes?: any[]) => {
           let rowid = getRowid($xetable, row)
           const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
           const level = nodes ? nodes.length - 1 : 0
@@ -4869,10 +4862,36 @@ export default defineComponent({
         }
         fullAllDataRowIdData = internalData.fullAllDataRowIdData = {}
         if (treeConfig) {
-          XEUtils.eachTree(tableFullTreeData, handleCache, treeOpts)
+          XEUtils.eachTree(tableFullTreeData, handleRow, treeOpts)
         } else {
-          tableFullData.forEach(handleCache)
+          tableFullData.forEach(handleRow)
         }
+      },
+      cacheSourceMap (fullData) {
+        const { treeConfig } = props
+        const treeOpts = computeTreeOpts.value
+        let { sourceDataRowIdData } = internalData
+        const sourceData = XEUtils.clone(fullData, true)
+        const rowkey = getRowkey($xetable)
+        sourceDataRowIdData = internalData.sourceDataRowIdData = {}
+        const handleSourceRow = (row: any) => {
+          let rowid = getRowid($xetable, row)
+          if (eqEmptyValue(rowid)) {
+            rowid = getRowUniqueId()
+            XEUtils.set(row, rowkey, rowid)
+          }
+          sourceDataRowIdData[rowid] = {
+            row,
+            rowid
+          }
+        }
+        // 源数据缓存
+        if (treeConfig && !treeOpts.transform) {
+          XEUtils.eachTree(sourceData, handleSourceRow, treeOpts)
+        } else {
+          sourceData.forEach(handleSourceRow)
+        }
+        internalData.tableSourceData = sourceData
       },
       /**
        * 指定列宽的列进行拆分

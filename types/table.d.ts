@@ -729,6 +729,7 @@ export interface TablePrivateMethods<D = VxeTableDataRow> {
   defineField(records: any[]): any[]
   handleTableData(force?: boolean): Promise<any>
   cacheRowMap(isSource?: boolean): void
+  cacheSourceMap(fullData: any[]): void
   saveCustomResizable(isReset?: boolean): void
   saveCustomVisible(): void
   saveCustomFixed(): void
@@ -1070,6 +1071,12 @@ export interface TableInternalData<D = VxeTableDataRow> {
       }
     }
   }
+  sourceDataRowIdData: {
+    [key: string]: {
+      row: D
+      rowid: string
+    }
+  }
   fullDataRowIdData: {
     [key: string]: {
       row: D
@@ -1316,6 +1323,9 @@ export namespace VxeTablePropTypes {
     minWidth?: VxeColumnPropTypes.MinWidth
     maxWidth?: VxeColumnPropTypes.MaxWidth,
     maxFixedSize?: number
+    headerExportMethod?: VxeColumnPropTypes.HeaderExportMethod<any>
+    exportMethod?: VxeColumnPropTypes.ExportMethod<any>
+    footerExportMethod?: VxeColumnPropTypes.FooterExportMethod<any>
   }
   export interface ColumnOpts extends ColumnConfig { }
 
