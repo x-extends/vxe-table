@@ -911,7 +911,7 @@ export default defineComponent({
       const prefixSlot = slots.prefix
       return h('div', {
         ref: refElem,
-        class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: $xeselect }) : className) : '', {
+        class: ['vxe-select', {
           [`size--${vSize}`]: vSize,
           'is--visivle': visiblePanel,
           'is--disabled': disabled,
@@ -948,7 +948,7 @@ export default defineComponent({
         }, [
           h('div', {
             ref: refOptionPanel,
-            class: ['vxe-table--ignore-clear vxe-select--panel', {
+            class: ['vxe-table--ignore-clear vxe-select--panel', className ? (XEUtils.isFunction(className) ? className({ $select: $xeselect }) : className) : '', {
               [`size--${vSize}`]: vSize,
               'is--transfer': transfer,
               'animat--leave': !loading && reactData.animatVisible,
