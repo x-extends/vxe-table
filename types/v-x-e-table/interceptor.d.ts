@@ -9,8 +9,8 @@ export namespace VxeGlobalInterceptorHandles {
   export type InterceptorCallback = (params: any) => any
 
   interface InterceptorParams {
-    $grid?: VxeGridConstructor & VxeGridPrivateMethods
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    $grid?: VxeGridConstructor<any> & VxeGridPrivateMethods<any>
+    $table: VxeTableConstructor<any> & VxeTablePrivateMethods<any>
     $event: Event
   }
 
@@ -21,25 +21,25 @@ export namespace VxeGlobalInterceptorHandles {
 
   export interface InterceptorExportParams extends InterceptorParams {
     options: VxeTablePropTypes.ExportHandleOptions
-    columns: VxeTableDefines.ColumnInfo[]
-    colgroups: VxeTableDefines.ColumnInfo[][]
+    columns: VxeTableDefines.ColumnInfo<any>[]
+    colgroups: VxeTableDefines.ColumnInfo<any>[][]
     datas: any[]
   }
 
   export interface InterceptorImportParams extends InterceptorParams {
     file: File
     options: VxeTablePropTypes.ExportHandleOptions
-    columns: VxeTableDefines.ColumnInfo[]
+    columns: VxeTableDefines.ColumnInfo<any>[]
     datas: any[]
   }
 
   export interface InterceptorShowMenuParams extends InterceptorParams {
     type: 'header' | 'body' | 'footer'
     options: VxeTableDefines.MenuFirstOption[][]
-    columns: VxeTableDefines.ColumnInfo[]
+    columns: VxeTableDefines.ColumnInfo<any>[]
     row?: any
     rowIndex?: number
-    column?: VxeTableDefines.ColumnInfo
+    column?: VxeTableDefines.ColumnInfo<any>
     columnIndex?: number
   }
 }

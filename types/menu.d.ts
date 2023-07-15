@@ -1,5 +1,6 @@
 import { RenderFunction, SetupContext, Ref, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase } from './component'
+import { VxeTableDataRow } from './table'
 
 /* eslint-disable no-use-before-define */
 
@@ -32,14 +33,14 @@ export type VxeMenuPanelProps = {
   [key: string]: any
 }
 
-export interface TableMenuMethods {
+export interface TableMenuMethods<D = VxeTableDataRow> {
   /**
    * 手动关闭快捷菜单
    */
   closeMenu(): Promise<any>
 }
 
-export interface TableMenuPrivateMethods {
+export interface TableMenuPrivateMethods<D = VxeTableDataRow> {
   moveCtxMenu(evnt: any, ctxMenuStore: any, property: any, hasOper: boolean, operRest: any, menuList: any): void
   handleGlobalContextmenuEvent(evnt: any): void
   ctxMenuMouseoverEvent(evnt: any, item: any, child?: any): void
@@ -48,13 +49,13 @@ export interface TableMenuPrivateMethods {
 }
 
 declare module './grid' {
-  interface VxeGridMethods extends TableMenuMethods { }
+  export interface VxeGridMethods<D = VxeTableDataRow> extends TableMenuMethods<D> { }
 }
 
 declare module './table' {
-  interface VxeTableMethods extends TableMenuMethods { }
-  interface VxeTablePrivateMethods extends TableMenuPrivateMethods { }
-  namespace VxeTableDefines {
+  export interface VxeTableMethods<D = VxeTableDataRow> extends TableMenuMethods<D> { }
+  export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableMenuPrivateMethods<D> { }
+  export namespace VxeTableDefines {
     export interface MenuOptions {
       disabled?: boolean
       options?: MenuFirstOption[][]

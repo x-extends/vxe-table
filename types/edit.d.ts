@@ -12,12 +12,12 @@ export const VxeModuleEdit: VXEComponent<{ [key: string]: any }>
  */
 export const Edit: VXEComponent<{ [key: string]: any }>
 
-export interface TableEditMethods<DT = VxeTableDataRow> {
+export interface TableEditMethods<D = VxeTableDataRow> {
   /**
    * 往表格插入临时数据，从第一行新增一行或多行新数据
    * @param records 新数据
    */
-  insert(records: any): Promise<{ row: DT, rows: DT[] }>
+  insert(records: any): Promise<{ row: D, rows: D[] }>
   /**
    * 往表格指定行中插入临时数据
    * 如果 row 为空则从插入到顶部，如果为树结构，则插入到目标节点顶部
@@ -26,54 +26,54 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
    * @param {Object/Array} records 新的数据
    * @param {Row} row 指定行
    */
-  insertAt(records: any, row: any | -1 | null): Promise<{ row: DT, rows: DT[] }>
+  insertAt(records: any, row: any | -1 | null): Promise<{ row: D, rows: D[] }>
   /**
    * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
    * @param rows 指定行
    */
-  remove(rows?: any | any[]): Promise<{ row: DT, rows: DT[] }>
+  remove(rows?: any | any[]): Promise<{ row: D, rows: D[] }>
   /**
    * 删除复选框选中的行数据
    */
-  removeCheckboxRow(): Promise<{ row: DT, rows: DT[] }>
+  removeCheckboxRow(): Promise<{ row: D, rows: D[] }>
   /**
    * 删除单选框选中的行数据
    */
-  removeRadioRow(): Promise<{ row: DT, rows: DT[] }>
+  removeRadioRow(): Promise<{ row: D, rows: D[] }>
   /**
    * 删除当前行选中的行数据
    */
-  removeCurrentRow(): Promise<{ row: DT, rows: DT[] }>
+  removeCurrentRow(): Promise<{ row: D, rows: D[] }>
   /**
    * 获取表格数据集
    * 获取新增、删除、更改的数据
    */
   getRecordset(): {
-    insertRecords: DT[]
-    removeRecords: DT[]
-    updateRecords: DT[]
+    insertRecords: D[]
+    removeRecords: D[]
+    updateRecords: D[]
   }
   /**
    * 用于 edit-config，获取新增的临时数据
    */
-  getInsertRecords(): DT[]
+  getInsertRecords(): D[]
   /**
    * 获取已删除的数据
    */
-  getRemoveRecords(): DT[]
+  getRemoveRecords(): D[]
   /**
    * 用于 edit-config，获取已修改的数据
    */
-  getUpdateRecords(): DT[]
+  getUpdateRecords(): D[]
   /**
    * 请使用 getEditRecord
    * @deprecated
    */
   getActiveRecord(): {
-    row: DT
+    row: D
     rowIndex: number
     $rowIndex: number
-    column: VxeTableDefines.ColumnInfo<DT>
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     cell: HTMLElement
@@ -82,10 +82,10 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
    * 用于 edit-config，获取已激活的行数据
    */
   getEditRecord(): {
-    row: DT
+    row: D
     rowIndex: number
     $rowIndex: number
-    column: VxeTableDefines.ColumnInfo<DT>
+    column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     cell: HTMLElement
@@ -94,8 +94,8 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
    * 用于 mouse-config.selected，获取选中的单元格信息
    */
   getSelectedCell(): {
-    row: DT
-    column: VxeTableDefines.ColumnInfo<DT>
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
   }
   /**
    * 请使用 clearEdit
@@ -124,29 +124,29 @@ export interface TableEditMethods<DT = VxeTableDataRow> {
    * 请使用 setEditRow
    * @deprecated
    */
-  setActiveRow(row: any): Promise<any>
+  setActiveRow(row: any): Promise<void>
   /**
    * 用于 edit-config，激活行编辑并激活第一个单元格
    * @param row 指定行
    */
-  setEditRow(row: any): Promise<any>
+  setEditRow(row: any): Promise<void>
   /**
    * 请使用 setEditCell
    * @deprecated
    */
-  setActiveCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<any>
+  setActiveCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<void>
   /**
    * 用于 edit-config，激活单元格编辑
    * @param row 指定行
    * @param field 字段名
    */
-  setEditCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<any>
+  setEditCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<void>
   /**
    * 用于 mouse-config.mouse-config，选中某个单元格
    * @param row 指定行
    * @param field 字段名
    */
-  setSelectCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<any>
+  setSelectCell(row: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo<any>): Promise<void>
 }
 
 export interface TableEditPrivateMethods<D = VxeTableDataRow> {
@@ -157,10 +157,10 @@ export interface TableEditPrivateMethods<D = VxeTableDataRow> {
 }
 
 declare module './grid' {
-  interface VxeGridMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
+  export interface VxeGridMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
 }
 
 declare module './table' {
-  interface VxeTableMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
-  interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableEditPrivateMethods<D> { }
+  export interface VxeTableMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
+  export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableEditPrivateMethods<D> { }
 }

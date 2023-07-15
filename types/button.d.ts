@@ -45,7 +45,8 @@ export interface ButtonInternalData {
 export namespace VxeButtonPropTypes {
   export type Size = SizeType
   export type Type = string
-  export type ClassName = string
+  export type ClassName = string | ((params: { $button: VxeButtonConstructor }) => string)
+  export type PopupClassName = string | ((params: { $button: VxeButtonConstructor }) => string)
   export type Name = string | number
   export type Content = string
   export type Placement = string
@@ -66,6 +67,7 @@ export type VxeButtonProps = {
    */
   type?: VxeButtonPropTypes.Type
   className?: VxeButtonPropTypes.ClassName
+  popupClassName?: VxeButtonPropTypes.PopupClassName
   /**
    * 用来标识这一项
    */

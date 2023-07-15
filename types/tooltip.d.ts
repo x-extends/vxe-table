@@ -51,6 +51,7 @@ export namespace VxeTooltipPropTypes {
   export type Content = string | number
   export type UseHTML = boolean
   export type ZIndex = string | number
+  export type PopupClassName = string | ((params: { $tooltip: VxeTooltipConstructor }) => string)
   export type IsArrow = boolean
   export type Enterable = boolean
   export type EnterDelay = number
@@ -65,6 +66,7 @@ export type VxeTooltipProps = {
   theme?: VxeTooltipPropTypes.Theme
   content?: VxeTooltipPropTypes.Content
   useHTML?: VxeTooltipPropTypes.UseHTML
+  popupClassName?: VxeTooltipPropTypes.PopupClassName
   zIndex?: VxeTooltipPropTypes.ZIndex
   isArrow?: VxeTooltipPropTypes.IsArrow
   enterable?: VxeTooltipPropTypes.Enterable

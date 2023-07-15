@@ -1277,7 +1277,11 @@
   },
   "vxe-select/class-name": {
     "type": "string | (({}) => string)",
-    "description": "给下拉框附加 className"
+    "description": "给选择器附加 className"
+  },
+  "vxe-select/popup-class-name": {
+    "type": "string | (({}) => string)",
+    "description": "给下拉容器附加 className"
   },
   "vxe-select/visible": {
     "type": "boolean",
@@ -1408,8 +1412,12 @@
     "description": "是否禁用"
   },
   "vxe-button/class-name": {
-    "type": "string",
-    "description": "附加 className"
+    "type": "string | (({}) => string)",
+    "description": "给展示容器附加 className"
+  },
+  "vxe-button/popup-class-name": {
+    "type": "string | (({}) => string)",
+    "description": "给下拉容器附加 className"
   },
   "vxe-button/loading": {
     "type": "boolean",
@@ -1442,6 +1450,10 @@
   "vxe-tooltip/theme": {
     "type": "string",
     "description": "主题样式"
+  },
+  "vxe-tooltip/popup-class-name": {
+    "type": "string | (({}) => string)",
+    "description": "给下拉容器附加 className"
   },
   "vxe-tooltip/z-index": {
     "type": "number",
@@ -1826,6 +1838,14 @@
   "vxe-pulldown/size": {
     "type": "string",
     "description": "尺寸"
+  },
+  "vxe-pulldown/class-name": {
+    "type": "string | (({}) => string)",
+    "description": "给展示容器附加 className"
+  },
+  "vxe-pulldown/popup-class-name": {
+    "type": "string | (({}) => string)",
+    "description": "给下拉容器附加 className"
   },
   "vxe-pulldown/disabled": {
     "type": "boolean",

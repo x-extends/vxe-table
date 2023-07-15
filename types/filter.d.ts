@@ -1,5 +1,5 @@
 import { VXEComponent } from './component'
-import { VxeTableDefines } from './table'
+import { VxeTableDefines, VxeTableDataRow } from './table'
 import { VxeColumnPropTypes } from './column'
 
 /* eslint-disable no-use-before-define */
@@ -37,32 +37,32 @@ export interface VxeFilterPanel {
   resetFilter(evnt?: Event): void
 }
 
-export interface TableFilterMethods {
+export interface TableFilterMethods<D = VxeTableDataRow> {
   /**
    * 手动弹出筛选
    * @param fieldOrColumn
    */
-  openFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>):Promise<any>
+  openFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>):Promise<void>
   /**
    * 用于 filters，修改筛选列表
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
    * @param columnOrField 列对象或字段名
    * @param options 选项列表
    */
-  setFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.Filter[]): Promise<any>
+  setFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>, options: VxeColumnPropTypes.Filter[]): Promise<void>
   /**
    * 手动清空筛选条件
    * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态
    * @param column 字段名
    */
-  clearFilter(column?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null): Promise<any>
+  clearFilter(column?: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null): Promise<void>
   /**
    * 获取当前筛选的所有列信息
    */
-  getCheckedFilters(): VxeTableDefines.FilterCheckedParams[]
+  getCheckedFilters(): VxeTableDefines.FilterCheckedParams<D>[]
 }
 
-export interface TableFilterPrivateMethods {
+export interface TableFilterPrivateMethods<D = VxeTableDataRow> {
   checkFilterOptions(): void
   handleClearFilter(column: any): void
   triggerFilterEvent(evnt: any, column: any, params: any): void
@@ -70,13 +70,13 @@ export interface TableFilterPrivateMethods {
 }
 
 declare module './grid' {
-  interface VxeGridMethods extends TableFilterMethods { }
+  export interface VxeGridMethods<D = VxeTableDataRow> extends TableFilterMethods<D> { }
 }
 
 declare module './table' {
-  interface VxeTableMethods extends TableFilterMethods { }
-  interface VxeTablePrivateMethods extends TableFilterPrivateMethods { }
-  namespace VxeTableDefines {
+  export interface VxeTableMethods<D = VxeTableDataRow> extends TableFilterMethods<D> { }
+  export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableFilterPrivateMethods<D> { }
+  export namespace VxeTableDefines {
     export interface FilterOption {
       label: string | number
       value: any

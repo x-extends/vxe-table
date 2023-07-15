@@ -18,6 +18,7 @@ export default defineComponent({
     content: { type: [String, Number] as PropType<VxeTooltipPropTypes.Content>, default: null },
     useHTML: Boolean as PropType<VxeTooltipPropTypes.UseHTML>,
     zIndex: [String, Number] as PropType<VxeTooltipPropTypes.ZIndex>,
+    popupClassName: [String, Function] as PropType<VxeTooltipPropTypes.PopupClassName>,
     isArrow: { type: Boolean as PropType<VxeTooltipPropTypes.IsArrow>, default: true },
     enterable: Boolean as PropType<VxeTooltipPropTypes.Enterable>,
     enterDelay: { type: Number as PropType<VxeTooltipPropTypes.EnterDelay>, default: () => GlobalConfig.tooltip.enterDelay },
@@ -314,7 +315,7 @@ export default defineComponent({
     }
 
     const renderVN = () => {
-      const { theme, isArrow, enterable } = props
+      const { popupClassName, theme, isArrow, enterable } = props
       const { tipActive, visible, tipStore } = reactData
       const defaultSlot = slots.default
       const vSize = computeSize.value
@@ -327,7 +328,7 @@ export default defineComponent({
       }
       return h('div', {
         ref: refElem,
-        class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, {
+        class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $tooltip: $xetooltip }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           [`placement--${tipStore.placement}`]: tipStore.placement,
           'is--enterable': enterable,

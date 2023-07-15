@@ -23,6 +23,8 @@ export namespace VxePulldownPropTypes {
   export type Size = SizeType
   export type Disabled = boolean
   export type Placement = string
+  export type ClassName = string | ((params: { $pulldown: VxePulldownConstructor }) => string)
+  export type PopupClassName = string | ((params: { $pulldown: VxePulldownConstructor }) => string)
   export type DestroyOnClose = boolean
   export type Transfer = boolean
 }
@@ -52,6 +54,8 @@ export type VxePulldownProps = {
    * 是否禁用
    */
   disabled?: VxePulldownPropTypes.Disabled
+  className?: VxePulldownPropTypes.ClassName
+  popupClassName?: VxePulldownPropTypes.PopupClassName
   /**
    * 固定显示下拉面板的方向
    */
@@ -101,7 +105,7 @@ export interface VxePulldownConstructor extends VxeComponentBase, VxePulldownMet
 export type VxePulldownInstance = ComponentPublicInstance<VxePulldownProps, VxePulldownConstructor>
 
 export namespace VxePulldownDefines {
-  interface PulldownEventParams extends VxeEvent {
+  export interface PulldownEventParams extends VxeEvent {
     $pulldown: VxePulldownConstructor
   }
 

@@ -1032,9 +1032,17 @@ export interface TableInternalData<D = VxeTableDataRow> {
   // 复选框属性，已选中保留的行
   checkboxReserveRowMap: any
   // 行数据，已展开保留的行
-  rowExpandedReserveRowMap: any
+  rowExpandedReserveRowMap: {
+    [key: string]: any
+  }
   // 树结构数据，已展开保留的行
-  treeExpandedReserveRowMap: any
+  treeExpandedReserveRowMap: {
+    [key: string]: any
+  }
+  // 树结构数据，不确定状态的缓存
+  treeIndeterminateRowMaps: {
+    [key: string]: any
+  }
   // 列表完整数据、条件处理后
   tableFullData: D[]
   afterFullData: D[]

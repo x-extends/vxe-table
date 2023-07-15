@@ -87,13 +87,13 @@ export interface VxeTableProPrivateMethods<D = VxeTableDataRow> {
 export type VxeProPluginPrivateMethods<D = VxeTableDataRow> = VxeTableProPrivateMethods<D>
 
 declare module '../table' {
-  interface VxeTableMethods<D = VxeTableDataRow> extends VxeTableProMethods<D> { }
-  interface VxeTablePrivateMethods<D = VxeTableDataRow> extends VxeTableProPrivateMethods<D> { }
+  export interface VxeTableMethods<D = VxeTableDataRow> extends VxeTableProMethods<D> { }
+  export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends VxeTableProPrivateMethods<D> { }
 }
 
 declare module '../grid' {
-  interface VxeGridMethods<D = VxeTableDataRow> extends VxeTableProMethods<D> { }
-  interface VxeGridPrivateMethods<D = VxeTableDataRow> extends VxeTableProPrivateMethods<D> { }
+  export interface VxeGridMethods<D = VxeTableDataRow> extends VxeTableProMethods<D> { }
+  export interface VxeGridPrivateMethods<D = VxeTableDataRow> extends VxeTableProPrivateMethods<D> { }
 }
 
 export interface VXETableProClipboard {
@@ -103,7 +103,7 @@ export interface VXETableProClipboard {
 }
 
 declare module '../vxe-table' {
-  interface VXETableConfig {
+  export interface VXETableConfig {
     clipboard?: VXETableProClipboard
   }
 }
@@ -389,7 +389,7 @@ export type VxeTableProEmits = [
 ]
 
 declare module '../table' {
-  interface VxeTableEventProps<D = VxeTableDataRow> {
+  export interface VxeTableEventProps<D = VxeTableDataRow> {
     onOpenFnr?: VxeTableEvents.OpenFnr<D>
     onFnrChange?: VxeTableEvents.FnrChange<D>
     onFnrFind?: VxeTableEvents.FnrFind<D>
@@ -415,7 +415,7 @@ declare module '../table' {
     onActiveCellChangeStart?: VxeTableEvents.ActiveCellChangeStart<D>
     onActiveCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd<D>
   }
-  interface VxeTableListeners<D = VxeTableDataRow> {
+  export interface VxeTableListeners<D = VxeTableDataRow> {
     openFnr?: VxeTableEvents.OpenFnr<D>
     fnrChange?: VxeTableEvents.FnrChange<D>
     fnrFind?: VxeTableEvents.FnrFind<D>
@@ -441,7 +441,7 @@ declare module '../table' {
     activeCellChangeStart?: VxeTableEvents.ActiveCellChangeStart<D>
     activeCellChangeEnd?: VxeTableEvents.ActiveCellChangeEnd<D>
   }
-  namespace VxeTableEvents {
+  export namespace VxeTableEvents {
     export type OpenFnr<D = any> = (params: VxeTableProDefines.OpenFnrParams<D>) => void
     export type FnrChange<D = any> = (params: VxeTableProDefines.FnrChangeParams<D>) => void
     export type FnrFind<D = any> = (params: VxeTableProDefines.FnrFindParams<D>) => void
@@ -470,7 +470,7 @@ declare module '../table' {
 }
 
 declare module '../grid' {
-  interface VxeGridEventProps<D = VxeTableDataRow> {
+  export interface VxeGridEventProps<D = VxeTableDataRow> {
     onOpenFnr?: VxeGridEvents.OpenFnr<D>
     onFnrChange?: VxeGridEvents.FnrChange<D>
     onFnrFind?: VxeGridEvents.FnrFind<D>
@@ -496,7 +496,7 @@ declare module '../grid' {
     onActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart<D>
     onActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd<D>
   }
-  interface VxeGridListeners<D = VxeTableDataRow> {
+  export interface VxeGridListeners<D = VxeTableDataRow> {
     openFnr?: VxeGridEvents.OpenFnr<D>
     changeFnr?: VxeGridEvents.FnrChange<D>
     fnrFind?: VxeGridEvents.FnrFind<D>
@@ -521,7 +521,7 @@ declare module '../grid' {
     ActiveCellChangeStart?: VxeGridEvents.ActiveCellChangeStart<D>
     ActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd<D>
   }
-  namespace VxeGridEvents {
+  export namespace VxeGridEvents {
     export type OpenFnr<D = any> = (params: VxeTableProDefines.OpenFnrParams<D>) => void
     export type FnrChange<D = any> = (params: VxeTableProDefines.FnrChangeParams<D>) => void
     export type FnrFind<D = any> = (params: VxeTableProDefines.FnrFindParams<D>) => void

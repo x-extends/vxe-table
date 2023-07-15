@@ -62,6 +62,7 @@ export type VxeSelectProps = {
   loading?: VxeSelectPropTypes.Loading
   disabled?: VxeSelectPropTypes.Disabled
   className?: VxeSelectPropTypes.ClassName
+  popupClassName?: VxeSelectPropTypes.PopupClassName
   multiple?: VxeSelectPropTypes.Multiple
   multiCharOverflow?: VxeSelectPropTypes.MultiCharOverflow
   prefixIcon?: VxeSelectPropTypes.PrefixIcon
@@ -98,6 +99,7 @@ export namespace VxeSelectPropTypes {
   export type Loading = boolean
   export type Disabled = boolean
   export type ClassName = string | ((params: { $select: VxeSelectConstructor }) => string)
+  export type PopupClassName = string | ((params: { $select: VxeSelectConstructor }) => string)
   export type Multiple = boolean
   export type MultiCharOverflow = number | string
   export type PrefixIcon = string

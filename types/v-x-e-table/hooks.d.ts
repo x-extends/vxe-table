@@ -4,8 +4,8 @@ import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 export namespace VxeGlobalHooksHandles {
   export type Name = 'VxeGrid' | 'VxeTable'
   export interface HookOptions {
-    setupTable?($table: VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods): void | { [key: string]: any }
-    setupGrid?($grid: VxeGridConstructor & VxeGridPrivateMethods): void | { [key: string]: any }
+    setupTable?($table: VxeTableConstructor<any> & VxeTableMethods<any> & VxeTablePrivateMethods<any>): void | { [key: string]: any }
+    setupGrid?($grid: VxeGridConstructor<any> & VxeGridPrivateMethods<any>): void | { [key: string]: any }
   }
 }
 

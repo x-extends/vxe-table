@@ -15,6 +15,8 @@ export default defineComponent({
     disabled: Boolean as PropType<VxePulldownPropTypes.Disabled>,
     placement: String as PropType<VxePulldownPropTypes.Placement>,
     size: { type: String as PropType<VxePulldownPropTypes.Size>, default: () => GlobalConfig.size },
+    className: [String, Function] as PropType<VxePulldownPropTypes.ClassName>,
+    popupClassName: [String, Function] as PropType<VxePulldownPropTypes.PopupClassName>,
     destroyOnClose: Boolean as PropType<VxePulldownPropTypes.DestroyOnClose>,
     transfer: Boolean as PropType<VxePulldownPropTypes.Transfer>
   },
@@ -276,12 +278,12 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { destroyOnClose, transfer, disabled } = props
+      const { className, popupClassName, destroyOnClose, transfer, disabled } = props
       const { inited, isActivated, animatVisible, visiblePanel, panelStyle, panelPlacement } = reactData
       const vSize = computeSize.value
       return h('div', {
         ref: refElem,
-        class: ['vxe-pulldown', {
+        class: ['vxe-pulldown', className ? (XEUtils.isFunction(className) ? className({ $pulldown: $xepulldown }) : className) : '', {
           [`size--${vSize}`]: vSize,
           'is--visivle': visiblePanel,
           'is--disabled': disabled,
@@ -298,7 +300,7 @@ export default defineComponent({
         }, [
           h('div', {
             ref: refPulldowPnanel,
-            class: ['vxe-table--ignore-clear vxe-pulldown--panel', {
+            class: ['vxe-table--ignore-clear vxe-pulldown--panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $pulldown: $xepulldown }) : popupClassName) : '', {
               [`size--${vSize}`]: vSize,
               'is--transfer': transfer,
               'animat--leave': animatVisible,

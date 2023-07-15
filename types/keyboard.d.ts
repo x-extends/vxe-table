@@ -1,4 +1,5 @@
 import { VXEComponent } from './component'
+import { VxeTableDataRow } from './table'
 
 /* eslint-disable no-use-before-define */
 
@@ -11,9 +12,9 @@ export const VxeModuleKeyboard: VXEComponent<{ [key: string]: any }>
  */
 export const Keyboard: VXEComponent<{ [key: string]: any }>
 
-export interface TableKeyboardMethods {}
+export interface TableKeyboardMethods<D = VxeTableDataRow> {}
 
-export interface TableKeyboardPrivateMethods {
+export interface TableKeyboardPrivateMethods<D = VxeTableDataRow> {
   moveTabSelected(args: any, isLeft: any, evnt: any): void
   moveCurrentRow(isUpArrow: any, isDwArrow: any, evnt: any): void
   moveSelected(args: any, isLeftArrow: any, isUpArrow: any, isRightArrow: any, isDwArrow: any, evnt: any): void
@@ -22,10 +23,10 @@ export interface TableKeyboardPrivateMethods {
  }
 
 declare module './grid' {
-  interface VxeGridMethods extends TableKeyboardMethods { }
+  export interface VxeGridMethods<D = VxeTableDataRow> extends TableKeyboardMethods<D> { }
 }
 
 declare module './table' {
-  interface VxeTableMethods extends TableKeyboardMethods { }
-  interface VxeTablePrivateMethods extends TableKeyboardPrivateMethods { }
+  export interface VxeTableMethods<D = VxeTableDataRow> extends TableKeyboardMethods<D> { }
+  export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableKeyboardPrivateMethods<D> { }
 }

@@ -39,14 +39,13 @@ export interface TableValidatorPrivateMethods<D = VxeTableDataRow> {
 }
 
 declare module './grid' {
-  interface VxeGridMethods<D = VxeTableDataRow> extends TableValidatorMethods<D> { }
+  export interface VxeGridMethods<D = VxeTableDataRow> extends TableValidatorMethods<D> { }
 }
 
 declare module './table' {
-  interface VxeTableMethods<D = VxeTableDataRow> extends TableValidatorMethods<D> { }
-  interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableValidatorPrivateMethods<D> { }
-  const a: VxeTableMethods
-  namespace VxeTableDefines {
+  export interface VxeTableMethods<D = VxeTableDataRow> extends TableValidatorMethods<D> { }
+  export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableValidatorPrivateMethods<D> { }
+  export namespace VxeTableDefines {
     export interface ValidatorRule<D = VxeTableDataRow> {
       /**
        * 是否必填

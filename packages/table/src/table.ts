@@ -274,6 +274,8 @@ export default defineComponent({
       rowExpandedReserveRowMap: {},
       // 树结构数据，已展开保留的行
       treeExpandedReserveRowMap: {},
+      // 树结构数据，不确定状态的缓存
+      treeIndeterminateRowMaps: {},
       // 列表完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],
@@ -1913,6 +1915,7 @@ export default defineComponent({
         reactData.selection = checkField ? [] : beforeSelection.concat(selectRows)
       }
       reactData.treeIndeterminates = []
+      internalData.treeIndeterminateRowMaps = {}
       tablePrivateMethods.checkSelectionStatus()
       return nextTick()
     }

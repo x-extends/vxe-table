@@ -1,5 +1,5 @@
 import { VXEComponent } from './component'
-import { VxeTablePropTypes, VxeTableConstructor } from './table'
+import { VxeTablePropTypes, VxeTableConstructor, VxeTableDataRow } from './table'
 import { VxeGridConstructor } from './grid'
 
 /* eslint-disable no-use-before-define */
@@ -13,7 +13,7 @@ export const VxeModuleExport: VXEComponent<{ [key: string]: any }>
  */
 export const Export: VXEComponent<{ [key: string]: any }>
 
-export interface TableExportMethods {
+export interface TableExportMethods<D = VxeTableDataRow> {
   /**
    * 打开高级导出
    * @param options 参数
@@ -62,16 +62,16 @@ export interface TableExportMethods {
   openPrint(options?: VxeTablePropTypes.PrintConfig): void
 }
 
-export interface TableExportPrivateMethods { }
+export interface TableExportPrivateMethods<D = VxeTableDataRow> { }
 
 declare module './grid' {
-  interface VxeGridMethods extends TableExportMethods { }
+  export interface VxeGridMethods<D = VxeTableDataRow> extends TableExportMethods<D> { }
 }
 
 declare module './table' {
-  interface VxeTableMethods extends TableExportMethods { }
-  interface VxeTablePrivateMethods extends TableExportPrivateMethods { }
-  namespace VxeTableDefines {
+  export interface VxeTableMethods<D = VxeTableDataRow> extends TableExportMethods<D> { }
+  export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableExportPrivateMethods<D> { }
+  export namespace VxeTableDefines {
     interface ExtortSheetMethodParams {
       $table: VxeTableConstructor
       $grid?: VxeGridConstructor
@@ -81,7 +81,7 @@ declare module './table' {
       colgroups: VxeTableDefines.ColumnInfo[][]
     }
   }
-  namespace VxeTablePropTypes {
+  export namespace VxeTablePropTypes {
     /**
      * 导入参数
      */
@@ -131,7 +131,7 @@ declare module './table' {
       colgroups: VxeTableDefines.ColumnInfo[][]
     }
 
-    interface ExportOrPrintColumnOption {
+    export interface ExportOrPrintColumnOption {
       colid?: number
       type?: string
       field?: string

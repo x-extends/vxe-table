@@ -176,8 +176,8 @@ export interface ToolbarReactData {
 export interface ToolbarMethods {
   dispatchEvent(type: ValueOf<VxeToolbarEmits>, params: any, evnt: Event): void
   syncUpdate(params: {
-    collectColumn: VxeTableDefines.ColumnInfo[]
-    $table: VxeTableConstructor & VxeTablePrivateMethods
+    collectColumn: VxeTableDefines.ColumnInfo<any>[]
+    $table: VxeTableConstructor<any> & VxeTablePrivateMethods<any>
   }): void
 }
 export interface VxeToolbarMethods extends ToolbarMethods { }
@@ -191,7 +191,7 @@ export type VxeToolbarEmits = [
 ]
 
 export namespace VxeToolbarDefines {
-  interface ToolbarEventParams extends VxeEvent {
+  export interface ToolbarEventParams extends VxeEvent {
     $toolbar: VxeToolbarConstructor
   }
 }
