@@ -21,7 +21,8 @@ export default {
     disabled: Boolean,
     loading: Boolean,
     destroyOnClose: Boolean,
-    className: String,
+    className: [String, Function],
+    popupClassName: [String, Function],
     transfer: { type: Boolean, default: () => GlobalConfig.button.transfer }
   },
   data () {
@@ -58,10 +59,10 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, $listeners, className, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, $listeners, className, popupClassName, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
     return downsSlot ? h('div', {
-      class: ['vxe-button--dropdown', className, {
+      class: ['vxe-button--dropdown', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         'is--active': showPanel
       }]
@@ -92,7 +93,7 @@ export default {
       ])),
       h('div', {
         ref: 'panel',
-        class: ['vxe-button--dropdown-panel', {
+        class: ['vxe-button--dropdown-panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $button: this }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           'animat--leave': animatVisible,
           'animat--enter': showPanel

@@ -75,6 +75,7 @@ export default {
     content: { type: [String, Number], default: null },
     useHTML: Boolean,
     zIndex: [String, Number],
+    popupClassName: [String, Function],
     isArrow: { type: Boolean, default: true },
     enterable: Boolean,
     enterDelay: { type: Number, default: () => GlobalConfig.tooltip.enterDelay },
@@ -159,7 +160,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, vSize, theme, tipActive, isArrow, visible, tipStore, enterable } = this
+    const { $scopedSlots, vSize, popupClassName, theme, tipActive, isArrow, visible, tipStore, enterable } = this
     let on
     if (enterable) {
       on = {
@@ -168,7 +169,7 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, {
+      class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $tooltip: this }) : popupClassName) : '', {
         [`size--${vSize}`]: vSize,
         [`placement--${tipStore.placement}`]: tipStore.placement,
         'is--enterable': enterable,

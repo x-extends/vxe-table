@@ -3,6 +3,7 @@ import vSize from '../../mixins/size'
 import UtilTools from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import { GlobalEvent } from '../../tools/event'
+import XEUtils from 'xe-utils'
 
 export default {
   name: 'VxePulldown',
@@ -12,6 +13,8 @@ export default {
     disabled: Boolean,
     placement: String,
     size: { type: String, default: () => GlobalConfig.size },
+    className: [String, Function],
+    popupClassName: [String, Function],
     destroyOnClose: Boolean,
     transfer: Boolean
   },
@@ -53,11 +56,11 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $scopedSlots, inited, vSize, destroyOnClose, transfer, isActivated, disabled, animatVisible, visiblePanel, panelStyle, panelPlacement } = this
+    const { $scopedSlots, inited, className, popupClassName, vSize, destroyOnClose, transfer, isActivated, disabled, animatVisible, visiblePanel, panelStyle, panelPlacement } = this
     const defaultSlot = $scopedSlots.default
     const downSlot = $scopedSlots.dropdown
     return h('div', {
-      class: ['vxe-pulldown', {
+      class: ['vxe-pulldown', className ? (XEUtils.isFunction(className) ? className({ $pulldown: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
@@ -70,7 +73,7 @@ export default {
       }, defaultSlot ? defaultSlot.call(this, { $pulldown: this }, h) : []),
       h('div', {
         ref: 'panel',
-        class: ['vxe-table--ignore-clear vxe-pulldown--panel', {
+        class: ['vxe-table--ignore-clear vxe-pulldown--panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $pulldown: this }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           'is--transfer': transfer,
           'animat--leave': animatVisible,

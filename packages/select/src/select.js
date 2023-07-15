@@ -254,6 +254,7 @@ export default {
     optionGroupProps: Object,
     optionConfig: Object,
     className: [String, Function],
+    popupClassName: [String, Function],
     max: [String, Number],
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
     filterable: Boolean,
@@ -408,7 +409,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { _e, $scopedSlots, vSize, className, inited, isActivated, loading, disabled, visiblePanel, filterable } = this
+    const { _e, $scopedSlots, vSize, className, popupClassName, inited, isActivated, loading, disabled, visiblePanel, filterable } = this
     const prefixSlot = $scopedSlots.prefix
     return h('div', {
       class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: this }) : className) : '', {
@@ -449,7 +450,7 @@ export default {
       }),
       h('div', {
         ref: 'panel',
-        class: ['vxe-table--ignore-clear vxe-select--panel', {
+        class: ['vxe-table--ignore-clear vxe-select--panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $select: this }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           'is--transfer': this.transfer,
           'animat--leave': !loading && this.animatVisible,
