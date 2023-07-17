@@ -15,7 +15,7 @@
       <vxe-column type="seq" tree-node></vxe-column>
       <vxe-column field="name" title="名称"></vxe-column>
       <vxe-column field="size" title="大小" width="140"></vxe-column>
-      <vxe-column field="type" title="类型" width="140" :filters="[{label: 'js', value: 'js'}, {label: 'mp3', value: 'mp3'}, {label: 'avi', value: 'avi'}]"></vxe-column>
+      <vxe-column field="type" title="类型" width="140" :filters="typeOptions"></vxe-column>
       <vxe-column field="date" title="修改日期" width="260"></vxe-column>
     </vxe-table>
 
@@ -30,6 +30,8 @@ export default defineComponent({
   setup () {
     const xTable = ref({} as VxeTableInstance)
     const xToolbar = ref({} as VxeToolbarInstance)
+
+    const typeOptions = ref([{ label: 'js', value: 'js' }, { label: 'mp3', value: 'mp3' }, { label: 'avi', value: 'avi' }])
 
     const demo1 = reactive({
       tableData: [
@@ -67,7 +69,8 @@ export default defineComponent({
     return {
       xTable,
       xToolbar,
-      demo1
+      demo1,
+      typeOptions
     }
   }
 })

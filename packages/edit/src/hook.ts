@@ -216,12 +216,11 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             }
           }
         }
-        const { insertList, insertMaps } = editStore
+        const { insertMaps } = editStore
         newRecords.forEach(newRow => {
           const rowid = getRowid($xetable, newRow)
           insertMaps[rowid] = newRow
         })
-        insertList.unshift(...newRecords)
         $xetable.cacheRowMap()
         $xetable.updateScrollYStatus()
         $xetable.handleTableData(treeConfig && transform)
@@ -251,12 +250,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       remove (rows: any) {
         const { treeConfig } = props
-        const { mergeList, editStore, selection } = reactData
+        const { mergeList, editStore, selectCheckboxRows } = reactData
         const { tableFullTreeData, afterFullData, tableFullData } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
-        const { actived, removeList, insertList, insertMaps } = editStore
+        const { actived, removeMaps, insertMaps } = editStore
         const { checkField } = checkboxOpts
         let rest: any[] = []
         if (!rows) {
@@ -267,15 +266,16 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         // 如果是新增，则保存记录
         rows.forEach((row: any) => {
           if (!$xetable.isInsertByRow(row)) {
-            removeList.push(row)
+            const rowid = getRowid($xetable, row)
+            removeMaps[rowid] = row
           }
         })
         // 如果绑定了多选属性，则更新状态
         if (!checkField) {
           rows.forEach((row: any) => {
-            const sIndex = $xetable.findRowIndexOf(selection, row)
+            const sIndex = $xetable.findRowIndexOf(selectCheckboxRows, row)
             if (sIndex > -1) {
-              selection.splice(sIndex, 1)
+              selectCheckboxRows.splice(sIndex, 1)
             }
           })
         }
@@ -330,11 +330,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         // 从新增中移除已删除的数据
         rows.forEach((row: any) => {
           const rowid = getRowid($xetable, row)
-          const iIndex = $xetable.findRowIndexOf(insertList, row)
-          if (iIndex > -1) {
-            insertList.splice(iIndex, 1)
+          if (insertMaps[rowid]) {
+            delete insertMaps[rowid]
           }
-          delete insertMaps[rowid]
         })
         $xetable.updateFooter()
         $xetable.cacheRowMap()
@@ -398,10 +396,9 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       getInsertRecords () {
         const { editStore } = reactData
         const { fullAllDataRowIdData } = internalData
-        const insertList = editStore.insertList
+        const { insertMaps } = editStore
         const insertRecords: any[] = []
-        insertList.forEach(row => {
-          const rowid = getRowid($xetable, row)
+        XEUtils.each(insertMaps, (row, rowid) => {
           if (fullAllDataRowIdData[rowid]) {
             insertRecords.push(row)
           }
@@ -413,7 +410,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       getRemoveRecords () {
         const { editStore } = reactData
-        return editStore.removeList
+        const { removeMaps } = editStore
+        const removeRecords: any[] = []
+        XEUtils.each(removeMaps, (row) => {
+          removeRecords.push(row)
+        })
+        return removeRecords
       },
       /**
        * 获取更新数据

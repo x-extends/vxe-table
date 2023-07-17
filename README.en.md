@@ -76,6 +76,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] VxeGlobalRenderer
 * [x] Virtual scroller
 * [x] Virtual merger
+* [x] CSS Variable Theme
 * [x] (pro) Cell area selection
 * [x] (pro) Cell copy & paste
 * [x] (pro) Cell find and replace

@@ -75,6 +75,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 渲染器
 * [x] 虛擬滾動
 * [x] 虛擬合併
+* [x] CSS 變量主題
 * [x] (pro) 儲存格區域選取
 * [x] (pro) 儲存格複製/粘貼
 * [x] (pro) 儲存格查找和替換

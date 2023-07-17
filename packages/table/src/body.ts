@@ -319,7 +319,7 @@ export default defineComponent({
 
     const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandeds, scrollYLoad, rowExpandeds, expandColumn, selectRow } = tableReactData
+      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -360,7 +360,7 @@ export default defineComponent({
         }
         const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
         // 行是否被展开
-        const isExpandRow = expandColumn && rowExpandeds.length && $xetable.findRowIndexOf(rowExpandeds, row) > -1
+        const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
         // 树节点是否被展开
         let isExpandTree = false
         let rowChildren = []
@@ -369,9 +369,9 @@ export default defineComponent({
         if (editConfig) {
           isNewRow = $xetable.isInsertByRow(row)
         }
-        if (treeConfig && !scrollYLoad && !transform && treeExpandeds.length) {
+        if (treeConfig && !scrollYLoad && !transform) {
           rowChildren = row[treeOpts.children]
-          isExpandTree = rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1
+          isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
         }
         rows.push(
           h('tr', {
@@ -384,7 +384,7 @@ export default defineComponent({
                 'is--expand-row': isExpandRow,
                 'is--expand-tree': isExpandTree,
                 'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-                'row--radio': radioOpts.highlight && selectRow === row,
+                'row--radio': radioOpts.highlight && $xetable.eqRow(selectRadioRow, row),
                 'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
               },
               getPropClass(rowClassName, params)
@@ -440,9 +440,9 @@ export default defineComponent({
           )
         }
         // 如果是树形表格
-        if (treeConfig && !scrollYLoad && !transform && treeExpandeds.length) {
+        if (treeConfig && !scrollYLoad && !transform) {
           const rowChildren = row[treeOpts.children]
-          if (rowChildren && rowChildren.length && $xetable.findRowIndexOf(treeExpandeds, row) > -1) {
+          if (rowChildren && rowChildren.length && treeExpandedMaps[rowid]) {
             rows.push(...renderRows(fixedType, rowChildren, tableColumn))
           }
         }

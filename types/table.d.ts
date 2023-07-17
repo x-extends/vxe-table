@@ -817,30 +817,30 @@ export interface TableReactData<D = VxeTableDataRow> {
   // 复选框属性，有选中且非全选状态
   isIndeterminate: boolean
   // 复选框属性，已选中的行
-  selection: D[]
+  selectCheckboxRows: D[]
   // 当前行
   currentRow: D | null
   // 单选框属性，选中列
   currentColumn: any
   // 单选框属性，选中行
-  selectRow: D | null
+  selectRadioRow: D | null
   // 表尾合计数据
   footerTableData: any[][]
   // 展开列信息
   expandColumn: any
   hasFixedColumn: boolean
+  // 已展开的行
+  rowExpandedMaps: Record<string, D>
+  // 懒加载中的展开行的列表
+  rowExpandLazyLoadedMaps: Record<string, D>
   // 树节点列信息
   treeNodeColumn: any
-  // 已展开的行
-  rowExpandeds: D[]
-  // 懒加载中的展开行的列表
-  expandLazyLoadeds: D[]
   // 已展开树节点
-  treeExpandeds: D[]
-  // 懒加载中的树节点的列表
-  treeLazyLoadeds: D[]
-  // 树节点不确定状态的列表
-  treeIndeterminates: D[]
+  treeExpandedMaps: Record<string, D>
+  // 懒加载中的树节点的集合
+  treeExpandLazyLoadedMaps: Record<string, D>
+  // 树节点不确定状态的集合
+  treeIndeterminateMaps: Record<string, D>
   // 合并单元格的对象集
   mergeList: VxeTableDefines.MergeItem<D>[]
   // 合并表尾数据的对象集
@@ -916,11 +916,9 @@ export interface TableReactData<D = VxeTableDataRow> {
       column: any
       [key: string]: any
     },
-    insertList: D[]
     insertMaps: {
       [key: string]: any
     }
-    removeList: D[]
     removeMaps: {
       [key: string]: any
     }
@@ -1031,26 +1029,22 @@ export interface TableInternalData<D = VxeTableDataRow> {
   radioReserveRow: any
   // 复选框属性，已选中保留的行
   checkboxReserveRowMap: any
-  // 行数据，已展开保留的行
-  rowExpandedReserveRowMap: {
-    [key: string]: any
-  }
-  // 树结构数据，已展开保留的行
-  treeExpandedReserveRowMap: {
-    [key: string]: any
-  }
-  // 树结构数据，不确定状态的缓存
-  treeIndeterminateRowMaps: {
-    [key: string]: any
-  }
+  // 行数据，已展开保留的行集合
+  rowExpandedReserveRowMap: Record<string, D>
+  // 树结构数据，已展开保留的行集合
+  treeExpandedReserveRowMap: Record<string, D>
+  // 树结构数据，不确定状态的集合
+  treeIndeterminateRowMaps: Record<string, D>
   // 列表完整数据、条件处理后
   tableFullData: D[]
   afterFullData: D[]
+  afterTreeFullData: D[]
+  // 列表条件处理后数据集合
+  afterFullRowMaps: Record<string, D>
   tableSynchData: D[]
   tableSourceData: D[]
   // 树的全量数据、条件处理后
   tableFullTreeData: D[]
-  afterTreeFullData: D[]
   // 收集的列配置（带分组）
   collectColumn: VxeTableDefines.ColumnInfo<D>[],
   // 完整所有列（不带分组）
