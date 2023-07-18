@@ -62,7 +62,7 @@ export declare class List extends VXETableComponent {
    * 刷新滚动操作，手动同步滚动相关位置
    */
   refreshScroll(): Promise<any>;
-  
+
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */

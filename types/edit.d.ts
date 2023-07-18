@@ -1,17 +1,19 @@
 import { VXETableComponent } from './component'
 import { ColumnCellRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 编辑
  */
 export declare class Edit extends VXETableComponent {}
 
-export interface ColumnEditSlotParams extends ColumnEditRenderParams {}
+export type ColumnEditSlotParams = ColumnEditRenderParams
 
 /**
  * 单元格编辑渲染参数
  */
-export interface ColumnEditRenderParams extends ColumnCellRenderParams {}
+export type ColumnEditRenderParams = ColumnCellRenderParams
 
 /**
  * 编辑渲染配置项

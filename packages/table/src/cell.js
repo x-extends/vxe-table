@@ -407,7 +407,7 @@ export const Cell = {
   },
   renderCheckboxCell (h, params) {
     const { $table, row, column, isHidden } = params
-    const { treeConfig, treeIndeterminates, selection } = $table
+    const { treeConfig, treeIndeterminates, selectCheckboxRows } = $table
     const { labelField, checkMethod, visibleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
@@ -418,7 +418,7 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
-      isChecked = $table.findRowIndexOf(selection, row) > -1
+      isChecked = $table.findRowIndexOf(selectCheckboxRows, row) > -1
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {

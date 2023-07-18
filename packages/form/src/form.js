@@ -367,7 +367,9 @@ export default {
     },
     validateField (fieldOrItem, callback) {
       let fields = []
-      if (!XEUtils.isArray(fieldOrItem)) {
+      if (XEUtils.isArray(fieldOrItem)) {
+        fields = fieldOrItem
+      } else {
         fields = [fieldOrItem]
       }
       return this.beginValidate(fields.map(field => handleFieldOrItem(this, field)), '', callback)

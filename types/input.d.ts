@@ -1,5 +1,7 @@
 import { VXETableComponent } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 输入框
  */

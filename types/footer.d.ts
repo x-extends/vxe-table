@@ -2,12 +2,14 @@ import { VXETableComponent } from './component'
 import { ColumnInfo } from './column'
 import { TableRenderParams } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 表尾
  */
 export declare class Footer extends VXETableComponent {}
 
-export interface ColumnFooterSlotParams extends ColumnFooterRenderParams {}
+export type ColumnFooterSlotParams = ColumnFooterRenderParams
 
 /**
  * 表尾渲染参数

@@ -303,7 +303,7 @@ export default {
       // 复选框属性，有选中且非全选状态
       isIndeterminate: false,
       // 复选框属性，已选中的行
-      selection: [],
+      selectCheckboxRows: [],
       // 当前行
       currentRow: null,
       // 单选框属性，选中列

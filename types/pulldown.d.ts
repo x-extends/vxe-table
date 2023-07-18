@@ -30,15 +30,14 @@ export declare class Pulldown extends VXETableComponent {
    * 切换下拉面板
    */
   togglePanel(): Promise<any>;
-  
+
   /**
    * 显示下拉面板
    */
   showPanel(): Promise<any>;
-  
+
   /**
    * 隐藏下拉面板
    */
   hidePanel(): Promise<any>;
-
 }

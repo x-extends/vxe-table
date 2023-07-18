@@ -43,6 +43,7 @@ export declare class Textarea extends VXETableComponent {
     minRows?: number;
     maxRows?: number;
   };
+
   /**
    * 原生 form 属性
    */

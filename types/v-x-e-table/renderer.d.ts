@@ -10,6 +10,8 @@ import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethod
 import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams, ToolbarToolRenderOptions, ToolbarToolRenderParams } from '../toolbar'
 import { FormItemRenderOptions, FormItemRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 渲染器
  */
@@ -43,7 +45,7 @@ export interface RendererMapOptions {
 
   // 单元格渲染
   cellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | VNodeClassName)
-  cellStyle?:  VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => VNodeStyle)
+  cellStyle?: VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => VNodeStyle)
   renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
   renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
   renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): SlotVNodeType | SlotVNodeType[];
@@ -101,11 +103,11 @@ export class RenderOptions {
   /**
    * 目标组件渲染的事件
    */
-  events?: { [key: string]: Function };
+  events?: { [key: string]: ((...angs: any[])=>any) };
   /**
    * 目标组件渲染的原生事件
    */
-  nativeEvents?: { [key: string]: Function };
+  nativeEvents?: { [key: string]: ((...angs: any[])=>any) };
   [key: string]: any;
 }
 

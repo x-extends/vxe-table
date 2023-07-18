@@ -1167,11 +1167,11 @@ const Methods = {
         rowList = currTableData.filter(row => XEUtils.get(row, checkField))
       }
     } else {
-      const { selection } = this
+      const { selectCheckboxRows } = this
       if (treeConfig) {
-        rowList = XEUtils.filterTree(currTableData, row => this.findRowIndexOf(selection, row) > -1, { children: transform ? mapChildren : children })
+        rowList = XEUtils.filterTree(currTableData, row => this.findRowIndexOf(selectCheckboxRows, row) > -1, { children: transform ? mapChildren : children })
       } else {
-        rowList = currTableData.filter(row => this.findRowIndexOf(selection, row) > -1)
+        rowList = currTableData.filter(row => this.findRowIndexOf(selectCheckboxRows, row) > -1)
       }
     }
     return rowList
@@ -2947,12 +2947,12 @@ const Methods = {
     return this.handleCheckedCheckboxRow(rows, value, true)
   },
   isCheckedByCheckboxRow (row) {
-    const { selection } = this
+    const { selectCheckboxRows } = this
     const { checkField } = this.checkboxOpts
     if (checkField) {
       return XEUtils.get(row, checkField)
     }
-    return this.findRowIndexOf(selection, row) > -1
+    return this.findRowIndexOf(selectCheckboxRows, row) > -1
   },
   isIndeterminateByCheckboxRow (row) {
     const { treeIndeterminates } = this
@@ -2963,7 +2963,7 @@ const Methods = {
    * value 选中true 不选false 半选-1
    */
   handleSelectRow ({ row }, value, isForce) {
-    const { selection, afterFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
+    const { selectCheckboxRows, afterFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
     const { checkField, checkStrictly, checkMethod } = checkboxOpts
     if (checkField) {
       if (treeConfig && !checkStrictly) {
@@ -3008,15 +3008,15 @@ const Methods = {
           if (this.findRowIndexOf(treeIndeterminates, row) === -1) {
             treeIndeterminates.push(row)
           }
-          XEUtils.remove(selection, item => this.eqRow(item, row))
+          XEUtils.remove(selectCheckboxRows, item => this.eqRow(item, row))
         } else {
           // 更新子节点状态
           XEUtils.eachTree([row], (item) => {
             if (this.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
               if (value) {
-                selection.push(item)
+                selectCheckboxRows.push(item)
               } else {
-                XEUtils.remove(selection, select => this.eqRow(select, item))
+                XEUtils.remove(selectCheckboxRows, select => this.eqRow(select, item))
               }
               XEUtils.remove(treeIndeterminates, half => this.eqRow(half, item))
               this.handleCheckboxReserveRow(row, value)
@@ -3032,7 +3032,7 @@ const Methods = {
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
-            const selectItems = matchObj.items.filter(item => this.findRowIndexOf(selection, item) > -1)
+            const selectItems = matchObj.items.filter(item => this.findRowIndexOf(selectCheckboxRows, item) > -1)
             parentStatus = selectItems.filter(item => this.findRowIndexOf(vItems, item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
           }
           return this.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
@@ -3040,11 +3040,11 @@ const Methods = {
       } else {
         if (isForce || (!checkMethod || checkMethod({ row }))) {
           if (value) {
-            if (this.findRowIndexOf(selection, row) === -1) {
-              selection.push(row)
+            if (this.findRowIndexOf(selectCheckboxRows, row) === -1) {
+              selectCheckboxRows.push(row)
             }
           } else {
-            XEUtils.remove(selection, item => this.eqRow(item, row))
+            XEUtils.remove(selectCheckboxRows, item => this.eqRow(item, row))
           }
           this.handleCheckboxReserveRow(row, value)
         }
@@ -3053,10 +3053,10 @@ const Methods = {
     this.checkSelectionStatus()
   },
   handleToggleCheckRowEvent (evnt, params) {
-    const { selection, checkboxOpts } = this
+    const { selectCheckboxRows, checkboxOpts } = this
     const { checkField } = checkboxOpts
     const { row } = params
-    const value = checkField ? !XEUtils.get(row, checkField) : this.findRowIndexOf(selection, row) === -1
+    const value = checkField ? !XEUtils.get(row, checkField) : this.findRowIndexOf(selectCheckboxRows, row) === -1
     if (evnt) {
       this.triggerCheckRowEvent(evnt, params, value)
     } else {
@@ -3079,17 +3079,17 @@ const Methods = {
    * 多选，切换某一行的选中状态
    */
   toggleCheckboxRow (row) {
-    const { selection, checkboxOpts } = this
+    const { selectCheckboxRows, checkboxOpts } = this
     const { checkField } = checkboxOpts
-    const value = checkField ? !XEUtils.get(row, checkField) : this.findRowIndexOf(selection, row) === -1
+    const value = checkField ? !XEUtils.get(row, checkField) : this.findRowIndexOf(selectCheckboxRows, row) === -1
     this.handleSelectRow({ row }, value, true)
     return this.$nextTick()
   },
   handleCheckedAllCheckboxRow (value, isForce) {
-    const { afterFullData, treeConfig, treeOpts, selection, checkboxReserveRowMap, checkboxOpts } = this
+    const { afterFullData, treeConfig, treeOpts, selectCheckboxRows, checkboxReserveRowMap, checkboxOpts } = this
     const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
     let selectRows = []
-    const beforeSelection = treeConfig ? [] : selection.filter(row => this.findRowIndexOf(afterFullData, row) === -1)
+    const beforeSelection = treeConfig ? [] : selectCheckboxRows.filter(row => this.findRowIndexOf(afterFullData, row) === -1)
     if (checkStrictly) {
       this.isAllSelected = value
     } else {
@@ -3136,7 +3136,7 @@ const Methods = {
              */
             if (!isForce && checkMethod) {
               XEUtils.eachTree(afterFullData, (row) => {
-                if (checkMethod({ row }) ? 0 : this.findRowIndexOf(selection, row) > -1) {
+                if (checkMethod({ row }) ? 0 : this.findRowIndexOf(selectCheckboxRows, row) > -1) {
                   selectRows.push(row)
                 }
               }, treeOpts)
@@ -3150,7 +3150,7 @@ const Methods = {
              * 如果不存在选中方法，则添加所有数据到临时集合中
              */
             if (!isForce && checkMethod) {
-              selectRows = afterFullData.filter((row) => this.findRowIndexOf(selection, row) > -1 || checkMethod({ row }))
+              selectRows = afterFullData.filter((row) => this.findRowIndexOf(selectCheckboxRows, row) > -1 || checkMethod({ row }))
             } else {
               selectRows = afterFullData.slice(0)
             }
@@ -3161,7 +3161,7 @@ const Methods = {
              * 如果不存在选中方法，无需处理，临时集合默认为空
              */
             if (!isForce && checkMethod) {
-              selectRows = afterFullData.filter((row) => checkMethod({ row }) ? 0 : this.findRowIndexOf(selection, row) > -1)
+              selectRows = afterFullData.filter((row) => checkMethod({ row }) ? 0 : this.findRowIndexOf(selectCheckboxRows, row) > -1)
             }
           }
         }
@@ -3175,7 +3175,7 @@ const Methods = {
           afterFullData.forEach(row => this.handleCheckboxReserveRow(row, false))
         }
       }
-      this.selection = checkField ? [] : beforeSelection.concat(selectRows)
+      this.selectCheckboxRows = checkField ? [] : beforeSelection.concat(selectRows)
     }
     this.treeIndeterminates = []
     this.checkSelectionStatus()
@@ -3189,7 +3189,7 @@ const Methods = {
     return this.handleCheckedAllCheckboxRow(value, true)
   },
   checkSelectionStatus () {
-    const { afterFullData, selection, treeIndeterminates, checkboxOpts, treeConfig } = this
+    const { afterFullData, selectCheckboxRows, treeIndeterminates, checkboxOpts, treeConfig } = this
     const { checkField, halfField, checkStrictly, checkMethod } = checkboxOpts
     if (!checkStrictly) {
       const disableRows = []
@@ -3235,19 +3235,19 @@ const Methods = {
                   disableRows.push(row)
                   return true
                 }
-                if (this.findRowIndexOf(selection, row) > -1) {
+                if (this.findRowIndexOf(selectCheckboxRows, row) > -1) {
                   checkRows.push(row)
                   return true
                 }
                 return false
               }
-            : row => this.findRowIndexOf(selection, row) > -1
+            : row => this.findRowIndexOf(selectCheckboxRows, row) > -1
         )
         isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
         if (treeConfig) {
-          isIndeterminate = !isAllSelected && afterFullData.some(row => this.findRowIndexOf(treeIndeterminates, row) > -1 || this.findRowIndexOf(selection, row) > -1)
+          isIndeterminate = !isAllSelected && afterFullData.some(row => this.findRowIndexOf(treeIndeterminates, row) > -1 || this.findRowIndexOf(selectCheckboxRows, row) > -1)
         } else {
-          isIndeterminate = !isAllSelected && afterFullData.some(row => this.findRowIndexOf(selection, row) > -1)
+          isIndeterminate = !isAllSelected && afterFullData.some(row => this.findRowIndexOf(selectCheckboxRows, row) > -1)
         }
       }
       this.isAllSelected = isAllSelected
@@ -3256,7 +3256,7 @@ const Methods = {
   },
   // 还原展开、选中等相关状态
   handleReserveStatus () {
-    const { expandColumn, treeOpts, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRow, radioReserveRow, radioOpts, checkboxOpts, selection, rowExpandeds, treeExpandeds, expandOpts } = this
+    const { expandColumn, treeOpts, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRow, radioReserveRow, radioOpts, checkboxOpts, selectCheckboxRows, rowExpandeds, treeExpandeds, expandOpts } = this
     // 单选框
     if (selectRow && !fullAllDataRowMap.has(selectRow)) {
       this.selectRow = null // 刷新单选行状态
@@ -3269,7 +3269,7 @@ const Methods = {
       }
     }
     // 复选框
-    this.selection = getRecoverRow(this, selection) // 刷新多选行状态
+    this.selectCheckboxRows = getRecoverRow(this, selectCheckboxRows) // 刷新多选行状态
     // 还原保留选中状态
     if (checkboxOpts.reserve) {
       this.handleCheckedCheckboxRow(handleReserveRow(this, this.checkboxReserveRowMap), true, true)
@@ -3407,7 +3407,7 @@ const Methods = {
     }
     this.isAllSelected = false
     this.isIndeterminate = false
-    this.selection = []
+    this.selectCheckboxRows = []
     this.treeIndeterminates = []
     return this.$nextTick()
   },

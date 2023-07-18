@@ -7,6 +7,8 @@ import { ColumnEditRule, ColumnEditValidErrMapParams } from './validator'
 import { ColumnFooterRenderParams } from './footer'
 import { MenuOptions, MenuFirstOption } from './menu'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 表格
  */
@@ -95,51 +97,51 @@ export declare class Table extends VXETableComponent {
   /**
    * 给行附加 className
    */
-  rowClassName?: string | Function;
+  rowClassName?: string | ((params: any) => any);
   /**
    * 给单元格附加 className
    */
-  cellClassName?: string | Function;
+  cellClassName?: string | ((params: any) => any);
   /**
    * 给表头的行附加 className
    */
-  headerRowClassName?: string | Function;
+  headerRowClassName?: string | ((params: any) => any);
   /**
    * 给表头的单元格附加 className
    */
-  headerCellClassName?: string | Function;
+  headerCellClassName?: string | ((params: any) => any);
   /**
    * 给表尾的行附加 className
    */
-  footerRowClassName?: string | Function;
+  footerRowClassName?: string | ((params: any) => any);
   /**
    * 给表尾的单元格附加 className
    */
-  footerCellClassName?: string | Function;
+  footerCellClassName?: string | ((params: any) => any);
   /**
    * 给单元格附加样式
    */
-  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表头单元格附加样式
    */
-  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表尾单元格附加样式
    */
-  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给行附加样式
    */
-  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表头行附加样式
    */
-  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表尾行附加样式
    */
-  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 临时合并单元格
    */
@@ -496,6 +498,7 @@ export declare class Table extends VXETableComponent {
     fixed?: boolean
     order?: boolean
    }): Promise<any>;
+
   /**
    * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
@@ -1161,18 +1164,18 @@ export interface TableOptions {
   highlightCell?: boolean;
   showFooter?: boolean;
   footerMethod?: typeof TableFooterMethod;
-  rowClassName?: string | Function;
-  cellClassName?: string | Function;
-  headerRowClassName?: string | Function;
-  headerCellClassName?: string | Function;
-  footerRowClassName?: string | Function;
-  footerCellClassName?: string | Function;
-  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  rowClassName?: string | ((params: any) => any);
+  cellClassName?: string | ((params: any) => any);
+  headerRowClassName?: string | ((params: any) => any);
+  headerCellClassName?: string | ((params: any) => any);
+  footerRowClassName?: string | ((params: any) => any);
+  footerCellClassName?: string | ((params: any) => any);
+  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   mergeCells?: TableMergeConfig[];
   mergeFooterItems?: TableMergeConfig[];
   spanMethod?: typeof TableSpanMethod;
@@ -1277,12 +1280,12 @@ export interface TableSeqConfig {
 }
 export type SeqConfig = TableSeqConfig
 
+export type TableSortOrder = 'asc' | 'desc' | '' | null;
+
 export interface TableSortConfs {
   field: string;
   order?: TableSortOrder;
 }
-
-export type TableSortOrder = 'asc' | 'desc' | '' | null;
 
 /**
  * 排序配置项

@@ -19,7 +19,7 @@ export interface InterceptorParams extends GridRenderParams {
   $event: any;
 }
 
-export interface InterceptorKeydownParams extends InterceptorParams { }
+export type InterceptorKeydownParams = InterceptorParams
 
 export interface InterceptorExportParams extends InterceptorParams {
   options: TableExportConfig;

@@ -4,6 +4,8 @@ import { Grid } from './grid'
 import { ColumnInfo } from './column'
 import { GridRenderParams } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 导出
  */

@@ -1,6 +1,8 @@
 import { VXETableComponent } from './component'
 import { ColumnCellRenderParams } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 快捷菜单
  */

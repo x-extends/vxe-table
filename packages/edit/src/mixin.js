@@ -192,7 +192,7 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, treeOpts } = this
+      const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selectCheckboxRows, isInsertByRow, treeOpts } = this
       const { transform } = treeOpts
       const { actived, removeList, insertList, insertMaps } = editStore
       const { checkField } = checkboxOpts
@@ -211,9 +211,9 @@ export default {
       // 如果绑定了多选属性，则更新状态
       if (!checkField) {
         rows.forEach(row => {
-          const sIndex = this.findRowIndexOf(selection, row)
+          const sIndex = this.findRowIndexOf(selectCheckboxRows, row)
           if (sIndex > -1) {
-            selection.splice(sIndex, 1)
+            selectCheckboxRows.splice(sIndex, 1)
           }
         })
       }

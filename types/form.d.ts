@@ -1,6 +1,8 @@
 import { VXETableComponent } from './component'
 import { FormItemOptions } from './form-item'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 表单
  */

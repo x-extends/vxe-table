@@ -1,6 +1,8 @@
 import { ToolbarButtonConfig } from '../toolbar'
 import { GridRenderParams } from './renderer'
 
+/* eslint-disable no-use-before-define */
+
 declare function commandsFunc(params: CommandsParams, ...args: any[]): any;
 
 /**

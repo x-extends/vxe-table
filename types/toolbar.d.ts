@@ -3,6 +3,8 @@ import { VXETableComponent } from './component'
 import { ColumnInfo } from './column'
 import { GridRenderParams, RenderOptions } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 工具栏
  */

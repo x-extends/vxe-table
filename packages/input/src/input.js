@@ -1195,6 +1195,11 @@ export default {
       this.isActivated = false
       return this.$nextTick()
     },
+    select () {
+      this.$refs.input.select()
+      this.isActivated = false
+      return this.$nextTick()
+    },
     triggerEvent (evnt) {
       const { $refs, inputValue } = this
       this.$emit(evnt.type, { $panel: $refs.panel, value: inputValue, $event: evnt })

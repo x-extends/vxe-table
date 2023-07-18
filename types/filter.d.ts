@@ -2,6 +2,8 @@ import { VXETableComponent } from './component'
 import { ColumnInfo } from './column'
 import { TableRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 筛选
  */
@@ -92,7 +94,7 @@ export interface ColumnFilterMethodParams {
   column: ColumnInfo;
 }
 
-export interface ColumnFilterSlotParams extends ColumnFilterRenderParams {}
+export type ColumnFilterSlotParams = ColumnFilterRenderParams
 
 export interface ColumnFilterResetParams extends TableRenderParams {
   options: ColumnFilterParams[];

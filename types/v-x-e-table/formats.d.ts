@@ -1,5 +1,7 @@
 import { ColumnInfo } from '../column'
 
+/* eslint-disable no-use-before-define */
+
 declare function formatsFunc(params: FormatsParams, ...args: any[]): any;
 
 /**

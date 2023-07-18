@@ -8,6 +8,8 @@ import { ColumnEditRenderOptions, ColumnEditSlotParams } from './edit'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams, ColumnExportHeaderRenderParams } from './export'
 import { TableOverflow } from './table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 列
  */
@@ -356,6 +358,7 @@ export class ColumnInfo {
     update: boolean;
     value: any;
   };
+
   children: ColumnInfo[];
 
   getTitle(): string;

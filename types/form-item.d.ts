@@ -2,6 +2,8 @@ import { VXETableComponent } from './component'
 import { Form } from './form'
 import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 表单 - 项
  */

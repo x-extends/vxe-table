@@ -2,12 +2,14 @@ import { VXETableComponent } from './component'
 import { ColumnInfo } from './column'
 import { TableRenderParams } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 表头
  */
 export declare class Header extends VXETableComponent {}
 
-export interface ColumnHeaderSlotParams extends ColumnHeaderRenderParams {}
+export type ColumnHeaderSlotParams = ColumnHeaderRenderParams
 
 /**
  * 表头渲染参数

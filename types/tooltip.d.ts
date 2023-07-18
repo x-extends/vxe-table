@@ -19,7 +19,7 @@ export declare class Tooltip extends VXETableComponent {
   /**
    * 显示内容
    */
-  content?: string | Function;
+  content?: string | ((params: any) => any);
   /**
    * 自定义堆叠顺序
    */

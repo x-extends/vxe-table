@@ -7,6 +7,8 @@ import { ToolbarOptions } from './toolbar'
 import { PagerOptions } from './pager'
 import { RowInfo } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 高级表格
  */
@@ -74,6 +76,7 @@ export declare class Grid extends Table {
     pager: any;
     pendingRecords: any[];
   };
+
   [key: string]: any;
 }
 

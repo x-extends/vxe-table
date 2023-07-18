@@ -7,12 +7,14 @@ import { ColumnEditRenderOptions } from './edit'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
 import { TableOverflow } from './table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 组件 - 表格分组列
  */
 export declare class Colgroup extends Column {}
 
-export interface ColgroupOptions extends ColgroupProps {}
+export type ColgroupOptions = ColgroupProps
 
 export interface ColgroupProps {
   /**
