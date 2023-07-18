@@ -2296,6 +2296,12 @@ export default defineComponent({
         reactData.isActivated = false
         return nextTick()
       },
+      select () {
+        const inputElem = refInputTarget.value
+        inputElem.select()
+        reactData.isActivated = false
+        return nextTick()
+      },
       showPanel,
       hidePanel,
       updatePlacement

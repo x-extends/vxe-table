@@ -460,7 +460,9 @@ export default defineComponent({
 
     const validateField = (fieldOrItem: VxeFormItemPropTypes.Field | VxeFormItemPropTypes.Field[] | VxeFormDefines.ItemInfo | VxeFormDefines.ItemInfo[], callback: any) => {
       let fields: any[] = []
-      if (!XEUtils.isArray(fieldOrItem)) {
+      if (XEUtils.isArray(fieldOrItem)) {
+        fields = fieldOrItem
+      } else {
         fields = [fieldOrItem]
       }
       return beginValidate(fields.map(field => handleFieldOrItem($xeform, field) as VxeFormDefines.ItemInfo), '', callback)

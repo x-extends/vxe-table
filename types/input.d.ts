@@ -153,6 +153,10 @@ export interface InputMethods {
    */
   blur(): Promise<any>
   /**
+   * 选中内容
+   */
+  select(): Promise<any>
+  /**
    * 弹出面板，用于带下拉面板的功能，
    */
   showPanel(): Promise<any>

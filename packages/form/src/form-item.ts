@@ -31,7 +31,7 @@ export const formItemProps = {
     default: null
   },
   showTitle: {
-    type: Boolean,
+    type: Boolean as PropType<VxeFormItemPropTypes.ShowTitle>,
     default: true
   },
   className: [String, Function] as PropType<VxeFormItemPropTypes.ClassName>,
