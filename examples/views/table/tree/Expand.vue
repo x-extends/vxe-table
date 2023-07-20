@@ -4,9 +4,19 @@
       树表格与展开行同时使用，非常简单就能实现很复杂的树形展开行
     </p>
 
+    <vxe-toolbar>
+      <template #buttons>
+        <vxe-button @click="$refs.xTable1.setAllTreeExpand(true)">展开所有树</vxe-button>
+        <vxe-button @click="$refs.xTable1.clearTreeExpand()">关闭所有树</vxe-button>
+        <vxe-button @click="$refs.xTable1.setAllRowExpand(true)">设置所有行展开</vxe-button>
+        <vxe-button @click="$refs.xTable1.clearRowExpand()">关闭所有行展开</vxe-button>
+      </template>
+    </vxe-toolbar>
+
     <vxe-table
       border
       resizable
+      ref="xTable1"
       :tree-config="{transform: true}"
       :data="tableData">
       <vxe-column field="name" title="Name" tree-node></vxe-column>

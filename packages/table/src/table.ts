@@ -3786,8 +3786,17 @@ export default defineComponent({
        * @param {Boolean} expanded 是否展开
        */
       setAllRowExpand (expanded) {
-        const expandOpts = computeExpandOpts.value
-        return tableMethods.setRowExpand(expandOpts.lazy ? reactData.tableData : internalData.tableFullData, expanded)
+        const treeOpts = computeTreeOpts.value
+        const { tableFullData, tableFullTreeData } = internalData
+        let expandedRows: any[] = []
+        if (props.treeConfig) {
+          XEUtils.eachTree(tableFullTreeData, (row) => {
+            expandedRows.push(row)
+          }, treeOpts)
+        } else {
+          expandedRows = tableFullData
+        }
+        return tableMethods.setRowExpand(expandedRows, expanded)
       },
       /**
        * 设置展开行，二个参数设置这一行展开与否
