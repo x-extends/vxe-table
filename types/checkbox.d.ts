@@ -9,6 +9,10 @@ export declare class Checkbox extends VXETableComponent {
    */
   value?: boolean;
   /**
+   * 原生 name 属性
+   */
+  name?: string;
+  /**
    * 只对 checkbox-group 有效，值
    */
   label?: string | number;

@@ -4,14 +4,14 @@
     <p class="tip">复选框、复选组</p>
 
     <p>
-      <vxe-checkbox v-model="value1" content="默认尺寸"></vxe-checkbox>
-      <vxe-checkbox v-model="value2" size="medium" content="中等尺寸"></vxe-checkbox>
-      <vxe-checkbox v-model="value3" size="small" content="小型尺寸"></vxe-checkbox>
-      <vxe-checkbox v-model="value4" size="mini" content="超小尺寸"></vxe-checkbox>
-      <vxe-checkbox v-model="value5" content="默认尺寸" indeterminate></vxe-checkbox>
-      <vxe-checkbox v-model="value6" size="medium" content="中等尺寸" indeterminate></vxe-checkbox>
-      <vxe-checkbox v-model="value7" size="small" content="小型尺寸" indeterminate></vxe-checkbox>
-      <vxe-checkbox v-model="value8" size="mini" content="超小尺寸" indeterminate></vxe-checkbox>
+      <vxe-checkbox v-model="value1" name="value2" content="默认尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value2" name="value1" size="medium" content="中等尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value3" name="value1" size="small" content="小型尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value4" name="value1" size="mini" content="超小尺寸"></vxe-checkbox>
+      <vxe-checkbox v-model="value5" name="value1" content="默认尺寸" indeterminate></vxe-checkbox>
+      <vxe-checkbox v-model="value6" name="value1" size="medium" content="中等尺寸" indeterminate></vxe-checkbox>
+      <vxe-checkbox v-model="value7" name="value1" size="small" content="小型尺寸" indeterminate></vxe-checkbox>
+      <vxe-checkbox v-model="value8" name="value1" size="mini" content="超小尺寸" indeterminate></vxe-checkbox>
     </p>
 
     <p>

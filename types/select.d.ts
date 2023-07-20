@@ -14,6 +14,10 @@ export declare class Select extends VXETableComponent {
    */
   clearable?: boolean;
   /**
+   * 原生 name 属性
+   */
+  name?: string;
+  /**
    * 空值显示的占位符
    */
   placeholder?: string;
