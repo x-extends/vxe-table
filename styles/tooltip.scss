@@ -125,11 +125,3 @@
     }
   }
 }
-
-/*valid error*/
-.vxe-table--tooltip-wrapper {
-  &.vxe-table--valid-error {
-    background-color: var(--vxe-tooltip-validate-error-background-color);
-    color: var(--vxe-tooltip-validate-error-color);
-  }
-}

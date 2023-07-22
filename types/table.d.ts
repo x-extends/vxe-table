@@ -40,6 +40,7 @@ export interface VxeTableConstructor<D = any> extends VxeComponentBase, VxeTable
 export interface TablePrivateRef {
   refElem: Ref<HTMLDivElement>
   refTooltip: Ref<VxeTooltipInstance>
+  refValidTooltip: Ref<VxeTooltipInstance>
   refTableFilter: Ref<ComponentPublicInstance>
   refTableMenu: Ref<VxeMenuPanelInstance>
   refTableHeader: Ref<ComponentPublicInstance>
@@ -2013,14 +2014,32 @@ export namespace VxeTablePropTypes {
    * 校验配置项
    */
   export interface ValidConfig {
+    /**
+     * 是否自动定位到校验不通过的单元格
+     */
     autoPos?: boolean
+    /**
+     * 是否显示错误显示
+     */
     showMessage?: boolean
+    /**
+     * 校验消息提示方式
+     */
+    msgMode?: 'single' | 'full' | null | ''
+    /**
+     * 当点击表格之外或者其他列之后，是否自动清除单元格的校验消息
+     */
+    autoClear?: boolean
+    /**
+     * 校验提示框的最大宽度
+     */
+    maxWidth?: number
+
     /**
      * 不建议使用，后续废弃
      * @deprecated
      */
     message?: string
-    maxWidth?: number
   }
   export interface ValidOpts extends ValidConfig { }
 

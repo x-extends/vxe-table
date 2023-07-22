@@ -132,6 +132,7 @@ $vxe-loading-z-index: 999 !default;
 
 /*validate*/
 $vxe-table-validate-error-color: #f56c6c !default;
+$vxe-table-validate-error-background-color: $vxe-table-body-background-color !default;
 
 /*grid*/
 $vxe-grid-maximize-background-color: #fff !default;
@@ -145,8 +146,6 @@ $vxe-toolbar-panel-background-color: #fff !default;
 $vxe-tooltip-dark-color: #fff !default;
 $vxe-tooltip-dark-background-color: #303133 !default;
 $vxe-tooltip-light-background-color: #fff !default;
-$vxe-tooltip-validate-error-color: #fff !default;
-$vxe-tooltip-validate-error-background-color: #f56c6c !default;
 
 /*pager*/
 $vxe-pager-background-color: #fff !default;

@@ -309,6 +309,7 @@ export default defineComponent({
     const refElem = ref() as Ref<HTMLDivElement>
     const refTooltip = ref() as Ref<VxeTooltipInstance>
     const refCommTooltip = ref() as Ref<VxeTooltipInstance>
+    const refValidTooltip = ref() as Ref<VxeTooltipInstance>
     const refTableFilter = ref() as Ref<ComponentPublicInstance>
     const refTableMenu = ref() as Ref<VxeMenuPanelInstance>
 
@@ -392,6 +393,11 @@ export default defineComponent({
         ...tooltipOpts,
         ...tooltipStore.currOpts
       }
+    })
+
+    const computeValidTipOpts = computed(() => {
+      const tooltipOpts = computeTooltipOpts.value
+      return Object.assign({ isArrow: false }, tooltipOpts)
     })
 
     const computeEditOpts = computed(() => {
@@ -560,6 +566,7 @@ export default defineComponent({
     const refMaps: VxeTablePrivateRef = {
       refElem,
       refTooltip,
+      refValidTooltip,
       refTableFilter,
       refTableMenu,
       refTableHeader,
@@ -4168,7 +4175,7 @@ export default defineComponent({
           const { editRules } = props
           const { validStore } = reactData
           const tableBody = refTableBody.value
-          if (scope && tableBody && editRules) {
+          if (!scope && tableBody && editRules) {
             const { row, column } = scope
             const type = 'change'
             if ($xetable.hasCellRules) {
@@ -4298,10 +4305,12 @@ export default defineComponent({
      */
     const handleGlobalMousedownEvent = (evnt: MouseEvent) => {
       const { editStore, ctxMenuStore, filterStore } = reactData
-      const { mouseConfig } = props
+      const { mouseConfig, editRules } = props
       const el = refElem.value
       const editOpts = computeEditOpts.value
+      const validOpts = computeValidOpts.value
       const { actived } = editStore
+      const $validTooltip = refValidTooltip.value
       const tableFilter = refTableFilter.value
       const tableMenu = refTableMenu.value
       if (tableFilter) {
@@ -4321,7 +4330,9 @@ export default defineComponent({
           // 如果是激活状态，点击了单元格之外
           const cell = actived.args.cell
           if ((!cell || !getEventTargetNode(evnt, cell).flag)) {
-            if (!internalData._lastCallTime || internalData._lastCallTime + 50 < Date.now()) {
+            if ($validTooltip && getEventTargetNode(evnt, $validTooltip.$el as HTMLDivElement).flag) {
+              // 如果是激活状态，且点击了校验提示框
+            } else if (!internalData._lastCallTime || internalData._lastCallTime + 50 < Date.now()) {
               // 如果是激活状态，点击了单元格之外
               if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
                 // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
@@ -4382,8 +4393,13 @@ export default defineComponent({
           $xetable.closeMenu()
         }
       }
+      const isActivated = getEventTargetNode(evnt, $xegrid ? $xegrid.getRefMaps().refElem.value : el).flag
+      // 如果存在校验，点击了表格之外则清除
+      if (!isActivated && editRules && validOpts.autoClear) {
+        reactData.validErrorMaps = {}
+      }
       // 最后激活的表格
-      internalData.isActivated = getEventTargetNode(evnt, $xegrid ? $xegrid.getRefMaps().refElem.value : el).flag
+      internalData.isActivated = isActivated
     }
 
     /**
@@ -6310,23 +6326,26 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { loading, stripe, showHeader, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig } = props
+      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
+      const validOpts = computeValidOpts.value
       const treeOpts = computeTreeOpts.value
       const rowOpts = computeRowOpts.value
       const columnOpts = computeColumnOpts.value
       const vSize = computeSize.value
       const tableBorder = computeTableBorder.value
       const mouseOpts = computeMouseOpts.value
+      const validTipOpts = computeValidTipOpts.value
       const loadingOpts = computeLoadingOpts.value
       const isMenu = computeIsMenu.value
       return h('div', {
         ref: refElem,
         class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
           [`size--${vSize}`]: vSize,
+          [`vaild-msg--${validOpts.msgMode}`]: !!editRules,
           'vxe-editable': !!editConfig,
           'cell--highlight': highlightCell,
           'cell--selected': mouseConfig && mouseOpts.selected,
@@ -6474,6 +6493,14 @@ export default defineComponent({
           ref: refCommTooltip,
           isArrow: false,
           enterable: false
+        }) : createCommentVNode(),
+        /**
+         * 校验提示
+         */
+        hasUseTooltip && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
+          ref: refValidTooltip,
+          class: 'vxe-table--valid-error',
+          ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {})
         }) : createCommentVNode(),
         /**
          * 工具提示

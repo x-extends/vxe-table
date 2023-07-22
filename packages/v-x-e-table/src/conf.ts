@@ -47,7 +47,10 @@ const GlobalConfig: VXETableGlobalConfig = {
       enterable: true
     },
     validConfig: {
-      showMessage: true
+      showMessage: true,
+      autoClear: true,
+      message: 'default',
+      msgMode: 'single'
     },
     columnConfig: {
       maxFixedSize: 4

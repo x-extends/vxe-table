@@ -45,6 +45,7 @@ const tableValidatorMethodKeys: (keyof TableValidatorMethods)[] = ['fullValidate
 const validatorHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
     const { props, reactData, internalData } = $xetable
+    const { refValidTooltip } = $xetable.getRefMaps()
     const { computeValidOpts, computeTreeOpts, computeEditOpts } = $xetable.getComputeMaps()
 
     let validatorMethods = {} as TableValidatorMethods
@@ -67,6 +68,30 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           })
         }
       })
+    }
+
+    const handleErrMsgMode = (validErrMaps: Record<string, {
+      row: any;
+      column: any;
+      rule: any;
+      content: any;
+    }>) => {
+      const validOpts = computeValidOpts.value
+      if (validOpts.msgMode === 'single') {
+        const keys = Object.keys(validErrMaps)
+        const resMaps: Record<string, {
+          row: any;
+          column: any;
+          rule: any;
+          content: any;
+        }> = validErrMaps
+        if (keys.length) {
+          const firstKey = keys[0]
+          resMaps[firstKey] = validErrMaps[firstKey]
+        }
+        return resMaps
+      }
+      return validErrMaps
     }
 
     /**
@@ -105,14 +130,12 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       internalData._lastCallTime = Date.now()
       validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
       validatorMethods.clearValidate()
-      const validErrMaps: {
-        [key: string]: {
-          row: any;
-          column: any;
-          rule: any,
-          content: any;
-        }
-      } = {}
+      const validErrMaps: Record<string, {
+        row: any;
+        column: any;
+        rule: any;
+        content: any;
+      }> = {}
       if (editRules) {
         const columns = $xetable.getColumns()
         const handleVaild = (row: any) => {
@@ -161,7 +184,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         }
         return Promise.all(rowValids).then(() => {
           const ruleProps = Object.keys(validRest)
-          reactData.validErrorMaps = validErrMaps
+          reactData.validErrorMaps = handleErrMsgMode(validErrMaps)
           return nextTick().then(() => {
             if (ruleProps.length) {
               return Promise.reject(validRest[ruleProps[0]][0])
@@ -200,7 +223,6 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             const row = firstErrParams.row
             const rowIndex = afterFullData.indexOf(row)
             const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
-            reactData.validErrorMaps = validErrMaps
             if (validOpts.autoPos === false) {
               finish()
             } else {
@@ -212,8 +234,9 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             }
           })
         })
+      } else {
+        reactData.validErrorMaps = {}
       }
-      // reactData.validErrorMaps = validErrMaps
       return nextTick().then(() => {
         if (cb) {
           cb()
@@ -235,18 +258,27 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         return beginValidate(rows, cb)
       },
       clearValidate (rows, fieldOrColumn) {
+        const { validErrorMaps } = reactData
+        const validTip = refValidTooltip.value
+        const validOpts = computeValidOpts.value
         const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
         const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : []).map(column => handleFieldOrColumn($xetable, column))) as VxeTableDefines.ColumnInfo<any>[]
-        let validErrMaps: {
-          [key: string]: {
-            row: any;
-            column: any;
-            rule: any;
-            content: any;
-          }
-        } = {}
+        let validErrMaps: Record<string, {
+          row: any;
+          column: any;
+          rule: any;
+          content: any;
+        }> = {}
+        if (validTip && validTip.reactData.visible) {
+          validTip.close()
+        }
+        // 如果是单个提示模式
+        if (validOpts.msgMode === 'single') {
+          reactData.validErrorMaps = {}
+          return nextTick()
+        }
         if (rowList.length && colList.length) {
-          validErrMaps = Object.assign({}, reactData.validErrorMaps)
+          validErrMaps = Object.assign({}, validErrorMaps)
           rowList.forEach(row => {
             colList.forEach((column) => {
               const vaildKey = `${getRowid($xetable, row)}:${column.id}`
@@ -257,14 +289,14 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           })
         } else if (rowList.length) {
           const rowidList = rowList.map(row => `${getRowid($xetable, row)}`)
-          XEUtils.each(reactData.validErrorMaps, (item, key) => {
+          XEUtils.each(validErrorMaps, (item, key) => {
             if (rowidList.indexOf(key.split(':')[0]) > -1) {
               validErrMaps[key] = item
             }
           })
         } else if (colList.length) {
           const colidList = colList.map(column => `${column.id}`)
-          XEUtils.each(reactData.validErrorMaps, (item, key) => {
+          XEUtils.each(validErrorMaps, (item, key) => {
             if (colidList.indexOf(key.split(':')[1]) > -1) {
               validErrMaps[key] = item
             }
@@ -395,6 +427,13 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         const { editStore } = reactData
         const { actived } = editStore
         const editOpts = computeEditOpts.value
+        const validOpts = computeValidOpts.value
+        // 检查清除校验消息
+        if (editRules && validOpts.msgMode === 'single') {
+          reactData.validErrorMaps = {}
+        }
+
+        // 校验单元格
         if (editConfig && editRules && actived.row) {
           const { row, column, cell } = actived.args
           if (validatorPrivateMethods.hasCellRules(type, row, column)) {
@@ -419,17 +458,37 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
        * 弹出校验错误提示
        */
       showValidTooltip (params) {
-        const { validStore } = reactData
+        const { height } = props
+        const { tableData, validStore, validErrorMaps } = reactData
+        const validOpts = computeValidOpts.value
+        const validTip = refValidTooltip.value
         validStore.visible = true
-        reactData.validErrorMaps = Object.assign({}, reactData.validErrorMaps, {
-          [`${getRowid($xetable, params.row)}:${params.column.id}`]: {
-            column: params.column,
-            row: params.row,
-            rule: params.rule,
-            content: params.rule.content
+        if (validOpts.msgMode === 'single') {
+          reactData.validErrorMaps = {
+            [`${getRowid($xetable, params.row)}:${params.column.id}`]: {
+              column: params.column,
+              row: params.row,
+              rule: params.rule,
+              content: params.rule.content
+            }
           }
-        })
+        } else {
+          reactData.validErrorMaps = Object.assign({}, validErrorMaps, {
+            [`${getRowid($xetable, params.row)}:${params.column.id}`]: {
+              column: params.column,
+              row: params.row,
+              rule: params.rule,
+              content: params.rule.content
+            }
+          })
+        }
         $xetable.dispatchEvent('valid-error', params, null)
+        if (validTip) {
+          const { cell } = params
+          if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
+            return validTip.open(cell, params.rule.content)
+          }
+        }
         return nextTick()
       }
     }

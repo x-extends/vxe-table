@@ -135,6 +135,7 @@
 
   /*validate*/
   --vxe-table-validate-error-color: #{$vxe-table-validate-error-color};
+  --vxe-table-validate-error-background-color: #{$vxe-table-validate-error-background-color};
 
   /*grid*/
   --vxe-grid-maximize-background-color: #{$vxe-grid-maximize-background-color};
@@ -148,8 +149,6 @@
   --vxe-tooltip-dark-color: #{$vxe-tooltip-dark-color};
   --vxe-tooltip-dark-background-color: #{$vxe-tooltip-dark-background-color};
   --vxe-tooltip-light-background-color: #{$vxe-tooltip-light-background-color};
-  --vxe-tooltip-validate-error-color: #{$vxe-tooltip-validate-error-color};
-  --vxe-tooltip-validate-error-background-color: #{$vxe-tooltip-validate-error-background-color};
 
   /*pager*/
   --vxe-pager-background-color: #{$vxe-pager-background-color};
