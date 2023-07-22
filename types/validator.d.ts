@@ -1,5 +1,6 @@
 import { VXEComponent } from './component'
 import { VxeTableDefines, VxeTableDataRow, VxeTableConstructor } from './table'
+import { VxeGridConstructor } from './grid'
 import { VxeColumnPropTypes } from './column'
 
 /* eslint-disable no-use-before-define */
@@ -71,7 +72,7 @@ declare module './table' {
        * 使用自定义校验函数，接收一个 Promise
        * @param params 参数
        */
-      validator?(params: VxeTableDefines.ValidatorErrorParams<D>): void | Error | Promise<void>
+      validator?: string | ((params: RuleValidatorParams<D>) => void | Error | Promise<void>)
       /**
        * 提示消息
        */
@@ -82,6 +83,18 @@ declare module './table' {
        * @deprecated 已废弃，请使用 content
        */
       message?: string
+    }
+    export interface RuleValidatorParams<D = VxeTableDataRow> {
+      $table: VxeTableConstructor<D>
+      $grid: VxeGridConstructor<D> | null
+      cellValue: any
+      rule: ValidatorRule<D>
+      rules: ValidatorRule<D>[]
+      column: VxeTableDefines.ColumnInfo<D>
+      columnIndex: number
+      row: D
+      rowIndex: number
+      field: string
     }
     export interface ValidatorErrorParams<D = VxeTableDataRow> {
       $table: VxeTableConstructor<D>

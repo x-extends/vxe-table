@@ -4169,14 +4169,14 @@ export default defineComponent({
        * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一列编辑状态
        * 如果单元格配置了校验规则，则会进行校验
        */
-      updateStatus (scope, cellValue) {
+      updateStatus (slotParams, cellValue) {
         const customVal = !XEUtils.isUndefined(cellValue)
         return nextTick().then(() => {
           const { editRules } = props
           const { validStore } = reactData
           const tableBody = refTableBody.value
-          if (!scope && tableBody && editRules) {
-            const { row, column } = scope
+          if (slotParams && tableBody && editRules) {
+            const { row, column } = slotParams
             const type = 'change'
             if ($xetable.hasCellRules) {
               if ($xetable.hasCellRules(type, row, column)) {

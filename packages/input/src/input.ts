@@ -66,7 +66,10 @@ export default defineComponent({
     clearable: { type: Boolean as PropType<VxeInputPropTypes.Clearable>, default: () => GlobalConfig.input.clearable },
     readonly: Boolean as PropType<VxeInputPropTypes.Readonly>,
     disabled: Boolean as PropType<VxeInputPropTypes.Disabled>,
-    placeholder: String as PropType<VxeInputPropTypes.Placeholder>,
+    placeholder: {
+      type: String as PropType<VxeInputPropTypes.Placeholder>,
+      default: () => XEUtils.eqNull(GlobalConfig.input.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseInput') : GlobalConfig.input.placeholder
+    },
     maxlength: [String, Number] as PropType<VxeInputPropTypes.Maxlength>,
     autocomplete: { type: String as PropType<VxeInputPropTypes.Autocomplete>, default: 'off' },
     align: String as PropType<VxeInputPropTypes.Align>,

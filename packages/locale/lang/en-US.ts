@@ -1,5 +1,9 @@
 export default {
   vxe: {
+    base: {
+      pleaseInput: 'Please input',
+      pleaseSelect: 'Select'
+    },
     loading: {
       text: 'Loading...'
     },

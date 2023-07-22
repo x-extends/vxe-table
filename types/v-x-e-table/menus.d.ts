@@ -5,18 +5,30 @@ import { VxeGlobalRendererHandles } from './renderer'
 /* eslint-disable no-use-before-define */
 
 export namespace VxeGlobalMenusHandles {
-  export type MenusCallback<D = VxeTableDataRow> = (params: MenusCallbackParams<D>, event: Event) => any
-
+  export type MenusOption<D = VxeTableDataRow> = {
+    menuMethod?: (params: MenuMethodParams<D>, event: Event) => any
+  }
   interface MenusParams<D = VxeTableDataRow> {
     $grid: VxeGridConstructor<D> | null
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
   }
-  export interface MenusCallbackParams<D = VxeTableDataRow> extends MenusParams<D>, VxeGlobalRendererHandles.RenderCellParams<D> {
+  export interface MenuMethodParams<D = VxeTableDataRow> extends MenusParams<D>, VxeGlobalRendererHandles.RenderCellParams<D> {
     $grid: VxeGridConstructor<D> | null
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     $event: MouseEvent
     menu: VxeTableDefines.MenuFirstOption | VxeTableDefines.MenuChildOption
   }
+
+  /**
+   * 请使用 MenusOption
+   * @deprecated
+   */
+  export type MenusCallback = MenusOption
+  /**
+   * 请使用 MenuMethodParams
+   * @deprecated
+   */
+  export interface MenusCallbackParams<D = VxeTableDataRow> extends MenuMethodParams<D> {}
 }
 
 /**
@@ -24,11 +36,11 @@ export namespace VxeGlobalMenusHandles {
  */
 export interface VxeGlobalMenus {
   mixin(options: {
-    [code: string]: VxeGlobalMenusHandles.MenusCallback<any>
+    [code: string]: VxeGlobalMenusHandles.MenusOption<any> | ((params: VxeGlobalMenusHandles.MenuMethodParams<any>, event: Event) => any)
   }): VxeGlobalMenus
   has(code: string): boolean
-  get(code: string): VxeGlobalMenusHandles.MenusCallback<any>
-  add(code: string, callback: VxeGlobalMenusHandles.MenusCallback<any>): VxeGlobalMenus
+  get(code: string): VxeGlobalMenusHandles.MenusOption<any>
+  add(code: string, options: VxeGlobalMenusHandles.MenusOption<any> | ((params: VxeGlobalMenusHandles.MenuMethodParams<any>, event: Event) => any)): VxeGlobalMenus
   delete(code: string): void
-  forEach(callback: (options: VxeGlobalMenusHandles.MenusCallback<any>, code: string) => void): void
+  forEach(callback: (options: VxeGlobalMenusHandles.MenusOption<any>, code: string) => void): void
 }

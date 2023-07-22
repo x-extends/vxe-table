@@ -1233,8 +1233,8 @@
         position: relative;
         &:before {
           content: "";
-          top: var(--vxe-table-cell-dirty-width);
-          left: var(--vxe-table-cell-dirty-width);
+          top: calc(var(--vxe-table-cell-dirty-width) * -1);
+          left: calc(var(--vxe-table-cell-dirty-width) * -1);
           position: absolute;
           border-width: var(--vxe-table-cell-dirty-width);
           border-style: solid;

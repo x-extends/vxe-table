@@ -8,7 +8,9 @@ export class Store {
   private store: any = {}
 
   mixin (options: any): Store {
-    Object.assign(this.store, options)
+    XEUtils.each(options, (item, key) => {
+      this.add(key, item)
+    })
     return this
   }
 

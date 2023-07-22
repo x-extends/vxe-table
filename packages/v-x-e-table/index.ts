@@ -5,6 +5,7 @@ import { renderer } from './src/renderer'
 import { commands } from './src/commands'
 import { menus } from './src/menus'
 import { formats } from './src/formats'
+import { validators } from './src/validators'
 import { hooks } from './src/hooks'
 import { setup } from './src/setup'
 import { getLastZIndex, nextZIndex } from '../tools/utils'
@@ -83,6 +84,7 @@ export const VXETable = {
   renderer,
   commands,
   formats,
+  validators,
   menus,
   hooks,
   config,
@@ -96,6 +98,7 @@ export * from './src/renderer'
 export * from './src/commands'
 export * from './src/menus'
 export * from './src/formats'
+export * from './src/validators'
 export * from './src/hooks'
 export * from './src/setup'
 
