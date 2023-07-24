@@ -649,10 +649,16 @@ export default {
         if ($xegrid) {
           $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
-          const commandMethod = VXETable.commands.get(code)
+          const gCommandOpts = VXETable.commands.get(code)
           const params = { code, button: item, $table: $xetable, $grid: $xegrid, $event: evnt }
-          if (commandMethod) {
-            commandMethod.call(this, params, evnt)
+          if (gCommandOpts) {
+            if (gCommandOpts.commandMethod) {
+              gCommandOpts.commandMethod(params)
+            } else {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
           }
           this.$emit('button-click', params)
         }
@@ -665,10 +671,16 @@ export default {
         if ($xegrid) {
           $xegrid.triggerToolbarTolEvent(item, evnt)
         } else {
-          const commandMethod = VXETable.commands.get(code)
+          const gCommandOpts = VXETable.commands.get(code)
           const params = { code, tool: item, $xegrid, $table: $xetable, $event: evnt }
-          if (commandMethod) {
-            commandMethod.call(this, params, evnt)
+          if (gCommandOpts) {
+            if (gCommandOpts.commandMethod) {
+              gCommandOpts.commandMethod(params)
+            } else {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
           }
           this.$emit('tool-click', params)
         }

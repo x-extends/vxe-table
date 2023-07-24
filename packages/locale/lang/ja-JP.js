@@ -1,5 +1,9 @@
 export default {
   vxe: {
+    base: {
+      pleaseInput: 'Please input',
+      pleaseSelect: 'Select'
+    },
     loading: {
       text: 'Loading...'
     },
@@ -19,6 +23,9 @@ export default {
       errProp: 'サポートされていないパラメーター "{0}"，"{1}" の可能性があります',
       colRepet: 'column.{0}="{0}" が重複しているため、機能が使えなくなることがあります。',
       notFunc: 'method "{0}" はありません',
+      notValidators: 'Global validators "{0}" no existe.',
+      notFormats: 'Global formats "{0}" no existe.',
+      notCommands: 'Global commands "{0}" no existe.',
       notSlot: 'slot "{0}" はありません',
       noTree: 'Tree structureは "{0}" をサポートしていません',
       notProp: 'サポートされていないパラメータ "{0}"',

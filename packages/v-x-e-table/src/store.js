@@ -9,8 +9,10 @@ class Store {
     this.store = {}
   }
 
-  mixin (map) {
-    Object.assign(this.store, map)
+  mixin (options) {
+    XEUtils.each(options, (item, key) => {
+      this.add(key, item)
+    })
     return Store
   }
 

@@ -2049,6 +2049,7 @@ const Methods = {
   },
   updateHeight () {
     this.customHeight = calcHeight(this, 'height')
+    this.customMinHeight = calcHeight(this, 'minHeight')
     this.customMaxHeight = calcHeight(this, 'maxHeight')
   },
   updateStyle () {
@@ -2058,6 +2059,7 @@ const Methods = {
       fullColumnIdData,
       tableColumn,
       customHeight,
+      customMinHeight,
       customMaxHeight,
       border,
       headerHeight,
@@ -2170,15 +2172,22 @@ const Methods = {
         } else if (layout === 'body') {
           const emptyBlockElem = elemStore[`${name}-${layout}-emptyBlock`]
           if (isNodeElement(wrapperElem)) {
+            const bodyMinHeight = fixedType ? ((customMinHeight - headerHeight - footerHeight) - (showFooter ? 0 : scrollbarHeight)) : (customMinHeight - headerHeight - footerHeight)
+            let bodyMaxHeight = 0
             if (customMaxHeight) {
-              wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight - footerHeight}px`
-            } else {
-              if (customHeight > 0) {
-                wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
-              } else {
-                wrapperElem.style.height = ''
-              }
+              bodyMaxHeight = Math.max(bodyMinHeight, fixedType ? (customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight)) : (customMaxHeight - headerHeight - footerHeight))
+              wrapperElem.style.maxHeight = `${bodyMaxHeight}px`
             }
+            if (customHeight > 0) {
+              let bodyHeight = fixedType ? ((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight)) : (customHeight - headerHeight - footerHeight)
+              if (bodyMaxHeight) {
+                bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
+              }
+              wrapperElem.style.height = `${Math.max(bodyMinHeight, bodyHeight)}px`
+            } else {
+              wrapperElem.style.height = ''
+            }
+            wrapperElem.style.minHeight = `${bodyMinHeight}px`
           }
 
           // 如果是固定列
@@ -3757,7 +3766,10 @@ const Methods = {
       } else {
         this.sort({ field, order })
       }
-      const params = { column, field, property: field, order: column.order, sortList: this.getSortColumns() }
+      const params = { $table: this, $event: evnt, column, field, property: field, order: column.order, sortList: this.getSortColumns(), sortTime: column.sortTime }
+      if (this.mouseConfig && this.mouseOpts.area && this.handleSortEvent) {
+        return this.handleSortEvent(evnt, params)
+      }
       this.emitEvent('sort-change', params, evnt)
     }
   },
@@ -3972,7 +3984,16 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setAllRowExpand (expanded) {
-    return this.setRowExpand(this.expandOpts.lazy ? this.tableData : this.tableFullData, expanded)
+    const { treeConfig, treeOpts, tableFullData, tableFullTreeData } = this
+    let expandedRows = []
+    if (treeConfig) {
+      XEUtils.eachTree(tableFullTreeData, (row) => {
+        expandedRows.push(row)
+      }, treeOpts)
+    } else {
+      expandedRows = tableFullData
+    }
+    return this.setRowExpand(expandedRows, expanded)
   },
   handleAsyncRowExpand (row) {
     const rest = this.fullAllDataRowMap.get(row)
@@ -4671,12 +4692,12 @@ const Methods = {
    * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一列编辑状态
    * 如果单元格配置了校验规则，则会进行校验
    */
-  updateStatus (scope, cellValue) {
+  updateStatus (slotParams, cellValue) {
     const customVal = !XEUtils.isUndefined(cellValue)
     return this.$nextTick().then(() => {
       const { $refs, editRules, validStore } = this
-      if (scope && $refs.tableBody && editRules) {
-        const { row, column } = scope
+      if (slotParams && $refs.tableBody && editRules) {
+        const { row, column } = slotParams
         const type = 'change'
         if (this.hasCellRules(type, row, column)) {
           const cell = this.getCell(row, column)
@@ -4843,11 +4864,11 @@ const Methods = {
       }
       const formatParams = { cellValue, row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column) }
       if (XEUtils.isString(formatter)) {
-        const globalFunc = formats.get(formatter)
-        cellLabel = globalFunc ? globalFunc(formatParams) : ''
+        const gFormatOpts = formats.get(formatter)
+        cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams) : ''
       } else if (XEUtils.isArray(formatter)) {
-        const globalFunc = formats.get(formatter[0])
-        cellLabel = globalFunc ? globalFunc(formatParams, ...formatter.slice(1)) : ''
+        const gFormatOpts = formats.get(formatter[0])
+        cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams, ...formatter.slice(1)) : ''
       } else {
         cellLabel = formatter(formatParams)
       }

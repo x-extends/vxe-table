@@ -5,6 +5,7 @@ import { renderer } from './src/renderer'
 import { commands } from './src/commands'
 import { menus } from './src/menus'
 import { formats } from './src/formats'
+import { validators } from './src/validators'
 import { setup } from './src/setup'
 import { UtilTools } from '../tools/utils'
 import { errLog } from '../tools/log'
@@ -98,6 +99,7 @@ export const VXETable = {
   commands,
   formats,
   menus,
+  validators,
   config,
   t,
   _t

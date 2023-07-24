@@ -8,6 +8,7 @@ import { VxeGlobalInterceptor } from './interceptor'
 import { VxeGlobalCommands } from './commands'
 import { VxeGlobalFormats } from './formats'
 import { VxeGlobalMenus } from './menus'
+import { VxeGlobalValidators } from './validators'
 import { VxeGlobalSetup } from './setup'
 
 /* eslint-disable no-use-before-define */
@@ -74,6 +75,10 @@ export interface VXETableCore {
    */
   menus: VxeGlobalMenus;
   /**
+   * Validators table/form
+   */
+  validators: VxeGlobalValidators
+  /**
    * 弹窗
    */
   modal: ModalController;
@@ -103,7 +108,7 @@ export interface VXETableCore {
 }
 
 /**
- * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟滚动、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、虚拟列表、弹窗、自定义模板、渲染器、贼灵活的配置项等...
+ * 一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、JSON 配置式为零代码而设计...
  */
 export const VXETable: VXETableCore
 
@@ -112,6 +117,7 @@ export * from './interceptor'
 export * from './commands'
 export * from './formats'
 export * from './menus'
+export * from './validators'
 export * from './setup'
 
 export default VXETable

@@ -1,5 +1,9 @@
 export default {
   vxe: {
+    base: {
+      pleaseInput: 'Please input',
+      pleaseSelect: 'Select'
+    },
     loading: {
       text: 'Loading...'
     },
@@ -19,6 +23,9 @@ export default {
       errProp: 'Unsupported parameter "{0}", possibly "{1}".',
       colRepet: 'column.{0}="{0}" is duplicated, which may make some features unusable',
       notFunc: 'method "{0}" not exist.',
+      notValidators: 'Global validators "{0}" no existe.',
+      notFormats: 'Global formats "{0}" no existe.',
+      notCommands: 'Global commands "{0}" no existe.',
       notSlot: 'slot "{0}" does not exist',
       noTree: 'The tree structure does not support "{0}".',
       notProp: 'Unsupported parameters "{0}"',

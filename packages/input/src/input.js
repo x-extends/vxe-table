@@ -624,7 +624,10 @@ export default {
     clearable: { type: Boolean, default: () => GlobalConfig.input.clearable },
     readonly: Boolean,
     disabled: Boolean,
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: () => XEUtils.eqNull(GlobalConfig.input.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseInput') : GlobalConfig.input.placeholder
+    },
     maxlength: [String, Number],
     autocomplete: { type: String, default: 'off' },
     align: String,

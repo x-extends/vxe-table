@@ -40,14 +40,14 @@ export class ColumnInfo {
       }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
-          const globalFunc = formats.get(formatter) || XEUtils[formatter]
-          if (!XEUtils.isFunction(globalFunc)) {
-            errLog('vxe.error.notFunc', [formatter])
+          const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+            errLog('vxe.error.notFormats', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
-          const globalFunc = formats.get(formatter[0]) || XEUtils[formatter[0]]
-          if (!XEUtils.isFunction(globalFunc)) {
-            errLog('vxe.error.notFunc', [formatter[0]])
+          const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+            errLog('vxe.error.notFormats', [formatter[0]])
           }
         }
       }

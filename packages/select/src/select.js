@@ -241,7 +241,10 @@ export default {
   props: {
     value: null,
     clearable: Boolean,
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: () => XEUtils.eqNull(GlobalConfig.select.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseSelect') : GlobalConfig.select.placeholder
+    },
     loading: Boolean,
     disabled: Boolean,
     multiple: Boolean,

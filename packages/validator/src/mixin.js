@@ -1,6 +1,8 @@
 import XEUtils from 'xe-utils'
+import VXETable from '../../v-x-e-table'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { eqEmptyValue, getFuncText } from '../../tools/utils'
+import { warnLog, errLog } from '../../tools/log'
 import DomTools from '../../tools/dom'
 
 /**
@@ -248,10 +250,10 @@ export default {
         if (rules) {
           const cellValue = XEUtils.isUndefined(val) ? XEUtils.get(row, property) : val
           rules.forEach(rule => {
-            const { type, trigger, required } = rule
+            const { type, trigger, required, validator } = rule
             if (validType === 'all' || !trigger || validType === trigger) {
-              if (XEUtils.isFunction(rule.validator)) {
-                const customValid = rule.validator({
+              if (validator) {
+                const validParams = {
                   cellValue,
                   rule,
                   rules,
@@ -261,7 +263,26 @@ export default {
                   columnIndex: this.getColumnIndex(column),
                   field: column.property,
                   $table: this
-                })
+                }
+                let customValid
+                if (XEUtils.isString(validator)) {
+                  const gvItem = VXETable.validators.get(validator)
+                  if (gvItem) {
+                    if (gvItem.cellValidatorMethod) {
+                      customValid = gvItem.cellValidatorMethod(validParams)
+                    } else {
+                      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                        warnLog('vxe.error.notValidators', [validator])
+                      }
+                    }
+                  } else {
+                    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                      errLog('vxe.error.notValidators', [validator])
+                    }
+                  }
+                } else {
+                  customValid = validator(validParams)
+                }
                 if (customValid) {
                   if (XEUtils.isError(customValid)) {
                     this.validRuleErr = true

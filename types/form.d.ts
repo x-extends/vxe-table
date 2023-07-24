@@ -83,24 +83,26 @@ export interface FormRule {
    * 使用自定义校验函数，接收一个 Promise
    * @param params 参数
    */
-  validator?(params: {
-    $form: Form,
-    itemValue: any,
-    rule: FormRule;
-    rules: FormRule[];
-    data: any;
-    field: string
-    /**
-     * @deprecated
-     */
-    property: string
-  }): void | Error | Promise<any>
+  validator?(params: FormRuleValidatorParams): void | Error | Promise<any>
   /**
    * 提示消息
    */
   message?: string;
   trigger?: 'change';
   maxWidth?: number;
+}
+
+export interface FormRuleValidatorParams {
+  $form: Form,
+  itemValue: any,
+  rule: FormRule;
+  rules: FormRule[];
+  data: any;
+  field: string
+  /**
+   * @deprecated
+   */
+  property: string
 }
 
 /**

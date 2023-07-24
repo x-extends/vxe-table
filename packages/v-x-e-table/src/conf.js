@@ -13,6 +13,7 @@ export default {
     animat: true,
     delayHover: 250,
     autoResize: true,
+    minHeight: 144,
     // keepSource: false,
     // showOverflow: null,
     // showHeaderOverflow: null,
@@ -46,7 +47,9 @@ export default {
     },
     validConfig: {
       showMessage: true,
-      message: 'default'
+      autoClear: true,
+      message: 'inline',
+      msgMode: 'single'
     },
     columnConfig: {
       maxFixedSize: 4

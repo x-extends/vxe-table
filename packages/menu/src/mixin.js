@@ -249,10 +249,10 @@ export default {
     ctxMenuLinkEvent (evnt, menu) {
       // 如果一级菜单有配置 code 则允许点击，否则不能点击
       if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
-        const ctxMenuMethod = VXETable.menus.get(menu.code)
+        const gMenuOpts = VXETable.menus.get(menu.code)
         const params = Object.assign({ menu, $grid: this.$xegrid, $table: this, $event: evnt }, this.ctxMenuStore.args)
-        if (ctxMenuMethod) {
-          ctxMenuMethod.call(this, params, evnt)
+        if (gMenuOpts && gMenuOpts.menuMethod) {
+          gMenuOpts.menuMethod(params, evnt)
         }
         // 在 v4 中废弃事件 context-menu-click
         if (this.$listeners['context-menu-click']) {

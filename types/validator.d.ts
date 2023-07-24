@@ -2,6 +2,8 @@ import { VXETableComponent } from './component'
 import { ColumnInfo } from './column'
 import { Table } from './table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 表格校验
  */
@@ -32,7 +34,7 @@ export interface ColumnEditRule {
    * 使用自定义校验函数，接收一个 Promise
    * @param params 参数
    */
-  validator?: typeof ColumnValidatorMethod;
+  validator?: string | ((params: CellRuleValidatorParams) => void | Error | Promise<any>);
   /**
    * 提示消息
    */
@@ -41,9 +43,18 @@ export interface ColumnEditRule {
   maxWidth?: number;
 }
 
-export function ColumnValidatorMethod(params: ColumnEditValidErrParams): void;
-export function ColumnValidatorMethod(params: ColumnEditValidErrParams): Error;
-export function ColumnValidatorMethod(params: ColumnEditValidErrParams): Promise<any>;
+export interface CellRuleValidatorParams {
+  $table: Table,
+  cellValue: any,
+  rule: ColumnEditRule;
+  rules: ColumnEditRule[];
+  column: ColumnInfo;
+  columnIndex: number;
+  row: any;
+  rowIndex: number;
+}
+
+export function ColumnValidatorMethod(params: ColumnEditValidErrParams): void | Error | Promise<any>;
 
 export interface ColumnEditValidErrParams {
   $table: Table,

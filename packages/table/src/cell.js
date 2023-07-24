@@ -639,6 +639,7 @@ export const Cell = {
           },
           on: {
             click (evnt) {
+              evnt.stopPropagation()
               $table.triggerSortEvent(evnt, column, 'asc')
             }
           }
@@ -652,6 +653,7 @@ export const Cell = {
           },
           on: {
             click (evnt) {
+              evnt.stopPropagation()
               $table.triggerSortEvent(evnt, column, 'desc')
             }
           }

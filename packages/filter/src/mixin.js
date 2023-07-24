@@ -171,12 +171,16 @@ export default {
         }
       })
       const filterList = this.getCheckedFilters()
+      const params = { $table: this, $event: evnt, column, field, property: field, values, datas, filters: filterList, filterList }
       // 如果是服务端筛选，则跳过本地筛选处理
       if (!filterOpts.remote) {
         this.handleTableData(true)
         this.checkSelectionStatus()
       }
-      this.emitEvent('filter-change', { column, field, property: field, values, datas, filters: filterList, filterList }, evnt)
+      if (this.mouseConfig && this.mouseOpts.area && this.handleFilterEvent) {
+        this.handleFilterEvent(evnt, params)
+      }
+      this.emitEvent('filter-change', params, evnt)
       this.closeFilter()
       this.updateFooter().then(() => {
         const { scrollXLoad, scrollYLoad } = this

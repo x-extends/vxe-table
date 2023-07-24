@@ -96,6 +96,8 @@ export default {
     data: Array,
     // 表格的高度
     height: [Number, String],
+    // 表格的最小高度
+    minHeight: { type: [Number, String], default: () => GlobalConfig.table.minHeight },
     // 表格的最大高度
     maxHeight: [Number, String],
     // 已废弃，被 column-config.resizable 替换
@@ -1015,11 +1017,13 @@ export default {
       hasTip,
       columnOpts,
       rowOpts,
-      loadingOpts
+      loadingOpts,
+      editRules
     } = this
     const { leftList, rightList } = columnStore
     return h('div', {
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
+        [`vaild-msg--${validOpts.msgMode}`]: !!editRules,
         'vxe-editable': !!editConfig,
         'cell--highlight': highlightCell,
         'cell--selected': mouseConfig && mouseOpts.selected,

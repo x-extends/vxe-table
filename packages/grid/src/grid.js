@@ -747,9 +747,13 @@ export default {
           break
         }
         default: {
-          const btnMethod = VXETable.commands.get(code)
-          if (btnMethod) {
-            btnMethod({ code, button, $grid: this, $table: $xetable }, ...args)
+          const gCommandOpts = VXETable.commands.get(code)
+          if (gCommandOpts.commandMethod) {
+            gCommandOpts.commandMethod({ code, button, $grid: this, $table: $xetable }, ...args)
+          } else {
+            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              errLog('vxe.error.notCommands', [code])
+            }
           }
         }
       }

@@ -18,7 +18,10 @@ export default {
     name: String,
     readonly: Boolean,
     disabled: Boolean,
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: () => XEUtils.eqNull(GlobalConfig.textarea.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseInput') : GlobalConfig.textarea.placeholder
+    },
     maxlength: [String, Number],
     rows: { type: [String, Number], default: 2 },
     cols: { type: [String, Number], default: null },

@@ -5,7 +5,7 @@ import VXETable from '../../v-x-e-table'
 import { isEnableConf, eqEmptyValue, getFuncText } from '../../tools/utils'
 import DomTools, { browse } from '../../tools/dom'
 import { createItem, handleFieldOrItem, isHiddenItem, isActivetem } from './util'
-import { errLog } from '../../tools/log'
+import { warnLog, errLog } from '../../tools/log'
 import VxeFormConfigItem from './form-config-item'
 import VxeLoading from '../../loading/index'
 import { getSlotVNs } from '../../tools/vn'
@@ -461,10 +461,10 @@ export default {
             if (rules) {
               const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
               rules.forEach(rule => {
-                const { type, trigger, required } = rule
+                const { type, trigger, required, validator } = rule
                 if (validType === 'all' || !trigger || validType === rule.trigger) {
-                  if (XEUtils.isFunction(rule.validator)) {
-                    const customValid = rule.validator({
+                  if (validator) {
+                    const validParams = {
                       itemValue,
                       rule,
                       rules,
@@ -472,7 +472,26 @@ export default {
                       field: property,
                       property,
                       $form: this
-                    })
+                    }
+                    let customValid
+                    if (XEUtils.isString(validator)) {
+                      const gvItem = VXETable.validators.get(validator)
+                      if (gvItem) {
+                        if (gvItem.itemValidatorMethod) {
+                          customValid = gvItem.itemValidatorMethod(validParams)
+                        } else {
+                          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                            warnLog('vxe.error.notValidators', [validator])
+                          }
+                        }
+                      } else {
+                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                          errLog('vxe.error.notValidators', [validator])
+                        }
+                      }
+                    } else {
+                      customValid = validator(validParams)
+                    }
                     if (customValid) {
                       if (XEUtils.isError(customValid)) {
                         errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))

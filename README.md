@@ -10,16 +10,12 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、贼灵活的配置项等...  
+一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、JSON 配置式为零代码而设计...  
 
 * 设计理念
   * 面向现代浏览器，高效的简洁 API 设计
   * 模块化表格、按需加载
   * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能
-
-## QQ 交流群
-
-![qq](https://vxetable.cn/static/donation/qq.png)
 
 ## 浏览器支持
 
@@ -35,7 +31,7 @@
 * [x] 多种边框
 * [x] 单元格样式
 * [x] 列宽拖动
-* [x] 最大高度
+* [x] 最小/最大高度
 * [x] 自适应宽高
 * [x] 固定列
 * [x] 多级表头
@@ -103,10 +99,10 @@ Vue.use(VXETable)
 
 ```HTML
 <!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
+<link rel="stylesheet" href="https://unpkg.com/vxe-table@legacy/lib/style.css">
 <!-- 引入脚本 -->
 <script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table"></script>
+<script src="https://unpkg.com/vxe-table@legacy"></script>
 ```
 
 ## 示例

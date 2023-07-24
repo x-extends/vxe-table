@@ -1,5 +1,9 @@
 export default {
   vxe: {
+    base: {
+      pleaseInput: '请输入',
+      pleaseSelect: '请选择'
+    },
     loading: {
       text: '加載中...'
     },
@@ -19,6 +23,9 @@ export default {
       errProp: '不支持的參數 "{0}"，可能為 "{1}"',
       colRepet: 'column.{0}="{1}" 重複了，這可能會導致某些功能無法使用',
       notFunc: '方法 "{0}" 不存在',
+      notValidators: '全局校验 "{0}" 不存在',
+      notFormats: '全局格式化 "{0}" 不存在',
+      notCommands: '全局指令 "{0}" 不存在',
       notSlot: '插槽 "{0}" 不存在',
       noTree: '樹狀結構不支援 {0}',
       notProp: '不支持的參數 "{0}"',

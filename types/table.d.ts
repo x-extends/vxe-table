@@ -26,6 +26,10 @@ export declare class Table extends VXETableComponent {
    */
   height?: number | string;
   /**
+   * 表格的最小高度
+   */
+  minHeight?: number | string;
+  /**
    * 表格的最大高度
    */
   maxHeight?: number | string;
