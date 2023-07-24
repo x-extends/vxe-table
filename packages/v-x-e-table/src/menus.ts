@@ -25,6 +25,7 @@ class VXEMenusStore {
     const conf = this.store[name]
     // 兼容
     if (XEUtils.isFunction(render)) {
+      // warnLog('vxe.error.delProp', ['callback', 'menuMethod'])
       render = {
         menuMethod: render
       }

@@ -24,6 +24,8 @@ export default {
       colRepet: 'columna.{0}="{0}" está duplicado, lo que puede hacer que algunas funciones sean inutilizables',
       notFunc: 'El método "{0}" no existe.',
       notValidators: 'Global validators "{0}" no existe.',
+      notFormats: 'Global formats "{0}" no existe.',
+      notCommands: 'Global commands "{0}" no existe.',
       notSlot: 'La ranura "{0}" no existe.',
       noTree: 'La estructura de árbol no soporta "{0}".',
       notProp: 'Parámetros no compatibles "{0}"',

@@ -10,6 +10,8 @@ export default {
   data: Array as PropType<any[]>,
   // 表格的高度
   height: [Number, String] as PropType<VxeTablePropTypes.Height>,
+  // 表格的最小高度
+  minHeight: { type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>, default: () => GlobalConfig.table.minHeight },
   // 表格的最大高度
   maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
   // 已废弃，被 column-config.resizable 替换

@@ -15,6 +15,7 @@ const GlobalConfig: VXETableGlobalConfig = {
     animat: true,
     delayHover: 250,
     autoResize: true,
+    minHeight: 144,
     // keepSource: false,
     // showOverflow: null,
     // showHeaderOverflow: null,
@@ -49,7 +50,7 @@ const GlobalConfig: VXETableGlobalConfig = {
     validConfig: {
       showMessage: true,
       autoClear: true,
-      message: 'default',
+      message: 'inline',
       msgMode: 'single'
     },
     columnConfig: {

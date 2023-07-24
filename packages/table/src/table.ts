@@ -257,6 +257,7 @@ export default defineComponent({
       // 表尾高度
       footerHeight: 0,
       customHeight: 0,
+      customMinHeight: 0,
       customMaxHeight: 0,
       // 当前 hover 行
       hoverRow: null,
@@ -848,7 +849,7 @@ export default defineComponent({
       })
     }
 
-    const calcHeight = (key: 'height' | 'maxHeight') => {
+    const calcHeight = (key: 'height' | 'minHeight' | 'maxHeight') => {
       const { parentHeight } = reactData
       const val = props[key]
       let num = 0
@@ -1099,6 +1100,7 @@ export default defineComponent({
 
     const updateHeight = () => {
       internalData.customHeight = calcHeight('height')
+      internalData.customMinHeight = calcHeight('minHeight')
       internalData.customMaxHeight = calcHeight('maxHeight')
     }
 
@@ -1459,7 +1461,7 @@ export default defineComponent({
     const updateStyle = () => {
       const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod, keyboardConfig } = props
       const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore, mergeList, mergeFooterList, isAllOverflow } = reactData
-      let { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMaxHeight } = internalData
+      let { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
       const containerList = ['main', 'left', 'right']
       const emptyPlaceholderElem = refEmptyPlaceholder.value
       const cellOffsetWidth = computeCellOffsetWidth.value
@@ -1551,15 +1553,22 @@ export default defineComponent({
             const emptyBlockRef = elemStore[`${name}-${layout}-emptyBlock`]
             const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
             if (isNodeElement(wrapperElem)) {
+              const bodyMinHeight = fixedType ? ((customMinHeight - headerHeight - footerHeight) - (showFooter ? 0 : scrollbarHeight)) : (customMinHeight - headerHeight - footerHeight)
+              let bodyMaxHeight = 0
               if (customMaxHeight) {
-                wrapperElem.style.maxHeight = `${fixedType ? customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight) : customMaxHeight - headerHeight - footerHeight}px`
-              } else {
-                if (customHeight > 0) {
-                  wrapperElem.style.height = `${fixedType ? (customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight) : customHeight - headerHeight - footerHeight}px`
-                } else {
-                  wrapperElem.style.height = ''
-                }
+                bodyMaxHeight = Math.max(bodyMinHeight, fixedType ? (customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight)) : (customMaxHeight - headerHeight - footerHeight))
+                wrapperElem.style.maxHeight = `${bodyMaxHeight}px`
               }
+              if (customHeight > 0) {
+                let bodyHeight = fixedType ? ((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight)) : (customHeight - headerHeight - footerHeight)
+                if (bodyMaxHeight) {
+                  bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
+                }
+                wrapperElem.style.height = `${Math.max(bodyMinHeight, bodyHeight)}px`
+              } else {
+                wrapperElem.style.height = ''
+              }
+              wrapperElem.style.minHeight = `${bodyMinHeight}px`
             }
 
             // 如果是固定列
@@ -5628,7 +5637,9 @@ export default defineComponent({
        * 点击排序事件
        */
       triggerSortEvent (evnt, column, order) {
+        const { mouseConfig } = props
         const sortOpts = computeSortOpts.value
+        const mouseOpts = computeMouseOpts.value
         const { field, sortable } = column
         if (sortable) {
           if (!order || column.order === order) {
@@ -5636,7 +5647,10 @@ export default defineComponent({
           } else {
             tableMethods.sort({ field, order })
           }
-          const params = { column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns() }
+          const params = { $table: $xetable, $event: evnt, column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
+          if (mouseConfig && mouseOpts.area && $xetable.handleSortEvent) {
+            return $xetable.handleSortEvent(evnt, params)
+          }
           tableMethods.dispatchEvent('sort-change', params, evnt)
         }
       },
@@ -5871,11 +5885,11 @@ export default defineComponent({
           }
           const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
           if (XEUtils.isString(formatter)) {
-            const globalFunc = VXETable.formats.get(formatter)
-            cellLabel = globalFunc ? globalFunc(formatParams) : ''
+            const gFormatOpts = VXETable.formats.get(formatter)
+            cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams) : ''
           } else if (XEUtils.isArray(formatter)) {
-            const globalFunc = VXETable.formats.get(formatter[0])
-            cellLabel = globalFunc ? globalFunc(formatParams, ...formatter.slice(1)) : ''
+            const gFormatOpts = VXETable.formats.get(formatter[0])
+            cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams, ...formatter.slice(1)) : ''
           } else {
             cellLabel = formatter(formatParams)
           }

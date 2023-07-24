@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
-import { VXETable } from '../../v-x-e-table'
+import { formats } from '../../v-x-e-table/src/formats'
 import { toFilters } from './util'
 import { getFuncText } from '../../tools/utils'
 import { warnLog, errLog } from '../../tools/log'
@@ -43,14 +43,14 @@ export class ColumnInfo {
       }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
-          const globalFunc = VXETable.formats.get(formatter) || XEUtils[formatter]
-          if (!XEUtils.isFunction(globalFunc)) {
-            errLog('vxe.error.notFunc', [formatter])
+          const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+            errLog('vxe.error.notFormats', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
-          const globalFunc = VXETable.formats.get(formatter[0]) || XEUtils[formatter[0]]
-          if (!XEUtils.isFunction(globalFunc)) {
-            errLog('vxe.error.notFunc', [formatter[0]])
+          const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+            errLog('vxe.error.notFormats', [formatter[0]])
           }
         }
       }

@@ -74,6 +74,8 @@ export interface VxeTableProPrivateMethods<D = VxeTableDataRow> {
   handleKeyboardEvent(evnt: KeyboardEvent): void
   handleHeaderCellAreaEvent(evnt: KeyboardEvent, params: VxeTableDefines.HeaderCellClickEventParams<D>): void
   handleCellAreaEvent(evnt: MouseEvent, params: VxeTableDefines.CellClickEventParams<D>): void
+  handleFilterEvent(evnt: Event, params: VxeTableDefines.FilterChangeEventParams<D>): any
+  handleSortEvent(evnt: Event, params: VxeTableDefines.SortChangeEventParams<D>): any
   handleUpdateCellAreas(): any
   handleCopyCellAreaEvent(evnt: ClipboardEvent): void
   handlePasteCellAreaEvent(evnt: ClipboardEvent): void

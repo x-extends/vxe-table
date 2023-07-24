@@ -40,7 +40,7 @@
 * [x] 多种边框
 * [x] 单元格样式
 * [x] 列宽拖动
-* [x] 最大高度
+* [x] 最小/最大高度
 * [x] 自适应宽高
 * [x] 固定列
 * [x] 多级表头
@@ -150,6 +150,12 @@ const tableData = ref([
 参与文档完善、补充详细文档  
 
 💡 [官网文档源码](https://github.com/x-extends/vxe-table-docs)
+
+## QQ 交流群
+
+该群供大家交流問題，如果群人数已满，将会不定期剔除不活跃的。  
+
+![qq](https://vxetable.cn/static/donation/qq.png)
 
 ## 运行项目
 

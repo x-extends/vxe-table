@@ -134,6 +134,28 @@ export interface GridPublicMethods<D = VxeTableDataRow> {
     }
     pendingRecords: D[]
   } | null
+  /**
+   * 设置数据代理信息
+   */
+  // setProxyInfo(options: {
+  //   /**
+  //    * 修改表格数据
+  //    */
+  //   data?: any[]
+  //   /**
+  //    * 修改表单数据
+  //    */
+  //   form?: {
+  //     [key: string]: any
+  //   },
+  //   /**
+  //    * 修改分页数据
+  //    */
+  //   pager?: {
+  //     pageSize?: number
+  //     currentPage?: number
+  //   }
+  // }): Promise<any>
 }
 
 export interface VxeGridMethods<D = VxeTableDataRow> extends GridMethods<D>, TablePublicMethods<D> { }

@@ -977,9 +977,15 @@ export default defineComponent({
             break
           }
           default: {
-            const btnMethod = VXETable.commands.get(code)
-            if (btnMethod) {
-              btnMethod({ code, button, $grid: $xegrid, $table: $xetable }, ...args)
+            const gCommandOpts = VXETable.commands.get(code)
+            if (gCommandOpts) {
+              if (gCommandOpts.commandMethod) {
+                gCommandOpts.commandMethod({ code, button, $grid: $xegrid, $table: $xetable }, ...args)
+              } else {
+                if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                  errLog('vxe.error.notCommands', [code])
+                }
+              }
             }
           }
         }
@@ -1028,6 +1034,24 @@ export default defineComponent({
         }
         return null
       }
+      // setProxyInfo (options) {
+      //   if (props.proxyConfig && options) {
+      //     const { pager, form } = options
+      //     const proxyOpts = computeProxyOpts.value
+      //     if (pager) {
+      //       if (pager.currentPage) {
+      //         reactData.tablePage.currentPage = Number(pager.currentPage)
+      //       }
+      //       if (pager.pageSize) {
+      //         reactData.tablePage.pageSize = Number(pager.pageSize)
+      //       }
+      //     }
+      //     if (proxyOpts.form && form) {
+      //       Object.assign(reactData.formData, form)
+      //     }
+      //   }
+      //   return nextTick()
+      // }
     }
 
     // 检查插槽

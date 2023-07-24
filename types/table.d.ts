@@ -1019,6 +1019,7 @@ export interface TableInternalData<D = VxeTableDataRow> {
   // 表尾高度
   footerHeight: number
   customHeight: number
+  customMinHeight: number
   customMaxHeight: number
   // 当前 hover 行
   hoverRow: any
@@ -1131,6 +1132,7 @@ export namespace VxeTablePropTypes {
   export type ID = string
   export type Data<T = any> = T[]
   export type Height = number | string
+  export type MinHeight = number | string
   export type MaxHeight = number | string
   export type Resizable = boolean
   export type Stripe = boolean
@@ -2036,10 +2038,10 @@ export namespace VxeTablePropTypes {
     maxWidth?: number
 
     /**
-     * 不建议使用，后续废弃
+     * 不建议使用，已废弃
      * @deprecated
      */
-    message?: string
+    message?: 'inline' | 'default' | 'tooltip' | '' | null
   }
   export interface ValidOpts extends ValidConfig { }
 
@@ -2102,6 +2104,7 @@ export type VxeTableProps<D = VxeTableDataRow> = {
   id?: VxeTablePropTypes.ID
   data?: VxeTablePropTypes.Data<D>
   height?: VxeTablePropTypes.Height
+  minHeight?: VxeTablePropTypes.MinHeight
   maxHeight?: VxeTablePropTypes.MaxHeight
   /**
    * 不建议使用，被 column-config.resizable 替换

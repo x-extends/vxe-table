@@ -1,13 +1,15 @@
-import { VxeTableDefines } from '../table'
+import { VxeTableDefines, VxeTableDataRow } from '../table'
 
 /* eslint-disable no-use-before-define */
 
 export namespace VxeGlobalFormatsHandles {
-  export type FormatsCallback = (params: FormatsParams, ...args: any[]) => string | number
-  export interface FormatsParams {
+  export interface FormatsOptions<D = VxeTableDataRow> {
+    formatMethod?: (params: FormatMethodParams<D>, ...args: any[]) => string | number
+  }
+  export interface FormatMethodParams<D = VxeTableDataRow> {
     cellValue: any
-    row: any,
-    column: VxeTableDefines.ColumnInfo
+    row: D
+    column: VxeTableDefines.ColumnInfo<D>
   }
 }
 
@@ -15,12 +17,12 @@ export namespace VxeGlobalFormatsHandles {
  * 全局格式化
  */
 export interface VxeGlobalFormats {
-  mixin(options: {
-    [name: string]: VxeGlobalFormatsHandles.FormatsCallback
+  mixin(opts: {
+    [name: string]: VxeGlobalFormatsHandles.FormatsOptions<any> | ((params: VxeGlobalFormatsHandles.FormatMethodParams<any>, ...args: any[]) => string | number)
   }): VxeGlobalFormats
   has(name: string): boolean
-  get(name: string): VxeGlobalFormatsHandles.FormatsCallback
-  add(name: string, callback: VxeGlobalFormatsHandles.FormatsCallback): VxeGlobalFormats
+  get(name: string): VxeGlobalFormatsHandles.FormatsOptions<any>
+  add(name: string, options: VxeGlobalFormatsHandles.FormatsOptions<any> | ((params: VxeGlobalFormatsHandles.FormatMethodParams<any>, ...args: any[]) => string | number)): VxeGlobalFormats
   delete(name: string): void
-  forEach(callback: (callback: VxeGlobalFormatsHandles.FormatsCallback, name: string) => void): void
+  forEach(callback: (options: VxeGlobalFormatsHandles.FormatsOptions<any>, name: string) => void): void
 }

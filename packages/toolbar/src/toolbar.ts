@@ -300,10 +300,16 @@ export default defineComponent({
         if ($xegrid) {
           $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
-          const commandMethod = VXETable.commands.get(code)
+          const gCommandOpts = VXETable.commands.get(code)
           const params = { code, button: item, $table: $xetable, $grid: $xegrid, $event: evnt }
-          if (commandMethod) {
-            commandMethod(params, evnt)
+          if (gCommandOpts) {
+            if (gCommandOpts.commandMethod) {
+              gCommandOpts.commandMethod(params)
+            } else {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
           }
           $xetoolbar.dispatchEvent('button-click', params, evnt)
         }
@@ -316,10 +322,16 @@ export default defineComponent({
         if ($xegrid) {
           $xegrid.triggerToolbarTolEvent(item, evnt)
         } else {
-          const commandMethod = VXETable.commands.get(code)
+          const gCommandOpts = VXETable.commands.get(code)
           const params = { code, tool: item, $table: $xetable, $grid: $xegrid, $event: evnt }
-          if (commandMethod) {
-            commandMethod(params, evnt)
+          if (gCommandOpts) {
+            if (gCommandOpts.commandMethod) {
+              gCommandOpts.commandMethod(params)
+            } else {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
           }
           $xetoolbar.dispatchEvent('tool-click', params, evnt)
         }

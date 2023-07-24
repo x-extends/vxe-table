@@ -1213,6 +1213,11 @@
         .vxe-cell--valid {
           bottom: calc(100%);
         }
+        &:first-child {
+          .vxe-cell--valid {
+            bottom: auto;
+          }
+        }
       }
     }
   }

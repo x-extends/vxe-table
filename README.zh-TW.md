@@ -39,7 +39,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 多種邊框
 * [x] 儲存格樣式
 * [x] 列寬拖動
-* [x] 最大高度
+* [x] 最小/最大高度
 * [x] 自我調整寬高
 * [x] 固定列
 * [x] 多級表頭

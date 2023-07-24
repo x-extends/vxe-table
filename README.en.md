@@ -39,7 +39,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Table with border
 * [x] Cell style
 * [x] Column resizing
-* [x] Maximum table height
+* [x] Minimum/maximum height
 * [x] Resize height & width
 * [x] Fixed column
 * [x] Grouping table header

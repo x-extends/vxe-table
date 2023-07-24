@@ -10,9 +10,9 @@ const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['setFilter', 'clear
 
 const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
   setupTable ($xetable) {
-    const { reactData, internalData } = $xetable
+    const { props, reactData, internalData } = $xetable
     const { refTableBody, refTableFilter } = $xetable.getRefMaps()
-    const { computeFilterOpts } = $xetable.getComputeMaps()
+    const { computeFilterOpts, computeMouseOpts } = $xetable.getComputeMaps()
 
     const filterPrivateMethods: TableFilterPrivateMethods = {
       checkFilterOptions () {
@@ -137,8 +137,10 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
        * @param {Event} evnt 事件
        */
       confirmFilterEvent (evnt: Event) {
+        const { mouseConfig } = props
         const { filterStore, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
         const filterOpts = computeFilterOpts.value
+        const mouseOpts = computeMouseOpts.value
         const { column } = filterStore
         const { field } = column
         const values: any[] = []
@@ -150,12 +152,16 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
           }
         })
         const filterList = $xetable.getCheckedFilters()
+        const params = { $table: $xetable, $event: evnt, column, field, property: field, values, datas, filters: filterList, filterList }
         // 如果是服务端筛选，则跳过本地筛选处理
         if (!filterOpts.remote) {
           $xetable.handleTableData(true)
           $xetable.checkSelectionStatus()
         }
-        $xetable.dispatchEvent('filter-change', { column, field, property: field, values, datas, filters: filterList, filterList }, evnt)
+        if (mouseConfig && mouseOpts.area && $xetable.handleFilterEvent) {
+          $xetable.handleFilterEvent(evnt, params)
+        }
+        $xetable.dispatchEvent('filter-change', params, evnt)
         $xetable.closeFilter()
         $xetable.updateFooter().then(() => {
           const { scrollXLoad, scrollYLoad } = reactData
