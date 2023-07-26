@@ -201,6 +201,7 @@ export default defineComponent({
       const { isZMax, tableLoading, tablePage, tableData } = reactData
       const tableExtendProps = computeTableExtendProps.value
       const proxyOpts = computeProxyOpts.value
+      const pagerOpts = computePagerOpts.value
       const tableProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
@@ -209,11 +210,11 @@ export default defineComponent({
           tableProps.height = 'auto'
         }
       }
-      if (proxyConfig) {
+      if (proxyConfig && isEnableConf(proxyOpts)) {
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
         tableProps.rowClassName = handleRowClassName
-        if (proxyOpts.seq && isEnableConf(pagerConfig)) {
+        if (pagerConfig && proxyOpts.seq && isEnableConf(pagerOpts)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
@@ -224,13 +225,16 @@ export default defineComponent({
     })
 
     const initToolbar = () => {
-      nextTick(() => {
-        const $xetable = refTable.value
-        const $xetoolbar = refToolbar.value
-        if ($xetable && $xetoolbar) {
-          $xetable.connect($xetoolbar)
-        }
-      })
+      const toolbarOpts = computeToolbarOpts.value
+      if (props.toolbarConfig && isEnableConf(toolbarOpts)) {
+        nextTick(() => {
+          const $xetable = refTable.value
+          const $xetoolbar = refToolbar.value
+          if ($xetable && $xetoolbar) {
+            $xetable.connect($xetoolbar)
+          }
+        })
+      }
     }
 
     const initPages = () => {
@@ -238,7 +242,7 @@ export default defineComponent({
       const { pagerConfig } = props
       const pagerOpts = computePagerOpts.value
       const { currentPage, pageSize } = pagerOpts
-      if (pagerConfig) {
+      if (pagerConfig && isEnableConf(pagerOpts)) {
         if (currentPage) {
           tablePage.currentPage = currentPage
         }
@@ -323,10 +327,11 @@ export default defineComponent({
       const { proxyConfig } = props
       const { tablePage } = reactData
       const { currentPage, pageSize } = params
+      const proxyOpts = computeProxyOpts.value
       tablePage.currentPage = currentPage
       tablePage.pageSize = pageSize
       gridMethods.dispatchEvent('page-change', params)
-      if (proxyConfig) {
+      if (proxyConfig && isEnableConf(proxyOpts)) {
         gridMethods.commitProxy('query').then((rest) => {
           gridMethods.dispatchEvent('proxy-query', rest, params.$event)
         })
@@ -337,11 +342,12 @@ export default defineComponent({
       const $xetable = refTable.value
       const { proxyConfig } = props
       const { computeSortOpts } = $xetable.getComputeMaps()
+      const proxyOpts = computeProxyOpts.value
       const sortOpts = computeSortOpts.value
       // 如果是服务端排序
       if (sortOpts.remote) {
         reactData.sortData = params.sortList
-        if (proxyConfig) {
+        if (proxyConfig && isEnableConf(proxyOpts)) {
           reactData.tablePage.currentPage = 1
           gridMethods.commitProxy('query').then((rest) => {
             gridMethods.dispatchEvent('proxy-query', rest, params.$event)
@@ -355,11 +361,12 @@ export default defineComponent({
       const $xetable = refTable.value
       const { proxyConfig } = props
       const { computeFilterOpts } = $xetable.getComputeMaps()
+      const proxyOpts = computeProxyOpts.value
       const filterOpts = computeFilterOpts.value
       // 如果是服务端过滤
       if (filterOpts.remote) {
         reactData.filterData = params.filterList
-        if (proxyConfig) {
+        if (proxyConfig && isEnableConf(proxyOpts)) {
           reactData.tablePage.currentPage = 1
           gridMethods.commitProxy('query').then((rest) => {
             gridMethods.dispatchEvent('proxy-query', rest, params.$event)
@@ -371,7 +378,8 @@ export default defineComponent({
 
     const submitFormEvent: VxeFormEvents.Submit = (params) => {
       const { proxyConfig } = props
-      if (proxyConfig) {
+      const proxyOpts = computeProxyOpts.value
+      if (proxyConfig && isEnableConf(proxyOpts)) {
         gridMethods.commitProxy('reload').then((rest) => {
           gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
         })
@@ -381,7 +389,8 @@ export default defineComponent({
 
     const resetFormEvent: VxeFormEvents.Reset = (params) => {
       const { proxyConfig } = props
-      if (proxyConfig) {
+      const proxyOpts = computeProxyOpts.value
+      if (proxyConfig && isEnableConf(proxyOpts)) {
         gridMethods.commitProxy('reload').then((rest) => {
           gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
         })
@@ -437,7 +446,7 @@ export default defineComponent({
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
       const restVNs = []
-      if (isEnableConf(formConfig) || slots.form) {
+      if ((formConfig && isEnableConf(formOpts)) || slots.form) {
         let slotVNs = []
         if (slots.form) {
           slotVNs = slots.form({ $grid: $xegrid })
@@ -467,7 +476,7 @@ export default defineComponent({
               h(resolveComponent('vxe-form') as ComponentOptions, {
                 ref: refForm,
                 ...Object.assign({}, formOpts, {
-                  data: proxyConfig && proxyOpts.form ? formData : formOpts.data
+                  data: proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
                 }),
                 onSubmit: submitFormEvent,
                 onReset: resetFormEvent,
@@ -494,7 +503,7 @@ export default defineComponent({
       const { toolbarConfig } = props
       const toolbarOpts = computeToolbarOpts.value
       const restVNs = []
-      if (isEnableConf(toolbarConfig) || slots.toolbar) {
+      if ((toolbarConfig && isEnableConf(toolbarOpts)) || slots.toolbar) {
         let slotVNs = []
         if (slots.toolbar) {
           slotVNs = slots.toolbar({ $grid: $xegrid })
@@ -561,7 +570,7 @@ export default defineComponent({
       const tableOns = Object.assign({}, tableCompEvents)
       const emptySlot = slots.empty
       const loadingSlot = slots.loading
-      if (proxyConfig) {
+      if (proxyConfig && isEnableConf(proxyOpts)) {
         if (proxyOpts.sort) {
           tableOns.onSortChange = sortChangeEvent
         }
@@ -607,10 +616,11 @@ export default defineComponent({
      * 渲染分页
      */
     const renderPagers = () => {
-      const { pagerConfig } = props
+      const { proxyConfig, pagerConfig } = props
+      const proxyOpts = computeProxyOpts.value
       const pagerOpts = computePagerOpts.value
       const restVNs = []
-      if (isEnableConf(pagerConfig) || slots.pager) {
+      if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
         let slotVNs = []
         if (slots.pager) {
           slotVNs = slots.pager({ $grid: $xegrid })
@@ -633,7 +643,7 @@ export default defineComponent({
             h(resolveComponent('vxe-pager') as ComponentOptions, {
               ref: refPager,
               ...pagerOpts,
-              ...(props.proxyConfig ? reactData.tablePage : {}),
+              ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
               onPageChange: pageChangeEvent
             }, pagerSlots)
           )
@@ -653,8 +663,8 @@ export default defineComponent({
       const { proxyInited } = reactData
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
-      if (proxyConfig) {
-        if (isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
+      if (proxyConfig && isEnableConf(proxyOpts)) {
+        if (formConfig && isEnableConf(formOpts) && proxyOpts.form && formOpts.items) {
           const formData: any = {}
           formOpts.items.forEach(item => {
             const { field, itemRender } = item
@@ -697,6 +707,7 @@ export default defineComponent({
         const { tablePage, formData } = reactData
         const isMsg = computeIsMsg.value
         const proxyOpts = computeProxyOpts.value
+        const pagerOpts = computePagerOpts.value
         const toolbarOpts = computeToolbarOpts.value
         const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
         const $xetable = refTable.value
@@ -704,7 +715,7 @@ export default defineComponent({
         let code: string | null = null
         if (XEUtils.isString(proxyTarget)) {
           const { buttons } = toolbarOpts
-          const matchObj = toolbarConfig && buttons ? XEUtils.findTree(buttons, (item) => item.code === proxyTarget, { children: 'dropdowns' }) : null
+          const matchObj = toolbarConfig && isEnableConf(toolbarOpts) && buttons ? XEUtils.findTree(buttons, (item) => item.code === proxyTarget, { children: 'dropdowns' }) : null
           button = matchObj ? matchObj.item : null
           code = proxyTarget
         } else {
@@ -750,7 +761,7 @@ export default defineComponent({
                 if (isInited || isReload) {
                   tablePage.currentPage = 1
                 }
-                if (isEnableConf(pagerConfig)) {
+                if (isEnableConf(pagerOpts)) {
                   pageParams = { ...tablePage }
                 }
               }
@@ -802,7 +813,7 @@ export default defineComponent({
                 .then(rest => {
                   reactData.tableLoading = false
                   if (rest) {
-                    if (isEnableConf(pagerConfig)) {
+                    if (pagerConfig && isEnableConf(pagerOpts)) {
                       const total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
                       tablePage.total = XEUtils.toNumber(total)
                       reactData.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
@@ -1011,7 +1022,7 @@ export default defineComponent({
         const { formConfig } = props
         const { items } = formOpts
         const itemList: VxeFormItemProps[] = []
-        XEUtils.eachTree(isEnableConf(formConfig) && items ? items : [], item => {
+        XEUtils.eachTree(formConfig && isEnableConf(formOpts) && items ? items : [], item => {
           itemList.push(item)
         }, { children: 'children' })
         return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
@@ -1147,10 +1158,8 @@ export default defineComponent({
       nextTick(() => $xegrid.loadColumn(props.columns || []))
     })
 
-    watch(() => props.toolbarConfig, (value) => {
-      if (value) {
-        initToolbar()
-      }
+    watch(() => props.toolbarConfig, () => {
+      initToolbar()
     })
 
     watch(() => props.pagerConfig, () => {
@@ -1186,7 +1195,7 @@ export default defineComponent({
         const { data, columns, proxyConfig } = props
         const proxyOpts = computeProxyOpts.value
         const formOpts = computeFormOpts.value
-        if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
+        if (isEnableConf(proxyConfig) && (data || (proxyOpts.form && formOpts.data))) {
           errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
         }
         if (columns && columns.length) {

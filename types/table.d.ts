@@ -1315,16 +1315,49 @@ export namespace VxeTablePropTypes {
    * 列配置信息
    */
   export interface ColumnConfig {
+    /**
+     * 是否需要为每一列的 VNode 设置 key 属性
+     */
     useKey?: boolean
+    /**
+     * 当鼠标点击列头时，是否要高亮当前列
+     */
     isCurrent?: boolean
+    /**
+     * 当鼠标移到列头时，是否要高亮当前头
+     */
     isHover?: boolean
+    /**
+     * 每一列是否启用列宽调整
+     */
     resizable?: VxeColumnPropTypes.Resizable
+    /**
+     * 每一列的宽度
+     */
     width?: VxeColumnPropTypes.Width
+    /**
+     * 每一列的最小宽度
+     */
     minWidth?: VxeColumnPropTypes.MinWidth
-    maxWidth?: VxeColumnPropTypes.MaxWidth,
+    /**
+     * 每一列的最大宽度
+     */
+    maxWidth?: VxeColumnPropTypes.MaxWidth
+    /**
+     * 固定列允许设置的最大数量（如果是分组，则一个分组算一个）
+     */
     maxFixedSize?: number
+    /**
+     * 每一列的自定义表头单元格数据导出方法，返回自定义的标题
+     */
     headerExportMethod?: VxeColumnPropTypes.HeaderExportMethod<any>
+    /**
+     * 每一列的自定义单元格数据导出方法，返回自定义的值
+     */
     exportMethod?: VxeColumnPropTypes.ExportMethod<any>
+    /**
+     * 每一列的自定义表尾单元格数据导出方法，返回自定义的值
+     */
     footerExportMethod?: VxeColumnPropTypes.FooterExportMethod<any>
   }
   export interface ColumnOpts extends ColumnConfig { }
@@ -1333,11 +1366,29 @@ export namespace VxeTablePropTypes {
    * 行配置信息
    */
   export interface RowConfig {
+    /**
+     * 是否需要为每一行的 VNode 设置 key 属性
+     */
     useKey?: boolean
+    /**
+     * 自定义行数据唯一主键的字段名（默认自动生成）
+     */
     keyField?: string
+    /**
+     * 当鼠标点击行时，是否要高亮当前行
+     */
     isCurrent?: boolean
+    /**
+     * 当鼠标移到行时，是否要高亮当前行
+     */
     isHover?: boolean
+    /**
+     * 每一行开启调整行高度
+     */
     resizable?: boolean
+    /**
+     * 只对 show-overflow 有效，每一行的高度
+     */
     height?: number
   }
   export interface RowOpts extends RowConfig { }
@@ -1346,12 +1397,18 @@ export namespace VxeTablePropTypes {
    * 自定义列配置项
    */
   export interface CustomConfig<D = VxeTableDataRow> {
+    /**
+     * 是否启用 localStorage 本地保存，会将列操作状态保留在本地（需要有 id）
+     */
     storage?: boolean | {
       visible?: boolean
       resizable?: boolean
       fixed?: boolean
       order?: boolean
     }
+    /**
+     * 自定义列是否允许列选中的方法，该方法的返回值用来决定这一列的 checkbox 是否可以选中
+     */
     checkMethod?(params: {
       column: VxeTableDefines.ColumnInfo<D>
     }): boolean
@@ -1362,6 +1419,9 @@ export namespace VxeTablePropTypes {
    * 列调整配置项
    */
   export interface ResizableConfig<D = VxeTableDataRow> {
+    /**
+     * 列宽拖动的最小宽度
+     */
     minWidth?: number | string | ((params: {
       $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
       column: VxeTableDefines.ColumnInfo<D>
@@ -1370,6 +1430,9 @@ export namespace VxeTablePropTypes {
       $rowIndex: number
       cell: HTMLElement
     }) => number | string)
+    /**
+     * 列宽拖动的最大宽度
+     */
     maxWidth?: number | string | ((params: {
       $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
       column: VxeTableDefines.ColumnInfo<D>
@@ -2056,7 +2119,13 @@ export namespace VxeTablePropTypes {
   export type EmptyText = string
 
   export interface LoadingConfig {
+    /**
+     * 显示图标
+     */
     icon?: string
+    /**
+     * 显示文字
+     */
     text?: string
   }
   export interface LoadingOpts extends LoadingConfig { }
@@ -2069,9 +2138,21 @@ export namespace VxeTablePropTypes {
   export type DelayHover = number
 
   export interface ScrollX {
+    /**
+     * 指定大于指定列时自动启动横向虚拟滚动，如果为 0 则总是启用；如果需要关闭，可以设置 enabled 为 false
+     */
     gt?: number
+    /**
+     * 指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于低性能浏览器可以设置大一点，减低渲染次数）
+     */
     oSize?: number
+    /**
+     * 是否启用
+     */
     enabled?: boolean
+    /**
+     * 当数据源被更改时，自动将横向滚动条滚动到左侧
+     */
     scrollToLeftOnChange?: boolean
   }
   export interface SXOpts extends ScrollX {
@@ -2080,15 +2161,36 @@ export namespace VxeTablePropTypes {
   }
 
   export interface ScrollY {
-    mode?: 'default' | 'wheel'
-    gt?: number
-    oSize?: number
-    enabled?: boolean
-    scrollToTopOnChange?: boolean
     /**
-     * @deprecated 请使用 row-config.height
+     * 滚动模式
+     */
+    mode?: 'default' | 'wheel'
+    /**
+     * 指定大于指定行时自动启动纵向虚拟滚动，如果为 0 则总是启用；如果需要关闭，可以设置 enabled 为 false（注：启用纵向虚拟滚动之后将不能支持动态行高）
+     */
+    gt?: number
+    /**
+     * 指定每次渲染的数据偏移量，偏移量越大渲染次数就越少，但每次渲染耗时就越久（对于低性能浏览器可以设置大一点，减低渲染次数）
+     */
+    oSize?: number
+    /**
+     * 是否启用
+     */
+    enabled?: boolean
+    /**
+     * 当数据源被更改时，自动将纵向滚动条滚动到顶部
+     */
+    scrollToTopOnChange?: boolean
+
+    /**
+     * 请使用 row-config.height
+     * @deprecated
      */
     rHeight?: number
+    /**
+     * 不建议使用
+     * @deprecated
+     */
     adaptive?: boolean
   }
   export interface SYOpts extends ScrollY {
@@ -2101,90 +2203,167 @@ export namespace VxeTablePropTypes {
 
 export type VxeTableProps<D = VxeTableDataRow> = {
   size?: VxeTablePropTypes.Size
+  /**
+   * 唯一标识
+   * 当使用某个特定功能时，需要设置才能生效
+   */
   id?: VxeTablePropTypes.ID
+  /**
+   * 表格数据
+   * 与 loadData 行为一致，更新数据是不会重置状态
+   */
   data?: VxeTablePropTypes.Data<D>
+  /**
+   * 表格的高度；支持铺满父容器或者固定高度，如果设置 auto 为铺满父容器（如果设置为 auto，则必须确保存在父节点且不允许存在相邻元素）
+   */
   height?: VxeTablePropTypes.Height
+  /**
+   * 表格最小高度
+   */
   minHeight?: VxeTablePropTypes.MinHeight
+  /**
+   * max-height
+   */
   maxHeight?: VxeTablePropTypes.MaxHeight
   /**
-   * 不建议使用，被 column-config.resizable 替换
-   * @deprecated
+   * 是否带有斑马纹（需要注意的是，在可编辑表格场景下，临时插入的数据不会有斑马纹样式）
    */
-  resizable?: VxeTablePropTypes.Resizable
   stripe?: VxeTablePropTypes.Stripe
+  /**
+   * 是否为圆角边框
+   */
   round?: VxeTablePropTypes.Round
+  /**
+   * 是否带有边框
+   */
   border?: VxeTablePropTypes.Border
+  /**
+   * 表格是否显示加载中
+   */
   loading?: VxeTablePropTypes.Loading
+  /**
+   * 所有的列对齐方式
+   */
   align?: VxeTablePropTypes.Align
+  /**
+   * 所有的表头列的对齐方式
+   */
   headerAlign?: VxeTablePropTypes.HeaderAlign
+  /**
+   * 所有的表尾列的对齐方式
+   */
   footerAlign?: VxeTablePropTypes.FooterAlign
+  /**
+   * 是否显示表头
+   */
   showHeader?: VxeTablePropTypes.ShowHeader
   /**
-   * 不建议使用，被 row-config.isCurrent 替换
-   * @deprecated
+   * 是否显示表尾
    */
-  highlightCurrentRow?: VxeTablePropTypes.HighlightCurrentRow
-  /**
-   * 不建议使用，被 row-config.isHover 替换
-   * @deprecated
-   */
-  highlightHoverRow?: VxeTablePropTypes.HighlightHoverRow
-  /**
-   * 不建议使用，被 column-config.isCurrent 替换
-   * @deprecated
-   */
-  highlightCurrentColumn?: VxeTablePropTypes.HighlightCurrentColumn
-  /**
-   * 不建议使用，被 column-config.isHover 替换
-   * @deprecated
-   */
-  highlightHoverColumn?: VxeTablePropTypes.HighlightHoverColumn
-  /**
-   * 已废弃
-   * @deprecated
-   */
-  highlightCell?: VxeTablePropTypes.HighlightCell
   showFooter?: VxeTablePropTypes.ShowFooter
+  /**
+   * 表尾的数据获取方法，返回一个二维数组
+   */
   footerMethod?: VxeTablePropTypes.FooterMethod<D>
+  /**
+   * 给行附加 className
+   */
   rowClassName?: VxeTablePropTypes.RowClassName<D>
+  /**
+   * 给单元格附加 className
+   */
   cellClassName?: VxeTablePropTypes.CellClassName<D>
+  /**
+   * 给表头的行附加 className
+   */
   headerRowClassName?: VxeTablePropTypes.HeaderRowClassName<D>
+  /**
+   * 给表头的单元格附加 className
+   */
   headerCellClassName?: VxeTablePropTypes.HeaderCellClassName<D>
+  /**
+   * 给表尾的行附加 className
+   */
   footerRowClassName?: VxeTablePropTypes.FooterRowClassName<D>
+  /**
+   * 给表尾的单元格附加 className
+   */
   footerCellClassName?: VxeTablePropTypes.FooterCellClassName<D>
+  /**
+   * 给单元格附加样式
+   */
   cellStyle?: VxeTablePropTypes.CellStyle<D>
+  /**
+   * 给行附加样式，也可以是函数
+   */
   rowStyle?: VxeTablePropTypes.RowStyle<D>
+  /**
+   * 给表头单元格附加样式
+   */
   headerCellStyle?: VxeTablePropTypes.HeaderCellStyle<D>
+  /**
+   * 给表头行附加样式
+   */
   headerRowStyle?: VxeTablePropTypes.HeaderRowStyle<D>
+  /**
+   * 给表尾行附加样式
+   */
   footerRowStyle?: VxeTablePropTypes.FooterRowStyle<D>
+  /**
+   * 给表尾单元格附加样式
+   */
   footerCellStyle?: VxeTablePropTypes.FooterCellStyle<D>
+  /**
+   * 临时合并指定的单元格 (不能用于展开行，不建议用于固定列、树形结构)
+   */
   mergeCells?: VxeTablePropTypes.MergeCells<D>
+  /**
+   * 临时合并表尾 (不能用于展开行，不建议用于固定列、树形结构)
+   */
   mergeFooterItems?: VxeTablePropTypes.MergeFooterItems<D>
+  /**
+   * 自定义合并函数，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)
+   */
   spanMethod?: VxeTablePropTypes.SpanMethod<D>
+  /**
+   * 表尾合并行或列，返回计算后的值 (不能用于虚拟滚动、展开行，不建议用于固定列、树形结构)
+   */
   footerSpanMethod?: VxeTablePropTypes.FooterSpanMethod<D>
+  /**
+   * 设置所有内容过长时显示为省略号（如果是固定列建议设置该值，提升渲染速度）
+   */
   showOverflow?: VxeTablePropTypes.ShowOverflow
+  /**
+   * 设置表头所有内容过长时显示为省略号
+   */
   showHeaderOverflow?: VxeTablePropTypes.ShowHeaderOverflow
+  /**
+   * 设置表尾所有内容过长时显示为省略号
+   */
   showFooterOverflow?: VxeTablePropTypes.ShowFooterOverflow
   /**
-   * 请使用 column-config.useKey
-   * @deprecated
+   * 保持原始值的状态，被某些功能所依赖，比如编辑状态、还原数据等
    */
-  columnKey?: VxeTablePropTypes.ColumnKey
-  /**
-   * 请使用 row-config.useKey
-   * @deprecated
-   */
-  rowKey?: VxeTablePropTypes.RowKey
-  /**
-   * 请使用 row-config.keyField
-   * @deprecated
-   */
-  rowId?: VxeTablePropTypes.RowId
   keepSource?: VxeTablePropTypes.KeepSource
+  /**
+   * 自动监听父元素的变化去重新计算表格（对于父元素可能存在动态变化、显示隐藏的容器中、列宽异常等场景中的可能会用到）
+   */
   autoResize?: VxeTablePropTypes.AutoResize
+  /**
+   * 自动跟随某个属性的变化去重新计算表格，和手动调用 recalculate 方法是一样的效果（对于通过某个属性来控制显示/隐藏切换时可能会用到）
+   */
   syncResize?: VxeTablePropTypes.SyncResize
+  /**
+   * 列配置信息
+   */
   columnConfig?: VxeTablePropTypes.ColumnConfig
+  /**
+   * 行配置信息
+   */
   rowConfig?: VxeTablePropTypes.RowConfig
+  /**
+   * 个性化信息配置项
+   */
   customConfig?: VxeTablePropTypes.CustomConfig<D>
   resizeConfig?: VxeTablePropTypes.ResizeConfig
   resizableConfig?: VxeTablePropTypes.ResizableConfig<D>
@@ -2210,7 +2389,68 @@ export type VxeTableProps<D = VxeTableDataRow> = {
   editRules?: VxeTablePropTypes.EditRules<D>
   emptyText?: VxeTablePropTypes.EmptyText
   emptyRender?: VxeTablePropTypes.EmptyRender
+  /**
+   * 加载中配置项
+   */
   loadingConfig?: VxeTablePropTypes.LoadingConfig
+  /**
+   * 横向虚拟滚动配置（不支持展开行）
+   */
+  scrollX?: VxeTablePropTypes.ScrollX
+  /**
+   * 纵向虚拟滚动配置（不支持展开行）
+   */
+  scrollY?: VxeTablePropTypes.ScrollY
+  /**
+   * 自定义参数（可以用来存放一些自定义的数据）
+   */
+  params?: VxeTablePropTypes.Params
+
+  /**
+   * 已废弃，不建议使用，被 column-config.resizable 替换
+   * @deprecated
+   */
+  resizable?: VxeTablePropTypes.Resizable
+  /**
+   * 已废弃，不建议使用，被 row-config.isCurrent 替换
+   * @deprecated
+   */
+  highlightCurrentRow?: VxeTablePropTypes.HighlightCurrentRow
+  /**
+   * 已废弃，不建议使用，被 row-config.isHover 替换
+   * @deprecated
+   */
+  highlightHoverRow?: VxeTablePropTypes.HighlightHoverRow
+  /**
+   * 已废弃，不建议使用，被 column-config.isCurrent 替换
+   * @deprecated
+   */
+  highlightCurrentColumn?: VxeTablePropTypes.HighlightCurrentColumn
+  /**
+   * 已废弃，不建议使用，被 column-config.isHover 替换
+   * @deprecated
+   */
+  highlightHoverColumn?: VxeTablePropTypes.HighlightHoverColumn
+  /**
+   * 已废弃
+   * @deprecated
+   */
+  highlightCell?: VxeTablePropTypes.HighlightCell
+  /**
+   * 已废弃，请使用 column-config.useKey
+   * @deprecated
+   */
+  columnKey?: VxeTablePropTypes.ColumnKey
+  /**
+   * 已废弃，请使用 row-config.useKey
+   * @deprecated
+   */
+  rowKey?: VxeTablePropTypes.RowKey
+  /**
+   * 已废弃，请使用 row-config.keyField
+   * @deprecated
+   */
+  rowId?: VxeTablePropTypes.RowId
   /**
    * 不建议使用，已废弃
    * @deprecated
@@ -2226,9 +2466,6 @@ export type VxeTableProps<D = VxeTableDataRow> = {
    * @deprecated
    */
   delayHover?: VxeTablePropTypes.DelayHover
-  scrollX?: VxeTablePropTypes.ScrollX
-  scrollY?: VxeTablePropTypes.ScrollY
-  params?: VxeTablePropTypes.Params
 }
 
 export type VxeTableEmits = [
