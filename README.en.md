@@ -34,7 +34,9 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 ## Features
 
 * [x] Basic table
-* [x] Grid
+* [x] Configuration grid
+* [x] Base form
+* [x] Configuration form
 * [x] Striped
 * [x] Table with border
 * [x] Cell style
@@ -63,7 +65,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Context menu
 * [x] Detail - Expandable row
 * [x] Pager
-* [x] Form
 * [x] Toolbar
 * [x] Pulldown
 * [x] Virtual list

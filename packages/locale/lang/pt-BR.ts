@@ -23,6 +23,7 @@ export default {
       errProp: 'Parâmetro não suportado "{0}", possivelmente "{1}".',
       colRepet: 'column.{0}="{0}" está duplicado, o que pode tornar algumas funcionalidades inutilizáveis.',
       notFunc: 'método "{0}" não existe.',
+      errFunc: 'The argument "{0}" is not a method',
       notValidators: 'Validadores globais "{0}" não existem.',
       notFormats: 'Formatos globais "{0}" não existem.',
       notCommands: 'Comandos globais "{0}" não existem.',

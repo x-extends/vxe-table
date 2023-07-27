@@ -34,7 +34,9 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 ## 功能點
 
 * [x] 基礎表格
-* [x] 高級表格
+* [x] 配置式表格
+* [x] 基礎表單
+* [x] 配置式表單
 * [x] 斑馬線條紋
 * [x] 多種邊框
 * [x] 儲存格樣式
@@ -63,7 +65,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 快捷選單
 * [x] 展開行
 * [x] 分頁
-* [x] 表單
 * [x] 工具列
 * [x] 下拉容器
 * [x] 虛擬清單

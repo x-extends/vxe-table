@@ -23,6 +23,7 @@ export default {
       errProp: '不支持的参数 "{0}"，可能为 "{1}"',
       colRepet: 'column.{0}="{1}" 重复了，这可能会导致某些功能无法使用',
       notFunc: '方法 "{0}" 不存在',
+      errFunc: '参数 "{0}" 不是一个方法',
       notValidators: '全局校验 "{0}" 不存在',
       notFormats: '全局格式化 "{0}" 不存在',
       notCommands: '全局指令 "{0}" 不存在',

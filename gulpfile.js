@@ -65,7 +65,8 @@ const languages = [
   'zh-TW',
   'en-US',
   'ja-JP',
-  'es-ES'
+  'es-ES',
+  'pt-BR'
 ]
 
 const styleCode = 'require(\'./style.css\')'

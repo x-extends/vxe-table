@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from './conf'
 import { getCellValue, setCellValue } from '../../table/src/util'
 import { getFuncText, formatText, isEmptyValue } from '../../tools/utils'
-import { warnLog } from '../../tools/log'
+import { errLog, warnLog } from '../../tools/log'
 import { getOnName } from '../../tools/vn'
 
 import { VxeGlobalRendererHandles, VxeGlobalRenderer, VxeColumnPropTypes } from '../../../types/all'
@@ -166,6 +166,11 @@ function getComponentOns (renderOpts: any, params: any, modelFunc?: any, changeF
   const ons: any = {}
   XEUtils.objectEach(events, (func, key: any) => {
     ons[getOnName(key)] = function (...args: any[]) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (!XEUtils.isFunction(key)) {
+          errLog('vxe.error.errFunc', [key])
+        }
+      }
       func(params, ...args)
     }
   })
