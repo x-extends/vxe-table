@@ -1,0 +1,272 @@
+/**Variable**/
+
+:root {
+  /*font*/
+  --vxe-font-family: #{$vxe-font-family};
+  --vxe-font-size: #{$vxe-font-size};
+  --vxe-font-size-medium: #{$vxe-font-size-medium};
+  --vxe-font-size-small: #{$vxe-font-size-small};
+  --vxe-font-size-mini: #{$vxe-font-size-mini};
+
+  /*size*/
+  --vxe-border-radius: #{$vxe-border-radius};
+
+  /*icon*/
+  --vxe-icon-font-family: #{$vxe-icon-font-family};
+  --vxe-icon-background-color: #{$vxe-icon-background-color};
+
+  /*color*/
+  --vxe-font-color: #{$vxe-font-color};
+  --vxe-primary-color: #{$vxe-primary-color};
+  --vxe-success-color: #{$vxe-success-color};
+  --vxe-info-color: #{$vxe-info-color};
+  --vxe-warning-color: #{$vxe-warning-color};
+  --vxe-danger-color: #{$vxe-danger-color};
+
+  --vxe-font-lighten-color: #{$vxe-font-lighten-color};
+  --vxe-primary-lighten-color: #{$vxe-primary-lighten-color};
+  --vxe-success-lighten-color: #{$vxe-success-lighten-color};
+  --vxe-info-lighten-color: #{$vxe-info-lighten-color};
+  --vxe-warning-lighten-color: #{$vxe-warning-lighten-color};
+  --vxe-danger-lighten-color: #{$vxe-danger-lighten-color};
+
+  --vxe-font-darken-color: #{$vxe-font-darken-color};
+  --vxe-primary-darken-color: #{$vxe-primary-darken-color};
+  --vxe-success-darken-color: #{$vxe-success-darken-color};
+  --vxe-info-darken-color: #{$vxe-info-darken-color};
+  --vxe-warning-darken-color: #{$vxe-warning-darken-color};
+  --vxe-danger-darken-color: #{$vxe-danger-darken-color};
+
+  --vxe-font-disabled-color: #{$vxe-font-disabled-color};
+  --vxe-primary-disabled-color: #{$vxe-primary-disabled-color};
+  --vxe-success-disabled-color: #{$vxe-success-disabled-color};
+  --vxe-info-disabled-color: #{$vxe-info-disabled-color};
+  --vxe-warning-disabled-color: #{$vxe-warning-disabled-color};
+  --vxe-danger-disabled-color: #{$vxe-danger-disabled-color};
+
+  /*input/radio/checkbox*/
+  --vxe-input-border-color: #{$vxe-input-border-color};
+  --vxe-input-disabled-color: #{$vxe-input-disabled-color};
+  --vxe-input-disabled-background-color: #{$vxe-input-disabled-background-color};
+  --vxe-input-placeholder-color: #{$vxe-input-placeholder-color};
+
+  /*popup*/
+  --vxe-table-popup-border-color: #{$vxe-table-popup-border-color};
+
+  /*table*/
+  --vxe-table-header-font-color: #{$vxe-table-header-font-color};
+  --vxe-table-footer-font-color: #{$vxe-table-footer-font-color};
+  --vxe-table-border-radius: #{$vxe-table-border-radius};
+  --vxe-table-border-width: #{$vxe-table-border-width};
+  --vxe-table-border-color: #{$vxe-table-border-color};
+  --vxe-table-resizable-line-color: #{$vxe-table-resizable-line-color};
+  --vxe-table-resizable-drag-line-color: #{$vxe-table-resizable-drag-line-color};
+  --vxe-table-header-background-color: #{$vxe-table-header-background-color};
+  --vxe-table-body-background-color: #{$vxe-table-body-background-color};
+  --vxe-table-footer-background-color: #{$vxe-table-footer-background-color};
+  --vxe-table-tree-node-line-color: #{$vxe-table-tree-node-line-color};
+  --vxe-table-tree-node-line-style: #{$vxe-table-tree-node-line-style};
+  --vxe-table-header-font-weight: #{$vxe-table-header-font-weight};
+
+  --vxe-table-row-height-default: #{$vxe-table-row-height-default};
+  --vxe-table-row-height-medium: #{$vxe-table-row-height-medium};
+  --vxe-table-row-height-small: #{$vxe-table-row-height-small};
+  --vxe-table-row-height-mini: #{$vxe-table-row-height-mini};
+  --vxe-table-row-line-height: #{$vxe-table-row-line-height};
+  --vxe-table-row-hover-background-color: #{$vxe-table-row-hover-background-color};
+  --vxe-table-row-striped-background-color: #{$vxe-table-row-striped-background-color};
+  --vxe-table-row-hover-striped-background-color: #{$vxe-table-row-hover-striped-background-color};
+  --vxe-table-row-radio-checked-background-color: #{$vxe-table-row-radio-checked-background-color};
+  --vxe-table-row-hover-radio-checked-background-color: #{$vxe-table-row-hover-radio-checked-background-color};
+  --vxe-table-row-checkbox-checked-background-color: #{$vxe-table-row-checkbox-checked-background-color};
+  --vxe-table-row-hover-checkbox-checked-background-color: #{$vxe-table-row-hover-checkbox-checked-background-color};
+  --vxe-table-row-current-background-color: #{$vxe-table-row-current-background-color};
+  --vxe-table-row-hover-current-background-color: #{$vxe-table-row-hover-current-background-color};
+
+  --vxe-table-column-padding-default: #{$vxe-table-column-padding-default};
+  --vxe-table-column-padding-medium: #{$vxe-table-column-padding-medium};
+  --vxe-table-column-padding-small: #{$vxe-table-column-padding-small};
+  --vxe-table-column-padding-mini: #{$vxe-table-column-padding-mini};
+  --vxe-table-column-hover-background-color: #{$vxe-table-column-hover-background-color};
+  --vxe-table-column-current-background-color: #{$vxe-table-column-current-background-color};
+  --vxe-table-column-icon-border-color: #{$vxe-table-column-icon-border-color};
+  --vxe-table-column-icon-border-hover-color: #{$vxe-table-column-icon-border-hover-color};
+
+  --vxe-table-cell-placeholder-color: #{$vxe-table-cell-placeholder-color};
+  --vxe-table-cell-padding-left: #{$vxe-table-cell-padding-left};
+  --vxe-table-cell-padding-right: #{$vxe-table-cell-padding-right};
+  --vxe-table-cell-input-height-default: #{$vxe-table-cell-input-height-default};
+  --vxe-table-cell-input-height-medium: #{$vxe-table-cell-input-height-medium};
+  --vxe-table-cell-input-height-small: #{$vxe-table-cell-input-height-small};
+  --vxe-table-cell-input-height-mini: #{$vxe-table-cell-input-height-mini};
+  --vxe-table-cell-dirty-width: #{$vxe-table-cell-dirty-width};
+  --vxe-table-cell-dirty-update-color: #{$vxe-table-cell-dirty-update-color};
+  --vxe-table-cell-dirty-insert-color: #{$vxe-table-cell-dirty-insert-color};
+  --vxe-table-cell-area-border-color: #{$vxe-table-cell-area-border-color};
+  --vxe-table-cell-area-border-width: #{$vxe-table-cell-area-border-width};
+  --vxe-table-cell-main-area-extension-border-color: #{$vxe-table-cell-main-area-extension-border-color};
+  --vxe-table-cell-main-area-extension-background-color: #{$vxe-table-cell-main-area-extension-background-color};
+  --vxe-table-cell-extend-area-border-width: #{$vxe-table-cell-extend-area-border-width};
+  --vxe-table-cell-copy-area-border-width: #{$vxe-table-cell-copy-area-border-width};
+  --vxe-table-cell-active-area-border-width: #{$vxe-table-cell-active-area-border-width};
+  --vxe-table-cell-copy-area-border-color: #{$vxe-table-cell-copy-area-border-color};
+  --vxe-table-cell-extend-area-border-color: #{$vxe-table-cell-extend-area-border-color};
+  --vxe-table-cell-active-area-border-color: #{$vxe-table-cell-active-area-border-color};
+  --vxe-table-cell-area-background-color: #{$vxe-table-cell-area-background-color};
+
+  --vxe-table-checkbox-range-border-width: #{$vxe-table-checkbox-range-border-width};
+  --vxe-table-checkbox-range-border-color: #{$vxe-table-checkbox-range-border-color};
+  --vxe-table-checkbox-range-background-color: #{$vxe-table-checkbox-range-background-color};
+
+  --vxe-table-fixed-left-scrolling-box-shadow: #{$vxe-table-fixed-left-scrolling-box-shadow};
+  --vxe-table-fixed-right-scrolling-box-shadow: #{$vxe-table-fixed-right-scrolling-box-shadow};
+
+  /*filter*/
+  --vxe-table-filter-panel-background-color: #{$vxe-table-filter-panel-background-color};
+
+  /*menu*/
+  --vxe-table-menu-item-width: #{$vxe-table-menu-item-width};
+  --vxe-table-menu-background-color: #{$vxe-table-menu-background-color};
+
+  /*loading*/
+  --vxe-loading-color: #{$vxe-loading-color};
+  --vxe-loading-background-color: #{$vxe-loading-background-color};
+  --vxe-loading-z-index: #{$vxe-loading-z-index};
+
+  /*validate*/
+  --vxe-table-validate-error-color: #{$vxe-table-validate-error-color};
+  --vxe-table-validate-error-background-color: #{$vxe-table-validate-error-background-color};
+
+  /*grid*/
+  --vxe-grid-maximize-background-color: #{$vxe-grid-maximize-background-color};
+
+  /*toolbar*/
+  --vxe-toolbar-background-color: #{$vxe-toolbar-background-color};
+  --vxe-toolbar-custom-active-background-color: #{$vxe-toolbar-custom-active-background-color};
+  --vxe-toolbar-panel-background-color: #{$vxe-toolbar-panel-background-color};
+
+  /*tooltip*/
+  --vxe-tooltip-dark-color: #{$vxe-tooltip-dark-color};
+  --vxe-tooltip-dark-background-color: #{$vxe-tooltip-dark-background-color};
+  --vxe-tooltip-light-background-color: #{$vxe-tooltip-light-background-color};
+
+  /*pager*/
+  --vxe-pager-background-color: #{$vxe-pager-background-color};
+  --vxe-pager-perfect-background-color: #{$vxe-pager-perfect-background-color};
+  --vxe-pager-perfect-button-background-color: #{$vxe-pager-perfect-button-background-color};
+
+  /*modal*/
+  --vxe-modal-header-background-color: #{$vxe-modal-header-background-color};
+  --vxe-modal-body-background-color: #{$vxe-modal-body-background-color};
+  --vxe-modal-border-color: #{$vxe-modal-border-color};
+
+  /*checkbox*/
+  --vxe-checkbox-font-size-default: #{$vxe-checkbox-font-size-default};
+  --vxe-checkbox-font-size-medium: #{$vxe-checkbox-font-size-medium};
+  --vxe-checkbox-font-size-small: #{$vxe-checkbox-font-size-small};
+  --vxe-checkbox-font-size-mini: #{$vxe-checkbox-font-size-mini};
+  --vxe-checkbox-checked-width: #{$vxe-checkbox-checked-width};
+  --vxe-checkbox-checked-height: #{$vxe-checkbox-checked-height};
+  --vxe-checkbox-indeterminate-width: #{$vxe-checkbox-indeterminate-width};
+  --vxe-checkbox-indeterminate-height: #{$vxe-checkbox-indeterminate-height};
+  --vxe-checkbox-border-width: #{$vxe-checkbox-border-width};
+  --vxe-checkbox-border-radius: #{$vxe-checkbox-border-radius};
+  --vxe-checkbox-icon-background-color: #{$vxe-checkbox-icon-background-color};
+  --vxe-checkbox-checked-icon-border-color: #{$vxe-checkbox-checked-icon-border-color};
+  --vxe-checkbox-indeterminate-icon-background-color: #{$vxe-checkbox-indeterminate-icon-background-color};
+
+  /*radio*/
+  --vxe-radio-font-size-default: #{$vxe-radio-font-size-default};
+  --vxe-radio-font-size-medium: #{$vxe-radio-font-size-medium};
+  --vxe-radio-font-size-small: #{$vxe-radio-font-size-small};
+  --vxe-radio-font-size-mini: #{$vxe-radio-font-size-mini};
+  --vxe-radio-border-width: #{$vxe-radio-border-width};
+  --vxe-radio-icon-background-color: #{$vxe-radio-icon-background-color};
+  --vxe-radio-checked-icon-background-color: #{$vxe-radio-checked-icon-background-color};
+  --vxe-radio-indeterminate-icon-background-color: #{$vxe-radio-indeterminate-icon-background-color};
+  --vxe-radio-button-default-background-color: #{$vxe-radio-button-default-background-color};
+
+  /*button*/
+  --vxe-button-max-width: #{$vxe-button-max-width};
+  --vxe-button-default-background-color: #{$vxe-button-default-background-color};
+  --vxe-button-dropdown-panel-background-color: #{$vxe-button-dropdown-panel-background-color};
+  --vxe-button-height-default: #{$vxe-button-height-default};
+  --vxe-button-height-medium: #{$vxe-button-height-medium};
+  --vxe-button-height-small: #{$vxe-button-height-small};
+  --vxe-button-height-mini: #{$vxe-button-height-mini};
+  --vxe-button-round-border-radius-default: #{$vxe-button-round-border-radius-default};
+  --vxe-button-round-border-radius-medium: #{$vxe-button-round-border-radius-medium};
+  --vxe-button-round-border-radius-small: #{$vxe-button-round-border-radius-small};
+  --vxe-button-round-border-radius-mini: #{$vxe-button-round-border-radius-mini};
+
+  /*input*/
+  --vxe-input-background-color: #{$vxe-input-background-color};
+  --vxe-input-panel-background-color: #{$vxe-input-panel-background-color};
+  --vxe-input-number-disabled-color: #{$vxe-input-number-disabled-color};
+  --vxe-input-date-festival-color: #{$vxe-input-date-festival-color};
+  --vxe-input-date-festival-important-color: #{$vxe-input-date-festival-important-color};
+  --vxe-input-date-notice-background-color: #{$vxe-input-date-notice-background-color};
+  --vxe-input-date-picker-hover-background-color: #{$vxe-input-date-picker-hover-background-color};
+  --vxe-input-date-picker-selected-color: #{$vxe-input-date-picker-selected-color};
+  --vxe-input-date-time-confirm-button-color: #{$vxe-input-date-time-confirm-button-color};
+  --vxe-input-date-picker-festival-selected-color: #{$vxe-input-date-picker-festival-selected-color};
+  --vxe-input-date-picker-notice-selected-background-color: #{$vxe-input-date-picker-notice-selected-background-color};
+  --vxe-input-date-extra-color: #{$vxe-input-date-extra-color};
+  --vxe-input-date-extra-important-color: #{$vxe-input-date-extra-important-color};
+  --vxe-input-date-title-height-default: #{$vxe-input-date-title-height-default};
+  --vxe-input-date-title-height-medium: #{$vxe-input-date-title-height-medium};
+  --vxe-input-date-title-height-small: #{$vxe-input-date-title-height-small};
+  --vxe-input-date-title-height-mini: #{$vxe-input-date-title-height-mini};
+  --vxe-input-date-time-week-row-height-default: #{$vxe-input-date-time-week-row-height-default};
+  --vxe-input-date-time-week-row-height-medium: #{$vxe-input-date-time-week-row-height-medium};
+  --vxe-input-date-time-week-row-height-small: #{$vxe-input-date-time-week-row-height-small};
+  --vxe-input-date-time-week-row-height-mini: #{$vxe-input-date-time-week-row-height-mini};
+  --vxe-input-date-month-year-row-height-default: #{$vxe-input-date-month-year-row-height-default};
+  --vxe-input-date-month-year-row-height-medium: #{$vxe-input-date-month-year-row-height-medium};
+  --vxe-input-date-month-year-row-height-small: #{$vxe-input-date-month-year-row-height-small};
+  --vxe-input-date-month-year-row-height-mini: #{$vxe-input-date-month-year-row-height-mini};
+  --vxe-input-date-quarter-row-height-default: #{$vxe-input-date-quarter-row-height-default};
+  --vxe-input-date-quarter-row-height-medium: #{$vxe-input-date-quarter-row-height-medium};
+  --vxe-input-date-quarter-row-height-small: #{$vxe-input-date-quarter-row-height-small};
+  --vxe-input-date-quarter-row-height-mini: #{$vxe-input-date-quarter-row-height-mini};
+  --vxe-input-height-default: #{$vxe-input-height-default};
+  --vxe-input-height-medium: #{$vxe-input-height-medium};
+  --vxe-input-height-small: #{$vxe-input-height-small};
+  --vxe-input-height-mini: #{$vxe-input-height-mini};
+
+  /*textarea*/
+  --vxe-textarea-line-height: #{$vxe-textarea-line-height};
+  --vxe-textarea-background-color: #{$vxe-textarea-background-color};
+  --vxe-textarea-count-color: #{$vxe-textarea-count-color};
+  --vxe-textarea-count-background-color: #{$vxe-textarea-count-background-color};
+  --vxe-textarea-count-error-color: #{$vxe-textarea-count-error-color};
+
+  /*form*/
+  --vxe-form-item-min-height-default: #{$vxe-form-item-min-height-default};
+  --vxe-form-item-min-height-medium: #{$vxe-form-item-min-height-medium};
+  --vxe-form-item-min-height-small: #{$vxe-form-item-min-height-small};
+  --vxe-form-item-min-height-mini: #{$vxe-form-item-min-height-mini};
+  --vxe-form-background-color: #{$vxe-form-background-color};
+  --vxe-form-validate-error-color: #{$vxe-form-validate-error-color};
+  --vxe-form-validate-error-background-color: #{$vxe-form-validate-error-background-color};
+
+  /*select*/
+  --vxe-select-option-height-default: #{$vxe-select-option-height-default};
+  --vxe-select-option-height-medium: #{$vxe-select-option-height-medium};
+  --vxe-select-option-height-small: #{$vxe-select-option-height-small};
+  --vxe-select-option-height-mini: #{$vxe-select-option-height-mini};
+  --vxe-select-option-hover-background-color: #{$vxe-select-option-hover-background-color};
+  --vxe-select-panel-background-color: #{$vxe-select-panel-background-color};
+  --vxe-select-empty-color: #{$vxe-select-empty-color};
+  --vxe-optgroup-title-color: #{$vxe-optgroup-title-color};
+
+  /*switch*/
+  --vxe-switch-font-color: #{$vxe-switch-font-color};
+  --vxe-switch-icon-background-color: #{$vxe-switch-icon-background-color};
+  --vxe-switch-open-background-color: #{$vxe-switch-open-background-color};
+  --vxe-switch-close-background-color: #{$vxe-switch-close-background-color};
+  --vxe-switch-disabled-background-color: #{$vxe-switch-disabled-background-color};
+
+  /*pulldown*/
+  --vxe-pulldown-panel-background-color: #{$vxe-pulldown-panel-background-color};
+}

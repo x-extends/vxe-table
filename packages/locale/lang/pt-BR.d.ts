@@ -1,7 +1,7 @@
 import Language from './language'
 
 /**
- * 简体中文
+ * Brazilian Portuguese language
  */
 declare const zhCN: Language
 

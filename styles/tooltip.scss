@@ -129,7 +129,7 @@
 /*valid error*/
 .vxe-table--tooltip-wrapper {
   &.vxe-table--valid-error {
-    background-color: $vxe-tooltip-validate-error-background-color;
-    color: $vxe-tooltip-validate-error-color;
+    background-color: #f56c6c;
+    color: #fff;
   }
 }

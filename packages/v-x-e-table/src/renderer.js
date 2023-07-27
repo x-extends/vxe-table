@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import UtilTools, { getFuncText } from '../../tools/utils'
-import { warnLog } from '../../tools/log'
+import { errLog, warnLog } from '../../tools/log'
 
 const defaultCompProps = { transfer: true }
 
@@ -103,6 +103,11 @@ function getNativeOns (renderOpts, params) {
   const nativeOns = {}
   XEUtils.objectEach(nativeEvents, (func, key) => {
     nativeOns[key] = function (...args) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (!XEUtils.isFunction(key)) {
+          errLog('vxe.error.errFunc', [key])
+        }
+      }
       func(params, ...args)
     }
   })
@@ -117,6 +122,11 @@ function getOns (renderOpts, params, inputFunc, changeFunc) {
   const ons = {}
   XEUtils.objectEach(events, (func, key) => {
     ons[key] = function (...args) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (!XEUtils.isFunction(key)) {
+          errLog('vxe.error.errFunc', [key])
+        }
+      }
       func(params, ...args)
     }
   })

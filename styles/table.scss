@@ -1187,8 +1187,8 @@
           display: inline-block;
           border-radius: $vxe-border-radius;
           padding: 8px 12px;
-          color: $vxe-table-validate-tooltip-error-color;
-          background-color: $vxe-table-validate-tooltip-error-background-color;
+          color: #fff;
+          background-color: #f56c6c;
           pointer-events: auto;
         }
       }
