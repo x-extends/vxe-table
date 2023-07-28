@@ -59,7 +59,7 @@ export default defineComponent({
       }
       const treeOpts = computeTreeOpts.value
       const rowChildren = prevRow[treeOpts.children]
-      if ($xetable.isTreeExpandByRow(prevRow)) {
+      if (rowChildren&&$xetable.isTreeExpandByRow(prevRow)) {
         for (let index = 0; index < rowChildren.length; index++) {
           count += countTreeExpand(rowChildren[index], params)
         }
