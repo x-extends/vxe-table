@@ -664,6 +664,12 @@ export default defineComponent({
       if (refresh && !$xegrid && !queryMethod) {
         warnLog('vxe.error.notFunc', ['queryMethod'])
       }
+      const customOpts = computeCustomOpts.value
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (customOpts.isFooter) {
+          warnLog('vxe.error.notValidators', ['custom.isFooter', 'custom.showFooter'])
+        }
+      }
     })
 
     const renderVN = () => {

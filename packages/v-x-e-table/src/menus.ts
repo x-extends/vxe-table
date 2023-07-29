@@ -24,10 +24,12 @@ class VXEMenusStore {
   add (name: string, render: any): VXEMenusStore {
     const conf = this.store[name]
     // 兼容
-    if (XEUtils.isFunction(render)) {
-      // warnLog('vxe.error.delProp', ['callback', 'menuMethod'])
-      render = {
-        menuMethod: render
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (XEUtils.isFunction(render)) {
+        warnLog('vxe.error.delProp', ['callback', 'menuMethod'])
+        render = {
+          menuMethod: render
+        }
       }
     }
 

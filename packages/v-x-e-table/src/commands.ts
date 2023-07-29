@@ -24,10 +24,12 @@ class VXECommandsStore {
   add (name: string, render: any): VXECommandsStore {
     const conf = this.store[name]
     // 兼容
-    if (XEUtils.isFunction(render)) {
-      // warnLog('vxe.error.delProp', ['callback', 'commandMethod'])
-      render = {
-        commandMethod: render
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (XEUtils.isFunction(render)) {
+        warnLog('vxe.error.delProp', ['callback', 'commandMethod'])
+        render = {
+          commandMethod: render
+        }
       }
     }
 

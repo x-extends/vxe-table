@@ -83,6 +83,12 @@ export interface VXETableGlobalConfig extends VXETableSetupOptions {
   modal: VxeModalProps
   list: VxeListProps
   i18n(key: string, args?: any): string
+
+  /**
+   * 还原旧的单元格校验模式，已废弃
+   * @deprecated
+   */
+  cellVaildMode?: 'obsolete' | '' | null
 }
 
 export type VxeGlobalSetup = (options?: VXETableSetupOptions) => VXETableGlobalConfig

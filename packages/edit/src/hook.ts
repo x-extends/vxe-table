@@ -1,5 +1,6 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import { renderer } from '../../v-x-e-table'
 import { isEnableConf } from '../../tools/utils'
 import { getCellValue, setCellValue, getRowid } from '../../table/src/util'
@@ -487,6 +488,11 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             columnIndex: $xetable.getColumnIndex(column),
             $columnIndex: $xetable.getVMColumnIndex(column)
           }, evnt || null)
+        }
+        if (GlobalConfig.cellVaildMode === 'obsolete') {
+          if ($xetable.clearValidate) {
+            return $xetable.clearValidate()
+          }
         }
         return nextTick()
       },

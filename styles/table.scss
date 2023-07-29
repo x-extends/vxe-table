@@ -1230,6 +1230,48 @@
       }
     }
   }
+  /*已废弃，旧的校验样式**/
+  &.old-cell-valid {
+    .vxe-body--column {
+      &.col--valid-error {
+        .vxe-cell--valid {
+          width: 320px;
+          position: absolute;
+          bottom: calc(100% + 4px);
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          pointer-events: none;
+          z-index: 4;
+          .vxe-cell--valid-msg {
+            display: inline-block;
+            border-radius: $vxe-border-radius;
+            padding: 8px 12px;
+            color: #fff;
+            background-color: #f56c6c;
+            pointer-events: auto;
+          }
+        }
+      }
+    }
+    .vxe-body--row {
+      &:first-child {
+        .vxe-cell--valid {
+          bottom: auto;
+          top: calc(100% + 4px);
+        }
+      }
+    }
+    .vxe-body--column {
+      &:first-child {
+        .vxe-cell--valid {
+          left: 10px;
+          transform: translateX(0);
+          text-align: left;
+        }
+      }
+    }
+  }
 
   /*单元格编辑状态*/
   .vxe-body--row {
@@ -1314,6 +1356,11 @@ div.vxe-table--tooltip-wrapper {
     padding: 0;
     color: var(--vxe-table-validate-error-color);
     background-color: var(--vxe-table-validate-error-background-color);
+    &.old-cell-valid {
+      padding: 8px 12px;
+      background-color: #f56c6c;
+      color: #fff;
+    }
   }
 }
 
