@@ -220,8 +220,10 @@ export const Cell = {
     const treeOpts = computeTreeOpts.value
     const { row, column, level } = params
     const { slots } = column
-    const { children, hasChild, indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
-    const rowChilds = row[children]
+    const { indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+    const rowChilds = row[childrenField]
     const iconSlot = slots ? slots.icon : null
     let hasLazyChilds = false
     let isAceived = false
@@ -235,7 +237,7 @@ export const Cell = {
       isAceived = !!treeExpandedMaps[rowid]
       if (lazy) {
         isLazyLoaded = !!treeExpandLazyLoadedMaps[rowid]
-        hasLazyChilds = row[hasChild]
+        hasLazyChilds = row[hasChildField]
       }
     }
     if (!trigger || trigger === 'default') {

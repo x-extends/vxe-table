@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { VXETableSetupOptions, VXETableCore } from './v-x-e-table'
+import { VXETableConfigOptions, VXETableCore } from './v-x-e-table'
 
 import { Icon } from './icon'
 import { Table } from './table'
@@ -28,7 +28,7 @@ import { Switch } from './switch'
 import { List } from './list'
 import { Pulldown } from './pulldown'
 
-export function install(app: App, options?: VXETableSetupOptions): void
+export function install(app: App, options?: VXETableConfigOptions): void
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {

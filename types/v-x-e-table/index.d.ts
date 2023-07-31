@@ -8,7 +8,7 @@ import { VxeGlobalFormats } from './formats'
 import { VxeGlobalMenus } from './menus'
 import { VxeGlobalValidators } from './validators'
 import { VxeGlobalHooks } from './hooks'
-import { VxeGlobalSetup } from './setup'
+import { VxeGlobalConfigMethod } from './setup'
 
 /* eslint-disable no-use-before-define */
 
@@ -34,7 +34,7 @@ export type VxeGlobalI18n = (key: string, args?: any) => string
 export type VxeGlobalTranslate = (key: string, args?: any) => string
 export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore
 
-export const setup: VxeGlobalSetup
+export const setup: VxeGlobalConfigMethod
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
 export const commands: VxeGlobalCommands
@@ -74,7 +74,7 @@ export interface VXETableCore {
   /**
    * 设置全局参数/获取所有参数
    */
-  setup: VxeGlobalSetup
+  setup: VxeGlobalConfigMethod
   /**
    * Table interceptor
    */

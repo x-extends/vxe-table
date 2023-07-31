@@ -434,7 +434,7 @@ export default defineComponent({
     })
 
     const computeMenuOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.menuConfig, props.menuConfig)
+      return Object.assign({}, GlobalConfig.table.menuConfig, props.menuConfig) as VxeTablePropTypes.MenuOpts
     })
 
     const computeHeaderMenu = computed(() => {
@@ -1270,6 +1270,7 @@ export default defineComponent({
       const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
       const { afterTreeFullData } = internalData
       const treeOpts = computeTreeOpts.value
+      const childrenField = treeOpts.children || treeOpts.childrenField
       const fullMaps: Record<string, any> = {}
       if (treeConfig) {
         XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
@@ -1285,7 +1286,7 @@ export default defineComponent({
             fullDataRowIdData[rowid] = rest
           }
           fullMaps[rowid] = row
-        }, { children: treeOpts.transform ? treeOpts.mapChildren : treeOpts.children })
+        }, { children: treeOpts.transform ? treeOpts.mapChildrenField : (childrenField) })
       } else {
         afterFullData.forEach((row, index) => {
           const rowid = getRowid($xetable, row)
@@ -1325,7 +1326,7 @@ export default defineComponent({
             expandMaps[rowid] = 1
             fullData.push(row)
           }
-        }, { children: treeOpts.mapChildren })
+        }, { children: treeOpts.mapChildrenField })
         internalData.afterFullData = fullData
         updateScrollYStatus(fullData)
         return fullData
@@ -2183,6 +2184,7 @@ export default defineComponent({
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const treeOpts = computeTreeOpts.value
       const { transform } = treeOpts
+      const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
       let fullData = datas ? datas.slice(0) : []
       if (treeConfig) {
@@ -2195,14 +2197,14 @@ export default defineComponent({
             if (!treeOpts.parentField) {
               errLog('vxe.error.reqProp', ['tree-config.parentField'])
             }
-            if (!treeOpts.children) {
-              errLog('vxe.error.reqProp', ['tree-config.children'])
+            if (!childrenField) {
+              errLog('vxe.error.reqProp', ['tree-config.childrenField'])
             }
-            if (!treeOpts.mapChildren) {
-              errLog('vxe.error.reqProp', ['tree-config.mapChildren'])
+            if (!treeOpts.mapChildrenField) {
+              errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
             }
-            if (treeOpts.children === treeOpts.mapChildren) {
-              errLog('vxe.error.errConflicts', ['tree-config.children', 'tree-config.mapChildren'])
+            if (childrenField === treeOpts.mapChildrenField) {
+              errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
             }
             // fullData.forEach(row => {
             //   if (row[treeOpts.children] && row[treeOpts.children].length) {
@@ -2213,8 +2215,8 @@ export default defineComponent({
           treeData = XEUtils.toArrayTree(fullData, {
             key: treeOpts.rowField,
             parentKey: treeOpts.parentField,
-            children: treeOpts.children,
-            mapChildren: treeOpts.mapChildren
+            children: childrenField,
+            mapChildren: treeOpts.mapChildrenField
           })
           fullData = treeData.slice(0)
         } else {
@@ -2522,7 +2524,9 @@ export default defineComponent({
       const { treeExpandedMaps, treeExpandLazyLoadedMaps, treeNodeColumn } = reactData
       const { fullAllDataRowIdData, tableFullData } = internalData
       const treeOpts = computeTreeOpts.value
-      const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
+      const { reserve, lazy, accordion, toggleMethod } = treeOpts
+      const childrenField = treeOpts.children || treeOpts.childrenField
+      const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
       const result: any[] = []
       const columnIndex = tableMethods.getColumnIndex(treeNodeColumn)
       const $columnIndex = tableMethods.getVMColumnIndex(treeNodeColumn)
@@ -2545,12 +2549,12 @@ export default defineComponent({
           const rowid = getRowid($xetable, row)
           if (!treeExpandedMaps[rowid]) {
             const rest = fullAllDataRowIdData[rowid]
-            const isLoad = lazy && row[hasChild] && !rest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
+            const isLoad = lazy && row[hasChildField] && !rest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
             // 是否使用懒加载
             if (isLoad) {
               result.push(handleAsyncTreeExpandChilds(row))
             } else {
-              if (row[children] && row[children].length) {
+              if (row[childrenField] && row[childrenField].length) {
                 treeExpandedMaps[rowid] = row
               }
             }
@@ -2769,7 +2773,8 @@ export default defineComponent({
         const { keepSource } = props
         const { tableSourceData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { transform, children, mapChildren } = treeOpts
+        const { transform, mapChildrenField } = treeOpts
+        const childrenField = treeOpts.children || treeOpts.childrenField
         const parentRest = fullAllDataRowIdData[getRowid($xetable, row)]
         const parentLevel = parentRest ? parentRest.level : 0
         return tableMethods.createData(childRecords).then((rows) => {
@@ -2777,7 +2782,7 @@ export default defineComponent({
             const rowid = getRowid($xetable, row)
             const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid($xetable, item), treeOpts)
             if (matchObj) {
-              matchObj.item[children] = XEUtils.clone(rows, true)
+              matchObj.item[childrenField] = XEUtils.clone(rows, true)
             }
           }
           XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
@@ -2786,9 +2791,9 @@ export default defineComponent({
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, treeOpts)
-          row[children] = rows
+          row[childrenField] = rows
           if (transform) {
-            row[mapChildren] = rows
+            row[mapChildrenField] = rows
           }
           updateAfterDataIndex()
           return rows
@@ -3075,13 +3080,14 @@ export default defineComponent({
         const { tableFullData, afterFullData, afterTreeFullData, tableFullTreeData, fullDataRowIdData, afterFullRowMaps } = internalData
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
-        const { transform, children, mapChildren } = treeOpts
+        const { transform, mapChildrenField } = treeOpts
         const { checkField } = checkboxOpts
+        const childrenField = treeOpts.children || treeOpts.childrenField
         let rowList = []
         const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
         if (checkField) {
           if (treeConfig) {
-            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildren : children })
+            rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
           } else {
             rowList = currTableData.filter((row) => XEUtils.get(row, checkField))
           }
@@ -3951,9 +3957,10 @@ export default defineComponent({
       reloadTreeExpand (row) {
         const { treeExpandLazyLoadedMaps } = reactData
         const treeOpts = computeTreeOpts.value
-        const { transform, lazy, hasChild } = treeOpts
+        const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+        const { transform, lazy } = treeOpts
         const rowid = getRowid($xetable, row)
-        if (lazy && row[hasChild] && !treeExpandLazyLoadedMaps[rowid]) {
+        if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
           tableMethods.clearTreeExpandLoaded(row).then(() => {
             return handleAsyncTreeExpandChilds(row)
           }).then(() => {
@@ -3987,10 +3994,11 @@ export default defineComponent({
       setAllTreeExpand (expanded: boolean) {
         const { tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { transform, lazy, children } = treeOpts
+        const { transform, lazy } = treeOpts
+        const childrenField = treeOpts.children || treeOpts.childrenField
         const expandeds: any[] = []
         XEUtils.eachTree(tableFullData, (row) => {
-          const rowChildren = row[children]
+          const rowChildren = row[childrenField]
           if (lazy || (rowChildren && rowChildren.length)) {
             expandeds.push(row)
           }
@@ -4489,6 +4497,7 @@ export default defineComponent({
           const menuList = computeMenuList.value
           const rowOpts = computeRowOpts.value
           const { selected, actived } = editStore
+          const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
           const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
           const isBack = hasEventKey(evnt, EVENT_KEYS.BACKSPACE)
@@ -4591,7 +4600,7 @@ export default defineComponent({
                 }
               } else if (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
                 // 如果是树形表格当前行回车移动到子节点
-                const childrens = currentRow[treeOpts.children]
+                const childrens = currentRow[childrenField]
                 if (childrens && childrens.length) {
                   evnt.preventDefault()
                   const targetRow = childrens[0]
@@ -4869,6 +4878,7 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
+        const childrenField = treeOpts.children || treeOpts.childrenField
         const rowkey = getRowkey($xetable)
         if (!XEUtils.isArray(records)) {
           records = [records]
@@ -4895,8 +4905,8 @@ export default defineComponent({
               XEUtils.set(record, key, null)
             }
           })
-          if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
-            record[treeOpts.children] = null
+          if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[childrenField])) {
+            record[childrenField] = null
           }
           // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
           if (eqEmptyValue(XEUtils.get(record, rowkey))) {
@@ -4935,6 +4945,8 @@ export default defineComponent({
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
         let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
+        const childrenField = treeOpts.children || treeOpts.childrenField
+        const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
         const rowkey = getRowkey($xetable)
         const isLazy = treeConfig && treeOpts.lazy
         const handleRow = (row: any, index: any, items: any, path?: any[], parent?: any, nodes?: any[]) => {
@@ -4945,8 +4957,8 @@ export default defineComponent({
             rowid = getRowUniqueId()
             XEUtils.set(row, rowkey, rowid)
           }
-          if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
-            row[treeOpts.children] = null
+          if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
+            row[childrenField] = null
           }
           const rest = { row, rowid, seq, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level }
           if (isSource) {
@@ -5886,10 +5898,10 @@ export default defineComponent({
           const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
           if (XEUtils.isString(formatter)) {
             const gFormatOpts = VXETable.formats.get(formatter)
-            cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams) : ''
+            cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams) : ''
           } else if (XEUtils.isArray(formatter)) {
             const gFormatOpts = VXETable.formats.get(formatter[0])
-            cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams, ...formatter.slice(1)) : ''
+            cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams, ...formatter.slice(1)) : ''
           } else {
             cellLabel = formatter(formatParams)
           }
@@ -6172,7 +6184,7 @@ export default defineComponent({
           if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
             warnLog('vxe.error.reqProp', ['keep-source'])
           }
-          if (treeConfig && treeOpts.line && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
+          if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
             warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
           }
           if (treeConfig && props.stripe) {
@@ -6230,6 +6242,12 @@ export default defineComponent({
               return
             }
           }
+          if (props.treeConfig && treeOpts.children) {
+            warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
+          }
+          if (props.treeConfig && treeOpts.line) {
+            warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
+          }
           if (mouseOpts.area && mouseOpts.selected) {
             warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
           }
@@ -6239,9 +6257,9 @@ export default defineComponent({
           if (props.treeConfig && mouseOpts.area) {
             errLog('vxe.error.noTree', ['mouse-config.area'])
           }
-          // if (props.editConfig && props.editConfig.activeMethod) {
-          //   warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
-          // }
+          if (props.editConfig && editOpts.activeMethod) {
+            warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+          }
         }
 
         // 检查是否有安装需要的模块
@@ -6370,7 +6388,7 @@ export default defineComponent({
           'is--header': showHeader,
           'is--footer': showFooter,
           'is--group': isGroup,
-          'is--tree-line': treeConfig && treeOpts.line,
+          'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
           'is--fixed-left': leftList.length,
           'is--fixed-right': rightList.length,
           'is--animat': !!props.animat,

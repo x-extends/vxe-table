@@ -37,19 +37,19 @@ export class ColumnInfo {
         const { treeConfig } = tableProps
         const { computeTreeOpts } = $xetable.getComputeMaps()
         const treeOpts = computeTreeOpts.value
-        if (treeConfig && treeOpts.line) {
-          errLog('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
+        if (treeConfig && (treeOpts.showLine || treeOpts.line)) {
+          errLog('vxe.error.errConflicts', ['tree-config.showLine', 'column.type=expand'])
         }
       }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
             errLog('vxe.error.notFormats', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
           const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
             errLog('vxe.error.notFormats', [formatter[0]])
           }
         }

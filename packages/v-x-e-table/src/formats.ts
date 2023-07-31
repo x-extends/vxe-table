@@ -26,9 +26,9 @@ class VXEFormatsStore {
     // 兼容
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (XEUtils.isFunction(render)) {
-        warnLog('vxe.error.delProp', ['callback', 'formatMethod'])
+        warnLog('vxe.error.delProp', ['callback', 'cellFormatMethod'])
         render = {
-          formatMethod: render
+          cellFormatMethod: render
         }
       }
     }

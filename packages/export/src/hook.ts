@@ -289,7 +289,8 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
 
     const hasTreeChildren = (row: any) => {
       const treeOpts = computeTreeOpts.value
-      return row[treeOpts.children] && row[treeOpts.children].length
+      const childrenField = treeOpts.children || treeOpts.childrenField
+      return row[childrenField] && row[childrenField].length
     }
 
     const getSeq = (row: any, $rowIndex: any, column: any, $columnIndex: any) => {

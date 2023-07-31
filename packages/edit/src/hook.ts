@@ -64,19 +64,20 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
     function insertTreeRow (newRecords: any[], isAppend: boolean) {
       const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
-      const { rowField, parentField, children, mapChildren } = treeOpts
+      const { rowField, parentField, mapChildrenField } = treeOpts
+      const childrenField = treeOpts.children || treeOpts.childrenField
       const funcName = isAppend ? 'push' : 'unshift'
       newRecords.forEach(item => {
         const parentRowId = item[parentField]
         const rowid = getRowid($xetable, item)
-        const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[rowField], { children: mapChildren }) : null
+        const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[rowField], { children: mapChildrenField }) : null
         if (matchObj) {
           const { item: parentRow } = matchObj
           const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
           const parentLevel = parentRest ? parentRest.level : 0
-          let parentChilds = parentRow[children]
+          let parentChilds = parentRow[childrenField]
           if (!XEUtils.isArray(parentChilds)) {
-            parentChilds = parentRow[children] = []
+            parentChilds = parentRow[childrenField] = []
           }
           parentChilds[funcName](item)
           const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
@@ -119,7 +120,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { mergeList, editStore } = reactData
         const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { transform, rowField, mapChildren } = treeOpts
+        const { transform, rowField, mapChildrenField } = treeOpts
         if (!XEUtils.isArray(records)) {
           records = [records]
         }
@@ -158,7 +159,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             // 如果为虚拟树
             if (treeConfig && transform) {
-              const matchObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: mapChildren })
+              const matchObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: mapChildrenField })
               if (matchObj) {
                 const { parent: parentRow } = matchObj
                 const parentChilds = matchObj.items

@@ -4,7 +4,7 @@ import { VxeTableDefines, VxeTableDataRow } from '../table'
 
 export namespace VxeGlobalFormatsHandles {
   export interface FormatsOptions<D = VxeTableDataRow> {
-    formatMethod?: (params: FormatMethodParams<D>, ...args: any[]) => string | number
+    cellFormatMethod?: (params: FormatMethodParams<D>, ...args: any[]) => string | number
   }
   export interface FormatMethodParams<D = VxeTableDataRow> {
     cellValue: any

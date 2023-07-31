@@ -2,7 +2,7 @@ import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle, SlotVNodeType } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
 import { VxeColumnPropTypes, VxeColumnProps } from './column'
-import { VXETableSetupOptions, VxeGlobalRendererHandles } from './v-x-e-table'
+import { VXETableConfigOptions, VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
 import { VxeGridConstructor } from './grid'
@@ -83,7 +83,7 @@ export interface TablePrivateComputed<D = VxeTableDataRow> {
   computeBodyMenu: ComputedRef<VxeTableDefines.MenuFirstOption>
   computeFooterMenu: ComputedRef<VxeTableDefines.MenuFirstOption>
   computeIsMenu: ComputedRef<boolean>
-  computeMenuOpts: ComputedRef<VxeTablePropTypes.MenuConfig<D>>
+  computeMenuOpts: ComputedRef<VxeTablePropTypes.MenuOpts<D>>
   computeExportOpts: ComputedRef<VxeTablePropTypes.ExportOpts>
   computeImportOpts: ComputedRef<VxeTablePropTypes.ImportOpts>
   computePrintOpts: ComputedRef<VxeTablePropTypes.PrintOpts>
@@ -721,7 +721,7 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
 export interface VxeTableMethods<D = VxeTableDataRow> extends TableMethods<D> { }
 
 export interface TablePrivateMethods<D = VxeTableDataRow> {
-  getSetupOptions(): VXETableSetupOptions
+  getSetupOptions(): Required<VXETableConfigOptions>
   updateAfterDataIndex(): void
   callSlot<T>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T): SlotVNodeType[]
   getParentElem(): Element | null
@@ -1617,24 +1617,72 @@ export namespace VxeTablePropTypes {
    * 树形结构配置项
    */
   export interface TreeConfig<D = VxeTableDataRow> {
+    /**
+     * 自动将列表转为树结构
+     */
     transform?: boolean
+    /**
+     * 用于 tree-config.transform，树节点的字段名
+     */
     rowField?: string
+    /**
+     * 用于 tree-config.transform，树父节点的字段名
+     */
     parentField?: string
-    children?: string
-    mapChildren?: string
+    /**
+     * 树子节点的字段名
+     */
+    childrenField?: string
+    /**
+     * 用于 tree-config.transform，树子节点映射的字段名
+     */
+    mapChildrenField?: string
+    /**
+     * 树节点的缩进
+     */
     indent?: number
-    line?: boolean
+    /**
+     * 树节点的连接线（启用连接线会降低渲染性能）
+     */
+    showLine?: boolean
+    /**
+     * 默认展开所有子孙树节点（只会在初始化时被触发一次）
+     */
     expandAll?: boolean
+    /**
+     * 默认展开指定树节点（只会在初始化时被触发一次，需要有 row-config.keyField）
+     */
     expandRowKeys?: string[] | number[]
+    /**
+     * 对于同一级的节点，每次只能展开一个
+     */
     accordion?: boolean
+    /**
+     * 触发方式（注：当多种功能重叠时，会同时触发）
+     */
     trigger?: 'default' | 'cell' | 'row' | '' | null
+    /**
+     * 是否使用懒加载（启用后只有指定 hasChildField 字段的节点才允许被点击）
+     */
     lazy?: boolean
-    hasChild?: string
+    /**
+     * 只对 lazy 启用后有效，标识是否存在子节点，从而控制是否允许被点击
+     */
+    hasChildField?: string
+    /**
+     * 是否保留展开状态，对于某些场景可能会用到，比如数据被刷新之后还保留之前展开的状态（需要有 row-config.keyField）
+     */
     reserve?: boolean
+    /**
+     * 该方法用于异步加载子节点
+     */
     loadMethod?(params: {
       $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
       row: D
     }): Promise<any[]>
+    /**
+     * 该方法在展开或关闭触发之前调用，可以通过返回值来决定是否允许继续执行
+     */
     toggleMethod?(params: {
       $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
       expanded: boolean
@@ -1643,32 +1691,73 @@ export namespace VxeTablePropTypes {
       columnIndex: number
       $columnIndex: number
     }): boolean
+    /**
+     * 是否显示图标按钮
+     */
     showIcon?: boolean
+    /**
+     * 自定义展开后显示的图标
+     */
     iconOpen?: string
+    /**
+     * 自定义收起后显示的图标
+     */
     iconClose?: string
+    /**
+     * 自定义懒加载中显示的图标
+     */
     iconLoaded?: string
+
+    /**
+     * 已废弃，请使用 showLine
+     * @deprecated
+     */
+    line?: boolean
+    /**
+     * 已废弃，请使用 hasChildField
+     * @deprecated
+     */
+    hasChild?: string
+    /**
+     * 已废弃，请使用 childrenField
+     * @deprecated
+     */
+    children?: string
   }
-  export interface TreeOpts<D = VxeTableDataRow> extends TreeConfig<D> {
-    rowField: string
-    parentField: string
-    children: string
-    indent: number
-    hasChild: string
-    mapChildren: string
-    iconOpen: string
-    iconClose: string
-    iconLoaded: string
-  }
+  export type TreeOpts<D = VxeTableDataRow> = Required<TreeConfig<D>>
 
   /**
    * 快捷菜单配置项
    */
   export interface MenuConfig<D = VxeTableDataRow> {
+    /**
+     * 是否启用
+     */
+    enabled?: boolean
+    /**
+     * 表头的右键菜单
+     */
     header?: VxeTableDefines.MenuOptions
+    /**
+     * 内容的右键菜单
+     */
     body?: VxeTableDefines.MenuOptions
+    /**
+     * 表尾的右键菜单
+     */
     footer?: VxeTableDefines.MenuOptions
+    /**
+     * 触发方式
+     * default（默认右键表格触发）, cell（右键单元格触发）
+     */
     trigger?: 'default' | 'cell' | '' | null
+    /**
+     * 菜单面板的 className
+     */
     className?: string
+    /**
+     * 该函数的返回值用来决定是否允许显示右键菜单（对于需要对菜单进行权限控制时可能会用到）
+     */
     visibleMethod?(params: {
       type: string
       options: VxeTableDefines.MenuFirstOption[][]
@@ -1679,11 +1768,15 @@ export namespace VxeTablePropTypes {
       columnIndex?: number
     }): boolean
   }
+  export type MenuOpts<D = VxeTableDataRow> = Required<MenuConfig<D>>
 
   /**
    * 鼠标配置项
    */
   export interface MouseConfig {
+    /**
+     * 开启单元格选中功能（只对 edit-config.mode=cell 有效）
+     */
     selected?: boolean
     /**
      * 如果功能被支持，则开启单元格区域选取功能，非连续的区域，按住 Ctrl 键，用鼠标逐一选取
@@ -1989,7 +2082,13 @@ export namespace VxeTablePropTypes {
    * 查找/替换配置项
    */
   export interface FNRConfig<DT = VxeTableDataRow> {
+    /**
+     * 是否启用查找功能
+     */
     isFind?: boolean
+    /**
+     * 自定义单元格查找方法
+     */
     findMethod?(params: {
       cellValue: any
       isWhole: boolean
@@ -1998,12 +2097,18 @@ export namespace VxeTablePropTypes {
       findValue: string | null
       findRE: RegExp | null
     }): boolean
+    /**
+     * 自定义单元格查找之前的方法，可以通过返回 false 阻止查找行为
+     */
     beforeFindMethod?(params: {
       isAll: boolean
       findValue: string | null
       $table: VxeTableConstructor<DT> & VxeTablePrivateMethods<DT>
       $grid: VxeGridConstructor<DT> | null | undefined
     }): boolean
+    /**
+     * 自定义单元格查找之后的方法
+     */
     afterFindMethod?(params: {
       isAll: boolean
       findValue: string | null
@@ -2011,12 +2116,21 @@ export namespace VxeTablePropTypes {
       $table: VxeTableConstructor<DT> & VxeTablePrivateMethods<DT>
       $grid: VxeGridConstructor<DT> | null | undefined
     }): void
+    /**
+     * 是否启用替换功能
+     */
     isReplace?: boolean
+    /**
+     * 自定义单元格替换方法
+     */
     replaceMethod?:(params: {
       row: DT
       column: VxeTableDefines.ColumnInfo<DT>
       cellValue: any
     }) => void
+    /**
+     * 自定义单元格替换之前的方法，可以通过返回 false 阻止替换行为
+     */
     beforeReplaceMethod?:(params: {
       isAll: boolean
       findValue: string | null
@@ -2024,6 +2138,9 @@ export namespace VxeTablePropTypes {
       $table: VxeTableConstructor<DT> & VxeTablePrivateMethods<DT>
       $grid: VxeGridConstructor<DT> | null | undefined
     }) => boolean
+    /**
+     * 自定义单元格替换之后的方法
+     */
     afterReplaceMethod?:(params: {
       isAll: boolean
       findValue: string | null
@@ -2039,15 +2156,47 @@ export namespace VxeTablePropTypes {
    * 编辑配置项
    */
   export interface EditConfig<DT = VxeTableDataRow> {
+    /**
+     * 触发方式
+     * manual（手动触发方式，只能用于 mode=row）,click（点击触发编辑）,dblclick（双击触发编辑）
+     */
     trigger?: 'manual' | 'click' | 'dblclick' | '' | null
+    /**
+     * 是否启用
+     */
     enabled?: boolean
-    mode?: string
+    /**
+     * 编辑模式
+     * cell（单元格编辑模式）,row（行编辑模式）
+     */
+    mode?: 'cell' | 'row' | '' | null
+    /**
+     * 自定义可编辑列的状态图标
+     */
     icon?: string
+    /**
+     * 是否显示列头编辑图标
+     */
     showIcon?: boolean
+    /**
+     * 只对 keep-source 开启有效，是否显示单元格新增与修改状态
+     */
     showStatus?: boolean
+    /**
+     * 只对 keep-source 开启有效，是否显示单元格修改状态
+     */
     showUpdateStatus?: boolean
+    /**
+     * 只对 keep-source 开启有效，是否显示单元格新增状态
+     */
     showInsertStatus?: boolean
+    /**
+     * 是否显示必填字段的红色星号
+     */
     showAsterisk?: boolean
+    /**
+     * 当点击表格之外或者非编辑列之后，是否自动清除单元格的激活状态
+     */
     autoClear?: boolean
     /**
      * 该方法的返回值用来决定该单元格是否允许编辑
@@ -2060,6 +2209,7 @@ export namespace VxeTablePropTypes {
       $table: VxeTableConstructor<DT> & VxeTablePrivateMethods<DT>
       $grid: VxeGridConstructor<DT> | null | undefined
     }): boolean
+
     /**
      * 请使用 beforeEditMethod
      * @deprecated
@@ -2365,40 +2515,112 @@ export type VxeTableProps<D = VxeTableDataRow> = {
    * 个性化信息配置项
    */
   customConfig?: VxeTablePropTypes.CustomConfig<D>
+  /**
+   * 响应式布局配置项
+   */
   resizeConfig?: VxeTablePropTypes.ResizeConfig
+  /**
+   * 列宽拖动配置项
+   */
   resizableConfig?: VxeTablePropTypes.ResizableConfig<D>
+  /**
+   * 序号配置项
+   */
   seqConfig?: VxeTablePropTypes.SeqConfig<D>
+  /**
+   * 排序配置项
+   */
   sortConfig?: VxeTablePropTypes.SortConfig<D>
+  /**
+   * 筛选配置项
+   */
   filterConfig?: VxeTablePropTypes.FilterConfig<D>
+  /**
+   * 单选框配置项
+   */
   radioConfig?: VxeTablePropTypes.RadioConfig<D>
+  /**
+   * 复选框配置项
+   */
   checkboxConfig?: VxeTablePropTypes.CheckboxConfig<D>
+  /**
+   * 工具提示配置项
+   */
   tooltipConfig?: VxeTablePropTypes.TooltipConfig<D>
+  /**
+   * 导出配置项
+   */
   exportConfig?: VxeTablePropTypes.ExportConfig
+  /**
+   * 导入配置项
+   */
   importConfig?: VxeTablePropTypes.ImportConfig
+  /**
+   * 打印配置项
+   */
   printConfig?: VxeTablePropTypes.PrintConfig
+  /**
+   * 展开行配置项
+   */
   expandConfig?: VxeTablePropTypes.ExpandConfig<D>
+  /**
+   * 树形结构配置项
+   */
   treeConfig?: VxeTablePropTypes.TreeConfig<D>
+  /**
+   * 右键菜单配置项
+   */
   menuConfig?: VxeTablePropTypes.MenuConfig<D>
+  /**
+   * 鼠标配置项
+   */
   mouseConfig?: VxeTablePropTypes.MouseConfig
+  /**
+   * 区域选取配置项
+   */
   areaConfig?: VxeTablePropTypes.AreaConfig<D>
+  /**
+   * 查找/替换配置项
+   */
   fnrConfig?: VxeTablePropTypes.FNRConfig<D>
+  /**
+   * 按键配置项
+   */
   keyboardConfig?: VxeTablePropTypes.KeyboardConfig<D>
+  /**
+   * 复制/粘贴配置项
+   */
   clipConfig?: VxeTablePropTypes.ClipConfig<D>
+  /**
+   * 可编辑配置项
+   */
   editConfig?: VxeTablePropTypes.EditConfig<D>
+  /**
+   * 校验配置项
+   */
   validConfig?: VxeTablePropTypes.ValidConfig
+  /**
+   * 校验规则配置项
+   */
   editRules?: VxeTablePropTypes.EditRules<D>
+  /**
+   * 空数据时显示的内容
+   */
   emptyText?: VxeTablePropTypes.EmptyText
+  /**
+   * 空内容渲染配置项，empty-render 的优先级大于 empty-text
+   */
   emptyRender?: VxeTablePropTypes.EmptyRender
   /**
    * 加载中配置项
    */
   loadingConfig?: VxeTablePropTypes.LoadingConfig
   /**
-   * 横向虚拟滚动配置（不支持展开行）
+   * 横向虚拟滚动配置
    */
   scrollX?: VxeTablePropTypes.ScrollX
   /**
-   * 纵向虚拟滚动配置（不支持展开行）
+   * 纵向虚拟滚动配置
    */
   scrollY?: VxeTablePropTypes.ScrollY
   /**
@@ -2452,17 +2674,17 @@ export type VxeTableProps<D = VxeTableDataRow> = {
    */
   rowId?: VxeTablePropTypes.RowId
   /**
-   * 不建议使用，已废弃
+   * 已废弃，已废弃
    * @deprecated
    */
   fit?: VxeTablePropTypes.Fit
   /**
-   * 不建议使用，已废弃
+   * 已废弃，已废弃
    * @deprecated
    */
   animat?: VxeTablePropTypes.Animat
   /**
-   * 不建议使用，已废弃
+   * 已废弃，已废弃
    * @deprecated
    */
   delayHover?: VxeTablePropTypes.DelayHover

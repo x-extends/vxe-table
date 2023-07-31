@@ -58,7 +58,8 @@ export default defineComponent({
         return count
       }
       const treeOpts = computeTreeOpts.value
-      const rowChildren = prevRow[treeOpts.children]
+      const childrenField = treeOpts.children || treeOpts.childrenField
+      const rowChildren = prevRow[childrenField]
       if ($xetable.isTreeExpandByRow(prevRow)) {
         for (let index = 0; index < rowChildren.length; index++) {
           count += countTreeExpand(rowChildren[index], params)
@@ -101,7 +102,7 @@ export default defineComponent({
       if (slots && slots.line) {
         return $xetable.callSlot(slots.line, params)
       }
-      if (treeConfig && treeNode && treeOpts.line) {
+      if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
         return [
           h('div', {
             class: 'vxe-tree--line-wrapper'
@@ -327,6 +328,7 @@ export default defineComponent({
       const editOpts = computeEditOpts.value
       const rowOpts = computeRowOpts.value
       const { transform } = treeOpts
+      const childrenField = treeOpts.children || treeOpts.childrenField
       const rows: any[] = []
       tableData.forEach((row: any, $rowIndex: any) => {
         const trOn: any = {}
@@ -370,7 +372,7 @@ export default defineComponent({
           isNewRow = $xetable.isInsertByRow(row)
         }
         if (treeConfig && !scrollYLoad && !transform) {
-          rowChildren = row[treeOpts.children]
+          rowChildren = row[childrenField]
           isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
         }
         rows.push(
@@ -441,7 +443,7 @@ export default defineComponent({
         }
         // 如果是树形表格
         if (treeConfig && !scrollYLoad && !transform) {
-          const rowChildren = row[treeOpts.children]
+          const rowChildren = row[childrenField]
           if (rowChildren && rowChildren.length && treeExpandedMaps[rowid]) {
             rows.push(...renderRows(fixedType, rowChildren, tableColumn))
           }
