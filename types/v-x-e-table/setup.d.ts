@@ -5,7 +5,7 @@ interface DefaultOptions {
   [key: string]: any;
 }
 
-export interface VXETableSetupOptions {
+export interface VXETableConfigOptions {
   size?: SizeType;
   zIndex?: number;
   version?: number;
@@ -39,36 +39,13 @@ export interface VXETableSetupOptions {
   [key: string]: any;
 }
 
-export interface VXETableGlobalConfig extends VXETableSetupOptions {
-  size: SizeType;
-  zIndex: number;
-  version: number;
-  emptyCell: string;
-  icon: {
-    [key: string]: string;
-  };
-  table: any;
-  grid: any;
-  export: {
-    types: {
-      [key: string]: 0 | 1 | 2;
-    }
-    [key: string]: any;
-  };
-  tooltip: DefaultOptions;
-  pager: any;
-  form: DefaultOptions;
-  input: DefaultOptions;
-  textarea: DefaultOptions;
-  select: DefaultOptions;
-  toolbar: any;
-  button: DefaultOptions;
-  radio: DefaultOptions;
-  checkbox: DefaultOptions;
-  switch: DefaultOptions;
-  modal: DefaultOptions;
-  list: DefaultOptions;
-  i18n(key: string, args?: any): string;
-}
+export type VxeGlobalConfigMethod = (options?: VXETableConfigOptions) => Required<VXETableConfigOptions>
 
-export type VxeGlobalSetup = (options?: VXETableSetupOptions) => VXETableGlobalConfig;
+/**
+ * @deprecated
+ */
+export type VXETableSetupOptions = VXETableConfigOptions
+/**
+ * @deprecated
+ */
+export type VxeGlobalSetup = VxeGlobalConfigMethod;

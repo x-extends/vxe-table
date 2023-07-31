@@ -38,7 +38,8 @@ function getExportBlobByContent (content, options) {
 
 function hasTreeChildren ($xetable, row) {
   const treeOpts = $xetable.treeOpts
-  return row[treeOpts.children] && row[treeOpts.children].length > 0
+  const childrenField = treeOpts.children || treeOpts.childrenField
+  return row[childrenField] && row[childrenField].length > 0
 }
 
 function getSeq ($xetable, row, $rowIndex, column, $columnIndex) {

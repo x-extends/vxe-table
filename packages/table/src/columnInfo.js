@@ -28,7 +28,7 @@ export class ColumnInfo {
         warnLog('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }
       if (_vm.type === 'expand') {
-        if ($xetable.treeConfig && $xetable.treeOpts.line) {
+        if ($xetable.treeConfig && ($xetable.treeOpts.showLine || $xetable.treeOpts.line)) {
           errLog('vxe.error.errConflicts', ['tree-config.line', 'column.type=expand'])
         }
       }
@@ -41,12 +41,12 @@ export class ColumnInfo {
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
             errLog('vxe.error.notFormats', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
           const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.formatMethod)) {
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
             errLog('vxe.error.notFormats', [formatter[0]])
           }
         }

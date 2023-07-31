@@ -76,9 +76,9 @@ export default {
     treeConfig: {
       rowField: 'id',
       parentField: 'parentId',
-      children: 'children',
-      hasChild: 'hasChild',
-      mapChildren: '_X_ROW_CHILD',
+      childrenField: 'children',
+      hasChildField: 'hasChild',
+      mapChildrenField: '_X_ROW_CHILD',
       indent: 20,
       showIcon: true
     },

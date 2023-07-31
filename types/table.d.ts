@@ -1390,26 +1390,41 @@ export type ExpandConfig = TableExpandConfig
  * 树形结构配置项
  */
 export interface TableTreeConfig {
-  children?: string;
+  childrenField?: string;
   indent?: number;
-  line?: boolean;
+  showLine?: boolean;
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
   accordion?: boolean;
   trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
-  hasChild?: string;
+  hasChildField?: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   showIcon?: boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
+  /**
+   * 已废弃，请使用 showLine
+   * @deprecated
+   */
+  line?: boolean;
+  /**
+   * 已废弃，请使用 hasChildField
+   * @deprecated
+   */
+  hasChild: string;
+  /**
+   * 已废弃，请使用 childrenField
+   * @deprecated
+   */
+  children?: string
 }
 export type TreeConfig = TableTreeConfig
 
 export interface TreeOpts {
-  children: string;
+  childrenField: string;
   indent: number;
   line?: boolean;
   expandAll?: boolean;
@@ -1418,6 +1433,7 @@ export interface TreeOpts {
   trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
   hasChild: string;
+  hasChildField: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   showIcon: boolean;

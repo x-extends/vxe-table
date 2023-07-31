@@ -352,7 +352,7 @@ export default {
     }
   },
   created () {
-    const { refresh, refreshOpts } = this
+    const { refresh, refreshOpts, customOpts } = this
     this.$nextTick(() => {
       const $xetable = this.fintTable()
       const queryMethod = refreshOpts.queryMethod || refreshOpts.query
@@ -363,6 +363,9 @@ export default {
         $xetable.connect(this)
       }
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (customOpts.isFooter) {
+          warnLog('vxe.error.notValidators', ['custom.isFooter', 'custom.showFooter'])
+        }
         if (this.buttons) {
           this.buttons.forEach(item => {
             const { buttonRender } = item

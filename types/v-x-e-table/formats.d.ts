@@ -4,7 +4,7 @@ import { ColumnInfo } from '../column'
 
 export namespace VxeGlobalFormatsHandles {
   export interface FormatsOptions {
-    formatMethod?: (params: FormatMethodParams, ...args: any[]) => string | number
+    cellFormatMethod?: (params: FormatMethodParams, ...args: any[]) => string | number
   }
   export interface FormatMethodParams {
     cellValue: any

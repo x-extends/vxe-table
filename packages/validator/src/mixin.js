@@ -65,12 +65,22 @@ export default {
      * 完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验
      */
     _fullValidate (rows, cb) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (XEUtils.isFunction(cb)) {
+          warnLog('vxe.error.notValidators', ['fullValidate(rows, callback)', 'fullValidate(rows)'])
+        }
+      }
       return this.beginValidate(rows, cb, true)
     },
     /**
      * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
      */
     _validate (rows, cb) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (XEUtils.isFunction(cb)) {
+          warnLog('vxe.error.notValidators', ['validate(rows, callback)', 'validate(rows)'])
+        }
+      }
       return this.beginValidate(rows, cb)
     },
     /**

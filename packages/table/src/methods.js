@@ -357,6 +357,7 @@ const Methods = {
    */
   loadTableData (datas) {
     const { keepSource, treeConfig, treeOpts, editStore, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad, sXOpts, sYOpts } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     let treeData = []
     let fullData = datas ? datas.slice(0) : []
     if (treeConfig) {
@@ -369,26 +370,26 @@ const Methods = {
           if (!treeOpts.parentField) {
             errLog('vxe.error.reqProp', ['table.tree-config.parentField'])
           }
-          if (!treeOpts.children) {
-            errLog('vxe.error.reqProp', ['tree-config.children'])
+          if (!childrenField) {
+            errLog('vxe.error.reqProp', ['tree-config.childrenField'])
           }
-          if (!treeOpts.mapChildren) {
-            errLog('vxe.error.reqProp', ['tree-config.mapChildren'])
+          if (!treeOpts.mapChildrenField) {
+            errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
           }
-          if (treeOpts.children === treeOpts.mapChildren) {
-            errLog('vxe.error.errConflicts', ['tree-config.children', 'tree-config.mapChildren'])
+          if (childrenField === treeOpts.mapChildrenField) {
+            errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
           }
           fullData.forEach(row => {
-            if (row[treeOpts.children] && row[treeOpts.children].length) {
-              warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+            if (row[childrenField] && row[childrenField].length) {
+              warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${childrenField}`])
             }
           })
         }
         treeData = XEUtils.toArrayTree(fullData, {
           key: treeOpts.rowField,
           parentKey: treeOpts.parentField,
-          children: treeOpts.children,
-          mapChildren: treeOpts.mapChildren
+          children: childrenField,
+          mapChildren: treeOpts.mapChildrenField
         })
         fullData = treeData.slice(0)
       } else {
@@ -592,6 +593,8 @@ const Methods = {
   cacheRowMap (source) {
     const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap, tableFullTreeData } = this
     let { fullDataRowIdData, fullAllDataRowIdData } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
     const handleCache = (row, index, items, path, parent, nodes) => {
@@ -602,8 +605,8 @@ const Methods = {
         rowid = getRowUniqueId()
         XEUtils.set(row, rowkey, rowid)
       }
-      if (isLazy && row[treeOpts.hasChild] && XEUtils.isUndefined(row[treeOpts.children])) {
-        row[treeOpts.children] = null
+      if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
+        row[childrenField] = null
       }
       const rest = { row, rowid, seq, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level }
       if (source) {
@@ -651,7 +654,8 @@ const Methods = {
   },
   loadTreeChildren (row, childRecords) {
     const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
-    const { transform, children, mapChildren } = treeOpts
+    const { transform, mapChildrenField } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const rest = fullAllDataRowIdData[getRowid(this, row)]
     const parentLevel = rest ? rest.level : 0
     return this.createData(childRecords).then((rows) => {
@@ -659,7 +663,7 @@ const Methods = {
         const rowid = getRowid(this, row)
         const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid(this, item), treeOpts)
         if (matchObj) {
-          matchObj.item[children] = XEUtils.clone(rows, true)
+          matchObj.item[childrenField] = XEUtils.clone(rows, true)
         }
       }
       XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
@@ -670,9 +674,9 @@ const Methods = {
         fullAllDataRowIdData[rowid] = rest
         fullAllDataRowMap.set(childRow, rest)
       }, treeOpts)
-      row[children] = rows
+      row[childrenField] = rows
       if (transform) {
-        row[mapChildren] = rows
+        row[mapChildrenField] = rows
       }
       this.updateAfterDataIndex()
       return rows
@@ -930,6 +934,7 @@ const Methods = {
    */
   defineField (records) {
     const { radioOpts, checkboxOpts, treeConfig, treeOpts, expandOpts } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const rowkey = getRowkey(this)
     if (!XEUtils.isArray(records)) {
       records = [records || {}]
@@ -956,8 +961,8 @@ const Methods = {
           XEUtils.set(record, key, null)
         }
       })
-      if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[treeOpts.children])) {
-        record[treeOpts.children] = null
+      if (treeConfig && treeOpts.lazy && XEUtils.isUndefined(record[childrenField])) {
+        record[childrenField] = null
       }
       // 必须有行数据的唯一主键，可以自行设置；也可以默认生成一个随机数
       if (eqEmptyValue(XEUtils.get(record, rowkey))) {
@@ -1156,20 +1161,21 @@ const Methods = {
    */
   getCheckboxRecords (isFull) {
     const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts, tableFullTreeData, afterTreeFullData } = this
-    const { transform, children, mapChildren } = treeOpts
+    const { transform, mapChildrenField } = treeOpts
     const { checkField } = checkboxOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const currTableData = isFull ? (transform ? tableFullTreeData : tableFullData) : (transform ? afterTreeFullData : afterFullData)
     let rowList = []
     if (checkField) {
       if (treeConfig) {
-        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildren : children })
+        rowList = XEUtils.filterTree(currTableData, row => XEUtils.get(row, checkField), { children: transform ? mapChildrenField : childrenField })
       } else {
         rowList = currTableData.filter(row => XEUtils.get(row, checkField))
       }
     } else {
       const { selectCheckboxRows } = this
       if (treeConfig) {
-        rowList = XEUtils.filterTree(currTableData, row => this.findRowIndexOf(selectCheckboxRows, row) > -1, { children: transform ? mapChildren : children })
+        rowList = XEUtils.filterTree(currTableData, row => this.findRowIndexOf(selectCheckboxRows, row) > -1, { children: transform ? mapChildrenField : childrenField })
       } else {
         rowList = currTableData.filter(row => this.findRowIndexOf(selectCheckboxRows, row) > -1)
       }
@@ -1190,7 +1196,7 @@ const Methods = {
           expandMaps.set(row, 1)
           fullData.push(row)
         }
-      }, { children: treeOpts.mapChildren })
+      }, { children: treeOpts.mapChildrenField })
       this.afterFullData = fullData
       this.updateScrollYStatus(fullData)
       return fullData
@@ -1314,6 +1320,7 @@ const Methods = {
    */
   updateAfterDataIndex () {
     const { treeConfig, afterFullData, fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData, treeOpts } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     if (treeConfig) {
       XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
         const rowid = getRowid(this, row)
@@ -1327,7 +1334,7 @@ const Methods = {
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
-      }, { children: treeOpts.transform ? treeOpts.mapChildren : treeOpts.children })
+      }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
     } else {
       afterFullData.forEach((row, index) => {
         const rowid = getRowid(this, row)
@@ -4142,8 +4149,9 @@ const Methods = {
    */
   reloadTreeExpand (row) {
     const { treeOpts, treeLazyLoadeds } = this
-    const { transform, lazy, hasChild } = treeOpts
-    if (lazy && row[hasChild] && treeLazyLoadeds.indexOf(row) === -1) {
+    const { transform, lazy } = treeOpts
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+    if (lazy && row[hasChildField] && treeLazyLoadeds.indexOf(row) === -1) {
       this.clearTreeExpandLoaded(row).then(() => {
         return this.handleAsyncTreeExpandChilds(row)
       }).then(() => {
@@ -4252,10 +4260,11 @@ const Methods = {
    */
   setAllTreeExpand (expanded) {
     const { tableFullData, treeOpts } = this
-    const { lazy, children } = treeOpts
+    const { lazy } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const expandeds = []
     XEUtils.eachTree(tableFullData, row => {
-      const rowChildren = row[children]
+      const rowChildren = row[childrenField]
       if (lazy || (rowChildren && rowChildren.length)) {
         expandeds.push(row)
       }
@@ -4270,7 +4279,9 @@ const Methods = {
    */
   handleBaseTreeExpand (rows, expanded) {
     const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, treeNodeColumn } = this
-    const { reserve, lazy, hasChild, children, accordion, toggleMethod } = treeOpts
+    const { reserve, lazy, accordion, toggleMethod } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const result = []
     const columnIndex = this.getColumnIndex(treeNodeColumn)
     const $columnIndex = this.getVMColumnIndex(treeNodeColumn)
@@ -4287,12 +4298,12 @@ const Methods = {
       validRows.forEach(row => {
         if (treeExpandeds.indexOf(row) === -1) {
           const rest = fullAllDataRowMap.get(row)
-          const isLoad = lazy && row[hasChild] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
+          const isLoad = lazy && row[(hasChildField)] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
           // 是否使用懒加载
           if (isLoad) {
             result.push(this.handleAsyncTreeExpandChilds(row))
           } else {
-            if (row[children] && row[children].length) {
+            if (row[childrenField] && row[childrenField].length) {
               treeExpandeds.push(row)
             }
           }
@@ -4865,10 +4876,10 @@ const Methods = {
       const formatParams = { cellValue, row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column) }
       if (XEUtils.isString(formatter)) {
         const gFormatOpts = formats.get(formatter)
-        cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams) : ''
+        cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams) : ''
       } else if (XEUtils.isArray(formatter)) {
         const gFormatOpts = formats.get(formatter[0])
-        cellLabel = gFormatOpts && gFormatOpts.formatMethod ? gFormatOpts.formatMethod(formatParams, ...formatter.slice(1)) : ''
+        cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams, ...formatter.slice(1)) : ''
       } else {
         cellLabel = formatter(formatParams)
       }

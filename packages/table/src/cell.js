@@ -207,8 +207,10 @@ export const Cell = {
     const { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
     const { row, column, level } = params
     const { slots } = column
-    const { children, hasChild, indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
-    const rowChilds = row[children]
+    const { indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+    const rowChilds = row[childrenField]
     let hasLazyChilds = false
     let isAceived = false
     let isLazyLoaded = false
@@ -220,7 +222,7 @@ export const Cell = {
       isAceived = $table.findRowIndexOf(treeExpandeds, row) > -1
       if (lazy) {
         isLazyLoaded = $table.findRowIndexOf(treeLazyLoadeds, row) > -1
-        hasLazyChilds = row[hasChild]
+        hasLazyChilds = row[hasChildField]
       }
     }
     if (!trigger || trigger === 'default') {

@@ -1,9 +1,9 @@
 import Vue from 'vue'
 
 import { ModalController } from './modal'
-import { VXETableSetupOptions, VXETableCore, VxeGlobalTranslate, VxeGlobalI18n } from './v-x-e-table'
+import { VXETableConfigOptions, VXETableCore, VxeGlobalTranslate, VxeGlobalI18n } from './v-x-e-table'
 
-export function install(app: typeof Vue, options?: VXETableSetupOptions): void;
+export function install(app: typeof Vue, options?: VXETableConfigOptions): void;
 
 export interface VXETableClipboard {
   text: string;

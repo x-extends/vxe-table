@@ -30,7 +30,7 @@ function renderLine (h, _vm, $xetable, params) {
   if (slots && slots.line) {
     return $xetable.callSlot(slots.line, params, h)
   }
-  if (treeConfig && treeNode && treeOpts.line) {
+  if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
     return [
       h('div', {
         class: 'vxe-tree--line-wrapper'
@@ -312,6 +312,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     fullAllDataRowIdData,
     rowOpts
   } = $xetable
+  const childrenField = treeOpts.children || treeOpts.childrenField
   const rows = []
   tableData.forEach((row, $rowIndex) => {
     const trOn = {}
@@ -350,7 +351,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
       isNewRow = $xetable.isInsertByRow(row)
     }
     if (treeConfig && !scrollYLoad && !treeOpts.transform && treeExpandeds.length) {
-      rowChildren = row[treeOpts.children]
+      rowChildren = row[childrenField]
       isExpandTree = rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1
     }
     rows.push(

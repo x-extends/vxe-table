@@ -1300,6 +1300,13 @@
   }
 }
 
+.vxe-table--tooltip-wrapper {
+  &.vxe-table--valid-error {
+    background-color: #f56c6c;
+    color: #fff;
+  }
+}
+
 /*footer*/
 .vxe-table--footer-wrapper {
   color: $vxe-table-footer-font-color;

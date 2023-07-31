@@ -775,7 +775,7 @@ export default {
       if (this.editConfig && editOpts.showStatus && !this.keepSource) {
         warnLog('vxe.error.reqProp', ['keep-source'])
       }
-      if (treeConfig && treeOpts.line && (!(this.rowKey || rowOpts.useKey) || !showOverflow)) {
+      if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(this.rowKey || rowOpts.useKey) || !showOverflow)) {
         warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
       }
       if (this.showFooter && !this.footerMethod) {
@@ -832,6 +832,12 @@ export default {
           return
         }
       }
+      if (this.treeConfig && treeOpts.children) {
+        warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
+      }
+      if (this.treeConfig && treeOpts.line) {
+        warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
+      }
       if (this.mouseOpts.area && this.mouseOpts.selected) {
         warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
       }
@@ -876,9 +882,9 @@ export default {
       if (this.emptyRender && !XEUtils.isObject(this.emptyRender)) {
         warnLog('vxe.error.errProp', [`table.empty-render=${this.emptyRender}`, 'table.empty-render={}'])
       }
-      // if (this.editConfig && this.editConfig.activeMethod) {
-      //   warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
-      // }
+      if (this.editConfig && this.editOpts.activeMethod) {
+        warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
+      }
     }
 
     // 检查是否有安装需要的模块
@@ -1033,7 +1039,7 @@ export default {
         'is--header': showHeader,
         'is--footer': showFooter,
         'is--group': isGroup,
-        'is--tree-line': treeConfig && treeOpts.line,
+        'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
         'is--fixed-left': leftList.length,
         'is--fixed-right': rightList.length,
         'is--animat': !!this.animat,
