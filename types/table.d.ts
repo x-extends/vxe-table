@@ -2158,7 +2158,9 @@ export namespace VxeTablePropTypes {
   export interface EditConfig<DT = VxeTableDataRow> {
     /**
      * 触发方式
-     * manual（手动触发方式，只能用于 mode=row）,click（点击触发编辑）,dblclick（双击触发编辑）
+     * - manual（手动触发方式，只能用于 mode=row）
+     * - click（点击触发编辑）
+     * - dblclick（双击触发编辑）
      */
     trigger?: 'manual' | 'click' | 'dblclick' | '' | null
     /**
@@ -2167,7 +2169,8 @@ export namespace VxeTablePropTypes {
     enabled?: boolean
     /**
      * 编辑模式
-     * cell（单元格编辑模式）,row（行编辑模式）
+     * - cell（单元格编辑模式）
+     * - row（行编辑模式）
      */
     mode?: 'cell' | 'row' | '' | null
     /**
@@ -2239,6 +2242,8 @@ export namespace VxeTablePropTypes {
     showMessage?: boolean
     /**
      * 校验消息提示方式
+     * - single 单个提示
+     * - full - 全量提示
      */
     msgMode?: 'single' | 'full' | null | ''
     /**
@@ -3185,8 +3190,17 @@ export interface VxeTableEventProps<D = VxeTableDataRow> {
 }
 
 export interface VxeTableListeners<D = VxeTableDataRow> {
+  /**
+   * 当表格被激活且键盘被按下开始时会触发的事件
+   */
   keydownStart?: VxeTableEvents.KeydownStart<D>
+  /**
+   * 当表格被激活且键盘被按下时会触发的事件
+   */
   keydown?: VxeTableEvents.Keydown<D>
+  /**
+   * 当表格被激活且键盘被按下结束时会触发的事件
+   */
   keydownEnd?: VxeTableEvents.KeydownEnd<D>
   paste?: VxeTableEvents.Paste<D>
   copy?: VxeTableEvents.Copy<D>
@@ -3218,8 +3232,17 @@ export interface VxeTableListeners<D = VxeTableDataRow> {
   editClosed?: VxeTableEvents.EditClosed<D>
   editActived?: VxeTableEvents.EditActived<D>
   editDisabled?: VxeTableEvents.EditDisabled<D>
+  /**
+   * 只对 edit-rules 配置时有效，当数据校验不通过时会触发该事件
+   */
   validError?: VxeTableEvents.ValidError<D>
+  /**
+   * 表格滚动时会触发该事件
+   */
   scroll?: VxeTableEvents.Scroll<D>
+  /**
+   * 如果与工具栏关联，在自定义列按钮被手动点击后会触发该事件
+   */
   custom?: VxeTableEvents.Custom<D>
 }
 

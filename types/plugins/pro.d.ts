@@ -499,11 +499,29 @@ declare module '../grid' {
     onActiveCellChangeEnd?: VxeGridEvents.ActiveCellChangeEnd<D>
   }
   export interface VxeGridListeners<D = VxeTableDataRow> {
+    /**
+     * 只对 keyboard-config.isFNR 配置时有效，在查找与替换弹框被打开时会触发该事件
+     */
     openFnr?: VxeGridEvents.OpenFnr<D>
-    changeFnr?: VxeGridEvents.FnrChange<D>
+    /**
+     * 只对 keyboard-config.isFNR 配置时有效，在查找与替换弹框的 Tab 页被切换时会触发该事件
+     */
+    fnrChange?: VxeGridEvents.FnrChange<D>
+    /**
+     * 只对 keyboard-config.isFNR 配置时有效，在点击查找时会触发该事件
+     */
     fnrFind?: VxeGridEvents.FnrFind<D>
+    /**
+     * 只对 keyboard-config.isFNR 配置时有效，在点击查找所有时会触发该事件
+     */
     fnrFindAll?: VxeGridEvents.FnrFindAll<D>
+    /**
+     * 只对 keyboard-config.isFNR 配置时有效，在点击替换时会触发该事件
+     */
     fnrReplace?: VxeGridEvents.FnrReplace<D>
+    /**
+     * 只对 keyboard-config.isFNR 配置时有效，在点击替换所有时会触发该事件
+     */
     fnrReplaceAll?: VxeGridEvents.FnrReplaceAll<D>
     cellAreaCopy?: VxeGridEvents.CellAreaCopy<D>
     cellAreaCut?: VxeGridEvents.CellAreaCut<D>

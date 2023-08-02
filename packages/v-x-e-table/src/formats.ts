@@ -24,12 +24,12 @@ class VXEFormatsStore {
   add (name: string, render: any): VXEFormatsStore {
     const conf = this.store[name]
     // 兼容
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (XEUtils.isFunction(render)) {
+    if (XEUtils.isFunction(render)) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         warnLog('vxe.error.delProp', ['callback', 'cellFormatMethod'])
-        render = {
-          cellFormatMethod: render
-        }
+      }
+      render = {
+        cellFormatMethod: render
       }
     }
 
