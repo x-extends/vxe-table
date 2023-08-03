@@ -230,14 +230,14 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
       // 处理 Tab 键移动
       moveTabSelected (args, isLeft, evnt) {
         const { editConfig } = props
-        const { afterFullData, visibleColumn } = internalData
+        const { afterFullData, visibleColumn, scrollYStore } = internalData
         const editOpts = computeEditOpts.value
-        let targetRow
-        let targetRowIndex: any
-        let targetColumnIndex: any
         const params = Object.assign({}, args)
-        const _rowIndex = $xetable.getVTRowIndex(params.row)
+        const _rowIndex = $xetable.getVMRowIndex(params.row) + scrollYStore.startIndex
         const _columnIndex = $xetable.getVTColumnIndex(params.column)
+        let targetRowIndex = _rowIndex
+        let targetRow = afterFullData[targetRowIndex]
+        let targetColumnIndex = params.columnIndex
         evnt.preventDefault()
         if (isLeft) {
           // 向左
@@ -251,9 +251,10 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
           } else {
             targetColumnIndex = _columnIndex - 1
           }
+          // 向右
         } else {
           if (_columnIndex >= visibleColumn.length - 1) {
-            // 如果已经是第一列，则移动到上一行
+            // 如果已经是第最后一列，则移动到下一行
             if (_rowIndex < afterFullData.length - 1) {
               targetRowIndex = _rowIndex + 1
               targetRow = afterFullData[targetRowIndex]
@@ -329,9 +330,9 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
       },
       // 处理可编辑方向键移动
       moveSelected (args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt) {
-        const { afterFullData, visibleColumn } = internalData
+        const { afterFullData, visibleColumn, scrollYStore } = internalData
         const params = Object.assign({}, args)
-        const _rowIndex = $xetable.getVTRowIndex(params.row)
+        const _rowIndex = $xetable.getVMRowIndex(params.row) + scrollYStore.startIndex
         const _columnIndex = $xetable.getVTColumnIndex(params.column)
         evnt.preventDefault()
         if (isUpArrow && _rowIndex > 0) {
