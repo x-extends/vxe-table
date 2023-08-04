@@ -1539,6 +1539,7 @@ export namespace VxeTablePropTypes {
     checkRowKeys?: string[] | number[]
     checkStrictly?: boolean
     strict?: boolean
+    isShiftKey?: boolean
     checkMethod?(params: {
       row: D
     }): boolean
@@ -2710,6 +2711,7 @@ export type VxeTableEmits = [
   'checkbox-range-start',
   'checkbox-range-change',
   'checkbox-range-end',
+  'checkbox-range-select',
   'cell-click',
   'cell-dblclick',
   'cell-menu',
@@ -3022,6 +3024,11 @@ export namespace VxeTableDefines {
 
   export interface CheckboxRangeEndEventParams<D = VxeTableDataRow> extends TableEventParams<D>, CheckboxRangeEndParams<D> { }
 
+  export interface CheckboxRangeSelectParams<D = VxeTableDataRow> {
+    rangeRecords: D[]
+  }
+  export interface CheckboxRangeSelectEventParams<D = VxeTableDataRow> extends TableEventParams<D>, CheckboxRangeSelectParams<D> { }
+
   export interface CellClickParams<D = VxeTableDataRow> extends TableBaseCellParams<D> {
     triggerRadio: boolean
     triggerCheckbox: boolean
@@ -3163,6 +3170,7 @@ export interface VxeTableEventProps<D = VxeTableDataRow> {
   onCheckboxRangeStart?: VxeTableEvents.CheckboxRangeStart<D>
   onCheckboxRangeChange?: VxeTableEvents.CheckboxRangeChange<D>
   onCheckboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd<D>
+  onCheckboxRangeSelect?: VxeTableEvents.CheckboxRangeSelect<D>
   onCellClick?: VxeTableEvents.CellClick<D>
   onCellDblclick?: VxeTableEvents.CellDblclick<D>
   onCellMenu?: VxeTableEvents.CellMenu<D>
@@ -3212,6 +3220,7 @@ export interface VxeTableListeners<D = VxeTableDataRow> {
   checkboxRangeStart?: VxeTableEvents.CheckboxRangeStart<D>
   checkboxRangeChange?: VxeTableEvents.CheckboxRangeChange<D>
   checkboxRangeEnd?: VxeTableEvents.CheckboxRangeEnd<D>
+  checkboxRangeSelect?: VxeTableEvents.CheckboxRangeSelect<D>
   cellClick?: VxeTableEvents.CellClick<D>
   cellDblclick?: VxeTableEvents.CellDblclick<D>
   cellMenu?: VxeTableEvents.CellMenu<D>
@@ -3260,6 +3269,7 @@ export namespace VxeTableEvents {
   export type CheckboxRangeStart<D = any> = (params: VxeTableDefines.CheckboxRangeStartEventParams<D>) => void
   export type CheckboxRangeChange<D = any> = (params: VxeTableDefines.CheckboxRangeChangeEventParams<D>) => void
   export type CheckboxRangeEnd<D = any> = (params: VxeTableDefines.CheckboxRangeEndEventParams<D>) => void
+  export type CheckboxRangeSelect<D = any> = (params: VxeTableDefines.CheckboxRangeSelectEventParams<D>) => void
   export type CellClick<D = any> = (params: VxeTableDefines.CellClickEventParams<D>) => void
   export type CellDblclick<D = any> = (params: VxeTableDefines.CellDblclickEventParams<D>) => void
   export type CellMenu<D = any> = (params: VxeTableDefines.CellMenuEventParams<D>) => void

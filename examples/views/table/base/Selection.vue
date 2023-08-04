@@ -16,6 +16,7 @@
       border
       ref="xTable1"
       :data="demo1.tableData"
+      :checkbox-config="{isShiftKey: true}"
       @checkbox-all="selectAllChangeEvent1"
       @checkbox-change="selectChangeEvent1">
       <vxe-column type="checkbox" width="60"></vxe-column>

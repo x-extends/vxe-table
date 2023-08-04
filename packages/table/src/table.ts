@@ -5545,10 +5545,27 @@ export default defineComponent({
           tablePrivateMethods.handleSelectRow(params, value)
         }
       },
-      triggerCheckRowEvent (evnt, params, value) {
+      triggerCheckRowEvent (evnt: MouseEvent, params, value) {
         const checkboxOpts = computeCheckboxOpts.value
+        const { row } = params
+        const { afterFullData } = internalData
         const { checkMethod } = checkboxOpts
-        if (!checkMethod || checkMethod({ row: params.row })) {
+        if (checkboxOpts.isShiftKey && evnt.shiftKey && !props.treeConfig) {
+          const checkboxRecords = tableMethods.getCheckboxRecords()
+          if (checkboxRecords.length) {
+            const firstRow = checkboxRecords[0]
+            const _rowIndex = tableMethods.getVTRowIndex(row)
+            const _firstRowIndex = tableMethods.getVTRowIndex(firstRow)
+            if (_rowIndex !== _firstRowIndex) {
+              tableMethods.setAllCheckboxRow(false)
+              const rangeRows = _rowIndex < _firstRowIndex ? afterFullData.slice(_rowIndex, _firstRowIndex + 1) : afterFullData.slice(_firstRowIndex, _rowIndex + 1)
+              handleCheckedCheckboxRow(rangeRows, true, false)
+              tableMethods.dispatchEvent('checkbox-range-select', Object.assign({ rangeRecords: rangeRows }, params), evnt)
+              return
+            }
+          }
+        }
+        if (!checkMethod || checkMethod({ row })) {
           tablePrivateMethods.handleSelectRow(params, value)
           tableMethods.dispatchEvent('checkbox-change', Object.assign({
             records: tableMethods.getCheckboxRecords(),
@@ -6259,6 +6276,9 @@ export default defineComponent({
           }
           if (props.editConfig && editOpts.activeMethod) {
             warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+          }
+          if (props.treeConfig && checkboxOpts.isShiftKey) {
+            errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
           }
         }
 
