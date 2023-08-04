@@ -3080,8 +3080,25 @@ const Methods = {
     }
   },
   triggerCheckRowEvent (evnt, params, value) {
-    const { checkMethod } = this.checkboxOpts
-    if (!checkMethod || checkMethod({ row: params.row })) {
+    const { checkboxOpts, afterFullData } = this
+    const { checkMethod } = checkboxOpts
+    const { row } = params
+    if (checkboxOpts.isShiftKey && evnt.shiftKey && !this.treeConfig) {
+      const checkboxRecords = this.getCheckboxRecords()
+      if (checkboxRecords.length) {
+        const firstRow = checkboxRecords[0]
+        const _rowIndex = this.getVTRowIndex(row)
+        const _firstRowIndex = this.getVTRowIndex(firstRow)
+        if (_rowIndex !== _firstRowIndex) {
+          this.setAllCheckboxRow(false)
+          const rangeRows = _rowIndex < _firstRowIndex ? afterFullData.slice(_rowIndex, _firstRowIndex + 1) : afterFullData.slice(_firstRowIndex, _rowIndex + 1)
+          this.handleCheckedCheckboxRow(rangeRows, true, false)
+          this.emitEvent('checkbox-range-select', Object.assign({ rangeRecords: rangeRows }, params), evnt)
+          return
+        }
+      }
+    }
+    if (!checkMethod || checkMethod({ row })) {
       this.handleSelectRow(params, value)
       this.emitEvent('checkbox-change', Object.assign({
         records: this.getCheckboxRecords(),
