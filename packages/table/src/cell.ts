@@ -27,7 +27,7 @@ function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
 
 function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: SlotVNodeType | SlotVNodeType[]) {
   const { $table, column } = params
-  const { props, internalData } = $table
+  const { props, reactData } = $table
   const { computeTooltipOpts } = $table.getComputeMaps()
   const { showHeaderOverflow: allColumnHeaderOverflow } = props
   const { type, showHeaderOverflow } = column
@@ -39,7 +39,7 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
   const ons: any = {}
   if (showTitle || showTooltip || showAllTip) {
     ons.onMouseenter = (evnt: MouseEvent) => {
-      if (internalData._isResize) {
+      if (reactData._isResize) {
         return
       }
       if (showTitle) {
@@ -51,7 +51,7 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
   }
   if (showTooltip || showAllTip) {
     ons.onMouseleave = (evnt: MouseEvent) => {
-      if (internalData._isResize) {
+      if (reactData._isResize) {
         return
       }
       if (showTooltip || showAllTip) {
@@ -435,7 +435,7 @@ export const Cell = {
     const { $table, row, column, isHidden } = params
     const { props, reactData } = $table
     const { treeConfig } = props
-    const { selectCheckboxRows, treeIndeterminateMaps } = reactData
+    const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
     const { labelField, checkMethod, visibleMethod } = checkboxOpts
@@ -446,9 +446,10 @@ export const Cell = {
     let isChecked = false
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
+    const rowid = getRowid($table, row)
     let ons
     if (!isHidden) {
-      isChecked = $table.findRowIndexOf(selectCheckboxRows, row) > -1
+      isChecked = !!selectCheckboxMaps[rowid]
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isDisabled && isVisible) {
@@ -461,7 +462,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = !!treeIndeterminateMaps[getRowid($table, row)]
+        indeterminate = !!treeIndeterminateMaps[rowid]
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }

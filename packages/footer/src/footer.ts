@@ -59,7 +59,7 @@ export default defineComponent({
       const scrollLeft = footerElem.scrollLeft
       const isX = scrollLeft !== lastScrollLeft
       tableInternalData.lastScrollLeft = scrollLeft
-      tableInternalData.lastScrollTime = Date.now()
+      tableReactData.lastScrollTime = Date.now()
       if (headerElem) {
         headerElem.scrollLeft = scrollLeft
       }

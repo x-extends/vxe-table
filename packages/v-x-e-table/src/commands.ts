@@ -26,7 +26,7 @@ class VXECommandsStore {
     // 兼容
     if (XEUtils.isFunction(render)) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        warnLog('vxe.error.delProp', ['callback', 'commandMethod'])
+        warnLog('vxe.error.delProp', ['commands -> callback', 'commandMethod'])
       }
       render = {
         commandMethod: render

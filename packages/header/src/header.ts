@@ -103,7 +103,7 @@ export default defineComponent({
         resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
       }
 
-      tableInternalData._isResize = true
+      tableReactData._isResize = true
       addClass(tableEl, 'drag--resize')
       resizeBarElem.style.display = 'block'
       document.onmousemove = updateEvent
@@ -113,7 +113,7 @@ export default defineComponent({
         const resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
         column.resizeWidth = resizeWidth
         resizeBarElem.style.display = 'none'
-        tableInternalData._isResize = false
+        tableReactData._isResize = false
         tableInternalData._lastResizeTime = Date.now()
         $xetable.analyColumnWidth()
         $xetable.recalculate(true).then(() => {

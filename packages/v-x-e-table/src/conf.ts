@@ -121,12 +121,12 @@ const GlobalConfig: VXETableConfigOptions = {
       isReplace: true
     },
     scrollX: {
-      enabled: true,
+      // enabled: false,
       gt: 60
       // oSize: 0
     },
     scrollY: {
-      enabled: true,
+      // enabled: false,
       gt: 100
       // oSize: 0
     }

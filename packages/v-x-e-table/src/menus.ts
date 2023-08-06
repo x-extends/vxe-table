@@ -26,7 +26,7 @@ class VXEMenusStore {
     // 兼容
     if (XEUtils.isFunction(render)) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        warnLog('vxe.error.delProp', ['callback', 'menuMethod'])
+        warnLog('vxe.error.delProp', ['menus -> callback', 'menuMethod'])
       }
       render = {
         menuMethod: render

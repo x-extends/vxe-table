@@ -252,7 +252,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       remove (rows: any) {
         const { treeConfig } = props
-        const { mergeList, editStore, selectCheckboxRows } = reactData
+        const { mergeList, editStore, selectCheckboxMaps } = reactData
         const { tableFullTreeData, afterFullData, tableFullData } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
@@ -274,12 +274,14 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         })
         // 如果绑定了多选属性，则更新状态
         if (!checkField) {
+          const selectRowMaps = { ...selectCheckboxMaps }
           rows.forEach((row: any) => {
-            const sIndex = $xetable.findRowIndexOf(selectCheckboxRows, row)
-            if (sIndex > -1) {
-              selectCheckboxRows.splice(sIndex, 1)
+            const rowid = getRowid($xetable, row)
+            if (selectRowMaps[rowid]) {
+              delete selectRowMaps[rowid]
             }
           })
+          reactData.selectCheckboxMaps = selectRowMaps
         }
         // 从数据源中移除
         if (tableFullData === rows) {

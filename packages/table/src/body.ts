@@ -32,7 +32,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xetable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeIsVMScrollProcess } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -74,13 +74,6 @@ export default defineComponent({
         expandSize = countTreeExpand(items[rIndex - 1], params)
       }
       return tableReactData.rowHeight * expandSize - (rIndex ? 1 : (12 - getOffsetSize()))
-    }
-
-    // 滚动、拖动过程中不需要触发
-    const isOperateMouse = () => {
-      const { delayHover } = tableProps
-      const { lastScrollTime, _isResize } = tableInternalData
-      return _isResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number))
     }
 
     const renderLine = (params: any) => {
@@ -166,7 +159,7 @@ export default defineComponent({
       // hover 进入事件
       if (showTitle || showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseenter = (evnt: MouseEvent) => {
-          if (isOperateMouse()) {
+          if (computeIsVMScrollProcess.value) {
             return
           }
           if (showTitle) {
@@ -181,7 +174,7 @@ export default defineComponent({
       // hover 退出事件
       if (showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseleave = (evnt: MouseEvent) => {
-          if (isOperateMouse()) {
+          if (computeIsVMScrollProcess.value) {
             return
           }
           if (showTooltip || showAllTip) {
@@ -338,13 +331,13 @@ export default defineComponent({
         // 事件绑定
         if (rowOpts.isHover || highlightHoverRow) {
           trOn.onMouseenter = (evnt: any) => {
-            if (isOperateMouse()) {
+            if (computeIsVMScrollProcess.value) {
               return
             }
             $xetable.triggerHoverEvent(evnt, { row, rowIndex })
           }
           trOn.onMouseleave = () => {
-            if (isOperateMouse()) {
+            if (computeIsVMScrollProcess.value) {
               return
             }
             $xetable.clearHoverRow()
@@ -529,7 +522,7 @@ export default defineComponent({
       const isRollY = scrollTop !== lastScrollTop
       tableInternalData.lastScrollTop = scrollTop
       tableInternalData.lastScrollLeft = scrollLeft
-      tableInternalData.lastScrollTime = Date.now()
+      tableReactData.lastScrollTime = Date.now()
       if (rowOpts.isHover || highlightHoverRow) {
         $xetable.clearHoverRow()
       }
@@ -673,7 +666,7 @@ export default defineComponent({
         evnt.preventDefault()
         tableInternalData.lastScrollTop = scrollTop
         tableInternalData.lastScrollLeft = scrollLeft
-        tableInternalData.lastScrollTime = Date.now()
+        tableReactData.lastScrollTime = Date.now()
         if (rowOpts.isHover || highlightHoverRow) {
           $xetable.clearHoverRow()
         }

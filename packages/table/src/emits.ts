@@ -15,6 +15,7 @@ export default [
   'checkbox-range-start',
   'checkbox-range-change',
   'checkbox-range-end',
+  'checkbox-range-select',
   'cell-click',
   'cell-dblclick',
   'cell-menu',
