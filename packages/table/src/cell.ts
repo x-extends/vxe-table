@@ -505,11 +505,12 @@ export const Cell = {
     const { treeIndeterminateMaps } = reactData
     const { computeCheckboxOpts } = $table.getComputeMaps()
     const checkboxOpts = computeCheckboxOpts.value
-    const { labelField, checkField, halfField, checkMethod, visibleMethod } = checkboxOpts
+    const { labelField, checkField, checkMethod, visibleMethod } = checkboxOpts
+    const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
-    let indeterminate = false
+    let isIndeterminate = false
     let isChecked = false
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
@@ -528,10 +529,10 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = !!treeIndeterminateMaps[getRowid($table, row)]
+        isIndeterminate = !!treeIndeterminateMaps[getRowid($table, row)]
       }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
+    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate: isIndeterminate }
     if (checkboxSlot) {
       return $table.callSlot(checkboxSlot, checkboxParams)
     }
@@ -539,7 +540,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+          class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       )
       if (defaultSlot || labelField) {
@@ -555,7 +556,7 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': halfField && !isChecked ? row[halfField] : indeterminate
+          'is--indeterminate': indeterminateField && !isChecked ? row[indeterminateField] : isIndeterminate
         }],
         ...ons
       }, checkVNs)

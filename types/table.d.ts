@@ -92,7 +92,6 @@ export interface TablePrivateComputed<D = VxeTableDataRow> {
   computeEmptyOpts: ComputedRef<VxeTablePropTypes.EmptyOpts>
   computeLoadingOpts: ComputedRef<VxeTablePropTypes.LoadingOpts>
   computeCustomOpts: ComputedRef<VxeTablePropTypes.CustomOpts<D>>
-  computeIsVMScrollProcess: ComputedRef<boolean>
   computeFixedColumnSize: ComputedRef<number>
   computeIsMaxFixedColumn: ComputedRef<boolean>
   computeIsAllCheckboxDisabled: ComputedRef<boolean>
@@ -990,6 +989,7 @@ export interface TableReactData<D = VxeTableDataRow> {
     isHeader: boolean
     isFooter: boolean
   },
+  scrollVMLoading: boolean
   _isResize: boolean
 }
 
@@ -1535,7 +1535,7 @@ export namespace VxeTablePropTypes {
     reserve?: boolean
     labelField?: string
     checkField?: string
-    halfField?: string
+    indeterminateField?: string
     showHeader?: boolean
     checkAll?: boolean
     checkRowKeys?: string[] | number[]
@@ -1551,6 +1551,12 @@ export namespace VxeTablePropTypes {
     trigger?: 'default' | 'cell' | 'row' | '' | null
     highlight?: boolean
     range?: boolean
+
+    /**
+     * 请使用 indeterminateField
+     * @deprecated
+     */
+    halfField?: string
   }
   export interface CheckboxOpts<D = VxeTableDataRow> extends CheckboxConfig<D> { }
 

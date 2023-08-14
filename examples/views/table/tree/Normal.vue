@@ -39,7 +39,7 @@
       :show-header="false"
       :data="demo2.tableData"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}">
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus', iconClose: 'vxe-icon-square-plus'}">
       <vxe-column type="checkbox" tree-node></vxe-column>
     </vxe-table>
 
@@ -62,7 +62,7 @@
       :data="demo3.tableData"
       :checkbox-config="{labelField: 'name'}"
       :scroll-y="{enabled: false}"
-      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus', iconClose: 'vxe-icon-square-plus'}">
       <vxe-column type="checkbox" tree-node>
         <template #default="{ row }">
           <span>
@@ -292,7 +292,7 @@ export default defineComponent({
           :show-header="false"
           :data="demo2.tableData"
           :checkbox-config="{labelField: 'name'}"
-          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-caret-down', iconClose: 'fa fa-caret-right'}">
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus', iconClose: 'vxe-icon-square-plus'}">
           <vxe-column type="checkbox" tree-node></vxe-column>
         </vxe-table>
         `,
@@ -341,7 +341,7 @@ export default defineComponent({
           :data="demo3.tableData"
           :checkbox-config="{labelField: 'name'}"
           :scroll-y="{enabled: false}"
-          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'fa fa-minus-square-o', iconClose: 'fa fa-plus-square-o'}">
+          :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-square-minus', iconClose: 'vxe-icon-square-plus'}">
           <vxe-column type="checkbox" tree-node>
             <template #default="{ row }">
               <span>

@@ -22,7 +22,8 @@
       height="500"
       :row-config="{keyField: 'id'}"
       :loading="demo1.loading"
-      :checkbox-config="{checkField: 'checked'}">
+      :checkbox-config="{checkField: 'checked'}"
+      :scroll-y="{enabled: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>

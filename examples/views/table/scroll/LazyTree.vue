@@ -13,6 +13,7 @@
       :menu-config="demo1.tableMenu"
       :tree-config="demo1.treeConfig"
       :data="demo1.tableData"
+      :scroll-y="{enabled: true}"
       @menu-click="contextMenuClickEvent">
       <vxe-column field="id" title="Id" width="400" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>

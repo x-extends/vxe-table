@@ -51,7 +51,10 @@ export default defineComponent({
         checkField: 'checked',
         labelField: 'id'
       },
-      loading: false
+      loading: false,
+      scrollY: {
+        enabled: true
+      }
     } as VxeGridProps)
 
     let colIndex = 0

@@ -127,7 +127,10 @@ export default defineComponent({
         { field: 'address', title: 'Address', slots: { default: 'default_address' } },
         { field: 'html2', title: 'Html片段', slots: { default: 'default_html2' } },
         { field: 'img1', title: '图片路径', slots: { default: 'default_img1' } }
-      ]
+      ],
+      scrollY: {
+        enabled: true
+      }
     } as VxeGridProps)
 
     const showDetailEvent = (row: any) => {

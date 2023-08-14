@@ -32,7 +32,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
     const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeIsVMScrollProcess } = $xetable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -52,6 +52,13 @@ export default defineComponent({
       return 0
     }
 
+    // 滚动、拖动过程中不需要触发
+    const isVMScrollProcess = () => {
+      const { delayHover } = tableProps
+      const { lastScrollTime, _isResize } = tableReactData
+      return !!(_isResize || (lastScrollTime && Date.now() < lastScrollTime + (delayHover as number)))
+    }
+
     const countTreeExpand = (prevRow: any, params: any) => {
       let count = 1
       if (!prevRow) {
@@ -60,7 +67,7 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const rowChildren = prevRow[childrenField]
-      if ($xetable.isTreeExpandByRow(prevRow)) {
+      if (rowChildren && $xetable.isTreeExpandByRow(prevRow)) {
         for (let index = 0; index < rowChildren.length; index++) {
           count += countTreeExpand(rowChildren[index], params)
         }
@@ -159,7 +166,7 @@ export default defineComponent({
       // hover 进入事件
       if (showTitle || showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseenter = (evnt: MouseEvent) => {
-          if (computeIsVMScrollProcess.value) {
+          if (isVMScrollProcess()) {
             return
           }
           if (showTitle) {
@@ -174,7 +181,7 @@ export default defineComponent({
       // hover 退出事件
       if (showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseleave = (evnt: MouseEvent) => {
-          if (computeIsVMScrollProcess.value) {
+          if (isVMScrollProcess()) {
             return
           }
           if (showTooltip || showAllTip) {
@@ -331,13 +338,13 @@ export default defineComponent({
         // 事件绑定
         if (rowOpts.isHover || highlightHoverRow) {
           trOn.onMouseenter = (evnt: any) => {
-            if (computeIsVMScrollProcess.value) {
+            if (isVMScrollProcess()) {
               return
             }
             $xetable.triggerHoverEvent(evnt, { row, rowIndex })
           }
           trOn.onMouseleave = () => {
-            if (computeIsVMScrollProcess.value) {
+            if (isVMScrollProcess()) {
               return
             }
             $xetable.clearHoverRow()
@@ -483,9 +490,12 @@ export default defineComponent({
           // setScrollTop(bodyElem, targetTop)
           // setScrollTop(leftElem, targetTop)
           // setScrollTop(rightElem, targetTop)
+          tableReactData.lastScrollTime = Date.now()
         }, 300)
       }
     }
+
+    const scrollLoadingTime: any = null
 
     /**
      * 滚动处理
@@ -548,12 +558,29 @@ export default defineComponent({
           }
         }
       }
+      // let isLoadScroll = false
       if (scrollXLoad && isRollX) {
+        // isLoadScroll = true
         $xetable.triggerScrollXEvent(evnt)
       }
       if (scrollYLoad && isRollY) {
+        // isLoadScroll = true
         $xetable.triggerScrollYEvent(evnt)
       }
+
+      if (scrollLoadingTime !== null) {
+        clearTimeout(scrollLoadingTime)
+      }
+      // if (isLoadScroll) {
+      //   tableReactData.scrollVMLoading = true
+      //   scrollLoadingTime = setTimeout(() => {
+      //     scrollLoadingTime = null
+      //     tableReactData.scrollVMLoading = false
+      //   }, 20)
+      // } else {
+      //   tableReactData.scrollVMLoading = false
+      // }
+
       if (isRollX && validTip && validTip.reactData.visible) {
         validTip.updatePlacement()
       }

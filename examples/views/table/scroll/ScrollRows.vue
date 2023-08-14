@@ -30,7 +30,8 @@
       height="700"
       :export-config="{}"
       :sort-config="{trigger: 'cell'}"
-      :loading="demo1.loading">
+      :loading="demo1.loading"
+      :scroll-y="{enabled: true}">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="attr0" title="Attr0" sortable width="200"></vxe-column>
       <vxe-column field="attr1" title="Attr1" width="200"></vxe-column>

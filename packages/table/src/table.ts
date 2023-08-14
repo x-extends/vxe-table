@@ -230,6 +230,7 @@ export default defineComponent({
         isHeader: false,
         isFooter: false
       },
+      scrollVMLoading: false,
       _isResize: false
     })
 
@@ -512,13 +513,6 @@ export default defineComponent({
       return Object.assign({}, GlobalConfig.table.customConfig, props.customConfig)
     })
 
-    // 滚动、拖动过程中不需要触发
-    const computeIsVMScrollProcess = computed(() => {
-      const { delayHover } = props
-      const { lastScrollTime, _isResize } = reactData
-      return !!(_isResize || (lastScrollTime && Date.now() < lastScrollTime + delayHover))
-    })
-
     const computeFixedColumnSize = computed(() => {
       const { tableFullColumn } = internalData
       let fixedSize = 0
@@ -627,7 +621,6 @@ export default defineComponent({
       computeEmptyOpts,
       computeLoadingOpts,
       computeCustomOpts,
-      computeIsVMScrollProcess,
       computeFixedColumnSize,
       computeIsMaxFixedColumn,
       computeIsAllCheckboxDisabled
@@ -1863,6 +1856,7 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
+      const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
       const selectRowMaps: Record<string, any> = {}
 
       // 疑惑！
@@ -1889,6 +1883,9 @@ export default defineComponent({
                 selectRowMaps[getRowid($xetable, row)] = row
               }
               XEUtils.set(row, checkField, value)
+            }
+            if (treeConfig && indeterminateField) {
+              XEUtils.set(row, indeterminateField, false)
             }
           }
           // 如果存在选中方法
@@ -2252,6 +2249,7 @@ export default defineComponent({
       scrollYStore.endIndex = 1
       scrollXStore.startIndex = 0
       scrollXStore.endIndex = 1
+      reactData.scrollVMLoading = false
       editStore.insertMaps = {}
       editStore.removeMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
@@ -3547,11 +3545,18 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, reserve } = checkboxOpts
+        const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
         if (checkField) {
+          const handleClearChecked = (item: any) => {
+            if (treeConfig && indeterminateField) {
+              XEUtils.set(item, indeterminateField, false)
+            }
+            XEUtils.set(item, checkField, false)
+          }
           if (treeConfig) {
-            XEUtils.eachTree(tableFullData, item => XEUtils.set(item, checkField, false), treeOpts)
+            XEUtils.eachTree(tableFullData, handleClearChecked, treeOpts)
           } else {
-            tableFullData.forEach((item) => XEUtils.set(item, checkField, false))
+            tableFullData.forEach(handleClearChecked)
           }
         }
         if (reserve) {
@@ -5177,7 +5182,8 @@ export default defineComponent({
         const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
         const { afterFullData } = internalData
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField, halfField, checkStrictly, checkMethod } = checkboxOpts
+        const { checkField, checkStrictly, checkMethod } = checkboxOpts
+        const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
         if (!checkStrictly) {
           const disableRows = []
           const checkRows = []
@@ -5202,14 +5208,14 @@ export default defineComponent({
             )
             isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
             if (treeConfig) {
-              if (halfField) {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, halfField) || !!treeIndeterminateMaps[getRowid($xetable, row)])
+              if (indeterminateField) {
+                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField) || !!treeIndeterminateMaps[getRowid($xetable, row)])
               } else {
                 isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || !!treeIndeterminateMaps[getRowid($xetable, row)])
               }
             } else {
-              if (halfField) {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, halfField))
+              if (indeterminateField) {
+                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField))
               } else {
                 isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField))
               }
@@ -5256,11 +5262,15 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, checkStrictly, checkMethod } = checkboxOpts
+        const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
         const rowid = getRowid($xetable, row)
         if (checkField) {
           if (treeConfig && !checkStrictly) {
             if (value === -1) {
               if (!treeIndeterminateMaps[rowid]) {
+                if (indeterminateField) {
+                  XEUtils.set(row, indeterminateField, true)
+                }
                 treeIndeterminateMaps[rowid] = row
               }
               XEUtils.set(row, checkField, false)
@@ -5269,6 +5279,9 @@ export default defineComponent({
               XEUtils.eachTree([row], (item) => {
                 if ($xetable.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
                   XEUtils.set(item, checkField, value)
+                  if (indeterminateField) {
+                    XEUtils.set(row, indeterminateField, false)
+                  }
                   delete treeIndeterminateMaps[getRowid($xetable, item)]
                   handleCheckboxReserveRow(row, value)
                 }
@@ -5320,6 +5333,9 @@ export default defineComponent({
           if (treeConfig && !checkStrictly) {
             if (value === -1) {
               if (!treeIndeterminateMaps[rowid]) {
+                if (indeterminateField) {
+                  XEUtils.set(row, indeterminateField, true)
+                }
                 treeIndeterminateMaps[rowid] = row
               }
               if (selectRowMaps[rowid]) {
@@ -5336,6 +5352,9 @@ export default defineComponent({
                     if (selectRowMaps[itemRid]) {
                       delete selectRowMaps[itemRid]
                     }
+                  }
+                  if (indeterminateField) {
+                    XEUtils.set(row, indeterminateField, false)
                   }
                   delete treeIndeterminateMaps[getRowid($xetable, item)]
                   handleCheckboxReserveRow(row, value)
@@ -6366,6 +6385,9 @@ export default defineComponent({
           }
           if (props.treeConfig && checkboxOpts.isShiftKey) {
             errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
+          }
+          if (checkboxOpts.halfField) {
+            warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
           }
         }
 

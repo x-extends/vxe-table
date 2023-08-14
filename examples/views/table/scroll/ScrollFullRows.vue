@@ -36,7 +36,8 @@
       :export-config="{}"
       :loading="demo1.loading"
       :sort-config="{trigger: 'cell'}"
-      :checkbox-config="{checkField: 'checked'}">
+      :checkbox-config="{checkField: 'checked'}"
+      :scroll-y="{enabled: true}">
       <vxe-column type="seq" width="100" fixed="left"></vxe-column>
       <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
       <vxe-column field="attr0" title="Attr0" width="200" sortable></vxe-column>

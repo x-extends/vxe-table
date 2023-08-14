@@ -14,7 +14,7 @@
       height="500"
       ref="xTable"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId'}"
-      :scroll-y="{gt: 0}"
+      :scroll-y="{enabled: true, gt: 0}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="200" tree-node></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>

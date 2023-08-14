@@ -9,7 +9,7 @@
       ref="xTable"
       height="500"
       :row-config="{height: 120}"
-      :scroll-y="{gt: 0}"
+      :scroll-y="{enabled: true, gt: 0}"
       :loading="demo1.loading">
       <vxe-column type="seq" title="序号" width="100"></vxe-column>
       <vxe-column title="图片" width="140" align="center">

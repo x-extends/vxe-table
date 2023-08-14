@@ -36,6 +36,9 @@ export default defineComponent({
         checkField: 'checked',
         labelField: 'id'
       },
+      scrollY: {
+        enabled: true
+      },
       footerMethod () {
         return footerData.value
       }
