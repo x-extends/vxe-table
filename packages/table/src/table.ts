@@ -3634,7 +3634,7 @@ export default defineComponent({
               return selectRadioRow
             }
           } else {
-            if (!afterFullRowMaps[rowid]) {
+            if (afterFullRowMaps[rowid]) {
               return selectRadioRow
             }
           }
