@@ -31,7 +31,7 @@
       <vxe-column title="操作" width="500">
         <template #default="{ row }">
           <vxe-button type="text" status="primary" @click="insertRow(row, 'current')">插入节点</vxe-button>
-          <vxe-button type="text" status="primary" @click="insertRow(row, 'top')">顶部插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertRow(row, 'top')">顶部插入子节点</vxe-button>
           <vxe-button type="text" status="primary" @click="insertRow(row, 'bottom')">尾部插入子节点</vxe-button>
           <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
         </template>

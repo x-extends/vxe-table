@@ -76,10 +76,15 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           const parentRest = fullAllDataRowIdData[getRowid($xetable, parentRow)]
           const parentLevel = parentRest ? parentRest.level : 0
           let parentChilds = parentRow[childrenField]
+          let mapChilds = parentRow[mapChildrenField]
           if (!XEUtils.isArray(parentChilds)) {
             parentChilds = parentRow[childrenField] = []
           }
+          if (!XEUtils.isArray(mapChilds)) {
+            mapChilds = parentRow[childrenField] = []
+          }
           parentChilds[funcName](item)
+          mapChilds[funcName](item)
           const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
@@ -116,6 +121,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        * @param {Row} row 指定行
        */
       insertAt (records: any, row: any) {
+        debugger
         const { treeConfig } = props
         const { mergeList, editStore } = reactData
         const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
