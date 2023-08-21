@@ -28,6 +28,15 @@ export interface TableEditMethods<D = VxeTableDataRow> {
    */
   insertAt(records: any, row: any | -1 | null): Promise<{ row: D, rows: D[] }>
   /**
+   * 往表格在指定行中的下一行插入临时数据
+   * 如果 row 为空则从插入到顶部，如果为树结构，则插入到目标节点顶部
+   * 如果 row 为 -1 则从插入到底部，如果为树结构，则插入到目标节点底部
+   * 如果 row 为有效行则插入到该行的下一行位置，如果为树结构，则有插入到效的目标节点该行的下一行位置
+   * @param records records 新的数据
+   * @param row row 指定行
+   */
+  insertNextAt(records: any, row: any | -1 | null): Promise<{ row: D, rows: D[] }>
+  /**
    * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
    * @param rows 指定行
    */

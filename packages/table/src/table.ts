@@ -5760,7 +5760,6 @@ export default defineComponent({
         const { row, column } = params
         const { lazy } = treeOpts
         const rowid = getRowid($xetable, row)
-        debugger
         if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
           const expanded = !tableMethods.isTreeExpandByRow(row)
           const columnIndex = tableMethods.getColumnIndex(column)

@@ -122,7 +122,7 @@ export namespace VxeModalPropTypes {
   export type Position = 'center' | ModalPosition
   export type Title = string | number
   export type Duration = number | string
-  export type Content = number | string
+  export type Content = number | string | null
   /**
    * 请使用 content
    * @deprecated

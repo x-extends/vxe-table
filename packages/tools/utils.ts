@@ -1,8 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../v-x-e-table/src/conf'
-
-let zindexIndex = 0
-let lastZindex = 1
+import DomZIndex from 'dom-zindex'
 
 export function isEnableConf (conf: any): boolean {
   return conf && conf.enabled !== false
@@ -21,12 +19,11 @@ export function parseFile (file: File) {
 }
 
 export function nextZIndex () {
-  lastZindex = GlobalConfig.zIndex + zindexIndex++
-  return lastZindex
+  return DomZIndex.getNext()
 }
 
 export function getLastZIndex () {
-  return lastZindex
+  return DomZIndex.getCurrent()
 }
 
 export function hasChildrenList (item: any) {

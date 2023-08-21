@@ -25,15 +25,19 @@
       :data="demo1.tableData">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column field="name" title="Name" tree-node></vxe-column>
-      <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="size" title="Size" width="100" :edit-render="{}">
+        <template #edit="{ row }">
+          <vxe-input v-model="row.size" type="text"></vxe-input>
+        </template>
+      </vxe-column>
       <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
-      <vxe-column title="操作" width="500">
+      <vxe-column title="操作" width="640">
         <template #default="{ row }">
-          <vxe-button type="text" status="primary" @click="insertRow(row, 'current')">插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertRow(row, 'current')">当前位置插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertNextRow(row, 'current')">下一行位置插入新节点</vxe-button>
           <vxe-button type="text" status="primary" @click="insertRow(row, 'top')">顶部插入子节点</vxe-button>
           <vxe-button type="text" status="primary" @click="insertRow(row, 'bottom')">尾部插入子节点</vxe-button>
-          <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
+          <vxe-button type="text" status="danger" @click="removeRow(row)">删除节点</vxe-button>
         </template>
       </vxe-column>
     </vxe-table>
@@ -110,10 +114,11 @@ export default defineComponent({
       // 如果 null 则插入到目标节点顶部
       // 如果 -1 则插入到目标节点底部
       // 如果 row 则有插入到效的目标节点该行的位置
+      const rid = Date.now()
       if (locat === 'current') {
         const record = {
-          name: '新数据',
-          id: Date.now(),
+          name: `新数据${rid}`,
+          id: rid,
           parentId: currRow.parentId, // 父节点必须与当前行一致
           date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
         }
@@ -121,8 +126,8 @@ export default defineComponent({
         await $table.setActiveRow(newRow) // 插入子节点
       } else if (locat === 'top') {
         const record = {
-          name: '新数据',
-          id: Date.now(),
+          name: `新数据${rid}`,
+          id: rid,
           parentId: currRow.id, // 需要指定父节点，自动插入该节点中
           date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
         }
@@ -131,13 +136,31 @@ export default defineComponent({
         await $table.setActiveRow(newRow) // 插入子节点
       } else if (locat === 'bottom') {
         const record = {
-          name: '新数据',
-          id: Date.now(),
+          name: `新数据${rid}`,
+          id: rid,
           parentId: currRow.id, // 需要指定父节点，自动插入该节点中
           date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
         }
         const { row: newRow } = await $table.insertAt(record, -1)
         await $table.setTreeExpand(currRow, true) // 将父节点展开
+        await $table.setActiveRow(newRow) // 插入子节点
+      }
+    }
+
+    const insertNextRow = async (currRow: any, locat: string) => {
+      const $table = xTable.value
+      // 如果 null 则插入到目标节点顶部
+      // 如果 -1 则插入到目标节点底部
+      // 如果 row 则有插入到效的目标节点该行的位置
+      const rid = Date.now()
+      if (locat === 'current') {
+        const record = {
+          name: `新数据${rid}`,
+          id: rid,
+          parentId: currRow.parentId, // 父节点必须与当前行一致
+          date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+        }
+        const { row: newRow } = await $table.insertNextAt(record, currRow)
         await $table.setActiveRow(newRow) // 插入子节点
       }
     }
@@ -193,6 +216,7 @@ export default defineComponent({
       searchMethod,
       removeRow,
       insertRow,
+      insertNextRow,
       getInsertEvent,
       getRemoveEvent,
       getUpdateEvent,
