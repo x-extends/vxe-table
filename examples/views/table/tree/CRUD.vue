@@ -25,13 +25,13 @@
       :data="tableData">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column field="name" title="Name" tree-node></vxe-column>
-      <vxe-column field="size" title="Size" :edit-render="{name: 'input'}"></vxe-column>
-      <vxe-column field="type" title="Type" :edit-render="{name: 'input'}"></vxe-column>
+      <vxe-column field="size" title="Size" width="100" :edit-render="{name: 'input'}"></vxe-column>
       <vxe-column field="date" title="Date" :edit-render="{name: '$input', props: {type: 'date'}}"></vxe-column>
-      <vxe-column title="操作" width="500">
+      <vxe-column title="操作" width="640">
         <template #default="{ row }">
-          <vxe-button type="text" status="primary" @click="insertRow(row, 'current')">插入节点</vxe-button>
-          <vxe-button type="text" status="primary" @click="insertRow(row, 'top')">顶部插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertRow(row, 'current')">当前位置插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertNextRow(row, 'current')">下一行位置插入节点</vxe-button>
+          <vxe-button type="text" status="primary" @click="insertRow(row, 'top')">顶部插入子节点</vxe-button>
           <vxe-button type="text" status="primary" @click="insertRow(row, 'bottom')">尾部插入子节点</vxe-button>
           <vxe-button type="text" status="primary" @click="removeRow(row)">删除节点</vxe-button>
         </template>
@@ -284,6 +284,22 @@ export default {
         }
         const { row: newRow } = await $table.insertAt(record, -1)
         await $table.setTreeExpand(currRow, true) // 将父节点展开
+        await $table.setActiveRow(newRow) // 插入子节点
+      }
+    },
+    async insertNextRow (currRow, locat) {
+      const $table = this.$refs.xTable
+      // 如果 null 则插入到目标节点顶部
+      // 如果 -1 则插入到目标节点底部
+      // 如果 row 则有插入到效的目标节点该行的位置
+      if (locat === 'current') {
+        const record = {
+          name: '新数据',
+          id: Date.now(),
+          parentId: currRow.parentId, // 父节点必须与当前行一致
+          date: XEUtils.toDateString(new Date(), 'yyyy-MM-dd')
+        }
+        const { row: newRow } = await $table.insertNextAt(record, currRow)
         await $table.setActiveRow(newRow) // 插入子节点
       }
     },

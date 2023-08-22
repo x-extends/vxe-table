@@ -104,8 +104,8 @@ function getNativeOns (renderOpts, params) {
   XEUtils.objectEach(nativeEvents, (func, key) => {
     nativeOns[key] = function (...args) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (!XEUtils.isFunction(key)) {
-          errLog('vxe.error.errFunc', [key])
+        if (!XEUtils.isFunction(func)) {
+          errLog('vxe.error.errFunc', [func])
         }
       }
       func(params, ...args)
@@ -123,8 +123,8 @@ function getOns (renderOpts, params, inputFunc, changeFunc) {
   XEUtils.objectEach(events, (func, key) => {
     ons[key] = function (...args) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (!XEUtils.isFunction(key)) {
-          errLog('vxe.error.errFunc', [key])
+        if (!XEUtils.isFunction(func)) {
+          errLog('vxe.error.errFunc', [func])
         }
       }
       func(params, ...args)

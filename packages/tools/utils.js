@@ -1,9 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../v-x-e-table/src/conf'
+import DomZIndex from 'dom-zindex'
 import { warnLog, errLog } from '../tools/log'
-
-let zindexIndex = 0
-let lastZindex = 1
 
 export function isEnableConf (conf) {
   return conf && conf.enabled !== false
@@ -31,11 +29,10 @@ export function getColumnList (columns) {
 
 export const UtilTools = {
   nextZIndex () {
-    lastZindex = GlobalConfig.zIndex + zindexIndex++
-    return lastZindex
+    return DomZIndex.getNext()
   },
   getLastZIndex () {
-    return lastZindex
+    return DomZIndex.getCurrent()
   },
   getColumnList,
   getClass (property, params) {

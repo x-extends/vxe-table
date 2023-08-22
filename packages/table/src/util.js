@@ -160,7 +160,7 @@ function countTreeExpand (prevRow, params) {
   const { treeOpts } = $table
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rowChildren = prevRow[childrenField]
-  if ($table.isTreeExpandByRow(prevRow)) {
+  if (rowChildren && $table.isTreeExpandByRow(prevRow)) {
     for (let index = 0; index < rowChildren.length; index++) {
       count += countTreeExpand(rowChildren[index], params)
     }

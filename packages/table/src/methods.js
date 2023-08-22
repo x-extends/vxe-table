@@ -3121,6 +3121,7 @@ const Methods = {
   handleCheckedAllCheckboxRow (value, isForce) {
     const { afterFullData, treeConfig, treeOpts, selectCheckboxRows, checkboxReserveRowMap, checkboxOpts } = this
     const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
+    const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     let selectRows = []
     const beforeSelection = treeConfig ? [] : selectCheckboxRows.filter(row => this.findRowIndexOf(afterFullData, row) === -1)
     if (checkStrictly) {
@@ -3137,6 +3138,9 @@ const Methods = {
               selectRows.push(row)
             }
             XEUtils.set(row, checkField, value)
+          }
+          if (treeConfig && indeterminateField) {
+            XEUtils.set(row, indeterminateField, false)
           }
         }
         // 如果存在选中方法
@@ -3223,7 +3227,8 @@ const Methods = {
   },
   checkSelectionStatus () {
     const { afterFullData, selectCheckboxRows, treeIndeterminates, checkboxOpts, treeConfig } = this
-    const { checkField, halfField, checkStrictly, checkMethod } = checkboxOpts
+    const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (!checkStrictly) {
       const disableRows = []
       const checkRows = []
@@ -3248,14 +3253,14 @@ const Methods = {
         )
         isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
         if (treeConfig) {
-          if (halfField) {
-            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, halfField) || this.findRowIndexOf(treeIndeterminates, row) > -1)
+          if (indeterminateField) {
+            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField) || this.findRowIndexOf(treeIndeterminates, row) > -1)
           } else {
             isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || this.findRowIndexOf(treeIndeterminates, row) > -1)
           }
         } else {
-          if (halfField) {
-            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, halfField))
+          if (indeterminateField) {
+            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField))
           } else {
             isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField))
           }
@@ -3428,11 +3433,18 @@ const Methods = {
   clearCheckboxRow () {
     const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
     const { checkField, reserve } = checkboxOpts
+    const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (checkField) {
+      const handleClearChecked = (item) => {
+        if (treeConfig && indeterminateField) {
+          XEUtils.set(item, indeterminateField, false)
+        }
+        XEUtils.set(item, checkField, false)
+      }
       if (treeConfig) {
-        XEUtils.eachTree(tableFullData, item => XEUtils.set(item, checkField, false), treeOpts)
+        XEUtils.eachTree(tableFullData, handleClearChecked, treeOpts)
       } else {
-        tableFullData.forEach(item => XEUtils.set(item, checkField, false))
+        tableFullData.forEach(handleClearChecked)
       }
     }
     if (reserve) {
@@ -4928,7 +4940,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

@@ -9,7 +9,7 @@ import { getSlotVNs } from '../../tools/vn'
 const renderType = 'body'
 
 // 滚动、拖动过程中不需要触发
-function isOperateMouse ($xetable) {
+function isVMScrollProcess ($xetable) {
   return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.delayHover)
 }
 
@@ -122,7 +122,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   // hover 进入事件
   if (showTitle || showTooltip || showAllTip || bindMouseenter || tooltipConfig) {
     tdOns.mouseenter = evnt => {
-      if (isOperateMouse($xetable)) {
+      if (isVMScrollProcess($xetable)) {
         return
       }
       if (showTitle) {
@@ -139,7 +139,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   // hover 退出事件
   if (showTooltip || showAllTip || bindMouseleave || tooltipConfig) {
     tdOns.mouseleave = evnt => {
-      if (isOperateMouse($xetable)) {
+      if (isVMScrollProcess($xetable)) {
         return
       }
       if (showTooltip || showAllTip) {
@@ -323,13 +323,13 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     // 事件绑定
     if (rowOpts.isHover || highlightHoverRow) {
       trOn.mouseenter = evnt => {
-        if (isOperateMouse($xetable)) {
+        if (isVMScrollProcess($xetable)) {
           return
         }
         $xetable.triggerHoverEvent(evnt, { row, rowIndex })
       }
       trOn.mouseleave = () => {
-        if (isOperateMouse($xetable)) {
+        if (isVMScrollProcess($xetable)) {
           return
         }
         $xetable.clearHoverRow()

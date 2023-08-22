@@ -885,6 +885,12 @@ export default {
       if (this.editConfig && this.editOpts.activeMethod) {
         warnLog('vxe.error.delProp', ['table.edit-config.activeMethod', 'table.edit-config.beforeEditMethod'])
       }
+      if (this.treeConfig && this.checkboxOpts.isShiftKey) {
+        errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
+      }
+      if (this.checkboxOpts.halfField) {
+        warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+      }
     }
 
     // 检查是否有安装需要的模块
