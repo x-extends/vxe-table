@@ -504,8 +504,10 @@ export default {
   },
   beforeDestroy () {
     clearTimeout(this.wheelTime)
-    this.$el._onscroll = null
-    this.$el.onscroll = null
+    if (this.$el) {
+      this.$el._onscroll = null
+      this.$el.onscroll = null
+    }
   },
   destroyed () {
     const { $parent: $xetable, fixedType } = this
