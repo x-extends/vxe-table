@@ -725,8 +725,10 @@ export default defineComponent({
     onBeforeUnmount(() => {
       const el = refElem.value
       clearTimeout(wheelTime)
-      el._onscroll = null
-      el.onscroll = null
+      if (el) {
+        el._onscroll = null
+        el.onscroll = null
+      }
     })
 
     onUnmounted(() => {
