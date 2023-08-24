@@ -454,10 +454,14 @@
   font-family: var(--vxe-font-family);
   direction: ltr;
   .vxe-table--body-wrapper {
-    background-color: var(--vxe-table-body-background-color);
+    table {
+      background-color: var(--vxe-table-body-background-color);
+    }
   }
   .vxe-table--footer-wrapper {
-    background-color: var(--vxe-table-footer-background-color);
+    table {
+      background-color: var(--vxe-table-footer-background-color);
+    }
   }
   .vxe-table--header,
   .vxe-table--body,
