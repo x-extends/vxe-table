@@ -623,7 +623,7 @@ const Methods = {
     fullAllDataRowIdData = this.fullAllDataRowIdData = {}
     fullAllDataRowMap.clear()
     if (treeConfig) {
-      XEUtils.eachTree(tableFullTreeData, handleCache, treeOpts)
+      XEUtils.eachTree(tableFullTreeData, handleCache, { children: childrenField })
     } else {
       tableFullData.forEach(handleCache)
     }
@@ -646,7 +646,8 @@ const Methods = {
     }
     // 源数据缓存
     if (treeConfig && !treeOpts.transform) {
-      XEUtils.eachTree(sourceData, handleSourceRow, treeOpts)
+      const childrenField = treeOpts.children || treeOpts.childrenField
+      XEUtils.eachTree(sourceData, handleSourceRow, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
     } else {
       sourceData.forEach(handleSourceRow)
     }
@@ -661,7 +662,7 @@ const Methods = {
     return this.createData(childRecords).then((rows) => {
       if (keepSource) {
         const rowid = getRowid(this, row)
-        const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid(this, item), treeOpts)
+        const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid(this, item), { children: childrenField })
         if (matchObj) {
           matchObj.item[childrenField] = XEUtils.clone(rows, true)
         }
@@ -673,7 +674,7 @@ const Methods = {
         fullDataRowMap.set(childRow, rest)
         fullAllDataRowIdData[rowid] = rest
         fullAllDataRowMap.set(childRow, rest)
-      }, treeOpts)
+      }, { children: childrenField })
       row[childrenField] = rows
       if (transform) {
         row[mapChildrenField] = rows
@@ -2520,6 +2521,7 @@ const Methods = {
         const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
+        const childrenField = treeOpts.children || treeOpts.childrenField
         let params
         if (filterStore.visible) {
           if (isEsc) {
@@ -2592,7 +2594,7 @@ const Methods = {
               }
             } else if (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
               // 如果是树形表格当前行回车移动到子节点
-              const childrens = currentRow[treeOpts.children]
+              const childrens = currentRow[childrenField]
               if (childrens && childrens.length) {
                 evnt.preventDefault()
                 const targetRow = childrens[0]
@@ -2654,7 +2656,7 @@ const Methods = {
               }
             } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
-              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, treeOpts)
+              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, { children: childrenField })
               if (parentRow) {
                 evnt.preventDefault()
                 params = { $table: this, row: parentRow }
@@ -2981,6 +2983,7 @@ const Methods = {
   handleSelectRow ({ row }, value, isForce) {
     const { selectCheckboxRows, afterFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
     const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     if (checkField) {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
@@ -2996,10 +2999,10 @@ const Methods = {
               XEUtils.remove(treeIndeterminates, half => this.eqRow(half, item))
               this.handleCheckboxReserveRow(row, value)
             }
-          }, treeOpts)
+          }, { children: childrenField })
         }
         // 如果存在父节点，更新父节点状态
-        const matchObj = XEUtils.findTree(afterFullData, item => this.eqRow(item, row), treeOpts)
+        const matchObj = XEUtils.findTree(afterFullData, item => this.eqRow(item, row), { children: childrenField })
         if (matchObj && matchObj.parent) {
           let parentStatus
           const vItems = !isForce && checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
@@ -3037,10 +3040,10 @@ const Methods = {
               XEUtils.remove(treeIndeterminates, half => this.eqRow(half, item))
               this.handleCheckboxReserveRow(row, value)
             }
-          }, treeOpts)
+          }, { children: childrenField })
         }
         // 如果存在父节点，更新父节点状态
-        const matchObj = XEUtils.findTree(afterFullData, item => this.eqRow(item, row), treeOpts)
+        const matchObj = XEUtils.findTree(afterFullData, item => this.eqRow(item, row), { children: childrenField })
         if (matchObj && matchObj.parent) {
           let parentStatus
           const vItems = !isForce && checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
@@ -3122,6 +3125,7 @@ const Methods = {
     const { afterFullData, treeConfig, treeOpts, selectCheckboxRows, checkboxReserveRowMap, checkboxOpts } = this
     const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
+    const childrenField = treeOpts.children || treeOpts.childrenField
     let selectRows = []
     const beforeSelection = treeConfig ? [] : selectCheckboxRows.filter(row => this.findRowIndexOf(afterFullData, row) === -1)
     if (checkStrictly) {
@@ -3146,7 +3150,7 @@ const Methods = {
         // 如果存在选中方法
         // 如果方法成立，则更新值，否则忽略该数据
         if (treeConfig) {
-          XEUtils.eachTree(afterFullData, checkValFn, treeOpts)
+          XEUtils.eachTree(afterFullData, checkValFn, { children: childrenField })
         } else {
           afterFullData.forEach(checkValFn)
         }
@@ -3165,7 +3169,7 @@ const Methods = {
               if (isForce || (!checkMethod || checkMethod({ row }))) {
                 selectRows.push(row)
               }
-            }, treeOpts)
+            }, { children: childrenField })
           } else {
             /**
              * 如果是树取消
@@ -3176,7 +3180,7 @@ const Methods = {
                 if (checkMethod({ row }) ? 0 : this.findRowIndexOf(selectCheckboxRows, row) > -1) {
                   selectRows.push(row)
                 }
-              }, treeOpts)
+              }, { children: childrenField })
             }
           }
         } else {
@@ -3332,6 +3336,7 @@ const Methods = {
    */
   getRadioReserveRecord (isFull) {
     const { fullDataRowIdData, radioReserveRow, radioOpts, afterFullData, treeConfig, treeOpts } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     if (radioOpts.reserve && radioReserveRow) {
       const rowid = getRowid(this, radioReserveRow)
       if (isFull) {
@@ -3341,7 +3346,7 @@ const Methods = {
       } else {
         const rowkey = getRowkey(this)
         if (treeConfig) {
-          const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), treeOpts)
+          const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), { children: childrenField })
           if (matchObj) {
             return radioReserveRow
           }
@@ -3369,13 +3374,14 @@ const Methods = {
    */
   getCheckboxReserveRecords (isFull) {
     const { fullDataRowIdData, afterFullData, checkboxReserveRowMap, checkboxOpts, treeConfig, treeOpts } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const reserveSelection = []
     if (checkboxOpts.reserve) {
       const afterFullIdMaps = {}
       if (treeConfig) {
         XEUtils.eachTree(afterFullData, row => {
           afterFullIdMaps[getRowid(this, row)] = 1
-        }, treeOpts)
+        }, { children: childrenField })
       } else {
         afterFullData.forEach(row => {
           afterFullIdMaps[getRowid(this, row)] = 1
@@ -3433,6 +3439,7 @@ const Methods = {
   clearCheckboxRow () {
     const { tableFullData, treeConfig, treeOpts, checkboxOpts } = this
     const { checkField, reserve } = checkboxOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (checkField) {
       const handleClearChecked = (item) => {
@@ -3442,7 +3449,7 @@ const Methods = {
         XEUtils.set(item, checkField, false)
       }
       if (treeConfig) {
-        XEUtils.eachTree(tableFullData, handleClearChecked, treeOpts)
+        XEUtils.eachTree(tableFullData, handleClearChecked, { children: childrenField })
       } else {
         tableFullData.forEach(handleClearChecked)
       }
@@ -3567,6 +3574,7 @@ const Methods = {
    */
   getRadioRecord (isFull) {
     const { treeConfig, treeOpts, selectRow, fullDataRowIdData, afterFullData } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     if (selectRow) {
       const rowid = getRowid(this, selectRow)
       if (isFull) {
@@ -3576,7 +3584,7 @@ const Methods = {
       } else {
         if (treeConfig) {
           const rowkey = getRowkey(this)
-          const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), treeOpts)
+          const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), { children: childrenField })
           if (matchObj) {
             return selectRow
           }
@@ -4021,11 +4029,12 @@ const Methods = {
    */
   setAllRowExpand (expanded) {
     const { treeConfig, treeOpts, tableFullData, tableFullTreeData } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     let expandedRows = []
     if (treeConfig) {
       XEUtils.eachTree(tableFullTreeData, (row) => {
         expandedRows.push(row)
-      }, treeOpts)
+      }, { children: childrenField })
     } else {
       expandedRows = tableFullData
     }
@@ -4229,13 +4238,14 @@ const Methods = {
     const { treeConfig, treeOpts, tableFullData } = this
     if (treeConfig) {
       const { expandAll, expandRowKeys } = treeOpts
+      const childrenField = treeOpts.children || treeOpts.childrenField
       if (expandAll) {
         this.setAllTreeExpand(true)
       } else if (expandRowKeys) {
         const defExpandeds = []
         const rowkey = getRowkey(this)
         expandRowKeys.forEach(rowid => {
-          const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeOpts)
+          const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), { children: childrenField })
           if (matchObj) {
             defExpandeds.push(matchObj.item)
           }
@@ -4297,7 +4307,7 @@ const Methods = {
       if (lazy || (rowChildren && rowChildren.length)) {
         expandeds.push(row)
       }
-    }, treeOpts)
+    }, { children: childrenField })
     return this.setTreeExpand(expandeds, expanded)
   },
   /**
@@ -4318,7 +4328,7 @@ const Methods = {
     if (accordion) {
       validRows = validRows.length ? [validRows[validRows.length - 1]] : []
       // 同一级只能展开一个
-      const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], treeOpts)
+      const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], { children: childrenField })
       if (matchObj) {
         XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
       }
@@ -4398,10 +4408,11 @@ const Methods = {
   clearTreeExpand () {
     const { treeOpts, treeExpandeds, tableFullData } = this
     const { transform, reserve } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const isExists = treeExpandeds.length
     this.treeExpandeds = []
     if (reserve) {
-      XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), treeOpts)
+      XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), { children: childrenField })
     }
     return this.handleTableData().then(() => {
       if (transform) {
@@ -4678,9 +4689,10 @@ const Methods = {
    */
   scrollToTreeRow (row) {
     const { tableFullData, treeConfig, treeOpts } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     const rests = []
     if (treeConfig) {
-      const matchObj = XEUtils.findTree(tableFullData, item => item === row, treeOpts)
+      const matchObj = XEUtils.findTree(tableFullData, item => item === row, { children: childrenField })
       if (matchObj) {
         const nodes = matchObj.nodes
         nodes.forEach((row, index) => {

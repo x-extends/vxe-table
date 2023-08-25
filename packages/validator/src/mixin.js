@@ -112,6 +112,7 @@ export default {
     beginValidate (rows, cb, isFull) {
       const validRest = {}
       const { editRules, afterFullData, treeConfig, treeOpts } = this
+      const childrenField = treeOpts.children || treeOpts.childrenField
       let vaildDatas
       if (rows === true) {
         vaildDatas = afterFullData
@@ -165,7 +166,7 @@ export default {
           }
         }
         if (treeConfig) {
-          XEUtils.eachTree(vaildDatas, handleVaild, treeOpts)
+          XEUtils.eachTree(vaildDatas, handleVaild, { children: childrenField })
         } else {
           vaildDatas.forEach(handleVaild)
         }

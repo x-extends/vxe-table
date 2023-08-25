@@ -79,6 +79,7 @@ function toBooleanValue (cellValue) {
 function getLabelData ($xetable, opts, columns, datas) {
   const { isAllExpand, mode } = opts
   const { treeConfig, treeOpts, radioOpts, checkboxOpts, columnOpts } = $xetable
+  const childrenField = treeOpts.children || treeOpts.childrenField
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
   }
@@ -149,7 +150,7 @@ function getLabelData ($xetable, opts, columns, datas) {
         expandMaps.set(row, 1)
         rest.push(Object.assign(item, row))
       }
-    }, treeOpts)
+    }, { children: childrenField })
     return rest
   }
   return datas.map((row, $rowIndex) => {
