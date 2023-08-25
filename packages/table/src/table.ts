@@ -1281,7 +1281,7 @@ export default defineComponent({
             fullDataRowIdData[rowid] = rest
           }
           fullMaps[rowid] = row
-        }, { children: treeOpts.transform ? treeOpts.mapChildrenField : (childrenField) })
+        }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
       } else {
         afterFullData.forEach((row, index) => {
           const rowid = getRowid($xetable, row)
@@ -1854,6 +1854,7 @@ export default defineComponent({
       const { selectCheckboxMaps } = reactData
       const { afterFullData, afterFullRowMaps, checkboxReserveRowMap } = internalData
       const treeOpts = computeTreeOpts.value
+      const childrenField = treeOpts.children || treeOpts.childrenField
       const checkboxOpts = computeCheckboxOpts.value
       const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
       const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
@@ -1891,7 +1892,7 @@ export default defineComponent({
           // 如果存在选中方法
           // 如果方法成立，则更新值，否则忽略该数据
           if (treeConfig) {
-            XEUtils.eachTree(afterFullData, checkValFn, treeOpts)
+            XEUtils.eachTree(afterFullData, checkValFn, { children: childrenField })
           } else {
             afterFullData.forEach(checkValFn)
           }
@@ -1910,7 +1911,7 @@ export default defineComponent({
                 if (isForce || (!checkMethod || checkMethod({ row }))) {
                   selectRowMaps[getRowid($xetable, row)] = row
                 }
-              }, treeOpts)
+              }, { children: childrenField })
             } else {
               /**
                * 如果是树取消
@@ -1922,7 +1923,7 @@ export default defineComponent({
                   if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
                     selectRowMaps[rowid] = row
                   }
-                }, treeOpts)
+                }, { children: childrenField })
               }
             }
           } else {
@@ -2029,13 +2030,14 @@ export default defineComponent({
         const { tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const { expandAll, expandRowKeys } = treeOpts
+        const childrenField = treeOpts.children || treeOpts.childrenField
         if (expandAll) {
           tableMethods.setAllTreeExpand(true)
         } else if (expandRowKeys) {
           const defExpandeds: any[] = []
           const rowkey = getRowkey($xetable)
           expandRowKeys.forEach((rowid: any) => {
-            const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), treeOpts)
+            const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), { children: childrenField })
             if (matchObj) {
               defExpandeds.push(matchObj.item)
             }
@@ -2557,7 +2559,7 @@ export default defineComponent({
       if (accordion) {
         validRows = validRows.length ? [validRows[validRows.length - 1]] : []
         // 同一级只能展开一个
-        const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], treeOpts)
+        const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], { children: childrenField })
         if (matchObj) {
           matchObj.items.forEach(item => {
             const rowid = getRowid($xetable, item)
@@ -2803,7 +2805,7 @@ export default defineComponent({
         return tableMethods.createData(childRecords).then((rows) => {
           if (keepSource) {
             const rowid = getRowid($xetable, row)
-            const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid($xetable, item), treeOpts)
+            const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid($xetable, item), { children: childrenField })
             if (matchObj) {
               matchObj.item[childrenField] = XEUtils.clone(rows, true)
             }
@@ -2813,7 +2815,7 @@ export default defineComponent({
             const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
-          }, treeOpts)
+          }, { children: childrenField })
           row[childrenField] = rows
           if (transform) {
             row[mapChildrenField] = rows
@@ -3462,6 +3464,7 @@ export default defineComponent({
         const { fullDataRowIdData, radioReserveRow, afterFullData } = internalData
         const radioOpts = computeRadioOpts.value
         const treeOpts = computeTreeOpts.value
+        const childrenField = treeOpts.children || treeOpts.childrenField
         if (radioOpts.reserve && radioReserveRow) {
           const rowid = getRowid($xetable, radioReserveRow)
           if (isFull) {
@@ -3471,7 +3474,7 @@ export default defineComponent({
           } else {
             const rowkey = getRowkey($xetable)
             if (treeConfig) {
-              const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), treeOpts)
+              const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), { children: childrenField })
               if (matchObj) {
                 return radioReserveRow
               }
@@ -3496,13 +3499,14 @@ export default defineComponent({
         const { afterFullData, fullDataRowIdData, checkboxReserveRowMap } = internalData
         const checkboxOpts = computeCheckboxOpts.value
         const treeOpts = computeTreeOpts.value
+        const childrenField = treeOpts.children || treeOpts.childrenField
         const reserveSelection: any[] = []
         if (checkboxOpts.reserve) {
           const afterFullIdMaps: { [key: string]: number } = {}
           if (treeConfig) {
             XEUtils.eachTree(afterFullData, row => {
               afterFullIdMaps[getRowid($xetable, row)] = 1
-            }, treeOpts)
+            }, { children: childrenField })
           } else {
             afterFullData.forEach(row => {
               afterFullIdMaps[getRowid($xetable, row)] = 1
@@ -3543,6 +3547,7 @@ export default defineComponent({
         const { treeConfig } = props
         const { tableFullData } = internalData
         const treeOpts = computeTreeOpts.value
+        const childrenField = treeOpts.children || treeOpts.childrenField
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, reserve } = checkboxOpts
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
@@ -3554,7 +3559,7 @@ export default defineComponent({
             XEUtils.set(item, checkField, false)
           }
           if (treeConfig) {
-            XEUtils.eachTree(tableFullData, handleClearChecked, treeOpts)
+            XEUtils.eachTree(tableFullData, handleClearChecked, { children: childrenField })
           } else {
             tableFullData.forEach(handleClearChecked)
           }
@@ -3840,11 +3845,12 @@ export default defineComponent({
       setAllRowExpand (expanded) {
         const treeOpts = computeTreeOpts.value
         const { tableFullData, tableFullTreeData } = internalData
+        const childrenField = treeOpts.children || treeOpts.childrenField
         let expandedRows: any[] = []
         if (props.treeConfig) {
           XEUtils.eachTree(tableFullTreeData, (row) => {
             expandedRows.push(row)
-          }, treeOpts)
+          }, { children: childrenField })
         } else {
           expandedRows = tableFullData
         }
@@ -4032,7 +4038,7 @@ export default defineComponent({
           if (lazy || (rowChildren && rowChildren.length)) {
             expandeds.push(row)
           }
-        }, treeOpts)
+        }, { children: childrenField })
         return tableMethods.setTreeExpand(expandeds, expanded).then(() => {
           if (transform) {
             handleVirtualTreeToList()
@@ -4079,11 +4085,12 @@ export default defineComponent({
       clearTreeExpand () {
         const { tableFullTreeData } = internalData
         const treeOpts = computeTreeOpts.value
+        const childrenField = treeOpts.children || treeOpts.childrenField
         const { transform, reserve } = treeOpts
         const expList = tableMethods.getTreeExpandRecords()
         reactData.treeExpandedMaps = {}
         if (reserve) {
-          XEUtils.eachTree(tableFullTreeData, row => handleTreeExpandReserve(row, false), treeOpts)
+          XEUtils.eachTree(tableFullTreeData, row => handleTreeExpandReserve(row, false), { children: childrenField })
         }
         return tablePrivateMethods.handleTableData().then(() => {
           if (transform) {
@@ -4697,7 +4704,7 @@ export default defineComponent({
                 }
               } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
                 // 如果树形表格回退键关闭当前行返回父节点
-                const { parent: parentRow } = XEUtils.findTree(internalData.afterFullData, item => item === currentRow, treeOpts)
+                const { parent: parentRow } = XEUtils.findTree(internalData.afterFullData, item => item === currentRow, { children: childrenField })
                 if (parentRow) {
                   evnt.preventDefault()
                   params = {
@@ -5001,7 +5008,7 @@ export default defineComponent({
         }
         fullAllDataRowIdData = internalData.fullAllDataRowIdData = {}
         if (treeConfig) {
-          XEUtils.eachTree(tableFullTreeData, handleRow, treeOpts)
+          XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
         } else {
           tableFullData.forEach(handleRow)
         }
@@ -5022,8 +5029,9 @@ export default defineComponent({
           sourceDataRowIdData[rowid] = row
         }
         // 源数据缓存
-        if (treeConfig && !treeOpts.transform) {
-          XEUtils.eachTree(sourceData, handleSourceRow, treeOpts)
+        if (treeConfig) {
+          const childrenField = treeOpts.children || treeOpts.childrenField
+          XEUtils.eachTree(sourceData, handleSourceRow, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
         } else {
           sourceData.forEach(handleSourceRow)
         }
@@ -5260,6 +5268,7 @@ export default defineComponent({
         const selectRowMaps = { ...selectCheckboxMaps }
         const { afterFullData } = internalData
         const treeOpts = computeTreeOpts.value
+        const childrenField = treeOpts.children || treeOpts.childrenField
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, checkStrictly, checkMethod } = checkboxOpts
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
@@ -5285,10 +5294,10 @@ export default defineComponent({
                   delete treeIndeterminateMaps[getRowid($xetable, item)]
                   handleCheckboxReserveRow(row, value)
                 }
-              }, treeOpts)
+              }, { children: childrenField })
             }
             // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), treeOpts)
+            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), { children: childrenField })
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems: any[] = []
@@ -5359,10 +5368,10 @@ export default defineComponent({
                   delete treeIndeterminateMaps[getRowid($xetable, item)]
                   handleCheckboxReserveRow(row, value)
                 }
-              }, treeOpts)
+              }, { children: childrenField })
             }
             // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), treeOpts)
+            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), { children: childrenField })
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems: any[] = []
@@ -5819,7 +5828,8 @@ export default defineComponent({
         const rests: Promise<any>[] = []
         if (treeConfig) {
           const treeOpts = computeTreeOpts.value
-          const matchObj = XEUtils.findTree(tableFullData, item => $xetable.eqRow(item, row), treeOpts)
+          const childrenField = treeOpts.children || treeOpts.childrenField
+          const matchObj = XEUtils.findTree(tableFullData, item => $xetable.eqRow(item, row), { children: childrenField })
           if (matchObj) {
             const nodes = matchObj.nodes
             nodes.forEach((row, index) => {

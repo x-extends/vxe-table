@@ -28,7 +28,7 @@
   "style": "lib/style.css",
   "typings": "types/index.d.ts",
   "dependencies": {
-    "dom-zindex": "^0.4.0"
+    "dom-zindex": "^0.5.0"
   },
   "devDependencies": {
     "@types/resize-observer-browser": "^0.1.7",

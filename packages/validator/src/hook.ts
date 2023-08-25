@@ -110,6 +110,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       const { editRules, treeConfig } = props
       const { afterFullData } = internalData
       const treeOpts = computeTreeOpts.value
+      const childrenField = treeOpts.children || treeOpts.childrenField
       const validOpts = computeValidOpts.value
       let vaildDatas
       if (rows === true) {
@@ -180,7 +181,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           }
         }
         if (treeConfig) {
-          XEUtils.eachTree(vaildDatas, handleVaild, treeOpts)
+          XEUtils.eachTree(vaildDatas, handleVaild, { children: childrenField })
         } else {
           vaildDatas.forEach(handleVaild)
         }

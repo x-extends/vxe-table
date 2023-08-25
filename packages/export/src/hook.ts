@@ -330,6 +330,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         htmlCellElem = document.createElement('div')
       }
       if (treeConfig) {
+        const childrenField = treeOpts.children || treeOpts.childrenField
         // 如果是树表格只允许导出数据源
         const rest: any[] = []
         const expandMaps: Map<any, number> = new Map()
@@ -396,7 +397,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
             expandMaps.set(row, 1)
             rest.push(Object.assign(item, row))
           }
-        }, treeOpts)
+        }, { children: childrenField })
         return rest
       }
       return datas.map((row, $rowIndex) => {
