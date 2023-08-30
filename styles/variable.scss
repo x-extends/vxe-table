@@ -230,13 +230,13 @@ $vxe-input-height-default: $vxe-button-height-default !default;
 $vxe-input-height-medium: $vxe-button-height-medium !default;
 $vxe-input-height-small: $vxe-button-height-small !default;
 $vxe-input-height-mini: $vxe-button-height-mini !default;
+$vxe-input-count-color: #999 !default;
+$vxe-input-count-background-color: #fff !default;
+$vxe-input-count-error-color: $vxe-table-validate-error-color !default;
 
 /*textarea*/
 $vxe-textarea-line-height: 1.5715 !default;
 $vxe-textarea-background-color: #fff !default;
-$vxe-textarea-count-color: #999 !default;
-$vxe-textarea-count-background-color: #fff !default;
-$vxe-textarea-count-error-color: $vxe-table-validate-error-color !default;
 
 /*form*/
 $vxe-form-item-min-height-default: 36px !default;

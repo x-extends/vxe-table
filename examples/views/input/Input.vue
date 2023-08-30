@@ -14,7 +14,9 @@
     </p>
 
     <p>
-      <vxe-input v-model="demo1.value200" placeholder="可清除" clearable></vxe-input>
+      <vxe-input v-model="demo1.value200" placeholder="可清除" showWordCount></vxe-input>
+      <vxe-input v-model="demo1.value200" placeholder="可清除" showWordCount maxlength="20"></vxe-input>
+      <vxe-input v-model="demo1.value200" placeholder="可清除" showWordCount clearable></vxe-input>
       <vxe-input v-model="demo1.value201" placeholder="带图标" prefix-icon="fa fa-user" suffix-icon="fa fa-search" clearable></vxe-input>
       <vxe-input v-model="demo1.value202" placeholder="只读的" suffix-icon="fa fa-search" readonly></vxe-input>
       <vxe-input v-model="demo1.value203" placeholder="禁用的" prefix-icon="fa fa-user-o" disabled></vxe-input>

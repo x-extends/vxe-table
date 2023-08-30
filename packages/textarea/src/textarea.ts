@@ -222,6 +222,7 @@ export default defineComponent({
         class: ['vxe-textarea', className, {
           [`size--${vSize}`]: vSize,
           'is--autosize': autosize,
+          'is--count': showWordCount,
           'is--disabled': disabled,
           'def--rows': !XEUtils.eqNull(rows),
           'def--cols': !XEUtils.eqNull(cols)

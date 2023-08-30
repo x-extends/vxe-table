@@ -60,10 +60,10 @@
   bottom: 0.2em;
   right: 1.4em;
   padding-left: 0.2em;
-  color: var(--vxe-textarea-count-color);
-  background-color: var(--vxe-textarea-count-background-color);
+  color: var(--vxe-input-count-color);
+  background-color: var(--vxe-input-count-background-color);
   &.is--error {
-    color: var(--vxe-textarea-count-error-color);
+    color: var(--vxe-input-count-error-color);
   }
 }
 

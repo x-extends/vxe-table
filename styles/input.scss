@@ -81,6 +81,18 @@ $iconWidth: 1.6em;
   }
 }
 
+.vxe-input--count {
+  position: absolute;
+  top: 1px;
+  right: 0.5em;
+  height: calc(100% - 2px);
+  color: var(--vxe-input-count-color);
+  background-color: var(--vxe-input-count-background-color);
+  &.is--error {
+    color: var(--vxe-input-count-error-color);
+  }
+}
+
 // 前缀图标
 .vxe-input {
   .vxe-input--prefix {
@@ -106,6 +118,14 @@ $iconWidth: 1.6em;
     .vxe-input--inner {
       padding-right: $iconWidth + 0.2em;
     }
+    &.is--count {
+      .vxe-input--inner {
+        padding-right: 5em;
+      }
+    }
+    .vxe-input--count {
+      right: $iconWidth + 0.5em;
+    }
   }
   &.is--left {
     .vxe-input--inner {
@@ -120,6 +140,11 @@ $iconWidth: 1.6em;
   &.is--right {
     .vxe-input--inner {
       text-align: right;
+    }
+  }
+  &.is--count {
+    .vxe-input--inner {
+      padding-right: 3.4em;
     }
   }
   &.is--controls {

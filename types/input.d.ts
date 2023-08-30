@@ -62,6 +62,10 @@ export namespace VxeInputPropTypes {
   export type Placeholder = string
   export type Maxlength = string | number
   export type Multiple = boolean
+  export type ShowWordCount = boolean
+  export type CountMethod = (params: {
+    value: string
+  }) => number
   export type Autocomplete = string
   export type Align = string
   export type Form = string
@@ -101,6 +105,14 @@ export type VxeInputProps = {
   placeholder?: VxeInputPropTypes.Placeholder
   maxlength?: VxeInputPropTypes.Maxlength
   multiple?: VxeInputPropTypes.Multiple
+  /**
+   * 是否显示字数统计
+   */
+  showWordCount?: VxeInputPropTypes.ShowWordCount
+  /**
+   * 自定义字数统计方法
+   */
+  countMethod?: VxeInputPropTypes.CountMethod
   autocomplete?: VxeInputPropTypes.Autocomplete
   align?: VxeInputPropTypes.Align
   form?: VxeInputPropTypes.Form
