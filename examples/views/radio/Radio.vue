@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>{{ $t('app.aside.nav.radio') }}</h2>
-    <p class="tip">单选框、单选祖、单选按钮</p>
+    <p class="tip">单选框、单选组、单选按钮</p>
 
     <p>
       <vxe-radio name="n1" v-model="demo1.value1" label="1" content="默认尺寸"></vxe-radio>
