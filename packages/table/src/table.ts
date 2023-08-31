@@ -2796,7 +2796,7 @@ export default defineComponent({
        */
       loadTreeChildren (row, childRecords) {
         const { keepSource } = props
-        const { tableSourceData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+        const { tableSourceData, fullDataRowIdData, fullAllDataRowIdData, sourceDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
@@ -2809,6 +2809,10 @@ export default defineComponent({
             if (matchObj) {
               matchObj.item[childrenField] = XEUtils.clone(rows, true)
             }
+            rows.forEach(childRow => {
+              const rowid = getRowid($xetable, childRow)
+              sourceDataRowIdData[rowid] = XEUtils.clone(childRow, true)
+            })
           }
           XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
             const rowid = getRowid($xetable, childRow)

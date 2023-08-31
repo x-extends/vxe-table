@@ -1,4 +1,4 @@
-import { nextTick } from 'vue'
+import { reactive, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { renderer } from '../../v-x-e-table'
@@ -113,7 +113,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       if (!XEUtils.isArray(records)) {
         records = [records]
       }
-      const newRecords: any[] = $xetable.defineField(records.map((record: any) => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
+      const newRecords: any[] = reactive($xetable.defineField(records.map((record: any) => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record))))
       if (!row) {
         // 如果为虚拟树
         if (treeConfig && transform) {

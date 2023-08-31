@@ -19,6 +19,10 @@
     "type": "number | string",
     "description": "表格的高度；支持铺满父容器或者固定高度，如果设置 auto 为铺满父容器（如果设置为 auto，则必须确保存在父节点且不允许存在相邻元素）"
   },
+  "vxe-table/min-height": {
+    "type": "number | string",
+    "description": "表格最小高度"
+  },
   "vxe-table/max-height": {
     "type": "number | string",
     "description": "表格的最大高度"
@@ -297,7 +301,7 @@
   },
   "vxe-table/custom-config": {
     "type": "any",
-    "description": "自定义列配置项"
+    "description": "个性化信息配置项"
   },
   "vxe-table/scroll-x": {
     "type": "any",
@@ -530,6 +534,10 @@
   "vxe-grid/height": {
     "type": "number | string",
     "description": "表格的高度；支持铺满父容器或者固定高度，如果设置 auto 为铺满父容器（如果设置为 auto，则必须确保存在父节点且不允许存在相邻元素）"
+  },
+  "vxe-grid/min-height": {
+    "type": "number | string",
+    "description": "表格最小高度"
   },
   "vxe-grid/max-height": {
     "type": "number | string",
@@ -809,7 +817,7 @@
   },
   "vxe-grid/custom-config": {
     "type": "any",
-    "description": "自定义列配置项"
+    "description": "个性化信息配置项"
   },
   "vxe-grid/scroll-x": {
     "type": "any",
@@ -1202,6 +1210,14 @@
   "vxe-input/controls": {
     "type": "boolean",
     "description": "只对 type=number|integer|float 有效，是否显示控制按钮"
+  },
+  "vxe-input/show-word-count": {
+    "type": "boolean",
+    "description": "只对 type=text|search 有效，是否显示字数统计"
+  },
+  "vxe-input/count-method": {
+    "type": "boolean",
+    "description": "只对 showWordCount 有效，自定义字数计算方法"
   },
   "vxe-input/start-date": {
     "type": "number | string | date",
