@@ -833,17 +833,17 @@ export interface TableReactData<D = VxeTableDataRow> {
   expandColumn: any
   hasFixedColumn: boolean
   // 已展开的行
-  rowExpandedMaps: Record<string, D>
+  rowExpandedMaps: Record<string, D | null>
   // 懒加载中的展开行
-  rowExpandLazyLoadedMaps: Record<string, D>
+  rowExpandLazyLoadedMaps: Record<string, D | null>
   // 树节点列信息
   treeNodeColumn: any
   // 已展开树节点
-  treeExpandedMaps: Record<string, D>
+  treeExpandedMaps: Record<string, D | null>
   // 懒加载中的树节点的集合
-  treeExpandLazyLoadedMaps: Record<string, D>
+  treeExpandLazyLoadedMaps: Record<string, D | null>
   // 树节点不确定状态的集合
-  treeIndeterminateMaps: Record<string, D>
+  treeIndeterminateMaps: Record<string, D | null>
   // 合并单元格的对象集
   mergeList: VxeTableDefines.MergeItem<D>[]
   // 合并表尾数据的对象集

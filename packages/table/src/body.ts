@@ -442,11 +442,8 @@ export default defineComponent({
           )
         }
         // 如果是树形表格
-        if (treeConfig && !scrollYLoad && !transform) {
-          const rowChildren = row[childrenField]
-          if (rowChildren && rowChildren.length && treeExpandedMaps[rowid]) {
-            rows.push(...renderRows(fixedType, rowChildren, tableColumn))
-          }
+        if (isExpandTree) {
+          rows.push(...renderRows(fixedType, rowChildren, tableColumn))
         }
       })
       return rows

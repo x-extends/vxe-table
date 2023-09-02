@@ -2048,16 +2048,16 @@ export default defineComponent({
     }
 
     const handleAsyncTreeExpandChilds = (row: any): Promise<void> => {
-      const { treeExpandedMaps, treeExpandLazyLoadedMaps } = reactData
-      const { fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const { transform, loadMethod } = treeOpts
       const { checkStrictly } = checkboxOpts
-      const rowid = getRowid($xetable, row)
-      const rest = fullAllDataRowIdData[rowid]
       return new Promise(resolve => {
         if (loadMethod) {
+          const { treeExpandLazyLoadedMaps } = reactData
+          const { fullAllDataRowIdData } = internalData
+          const rowid = getRowid($xetable, row)
+          const rest = fullAllDataRowIdData[rowid]
           treeExpandLazyLoadedMaps[rowid] = row
           loadMethod({ $table: $xetable, row }).then((childRecords: any) => {
             rest.treeLoaded = true
@@ -2069,6 +2069,7 @@ export default defineComponent({
             }
             if (childRecords) {
               return tableMethods.loadTreeChildren(row, childRecords).then(childRows => {
+                const { treeExpandedMaps } = reactData
                 if (childRows.length && !treeExpandedMaps[rowid]) {
                   treeExpandedMaps[rowid] = row
                 }
@@ -2084,6 +2085,7 @@ export default defineComponent({
               })
             }
           }).catch(() => {
+            const { treeExpandLazyLoadedMaps } = reactData
             rest.treeLoaded = false
             if (treeExpandLazyLoadedMaps[rowid]) {
               delete treeExpandLazyLoadedMaps[rowid]
@@ -2111,21 +2113,23 @@ export default defineComponent({
     }
 
     const handleAsyncRowExpand = (row: any): Promise<void> => {
-      const { fullAllDataRowIdData } = internalData
-      const { rowExpandLazyLoadedMaps, rowExpandedMaps } = reactData
       return new Promise(resolve => {
         const expandOpts = computeExpandOpts.value
         const { loadMethod } = expandOpts
         if (loadMethod) {
+          const { fullAllDataRowIdData } = internalData
+          const { rowExpandLazyLoadedMaps } = reactData
           const rowid = getRowid($xetable, row)
           const rest = fullAllDataRowIdData[rowid]
           rowExpandLazyLoadedMaps[rowid] = row
           loadMethod({ $table: $xetable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).then(() => {
+            const { rowExpandedMaps } = reactData
             rest.expandLoaded = true
             rowExpandedMaps[rowid] = row
           }).catch(() => {
             rest.expandLoaded = false
           }).finally(() => {
+            const { rowExpandLazyLoadedMaps } = reactData
             if (rowExpandLazyLoadedMaps[rowid]) {
               delete rowExpandLazyLoadedMaps[rowid]
             }
@@ -2547,6 +2551,7 @@ export default defineComponent({
      */
     const handleBaseTreeExpand = (rows: any[], expanded: boolean) => {
       const { treeExpandedMaps, treeExpandLazyLoadedMaps, treeNodeColumn } = reactData
+      const treeTempExpandedMaps = { ...treeExpandedMaps }
       const { fullAllDataRowIdData, tableFullData } = internalData
       const treeOpts = computeTreeOpts.value
       const { reserve, lazy, accordion, toggleMethod } = treeOpts
@@ -2563,8 +2568,8 @@ export default defineComponent({
         if (matchObj) {
           matchObj.items.forEach(item => {
             const rowid = getRowid($xetable, item)
-            if (treeExpandedMaps[rowid]) {
-              delete treeExpandedMaps[rowid]
+            if (treeTempExpandedMaps[rowid]) {
+              delete treeTempExpandedMaps[rowid]
             }
           })
         }
@@ -2572,7 +2577,7 @@ export default defineComponent({
       if (expanded) {
         validRows.forEach((row: any) => {
           const rowid = getRowid($xetable, row)
-          if (!treeExpandedMaps[rowid]) {
+          if (!treeTempExpandedMaps[rowid]) {
             const rest = fullAllDataRowIdData[rowid]
             const isLoad = lazy && row[hasChildField] && !rest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
             // 是否使用懒加载
@@ -2580,7 +2585,7 @@ export default defineComponent({
               result.push(handleAsyncTreeExpandChilds(row))
             } else {
               if (row[childrenField] && row[childrenField].length) {
-                treeExpandedMaps[rowid] = row
+                treeTempExpandedMaps[rowid] = row
               }
             }
           }
@@ -2588,14 +2593,15 @@ export default defineComponent({
       } else {
         validRows.forEach(item => {
           const rowid = getRowid($xetable, item)
-          if (treeExpandedMaps[rowid]) {
-            delete treeExpandedMaps[rowid]
+          if (treeTempExpandedMaps[rowid]) {
+            delete treeTempExpandedMaps[rowid]
           }
         })
       }
       if (reserve) {
         validRows.forEach((row: any) => handleTreeExpandReserve(row, expanded))
       }
+      reactData.treeExpandedMaps = treeTempExpandedMaps
       return Promise.all(result).then(() => {
         return tableMethods.recalculate()
       })
@@ -3440,7 +3446,7 @@ export default defineComponent({
       },
       isIndeterminateByCheckboxRow (row) {
         const { treeIndeterminateMaps } = reactData
-        return treeIndeterminateMaps[getRowid($xetable, row)] && !tableMethods.isCheckedByCheckboxRow(row)
+        return !!treeIndeterminateMaps[getRowid($xetable, row)] && !tableMethods.isCheckedByCheckboxRow(row)
       },
       /**
        * 多选，切换某一行的选中状态
@@ -3868,8 +3874,9 @@ export default defineComponent({
        * @param {Boolean} expanded 是否展开
        */
       setRowExpand (rows, expanded) {
-        let { rowExpandedMaps, rowExpandLazyLoadedMaps, expandColumn: column } = reactData
+        const { rowExpandedMaps, rowExpandLazyLoadedMaps, expandColumn: column } = reactData
         const { fullAllDataRowIdData } = internalData
+        let rExpandedMaps = { ...rowExpandedMaps }
         const expandOpts = computeExpandOpts.value
         const { reserve, lazy, accordion, toggleMethod } = expandOpts
         const lazyRests: any[] = []
@@ -3881,28 +3888,28 @@ export default defineComponent({
           }
           if (accordion) {
             // 只能同时展开一个
-            rowExpandedMaps = {}
+            rExpandedMaps = {}
             rows = rows.slice(rows.length - 1, rows.length)
           }
           const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xetable, expanded, column, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) })) : rows
           if (expanded) {
             validRows.forEach((row: any) => {
               const rowid = getRowid($xetable, row)
-              if (!rowExpandedMaps[rowid]) {
+              if (!rExpandedMaps[rowid]) {
                 const rest = fullAllDataRowIdData[rowid]
                 const isLoad = lazy && !rest.expandLoaded && !rowExpandLazyLoadedMaps[rowid]
                 if (isLoad) {
                   lazyRests.push(handleAsyncRowExpand(row))
                 } else {
-                  rowExpandedMaps[rowid] = row
+                  rExpandedMaps[rowid] = row
                 }
               }
             })
           } else {
             validRows.forEach(item => {
               const rowid = getRowid($xetable, item)
-              if (rowExpandedMaps[rowid]) {
-                delete rowExpandedMaps[rowid]
+              if (rExpandedMaps[rowid]) {
+                delete rExpandedMaps[rowid]
               }
             })
           }
@@ -3910,7 +3917,7 @@ export default defineComponent({
             validRows.forEach((row: any) => handleRowExpandReserve(row, expanded))
           }
         }
-        reactData.rowExpandedMaps = rowExpandedMaps
+        reactData.rowExpandedMaps = rExpandedMaps
         return Promise.all(lazyRests).then(() => tableMethods.recalculate())
       },
       /**
