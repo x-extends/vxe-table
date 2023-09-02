@@ -52,9 +52,15 @@ function getCustomStorageMap (key) {
   return rest && rest._v === version ? rest : { _v: version }
 }
 
-function getRecoverRow (_vm, list) {
-  const { fullAllDataRowMap } = _vm
-  return list.filter(row => fullAllDataRowMap.has(row))
+const getRecoverRowMaps = (_vm, keyMaps) => {
+  const { fullAllDataRowIdData } = _vm
+  const restKeys = {}
+  XEUtils.each(keyMaps, (row, rowid) => {
+    if (fullAllDataRowIdData[rowid]) {
+      restKeys[rowid] = row
+    }
+  })
+  return restKeys
 }
 
 function handleReserveRow (_vm, reserveRowMap) {
@@ -654,7 +660,7 @@ const Methods = {
     this.tableSourceData = sourceData
   },
   loadTreeChildren (row, childRecords) {
-    const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData } = this
+    const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData, sourceDataRowIdData } = this
     const { transform, mapChildrenField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const rest = fullAllDataRowIdData[getRowid(this, row)]
@@ -666,6 +672,10 @@ const Methods = {
         if (matchObj) {
           matchObj.item[childrenField] = XEUtils.clone(rows, true)
         }
+        rows.forEach(childRow => {
+          const rowid = getRowid(this, childRow)
+          sourceDataRowIdData[rowid] = XEUtils.clone(childRow, true)
+        })
       }
       XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
         const rowid = getRowid(this, childRow)
@@ -1161,7 +1171,7 @@ const Methods = {
    * 用于多选行，获取已选中的数据
    */
   getCheckboxRecords (isFull) {
-    const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts, tableFullTreeData, afterTreeFullData } = this
+    const { tableFullData, afterFullData, treeConfig, treeOpts, checkboxOpts, tableFullTreeData, afterTreeFullData, afterFullRowMaps } = this
     const { transform, mapChildrenField } = treeOpts
     const { checkField } = checkboxOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
@@ -1174,12 +1184,12 @@ const Methods = {
         rowList = currTableData.filter(row => XEUtils.get(row, checkField))
       }
     } else {
-      const { selectCheckboxRows } = this
-      if (treeConfig) {
-        rowList = XEUtils.filterTree(currTableData, row => this.findRowIndexOf(selectCheckboxRows, row) > -1, { children: transform ? mapChildrenField : childrenField })
-      } else {
-        rowList = currTableData.filter(row => this.findRowIndexOf(selectCheckboxRows, row) > -1)
-      }
+      const { selectCheckboxMaps, fullDataRowIdData } = this
+      XEUtils.each(selectCheckboxMaps, (row, rowid) => {
+        if (isFull ? fullDataRowIdData[rowid] : afterFullRowMaps[rowid]) {
+          rowList.push(row)
+        }
+      })
     }
     return rowList
   },
@@ -1188,13 +1198,15 @@ const Methods = {
    * @returns
    */
   handleVirtualTreeToList () {
-    const { treeOpts, treeConfig, treeExpandeds, afterTreeFullData, afterFullData } = this
+    const { treeOpts, treeConfig, treeExpandedMaps, afterTreeFullData, afterFullData } = this
     if (treeConfig && treeOpts.transform) {
       const fullData = []
-      const expandMaps = new Map()
+      const expandMaps = {}
       XEUtils.eachTree(afterTreeFullData, (row, index, items, path, parent) => {
-        if (!parent || (expandMaps.has(parent) && treeExpandeds.indexOf(parent) > -1)) {
-          expandMaps.set(row, 1)
+        const rowid = getRowid(this, row)
+        const parentRowid = getRowid(this, parent)
+        if (!parent || (expandMaps[parentRowid] && treeExpandedMaps[parentRowid])) {
+          expandMaps[rowid] = 1
           fullData.push(row)
         }
       }, { children: treeOpts.mapChildrenField })
@@ -1322,6 +1334,7 @@ const Methods = {
   updateAfterDataIndex () {
     const { treeConfig, afterFullData, fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData, treeOpts } = this
     const childrenField = treeOpts.children || treeOpts.childrenField
+    const fullMaps = {}
     if (treeConfig) {
       XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
         const rowid = getRowid(this, row)
@@ -1335,6 +1348,7 @@ const Methods = {
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
+        fullMaps[rowid] = row
       }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
     } else {
       afterFullData.forEach((row, index) => {
@@ -1349,8 +1363,10 @@ const Methods = {
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
+        fullMaps[rowid] = row
       })
     }
+    this.afterFullRowMaps = fullMaps
   },
   /**
    * 只对 tree-config 有效，获取行的父级
@@ -2922,12 +2938,22 @@ const Methods = {
    * 获取复选框半选状态的行数据
    */
   getCheckboxIndeterminateRecords (isFull) {
-    const { treeConfig, treeIndeterminates, fullDataRowIdData } = this
+    const { treeConfig, treeIndeterminateMaps, fullDataRowIdData } = this
     if (treeConfig) {
-      return isFull ? treeIndeterminates.slice(0) : treeIndeterminates.filter(row => {
-        const rowid = getRowid(this, row)
-        return fullDataRowIdData[rowid]
+      const fullRest = []
+      const defRest = []
+      XEUtils.each(treeIndeterminateMaps, (item, rowid) => {
+        if (item) {
+          fullRest.push(item)
+          if (fullDataRowIdData[rowid]) {
+            defRest.push(item)
+          }
+        }
       })
+      if (isFull) {
+        return fullRest
+      }
+      return defRest
     }
     return []
   },
@@ -2965,30 +2991,36 @@ const Methods = {
     return this.handleCheckedCheckboxRow(rows, value, true)
   },
   isCheckedByCheckboxRow (row) {
-    const { selectCheckboxRows } = this
+    const { selectCheckboxMaps } = this
     const { checkField } = this.checkboxOpts
     if (checkField) {
       return XEUtils.get(row, checkField)
     }
-    return this.findRowIndexOf(selectCheckboxRows, row) > -1
+    return !!selectCheckboxMaps[getRowid(this, row)]
   },
   isIndeterminateByCheckboxRow (row) {
-    const { treeIndeterminates } = this
-    return this.findRowIndexOf(treeIndeterminates, row) > -1 && !this.isCheckedByCheckboxRow(row)
+    const { treeIndeterminateMaps } = this
+    return !!treeIndeterminateMaps[getRowid(this, row)] && !this.isCheckedByCheckboxRow(row)
   },
   /**
    * 多选，行选中事件
    * value 选中true 不选false 半选-1
    */
   handleSelectRow ({ row }, value, isForce) {
-    const { selectCheckboxRows, afterFullData, treeConfig, treeOpts, treeIndeterminates, checkboxOpts } = this
+    const { selectCheckboxMaps, afterFullData, treeConfig, treeOpts, treeIndeterminateMaps, checkboxOpts } = this
     const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    const selectRowMaps = { ...selectCheckboxMaps }
     const childrenField = treeOpts.children || treeOpts.childrenField
+    const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
+    const rowid = getRowid(this, row)
     if (checkField) {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
-          if (this.findRowIndexOf(treeIndeterminates, row) === -1) {
-            treeIndeterminates.push(row)
+          if (!treeIndeterminateMaps[rowid]) {
+            if (indeterminateField) {
+              XEUtils.set(row, indeterminateField, true)
+            }
+            treeIndeterminateMaps[rowid] = row
           }
           XEUtils.set(row, checkField, false)
         } else {
@@ -2996,7 +3028,10 @@ const Methods = {
           XEUtils.eachTree([row], (item) => {
             if (this.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
               XEUtils.set(item, checkField, value)
-              XEUtils.remove(treeIndeterminates, half => this.eqRow(half, item))
+              if (indeterminateField) {
+                XEUtils.set(row, indeterminateField, false)
+              }
+              delete treeIndeterminateMaps[getRowid(this, item)]
               this.handleCheckboxReserveRow(row, value)
             }
           }, { children: childrenField })
@@ -3005,14 +3040,36 @@ const Methods = {
         const matchObj = XEUtils.findTree(afterFullData, item => this.eqRow(item, row), { children: childrenField })
         if (matchObj && matchObj.parent) {
           let parentStatus
-          const vItems = !isForce && checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
-          const indeterminatesItem = XEUtils.find(matchObj.items, item => this.findRowIndexOf(treeIndeterminates, item) > -1)
+          const vItems = []
+          const vItemMaps = {}
+          if (!isForce && checkMethod) {
+            matchObj.items.forEach((item) => {
+              if (checkMethod({ row: item })) {
+                const itemRid = getRowid(this, item)
+                vItemMaps[itemRid] = item
+                vItems.push(item)
+              }
+            })
+          } else {
+            matchObj.items.forEach(item => {
+              const itemRid = getRowid(this, item)
+              vItemMaps[itemRid] = item
+              vItems.push(item)
+            })
+          }
+          const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid(this, item)])
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
-            const selectItems = matchObj.items.filter(item => XEUtils.get(item, checkField))
-            parentStatus = selectItems.filter(item => this.findRowIndexOf(vItems, item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+            const selectItems = []
+            matchObj.items.forEach(item => {
+              if (XEUtils.get(item, checkField)) {
+                selectItems.push(item)
+              }
+            })
+            parentStatus = selectItems.filter(item => vItemMaps[getRowid(this, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
           }
+          this.selectCheckboxMaps = selectRowMaps
           return this.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
         }
       } else {
@@ -3024,20 +3081,31 @@ const Methods = {
     } else {
       if (treeConfig && !checkStrictly) {
         if (value === -1) {
-          if (this.findRowIndexOf(treeIndeterminates, row) === -1) {
-            treeIndeterminates.push(row)
+          if (!treeIndeterminateMaps[rowid]) {
+            if (indeterminateField) {
+              XEUtils.set(row, indeterminateField, true)
+            }
+            treeIndeterminateMaps[rowid] = row
           }
-          XEUtils.remove(selectCheckboxRows, item => this.eqRow(item, row))
+          if (selectRowMaps[rowid]) {
+            delete selectRowMaps[rowid]
+          }
         } else {
           // 更新子节点状态
           XEUtils.eachTree([row], (item) => {
+            const itemRid = getRowid(this, item)
             if (this.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
               if (value) {
-                selectCheckboxRows.push(item)
+                selectRowMaps[itemRid] = item
               } else {
-                XEUtils.remove(selectCheckboxRows, select => this.eqRow(select, item))
+                if (selectRowMaps[itemRid]) {
+                  delete selectRowMaps[itemRid]
+                }
               }
-              XEUtils.remove(treeIndeterminates, half => this.eqRow(half, item))
+              if (indeterminateField) {
+                XEUtils.set(row, indeterminateField, false)
+              }
+              delete treeIndeterminateMaps[getRowid(this, item)]
               this.handleCheckboxReserveRow(row, value)
             }
           }, { children: childrenField })
@@ -3046,36 +3114,67 @@ const Methods = {
         const matchObj = XEUtils.findTree(afterFullData, item => this.eqRow(item, row), { children: childrenField })
         if (matchObj && matchObj.parent) {
           let parentStatus
-          const vItems = !isForce && checkMethod ? matchObj.items.filter((item) => checkMethod({ row: item })) : matchObj.items
-          const indeterminatesItem = XEUtils.find(matchObj.items, item => this.findRowIndexOf(treeIndeterminates, item) > -1)
+          const vItems = []
+          const vItemMaps = {}
+          if (!isForce && checkMethod) {
+            matchObj.items.forEach((item) => {
+              if (checkMethod({ row: item })) {
+                const itemRid = getRowid(this, item)
+                vItemMaps[itemRid] = item
+                vItems.push(item)
+              }
+            })
+          } else {
+            matchObj.items.forEach(item => {
+              const itemRid = getRowid(this, item)
+              vItemMaps[itemRid] = item
+              vItems.push(item)
+            })
+          }
+          const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid(this, item)])
           if (indeterminatesItem) {
             parentStatus = -1
           } else {
-            const selectItems = matchObj.items.filter(item => this.findRowIndexOf(selectCheckboxRows, item) > -1)
-            parentStatus = selectItems.filter(item => this.findRowIndexOf(vItems, item) > -1).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+            const selectItems = []
+            matchObj.items.forEach(item => {
+              const itemRid = getRowid(this, item)
+              if (selectRowMaps[itemRid]) {
+                selectItems.push(item)
+              }
+            })
+            parentStatus = selectItems.filter(item => vItemMaps[getRowid(this, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
           }
+          this.selectCheckboxMaps = selectRowMaps
           return this.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
         }
       } else {
         if (isForce || (!checkMethod || checkMethod({ row }))) {
           if (value) {
-            if (this.findRowIndexOf(selectCheckboxRows, row) === -1) {
-              selectCheckboxRows.push(row)
+            if (!selectRowMaps[rowid]) {
+              selectRowMaps[rowid] = row
             }
           } else {
-            XEUtils.remove(selectCheckboxRows, item => this.eqRow(item, row))
+            if (selectRowMaps[rowid]) {
+              delete selectRowMaps[rowid]
+            }
           }
           this.handleCheckboxReserveRow(row, value)
         }
       }
     }
+    this.selectCheckboxMaps = selectRowMaps
     this.checkSelectionStatus()
   },
   handleToggleCheckRowEvent (evnt, params) {
-    const { selectCheckboxRows, checkboxOpts } = this
+    const { selectCheckboxMaps, checkboxOpts } = this
     const { checkField } = checkboxOpts
     const { row } = params
-    const value = checkField ? !XEUtils.get(row, checkField) : this.findRowIndexOf(selectCheckboxRows, row) === -1
+    let value = false
+    if (checkField) {
+      value = !XEUtils.get(row, checkField)
+    } else {
+      value = !selectCheckboxMaps[getRowid(this, row)]
+    }
     if (evnt) {
       this.triggerCheckRowEvent(evnt, params, value)
     } else {
@@ -3115,19 +3214,29 @@ const Methods = {
    * 多选，切换某一行的选中状态
    */
   toggleCheckboxRow (row) {
-    const { selectCheckboxRows, checkboxOpts } = this
+    const { selectCheckboxMaps, checkboxOpts } = this
     const { checkField } = checkboxOpts
-    const value = checkField ? !XEUtils.get(row, checkField) : this.findRowIndexOf(selectCheckboxRows, row) === -1
+    const value = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid(this, row)]
     this.handleSelectRow({ row }, value, true)
     return this.$nextTick()
   },
   handleCheckedAllCheckboxRow (value, isForce) {
-    const { afterFullData, treeConfig, treeOpts, selectCheckboxRows, checkboxReserveRowMap, checkboxOpts } = this
+    const { afterFullData, treeConfig, treeOpts, selectCheckboxMaps, checkboxReserveRowMap, checkboxOpts, afterFullRowMaps } = this
     const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     const childrenField = treeOpts.children || treeOpts.childrenField
-    let selectRows = []
-    const beforeSelection = treeConfig ? [] : selectCheckboxRows.filter(row => this.findRowIndexOf(afterFullData, row) === -1)
+    const selectRowMaps = {}
+
+    // 疑惑！
+    if (!treeConfig) {
+      XEUtils.each(selectCheckboxMaps, (row, rowid) => {
+        if (!afterFullRowMaps[rowid]) {
+          selectRowMaps[rowid] = row
+        }
+      })
+    }
+    // 疑惑！
+
     if (checkStrictly) {
       this.isAllSelected = value
     } else {
@@ -3139,7 +3248,7 @@ const Methods = {
         const checkValFn = (row) => {
           if (isForce || (!checkMethod || checkMethod({ row }))) {
             if (value) {
-              selectRows.push(row)
+              selectRowMaps[getRowid(this, row)] = row
             }
             XEUtils.set(row, checkField, value)
           }
@@ -3167,7 +3276,7 @@ const Methods = {
              */
             XEUtils.eachTree(afterFullData, (row) => {
               if (isForce || (!checkMethod || checkMethod({ row }))) {
-                selectRows.push(row)
+                selectRowMaps[getRowid(this, row)] = row
               }
             }, { children: childrenField })
           } else {
@@ -3177,8 +3286,9 @@ const Methods = {
              */
             if (!isForce && checkMethod) {
               XEUtils.eachTree(afterFullData, (row) => {
-                if (checkMethod({ row }) ? 0 : this.findRowIndexOf(selectCheckboxRows, row) > -1) {
-                  selectRows.push(row)
+                const rowid = getRowid(this, row)
+                if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
+                  selectRowMaps[rowid] = row
                 }
               }, { children: childrenField })
             }
@@ -3191,9 +3301,16 @@ const Methods = {
              * 如果不存在选中方法，则添加所有数据到临时集合中
              */
             if (!isForce && checkMethod) {
-              selectRows = afterFullData.filter((row) => this.findRowIndexOf(selectCheckboxRows, row) > -1 || checkMethod({ row }))
+              afterFullData.forEach((row) => {
+                const rowid = getRowid(this, row)
+                if (selectCheckboxMaps[rowid] || checkMethod({ row })) {
+                  selectRowMaps[rowid] = row
+                }
+              })
             } else {
-              selectRows = afterFullData.slice(0)
+              afterFullData.forEach(row => {
+                selectRowMaps[getRowid(this, row)] = row
+              })
             }
           } else {
             /**
@@ -3202,23 +3319,29 @@ const Methods = {
              * 如果不存在选中方法，无需处理，临时集合默认为空
              */
             if (!isForce && checkMethod) {
-              selectRows = afterFullData.filter((row) => checkMethod({ row }) ? 0 : this.findRowIndexOf(selectCheckboxRows, row) > -1)
+              afterFullData.forEach((row) => {
+                const rowid = getRowid(this, row)
+                if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
+                  selectRowMaps[rowid] = row
+                }
+              })
             }
           }
         }
       }
       if (reserve) {
         if (value) {
-          selectRows.forEach(row => {
-            checkboxReserveRowMap[getRowid(this, row)] = row
+          XEUtils.each(selectRowMaps, (row, rowid) => {
+            checkboxReserveRowMap[rowid] = row
           })
         } else {
-          afterFullData.forEach(row => this.handleCheckboxReserveRow(row, false))
+          afterFullData.forEach((row) => this.handleCheckboxReserveRow(row, false))
         }
       }
-      this.selectCheckboxRows = checkField ? [] : beforeSelection.concat(selectRows)
+      this.selectCheckboxMaps = checkField ? {} : selectRowMaps
     }
-    this.treeIndeterminates = []
+    this.treeIndeterminateMaps = {}
+    this.treeIndeterminateRowMaps = {}
     this.checkSelectionStatus()
     return this.$nextTick()
   },
@@ -3230,7 +3353,7 @@ const Methods = {
     return this.handleCheckedAllCheckboxRow(value, true)
   },
   checkSelectionStatus () {
-    const { afterFullData, selectCheckboxRows, treeIndeterminates, checkboxOpts, treeConfig } = this
+    const { afterFullData, selectCheckboxMaps, treeIndeterminateMaps, checkboxOpts, treeConfig } = this
     const { checkField, checkStrictly, checkMethod } = checkboxOpts
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     if (!checkStrictly) {
@@ -3258,15 +3381,15 @@ const Methods = {
         isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
         if (treeConfig) {
           if (indeterminateField) {
-            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField) || this.findRowIndexOf(treeIndeterminates, row) > -1)
+            isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField) || !!treeIndeterminateMaps[getRowid(this, row)])
           } else {
-            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || this.findRowIndexOf(treeIndeterminates, row) > -1)
+            isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || !!treeIndeterminateMaps[getRowid(this, row)])
           }
         } else {
           if (indeterminateField) {
-            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField))
+            isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField))
           } else {
-            isIndeterminate = !isAllSelected && afterFullData.some(row => XEUtils.get(row, checkField))
+            isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField))
           }
         }
       } else {
@@ -3277,19 +3400,22 @@ const Methods = {
                   disableRows.push(row)
                   return true
                 }
-                if (this.findRowIndexOf(selectCheckboxRows, row) > -1) {
+                if (selectCheckboxMaps[getRowid(this, row)]) {
                   checkRows.push(row)
                   return true
                 }
                 return false
               }
-            : row => this.findRowIndexOf(selectCheckboxRows, row) > -1
+            : row => selectCheckboxMaps[getRowid(this, row)]
         )
         isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
         if (treeConfig) {
-          isIndeterminate = !isAllSelected && afterFullData.some(row => this.findRowIndexOf(treeIndeterminates, row) > -1 || this.findRowIndexOf(selectCheckboxRows, row) > -1)
+          isIndeterminate = !isAllSelected && afterFullData.some((row) => {
+            const itemRid = getRowid(this, row)
+            return treeIndeterminateMaps[itemRid] || selectCheckboxMaps[itemRid]
+          })
         } else {
-          isIndeterminate = !isAllSelected && afterFullData.some(row => this.findRowIndexOf(selectCheckboxRows, row) > -1)
+          isIndeterminate = !isAllSelected && afterFullData.some((row) => selectCheckboxMaps[getRowid(this, row)])
         }
       }
       this.isAllSelected = isAllSelected
@@ -3298,10 +3424,10 @@ const Methods = {
   },
   // 还原展开、选中等相关状态
   handleReserveStatus () {
-    const { expandColumn, treeOpts, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRow, radioReserveRow, radioOpts, checkboxOpts, selectCheckboxRows, rowExpandeds, treeExpandeds, expandOpts } = this
+    const { expandColumn, treeOpts, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRadioRow, radioReserveRow, radioOpts, checkboxOpts, selectCheckboxMaps, rowExpandedMaps, treeExpandedMaps, expandOpts } = this
     // 单选框
-    if (selectRow && !fullAllDataRowMap.has(selectRow)) {
-      this.selectRow = null // 刷新单选行状态
+    if (selectRadioRow && !fullAllDataRowMap.has(selectRadioRow)) {
+      this.selectRadioRow = null // 刷新单选行状态
     }
     // 还原保留选中状态
     if (radioOpts.reserve && radioReserveRow) {
@@ -3311,7 +3437,7 @@ const Methods = {
       }
     }
     // 复选框
-    this.selectCheckboxRows = getRecoverRow(this, selectCheckboxRows) // 刷新多选行状态
+    this.selectCheckboxMaps = getRecoverRowMaps(this, selectCheckboxMaps) // 刷新多选行状态
     // 还原保留选中状态
     if (checkboxOpts.reserve) {
       this.handleCheckedCheckboxRow(handleReserveRow(this, this.checkboxReserveRowMap), true, true)
@@ -3320,13 +3446,13 @@ const Methods = {
       this.currentRow = null // 刷新当前行状态
     }
     // 行展开
-    this.rowExpandeds = expandColumn ? getRecoverRow(this, rowExpandeds) : [] // 刷新行展开状态
+    this.rowExpandedMaps = expandColumn ? getRecoverRowMaps(this, rowExpandedMaps) : [] // 刷新行展开状态
     // 还原保留状态
     if (expandColumn && expandOpts.reserve) {
       this.setRowExpand(handleReserveRow(this, this.rowExpandedReserveRowMap), true)
     }
     // 树展开
-    this.treeExpandeds = treeConfig ? getRecoverRow(this, treeExpandeds) : [] // 刷新树展开状态
+    this.treeExpandedMaps = treeConfig ? getRecoverRowMaps(this, treeExpandedMaps) : [] // 刷新树展开状态
     if (treeConfig && treeOpts.reserve) {
       this.setTreeExpand(handleReserveRow(this, this.treeExpandedReserveRowMap), true)
     }
@@ -3459,8 +3585,8 @@ const Methods = {
     }
     this.isAllSelected = false
     this.isIndeterminate = false
-    this.selectCheckboxRows = []
-    this.treeIndeterminates = []
+    this.selectCheckboxMaps = {}
+    this.treeIndeterminateMaps = {}
     return this.$nextTick()
   },
   /**
@@ -3483,7 +3609,7 @@ const Methods = {
    * 单选，行选中事件
    */
   triggerRadioRowEvent (evnt, params) {
-    const { selectRow: oldValue, radioOpts } = this
+    const { selectRadioRow: oldValue, radioOpts } = this
     const { row } = params
     let newValue = row
     let isChange = oldValue !== newValue
@@ -3526,13 +3652,13 @@ const Methods = {
     return this.$nextTick()
   },
   isCheckedByRadioRow (row) {
-    return this.selectRow === row
+    return this.selectRadioRow === row
   },
   handleCheckedRadioRow (row, isForce) {
     const { radioOpts } = this
     const { checkMethod } = radioOpts
     if (row && (isForce || (!checkMethod || checkMethod({ row })))) {
-      this.selectRow = row
+      this.selectRadioRow = row
       this.handleRadioReserveRow(row)
     }
     return this.$nextTick()
@@ -3560,7 +3686,7 @@ const Methods = {
    * 用于单选行，手动清空用户的选择
    */
   clearRadioRow () {
-    this.selectRow = null
+    this.selectRadioRow = null
     return this.$nextTick()
   },
   /**
@@ -3573,25 +3699,16 @@ const Methods = {
    * 用于单选行，获取当已选中的数据
    */
   getRadioRecord (isFull) {
-    const { treeConfig, treeOpts, selectRow, fullDataRowIdData, afterFullData } = this
-    const childrenField = treeOpts.children || treeOpts.childrenField
-    if (selectRow) {
-      const rowid = getRowid(this, selectRow)
+    const { selectRadioRow, fullDataRowIdData, afterFullRowMaps } = this
+    if (selectRadioRow) {
+      const rowid = getRowid(this, selectRadioRow)
       if (isFull) {
         if (!fullDataRowIdData[rowid]) {
-          return selectRow
+          return selectRadioRow
         }
       } else {
-        if (treeConfig) {
-          const rowkey = getRowkey(this)
-          const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), { children: childrenField })
-          if (matchObj) {
-            return selectRow
-          }
-        } else {
-          if (afterFullData.indexOf(selectRow) > -1) {
-            return selectRow
-          }
+        if (afterFullRowMaps[rowid]) {
+          return selectRadioRow
         }
       }
     }
@@ -3955,12 +4072,17 @@ const Methods = {
     return rest && rest.expandLoaded
   },
   clearRowExpandLoaded (row) {
-    const { expandOpts, expandLazyLoadeds, fullAllDataRowMap } = this
+    const { expandOpts, rowExpandLazyLoadedMaps, fullAllDataRowMap } = this
     const { lazy } = expandOpts
+    const rowid = getRowid(this, row)
     const rest = fullAllDataRowMap.get(row)
     if (lazy && rest) {
       rest.expandLoaded = false
-      XEUtils.remove(expandLazyLoadeds, item => this.eqRow(item, row))
+      const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
+      if (rowTempExpandLazyLoadedMaps[rowid]) {
+        delete rowTempExpandLazyLoadedMaps[rowid]
+      }
+      this.rowExpandLazyLoadedMaps = rowTempExpandLazyLoadedMaps
     }
     return this.$nextTick()
   },
@@ -3969,9 +4091,10 @@ const Methods = {
    * @param {Row} row 行对象
    */
   reloadRowExpand (row) {
-    const { expandOpts, expandLazyLoadeds } = this
+    const { expandOpts, rowExpandLazyLoadedMaps } = this
     const { lazy } = expandOpts
-    if (lazy && this.findRowIndexOf(expandLazyLoadeds, row) === -1) {
+    const rowid = getRowid(this, row)
+    if (lazy && !rowExpandLazyLoadedMaps[rowid]) {
       this.clearRowExpandLoaded(row)
         .then(() => this.handleAsyncRowExpand(row))
     }
@@ -3988,10 +4111,11 @@ const Methods = {
    * 展开行事件
    */
   triggerRowExpandEvent (evnt, params) {
-    const { expandOpts, expandLazyLoadeds, expandColumn: column } = this
+    const { expandOpts, rowExpandLazyLoadedMaps, expandColumn: column } = this
     const { row } = params
     const { lazy } = expandOpts
-    if (!lazy || this.findRowIndexOf(expandLazyLoadeds, row) === -1) {
+    const rowid = getRowid(this, row)
+    if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
       const expanded = !this.isExpandByRow(row)
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.getVMColumnIndex(column)
@@ -4041,18 +4165,36 @@ const Methods = {
     return this.setRowExpand(expandedRows, expanded)
   },
   handleAsyncRowExpand (row) {
-    const rest = this.fullAllDataRowMap.get(row)
+    const { fullAllDataRowMap, expandOpts } = this
+    const rest = fullAllDataRowMap.get(row)
     return new Promise(resolve => {
-      this.expandLazyLoadeds.push(row)
-      this.expandOpts.loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
-        rest.expandLoaded = true
-        this.rowExpandeds.push(row)
-      }).catch(() => {
-        rest.expandLoaded = false
-      }).finally(() => {
-        XEUtils.remove(this.expandLazyLoadeds, item => this.eqRow(item, row))
-        resolve(this.$nextTick().then(this.recalculate))
-      })
+      const { loadMethod } = expandOpts
+      if (loadMethod) {
+        const { rowExpandLazyLoadedMaps } = this
+        const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
+        const rowid = getRowid(this, row)
+        rowTempExpandLazyLoadedMaps[rowid] = row
+        this.rowExpandLazyLoadedMaps = rowTempExpandLazyLoadedMaps
+        loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
+          rest.expandLoaded = true
+          const { rowExpandedMaps } = this
+          const rowTempExpandedMaps = { ...rowExpandedMaps }
+          rowTempExpandedMaps[rowid] = row
+          this.rowExpandedMaps = rowTempExpandedMaps
+        }).catch(() => {
+          rest.expandLoaded = false
+        }).finally(() => {
+          const { rowExpandLazyLoadedMaps } = this
+          const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
+          if (rowTempExpandLazyLoadedMaps[rowid]) {
+            delete rowTempExpandLazyLoadedMaps[rowid]
+          }
+          this.rowExpandLazyLoadedMaps = rowTempExpandLazyLoadedMaps
+          resolve(this.$nextTick().then(this.recalculate))
+        })
+      } else {
+        resolve()
+      }
     })
   },
   /**
@@ -4063,8 +4205,8 @@ const Methods = {
    * @param {Boolean} expanded 是否展开
    */
   setRowExpand (rows, expanded) {
-    const { fullAllDataRowMap, expandLazyLoadeds, expandOpts, expandColumn: column } = this
-    let { rowExpandeds } = this
+    const { rowExpandedMaps, fullAllDataRowIdData, rowExpandLazyLoadedMaps, expandOpts, expandColumn: column } = this
+    let rExpandedMaps = { ...rowExpandedMaps }
     const { reserve, lazy, accordion, toggleMethod } = expandOpts
     const lazyRests = []
     const columnIndex = this.getColumnIndex(column)
@@ -4075,30 +4217,36 @@ const Methods = {
       }
       if (accordion) {
         // 只能同时展开一个
-        rowExpandeds = []
+        rExpandedMaps = {}
         rows = rows.slice(rows.length - 1, rows.length)
       }
       const validRows = toggleMethod ? rows.filter(row => toggleMethod({ expanded, column, columnIndex, $columnIndex, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) })) : rows
       if (expanded) {
         validRows.forEach(row => {
-          if (this.findRowIndexOf(rowExpandeds, row) === -1) {
-            const rest = fullAllDataRowMap.get(row)
-            const isLoad = lazy && !rest.expandLoaded && this.findRowIndexOf(expandLazyLoadeds, row) === -1
+          const rowid = getRowid(this, row)
+          if (!rExpandedMaps[rowid]) {
+            const rest = fullAllDataRowIdData[rowid]
+            const isLoad = lazy && !rest.expandLoaded && !rowExpandLazyLoadedMaps[rowid]
             if (isLoad) {
               lazyRests.push(this.handleAsyncRowExpand(row))
             } else {
-              rowExpandeds.push(row)
+              rExpandedMaps[rowid] = row
             }
           }
         })
       } else {
-        XEUtils.remove(rowExpandeds, row => this.findRowIndexOf(validRows, row) > -1)
+        validRows.forEach(item => {
+          const rowid = getRowid(this, item)
+          if (rExpandedMaps[rowid]) {
+            delete rExpandedMaps[rowid]
+          }
+        })
       }
       if (reserve) {
         validRows.forEach(row => this.handleRowExpandReserve(row, expanded))
       }
     }
-    this.rowExpandeds = rowExpandeds
+    this.rowExpandedMaps = rExpandedMaps
     return Promise.all(lazyRests).then(this.recalculate)
   },
   /**
@@ -4106,22 +4254,23 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isExpandByRow (row) {
-    const { rowExpandeds } = this
-    return this.findRowIndexOf(rowExpandeds, row) > -1
+    const { rowExpandedMaps } = this
+    const rowid = getRowid(this, row)
+    return !!rowExpandedMaps[rowid]
   },
   /**
    * 手动清空展开行状态，数据会恢复成未展开的状态
    */
   clearRowExpand () {
-    const { expandOpts, rowExpandeds, tableFullData } = this
+    const { expandOpts, tableFullData } = this
     const { reserve } = expandOpts
-    const isExists = rowExpandeds.length
-    this.rowExpandeds = []
+    const expList = this.getRowExpandRecords()
+    this.rowExpandedMaps = {}
     if (reserve) {
       tableFullData.forEach(row => this.handleRowExpandReserve(row, false))
     }
     return this.$nextTick().then(() => {
-      if (isExists) {
+      if (expList.length) {
         this.recalculate()
       }
     })
@@ -4142,13 +4291,25 @@ const Methods = {
     }
   },
   getRowExpandRecords () {
-    return this.rowExpandeds.slice(0)
+    const rest = []
+    XEUtils.each(this.rowExpandedMaps, item => {
+      if (item) {
+        rest.push(item)
+      }
+    })
+    return rest
   },
   getTreeExpandRecords () {
-    return this.treeExpandeds.slice(0)
+    const rest = []
+    XEUtils.each(this.treeExpandedMaps, item => {
+      if (item) {
+        rest.push(item)
+      }
+    })
+    return rest
   },
   /**
-   * 获取数表格状态
+   * 获取树表格状态
    */
   getTreeStatus () {
     if (this.treeConfig) {
@@ -4168,12 +4329,15 @@ const Methods = {
     return rest && rest.treeLoaded
   },
   clearTreeExpandLoaded (row) {
-    const { treeOpts, treeExpandeds, fullAllDataRowMap } = this
+    const { treeOpts, treeExpandedMaps, fullAllDataRowMap } = this
     const { transform, lazy } = treeOpts
+    const rowid = getRowid(this, row)
     const rest = fullAllDataRowMap.get(row)
     if (lazy && rest) {
       rest.treeLoaded = false
-      XEUtils.remove(treeExpandeds, item => row === item)
+      if (treeExpandedMaps[rowid]) {
+        delete treeExpandedMaps[rowid]
+      }
     }
     if (transform) {
       this.handleVirtualTreeToList()
@@ -4186,10 +4350,11 @@ const Methods = {
    * @param {Row} row 行对象
    */
   reloadTreeExpand (row) {
-    const { treeOpts, treeLazyLoadeds } = this
+    const { treeOpts, treeExpandLazyLoadedMaps } = this
     const { transform, lazy } = treeOpts
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
-    if (lazy && row[hasChildField] && treeLazyLoadeds.indexOf(row) === -1) {
+    const rowid = getRowid(this, row)
+    if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
       this.clearTreeExpandLoaded(row).then(() => {
         return this.handleAsyncTreeExpandChilds(row)
       }).then(() => {
@@ -4214,10 +4379,11 @@ const Methods = {
    * 展开树节点事件
    */
   triggerTreeExpandEvent (evnt, params) {
-    const { treeOpts, treeLazyLoadeds } = this
+    const { treeOpts, treeExpandLazyLoadedMaps } = this
     const { row, column } = params
     const { lazy } = treeOpts
-    if (!lazy || treeLazyLoadeds.indexOf(row) === -1) {
+    const rowid = getRowid(this, row)
+    if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
       const expanded = !this.isTreeExpandByRow(row)
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.getVMColumnIndex(column)
@@ -4255,42 +4421,56 @@ const Methods = {
     }
   },
   handleAsyncTreeExpandChilds (row) {
-    const { fullAllDataRowMap, treeExpandeds, treeOpts, treeLazyLoadeds, checkboxOpts } = this
+    const { treeOpts, checkboxOpts } = this
     const { transform, loadMethod } = treeOpts
     const { checkStrictly } = checkboxOpts
-    const rest = fullAllDataRowMap.get(row)
     return new Promise(resolve => {
-      treeLazyLoadeds.push(row)
-      loadMethod({ $table: this, row }).then(childRecords => {
-        // 响应成功后则展开行，并将子节点挂载到该节点下
-        rest.treeLoaded = true
-        XEUtils.remove(treeLazyLoadeds, item => item === row)
-        if (!XEUtils.isArray(childRecords)) {
-          childRecords = []
-        }
-        if (childRecords) {
-          return this.loadTreeChildren(row, childRecords).then(childRows => {
-            if (childRows.length && treeExpandeds.indexOf(row) === -1) {
-              treeExpandeds.push(row)
-            }
-            // 如果当前节点已选中，则展开后子节点也被选中
-            if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
-              this.handleCheckedCheckboxRow(childRows, true, true)
-            }
-            return this.$nextTick().then(() => {
-              if (transform) {
-                return this.handleTableData()
+      if (loadMethod) {
+        const { fullAllDataRowMap, treeExpandLazyLoadedMaps } = this
+        const rowid = getRowid(this, row)
+        const rest = fullAllDataRowMap.get(row)
+        treeExpandLazyLoadedMaps[rowid] = row
+        loadMethod({ $table: this, row }).then(childRecords => {
+          // 响应成功后则展开行，并将子节点挂载到该节点下
+          rest.treeLoaded = true
+          if (treeExpandLazyLoadedMaps[rowid]) {
+            treeExpandLazyLoadedMaps[rowid] = null
+          }
+          if (!XEUtils.isArray(childRecords)) {
+            childRecords = []
+          }
+          if (childRecords) {
+            return this.loadTreeChildren(row, childRecords).then(childRows => {
+              const { treeExpandedMaps } = this
+              const treeTempExpandedMaps = { ...treeExpandedMaps }
+              if (childRows.length && !treeTempExpandedMaps[rowid]) {
+                treeTempExpandedMaps[rowid] = row
+                this.treeExpandedMaps = treeTempExpandedMaps
               }
+              // 如果当前节点已选中，则展开后子节点也被选中
+              if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
+                this.handleCheckedCheckboxRow(childRows, true, true)
+              }
+              return this.$nextTick().then(() => {
+                if (transform) {
+                  return this.handleTableData()
+                }
+              })
             })
-          })
-        }
-      }).catch(() => {
+          }
+        }).catch(() => {
         // 如果响应异常，则不展开，再次点击后将重新触发懒加载
-        rest.treeLoaded = false
-        XEUtils.remove(treeLazyLoadeds, item => item === row)
-      }).finally(() => {
-        this.$nextTick().then(() => this.recalculate()).then(() => resolve())
-      })
+          rest.treeLoaded = false
+          const { treeExpandLazyLoadedMaps } = this
+          if (treeExpandLazyLoadedMaps[rowid]) {
+            treeExpandLazyLoadedMaps[rowid] = null
+          }
+        }).finally(() => {
+          this.$nextTick().then(() => this.recalculate()).then(() => resolve())
+        })
+      } else {
+        resolve()
+      }
     })
   },
   /**
@@ -4317,8 +4497,9 @@ const Methods = {
    * @returns
    */
   handleBaseTreeExpand (rows, expanded) {
-    const { fullAllDataRowMap, tableFullData, treeExpandeds, treeOpts, treeLazyLoadeds, treeNodeColumn } = this
+    const { fullAllDataRowMap, tableFullData, treeExpandedMaps, treeOpts, treeExpandLazyLoadedMaps, treeNodeColumn } = this
     const { reserve, lazy, accordion, toggleMethod } = treeOpts
+    const treeTempExpandedMaps = { ...treeExpandedMaps }
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const result = []
@@ -4330,30 +4511,42 @@ const Methods = {
       // 同一级只能展开一个
       const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], { children: childrenField })
       if (matchObj) {
-        XEUtils.remove(treeExpandeds, item => matchObj.items.indexOf(item) > -1)
+        matchObj.items.forEach(item => {
+          const rowid = getRowid(this, item)
+          if (treeTempExpandedMaps[rowid]) {
+            delete treeTempExpandedMaps[rowid]
+          }
+        })
       }
     }
     if (expanded) {
       validRows.forEach(row => {
-        if (treeExpandeds.indexOf(row) === -1) {
+        const rowid = getRowid(this, row)
+        if (!treeTempExpandedMaps[rowid]) {
           const rest = fullAllDataRowMap.get(row)
-          const isLoad = lazy && row[(hasChildField)] && !rest.treeLoaded && treeLazyLoadeds.indexOf(row) === -1
+          const isLoad = lazy && row[hasChildField] && !rest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
           // 是否使用懒加载
           if (isLoad) {
             result.push(this.handleAsyncTreeExpandChilds(row))
           } else {
             if (row[childrenField] && row[childrenField].length) {
-              treeExpandeds.push(row)
+              treeTempExpandedMaps[rowid] = row
             }
           }
         }
       })
     } else {
-      XEUtils.remove(treeExpandeds, row => validRows.indexOf(row) > -1)
+      validRows.forEach(item => {
+        const rowid = getRowid(this, item)
+        if (treeTempExpandedMaps[rowid]) {
+          delete treeTempExpandedMaps[rowid]
+        }
+      })
     }
     if (reserve) {
       validRows.forEach(row => this.handleTreeExpandReserve(row, expanded))
     }
+    this.treeExpandedMaps = treeTempExpandedMaps
     return Promise.all(result).then(this.recalculate)
   },
   /**
@@ -4400,17 +4593,18 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isTreeExpandByRow (row) {
-    return this.treeExpandeds.indexOf(row) > -1
+    const { treeExpandedMaps } = this
+    return !!treeExpandedMaps[getRowid(this, row)]
   },
   /**
    * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
    */
   clearTreeExpand () {
-    const { treeOpts, treeExpandeds, tableFullData } = this
+    const { treeOpts, tableFullData } = this
     const { transform, reserve } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
-    const isExists = treeExpandeds.length
-    this.treeExpandeds = []
+    const expList = this.getTreeExpandRecords()
+    this.treeExpandedMaps = {}
     if (reserve) {
       XEUtils.eachTree(tableFullData, row => this.handleTreeExpandReserve(row, false), { children: childrenField })
     }
@@ -4420,7 +4614,7 @@ const Methods = {
         return this.handleTableData()
       }
     }).then(() => {
-      if (isExists) {
+      if (expList.length) {
         this.recalculate()
       }
     })

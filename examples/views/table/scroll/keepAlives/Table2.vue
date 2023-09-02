@@ -7,7 +7,8 @@
       show-overflow
       ref="xTable"
       height="400"
-      :loading="loading">
+      :loading="loading"
+      :scroll-y="{enabled: true}">
       <vxe-column type="radio" width="60"></vxe-column>
       <vxe-column field="role" title="Role"></vxe-column>
       <vxe-column field="age" title="Age"></vxe-column>

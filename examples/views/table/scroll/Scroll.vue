@@ -13,7 +13,8 @@
       highlight-hover-row
       ref="xTable1"
       height="300"
-      :sort-config="{trigger: 'cell'}">
+      :sort-config="{trigger: 'cell'}"
+      :scroll-y="{enabled: true}">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>
@@ -43,8 +44,8 @@
       height="300"
       :sort-config="{trigger: 'cell'}"
       :footer-method="footerMethod"
-      :scroll-x="{gt: 10}"
-      :scroll-y="{gt: 100}">
+      :scroll-x="{enabled: true, gt: 10}"
+      :scroll-y="{enabled: true, gt: 100}">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" width="150" sortable></vxe-column>
       <vxe-column field="sex" title="Sex" width="100"></vxe-column>

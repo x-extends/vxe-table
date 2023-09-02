@@ -8,7 +8,8 @@
       show-overflow
       ref="xTable"
       height="500"
-      :scroll-x="{gt: 0}"
+      :scroll-x="{enabled: true, gt: 0}"
+      :scroll-y="{enabled: true}"
       :loading="loading">
       <vxe-column type="seq" title="序号" width="100"></vxe-column>
       <vxe-column field="name1" title="Name" width="200" sortable></vxe-column>

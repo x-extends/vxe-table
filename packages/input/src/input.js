@@ -636,6 +636,10 @@ export default {
     size: { type: String, default: () => GlobalConfig.input.size || GlobalConfig.size },
     multiple: Boolean,
 
+    // text
+    showWordCount: Boolean,
+    countMethod: Function,
+
     // number、integer、float
     min: { type: [String, Number], default: null },
     max: { type: [String, Number], default: null },
@@ -713,6 +717,12 @@ export default {
     },
     isSearch () {
       return this.type === 'search'
+    },
+    inputCount () {
+      return XEUtils.getSize(this.inputValue)
+    },
+    isCountError () {
+      return this.maxlength && this.inputCount > XEUtils.toNumber(this.maxlength)
     },
     stepValue () {
       const { type, step } = this
@@ -1125,7 +1135,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { name, form, inputType, inpPlaceholder, inpMaxlength, inpReadonly, className, controls, inputValue, isDatePickerType, visiblePanel, isActivated, vSize, type, align, readonly, disabled, autocomplete } = this
+    const { name, form, inputType, inpPlaceholder, inpMaxlength, inpReadonly, className, controls, showWordCount, countMethod, inputValue, isDatePickerType, visiblePanel, isActivated, vSize, type, align, readonly, disabled, autocomplete } = this
     const childs = []
     const prefix = rendePrefixIcon(h, this)
     const suffix = renderSuffixIcon(h, this)
@@ -1173,6 +1183,18 @@ export default {
     if (isDatePickerType) {
       childs.push(renderPanel(h, this))
     }
+    let isWordCount = false
+    // 统计字数
+    if (showWordCount && ['text', 'search'].includes(type)) {
+      isWordCount = true
+      childs.push(
+        h('span', {
+          class: ['vxe-input--count', {
+            'is--error': this.isCountError
+          }]
+        }, countMethod ? `${countMethod({ value: inputValue })}` : `${this.inputCount}${inpMaxlength ? `/${inpMaxlength}` : ''}`)
+      )
+    }
     return h('div', {
       class: ['vxe-input', `type--${type}`, className, {
         [`size--${vSize}`]: vSize,
@@ -1182,6 +1204,7 @@ export default {
         'is--suffix': !!suffix,
         'is--readonly': readonly,
         'is--visivle': visiblePanel,
+        'is--count': isWordCount,
         'is--disabled': disabled,
         'is--active': isActivated
       }]

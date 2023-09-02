@@ -27,7 +27,7 @@
       height="600"
       :loading="loading"
       :checkbox-config="{checkField: 'checked'}"
-      :scroll-y="{mode: 'wheel'}">
+      :scroll-y="{enabled: true, mode: 'wheel'}">
       <vxe-column type="seq" width="100" fixed="left"></vxe-column>
       <vxe-column field="attr0" title="Attr0" width="200" fixed="left" sortable></vxe-column>
       <vxe-column field="attr1" title="Attr1" width="200"></vxe-column>

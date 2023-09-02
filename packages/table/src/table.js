@@ -304,14 +304,14 @@ export default {
       isAllSelected: false,
       // 复选框属性，有选中且非全选状态
       isIndeterminate: false,
-      // 复选框属性，已选中的行
-      selectCheckboxRows: [],
+      // 复选框属性，已选中的行集合
+      selectCheckboxMaps: {},
       // 当前行
       currentRow: null,
       // 单选框属性，选中列
       currentColumn: null,
       // 单选框属性，选中行
-      selectRow: null,
+      selectRadioRow: null,
       // 表尾合计数据
       footerTableData: [],
       // 展开列信息
@@ -319,16 +319,16 @@ export default {
       hasFixedColumn: false,
       // 树节点列信息
       treeNodeColumn: null,
-      // 已展开的行
-      rowExpandeds: [],
-      // 懒加载中的展开行的列表
-      expandLazyLoadeds: [],
-      // 已展开树节点
-      treeExpandeds: [],
-      // 懒加载中的树节点的列表
-      treeLazyLoadeds: [],
-      // 树节点不确定状态的列表
-      treeIndeterminates: [],
+      // 已展开的行集合
+      rowExpandedMaps: {},
+      // 懒加载中的展开行的集合
+      rowExpandLazyLoadedMaps: {},
+      // 已展开树节点集合
+      treeExpandedMaps: {},
+      // 懒加载中的树节点的集合
+      treeExpandLazyLoadedMaps: {},
+      // 树节点不确定状态的集合
+      treeIndeterminateMaps: {},
       // 合并单元格的对象集
       mergeList: [],
       // 合并表尾数据的对象集
@@ -743,6 +743,8 @@ export default {
       // 完整数据、条件处理后
       tableFullData: [],
       afterFullData: [],
+      // 列表条件处理后数据集合
+      afterFullRowMaps: {},
       // 收集的列配置（带分组）
       collectColumn: [],
       // 完整所有列（不带分组）

@@ -3,7 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import DomTools from '../../tools/dom'
 import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
-import { getColumnConfig } from './util'
+import { getRowid, getColumnConfig } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
 function renderHelpIcon (h, params) {
@@ -204,7 +204,7 @@ export const Cell = {
    */
   renderTreeIcon (h, params, cellVNodes) {
     const { $table, isHidden } = params
-    const { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
+    const { treeOpts, treeExpandedMaps, treeExpandLazyLoadedMaps } = $table
     const { row, column, level } = params
     const { slots } = column
     const { indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
@@ -219,9 +219,10 @@ export const Cell = {
       return $table.callSlot(slots.icon, params, h, cellVNodes)
     }
     if (!isHidden) {
-      isAceived = $table.findRowIndexOf(treeExpandeds, row) > -1
+      const rowid = getRowid($table, row)
+      isAceived = !!treeExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = $table.findRowIndexOf(treeLazyLoadeds, row) > -1
+        isLazyLoaded = !!treeExpandLazyLoadedMaps[rowid]
         hasLazyChilds = row[hasChildField]
       }
     }
@@ -296,13 +297,13 @@ export const Cell = {
   },
   renderRadioCell (h, params) {
     const { $table, column, isHidden } = params
-    const { radioOpts, selectRow } = $table
+    const { radioOpts, selectRadioRow } = $table
     const { slots } = column
     const { labelField, checkMethod, visibleMethod } = radioOpts
     const { row } = params
     const defaultSlot = slots ? slots.default : null
     const radioSlot = slots ? slots.radio : null
-    const isChecked = row === selectRow
+    const isChecked = row === selectRadioRow
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
     let on
@@ -409,7 +410,7 @@ export const Cell = {
   },
   renderCheckboxCell (h, params) {
     const { $table, row, column, isHidden } = params
-    const { treeConfig, treeIndeterminates, selectCheckboxRows } = $table
+    const { treeConfig, treeIndeterminateMaps, selectCheckboxMaps } = $table
     const { labelField, checkMethod, visibleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
@@ -420,7 +421,8 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
-      isChecked = $table.findRowIndexOf(selectCheckboxRows, row) > -1
+      const rowid = getRowid($table, row)
+      isChecked = !!selectCheckboxMaps[rowid]
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
@@ -433,7 +435,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = $table.findRowIndexOf(treeIndeterminates, row) > -1
+        indeterminate = !!treeIndeterminateMaps[rowid]
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
@@ -471,7 +473,7 @@ export const Cell = {
   },
   renderCheckboxCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
-    const { treeConfig, treeIndeterminates, checkboxOpts } = $table
+    const { treeConfig, treeIndeterminateMaps, checkboxOpts } = $table
     const { labelField, checkField, checkMethod, visibleMethod } = checkboxOpts
     const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     const { slots } = column
@@ -483,6 +485,7 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
+      const rowid = getRowid($table, row)
       isChecked = XEUtils.get(row, checkField)
       on = {
         click (evnt) {
@@ -496,7 +499,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        isIndeterminate = $table.findRowIndexOf(treeIndeterminates, row) > -1
+        isIndeterminate = !!treeIndeterminateMaps[rowid]
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate: isIndeterminate }
@@ -538,7 +541,7 @@ export const Cell = {
    */
   renderExpandCell (h, params) {
     const { $table, isHidden, row, column } = params
-    const { expandOpts, rowExpandeds, expandLazyLoadeds } = $table
+    const { expandOpts, rowExpandedMaps, rowExpandLazyLoadedMaps } = $table
     const { lazy, labelField, iconLoaded, showIcon, iconOpen, iconClose, visibleMethod } = expandOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
@@ -548,9 +551,10 @@ export const Cell = {
       return $table.callSlot(slots.icon, params, h)
     }
     if (!isHidden) {
-      isAceived = $table.findRowIndexOf(rowExpandeds, params.row) > -1
+      const rowid = getRowid($table, row)
+      isAceived = !!rowExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = $table.findRowIndexOf(expandLazyLoadeds, row) > -1
+        isLazyLoaded = !!rowExpandLazyLoadedMaps[rowid]
       }
     }
     return [

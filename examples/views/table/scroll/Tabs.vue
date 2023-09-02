@@ -21,7 +21,8 @@
         show-overflow
         height="400"
         :sync-resize="selectTab"
-        :data="tableData">
+        :data="tableData"
+        :scroll-y="{enabled: true}">
         <vxe-column type="seq" width="60"></vxe-column>
         <vxe-column field="name" title="Name"></vxe-column>
         <vxe-column field="sex" title="Sex"></vxe-column>
@@ -35,7 +36,8 @@
         show-overflow
         height="400"
         :sync-resize="selectTab"
-        :data="tableData">
+        :data="tableData"
+        :scroll-y="{enabled: true}">
         <vxe-column type="radio" width="60"></vxe-column>
         <vxe-column field="role" title="Rolw"></vxe-column>
         <vxe-column field="age" title="Age"></vxe-column>
@@ -50,7 +52,8 @@
         show-overflow
         height="400"
         :sync-resize="selectTab"
-        :data="tableData">
+        :data="tableData"
+        :scroll-y="{enabled: true}">
         <vxe-column type="checkbox" width="60"></vxe-column>
         <vxe-column field="nickname" title="nickname"></vxe-column>
         <vxe-column field="sex" title="Sex"></vxe-column>

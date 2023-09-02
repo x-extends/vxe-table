@@ -302,9 +302,9 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     treeOpts,
     expandOpts,
     editOpts,
-    treeExpandeds,
+    treeExpandedMaps,
     scrollYLoad,
-    rowExpandeds,
+    rowExpandedMaps,
     radioOpts,
     checkboxOpts,
     expandColumn,
@@ -341,7 +341,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     const seq = rest ? rest.seq : -1
     const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
     // 行是否被展开
-    const isExpandRow = expandColumn && rowExpandeds.length && rowExpandeds.indexOf(row) > -1
+    const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
     // 树节点是否被展开
     let isExpandTree = false
     let rowChildren = []
@@ -350,9 +350,9 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     if (editConfig) {
       isNewRow = $xetable.isInsertByRow(row)
     }
-    if (treeConfig && !scrollYLoad && !treeOpts.transform && treeExpandeds.length) {
+    if (treeConfig && !scrollYLoad && !treeOpts.transform) {
       rowChildren = row[childrenField]
-      isExpandTree = rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1
+      isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
     }
     rows.push(
       h('tr', {
@@ -365,7 +365,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
             'is--expand-row': isExpandRow,
             'is--expand-tree': isExpandTree,
             'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-            'row--radio': radioOpts.highlight && $xetable.selectRow === row,
+            'row--radio': radioOpts.highlight && $xetable.selectRadioRow === row,
             'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
           },
           rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''

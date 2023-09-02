@@ -31,7 +31,8 @@
       :row-config="{useKey: true}"
       :export-config="{}"
       :loading="loading"
-      :checkbox-config="{checkField: 'checked'}">
+      :checkbox-config="{checkField: 'checked'}"
+      :scroll-y="{enabled: true}">
       <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
       <vxe-column type="seq" width="100" fixed="left"></vxe-column>
       <vxe-column field="name" title="Name" sortable width="200" :filters="[{label: '50',value:50},{label: '120',value:120},{label: '220',value:220}]" :filter-method="filterNameMethod"></vxe-column>

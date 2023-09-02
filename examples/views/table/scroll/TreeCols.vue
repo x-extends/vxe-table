@@ -18,7 +18,9 @@
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
       :radio-config="{labelField: 'name'}"
       :tree-config="{children: 'children'}"
-      :columns="tableColumn">
+      :columns="tableColumn"
+      :scroll-x="{enabled: true}"
+      :scroll-y="{enabled: true}">
       <template #toolbar_buttons>
         <vxe-button @click="loadColumnAndData(1000, 5000)">1k列5k条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 10000)">1k列1w条</vxe-button>

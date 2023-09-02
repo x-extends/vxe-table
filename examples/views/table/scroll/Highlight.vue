@@ -10,7 +10,8 @@
       ref="xTable"
       height="300"
       :loading="loading"
-      :keyboard-config="{isArrow: true}">
+      :keyboard-config="{isArrow: true}"
+      :scroll-y="{enabled: true}">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable width="200"></vxe-column>
       <vxe-column field="age" title="Age" width="200"></vxe-column>

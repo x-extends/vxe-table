@@ -17,7 +17,9 @@
       height="600"
       :loading="loading"
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-      :checkbox-config="{checkField: 'checked', labelField: 'name'}">
+      :checkbox-config="{checkField: 'checked', labelField: 'name'}"
+      :scroll-x="{enabled: true}"
+      :scroll-y="{enabled: true}">
       <template #toolbar_buttons>
         <vxe-button @click="loadColumnAndData(50, 20)">50列20条</vxe-button>
         <vxe-button @click="loadColumnAndData(100, 50)">100列50条</vxe-button>
