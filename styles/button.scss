@@ -334,12 +334,14 @@ $btnThemeList: (
   border-radius: var(--vxe-border-radius);
   border: 1px solid var(--vxe-input-border-color);
   box-shadow: 0 1px 6px rgba(0,0,0,.2);
-  & > .vxe-button {
-    margin-left: 0;
-    margin-top: 0.4em;
+  & > .vxe-button.type--text,
+  & > .vxe-button.type--button {
     display: block;
     width: 100%;
     border: 0;
+    margin: 0.4em 0 0 0;
+  }
+  & > .vxe-button {
     &.type--text {
       padding: 2px 8px;
     }
