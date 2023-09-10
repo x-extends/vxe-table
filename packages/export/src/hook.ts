@@ -866,7 +866,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       const { type, filename } = parseFile(file)
 
       // 检查类型，如果为自定义导出，则不需要校验类型
-      if (!importMethod && !XEUtils.includes(VXETable.config.importTypes, type)) {
+      if (!importMethod && !XEUtils.includes(VXETable.globalConfs.importTypes, type)) {
         if (opts.message !== false) {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -950,7 +950,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       const hasFooter = !!footerTableData.length
       const hasMerge = !hasTree && mergeList.length
       const defOpts = Object.assign({ message: true, isHeader: showHeader, isFooter: showFooter }, options)
-      const types: string[] = defOpts.types || VXETable.config.exportTypes
+      const types: string[] = defOpts.types || VXETable.globalConfs.exportTypes
       const modes: string[] = defOpts.modes
       const checkMethod = customOpts.checkMethod
       const exportColumns = collectColumn.slice(0)
@@ -1127,7 +1127,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         }
 
         // 检查类型，如果为自定义导出，则不需要校验类型
-        if (!opts.exportMethod && !XEUtils.includes(VXETable.config.exportTypes, type)) {
+        if (!opts.exportMethod && !XEUtils.includes(VXETable.globalConfs.exportTypes, type)) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             errLog('vxe.error.notType', [type])
           }
@@ -1206,7 +1206,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
       importData (options) {
         const importOpts = computeImportOpts.value
         const opts = Object.assign({
-          types: VXETable.config.importTypes
+          types: VXETable.globalConfs.importTypes
           // beforeImportMethod: null,
           // afterImportMethod: null
         }, importOpts, options)
@@ -1260,7 +1260,7 @@ const tableExportHook: VxeGlobalHooksHandles.HookOptions = {
         const { treeConfig, importConfig } = props
         const { initStore, importStore, importParams } = reactData
         const importOpts = computeImportOpts.value
-        const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.config.importTypes }, options, importOpts)
+        const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.globalConfs.importTypes }, options, importOpts)
         const { types } = defOpts
         const isTree = !!treeConfig
         if (isTree) {

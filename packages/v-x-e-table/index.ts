@@ -7,7 +7,7 @@ import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
 import { hooks } from './src/hooks'
-import { setup } from './src/setup'
+import { config } from './src/config'
 import { getLastZIndex, nextZIndex } from '../tools/utils'
 
 import { VXETableCore } from '../../types/all'
@@ -72,14 +72,19 @@ class VXETableConfig {
     return getExportOrImpotType(GlobalConfig.export.types, 2)
   }
 }
-export const config = new VXETableConfig()
+
+// 已废弃
+export const globalConfs = new VXETableConfig()
 
 export const v = 'v4'
+
+export const setup = config
 
 export const VXETable = {
   v,
   version: process.env.VUE_APP_VXE_TABLE_VERSION,
   setup,
+  config,
   interceptor,
   renderer,
   commands,
@@ -87,7 +92,6 @@ export const VXETable = {
   validators,
   menus,
   hooks,
-  config,
   use,
   t,
   _t
@@ -100,6 +104,6 @@ export * from './src/menus'
 export * from './src/formats'
 export * from './src/validators'
 export * from './src/hooks'
-export * from './src/setup'
+export * from './src/config'
 
 export default VXETable

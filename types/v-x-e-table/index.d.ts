@@ -8,7 +8,7 @@ import { VxeGlobalFormats } from './formats'
 import { VxeGlobalMenus } from './menus'
 import { VxeGlobalValidators } from './validators'
 import { VxeGlobalHooks } from './hooks'
-import { VxeGlobalConfigMethod } from './setup'
+import { VxeGlobalConfigMethod } from './config'
 
 /* eslint-disable no-use-before-define */
 
@@ -34,7 +34,7 @@ export type VxeGlobalI18n = (key: string, args?: any) => string
 export type VxeGlobalTranslate = (key: string, args?: any) => string
 export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore
 
-export const setup: VxeGlobalConfigMethod
+export const config: VxeGlobalConfigMethod
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
 export const commands: VxeGlobalCommands
@@ -46,10 +46,20 @@ export const modal: ModalController
 export const saveFile: SaveFileFunction
 export const readFile: ReadFileFunction
 export const print: PrintFunction
-export const config: VXETableConfig
 export const t: VxeGlobalI18n
 export const _t: VxeGlobalTranslate
 export const use: VxeGlobalUse
+
+/**
+ * 请使用 config
+ * @deprecated
+ */
+export const setup: VxeGlobalConfigMethod
+/**
+ * 已废弃
+ * @deprecated
+ */
+export const globalConfs: VXETableConfig
 
 export interface VXETablePluginObject {
   install(vxetable: VXETableCore, ...options: any[]): void
@@ -63,18 +73,13 @@ export const v: VXETableVersion
 export interface VXETableCore {
   tooltip?: boolean
   /**
-   * 已被 version 替换
-   * @deprecated
-   */
-  v: VXETableVersion
-  /**
    * 版本号
    */
   version: string
   /**
    * 设置全局参数/获取所有参数
    */
-  setup: VxeGlobalConfigMethod
+  config: VxeGlobalConfigMethod
   /**
    * Table interceptor
    */
@@ -120,10 +125,6 @@ export interface VXETableCore {
    */
   print: PrintFunction
   /**
-   * 读取内置配置
-   */
-  config: VXETableConfig
-  /**
    * 安装插件
    * @param plugin
    * @param options
@@ -134,6 +135,22 @@ export interface VXETableCore {
    */
   t: VxeGlobalI18n
   _t: VxeGlobalTranslate
+
+  /**
+   * 读取内置配置
+   * @deprecated 已废弃
+   */
+  globalConfs: VXETableConfig
+  /**
+   * 已被 version 替换
+   * @deprecated
+   */
+  v: VXETableVersion
+  /**
+   * 请使用 config
+   * @deprecated
+   */
+  setup: VxeGlobalConfigMethod
 }
 
 /**
@@ -148,6 +165,6 @@ export * from './formats'
 export * from './menus'
 export * from './validators'
 export * from './hooks'
-export * from './setup'
+export * from './config'
 
 export default VXETable

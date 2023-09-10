@@ -6,6 +6,6 @@ import { VxeGlobalConfigMethod } from '../../../types/all'
 /**
  * 全局参数设置
  */
-export const setup: VxeGlobalConfigMethod = (options) => {
+export const config: VxeGlobalConfigMethod = (options) => {
   return XEUtils.merge(GlobalConfig, options)
 }
