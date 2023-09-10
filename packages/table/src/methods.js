@@ -1498,7 +1498,7 @@ const Methods = {
    */
   showColumn (fieldOrColumn) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column && column.visible) {
+    if (column && !column.visible) {
       column.visible = true
       return this.handleCustom()
     }

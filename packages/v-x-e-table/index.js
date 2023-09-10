@@ -6,7 +6,7 @@ import { commands } from './src/commands'
 import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
-import { setup } from './src/setup'
+import { config } from './src/config'
 import { UtilTools } from '../tools/utils'
 import { errLog } from '../tools/log'
 
@@ -76,7 +76,9 @@ class VXETableConfig {
     return getExportOrImpotType(GlobalConfig.export.types, 2)
   }
 }
-export const config = new VXETableConfig()
+
+// 已废弃
+export const globalConfs = new VXETableConfig()
 
 export function t (key, args) {
   return GlobalConfig.i18n(key, args)
@@ -87,6 +89,7 @@ export function _t (key, args) {
 }
 
 export const v = 'v3'
+export const setup = config
 
 export const VXETable = {
   v,
@@ -94,13 +97,13 @@ export const VXETable = {
   reg,
   use,
   setup,
+  config,
   interceptor,
   renderer,
   commands,
   formats,
   menus,
   validators,
-  config,
   t,
   _t
 }
@@ -110,6 +113,6 @@ export * from './src/renderer'
 export * from './src/commands'
 export * from './src/menus'
 export * from './src/formats'
-export * from './src/setup'
+export * from './src/config'
 
 export default VXETable

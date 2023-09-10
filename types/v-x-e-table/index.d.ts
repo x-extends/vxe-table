@@ -9,7 +9,7 @@ import { VxeGlobalCommands } from './commands'
 import { VxeGlobalFormats } from './formats'
 import { VxeGlobalMenus } from './menus'
 import { VxeGlobalValidators } from './validators'
-import { VxeGlobalConfigMethod } from './setup'
+import { VxeGlobalConfigMethod } from './config'
 
 /* eslint-disable no-use-before-define */
 
@@ -17,7 +17,7 @@ export type VxeGlobalI18n = (key: string, args?: any) => number | string;
 export type VxeGlobalTranslate = (key: string, args?: any) => string;
 export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore;
 
-export const setup: VxeGlobalConfigMethod
+export const config: VxeGlobalConfigMethod
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
 export const commands: VxeGlobalCommands
@@ -31,6 +31,12 @@ export const t: VxeGlobalI18n
 export const _t: VxeGlobalTranslate
 export const use: VxeGlobalUse
 
+/**
+ * 请使用 config
+ * @deprecated
+ */
+export const setup: VxeGlobalConfigMethod
+
 export interface VXETablePluginObject {
   install(vxetable: VXETableCore, ...options: any[]): void;
   [key: string]: any;
@@ -42,18 +48,13 @@ export const v: VXETableVersion
 
 export interface VXETableCore {
   /**
-   * 已被 version 替换
-   * @deprecated
-   */
-  v: VXETableVersion;
-  /**
    * 版本号
    */
   version: string;
   /**
    * 设置全局参数/获取所有参数
    */
-  setup: VxeGlobalConfigMethod;
+  config: VxeGlobalConfigMethod;
   /**
    * Table interceptor
    */
@@ -105,6 +106,17 @@ export interface VXETableCore {
    */
   t: VxeGlobalI18n;
   _t: VxeGlobalTranslate;
+
+  /**
+   * 已被 version 替换
+   * @deprecated
+   */
+  v: VXETableVersion;
+  /**
+   * 请使用 config
+   * @deprecated
+   */
+  setup: VxeGlobalConfigMethod;
 }
 
 /**
@@ -118,6 +130,6 @@ export * from './commands'
 export * from './formats'
 export * from './menus'
 export * from './validators'
-export * from './setup'
+export * from './config'
 
 export default VXETable

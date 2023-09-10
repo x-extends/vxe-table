@@ -21,9 +21,9 @@ class VXECommandsStore {
     const conf = this.store[name]
     // 兼容
     if (XEUtils.isFunction(render)) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        warnLog('vxe.error.delProp', ['commands -> callback', 'commandMethod'])
-      }
+      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      //   warnLog('vxe.error.delProp', ['commands -> callback', 'commandMethod'])
+      // }
       render = {
         commandMethod: render
       }

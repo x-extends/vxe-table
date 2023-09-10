@@ -858,7 +858,7 @@ function handleFileImport ($xetable, file, opts) {
   const { type, filename } = UtilTools.parseFile(file)
 
   // 检查类型，如果为自定义导出，则不需要校验类型
-  if (!importMethod && !XEUtils.includes(VXETable.config.importTypes, type)) {
+  if (!importMethod && !XEUtils.includes(VXETable.globalConfs.importTypes, type)) {
     if (opts.message !== false) {
       // 检测弹窗模块
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -1042,7 +1042,7 @@ function handleExportAndPrint ($xetable, options, isPrint) {
   const hasTree = treeConfig
   const hasMerge = !hasTree && mergeList.length
   const defOpts = Object.assign({ message: true, isHeader: true }, options)
-  const types = defOpts.types || VXETable.config.exportTypes
+  const types = defOpts.types || VXETable.globalConfs.exportTypes
   const modes = defOpts.modes
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
@@ -1274,7 +1274,7 @@ export default {
       }
 
       // 检查类型，如果为自定义导出，则不需要校验类型
-      if (!opts.exportMethod && !XEUtils.includes(VXETable.config.exportTypes, type)) {
+      if (!opts.exportMethod && !XEUtils.includes(VXETable.globalConfs.exportTypes, type)) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           errLog('vxe.error.notType', [type])
         }
@@ -1349,7 +1349,7 @@ export default {
     },
     _importData (options) {
       const opts = Object.assign({
-        types: VXETable.config.importTypes
+        types: VXETable.globalConfs.importTypes
         // beforeImportMethod: null,
         // afterImportMethod: null
       }, this.importOpts, options)
@@ -1399,7 +1399,7 @@ export default {
       })
     },
     _openImport (options) {
-      const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.config.importTypes }, options, this.importOpts)
+      const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.globalConfs.importTypes }, options, this.importOpts)
       const { types } = defOpts
       const isTree = !!this.getTreeStatus()
       if (isTree) {
