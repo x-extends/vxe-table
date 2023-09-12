@@ -55,6 +55,10 @@ export interface VxeFormItemProps {
    */
   showTitle?: VxeFormItemPropTypes.ShowTitle
   /**
+   * 使用垂直布局
+   */
+  vertical?: VxeFormItemPropTypes.Vertical
+  /**
    * 给表单项附加 className
    */
   className?: VxeFormItemPropTypes.ClassName
@@ -121,6 +125,7 @@ export namespace VxeFormItemPropTypes {
   export type TitleColon = VxeFormPropTypes.TitleColon
   export type TitleAsterisk = VxeFormPropTypes.TitleAsterisk
   export type ShowTitle = boolean
+  export type Vertical = boolean
 
   interface ClassNameParams {
     $form: VxeFormConstructor

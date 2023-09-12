@@ -76,6 +76,7 @@ export namespace VxeFormPropTypes {
   export type TitleColon = boolean
   export type TitleAsterisk = boolean
   export type TitleOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | '' | null
+  export type Vertical = boolean
 
   interface ClassNameParams {
     $form: VxeFormConstructor
@@ -128,6 +129,7 @@ export type VxeFormProps<D = any> = {
   titleColon?: VxeFormPropTypes.TitleColon
   titleAsterisk?: VxeFormPropTypes.TitleAsterisk
   titleOverflow?: VxeFormPropTypes.TitleOverflow
+  vertical?: VxeFormPropTypes.Vertical
   className?: VxeFormPropTypes.ClassName
   readonly?: VxeFormPropTypes.Readonly
   items?: VxeFormPropTypes.Items
@@ -218,6 +220,7 @@ export namespace VxeFormDefines {
     titleSuffix: VxeFormItemPropTypes.TitleSuffix
     titleOverflow: VxeFormItemPropTypes.TitleOverflow
     showTitle: VxeFormItemPropTypes.ShowTitle
+    vertical: VxeFormItemPropTypes.Vertical
     resetValue: VxeFormItemPropTypes.ResetValue
     visibleMethod: VxeFormItemPropTypes.VisibleMethod
     visible: VxeFormItemPropTypes.Visible

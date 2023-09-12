@@ -34,6 +34,10 @@ export const formItemProps = {
     type: Boolean as PropType<VxeFormItemPropTypes.ShowTitle>,
     default: true
   },
+  vertical: {
+    type: Boolean as PropType<VxeFormItemPropTypes.Vertical>,
+    default: null
+  },
   className: [String, Function] as PropType<VxeFormItemPropTypes.ClassName>,
   contentClassName: [String, Function] as PropType<VxeFormItemPropTypes.ContentClassName>,
   contentStyle: [Object, Function] as PropType<VxeFormItemPropTypes.ContentStyle>,
@@ -81,11 +85,11 @@ export default defineComponent({
 
     const renderItem = ($xeform: VxeFormConstructor & VxeFormPrivateMethods, item: VxeFormDefines.ItemInfo) => {
       const { props, reactData } = $xeform
-      const { data, rules, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = props
+      const { data, rules, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = props
       const { collapseAll } = reactData
       const { computeValidOpts } = $xeform.getComputeMaps()
       const validOpts = computeValidOpts.value
-      const { slots, title, visible, folding, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
+      const { slots, title, visible, folding, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
       const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
       const itemClassName = compConf ? compConf.itemClassName : ''
       const itemStyle = compConf ? compConf.itemStyle : null
@@ -102,6 +106,7 @@ export default defineComponent({
       const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
       const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
       const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
+      const itemVertical = (XEUtils.isUndefined(vertical) || XEUtils.isNull(vertical)) ? allVertical : vertical
       const ovEllipsis = itemOverflow === 'ellipsis'
       const ovTitle = itemOverflow === 'title'
       const ovTooltip = itemOverflow === true || itemOverflow === 'tooltip'
@@ -167,6 +172,7 @@ export default defineComponent({
           {
             'is--title': title,
             'is--colon': titleColon,
+            'is--vertical': itemVertical,
             'is--asterisk': titleAsterisk,
             'is--required': isRequired,
             'is--hidden': folding && collapseAll,

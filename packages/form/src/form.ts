@@ -83,6 +83,10 @@ export default defineComponent({
     titleColon: { type: Boolean as PropType<VxeFormPropTypes.TitleColon>, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean as PropType<VxeFormPropTypes.TitleAsterisk>, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String] as PropType<VxeFormPropTypes.TitleOverflow>, default: null },
+    vertical: {
+      type: Boolean as PropType<VxeFormPropTypes.Vertical>,
+      default: null
+    },
     className: [String, Function] as PropType<VxeFormPropTypes.ClassName>,
     readonly: Boolean as PropType<VxeFormPropTypes.Readonly>,
     items: Array as PropType<VxeFormPropTypes.Items>,

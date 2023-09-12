@@ -720,7 +720,9 @@ export const Cell = {
           class: ['vxe-filter--btn', hasFilter ? (iconMatch || GlobalConfig.icon.TABLE_FILTER_MATCH) : (iconNone || GlobalConfig.icon.TABLE_FILTER_NONE)],
           title: GlobalConfig.i18n('vxe.table.filter'),
           onClick (evnt: Event) {
-            $table.triggerFilterEvent(evnt, params.column, params)
+            if ($table.triggerFilterEvent) {
+              $table.triggerFilterEvent(evnt, params.column, params)
+            }
           }
         })
       ])

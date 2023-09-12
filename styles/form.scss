@@ -138,6 +138,20 @@
       }
     }
   }
+  &.is--vertical {
+    .vxe-form--item-inner {
+      flex-direction: column;
+      align-items: initial;
+      .vxe-form--item-title {
+        height: 2em;
+        line-height: 2em;
+        padding-right: 0;
+      }
+      .vxe-form--item-title-content {
+        flex-grow: initial;
+      }
+    }
+  }
   &.is--span {
     .vxe-default-input:not([type="submit"]):not([type="reset"]),
     .vxe-default-textarea,
