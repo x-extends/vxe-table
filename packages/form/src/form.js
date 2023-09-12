@@ -79,6 +79,10 @@ export default {
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String], default: null },
+    vertical: {
+      type: Boolean,
+      default: null
+    },
     className: [String, Function],
     readonly: Boolean,
     items: Array,

@@ -692,7 +692,9 @@ export const Cell = {
           },
           on: {
             click (evnt) {
-              $table.triggerFilterEvent(evnt, params.column, params)
+              if ($table.triggerFilterEvent) {
+                $table.triggerFilterEvent(evnt, params.column, params)
+              }
             }
           }
         })

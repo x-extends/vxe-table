@@ -27,8 +27,8 @@ const VxeFormConfigItem = {
   },
   render (h) {
     const { _e, $xeform, itemConfig: item } = this
-    const { rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = $xeform
-    const { slots, title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
+    const { rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = $xeform
+    const { slots, title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, children, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const itemClassName = compConf ? compConf.itemClassName : ''
     const itemStyle = compConf ? compConf.itemStyle : null
@@ -43,6 +43,7 @@ const VxeFormConfigItem = {
     const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
     const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
     const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
+    const itemVertical = (XEUtils.isUndefined(vertical) || XEUtils.isNull(vertical)) ? allVertical : vertical
     const ovEllipsis = itemOverflow === 'ellipsis'
     const ovTitle = itemOverflow === 'title'
     const ovTooltip = itemOverflow === true || itemOverflow === 'tooltip'
@@ -99,6 +100,7 @@ const VxeFormConfigItem = {
         {
           'is--title': title,
           'is--colon': titleColon,
+          'is--vertical': itemVertical,
           'is--asterisk': titleAsterisk,
           'is--required': isRequired,
           'is--hidden': folding && collapseAll,

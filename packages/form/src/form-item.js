@@ -32,6 +32,10 @@ const props = {
     type: Boolean,
     default: true
   },
+  vertical: {
+    type: Boolean,
+    default: null
+  },
   className: [String, Function],
   contentClassName: [String, Function],
   contentStyle: [Object, Function],
@@ -59,8 +63,8 @@ Object.keys(props).forEach(name => {
 })
 
 const renderItem = (h, _vm, item, slots) => {
-  const { _e, rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow } = _vm
-  const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
+  const { _e, rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = _vm
+  const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const itemClassName = compConf ? compConf.itemClassName : ''
   const itemStyle = compConf ? compConf.itemStyle : null
@@ -75,6 +79,7 @@ const renderItem = (h, _vm, item, slots) => {
   const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
   const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
   const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
+  const itemVertical = (XEUtils.isUndefined(vertical) || XEUtils.isNull(vertical)) ? allVertical : vertical
   const ovEllipsis = itemOverflow === 'ellipsis'
   const ovTitle = itemOverflow === 'title'
   const ovTooltip = itemOverflow === true || itemOverflow === 'tooltip'
@@ -116,6 +121,7 @@ const renderItem = (h, _vm, item, slots) => {
       {
         'is--title': title,
         'is--colon': titleColon,
+        'is--vertical': itemVertical,
         'is--asterisk': titleAsterisk,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,
