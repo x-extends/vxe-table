@@ -1695,6 +1695,10 @@
     "type": "string | boolean",
     "description": "所有设置标题内容过长时显示为省略号"
   },
+  "vxe-form/vertical": {
+    "type": "boolean",
+    "description": "所有项使用垂直布局"
+  },
   "vxe-form/class-name": {
     "type": "string, ({ data }) => string",
     "description": "给表单附加 className"
@@ -1762,6 +1766,10 @@
   "vxe-form-item/show-title": {
     "type": "boolean",
     "description": "是否显示标题"
+  },
+  "vxe-form-item/vertical": {
+    "type": "boolean",
+    "description": "使用垂直布局"
   },
   "vxe-form-item/class-name": {
     "type": "string, ({ field, data }) => string",

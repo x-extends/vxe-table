@@ -78,9 +78,9 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Virtual scroller
 * [x] Virtual merger
 * [x] CSS Variable Theme
-* [x] (pro) Cell area selection
-* [x] (pro) Cell copy & paste
-* [x] (pro) Cell find and replace
+* [x] (插件) Cell area selection
+* [x] (插件) Cell copy & paste
+* [x] (插件) Cell find and replace
 
 ## Installing
 
