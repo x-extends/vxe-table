@@ -14,6 +14,7 @@ export declare class Form extends VXETableComponent {
   titleAlign?: 'left' | 'center' | 'right';
   titleWidth?: string | number;
   titleColon?: boolean;
+  vertical?: boolean
   items?: FormItemOptions[];
   rules?: FormVaildRules;
   preventSubmit?: boolean;

@@ -40,6 +40,7 @@ export class FormItem extends VXETableComponent {
    * 后缀配置项
    */
   titleSuffix?: FormItemTitleOptions;
+  vertical?: boolean
   showTitle?: boolean
   /**
    * 重置时的默认值
