@@ -97,7 +97,6 @@ export const VXETable = {
   reg,
   use,
   setup,
-  config,
   interceptor,
   renderer,
   commands,
@@ -105,7 +104,11 @@ export const VXETable = {
   menus,
   validators,
   t,
-  _t
+  _t,
+
+  // 已废弃
+  config,
+  globalConfs
 }
 
 export * from './src/interceptor'
