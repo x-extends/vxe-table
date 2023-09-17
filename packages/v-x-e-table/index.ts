@@ -80,11 +80,13 @@ export const v = 'v4'
 
 export const setup = config
 
+export const globalStore = {}
+
 export const VXETable = {
   v,
   version: process.env.VUE_APP_VXE_TABLE_VERSION,
   setup,
-  config,
+  globalStore,
   interceptor,
   renderer,
   commands,
@@ -94,7 +96,11 @@ export const VXETable = {
   hooks,
   use,
   t,
-  _t
+  _t,
+
+  // 已废弃
+  config,
+  globalConfs
 } as VXETableCore
 
 export * from './src/interceptor'

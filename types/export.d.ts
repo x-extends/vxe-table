@@ -72,7 +72,7 @@ declare module './table' {
   export interface VxeTableMethods<D = VxeTableDataRow> extends TableExportMethods<D> { }
   export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableExportPrivateMethods<D> { }
   export namespace VxeTableDefines {
-    interface ExtortSheetMethodParams {
+    export interface ExtortSheetMethodParams {
       $table: VxeTableConstructor
       $grid?: VxeGridConstructor
       options: VxeTablePropTypes.ExportHandleOptions

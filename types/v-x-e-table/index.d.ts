@@ -66,6 +66,15 @@ export interface VXETablePluginObject {
   [key: string]: any
 }
 
+export interface VxeGlobalStore {
+  [key: string]: any
+  clipboard?: {
+    text: string
+    html: string
+  }
+}
+export const globalStore: VxeGlobalStore
+
 export type VXETableVersion = 'v1' | 'v2' | 'v3' | 'v4'
 
 export const v: VXETableVersion
@@ -80,6 +89,10 @@ export interface VXETableCore {
    * 设置全局参数/获取所有参数
    */
   config: VxeGlobalConfigMethod
+  /**
+   * 读取内部数据
+   */
+  globalStore: VxeGlobalStore
   /**
    * Table interceptor
    */
@@ -137,7 +150,6 @@ export interface VXETableCore {
   _t: VxeGlobalTranslate
 
   /**
-   * 读取内置配置
    * @deprecated 已废弃
    */
   globalConfs: VXETableConfig

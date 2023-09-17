@@ -98,18 +98,6 @@ declare module '../grid' {
   export interface VxeGridPrivateMethods<D = VxeTableDataRow> extends VxeTableProPrivateMethods<D> { }
 }
 
-export interface VXETableProClipboard {
-  text?: string
-  html?: string
-  [key: string]: any
-}
-
-declare module '../vxe-table' {
-  export interface VXETableConfig {
-    clipboard?: VXETableProClipboard
-  }
-}
-
 export namespace VxeTableProDefines {
   export interface CellAreaParams<D = VxeTableDataRow> {
     cols: VxeTableDefines.ColumnInfo<D>[]

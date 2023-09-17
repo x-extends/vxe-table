@@ -6452,11 +6452,15 @@ export default defineComponent({
 
         if (props.autoResize) {
           const resizeOpts = computeResizeleOpts.value
+          const { refreshDelay } = resizeOpts
           const el = refElem.value
           const parentEl = tablePrivateMethods.getParentElem()
-          resizeObserver = createResizeEvent(resizeOpts.refreshDelay ? XEUtils.throttle(() => {
-            tableMethods.recalculate(true)
-          }, resizeOpts.refreshDelay, { leading: true, trailing: true }) : () => {
+          const handleOptimizeResize = refreshDelay ? XEUtils.throttle(() => tableMethods.recalculate(true), refreshDelay, { leading: true, trailing: true }) : null
+          resizeObserver = createResizeEvent(handleOptimizeResize ? () => {
+            if (props.autoResize) {
+              requestAnimationFrame(handleOptimizeResize)
+            }
+          } : () => {
             if (props.autoResize) {
               tableMethods.recalculate(true)
             }
