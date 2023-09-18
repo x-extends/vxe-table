@@ -1471,7 +1471,7 @@ export default defineComponent({
         emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
       }
       if (customHeight > 0) {
-        if (showFooter && aboveBodyFooter) {
+        if (showFooter && !aboveBodyFooter) {
           customHeight += scrollbarHeight
         }
       }
