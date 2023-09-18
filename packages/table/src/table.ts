@@ -1550,14 +1550,14 @@ export default defineComponent({
             const emptyBlockRef = elemStore[`${name}-${layout}-emptyBlock`]
             const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
             if (isNodeElement(wrapperElem)) {
-              const bodyMinHeight = fixedType ? ((customMinHeight - headerHeight - footerHeight) - (showFooter && !aboveBodyFooter ? 0 : scrollbarHeight)) : (customMinHeight - headerHeight - footerHeight)
+              const bodyMinHeight = fixedType ? ((customMinHeight - headerHeight - footerHeight) - (showFooter ? 0 : scrollbarHeight)) : (customMinHeight - headerHeight - footerHeight)
               let bodyMaxHeight = 0
               if (customMaxHeight) {
-                bodyMaxHeight = Math.max(bodyMinHeight, fixedType ? (customMaxHeight - headerHeight - (showFooter && !aboveBodyFooter ? 0 : scrollbarHeight)) : (customMaxHeight - headerHeight - footerHeight))
+                bodyMaxHeight = Math.max(bodyMinHeight, fixedType ? (customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight)) : (customMaxHeight - headerHeight - footerHeight))
                 wrapperElem.style.maxHeight = `${bodyMaxHeight}px`
               }
               if (customHeight > 0) {
-                let bodyHeight = fixedType ? ((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter && !aboveBodyFooter ? 0 : scrollbarHeight)) : (customHeight - headerHeight - footerHeight)
+                let bodyHeight = fixedType ? ((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight)) : (customHeight - headerHeight - footerHeight)
                 if (bodyMaxHeight) {
                   bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
                 }
@@ -1573,11 +1573,11 @@ export default defineComponent({
               let fixedHeight = 0
               if (isNodeElement(wrapperElem)) {
                 if (showFooter && aboveBodyFooter) {
-                  fixedHeight = Math.max(wrapperElem.offsetHeight - wrapperElem.clientHeight - (scrollbarHeight * 2), 0)
+                  fixedHeight = Math.max(wrapperElem.offsetHeight - wrapperElem.clientHeight - scrollbarHeight, 0)
                 }
-                wrapperElem.style.top = aboveBodyFooter ? `${(customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight) - fixedHeight}px` : `${headerHeight}px`
+                wrapperElem.style.top = showFooter && aboveBodyFooter ? `${(customHeight > 0 ? customHeight - footerHeight + scrollbarHeight - fixedHeight : headerHeight + footerHeight - scrollbarHeight * 2)}px` : `${headerHeight}px`
               }
-              fixedWrapperElem.style.height = `${((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)) - fixedHeight}px`
+              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1) - fixedHeight}px`
               fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isFixedLeft ? 0 : scrollbarWidth)}px`
             }
 
