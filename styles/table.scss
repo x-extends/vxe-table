@@ -658,7 +658,7 @@
       user-select: none;
     }
   }
-  
+
   /*边框*/
   .vxe-table--footer-wrapper {
     border-top: var(--vxe-table-border-width) solid var(--vxe-table-border-color);
@@ -736,7 +736,7 @@
       display: none;
     }
   }
-  
+
   &.size--medium {
     font-size: var(--vxe-font-size-medium);
     .vxe-table--empty-placeholder,
@@ -1350,6 +1350,13 @@
       &.col--actived {
         padding: 0;
       }
+    }
+  }
+
+  /*above body footer*/
+  &.is--above-body-footer {
+    .vxe-table--footer-wrapper.body--wrapper {
+      overflow: hidden;
     }
   }
 }

@@ -1455,7 +1455,7 @@ export default defineComponent({
     }
 
     const updateStyle = () => {
-      const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod, keyboardConfig } = props
+      const { border, showFooter, aboveBodyFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod, keyboardConfig } = props
       const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, scrollbarWidth, scrollbarHeight, columnStore, editStore, mergeList, mergeFooterList, isAllOverflow } = reactData
       let { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
       const containerList = ['main', 'left', 'right']
@@ -1466,11 +1466,12 @@ export default defineComponent({
       const bodyWrapperRef = elemStore['main-body-wrapper']
       const bodyWrapperElem = bodyWrapperRef ? bodyWrapperRef.value : null
       if (emptyPlaceholderElem) {
-        emptyPlaceholderElem.style.top = `${headerHeight}px`
+        // emptyPlaceholderElem.style.top = `${headerHeight}px`
+        emptyPlaceholderElem.style.top = `${headerHeight + ((showFooter && aboveBodyFooter) ? footerHeight : 0)}px`
         emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
       }
       if (customHeight > 0) {
-        if (showFooter) {
+        if (showFooter && aboveBodyFooter) {
           customHeight += scrollbarHeight
         }
       }
@@ -1549,14 +1550,14 @@ export default defineComponent({
             const emptyBlockRef = elemStore[`${name}-${layout}-emptyBlock`]
             const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
             if (isNodeElement(wrapperElem)) {
-              const bodyMinHeight = fixedType ? ((customMinHeight - headerHeight - footerHeight) - (showFooter ? 0 : scrollbarHeight)) : (customMinHeight - headerHeight - footerHeight)
+              const bodyMinHeight = fixedType ? ((customMinHeight - headerHeight - footerHeight) - (showFooter && !aboveBodyFooter ? 0 : scrollbarHeight)) : (customMinHeight - headerHeight - footerHeight)
               let bodyMaxHeight = 0
               if (customMaxHeight) {
-                bodyMaxHeight = Math.max(bodyMinHeight, fixedType ? (customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight)) : (customMaxHeight - headerHeight - footerHeight))
+                bodyMaxHeight = Math.max(bodyMinHeight, fixedType ? (customMaxHeight - headerHeight - (showFooter && !aboveBodyFooter ? 0 : scrollbarHeight)) : (customMaxHeight - headerHeight - footerHeight))
                 wrapperElem.style.maxHeight = `${bodyMaxHeight}px`
               }
               if (customHeight > 0) {
-                let bodyHeight = fixedType ? ((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight)) : (customHeight - headerHeight - footerHeight)
+                let bodyHeight = fixedType ? ((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter && !aboveBodyFooter ? 0 : scrollbarHeight)) : (customHeight - headerHeight - footerHeight)
                 if (bodyMaxHeight) {
                   bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
                 }
@@ -1569,10 +1570,14 @@ export default defineComponent({
 
             // 如果是固定列
             if (fixedWrapperElem) {
+              let fixedHeight = 0
               if (isNodeElement(wrapperElem)) {
-                wrapperElem.style.top = `${headerHeight}px`
+                if (showFooter && aboveBodyFooter) {
+                  fixedHeight = Math.max(wrapperElem.offsetHeight - wrapperElem.clientHeight - (scrollbarHeight * 2), 0)
+                }
+                wrapperElem.style.top = aboveBodyFooter ? `${(customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight) - fixedHeight}px` : `${headerHeight}px`
               }
-              fixedWrapperElem.style.height = `${(customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)}px`
+              fixedWrapperElem.style.height = `${((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) + headerHeight + footerHeight - scrollbarHeight * (showFooter ? 2 : 1)) - fixedHeight}px`
               fixedWrapperElem.style.width = `${fixedColumn.reduce((previous, column) => previous + column.renderWidth, isFixedLeft ? 0 : scrollbarWidth)}px`
             }
 
@@ -1624,7 +1629,7 @@ export default defineComponent({
             if (isNodeElement(wrapperElem)) {
               // 如果是固定列
               if (fixedWrapperElem) {
-                wrapperElem.style.top = `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
+                wrapperElem.style.top = aboveBodyFooter ? `${headerHeight}px` : `${customHeight > 0 ? customHeight - footerHeight : tableHeight + headerHeight}px`
               }
               wrapperElem.style.marginTop = `${-Math.max(1, scrollbarHeight)}px`
             }
@@ -6092,7 +6097,7 @@ export default defineComponent({
      * @param {String} fixedType 固定列类型
      */
     const renderFixed = (fixedType: 'left' | 'right') => {
-      const { showHeader, showFooter } = props
+      const { showHeader, showFooter, aboveBodyFooter } = props
       const { tableData, tableColumn, tableGroupColumn, columnStore, footerTableData } = reactData
       const isFixedLeft = fixedType === 'left'
       const fixedColumn = isFixedLeft ? columnStore.leftList : columnStore.rightList
@@ -6108,6 +6113,15 @@ export default defineComponent({
           tableGroupColumn,
           fixedColumn
         }) : createCommentVNode(),
+
+        aboveBodyFooter ? (showFooter ? h(TableFooterComponent, {
+          ref: isFixedLeft ? refTableLeftFooter : refTableRightFooter,
+          footerTableData,
+          tableColumn,
+          fixedColumn,
+          fixedType
+        }) : createCommentVNode()) : createCommentVNode(),
+
         h(TableBodyComponent as ComponentOptions, {
           ref: isFixedLeft ? refTableLeftBody : refTableRightBody,
           fixedType,
@@ -6115,17 +6129,17 @@ export default defineComponent({
           tableColumn,
           fixedColumn
         }),
-        showFooter ? h(TableFooterComponent, {
+        showFooter ? (!aboveBodyFooter ? h(TableFooterComponent, {
           ref: isFixedLeft ? refTableLeftFooter : refTableRightFooter,
           footerTableData,
           tableColumn,
           fixedColumn,
           fixedType
-        }) : createCommentVNode()
+        }) : createCommentVNode()) : createCommentVNode()
       ])
     }
 
-    const renderEmptyContenet = () => {
+    const renderEmptyContent = () => {
       const emptyOpts = computeEmptyOpts.value
       const params = { $table: $xetable }
       if (slots.empty) {
@@ -6512,7 +6526,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
+      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, aboveBodyFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
       const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
@@ -6541,6 +6555,7 @@ export default defineComponent({
           'column--highlight': columnOpts.isHover || highlightHoverColumn,
           'is--header': showHeader,
           'is--footer': showFooter,
+          'is--above-body-footer': aboveBodyFooter,
           'is--group': isGroup,
           'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
           'is--fixed-left': leftList.length,
@@ -6578,6 +6593,16 @@ export default defineComponent({
               tableColumn,
               tableGroupColumn
             }) : createCommentVNode(),
+
+            /**
+             * 表尾
+             */
+            aboveBodyFooter ? (showFooter ? h(TableFooterComponent, {
+              ref: refTableFooter,
+              footerTableData,
+              tableColumn
+            }) : createCommentVNode()) : createCommentVNode(),
+
             /**
              * 表体
              */
@@ -6589,11 +6614,11 @@ export default defineComponent({
             /**
              * 表尾
              */
-            showFooter ? h(TableFooterComponent, {
+            showFooter ? (!aboveBodyFooter ? h(TableFooterComponent, {
               ref: refTableFooter,
               footerTableData,
               tableColumn
-            }) : createCommentVNode()
+            }) : createCommentVNode()) : createCommentVNode()
           ]),
           h('div', {
             class: 'vxe-table--fixed-wrapper'
@@ -6617,7 +6642,7 @@ export default defineComponent({
         }, [
           h('div', {
             class: 'vxe-table--empty-content'
-          }, renderEmptyContenet())
+          }, renderEmptyContent())
         ]),
         /**
          * 边框线

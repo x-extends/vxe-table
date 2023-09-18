@@ -67,6 +67,7 @@
       show-overflow
       class="mytable-footer"
       height="400"
+      above-body-footer
       :show-header="demo3.showHeader"
       :show-footer="demo3.showFooter"
       :footer-method="footerMethod"
