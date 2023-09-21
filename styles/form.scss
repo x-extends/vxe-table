@@ -143,9 +143,10 @@
       flex-direction: column;
       align-items: initial;
       .vxe-form--item-title {
-        height: 2em;
-        line-height: 2em;
+        height: 2.2em;
+        line-height: 2.2em;
         padding-right: 0;
+        max-width: none;
       }
       .vxe-form--item-title-content {
         flex-grow: initial;
