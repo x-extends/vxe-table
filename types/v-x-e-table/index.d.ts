@@ -17,6 +17,15 @@ export type VxeGlobalI18n = (key: string, args?: any) => number | string;
 export type VxeGlobalTranslate = (key: string, args?: any) => string;
 export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore;
 
+export interface VxeGlobalStore {
+  [key: string]: any
+  clipboard?: {
+    text: string
+    html: string
+  }
+}
+export const globalStore: VxeGlobalStore
+
 export const config: VxeGlobalConfigMethod
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
@@ -55,6 +64,10 @@ export interface VXETableCore {
    * 设置全局参数/获取所有参数
    */
   config: VxeGlobalConfigMethod;
+  /**
+   * 读取内部数据
+   */
+  globalStore: VxeGlobalStore
   /**
    * Table interceptor
    */

@@ -91,12 +91,15 @@ export function _t (key, args) {
 export const v = 'v3'
 export const setup = config
 
+export const globalStore = {}
+
 export const VXETable = {
   v,
   version: process.env.VUE_APP_VXE_TABLE_VERSION,
   reg,
   use,
   setup,
+  globalStore,
   interceptor,
   renderer,
   commands,

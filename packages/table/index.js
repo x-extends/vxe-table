@@ -8,6 +8,10 @@ export const Table = Object.assign(VxeTable, {
       VxeTable.mixins.push(window.VXETableMixin)
       delete window.VXETableMixin
     }
+    if (typeof window !== 'undefined' && window.VXETablePro && window.VXETablePro.init) {
+      window.VXETablePro.init(VXETable)
+      delete window.VXETablePro
+    }
     VXETable.Vue = Vue
     VXETable.Table = VxeTable
     VXETable.TableComponent = VxeTable

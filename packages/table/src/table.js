@@ -953,10 +953,15 @@ export default {
       }
     }
     if (this.autoResize) {
-      const resizeObserver = createResizeEvent(this.resizeOpts.refreshDelay ? XEUtils.throttle(() => {
-        this.recalculate(true)
-      }, this.resizeOpts.refreshDelay, { leading: true, trailing: true }) : () => {
-        this.recalculate(true)
+      const handleWarpperResize = this.resizeOpts.refreshDelay ? XEUtils.throttle(() => this.recalculate(true), this.resizeOpts.refreshDelay, { leading: true, trailing: true }) : null
+      const resizeObserver = createResizeEvent(handleWarpperResize ? () => {
+        if (this.autoResize) {
+          requestAnimationFrame(handleWarpperResize)
+        }
+      } : () => {
+        if (this.autoResize) {
+          this.recalculate(true)
+        }
       })
       resizeObserver.observe(this.$el)
       resizeObserver.observe(this.getParentElem())
