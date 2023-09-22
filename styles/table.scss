@@ -1234,8 +1234,8 @@
         position: relative;
         &:before {
           content: "";
-          top: calc($vxe-table-cell-dirty-width * -1);
-          left: calc($vxe-table-cell-dirty-width * -1);
+          top: $vxe-table-cell-dirty-width * -1;
+          left: $vxe-table-cell-dirty-width * -1;
           position: absolute;
           border-width: $vxe-table-cell-dirty-width;
           border-style: solid;
@@ -1250,8 +1250,8 @@
       position: relative;
       &:before {
         content: "";
-        top: calc($vxe-table-cell-dirty-width * -1);
-        left: calc($vxe-table-cell-dirty-width * -1);
+        top: $vxe-table-cell-dirty-width * -1;
+        left: $vxe-table-cell-dirty-width * -1;
         position: absolute;
         border-width: $vxe-table-cell-dirty-width;
         border-style: solid;
