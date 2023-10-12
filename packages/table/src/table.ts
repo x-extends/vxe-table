@@ -2214,7 +2214,7 @@ export default defineComponent({
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
-      let fullData = datas ? datas.slice(0) : []
+      let fullData = reactive(datas ? datas.slice(0) : []) // 转为响应式
       if (treeConfig) {
         if (transform) {
           // 树结构自动转换
@@ -2696,6 +2696,7 @@ export default defineComponent({
        * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
        */
       syncData () {
+        warnLog('vxe.error.delFunc', ['syncData', 'getData'])
         return nextTick().then(() => {
           reactData.tableData = []
           emit('update:data', internalData.tableFullData)
