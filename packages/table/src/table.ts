@@ -6168,11 +6168,11 @@ export default defineComponent({
           handleInitDefaults()
         }
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          const checkboxOpts = computeCheckboxOpts.value
-          const checkboxColumn = internalData.tableFullColumn.find(column => column.type === 'checkbox')
-          if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
-            warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
-          }
+          // const checkboxOpts = computeCheckboxOpts.value
+          // const checkboxColumn = internalData.tableFullColumn.find(column => column.type === 'checkbox')
+          // if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
+          //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
+          // }
           if ((scrollXLoad || scrollYLoad) && expandColumn) {
             warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
           }
