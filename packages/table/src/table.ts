@@ -1549,14 +1549,23 @@ export default defineComponent({
             const emptyBlockRef = elemStore[`${name}-${layout}-emptyBlock`]
             const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
             if (isNodeElement(wrapperElem)) {
-              const bodyMinHeight = fixedType ? ((customMinHeight - headerHeight - footerHeight) - (showFooter ? 0 : scrollbarHeight)) : (customMinHeight - headerHeight - footerHeight)
               let bodyMaxHeight = 0
+              const bodyMinHeight = customMinHeight - headerHeight - footerHeight
               if (customMaxHeight) {
-                bodyMaxHeight = Math.max(bodyMinHeight, fixedType ? (customMaxHeight - headerHeight - (showFooter ? 0 : scrollbarHeight)) : (customMaxHeight - headerHeight - footerHeight))
+                bodyMaxHeight = customMaxHeight - headerHeight - footerHeight
+                // 如果是固定列
+                if (fixedType) {
+                  bodyMaxHeight -= (showFooter ? 0 : scrollbarHeight)
+                }
+                bodyMaxHeight = Math.max(bodyMinHeight, bodyMaxHeight)
                 wrapperElem.style.maxHeight = `${bodyMaxHeight}px`
               }
-              if (customHeight > 0) {
-                let bodyHeight = fixedType ? ((customHeight > 0 ? customHeight - headerHeight - footerHeight : tableHeight) - (showFooter ? 0 : scrollbarHeight)) : (customHeight - headerHeight - footerHeight)
+              if (customHeight) {
+                let bodyHeight = customHeight - headerHeight - footerHeight
+                // 如果是固定列
+                if (fixedType) {
+                  bodyHeight -= (showFooter ? 0 : scrollbarHeight)
+                }
                 if (bodyMaxHeight) {
                   bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
                 }
