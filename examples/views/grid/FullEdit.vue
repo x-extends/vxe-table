@@ -135,7 +135,9 @@ export default defineComponent({
             })
             return fetch(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}?${XEUtils.serialize(queryParams)}`).then(response => response.json())
           },
-          delete: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body),
+          delete: ({ body }) => {
+            return postMock('https://api.vxetable.cn/demo/api/pub/save', body)
+          },
           save: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body)
         }
       },

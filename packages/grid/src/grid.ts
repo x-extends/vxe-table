@@ -849,7 +849,7 @@ export default defineComponent({
               const selectRecords = gridExtendTableMethods.getCheckboxRecords()
               const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
               const body = { removeRecords }
-              const commitParams = { $grid: $xegrid, code, button, body, options: ajaxMethods }
+              const commitParams = { $grid: $xegrid, code, button, body, form: formData, options: ajaxMethods }
               const applyArgs = [commitParams].concat(args)
               if (selectRecords.length) {
                 return handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
@@ -913,7 +913,7 @@ export default defineComponent({
             if (ajaxMethods) {
               const body = Object.assign({ pendingRecords: reactData.pendingRecords }, $xetable.getRecordset())
               const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-              const commitParams = { $grid: $xegrid, code, button, body, options: ajaxMethods }
+              const commitParams = { $grid: $xegrid, code, button, body, form: formData, options: ajaxMethods }
               const applyArgs = [commitParams].concat(args)
               // 排除掉新增且标记为删除的数据
               if (insertRecords.length) {
