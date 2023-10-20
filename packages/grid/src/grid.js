@@ -609,7 +609,7 @@ export default {
             const selectRecords = $xetable.getCheckboxRecords()
             const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
             const body = { removeRecords }
-            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            const applyArgs = [{ $grid: this, code, button, body, form: formData, options: ajaxMethods }].concat(args)
             if (selectRecords.length) {
               return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 if (!removeRecords.length) {
@@ -673,7 +673,7 @@ export default {
           if (ajaxMethods) {
             const body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            const applyArgs = [{ $grid: this, code, button, body, form: formData, options: ajaxMethods }].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
               body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
