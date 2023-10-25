@@ -209,7 +209,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             }
             // 如果是插入指定行的下一行
             if (isInsertNextRow) {
-              afIndex = Math.max(afterFullData.length, afIndex + 1)
+              afIndex = Math.min(afterFullData.length, afIndex + 1)
             }
             if (afIndex === -1) {
               throw new Error(errLog('vxe.error.unableInsert'))
