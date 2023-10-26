@@ -5814,7 +5814,7 @@ export default defineComponent({
           }
           const params = { $table: $xetable, $event: evnt, column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
           if (mouseConfig && mouseOpts.area && $xetable.handleSortEvent) {
-            return $xetable.handleSortEvent(evnt, params)
+            $xetable.handleSortEvent(evnt, params)
           }
           tableMethods.dispatchEvent('sort-change', params, evnt)
         }
