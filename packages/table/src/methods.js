@@ -3939,7 +3939,7 @@ const Methods = {
       }
       const params = { $table: this, $event: evnt, column, field, property: field, order: column.order, sortList: this.getSortColumns(), sortTime: column.sortTime }
       if (this.mouseConfig && this.mouseOpts.area && this.handleSortEvent) {
-        return this.handleSortEvent(evnt, params)
+        this.handleSortEvent(evnt, params)
       }
       this.emitEvent('sort-change', params, evnt)
     }
