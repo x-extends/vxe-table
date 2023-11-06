@@ -38,8 +38,9 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
               evnt.preventDefault()
               $xetable.updateZindex()
               const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
-              let top = evnt.clientY + scrollTop
-              let left = evnt.clientX + scrollLeft
+              const bodyRect = document.body.getBoundingClientRect()
+              let top = evnt.clientY + scrollTop - bodyRect.top
+              let left = evnt.clientX + scrollLeft - bodyRect.left
               const handleVisible = () => {
                 internalData._currMenuParams = params
                 Object.assign(ctxMenuStore, {

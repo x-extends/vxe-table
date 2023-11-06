@@ -133,8 +133,9 @@ export function getOffsetPos (elem: any, container: any) {
 
 export function getAbsolutePos (elem: any) {
   const bounding = elem.getBoundingClientRect()
-  const boundingTop = bounding.top
-  const boundingLeft = bounding.left
+  const bodyRect = document.body.getBoundingClientRect()
+  const boundingTop = bounding.top - bodyRect.top
+  const boundingLeft = bounding.left - bodyRect.left
   const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
   return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
 }
