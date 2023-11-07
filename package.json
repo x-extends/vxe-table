@@ -28,6 +28,7 @@
   "style": "lib/style.css",
   "typings": "types/index.d.ts",
   "dependencies": {
+    "@floating-ui/vue": "^1.0.2",
     "dom-zindex": "^1.0.1",
     "xe-utils": "^3.5.13"
   },

@@ -18,6 +18,9 @@
     <vxe-table
       border
       height="400"
+      :filter-config="{
+        isFloating: true,
+      }"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="文本筛选" :filters="nameOptions" :filter-render="{name: 'FilterInput'}"></vxe-column>
