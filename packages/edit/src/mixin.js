@@ -626,8 +626,12 @@ export default {
     /**
      * 激活行编辑
      */
-    _setEditRow (row) {
-      return this.setEditCell(row, XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender)))
+    _setEditRow (row, fieldOrColumn) {
+      let column = XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender))
+      if (fieldOrColumn) {
+        column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      }
+      return this.setEditCell(row, column)
     },
     _setActiveCell (row) {
       // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {

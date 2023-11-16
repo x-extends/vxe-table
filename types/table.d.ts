@@ -983,10 +983,10 @@ export declare class Table extends VXETableComponent {
    */
   setActiveRow(row: any): Promise<any>
   /**
-    * 用于 edit-config，激活行编辑并激活第一个单元格
-    * @param row 指定行
-    */
-  setEditRow(row: any): Promise<any>
+   * 用于 edit-config，激活行编辑并默认激活第一个列，也可以指定列
+   * @param row 指定行
+   */
+  setEditRow(row: any, fieldOrColumn?: string | ColumnInfo): Promise<void>
   /**
     * 请使用 setEditCell
     * @deprecated

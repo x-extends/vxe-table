@@ -2,7 +2,8 @@ export default {
   name: 'VxeIcon',
   props: {
     name: String,
-    roll: Boolean
+    roll: Boolean,
+    status: String
   },
   render (h) {
     return h('i', {
