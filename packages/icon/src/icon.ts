@@ -6,7 +6,8 @@ export default defineComponent({
   name: 'VxeIcon',
   props: {
     name: String as PropType<VxeIconPropTypes.Name>,
-    roll: Boolean as PropType<VxeIconPropTypes.Roll>
+    roll: Boolean as PropType<VxeIconPropTypes.Roll>,
+    status: String as PropType<VxeIconPropTypes.Status>
   },
   emits: [
     'click'

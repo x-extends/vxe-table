@@ -574,9 +574,13 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       /**
        * 激活行编辑
        */
-      setEditRow (row) {
+      setEditRow (row, fieldOrColumn) {
         const { visibleColumn } = internalData
-        return $xetable.setEditCell(row, XEUtils.find(visibleColumn, column => isEnableConf(column.editRender)))
+        let column: any = XEUtils.find(visibleColumn, column => isEnableConf(column.editRender))
+        if (fieldOrColumn) {
+          column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+        }
+        return $xetable.setEditCell(row, column)
       },
       setActiveCell (row, fieldOrColumn) {
         // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {

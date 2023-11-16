@@ -25,11 +25,13 @@ export interface VxeIconMethods extends IconMethods { }
 export type VxeIconProps<D = any> = {
   name?: VxeIconPropTypes.Name
   roll?: VxeIconPropTypes.Roll
+  status?: VxeIconPropTypes.Status
 }
 
 export namespace VxeIconPropTypes {
   export type Name = string
   export type Roll = boolean
+  export type Status = string
 }
 
 export type VxeIconEmits = [
