@@ -1988,6 +1988,63 @@ export default defineComponent({
       return nextTick()
     }
 
+    const handleCheckedCheckboxRows = (rows: any[], value: boolean) => {
+      const { treeConfig } = props
+      const { checkboxReserveRowMap } = internalData
+      const { selectCheckboxMaps } = reactData
+      const selectRowMaps = { ...selectCheckboxMaps }
+      const checkboxOpts = computeCheckboxOpts.value
+      const { checkField, reserve, checkStrictly } = checkboxOpts
+      if (checkField) {
+        if (treeConfig && !checkStrictly) {
+          // todo
+        } else {
+          rows.forEach((row) => {
+            XEUtils.set(row, checkField, value)
+          })
+        }
+      } else {
+        if (treeConfig && !checkStrictly) {
+          // todo
+        } else {
+          if (value) {
+            rows.forEach((row) => {
+              const rowid = getRowid($xetable, row)
+              if (!selectRowMaps[rowid]) {
+                selectRowMaps[rowid] = row
+              }
+            })
+          } else {
+            rows.forEach((row) => {
+              const rowid = getRowid($xetable, row)
+              if (selectRowMaps[rowid]) {
+                delete selectRowMaps[rowid]
+              }
+            })
+          }
+        }
+      }
+  
+      if (reserve) {
+        if (value) {
+          rows.forEach((row) => {
+            const rowid = getRowid($xetable, row)
+            checkboxReserveRowMap[rowid] = row
+          })
+        } else {
+          rows.forEach((row) => {
+            const rowid = getRowid($xetable, row)
+            if (checkboxReserveRowMap[rowid]) {
+              delete checkboxReserveRowMap[rowid]
+            }
+          })
+        }
+      }
+      reactData.selectCheckboxMaps = selectRowMaps
+      tablePrivateMethods.checkSelectionStatus()
+      return nextTick()
+    }
+
     // 还原展开、选中等相关状态
     const handleReserveStatus = () => {
       const { treeConfig } = props
@@ -3476,6 +3533,14 @@ export default defineComponent({
       setAllCheckboxRow (value) {
         return handleCheckedAllCheckboxRow(value, true)
       },
+      /**
+       * 用于多选行，设置所选行的选中状态，暂不支持树结构
+       * @param {Array} rows 需要设置的行
+       * @param {Boolean} value 是否选中
+       */
+      setCheckboxRows (rows, value) {
+          return handleCheckedCheckboxRows(rows, value);
+      }
       /**
        * 获取单选框保留选中的行
        */
