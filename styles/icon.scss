@@ -15,6 +15,29 @@
   }
 }
 
+$btnThemeList: (
+  (
+    name: "primary",
+    textColor: var(--vxe-primary-color),
+  ),
+  (
+    name: "success",
+    textColor: var(--vxe-success-color),
+  ),
+  (
+    name: "info",
+    textColor: var(--vxe-info-color),
+  ),
+  (
+    name: "warning",
+    textColor: var(--vxe-warning-color),
+  ),
+  (
+    name: "danger",
+    textColor: var(--vxe-danger-color),
+  )
+);
+
 [class*="vxe-icon-"] {
   font-family: "vxeiconfont" !important;
   font-style: normal;
@@ -41,6 +64,12 @@
   }
   &.roll {
     animation: rollCircle 1s infinite linear;
+  }
+  @for $index from 0 to length($btnThemeList) {
+    $item: nth($btnThemeList, $index + 1);
+    &.theme--#{map-get($item, name)} {
+      color: map-get($item, textColor);
+    }
   }
 }
 
