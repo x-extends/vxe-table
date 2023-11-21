@@ -17,8 +17,9 @@ export default defineComponent({
       emit('click', { $event: evnt })
     }
     return () => {
+      const { name, roll, status } = props
       return h('i', {
-        class: [`vxe-icon-${props.name}`, props.roll ? 'roll' : ''],
+        class: [`vxe-icon-${name}`, roll || '', status || ''],
         onClick: clickEvent
       })
     }
