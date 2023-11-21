@@ -6,8 +6,9 @@ export default {
     status: String
   },
   render (h) {
+    const { name, roll, status } = this
     return h('i', {
-      class: [`vxe-icon-${this.name}`, this.roll ? 'roll' : ''],
+      class: [`vxe-icon-${name}`, roll || '', status || ''],
       on: {
         click: this.clickEvent
       }
