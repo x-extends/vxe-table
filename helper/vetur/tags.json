@@ -2,6 +2,7 @@
   "vxe-icon": {
     "attributes": [
       "name",
+      "status",
       "roll"
     ],
     "description": "图标"
