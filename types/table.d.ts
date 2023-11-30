@@ -708,6 +708,11 @@ export declare class Table extends VXETableComponent {
    * 用于 expand-config，判断行是否为展开状态
    * @param row 指定行
    */
+  isRowExpandByRow(row: RowInfo): boolean;
+  /**
+   * 已废弃，请使用 isRowExpandByRow
+   * @deprecated
+   */
   isExpandByRow(row: RowInfo): boolean;
   /**
    * 用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态

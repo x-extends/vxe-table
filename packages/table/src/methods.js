@@ -4126,7 +4126,7 @@ const Methods = {
     const { lazy } = expandOpts
     const rowid = getRowid(this, row)
     if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
-      const expanded = !this.isExpandByRow(row)
+      const expanded = !this.isRowExpandByRow(row)
       const columnIndex = this.getColumnIndex(column)
       const $columnIndex = this.getVMColumnIndex(column)
       this.setRowExpand(row, expanded)
@@ -4137,7 +4137,7 @@ const Methods = {
    * 切换展开行
    */
   toggleRowExpand (row) {
-    return this.setRowExpand(row, !this.isExpandByRow(row))
+    return this.setRowExpand(row, !this.isRowExpandByRow(row))
   },
   /**
    * 处理默认展开行
@@ -4263,10 +4263,17 @@ const Methods = {
    * 判断行是否为展开状态
    * @param {Row} row 行对象
    */
-  isExpandByRow (row) {
+  isRowExpandByRow (row) {
     const { rowExpandedMaps } = this
     const rowid = getRowid(this, row)
     return !!rowExpandedMaps[rowid]
+  },
+  isExpandByRow (row) {
+    // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    //   warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
+    // }
+    // 即将废弃
+    return this.isRowExpandByRow(row)
   },
   /**
    * 手动清空展开行状态，数据会恢复成未展开的状态
