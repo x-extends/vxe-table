@@ -573,6 +573,10 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 用于 expand-config，判断行是否为展开状态
    * @param row 指定行
    */
+  isRowExpandByRow(row: any): boolean
+  /**
+   * @deprecated 已废弃，请使用 isRowExpandByRow
+   */
   isExpandByRow(row: any): boolean
   /**
    * 用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态

@@ -3856,7 +3856,7 @@ export default defineComponent({
        * 切换展开行
        */
       toggleRowExpand (row) {
-        return tableMethods.setRowExpand(row, !tableMethods.isExpandByRow(row))
+        return tableMethods.setRowExpand(row, !tableMethods.isRowExpandByRow(row))
       },
       /**
        * 设置所有行的展开与否
@@ -3934,10 +3934,16 @@ export default defineComponent({
        * 判断行是否为展开状态
        * @param {Row} row 行对象
        */
-      isExpandByRow (row) {
+      isRowExpandByRow (row) {
         const { rowExpandedMaps } = reactData
         const rowid = getRowid($xetable, row)
         return !!rowExpandedMaps[rowid]
+      },
+      isExpandByRow (row) {
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
+        // }
+        return tableMethods.isRowExpandByRow(row)
       },
       /**
        * 手动清空展开行状态，数据会恢复成未展开的状态
