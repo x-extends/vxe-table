@@ -714,8 +714,10 @@ export default defineComponent({
         elemStore[`${prefix}xSpace`] = refBodyXSpace
         elemStore[`${prefix}ySpace`] = refBodyYSpace
         elemStore[`${prefix}emptyBlock`] = refBodyEmptyBlock
-        el.onscroll = scrollEvent
-        el._onscroll = scrollEvent
+        if (el) {
+          el.onscroll = scrollEvent
+          el._onscroll = scrollEvent
+        }
       })
     })
 
