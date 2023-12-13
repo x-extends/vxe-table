@@ -188,7 +188,7 @@ export default {
         autoTxtElem.className = ['vxe-textarea--autosize', size ? `size--${size}` : ''].join(' ')
         autoTxtElem.style.width = `${textElem.clientWidth}px`
         autoTxtElem.style.padding = textStyle.padding
-        autoTxtElem.innerHTML = ('' + (inputValue || '　')).replace(/\n$/, '\n　')
+        autoTxtElem.innerText = ('' + (inputValue || '　')).replace(/\n$/, '\n　')
       }
     },
     handleResize () {

@@ -499,8 +499,10 @@ export default {
     elemStore[`${prefix}xSpace`] = $refs.xSpace
     elemStore[`${prefix}ySpace`] = $refs.ySpace
     elemStore[`${prefix}emptyBlock`] = $refs.emptyBlock
-    this.$el.onscroll = this.scrollEvent
-    this.$el._onscroll = this.scrollEvent
+    if (this.$el) {
+      this.$el.onscroll = this.scrollEvent
+      this.$el._onscroll = this.scrollEvent
+    }
   },
   beforeDestroy () {
     clearTimeout(this.wheelTime)
