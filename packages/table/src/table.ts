@@ -2547,7 +2547,7 @@ export default defineComponent({
       const { transform } = treeOpts
       const allList = fullData || internalData.tableFullData
       // 如果gt为0，则总是启用
-      const scrollYLoad = !!((transform || treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt < allList.length))
+      const scrollYLoad = (transform || !treeConfig) && !!sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt < allList.length)
       reactData.scrollYLoad = scrollYLoad
       return scrollYLoad
     }
