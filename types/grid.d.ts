@@ -9,12 +9,12 @@ import { VxeTableDataRow, VxeTableDefines, VxeTableEmits, VxeTableConstructor, V
 /* eslint-disable no-use-before-define */
 
 /**
- * 组件 - 高级表格
+ * 组件 - 配置式表格
  * @example import { VxeGrid } from 'vxe-table'
  */
 export const VxeGrid: VXEComponent<VxeGridProps<any>, VxeGridEventProps<any>, VxeGridSlots<any>>
 /**
- * 组件 - 高级表格
+ * 组件 - 配置式表格
  */
 export const Grid: typeof VxeGrid
 
@@ -54,7 +54,6 @@ export interface GridReactData<D = VxeTableDataRow> {
   proxyInited: boolean
   isZMax: boolean
   tableData: D[]
-  pendingRecords: D[]
   filterData: VxeTableDefines.FilterCheckedParams<D>[]
   formData: any
   sortData: VxeTableDefines.SortCheckedParams<D>[]
@@ -98,10 +97,6 @@ export interface GridPublicMethods<D = VxeTableDataRow> {
    */
   getFormItems(): VxeFormItemProps[]
   getFormItems(itemIndex?: number): VxeFormItemProps
-  /**
-   * 获取已标记删除的数据
-   */
-  getPendingRecords(): D[]
   /**
    * 切换表格最大化/还原
    */

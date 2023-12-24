@@ -61,6 +61,7 @@ export interface TableEditMethods<D = VxeTableDataRow> {
     insertRecords: D[]
     removeRecords: D[]
     updateRecords: D[]
+    pendingRecords: D[]
   }
   /**
    * 用于 edit-config，获取新增的临时数据

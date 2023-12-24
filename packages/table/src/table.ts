@@ -109,6 +109,10 @@ export default defineComponent({
       upDataFlag: 0,
       // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
       reColumnFlag: 0,
+      // 已标记的对象集
+      pendingRowMaps: {},
+      // 已标记的行
+      pendingRowList: [],
       // 初始化标识
       initStore: {
         filter: false,
@@ -3689,6 +3693,75 @@ export default defineComponent({
         reactData.currentColumn = null
         return nextTick()
       },
+      setPendingRow (rows: any | any[], status: boolean) {
+        const pendingMaps = { ...reactData.pendingRowMaps }
+        const pendingList = [...reactData.pendingRowList]
+        if (rows && !XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
+        if (status) {
+          rows.forEach((row: any) => {
+            const rowid = getRowid($xetable, row)
+            if (rowid && !pendingMaps[rowid]) {
+              pendingList.push(row)
+              pendingMaps[rowid] = row
+            }
+          })
+        } else {
+          rows.forEach((row: any) => {
+            const rowid = getRowid($xetable, row)
+            if (rowid && pendingMaps[rowid]) {
+              const pendingIndex = $xetable.findRowIndexOf(pendingList, row)
+              if (pendingIndex > -1) {
+                pendingList.splice(pendingIndex, 1)
+              }
+              delete pendingMaps[rowid]
+            }
+          })
+        }
+        reactData.pendingRowMaps = pendingMaps
+        reactData.pendingRowList = pendingList
+        return nextTick()
+      },
+      togglePendingRow (rows: any | any[]) {
+        const pendingMaps = { ...reactData.pendingRowMaps }
+        const pendingList = [...reactData.pendingRowList]
+        if (rows && !XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
+        rows.forEach((row: any) => {
+          const rowid = getRowid($xetable, row)
+          if (rowid) {
+            if (pendingMaps[rowid]) {
+              const pendingIndex = $xetable.findRowIndexOf(pendingList, row)
+              if (pendingIndex > -1) {
+                pendingList.splice(pendingIndex, 1)
+              }
+              delete pendingMaps[rowid]
+            } else {
+              pendingList.push(row)
+              pendingMaps[rowid] = row
+            }
+          }
+        })
+        reactData.pendingRowMaps = pendingMaps
+        reactData.pendingRowList = pendingList
+        return nextTick()
+      },
+      hasPendingByRow (row) {
+        const { pendingRowMaps } = reactData
+        const rowid = getRowid($xetable, row)
+        return !!pendingRowMaps[rowid]
+      },
+      getPendingRecords () {
+        const { pendingRowList } = reactData
+        return pendingRowList.slice(0)
+      },
+      clearPendingRow () {
+        reactData.pendingRowMaps = {}
+        reactData.pendingRowList = []
+        return nextTick()
+      },
       sort (sortConfs: any, sortOrder?: VxeTablePropTypes.SortOrder) {
         const sortOpts = computeSortOpts.value
         const { multiple, remote, orders } = sortOpts
@@ -4246,7 +4319,7 @@ export default defineComponent({
         return nextTick()
       },
       /**
-       * 更新列状态
+       * 更新列状态 updateStatus({ row, column }, cellValue)
        * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一列编辑状态
        * 如果单元格配置了校验规则，则会进行校验
        */
@@ -6698,6 +6771,13 @@ export default defineComponent({
           enterable: false
         }) : createCommentVNode(),
         /**
+         * 工具提示
+         */
+        hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
+          ref: refTooltip,
+          ...tipConfig
+        }) : createCommentVNode(),
+        /**
          * 校验提示
          */
         hasUseTooltip && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
@@ -6706,13 +6786,6 @@ export default defineComponent({
             'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete'
           }, 'vxe-table--valid-error'],
           ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {})
-        }) : createCommentVNode(),
-        /**
-         * 工具提示
-         */
-        hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          ref: refTooltip,
-          ...tipConfig
         }) : createCommentVNode()
       ])
     }

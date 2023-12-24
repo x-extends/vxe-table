@@ -336,7 +336,7 @@ export default defineComponent({
           'is--enterable': enterable,
           'is--visible': visible,
           'is--arrow': isArrow,
-          'is--actived': tipActive
+          'is--active': tipActive
         }],
         style: tipStore.style,
         ...ons

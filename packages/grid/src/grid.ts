@@ -15,7 +15,7 @@ import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridP
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
-const tableComponentMethodKeys: (keyof TableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'focus', 'blur', 'connect']
+const tableComponentMethodKeys: (keyof TableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'focus', 'blur', 'connect']
 
 const gridComponentEmits: VxeGridEmits = [
   ...tableComponentEmits,
@@ -60,7 +60,6 @@ export default defineComponent({
       proxyInited: false,
       isZMax: false,
       tableData: [],
-      pendingRecords: [],
       filterData: [],
       formData: {},
       sortData: [],
@@ -174,28 +173,6 @@ export default defineComponent({
 
     let gridMethods = {} as GridMethods
 
-    const handleRowClassName = (params: any) => {
-      const { pendingRecords } = reactData
-      const rowClassName = props.rowClassName
-      const clss = []
-      if (pendingRecords.some((item) => item === params.row)) {
-        clss.push('row--pending')
-      }
-      clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
-      return clss
-    }
-
-    const handleBeforeEditMethod = (params: any) => {
-      const { editConfig } = props
-      const { pendingRecords } = reactData
-      const $xetable = refTable.value
-      const beforeEditMethod = editConfig ? (editConfig.beforeEditMethod || editConfig.activeMethod) : null
-      if ($xetable.findRowIndexOf(pendingRecords, params.row) === -1) {
-        return !beforeEditMethod || beforeEditMethod({ ...params, $grid: $xegrid })
-      }
-      return false
-    }
-
     const computeTableProps = computed(() => {
       const { seqConfig, pagerConfig, loading, editConfig, proxyConfig } = props
       const { isZMax, tableLoading, tablePage, tableData } = reactData
@@ -213,13 +190,12 @@ export default defineComponent({
       if (proxyConfig && isEnableConf(proxyOpts)) {
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
-        tableProps.rowClassName = handleRowClassName
         if (pagerConfig && proxyOpts.seq && isEnableConf(pagerOpts)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
       if (editConfig) {
-        tableProps.editConfig = Object.assign({}, editConfig, { beforeEditMethod: handleBeforeEditMethod })
+        tableProps.editConfig = Object.assign({}, editConfig)
       }
       return tableProps
     })
@@ -253,25 +229,11 @@ export default defineComponent({
     }
 
     const triggerPendingEvent = (code: string) => {
-      const { pendingRecords } = reactData
       const isMsg = computeIsMsg.value
       const $xetable = refTable.value
       const selectRecords = $xetable.getCheckboxRecords()
       if (selectRecords.length) {
-        const plus: any[] = []
-        const minus: any[] = []
-        selectRecords.forEach((data) => {
-          if (pendingRecords.some((item) => data === item)) {
-            minus.push(data)
-          } else {
-            plus.push(data)
-          }
-        })
-        if (minus.length) {
-          reactData.pendingRecords = pendingRecords.filter((item) => $xetable.findRowIndexOf(minus, item) === -1).concat(plus)
-        } else if (plus.length) {
-          reactData.pendingRecords = pendingRecords.concat(plus)
-        }
+        $xetable.togglePendingRow(selectRecords)
         gridExtendTableMethods.clearCheckboxRow()
       } else {
         if (isMsg) {
@@ -726,8 +688,14 @@ export default defineComponent({
         switch (code) {
           case 'insert':
             return $xetable.insert({})
+          case 'insert_edit':
+            return $xetable.insert({}).then(({ row }) => $xetable.setEditRow(row))
+
+            // 已废弃
           case 'insert_actived':
             return $xetable.insert({}).then(({ row }) => $xetable.setEditRow(row))
+            // 已废弃
+
           case 'mark_cancel':
             triggerPendingEvent(code)
             break
@@ -785,7 +753,6 @@ export default defineComponent({
                 filterList = $xetable.getCheckedFilters()
               } else {
                 if (isReload) {
-                  reactData.pendingRecords = []
                   $xetable.clearAll()
                 } else {
                   sortList = $xetable.getSortColumns()
@@ -860,7 +827,7 @@ export default defineComponent({
                   return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                     .then(rest => {
                       reactData.tableLoading = false
-                      reactData.pendingRecords = reactData.pendingRecords.filter((row) => $xetable.findRowIndexOf(removeRecords, row) === -1)
+                      $xetable.setPendingRow(removeRecords, false)
                       if (isMsg) {
                         // 检测弹窗模块
                         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -911,7 +878,7 @@ export default defineComponent({
           case 'save': {
             const ajaxMethods = ajax.save
             if (ajaxMethods) {
-              const body = Object.assign({ pendingRecords: reactData.pendingRecords }, $xetable.getRecordset())
+              const body = $xetable.getRecordset()
               const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
               const commitParams = { $grid: $xegrid, code, button, body, form: formData, options: ajaxMethods }
               const applyArgs = [commitParams].concat(args)
@@ -938,7 +905,7 @@ export default defineComponent({
                   return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
                     .then(rest => {
                       reactData.tableLoading = false
-                      reactData.pendingRecords = []
+                      $xetable.clearPendingRow()
                       if (isMsg) {
                         // 检测弹窗模块
                         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -1027,10 +994,8 @@ export default defineComponent({
         }, { children: 'children' })
         return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
       },
-      getPendingRecords () {
-        return reactData.pendingRecords
-      },
       getProxyInfo () {
+        const $xetable = refTable.value
         if (props.proxyConfig) {
           const { sortData } = reactData
           return {
@@ -1040,7 +1005,7 @@ export default defineComponent({
             sort: sortData.length ? sortData[0] : {},
             sorts: sortData,
             pager: reactData.tablePage,
-            pendingRecords: reactData.pendingRecords
+            pendingRecords: $xetable ? $xetable.getPendingRecords() : []
           }
         }
         return null

@@ -454,6 +454,27 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    */
   setRadioRow(row: any): Promise<any>
   /**
+   * 将指定行设置为取消/标记待删除状态
+   */
+  setPendingRow(rows: any | any[], status: boolean): Promise<any>
+  /**
+   * 切换指定行的取消/标记待删除状态
+   */
+  togglePendingRow(rows: any | any[]): Promise<any>
+  /**
+   * 获取待删除状态的数据
+   */
+  getPendingRecords(): DT[]
+  /**
+   * 判断行是否为待删除状态
+   * @param row 指定行
+   */
+  hasPendingByRow(row: any): boolean
+  /**
+   * 清除所有标记状态
+   */
+  clearPendingRow(): Promise<any>
+  /**
    * 手动清除临时合并的单元格
    */
   clearMergeCells(): Promise<any>
@@ -856,6 +877,10 @@ export interface TableReactData<D = VxeTableDataRow> {
   upDataFlag: number
   // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
   reColumnFlag: number
+  // 已标记的对象集
+  pendingRowMaps: Record<string, D | null>
+  // 已标记的行
+  pendingRowList: any[],
   // 初始化标识
   initStore: {
     filter: boolean
@@ -2747,7 +2772,10 @@ export type VxeTableEmits = [
   'toggle-tree-expand',
   'menu-click',
   'edit-closed',
-  'edit-actived',
+
+  'edit-actived', // 已废弃
+
+  'edit-activated',
   'edit-disabled',
   'valid-error',
   'scroll',

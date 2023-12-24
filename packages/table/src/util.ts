@@ -292,6 +292,7 @@ export function clearTableDefaultStatus ($xetable: VxeTableConstructor & VxeTabl
   $xetable.clearRowExpand()
   $xetable.clearTreeExpand()
   $xetable.clearTreeExpandReserve()
+  $xetable.clearPendingRow()
   if ($xetable.clearFilter) {
     $xetable.clearFilter()
   }
