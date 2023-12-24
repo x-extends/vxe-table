@@ -139,8 +139,9 @@ function checkOptionDisabled (_vm, isSelected, option, group) {
 }
 
 export function renderOption (h, _vm, list, group) {
-  const { isGroup, labelField, valueField, optionKey, value, multiple, currentValue, optionOpts } = _vm
+  const { $scopedSlots, isGroup, labelField, valueField, optionKey, value, multiple, currentValue, optionOpts } = _vm
   const { useKey } = optionOpts
+  const optionSlot = $scopedSlots.option
   return list.map((option, cIndex) => {
     const { slots } = option
     const optionValue = option[valueField]
@@ -149,6 +150,7 @@ export function renderOption (h, _vm, list, group) {
     const isDisabled = checkOptionDisabled(_vm, isSelected, option, group)
     const optid = getOptid(_vm, option)
     const defaultSlot = slots ? slots.default : null
+    const optParams = { option, group: null, $select: _vm }
     return isVisible ? h('div', {
       key: useKey || optionKey ? optid : cIndex,
       class: ['vxe-select-option', option.className, {
@@ -172,18 +174,20 @@ export function renderOption (h, _vm, list, group) {
           }
         }
       }
-    }, defaultSlot ? _vm.callSlot(defaultSlot, { option, $select: _vm }, h) : UtilTools.formatText(getFuncText(option[labelField]))) : null
+    }, optionSlot ? _vm.callSlot(optionSlot, optParams, h) : (defaultSlot ? _vm.callSlot(defaultSlot, optParams, h) : UtilTools.formatText(getFuncText(option[labelField])))) : null
   })
 }
 
 export function renderOptgroup (h, _vm) {
-  const { optionKey, visibleGroupList, groupLabelField, groupOptionsField, optionOpts } = _vm
+  const { $scopedSlots, optionKey, visibleGroupList, groupLabelField, groupOptionsField, optionOpts } = _vm
   const { useKey } = optionOpts
+  const optionSlot = $scopedSlots.option
   return visibleGroupList.map((group, gIndex) => {
     const { slots } = group
     const optid = getOptid(_vm, group)
     const isGroupDisabled = group.disabled
     const defaultSlot = slots ? slots.default : null
+    const optParams = { option: group, group, $select: _vm }
     return h('div', {
       key: useKey || optionKey ? optid : gIndex,
       class: ['vxe-optgroup', group.className, {
@@ -195,7 +199,7 @@ export function renderOptgroup (h, _vm) {
     }, [
       h('div', {
         class: 'vxe-optgroup--title'
-      }, defaultSlot ? _vm.callSlot(defaultSlot, { option: group, $select: _vm }, h) : getFuncText(group[groupLabelField])),
+      }, optionSlot ? _vm.callSlot(optionSlot, optParams, h) : (defaultSlot ? _vm.callSlot(defaultSlot, optParams, h) : getFuncText(group[groupLabelField]))),
       h('div', {
         class: 'vxe-optgroup--wrapper'
       }, renderOption(h, _vm, group[groupOptionsField], group))
@@ -413,7 +417,10 @@ export default {
   },
   render (h) {
     const { _e, $scopedSlots, vSize, className, popupClassName, inited, isActivated, loading, disabled, visiblePanel, filterable } = this
+    const defaultSlot = $scopedSlots.default
     const prefixSlot = $scopedSlots.prefix
+    const headerSlot = $scopedSlots.header
+    const footerSlot = $scopedSlots.footer
     return h('div', {
       class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
@@ -427,7 +434,7 @@ export default {
       h('div', {
         class: 'vxe-select-slots',
         ref: 'hideOption'
-      }, this.$slots.default),
+      }, defaultSlot ? defaultSlot.call(this, {}) : []),
       h('vxe-input', {
         ref: 'input',
         props: {
@@ -448,7 +455,7 @@ export default {
           'suffix-click': this.togglePanelEvent
         },
         scopedSlots: prefixSlot ? {
-          prefix: () => prefixSlot({})
+          prefix: () => prefixSlot.call(this, {})
         } : {}
       }),
       h('div', {
@@ -465,11 +472,11 @@ export default {
         style: this.panelStyle
       }, inited ? [
         filterable ? h('div', {
-          class: 'vxe-select-filter--wrapper'
+          class: 'vxe-select--panel-search'
         }, [
           h('vxe-input', {
             ref: 'inpSearch',
-            class: 'vxe-select-filter--input',
+            class: 'vxe-select-search--input',
             props: {
               value: this.searchValue,
               type: 'text',
@@ -487,10 +494,24 @@ export default {
           })
         ]) : _e(),
         h('div', {
-          ref: 'optWrapper',
-          class: 'vxe-select-option--wrapper'
-        }, renderOpts(h, this))
-      ] : null)
+          class: 'vxe-select--panel-wrapper'
+        }, [
+          headerSlot ? h('div', {
+            class: 'vxe-select--panel-header'
+          }, headerSlot.call(this, {})) : _e(),
+          h('div', {
+            class: 'vxe-select--panel-body'
+          }, [
+            h('div', {
+              ref: 'optWrapper',
+              class: 'vxe-select-option--wrapper'
+            }, renderOpts(h, this))
+          ]),
+          footerSlot ? h('div', {
+            class: 'vxe-select--panel-footer'
+          }, footerSlot.call(this, {})) : _e()
+        ])
+      ] : [])
     ])
   },
   methods: {

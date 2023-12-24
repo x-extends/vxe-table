@@ -5,6 +5,24 @@
 
     <p>
       <vxe-select v-model="value10" placeholder="默认尺寸">
+        <template #header>
+          <div>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+          </div>
+        </template>
+
+        <template #footer>
+          <div>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+          </div>
+        </template>
+
         <vxe-option v-for="num in 15" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
       <vxe-select v-model="value11" placeholder="中等尺寸" size="medium">
