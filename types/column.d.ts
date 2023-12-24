@@ -181,11 +181,11 @@ export namespace VxeColumnPropTypes {
     /**
      * 只对 type=radio 有效，自定义单选框模板
      */
-    radio?: string | ((params: VxeColumnSlotTypes.DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    radio?: string | ((params: VxeColumnSlotTypes.RadioSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
     /**
      * 只对 type=checkbox 有效，自定义复选框模板
      */
-    checkbox?: string | ((params: VxeColumnSlotTypes.DefaultSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
+    checkbox?: string | ((params: VxeColumnSlotTypes.CheckboxSlotParams<D>) => SlotVNodeType[] | SlotVNodeType) | null
     /**
      * 自定义显示内容模板
      */
@@ -405,7 +405,7 @@ export namespace VxeColumnSlotTypes {
     data: D[][]
   }
 
-  export interface HeaderSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderHeaderParams<D> { }
+  export interface HeaderSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderHeaderParams<D> {}
 
   export interface ContentSlotParams<D = VxeTableDataRow> {
     column: VxeTableDefines.ColumnInfo<D>
@@ -421,6 +421,13 @@ export namespace VxeColumnSlotTypes {
 
   export interface DefaultSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderBodyParams<D> { }
 
+  export interface CheckboxSlotParams<D = VxeTableDataRow> extends DefaultSlotParams<D> {
+    checked: boolean
+    indeterminate: boolean
+  }
+  export interface RadioSlotParams<D = VxeTableDataRow> extends DefaultSlotParams<D> {
+    checked: boolean
+  }
   export interface IconSlotParams<D = VxeTableDataRow> extends DefaultSlotParams<D> { }
 }
 
@@ -444,11 +451,11 @@ export interface VxeColumnSlots<D = VxeTableDataRow> {
   /**
    * 只对 type=checkbox 有效，自定义复选框模板
    */
-  checkbox: (params: VxeColumnSlotTypes.DefaultSlotParams<D>) => any
+  checkbox: (params: VxeColumnSlotTypes.CheckboxSlotParams<D>) => any
   /**
    * 只对 type=radio 有效，自定义单选框模板
    */
-  radio: (params: VxeColumnSlotTypes.DefaultSlotParams<D>) => any
+  radio: (params: VxeColumnSlotTypes.RadioSlotParams<D>) => any
   /**
    * 只对 type=expand 有效，自定义展开后的内容模板
    */

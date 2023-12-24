@@ -2892,6 +2892,9 @@ export namespace VxeTableDefines {
     type: string
     isHidden: boolean
     hasFilter: boolean
+
+    checked?: boolean
+    indeterminate?: boolean
   }
 
   export interface CellRenderBodyParams<D = VxeTableDataRow> {

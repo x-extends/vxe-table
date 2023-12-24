@@ -593,6 +593,11 @@ export interface VxeGridSlots<D = VxeTableDataRow> {
     $columnIndex: number
     _columnIndex: number
 
+    checked?: boolean
+    indeterminate?: boolean
+
+    items: D[]
+
     [key: string]: any
   }) => any) | undefined
 }

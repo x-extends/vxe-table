@@ -5,6 +5,23 @@
 
     <p>
       <vxe-select v-model="demo1.value10" placeholder="默认尺寸">
+        <template #header>
+          <div>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+          </div>
+        </template>
+
+        <template #footer>
+          <div>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+          </div>
+        </template>
         <vxe-option v-for="num in 15" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
       <vxe-select v-model="demo1.value11" placeholder="中等尺寸" size="medium">
@@ -23,6 +40,23 @@
         <vxe-option v-for="num in 3" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
       <vxe-select v-model="demo1.value21" placeholder="可搜索" filterable clearable>
+        <template #header>
+          <div>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+          </div>
+        </template>
+
+        <template #footer>
+          <div>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+            <vxe-button type="text">按钮</vxe-button>
+          </div>
+        </template>
         <vxe-option v-for="num in 11" :key="num" :value="num" :label="`选项${num}`"></vxe-option>
       </vxe-select>
       <vxe-select v-model="demo1.value24" placeholder="远程搜索" filterable clearable remote :remote-method="remoteMethod24">
