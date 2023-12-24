@@ -343,6 +343,10 @@ export default {
       upDataFlag: 0,
       // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
       reColumnFlag: 0,
+      // 已标记的对象集
+      pendingRowMaps: {},
+      // 已标记的行
+      pendingRowList: [],
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -413,13 +417,9 @@ export default {
       },
       // 存放数据校验相关信息
       validStore: {
-        visible: false,
-        row: null,
-        column: null,
-        content: '',
-        rule: null,
-        isArrow: false
+        visible: false
       },
+      validErrorMaps: {},
       // 导入相关信息
       importStore: {
         inited: false,
@@ -1044,6 +1044,7 @@ export default {
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         [`vaild-msg--${validOpts.msgMode}`]: !!editRules,
         'vxe-editable': !!editConfig,
+        'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete',
         'cell--highlight': highlightCell,
         'cell--selected': mouseConfig && mouseOpts.selected,
         'cell--area': mouseConfig && mouseOpts.area,
@@ -1227,7 +1228,9 @@ export default {
        */
       hasTip && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
         ref: 'validTip',
-        class: 'vxe-table--valid-error',
+        class: [{
+          'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete'
+        }, 'vxe-table--valid-error'],
         props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null
       }) : _e()
     ])

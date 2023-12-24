@@ -601,6 +601,22 @@ export declare class Table extends VXETableComponent {
    */
   setRadioRow(row: RowInfo): Promise<any>;
   /**
+   * 将指定行设置为取消/标记待删除状态
+   */
+  setPendingRow(rows: any | any[], status: boolean): Promise<any>
+  /**
+   * 切换指定行的取消/标记待删除状态
+   */
+  togglePendingRow(rows: any | any[]): Promise<any>
+  /**
+   * 获取待删除状态的数据
+   */
+  getPendingRecords(): any[]
+  /**
+   * 清除所有标记状态
+   */
+  clearPendingRow(): Promise<any>
+  /**
    * 手动清除临时合并的单元格
    */
   clearMergeCells(): Promise<any>;
@@ -913,6 +929,7 @@ export declare class Table extends VXETableComponent {
     insertRecords: RowInfo[];
     removeRecords: RowInfo[];
     updateRecords: RowInfo[];
+    pendingRecords: RowInfo[]
   };
 
   /**

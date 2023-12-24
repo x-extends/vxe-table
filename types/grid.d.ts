@@ -10,7 +10,7 @@ import { RowInfo } from './component'
 /* eslint-disable no-use-before-define */
 
 /**
- * 高级表格
+ * 配置式表格
  */
 export declare class Grid extends Table {
   /**

@@ -181,7 +181,7 @@ export class TableRenderParams extends RenderParams {
 
 export class GridRenderParams extends TableRenderParams {
   /**
-   * 高级表格实例对象
+   * 配置式表格实例对象
    */
   $grid: Grid;
 }

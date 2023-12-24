@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
 import GlobalConfig from '../../v-x-e-table/src/conf'
+import { getRowid, handleFieldOrColumn } from '../../table/src/util'
 import { eqEmptyValue, getFuncText } from '../../tools/utils'
 import { warnLog, errLog } from '../../tools/log'
 import DomTools from '../../tools/dom'
@@ -87,8 +88,9 @@ export default {
      * 聚焦到校验通过的单元格并弹出校验错误提示
      */
     handleValidError (params) {
+      const { validOpts } = this
       return new Promise(resolve => {
-        if (this.validOpts.autoPos === false) {
+        if (validOpts.autoPos === false) {
           this.emitEvent('valid-error', params)
           resolve()
         } else {
@@ -99,6 +101,19 @@ export default {
           })
         }
       })
+    },
+    handleErrMsgMode (validErrMaps) {
+      const { validOpts } = this
+      if (validOpts.msgMode === 'single') {
+        const keys = Object.keys(validErrMaps)
+        const resMaps = validErrMaps
+        if (keys.length) {
+          const firstKey = keys[0]
+          resMaps[firstKey] = validErrMaps[firstKey]
+        }
+        return resMaps
+      }
+      return validErrMaps
     },
     /**
      * 对表格数据进行校验
@@ -111,7 +126,7 @@ export default {
      */
     beginValidate (rows, cb, isFull) {
       const validRest = {}
-      const { editRules, afterFullData, treeConfig, treeOpts } = this
+      const { editRules, afterFullData, visibleColumn, treeConfig, treeOpts } = this
       const childrenField = treeOpts.children || treeOpts.childrenField
       let vaildDatas
       if (rows === true) {
@@ -130,6 +145,7 @@ export default {
       this.lastCallTime = Date.now()
       this.validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
       this.clearValidate()
+      const validErrMaps = {}
       if (editRules) {
         const columns = this.getColumns()
         const handleVaild = row => {
@@ -153,6 +169,12 @@ export default {
                       if (!validRest[column.property]) {
                         validRest[column.property] = []
                       }
+                      validErrMaps[`${getRowid(this, row)}:${column.id}`] = {
+                        column,
+                        row,
+                        rule,
+                        content: rule.content
+                      }
                       validRest[column.property].push(rest)
                       if (!isFull) {
                         this.validRuleErr = true
@@ -172,6 +194,7 @@ export default {
         }
         return Promise.all(rowValids).then(() => {
           const ruleProps = Object.keys(validRest)
+          this.validErrorMaps = this.handleErrMsgMode(validErrMaps)
           return this.$nextTick().then(() => {
             if (ruleProps.length) {
               return Promise.reject(validRest[ruleProps[0]][0])
@@ -207,20 +230,21 @@ export default {
              * 将表格滚动到可视区
              * 由于提示信息至少需要占一行，定位向上偏移一行
              */
-            const row = firstErrParams.row
-            const rowIndex = afterFullData.indexOf(row)
-            const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
             if (this.validOpts.autoPos === false) {
               finish()
             } else {
-              if (treeConfig) {
-                this.scrollToTreeRow(locatRow).then(posAndFinish)
-              } else {
-                this.scrollToRow(locatRow).then(posAndFinish)
-              }
+              const row = firstErrParams.row
+              const column = firstErrParams.column
+              const rowIndex = afterFullData.indexOf(row)
+              const columnIndex = visibleColumn.indexOf(column)
+              const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+              const locatColumn = columnIndex > 0 ? visibleColumn[rowIndex - 1] : column
+              this.scrollToRow(locatRow, locatColumn).then(posAndFinish)
             }
           })
         })
+      } else {
+        this.validErrorMaps = {}
       }
       return this.$nextTick().then(() => {
         if (cb) {
@@ -335,34 +359,66 @@ export default {
         }
       })
     },
-    _clearValidate () {
+    _clearValidate  (rows, fieldOrColumn) {
+      const { validOpts, validErrorMaps } = this
       const validTip = this.$refs.validTip
-      Object.assign(this.validStore, {
-        visible: false,
-        row: null,
-        column: null,
-        content: '',
-        rule: null
-      })
-      if (validTip && validTip.visible) {
+      const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
+      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : []).map(column => handleFieldOrColumn(this, column)))
+      let validErrMaps = {}
+      if (validTip && validTip.reactData.visible) {
         validTip.close()
       }
+      // 如果是单个提示模式
+      if (validOpts.msgMode === 'single') {
+        this.validErrorMaps = {}
+        return this.$nextTick()
+      }
+      if (rowList.length && colList.length) {
+        validErrMaps = Object.assign({}, validErrorMaps)
+        rowList.forEach(row => {
+          colList.forEach((column) => {
+            const vaildKey = `${getRowid(this, row)}:${column.id}`
+            if (validErrMaps[vaildKey]) {
+              delete validErrMaps[vaildKey]
+            }
+          })
+        })
+      } else if (rowList.length) {
+        const rowidList = rowList.map(row => `${getRowid(this, row)}`)
+        XEUtils.each(validErrorMaps, (item, key) => {
+          if (rowidList.indexOf(key.split(':')[0]) > -1) {
+            validErrMaps[key] = item
+          }
+        })
+      } else if (colList.length) {
+        const colidList = colList.map(column => `${column.id}`)
+        XEUtils.each(validErrorMaps, (item, key) => {
+          if (colidList.indexOf(key.split(':')[1]) > -1) {
+            validErrMaps[key] = item
+          }
+        })
+      }
+      this.validErrorMaps = validErrMaps
       return this.$nextTick()
     },
     /**
      * 触发校验
      */
     triggerValidate (type) {
-      const { editConfig, editStore, editRules, validStore } = this
+      const { editConfig, editStore, editRules, editOpts, validOpts } = this
       const { actived } = editStore
-      if (actived.row && editRules) {
+      // 检查清除校验消息
+      if (editRules && validOpts.msgMode === 'single') {
+        this.validErrorMaps = {}
+      }
+
+      // 校验单元格
+      if (editConfig && editRules && actived.row) {
         const { row, column, cell } = actived.args
         if (this.hasCellRules(type, row, column)) {
           return this.validCellRules(type, row, column).then(() => {
-            if (editConfig.mode === 'row') {
-              if (validStore.visible && validStore.row === row && validStore.column === column) {
-                this.clearValidate()
-              }
+            if (editOpts.mode === 'row') {
+              this.clearValidate(row, column)
             }
           }).catch(({ rule }) => {
             // 如果校验不通过与触发方式一致，则聚焦提示错误，否则跳过并不作任何处理
@@ -381,23 +437,37 @@ export default {
      * 弹出校验错误提示
      */
     showValidTooltip (params) {
-      const { $refs, height, tableData, validOpts } = this
+      const { $refs, height, validStore, validErrorMaps, tableData, validOpts } = this
       const { rule, row, column, cell } = params
       const validTip = $refs.validTip
       const content = rule.content
-      return this.$nextTick(() => {
-        Object.assign(this.validStore, {
-          row,
-          column,
-          rule,
-          content,
-          visible: true
+      validStore.visible = true
+      if (validOpts.msgMode === 'single') {
+        this.validErrorMaps = {
+          [`${getRowid(this, row)}:${column.id}`]: {
+            column,
+            row,
+            rule,
+            content
+          }
+        }
+      } else {
+        this.validErrorMaps = Object.assign({}, validErrorMaps, {
+          [`${getRowid(this, row)}:${column.id}`]: {
+            column,
+            row,
+            rule,
+            content
+          }
         })
-        this.emitEvent('valid-error', params)
+      }
+      this.emitEvent('valid-error', params, null)
+      if (validTip) {
         if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
           return validTip.open(cell, content)
         }
-      })
+      }
+      return this.$nextTick()
     }
   }
 }

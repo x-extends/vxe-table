@@ -82,10 +82,10 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
     editRules,
     validOpts,
     editStore,
-    validStore,
     tooltipConfig,
     rowOpts,
-    columnOpts
+    columnOpts,
+    validErrorMaps
   } = $xetable
   const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
   const { actived } = editStore
@@ -108,7 +108,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   let isDirty
   const tdOns = {}
   const cellAlign = align || allAlign
-  const hasValidError = validStore.row === row && validStore.column === column
+  const errorValidItem = validErrorMaps[`${rowid}:${column.id}`]
   const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { colid: column.id }
   const bindMouseenter = tableListeners['cell-mouseenter']
@@ -244,17 +244,17 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
         }
       }, column.renderCell(h, params))
     )
-    if (showValidTip && hasValidError) {
+    if (showValidTip && errorValidItem) {
       tdVNs.push(
         h('div', {
-          class: 'vxe-cell--valid',
-          style: validStore.rule && validStore.rule.maxWidth ? {
-            width: `${validStore.rule.maxWidth}px`
+          class: 'vxe-cell--valid-error-hint',
+          style: errorValidItem.rule && errorValidItem.rule.maxWidth ? {
+            width: `${errorValidItem.rule.maxWidth}px`
           } : null
         }, [
           h('span', {
-            class: 'vxe-cell--valid-msg'
-          }, validStore.content)
+            class: 'vxe-cell--valid-error-msg'
+          }, errorValidItem.content)
         ])
       )
     }
@@ -272,8 +272,8 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
         'col--ellipsis': hasEllipsis,
         'fixed--hidden': fixedHiddenColumn,
         'col--dirty': isDirty,
-        'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
-        'col--valid-error': hasValidError,
+        'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
+        'col--valid-error': !!errorValidItem,
         'col--current': currentColumn === column
       },
       UtilTools.getClass(compCellClassName, params),
@@ -310,7 +310,9 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     expandColumn,
     hasFixedColumn,
     fullAllDataRowIdData,
-    rowOpts
+    rowOpts,
+    pendingRowList,
+    pendingRowMaps
   } = $xetable
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rows = []
@@ -366,7 +368,8 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
             'is--expand-tree': isExpandTree,
             'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
             'row--radio': radioOpts.highlight && $xetable.selectRadioRow === row,
-            'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
+            'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row),
+            'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
           },
           rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
         ],

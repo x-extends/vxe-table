@@ -1067,7 +1067,7 @@
   .vxe-footer--column {
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
-      &:not(.col--actived) {
+      &:not(.col--active) {
         & > .vxe-cell {
           @extend %TextEllipsis;
         }
@@ -1173,26 +1173,28 @@
 
   /*校验不通过*/
   .vxe-body--column {
-    &.col--actived,
+    &.col--active,
     &.col--selected {
       position: relative;
     }
     &.col--valid-error {
-      .vxe-cell--valid {
-        width: 320px;
+      .vxe-cell--valid-error-hint {
+        width: 100%;
         position: absolute;
-        bottom: calc(100% + 4px);
         left: 50%;
+        font-size: 12px;
+        line-height: 1.2em;
         transform: translateX(-50%);
-        text-align: center;
+        text-align: left;
         pointer-events: none;
         z-index: 4;
-        .vxe-cell--valid-msg {
+        padding-left: $vxe-table-cell-padding-left;
+        padding-right: $vxe-table-cell-padding-right;
+        .vxe-cell--valid-error-msg {
           display: inline-block;
           border-radius: $vxe-border-radius;
-          padding: 8px 12px;
-          color: #fff;
-          background-color: #f56c6c;
+          color: $vxe-table-validate-error-color;
+          background-color: $vxe-table-validate-error-background-color;
           pointer-events: auto;
         }
       }
@@ -1209,20 +1211,90 @@
 
     }
   }
-  .vxe-body--row {
-    &:first-child {
-      .vxe-cell--valid {
-        bottom: auto;
-        top: calc(100% + 4px);
+  &.vaild-msg--single {
+    .vxe-body--row {
+      &:last-child {
+        .vxe-cell--valid-error-hint {
+          bottom: calc(100%);
+        }
+        &:first-child {
+          .vxe-cell--valid-error-hint {
+            bottom: auto;
+          }
+        }
       }
     }
   }
-  .vxe-body--column {
-    &:first-child {
-      .vxe-cell--valid {
-        left: 10px;
-        transform: translateX(0);
-        text-align: left;
+  &.vaild-msg--full {
+    .vxe-body--row {
+      &:last-child {
+        .vxe-cell--valid-error-hint {
+          top: calc(100% - 1.3em);
+        }
+      }
+    }
+  }
+  /*已废弃，旧的校验样式**/
+  &.old-cell-valid {
+    .vxe-body--column {
+      &.col--valid-error {
+        .vxe-cell--valid-error-hint {
+          width: 320px;
+          position: absolute;
+          bottom: calc(100% + 4px);
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          pointer-events: none;
+          z-index: 4;
+          .vxe-cell--valid-error-msg {
+            display: inline-block;
+            border-radius: $vxe-border-radius;
+            padding: 8px 12px;
+            color: #fff;
+            background-color: #f56c6c;
+            pointer-events: auto;
+          }
+        }
+      }
+    }
+    .vxe-body--row {
+      &:first-child {
+        .vxe-cell--valid-error-hint {
+          bottom: auto;
+          top: calc(100% + 4px);
+        }
+      }
+    }
+    .vxe-body--column {
+      &:first-child {
+        .vxe-cell--valid-error-hint {
+          left: 10px;
+          transform: translateX(0);
+          text-align: left;
+        }
+      }
+    }
+  }
+
+  /*单元格标记删除状态*/
+  .vxe-body--row {
+    &.row--pending {
+      color: $vxe-table-validate-error-color;
+      text-decoration: line-through;
+      cursor: no-drop;
+      .vxe-body--column {
+        position: relative;
+        &:after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 100%;
+          height: 0;
+          border-bottom: 1px solid $vxe-table-validate-error-color;
+          z-index: 1;
+        }
       }
     }
   }
@@ -1265,7 +1337,7 @@
   &.vxe-editable {
     &.cell--highlight {
       .vxe-body--column {
-        &.col--actived {
+        &.col--active {
           box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
           &.col--valid-error {
             box-shadow: inset 0px 0px 0px 2px $vxe-table-validate-error-color;
@@ -1297,7 +1369,7 @@
     }
     .vxe-body--column {
       padding: 0;
-      &.col--actived {
+      &.col--active {
         padding: 0;
       }
     }

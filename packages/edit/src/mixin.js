@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
+import GlobalConfig from '../../v-x-e-table/src/conf'
 import UtilTools, { isEnableConf } from '../../tools/utils'
 import { getRowid } from '../../table/src/util'
 import DomTools, { browse } from '../../tools/dom'
@@ -370,7 +371,8 @@ export default {
       return {
         insertRecords: this.getInsertRecords(),
         removeRecords: this.getRemoveRecords(),
-        updateRecords: this.getUpdateRecords()
+        updateRecords: this.getUpdateRecords(),
+        pendingRecords: this.getPendingRecords()
       }
     },
     /**
@@ -425,7 +427,7 @@ export default {
       const { editRender } = column
       const cell = params.cell = (params.cell || this.getCell(row, column))
       const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-      if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
+      if (isEnableConf(editConfig) && isEnableConf(editRender) && !this.hasPendingByRow(row) && cell) {
         if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
@@ -439,7 +441,7 @@ export default {
             if (actived.column) {
               this.clearActived(evnt)
             }
-            type = 'edit-actived'
+            type = 'edit-activated'
             column.renderHeight = cell.offsetHeight
             actived.args = params
             actived.row = row
@@ -461,6 +463,18 @@ export default {
             columnIndex: this.getColumnIndex(column),
             $columnIndex: this.getVMColumnIndex(column)
           }, evnt)
+
+          // v4已废弃
+          if (type === 'edit-activated') {
+            this.emitEvent('edit-actived', {
+              row,
+              rowIndex: this.getRowIndex(row),
+              $rowIndex: this.getVMRowIndex(row),
+              column,
+              columnIndex: this.getColumnIndex(column),
+              $columnIndex: this.getVMColumnIndex(column)
+            }, evnt)
+          }
         } else {
           const { column: oldColumn } = actived
           if (mouseConfig) {
@@ -542,7 +556,12 @@ export default {
           $columnIndex: this.getVMColumnIndex(column)
         }, evnt)
       }
-      return VXETable._valid ? this.clearValidate() : this.$nextTick()
+      if (GlobalConfig.cellVaildMode === 'obsolete') {
+        if (this.clearValidate) {
+          return this.clearValidate()
+        }
+      }
+      return this.$nextTick()
     },
     _getActiveRecord () {
       // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -555,7 +574,7 @@ export default {
       const { $el, editStore, afterFullData } = this
       const { actived } = editStore
       const { args, row } = actived
-      if (args && this.findRowIndexOf(afterFullData, row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
+      if (args && this.findRowIndexOf(afterFullData, row) > -1 && $el.querySelectorAll('.vxe-body--column.col--active').length) {
         return Object.assign({}, args)
       }
       return null

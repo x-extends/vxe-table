@@ -167,7 +167,6 @@ export default {
       tableLoading: false,
       isZMax: false,
       tableData: [],
-      pendingRecords: [],
       filterData: [],
       formData: {},
       sortData: [],
@@ -221,13 +220,12 @@ export default {
       if (proxyConfig) {
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
-        tableProps.rowClassName = this.handleRowClassName
         if (proxyOpts.seq && isEnableConf(pagerConfig)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
       if (editConfig) {
-        tableProps.editConfig = Object.assign({}, editConfig, { beforeEditMethod: this.handleBeforeEditMethod })
+        tableProps.editConfig = Object.assign({}, editConfig)
       }
       return tableProps
     }
@@ -391,23 +389,6 @@ export default {
       const parentPaddingSize = isZMax || height !== 'auto' ? 0 : getPaddingTopBottomSize($el.parentNode)
       return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
     },
-    handleRowClassName (params) {
-      const rowClassName = this.rowClassName
-      const clss = []
-      if (this.pendingRecords.some(item => item === params.row)) {
-        clss.push('row--pending')
-      }
-      clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
-      return clss
-    },
-    handleBeforeEditMethod (params) {
-      const { editConfig } = this
-      const beforeEditMethod = editConfig ? (editConfig.beforeEditMethod || editConfig.activeMethod) : null
-      if (this.pendingRecords.indexOf(params.row) === -1) {
-        return !beforeEditMethod || beforeEditMethod({ ...params, $grid: this })
-      }
-      return false
-    },
     initToolbar () {
       this.$nextTick(() => {
         const { xTable, xToolbar } = this.$refs
@@ -486,8 +467,14 @@ export default {
       switch (code) {
         case 'insert':
           return this.insert()
+        case 'insert_edit':
+          return this.insert().then(({ row }) => this.setEditRow(row))
+
+          // 已废弃
         case 'insert_actived':
-          return this.insert().then(({ row }) => this.setActiveRow(row))
+          return this.insert().then(({ row }) => this.setEditRow(row))
+          // 已废弃
+
         case 'mark_cancel':
           this.triggerPendingEvent(code)
           break
@@ -545,7 +532,6 @@ export default {
               filterList = $xetable.getCheckedFilters()
             } else {
               if (isReload) {
-                this.pendingRecords = []
                 $xetable.clearAll()
               } else {
                 sortList = $xetable.getSortColumns()
@@ -619,7 +605,7 @@ export default {
                 return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
-                    this.pendingRecords = this.pendingRecords.filter(row => removeRecords.indexOf(row) === -1)
+                    $xetable.setPendingRow(removeRecords, false)
                     if (isMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -671,7 +657,7 @@ export default {
         case 'save': {
           const ajaxMethods = ajax.save
           if (ajaxMethods) {
-            const body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
+            const body = this.getRecordset()
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
             const applyArgs = [{ $grid: this, code, button, body, form: formData, options: ajaxMethods }].concat(args)
             // 排除掉新增且标记为删除的数据
@@ -697,7 +683,7 @@ export default {
                 return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
-                    this.pendingRecords = []
+                    $xetable.clearPendingRow()
                     if (isMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -802,9 +788,6 @@ export default {
       }, { children: 'children' })
       return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
     },
-    getPendingRecords () {
-      return this.pendingRecords
-    },
     triggerToolbarCommitEvent (params, evnt) {
       const { code } = params
       return this.commitProxy(params, evnt).then((rest) => {
@@ -822,23 +805,10 @@ export default {
       this.$emit('toolbar-tool-click', { code: tool.code, tool, $grid: this, $event: evnt })
     },
     triggerPendingEvent (code) {
-      const { pendingRecords, isMsg } = this
+      const { isMsg } = this
       const selectRecords = this.getCheckboxRecords()
       if (selectRecords.length) {
-        const plus = []
-        const minus = []
-        selectRecords.forEach(data => {
-          if (pendingRecords.some(item => data === item)) {
-            minus.push(data)
-          } else {
-            plus.push(data)
-          }
-        })
-        if (minus.length) {
-          this.pendingRecords = pendingRecords.filter(item => minus.indexOf(item) === -1).concat(plus)
-        } else if (plus.length) {
-          this.pendingRecords = pendingRecords.concat(plus)
-        }
+        this.togglePendingRow(selectRecords)
         this.clearCheckboxRow()
       } else {
         if (isMsg) {
@@ -946,7 +916,8 @@ export default {
       return this.$nextTick().then(() => this.recalculate(true)).then(() => this.isZMax)
     },
     getProxyInfo () {
-      const { sortData, proxyConfig } = this
+      const { $refs, sortData, proxyConfig } = this
+      const $xetable = $refs.xTable
       if (proxyConfig) {
         return {
           data: this.tableData,
@@ -955,7 +926,7 @@ export default {
           sort: sortData.length ? sortData[0] : {},
           sorts: sortData,
           pager: this.tablePage,
-          pendingRecords: this.pendingRecords
+          pendingRecords: $xetable ? $xetable.getPendingRecords() : []
         }
       }
       return null

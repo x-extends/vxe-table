@@ -2389,7 +2389,7 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editOpts, filterStore, getRowNode } = this
+    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, filterStore, getRowNode } = this
     const { actived } = editStore
     const { ctxWrapper, filterWrapper, validTip } = $refs
     if (filterWrapper) {
@@ -2466,8 +2466,13 @@ const Methods = {
     if (ctxMenuStore.visible && ctxWrapper && !getEventTargetNode(evnt, ctxWrapper.$el).flag) {
       this.closeMenu()
     }
+    const isActivated = getEventTargetNode(evnt, ($xegrid || this).$el).flag
+    // 如果存在校验，点击了表格之外则清除
+    if (!isActivated && editRules && validOpts.autoClear) {
+      this.validErrorMaps = {}
+    }
     // 最后激活的表格
-    this.isActivated = getEventTargetNode(evnt, ($xegrid || this).$el).flag
+    this.isActivated = isActivated
   },
   /**
    * 窗口失焦事件处理
@@ -3944,6 +3949,74 @@ const Methods = {
       this.emitEvent('sort-change', params, evnt)
     }
   },
+  setPendingRow (rows, status) {
+    const pendingMaps = { ...this.pendingRowMaps }
+    const pendingList = [...this.pendingRowList]
+    if (rows && !XEUtils.isArray(rows)) {
+      rows = [rows]
+    }
+    if (status) {
+      rows.forEach((row) => {
+        const rowid = getRowid(this, row)
+        if (rowid && !pendingMaps[rowid]) {
+          pendingList.push(row)
+          pendingMaps[rowid] = row
+        }
+      })
+    } else {
+      rows.forEach((row) => {
+        const rowid = getRowid(this, row)
+        if (rowid && pendingMaps[rowid]) {
+          const pendingIndex = this.findRowIndexOf(pendingList, row)
+          if (pendingIndex > -1) {
+            pendingList.splice(pendingIndex, 1)
+          }
+          delete pendingMaps[rowid]
+        }
+      })
+    }
+    this.pendingRowMaps = pendingMaps
+    this.pendingRowList = pendingList
+    return this.$nextTick()
+  },
+  togglePendingRow (rows) {
+    const pendingMaps = { ...this.pendingRowMaps }
+    const pendingList = [...this.pendingRowList]
+    if (rows && !XEUtils.isArray(rows)) {
+      rows = [rows]
+    }
+    rows.forEach((row) => {
+      const rowid = getRowid(this, row)
+      if (rowid) {
+        if (pendingMaps[rowid]) {
+          const pendingIndex = this.findRowIndexOf(pendingList, row)
+          if (pendingIndex > -1) {
+            pendingList.splice(pendingIndex, 1)
+          }
+          delete pendingMaps[rowid]
+        } else {
+          pendingList.push(row)
+          pendingMaps[rowid] = row
+        }
+      }
+    })
+    this.pendingRowMaps = pendingMaps
+    this.pendingRowList = pendingList
+    return this.$nextTick()
+  },
+  getPendingRecords () {
+    return this.pendingRowList.slice(0)
+  },
+  hasPendingByRow (row) {
+    const { pendingRowMaps } = this
+    const rowid = getRowid(this, row)
+    return !!pendingRowMaps[rowid]
+  },
+  clearPendingRow () {
+    this.pendingRowMaps = {}
+    this.pendingRowList = []
+    return this.$nextTick()
+  },
   sort (sortConfs, sortOrder) {
     const { sortOpts } = this
     const { multiple, remote, orders } = sortOpts
@@ -4951,7 +5024,7 @@ const Methods = {
     return this.$nextTick()
   },
   /**
-   * 更新列状态
+   * 更新列状态 updateStatus({ row, column }, cellValue)
    * 如果组件值 v-model 发生 change 时，调用改函数用于更新某一列编辑状态
    * 如果单元格配置了校验规则，则会进行校验
    */
@@ -4959,25 +5032,28 @@ const Methods = {
     const customVal = !XEUtils.isUndefined(cellValue)
     return this.$nextTick().then(() => {
       const { $refs, editRules, validStore } = this
-      if (slotParams && $refs.tableBody && editRules) {
+      const tableBody = $refs.tableBody
+      if (slotParams && tableBody && editRules) {
         const { row, column } = slotParams
         const type = 'change'
-        if (this.hasCellRules(type, row, column)) {
-          const cell = this.getCell(row, column)
-          if (cell) {
-            return this.validCellRules(type, row, column, cellValue)
-              .then(() => {
-                if (customVal && validStore.visible) {
-                  setCellValue(row, column, cellValue)
-                }
-                this.clearValidate()
-              })
-              .catch(({ rule }) => {
-                if (customVal) {
-                  setCellValue(row, column, cellValue)
-                }
-                this.showValidTooltip({ rule, row, column, cell })
-              })
+        if (this.hasCellRules) {
+          if (this.hasCellRules(type, row, column)) {
+            const cell = this.getCell(row, column)
+            if (cell) {
+              return this.validCellRules(type, row, column, cellValue)
+                .then(() => {
+                  if (customVal && validStore.visible) {
+                    setCellValue(row, column, cellValue)
+                  }
+                  this.clearValidate(row, column)
+                })
+                .catch(({ rule }) => {
+                  if (customVal) {
+                    setCellValue(row, column, cellValue)
+                  }
+                  this.showValidTooltip({ rule, row, column, cell })
+                })
+            }
           }
         }
       }
