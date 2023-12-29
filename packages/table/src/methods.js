@@ -5174,7 +5174,10 @@ const Methods = {
   getCell (row, column) {
     const { $refs } = this
     const rowid = getRowid(this, row)
-    const bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
+    let bodyElem = null
+    if (column) {
+      bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
+    }
     if (bodyElem && bodyElem.$el) {
       return bodyElem.$el.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
     }
