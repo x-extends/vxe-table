@@ -6088,22 +6088,24 @@ export default defineComponent({
         const leftBody = refTableLeftBody.value
         const rightBody = refTableRightBody.value
         let bodyElem
-        if (column.fixed) {
-          if (column.fixed === 'left') {
-            if (leftBody) {
-              bodyElem = leftBody.$el as HTMLDivElement
-            }
-          } else {
-            if (rightBody) {
-              bodyElem = rightBody.$el as HTMLDivElement
+        if (column) {
+          if (column.fixed) {
+            if (column.fixed === 'left') {
+              if (leftBody) {
+                bodyElem = leftBody.$el as HTMLDivElement
+              }
+            } else {
+              if (rightBody) {
+                bodyElem = rightBody.$el as HTMLDivElement
+              }
             }
           }
-        }
-        if (!bodyElem) {
-          bodyElem = tableBody.$el as HTMLDivElement
-        }
-        if (bodyElem) {
-          return bodyElem.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
+          if (!bodyElem) {
+            bodyElem = tableBody.$el as HTMLDivElement
+          }
+          if (bodyElem) {
+            return bodyElem.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
+          }
         }
         return null
       },
