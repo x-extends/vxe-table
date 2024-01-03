@@ -108,7 +108,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
     const beginValidate = (rows: any, cb: any, isFull?: boolean): Promise<any> => {
       const validRest: any = {}
       const { editRules, treeConfig } = props
-      const { afterFullData } = internalData
+      const { afterFullData, visibleColumn } = internalData
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const validOpts = computeValidOpts.value
@@ -223,17 +223,16 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
              * 将表格滚动到可视区
              * 由于提示信息至少需要占一行，定位向上偏移一行
              */
-            const row = firstErrParams.row
-            const rowIndex = afterFullData.indexOf(row)
-            const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
             if (validOpts.autoPos === false) {
               finish()
             } else {
-              if (treeConfig) {
-                $xetable.scrollToTreeRow(locatRow).then(posAndFinish)
-              } else {
-                $xetable.scrollToRow(locatRow).then(posAndFinish)
-              }
+              const row = firstErrParams.row
+              const column = firstErrParams.column
+              const rowIndex = afterFullData.indexOf(row)
+              const columnIndex = visibleColumn.indexOf(column)
+              const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+              const locatColumn = columnIndex > 0 ? visibleColumn[rowIndex - 1] : column
+              $xetable.scrollToRow(locatRow, locatColumn).then(posAndFinish)
             }
           })
         })
@@ -493,33 +492,34 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       showValidTooltip (params) {
         const { height } = props
         const { tableData, validStore, validErrorMaps } = reactData
+        const { rule, row, column, cell } = params
         const validOpts = computeValidOpts.value
         const validTip = refValidTooltip.value
+        const content = rule.content
         validStore.visible = true
         if (validOpts.msgMode === 'single') {
           reactData.validErrorMaps = {
-            [`${getRowid($xetable, params.row)}:${params.column.id}`]: {
-              column: params.column,
-              row: params.row,
-              rule: params.rule,
-              content: params.rule.content
+            [`${getRowid($xetable, row)}:${column.id}`]: {
+              column,
+              row,
+              rule,
+              content
             }
           }
         } else {
           reactData.validErrorMaps = Object.assign({}, validErrorMaps, {
-            [`${getRowid($xetable, params.row)}:${params.column.id}`]: {
-              column: params.column,
-              row: params.row,
-              rule: params.rule,
-              content: params.rule.content
+            [`${getRowid($xetable, row)}:${column.id}`]: {
+              column,
+              row,
+              rule,
+              content
             }
           })
         }
         $xetable.dispatchEvent('valid-error', params, null)
         if (validTip) {
-          const { cell } = params
           if (validTip && (validOpts.message === 'tooltip' || (validOpts.message === 'default' && !height && tableData.length < 2))) {
-            return validTip.open(cell, params.rule.content)
+            return validTip.open(cell, content)
           }
         }
         return nextTick()

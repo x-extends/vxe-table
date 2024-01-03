@@ -127,11 +127,23 @@ export interface VxePulldownListeners {
 
 export interface VxePulldownSlots {
   /**
+   * 自定义弹窗容器头部模板
+   */
+  header: (params: {
+    [key: string]: any
+  }) => any
+  /**
    * 自定义显示的内容
    */
   default: (params: {
     [key: string]: any
   }) => any
+  /**
+   * 自定义弹窗容器底部模板
+   */
+  footer: ((params: {
+    [key: string]: any
+  }) => any) | undefined
   /**
    * 自定义下拉面板显示的内容
    */

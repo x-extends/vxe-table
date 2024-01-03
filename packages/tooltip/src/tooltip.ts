@@ -242,30 +242,32 @@ export default defineComponent({
       nextTick(() => {
         const { trigger, content, modelValue } = props
         const wrapperElem = refElem.value
-        const parentNode = wrapperElem.parentNode
-        if (parentNode) {
-          reactData.tipContent = content
-          reactData.tipZindex = nextZIndex()
-          XEUtils.arrayEach(wrapperElem.children, (elem, index) => {
-            if (index > 1) {
-              parentNode.insertBefore(elem, wrapperElem)
-              if (!reactData.target) {
-                reactData.target = elem as HTMLElement
+        if (wrapperElem) {
+          const parentNode = wrapperElem.parentNode
+          if (parentNode) {
+            reactData.tipContent = content
+            reactData.tipZindex = nextZIndex()
+            XEUtils.arrayEach(wrapperElem.children, (elem, index) => {
+              if (index > 1) {
+                parentNode.insertBefore(elem, wrapperElem)
+                if (!reactData.target) {
+                  reactData.target = elem as HTMLElement
+                }
+              }
+            })
+            parentNode.removeChild(wrapperElem)
+            const { target } = reactData
+            if (target) {
+              if (trigger === 'hover') {
+                target.onmouseenter = targetMouseenterEvent
+                target.onmouseleave = targetMouseleaveEvent
+              } else if (trigger === 'click') {
+                target.onclick = clickEvent
               }
             }
-          })
-          parentNode.removeChild(wrapperElem)
-          const { target } = reactData
-          if (target) {
-            if (trigger === 'hover') {
-              target.onmouseenter = targetMouseenterEvent
-              target.onmouseleave = targetMouseleaveEvent
-            } else if (trigger === 'click') {
-              target.onclick = clickEvent
+            if (modelValue) {
+              tooltipMethods.open()
             }
-          }
-          if (modelValue) {
-            tooltipMethods.open()
           }
         }
       })
@@ -334,7 +336,7 @@ export default defineComponent({
           'is--enterable': enterable,
           'is--visible': visible,
           'is--arrow': isArrow,
-          'is--actived': tipActive
+          'is--active': tipActive
         }],
         style: tipStore.style,
         ...ons

@@ -275,13 +275,13 @@ export default defineComponent({
         if (showValidTip && errorValidItem) {
           tdVNs.push(
             h('div', {
-              class: 'vxe-cell--valid',
+              class: 'vxe-cell--valid-error-hint',
               style: errorValidItem.rule && errorValidItem.rule.maxWidth ? {
                 width: `${errorValidItem.rule.maxWidth}px`
               } : null
             }, [
               h('span', {
-                class: 'vxe-cell--valid-msg'
+                class: 'vxe-cell--valid-error-msg'
               }, errorValidItem.content)
             ])
           )
@@ -301,7 +301,7 @@ export default defineComponent({
             'col--ellipsis': hasEllipsis,
             'fixed--hidden': fixedHiddenColumn,
             'col--dirty': isDirty,
-            'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
+            'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
             'col--valid-error': !!errorValidItem,
             'col--current': currentColumn === column
           },
@@ -320,7 +320,7 @@ export default defineComponent({
 
     const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow } = tableReactData
+      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, pendingRowList } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -387,7 +387,8 @@ export default defineComponent({
                 'is--expand-tree': isExpandTree,
                 'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
                 'row--radio': radioOpts.highlight && $xetable.eqRow(selectRadioRow, row),
-                'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
+                'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row),
+                'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
               },
               getPropClass(rowClassName, params)
             ],
@@ -714,8 +715,10 @@ export default defineComponent({
         elemStore[`${prefix}xSpace`] = refBodyXSpace
         elemStore[`${prefix}ySpace`] = refBodyYSpace
         elemStore[`${prefix}emptyBlock`] = refBodyEmptyBlock
-        el.onscroll = scrollEvent
-        el._onscroll = scrollEvent
+        if (el) {
+          el.onscroll = scrollEvent
+          el._onscroll = scrollEvent
+        }
       })
     })
 

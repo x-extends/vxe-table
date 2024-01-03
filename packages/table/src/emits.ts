@@ -39,7 +39,10 @@ export default [
   'toggle-tree-expand',
   'menu-click',
   'edit-closed',
-  'edit-actived',
+
+  'edit-actived', // 废弃
+
+  'edit-activated',
   'edit-disabled',
   'valid-error',
   'scroll',

@@ -233,9 +233,38 @@ export namespace VxeSelectEvents {
 
 export interface VxeSelectSlots {
   /**
+   * 自定义前缀图标模板
+   */
+  prefix: (params: {
+    [key: string]: any
+  }) => any
+  /**
+   * 自定义弹窗容器头部模板
+   */
+  header: (params: {
+    [key: string]: any
+  }) => any
+  /**
+   * 自定义弹窗容器选项模板
+   */
+  option: ((params: {
+    option: any
+    group: any
+    [key: string]: any
+  }) => any) | undefined
+  /**
+   * 自定义弹窗容器底部模板
+   */
+  footer: ((params: {
+    [key: string]: any
+  }) => any) | undefined
+
+  /**
    * 自定义插槽模板
    */
   [key: string]: ((params: {
+    option: any
+    group: any
     [key: string]: any
   }) => any) | undefined
 }

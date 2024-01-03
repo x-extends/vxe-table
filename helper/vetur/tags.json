@@ -2,6 +2,7 @@
   "vxe-icon": {
     "attributes": [
       "name",
+      "status",
       "roll"
     ],
     "description": "图标"
@@ -242,7 +243,7 @@
       "proxy-config",
       "zoom-config"
     ],
-    "description": "高级表格"
+    "description": "配置式表格"
   },
   "vxe-toolbar": {
     "attributes": [

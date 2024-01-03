@@ -111,3 +111,22 @@ app.config.globalProperties.$XSaveFile = VXETable.saveFile
 app.config.globalProperties.$XReadFile = VXETable.readFile
 
 app.mount('#app')
+
+const socket = new WebSocket('ws://43.128.2.227/queue/join')
+socket.addEventListener('open', () => {
+  console.log('WebSocket连接已打开')
+  setTimeout(() => {
+    socket.send(JSON.stringify(
+      { data: ['你能做什么？', [], 8192, 0.8, 0.6, [], null], event_data: null, fn_index: 0, session_hash: 'u8tfio3gce' }
+    ))
+  }, 100)
+})
+socket.addEventListener('message', (event) => {
+  console.log('收到消息：', event.data)
+})
+socket.addEventListener('error', () => {
+  console.error('WebSocket连接发生错误')
+})
+socket.addEventListener('close', () => {
+  console.log('WebSocket连接已关闭')
+})

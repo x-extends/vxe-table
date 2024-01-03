@@ -424,13 +424,14 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         })
       },
       /**
-       * 获取表格数据集，包含新增、删除、修改
+       * 获取表格数据集，包含新增、删除、修改、标记
        */
       getRecordset () {
         return {
           insertRecords: editMethods.getInsertRecords(),
           removeRecords: editMethods.getRemoveRecords(),
-          updateRecords: editMethods.getUpdateRecords()
+          updateRecords: editMethods.getUpdateRecords(),
+          pendingRecords: $xetable.getPendingRecords()
         }
       },
       /**
@@ -486,7 +487,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const { afterFullData } = internalData
         const el = refElem.value
         const { args, row } = editStore.actived
-        if (args && $xetable.findRowIndexOf(afterFullData, row) > -1 && el.querySelectorAll('.vxe-body--column.col--actived').length) {
+        if (args && $xetable.findRowIndexOf(afterFullData, row) > -1 && el.querySelectorAll('.vxe-body--column.col--active').length) {
           return Object.assign({}, args)
         }
         return null
@@ -574,9 +575,13 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
       /**
        * 激活行编辑
        */
-      setEditRow (row) {
+      setEditRow (row, fieldOrColumn) {
         const { visibleColumn } = internalData
-        return $xetable.setEditCell(row, XEUtils.find(visibleColumn, column => isEnableConf(column.editRender)))
+        let column: any = XEUtils.find(visibleColumn, column => isEnableConf(column.editRender))
+        if (fieldOrColumn) {
+          column = XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+        }
+        return $xetable.setEditCell(row, column)
       },
       setActiveCell (row, fieldOrColumn) {
         // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -650,10 +655,10 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         const cell = (params.cell || $xetable.getCell(row, column))
         const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
         params.cell = cell
-        if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
+        if (isEnableConf(editConfig) && isEnableConf(editRender) && !$xetable.hasPendingByRow(row) && cell) {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
-            let type: 'edit-disabled' | 'edit-actived' = 'edit-disabled'
+            let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
             if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xetable })) {
               if (mouseConfig) {
                 editMethods.clearSelected()
@@ -666,7 +671,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               if (actived.column) {
                 editMethods.clearEdit(evnt)
               }
-              type = 'edit-actived'
+              type = 'edit-activated'
               column.renderHeight = cell.offsetHeight
               actived.args = params
               actived.row = row
@@ -688,6 +693,18 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               columnIndex: $xetable.getColumnIndex(column),
               $columnIndex: $xetable.getVMColumnIndex(column)
             }, evnt)
+
+            // v4已废弃
+            if (type === 'edit-activated') {
+              $xetable.dispatchEvent('edit-actived', {
+                row,
+                rowIndex: $xetable.getRowIndex(row),
+                $rowIndex: $xetable.getVMRowIndex(row),
+                column,
+                columnIndex: $xetable.getColumnIndex(column),
+                $columnIndex: $xetable.getVMColumnIndex(column)
+              }, evnt)
+            }
           } else {
             const { column: oldColumn } = actived
             if (mouseConfig) {

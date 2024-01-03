@@ -3,6 +3,10 @@
     "type": "string",
     "description": "图标名称"
   },
+  "vxe-icon/status": {
+    "type": "string",
+    "description": "状态颜色"
+  },
   "vxe-icon/roll": {
     "type": "boolean",
     "description": "旋转动画"

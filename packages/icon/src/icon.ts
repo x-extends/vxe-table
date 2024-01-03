@@ -6,7 +6,8 @@ export default defineComponent({
   name: 'VxeIcon',
   props: {
     name: String as PropType<VxeIconPropTypes.Name>,
-    roll: Boolean as PropType<VxeIconPropTypes.Roll>
+    roll: Boolean as PropType<VxeIconPropTypes.Roll>,
+    status: String as PropType<VxeIconPropTypes.Status>
   },
   emits: [
     'click'
@@ -16,8 +17,9 @@ export default defineComponent({
       emit('click', { $event: evnt })
     }
     return () => {
+      const { name, roll, status } = props
       return h('i', {
-        class: [`vxe-icon-${props.name}`, props.roll ? 'roll' : ''],
+        class: [`vxe-icon-${name}`, roll || '', status ? [`theme--${status}`] : ''],
         onClick: clickEvent
       })
     }

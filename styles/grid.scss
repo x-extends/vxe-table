@@ -29,26 +29,6 @@
     padding: 0.5em 1em;
     background-color: var(--vxe-grid-maximize-background-color);
   }
-  .vxe-body--row {
-    &.row--pending {
-      color: var(--vxe-table-validate-error-color);
-      text-decoration: line-through;
-      cursor: no-drop;
-      .vxe-body--column {
-        position: relative;
-        &:after {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 0;
-          width: 100%;
-          height: 0;
-          border-bottom: 1px solid var(--vxe-table-validate-error-color);
-          z-index: 1;
-        }
-      }
-    }
-  }
   .vxe-grid--form-wrapper,
   .vxe-grid--top-wrapper,
   .vxe-grid--bottom-wrapper  {

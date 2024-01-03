@@ -13,6 +13,7 @@
             <vxe-button type="text" @click="insertEvent($refs.xTable.getData(300))">插入到 300 行</vxe-button>
           </template>
         </vxe-button>
+        <vxe-button @click="validEvent">快速校验</vxe-button>
         <vxe-button>
           <template #default>删除操作</template>
           <template #dropdowns>
@@ -38,8 +39,10 @@
       :export-config="{}"
       :loading="demo1.loading"
       :checkbox-config="{checkField: 'checked'}"
+      :edit-rules="validRules"
       :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
-      :scroll-y="{enabled: true}">
+      :scroll-x="{enabled: true, gt: 0}"
+      :scroll-y="{enabled: true, gt: 0}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>
@@ -59,6 +62,13 @@
       <vxe-column field="attr7" title="Attr7" width="200"></vxe-column>
       <vxe-column field="attr8" title="Attr8" width="200"></vxe-column>
       <vxe-column field="attr9" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr10" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr11" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr12" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr13" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr14" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr15" title="Attr9" width="200"></vxe-column>
+      <vxe-column field="attr16" title="Attr9" width="200"></vxe-column>
       <vxe-column field="createTime" title="CreateTime" width="200"></vxe-column>
     </vxe-table>
 
@@ -83,6 +93,16 @@ export default defineComponent({
     })
 
     const xTable = ref({} as VxeTableInstance)
+
+    const validRules = reactive({
+      name: [
+        { required: true, message: 'app.body.valid.rName' },
+        { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+      ],
+      sex: [
+        { required: true, message: '性别必须填写' }
+      ]
+    })
 
     const mockList = (size: number) => {
       const list: any[] = []
@@ -115,6 +135,16 @@ export default defineComponent({
           demo1.loading = false
         }, 300)
       })
+    }
+
+    const validEvent = async () => {
+      const $table = xTable.value
+      const errMap = await $table.validate()
+      if (errMap) {
+        VXETable.modal.message({ status: 'error', message: '校验不通过！' })
+      } else {
+        VXETable.modal.message({ status: 'success', message: '校验成功！' })
+      }
     }
 
     const insertEvent = (row: any) => {
@@ -150,7 +180,9 @@ export default defineComponent({
     return {
       xTable,
       demo1,
+      validRules,
       findList,
+      validEvent,
       insertEvent,
       getInsertEvent,
       getRemoveEvent,
