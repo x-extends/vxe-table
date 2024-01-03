@@ -340,7 +340,7 @@ export default defineComponent({
     const $xegrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xegrid', null)
     let $xetoolbar: VxeToolbarConstructor
 
-    const reference = ref<any>(null)
+    const reference = ref<HTMLDivElement|null>(null)
 
     const { floatingStyles } = useFloating(reference, refTableFilter, {
       // 浮动元素跟随目标元素
@@ -1391,7 +1391,10 @@ export default defineComponent({
         if (sortMultiple && chronological && orderColumns.length > 1) {
           orderColumns = XEUtils.orderBy(orderColumns, 'sortTime')
         }
-
+        // 处理是否有筛选列
+        if (tableFullColumn.findIndex(item => item.filters) > -1 && filterOpts.isFloating) {
+          reactData.initStore.filter = true
+        }
         // 处理筛选
         // 支持单列、多列、组合筛选
         if (!allRemoteFilter && filterColumns.length) {
