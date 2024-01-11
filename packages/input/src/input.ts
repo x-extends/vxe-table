@@ -1262,8 +1262,12 @@ export default defineComponent({
           dateCheckMonth(date)
         } else {
           dateChange(date)
-          if (!multiple) {
-            hidePanel()
+          if (type === 'datetime') {
+            // 日期带时间
+          } else {
+            if (!multiple) {
+              hidePanel()
+            }
           }
         }
       }

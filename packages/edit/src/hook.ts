@@ -659,7 +659,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
             // 判断是否禁用编辑
             let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'
-            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xetable })) {
+            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: $xetable, $grid: $xetable.xegrid })) {
               if (mouseConfig) {
                 editMethods.clearSelected()
                 if ($xetable.clearCellAreas) {

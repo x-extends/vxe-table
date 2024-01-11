@@ -4828,7 +4828,7 @@ export default defineComponent({
             // 如果是按下非功能键之外允许直接编辑
             if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
               const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xetable })) {
+              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xetable, $grid: $xegrid })) {
                 if (editMethod) {
                   editMethod({
                     row: selected.row,
