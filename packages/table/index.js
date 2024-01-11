@@ -8,7 +8,10 @@ export const Table = Object.assign(VxeTable, {
       VxeTable.mixins.push(window.VXETableMixin)
       delete window.VXETableMixin
     }
-    if (typeof window !== 'undefined' && window.VXETablePro && window.VXETablePro.init) {
+    if (typeof window !== 'undefined' && window.VXETableExtendCellArea && window.VXETableExtendCellArea.init) {
+      window.VXETableExtendCellArea.init(VXETable)
+      delete window.VXETableExtendCellArea
+    } else if (typeof window !== 'undefined' && window.VXETablePro && window.VXETablePro.init) {
       window.VXETablePro.init(VXETable)
       delete window.VXETablePro
     }

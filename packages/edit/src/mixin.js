@@ -431,7 +431,7 @@ export default {
         if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
           // 判断是否禁用编辑
           let type = 'edit-disabled'
-          if (!beforeEditMethod || beforeEditMethod({ ...params, $table: this })) {
+          if (!beforeEditMethod || beforeEditMethod({ ...params, $table: this, $grid: this.$xegrid })) {
             if (mouseConfig) {
               this.clearSelected(evnt)
               this.clearCellAreas(evnt)

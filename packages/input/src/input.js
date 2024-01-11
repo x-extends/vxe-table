@@ -1657,8 +1657,12 @@ export default {
           this.dateCheckMonth(date)
         } else {
           this.dateChange(date)
-          if (!multiple) {
-            this.hidePanel()
+          if (type === 'datetime') {
+            // 日期带时间
+          } else {
+            if (!multiple) {
+              this.hidePanel()
+            }
           }
         }
       }

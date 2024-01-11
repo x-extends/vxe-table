@@ -2706,14 +2706,15 @@ const Methods = {
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
             const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-            if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: this })) {
+            if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: this, $grid: this.$xegrid })) {
               if (editMethod) {
                 editMethod({
                   row: selected.row,
                   rowIndex: this.getRowIndex(selected.row),
                   column: selected.column,
                   columnIndex: this.getColumnIndex(selected.column),
-                  $table: this
+                  $table: this,
+                  $grid: this.$xegrid
                 })
               } else {
                 setCellValue(selected.row, selected.column, null)
