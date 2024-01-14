@@ -68,7 +68,6 @@
     transition: transform .3s cubic-bezier(.23,1,.32,1), opacity .3s cubic-bezier(.23,1,.32,1);
     transform-origin: center top;
     backface-visibility: hidden;
-    transform-style: preserve-3d;
     &[placement="top"] {
       transform-origin: center bottom;
     }
