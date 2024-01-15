@@ -1,4 +1,4 @@
-import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
+import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted, Teleport } from 'vue'
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
@@ -17,6 +17,7 @@ import tableEmits from './emits'
 import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement, getRootColumn } from './util'
 import { getSlotVNs } from '../../tools/vn'
+import { useFloating, autoUpdate, offset, flip } from '@floating-ui/vue'
 
 import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow } from '../../../types/all'
 
@@ -338,6 +339,17 @@ export default defineComponent({
 
     const $xegrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xegrid', null)
     let $xetoolbar: VxeToolbarConstructor
+
+    const reference = ref<HTMLDivElement|null>(null)
+
+    const { floatingStyles } = useFloating(reference, refTableFilter, {
+      // 浮动元素跟随目标元素
+      whileElementsMounted (...args) {
+        const cleanup = autoUpdate(...args, { animationFrame: true })
+        return cleanup
+      },
+      middleware: [offset(10), flip()]
+    })
 
     const computeValidOpts = computed(() => {
       return Object.assign({}, GlobalConfig.table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
@@ -1379,7 +1391,10 @@ export default defineComponent({
         if (sortMultiple && chronological && orderColumns.length > 1) {
           orderColumns = XEUtils.orderBy(orderColumns, 'sortTime')
         }
-
+        // 处理是否有筛选列
+        if (tableFullColumn.findIndex(item => item.filters) > -1 && filterOpts.isFloating) {
+          reactData.initStore.filter = true
+        }
         // 处理筛选
         // 支持单列、多列、组合筛选
         if (!allRemoteFilter && filterColumns.length) {
@@ -4470,6 +4485,8 @@ export default defineComponent({
       if (tableFilter) {
         if (getEventTargetNode(evnt, el, 'vxe-cell--filter').flag) {
           // 如果点击了筛选按钮
+          // 获取到元素位置
+          reference.value = getEventTargetNode(evnt, el, 'vxe-cell--filter').targetElem
         } else if (getEventTargetNode(evnt, tableFilter.$el as HTMLDivElement).flag) {
           // 如果点击筛选容器
         } else {
@@ -6617,6 +6634,7 @@ export default defineComponent({
       const mouseOpts = computeMouseOpts.value
       const validTipOpts = computeValidTipOpts.value
       const loadingOpts = computeLoadingOpts.value
+      const filterOpts = computeFilterOpts.value
       const isMenu = computeIsMenu.value
       return h('div', {
         ref: refElem,
@@ -6740,7 +6758,13 @@ export default defineComponent({
         /**
          * 筛选
          */
-        initStore.filter ? h(resolveComponent('vxe-table-filter') as ComponentOptions, {
+        initStore.filter ? filterOpts.isFloating ? h(Teleport, {
+          to: 'body'
+        }, [h(resolveComponent('vxe-table-filter'), {
+          ref: refTableFilter,
+          filterStore,
+          style: floatingStyles.value
+        })]) : h(resolveComponent('vxe-table-filter') as ComponentOptions, {
           ref: refTableFilter,
           filterStore
         }) : createCommentVNode(),

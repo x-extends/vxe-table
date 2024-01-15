@@ -1535,6 +1535,7 @@ export namespace VxeTablePropTypes {
     showIcon?: boolean
     iconNone?: string
     iconMatch?: string
+    isFloating?: boolean
   }
   export interface FilterOpts<D = VxeTableDataRow> extends FilterConfig<D> { }
 
