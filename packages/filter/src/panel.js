@@ -116,7 +116,8 @@ export default {
       ]
     },
     renderFooter (h) {
-      const { hasCheckOption, filterStore } = this
+      const { $parent: $xetable, hasCheckOption, filterStore } = this
+      const { filterOpts } = $xetable
       const { column, multiple } = filterStore
       const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
@@ -135,12 +136,12 @@ export default {
             on: {
               click: this.confirmFilter
             }
-          }, GlobalConfig.i18n('vxe.table.confirmFilter')),
+          }, filterOpts.confirmButtonText || GlobalConfig.i18n('vxe.table.confirmFilter')),
           h('button', {
             on: {
               click: this.resetFilter
             }
-          }, GlobalConfig.i18n('vxe.table.resetFilter'))
+          }, filterOpts.resetButtonText || GlobalConfig.i18n('vxe.table.resetFilter'))
         ])
       ] : []
     },

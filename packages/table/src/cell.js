@@ -6,7 +6,7 @@ import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/
 import { getRowid, getColumnConfig } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
-function renderHelpIcon (h, params) {
+function renderTitlePrefixIcon (h, params) {
   const { $table, column } = params
   const titlePrefix = column.titlePrefix || column.titleHelp
   return titlePrefix ? [
@@ -159,7 +159,7 @@ export const Cell = {
     return renderTitleContent(h, params, UtilTools.formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (h, params) {
-    return renderHelpIcon(h, params).concat(Cell.renderHeaderTitle(h, params))
+    return renderTitlePrefixIcon(h, params).concat(Cell.renderHeaderTitle(h, params))
   },
   renderDefaultCell (h, params) {
     const { $table, row, column } = params
