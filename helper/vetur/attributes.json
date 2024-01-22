@@ -3,6 +3,10 @@
     "type": "string",
     "description": "图标名称"
   },
+  "vxe-icon/status": {
+    "type": "string",
+    "description": "状态颜色"
+  },
   "vxe-icon/roll": {
     "type": "boolean",
     "description": "旋转动画"
@@ -850,6 +854,10 @@
   "vxe-grid/zoom-config": {
     "type": "any",
     "description": "缩放配置项"
+  },
+  "vxe-grid/layouts": {
+    "type": "string[]",
+    "description": "自定义布局"
   },
   "vxe-toolbar/size": {
     "type": "string",

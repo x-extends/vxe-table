@@ -168,10 +168,18 @@ export default {
       pagesize: '{0}件/ページ',
       total: '全 {0} 件',
       pageClassifier: '',
+      homePage: 'Home',
+      homePageTitle: 'Home page',
       prevPage: '前のページ',
+      prevPageTitle: '前のページ',
       nextPage: '次のページ',
+      nextPageTitle: '次のページ',
       prevJump: '前のページに移動',
-      nextJump: '次のページに移動'
+      prevJumpTitle: '前のページに移動',
+      nextJump: '次のページに移動',
+      nextJumpTitle: '次のページに移動',
+      endPage: 'End',
+      endPageTitle: 'End page'
     },
     alert: {
       title: 'メッセージ'

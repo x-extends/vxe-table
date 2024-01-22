@@ -7,7 +7,7 @@ export declare class Pager extends VXETableComponent {
   /**
    * 自定义布局
    */
-  layouts?: Array<'PrevJump' | 'PrevPage' | 'Number' | 'JumpNumber' | 'NextPage' | 'NextJump' | 'Sizes' | 'Jump' | 'FullJump' | 'PageCount' | 'Total'>;
+  layouts?: Array<'Home' | 'PrevJump' | 'PrevPage' | 'Number' | 'JumpNumber' | 'NextPage' | 'NextJump' | 'End' | 'Sizes' | 'Jump' | 'FullJump' | 'PageCount' | 'Total'>;
   /**
    * 当前页
    */

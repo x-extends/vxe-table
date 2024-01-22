@@ -137,6 +137,150 @@ function getTableOns (_vm) {
   return ons
 }
 
+/**
+ * 渲染表单
+ */
+function renderForms (h, _vm) {
+  const { _e, $scopedSlots, formConfig } = _vm
+  const formSlot = $scopedSlots.form
+  const hasForm = !!(formSlot || isEnableConf(formConfig))
+
+  return hasForm ? h('div', {
+    key: 'form',
+    ref: 'formWrapper',
+    class: 'vxe-grid--form-wrapper'
+  }, formSlot ? formSlot.call(_vm, { $grid: _vm }, h) : renderDefaultForm(h, _vm)) : _e()
+}
+
+/**
+ * 渲染工具栏
+ */
+function renderToolbars (h, _vm) {
+  const { _e, $scopedSlots, toolbarConfig, toolbar } = _vm
+  const toolbarSlot = $scopedSlots.toolbar
+  const hasToolbar = !!(toolbarSlot || isEnableConf(toolbarConfig) || toolbar)
+
+  return hasToolbar ? h('div', {
+    key: 'toolbar',
+    ref: 'toolbarWrapper',
+    class: 'vxe-grid--toolbar-wrapper'
+  }, toolbarSlot
+    ? toolbarSlot.call(_vm, { $grid: _vm }, h)
+    : [
+        h('vxe-toolbar', {
+          props: _vm.toolbarOpts,
+          ref: 'xToolbar',
+          scopedSlots: getToolbarSlots(_vm)
+        })
+      ]
+  ) : _e()
+}
+
+/**
+ * 渲染表格顶部区域
+ */
+function renderTops (h, _vm) {
+  const { _e, $scopedSlots } = _vm
+  const topSlot = $scopedSlots.top
+
+  return topSlot ? h('div', {
+    key: 'top',
+    ref: 'topWrapper',
+    class: 'vxe-grid--top-wrapper'
+  }, topSlot.call(_vm, { $grid: _vm }, h)) : _e()
+}
+
+/**
+ * 渲染表格
+ */
+function renderTables (h, _vm) {
+  const { $scopedSlots, tableProps } = _vm
+
+  return h('vxe-table', {
+    key: 'table',
+    props: tableProps,
+    on: getTableOns(_vm),
+    scopedSlots: $scopedSlots,
+    ref: 'xTable'
+  })
+}
+
+/**
+ * 渲染表格底部区域
+ */
+function renderBottoms (h, _vm) {
+  const { _e, $scopedSlots } = _vm
+  const bottomSlot = $scopedSlots.bottom
+
+  return bottomSlot ? h('div', {
+    key: 'bottom',
+    ref: 'bottomWrapper',
+    class: 'vxe-grid--bottom-wrapper'
+  }, bottomSlot.call(_vm, { $grid: _vm }, h)) : _e()
+}
+
+/**
+ * 渲染分页
+ */
+function renderPagers (h, _vm) {
+  const { _e, $scopedSlots, pagerConfig, proxyConfig, tablePage } = _vm
+  const pagerSlot = $scopedSlots.pager
+  const hasPager = !!(pagerSlot || isEnableConf(pagerConfig))
+
+  return hasPager ? h('div', {
+    key: 'pager',
+    ref: 'pagerWrapper',
+    class: 'vxe-grid--pager-wrapper'
+  }, pagerSlot
+    ? pagerSlot.call(_vm, { $grid: _vm }, h)
+    : [
+        h('vxe-pager', {
+          props: { ..._vm.pagerOpts, ...(proxyConfig ? tablePage : {}) },
+          on: {
+            'page-change': _vm.pageChangeEvent
+          },
+          scopedSlots: getPagerSlots(_vm)
+        })
+      ]
+  ) : _e()
+}
+
+const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
+
+function renderLayout (h, _vm) {
+  const { layouts } = _vm
+  const vns = []
+  const currLayouts = (layouts && layouts.length ? layouts : (GlobalConfig.grid.layouts || defaultLayouts))
+  currLayouts.forEach(name => {
+    switch (name) {
+      case 'Form':
+        vns.push(renderForms(h, _vm))
+        break
+      case 'Toolbar':
+        vns.push(renderToolbars(h, _vm))
+        break
+      case 'Top':
+        vns.push(renderTops(h, _vm))
+        break
+      case 'Table':
+        vns.push(renderTables(h, _vm))
+        break
+      case 'Bottom':
+        vns.push(renderBottoms(h, _vm))
+        break
+      case 'Pager':
+        vns.push(renderPagers(h, _vm))
+        break
+      default:
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          errLog('vxe.error.notProp', [`layouts -> ${name}`])
+        }
+        break
+    }
+  })
+  return vns
+}
+
 Object.keys(Table.methods).forEach(name => {
   methods[name] = function (...args) {
     return this.$refs.xTable && this.$refs.xTable[name](...args)
@@ -148,6 +292,7 @@ export default {
   mixins: [vSize],
   props: {
     ...Table.props,
+    layouts: Array,
     columns: Array,
     pagerConfig: [Boolean, Object],
     proxyConfig: Object,
@@ -279,10 +424,7 @@ export default {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    const { $scopedSlots, vSize, isZMax } = this
-    const hasForm = !!($scopedSlots.form || isEnableConf(this.formConfig))
-    const hasToolbar = !!($scopedSlots.toolbar || isEnableConf(this.toolbarConfig) || this.toolbar)
-    const hasPager = !!($scopedSlots.pager || isEnableConf(this.pagerConfig))
+    const { vSize, isZMax } = this
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
@@ -292,75 +434,7 @@ export default {
         'is--loading': this.loading || this.tableLoading
       }],
       style: this.renderStyle
-    }, [
-      /**
-       * 渲染表单
-       */
-      hasForm ? h('div', {
-        ref: 'formWrapper',
-        class: 'vxe-grid--form-wrapper'
-      }, $scopedSlots.form
-        ? $scopedSlots.form.call(this, { $grid: this }, h)
-        : renderDefaultForm(h, this)
-      ) : null,
-      /**
-       * 渲染工具栏
-       */
-      hasToolbar ? h('div', {
-        ref: 'toolbarWrapper',
-        class: 'vxe-grid--toolbar-wrapper'
-      }, $scopedSlots.toolbar
-        ? $scopedSlots.toolbar.call(this, { $grid: this }, h)
-        : [
-            h('vxe-toolbar', {
-              props: this.toolbarOpts,
-              ref: 'xToolbar',
-              scopedSlots: getToolbarSlots(this)
-            })
-          ]
-      ) : null,
-      /**
-       * 渲染表格顶部区域
-       */
-      $scopedSlots.top ? h('div', {
-        ref: 'topWrapper',
-        class: 'vxe-grid--top-wrapper'
-      }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
-      /**
-       * 渲染表格
-       */
-      h('vxe-table', {
-        props: this.tableProps,
-        on: getTableOns(this),
-        scopedSlots: $scopedSlots,
-        ref: 'xTable'
-      }),
-      /**
-       * 渲染表格底部区域
-       */
-      $scopedSlots.bottom ? h('div', {
-        ref: 'bottomWrapper',
-        class: 'vxe-grid--bottom-wrapper'
-      }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
-      /**
-       * 渲染分页
-       */
-      hasPager ? h('div', {
-        ref: 'pagerWrapper',
-        class: 'vxe-grid--pager-wrapper'
-      }, $scopedSlots.pager
-        ? $scopedSlots.pager.call(this, { $grid: this }, h)
-        : [
-            h('vxe-pager', {
-              props: { ...this.pagerOpts, ...(this.proxyConfig ? this.tablePage : {}) },
-              on: {
-                'page-change': this.pageChangeEvent
-              },
-              scopedSlots: getPagerSlots(this)
-            })
-          ]
-      ) : null
-    ])
+    }, renderLayout(h, this))
   },
   methods: {
     ...methods,

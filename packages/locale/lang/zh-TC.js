@@ -168,10 +168,18 @@ export default {
       pagesize: '{0}項/頁',
       total: '共 {0} 項記錄',
       pageClassifier: '頁',
+      homePage: '首頁',
+      homePageTitle: '首頁',
       prevPage: '上一頁',
+      prevPageTitle: '上一頁',
       nextPage: '下一頁',
+      nextPageTitle: '下一頁',
       prevJump: '向上跳頁',
-      nextJump: '向下跳頁'
+      prevJumpTitle: '向上跳頁',
+      nextJump: '向下跳頁',
+      nextJumpTitle: '向下跳頁',
+      endPage: '末頁',
+      endPageTitle: '末頁'
     },
     alert: {
       title: '訊息提示'

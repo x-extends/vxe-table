@@ -1410,9 +1410,9 @@ const Methods = {
    * 如果存在排序，继续处理
    */
   getTableData () {
-    const { tableFullData, afterFullData, tableData, footerTableData } = this
+    const { treeConfig, tableFullData, afterFullData, tableData, footerTableData, tableFullTreeData } = this
     return {
-      fullData: tableFullData.slice(0),
+      fullData: treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0),
       visibleData: afterFullData.slice(0),
       tableData: tableData.slice(0),
       footerData: footerTableData.slice(0)
@@ -1457,9 +1457,21 @@ const Methods = {
    * 设置为固定列
    */
   setColumnFixed (fieldOrColumn, fixed) {
+    const { isMaxFixedColumn, columnOpts } = this
+    const { maxFixedSize } = columnOpts
     const column = handleFieldOrColumn(this, fieldOrColumn)
     const targetColumn = getRootColumn(this, column)
     if (targetColumn && targetColumn.fixed !== fixed) {
+      // 是否超过最大固定列数量
+      if (!targetColumn.fixed && isMaxFixedColumn) {
+        if (VXETable.modal) {
+          VXETable.modal.message({
+            status: 'error',
+            content: GlobalConfig.i18n('vxe.table.maxFixedCol', [maxFixedSize])
+          })
+        }
+        return this.$nextTick()
+      }
       XEUtils.eachTree([targetColumn], (column) => {
         column.fixed = fixed
       })
@@ -1834,12 +1846,12 @@ const Methods = {
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (this.showHeader && !this.showHeaderOverflow) {
-          warnLog('vxe.error.reqProp', ['show-header-overflow'])
-        }
-        if (this.showFooter && !this.showFooterOverflow) {
-          warnLog('vxe.error.reqProp', ['show-footer-overflow'])
-        }
+        // if (this.showHeader && !this.showHeaderOverflow) {
+        //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
+        // }
+        // if (this.showFooter && !this.showFooterOverflow) {
+        //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
+        // }
         if (this.spanMethod) {
           warnLog('vxe.error.scrollErrProp', ['span-method'])
         }
