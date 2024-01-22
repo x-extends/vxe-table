@@ -67,7 +67,7 @@
         v-model:page-size="page6.pageSize"
         :total="page6.totalResult"
         :page-sizes="[10, 20, 100, {label: '大量数据', value: 1000}, {label: '全量数据', value: -1}]"
-        :layouts="['PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'Sizes', 'FullJump', 'Total']">
+        :layouts="['Home', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'End', 'Sizes', 'FullJump', 'Total']">
         <template #left>
           <vxe-button content="更多操作" size="small">
             <template #dropdowns>

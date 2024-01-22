@@ -3,6 +3,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { useSize } from '../../hooks/size'
+import { errLog } from '../../tools/log'
 
 import { VxePagerPropTypes, VxePagerConstructor, VxePagerEmits, VxeSelectEvents, PagerPrivateRef, VxeGridConstructor, PagerMethods, PagerPrivateMethods, VxePagerPrivateMethods, PagerReactData } from '../../../types/all'
 
@@ -41,7 +42,9 @@ export default defineComponent({
     iconJumpPrev: String as PropType<VxePagerPropTypes.IconJumpPrev>,
     iconJumpNext: String as PropType<VxePagerPropTypes.IconJumpNext>,
     iconNextPage: String as PropType<VxePagerPropTypes.IconNextPage>,
-    iconJumpMore: String as PropType<VxePagerPropTypes.IconJumpMore>
+    iconJumpMore: String as PropType<VxePagerPropTypes.IconJumpMore>,
+    iconHomePage: String as PropType<VxePagerPropTypes.IconHome>,
+    iconEndPage: String as PropType<VxePagerPropTypes.IconEnd>
   },
   emits: [
     'update:pageSize',
@@ -137,6 +140,21 @@ export default defineComponent({
       })
     })
 
+    const handleHomePage = (evnt?: Event) => {
+      const { currentPage } = props
+      if (currentPage > 1) {
+        changeCurrentPage(1, evnt)
+      }
+    }
+
+    const handleEndPage = (evnt?: Event) => {
+      const { currentPage } = props
+      const pageCount = computePageCount.value
+      if (currentPage < pageCount) {
+        changeCurrentPage(pageCount, evnt)
+      }
+    }
+
     const handlePrevPage = (evnt?: Event) => {
       const { currentPage } = props
       const pageCount = computePageCount.value
@@ -194,6 +212,22 @@ export default defineComponent({
       }
     }
 
+    // 第一页
+    const renderHomePage = () => {
+      return h('button', {
+        class: ['vxe-pager--prev-btn', {
+          'is--disabled': props.currentPage <= 1
+        }],
+        type: 'button',
+        title: GlobalConfig.i18n('vxe.pager.homePageTitle'),
+        onClick: handleHomePage
+      }, [
+        h('i', {
+          class: ['vxe-pager--btn-icon', props.iconHomePage || GlobalConfig.icon.PAGER_HOME]
+        })
+      ])
+    }
+
     // 上一页
     const renderPrevPage = () => {
       return h('button', {
@@ -201,7 +235,7 @@ export default defineComponent({
           'is--disabled': props.currentPage <= 1
         }],
         type: 'button',
-        title: GlobalConfig.i18n('vxe.pager.prevPage'),
+        title: GlobalConfig.i18n('vxe.pager.prevPageTitle'),
         onClick: handlePrevPage
       }, [
         h('i', {
@@ -218,7 +252,7 @@ export default defineComponent({
           'is--disabled': props.currentPage <= 1
         }],
         type: 'button',
-        title: GlobalConfig.i18n('vxe.pager.prevJump'),
+        title: GlobalConfig.i18n('vxe.pager.prevJumpTitle'),
         onClick: handlePrevJump
       }, [
         tagName ? h('i', {
@@ -239,7 +273,7 @@ export default defineComponent({
           'is--disabled': props.currentPage >= pageCount
         }],
         type: 'button',
-        title: GlobalConfig.i18n('vxe.pager.nextJump'),
+        title: GlobalConfig.i18n('vxe.pager.nextJumpTitle'),
         onClick: handleNextJump
       }, [
         tagName ? h('i', {
@@ -259,11 +293,28 @@ export default defineComponent({
           'is--disabled': props.currentPage >= pageCount
         }],
         type: 'button',
-        title: GlobalConfig.i18n('vxe.pager.nextPage'),
+        title: GlobalConfig.i18n('vxe.pager.nextPageTitle'),
         onClick: handleNextPage
       }, [
         h('i', {
           class: ['vxe-pager--btn-icon', props.iconNextPage || GlobalConfig.icon.PAGER_NEXT_PAGE]
+        })
+      ])
+    }
+
+    // 最后一页
+    const renderEndPage = () => {
+      const pageCount = computePageCount.value
+      return h('button', {
+        class: ['vxe-pager--prev-btn', {
+          'is--disabled': props.currentPage >= pageCount
+        }],
+        type: 'button',
+        title: GlobalConfig.i18n('vxe.pager.endPageTitle'),
+        onClick: handleEndPage
+      }, [
+        h('i', {
+          class: ['vxe-pager--btn-icon', props.iconEndPage || GlobalConfig.icon.PAGER_END]
         })
       ])
     }
@@ -396,6 +447,14 @@ export default defineComponent({
       dispatchEvent (type, params, evnt) {
         emit(type, Object.assign({ $pager: $xepager, $event: evnt }, params))
       },
+      homePage () {
+        handleHomePage()
+        return nextTick()
+      },
+      endPage () {
+        handleEndPage()
+        return nextTick()
+      },
       prevPage () {
         handlePrevPage()
         return nextTick()
@@ -442,11 +501,14 @@ export default defineComponent({
       layouts.forEach((name) => {
         let renderFn
         switch (name) {
-          case 'PrevPage':
-            renderFn = renderPrevPage
+          case 'Home':
+            renderFn = renderHomePage
             break
           case 'PrevJump':
             renderFn = renderPrevJump
+            break
+          case 'PrevPage':
+            renderFn = renderPrevPage
             break
           case 'Number':
             renderFn = renderNumber
@@ -454,11 +516,14 @@ export default defineComponent({
           case 'JumpNumber':
             renderFn = renderJumpNumber
             break
+          case 'NextPage':
+            renderFn = renderNextPage
+            break
           case 'NextJump':
             renderFn = renderNextJump
             break
-          case 'NextPage':
-            renderFn = renderNextPage
+          case 'End':
+            renderFn = renderEndPage
             break
           case 'Sizes':
             renderFn = renderSizes
@@ -478,6 +543,10 @@ export default defineComponent({
         }
         if (renderFn) {
           childNodes.push(renderFn())
+        } else {
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            errLog('vxe.error.notProp', [`layouts -> ${name}`])
+          }
         }
       })
       if (slots.right) {

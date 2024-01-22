@@ -171,6 +171,8 @@ export interface VxeGridPrivateMethods<D = VxeTableDataRow> extends GridPrivateM
 export namespace VxeGridPropTypes {
   export type Size = SizeType
 
+  export type Layouts = ('Form' | 'Toolbar' | 'Top' | 'Table' | 'Bottom' | 'Pager')[]
+
   export type Columns<D = VxeTableDataRow> = VxeTableDefines.ColumnOptions<D>[]
 
   export interface PagerConfig extends VxePagerProps {
@@ -286,6 +288,7 @@ export namespace VxeGridPropTypes {
 }
 
 export type VxeGridProps<D = VxeTableDataRow> = VxeTableProps<D> & {
+  layouts?: VxeGridPropTypes.Layouts
   columns?: VxeGridPropTypes.Columns<D>
   pagerConfig?: VxeGridPropTypes.PagerConfig
   proxyConfig?: VxeGridPropTypes.ProxyConfig<D>

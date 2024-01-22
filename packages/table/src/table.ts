@@ -2475,12 +2475,12 @@ export default defineComponent({
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          if (props.showHeader && !props.showHeaderOverflow) {
-            warnLog('vxe.error.reqProp', ['show-header-overflow'])
-          }
-          if (props.showFooter && !props.showFooterOverflow) {
-            warnLog('vxe.error.reqProp', ['show-footer-overflow'])
-          }
+          // if (props.showHeader && !props.showHeaderOverflow) {
+          //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
+          // }
+          // if (props.showFooter && !props.showFooterOverflow) {
+          //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
+          // }
           if (props.spanMethod) {
             warnLog('vxe.error.scrollErrProp', ['span-method'])
           }
@@ -3192,9 +3192,9 @@ export default defineComponent({
        */
       getTableData () {
         const { tableData, footerTableData } = reactData
-        const { tableFullData, afterFullData } = internalData
+        const { tableFullData, afterFullData, tableFullTreeData } = internalData
         return {
-          fullData: tableFullData.slice(0),
+          fullData: props.treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0),
           visibleData: afterFullData.slice(0),
           tableData: tableData.slice(0),
           footerData: footerTableData.slice(0)
@@ -3207,13 +3207,15 @@ export default defineComponent({
         const column = handleFieldOrColumn($xetable, fieldOrColumn)
         const targetColumn = getRootColumn($xetable, column as any)
         const isMaxFixedColumn = computeIsMaxFixedColumn.value
+        const columnOpts = computeColumnOpts.value
+        const { maxFixedSize } = columnOpts
         if (targetColumn && targetColumn.fixed !== fixed) {
           // 是否超过最大固定列数量
           if (!targetColumn.fixed && isMaxFixedColumn) {
             if (VXETable.modal) {
               VXETable.modal.message({
                 status: 'error',
-                content: GlobalConfig.i18n('vxe.table.maxFixedCol')
+                content: GlobalConfig.i18n('vxe.table.maxFixedCol', [maxFixedSize])
               })
             }
             return nextTick()

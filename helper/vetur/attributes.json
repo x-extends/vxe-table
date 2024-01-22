@@ -855,6 +855,10 @@
     "type": "any",
     "description": "缩放配置项"
   },
+  "vxe-grid/layouts": {
+    "type": "string[]",
+    "description": "自定义布局"
+  },
   "vxe-toolbar/size": {
     "type": "string",
     "description": "尺寸"

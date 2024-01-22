@@ -14,7 +14,8 @@ export default defineComponent({
   },
   setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
-    const { reactData: tableReactData, internalData: tableInternalData } = $xetable
+    const { reactData: tableReactData, internalData: tableInternalData, getComputeMaps } = $xetable
+    const { computeFilterOpts } = getComputeMaps()
 
     const computeHasCheckOption = computed(() => {
       const { filterStore } = props
@@ -179,6 +180,7 @@ export default defineComponent({
     const renderFooters = () => {
       const { filterStore } = props
       const { column, multiple } = filterStore
+      const filterOpts = computeFilterOpts.value
       const hasCheckOption = computeHasCheckOption.value
       const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
@@ -193,10 +195,10 @@ export default defineComponent({
             },
             disabled: isDisabled,
             onClick: confirmFilter
-          }, GlobalConfig.i18n('vxe.table.confirmFilter')),
+          }, filterOpts.confirmButtonText || GlobalConfig.i18n('vxe.table.confirmFilter')),
           h('button', {
             onClick: resetFilter
-          }, GlobalConfig.i18n('vxe.table.resetFilter'))
+          }, filterOpts.resetButtonText || GlobalConfig.i18n('vxe.table.resetFilter'))
         ])
       ] : []
     }

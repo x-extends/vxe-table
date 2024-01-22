@@ -9,7 +9,7 @@ import { getSlotVNs } from '../../tools/vn'
 
 import { SlotVNodeType, VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods } from '../../../types/all'
 
-function renderHelpIcon (params: VxeTableDefines.CellRenderHeaderParams) {
+function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params
   const titlePrefix = column.titlePrefix || column.titleHelp
   return titlePrefix ? [
@@ -167,7 +167,7 @@ export const Cell = {
     return renderTitleContent(params, formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams) {
-    return renderHelpIcon(params).concat(Cell.renderHeaderTitle(params))
+    return renderTitlePrefixIcon(params).concat(Cell.renderHeaderTitle(params))
   },
   renderDefaultCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, row, column } = params

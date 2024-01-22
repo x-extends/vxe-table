@@ -168,10 +168,18 @@ export default {
       pagesize: '{0}/page',
       total: 'Total {0} record',
       pageClassifier: '',
+      homePage: 'Home',
+      homePageTitle: 'Home page',
       prevPage: 'Previous page',
+      prevPageTitle: 'Previous page',
       nextPage: 'next page',
+      nextPageTitle: 'next page',
       prevJump: 'Jump previous page',
-      nextJump: 'Jump next page'
+      prevJumpTitle: 'Jump previous page',
+      nextJump: 'Jump next page',
+      nextJumpTitle: 'Jump next page',
+      endPage: 'End page',
+      endPageTitle: 'End'
     },
     alert: {
       title: 'Message notification'

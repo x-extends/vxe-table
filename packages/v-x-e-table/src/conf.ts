@@ -167,6 +167,8 @@ const GlobalConfig: VXETableConfigOptions = {
     SELECT_CLOSE: iconPrefix + 'caret-down',
 
     // pager
+    PAGER_HOME: iconPrefix + 'home-page',
+    PAGER_END: iconPrefix + 'end-page',
     PAGER_JUMP_PREV: iconPrefix + 'arrow-double-left',
     PAGER_JUMP_NEXT: iconPrefix + 'arrow-double-right',
     PAGER_PREV_PAGE: iconPrefix + 'arrow-left',

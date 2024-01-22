@@ -241,7 +241,8 @@
       "toolbar-config",
       "pager-config",
       "proxy-config",
-      "zoom-config"
+      "zoom-config",
+      "layouts"
     ],
     "description": "配置式表格"
   },

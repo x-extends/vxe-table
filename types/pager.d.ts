@@ -91,11 +91,13 @@ export type VxePagerProps = {
   iconJumpNext?: VxePagerPropTypes.IconJumpNext
   iconNextPage?: VxePagerPropTypes.IconNextPage
   iconJumpMore?: VxePagerPropTypes.IconJumpMore
+  iconHome?: VxePagerPropTypes.IconHome
+  iconEnd?: VxePagerPropTypes.IconEnd
 }
 
 export namespace VxePagerPropTypes {
   export type Size = SizeType
-  export type Layouts = Array<'PrevJump' | 'PrevPage' | 'Number' | 'JumpNumber' | 'NextPage' | 'NextJump' | 'Sizes' | 'Jump' | 'FullJump' | 'PageCount' | 'Total'>
+  export type Layouts = Array<'Home' | 'PrevJump' | 'PrevPage' | 'Number' | 'JumpNumber' | 'NextPage' | 'NextJump' | 'End' | 'Sizes' | 'Jump' | 'FullJump' | 'PageCount' | 'Total'>
   export type CurrentPage = number
   export type Loading = boolean
   export type PageSize = number
@@ -116,6 +118,8 @@ export namespace VxePagerPropTypes {
   export type IconJumpNext = string
   export type IconNextPage = string
   export type IconJumpMore = string
+  export type IconHome = string
+  export type IconEnd = string
 }
 
 export type PageSizeItemType = number | {
@@ -125,6 +129,14 @@ export type PageSizeItemType = number | {
 
 export interface PagerMethods {
   dispatchEvent(type: ValueOf<VxePagerEmits>, params: any, evnt?: Event): void
+  /**
+   * 首页
+   */
+  homePage(): Promise<any>
+  /**
+   * 末页
+   */
+  endPage(): Promise<any>
   /**
    * 上一页
    */

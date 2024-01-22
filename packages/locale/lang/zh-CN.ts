@@ -168,10 +168,18 @@ export default {
       pagesize: '{0}条/页',
       total: '共 {0} 条记录',
       pageClassifier: '页',
+      homePage: '首页',
+      homePageTitle: '首页',
       prevPage: '上一页',
+      prevPageTitle: '上一页',
       nextPage: '下一页',
+      nextPageTitle: '下一页',
       prevJump: '向上跳页',
-      nextJump: '向下跳页'
+      prevJumpTitle: '向上跳页',
+      nextJump: '向下跳页',
+      nextJumpTitle: '向下跳页',
+      endPage: '末页',
+      endPageTitle: '末页'
     },
     alert: {
       title: '消息提示'

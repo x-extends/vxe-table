@@ -15,7 +15,7 @@ import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridP
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
-const tableComponentMethodKeys: (keyof TableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'focus', 'blur', 'connect']
+const tableComponentMethodKeys: (keyof TableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'focus', 'blur', 'connect']
 
 const gridComponentEmits: VxeGridEmits = [
   ...tableComponentEmits,
@@ -37,6 +37,7 @@ export default defineComponent({
   name: 'VxeGrid',
   props: {
     ...tableComponentProps,
+    layouts: Array as PropType<VxeGridPropTypes.Layouts>,
     columns: Array as PropType<VxeGridPropTypes.Columns<any>>,
     pagerConfig: Object as PropType<VxeGridPropTypes.PagerConfig>,
     proxyConfig: Object as PropType<VxeGridPropTypes.ProxyConfig<any>>,
@@ -451,6 +452,7 @@ export default defineComponent({
         restVNs.push(
           h('div', {
             ref: refFormWrapper,
+            key: 'form',
             class: 'vxe-grid--form-wrapper'
           }, slotVNs)
         )
@@ -494,6 +496,7 @@ export default defineComponent({
         restVNs.push(
           h('div', {
             ref: refToolbarWrapper,
+            key: 'toolbar',
             class: 'vxe-grid--toolbar-wrapper'
           }, slotVNs)
         )
@@ -509,11 +512,48 @@ export default defineComponent({
         return [
           h('div', {
             ref: refTopWrapper,
+            key: 'top',
             class: 'vxe-grid--top-wrapper'
           }, slots.top({ $grid: $xegrid }))
         ]
       }
       return []
+    }
+
+    const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
+
+    const renderLayout = () => {
+      const { layouts } = props
+      const vns: any[] = []
+      const currLayouts = (layouts && layouts.length ? layouts : (GlobalConfig.grid.layouts || defaultLayouts))
+      currLayouts.forEach(name => {
+        switch (name) {
+          case 'Form':
+            vns.push(renderForms())
+            break
+          case 'Toolbar':
+            vns.push(renderToolbars())
+            break
+          case 'Top':
+            vns.push(renderTops())
+            break
+          case 'Table':
+            vns.push(renderTables())
+            break
+          case 'Bottom':
+            vns.push(renderBottoms())
+            break
+          case 'Pager':
+            vns.push(renderPagers())
+            break
+          default:
+            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              errLog('vxe.error.notProp', [`layouts -> ${name}`])
+            }
+            break
+        }
+      })
+      return vns
     }
 
     const tableCompEvents: VxeTableEventProps = {}
@@ -553,6 +593,7 @@ export default defineComponent({
       return [
         h(resolveComponent('vxe-table') as ComponentOptions, {
           ref: refTable,
+          key: 'table',
           ...tableProps,
           ...tableOns
         }, slotObj)
@@ -567,6 +608,7 @@ export default defineComponent({
         return [
           h('div', {
             ref: refBottomWrapper,
+            key: 'bottom',
             class: 'vxe-grid--bottom-wrapper'
           }, slots.bottom({ $grid: $xegrid }))
         ]
@@ -613,6 +655,7 @@ export default defineComponent({
         restVNs.push(
           h('div', {
             ref: refPagerWrapper,
+            key: 'pager',
             class: 'vxe-grid--pager-wrapper'
           }, slotVNs)
         )
@@ -1192,7 +1235,7 @@ export default defineComponent({
           'is--loading': props.loading || reactData.tableLoading
         }],
         style: styles
-      }, renderForms().concat(renderToolbars(), renderTops(), renderTables(), renderBottoms(), renderPagers()))
+      }, renderLayout())
     }
 
     $xegrid.renderVN = renderVN
