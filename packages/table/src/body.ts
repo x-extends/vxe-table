@@ -276,7 +276,7 @@ export default defineComponent({
           if (slots.validError) {
             const validErrorSlot = $xetable.callSlot(slots.validError, errorValidItem)
             tdVNs.push(
-              h('div', {class: 'vxe-cell--valid-error-slot'}, validErrorSlot)
+              h('div', { class: 'vxe-cell--valid-error-slot' }, validErrorSlot)
             )
           } else {
             tdVNs.push(
