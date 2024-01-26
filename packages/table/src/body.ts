@@ -273,8 +273,8 @@ export default defineComponent({
           }, column.renderCell(params))
         )
         if (showValidTip && errorValidItem) {
-          if (slots.validError) {
-            const validErrorSlot = $xetable.callSlot(slots.validError, errorValidItem)
+          if (slots.valid) {
+            const validErrorSlot = $xetable.callSlot(slots.valid, errorValidItem)
             tdVNs.push(
               h('div', { class: 'vxe-cell--valid-error-slot' }, validErrorSlot)
             )
