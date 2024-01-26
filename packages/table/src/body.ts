@@ -25,7 +25,7 @@ export default defineComponent({
     fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
-  setup (props) {
+  setup(props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const xesize = inject('xesize', null as ComputedRef<SizeType> | null)
@@ -134,7 +134,7 @@ export default defineComponent({
       const rowOpts = computeRowOpts.value
       const sYOpts = computeSYOpts.value
       const columnOpts = computeColumnOpts.value
-      const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
+      const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
       const { actived } = editStore
       const { rHeight: scrollYRHeight } = sYOpts
       const { height: rowHeight } = rowOpts
@@ -273,18 +273,25 @@ export default defineComponent({
           }, column.renderCell(params))
         )
         if (showValidTip && errorValidItem) {
-          tdVNs.push(
-            h('div', {
-              class: 'vxe-cell--valid-error-hint',
-              style: errorValidItem.rule && errorValidItem.rule.maxWidth ? {
-                width: `${errorValidItem.rule.maxWidth}px`
-              } : null
-            }, [
-              h('span', {
-                class: 'vxe-cell--valid-error-msg'
-              }, errorValidItem.content)
-            ])
-          )
+          if (slots.validError) {
+            const validErrorSlot = $xetable.callSlot(slots.validError, errorValidItem)
+            tdVNs.push(
+              h('div', {class: 'vxe-cell--valid-error-slot'}, validErrorSlot)
+            )
+          } else {
+            tdVNs.push(
+              h('div', {
+                class: 'vxe-cell--valid-error-hint',
+                style: errorValidItem.rule && errorValidItem.rule.maxWidth ? {
+                  width: `${errorValidItem.rule.maxWidth}px`
+                } : null
+              }, [
+                h('span', {
+                  class: 'vxe-cell--valid-error-msg'
+                }, errorValidItem.content)
+              ])
+            )
+          }
         }
       }
 
@@ -840,7 +847,7 @@ export default defineComponent({
           }, mouseOpts.extension ? [
             h('span', {
               class: 'vxe-table--cell-main-area-btn',
-              onMousedown (evnt: any) {
+              onMousedown(evnt: any) {
                 $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: renderType })
               }
             })
