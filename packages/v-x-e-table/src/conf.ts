@@ -49,7 +49,7 @@ const GlobalConfig: VXETableConfigOptions = {
     },
     validConfig: {
       showMessage: true,
-      autoClear: true,
+      autoClear: false,
       message: 'inline',
       msgMode: 'single'
     },
@@ -89,7 +89,7 @@ const GlobalConfig: VXETableConfigOptions = {
       showIcon: true
     },
     editConfig: {
-      // mode: 'cell',
+      mode: 'row',
       showIcon: true,
       showAsterisk: true
     },
