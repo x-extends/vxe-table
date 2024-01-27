@@ -25,7 +25,7 @@ export default defineComponent({
     fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
-  setup(props) {
+  setup (props) {
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const xesize = inject('xesize', null as ComputedRef<SizeType> | null)
@@ -273,25 +273,21 @@ export default defineComponent({
           }, column.renderCell(params))
         )
         if (showValidTip && errorValidItem) {
-          if (slots.valid) {
-            const validErrorSlot = $xetable.callSlot(slots.valid, errorValidItem)
-            tdVNs.push(
-              h('div', { class: 'vxe-cell--valid-error-slot' }, validErrorSlot)
-            )
-          } else {
-            tdVNs.push(
-              h('div', {
-                class: 'vxe-cell--valid-error-hint',
-                style: errorValidItem.rule && errorValidItem.rule.maxWidth ? {
-                  width: `${errorValidItem.rule.maxWidth}px`
-                } : null
-              }, [
-                h('span', {
-                  class: 'vxe-cell--valid-error-msg'
-                }, errorValidItem.content)
-              ])
-            )
-          }
+          const errRule = errorValidItem.rule
+          const validSlot = slots ? slots.valid : null
+          const validParams = { ...params, ...errorValidItem }
+          tdVNs.push(
+            h('div', {
+              class: ['vxe-cell--valid-error-hint', getPropClass(validOpts.className, validParams)],
+              style: errRule && errRule.maxWidth ? {
+                width: `${errRule.maxWidth}px`
+              } : null
+            }, validSlot ? $xetable.callSlot(validSlot, validParams) : [
+              h('span', {
+                class: 'vxe-cell--valid-error-msg'
+              }, errorValidItem.content)
+            ])
+          )
         }
       }
 
@@ -785,8 +781,9 @@ export default defineComponent({
         }
       }
       let emptyContent: string | VxeGlobalRendererHandles.RenderResult
-      if (slots.empty) {
-        emptyContent = $xetable.callSlot(slots.empty, { $table: $xetable, $grid: $xetable.xegrid })
+      const emptySlot = slots ? slots.empty : null
+      if (emptySlot) {
+        emptyContent = $xetable.callSlot(emptySlot, { $table: $xetable, $grid: $xetable.xegrid })
       } else {
         const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
         const renderEmpty = compConf ? compConf.renderEmpty : null
@@ -847,7 +844,7 @@ export default defineComponent({
           }, mouseOpts.extension ? [
             h('span', {
               class: 'vxe-table--cell-main-area-btn',
-              onMousedown(evnt: any) {
+              onMousedown (evnt: any) {
                 $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: renderType })
               }
             })

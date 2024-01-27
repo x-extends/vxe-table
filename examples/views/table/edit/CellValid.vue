@@ -39,8 +39,8 @@
       <vxe-colgroup title="分组2">
         <vxe-colgroup title="分组21">
           <vxe-column field="sex2" title="Sex" :edit-render="{name: 'input'}">
-            <template #valid="params">
-              <span class="red">{{ params }}</span>
+            <template #valid="{ content }">
+              <span class="red">自定义校验：{{ content }}</span>
             </template>
           </vxe-column>
           <vxe-column field="age" title="Age" :edit-render="{name: '$input', props: {type: 'integer'}}"></vxe-column>

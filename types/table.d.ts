@@ -1,7 +1,7 @@
 import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance, VNode } from 'vue'
 import { VXEComponent, VxeComponentBase, VxeEvent, SizeType, ValueOf, VNodeStyle, SlotVNodeType } from './component'
 import { VxeTableProEmits, VxeTableProDefines } from './plugins/pro'
-import { VxeColumnPropTypes, VxeColumnProps } from './column'
+import { VxeColumnPropTypes, VxeColumnProps, VxeColumnSlotTypes } from './column'
 import { VXETableConfigOptions, VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
@@ -60,7 +60,7 @@ export interface VxeTablePrivateRef extends TablePrivateRef { }
 
 export interface TablePrivateComputed<D = VxeTableDataRow> {
   computeSize: ComputedRef<VxeTablePropTypes.Size>
-  computeValidOpts: ComputedRef<VxeTablePropTypes.ValidOpts>
+  computeValidOpts: ComputedRef<VxeTablePropTypes.ValidOpts<D>>
   computeSXOpts: ComputedRef<VxeTablePropTypes.SXOpts>
   computeSYOpts: ComputedRef<VxeTablePropTypes.SYOpts>
   computeColumnOpts: ComputedRef<VxeTablePropTypes.ColumnOpts>
@@ -2271,7 +2271,7 @@ export namespace VxeTablePropTypes {
   /**
    * 校验配置项
    */
-  export interface ValidConfig {
+  export interface ValidConfig<D = VxeTableDataRow> {
     /**
      * 是否自动定位到校验不通过的单元格
      */
@@ -2294,6 +2294,10 @@ export namespace VxeTablePropTypes {
      * 校验提示框的最大宽度
      */
     maxWidth?: number
+    /**
+     * 给校验提示框附加 class
+     */
+    className?: string | ((params: VxeColumnSlotTypes.ValidSlotParams<D>) => string)
 
     /**
      * 不建议使用，已废弃
@@ -2301,7 +2305,7 @@ export namespace VxeTablePropTypes {
      */
     message?: 'inline' | 'default' | 'tooltip' | '' | null
   }
-  export interface ValidOpts extends ValidConfig { }
+  export interface ValidOpts<D = VxeTableDataRow> extends ValidConfig<D> { }
 
   /**
    * 校验规则配置项
@@ -2643,7 +2647,7 @@ export type VxeTableProps<D = VxeTableDataRow> = {
   /**
    * 校验配置项
    */
-  validConfig?: VxeTablePropTypes.ValidConfig
+  validConfig?: VxeTablePropTypes.ValidConfig<D>
   /**
    * 校验规则配置项
    */
