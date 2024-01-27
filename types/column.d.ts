@@ -130,7 +130,7 @@ export namespace VxeColumnPropTypes {
     message?: string
   }
 
-  export interface TitleHelp extends TitlePrefix {}
+  export interface TitleHelp extends TitlePrefix { }
 
   export type CellType = 'auto' | 'number' | 'string'
 
@@ -405,7 +405,7 @@ export namespace VxeColumnSlotTypes {
     data: D[][]
   }
 
-  export interface HeaderSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderHeaderParams<D> {}
+  export interface HeaderSlotParams<D = VxeTableDataRow> extends VxeTableDefines.CellRenderHeaderParams<D> { }
 
   export interface ContentSlotParams<D = VxeTableDataRow> {
     column: VxeTableDefines.ColumnInfo<D>
@@ -473,4 +473,8 @@ export interface VxeColumnSlots<D = VxeTableDataRow> {
    * @deprecated
    */
   icon: (params: VxeColumnSlotTypes.IconSlotParams<D>) => any
+   /**
+   * 只对 edit-render 启用时有效，自定义展示错误校验模板
+   */
+  valid: (params: { row: any; column: any; rule: any; content: any; }) => any
 }
