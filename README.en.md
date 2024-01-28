@@ -104,8 +104,8 @@ createApp(App).use(VXETable).mount('#app')
 
 ### CDN
 
-It is not recommended to use the public CDN address for production, because the connection may fail at any time, causing the project to hang up;  
-Remember to lock the version number by using CDN to avoid being affected by incompatible updates.
+Remember to lock the version number in CDN mode to avoid being affected by incompatible updates  
+***It is not recommended to use the CDN address of a third party for production, as the connection may fail at any time***  
 
 ```HTML
 <!-- Style -->
