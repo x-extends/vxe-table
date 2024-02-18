@@ -1,5 +1,4 @@
-import { VNode } from 'vue'
-import { VXEComponent, VNodeStyle } from './component'
+import { VXEComponent, VNodeStyle, SlotVNodeType } from './component'
 import { VxeFormConstructor, VxeFormDefines, VxeFormPropTypes } from './form'
 import { VxeGridConstructor } from './grid'
 import { VxeTooltipPropTypes } from './tooltip'
@@ -175,8 +174,8 @@ export namespace VxeFormItemPropTypes {
   export type CollapseNode = boolean
   export type ItemRender = FormItemRenderOptions
   export type Slots = {
-    title?: string | ((params: FormItemTitleRenderParams) => JSX.Element[] | VNode[] | string[]) | null
-    default?: string | ((params: FormItemContentRenderParams) => JSX.Element[] | VNode[] | string[]) | null
+    title?: string | ((params: FormItemTitleRenderParams) => SlotVNodeType | SlotVNodeType[]) | null
+    default?: string | ((params: FormItemContentRenderParams) => SlotVNodeType | SlotVNodeType[]) | null
   }
 }
 

@@ -1,5 +1,4 @@
-import { VNode } from 'vue'
-import { VXEComponent } from './component'
+import { VXEComponent, SlotVNodeType } from './component'
 import { VxeSelectConstructor } from './select'
 
 /* eslint-disable no-use-before-define */
@@ -36,7 +35,7 @@ export type VxeOptionProps = {
     default?: string | ((params: {
       option: any
       $select: VxeSelectConstructor
-    }) => JSX.Element[] | VNode[] | string[]) | null
+    }) => SlotVNodeType | SlotVNodeType[]) | null
   }
 }
 
@@ -53,7 +52,7 @@ export namespace VxeOptionPropTypes {
     default?: string | ((params: {
       option: any
       $select: VxeSelectConstructor
-    }) => JSX.Element[] | VNode[] | string[]) | null
+    }) => SlotVNodeType | SlotVNodeType[]) | null
   }
 }
 

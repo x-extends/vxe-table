@@ -1,4 +1,4 @@
-import { defineComponent, h, Teleport, PropType, ref, Ref, inject, VNode, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted, createCommentVNode } from 'vue'
+import { defineComponent, h, Teleport, PropType, ref, Ref, inject, computed, provide, onUnmounted, reactive, nextTick, watch, onMounted, createCommentVNode } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
@@ -8,7 +8,7 @@ import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import VxeInputComponent from '../../input/src/input'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeInputConstructor, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeOptgroupProps, VxeOptionProps, VxeFormDefines, VxeFormConstructor, VxeFormPrivateMethods, VxeInputDefines } from '../../../types/all'
+import { VxeSelectPropTypes, VxeSelectConstructor, SelectReactData, VxeSelectEmits, VxeInputConstructor, SelectMethods, SelectPrivateRef, VxeSelectMethods, VxeOptgroupProps, VxeOptionProps, VxeFormDefines, VxeFormConstructor, VxeFormPrivateMethods, VxeInputDefines, SlotVNodeType } from '../../../types/all'
 
 function isOptionVisible (option: any) {
   return option.visible !== false
@@ -157,7 +157,7 @@ export default defineComponent({
       return XEUtils.toNumber(props.multiCharOverflow)
     })
 
-    const callSlot = <T>(slotFunc: ((params: T) => JSX.Element[] | VNode[] | string[]) | string | null, params: T) => {
+    const callSlot = <T>(slotFunc: ((params: T) => SlotVNodeType | SlotVNodeType[]) | string | null, params: T) => {
       if (slotFunc) {
         if (XEUtils.isString(slotFunc)) {
           slotFunc = slots[slotFunc] || null

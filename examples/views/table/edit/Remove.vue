@@ -55,7 +55,7 @@ export default defineComponent({
 
     const xTable = ref({} as VxeTableInstance)
 
-    const insertEvent = async (row: any) => {
+    const insertEvent = async (row?: any) => {
       const $table = xTable.value
       const record = {
         sex: '1'

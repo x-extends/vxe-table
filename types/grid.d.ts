@@ -1,4 +1,4 @@
-import { VNode, RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
+import { RenderFunction, SetupContext, Ref, ComputedRef, ComponentPublicInstance, ComponentInternalInstance } from 'vue'
 import { VxeFormInstance, VxeFormProps, VxeFormDefines } from './form'
 import { VxeFormItemProps } from './form-item'
 import { VxeToolbarInstance, VxeToolbarProps, VxeToolbarPropTypes } from './toolbar'
@@ -268,8 +268,8 @@ export namespace VxeGridPropTypes {
       iconOut?: string
     }
     slots?: {
-      buttons?: string | ((params: { [key: string]: any }) => VNode[] | string[] | JSX.Element | JSX.Element[])
-      tools?: string | ((params: { [key: string]: any }) => VNode[] | string[] | JSX.Element | JSX.Element[])
+      buttons?: string | ((params: { [key: string]: any }) => SlotVNodeType | SlotVNodeType[])
+      tools?: string | ((params: { [key: string]: any }) => SlotVNodeType | SlotVNodeType[])
     }
   }
 
