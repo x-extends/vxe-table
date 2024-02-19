@@ -29,7 +29,7 @@ function insertTreeRow (_vm, newRecords, isAppend) {
       }
       parentChilds[funcName](item)
       mapChilds[funcName](item)
-      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
