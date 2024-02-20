@@ -680,7 +680,8 @@ const Methods = {
       }
       XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
         const rowid = getRowid(this, childRow)
-        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
+        const parentRow = parent || row
+        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length }
         fullDataRowIdData[rowid] = rest
         fullDataRowMap.set(childRow, rest)
         fullAllDataRowIdData[rowid] = rest
@@ -1373,7 +1374,7 @@ const Methods = {
    * 只对 tree-config 有效，获取行的父级
    */
   getParentRow (rowOrRowid) {
-    const { treeConfig, fullDataRowIdData } = this
+    const { treeConfig, fullDataRowIdData, treeOpts } = this
     if (rowOrRowid && treeConfig) {
       let rowid
       if (XEUtils.isString(rowOrRowid)) {
@@ -1382,7 +1383,16 @@ const Methods = {
         rowid = getRowid(this, rowOrRowid)
       }
       if (rowid) {
-        return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].parent : null
+        const rest = fullDataRowIdData[rowid]
+        if (treeOpts.transform) {
+          const row = rest ? rest.row : null
+          if (row) {
+            const parentRowId = row[treeOpts.parentField]
+            return fullDataRowIdData[parentRowId] ? fullDataRowIdData[parentRowId].row : null
+          }
+        } else {
+          return rest ? rest.parent : null
+        }
       }
     }
     return null
