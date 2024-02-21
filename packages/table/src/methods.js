@@ -1374,7 +1374,7 @@ const Methods = {
    * 只对 tree-config 有效，获取行的父级
    */
   getParentRow (rowOrRowid) {
-    const { treeConfig, fullDataRowIdData, treeOpts } = this
+    const { treeConfig, fullDataRowIdData } = this
     if (rowOrRowid && treeConfig) {
       let rowid
       if (XEUtils.isString(rowOrRowid)) {
@@ -1384,15 +1384,7 @@ const Methods = {
       }
       if (rowid) {
         const rest = fullDataRowIdData[rowid]
-        if (treeOpts.transform) {
-          const row = rest ? rest.row : null
-          if (row) {
-            const parentRowId = row[treeOpts.parentField]
-            return fullDataRowIdData[parentRowId] ? fullDataRowIdData[parentRowId].row : null
-          }
-        } else {
-          return rest ? rest.parent : null
-        }
+        return rest ? rest.parent : null
       }
     }
     return null
