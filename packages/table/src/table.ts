@@ -2836,7 +2836,8 @@ export default defineComponent({
           }
           XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
             const rowid = getRowid($xetable, childRow)
-            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent, level: parentLevel + nodes.length }
+            const parentRow = parent || parentRest.row
+            const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           }, { children: childrenField })
@@ -3164,7 +3165,8 @@ export default defineComponent({
             rowid = getRowid($xetable, rowOrRowid)
           }
           if (rowid) {
-            return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].parent : null
+            const rest = fullDataRowIdData[rowid]
+            return rest ? rest.parent : null
           }
         }
         return null

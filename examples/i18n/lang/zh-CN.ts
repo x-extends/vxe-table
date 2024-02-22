@@ -92,7 +92,7 @@ export default {
         tabs: '多页签切换',
         keepAlives: '显示隐藏 + keep-alive',
 
-        grid: '高级表格',
+        grid: '配置式表格',
         reverse: '反转表格',
         proxy: '数据代理',
         proxyPage: '数据代理 + 分页',
