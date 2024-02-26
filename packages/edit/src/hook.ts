@@ -114,7 +114,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         records = [records]
       }
       const newRecords: any[] = reactive($xetable.defineField(records.map((record: any) => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record))))
-      if (!row) {
+      if (XEUtils.eqNull(row)) {
         // 如果为虚拟树
         if (treeConfig && transform) {
           insertTreeRow(newRecords, false)
