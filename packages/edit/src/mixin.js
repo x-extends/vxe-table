@@ -55,7 +55,7 @@ function handleInsertRowAt (_vm, records, row, isInsertNextRow) {
     records = [records]
   }
   const newRecords = _vm.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
-  if (!row) {
+  if (XEUtils.eqNull(row)) {
   // 如果为虚拟树
     if (treeConfig && transform) {
       insertTreeRow(_vm, newRecords, false)
