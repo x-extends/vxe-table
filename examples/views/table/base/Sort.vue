@@ -21,6 +21,7 @@
       highlight-hover-row
       ref="xTable"
       height="300"
+      :sort-config="{iconLayout: 'horizontal', iconAsc: 'vxe-icon-sort-asc', iconDesc: 'vxe-icon-sort-desc'}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>

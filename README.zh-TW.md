@@ -86,7 +86,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 版本：[vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
-npm install xe-utils vxe-table@next
+npm install vxe-table@next
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)

@@ -324,22 +324,31 @@
   }
   /*排序*/
   .vxe-cell--sort {
-    width: 1.5em;
-    height: 1.35em;
-    vertical-align: middle;
     text-align: center;
-    display: inline-block;
     position: relative;
+    padding: 0 0.1em 0 0.2em;
+  }
+  .vxe-cell--sort-vertical-layout {
+    display: inline-flex;
+    flex-direction: column;
+    height: 1.8em;
+    vertical-align: middle;
+    .vxe-sort--asc-btn,
+    .vxe-sort--desc-btn {
+      height: 0.6em;
+    }
+  }
+  .vxe-cell--sort-horizontal-layout {
+    display: inline-flex;
+    flex-direction: row;
+    .vxe-sort--asc-btn,
+    .vxe-sort--desc-btn {
+      width: 0.5em;
+    }
   }
   .vxe-sort--asc-btn,
   .vxe-sort--desc-btn {
-    position: absolute;
-    left: 0.2em;
     color: var(--vxe-table-column-icon-border-color);
-    width: 1em;
-    text-align: center;
-    height: 0.8em;
-    line-height: 0.8em;
     cursor: pointer;
     &:hover {
       color: var(--vxe-font-color);
@@ -347,12 +356,6 @@
     &.sort--active {
       color: var(--vxe-primary-color);
     }
-  }
-  .vxe-sort--asc-btn {
-    top: -0.1em;
-  }
-  .vxe-sort--desc-btn {
-    bottom: -0.2em;
   }
 }
 

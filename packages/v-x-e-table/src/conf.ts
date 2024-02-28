@@ -68,7 +68,8 @@ const GlobalConfig: VXETableConfigOptions = {
       // trigger: 'default',
       // orders: ['asc', 'desc', null],
       // sortMethod: null,
-      showIcon: true
+      showIcon: true,
+      iconLayout: 'vertical'
     },
     filterConfig: {
       // remote: false,

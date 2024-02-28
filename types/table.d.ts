@@ -1512,6 +1512,7 @@ export namespace VxeTablePropTypes {
     chronological?: boolean
     trigger?: 'default' | 'cell'
     showIcon?: boolean
+    iconLayout?: 'horizontal' | 'vertical'
     iconAsc?: string
     iconDesc?: string
   }

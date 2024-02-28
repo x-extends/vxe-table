@@ -667,34 +667,37 @@ export const Cell = {
     const { $table, column } = params
     const { computeSortOpts } = $table.getComputeMaps()
     const sortOpts = computeSortOpts.value
-    const { showIcon, iconAsc, iconDesc } = sortOpts
+    const { showIcon, iconLayout, iconAsc, iconDesc } = sortOpts
     const { order } = column
-    return showIcon ? [
-      h('span', {
-        class: 'vxe-cell--sort'
-      }, [
-        h('i', {
-          class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.TABLE_SORT_ASC, {
-            'sort--active': order === 'asc'
-          }],
-          title: GlobalConfig.i18n('vxe.table.sortAsc'),
-          onClick (evnt: Event) {
-            evnt.stopPropagation()
-            $table.triggerSortEvent(evnt, column, 'asc')
-          }
-        }),
-        h('i', {
-          class: ['vxe-sort--desc-btn', iconDesc || GlobalConfig.icon.TABLE_SORT_DESC, {
-            'sort--active': order === 'desc'
-          }],
-          title: GlobalConfig.i18n('vxe.table.sortDesc'),
-          onClick (evnt: Event) {
-            evnt.stopPropagation()
-            $table.triggerSortEvent(evnt, column, 'desc')
-          }
-        })
-      ])
-    ] : []
+    if (showIcon) {
+      return [
+        h('span', {
+          class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
+        }, [
+          h('i', {
+            class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.TABLE_SORT_ASC, {
+              'sort--active': order === 'asc'
+            }],
+            title: GlobalConfig.i18n('vxe.table.sortAsc'),
+            onClick (evnt: Event) {
+              evnt.stopPropagation()
+              $table.triggerSortEvent(evnt, column, 'asc')
+            }
+          }),
+          h('i', {
+            class: ['vxe-sort--desc-btn', iconDesc || GlobalConfig.icon.TABLE_SORT_DESC, {
+              'sort--active': order === 'desc'
+            }],
+            title: GlobalConfig.i18n('vxe.table.sortDesc'),
+            onClick (evnt: Event) {
+              evnt.stopPropagation()
+              $table.triggerSortEvent(evnt, column, 'desc')
+            }
+          })
+        ])
+      ]
+    }
+    return []
   },
 
   /**
