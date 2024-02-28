@@ -632,10 +632,10 @@ export const Cell = {
   },
   renderSortIcon (h, params) {
     const { $table, column } = params
-    const { showIcon, iconAsc, iconDesc } = $table.sortOpts
+    const { showIcon, iconLayout, iconAsc, iconDesc } = $table.sortOpts
     return showIcon ? [
       h('span', {
-        class: 'vxe-cell--sort'
+        class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
       }, [
         h('i', {
           class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.TABLE_SORT_ASC, {

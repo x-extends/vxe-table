@@ -135,6 +135,7 @@ export default {
       confirmFilter: '筛选',
       resetFilter: '重置',
       allFilter: '全部',
+      sortSingle: '点击排序',
       sortAsc: '升序：最低到最高',
       sortDesc: '降序：最高到最低',
       filter: '对所选的列启用筛选',

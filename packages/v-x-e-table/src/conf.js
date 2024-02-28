@@ -66,7 +66,8 @@ export default {
       // trigger: 'default',
       // orders: ['asc', 'desc', null],
       // sortMethod: null,
-      showIcon: true
+      showIcon: true,
+      iconLayout: 'vertical'
     },
     filterConfig: {
       // remote: false,
@@ -137,6 +138,7 @@ export default {
     LOADING: iconPrefix + 'spinner roll vxe-loading--default-icon',
 
     // table
+    // TABLE_SORT_NONE: '',
     TABLE_SORT_ASC: iconPrefix + 'caret-up',
     TABLE_SORT_DESC: iconPrefix + 'caret-down',
     TABLE_FILTER_NONE: iconPrefix + 'funnel',
