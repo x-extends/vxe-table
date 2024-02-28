@@ -135,7 +135,6 @@ export default {
       confirmFilter: 'Confirm',
       resetFilter: 'Reset',
       allFilter: 'All',
-      sortSingle: 'Click sort',
       sortAsc: 'Ascending: lowest to highest',
       sortDesc: 'Descending: highest to lowest',
       filter: 'Enable filtering on selected columns',

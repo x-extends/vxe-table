@@ -135,7 +135,6 @@ export default {
       confirmFilter: '完了',
       resetFilter: 'リセット',
       allFilter: '全て',
-      sortSingle: '点击排序',
       sortAsc: '昇順',
       sortDesc: '降順',
       filter: '選択した列をフィルタする',

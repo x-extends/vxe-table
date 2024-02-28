@@ -135,7 +135,6 @@ export default {
       confirmFilter: '篩選',
       resetFilter: '重置',
       allFilter: '全部',
-      sortSingle: '點擊排序',
       sortAsc: '按低到高排序',
       sortDesc: '按高到低排序',
       filter: '對所選的列啟用篩選',
