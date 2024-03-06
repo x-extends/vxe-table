@@ -157,6 +157,7 @@ export default {
     const { _e, loading, className, data, vSize, tooltipOpts, formItems, customLayout } = this
     const hasUseTooltip = VXETable._tooltip
     const defaultSlot = this.$scopedSlots.default
+    const loadingSlot = this.$scopedSlots.loading
     return h('form', {
       class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
@@ -180,7 +181,7 @@ export default {
       h('div', {
         class: 'vxe-form-slots',
         ref: 'hideItem'
-      }, customLayout ? [] : (defaultSlot ? defaultSlot.call(this, h, {}) : [])),
+      }, customLayout ? [] : (defaultSlot ? this.callSlot(defaultSlot, {}) : [])),
       /**
        * 加载中
        */
@@ -189,7 +190,7 @@ export default {
         props: {
           value: loading
         }
-      },this.callSlot($scopedSlots.loading, {})),
+      }, loadingSlot ? this.callSlot(loadingSlot, {}) : []),
       /**
        * 工具提示
        */
