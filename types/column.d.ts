@@ -132,6 +132,14 @@ export namespace VxeColumnPropTypes {
 
   export interface TitleHelp extends TitlePrefix { }
 
+  export interface TitleSuffix {
+    useHTML?: VxeTooltipPropTypes.UseHTML
+    content?: VxeTooltipPropTypes.Content
+    enterable?: VxeTooltipPropTypes.Enterable
+    theme?: VxeTooltipPropTypes.Theme
+    icon?: string
+  }
+
   export type CellType = 'auto' | 'number' | 'string'
 
   export interface CellRender<D = VxeTableDataRow> extends VxeGlobalRendererHandles.RenderOptions {
@@ -351,9 +359,13 @@ export type VxeColumnProps<D = VxeTableDataRow> = {
    */
   titleHelp?: VxeColumnPropTypes.TitleHelp
   /**
-   * 标题帮助图标配置项
+   * 标题前缀图标配置项
    */
   titlePrefix?: VxeColumnPropTypes.TitlePrefix
+  /**
+   * 标题后缀图标配置项
+   */
+  titleSuffix?: VxeColumnPropTypes.TitleSuffix
   /**
    * 单元格值类型
    */
