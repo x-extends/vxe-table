@@ -74,8 +74,10 @@ const props = {
   footerExportMethod: Function,
   // 已废弃，被 titlePrefix 替换
   titleHelp: Object,
-  // 标题帮助图标配置项
+  // 标题前缀图标配置项
   titlePrefix: Object,
+  // 标题后缀图标配置项
+  titleSuffix: Object,
   // 单元格值类型
   cellType: String,
   // 单元格渲染配置项
