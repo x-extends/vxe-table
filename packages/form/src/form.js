@@ -170,7 +170,7 @@ export default {
     }, [
       h('div', {
         class: 'vxe-form--wrapper vxe-row'
-      }, customLayout ? (defaultSlot ? defaultSlot.call(this, h, {}) : []) : formItems.map((item, index) => {
+      }, customLayout ? (defaultSlot ? this.callSlot(defaultSlot, {}, h) : []) : formItems.map((item, index) => {
         return h(VxeFormConfigItem, {
           key: index,
           props: {
@@ -181,7 +181,7 @@ export default {
       h('div', {
         class: 'vxe-form-slots',
         ref: 'hideItem'
-      }, customLayout ? [] : (defaultSlot ? this.callSlot(defaultSlot, {}) : [])),
+      }, customLayout ? [] : (defaultSlot ? this.callSlot(defaultSlot, {}, h) : [])),
       /**
        * 加载中
        */
@@ -190,7 +190,7 @@ export default {
         props: {
           value: loading
         }
-      }, loadingSlot ? this.callSlot(loadingSlot, {}) : []),
+      }, loadingSlot ? this.callSlot(loadingSlot, {}, h) : []),
       /**
        * 工具提示
        */

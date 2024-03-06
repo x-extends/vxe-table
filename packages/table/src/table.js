@@ -1168,7 +1168,7 @@ export default {
           icon: loadingOpts.icon,
           text: loadingOpts.text
         }
-      }, this.callSlot($scopedSlots.loading, {})),
+      }, this.callSlot($scopedSlots.loading, {}, h)),
       /**
        * 筛选
        */
