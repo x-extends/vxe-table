@@ -189,7 +189,7 @@ export default {
         props: {
           value: loading
         }
-      }),
+      },this.callSlot($scopedSlots.loading, {})),
       /**
        * 工具提示
        */
