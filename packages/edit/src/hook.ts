@@ -84,7 +84,10 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             mapChilds = parentRow[childrenField] = []
           }
           parentChilds[funcName](item)
-          mapChilds[funcName](item)
+          // 在开启懒加载的情况下，首次 insert row 会导致重复添加
+          if (mapChilds !== parentChilds) {
+            mapChilds[funcName](item)
+          }
           const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
