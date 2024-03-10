@@ -2811,9 +2811,10 @@ const Methods = {
     }
   },
   triggerHeaderTitleEvent (evnt, iconParams, params) {
-    if (iconParams.content || iconParams.message) {
+    const tipContent = iconParams.content || iconParams.message
+    if (tipContent) {
       const { $refs, tooltipStore } = this
-      const content = getFuncText(iconParams.content || iconParams.message)
+      const content = getFuncText(tipContent)
       this.handleTargetEnterEvent(true)
       tooltipStore.visible = true
       tooltipStore.currOpts = { ...params, content: null }
