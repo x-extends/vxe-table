@@ -143,12 +143,13 @@ export default defineComponent({
       },
       columns: [
         { type: 'checkbox', title: 'ID', width: 120 },
-        { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写！' }, editRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+        { field: 'name', title: 'Name', sortable: true, titleHelp: { message: '名称必须填写2！' }, titleSuffix: { content: '名称必须填写1！' }, editRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
         {
           field: 'role',
           title: 'Role',
           sortable: true,
-          titlePrefix: { useHTML: true, content: '点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>' },
+          titlePrefix: { useHTML: true, content: '1点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>' },
+          titleSuffix: { useHTML: true, content: '2点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>' },
           filters: [
             { label: '前端开发', value: '前端' },
             { label: '后端开发', value: '后端' },

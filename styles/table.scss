@@ -398,7 +398,8 @@
   }
   // .vxe-cell--required-icon,
   // .vxe-cell--edit-icon,
-  // .vxe-cell-help-icon,
+  // .vxe-cell-title-prefix-icon,
+  // .vxe-cell-title-suffix-icon,
   // .vxe-cell--title {
   //   vertical-align: middle;
   // }
@@ -406,10 +407,12 @@
     margin-right: 0.1em;
   }
   .vxe-cell--edit-icon,
-  .vxe-cell-help-icon {
+  .vxe-cell-title-prefix-icon,
+  .vxe-cell-title-suffix-icon {
     margin-right: 0.2em;
   }
-  .vxe-cell-help-icon {
+  .vxe-cell-title-prefix-icon,
+  .vxe-cell-title-suffix-icon {
     cursor: help;
   }
   .vxe-resizable {

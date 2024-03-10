@@ -179,10 +179,11 @@ export function getColReMinWidth (params: {
     const checkboxIconWidth = getPaddingLeftRightSize(queryCellElement(cell, '--title>.vxe-cell--checkbox'))
     const requiredIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--required-icon'))
     const editIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--edit-icon'))
-    const helpIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell-help-icon'))
+    const prefixIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell-title-prefix-icon'))
+    const suffixIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell-title-suffix-icon'))
     const sortIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--sort'))
     const filterIconWidth = getElemenMarginWidth(queryCellElement(cell, '>.vxe-cell--filter'))
-    mWidth += checkboxIconWidth + requiredIconWidth + editIconWidth + helpIconWidth + filterIconWidth + sortIconWidth
+    mWidth += checkboxIconWidth + requiredIconWidth + editIconWidth + prefixIconWidth + suffixIconWidth + filterIconWidth + sortIconWidth
   }
   // 如果设置最小宽
   if (colMinWidth) {

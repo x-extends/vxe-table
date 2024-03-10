@@ -14,9 +14,25 @@ function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams) 
   const titlePrefix = column.titlePrefix || column.titleHelp
   return titlePrefix ? [
     h('i', {
-      class: ['vxe-cell-help-icon', titlePrefix.icon || GlobalConfig.icon.TABLE_HELP],
+      class: ['vxe-cell-title-prefix-icon', titlePrefix.icon || GlobalConfig.icon.TABLE_TITLE_PREFIX],
       onMouseenter (evnt: MouseEvent) {
-        $table.triggerHeaderHelpEvent(evnt, params)
+        $table.triggerHeaderTitleEvent(evnt, titlePrefix, params)
+      },
+      onMouseleave (evnt: MouseEvent) {
+        $table.handleTargetLeaveEvent(evnt)
+      }
+    })
+  ] : []
+}
+
+function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams) {
+  const { $table, column } = params
+  const titleSuffix = column.titleSuffix
+  return titleSuffix ? [
+    h('i', {
+      class: ['vxe-cell-title-suffix-icon', titleSuffix.icon || GlobalConfig.icon.TABLE_TITLE_SUFFIX],
+      onMouseenter (evnt: MouseEvent) {
+        $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
       },
       onMouseleave (evnt: MouseEvent) {
         $table.handleTargetLeaveEvent(evnt)
@@ -167,7 +183,7 @@ export const Cell = {
     return renderTitleContent(params, formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (params: VxeTableDefines.CellRenderHeaderParams) {
-    return renderTitlePrefixIcon(params).concat(Cell.renderHeaderTitle(params))
+    return renderTitlePrefixIcon(params).concat(Cell.renderHeaderTitle(params)).concat(renderTitleSuffixIcon(params))
   },
   renderDefaultCell (params: VxeTableDefines.CellRenderBodyParams) {
     const { $table, row, column } = params
