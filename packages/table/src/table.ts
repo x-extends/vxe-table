@@ -5530,9 +5530,10 @@ export default defineComponent({
         tablePrivateMethods.checkSelectionStatus()
       },
       triggerHeaderTitleEvent (evnt, iconParams, params) {
-        if (iconParams.content || iconParams.message) {
+        const tipContent = iconParams.content || (iconParams as any).message
+        if (tipContent) {
           const { tooltipStore } = reactData
-          const content = getFuncText(iconParams.content || iconParams.message)
+          const content = getFuncText(tipContent)
           handleTargetEnterEvent(true)
           tooltipStore.visible = true
           tooltipStore.currOpts = { ...params, content: null }

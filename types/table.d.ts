@@ -766,7 +766,7 @@ export interface TablePrivateMethods<D = VxeTableDataRow> {
   handleUpdateDataQueue(): void
   handleRefreshColumnQueue(): void
   preventEvent(evnt: any, type: any, args?: any, next?: any, end?: any): any
-  triggerHeaderTitleEvent(evnt: MouseEvent, iconParams: VxeColumnPropTypes.TitlePrefix<any> | VxeColumnPropTypes.TitleSuffix<any>, params: VxeTableDefines.CellRenderHeaderParams<any>): void
+  triggerHeaderTitleEvent(evnt: MouseEvent, iconParams: VxeColumnPropTypes.TitlePrefix | VxeColumnPropTypes.TitleSuffix, params: VxeTableDefines.CellRenderHeaderParams<any>): void
   triggerHeaderTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderHeaderParams<any>): void
   triggerBodyTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderBodyParams<any>): void
   triggerFooterTooltipEvent(evnt: MouseEvent, params: VxeTableDefines.CellRenderFooterParams<any>): void
