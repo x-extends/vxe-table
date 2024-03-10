@@ -11,10 +11,28 @@ function renderTitlePrefixIcon (h, params) {
   const titlePrefix = column.titlePrefix || column.titleHelp
   return titlePrefix ? [
     h('i', {
-      class: ['vxe-cell-help-icon', titlePrefix.icon || GlobalConfig.icon.TABLE_HELP],
+      class: ['vxe-cell-title-prefix-icon', titlePrefix.icon || GlobalConfig.icon.TABLE_TITLE_PREFIX],
       on: {
         mouseenter (evnt) {
-          $table.triggerHeaderHelpEvent(evnt, params)
+          $table.triggerHeaderTitleEvent(evnt, titlePrefix, params)
+        },
+        mouseleave (evnt) {
+          $table.handleTargetLeaveEvent(evnt)
+        }
+      }
+    })
+  ] : []
+}
+
+function renderTitleSuffixIcon (h, params) {
+  const { $table, column } = params
+  const titleSuffix = column.titleSuffix
+  return titleSuffix ? [
+    h('i', {
+      class: ['vxe-cell-title-suffix-icon', titleSuffix.icon || GlobalConfig.icon.TABLE_TITLE_SUFFIX],
+      on: {
+        mouseenter (evnt) {
+          $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
         },
         mouseleave (evnt) {
           $table.handleTargetLeaveEvent(evnt)
@@ -159,7 +177,7 @@ export const Cell = {
     return renderTitleContent(h, params, UtilTools.formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (h, params) {
-    return renderTitlePrefixIcon(h, params).concat(Cell.renderHeaderTitle(h, params))
+    return renderTitlePrefixIcon(h, params).concat(Cell.renderHeaderTitle(h, params)).concat(renderTitleSuffixIcon(h, params))
   },
   renderDefaultCell (h, params) {
     const { $table, row, column } = params

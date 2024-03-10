@@ -2810,15 +2810,13 @@ const Methods = {
       this.closeTooltip()
     }
   },
-  triggerHeaderHelpEvent (evnt, params) {
-    const { column } = params
-    const titlePrefix = column.titlePrefix || column.titleHelp
-    if (titlePrefix.content || titlePrefix.message) {
+  triggerHeaderTitleEvent (evnt, iconParams, params) {
+    if (iconParams.content || iconParams.message) {
       const { $refs, tooltipStore } = this
-      const content = getFuncText(titlePrefix.content || titlePrefix.message)
+      const content = getFuncText(iconParams.content || iconParams.message)
       this.handleTargetEnterEvent(true)
       tooltipStore.visible = true
-      tooltipStore.currOpts = { ...titlePrefix, content: null }
+      tooltipStore.currOpts = { ...params, content: null }
       this.$nextTick(() => {
         const $tooltip = $refs.tooltip
         if ($tooltip) {
