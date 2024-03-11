@@ -495,6 +495,10 @@
     "type": "any",
     "description": "标题前缀图标配置项"
   },
+  "vxe-column/title-suffix": {
+    "type": "any",
+    "description": "标题后缀图标配置项"
+  },
   "vxe-column/cell-type": {
     "type": "string",
     "description": "只对特定功能有效，单元格值类型（例如：导出数据类型设置）"
