@@ -1180,6 +1180,7 @@ export namespace VxeTablePropTypes {
   export type HighlightHoverColumn = boolean
   export type HighlightCell = boolean
   export type ShowFooter = boolean
+  export type AboveBodyFooter = boolean;
 
   export type FooterMethod<D = VxeTableDataRow> = (params: {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
@@ -2461,6 +2462,10 @@ export type VxeTableProps<D = VxeTableDataRow> = {
    * 是否显示表尾
    */
   showFooter?: VxeTablePropTypes.ShowFooter
+  /**
+   * 表尾放在body上方
+   */
+  aboveBodyFooter?: VxeTablePropTypes.AboveBodyFooter
   /**
    * 表尾的数据获取方法，返回一个二维数组
    */

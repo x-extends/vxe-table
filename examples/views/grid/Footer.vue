@@ -41,6 +41,7 @@ export default defineComponent({
     const gridOptions = reactive<VxeGridProps>({
       border: true,
       stripe: true,
+      aboveBodyFooter: true,
       resizable: true,
       showFooter: true,
       height: 400,

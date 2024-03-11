@@ -48,6 +48,8 @@ export default {
   highlightCell: Boolean as PropType<VxeTablePropTypes.HighlightCell>,
   // 是否显示表尾合计
   showFooter: Boolean as PropType<VxeTablePropTypes.ShowFooter>,
+  // 表尾放到 body 上方
+  aboveBodyFooter: Boolean as PropType<VxeTablePropTypes.AboveBodyFooter>,
   // 表尾合计的计算方法
   footerMethod: Function as PropType<VxeTablePropTypes.FooterMethod>,
   // 给行附加 className
