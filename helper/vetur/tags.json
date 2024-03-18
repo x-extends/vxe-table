@@ -147,6 +147,7 @@
       "footer-export-method",
       "title-help",
       "title-prefix",
+      "title-suffix",
       "cell-type",
       "cell-render",
       "edit-render",

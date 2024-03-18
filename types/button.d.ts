@@ -9,6 +9,10 @@ export declare class Button extends VXETableComponent {
    */
   type?: string;
   /**
+   * 按钮模式
+   */
+  mode?: string;
+  /**
    * 用来标识这一项
    */
   name?: string | number;

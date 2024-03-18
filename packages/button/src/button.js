@@ -10,6 +10,7 @@ export default {
   mixins: [vSize],
   props: {
     type: String,
+    mode: String,
     size: { type: String, default: () => GlobalConfig.button.size || GlobalConfig.size },
     name: [String, Number],
     content: String,
@@ -36,14 +37,11 @@ export default {
     }
   },
   computed: {
-    isText () {
-      return this.type === 'text'
-    },
     isFormBtn () {
       return ['submit', 'reset', 'button'].indexOf(this.type) > -1
     },
     btnType () {
-      return this.isText ? this.type : 'button'
+      return (this.type === 'text' || this.mode === 'text') ? 'text' : 'button'
     }
   },
   created () {
