@@ -1407,6 +1407,10 @@
     "type": "string",
     "description": "内容（支持开启国际化）"
   },
+  "vxe-button/mode": {
+    "type": "string",
+    "description": "模式"
+  },
   "vxe-button/type": {
     "type": "string",
     "description": "类型"

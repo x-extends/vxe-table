@@ -15,6 +15,7 @@ export default defineComponent({
      * 按钮类型
      */
     type: String as PropType<VxeButtonPropTypes.Type>,
+    mode: String as PropType<VxeButtonPropTypes.Mode>,
     className: [String, Function] as PropType<VxeButtonPropTypes.ClassName>,
     popupClassName: [String, Function] as PropType<VxeButtonPropTypes.PopupClassName>,
     /**
@@ -118,8 +119,8 @@ export default defineComponent({
     })
 
     const computeBtnType = computed(() => {
-      const { type } = props
-      return type && type === 'text' ? type : 'button'
+      const { type, mode } = props
+      return (mode === 'text' || type === 'text') ? 'text' : 'button'
     })
 
     const updateZindex = () => {

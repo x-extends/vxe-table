@@ -459,6 +459,7 @@
   "vxe-button": {
     "attributes": [
       "content",
+      "mode",
       "type",
       "size",
       "name",
