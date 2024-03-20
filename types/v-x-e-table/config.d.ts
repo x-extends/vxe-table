@@ -23,6 +23,14 @@ export interface VXETableConfigOptions {
    * 扩展插件授权码
    */
   authId?: string
+  onauth?(event: {
+    status: boolean
+    code: number
+    msg: string
+
+    [key: string]: any
+  }): void
+
   size?: SizeType
   zIndex?: number
   version?: number

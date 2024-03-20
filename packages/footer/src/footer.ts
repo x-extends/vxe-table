@@ -178,7 +178,22 @@ export default defineComponent({
               const columnIndex = $xetable.getColumnIndex(column)
               const _columnIndex = $xetable.getVTColumnIndex(column)
               const itemIndex = _columnIndex
-              const params: VxeTableDefines.CellRenderFooterParams = { $table: $xetable, $grid: $xetable.xegrid, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: renderType, data: footerTableData }
+              const params: VxeTableDefines.CellRenderFooterParams = {
+                $table: $xetable,
+                $grid: $xetable.xegrid,
+                row: list,
+                _rowIndex,
+                $rowIndex,
+                column,
+                columnIndex,
+                $columnIndex,
+                _columnIndex,
+                itemIndex,
+                items: list,
+                fixed: fixedType,
+                type: renderType,
+                data: footerTableData
+              }
               // 纵向虚拟滚动不支持动态行高
               if (scrollXLoad && !hasEllipsis) {
                 showEllipsis = hasEllipsis = true

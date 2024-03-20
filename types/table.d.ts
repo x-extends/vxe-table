@@ -1180,6 +1180,7 @@ export namespace VxeTablePropTypes {
   export type HighlightHoverColumn = boolean
   export type HighlightCell = boolean
   export type ShowFooter = boolean
+  export type FooterData = Record<string, any>[]
 
   export type FooterMethod<D = VxeTableDataRow> = (params: {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
@@ -2462,6 +2463,10 @@ export type VxeTableProps<D = VxeTableDataRow> = {
    */
   showFooter?: VxeTablePropTypes.ShowFooter
   /**
+   * 表尾数据
+   */
+  footerData?: VxeTablePropTypes.FooterData
+  /**
    * 表尾的数据获取方法，返回一个二维数组
    */
   footerMethod?: VxeTablePropTypes.FooterMethod<D>
@@ -2961,17 +2966,19 @@ export namespace VxeTableDefines {
   export interface CellRenderFooterParams<D = VxeTableDataRow> {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     $grid: VxeGridConstructor<D> | null
+    row: any
     _rowIndex: number
     $rowIndex: number
     column: ColumnInfo<D>
     columnIndex: number
     $columnIndex: number
     _columnIndex: number
-    itemIndex: number
-    items: any[]
     fixed: VxeColumnPropTypes.Fixed
     type: string
     data: any[][]
+
+    itemIndex: number
+    items: any[]
   }
 
   interface TableEventParams<D = VxeTableDataRow> extends VxeEvent {

@@ -4017,9 +4017,9 @@ export default defineComponent({
         return !!rowExpandedMaps[rowid]
       },
       isExpandByRow (row) {
-        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        //   warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
-        // }
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
+        }
         return tableMethods.isRowExpandByRow(row)
       },
       /**
@@ -4315,11 +4315,15 @@ export default defineComponent({
        * 更新表尾合计
        */
       updateFooter () {
-        const { showFooter, footerMethod } = props
+        const { showFooter, footerData, footerMethod } = props
         const { visibleColumn, afterFullData } = internalData
-        if (showFooter && footerMethod) {
-          reactData.footerTableData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xetable, $grid: $xegrid }) : []
+        let footData: any[] = []
+        if (showFooter && footerData && footerData.length) {
+          footData = footerData.slice(0)
+        } else if (showFooter && footerMethod) {
+          footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xetable, $grid: $xegrid }) : []
         }
+        reactData.footerTableData = footData
         return nextTick()
       },
       /**
@@ -6320,6 +6324,17 @@ export default defineComponent({
       })
     })
 
+    const footFlag = ref(0)
+    watch(() => props.footerData ? props.footerData.length : -1, () => {
+      footFlag.value++
+    })
+    watch(() => props.footerData, () => {
+      footFlag.value++
+    })
+    watch(footFlag, () => {
+      tableMethods.updateFooter()
+    })
+
     watch(() => props.height, () => {
       nextTick(() => tableMethods.recalculate(true))
     })
@@ -6428,8 +6443,8 @@ export default defineComponent({
           if (treeConfig && props.stripe) {
             warnLog('vxe.error.noTree', ['stripe'])
           }
-          if (props.showFooter && !props.footerMethod) {
-            warnLog('vxe.error.reqProp', ['footer-method'])
+          if (props.showFooter && !(props.footerMethod || props.footerData)) {
+            warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
           }
           // if (props.highlightCurrentRow) {
           //   warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
