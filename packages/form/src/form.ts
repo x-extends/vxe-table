@@ -632,6 +632,8 @@ export default defineComponent({
     })
     watch(() => props.items, () => {
       itemFlag.value++
+    }, {
+      deep: true
     })
     watch(itemFlag, () => {
       loadItem(props.items || [])
