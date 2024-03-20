@@ -95,6 +95,10 @@ export declare class Table extends VXETableComponent {
    */
   showFooter?: boolean;
   /**
+   * 表尾数据
+   */
+  footerData: any[]
+  /**
    * 表尾数据获取的方法
    */
   footerMethod?: typeof TableFooterMethod;
@@ -1198,6 +1202,7 @@ export interface TableOptions {
    */
   highlightCell?: boolean;
   showFooter?: boolean;
+  footerData?: any[];
   footerMethod?: typeof TableFooterMethod;
   rowClassName?: string | ((params: any) => any);
   cellClassName?: string | ((params: any) => any);

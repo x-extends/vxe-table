@@ -152,7 +152,22 @@ export default {
             const columnIndex = $xetable.getColumnIndex(column)
             const _columnIndex = $xetable.getVTColumnIndex(column)
             const itemIndex = _columnIndex
-            const params = { $table: $xetable, $grid: $xetable.xegrid, _rowIndex, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, itemIndex, items: list, fixed: fixedType, type: cellType, data: footerTableData }
+            const params = {
+              $table: $xetable,
+              $grid: $xetable.xegrid,
+              row: list,
+              _rowIndex,
+              $rowIndex,
+              column,
+              columnIndex,
+              $columnIndex,
+              _columnIndex,
+              itemIndex,
+              items: list,
+              fixed: fixedType,
+              type: cellType,
+              data: footerTableData
+            }
             // 虚拟滚动不支持动态高度
             if (scrollXLoad && !hasEllipsis) {
               showEllipsis = hasEllipsis = true

@@ -134,6 +134,8 @@ export default {
     highlightCell: Boolean,
     // 是否显示表尾合计
     showFooter: Boolean,
+    // 表尾数据
+    footerData: Array,
     // 表尾合计的计算方法
     footerMethod: Function,
     // 给行附加 className
@@ -780,8 +782,8 @@ export default {
       if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(this.rowKey || rowOpts.useKey) || !showOverflow)) {
         warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
       }
-      if (this.showFooter && !this.footerMethod) {
-        warnLog('vxe.error.reqProp', ['footer-method'])
+      if (this.showFooter && !(this.footerMethod || this.footerData)) {
+        warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
       }
       if (treeConfig && this.stripe) {
         warnLog('vxe.error.noTree', ['stripe'])

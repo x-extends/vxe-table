@@ -4356,9 +4356,9 @@ const Methods = {
     return !!rowExpandedMaps[rowid]
   },
   isExpandByRow (row) {
-    // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-    //   warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
-    // }
+    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
+    }
     // 即将废弃
     return this.isRowExpandByRow(row)
   },
@@ -5031,10 +5031,14 @@ const Methods = {
    * 更新表尾合计
    */
   updateFooter () {
-    const { showFooter, visibleColumn, footerMethod } = this
-    if (showFooter && footerMethod) {
-      this.footerTableData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: this, $grid: this.$xegrid }) : []
+    const { showFooter, visibleColumn, footerData, footerMethod } = this
+    let footData = []
+    if (showFooter && footerData && footerData.length) {
+      footData = footerData.slice(0)
+    } else if (showFooter && footerMethod) {
+      footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: this.afterFullData, $table: this, $grid: this.$xegrid }) : []
     }
+    this.footerTableData = footData
     return this.$nextTick()
   },
   /**

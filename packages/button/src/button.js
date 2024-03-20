@@ -4,6 +4,7 @@ import vSize from '../../mixins/size'
 import UtilTools, { getFuncText } from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import { GlobalEvent } from '../../tools/event'
+// import { warnLog } from '../../tools/log'
 
 export default {
   name: 'VxeButton',
@@ -45,6 +46,12 @@ export default {
     }
   },
   created () {
+    // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    //   if (props.type === 'text') {
+    //     warnLog('vxe.error.delFunc', ['type=text', 'mode=text'])
+    //   }
+    // }
+
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
   },
   beforeDestroy () {

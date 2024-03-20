@@ -88,7 +88,7 @@ function renderTitleContent (h, params, content) {
 }
 
 function getFooterContent (h, params) {
-  const { $table, column, _columnIndex, items } = params
+  const { $table, column, _columnIndex, row, items } = params
   const { slots, editRender, cellRender } = column
   const renderOpts = editRender || cellRender
   if (slots && slots.footer) {
@@ -100,7 +100,11 @@ function getFooterContent (h, params) {
       return getSlotVNs(compConf.renderFooter.call($table, h, renderOpts, params))
     }
   }
-  return [UtilTools.formatText(items[_columnIndex], 1)]
+  // 兼容老模式
+  if (XEUtils.isArray(items)) {
+    return [UtilTools.formatText(items[_columnIndex], 1)]
+  }
+  return [UtilTools.formatText(XEUtils.get(row, column.field), 1)]
 }
 
 function getDefaultCellLabel (params) {
