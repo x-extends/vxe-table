@@ -365,7 +365,7 @@ export default {
       const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
       const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : []).map(column => handleFieldOrColumn(this, column)))
       let validErrMaps = {}
-      if (validTip && validTip.reactData.visible) {
+      if (validTip && validTip.visible) {
         validTip.close()
       }
       // 如果是单个提示模式
