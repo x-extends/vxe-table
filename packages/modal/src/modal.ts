@@ -2,7 +2,7 @@ import { defineComponent, h, Teleport, ref, Ref, computed, reactive, nextTick, w
 import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 import { getDomNode, getEventTargetNode } from '../../tools/dom'
-import { getLastZIndex, nextZIndex, getFuncText } from '../../tools/utils'
+import { getLastZIndex, nextZIndex, getFuncText, clearIframeMouseMoveEffect } from '../../tools/utils'
 import { errLog } from '../../tools/log'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
@@ -518,6 +518,7 @@ export default defineComponent({
           boxElem.style.top = `${top}px`
           boxElem.className = boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
         }
+        clearIframeMouseMoveEffect()
         document.onmouseup = () => {
           document.onmousemove = domMousemove
           document.onmouseup = domMouseup
@@ -674,6 +675,7 @@ export default defineComponent({
         }
         modalMethods.dispatchEvent('zoom', params, evnt)
       }
+      clearIframeMouseMoveEffect()
       document.onmouseup = () => {
         reactData.zoomLocat = null
         document.onmousemove = domMousemove

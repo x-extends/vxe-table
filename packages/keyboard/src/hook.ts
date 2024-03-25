@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass, getEventTargetNode } from '../../tools/dom'
-
 import { VxeGlobalHooksHandles, TableKeyboardPrivateMethods } from '../../../types/all'
+import { clearIframeMouseMoveEffect } from '../../tools/utils'
 
 function getTargetOffset (target: any, container: any) {
   let offsetTop = 0
@@ -195,6 +195,7 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
           }
           handleChecked(evnt)
         }
+        clearIframeMouseMoveEffect()
         document.onmouseup = (evnt) => {
           stopMouseScroll()
           removeClass(el, 'drag--range')
