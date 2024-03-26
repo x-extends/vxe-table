@@ -29,7 +29,7 @@
 
     <p>
       <vxe-tooltip ref="xTip4"></vxe-tooltip>
-      <vxe-button @mouseenter="$refs.xTip4.open($event.target, '自定义提示内容')" @mouseleave="$refs.xTip4.close()">高性能模式，只创建一个实例</vxe-button>
+      <vxe-button @mouseenter="$refs.xTip4.show($event.target, '自定义提示内容')" @mouseleave="$refs.xTip4.close()">高性能模式，只创建一个实例</vxe-button>
     </p>
 
     <p>
@@ -75,7 +75,7 @@ export default defineComponent({
     const xTip5 = ref({} as VxeTooltipInstance)
     const cellMouseenterEvent = ({ cell }: any) => {
       const $tooltip5 = xTip5.value
-      $tooltip5.open(cell, `自定义提示内容：${cell.innerText}`)
+      $tooltip5.show(cell, `自定义提示内容：${cell.innerText}`)
     }
     const cellMouseleaveEvent = () => {
       const $tooltip5 = xTip5.value
@@ -114,7 +114,7 @@ export default defineComponent({
 
         <p>
           <vxe-tooltip ref="xTip1"></vxe-tooltip>
-          <vxe-button @mouseenter="$refs.xTip1.open($event.target, '自定义提示内容')" @mouseleave="$refs.xTip1.close()">高性能模式，只创建一个实例</vxe-button>
+          <vxe-button @mouseenter="$refs.xTip1.show($event.target, '自定义提示内容')" @mouseleave="$refs.xTip1.close()">高性能模式，只创建一个实例</vxe-button>
         </p>
 
         <p>
@@ -151,7 +151,7 @@ export default defineComponent({
             const xTip5 = ref({} as VxeTooltipInstance)
             const cellMouseenterEvent = ({ cell }: any) => {
               const $tooltip5 = xTip5.value
-              $tooltip5.open(cell, \`自定义提示内容：\${cell.innerText}\`)
+              $tooltip5.show(cell, \`自定义提示内容：\${cell.innerText}\`)
             }
             const cellMouseleaveEvent = () => {
               const $tooltip5 = xTip5.value
