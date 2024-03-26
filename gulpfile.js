@@ -188,7 +188,10 @@ function toCSSUnicode (css) {
 }
 
 gulp.task('build_lib', () => {
-  const styleStr = fs.readFileSync('lib_temp/index.css', 'utf-8')
+  let styleStr = fs.readFileSync('lib_temp/index.css', 'utf-8')
+  if (!styleStr.startsWith('@charset')) {
+    styleStr = `@charset "UTF-8";\n${styleStr}`
+  }
   fs.writeFileSync('lib_temp/index.css', toCSSUnicode(styleStr))
   return merge(
     gulp.src('es/index.common.js')
