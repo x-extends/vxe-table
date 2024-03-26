@@ -432,6 +432,8 @@ export default {
       if (currentPage !== this.currentPage) {
         this.$emit('update:currentPage', currentPage)
         this.$emit('page-change', { type: 'current', pageSize: this.pageSize, currentPage })
+      } else {
+        this.inpCurrPage = currentPage
       }
     },
     pageSizeEvent (pageSize) {
