@@ -307,9 +307,11 @@ $btnThemeList: (
 }
 
 .vxe-button--dropdown-panel {
+  z-index: -1;
   display: none;
   position: absolute;
   right: 0;
+  top: 2px;
   padding: 4px 0;
   &.animat--leave {
     display: block;
