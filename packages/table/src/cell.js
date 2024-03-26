@@ -109,7 +109,7 @@ function getFooterContent (h, params) {
 
 function getDefaultCellLabel (params) {
   const { $table, row, column } = params
-  return UtilTools.formatText($table.getCellLabel(row, column), 1)
+  return $table.getCellLabel(row, column)
 }
 
 export const Cell = {
@@ -207,7 +207,7 @@ export const Cell = {
         h('span', {
           class: 'vxe-cell--placeholder'
         }, UtilTools.formatText(getFuncText(cellPlaceholder), 1))
-      ] : UtilTools.formatText(cellValue, 1))
+      ] : [cellValue])
     ]
   },
   renderTreeCell (h, params) {
@@ -628,7 +628,7 @@ export const Cell = {
       h('span', {
         class: 'vxe-cell--html',
         domProps: {
-          innerHTML: getDefaultCellLabel(params)
+          innerHTML: UtilTools.formatText(getDefaultCellLabel(params), 1)
         }
       })
     ]
