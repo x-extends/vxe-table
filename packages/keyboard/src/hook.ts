@@ -335,14 +335,32 @@ const tableKeyboardHook: VxeGlobalHooksHandles.HookOptions = {
         const _rowIndex = $xetable.getVTRowIndex(params.row)
         const _columnIndex = $xetable.getVTColumnIndex(params.column)
         evnt.preventDefault()
-        if (isUpArrow && _rowIndex > 0) {
-          // 移动到上一行
-          params.rowIndex = _rowIndex - 1
-          params.row = afterFullData[params.rowIndex]
-        } else if (isDwArrow && _rowIndex < afterFullData.length - 1) {
-          // 移动到下一行
-          params.rowIndex = _rowIndex + 1
-          params.row = afterFullData[params.rowIndex]
+        if (isUpArrow) {
+          if (_rowIndex > 0) {
+            // 移动到上一行
+            params.rowIndex = _rowIndex - 1
+            params.row = afterFullData[params.rowIndex]
+          } else if (_columnIndex > 0) {
+            // 移动到上一列最后一行
+            params.rowIndex = afterFullData.length - 1
+            params.row = afterFullData[params.rowIndex]
+            params.columnIndex = _columnIndex - 1
+            params.column = visibleColumn[params.columnIndex]
+          }
+          // 第一行第一列,静默
+        } else if (isDwArrow) {
+          if (_rowIndex < afterFullData.length - 1) {
+            // 移动到下一行
+            params.rowIndex = _rowIndex + 1
+            params.row = afterFullData[params.rowIndex]
+          } else if (_columnIndex < visibleColumn.length - 1) {
+            // 移动到下一列第一行
+            params.rowIndex = 0
+            params.row = afterFullData[params.rowIndex]
+            params.columnIndex = _columnIndex + 1
+            params.column = visibleColumn[params.columnIndex]
+          }
+          // 最后一列最后一行,静默
         } else if (isLeftArrow && _columnIndex) {
           // 移动到左侧单元格
           params.columnIndex = _columnIndex - 1
