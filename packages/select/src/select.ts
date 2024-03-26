@@ -734,7 +734,7 @@ export default defineComponent({
             'is--hover': currentValue === optionValue
           }],
           // attrs
-          optid: optid,
+          optid,
           // event
           onMousedown: (evnt: MouseEvent) => {
             const isLeftBtn = evnt.button === 0
@@ -776,7 +776,7 @@ export default defineComponent({
             'is--disabled': isGroupDisabled
           }],
           // attrs
-          optid: optid
+          optid
         }, [
           h('div', {
             class: 'vxe-optgroup--title'
@@ -940,7 +940,7 @@ export default defineComponent({
           clearable: props.clearable,
           placeholder: props.placeholder,
           readonly: true,
-          disabled: disabled,
+          disabled,
           type: 'text',
           prefixIcon: props.prefixIcon,
           suffixIcon: loading ? GlobalConfig.icon.SELECT_LOADED : (visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE),

@@ -395,7 +395,7 @@ export default defineComponent({
               },
               getPropClass(rowClassName, params)
             ],
-            rowid: rowid,
+            rowid,
             style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
             key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,
             ...trOn
