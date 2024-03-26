@@ -93,13 +93,13 @@ const tableFilterHook: VxeGlobalHooksHandles.HookOptions = {
             } else {
               left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth - bodyElem.scrollLeft
             }
-            if (left) {
+            if (!isNaN(left)) {
               const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
               if (overflowWidth > 0) {
                 left -= overflowWidth
               }
               style.left = `${Math.min(maxLeft, Math.max(minMargin, left))}px`
-            } else if (right) {
+            } else if (!isNaN(right)) {
               const overflowWidth = (pageX + filterWidth - centerWidth + minMargin) - visibleWidth
               if (overflowWidth > 0) {
                 right += overflowWidth
