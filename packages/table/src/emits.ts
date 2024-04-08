@@ -51,6 +51,8 @@ export default [
   'change-fnr', // 废弃
 
   'open-fnr',
+  'show-fnr',
+  'hide-fnr',
   'fnr-change',
   'fnr-find',
   'fnr-find-all',

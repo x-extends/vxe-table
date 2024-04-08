@@ -64,6 +64,12 @@ export interface VxeTableProMethods<D = VxeTableDataRow> {
    */
   openReplace(): Promise<any>
   /**
+   * 手动打开查找与替换窗口
+   */
+  openFNR(options: {
+    type?: 'find' | 'replace' | '' | null
+  }): Promise<any>
+  /**
    * 手动关闭查找与替换窗口
    */
   closeFNR(): Promise<any>
@@ -353,6 +359,8 @@ export type VxeTableProEmits = [
   'change-fnr', // 废弃
 
   'open-fnr',
+  'show-fnr',
+  'hide-fnr',
   'fnr-change',
   'fnr-find',
   'fnr-find-all',
