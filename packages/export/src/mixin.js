@@ -240,7 +240,7 @@ function getFooterCellValue ($xetable, opts, items, column) {
     footLabelMethod = columnOpts.footerExportMethod
   }
   const _columnIndex = $xetable.getVTColumnIndex(column)
-  const cellValue = footLabelMethod ? footLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
+  const cellValue = footLabelMethod ? footLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, row: items, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
   return cellValue
 }
 

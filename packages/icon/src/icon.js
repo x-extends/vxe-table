@@ -8,7 +8,7 @@ export default {
   render (h) {
     const { name, roll, status } = this
     return h('i', {
-      class: [`vxe-icon-${name}`, roll || '', status ? [`theme--${status}`] : ''],
+      class: [`vxe-icon-${name}`, roll ? 'roll' : '', status ? [`theme--${status}`] : ''],
       on: {
         click: this.clickEvent
       }
