@@ -19,7 +19,7 @@ export default defineComponent({
     return () => {
       const { name, roll, status } = props
       return h('i', {
-        class: [`vxe-icon-${name}`, roll || '', status ? [`theme--${status}`] : ''],
+        class: [`vxe-icon-${name}`, roll ? 'roll' : '', status ? [`theme--${status}`] : ''],
         onClick: clickEvent
       })
     }
