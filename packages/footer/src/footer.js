@@ -133,9 +133,10 @@ export default {
           ref: 'tfoot'
         }, footerTableData.map((list, _rowIndex) => {
           const $rowIndex = _rowIndex
+          const rowParams = { $table: $xetable, row: list, _rowIndex, $rowIndex, fixed: fixedType, type: cellType }
           return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: cellType }) : footerRowClassName : ''],
-            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: cellType }) : footerRowStyle) : null
+            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''],
+            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
           }, tableColumn.map((column, $columnIndex) => {
             const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
             const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
@@ -152,7 +153,7 @@ export default {
             const columnIndex = $xetable.getColumnIndex(column)
             const _columnIndex = $xetable.getVTColumnIndex(column)
             const itemIndex = _columnIndex
-            const params = {
+            const cellParams = {
               $table: $xetable,
               $grid: $xetable.xegrid,
               row: list,
@@ -177,7 +178,7 @@ export default {
                 if (showTitle) {
                   DomTools.updateCellTitle(evnt.currentTarget, column)
                 } else if (showTooltip || showAllTip) {
-                  $xetable.triggerFooterTooltipEvent(evnt, params)
+                  $xetable.triggerFooterTooltipEvent(evnt, cellParams)
                 }
               }
             }
@@ -190,12 +191,12 @@ export default {
             }
             if (tableListeners['footer-cell-click']) {
               tfOns.click = evnt => {
-                $xetable.emitEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+                $xetable.emitEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
               }
             }
             if (tableListeners['footer-cell-dblclick']) {
               tfOns.dblclick = evnt => {
-                $xetable.emitEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+                $xetable.emitEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
               }
             }
             // 合并行或列
@@ -215,7 +216,7 @@ export default {
               }
             } else if (footerSpanMethod) {
               // 自定义合并方法
-              const { rowspan = 1, colspan = 1 } = footerSpanMethod(params) || {}
+              const { rowspan = 1, colspan = 1 } = footerSpanMethod(cellParams) || {}
               if (!rowspan || !colspan) {
                 return null
               }
@@ -234,9 +235,9 @@ export default {
                 'fixed--hidden': fixedHiddenColumn,
                 'col--ellipsis': hasEllipsis,
                 'col--current': currentColumn === column
-              }, UtilTools.getClass(footerClassName, params), UtilTools.getClass(footerCellClassName, params)],
+              }, UtilTools.getClass(footerClassName, cellParams), UtilTools.getClass(footerCellClassName, cellParams)],
               attrs,
-              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
+              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) : null,
               on: tfOns,
               key: columnKey || columnOpts.useKey ? column.id : $columnIndex
             }, [
@@ -246,7 +247,7 @@ export default {
                   'c--tooltip': showTooltip,
                   'c--ellipsis': showEllipsis
                 }]
-              }, column.renderFooter(h, params))
+              }, column.renderFooter(h, cellParams))
             ])
           }).concat(scrollbarWidth ? [
             h('td', {
