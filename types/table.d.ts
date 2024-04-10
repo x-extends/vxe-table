@@ -1187,7 +1187,7 @@ export namespace VxeTablePropTypes {
     $grid: VxeGridConstructor<D> | null | undefined
     columns: VxeTableDefines.ColumnInfo<D>[]
     data: D[]
-  }) => Array<string | number | null>[]
+  }) => Array<string | number | null>[] | VxeTableDataRow[]
 
   export type RowClassName<D = VxeTableDataRow> = string | ((params: {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
@@ -1226,6 +1226,7 @@ export namespace VxeTablePropTypes {
 
   export type FooterRowClassName<D = VxeTableDataRow> = string | ((params: {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
+    row: D
     $rowIndex: number
     _rowIndex: number
     fixed: VxeColumnPropTypes.Fixed
@@ -1234,6 +1235,7 @@ export namespace VxeTablePropTypes {
 
   export type FooterCellClassName<D = VxeTableDataRow> = string | ((params: {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
+    row: D
     $rowIndex: number
     _rowIndex: number
     column: VxeTableDefines.ColumnInfo<D>
@@ -1263,6 +1265,7 @@ export namespace VxeTablePropTypes {
 
   export type FooterCellStyle<D = VxeTableDataRow> = VNodeStyle | ((params: {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
+    row: D
     $rowIndex: number
     column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
@@ -1287,6 +1290,7 @@ export namespace VxeTablePropTypes {
 
   export type FooterRowStyle<D = VxeTableDataRow> = VNodeStyle | ((params: {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
+    row: D
     $rowIndex: number
     _rowIndex: number
     fixed: VxeColumnPropTypes.Fixed
@@ -1319,6 +1323,7 @@ export namespace VxeTablePropTypes {
     columnIndex: number
     _columnIndex: number
     $columnIndex: number
+    row: D
     $rowIndex: number
     _rowIndex: number
     items: any[]

@@ -159,9 +159,10 @@ export default defineComponent({
             ref: refFooterTFoot
           }, footerTableData.map((list, _rowIndex) => {
             const $rowIndex = _rowIndex
+            const rowParams = { $table: $xetable, row: list, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
             return h('tr', {
-              class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }) : footerRowClassName : ''],
-              style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle({ $table: $xetable, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }) : footerRowStyle) : null
+              class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''],
+              style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
             }, tableColumn.map((column, $columnIndex) => {
               const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
               const showAllTip = tooltipOpts.showAll
@@ -178,7 +179,7 @@ export default defineComponent({
               const columnIndex = $xetable.getColumnIndex(column)
               const _columnIndex = $xetable.getVTColumnIndex(column)
               const itemIndex = _columnIndex
-              const params: VxeTableDefines.CellRenderFooterParams = {
+              const cellParams: VxeTableDefines.CellRenderFooterParams = {
                 $table: $xetable,
                 $grid: $xetable.xegrid,
                 row: list,
@@ -203,7 +204,7 @@ export default defineComponent({
                   if (showTitle) {
                     updateCellTitle(evnt.currentTarget, column)
                   } else if (showTooltip || showAllTip) {
-                    $xetable.triggerFooterTooltipEvent(evnt, params)
+                    $xetable.triggerFooterTooltipEvent(evnt, cellParams)
                   }
                 }
               }
@@ -215,10 +216,10 @@ export default defineComponent({
                 }
               }
               tfOns.onClick = (evnt: MouseEvent) => {
-                $xetable.dispatchEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+                $xetable.dispatchEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
               }
               tfOns.onDblclick = (evnt: MouseEvent) => {
-                $xetable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+                $xetable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
               }
               // 合并行或列
               if (mergeFooterList.length) {
@@ -237,7 +238,7 @@ export default defineComponent({
                 }
               } else if (footerSpanMethod) {
                 // 自定义合并方法
-                const { rowspan = 1, colspan = 1 } = footerSpanMethod(params) || {}
+                const { rowspan = 1, colspan = 1 } = footerSpanMethod(cellParams) || {}
                 if (!rowspan || !colspan) {
                   return null
                 }
@@ -256,9 +257,9 @@ export default defineComponent({
                   'fixed--hidden': fixedHiddenColumn,
                   'col--ellipsis': hasEllipsis,
                   'col--current': currentColumn === column
-                }, getPropClass(footerClassName, params), getPropClass(footerCellClassName, params)],
+                }, getPropClass(footerClassName, cellParams), getPropClass(footerCellClassName, cellParams)],
                 ...attrs,
-                style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(params) : footerCellStyle) : null,
+                style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) : null,
                 ...tfOns,
                 key: columnKey || columnOpts.useKey ? column.id : $columnIndex
               }, [
@@ -268,7 +269,7 @@ export default defineComponent({
                     'c--tooltip': showTooltip,
                     'c--ellipsis': showEllipsis
                   }]
-                }, column.renderFooter(params))
+                }, column.renderFooter(cellParams))
               ])
             }).concat(scrollbarWidth ? [
               h('td', {

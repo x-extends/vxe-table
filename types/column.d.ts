@@ -113,6 +113,7 @@ export namespace VxeColumnPropTypes {
   interface FooterExportParams<D = VxeTableDataRow> {
     $table: VxeTableConstructor<D>,
     items: any[]
+    row: any
     column: VxeTableDefines.ColumnInfo<D>
     _columnIndex: number
   }
