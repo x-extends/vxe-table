@@ -31,7 +31,7 @@ export default {
       noTree: 'Tree structureは "{0}" をサポートしていません',
       notProp: 'サポートされていないパラメータ "{0}"',
       checkProp: '当数据量过大时可能会导致复选框卡顿，建议设置参数 "{0}" 提升渲染速度',
-      coverProp: '"{0}" 的参数 "{1}" 被覆盖，这可能会出现错误',
+      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
       delFunc: '"{0}" functionは非推奨です、"{1}"を使用してください',
       delProp: '"{0}" propertyは非推奨です、"{1}"を使用してください',
       delEvent: 'イベント "{0}" は廃止されました。 "{1}" を使用してください',
@@ -266,8 +266,7 @@ export default {
       customConfirm: '確定',
       customRestore: 'リセット',
       fixedLeft: '固定在左侧',
-      fixedRight: '固定在右侧',
-      cancelfixed: '取消固定'
+      fixedRight: '固定在右侧'
     },
     input: {
       date: {

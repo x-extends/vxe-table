@@ -31,7 +31,7 @@ export default {
       noTree: 'A estrutura de árvore não suporta "{0}".',
       notProp: 'Parâmetros não suportados "{0}"',
       checkProp: 'A caixa de seleção pode travar quando a quantidade de dados é muito grande, é recomendado definir o parâmetro "{0}" para aumentar a velocidade de renderização ',
-      coverProp: 'O parâmetro "{1}" para "{0}" está sendo substituído. Isso pode causar um erro',
+      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
       delFunc: 'A função "{0}" está obsoleta, por favor, use "{1}".',
       delProp: 'A propriedade "{0}" está obsoleta, por favor, use "{1}".',
       delEvent: 'O evento "{0}" está obsoleto, por favor, use "{1}".',
