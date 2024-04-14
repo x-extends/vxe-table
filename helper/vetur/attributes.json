@@ -1475,6 +1475,30 @@
     "type": "boolean",
     "description": "是否将弹框容器插入于 body 内（对于嵌入到表格或者弹窗中被遮挡时需要设置为 true）"
   },
+  "vxe-button-group/mode": {
+    "type": "string",
+    "description": "模式"
+  },
+  "vxe-button-group/size": {
+    "type": "string",
+    "description": "尺寸"
+  },
+  "vxe-button-group/round": {
+    "type": "boolean",
+    "description": "圆角边框"
+  },
+  "vxe-button-group/circle": {
+    "type": "boolean",
+    "description": "圆角按钮"
+  },
+  "vxe-button-group/disabled": {
+    "type": "boolean",
+    "description": "是否禁用"
+  },
+  "vxe-button-group/class-name": {
+    "type": "string | (({}) => string)",
+    "description": "给展示容器附加 className"
+  },
   "vxe-tooltip/model-value": {
     "type": "boolean",
     "description": "是否显示"

@@ -12,6 +12,7 @@ import { VxeSelectProps } from '../select'
 import { VxeInputProps } from '../input'
 import { VxeTextareaProps } from '../textarea'
 import { VxeButtonProps } from '../button'
+import { VxeButtonGroupProps } from '../button-group'
 import { VxeCheckboxProps } from '../checkbox'
 import { VxeCheckboxGroupProps } from '../checkbox-group'
 import { VxeRadioProps } from '../radio'
@@ -54,6 +55,7 @@ export interface VXETableConfigOptions {
   select?: VxeSelectProps
   toolbar?: VxeToolbarProps
   button?: VxeButtonProps
+  buttonGroup?: VxeButtonGroupProps
   radio?: VxeRadioProps
   radioButton?: VxeRadioButtonProps
   radioGroup?: VxeRadioGroupProps

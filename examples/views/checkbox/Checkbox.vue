@@ -28,6 +28,7 @@
         <vxe-checkbox label="4" content="SASS"></vxe-checkbox>
         <vxe-checkbox label="5" content="LESS"></vxe-checkbox>
       </vxe-checkbox-group>
+      <vxe-checkbox-group v-model="demo1.value12" :options="demo1.opts1"></vxe-checkbox-group>
     </p>
 
     <p>
@@ -75,7 +76,14 @@ export default defineComponent({
       value10: true,
       value11: '1',
       value12: ['3'],
-      value20: []
+      value20: [],
+      opts1: [
+        { value: '1', label: 'HTML' },
+        { value: '2', label: 'CSS' },
+        { value: '3', label: 'Javascript' },
+        { value: '4', label: 'SASS' },
+        { value: '5', label: 'LESS' }
+      ]
     })
     return {
       demo1,

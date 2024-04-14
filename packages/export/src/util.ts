@@ -34,6 +34,7 @@ export function createHtmlPage (opts: VxeTablePropTypes.PrintConfig, content: st
     '<head>',
     '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">',
     `<title>${opts.sheetName}</title>`,
+    '<style media="print">.vxe-page-break-before{page-break-before:always;}.vxe-page-break-after{page-break-after:always;}</style>',
     `<style>${defaultHtmlStyle}</style>`,
     style ? `<style>${style}</style>` : '',
     '</head>',

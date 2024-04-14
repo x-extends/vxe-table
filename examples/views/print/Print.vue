@@ -3,7 +3,7 @@
     <p class="tip">
       高级打印，可以将任意视图的 HTML 片段输出打印<br>
       给 vue 实例挂载属性：<br>
-      app.config.globalProperties.$XPrint = VXETable.print<br>
+      换页 class=.vxe-page-break-before 或者 .vxe-page-break-after<br>
     </p>
 
     <vxe-toolbar ref="xToolbar" print>

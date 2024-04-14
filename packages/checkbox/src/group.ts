@@ -1,6 +1,7 @@
 import { defineComponent, h, provide, PropType, computed, inject } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
+import VxeCheckboxComponent from './checkbox'
 import { useSize } from '../../hooks/size'
 
 import { VxeCheckboxGroupConstructor, VxeCheckboxGroupEmits, VxeCheckboxGroupPrivateMethods, CheckboxGroupPrivateMethods, CheckboxPrivateComputed, CheckboxGroupMethods, VxeCheckboxGroupPropTypes, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
@@ -9,9 +10,11 @@ export default defineComponent({
   name: 'VxeCheckboxGroup',
   props: {
     modelValue: Array as PropType<VxeCheckboxGroupPropTypes.ModelValue>,
+    options: Array as PropType<VxeCheckboxGroupPropTypes.Options>,
+    optionProps: Object as PropType<VxeCheckboxGroupPropTypes.OptionProps>,
     disabled: Boolean as PropType<VxeCheckboxGroupPropTypes.Disabled>,
     max: { type: [String, Number] as PropType<VxeCheckboxGroupPropTypes.Max>, default: null },
-    size: { type: String as PropType<VxeCheckboxGroupPropTypes.Size>, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
+    size: { type: String as PropType<VxeCheckboxGroupPropTypes.Size>, default: () => GlobalConfig.checkboxGroup.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',
@@ -30,6 +33,20 @@ export default defineComponent({
         return (modelValue ? modelValue.length : 0) >= XEUtils.toNumber(max)
       }
       return false
+    })
+
+    const computePropsOpts = computed(() => {
+      return props.optionProps || {}
+    })
+
+    const computeLabelField = computed(() => {
+      const propsOpts = computePropsOpts.value
+      return propsOpts.label || 'label'
+    })
+
+    const computeValueField = computed(() => {
+      const propsOpts = computePropsOpts.value
+      return propsOpts.value || 'value'
     })
 
     const computeMaps: CheckboxPrivateComputed = {
@@ -76,9 +93,18 @@ export default defineComponent({
     Object.assign($xecheckboxgroup, checkboxGroupMethods, checkboxGroupPrivateMethods)
 
     const renderVN = () => {
+      const { options } = props
+      const defaultSlot = slots.default
+      const valueField = computeValueField.value as 'value'
+      const labelField = computeLabelField.value as 'label'
       return h('div', {
         class: 'vxe-checkbox-group'
-      }, slots.default ? slots.default({}) : [])
+      }, defaultSlot ? defaultSlot({}) : (options ? options.map(item => {
+        return h(VxeCheckboxComponent, {
+          label: item[valueField],
+          content: item[labelField]
+        })
+      }) : []))
     }
 
     $xecheckboxgroup.renderVN = renderVN

@@ -1,13 +1,13 @@
-import { defineComponent, h, ref, Ref, computed, Teleport, VNode, onUnmounted, reactive, nextTick, PropType, onMounted } from 'vue'
+import { defineComponent, h, ref, Ref, computed, Teleport, VNode, onUnmounted, reactive, nextTick, PropType, onMounted, inject } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { useSize } from '../../hooks/size'
 import { getAbsolutePos, getEventTargetNode } from '../../tools/dom'
 import { getFuncText, getLastZIndex, nextZIndex } from '../../tools/utils'
 import { GlobalEvent } from '../../tools/event'
-// import { warnLog } from '../../tools/log'
+import { warnLog } from '../../tools/log'
 
-import { VxeButtonConstructor, VxeButtonPropTypes, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef, ButtonInternalData } from '../../../types/all'
+import { VxeButtonConstructor, VxeButtonPropTypes, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef, ButtonInternalData, VxeButtonGroupConstructor, VxeButtonGroupPrivateMethods } from '../../../types/all'
 
 export default defineComponent({
   name: 'VxeButton',
@@ -109,6 +109,8 @@ export default defineComponent({
       getRefMaps: () => refMaps
     } as unknown as VxeButtonConstructor
 
+    const $xebuttonggroup = inject('$xebuttongroup', null as (VxeButtonGroupConstructor & VxeButtonGroupPrivateMethods) | null)
+
     let buttonMethods = {} as ButtonMethods
 
     const computeIsFormBtn = computed(() => {
@@ -202,7 +204,11 @@ export default defineComponent({
     }
 
     const clickEvent = (evnt: Event) => {
-      buttonMethods.dispatchEvent('click', { $event: evnt }, evnt)
+      if ($xebuttonggroup) {
+        $xebuttonggroup.handleClick({ name: props.name as string }, evnt)
+      } else {
+        buttonMethods.dispatchEvent('click', { $event: evnt }, evnt)
+      }
     }
 
     const mousedownDropdownEvent = (evnt: MouseEvent) => {
@@ -349,11 +355,11 @@ export default defineComponent({
     Object.assign($xebutton, buttonMethods)
 
     onMounted(() => {
-      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      //   if (props.type === 'text') {
-      //     warnLog('vxe.error.delFunc', ['type=text', 'mode=text'])
-      //   }
-      // }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (props.type === 'text') {
+          warnLog('vxe.error.delFunc', ['type=text', 'mode=text'])
+        }
+      }
 
       GlobalEvent.on($xebutton, 'mousewheel', (evnt: Event) => {
         const panelElem = refBtnPanel.value

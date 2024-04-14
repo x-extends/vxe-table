@@ -31,7 +31,7 @@ export default {
       noTree: 'The tree structure does not support "{0}".',
       notProp: 'Unsupported parameters "{0}"',
       checkProp: 'The checkbox may stall when the amount of data is too large, it is recommended to set the parameter "{0}" to increase the rendering speed ',
-      coverProp: 'The parameter "{1}" to "{0}" is overwritten. This may cause an error',
+      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
       delFunc: 'The function "{0}" is deprecated, please use "{1}".',
       delProp: 'The property "{0}" is deprecated, please use "{1}".',
       delEvent: 'The event "{0}" is deprecated, please use "{1}"',

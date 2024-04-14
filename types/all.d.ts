@@ -16,6 +16,7 @@ import { RadioButton } from './radio-button'
 import { Input } from './input'
 import { Textarea } from './textarea'
 import { Button } from './button'
+import { ButtonGroup } from './button-group'
 import { Select } from './select'
 import { Optgroup } from './optgroup'
 import { Option } from './option'
@@ -46,6 +47,7 @@ declare module '@vue/runtime-core' {
     VxeRadio: typeof Radio
     VxeRadioGroup: typeof RadioGroup
     VxeRadioButton: typeof RadioButton
+    VxeButtonGroup: typeof ButtonGroup
     VxeInput: typeof Input
     VxeTextarea: typeof Textarea
     VxeButton: typeof Button
@@ -98,6 +100,7 @@ export * from './radio-button'
 export * from './input'
 export * from './textarea'
 export * from './button'
+export * from './button-group'
 export * from './select'
 export * from './optgroup'
 export * from './option'

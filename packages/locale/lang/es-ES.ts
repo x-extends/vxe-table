@@ -31,7 +31,7 @@ export default {
       noTree: 'La estructura de árbol no soporta "{0}".',
       notProp: 'Parámetros no compatibles "{0}"',
       checkProp: 'La casilla de verificación puede detenerse cuando la cantidad de datos es demasiado grande, se recomienda establecer el parámetro "{0}" para aumentar la velocidad de representación',
-      coverProp: 'El parámetro "{1}" a "{0}" está sobrescrito. Esto puede causar un error',
+      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
       delFunc: 'La función "{0}" está en desuso, por favor use "{1}".',
       delProp: 'La propiedad "{0}" está en desuso, por favor use "{1}".',
       delEvent: 'El evento "{0}" está en desuso, por favor use "{1}"',

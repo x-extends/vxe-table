@@ -43,6 +43,7 @@ const componentList = [
   'input',
   'textarea',
   'button',
+  'button-group',
   'modal',
   'tooltip',
   'form',

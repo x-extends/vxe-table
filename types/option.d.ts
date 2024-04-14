@@ -37,6 +37,8 @@ export type VxeOptionProps = {
       $select: VxeSelectConstructor
     }) => SlotVNodeType | SlotVNodeType[]) | null
   }
+
+  [key: string]: any
 }
 
 export namespace VxeOptionPropTypes {

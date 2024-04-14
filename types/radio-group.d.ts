@@ -1,5 +1,7 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance } from 'vue'
 import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
+import { VxeGlobalRendererHandles } from './v-x-e-table'
+import { VxeRadioPropTypes } from './radio'
 
 /* eslint-disable no-use-before-define */
 
@@ -29,6 +31,8 @@ export type VxeRadioGroupEmits = [
 
 export type VxeRadioGroupProps = {
   size?: VxeRadioGroupPropTypes.Size
+  options?: VxeRadioGroupPropTypes.Options
+  optionProps?: VxeRadioGroupPropTypes.OptionProps
   /**
    * 严格模式，不允许取消
    */
@@ -39,6 +43,13 @@ export type VxeRadioGroupProps = {
 
 export namespace VxeRadioGroupPropTypes {
   export type Size = SizeType
+  export type Options = {
+    value?: VxeRadioPropTypes.Label
+    label?: VxeRadioPropTypes.Content
+
+    [key: string]: any
+  }[]
+  export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps
   export type ModelValue = any
   export type Strict = boolean
   export type Disabled = boolean

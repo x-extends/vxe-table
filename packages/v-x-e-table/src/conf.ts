@@ -343,6 +343,9 @@ const GlobalConfig: VXETableConfigOptions = {
   checkbox: {
     // size: null
   },
+  checkboxGroup: {
+    // size: null
+  },
   switch: {
     // size: null
   },

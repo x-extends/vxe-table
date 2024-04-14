@@ -1,5 +1,6 @@
 import { SetupContext, RenderFunction, ComponentPublicInstance, ComputedRef } from 'vue'
 import { VXEComponent, VxeComponentBase, SizeType, VxeEvent, ValueOf } from './component'
+import { VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeCheckboxPropTypes } from './checkbox'
 
 /* eslint-disable no-use-before-define */
@@ -25,6 +26,8 @@ export interface VxeCheckboxGroupConstructor extends VxeComponentBase, VxeCheckb
 
 export type VxeCheckboxGroupProps = {
   size?: VxeCheckboxGroupPropTypes.Size
+  options?: VxeCheckboxGroupPropTypes.Options
+  optionProps?: VxeCheckboxGroupPropTypes.OptionProps
   /**
    * 绑定值
    */
@@ -39,6 +42,13 @@ export type VxeCheckboxGroupProps = {
 export namespace VxeCheckboxGroupPropTypes {
   export type Size = SizeType
   export type ModelValue = any[]
+  export type Options = {
+    value?: VxeCheckboxPropTypes.Label
+    label?: VxeCheckboxPropTypes.Content
+
+    [key: string]: any
+  }[]
+  export type OptionProps = VxeGlobalRendererHandles.RenderOptionProps
   export type Max = string | number
   export type Disabled = boolean
 }

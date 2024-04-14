@@ -23,6 +23,7 @@ import { VxeRadioButton } from './radio-button'
 import { VxeInput } from './input'
 import { VxeTextarea } from './textarea'
 import { VxeButton } from './button'
+import { VxeButtonGroup } from './button-group'
 import { VxeModal } from './modal'
 import { VxeTooltip } from './tooltip'
 import { VxeForm } from './form'
@@ -63,6 +64,7 @@ const components = [
   VxeInput,
   VxeTextarea,
   VxeButton,
+  VxeButtonGroup,
   VxeModal,
   VxeTooltip,
   VxeForm,
@@ -116,6 +118,7 @@ export * from './radio-button'
 export * from './input'
 export * from './textarea'
 export * from './button'
+export * from './button-group'
 export * from './modal'
 export * from './tooltip'
 export * from './form'

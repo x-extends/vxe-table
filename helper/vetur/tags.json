@@ -479,6 +479,17 @@
     ],
     "description": "按钮"
   },
+  "vxe-button-group": {
+    "attributes": [
+      "mode",
+      "size",
+      "round",
+      "circle",
+      "disabled",
+      "class-name"
+    ],
+    "description": "按钮组"
+  },
   "vxe-tooltip": {
     "attributes": [
       "model-value",

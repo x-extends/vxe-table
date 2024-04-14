@@ -1,6 +1,7 @@
-import { defineComponent, h, provide, PropType, inject } from 'vue'
+import { defineComponent, h, provide, PropType, inject, computed } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
+import VxeRadioComponent from './radio'
 import { useSize } from '../../hooks/size'
 
 import { VxeRadioGroupPropTypes, VxeRadioGroupConstructor, VxeRadioGroupEmits, VxeRadioGroupPrivateMethods, RadioGroupPrivateMethods, RadioGroupMethods, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
@@ -10,8 +11,10 @@ export default defineComponent({
   props: {
     modelValue: [String, Number, Boolean] as PropType<VxeRadioGroupPropTypes.ModelValue>,
     disabled: Boolean as PropType<VxeRadioGroupPropTypes.Disabled>,
-    strict: { type: Boolean as PropType<VxeRadioGroupPropTypes.Strict>, default: () => GlobalConfig.radio.strict },
-    size: { type: String as PropType<VxeRadioGroupPropTypes.Size>, default: () => GlobalConfig.radio.size || GlobalConfig.size }
+    options: Array as PropType<VxeRadioGroupPropTypes.Options>,
+    optionProps: Object as PropType<VxeRadioGroupPropTypes.OptionProps>,
+    strict: { type: Boolean as PropType<VxeRadioGroupPropTypes.Strict>, default: () => GlobalConfig.radioGroup.strict },
+    size: { type: String as PropType<VxeRadioGroupPropTypes.Size>, default: () => GlobalConfig.radioGroup.size || GlobalConfig.size }
   },
   emits: [
     'update:modelValue',
@@ -30,6 +33,20 @@ export default defineComponent({
       context,
       name: XEUtils.uniqueId('xegroup_')
     } as unknown as VxeRadioGroupConstructor & VxeRadioGroupPrivateMethods
+
+    const computePropsOpts = computed(() => {
+      return props.optionProps || {}
+    })
+
+    const computeLabelField = computed(() => {
+      const propsOpts = computePropsOpts.value
+      return propsOpts.label || 'label'
+    })
+
+    const computeValueField = computed(() => {
+      const propsOpts = computePropsOpts.value
+      return propsOpts.value || 'value'
+    })
 
     let radioGroupMethods = {} as RadioGroupMethods
 
@@ -53,9 +70,18 @@ export default defineComponent({
     }
 
     const renderVN = () => {
+      const { options } = props
+      const defaultSlot = slots.default
+      const valueField = computeValueField.value as 'value'
+      const labelField = computeLabelField.value as 'label'
       return h('div', {
         class: 'vxe-radio-group'
-      }, slots.default ? slots.default({}) : [])
+      }, defaultSlot ? defaultSlot({}) : (options ? options.map(item => {
+        return h(VxeRadioComponent, {
+          label: item[valueField],
+          content: item[labelField]
+        })
+      }) : []))
     }
 
     Object.assign($xeradiogroup, radioGroupPrivateMethods, {

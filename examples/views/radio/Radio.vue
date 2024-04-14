@@ -24,6 +24,7 @@
         <vxe-radio label="4" content="SASS"></vxe-radio>
         <vxe-radio label="5" content="LESS"></vxe-radio>
       </vxe-radio-group>
+      <vxe-radio-group v-model="demo1.value3" :options="demo1.opts1"></vxe-radio-group>
     </p>
 
     <p>
@@ -93,7 +94,14 @@ export default defineComponent({
       value5: null,
       value6: '1',
       value7: '1',
-      value9: ''
+      value9: '',
+      opts1: [
+        { value: '1', label: 'HTML' },
+        { value: '2', label: 'CSS' },
+        { value: '3', label: 'Javascript' },
+        { value: '4', label: 'SASS' },
+        { value: '5', label: 'LESS' }
+      ]
     })
     return {
       demo1,
