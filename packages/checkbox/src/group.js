@@ -5,6 +5,8 @@ export default {
   name: 'VxeCheckboxGroup',
   props: {
     value: Array,
+    options: Array,
+    optionProps: Object,
     disabled: Boolean,
     max: [String, Number],
     size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
@@ -32,13 +34,28 @@ export default {
         return value.length >= XEUtils.toNumber(max)
       }
       return false
+    },
+    propsOpts () {
+      return this.optionProps || {}
+    },
+    labelField () {
+      return this.propsOpts.label || 'label'
+    },
+    valueField () {
+      return this.propsOpts.value || 'value'
     }
   },
   render (h) {
-    const { $scopedSlots } = this
+    const { $scopedSlots, options, valueField, labelField } = this
+    const defaultSlots = $scopedSlots.default
     return h('div', {
       class: 'vxe-checkbox-group'
-    }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [])
+    }, defaultSlots ? defaultSlots.call(this, {}) : (options ? options.map(item => {
+      return h('vxe-checkbox', {
+        label: item[valueField],
+        content: item[labelField]
+      })
+    }) : []))
   },
   methods: {
     handleChecked (params, evnt) {

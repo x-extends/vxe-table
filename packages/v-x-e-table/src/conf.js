@@ -342,6 +342,9 @@ export default {
   checkbox: {
     // size: null
   },
+  checkboxGroup: {
+    // size: null
+  },
   switch: {
     // size: null
   },

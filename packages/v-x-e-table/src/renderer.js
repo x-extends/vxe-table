@@ -257,6 +257,16 @@ function nativeEditRender (h, renderOpts, params) {
   ]
 }
 
+function defaultCellRender (h, renderOpts, params) {
+  return [
+    h(getDefaultComponentName(renderOpts), {
+      props: getCellEditProps(renderOpts, params),
+      on: getOns(renderOpts, params),
+      nativeOn: getNativeOns(renderOpts, params)
+    })
+  ]
+}
+
 function defaultEditRender (h, renderOpts, params) {
   const { row, column } = params
   const cellValue = UtilTools.getCellValue(row, column)
@@ -488,7 +498,7 @@ function handleExportSelectMethod (params) {
  * 渲染表单-项中
  * 单选框和复选框
  */
-function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
+function defaultFormItemRender (h, renderOpts, params) {
   const { options, optionProps = {} } = renderOpts
   const { data, property } = params
   const labelProp = optionProps.label || 'label'
@@ -522,6 +532,111 @@ function defaultFormItemRadioAndCheckboxRender (h, renderOpts, params) {
       nativeOn: getNativeOns(renderOpts, params)
     })
   ]
+}
+
+/**
+ * 已废弃
+ */
+function defaultOldFormItemRadioAndCheckboxRender (h, renderOpts, params) {
+  const { options, optionProps = {} } = renderOpts
+  const { data, property } = params
+  const labelProp = optionProps.label || 'label'
+  const valueProp = optionProps.value || 'value'
+  const disabledProp = optionProps.disabled || 'disabled'
+  const itemValue = XEUtils.get(data, property)
+  const name = getDefaultComponentName(renderOpts)
+  // 如果是分组
+  if (options) {
+    return [
+      h(`${name}-group`, {
+        props: getItemProps(renderOpts, params, itemValue),
+        on: getItemOns(renderOpts, params),
+        nativeOn: getNativeOns(renderOpts, params)
+      }, options.map((item, index) => {
+        return h(name, {
+          key: index,
+          props: {
+            label: item[valueProp],
+            content: item[labelProp],
+            disabled: item[disabledProp]
+          }
+        })
+      }))
+    ]
+  }
+  return [
+    h(name, {
+      props: getItemProps(renderOpts, params, itemValue),
+      on: getItemOns(renderOpts, params),
+      nativeOn: getNativeOns(renderOpts, params)
+    })
+  ]
+}
+
+const VxeInputRender = {
+  autofocus: '.vxe-input--inner',
+  renderEdit: defaultEditRender,
+  renderCell (h, renderOpts, params) {
+    const { props = {} } = renderOpts
+    const { row, column } = params
+    const digits = props.digits || GlobalConfig.input.digits
+    let cellValue = XEUtils.get(row, column.property)
+    if (cellValue) {
+      switch (props.type) {
+        case 'date':
+        case 'week':
+        case 'month':
+        case 'year':
+          cellValue = getLabelFormatDate(cellValue, props)
+          break
+        case 'float':
+          cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+          break
+      }
+    }
+    return getCellLabelVNs(h, renderOpts, params, cellValue)
+  },
+  renderDefault: defaultEditRender,
+  renderFilter: defaultFilterRender,
+  defaultFilterMethod: handleFilterMethod,
+  renderItemContent: defaultItemRender
+}
+
+const VxeSelectRender = {
+  autofocus: '.vxe-input--inner',
+  renderEdit: defaultSelectEditRender,
+  renderDefault: defaultSelectEditRender,
+  renderCell (h, renderOpts, params) {
+    return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
+  },
+  renderFilter (h, renderOpts, params) {
+    const { column } = params
+    const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
+    const nativeOn = getNativeOns(renderOpts, params)
+    return column.filters.map((option, oIndex) => {
+      const optionValue = option.data
+      return h(getDefaultComponentName(renderOpts), {
+        key: oIndex,
+        props: getFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
+        on: getFilterOns(renderOpts, params, option),
+        nativeOn
+      })
+    })
+  },
+  defaultFilterMethod: handleFilterMethod,
+  renderItemContent (h, renderOpts, params) {
+    const { data, property } = params
+    const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
+    const itemValue = XEUtils.get(data, property)
+    return [
+      h(getDefaultComponentName(renderOpts), {
+        props: getItemProps(renderOpts, params, itemValue, { options, optionProps, optionGroups, optionGroupProps }),
+        on: getItemOns(renderOpts, params),
+        nativeOn: getNativeOns(renderOpts, params)
+      })
+    ]
+  },
+  cellExportMethod: handleExportSelectMethod
 }
 
 /**
@@ -572,34 +687,45 @@ const renderMap = {
     },
     cellExportMethod: handleExportSelectMethod
   },
-  $input: {
-    autofocus: '.vxe-input--inner',
-    renderEdit: defaultEditRender,
-    renderCell (h, renderOpts, params) {
-      const { props = {} } = renderOpts
-      const { row, column } = params
-      const digits = props.digits || GlobalConfig.input.digits
-      let cellValue = XEUtils.get(row, column.property)
-      if (cellValue) {
-        switch (props.type) {
-          case 'date':
-          case 'week':
-          case 'month':
-          case 'year':
-            cellValue = getLabelFormatDate(cellValue, props)
-            break
-          case 'float':
-            cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
-            break
-        }
-      }
-      return getCellLabelVNs(h, renderOpts, params, cellValue)
-    },
-    renderDefault: defaultEditRender,
-    renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleFilterMethod,
+  VxeInput: VxeInputRender,
+  VxeTextarea: {
+    autofocus: '.vxe-textarea--inner',
     renderItemContent: defaultItemRender
   },
+  VxeButton: {
+    renderDefault: defaultCellRender,
+    renderItemContent: defaultFormItemRender
+  },
+  VxeButtonGroup: {
+    renderDefault: defaultCellRender,
+    renderItemContent: defaultFormItemRender
+  },
+  VxeSelect: VxeSelectRender,
+  VxeRadio: {
+    autofocus: '.vxe-radio--input',
+    renderItemContent: defaultFormItemRender
+  },
+  VxeRadioGroup: {
+    autofocus: '.vxe-radio--input',
+    renderItemContent: defaultFormItemRender
+  },
+  VxeCheckbox: {
+    autofocus: '.vxe-checkbox--input',
+    renderItemContent: defaultFormItemRender
+  },
+  VxeCheckboxGroup: {
+    autofocus: '.vxe-checkbox--input',
+    renderItemContent: defaultFormItemRender
+  },
+  VxeSwitch: {
+    autofocus: '.vxe-switch--button',
+    renderEdit: defaultEditRender,
+    renderDefault: defaultEditRender,
+    renderItemContent: defaultItemRender
+  },
+
+  // 以下已废弃
+  $input: VxeInputRender,
   $textarea: {
     autofocus: '.vxe-textarea--inner',
     renderItemContent: defaultItemRender
@@ -612,49 +738,14 @@ const renderMap = {
     renderDefault: defaultButtonsEditRender,
     renderItemContent: defaultButtonsItemRender
   },
-  $select: {
-    autofocus: '.vxe-input--inner',
-    renderEdit: defaultSelectEditRender,
-    renderDefault: defaultSelectEditRender,
-    renderCell (h, renderOpts, params) {
-      return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
-    },
-    renderFilter (h, renderOpts, params) {
-      const { column } = params
-      const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
-      const nativeOn = getNativeOns(renderOpts, params)
-      return column.filters.map((option, oIndex) => {
-        const optionValue = option.data
-        return h(getDefaultComponentName(renderOpts), {
-          key: oIndex,
-          props: getFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
-          on: getFilterOns(renderOpts, params, option),
-          nativeOn
-        })
-      })
-    },
-    defaultFilterMethod: handleFilterMethod,
-    renderItemContent (h, renderOpts, params) {
-      const { data, property } = params
-      const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
-      const itemValue = XEUtils.get(data, property)
-      return [
-        h(getDefaultComponentName(renderOpts), {
-          props: getItemProps(renderOpts, params, itemValue, { options, optionProps, optionGroups, optionGroupProps }),
-          on: getItemOns(renderOpts, params),
-          nativeOn: getNativeOns(renderOpts, params)
-        })
-      ]
-    },
-    cellExportMethod: handleExportSelectMethod
-  },
+  $select: VxeSelectRender,
   $radio: {
     autofocus: '.vxe-radio--input',
-    renderItemContent: defaultFormItemRadioAndCheckboxRender
+    renderItemContent: defaultOldFormItemRadioAndCheckboxRender
   },
   $checkbox: {
     autofocus: '.vxe-checkbox--input',
-    renderItemContent: defaultFormItemRadioAndCheckboxRender
+    renderItemContent: defaultOldFormItemRadioAndCheckboxRender
   },
   $switch: {
     autofocus: '.vxe-switch--button',
@@ -662,6 +753,7 @@ const renderMap = {
     renderDefault: defaultEditRender,
     renderItemContent: defaultItemRender
   }
+  // 以上已废弃
 }
 
 /**
