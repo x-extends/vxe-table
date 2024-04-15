@@ -1,15 +1,15 @@
-import { VXEComponent } from './component'
-import { VxeTableDefines, VxeTableDataRow } from './table'
-import { VxeColumnPropTypes } from './column'
+import { VXEComponent } from '../component'
+import { VxeTableDefines, VxeTableDataRow } from '../table'
+import { VxeColumnPropTypes } from '../column'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 表格扩展 - 筛选
+ * 表格模块 - 筛选
  */
-export const VxeModuleFilter: VXEComponent<{ [key: string]: any }>
+export const VxeTableFilterModule: VXEComponent<{ [key: string]: any }>
 /**
- * 表格扩展 - 筛选
+ * 表格模块 - 筛选
  */
 export const Filter: VXEComponent<{ [key: string]: any }>
 
@@ -69,11 +69,11 @@ export interface TableFilterPrivateMethods<D = VxeTableDataRow> {
   confirmFilterEvent(evnt: Event): void
 }
 
-declare module './grid' {
+declare module '../grid' {
   export interface VxeGridMethods<D = VxeTableDataRow> extends TableFilterMethods<D> { }
 }
 
-declare module './table' {
+declare module '../table' {
   export interface VxeTableMethods<D = VxeTableDataRow> extends TableFilterMethods<D> { }
   export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableFilterPrivateMethods<D> { }
   export namespace VxeTableDefines {

@@ -2,7 +2,7 @@ import { SlotVNodeType, VNodeStyle, VNodeClassName } from '../component'
 import { VxeTableDefines, VxeTableConstructor, VxeTablePrivateMethods, VxeTablePropTypes, VxeTableDataRow } from '../table'
 import { VxeGridConstructor } from '../grid'
 import { VxeColumnPropTypes } from '../column'
-import { VxeFilterPanel } from '../filter'
+import { VxeFilterPanel } from '../module/filter'
 import { VxeToolbarPropTypes } from '../toolbar'
 import { FormItemRenderOptions, FormItemTitleRenderParams, FormItemContentRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 

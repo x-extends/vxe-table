@@ -18,12 +18,12 @@ import VirtualTreeAPILink from './components/VirtualTreeAPILink.vue'
 import {
   VXETable,
 
-  VxeModuleFilter,
-  VxeModuleMenu,
-  VxeModuleEdit,
-  VxeModuleExport,
-  VxeModuleKeyboard,
-  VxeModuleValidator,
+  VxeTableFilterModule,
+  VxeTableMenuModule,
+  VxeTableEditModule,
+  VxeTableExportModule,
+  VxeTableKeyboardModule,
+  VxeTableValidatorModule,
 
   VxeIcon,
   VxeColumn,
@@ -64,12 +64,12 @@ app.component(ToolbarAPILink.name, ToolbarAPILink)
 app.component(PagerAPILink.name, PagerAPILink)
 app.component(VirtualTreeAPILink.name, VirtualTreeAPILink)
 
-app.use(VxeModuleFilter)
-app.use(VxeModuleMenu)
-app.use(VxeModuleEdit)
-app.use(VxeModuleExport)
-app.use(VxeModuleKeyboard)
-app.use(VxeModuleValidator)
+app.use(VxeTableFilterModule)
+app.use(VxeTableMenuModule)
+app.use(VxeTableEditModule)
+app.use(VxeTableExportModule)
+app.use(VxeTableKeyboardModule)
+app.use(VxeTableValidatorModule)
 
 app.use(VxeIcon)
 app.use(VxeColumn)

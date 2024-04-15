@@ -1,14 +1,14 @@
-import { VXEComponent } from './component'
-import { VxeTableDataRow } from './table'
+import { VXEComponent } from '../component'
+import { VxeTableDataRow } from '../table'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 表格扩展 - 键盘导航
+ * 表格模块 - 键盘导航
  */
-export const VxeModuleKeyboard: VXEComponent<{ [key: string]: any }>
+export const VxeTableKeyboardModule: VXEComponent<{ [key: string]: any }>
 /**
- * 表格扩展 - 键盘导航
+ * 表格模块 - 键盘导航
  */
 export const Keyboard: VXEComponent<{ [key: string]: any }>
 
@@ -22,11 +22,11 @@ export interface TableKeyboardPrivateMethods<D = VxeTableDataRow> {
   triggerCellMousedownEvent(evnt: any, params: any): void
  }
 
-declare module './grid' {
+declare module '../grid' {
   export interface VxeGridMethods<D = VxeTableDataRow> extends TableKeyboardMethods<D> { }
 }
 
-declare module './table' {
+declare module '../table' {
   export interface VxeTableMethods<D = VxeTableDataRow> extends TableKeyboardMethods<D> { }
   export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableKeyboardPrivateMethods<D> { }
 }

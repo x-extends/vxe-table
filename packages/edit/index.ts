@@ -1,12 +1,12 @@
 import editHook from './src/hook'
 import { VXETable } from '../v-x-e-table'
 
-export const VxeModuleEdit = {
+export const VxeTableEditModule = {
   install (): void {
     VXETable.hooks.add('$tableEdit', editHook)
   }
 }
 
-export const Edit = VxeModuleEdit
+export const Edit = VxeTableEditModule
 
-export default VxeModuleEdit
+export default VxeTableEditModule

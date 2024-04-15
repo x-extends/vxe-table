@@ -1,12 +1,12 @@
 import validatorHook from './src/hook'
 import { VXETable } from '../v-x-e-table'
 
-export const VxeModuleValidator = {
+export const VxeTableValidatorModule = {
   install (): void {
     VXETable.hooks.add('$tableValidator', validatorHook)
   }
 }
 
-export const Validator = VxeModuleValidator
+export const Validator = VxeTableValidatorModule
 
-export default VxeModuleValidator
+export default VxeTableValidatorModule

@@ -1,7 +1,7 @@
 import { VXEComponent, SlotVNodeType } from './component'
 import { VxeTableConstructor, VxeTableDataRow, VxeTableDefines, VxeTablePropTypes } from './table'
 import { VxeGlobalRendererHandles } from './v-x-e-table'
-import { VxeFilterPanel } from './filter'
+import { VxeFilterPanel } from './module/filter'
 import { VxeTooltipPropTypes } from './tooltip'
 
 /* eslint-disable no-use-before-define */

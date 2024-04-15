@@ -6,7 +6,7 @@ import { VXETableConfigOptions, VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
 import { VxeGridConstructor } from './grid'
-import { VxeMenuPanelInstance } from './menu'
+import { VxeMenuPanelInstance } from './module/menu'
 
 /* eslint-disable no-use-before-define */
 

@@ -39,12 +39,12 @@
           VXETable,
 
           // 表格功能
-          // VxeModuleFilter,
-          // VxeModuleEdit,
-          // VxeModuleMenu,
-          // VxeModuleExport,
-          // VxeModuleKeyboard,
-          // VxeModuleValidator,
+          // VxeTableFilterModule,
+          // VxeTableEditModule,
+          // VxeTableMenuModule,
+          // VxeTableExportModule,
+          // VxeTableKeyboardModule,
+          // VxeTableValidatorModule,
 
           // 可选组件
           VxeIcon,
@@ -85,12 +85,12 @@
 
         function useTable (app: App) {
           // 表格功能
-          app.use(VxeModuleFilter)
-          // .use(VxeModuleEdit)
-          // .use(VxeModuleMenu)
-          // .use(VxeModuleExport)
-          // .use(VxeModuleKeyboard)
-          // .use(VxeModuleValidator)
+          app.use(VxeTableFilterModule)
+          // .use(VxeTableEditModule)
+          // .use(VxeTableMenuModule)
+          // .use(VxeTableExportModule)
+          // .use(VxeTableKeyboardModule)
+          // .use(VxeTableValidatorModule)
 
           // 可选组件
           .use(VxeIcon)

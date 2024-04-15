@@ -1,4 +1,4 @@
-import { VxeModuleEdit } from '../../types/edit'
+import { VxeTableEditModule } from '../../types/module/edit'
 
-export * from '../../types/edit'
-export default VxeModuleEdit
+export * from '../../types/module/edit'
+export default VxeTableEditModule

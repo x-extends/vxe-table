@@ -1,4 +1,4 @@
-import { VxeModuleValidator } from '../../types/validator'
+import { VxeTableValidatorModule } from '../../types/module/validator'
 
-export * from '../../types/validator'
-export default VxeModuleValidator
+export * from '../../types/module/validator'
+export default VxeTableValidatorModule

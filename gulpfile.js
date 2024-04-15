@@ -81,9 +81,9 @@ gulp.task('build_modules', () => {
   moduleList.forEach(name => {
     const exportName = `VxeModule${toExportName(name)}`
     const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
-    fs.mkdirSync(`packages_temp/vxe-module-${name}`)
-    fs.writeFileSync(`packages_temp/vxe-module-${name}/index.ts`, esCode)
-    fs.writeFileSync(`packages_temp/vxe-module-${name}/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
+    fs.mkdirSync(`packages_temp/vxe-table-${name}-module`)
+    fs.writeFileSync(`packages_temp/vxe-table-${name}-module/index.ts`, esCode)
+    fs.writeFileSync(`packages_temp/vxe-table-${name}-module/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
   })
   componentList.forEach(name => {
     const exportName = `Vxe${toExportName(name)}`
@@ -280,7 +280,7 @@ gulp.task('build_style', () => {
     return buildStyle(name, name)
   })
   moduleList.forEach(name => {
-    rest.push(buildStyle(name, `vxe-module-${name}`))
+    rest.push(buildStyle(name, `vxe-table-${name}-module`))
   })
   componentList.forEach(name => {
     rest.push(buildStyle(name, `vxe-${name}`))
@@ -298,7 +298,7 @@ gulp.task('build', gulp.series('build_clean', 'copy_pack', 'build_modules', 'bui
   })
   moduleList.forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
-    fs.writeFileSync(`lib/vxe-module-${name}/style/index.js`, styleCode)
+    fs.writeFileSync(`lib/vxe-table-${name}-module/style/index.js`, styleCode)
   })
   componentList.forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)

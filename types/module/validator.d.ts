@@ -1,16 +1,16 @@
-import { VXEComponent } from './component'
-import { VxeTableDefines, VxeTableDataRow, VxeTableConstructor } from './table'
-import { VxeGridConstructor } from './grid'
-import { VxeColumnPropTypes } from './column'
+import { VXEComponent } from '../component'
+import { VxeTableDefines, VxeTableDataRow, VxeTableConstructor } from '../table'
+import { VxeGridConstructor } from '../grid'
+import { VxeColumnPropTypes } from '../column'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 表格扩展 - 校验模块
+ * 表格模块 - 校验模块
  */
-export const VxeModuleValidator: VXEComponent<{ [key: string]: any }>
+export const VxeTableValidatorModule: VXEComponent<{ [key: string]: any }>
 /**
- * 表格扩展 - 校验模块
+ * 表格模块 - 校验模块
  */
 export const Validator: VXEComponent<{ [key: string]: any }>
 
@@ -39,11 +39,11 @@ export interface TableValidatorPrivateMethods<D = VxeTableDataRow> {
   showValidTooltip(params: any): void
 }
 
-declare module './grid' {
+declare module '../grid' {
   export interface VxeGridMethods<D = VxeTableDataRow> extends TableValidatorMethods<D> { }
 }
 
-declare module './table' {
+declare module '../table' {
   export interface VxeTableMethods<D = VxeTableDataRow> extends TableValidatorMethods<D> { }
   export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableValidatorPrivateMethods<D> { }
   export namespace VxeTableDefines {

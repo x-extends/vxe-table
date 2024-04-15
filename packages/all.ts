@@ -2,12 +2,12 @@ import { App } from 'vue'
 import XEUtils from 'xe-utils'
 import { config } from './v-x-e-table'
 
-import { VxeModuleFilter } from './filter'
-import { VxeModuleMenu } from './menu'
-import { VxeModuleEdit } from './edit'
-import { VxeModuleExport } from './export'
-import { VxeModuleKeyboard } from './keyboard'
-import { VxeModuleValidator } from './validator'
+import { VxeTableFilterModule } from './filter'
+import { VxeTableMenuModule } from './menu'
+import { VxeTableEditModule } from './edit'
+import { VxeTableExportModule } from './export'
+import { VxeTableKeyboardModule } from './keyboard'
+import { VxeTableValidatorModule } from './validator'
 
 import { VxeIcon } from './icon'
 import { VxeColumn } from './column'
@@ -42,12 +42,12 @@ import zhCN from './locale/lang/zh-CN'
 // 按需加载的组件
 const components = [
   // 功能模块
-  VxeModuleFilter,
-  VxeModuleMenu,
-  VxeModuleEdit,
-  VxeModuleExport,
-  VxeModuleKeyboard,
-  VxeModuleValidator,
+  VxeTableFilterModule,
+  VxeTableMenuModule,
+  VxeTableEditModule,
+  VxeTableExportModule,
+  VxeTableKeyboardModule,
+  VxeTableValidatorModule,
 
   // 可选组件
   VxeIcon,
@@ -96,13 +96,16 @@ export function install (app: App, options: any) {
 
 export * from './v-x-e-table'
 
-export * from './icon'
+// Table module
 export * from './filter'
 export * from './edit'
 export * from './export'
 export * from './keyboard'
 export * from './validator'
 
+// Components
+export * from './icon'
+export * from './table'
 export * from './column'
 export * from './colgroup'
 export * from './grid'
@@ -129,5 +132,3 @@ export * from './option'
 export * from './switch'
 export * from './list'
 export * from './pulldown'
-
-export * from './table'

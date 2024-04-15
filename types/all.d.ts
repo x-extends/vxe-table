@@ -47,10 +47,10 @@ declare module '@vue/runtime-core' {
     VxeRadio: typeof Radio
     VxeRadioGroup: typeof RadioGroup
     VxeRadioButton: typeof RadioButton
-    VxeButtonGroup: typeof ButtonGroup
     VxeInput: typeof Input
     VxeTextarea: typeof Textarea
     VxeButton: typeof Button
+    VxeButtonGroup: typeof ButtonGroup
     VxeSelect: typeof Select
     VxeOptgroup: typeof Optgroup
     VxeOption: typeof Option
@@ -74,14 +74,6 @@ declare global {
 // Constructor
 export * from './v-x-e-table'
 export * from './component'
-
-// Module
-export * from './filter'
-export * from './menu'
-export * from './edit'
-export * from './export'
-export * from './keyboard'
-export * from './validator'
 
 // Component
 export * from './icon'
@@ -113,5 +105,8 @@ export * from './switch'
 export * from './list'
 export * from './pulldown'
 
-// Plugins
+// Table module
+export * from './module'
+
+// Table plugins
 export * from './plugins'

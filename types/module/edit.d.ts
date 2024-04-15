@@ -1,14 +1,14 @@
-import { VXEComponent } from './component'
-import { VxeTableDataRow, VxeTableDefines } from './table'
+import { VXEComponent } from '../component'
+import { VxeTableDataRow, VxeTableDefines } from '../table'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 表格扩展 - 编辑
+ * 表格模块 - 可编辑
  */
-export const VxeModuleEdit: VXEComponent<{ [key: string]: any }>
+export const VxeTableEditModule: VXEComponent<{ [key: string]: any }>
 /**
- * 表格扩展 - 编辑
+ * 表格模块 - 可编辑
  */
 export const Edit: VXEComponent<{ [key: string]: any }>
 
@@ -166,11 +166,11 @@ export interface TableEditPrivateMethods<D = VxeTableDataRow> {
   addCellSelectedClass(): void
 }
 
-declare module './grid' {
+declare module '../grid' {
   export interface VxeGridMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
 }
 
-declare module './table' {
+declare module '../table' {
   export interface VxeTableMethods<D = VxeTableDataRow> extends TableEditMethods<D> { }
   export interface VxeTablePrivateMethods<D = VxeTableDataRow> extends TableEditPrivateMethods<D> { }
 }
