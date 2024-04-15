@@ -298,9 +298,11 @@ gulp.task('build', gulp.series('build_clean', 'copy_pack', 'build_modules', 'bui
   })
   moduleList.forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
+    fs.writeFileSync(`lib/vxe-module-${name}/style/index.js`, styleCode)
   })
   componentList.forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
+    fs.writeFileSync(`lib/vxe-${name}/style/index.js`, styleCode)
   })
   return del([
     'lib_temp',

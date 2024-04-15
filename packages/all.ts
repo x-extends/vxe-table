@@ -1,6 +1,6 @@
 import { App } from 'vue'
 import XEUtils from 'xe-utils'
-import { setup } from './v-x-e-table'
+import { config } from './v-x-e-table'
 
 import { VxeModuleFilter } from './filter'
 import { VxeModuleMenu } from './menu'
@@ -82,14 +82,14 @@ const components = [
 ]
 
 // 默认中文
-setup({
+config({
   i18n: (key: string, args: any) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 
 // 默认安装
 export function install (app: App, options: any) {
   if (XEUtils.isPlainObject(options)) {
-    setup(options)
+    config(options)
   }
   components.forEach(component => component.install(app))
 }
@@ -102,7 +102,6 @@ export * from './edit'
 export * from './export'
 export * from './keyboard'
 export * from './validator'
-export * from './header'
 
 export * from './column'
 export * from './colgroup'

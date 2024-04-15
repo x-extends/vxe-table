@@ -41,8 +41,9 @@ export default defineComponent({
 
     const buttonGroupPrivateMethods: ButtonGroupPrivateMethods = {
       handleClick (params, evnt) {
+        const { options } = props
         const { name } = params
-        const option = props.options ? props.options.find(item => item.name === name) : null
+        const option = options ? options.find(item => item.name === name) : null
         buttonGroupMethods.dispatchEvent('click', { ...params, option }, evnt)
       }
     }
@@ -54,9 +55,7 @@ export default defineComponent({
       const defaultSlot = slots.default
       return h('div', {
         class: 'vxe-button-group'
-      }, defaultSlot ? defaultSlot({}) : (options ? options.map(item => {
-        return h(VxeButtonComponent, item)
-      }) : []))
+      }, defaultSlot ? defaultSlot({}) : (options ? options.map(item => h(VxeButtonComponent, item)) : []))
     }
 
     $xebuttongroup.renderVN = renderVN

@@ -78,6 +78,9 @@ export const globalConfs = new VXETableConfig()
 
 export const v = 'v4'
 
+/**
+ * @deprecated
+ */
 export const setup = config
 
 export const globalStore = {}
@@ -85,7 +88,7 @@ export const globalStore = {}
 export const VXETable = {
   v,
   version: process.env.VUE_APP_VXE_TABLE_VERSION,
-  setup,
+  config,
   globalStore,
   interceptor,
   renderer,
@@ -99,7 +102,7 @@ export const VXETable = {
   _t,
 
   // 已废弃
-  config,
+  setup,
   globalConfs
 } as VXETableCore
 

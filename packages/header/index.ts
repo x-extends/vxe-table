@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import VxeTableHeader from './src/header'
+import VxeTableHeader from '../table/src/header'
 import { dynamicApp } from '../dynamics'
 
 export const Header = Object.assign(VxeTableHeader, {

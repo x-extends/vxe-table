@@ -1,7 +1,6 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { convertToRows } from './util'
-import { getColReMinWidth } from '../../table/src/util'
+import { convertHeaderColumnToRows, getColReMinWidth } from './util'
 import { hasClass, getOffsetPos, addClass, removeClass } from '../../tools/dom'
 
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types/all'
@@ -35,7 +34,7 @@ export default defineComponent({
 
     const uploadColumn = () => {
       const { isGroup } = tableReactData
-      headerColumn.value = isGroup ? convertToRows(props.tableGroupColumn) : []
+      headerColumn.value = isGroup ? convertHeaderColumnToRows(props.tableGroupColumn) : []
     }
 
     const resizeMousedown = (evnt: MouseEvent, params: any) => {

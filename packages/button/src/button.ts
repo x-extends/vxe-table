@@ -5,7 +5,7 @@ import { useSize } from '../../hooks/size'
 import { getAbsolutePos, getEventTargetNode } from '../../tools/dom'
 import { getFuncText, getLastZIndex, nextZIndex } from '../../tools/utils'
 import { GlobalEvent } from '../../tools/event'
-import { warnLog } from '../../tools/log'
+// import { warnLog } from '../../tools/log'
 
 import { VxeButtonConstructor, VxeButtonPropTypes, VxeButtonEmits, ButtonReactData, ButtonMethods, ButtonPrivateRef, ButtonInternalData, VxeButtonGroupConstructor, VxeButtonGroupPrivateMethods } from '../../../types/all'
 
@@ -355,11 +355,11 @@ export default defineComponent({
     Object.assign($xebutton, buttonMethods)
 
     onMounted(() => {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (props.type === 'text') {
-          warnLog('vxe.error.delFunc', ['type=text', 'mode=text'])
-        }
-      }
+      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      //   if (props.type === 'text') {
+      //     warnLog('vxe.error.delProp', ['type=text', 'mode=text'])
+      //   }
+      // }
 
       GlobalEvent.on($xebutton, 'mousewheel', (evnt: Event) => {
         const panelElem = refBtnPanel.value

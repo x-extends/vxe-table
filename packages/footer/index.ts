@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import VxeTableFooterComponent from './src/footer'
+import VxeTableFooterComponent from '../table/src/footer'
 import { dynamicApp } from '../dynamics'
 
 export const Footer = Object.assign(VxeTableFooterComponent, {
