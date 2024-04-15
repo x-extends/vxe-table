@@ -8,7 +8,6 @@ import { Edit } from './edit'
 import { Export } from './export'
 import { Keyboard } from './keyboard'
 import { Validator } from './validator'
-import { Footer } from './footer'
 
 import { Column } from './column'
 import { Colgroup } from './colgroup'
@@ -23,6 +22,7 @@ import { RadioButton } from './radio-button'
 import { Input } from './input'
 import { Textarea } from './textarea'
 import { Button } from './button'
+import { ButtonGroup } from './button-group'
 import { Modal } from './modal'
 import { Tooltip } from './tooltip'
 import { Form } from './form'
@@ -42,7 +42,6 @@ import zhCN from './locale/lang/zh-CN'
 // 按需加载的组件
 const components = [
   // 功能模块
-  Footer,
   Icon,
   Filter,
   Menu,
@@ -65,6 +64,7 @@ const components = [
   Input,
   Textarea,
   Button,
+  ButtonGroup,
   Modal,
   Tooltip,
   Form,
@@ -84,13 +84,13 @@ const components = [
 // 默认安装
 export function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
-    VXETable.setup(options)
+    VXETable.config(options)
   }
   components.map(component => component.install(Vue))
 }
 
 // 默认中文
-VXETable.setup({
+VXETable.config({
   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 
@@ -102,8 +102,6 @@ export * from './edit'
 export * from './export'
 export * from './keyboard'
 export * from './validator'
-export * from './header'
-export * from './footer'
 
 export * from './column'
 export * from './colgroup'
@@ -119,6 +117,7 @@ export * from './radio-button'
 export * from './input'
 export * from './textarea'
 export * from './button'
+export * from './button-group'
 export * from './modal'
 export * from './tooltip'
 export * from './form'

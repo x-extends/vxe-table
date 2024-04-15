@@ -1,8 +1,7 @@
 import XEUtils from 'xe-utils'
 import UtilTools from '../../tools/utils'
 import DomTools from '../../tools/dom'
-import { convertToRows } from './util'
-import { getColReMinWidth } from '../../table/src/util'
+import { convertHeaderColumnToRows, getColReMinWidth } from './util'
 
 const cellType = 'header'
 
@@ -206,7 +205,7 @@ export default {
   methods: {
     uploadColumn () {
       const { $parent: $xetable } = this
-      this.headerColumn = $xetable.isGroup ? convertToRows(this.tableGroupColumn) : []
+      this.headerColumn = $xetable.isGroup ? convertHeaderColumnToRows(this.tableGroupColumn) : []
     },
     resizeMousedown (evnt, params) {
       const { column } = params

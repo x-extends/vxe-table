@@ -1,4 +1,4 @@
-import VxeTableFooter from './src/footer'
+import VxeTableFooter from '../table/src/footer'
 
 export const Footer = Object.assign(VxeTableFooter, {
   install (Vue) {

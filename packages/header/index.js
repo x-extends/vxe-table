@@ -1,4 +1,4 @@
-import VxeTableHeader from './src/header'
+import VxeTableHeader from '../table/src/header'
 
 export const Header = Object.assign(VxeTableHeader, {
   install (Vue) {

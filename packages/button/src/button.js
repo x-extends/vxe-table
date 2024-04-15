@@ -27,6 +27,11 @@ export default {
     popupClassName: [String, Function],
     transfer: { type: Boolean, default: () => GlobalConfig.button.transfer }
   },
+  inject: {
+    $xebuttonggroup: {
+      default: null
+    }
+  },
   data () {
     return {
       inited: false,
@@ -47,8 +52,8 @@ export default {
   },
   created () {
     // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-    //   if (props.type === 'text') {
-    //     warnLog('vxe.error.delFunc', ['type=text', 'mode=text'])
+    //   if (this.type === 'text') {
+    //     warnLog('vxe.error.delProp', ['type=text', 'mode=text'])
     //   }
     // }
 
@@ -64,7 +69,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, $listeners, className, popupClassName, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, className, popupClassName, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
     return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
@@ -87,10 +92,11 @@ export default {
           type: isFormBtn ? type : 'button',
           disabled: disabled || loading
         },
-        on: Object.assign({
+        on: {
           mouseenter: this.mouseenterTargetEvent,
-          mouseleave: this.mouseleaveEvent
-        }, XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt })))
+          mouseleave: this.mouseleaveEvent,
+          click: this.clickEvent
+        }
       }, this.renderContent(h).concat([
         h('i', {
           class: `vxe-button--dropdown-arrow ${GlobalConfig.icon.BUTTON_DROPDOWN}`
@@ -133,7 +139,9 @@ export default {
         type: isFormBtn ? type : 'button',
         disabled: disabled || loading
       },
-      on: XEUtils.objectMap($listeners, (cb, type) => evnt => this.$emit(type, { $event: evnt }))
+      on: {
+        click: this.clickEvent
+      }
     }, this.renderContent(h))
   },
   methods: {
@@ -188,6 +196,14 @@ export default {
       const isLeftBtn = evnt.button === 0
       if (isLeftBtn) {
         evnt.stopPropagation()
+      }
+    },
+    clickEvent (evnt) {
+      const { $xebuttonggroup } = this
+      if ($xebuttonggroup) {
+        $xebuttonggroup.handleClick({ name: this.name }, evnt)
+      } else {
+        this.$emit('click', { $event: evnt })
       }
     },
     clickDropdownEvent (evnt) {

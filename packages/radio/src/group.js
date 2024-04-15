@@ -45,13 +45,15 @@ export default {
   },
   render (h) {
     const { $scopedSlots, options, valueField, labelField } = this
-    const defaultSlots = $scopedSlots.default
+    const defaultSlot = $scopedSlots.default
     return h('div', {
       class: 'vxe-radio-group'
-    }, defaultSlots ? defaultSlots.call(this, {}) : (options ? options.map(item => {
+    }, defaultSlot ? defaultSlot.call(this, {}) : (options ? options.map(item => {
       return h('vxe-radio', {
-        label: item[valueField],
-        content: item[labelField]
+        props: {
+          label: item[valueField],
+          content: item[labelField]
+        }
       })
     }) : []))
   },

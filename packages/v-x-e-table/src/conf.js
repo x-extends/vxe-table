@@ -327,6 +327,9 @@ export default {
     // size: null,
     // transfer: false
   },
+  buttonGroup: {
+    // size: null
+  },
   radio: {
     // size: null,
     strict: true

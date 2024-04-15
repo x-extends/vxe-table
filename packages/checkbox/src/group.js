@@ -9,7 +9,7 @@ export default {
     optionProps: Object,
     disabled: Boolean,
     max: [String, Number],
-    size: { type: String, default: () => GlobalConfig.checkbox.size || GlobalConfig.size }
+    size: { type: String, default: () => GlobalConfig.checkboxGroup.size || GlobalConfig.size }
   },
   inject: {
     $xeform: {
@@ -47,13 +47,15 @@ export default {
   },
   render (h) {
     const { $scopedSlots, options, valueField, labelField } = this
-    const defaultSlots = $scopedSlots.default
+    const defaultSlot = $scopedSlots.default
     return h('div', {
       class: 'vxe-checkbox-group'
-    }, defaultSlots ? defaultSlots.call(this, {}) : (options ? options.map(item => {
+    }, defaultSlot ? defaultSlot.call(this, {}) : (options ? options.map(item => {
       return h('vxe-checkbox', {
-        label: item[valueField],
-        content: item[labelField]
+        props: {
+          label: item[valueField],
+          content: item[labelField]
+        }
       })
     }) : []))
   },

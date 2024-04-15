@@ -25,8 +25,6 @@ const components = [
   'export',
   'keyboard',
   'validator',
-  'header',
-  'footer',
 
   'icon',
   'loading',

@@ -3,6 +3,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
 import VxeTableHeader from '../../header'
+import VxeTableFooter from '../../footer'
 import vSize from '../../mixins/size'
 import { isEnableConf, getFuncText } from '../../tools/utils'
 import { createResizeEvent } from '../../tools/resize'
@@ -38,7 +39,7 @@ function renderFixed (h, $xetable, fixedType) {
       },
       ref: `${fixedType}Header`
     }) : _e(),
-    h('vxe-table-body', {
+    h(VxeTableBody, {
       props: {
         fixedType,
         tableData,
@@ -48,7 +49,7 @@ function renderFixed (h, $xetable, fixedType) {
       },
       ref: `${fixedType}Body`
     }),
-    showFooter ? h('vxe-table-footer', {
+    showFooter ? h(VxeTableFooter, {
       props: {
         footerTableData,
         tableColumn,
@@ -257,9 +258,6 @@ export default {
     delayHover: { type: Number, default: () => GlobalConfig.table.delayHover },
     // 额外的参数
     params: Object
-  },
-  components: {
-    VxeTableBody
   },
   provide () {
     return {
