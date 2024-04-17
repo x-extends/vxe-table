@@ -12,20 +12,22 @@ const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 const merge = require('merge-stream')
 const pack = require('./package.json')
+const ts = require('gulp-typescript')
 
 const sass = gulpSass(dartSass)
 
-const components = [
-  'v-x-e-table',
-  'vxe-table',
+const coreName = 'v-x-e-table'
 
+const moduleList = [
   'filter',
   'menu',
   'edit',
   'export',
   'keyboard',
-  'validator',
+  'validator'
+]
 
+const componentList = [
   'icon',
   'loading',
   'column',
@@ -53,7 +55,6 @@ const components = [
   'switch',
   'list',
   'pulldown',
-
   'table'
 ]
 
@@ -71,8 +72,28 @@ const languages = [
 
 const styleCode = 'require(\'./style.css\')'
 
+function toExportName (name) {
+  const str = XEUtils.camelCase(name)
+  return `${str.slice(0, 1).toUpperCase()}${str.slice(1)}`
+}
+
 gulp.task('build_modules', () => {
-  return gulp.src('packages/**/*.js')
+  moduleList.forEach(name => {
+    const exportName = `VxeModule${toExportName(name)}`
+    const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
+    fs.mkdirSync(`packages_temp/vxe-table-${name}-module`)
+    fs.writeFileSync(`packages_temp/vxe-table-${name}-module/index.js`, esCode)
+    fs.writeFileSync(`packages_temp/vxe-table-${name}-module/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
+  })
+  componentList.forEach(name => {
+    const exportName = `Vxe${toExportName(name)}`
+    const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
+    fs.mkdirSync(`packages_temp/vxe-${name}`)
+    fs.writeFileSync(`packages_temp/vxe-${name}/index.js`, esCode)
+    fs.writeFileSync(`packages_temp/vxe-${name}/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
+  })
+
+  return gulp.src('packages_temp/**/*.js')
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_VERSION', `"${pack.version}"`))
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_ENV', 'process.env.NODE_ENV'))
     .pipe(babel({
@@ -88,10 +109,13 @@ gulp.task('build_modules', () => {
 })
 
 gulp.task('build_i18n', () => {
+  languages.forEach(code => {
+    fs.writeFileSync(`lib/locale/lang/${code}.d.ts`, 'declare const langMsgs: { [key: string]: any }\nexport default langMsgs')
+  })
   const rest = languages.map(code => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
     const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
-    return gulp.src(`packages/locale/lang/${isZHTC ? 'zh-TC' : code}.js`)
+    return gulp.src(`packages_temp/locale/lang/${isZHTC ? 'zh-TC' : code}.js`)
       .pipe(babel({
         moduleId: `vxe-table-lang.${code}`,
         presets: ['@babel/env'],
@@ -121,8 +145,13 @@ gulp.task('build_i18n', () => {
   return merge(...rest)
 })
 
+gulp.task('copy_pack', () => {
+  return gulp.src('packages/**')
+    .pipe(gulp.dest('packages_temp'))
+})
+
 gulp.task('copy_ts', () => {
-  return gulp.src('packages/**/*.d.ts')
+  return gulp.src('packages_temp/**/*.d.ts')
     .pipe(gulp.dest('lib'))
 })
 
@@ -186,41 +215,63 @@ gulp.task('build_icon', () => {
   )
 })
 
-gulp.task('build_style', gulp.series('build_modules', 'build_i18n', 'copy_ts', () => {
-  const rest = components.map(name => {
-    return gulp.src(`styles/${name}.scss`)
-      .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\';\n'))
-      .pipe(sass())
-      .pipe(prefixer({
-        borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
-        cascade: true,
-        remove: true
-      }))
-      .pipe(rename({
-        basename: 'style',
-        extname: '.css'
-      }))
-      .pipe(gulp.dest(`lib/${name}/style`))
-      .pipe(cleanCSS())
-      .pipe(rename({
-        basename: 'style',
-        suffix: '.min',
-        extname: '.css'
-      }))
-      .pipe(gulp.dest(`lib/${name}/style`))
+function buildStyle (name, dirName) {
+  return gulp.src(`styles/${name}.scss`)
+    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\';\n'))
+    .pipe(sass())
+    .pipe(prefixer({
+      borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
+      cascade: true,
+      remove: true
+    }))
+    .pipe(rename({
+      basename: 'style',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest(`lib/${dirName}/style`))
+    .pipe(cleanCSS())
+    .pipe(rename({
+      basename: 'style',
+      suffix: '.min',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest(`lib/${dirName}/style`))
+}
+
+gulp.task('build_style', () => {
+  const rest = [coreName, ...moduleList, ...componentList].map(name => {
+    return buildStyle(name, name)
+  })
+  moduleList.forEach(name => {
+    rest.push(buildStyle(name, `vxe-table-${name}-module`))
+  })
+  componentList.forEach(name => {
+    rest.push(buildStyle(name, `vxe-${name}`))
   })
   return merge(...rest)
-}))
-
-gulp.task('build_clean', () => {
-  return del('lib')
 })
 
-gulp.task('build', gulp.series('build_clean', 'build_style', 'build_icon', 'build_lib', () => {
-  components.forEach(name => {
+gulp.task('build_clean', () => {
+  return del(['lib', 'es'])
+})
+
+gulp.task('build', gulp.series('build_clean', 'copy_pack', 'build_modules', 'build_i18n', 'copy_ts', 'build_style', 'build_icon', 'build_lib', () => {
+  [coreName].forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
   })
+  moduleList.forEach(name => {
+    fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
+    fs.writeFileSync(`lib/vxe-table-${name}-module/style/index.js`, styleCode)
+  })
+  componentList.forEach(name => {
+    fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
+    fs.writeFileSync(`lib/vxe-${name}/style/index.js`, styleCode)
+  })
   return del([
-    'lib_temp'
+    'lib_temp',
+    'packages_temp',
+    'lib/index.esm.js',
+    'lib/index.esm.min.js',
+    'es/index.common.js'
   ])
 }))

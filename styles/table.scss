@@ -1,6 +1,5 @@
 /**Variable**/
 @import './helpers/mixin.scss';
-@import './base/checked.scss';
 @import './base/common.scss';
 @import './loading.scss';
 
@@ -659,11 +658,6 @@
       }
     }
   }
-  .vxe-body--column {
-    &.col--checkbox {
-      user-select: none;
-    }
-  }
   
   /*边框*/
   .vxe-table--footer-wrapper {
@@ -835,10 +829,10 @@
 
   // 单选框和复选框
   .vxe-cell--radio {
-    @extend %XERadioIcon;
+    @include createRadioIcon();
   }
   .vxe-cell--checkbox {
-    @extend %XECheckboxIcon;
+    @include createCheckboxIcon();
   }
 
   .fixed--hidden {

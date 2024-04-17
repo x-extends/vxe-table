@@ -1,3 +1,79 @@
 @mixin animatTransition ($property, $duration: .1s, $func: ease-in-out) {
   transition: $property $duration $func;
 }
+
+@mixin createCheckboxIcon {
+  .vxe-checkbox--icon {
+    font-size: 1.34em;
+  }
+  .vxe-checkbox--icon {
+    color: $vxe-input-border-color;
+    vertical-align: middle;
+    font-weight: 700;
+    user-select: none;
+  }
+  &.is--checked,
+  &.is--indeterminate {
+    color: $vxe-primary-color;
+    .vxe-checkbox--icon {
+      color: $vxe-primary-color;
+    }
+  }
+  &:not(.is--disabled) {
+    cursor: pointer;
+    &:hover {
+      .vxe-checkbox--icon {
+        color: $vxe-primary-color;
+      }
+    }
+  }
+  &.is--disabled {
+    color: $vxe-font-disabled-color;
+    cursor: not-allowed;
+    .vxe-checkbox--icon {
+      color: $vxe-input-disabled-color;
+    }
+  }
+  .vxe-checkbox--label {
+    padding-left: 0.5em;
+    vertical-align: middle;
+  }
+}
+
+@mixin createRadioIcon {
+  cursor: pointer;
+  .vxe-radio--icon {
+    font-size: 1.4em;
+  }
+  .vxe-radio--icon {
+    color: $vxe-input-border-color;
+    vertical-align: middle;
+    font-weight: 700;
+    user-select: none;
+  }
+  &.is--checked {
+    color: $vxe-primary-color;
+    .vxe-radio--icon {
+      color: $vxe-primary-color;
+    }
+  }
+  &:not(.is--disabled) {
+    cursor: pointer;
+    &:hover {
+      .vxe-radio--icon {
+        color: $vxe-primary-color;
+      }
+    }
+  }
+  &.is--disabled {
+    color: $vxe-font-disabled-color;
+    cursor: not-allowed;
+    .vxe-radio--icon {
+      color: $vxe-input-disabled-color;
+    }
+  }
+  .vxe-radio--label {
+    padding-left: 0.5em;
+    vertical-align: middle;
+  }
+}

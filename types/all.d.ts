@@ -42,8 +42,6 @@ declare global {
 export * from './v-x-e-table'
 export * from './component'
 
-export * from './footer'
-export * from './icon'
 export * from './filter'
 export * from './menu'
 export * from './edit'
@@ -51,6 +49,8 @@ export * from './export'
 export * from './keyboard'
 export * from './validator'
 
+export * from './icon'
+export * from './loading'
 export * from './table'
 export * from './column'
 export * from './colgroup'

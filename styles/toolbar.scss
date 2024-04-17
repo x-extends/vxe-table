@@ -1,5 +1,5 @@
 /**Variable**/
-@import './base/checked.scss';
+@import './helpers/mixin.scss';
 
 /*toolbar*/
 .vxe-toolbar {
@@ -170,7 +170,7 @@
 }
 
 .vxe-custom--checkbox-option {
-  @extend %XECheckboxIcon;
+  @include createCheckboxIcon();
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
