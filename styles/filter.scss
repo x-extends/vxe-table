@@ -1,5 +1,5 @@
 /**Variable**/
-@import './base/checked.scss';
+@import './helpers/mixin.scss';
 
 /*筛选*/
 .vxe-cell--filter {
@@ -109,5 +109,5 @@
 }
 
 .vxe-table--filter-option {
-  @extend %XECheckboxIcon;
+  @include createCheckboxIcon();
 }

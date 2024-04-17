@@ -1,5 +1,5 @@
 /**Variable**/
-@import './base/checked.scss';
+@import './helpers/mixin.scss';
 
 .vxe-export--panel-column > ul {
   list-style-type: none;
@@ -121,5 +121,5 @@
 }
 
 .vxe-export--panel-column-option {
-  @extend %XECheckboxIcon;
+  @include createCheckboxIcon();
 }

@@ -1,7 +1,6 @@
 /**Variable**/
 @import './helpers/mixin.scss';
 @import './base/common.scss';
-@import './base/checked.scss';
 
 /*radio-group*/
 .vxe-radio-group {
@@ -16,7 +15,7 @@
 
 /*radio*/
 .vxe-radio {
-  @extend %XERadioIcon;
+  @include createRadioIcon();
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;

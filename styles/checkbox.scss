@@ -1,7 +1,6 @@
 /**Variable**/
 @import './helpers/mixin.scss';
 @import './base/common.scss';
-@import './base/checked.scss';
 
 /*checkbox-group*/
 .vxe-checkbox-group {
@@ -12,7 +11,7 @@
 
 /*checkbox*/
 .vxe-checkbox {
-  @extend %XECheckboxIcon;
+  @include createCheckboxIcon();
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;

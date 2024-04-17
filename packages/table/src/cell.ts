@@ -509,7 +509,8 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': indeterminate
+          'is--indeterminate': indeterminate,
+          'is--hidden': !isVisible
         }],
         ...ons
       }, checkVNs)
@@ -577,7 +578,8 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': indeterminateField && !isChecked ? row[indeterminateField] : isIndeterminate
+          'is--indeterminate': indeterminateField && !isChecked ? row[indeterminateField] : isIndeterminate,
+          'is--hidden': !isVisible
         }],
         ...ons
       }, checkVNs)
