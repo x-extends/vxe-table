@@ -5,18 +5,17 @@ import 'xe-utils'
 import {
   VXETable,
 
-  Icon,
   Filter,
   Menu,
   Edit,
   Export,
   Keyboard,
   Validator,
-  Header,
-  Footer,
 
+  Icon,
   Column,
   Colgroup,
+  Table,
   Grid,
   Toolbar,
   Pager,
@@ -38,9 +37,7 @@ import {
   Option,
   Switch,
   List,
-  Pulldown,
-
-  Table
+  Pulldown
 } from '../../../packages/all'
 
 import './renderer'
@@ -58,19 +55,18 @@ VXETable.setup({
 })
 
 // 功能模块
-Vue.use(Icon)
-  .use(Filter)
+Vue.use(Filter)
   .use(Menu)
   .use(Edit)
   .use(Export)
   .use(Keyboard)
   .use(Validator)
-  .use(Header)
-  .use(Footer)
 
-  // 可选组件
+// 可选组件
+Vue.use(Icon)
   .use(Column)
   .use(Colgroup)
+  .use(Table)
   .use(Grid)
   .use(Toolbar)
   .use(Pager)
@@ -93,9 +89,6 @@ Vue.use(Icon)
   .use(Switch)
   .use(List)
   .use(Pulldown)
-
-  // 再安装核心
-  .use(Table)
 
 // 给 vue 实例挂载窗口对象
 Vue.prototype.$XModal = VXETable.modal
