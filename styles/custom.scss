@@ -1,0 +1,168 @@
+/**Variable**/
+@import './helpers/mixin.scss';
+
+.vxe-table-custom--option {
+  display: flex;
+  flex-direction: row;
+}
+
+.vxe-table-custom-wrapper {
+  display: none;
+  position: absolute;
+  top: -4px;
+  right: 2px;
+  text-align: left;
+  background-color: var(--vxe-toolbar-panel-background-color);
+  z-index: 19;
+  border: 1px solid var(--vxe-table-border-color);
+  border-radius: var(--vxe-border-radius);
+  box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  &.is--active {
+    display: block;
+  }
+  .vxe-table-custom--header,
+  .vxe-table-custom--body {
+    list-style-type: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    & > li {
+      max-width: 18em;
+      min-width: 14em;
+      padding: 0.2em 1em 0.2em 1em;
+      @for $i from 2 through 8 {
+        $interval: $i - 1 + 0.2;
+        &.level--#{$i}{
+          padding-left: #{$interval + 2.3}em;
+          .vxe-checkbox--icon {
+            left: #{$interval + 0.6}em;
+          }
+        }
+      }
+    }
+  }
+  .vxe-table-custom--header {
+    padding: 0.28em 0;
+    font-weight: 700;
+    border-bottom: 1px solid var(--vxe-table-popup-border-color);
+  }
+  .vxe-table-custom--body {
+    padding: 0.2em 0;
+    max-height: 20em;
+    .vxe-table-custom--checkbox-option {
+      &:hover {
+        background-color: var(--vxe-table-row-hover-background-color);
+      }
+    }
+  }
+  .vxe-table-custom--footer {
+    border-top: 1px solid var(--vxe-table-popup-border-color);
+    text-align: right;
+    button {
+      background-color: transparent;
+      width: 50%;
+      height: 2.5em;
+      border: 0;
+      color: var(--vxe-font-color);
+      text-align: center;
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        color: var(--vxe-primary-color);
+      }
+    }
+  }
+}
+
+.vxe-table-custom--checkbox-option {
+  @include createCheckboxIcon();
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1;
+}
+
+.vxe-table-custom--fixed-option {
+  flex-shrink: 0;
+  padding-left: 0.5em;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .vxe-table-custom--fixed-left-option,
+  .vxe-table-custom--fixed-right-option {
+    line-height: 1.34em;
+    font-size: 1.1em;
+    padding: 0 0.2em;
+    cursor: pointer;
+    &.is--checked,
+    &:hover {
+      color: var(--vxe-primary-color);
+    }
+    &.is--disabled {
+      cursor: no-drop;
+      color: var(--vxe-input-disabled-color);
+    }
+  }
+}
+
+.vxe-table-custom-popup--body {
+  overflow: auto;
+  height: 100%;
+  border: 1px solid var(--vxe-table-border-color);
+  .vxe-table-custom-popup--name {
+    max-width: 360px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  @for $index from 2 to 10 {
+    $paddingLeft: ($index - 1) * 24px;
+    .vxe-table-custom-popup--row-level#{$index} {
+      .vxe-table-custom-popup--name {
+        padding-left: $paddingLeft;
+        max-width: 260px - $paddingLeft;
+      }
+    }
+  }
+  .vxe-table-custom-popup--column-visible,
+  .vxe-table-custom-popup--column-fixed {
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    border: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+    th {
+      position: sticky;
+      top: 0;
+      text-align: left;
+      border-bottom: 1px solid var(--vxe-table-border-color);
+      border-left: 1px solid var(--vxe-table-border-color);
+      background-color: var(--vxe-table-header-background-color);
+    }
+    td {
+      border-top: 1px solid var(--vxe-table-border-color);
+      border-left: 1px solid var(--vxe-table-border-color);
+      &:nth-child(2) {
+        text-align: center;
+      }
+    }
+    tr {
+      &:first-child {
+        td {
+          border-top: 0;
+        }
+      }
+    }
+    th,
+    td {
+      height: 44px;
+      padding: 0 0.6em;
+    }
+  }
+}

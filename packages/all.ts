@@ -8,6 +8,7 @@ import { VxeTableEditModule } from './edit'
 import { VxeTableExportModule } from './export'
 import { VxeTableKeyboardModule } from './keyboard'
 import { VxeTableValidatorModule } from './validator'
+import { VxeTableCustomModule } from './custom'
 
 import { VxeIcon } from './icon'
 import { VxeColumn } from './column'
@@ -48,6 +49,7 @@ const components = [
   VxeTableExportModule,
   VxeTableKeyboardModule,
   VxeTableValidatorModule,
+  VxeTableCustomModule,
 
   // 可选组件
   VxeIcon,
@@ -98,10 +100,12 @@ export * from './v-x-e-table'
 
 // Table module
 export * from './filter'
+export * from './menu'
 export * from './edit'
 export * from './export'
 export * from './keyboard'
 export * from './validator'
+export * from './custom'
 
 // Components
 export * from './icon'
@@ -109,7 +113,6 @@ export * from './table'
 export * from './column'
 export * from './colgroup'
 export * from './grid'
-export * from './menu'
 export * from './toolbar'
 export * from './pager'
 export * from './checkbox'

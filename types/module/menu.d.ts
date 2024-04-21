@@ -13,10 +13,10 @@ export const VxeTableMenuModule: VXEComponent<{ [key: string]: any }>
  */
 export const Menu: VXEComponent<{ [key: string]: any }>
 
-export type VxeMenuPanelInstance = ComponentPublicInstance<VxeMenuPanelProps, VxeMenuPanelConstructor>
+export type VxeTableMenuPanelInstance = ComponentPublicInstance<VxeTableMenuPanelProps, VxeTableMenuPanelConstructor>
 
-export interface VxeMenuPanelConstructor extends VxeComponentBase, VxeMenuPanelMethods {
-  props: VxeMenuPanelProps
+export interface VxeTableMenuPanelConstructor extends VxeComponentBase, VxeTableMenuPanelMethods {
+  props: VxeTableMenuPanelProps
   context: SetupContext
   getRefMaps(): MenuPanelPrivateRef
   renderVN: RenderFunction
@@ -25,11 +25,11 @@ export interface VxeMenuPanelConstructor extends VxeComponentBase, VxeMenuPanelM
 export interface MenuPanelPrivateRef {
   refElem: Ref<HTMLDivElement>
 }
-export interface VxeMenuPanelPrivateRef extends MenuPanelPrivateRef { }
+export interface VxeTableMenuPanelPrivateRef extends MenuPanelPrivateRef { }
 
-export interface VxeMenuPanelMethods { }
+export interface VxeTableMenuPanelMethods { }
 
-export type VxeMenuPanelProps = {
+export type VxeTableMenuPanelProps = {
   [key: string]: any
 }
 

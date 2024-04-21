@@ -104,8 +104,8 @@ createApp(App).use(VXETable).mount('#app')
 
 ### CDN
 
-Remember to lock the version number in CDN mode to avoid being affected by incompatible updates  
-***It is not recommended to use the CDN address of a third party for production, as the connection may fail at any time***  
+Use a third-party CDN to remember to lock the version number to avoid being affected by incompatible updates.  
+***It is not recommended to use the CDN address of a third party in a formal environment because the connection can fail at any time***  
 
 ```HTML
 <!-- Style -->

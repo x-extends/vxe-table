@@ -8,7 +8,7 @@ import { getSlotVNs } from '../../tools/vn'
 import { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../types/all'
 
 export default defineComponent({
-  name: 'VxeTableFilter',
+  name: 'VxeTableFilterPanel',
   props: {
     filterStore: Object as any
   },

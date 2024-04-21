@@ -40,6 +40,10 @@ export default defineComponent({
      */
     status: String as PropType<VxeButtonPropTypes.Status>,
     /**
+     * 标题
+     */
+    title: String as PropType<VxeButtonPropTypes.Title>,
+    /**
      * 按钮的图标
      */
     icon: String as PropType<VxeButtonPropTypes.Icon>,
@@ -70,6 +74,8 @@ export default defineComponent({
   },
   emits: [
     'click',
+    'mouseenter',
+    'mouseleave',
     'dropdown-click'
   ] as VxeButtonEmits,
   setup (props, context) {
@@ -236,7 +242,7 @@ export default defineComponent({
       }
     }
 
-    const mouseenterEvent = () => {
+    const mouseenterDropdownEvent = () => {
       const panelElem = refBtnPanel.value
       if (panelElem) {
         panelElem.dataset.active = 'Y'
@@ -256,7 +262,7 @@ export default defineComponent({
       }
     }
 
-    const mouseenterTargetEvent = () => {
+    const mouseenterTargetEvent = (evnt: MouseEvent) => {
       const panelElem = refBtnPanel.value
       if (panelElem) {
         panelElem.dataset.active = 'Y'
@@ -265,12 +271,21 @@ export default defineComponent({
         }
         internalData.showTime = setTimeout(() => {
           if (panelElem.dataset.active === 'Y') {
-            mouseenterEvent()
+            mouseenterDropdownEvent()
           } else {
             reactData.animatVisible = false
           }
         }, 250)
       }
+      mouseenterEvent(evnt)
+    }
+
+    const mouseenterEvent = (evnt: MouseEvent) => {
+      emit('mouseenter', { $event: evnt })
+    }
+
+    const mouseleaveEvent = (evnt: MouseEvent) => {
+      emit('mouseleave', { $event: evnt })
     }
 
     const closePanel = () => {
@@ -294,7 +309,7 @@ export default defineComponent({
       }
     }
 
-    const mouseleaveEvent = () => {
+    const mouseleaveDropdownEvent = () => {
       closePanel()
     }
 
@@ -374,7 +389,7 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { className, popupClassName, transfer, type, round, circle, destroyOnClose, status, name, disabled, loading } = props
+      const { className, popupClassName, transfer, title, type, round, circle, destroyOnClose, status, name, disabled, loading } = props
       const { inited, showPanel } = reactData
       const isFormBtn = computeIsFormBtn.value
       const btnType = computeBtnType.value
@@ -397,6 +412,7 @@ export default defineComponent({
               'is--disabled': disabled || loading,
               'is--loading': loading
             }],
+            title,
             name,
             type: isFormBtn ? type : 'button',
             disabled: disabled || loading,
@@ -426,8 +442,8 @@ export default defineComponent({
                 class: 'vxe-button--dropdown-wrapper',
                 onMousedown: mousedownDropdownEvent,
                 onClick: clickDropdownEvent,
-                onMouseenter: mouseenterEvent,
-                onMouseleave: mouseleaveEvent
+                onMouseenter: mouseenterDropdownEvent,
+                onMouseleave: mouseleaveDropdownEvent
               }, destroyOnClose && !showPanel ? [] : slots.dropdowns({}))
             ] : [])
           ])
@@ -435,7 +451,7 @@ export default defineComponent({
       }
       return h('button', {
         ref: refButton,
-        class: ['vxe-button', `type--${btnType}`, {
+        class: ['vxe-button', `type--${btnType}`, className ? (XEUtils.isFunction(className) ? className({ $button: $xebutton }) : className) : '', {
           [`size--${vSize}`]: vSize,
           [`theme--${status}`]: status,
           'is--round': round,
@@ -443,10 +459,13 @@ export default defineComponent({
           'is--disabled': disabled || loading,
           'is--loading': loading
         }],
+        title,
         name,
         type: isFormBtn ? type : 'button',
         disabled: disabled || loading,
-        onClick: clickEvent
+        onClick: clickEvent,
+        onMouseenter: mouseenterEvent,
+        onMouseleave: mouseleaveEvent
       }, renderContent())
     }
 

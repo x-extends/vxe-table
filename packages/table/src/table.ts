@@ -18,7 +18,7 @@ import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement, getRootColumn } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow } from '../../../types/all'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeTableMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow } from '../../../types/all'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -118,6 +118,16 @@ export default defineComponent({
         filter: false,
         import: false,
         export: false
+      },
+      // 自定义列相关的信息
+      customStore: {
+        btnEl: null,
+        isAll: false,
+        isIndeterminate: false,
+        activeBtn: false,
+        activeWrapper: false,
+        visible: false,
+        maxHeight: 0
       },
       // 当前选中的筛选列
       filterStore: {
@@ -318,8 +328,9 @@ export default defineComponent({
     const refTooltip = ref() as Ref<VxeTooltipInstance>
     const refCommTooltip = ref() as Ref<VxeTooltipInstance>
     const refValidTooltip = ref() as Ref<VxeTooltipInstance>
+    const refTableMenu = ref() as Ref<VxeTableMenuPanelInstance>
     const refTableFilter = ref() as Ref<ComponentPublicInstance>
-    const refTableMenu = ref() as Ref<VxeMenuPanelInstance>
+    const refTableCustom = ref() as Ref<ComponentPublicInstance>
 
     const refTableHeader = ref() as Ref<ComponentPublicInstance>
     const refTableBody = ref() as Ref<ComponentPublicInstance>
@@ -576,6 +587,7 @@ export default defineComponent({
       refTooltip,
       refValidTooltip,
       refTableFilter,
+      refTableCustom,
       refTableMenu,
       refTableHeader,
       refTableBody,
@@ -3663,7 +3675,7 @@ export default defineComponent({
         if (selectRadioRow) {
           const rowid = getRowid($xetable, selectRadioRow)
           if (isFull) {
-            if (!fullDataRowIdData[rowid]) {
+            if (fullDataRowIdData[rowid]) {
               return selectRadioRow
             }
           } else {
@@ -4466,7 +4478,7 @@ export default defineComponent({
      * 全局按下事件处理
      */
     const handleGlobalMousedownEvent = (evnt: MouseEvent) => {
-      const { editStore, ctxMenuStore, filterStore } = reactData
+      const { editStore, ctxMenuStore, filterStore, customStore } = reactData
       const { mouseConfig, editRules } = props
       const el = refElem.value
       const editOpts = computeEditOpts.value
@@ -4474,7 +4486,9 @@ export default defineComponent({
       const { actived } = editStore
       const $validTooltip = refValidTooltip.value
       const tableFilter = refTableFilter.value
+      const tableCustom = refTableCustom.value
       const tableMenu = refTableMenu.value
+      // 筛选
       if (tableFilter) {
         if (getEventTargetNode(evnt, el, 'vxe-cell--filter').flag) {
           // 如果点击了筛选按钮
@@ -4486,6 +4500,19 @@ export default defineComponent({
           }
         }
       }
+      // 自定义列
+      if (tableCustom) {
+        if (customStore.btnEl === evnt.target || getEventTargetNode(evnt, document.body, 'vxe-toolbar-custom-target').flag) {
+          // 如果点击了自定义列按钮
+        } else if (getEventTargetNode(evnt, tableCustom.$el as HTMLDivElement).flag) {
+          // 如果点击自定义列容器
+        } else {
+          if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
+            tablePrivateMethods.preventEvent(evnt, 'event.clearCustom', {}, () => $xetable.closeCustom())
+          }
+        }
+      }
+
       // 如果已激活了编辑状态
       if (actived.row) {
         if (!(editOpts.autoClear === false)) {
@@ -4849,6 +4876,19 @@ export default defineComponent({
                 } else {
                   setCellValue(selected.row, selected.column, null)
                   $xetable.handleActived(selected.args, evnt)
+                }
+                const afterEditMethod = editOpts.afterEditMethod
+                if (afterEditMethod) {
+                  nextTick(() => {
+                    afterEditMethod({
+                      row: selected.row as any,
+                      rowIndex: tableMethods.getRowIndex(selected.row),
+                      column: selected.column,
+                      columnIndex: tableMethods.getColumnIndex(selected.column),
+                      $table: $xetable,
+                      $grid: $xegrid
+                    })
+                  })
                 }
               }
             }
@@ -6622,7 +6662,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore } = reactData
+      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
@@ -6756,30 +6796,37 @@ export default defineComponent({
           default: () => loadingSlot({ $table: $xetable, $grid: $xegrid })
         } : {}),
         /**
+         * 自定义列
+         */
+        h(resolveComponent('vxe-table-custom-panel') as ComponentOptions, {
+          ref: refTableCustom,
+          customStore
+        }),
+        /**
          * 筛选
          */
-        initStore.filter ? h(resolveComponent('vxe-table-filter') as ComponentOptions, {
+        initStore.filter ? h(resolveComponent('vxe-table-filter-panel') as ComponentOptions, {
           ref: refTableFilter,
           filterStore
         }) : createCommentVNode(),
         /**
          * 导入
          */
-        initStore.import && props.importConfig ? h(resolveComponent('vxe-import-panel') as ComponentOptions, {
+        initStore.import && props.importConfig ? h(resolveComponent('vxe-table-import-panel') as ComponentOptions, {
           defaultOptions: reactData.importParams,
           storeData: reactData.importStore
         }) : createCommentVNode(),
         /**
          * 导出/导出
          */
-        initStore.export && (props.exportConfig || props.printConfig) ? h(resolveComponent('vxe-export-panel') as ComponentOptions, {
+        initStore.export && (props.exportConfig || props.printConfig) ? h(resolveComponent('vxe-table-export-panel') as ComponentOptions, {
           defaultOptions: reactData.exportParams,
           storeData: reactData.exportStore
         }) : createCommentVNode(),
         /**
          * 快捷菜单
          */
-        isMenu ? h(resolveComponent('vxe-table-context-menu') as ComponentOptions, {
+        isMenu ? h(resolveComponent('vxe-table-menu-panel') as ComponentOptions, {
           ref: refTableMenu
         }) : createCommentVNode(),
         /**

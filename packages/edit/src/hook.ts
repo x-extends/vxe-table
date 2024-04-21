@@ -681,8 +681,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
               } else {
                 getEditColumnModel(row, column)
               }
+              const afterEditMethod = editOpts.afterEditMethod
               nextTick(() => {
                 editPrivateMethods.handleFocus(params, evnt)
+                if (afterEditMethod) {
+                  afterEditMethod({ ...params, $table: $xetable, $grid: $xetable.xegrid })
+                }
               })
             }
             $xetable.dispatchEvent(type, {

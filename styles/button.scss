@@ -235,7 +235,9 @@ $btnThemeList: (
   }
 }
 .vxe-input,
-.vxe-button {
+.vxe-button,
+.vxe-button-warpper {
+  &+.vxe-button-warpper,
   &+.vxe-button.type--button,
   &+.vxe-button--dropdown {
     margin-left: 12px;
@@ -254,6 +256,7 @@ $btnThemeList: (
 }
 .vxe-button--dropdown {
   position: relative;
+  &+.vxe-button-warpper,
   &+.vxe-button.type--button,
   &+.vxe-button--dropdown {
     margin-left: 12px;

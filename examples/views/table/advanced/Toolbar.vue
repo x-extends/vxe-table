@@ -11,6 +11,7 @@
       border
       height="300"
       ref="xTable1"
+      :custom-config="{}"
       :print-config="{}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
@@ -36,7 +37,7 @@
 
     <p class="tip">工具栏和表格默认是上下相邻关系，通过调用 <table-api-link prop="connect"/>() 方法与表格进行关联，就可以开启相关的功能</p>
 
-    <vxe-table
+    <!-- <vxe-table
       border
       ref="xTable2"
       height="300"
@@ -50,21 +51,22 @@
       <vxe-column field="sex" title="app.body.label.sex"></vxe-column>
       <vxe-column field="age" title="app.body.label.age"></vxe-column>
       <vxe-column field="rate" title="Rate"></vxe-column>
-    </vxe-table>
+    </vxe-table> -->
 
-    <div>
+    <!-- <div>
       <p>工具栏位置随意放</p>
       <div>
         <vxe-toolbar
           custom
           print
           ref="xToolbar2"
+          :custom-config="{trigger: 'hover'}"
           :buttons="demo2.toolbarButtons"
           :refresh="{query: findList}">
         </vxe-toolbar>
       </div>
       <p>工具栏位置随意放</p>
-    </div>
+    </div> -->
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
 

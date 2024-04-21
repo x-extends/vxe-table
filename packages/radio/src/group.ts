@@ -2,6 +2,7 @@ import { defineComponent, h, provide, PropType, inject, computed } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeRadioComponent from './radio'
+import VxeRadioButtonComponent from './button'
 import { useSize } from '../../hooks/size'
 
 import { VxeRadioGroupPropTypes, VxeRadioGroupConstructor, VxeRadioGroupEmits, VxeRadioGroupPrivateMethods, RadioGroupPrivateMethods, RadioGroupMethods, VxeFormConstructor, VxeFormPrivateMethods, VxeFormDefines } from '../../../types/all'
@@ -11,6 +12,7 @@ export default defineComponent({
   props: {
     modelValue: [String, Number, Boolean] as PropType<VxeRadioGroupPropTypes.ModelValue>,
     disabled: Boolean as PropType<VxeRadioGroupPropTypes.Disabled>,
+    type: String as PropType<VxeRadioGroupPropTypes.Type>,
     options: Array as PropType<VxeRadioGroupPropTypes.Options>,
     optionProps: Object as PropType<VxeRadioGroupPropTypes.OptionProps>,
     strict: { type: Boolean as PropType<VxeRadioGroupPropTypes.Strict>, default: () => GlobalConfig.radioGroup.strict },
@@ -70,14 +72,15 @@ export default defineComponent({
     }
 
     const renderVN = () => {
-      const { options } = props
+      const { options, type } = props
       const defaultSlot = slots.default
       const valueField = computeValueField.value as 'value'
       const labelField = computeLabelField.value as 'label'
+      const btnComp = type === 'button' ? VxeRadioButtonComponent : VxeRadioComponent
       return h('div', {
         class: 'vxe-radio-group'
       }, defaultSlot ? defaultSlot({}) : (options ? options.map(item => {
-        return h(VxeRadioComponent, {
+        return h(btnComp, {
           label: item[valueField],
           content: item[labelField]
         })

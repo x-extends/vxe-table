@@ -6,7 +6,7 @@ import { VXETableConfigOptions, VxeGlobalRendererHandles } from './v-x-e-table'
 import { VxeToolbarConstructor, VxeToolbarInstance } from './toolbar'
 import { VxeTooltipInstance } from './tooltip'
 import { VxeGridConstructor } from './grid'
-import { VxeMenuPanelInstance } from './module/menu'
+import { VxeTableMenuPanelInstance } from './module/menu'
 
 /* eslint-disable no-use-before-define */
 
@@ -42,7 +42,8 @@ export interface TablePrivateRef {
   refTooltip: Ref<VxeTooltipInstance>
   refValidTooltip: Ref<VxeTooltipInstance>
   refTableFilter: Ref<ComponentPublicInstance>
-  refTableMenu: Ref<VxeMenuPanelInstance>
+  refTableCustom: Ref<ComponentPublicInstance>
+  refTableMenu: Ref<VxeTableMenuPanelInstance>
   refTableHeader: Ref<ComponentPublicInstance>
   refTableBody: Ref<ComponentPublicInstance>
   refTableFooter: Ref<ComponentPublicInstance>
@@ -887,6 +888,8 @@ export interface TableReactData<D = VxeTableDataRow> {
     import: boolean
     export: boolean
   },
+  // 自定义列相关的信息
+  customStore: VxeTableCustomStoreObj,
   // 当前选中的筛选列
   filterStore: {
     isAllSelected: boolean
@@ -1020,6 +1023,16 @@ export interface TableReactData<D = VxeTableDataRow> {
   },
   scrollVMLoading: boolean
   _isResize: boolean
+}
+
+export interface VxeTableCustomStoreObj {
+  btnEl: HTMLDivElement | null
+  isAll: boolean
+  isIndeterminate: boolean
+  activeBtn: boolean
+  activeWrapper: boolean
+  visible: boolean
+  maxHeight: number
 }
 
 export interface TableInternalData<D = VxeTableDataRow> {
@@ -1443,12 +1456,18 @@ export namespace VxeTablePropTypes {
       fixed?: boolean
       order?: boolean
     }
+    mode?: 'simple' | 'popup' | '' | null
+    trigger?: string,
+    immediate?: boolean
     /**
      * 自定义列是否允许列选中的方法，该方法的返回值用来决定这一列的 checkbox 是否可以选中
      */
-    checkMethod?(params: {
-      column: VxeTableDefines.ColumnInfo<D>
-    }): boolean
+    checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean
+    allowFixed?: boolean
+    showFooter?: boolean
+    icon?: string
+    resetButtonText?: string
+    confirmButtonText?: string
   }
   export interface CustomOpts<D = VxeTableDataRow> extends CustomConfig<D> { }
 
@@ -2249,7 +2268,7 @@ export namespace VxeTablePropTypes {
      */
     autoClear?: boolean
     /**
-     * 该方法的返回值用来决定该单元格是否允许编辑
+     * 自定义编辑之前逻辑，该方法的返回值用来决定该单元格是否允许编辑
      */
     beforeEditMethod?(params: {
       row: DT
@@ -2259,6 +2278,17 @@ export namespace VxeTablePropTypes {
       $table: VxeTableConstructor<DT> & VxeTablePrivateMethods<DT>
       $grid: VxeGridConstructor<DT> | null | undefined
     }): boolean
+    /**
+     * 自定义编辑之后逻辑
+     */
+    afterEditMethod?(params: {
+      row: DT
+      rowIndex: number
+      column: VxeTableDefines.ColumnInfo<DT>
+      columnIndex: number
+      $table: VxeTableConstructor<DT> & VxeTablePrivateMethods<DT>
+      $grid: VxeGridConstructor<DT> | null | undefined
+    }): void
 
     /**
      * 请使用 beforeEditMethod

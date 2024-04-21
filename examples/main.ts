@@ -24,10 +24,12 @@ import {
   VxeTableExportModule,
   VxeTableKeyboardModule,
   VxeTableValidatorModule,
+  VxeTableCustomModule,
 
   VxeIcon,
   VxeColumn,
   VxeColgroup,
+  VxeTable,
   VxeGrid,
   VxeToolbar,
   VxePager,
@@ -39,6 +41,7 @@ import {
   VxeInput,
   VxeTextarea,
   VxeButton,
+  VxeButtonGroup,
   VxeModal,
   VxeTooltip,
   VxeForm,
@@ -49,9 +52,7 @@ import {
   VxeOption,
   VxeSwitch,
   VxeList,
-  VxePulldown,
-
-  VxeTable
+  VxePulldown
 } from '../packages/all'
 
 const app = createApp(App)
@@ -70,10 +71,12 @@ app.use(VxeTableEditModule)
 app.use(VxeTableExportModule)
 app.use(VxeTableKeyboardModule)
 app.use(VxeTableValidatorModule)
+app.use(VxeTableCustomModule)
 
 app.use(VxeIcon)
 app.use(VxeColumn)
 app.use(VxeColgroup)
+app.use(VxeTable)
 app.use(VxeGrid)
 app.use(VxeToolbar)
 app.use(VxePager)
@@ -85,6 +88,7 @@ app.use(VxeRadioButton)
 app.use(VxeInput)
 app.use(VxeTextarea)
 app.use(VxeButton)
+app.use(VxeButtonGroup)
 app.use(VxeModal)
 app.use(VxeSelect)
 app.use(VxeOptgroup)
@@ -96,7 +100,6 @@ app.use(VxeFormItem)
 app.use(VxeFormGather)
 app.use(VxeList)
 app.use(VxePulldown)
-app.use(VxeTable)
 
 app.use(store)
 app.use(router)

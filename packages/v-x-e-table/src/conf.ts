@@ -59,10 +59,12 @@ const GlobalConfig: VXETableConfigOptions = {
     // menuConfig: {
     //   visibleMethod () {}
     // },
-    // customConfig: {
+    customConfig: {
+      allowFixed: true,
+      showFooter: true
     //  storage: false,
     //  checkMethod () {}
-    // },
+    },
     sortConfig: {
       // remote: false,
       // trigger: 'default',

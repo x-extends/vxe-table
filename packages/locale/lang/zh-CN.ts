@@ -188,6 +188,12 @@ export default {
       confirm: '确认',
       cancel: '取消'
     },
+    custom: {
+      cstmTitle: '列设置',
+      cstmRestore: '恢复默认',
+      cstmCancel: '取消',
+      cstmConfirm: '确定'
+    },
     import: {
       modes: {
         covering: '覆盖',

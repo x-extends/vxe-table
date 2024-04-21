@@ -188,6 +188,12 @@ export default {
       confirm: 'Confirm',
       cancel: 'Cancel'
     },
+    custom: {
+      cstmTitle: 'Column Settings',
+      cstmRestore: 'Restore default',
+      cstmCancel: 'Cancelar',
+      cstmConfirm: 'Confirm'
+    },
     import: {
       modes: {
         covering: 'Covering',

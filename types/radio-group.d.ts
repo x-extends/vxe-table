@@ -31,6 +31,7 @@ export type VxeRadioGroupEmits = [
 
 export type VxeRadioGroupProps = {
   size?: VxeRadioGroupPropTypes.Size
+  type?: VxeRadioGroupPropTypes.Type
   options?: VxeRadioGroupPropTypes.Options
   optionProps?: VxeRadioGroupPropTypes.OptionProps
   /**
@@ -43,6 +44,7 @@ export type VxeRadioGroupProps = {
 
 export namespace VxeRadioGroupPropTypes {
   export type Size = SizeType
+  export type Type = 'button' | 'default' | '' | null
   export type Options = {
     value?: VxeRadioPropTypes.Label
     label?: VxeRadioPropTypes.Content

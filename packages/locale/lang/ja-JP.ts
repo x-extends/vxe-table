@@ -188,6 +188,12 @@ export default {
       confirm: '完了',
       cancel: 'キャンセル'
     },
+    custom: {
+      cstmTitle: 'Column Settings',
+      cstmRestore: 'Restore default',
+      cstmCancel: 'Cancelar',
+      cstmConfirm: 'Confirm'
+    },
     import: {
       modes: {
         covering: 'カバー',

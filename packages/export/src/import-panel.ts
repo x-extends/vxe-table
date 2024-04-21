@@ -10,7 +10,7 @@ import { parseFile } from '../../tools/utils'
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
 
 export default defineComponent({
-  name: 'VxeImportPanel',
+  name: 'VxeTableImportPanel',
   props: {
     defaultOptions: Object as any,
     storeData: Object as any
@@ -96,6 +96,7 @@ export default defineComponent({
       return h(VxeModalComponent, {
         modelValue: storeData.visible,
         title: GlobalConfig.i18n('vxe.import.impTitle'),
+        className: 'vxe-table-import-popup-warpper',
         width: 440,
         mask: true,
         lockView: true,

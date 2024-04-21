@@ -2,10 +2,10 @@ import { defineComponent, h, Teleport, inject, ref, Ref, createCommentVNode } fr
 import { getFuncText } from '../../tools/utils'
 import XEUtils from 'xe-utils'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeMenuPanelConstructor, VxeMenuPanelPrivateRef } from '../../../types/all'
+import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableMenuPanelConstructor, VxeTableMenuPanelPrivateRef } from '../../../types/all'
 
 export default defineComponent({
-  name: 'VxeTableContextMenu',
+  name: 'VxeTableMenuPanel',
   setup (props, context) {
     const xID = XEUtils.uniqueId()
 
@@ -15,7 +15,7 @@ export default defineComponent({
 
     const refElem = ref() as Ref<HTMLDivElement>
 
-    const refMaps: VxeMenuPanelPrivateRef = {
+    const refMaps: VxeTableMenuPanelPrivateRef = {
       refElem
     }
 
@@ -24,7 +24,7 @@ export default defineComponent({
       props,
       context,
       getRefMaps: () => refMaps
-    } as VxeMenuPanelConstructor
+    } as VxeTableMenuPanelConstructor
 
     const renderVN = () => {
       const { ctxMenuStore } = tableReactData

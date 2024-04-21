@@ -81,17 +81,50 @@ export namespace VxeToolbarPropTypes {
   export interface ZoomOpts extends ZoomConfig { }
 
   interface CustomConfig {
-    trigger?: string,
-    immediate?: boolean
-    storage?: boolean
-    checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean
-    showFooter?: boolean
     icon?: string
+
+    /**
+     * 已废弃，请使用 custom-config.trigger
+     * @deprecated
+     */
+    trigger?: string,
+    /**
+     * 已废弃，请使用 custom-config.immediate
+     * @deprecated
+     */
+    immediate?: boolean
+    /**
+     * 已废弃，请使用 custom-config.storage
+     * @deprecated
+     */
+    storage?: boolean
+    /**
+     * 已废弃，请使用 custom-config.checkMethod
+     * @deprecated
+     */
+    checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean
+    /**
+     * 已废弃，请使用 custom-config.showFooter
+     * @deprecated
+     */
+    showFooter?: boolean
+    /**
+     * 已废弃，请使用 custom-config.allowFixed
+     * @deprecated
+     */
     allowFixed?: boolean
+    /**
+     * 已废弃，请使用 custom-config.resetButtonText
+     * @deprecated
+     */
     resetButtonText?: string
+    /**
+     * 已废弃，请使用 custom-config.confirmButtonText
+     * @deprecated
+     */
     confirmButtonText?: string
     /**
-     * 已废弃，请使用 showFooter
+     * 已废弃，请使用 custom-config.showFooter
      * @deprecated
      */
     isFooter?: boolean

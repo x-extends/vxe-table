@@ -11,7 +11,7 @@ import VxeButtonComponent from '../../button/src/button'
 import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../types/all'
 
 export default defineComponent({
-  name: 'VxeExportPanel',
+  name: 'VxeTableExportPanel',
   props: {
     defaultOptions: Object as any,
     storeData: Object as any
@@ -193,6 +193,7 @@ export default defineComponent({
       return h(VxeModalComponent, {
         modelValue: storeData.visible,
         title: GlobalConfig.i18n(isPrint ? 'vxe.export.printTitle' : 'vxe.export.expTitle'),
+        className: 'vxe-table-export-popup-warpper',
         width: 660,
         mask: true,
         lockView: true,
