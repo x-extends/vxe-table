@@ -1,9 +1,11 @@
-import VxeRadioButton from '../radio/src/button'
+import VxeRadioButtonComponent from '../radio/src/button'
 
-export const RadioButton = Object.assign(VxeRadioButton, {
+export const VxeRadioButton = Object.assign(VxeRadioButtonComponent, {
   install (Vue) {
-    Vue.component(VxeRadioButton.name, VxeRadioButton)
+    Vue.component(VxeRadioButtonComponent.name, VxeRadioButtonComponent)
   }
 })
 
-export default RadioButton
+export const RadioButton = VxeRadioButton
+
+export default VxeRadioButton

@@ -1,9 +1,11 @@
-import VxeCheckboxGroup from '../checkbox/src/group'
+import VxeCheckboxGroupComponent from '../checkbox/src/group'
 
-export const CheckboxGroup = Object.assign(VxeCheckboxGroup, {
+export const VxeCheckboxGroup = Object.assign(VxeCheckboxGroupComponent, {
   install (Vue) {
-    Vue.component(VxeCheckboxGroup.name, VxeCheckboxGroup)
+    Vue.component(VxeCheckboxGroupComponent.name, VxeCheckboxGroupComponent)
   }
 })
 
-export default CheckboxGroup
+export const CheckboxGroup = VxeCheckboxGroup
+
+export default VxeCheckboxGroup

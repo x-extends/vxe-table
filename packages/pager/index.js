@@ -1,9 +1,11 @@
-import VxePager from './src/pager'
+import VxePagerComponent from './src/pager'
 
-export const Pager = Object.assign(VxePager, {
+export const VxePager = Object.assign(VxePagerComponent, {
   install (Vue) {
-    Vue.component(VxePager.name, VxePager)
+    Vue.component(VxePagerComponent.name, VxePagerComponent)
   }
 })
 
-export default Pager
+export const Pager = VxePager
+
+export default VxePager

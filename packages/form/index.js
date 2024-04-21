@@ -1,9 +1,11 @@
-import VxeForm from './src/form'
+import VxeFormComponent from './src/form'
 
-export const Form = Object.assign(VxeForm, {
+export const VxeForm = Object.assign(VxeFormComponent, {
   install (Vue) {
-    Vue.component(VxeForm.name, VxeForm)
+    Vue.component(VxeFormComponent.name, VxeFormComponent)
   }
 })
 
-export default Form
+export const Form = VxeForm
+
+export default VxeForm

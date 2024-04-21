@@ -5,7 +5,7 @@ import XEUtils from 'xe-utils'
 import { getSlotVNs } from '../../tools/vn'
 
 export default {
-  name: 'VxeTableFilter',
+  name: 'VxeTableFilterPanel',
   props: {
     filterStore: Object
   },

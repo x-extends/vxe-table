@@ -7,7 +7,7 @@ import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-
 /**
  * 表单 - 项
  */
-export class FormItem extends VXETableComponent {
+export class VxeFormItem extends VXETableComponent {
   /**
    * 标题
    */
@@ -63,6 +63,7 @@ export class FormItem extends VXETableComponent {
    */
   itemRender?: FormItemRenderOptions;
 }
+export class FormItem extends VxeFormItem {}
 
 export interface FormItemOptions {
   /**

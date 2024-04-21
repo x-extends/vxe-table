@@ -4,7 +4,7 @@ import { OptionProps, OptionGroupProps } from './v-x-e-table'
 /**
  * 下拉框
  */
-export declare class Select extends VXETableComponent {
+export declare class VxeSelect extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -63,3 +63,4 @@ export declare class Select extends VXETableComponent {
    */
   blur(): Promise<any>;
 }
+export class Select extends VxeSelect {}

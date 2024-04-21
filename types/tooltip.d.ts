@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 工具提示
  */
-export declare class Tooltip extends VXETableComponent {
+export declare class VxeTooltip extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -37,3 +37,4 @@ export declare class Tooltip extends VXETableComponent {
    */
   leaveDelay?: number;
 }
+export class Tooltip extends VxeTooltip {}

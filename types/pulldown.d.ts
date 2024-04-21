@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 组件 - 下拉容器
  */
-export declare class Pulldown extends VXETableComponent {
+export declare class VxePulldown extends VXETableComponent {
   /**
    * 是否禁用
    */
@@ -41,3 +41,4 @@ export declare class Pulldown extends VXETableComponent {
    */
   hidePanel(): Promise<any>;
 }
+export class Pulldown extends VxePulldown {}

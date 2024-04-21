@@ -1,4 +1,4 @@
-import { List } from '../../types/list'
+import { VxeList } from '../../types/list'
 
 export * from '../../types/list'
-export default List
+export default VxeList

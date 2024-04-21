@@ -1,11 +1,11 @@
 import { CreateElement, VNode } from 'vue'
 import { VXETableComponent, SlotVNodeType } from './component'
-import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './filter'
+import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './module/filter'
 import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './header'
 import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './footer'
-import { ColumnEditRenderOptions, ColumnEditSlotParams } from './edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams, ColumnExportHeaderRenderParams } from './export'
+import { ColumnEditRenderOptions, ColumnEditSlotParams } from './module/edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams, ColumnExportHeaderRenderParams } from './module/export'
 import { TableOverflow } from './table'
 
 /* eslint-disable no-use-before-define */
@@ -13,7 +13,7 @@ import { TableOverflow } from './table'
 /**
  * 列
  */
-export declare class Column extends VXETableComponent {
+export declare class VxeColumn extends VXETableComponent {
   /**
    * 渲染类型
    */
@@ -153,6 +153,7 @@ export declare class Column extends VXETableComponent {
    */
   params?: any;
 }
+export class Column extends VxeColumn {}
 
 export type ColumnAlign = 'left' | 'center' | 'right' | null
 export type ColumnFixed = 'left' | 'right' | null

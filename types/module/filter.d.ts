@@ -1,11 +1,16 @@
-import { VXETableComponent } from './component'
-import { ColumnInfo } from './column'
-import { TableRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
+import { VXETableComponent } from '../component'
+import { ColumnInfo } from '../column'
+import { TableRenderParams, RenderOptions, OptionProps, OptionGroupProps } from '../v-x-e-table'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 筛选
+ * 表格模块 - 筛选
+ */
+export declare class VxeTableFilterModule extends VXETableComponent {}
+
+/**
+ * 表格模块 - 筛选
  */
 export declare class Filter extends VXETableComponent {}
 

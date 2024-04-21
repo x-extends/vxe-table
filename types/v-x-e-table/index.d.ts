@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
 import { ModalController } from '../modal'
-import { SaveFileFunction, ReadFileFunction, PrintFunction } from '../export'
+import { SaveFileFunction, ReadFileFunction, PrintFunction } from '../module/export'
 
 import { VxeGlobalRenderer } from './renderer'
 import { VxeGlobalInterceptor } from './interceptor'

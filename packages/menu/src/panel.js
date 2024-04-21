@@ -1,7 +1,7 @@
 import { getFuncText } from '../../tools/utils'
 
 export default {
-  name: 'VxeTableContextMenu',
+  name: 'VxeTableMenuPanel',
   props: {
     ctxMenuStore: Object,
     ctxMenuOpts: Object

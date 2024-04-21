@@ -1,9 +1,11 @@
-import VxeOptgroup from '../select/src/optgroup'
+import VxeOptgroupComponent from '../select/src/optgroup'
 
-export const Optgroup = Object.assign(VxeOptgroup, {
+export const VxeOptgroup = Object.assign(VxeOptgroupComponent, {
   install (Vue) {
-    Vue.component(VxeOptgroup.name, VxeOptgroup)
+    Vue.component(VxeOptgroupComponent.name, VxeOptgroupComponent)
   }
 })
 
-export default Optgroup
+export const Optgroup = VxeOptgroup
+
+export default VxeOptgroup

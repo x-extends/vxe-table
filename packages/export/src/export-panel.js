@@ -8,7 +8,7 @@ import VxeOption from '../../select/src/option'
 import UtilTools from '../../tools/utils'
 
 export default {
-  name: 'VxeExportPanel',
+  name: 'VxeTableExportPanel',
   props: {
     defaultOptions: Object,
     storeData: Object

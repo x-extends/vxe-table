@@ -1,9 +1,11 @@
-import VxeButton from './src/button'
+import VxeButtonComponent from './src/button'
 
-export const Button = Object.assign(VxeButton, {
+export const VxeButton = Object.assign(VxeButtonComponent, {
   install (Vue) {
-    Vue.component(VxeButton.name, VxeButton)
+    Vue.component(VxeButtonComponent.name, VxeButtonComponent)
   }
 })
 
-export default Button
+export const Button = VxeButton
+
+export default VxeButton

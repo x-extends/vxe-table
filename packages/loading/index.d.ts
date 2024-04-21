@@ -1,4 +1,4 @@
-import { Loading } from '../../types/loading'
+import { VxeLoading } from '../../types/loading'
 
 export * from '../../types/loading'
-export default Loading
+export default VxeLoading

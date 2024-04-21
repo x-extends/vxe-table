@@ -8,7 +8,7 @@ import { GridRenderParams, RenderOptions } from './v-x-e-table'
 /**
  * 工具栏
  */
-export declare class Toolbar extends VXETableComponent {
+export declare class VxeToolbar extends VXETableComponent {
   /**
    * 唯一 ID 标识
    */
@@ -77,6 +77,7 @@ export declare class Toolbar extends VXETableComponent {
    */
   perfect?: boolean;
 }
+export class Toolbar extends VxeToolbar {}
 
 export interface ToolbarOptions {
   /**

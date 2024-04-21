@@ -1,4 +1,4 @@
-import { Radio } from '../../types/radio'
+import { VxeRadio } from '../../types/radio'
 
 export * from '../../types/radio'
-export default Radio
+export default VxeRadio

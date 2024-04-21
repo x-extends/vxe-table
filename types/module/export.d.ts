@@ -1,13 +1,18 @@
-import { VXETableComponent, RowInfo } from './component'
-import { Table } from './table'
-import { Grid } from './grid'
-import { ColumnInfo } from './column'
-import { GridRenderParams } from './v-x-e-table'
+import { VXETableComponent, RowInfo } from '../component'
+import { Table } from '../table'
+import { Grid } from '../grid'
+import { ColumnInfo } from '../column'
+import { GridRenderParams } from '../v-x-e-table'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 导出
+ * 表格模块 - 导出、导入、打印
+ */
+export declare class VxeTableExportModule extends VXETableComponent {}
+
+/**
+ * 表格模块 - 导出、导入、打印
  */
 export declare class Export extends VXETableComponent {}
 

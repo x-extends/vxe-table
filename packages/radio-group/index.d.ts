@@ -1,4 +1,4 @@
-import { RadioGroup } from '../../types/radio-group'
+import { VxeRadioGroup } from '../../types/radio-group'
 
 export * from '../../types/radio-group'
-export default RadioGroup
+export default VxeRadioGroup

@@ -451,8 +451,12 @@ export default {
             } else {
               this._getColumnModel(row, column)
             }
+            const afterEditMethod = editOpts.afterEditMethod
             this.$nextTick(() => {
               this.handleFocus(params, evnt)
+              if (afterEditMethod) {
+                afterEditMethod({ ...params, $table: this, $grid: this.$xegrid })
+              }
             })
           }
           this.emitEvent(type, {

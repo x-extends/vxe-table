@@ -1,4 +1,4 @@
-import { Column } from '../../types/column'
+import { VxeColumn } from '../../types/column'
 
 export * from '../../types/column'
-export default Column
+export default VxeColumn

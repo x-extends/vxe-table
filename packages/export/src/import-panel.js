@@ -5,7 +5,7 @@ import VxeRadio from '../../radio/src/radio'
 import UtilTools from '../../tools/utils'
 
 export default {
-  name: 'VxeImportPanel',
+  name: 'VxeTableImportPanel',
   props: {
     defaultOptions: Object,
     storeData: Object

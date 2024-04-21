@@ -1,9 +1,11 @@
-import VxeLoading from './src/loading'
+import VxeLoadingComponent from './src/loading'
 
-export const Loading = Object.assign(VxeLoading, {
+export const VxeLoading = Object.assign(VxeLoadingComponent, {
   install (Vue) {
-    Vue.component(VxeLoading.name, VxeLoading)
+    Vue.component(VxeLoadingComponent.name, VxeLoadingComponent)
   }
 })
+
+export const Loading = VxeLoading
 
 export default VxeLoading

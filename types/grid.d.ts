@@ -12,7 +12,7 @@ import { RowInfo } from './component'
 /**
  * 配置式表格
  */
-export declare class Grid extends Table {
+export declare class VxeGrid extends Table {
   /**
    * 列配置
    */
@@ -79,6 +79,7 @@ export declare class Grid extends Table {
 
   [key: string]: any;
 }
+export class Grid extends VxeGrid {}
 
 export interface GridProxyQueryPageParams {
   pageSize: number;

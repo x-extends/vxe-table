@@ -11,6 +11,7 @@ import {
   Export,
   Keyboard,
   Validator,
+  Custom,
 
   Icon,
   Column,
@@ -27,6 +28,7 @@ import {
   Input,
   Textarea,
   Button,
+  ButtonGroup,
   Modal,
   Tooltip,
   Form,
@@ -56,39 +58,41 @@ VXETable.setup({
 
 // 功能模块
 Vue.use(Filter)
-  .use(Menu)
-  .use(Edit)
-  .use(Export)
-  .use(Keyboard)
-  .use(Validator)
+Vue.use(Menu)
+Vue.use(Edit)
+Vue.use(Export)
+Vue.use(Keyboard)
+Vue.use(Validator)
+Vue.use(Custom)
 
 // 可选组件
 Vue.use(Icon)
-  .use(Column)
-  .use(Colgroup)
-  .use(Table)
-  .use(Grid)
-  .use(Toolbar)
-  .use(Pager)
-  .use(Checkbox)
-  .use(CheckboxGroup)
-  .use(Radio)
-  .use(RadioGroup)
-  .use(RadioButton)
-  .use(Input)
-  .use(Textarea)
-  .use(Button)
-  .use(Modal)
-  .use(Tooltip)
-  .use(Form)
-  .use(FormItem)
-  .use(FormGather)
-  .use(Select)
-  .use(Optgroup)
-  .use(Option)
-  .use(Switch)
-  .use(List)
-  .use(Pulldown)
+Vue.use(Column)
+Vue.use(Colgroup)
+Vue.use(Table)
+Vue.use(Grid)
+Vue.use(Toolbar)
+Vue.use(Pager)
+Vue.use(Checkbox)
+Vue.use(CheckboxGroup)
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(RadioButton)
+Vue.use(Input)
+Vue.use(Textarea)
+Vue.use(Button)
+Vue.use(ButtonGroup)
+Vue.use(Modal)
+Vue.use(Tooltip)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(FormGather)
+Vue.use(Select)
+Vue.use(Optgroup)
+Vue.use(Option)
+Vue.use(Switch)
+Vue.use(List)
+Vue.use(Pulldown)
 
 // 给 vue 实例挂载窗口对象
 Vue.prototype.$XModal = VXETable.modal

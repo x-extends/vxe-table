@@ -5,6 +5,7 @@ export default {
   name: 'VxeRadioGroup',
   props: {
     value: [String, Number, Boolean],
+    type: String,
     options: Array,
     optionProps: Object,
     disabled: Boolean,
@@ -44,12 +45,13 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, options, valueField, labelField } = this
+    const { $scopedSlots, options, type, valueField, labelField } = this
     const defaultSlot = $scopedSlots.default
+    const btnComp = type === 'button' ? 'vxe-radio-button' : 'vxe-radio'
     return h('div', {
       class: 'vxe-radio-group'
     }, defaultSlot ? defaultSlot.call(this, {}) : (options ? options.map(item => {
-      return h('vxe-radio', {
+      return h(btnComp, {
         props: {
           label: item[valueField],
           content: item[labelField]

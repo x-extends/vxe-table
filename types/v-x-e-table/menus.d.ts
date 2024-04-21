@@ -1,4 +1,4 @@
-import { MenuLinkParams } from '../menu'
+import { MenuLinkParams } from '../module/menu'
 
 /* eslint-disable no-use-before-define */
 

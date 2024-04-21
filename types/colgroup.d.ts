@@ -1,10 +1,10 @@
 import { ColumnFixed, ColumnAlign, ColumnFormatterMethodParams, ColumnCellRenderOptions, ColumnContentRenderOptions, Column } from './column'
-import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterMethodParams } from './filter'
+import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterMethodParams } from './module/filter'
 import { ColumnCellRenderParams } from './v-x-e-table/renderer'
 import { ColumnHeaderRenderParams } from './header'
 import { ColumnFooterRenderParams } from './footer'
-import { ColumnEditRenderOptions } from './edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
+import { ColumnEditRenderOptions } from './module/edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './module/export'
 import { TableOverflow } from './table'
 
 /* eslint-disable no-use-before-define */
@@ -12,7 +12,8 @@ import { TableOverflow } from './table'
 /**
  * 组件 - 表格分组列
  */
-export declare class Colgroup extends Column {}
+export declare class VxeColgroup extends Column {}
+export class Colgroup extends VxeColgroup {}
 
 export type ColgroupOptions = ColgroupProps
 

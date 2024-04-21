@@ -1,6 +1,6 @@
 import { ColumnInfo } from '../column'
-import { TableExportConfig } from '../export'
-import { MenuFirstOption } from '../menu'
+import { TableExportConfig } from '../module/export'
+import { MenuFirstOption } from '../module/menu'
 import { GridRenderParams } from './renderer'
 
 declare function interceptorFunc(params: any, event: any): any;

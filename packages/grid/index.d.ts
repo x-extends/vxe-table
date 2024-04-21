@@ -1,4 +1,4 @@
-import { Grid } from '../../types/grid'
+import { VxeGrid } from '../../types/grid'
 
 export * from '../../types/grid'
-export default Grid
+export default VxeGrid

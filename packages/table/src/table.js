@@ -2,8 +2,8 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import VxeTableBody from './body'
-import VxeTableHeader from '../../header'
-import VxeTableFooter from '../../footer'
+import VxeTableHeader from './header'
+import VxeTableFooter from './footer'
 import vSize from '../../mixins/size'
 import { isEnableConf, getFuncText } from '../../tools/utils'
 import { createResizeEvent } from '../../tools/resize'
@@ -347,6 +347,16 @@ export default {
       pendingRowMaps: {},
       // 已标记的行
       pendingRowList: [],
+      // 自定义列相关的信息
+      customStore: {
+        btnEl: null,
+        isAll: false,
+        isIndeterminate: false,
+        activeBtn: false,
+        activeWrapper: false,
+        visible: false,
+        maxHeight: 0
+      },
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -1030,6 +1040,7 @@ export default {
       initStore,
       columnStore,
       filterStore,
+      customStore,
       ctxMenuStore,
       ctxMenuOpts,
       footerTableData,
@@ -1109,7 +1120,7 @@ export default {
           /**
            * 表尾
            */
-          showFooter ? h('vxe-table-footer', {
+          showFooter ? h(VxeTableFooter, {
             ref: 'tableFooter',
             props: {
               footerTableData,
@@ -1170,9 +1181,18 @@ export default {
         }
       }, this.callSlot($scopedSlots.loading, {}, h)),
       /**
+       * 自定义列
+       */
+      h('vxe-table-custom-panel', {
+        ref: 'customWrapper',
+        props: {
+          customStore
+        }
+      }),
+      /**
        * 筛选
        */
-      initStore.filter ? h('vxe-table-filter', {
+      initStore.filter ? h('vxe-table-filter-panel', {
         ref: 'filterWrapper',
         props: {
           filterStore
@@ -1181,7 +1201,7 @@ export default {
       /**
        * 导入
        */
-      initStore.import && this.importConfig ? h('vxe-import-panel', {
+      initStore.import && this.importConfig ? h('vxe-table-import-panel', {
         props: {
           defaultOptions: this.importParams,
           storeData: this.importStore
@@ -1190,7 +1210,7 @@ export default {
       /**
        * 导出/打印
        */
-      initStore.export && (this.exportConfig || this.printConfig) ? h('vxe-export-panel', {
+      initStore.export && (this.exportConfig || this.printConfig) ? h('vxe-table-export-panel', {
         props: {
           defaultOptions: this.exportParams,
           storeData: this.exportStore
@@ -1199,7 +1219,7 @@ export default {
       /**
        * 快捷菜单
        */
-      ctxMenuStore.visible && this.isCtxMenu ? h('vxe-table-context-menu', {
+      ctxMenuStore.visible && this.isCtxMenu ? h('vxe-table-menu-panel', {
         ref: 'ctxWrapper',
         props: {
           ctxMenuStore,

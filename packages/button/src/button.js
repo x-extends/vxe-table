@@ -20,6 +20,7 @@ export default {
     icon: String,
     round: Boolean,
     circle: Boolean,
+    title: String,
     disabled: Boolean,
     loading: Boolean,
     destroyOnClose: Boolean,
@@ -69,7 +70,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, className, popupClassName, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, className, popupClassName, title, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
     return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
@@ -89,6 +90,7 @@ export default {
         }],
         attrs: {
           name,
+          title,
           type: isFormBtn ? type : 'button',
           disabled: disabled || loading
         },
@@ -119,14 +121,14 @@ export default {
           on: {
             mousedown: this.mousedownDropdownEvent,
             click: this.clickDropdownEvent,
-            mouseenter: this.mouseenterEvent,
-            mouseleave: this.mouseleaveEvent
+            mouseenter: this.mouseenterDropdownEvent,
+            mouseleave: this.mouseleaveDropdownEvent
           }
         }, destroyOnClose && !showPanel ? [] : downsSlot.call(this, {}, h))
       ] : null)
     ]) : h('button', {
       ref: 'xBtn',
-      class: ['vxe-button', `type--${btnType}`, className, {
+      class: ['vxe-button', `type--${btnType}`, className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         [`theme--${status}`]: status,
         'is--round': this.round,
@@ -136,11 +138,14 @@ export default {
       }],
       attrs: {
         name,
+        title,
         type: isFormBtn ? type : 'button',
         disabled: disabled || loading
       },
       on: {
-        click: this.clickEvent
+        click: this.clickEvent,
+        onMouseenter: this.mouseenterEvent,
+        onMouseleave: this.mouseleaveEvent
       }
     }, this.renderContent(h))
   },
@@ -223,7 +228,13 @@ export default {
         this.$emit('dropdown-click', { name: targetElem.getAttribute('name'), $event: evnt })
       }
     },
-    mouseenterTargetEvent () {
+    mouseenterEvent (evnt) {
+      this.$emit('mouseenter', { $event: evnt })
+    },
+    mouseleaveEvent (evnt) {
+      this.$emit('mouseleave', { $event: evnt })
+    },
+    mouseenterTargetEvent (evnt) {
       const panelElem = this.$refs.panel
       panelElem.dataset.active = 'Y'
       if (!this.inited) {
@@ -234,13 +245,14 @@ export default {
       }
       this.showTime = setTimeout(() => {
         if (panelElem.dataset.active === 'Y') {
-          this.mouseenterEvent()
+          this.mouseenterDropdownEvent()
         } else {
           this.animatVisible = false
         }
       }, 250)
+      this.$emit('mouseenter', { $event: evnt })
     },
-    mouseenterEvent () {
+    mouseenterDropdownEvent () {
       const panelElem = this.$refs.panel
       panelElem.dataset.active = 'Y'
       this.animatVisible = true
@@ -257,7 +269,7 @@ export default {
         }
       }, 20)
     },
-    mouseleaveEvent () {
+    mouseleaveDropdownEvent () {
       this.closePanel()
     },
     closePanel () {

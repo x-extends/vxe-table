@@ -1,9 +1,11 @@
-import VxeRadio from './src/radio'
+import VxeRadioComponent from './src/radio'
 
-export const Radio = Object.assign(VxeRadio, {
+export const VxeRadio = Object.assign(VxeRadioComponent, {
   install (Vue) {
-    Vue.component(VxeRadio.name, VxeRadio)
+    Vue.component(VxeRadioComponent.name, VxeRadioComponent)
   }
 })
 
-export default Radio
+export const Radio = VxeRadio
+
+export default VxeRadio

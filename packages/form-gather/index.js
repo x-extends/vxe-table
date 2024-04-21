@@ -1,9 +1,11 @@
-import VxeFormGather from '../form/src/form-gather'
+import VxeFormGatherComponent from '../form/src/form-gather'
 
-export const FormGather = Object.assign(VxeFormGather, {
+export const VxeFormGather = Object.assign(VxeFormGatherComponent, {
   install (Vue) {
-    Vue.component(VxeFormGather.name, VxeFormGather)
+    Vue.component(VxeFormGatherComponent.name, VxeFormGatherComponent)
   }
 })
 
-export default FormGather
+export const FormGather = VxeFormGather
+
+export default VxeFormGather

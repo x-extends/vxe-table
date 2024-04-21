@@ -1,11 +1,13 @@
-import VxeTableColgroup from '../table/src/group'
+import VxeTableColgroupComponent from '../table/src/group'
 
-export const Colgroup = Object.assign(VxeTableColgroup, {
+export const VxeColgroup = Object.assign(VxeTableColgroupComponent, {
   install (Vue) {
-    Vue.component(VxeTableColgroup.name, VxeTableColgroup)
+    Vue.component(VxeTableColgroupComponent.name, VxeTableColgroupComponent)
     // 兼容旧用法
-    Vue.component('VxeTableColgroup', VxeTableColgroup)
+    Vue.component('VxeTableColgroup', VxeTableColgroupComponent)
   }
 })
 
-export default Colgroup
+export const Colgroup = VxeColgroup
+
+export default VxeColgroup

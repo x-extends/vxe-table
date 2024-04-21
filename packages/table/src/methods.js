@@ -2403,9 +2403,10 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, filterStore, getRowNode } = this
+    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, filterStore, customStore, getRowNode } = this
     const { actived } = editStore
-    const { ctxWrapper, filterWrapper, validTip } = $refs
+    const { ctxWrapper, filterWrapper, customWrapper, validTip } = $refs
+    // 筛选
     if (filterWrapper) {
       if (getEventTargetNode(evnt, $el, 'vxe-cell--filter').flag) {
         // 如果点击了筛选按钮
@@ -2417,6 +2418,19 @@ const Methods = {
         }
       }
     }
+    // 自定义列
+    if (customWrapper) {
+      if (customStore.btnEl === evnt.target || getEventTargetNode(evnt, document.body, 'vxe-toolbar-custom-target').flag) {
+        // 如果点击了自定义列按钮
+      } else if (getEventTargetNode(evnt, customWrapper.$el).flag) {
+        // 如果点击自定义列容器
+      } else {
+        if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
+          this.preventEvent(evnt, 'event.clearCustom', {}, () => this.closeCustom())
+        }
+      }
+    }
+
     // 如果已激活了编辑状态
     if (actived.row) {
       if (!(editOpts.autoClear === false)) {
@@ -2733,6 +2747,19 @@ const Methods = {
               } else {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
+              }
+              const afterEditMethod = editOpts.afterEditMethod
+              if (afterEditMethod) {
+                this.$nextTick(() => {
+                  afterEditMethod({
+                    row: selected.row,
+                    rowIndex: this.getRowIndex(selected.row),
+                    column: selected.column,
+                    columnIndex: this.getColumnIndex(selected.column),
+                    $table: this,
+                    $grid: this.$xegrid
+                  })
+                })
               }
             }
           }
@@ -3732,7 +3759,7 @@ const Methods = {
     if (selectRadioRow) {
       const rowid = getRowid(this, selectRadioRow)
       if (isFull) {
-        if (!fullDataRowIdData[rowid]) {
+        if (fullDataRowIdData[rowid]) {
           return selectRadioRow
         }
       } else {
@@ -5260,7 +5287,7 @@ const Methods = {
 }
 
 // Module methods
-const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print,openCustom,closeCustom'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args) {

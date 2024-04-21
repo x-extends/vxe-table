@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 分页
  */
-export declare class Pager extends VXETableComponent {
+export declare class VxePager extends VXETableComponent {
   /**
    * 自定义布局
    */
@@ -61,6 +61,7 @@ export declare class Pager extends VXETableComponent {
   iconNextPage?: string;
   iconJumpMore?: string;
 }
+export class Pager extends VxePager {}
 
 export interface PagerOptions {
   /**

@@ -1,4 +1,4 @@
-import { Filter } from '../../types/filter'
+import { VxeTableFilterModule } from '../../types/module/filter'
 
-export * from '../../types/filter'
-export default Filter
+export * from '../../types/module/filter'
+export default VxeTableFilterModule

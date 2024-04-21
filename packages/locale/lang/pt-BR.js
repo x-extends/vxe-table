@@ -180,6 +180,12 @@ export default {
       confirm: 'Confirmar',
       cancel: 'Cancelar'
     },
+    custom: {
+      cstmTitle: 'Column Settings',
+      cstmRestore: 'Restore default',
+      cstmCancel: 'Cancelar',
+      cstmConfirm: 'Confirm'
+    },
     import: {
       modes: {
         covering: 'Sobrescrever',

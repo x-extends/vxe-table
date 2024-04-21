@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 列表
  */
-export declare class List extends VXETableComponent {
+export declare class VxeList extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -68,3 +68,4 @@ export declare class List extends VXETableComponent {
    */
   clearScroll(): Promise<any>;
 }
+export class List extends VxeList {}

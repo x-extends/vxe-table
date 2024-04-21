@@ -1,11 +1,16 @@
-import { VXETableComponent } from './component'
-import { ColumnInfo } from './column'
-import { Table } from './table'
+import { VXETableComponent } from '../component'
+import { ColumnInfo } from '../column'
+import { Table } from '../table'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 表格校验
+ * 表格模块 - 校验模块
+ */
+export declare class VxeTableValidatorModule extends VXETableComponent {}
+
+/**
+ * 表格模块 - 校验模块
  */
 export declare class Validator extends VXETableComponent {}
 

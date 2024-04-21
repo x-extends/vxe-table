@@ -27,10 +27,10 @@
             <vxe-option value="1" :label="$t('app.body.other.v1')" class-name="end-of-life"></vxe-option>
           </vxe-select> -->
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <template v-if="apiLoading && showPlugin">
+          <!-- <template v-if="apiLoading && showPlugin">
             <a v-if="disabledPlugin" class="link support" href="/vxe-table/plugins" target="_blank">💡插件</a>
             <a v-else title="维护中" class="link support" style="cursor: no-drop;color: #BFBFBF;background-color:#fff;" @click="$XModal.alert('维护中...', '维护中')">插件</a>
-          </template>
+          </template> -->
         </div>
       </div>
     </header>

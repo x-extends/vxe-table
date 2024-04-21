@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 文本域
  */
-export declare class Textarea extends VXETableComponent {
+export declare class VxeTextarea extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -62,3 +62,4 @@ export declare class Textarea extends VXETableComponent {
    */
   blur(): Promise<any>;
 }
+export class Textarea extends VxeTextarea {}

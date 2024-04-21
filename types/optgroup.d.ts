@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 组件 - 下拉框选项分组
  */
-export declare class Optgroup extends VXETableComponent {
+export declare class VxeOptgroup extends VXETableComponent {
   /**
    * 显示内容
    */
@@ -17,3 +17,4 @@ export declare class Optgroup extends VXETableComponent {
    */
   disabled?: boolean;
 }
+export class Optgroup extends VxeOptgroup {}

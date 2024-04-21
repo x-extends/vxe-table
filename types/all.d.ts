@@ -42,13 +42,10 @@ declare global {
 export * from './v-x-e-table'
 export * from './component'
 
-export * from './filter'
-export * from './menu'
-export * from './edit'
-export * from './export'
-export * from './keyboard'
-export * from './validator'
+// Component
+export * from './module'
 
+// Table module
 export * from './icon'
 export * from './loading'
 export * from './table'

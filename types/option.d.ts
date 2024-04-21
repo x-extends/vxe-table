@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 组件 - 下拉框选项
  */
-export declare class Option extends VXETableComponent {
+export declare class VxeOption extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -21,3 +21,4 @@ export declare class Option extends VXETableComponent {
    */
   disabled?: boolean;
 }
+export class Option extends VxeOption {}

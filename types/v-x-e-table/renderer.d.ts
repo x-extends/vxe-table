@@ -3,10 +3,10 @@ import { SlotVNodeType, RowInfo, VNodeStyle, VNodeClassName } from '../component
 import { Table } from '../table'
 import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from '../export'
-import { ColumnEditRenderOptions, ColumnEditRenderParams } from '../edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from '../module/export'
+import { ColumnEditRenderOptions, ColumnEditRenderParams } from '../module/edit'
 import { ColumnFooterRenderParams } from '../footer'
-import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from '../filter'
+import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from '../module/filter'
 import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams, ToolbarToolRenderOptions, ToolbarToolRenderParams } from '../toolbar'
 import { FormItemRenderOptions, FormItemRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
 

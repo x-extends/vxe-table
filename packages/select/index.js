@@ -1,15 +1,17 @@
-import VxeSelect from './src/select'
-import VxeOption from './src/option'
-import VxeOptgroup from './src/optgroup'
+import VxeSelectComponent from './src/select'
+import VxeOptionComponent from './src/option'
+import VxeOptgroupComponent from './src/optgroup'
 
-export const Select = Object.assign(VxeSelect, {
-  Option: VxeOption,
-  Optgroup: VxeOptgroup,
+export const VxeSelect = Object.assign(VxeSelectComponent, {
+  Option: VxeOptionComponent,
+  Optgroup: VxeOptgroupComponent,
   install (Vue) {
-    Vue.component(VxeSelect.name, VxeSelect)
-    Vue.component(VxeOption.name, VxeOption)
-    Vue.component(VxeOptgroup.name, VxeOptgroup)
+    Vue.component(VxeSelectComponent.name, VxeSelectComponent)
+    Vue.component(VxeOptionComponent.name, VxeOptionComponent)
+    Vue.component(VxeOptgroupComponent.name, VxeOptgroupComponent)
   }
 })
 
-export default Select
+export const Select = VxeSelect
+
+export default VxeSelect

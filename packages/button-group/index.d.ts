@@ -1,4 +1,4 @@
-import { ButtonGroup } from '../../types/button-group'
+import { VxeButtonGroup } from '../../types/button-group'
 
 export * from '../../types/button-group'
-export default ButtonGroup
+export default VxeButtonGroup

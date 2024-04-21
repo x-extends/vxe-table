@@ -1,9 +1,11 @@
-import VxeIcon from './src/icon'
+import VxeIconComponent from './src/icon'
 
-export const Icon = Object.assign(VxeIcon, {
+export const VxeIcon = Object.assign(VxeIconComponent, {
   install (Vue) {
-    Vue.component(VxeIcon.name, VxeIcon)
+    Vue.component(VxeIconComponent.name, VxeIconComponent)
   }
 })
 
-export default Icon
+export const Icon = VxeIcon
+
+export default VxeIcon

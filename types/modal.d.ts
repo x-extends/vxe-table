@@ -6,7 +6,7 @@ import { VXETableComponent } from './component'
 /**
  * 弹窗
  */
-export declare class Modal extends VXETableComponent {
+export declare class VxeModal extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -182,6 +182,7 @@ export declare class Modal extends VXETableComponent {
    */
   revert(): Promise<any>;
 }
+export class Modal extends VxeModal {}
 
 /**
  * 窗口类型

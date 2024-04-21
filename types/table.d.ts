@@ -1,18 +1,18 @@
 import { VXETableComponent, RowInfo, RecordInfo } from './component'
 import { ColumnOptions, ColumnInfo } from './column'
 import { ColumnCellRenderParams, TableEmptyRender } from './v-x-e-table'
-import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './export'
-import { ColumnFilterOption } from './filter'
-import { ColumnEditRule, ColumnEditValidErrMapParams } from './validator'
+import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './module/export'
+import { ColumnFilterOption } from './module/filter'
+import { ColumnEditRule, ColumnEditValidErrMapParams } from './module/validator'
 import { ColumnFooterRenderParams } from './footer'
-import { MenuOptions, MenuFirstOption } from './menu'
+import { MenuOptions, MenuFirstOption } from './module/menu'
 
 /* eslint-disable no-use-before-define */
 
 /**
  * 表格
  */
-export declare class Table extends VXETableComponent {
+export declare class VxeTable extends VXETableComponent {
   /**
    * 唯一标识
    */
@@ -1145,6 +1145,7 @@ export declare class Table extends VXETableComponent {
   blur(): Promise<any>;
   [key: string]: any;
 }
+export class Table extends VxeTable {}
 
 export type TableBorder = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none' | '';
 export type TableAlign = 'left' | 'center' | 'right' | '' | null;
@@ -1629,6 +1630,7 @@ export interface TableEditConfig {
    * 该方法的返回值用来决定该单元格是否允许编辑
    */
   beforeEditMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
+  afterEditMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): void;
   /**
    * 请使用 beforeEditMethod
    * @deprecated

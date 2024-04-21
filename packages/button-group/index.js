@@ -1,9 +1,11 @@
-import VxeButtonGroup from '../button/src/group'
+import VxeButtonGroupComponent from '../button/src/group'
 
-export const ButtonGroup = Object.assign(VxeButtonGroup, {
+export const VxeButtonGroup = Object.assign(VxeButtonGroupComponent, {
   install (Vue) {
-    Vue.component(VxeButtonGroup.name, VxeButtonGroup)
+    Vue.component(VxeButtonGroupComponent.name, VxeButtonGroupComponent)
   }
 })
 
-export default ButtonGroup
+export const ButtonGroup = VxeButtonGroup
+
+export default VxeButtonGroup

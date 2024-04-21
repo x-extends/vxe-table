@@ -1,11 +1,11 @@
-import VxeTable from './src/table'
-import VxeTableBody from './src/body'
+import VxeTableComponent from './src/table'
+import VxeTableBodyComponent from './src/body'
 import VXETable from '../v-x-e-table'
 
-export const Table = Object.assign(VxeTable, {
+export const VxeTable = Object.assign(VxeTableComponent, {
   install (Vue) {
     if (typeof window !== 'undefined' && window.VXETableMixin) {
-      VxeTable.mixins.push(window.VXETableMixin)
+      VxeTableComponent.mixins.push(window.VXETableMixin)
       delete window.VXETableMixin
     }
     if (typeof window !== 'undefined' && window.VXETableExtendCellArea && window.VXETableExtendCellArea.init) {
@@ -16,17 +16,19 @@ export const Table = Object.assign(VxeTable, {
       delete window.VXETablePro
     }
     VXETable.Vue = Vue
-    VXETable.Table = VxeTable
-    VXETable.TableComponent = VxeTable
+    VXETable.Table = VxeTableComponent
+    VXETable.TableComponent = VxeTableComponent
     if (!Vue.prototype.$vxe) {
       Vue.prototype.$vxe = { t: VXETable.t, _t: VXETable._t }
     } else {
       Vue.prototype.$vxe.t = VXETable.t
       Vue.prototype.$vxe._t = VXETable._t
     }
-    Vue.component(VxeTable.name, VxeTable)
-    Vue.component(VxeTableBody.name, VxeTableBody)
+    Vue.component(VxeTableComponent.name, VxeTableComponent)
+    Vue.component(VxeTableBodyComponent.name, VxeTableBodyComponent)
   }
 })
 
-export default Table
+export const Table = VxeTable
+
+export default VxeTable

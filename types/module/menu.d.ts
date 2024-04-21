@@ -1,10 +1,15 @@
-import { VXETableComponent } from './component'
-import { ColumnCellRenderParams } from './v-x-e-table'
+import { VXETableComponent } from '../component'
+import { ColumnCellRenderParams } from '../v-x-e-table'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 快捷菜单
+ * 表格模块 - 快捷菜单
+ */
+export declare class VxeTableMenuModule extends VXETableComponent {}
+
+/**
+ * 表格模块 - 快捷菜单
  */
 export declare class Menu extends VXETableComponent {}
 

@@ -1,10 +1,15 @@
-import { VXETableComponent } from './component'
-import { ColumnCellRenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
+import { VXETableComponent } from '../component'
+import { ColumnCellRenderParams, RenderOptions, OptionProps, OptionGroupProps } from '../v-x-e-table'
 
 /* eslint-disable no-use-before-define */
 
 /**
- * 编辑
+ * 表格模块 - 编辑
+ */
+export declare class VxeTableEditModule extends VXETableComponent {}
+
+/**
+ * 表格模块 - 编辑
  */
 export declare class Edit extends VXETableComponent {}
 

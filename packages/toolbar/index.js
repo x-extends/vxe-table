@@ -1,9 +1,11 @@
-import VxeToolbar from './src/toolbar'
+import VxeToolbarComponent from './src/toolbar'
 
-export const Toolbar = Object.assign(VxeToolbar, {
+export const VxeToolbar = Object.assign(VxeToolbarComponent, {
   install (Vue) {
-    Vue.component(VxeToolbar.name, VxeToolbar)
+    Vue.component(VxeToolbarComponent.name, VxeToolbarComponent)
   }
 })
 
-export default Toolbar
+export const Toolbar = VxeToolbar
+
+export default VxeToolbar

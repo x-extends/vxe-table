@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 按钮
  */
-export declare class Button extends VXETableComponent {
+export declare class VxeButton extends VXETableComponent {
   /**
    * 按钮类型
    */
@@ -45,3 +45,5 @@ export declare class Button extends VXETableComponent {
    */
   transfer?: boolean;
 }
+
+export class Button extends VxeButton {}

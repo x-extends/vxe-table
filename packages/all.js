@@ -1,17 +1,19 @@
 import XEUtils from 'xe-utils'
 import { VXETable } from './v-x-e-table'
 
-import { Icon } from './icon'
 import { Filter } from './filter'
 import { Menu } from './menu'
 import { Edit } from './edit'
 import { Export } from './export'
 import { Keyboard } from './keyboard'
 import { Validator } from './validator'
+import { Custom } from './custom'
 
+import { Icon } from './icon'
 import { Column } from './column'
 import { Colgroup } from './colgroup'
 import { Grid } from './grid'
+import { Table } from './table'
 import { Toolbar } from './toolbar'
 import { Pager } from './pager'
 import { Checkbox } from './checkbox'
@@ -35,24 +37,24 @@ import { Switch } from './switch'
 import { List } from './list'
 import { Pulldown } from './pulldown'
 
-import { Table } from './table'
-
 import zhCN from './locale/lang/zh-CN'
 
 // 按需加载的组件
 const components = [
   // 功能模块
-  Icon,
   Filter,
   Menu,
   Edit,
   Export,
   Keyboard,
   Validator,
+  Custom,
 
   // 可选组件
+  Icon,
   Column,
   Colgroup,
+  Table,
   Grid,
   Toolbar,
   Pager,
@@ -75,10 +77,7 @@ const components = [
   Option,
   Switch,
   List,
-  Pulldown,
-
-  // 核心
-  Table
+  Pulldown
 ]
 
 // 默认安装
@@ -96,17 +95,19 @@ VXETable.config({
 
 export * from './v-x-e-table'
 
-export * from './icon'
 export * from './filter'
 export * from './edit'
+export * from './menu'
 export * from './export'
 export * from './keyboard'
 export * from './validator'
+export * from './custom'
 
+export * from './icon'
 export * from './column'
 export * from './colgroup'
+export * from './table'
 export * from './grid'
-export * from './menu'
 export * from './toolbar'
 export * from './pager'
 export * from './checkbox'
@@ -129,5 +130,3 @@ export * from './option'
 export * from './switch'
 export * from './list'
 export * from './pulldown'
-
-export * from './table'

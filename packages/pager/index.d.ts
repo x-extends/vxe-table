@@ -1,4 +1,4 @@
-import { Pager } from '../../types/pager'
+import { VxePager } from '../../types/pager'
 
 export * from '../../types/pager'
-export default Pager
+export default VxePager

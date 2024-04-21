@@ -1,4 +1,4 @@
-import { Colgroup } from '../../types/colgroup'
+import { VxeColgroup } from '../../types/colgroup'
 
 export * from '../../types/colgroup'
-export default Colgroup
+export default VxeColgroup

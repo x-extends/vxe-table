@@ -1,4 +1,4 @@
-import { CellRuleValidatorParams } from '../validator'
+import { CellRuleValidatorParams } from '../module/validator'
 import { FormRuleValidatorParams } from '../form'
 
 /* eslint-disable no-use-before-define */

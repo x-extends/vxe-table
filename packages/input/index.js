@@ -1,9 +1,11 @@
-import VxeInput from './src/input'
+import VxeInputComponent from './src/input'
 
-export const Input = Object.assign(VxeInput, {
+export const VxeInput = Object.assign(VxeInputComponent, {
   install (Vue) {
-    Vue.component(VxeInput.name, VxeInput)
+    Vue.component(VxeInputComponent.name, VxeInputComponent)
   }
 })
 
-export default Input
+export const Input = VxeInput
+
+export default VxeInput

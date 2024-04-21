@@ -1,9 +1,11 @@
-import VxeTextarea from './src/textarea'
+import VxeTextareaComponent from './src/textarea'
 
-export const Textarea = Object.assign(VxeTextarea, {
+export const VxeTextarea = Object.assign(VxeTextareaComponent, {
   install (Vue) {
-    Vue.component(VxeTextarea.name, VxeTextarea)
+    Vue.component(VxeTextareaComponent.name, VxeTextareaComponent)
   }
 })
 
-export default Textarea
+export const Textarea = VxeTextarea
+
+export default VxeTextarea
