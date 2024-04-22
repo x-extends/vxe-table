@@ -13,6 +13,7 @@ const prefixer = require('gulp-autoprefixer')
 const merge = require('merge-stream')
 const pack = require('./package.json')
 const ts = require('gulp-typescript')
+const tsconfig = require('./tsconfig.json')
 
 const sass = gulpSass(dartSass)
 
@@ -24,7 +25,8 @@ const moduleList = [
   'edit',
   'export',
   'keyboard',
-  'validator'
+  'validator',
+  'custom'
 ]
 
 const componentList = [
@@ -96,14 +98,7 @@ gulp.task('build_modules', () => {
   return gulp.src('packages_temp/**/*.ts')
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_VERSION', `"${pack.version}"`))
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_ENV', 'process.env.NODE_ENV'))
-    .pipe(ts({
-      strict: true,
-      moduleResolution: 'node',
-      noImplicitAny: true,
-      target: 'es5',
-      module: 'esnext',
-      lib: ['dom', 'esnext']
-    }))
+    .pipe(ts(tsconfig.compilerOptions))
     .pipe(gulp.dest('es'))
     .pipe(babel({
       presets: [
@@ -129,13 +124,7 @@ gulp.task('build_i18n', () => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
     const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
     return gulp.src(`packages_temp/locale/lang/${isZHTC ? 'zh-TC' : code}.ts`)
-      .pipe(ts({
-        strict: true,
-        moduleResolution: 'node',
-        noImplicitAny: true,
-        target: 'esnext',
-        lib: ['dom', 'esnext']
-      }))
+      .pipe(ts(tsconfig.compilerOptions))
       .pipe(babel({
         moduleId: `vxe-table-lang.${code}`,
         presets: ['@babel/env'],

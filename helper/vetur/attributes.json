@@ -1023,6 +1023,10 @@
     "type": "any[]",
     "description": "v-model 绑定值"
   },
+  "vxe-radio-group/type": {
+    "type": "string",
+    "description": "选项类型"
+  },
   "vxe-radio-group/size": {
     "type": "string",
     "description": "尺寸"

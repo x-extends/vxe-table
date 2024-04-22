@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "4.6.0-beta.7",
+  "version": "4.6.0",
   "description": "一个基于 vue 的 PC 端表单/表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、JSON 配置式...",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
@@ -29,12 +29,12 @@
   "typings": "types/index.d.ts",
   "dependencies": {
     "dom-zindex": "^1.0.1",
-    "xe-utils": "^3.5.24"
+    "xe-utils": "^3.5.25"
   },
   "devDependencies": {
-    "@types/resize-observer-browser": "^0.1.7",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
+    "@types/resize-observer-browser": "^0.1.11",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
@@ -46,29 +46,29 @@
     "core-js": "^3.8.3",
     "del": "^6.1.1",
     "eslint": "^7.32.0",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.0",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^8.0.3",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^6.1.0",
+    "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.4.0",
-    "gulp-replace": "^1.0.0",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.1.4",
     "gulp-sass": "^5.1.0",
-    "gulp-sourcemaps": "^2.6.5",
+    "gulp-sourcemaps": "^3.0.0",
     "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
-    "postcss": "^8.2.15",
-    "sass": "^1.56.1",
-    "sass-loader": "^12.0.0",
+    "postcss": "^8.4.38",
+    "sass": "^1.75.0",
+    "sass-loader": "^14.2.0",
     "typescript": "~4.5.5",
     "vue": "3.3.13",
-    "vue-i18n": "^9.1.7",
-    "vue-router": "^4.0.11",
-    "vuex": "^4.0.2"
+    "vue-i18n": "^9.13.1",
+    "vue-router": "^4.3.2",
+    "vuex": "^4.1.0"
   },
   "peerDependencies": {
     "vue": "^3.2.28"

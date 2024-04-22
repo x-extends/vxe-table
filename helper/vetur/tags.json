@@ -304,6 +304,7 @@
   "vxe-radio-group": {
     "attributes": [
       "model-value",
+      "type",
       "size",
       "disabled",
       "strict"
