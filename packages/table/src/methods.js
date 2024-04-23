@@ -2841,10 +2841,13 @@ const Methods = {
     const tipContent = iconParams.content || iconParams.message
     if (tipContent) {
       const { $refs, tooltipStore } = this
+      const { column } = params
       const content = getFuncText(tipContent)
       this.handleTargetEnterEvent(true)
+      tooltipStore.row = null
+      tooltipStore.column = column
       tooltipStore.visible = true
-      tooltipStore.currOpts = { ...params, content: null }
+      // tooltipStore.currOpts = { content: null }
       this.$nextTick(() => {
         const $tooltip = $refs.tooltip
         if ($tooltip) {
@@ -2930,8 +2933,7 @@ const Methods = {
       Object.assign(tooltipStore, {
         row,
         column,
-        visible: true,
-        currOpts: null
+        visible: true
       })
       this.$nextTick(() => {
         const $tooltip = $refs.tooltip
@@ -2962,8 +2964,7 @@ const Methods = {
         row: null,
         column: null,
         content: null,
-        visible: false,
-        currOpts: null
+        visible: false
       })
       if (tooltip) {
         tooltip.close()
@@ -5294,9 +5295,17 @@ funcs.forEach(name => {
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (!this[`_${name}`]) {
         if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['Export'])
+          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
         } else if ('clearValidate,fullValidate,validate'.split(',').includes(name)) {
-          errLog('vxe.error.reqModule', ['Validator'])
+          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+        } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
+          errLog('vxe.error.reqModule', ['VxeTableFilterModule'])
+        } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
+          errLog('vxe.error.reqModule', ['VxeTableEditModule'])
+        } else if ('closeMenu'.split(',').includes(name)) {
+          errLog('vxe.error.reqModule', ['VxeTableMenuModule'])
+        } else if ('openCustom,closeCustom'.split(',').includes(name)) {
+          errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
         }
       }
     }

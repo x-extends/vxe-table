@@ -1,4 +1,3 @@
-
 import UtilTools from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
@@ -7,7 +6,7 @@ function renderSimplePanel (h, _vm) {
   const { $xetable, customStore } = _vm
   const { customOpts, collectColumn, isMaxFixedColumn } = $xetable
   const { maxHeight } = customStore
-  const { checkMethod, trigger } = customOpts
+  const { checkMethod, visibleMethod, trigger } = customOpts
   const colVNs = []
   const customWrapperOns = {}
   // hover 触发
@@ -16,15 +15,16 @@ function renderSimplePanel (h, _vm) {
     customWrapperOns.onMouseleave = _vm.handleWrapperMouseleaveEvent
   }
   XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
-    const colTitle = UtilTools.formatText(column.getTitle(), 1)
-    const colKey = column.getKey()
-    const isColGroup = column.children && column.children.length
-    const isDisabled = checkMethod ? !checkMethod({ column }) : false
-    if (isColGroup || colKey) {
+    const isVisible = visibleMethod ? visibleMethod({ column }) : true
+    if (isVisible) {
       const isChecked = column.visible
       const isIndeterminate = column.halfVisible
+      const colTitle = UtilTools.formatText(column.getTitle(), 1)
+      const isColGroup = column.children && column.children.length
+      const isDisabled = checkMethod ? !checkMethod({ column }) : false
       colVNs.push(
         h('li', {
+          key: column.id,
           class: ['vxe-table-custom--option', `level--${column.level}`, {
             'is--group': isColGroup
           }]
@@ -153,19 +153,22 @@ function renderSimplePanel (h, _vm) {
 const renderPopupPanel = (h, _vm) => {
   const { $xetable, customStore } = _vm
   const { customOpts, collectColumn, isMaxFixedColumn } = $xetable
-  const { checkMethod } = customOpts
+  const { checkMethod, visibleMethod } = customOpts
   const trVNs = []
   XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
-    const colTitle = UtilTools.formatText(column.getTitle(), 1)
-    const colKey = column.getKey()
-    const isColGroup = column.children && column.children.length
-    const isDisabled = checkMethod ? !checkMethod({ column }) : false
-    if (isColGroup || colKey) {
+    const isVisible = visibleMethod ? visibleMethod({ column }) : true
+    if (isVisible) {
       const isChecked = column.visible
       const isIndeterminate = column.halfVisible
+      const colTitle = UtilTools.formatText(column.getTitle(), 1)
+      const isColGroup = column.children && column.children.length
+      const isDisabled = checkMethod ? !checkMethod({ column }) : false
       trVNs.push(
         h('tr', {
-          class: [`vxe-table-custom-popup--row-level${column.level}`]
+          key: column.id,
+          class: [`vxe-table-custom-popup--row-level${column.level}`, {
+            'is--group': isColGroup
+          }]
         }, [
           h('td', {
             class: 'vxe-table-custom-popup--column-name'

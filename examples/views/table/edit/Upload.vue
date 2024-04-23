@@ -117,9 +117,9 @@ export default {
           const name = ns.slice(0, ns.length - 1).join('')
           const type = ns[ns.length - 1]
           return {
-            name: name,
+            name,
             size: file.size,
-            type: type,
+            type,
             date: XEUtils.toDateString(new Date())
           }
         })

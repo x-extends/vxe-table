@@ -12,7 +12,6 @@ const cleanCSS = require('gulp-clean-css')
 const prefixer = require('gulp-autoprefixer')
 const merge = require('merge-stream')
 const pack = require('./package.json')
-const ts = require('gulp-typescript')
 
 const sass = gulpSass(dartSass)
 
@@ -24,7 +23,8 @@ const moduleList = [
   'edit',
   'export',
   'keyboard',
-  'validator'
+  'validator',
+  'custom'
 ]
 
 const componentList = [

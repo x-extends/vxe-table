@@ -147,9 +147,6 @@ export default {
   beforeDestroy () {
     const { $el, target, trigger } = this
     const parentNode = $el.parentNode
-    if (parentNode) {
-      parentNode.removeChild($el)
-    }
     if (target) {
       if (trigger === 'hover') {
         target.onmouseenter = null
@@ -157,6 +154,9 @@ export default {
       } else if (trigger === 'click') {
         target.onclick = null
       }
+    }
+    if (parentNode) {
+      parentNode.removeChild($el)
     }
   },
   render (h) {

@@ -377,7 +377,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
           rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
         ],
         attrs: {
-          rowid: rowid
+          rowid
         },
         style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
         key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,

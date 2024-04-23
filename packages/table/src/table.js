@@ -422,8 +422,7 @@ export default {
       tooltipStore: {
         row: null,
         column: null,
-        visible: false,
-        currOpts: null
+        visible: false
       },
       // 存放数据校验相关信息
       validStore: {
@@ -518,7 +517,7 @@ export default {
       return Object.assign({}, GlobalConfig.tooltip, GlobalConfig.table.tooltipConfig, this.tooltipConfig)
     },
     tipConfig () {
-      return { ...this.tooltipOpts, ...this.tooltipStore.currOpts }
+      return { ...this.tooltipOpts }
     },
     validTipOpts () {
       return Object.assign({ isArrow: false }, this.tooltipOpts)

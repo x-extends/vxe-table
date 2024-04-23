@@ -159,7 +159,7 @@ export function renderOption (h, _vm, list, group) {
         'is--hover': currentValue === optionValue
       }],
       attrs: {
-        optid: optid
+        optid
       },
       on: {
         mousedown: _vm.mousedownOptionEvent,
@@ -194,7 +194,7 @@ export function renderOptgroup (h, _vm) {
         'is--disabled': isGroupDisabled
       }],
       attrs: {
-        optid: optid
+        optid
       }
     }, [
       h('div', {
@@ -441,7 +441,7 @@ export default {
           clearable: this.clearable,
           placeholder: this.placeholder,
           readonly: true,
-          disabled: disabled,
+          disabled,
           type: 'text',
           prefixIcon: this.prefixIcon,
           suffixIcon: loading ? GlobalConfig.icon.SELECT_LOADED : (visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE),

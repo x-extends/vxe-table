@@ -248,7 +248,7 @@ export default {
           return h('span', {
             class: `${type}-resize`,
             attrs: {
-              type: type
+              type
             },
             on: {
               mousedown: this.dragEvent

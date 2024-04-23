@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 
 export const browse = XEUtils.browse()
+
 const reClsMap = {}
 
 function getClsRE (cls) {
@@ -119,7 +120,7 @@ export const DomTools = {
       if (queryCls && hasClass(target, queryCls) && (!queryMethod || queryMethod(target))) {
         targetElem = target
       } else if (target === container) {
-        return { flag: queryCls ? !!targetElem : true, container, targetElem: targetElem }
+        return { flag: queryCls ? !!targetElem : true, container, targetElem }
       }
       target = target.parentNode
     }

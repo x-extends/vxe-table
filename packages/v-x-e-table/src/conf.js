@@ -319,10 +319,6 @@ export default {
     // export: {
     //   types: ['csv', 'html', 'xml', 'txt']
     // },
-    custom: {
-      allowFixed: true,
-      showFooter: true
-    }
     // buttons: []
   },
   button: {

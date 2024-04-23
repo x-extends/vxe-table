@@ -68,7 +68,7 @@ export default {
         class: 'vxe-switch--button',
         attrs: {
           type: 'button',
-          disabled: disabled
+          disabled
         },
         on: {
           click: this.clickEvent,

@@ -291,7 +291,7 @@ export default {
           warnLog('vxe.error.delProp', ['custom.isFooter', 'custom-config.showFooter'])
         }
         if (customOpts.showFooter) {
-          warnLog('vxe.error.delProp', ['custom.isFooter', 'custom-config.showFooter'])
+          warnLog('vxe.error.delProp', ['custom.showFooter', 'custom-config.showFooter'])
         }
         if (customOpts.immediate) {
           warnLog('vxe.error.delProp', ['custom.immediate', 'custom-config.immediate'])
