@@ -306,8 +306,11 @@
       "model-value",
       "type",
       "size",
+      "type",
       "disabled",
-      "strict"
+      "strict",
+      "options",
+      "option-props"
     ],
     "subtags": [
       "vxe-radio",
@@ -344,7 +347,9 @@
       "model-value",
       "max",
       "size",
-      "disabled"
+      "disabled",
+      "options",
+      "option-props"
     ],
     "subtags": [
       "vxe-checkbox"
@@ -463,6 +468,7 @@
     "attributes": [
       "content",
       "mode",
+      "title",
       "type",
       "size",
       "name",
@@ -487,7 +493,8 @@
       "round",
       "circle",
       "disabled",
-      "class-name"
+      "class-name",
+      "options"
     ],
     "description": "按钮组"
   },

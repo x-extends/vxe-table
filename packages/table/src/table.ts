@@ -193,8 +193,7 @@ export default defineComponent({
         row: null,
         column: null,
         content: null,
-        visible: false,
-        currOpts: null
+        visible: false
       },
       // 存放数据校验相关信息
       validStore: {
@@ -406,11 +405,9 @@ export default defineComponent({
     })
 
     const computeTipConfig = computed(() => {
-      const { tooltipStore } = reactData
       const tooltipOpts = computeTooltipOpts.value
       return {
-        ...tooltipOpts,
-        ...tooltipStore.currOpts
+        ...tooltipOpts
       }
     })
 
@@ -4989,8 +4986,7 @@ export default defineComponent({
         Object.assign(tooltipStore, {
           row,
           column,
-          visible: true,
-          currOpts: null
+          visible: true
         })
         nextTick(() => {
           const $tooltip = refTooltip.value
@@ -5577,10 +5573,13 @@ export default defineComponent({
         const tipContent = iconParams.content || (iconParams as any).message
         if (tipContent) {
           const { tooltipStore } = reactData
+          const { column } = params
           const content = getFuncText(tipContent)
           handleTargetEnterEvent(true)
+          tooltipStore.row = null
+          tooltipStore.column = column
           tooltipStore.visible = true
-          tooltipStore.currOpts = { ...params, content: null }
+          // tooltipStore.currOpts = { content: null }
           nextTick(() => {
             const $tooltip = refTooltip.value
             if ($tooltip) {

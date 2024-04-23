@@ -1025,7 +1025,7 @@
   },
   "vxe-radio-group/type": {
     "type": "string",
-    "description": "选项类型"
+    "description": "按钮类型"
   },
   "vxe-radio-group/size": {
     "type": "string",
@@ -1038,6 +1038,14 @@
   "vxe-radio-group/strict": {
     "type": "boolean",
     "description": "严格模式，选中后不能取消"
+  },
+  "vxe-radio-group/options": {
+    "type": "{ value, label }[]",
+    "description": "选项列表"
+  },
+  "vxe-radio-group/option-props": {
+    "type": "any",
+    "description": "选项属性参数配置"
   },
   "vxe-radio-button/model-value": {
     "type": "any",
@@ -1110,6 +1118,14 @@
   "vxe-checkbox-group/disabled": {
     "type": "boolean",
     "description": "是否禁用"
+  },
+  "vxe-checkbox-group/options": {
+    "type": "{ value, label }[]",
+    "description": "选项列表"
+  },
+  "vxe-checkbox-group/option-props": {
+    "type": "any",
+    "description": "选项属性参数配置"
   },
   "vxe-switch/model-value": {
     "type": "string | number | boolean",
@@ -1423,6 +1439,10 @@
     "type": "string",
     "description": "模式"
   },
+  "vxe-button/title": {
+    "type": "string",
+    "description": "标题"
+  },
   "vxe-button/type": {
     "type": "string",
     "description": "类型"
@@ -1502,6 +1522,10 @@
   "vxe-button-group/class-name": {
     "type": "string | (({}) => string)",
     "description": "给展示容器附加 className"
+  },
+  "vxe-button-group/options": {
+    "type": "array",
+    "description": "按钮列表"
   },
   "vxe-tooltip/model-value": {
     "type": "boolean",

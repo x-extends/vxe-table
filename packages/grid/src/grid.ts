@@ -1088,7 +1088,10 @@ export default defineComponent({
             })
           }
         })
-        return $xetable.loadColumn(columns)
+        if ($xetable) {
+          return $xetable.loadColumn(columns)
+        }
+        return nextTick()
       }
       (gridMethods as any).reloadColumn = (columns: any[]): Promise<any> => {
         gridExtendTableMethods.clearAll()

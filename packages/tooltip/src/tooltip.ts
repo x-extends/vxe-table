@@ -277,18 +277,18 @@ export default defineComponent({
       const { trigger } = props
       const { target } = reactData
       const wrapperElem = refElem.value
-      if (wrapperElem) {
-        const parentNode = wrapperElem.parentNode
-        if (parentNode) {
-          parentNode.removeChild(wrapperElem)
-        }
-      }
       if (target) {
         if (trigger === 'hover') {
           target.onmouseenter = null
           target.onmouseleave = null
         } else if (trigger === 'click') {
           target.onclick = null
+        }
+      }
+      if (wrapperElem) {
+        const parentNode = wrapperElem.parentNode
+        if (parentNode) {
+          parentNode.removeChild(wrapperElem)
         }
       }
     })

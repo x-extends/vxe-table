@@ -53,6 +53,9 @@ export default defineComponent({
       id: 'full_edit_1',
       height: 600,
       rowId: 'id',
+      columnConfig: {
+        useKey: true
+      },
       customConfig: {
         storage: true,
         checkMethod ({ column }) {

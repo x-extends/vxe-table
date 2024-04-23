@@ -1,48 +1,134 @@
 <template>
   <div>
-    <p class="tip">
-      <table-api-link name="vxe-table"/> 基础表格，基于模板方式使用非常简单、便捷<br>
-      <span class="red">（注：每一列 field 字段属性不可更改）</span>
-    </p>
-
-    <vxe-toolbar>
-      <template #buttons>
-        <vxe-button @click="allAlign = 'left'">居左</vxe-button>
-        <vxe-button @click="allAlign = 'center'">居中</vxe-button>
-        <vxe-button @click="allAlign = 'right'">居右</vxe-button>
-      </template>
-    </vxe-toolbar>
-
-    <vxe-table
-      :align="allAlign"
-      :data="tableData1">
-      <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name"></vxe-column>
-      <vxe-column field="sex" title="Sex"></vxe-column>
-      <vxe-column field="age" title="Age"></vxe-column>
-    </vxe-table>
-
+    <vxe-grid v-bind="gridOptions"></vxe-grid>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-  setup () {
-    const allAlign = ref('')
-
-    const tableData1 = ref([
-      { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
-      { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
-      { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
-      { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
-    ])
-
+<script>
+export default {
+  data () {
     return {
-      allAlign,
-      tableData1
+      tableData: [],
+      gridOptions: {
+        border: true,
+        showFooter: true,
+        autoResize: false,
+        height: 400,
+        columns: [
+          { field: 'a', title: 'a', width: 47 },
+          { field: 'b', title: 'b', width: 55 },
+          { field: 'c', title: 'c', width: 105 },
+          { field: 'd', title: 'd', width: 200 },
+          { field: 'e', title: 'e', width: 200 },
+          { field: 'f', title: 'f', width: 200 },
+          { field: 'g', title: 'g', width: 410 }
+        ],
+        footerMethod ({ columns, data }) {
+          return [
+            columns.map((column, columnIndex) => {
+              if (columnIndex === 0) {
+                return '平均'
+              }
+              if (['age', 'rate'].includes(column.field)) {
+                return this.meanNum(data, column.field)
+              }
+              return ''
+            })
+          ]
+        },
+        data: [
+          {
+            id: 10001,
+            name: 'Test1',
+            nickname: 'T1',
+            role: 'Develop',
+            sex: 'Man',
+            age: 28,
+            rate: 6,
+            address: 'Shenzhen'
+          },
+          {
+            id: 10002,
+            name: 'Test2',
+            nickname: 'T2',
+            role: 'Test',
+            sex: 'Women',
+            age: 22,
+            rate: 5,
+            address: 'Guangzhou'
+          },
+          {
+            id: 10003,
+            name: 'Test3',
+            nickname: 'T3',
+            role: 'PM',
+            sex: 'Man',
+            age: 32,
+            rate: 4,
+            address: 'Shanghai'
+          },
+          {
+            id: 10004,
+            name: 'Test4',
+            nickname: 'T4',
+            role: 'Designer',
+            sex: 'Women',
+            age: 23,
+            rate: 1,
+            address: 'Shenzhen'
+          },
+          {
+            id: 10005,
+            name: 'Test5',
+            nickname: 'T5',
+            role: 'Develop',
+            sex: 'Women',
+            age: 30,
+            rate: 5,
+            address: 'Shanghai'
+          },
+          {
+            id: 10006,
+            name: 'Test6',
+            nickname: 'T6',
+            role: 'Designer',
+            sex: 'Women',
+            age: 21,
+            rate: 2,
+            address: 'Shenzhen'
+          },
+          {
+            id: 10007,
+            name: 'Test7',
+            nickname: 'T7',
+            role: 'Test',
+            sex: 'Man',
+            age: 29,
+            rate: 7,
+            address: 'Shenzhen'
+          },
+          {
+            id: 10008,
+            name: 'Test8',
+            nickname: 'T8',
+            role: 'Develop',
+            sex: 'Man',
+            age: 35,
+            rate: 5,
+            address: 'Shenzhen'
+          }
+        ]
+      }
+    }
+  },
+  methods: {
+    meanNum (list, field) {
+      let count = 0
+      list.forEach((item) => {
+        count += Number(item[field])
+      })
+      return count / list.length
     }
   }
-})
+}
 </script>

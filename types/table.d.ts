@@ -963,8 +963,7 @@ export interface TableReactData<D = VxeTableDataRow> {
     row: D | null
     column: any
     content: any
-    visible: boolean,
-    currOpts: any
+    visible: boolean
   }
   // 存放数据校验相关信息
   validStore: {
@@ -1463,6 +1462,10 @@ export namespace VxeTablePropTypes {
      * 自定义列是否允许列选中的方法，该方法的返回值用来决定这一列的 checkbox 是否可以选中
      */
     checkMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean
+    /**
+     * 自定义列是否的方法，该方法的返回值用来决定这一列是否显示
+     */
+    visibleMethod?(params: { column: VxeTableDefines.ColumnInfo }): boolean
     allowFixed?: boolean
     showFooter?: boolean
     icon?: string
