@@ -4505,7 +4505,11 @@ export default defineComponent({
           // 如果点击自定义列容器
         } else {
           if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
-            tablePrivateMethods.preventEvent(evnt, 'event.clearCustom', {}, () => $xetable.closeCustom())
+            tablePrivateMethods.preventEvent(evnt, 'event.clearCustom', {}, () => {
+              if ($xetable.closeCustom) {
+                $xetable.closeCustom()
+              }
+            })
           }
         }
       }

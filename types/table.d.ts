@@ -1867,6 +1867,14 @@ export namespace VxeTablePropTypes {
      */
     multiple?: boolean
     /**
+     * 用于指定哪些列允许被选取
+     */
+    includeFields?: string[]
+    /**
+     * 用于排除指定列允许不允许被选取
+     */
+    excludeFields?: string[]
+    /**
      * 只对 mouse-config.area 启用后有效，点击列头是否选取当前列的所有单元格
      */
     selectCellByHeader?: boolean

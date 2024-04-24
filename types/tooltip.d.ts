@@ -102,7 +102,7 @@ export type VxeTooltipEmits = [
 ]
 
 export namespace VxeTooltipDefines {
-  interface TooltipEventParams extends VxeEvent {
+  export interface TooltipEventParams extends VxeEvent {
     $tooltip: VxeTooltipConstructor
   }
 }
