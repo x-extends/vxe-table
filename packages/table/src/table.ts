@@ -117,7 +117,8 @@ export default defineComponent({
       initStore: {
         filter: false,
         import: false,
-        export: false
+        export: false,
+        custom: false
       },
       // 自定义列相关的信息
       customStore: {
@@ -6801,10 +6802,10 @@ export default defineComponent({
         /**
          * 自定义列
          */
-        h(resolveComponent('vxe-table-custom-panel') as ComponentOptions, {
+        initStore.custom ? h(resolveComponent('vxe-table-custom-panel') as ComponentOptions, {
           ref: refTableCustom,
           customStore
-        }),
+        }) : createCommentVNode(),
         /**
          * 筛选
          */

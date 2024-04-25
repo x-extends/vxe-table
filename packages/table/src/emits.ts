@@ -64,6 +64,7 @@ export default [
   'cell-area-merge',
   'clear-cell-area-merge',
   'header-cell-area-selection',
+  'cell-area-selection-invalid',
   'cell-area-selection-start',
   'cell-area-selection-drag',
   'cell-area-selection-end',

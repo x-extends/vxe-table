@@ -32,8 +32,9 @@ const customHook: VxeGlobalHooksHandles.HookOptions = {
     }
 
     const openCustom = () => {
-      const { customStore } = reactData
+      const { initStore, customStore } = reactData
       customStore.visible = true
+      initStore.custom = true
       checkCustomStatus()
       calcMaxHeight()
       return nextTick().then(() => calcMaxHeight())

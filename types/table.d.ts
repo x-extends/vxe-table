@@ -887,6 +887,7 @@ export interface TableReactData<D = VxeTableDataRow> {
     filter: boolean
     import: boolean
     export: boolean
+    custom: boolean
   },
   // 自定义列相关的信息
   customStore: VxeTableCustomStoreObj,
@@ -2029,6 +2030,14 @@ export namespace VxeTablePropTypes {
      * 是否启用列自增，当粘贴的列数超出表格时自动插入新列（需要注意自增的列自字段是否定义，否则将无法响应）
      */
     isColumnIncrement?: boolean
+    /**
+     * 用于指定哪些列允许被复制粘贴
+     */
+    includeFields?: string[]
+    /**
+     * 用于排除指定列允许不允许被复制粘贴
+     */
+    excludeFields?: string[]
     /**
      * 重写单元格复制取值的方法，将单元格复制到剪贴板
      */

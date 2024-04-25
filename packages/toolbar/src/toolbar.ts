@@ -453,16 +453,16 @@ export default defineComponent({
       const customOpts = computeCustomOpts.value
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (customOpts.isFooter) {
-          warnLog('vxe.error.delProp', ['custom.isFooter', 'custom-config.showFooter'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
         }
         if (customOpts.showFooter) {
-          warnLog('vxe.error.delProp', ['custom.showFooter', 'custom-config.showFooter'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
         }
         if (customOpts.immediate) {
-          warnLog('vxe.error.delProp', ['custom.immediate', 'custom-config.immediate'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
         }
         if (customOpts.trigger) {
-          warnLog('vxe.error.delProp', ['custom.trigger', 'custom-config.trigger'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
         }
       }
     })
