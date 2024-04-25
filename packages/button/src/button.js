@@ -45,10 +45,15 @@ export default {
   },
   computed: {
     isFormBtn () {
-      return ['submit', 'reset', 'button'].indexOf(this.type) > -1
+      const { type } = this
+      if (type) {
+        return ['submit', 'reset', 'button'].indexOf(type) > -1
+      }
+      return false
     },
-    btnType () {
-      return (this.type === 'text' || this.mode === 'text') ? 'text' : 'button'
+    btnMode () {
+      const { mode, type } = this
+      return (mode === 'text' || type === 'text') ? 'text' : 'button'
     }
   },
   created () {
@@ -70,7 +75,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, className, popupClassName, title, inited, type, destroyOnClose, isFormBtn, status, btnType, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, className, popupClassName, title, inited, type, destroyOnClose, isFormBtn, status, btnMode, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
     return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
@@ -80,7 +85,7 @@ export default {
     }, [
       h('button', {
         ref: 'xBtn',
-        class: ['vxe-button', `type--${btnType}`, {
+        class: ['vxe-button', `type--${btnMode}`, {
           [`size--${vSize}`]: vSize,
           [`theme--${status}`]: status,
           'is--round': this.round,
@@ -128,7 +133,7 @@ export default {
       ] : null)
     ]) : h('button', {
       ref: 'xBtn',
-      class: ['vxe-button', `type--${btnType}`, className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
+      class: ['vxe-button', `type--${btnMode}`, className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         [`theme--${status}`]: status,
         'is--round': this.round,
