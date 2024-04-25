@@ -42,92 +42,6 @@ export default {
       impFields: 'Error de importación, por favor revise que el nombre del campo y el formato de datos sean correctos.',
       treeNotImp: 'La tabla de árbol no soporta importación.'
     },
-    renderer: {
-      search: 'Buscar',
-      cases: {
-        equal: 'Igual',
-        unequal: 'Distinto que',
-        gt: 'Mayor que',
-        ge: 'Mayor o igual que',
-        lt: 'Menor que',
-        le: 'Menor o igual que',
-        begin: 'Empieza por',
-        notbegin: 'No empieza por',
-        endin: 'Termina con',
-        notendin: 'No termina con',
-        include: 'Incluye',
-        exclude: 'Excluye',
-        between: 'Entre',
-        custom: 'Filtro personalizado',
-        insensitive: 'No sensible a mayúsculas/minúsculas',
-        isSensitive: 'Sensible a mayúsculas/minúsculas'
-      },
-      combination: {
-        menus: {
-          clearSort: 'Limpiar ordenamiento',
-          sortAsc: 'Orden ascendente',
-          sortDesc: 'Orden descendente',
-          fixedColumn: 'Columna fija',
-          fixedGroup: 'Grupo fijo',
-          cancelFixed: 'Borrar fijado',
-          fixedLeft: 'Fijar a la izquierda',
-          fixedRight: 'Fijar a la derecha',
-          clearFilter: 'Limpiar filtro',
-          textOption: 'Filtro de texto',
-          numberOption: 'Filtro de número'
-        },
-        popup: {
-          title: 'Filtro personalizado',
-          currColumnTitle: 'Columna actual:',
-          and: 'Y',
-          or: 'O',
-          describeHtml: 'Use ? para representar un solo carácter <br/> use * para representar cualquier número de caracteres'
-        },
-        empty: '(Vacío)',
-        notData: 'No hay datos'
-      }
-    },
-    pro: {
-      area: {
-        mergeErr: 'La operación no se puede realizar en celdas combinadas',
-        multiErr: 'La operación no se puede realizar en áreas de selección múltiple',
-        extendErr: 'Si el área extendida contiene celdas combinadas, todas las celdas combinadas deben tener el mismo tamaño',
-        pasteMultiErr: 'No se puede pegar, se requieren áreas copiadas y pegadas del mismo tamaño para realizar esta operación'
-      },
-      fnr: {
-        title: 'Buscar y reemplazar',
-        findLabel: 'Buscar',
-        replaceLabel: 'Reemplazar',
-        findTitle: 'Qué buscar:',
-        replaceTitle: 'Reemplazar con:',
-        tabs: {
-          find: 'Buscar',
-          replace: 'Reemplazar'
-        },
-        filter: {
-          re: 'Expresión regular',
-          whole: 'Palabra completa',
-          sensitive: 'Distinguir mayúsculas y minúsculas'
-        },
-        btns: {
-          findNext: 'Buscar siguiente',
-          findAll: 'Buscar todo',
-          replace: 'Reemplazar',
-          replaceAll: 'Reemplazar todo',
-          cancel: 'Cancelar'
-        },
-        header: {
-          seq: '#',
-          cell: 'Celda',
-          value: 'Valor'
-        },
-        empty: '(Vacío)',
-        reError: 'Expresión regular inválida',
-        recordCount: 'Se encontraron {0} celdas',
-        notCell: 'No se encontraron celdas coincidentes',
-        replaceSuccess: 'Se reemplazaron {0} celdas con éxito'
-      }
-    },
     table: {
       emptyText: 'No hay datos',
       allTitle: 'Seleccionar todo / cancelar',
@@ -179,6 +93,9 @@ export default {
     button: {
       confirm: 'Confirmar',
       cancel: 'Cancelar'
+    },
+    filter: {
+      search: '搜索'
     },
     custom: {
       cstmTitle: 'Column Settings',
@@ -323,6 +240,205 @@ export default {
           q3: 'Tercer trimestre',
           q4: 'Cuarto trimestre'
         }
+      }
+    },
+
+    /**
+     * 扩展插件
+     */
+    plugins: {
+      extendCellArea: {
+        area: {
+          mergeErr: '无法对合并单元格进行该操作',
+          multiErr: '无法对多重选择区域进行该操作',
+          extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
+          pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
+          cpInvalidErr: '该操作无法进行，您选择的区域中存在被禁止的列（{0}）'
+        },
+        fnr: {
+          title: '查找和替换',
+          findLabel: '查找',
+          replaceLabel: '替换',
+          findTitle: '查找内容：',
+          replaceTitle: '替换为：',
+          tabs: {
+            find: '查找',
+            replace: '替换'
+          },
+          filter: {
+            re: '正则表达式',
+            whole: '全词匹配',
+            sensitive: '区分大小写'
+          },
+          btns: {
+            findNext: '查找下一个',
+            findAll: '查找全部',
+            replace: '替换',
+            replaceAll: '替换全部',
+            cancel: '取消'
+          },
+          header: {
+            seq: '#',
+            cell: '单元格',
+            value: '值'
+          },
+          empty: '(空值)',
+          reError: '无效的正则表达式',
+          recordCount: '已找到 {0} 个单元格',
+          notCell: '找不到匹配的单元格',
+          replaceSuccess: '成功替换 {0} 个单元格'
+        }
+      },
+      filterComplexInput: {
+        menus: {
+          fixedColumn: '锁定列',
+          fixedGroup: '锁定组',
+          cancelFixed: '取消锁定',
+          fixedLeft: '锁定左侧',
+          fixedRight: '锁定右侧'
+        },
+        cases: {
+          equal: '等于',
+          gt: '大于',
+          lt: '小于',
+          begin: '开头是',
+          endin: '结尾是',
+          include: '包含',
+          isSensitive: '区分大小写'
+        }
+      },
+      filterCombination: {
+        menus: {
+          clearSort: '清除排序',
+          sortAsc: '升序',
+          sortDesc: '降序',
+          fixedColumn: '锁定列',
+          fixedGroup: '锁定组',
+          cancelFixed: '取消锁定',
+          fixedLeft: '锁定左侧',
+          fixedRight: '锁定右侧',
+          clearFilter: '清除筛选',
+          textOption: '文本筛选',
+          numberOption: '数值筛选'
+        },
+        popup: {
+          title: '自定义筛选的方式',
+          currColumnTitle: '当前列：',
+          and: '与',
+          or: '或',
+          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+        },
+        cases: {
+          equal: '等于',
+          unequal: '不等于',
+          gt: '大于',
+          ge: '大于或等于',
+          lt: '小于',
+          le: '小于或等于',
+          begin: '开头是',
+          notbegin: '开头不是',
+          endin: '结尾是',
+          notendin: '结尾不是',
+          include: '包含',
+          exclude: '不包含',
+          between: '介于',
+          custom: '自定义筛选',
+          insensitive: '不区分大小写',
+          isSensitive: '区分大小写'
+        },
+        empty: '(空白)',
+        notData: '无匹配项'
+      }
+    },
+
+    /**
+     * 以下废弃
+     * @deprecated
+     */
+    renderer: {
+      search: 'Buscar',
+      cases: {
+        equal: 'Igual',
+        unequal: 'Distinto que',
+        gt: 'Mayor que',
+        ge: 'Mayor o igual que',
+        lt: 'Menor que',
+        le: 'Menor o igual que',
+        begin: 'Empieza por',
+        notbegin: 'No empieza por',
+        endin: 'Termina con',
+        notendin: 'No termina con',
+        include: 'Incluye',
+        exclude: 'Excluye',
+        between: 'Entre',
+        custom: 'Filtro personalizado',
+        insensitive: 'No sensible a mayúsculas/minúsculas',
+        isSensitive: 'Sensible a mayúsculas/minúsculas'
+      },
+      combination: {
+        menus: {
+          clearSort: 'Limpiar ordenamiento',
+          sortAsc: 'Orden ascendente',
+          sortDesc: 'Orden descendente',
+          fixedColumn: 'Columna fija',
+          fixedGroup: 'Grupo fijo',
+          cancelFixed: 'Borrar fijado',
+          fixedLeft: 'Fijar a la izquierda',
+          fixedRight: 'Fijar a la derecha',
+          clearFilter: 'Limpiar filtro',
+          textOption: 'Filtro de texto',
+          numberOption: 'Filtro de número'
+        },
+        popup: {
+          title: 'Filtro personalizado',
+          currColumnTitle: 'Columna actual:',
+          and: 'Y',
+          or: 'O',
+          describeHtml: 'Use ? para representar un solo carácter <br/> use * para representar cualquier número de caracteres'
+        },
+        empty: '(Vacío)',
+        notData: 'No hay datos'
+      }
+    },
+    pro: {
+      area: {
+        mergeErr: 'La operación no se puede realizar en celdas combinadas',
+        multiErr: 'La operación no se puede realizar en áreas de selección múltiple',
+        extendErr: 'Si el área extendida contiene celdas combinadas, todas las celdas combinadas deben tener el mismo tamaño',
+        pasteMultiErr: 'No se puede pegar, se requieren áreas copiadas y pegadas del mismo tamaño para realizar esta operación'
+      },
+      fnr: {
+        title: 'Buscar y reemplazar',
+        findLabel: 'Buscar',
+        replaceLabel: 'Reemplazar',
+        findTitle: 'Qué buscar:',
+        replaceTitle: 'Reemplazar con:',
+        tabs: {
+          find: 'Buscar',
+          replace: 'Reemplazar'
+        },
+        filter: {
+          re: 'Expresión regular',
+          whole: 'Palabra completa',
+          sensitive: 'Distinguir mayúsculas y minúsculas'
+        },
+        btns: {
+          findNext: 'Buscar siguiente',
+          findAll: 'Buscar todo',
+          replace: 'Reemplazar',
+          replaceAll: 'Reemplazar todo',
+          cancel: 'Cancelar'
+        },
+        header: {
+          seq: '#',
+          cell: 'Celda',
+          value: 'Valor'
+        },
+        empty: '(Vacío)',
+        reError: 'Expresión regular inválida',
+        recordCount: 'Se encontraron {0} celdas',
+        notCell: 'No se encontraron celdas coincidentes',
+        replaceSuccess: 'Se reemplazaron {0} celdas con éxito'
       }
     }
   }

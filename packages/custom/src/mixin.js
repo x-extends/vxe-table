@@ -1,8 +1,9 @@
 export default {
   methods: {
     _openCustom () {
-      const { customStore } = this
+      const { initStore, customStore } = this
       customStore.visible = true
+      initStore.custom = true
       this.checkCustomStatus()
       this.calcMaxHeight()
       return this.$nextTick().then(() => this.calcMaxHeight())

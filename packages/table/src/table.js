@@ -337,7 +337,8 @@ export default {
       initStore: {
         filter: false,
         import: false,
-        export: false
+        export: false,
+        custom: false
       },
       // 刷新列标识，当列筛选被改变时，触发表格刷新数据
       upDataFlag: 0,
@@ -1182,12 +1183,12 @@ export default {
       /**
        * 自定义列
        */
-      h('vxe-table-custom-panel', {
+      initStore.custom ? h('vxe-table-custom-panel', {
         ref: 'customWrapper',
         props: {
           customStore
         }
-      }),
+      }) : _e(),
       /**
        * 筛选
        */
