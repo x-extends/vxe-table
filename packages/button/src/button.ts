@@ -127,7 +127,7 @@ export default defineComponent({
       return false
     })
 
-    const computeBtnType = computed(() => {
+    const computeBtnMode = computed(() => {
       const { type, mode } = props
       return (mode === 'text' || type === 'text') ? 'text' : 'button'
     })
@@ -280,6 +280,11 @@ export default defineComponent({
       mouseenterEvent(evnt)
     }
 
+    const mouseleaveTargetEvent = (evnt: MouseEvent) => {
+      closePanel()
+      mouseleaveEvent(evnt)
+    }
+
     const mouseenterEvent = (evnt: MouseEvent) => {
       emit('mouseenter', { $event: evnt })
     }
@@ -392,7 +397,7 @@ export default defineComponent({
       const { className, popupClassName, transfer, title, type, round, circle, destroyOnClose, status, name, disabled, loading } = props
       const { inited, showPanel } = reactData
       const isFormBtn = computeIsFormBtn.value
-      const btnType = computeBtnType.value
+      const btnMode = computeBtnMode.value
       const vSize = computeSize.value
       if (slots.dropdowns) {
         return h('div', {
@@ -404,7 +409,7 @@ export default defineComponent({
         }, [
           h('button', {
             ref: refButton,
-            class: ['vxe-button', `type--${btnType}`, {
+            class: ['vxe-button', `type--${btnMode}`, {
               [`size--${vSize}`]: vSize,
               [`theme--${status}`]: status,
               'is--round': round,
@@ -417,7 +422,7 @@ export default defineComponent({
             type: isFormBtn ? type : 'button',
             disabled: disabled || loading,
             onMouseenter: mouseenterTargetEvent,
-            onMouseleave: mouseleaveEvent,
+            onMouseleave: mouseleaveTargetEvent,
             onClick: clickEvent
           }, renderContent().concat([
             h('i', {
@@ -451,7 +456,7 @@ export default defineComponent({
       }
       return h('button', {
         ref: refButton,
-        class: ['vxe-button', `type--${btnType}`, className ? (XEUtils.isFunction(className) ? className({ $button: $xebutton }) : className) : '', {
+        class: ['vxe-button', `type--${btnMode}`, className ? (XEUtils.isFunction(className) ? className({ $button: $xebutton }) : className) : '', {
           [`size--${vSize}`]: vSize,
           [`theme--${status}`]: status,
           'is--round': round,

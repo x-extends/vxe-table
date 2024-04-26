@@ -55,7 +55,12 @@ export default defineComponent({
       const defaultSlot = slots.default
       return h('div', {
         class: 'vxe-button-group'
-      }, defaultSlot ? defaultSlot({}) : (options ? options.map(item => h(VxeButtonComponent, item)) : []))
+      }, defaultSlot ? defaultSlot({}) : (options ? options.map((item, index) => {
+        return h(VxeButtonComponent, {
+          key: index,
+          ...item
+        })
+      }) : []))
     }
 
     $xebuttongroup.renderVN = renderVN
