@@ -101,7 +101,7 @@ export default {
         },
         on: {
           mouseenter: this.mouseenterTargetEvent,
-          mouseleave: this.mouseleaveEvent,
+          mouseleave: this.mouseleaveTargetEvent,
           click: this.clickEvent
         }
       }, this.renderContent(h).concat([
@@ -232,6 +232,10 @@ export default {
         }, 350)
         this.$emit('dropdown-click', { name: targetElem.getAttribute('name'), $event: evnt })
       }
+    },
+    mouseleaveTargetEvent (evnt) {
+      this.closePanel()
+      this.mouseleaveEvent(evnt)
     },
     mouseenterEvent (evnt) {
       this.$emit('mouseenter', { $event: evnt })
