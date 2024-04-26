@@ -1109,7 +1109,7 @@ export default {
           /**
            * 表体
            */
-          h('vxe-table-body', {
+          h(VxeTableBody, {
             ref: 'tableBody',
             props: {
               tableData,
