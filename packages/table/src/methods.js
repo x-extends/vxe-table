@@ -18,7 +18,7 @@ const debounceScrollYDuration = browse.msie ? 80 : 20
 const resizableStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_WIDTH'
 const visibleStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE'
 const fixedStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_FIXED'
-const orderStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_ORDER'
+const sortStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_SORT'
 
 /**
  * 生成行的唯一主键
@@ -571,7 +571,7 @@ const Methods = {
     this.collectColumn = collectColumn
     const tableFullColumn = getColumnList(collectColumn)
     this.tableFullColumn = tableFullColumn
-    this.cacheColumnMap()
+    this.cacheColumnMap(true)
     this.restoreCustomStorage()
     this.parseColumns().then(() => {
       if (this.scrollXLoad) {
@@ -699,7 +699,7 @@ const Methods = {
    * 更新数据列的 Map
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
-  cacheColumnMap () {
+  cacheColumnMap (isInit) {
     const { tableFullColumn, collectColumn, fullColumnMap, showOverflow, columnOpts, rowOpts } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
@@ -794,6 +794,9 @@ const Methods = {
       }
       if (fullColumnIdData[colid]) {
         errLog('vxe.error.colRepet', ['colId', colid])
+      }
+      if (isInit) {
+        column.sortNumber = index
       }
       fullColumnIdData[colid] = rest
       fullColumnMap.set(column, rest)
@@ -1552,7 +1555,8 @@ const Methods = {
     const opts = Object.assign({
       visible: true,
       resizable: options === true,
-      fixed: options === true
+      fixed: options === true,
+      sort: options === true
     }, options)
     XEUtils.eachTree(collectColumn, (column) => {
       if (opts.resizable) {
@@ -1560,6 +1564,9 @@ const Methods = {
       }
       if (opts.fixed) {
         column.fixed = column.defaultFixed
+      }
+      if (opts.sort) {
+        column.renderSortNumber = column.sortNumber
       }
       if (!checkMethod || checkMethod({ column })) {
         column.visible = column.defaultVisible
@@ -1576,7 +1583,7 @@ const Methods = {
   handleCustom () {
     this.saveCustomVisible()
     this.analyColumnWidth()
-    return this.refreshColumn()
+    return this.refreshColumn(true)
   },
   /**
    * 还原自定义列操作状态
@@ -1584,12 +1591,13 @@ const Methods = {
   restoreCustomStorage () {
     const { id, collectColumn, customConfig, customOpts } = this
     const { storage } = customOpts
-    const isAllStorage = customOpts.storage === true
-    const isCustomResizable = isAllStorage || (storage && storage.resizable)
-    const isCustomVisible = isAllStorage || (storage && storage.visible)
-    const isCustomFixed = storage === true || (storage && storage.fixed)
-    const isCustomOrder = storage === true || (storage && storage.order)
-    if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomOrder)) {
+    const isAllStorage = storage === true
+    const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
+    const isCustomResizable = isAllStorage || storageOpts.resizable
+    const isCustomVisible = isAllStorage || storageOpts.visible
+    const isCustomFixed = isAllStorage || storageOpts.fixed
+    const isCustomSort = isAllStorage || storageOpts.sort
+    if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
       const customMap = {}
       if (!id) {
         errLog('vxe.error.reqProp', ['id'])
@@ -1619,18 +1627,18 @@ const Methods = {
         }
       }
       // 自定义顺序
-      if (isCustomOrder) {
-        const columnOrderStorage = getCustomStorageMap(orderStorageKey)[id]
-        if (columnOrderStorage) {
-          // const colOrderSeqs = columnOrderStorage.split(',')
-          // colOrderSeqs.forEach((orderConf) => {
-          //   const [colKey, order] = orderConf.split('|')
-          //   if (customMap[colKey]) {
-          //     customMap[colKey].order = order
-          //   } else {
-          //     customMap[colKey] = { order }
-          //   }
-          // })
+      if (isCustomSort) {
+        const columnSortStorage = getCustomStorageMap(sortStorageKey)[id]
+        if (columnSortStorage) {
+          const colOrderSeqs = columnSortStorage.split(',')
+          colOrderSeqs.forEach((orderConf) => {
+            const [colKey, sortNumber] = orderConf.split('|')
+            if (customMap[colKey]) {
+              customMap[colKey].sortNumber = sortNumber
+            } else {
+              customMap[colKey] = { sortNumber }
+            }
+          })
         }
       }
       if (isCustomVisible) {
@@ -1662,7 +1670,7 @@ const Methods = {
           keyMap[colKey] = column
         }
       })
-      XEUtils.each(customMap, ({ visible, resizeWidth, fixed, order }, field) => {
+      XEUtils.each(customMap, ({ visible, resizeWidth, fixed, sortNumber }, field) => {
         const column = keyMap[field]
         if (column) {
           if (XEUtils.isNumber(resizeWidth)) {
@@ -1674,8 +1682,8 @@ const Methods = {
           if (fixed) {
             column.fixed = fixed
           }
-          if (order) {
-            column.colSeq = order
+          if (sortNumber) {
+            column.colSeq = Number(sortNumber)
           }
         }
       })
@@ -1684,8 +1692,9 @@ const Methods = {
   saveCustomFixed () {
     const { id, collectColumn, customConfig, customOpts } = this
     const { storage } = customOpts
-    const isAllStorage = customOpts.storage === true
-    const isCustomFixed = isAllStorage || (storage && storage.fixed)
+    const isAllStorage = storage === true
+    const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
+    const isCustomFixed = isAllStorage || storageOpts.fixed
     if (customConfig && isCustomFixed) {
       const columnFixedStorageMap = getCustomStorageMap(fixedStorageKey)
       const colFixeds = []
@@ -1708,8 +1717,9 @@ const Methods = {
   saveCustomVisible () {
     const { id, collectColumn, customConfig, customOpts } = this
     const { checkMethod, storage } = customOpts
-    const isAllStorage = customOpts.storage === true
-    const isCustomVisible = isAllStorage || (storage && storage.visible)
+    const isAllStorage = storage === true
+    const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
+    const isCustomVisible = isAllStorage || storageOpts.visible
     if (customConfig && isCustomVisible) {
       const columnVisibleStorageMap = getCustomStorageMap(visibleStorageKey)
       const colHides = []
@@ -1740,8 +1750,9 @@ const Methods = {
   saveCustomResizable (isReset) {
     const { id, collectColumn, customConfig, customOpts } = this
     const { storage } = customOpts
-    const isAllStorage = customOpts.storage === true
-    const isResizable = isAllStorage || (storage && storage.resizable)
+    const isAllStorage = storage === true
+    const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
+    const isResizable = isAllStorage || storageOpts.resizable
     if (customConfig && isResizable) {
       const columnWidthStorageMap = getCustomStorageMap(resizableStorageKey)
       let columnWidthStorage
@@ -1773,7 +1784,14 @@ const Methods = {
   /**
    * 刷新列配置
    */
-  refreshColumn () {
+  refreshColumn (resiveOrder) {
+    if (resiveOrder) {
+      const columnList = XEUtils.orderBy(this.collectColumn, 'renderSortNumber')
+      this.collectColumn = columnList
+      const tableFullColumn = getColumnList(columnList)
+      this.tableFullColumn = tableFullColumn
+      this.cacheColumnMap()
+    }
     return this.parseColumns().then(() => {
       return this.refreshScroll()
     }).then(() => {

@@ -340,6 +340,7 @@ export default {
         export: false,
         custom: false
       },
+      customColumnList: [],
       // 刷新列标识，当列筛选被改变时，触发表格刷新数据
       upDataFlag: 0,
       // 刷新列标识，当列的特定属性被改变时，触发表格刷新列
@@ -605,9 +606,9 @@ export default {
       return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig)
     },
     fixedColumnSize () {
-      const { tableFullColumn } = this
+      const { collectColumn } = this
       let fixedSize = 0
-      tableFullColumn.forEach((column) => {
+      collectColumn.forEach((column) => {
         if (column.fixed) {
           fixedSize++
         }

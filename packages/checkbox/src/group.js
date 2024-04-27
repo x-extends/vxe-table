@@ -43,10 +43,13 @@ export default {
     },
     valueField () {
       return this.propsOpts.value || 'value'
+    },
+    disabledField () {
+      return this.propsOpts.disabled || 'disabled'
     }
   },
   render (h) {
-    const { $scopedSlots, options, valueField, labelField } = this
+    const { $scopedSlots, options, valueField, labelField, disabledField } = this
     const defaultSlot = $scopedSlots.default
     return h('div', {
       class: 'vxe-checkbox-group'
@@ -54,7 +57,8 @@ export default {
       return h('vxe-checkbox', {
         props: {
           label: item[valueField],
-          content: item[labelField]
+          content: item[labelField],
+          disabled: item[disabledField]
         }
       })
     }) : []))

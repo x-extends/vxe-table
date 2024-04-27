@@ -37,6 +37,9 @@ export default {
     },
     valueField () {
       return this.propsOpts.value || 'value'
+    },
+    disabledField () {
+      return this.propsOpts.disabled || 'disabled'
     }
   },
   data () {
@@ -45,7 +48,7 @@ export default {
     }
   },
   render (h) {
-    const { $scopedSlots, options, type, valueField, labelField } = this
+    const { $scopedSlots, options, type, valueField, labelField, disabledField } = this
     const defaultSlot = $scopedSlots.default
     const btnComp = type === 'button' ? 'vxe-radio-button' : 'vxe-radio'
     return h('div', {
@@ -54,7 +57,8 @@ export default {
       return h(btnComp, {
         props: {
           label: item[valueField],
-          content: item[labelField]
+          content: item[labelField],
+          disabled: item[disabledField]
         }
       })
     }) : []))

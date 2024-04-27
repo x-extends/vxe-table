@@ -96,7 +96,7 @@ export default {
       endPageTitle: '末页'
     },
     alert: {
-      title: '消息提示'
+      title: '系统提示'
     },
     button: {
       confirm: '确认',
@@ -109,7 +109,18 @@ export default {
       cstmTitle: '列设置',
       cstmRestore: '恢复默认',
       cstmCancel: '取消',
-      cstmConfirm: '确定'
+      cstmConfirm: '确定',
+      cstmConfirmRestore: '请确认是否恢复成默认列配置？',
+      cstmDragTarget: '移动目标：{0}',
+      setting: {
+        colSort: '排序',
+        colTitle: '标题',
+        colVisible: '是否显示',
+        colFixed: '是否固定',
+        fixedLeft: '左侧',
+        fixedUnset: '不设置',
+        fixedRight: '右侧'
+      }
     },
     import: {
       modes: {

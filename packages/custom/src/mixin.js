@@ -1,9 +1,10 @@
 export default {
   methods: {
     _openCustom () {
-      const { initStore, customStore } = this
+      const { initStore, customStore, collectColumn } = this
       customStore.visible = true
       initStore.custom = true
+      this.customColumnList = collectColumn.slice(0)
       this.checkCustomStatus()
       this.calcMaxHeight()
       return this.$nextTick().then(() => this.calcMaxHeight())

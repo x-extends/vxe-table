@@ -1,5 +1,6 @@
 /**Variable**/
 @import './helpers/mixin.scss';
+@import './base/common.scss';
 
 .vxe-table-custom--option {
   display: flex;
@@ -20,60 +21,64 @@
   &.is--active {
     display: block;
   }
-  .vxe-table-custom--header,
-  .vxe-table-custom--body {
-    list-style-type: none;
-    overflow-x: hidden;
-    overflow-y: auto;
-    margin: 0;
-    padding: 0;
-    user-select: none;
-    & > li {
-      max-width: 18em;
-      min-width: 14em;
-      padding: 0.2em 1em 0.2em 1em;
-      @for $i from 2 through 8 {
-        $interval: $i - 1 + 0.2;
-        &.level--#{$i}{
-          padding-left: #{$interval + 2.3}em;
-          .vxe-checkbox--icon {
-            left: #{$interval + 0.6}em;
-          }
+}
+
+.vxe-table-custom--header,
+.vxe-table-custom--body {
+  list-style-type: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  & > li {
+    max-width: 18em;
+    min-width: 14em;
+    padding: 0.2em 1em 0.2em 1em;
+    @for $i from 2 through 8 {
+      $interval: $i - 1 + 0.2;
+      &.level--#{$i}{
+        padding-left: #{$interval + 2.3}em;
+        .vxe-checkbox--icon {
+          left: #{$interval + 0.6}em;
         }
       }
     }
   }
-  .vxe-table-custom--header {
-    padding: 0.28em 0;
-    font-weight: 700;
-    border-bottom: 1px solid $vxe-table-popup-border-color;
-  }
-  .vxe-table-custom--body {
-    padding: 0.2em 0;
-    max-height: 20em;
-    .vxe-table-custom--checkbox-option {
-      &:hover {
-        background-color: $vxe-table-row-hover-background-color;
-      }
+}
+
+.vxe-table-custom--header {
+  padding: 0.28em 0;
+  font-weight: 700;
+  border-bottom: 1px solid $vxe-table-popup-border-color;
+}
+
+.vxe-table-custom--body {
+  padding: 0.2em 0;
+  max-height: 20em;
+  .vxe-table-custom--checkbox-option {
+    &:hover {
+      background-color: $vxe-table-row-hover-background-color;
     }
   }
-  .vxe-table-custom--footer {
-    border-top: 1px solid $vxe-table-popup-border-color;
-    text-align: right;
-    button {
-      background-color: transparent;
-      width: 50%;
-      height: 2.5em;
-      border: 0;
-      color: $vxe-font-color;
-      text-align: center;
-      cursor: pointer;
-      &:focus {
-        outline: none;
-      }
-      &:hover {
-        color: $vxe-primary-color;
-      }
+}
+
+.vxe-table-custom--footer {
+  border-top: 1px solid $vxe-table-popup-border-color;
+  text-align: right;
+  button {
+    background-color: transparent;
+    width: 50%;
+    height: 2.5em;
+    border: 0;
+    color: $vxe-font-color;
+    text-align: center;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      color: $vxe-primary-color;
     }
   }
 }
@@ -92,46 +97,31 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  .vxe-table-custom--fixed-left-option,
-  .vxe-table-custom--fixed-right-option {
-    line-height: 1.34em;
-    font-size: 1.1em;
-    padding: 0 0.2em;
-    cursor: pointer;
-    &.is--checked,
-    &:hover {
-      color: $vxe-primary-color;
-    }
-    &.is--disabled {
-      cursor: no-drop;
-      color: $vxe-input-disabled-color;
-    }
+}
+
+.vxe-table-custom--fixed-left-option,
+.vxe-table-custom--fixed-right-option {
+  line-height: 1.34em;
+  font-size: 1.1em;
+  padding: 0 0.2em;
+  cursor: pointer;
+  &.is--checked,
+  &:hover {
+    color: $vxe-primary-color;
+  }
+  &.is--disabled {
+    cursor: no-drop;
+    color: $vxe-input-disabled-color;
   }
 }
 
 .vxe-table-custom-popup--body {
   overflow: auto;
   height: 100%;
-  border: 1px solid $vxe-table-border-color;
-  .vxe-table-custom-popup--name {
-    max-width: 360px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  @for $index from 2 to 10 {
-    $paddingLeft: ($index - 1) * 24px;
-    .vxe-table-custom-popup--row-level#{$index} {
-      .vxe-table-custom-popup--name {
-        padding-left: $paddingLeft;
-        max-width: 260px - $paddingLeft;
-      }
-    }
-  }
-  .vxe-table-custom-popup--column-visible,
-  .vxe-table-custom-popup--column-fixed {
-    text-align: center;
-  }
+}
+
+.vxe-table-custom-popup--table-warpper {
+  border-bottom: 1px solid $vxe-table-border-color;
   table {
     width: 100%;
     border: 0;
@@ -141,16 +131,15 @@
       position: sticky;
       top: 0;
       text-align: left;
+      border-top: 1px solid $vxe-table-border-color;
       border-bottom: 1px solid $vxe-table-border-color;
       border-left: 1px solid $vxe-table-border-color;
       background-color: $vxe-table-header-background-color;
+      z-index: 7;
     }
     td {
       border-top: 1px solid $vxe-table-border-color;
       border-left: 1px solid $vxe-table-border-color;
-      &:nth-child(2) {
-        text-align: center;
-      }
     }
     tr {
       &:first-child {
@@ -163,6 +152,123 @@
     td {
       height: 44px;
       padding: 0 0.6em;
+      &:last-child {
+        border-right: 1px solid $vxe-table-border-color;
+      }
     }
+  }
+}
+
+.vxe-table-custom-popup--drag-hint {
+  @extend %TextEllipsis;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.6em 1em 0.6em 1.8em;
+  max-width: 300px;
+  border-radius: $vxe-border-radius;
+  user-select: none;
+  pointer-events: none;
+  background-color: $vxe-table-body-background-color;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  z-index: 33;
+}
+
+.vxe-table-custom-popup--name {
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@for $index from 2 to 10 {
+  $paddingLeft: ($index - 1) * 24px;
+  .vxe-table-custom-popup--row {
+    &.level--#{$index} {
+      .vxe-table-custom-popup--name {
+        padding-left: $paddingLeft;
+        max-width: 260px - $paddingLeft;
+      }
+    }
+  }
+}
+
+.vxe-table-custom-popup--column-item {
+  position: relative;
+  &.col--sort,
+  &.col--visible,
+  &.col--fixed {
+    text-align: center;
+  }
+}
+
+.vxe-table-custom-popup--row {
+  &.active--drag-target {
+    &[dragoffset="top"] {
+      .vxe-table-custom-popup--column-item {
+        &::after {
+          display: block;
+          top: -2px;
+        }
+      }
+    }
+    &[dragoffset="bottom"] {
+      .vxe-table-custom-popup--column-item {
+        &::after {
+          display: block;
+          bottom: -2px;
+        }
+      }
+    }
+  }
+  &:first-child {
+    &[dragoffset="top"] {
+      .vxe-table-custom-popup--column-item {
+        &::after {
+          top: 0;
+        }
+      }
+    }
+  }
+  &:last-child {
+    &[dragoffset="bottom"] {
+      .vxe-table-custom-popup--column-item {
+        &::after {
+          bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.vxe-table-custom-popup--column-item {
+  &::after {
+    display: none;
+    content: "";
+    position: absolute;
+    left: -1px;
+    width: calc(100% + 1px);
+    height: 3px;
+    background-color: $vxe-primary-color;
+    z-index: 12;
+  }
+  &:last-child {
+    &::after {
+      width: 100%;
+    }
+  }
+}
+
+.vxe-table-custom--flip-move {
+  transition: transform 0.35s;
+}
+
+.vxe-table-custom-popup--column-sort-btn {
+  font-size: 1.2em;
+  padding: 0.2em 0.5em;
+  cursor: grab;
+  &:active {
+    cursor: grabbing;
   }
 }

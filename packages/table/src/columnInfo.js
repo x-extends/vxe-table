@@ -112,9 +112,15 @@ export class ColumnInfo {
       level: 1,
       rowSpan: 1,
       colSpan: 1,
-      order: null,
-      sortTime: 0,
-      customOrder: 0,
+
+      // 数据排序
+      order: null, // 用于记录排序类型，升序和倒序
+      sortTime: 0, // 用于多列的先后顺序
+
+      // 列排序
+      sortNumber: 0, // 用于记录自定义列顺序
+      renderSortNumber: 0, // 用于记录自定义列顺序
+
       renderWidth: 0,
       renderHeight: 0,
       resizeWidth: 0,
