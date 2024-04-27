@@ -240,7 +240,7 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 用于 edit-config，判断行是否为新增的临时数据
    * @param row 指定行
    */
-  isInsertByRow(row: any): boolean
+  isInsertByRow(row: any | null): boolean
   /**
    * 删除所有新增的临时数据
    */
@@ -250,7 +250,7 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * @param row 指定行
    * @param field 指定字段
    */
-  isUpdateByRow(row: any, field?: string): boolean
+  isUpdateByRow(row: any, field?: string | null): boolean
   /**
    * 获取表格的可视列，也可以指定索引获取列
    * @param columnIndex 列索引
@@ -261,12 +261,12 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 根据列的唯一主键获取列
    * @param colid 列主键
    */
-  getColumnById(colid: string): VxeTableDefines.ColumnInfo<DT> | null
+  getColumnById(colid: string | null): VxeTableDefines.ColumnInfo<DT> | null
   /**
    * 根据列的字段名获取列
    * @param field 字段名
    */
-  getColumnByField(field: string): VxeTableDefines.ColumnInfo<DT> | null
+  getColumnByField(field: string | null): VxeTableDefines.ColumnInfo<DT> | null
   /**
    * 获取当前表格的列
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
@@ -294,12 +294,12 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 根据行的唯一主键获取行
    * @param rowid 行主键
    */
-  getRowById(rowid: string | number): DT | null
+  getRowById(rowid: string | number | null): DT | null
   /**
    * 根据行获取行的唯一主键
    * @param row 行对象
    */
-  getRowid(row: any): string
+  getRowid(row: any | null): string
   /**
    * 获取当前表格的数据
    * 完整的全量表体数据、处理条件之后的全量表体数据、当前渲染中的表体数据、当前渲染中的表尾数据
@@ -355,8 +355,9 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
   /**
    * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
+   * 如果传 true 则会检查列顺序并排序
    */
-  refreshColumn(): Promise<void>
+  refreshColumn(resiveOrder?: boolean): Promise<void>
   /**
    * 刷新滚动操作，手动同步滚动相关位置
    * 对于某些特殊的操作，比如滚动条错位、固定列不同步
@@ -448,7 +449,7 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 用于 type=radio，判断单选行数据是否勾选
    * @param row 指定行
    */
-  isCheckedByRadioRow(row: any): boolean
+  isCheckedByRadioRow(row: any | null): boolean
   /**
    * 用于 type=radio，设置某一行为选中状态
    * @param row 指定行
@@ -550,17 +551,17 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 已废弃，请使用 isActiveFilterByColumn
    * @deprecated
    */
-  isFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>): boolean
+  isFilter(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null): boolean
   /**
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param columnOrField 列对象或字段名
    */
-  isActiveFilterByColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any>): boolean
+  isActiveFilterByColumn(fieldOrColumn: VxeColumnPropTypes.Field | VxeTableDefines.ColumnInfo<any> | null): boolean
   /**
    * 用于 expand-config.lazy，用于懒加载展开行，判断展开行是否懒加载完成
    * @param row 指定行
    */
-  isRowExpandLoaded(row: any): boolean
+  isRowExpandLoaded(row: any | null): boolean
   /**
    * 用于 expand-config.lazy，手动清空懒加载展开行的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
@@ -595,11 +596,11 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 用于 expand-config，判断行是否为展开状态
    * @param row 指定行
    */
-  isRowExpandByRow(row: any): boolean
+  isRowExpandByRow(row: any | null): boolean
   /**
    * @deprecated 已废弃，请使用 isRowExpandByRow
    */
-  isExpandByRow(row: any): boolean
+  isExpandByRow(row: any | null): boolean
   /**
    * 用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态
    */
@@ -620,7 +621,7 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
   /**
    * 用于 tree-config.lazy，用于懒加载树表格，判断树节点是否懒加载完成
    */
-  isTreeExpandLoaded(row: any): boolean
+  isTreeExpandLoaded(row: any | null): boolean
   /**
    * 用于 tree-config.lazy，手动清空懒加载树节点的状态，数据会恢复成未展开的状态，当再次展开时会重新加载
    */
@@ -655,7 +656,7 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    * 用于 tree-config，判断行是否为树形节点展开状态
    * @param row 指定行
    */
-  isTreeExpandByRow(row: any): boolean
+  isTreeExpandByRow(row: any | null): boolean
   /**
    * 用于 tree-config，手动清空树形节点的展开状态，数据会恢复成未展开的状态
    */
@@ -891,6 +892,7 @@ export interface TableReactData<D = VxeTableDataRow> {
   },
   // 自定义列相关的信息
   customStore: VxeTableCustomStoreObj,
+  customColumnList: VxeTableDefines.ColumnInfo<D>[]
   // 当前选中的筛选列
   filterStore: {
     isAllSelected: boolean
@@ -1033,6 +1035,13 @@ export interface VxeTableCustomStoreObj {
   activeWrapper: boolean
   visible: boolean
   maxHeight: number
+}
+
+export interface VxeTableCustomStorageObj {
+  visible?: boolean
+  resizable?: boolean
+  fixed?: boolean
+  sort?: boolean
 }
 
 export interface TableInternalData<D = VxeTableDataRow> {
@@ -1450,12 +1459,7 @@ export namespace VxeTablePropTypes {
     /**
      * 是否启用 localStorage 本地保存，会将列操作状态保留在本地（需要有 id）
      */
-    storage?: boolean | {
-      visible?: boolean
-      resizable?: boolean
-      fixed?: boolean
-      order?: boolean
-    }
+    storage?: boolean | VxeTableCustomStorageObj
     mode?: 'simple' | 'popup' | '' | null
     trigger?: string,
     immediate?: boolean
@@ -2954,9 +2958,15 @@ export namespace VxeTableDefines {
     checked: boolean
     halfChecked: boolean
     disabled: boolean
+
+    // 数据排序
     order: VxeTablePropTypes.SortOrder
     sortTime: number
-    customOrder: number
+
+    // 列排序
+    sortNumber: number
+    renderSortNumber: number
+
     renderWidth: number
     renderHeight: number
     resizeWidth: number

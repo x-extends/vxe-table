@@ -248,6 +248,7 @@ export namespace VxeGlobalRendererHandles {
   export interface RenderOptionProps {
     value?: string
     label?: string
+    disabled?: string
     key?: string
   }
 

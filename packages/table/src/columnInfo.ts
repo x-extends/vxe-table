@@ -116,15 +116,18 @@ export class ColumnInfo {
       rowSpan: 1,
       // 跨列
       colSpan: 1,
-      // 数据排序-自定义排序
-      order: null,
-      // 数据排序-用于多列的先后顺序
-      sortTime: 0,
+
+      // 数据排序
+      order: null, // 用于记录排序类型，升序和倒序
+      sortTime: 0, // 用于多列的先后顺序
+
       // 列排序
-      customOrder: 0,
+      sortNumber: 0, // 用于记录自定义列顺序
+      renderSortNumber: 0, // 用于记录自定义列顺序
+
       renderWidth: 0,
       renderHeight: 0,
-      resizeWidth: 0,
+      resizeWidth: 0, // 手动调整
       renderLeft: 0,
       renderArgs: [], // 渲染参数可用于扩展
       model: {},

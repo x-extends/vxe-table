@@ -35,6 +35,7 @@ const customHook: VxeGlobalHooksHandles.HookOptions = {
       const { initStore, customStore } = reactData
       customStore.visible = true
       initStore.custom = true
+      reactData.customColumnList = internalData.collectColumn.slice(0)
       checkCustomStatus()
       calcMaxHeight()
       return nextTick().then(() => calcMaxHeight())

@@ -49,6 +49,11 @@ export default defineComponent({
       return propsOpts.value || 'value'
     })
 
+    const computeDisabledField = computed(() => {
+      const propsOpts = computePropsOpts.value
+      return propsOpts.disabled || 'disabled'
+    })
+
     const computeMaps: CheckboxPrivateComputed = {
       computeIsMaximize
     }
@@ -97,12 +102,14 @@ export default defineComponent({
       const defaultSlot = slots.default
       const valueField = computeValueField.value as 'value'
       const labelField = computeLabelField.value as 'label'
+      const disabledField = computeDisabledField.value as 'disabled'
       return h('div', {
         class: 'vxe-checkbox-group'
       }, defaultSlot ? defaultSlot({}) : (options ? options.map(item => {
         return h(VxeCheckboxComponent, {
           label: item[valueField],
-          content: item[labelField]
+          content: item[labelField],
+          disabled: item[disabledField]
         })
       }) : []))
     }

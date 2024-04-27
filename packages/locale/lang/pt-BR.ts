@@ -174,7 +174,7 @@ export default {
       nextJump: 'Saltar para próxima página'
     },
     alert: {
-      title: 'Notificação de Mensagem'
+      title: 'System messages'
     },
     button: {
       confirm: 'Confirmar',
@@ -184,7 +184,18 @@ export default {
       cstmTitle: 'Column Settings',
       cstmRestore: 'Restore default',
       cstmCancel: 'Cancelar',
-      cstmConfirm: 'Confirm'
+      cstmConfirm: 'Confirm',
+      cstmConfirmRestore: 'Please confirm whether to restore the default column configuration?',
+      cstmDragTarget: 'Moving target: {0}',
+      setting: {
+        colSort: 'Sort',
+        colTitle: 'Title',
+        colVisible: 'Visible',
+        colFixed: 'Fixed',
+        fixedLeft: 'Left',
+        fixedUnset: 'Unset',
+        fixedRight: 'Right'
+      }
     },
     import: {
       modes: {

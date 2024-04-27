@@ -96,7 +96,7 @@ export default {
       endPageTitle: '末頁'
     },
     alert: {
-      title: '訊息提示'
+      title: '系統提示'
     },
     button: {
       confirm: '確認',
@@ -109,7 +109,18 @@ export default {
       cstmTitle: '列設定',
       cstmRestore: '恢復默認',
       cstmCancel: '取消',
-      cstmConfirm: '確認'
+      cstmConfirm: '確認',
+      cstmConfirmRestore: '請確認是否恢復成默認列配置？',
+      cstmDragTarget: '移動目標：{0}',
+      setting: {
+        colSort: '排序',
+        colTitle: '標題',
+        colVisible: '是否顯示',
+        colFixed: '是否固定',
+        fixedLeft: '左側',
+        fixedUnset: '不設定',
+        fixedRight: '右側'
+      }
     },
     import: {
       modes: {

@@ -10,13 +10,13 @@
       <div class="right">
         <div class="content">
           <span v-if="appData.usedJSHeapSize && appData.usedJSHeapSize !== '0'" class="performance">Memory used: {{ appData.usedJSHeapSize }} MB.</span>
-          <!-- <span>{{ $t('app.body.label.translations') }}:</span> -->
-          <!-- <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
+          <span>{{ $t('app.body.label.translations') }}:</span>
+          <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
             <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
             <vxe-option value="en_US" label="English"></vxe-option> -->
             <!-- <vxe-option value="ja_JP" label="ジャパン"></vxe-option> -->
-          <!-- </vxe-select> -->
+          </vxe-select>
           <!-- <span>{{ $t('app.body.label.version') }}: </span> -->
           <!-- <vxe-select class="version-switch" size="mini" v-model="appData.version" @change="vChangeEvent"> -->
             <!-- <vxe-option value="4.5" :label="$t('app.body.other.v4d5')" disabled></vxe-option> -->

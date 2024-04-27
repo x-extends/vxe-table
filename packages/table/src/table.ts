@@ -18,14 +18,14 @@ import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement, getRootColumn } from './util'
 import { getSlotVNs } from '../../tools/vn'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeTableMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow } from '../../../types/all'
+import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeTableMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow, VxeTableCustomStorageObj } from '../../../types/all'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
 const resizableStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_WIDTH'
 const visibleStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_VISIBLE'
 const fixedStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_FIXED'
-const orderStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_ORDER'
+const sortStorageKey = 'VXE_TABLE_CUSTOM_COLUMN_SORT'
 
 export default defineComponent({
   name: 'VxeTable',
@@ -130,6 +130,7 @@ export default defineComponent({
         visible: false,
         maxHeight: 0
       },
+      customColumnList: [],
       // 当前选中的筛选列
       filterStore: {
         isAllSelected: false,
@@ -527,9 +528,10 @@ export default defineComponent({
     })
 
     const computeFixedColumnSize = computed(() => {
-      const { tableFullColumn } = internalData
+      const { collectColumn } = internalData
       let fixedSize = 0
-      tableFullColumn.forEach((column) => {
+      // 只判断第一层
+      collectColumn.forEach((column) => {
         if (column.fixed) {
           fixedSize++
         }
@@ -886,18 +888,20 @@ export default defineComponent({
       const { collectColumn } = internalData
       const customOpts = computeCustomOpts.value
       const { storage } = customOpts
-      const isCustomResizable = storage === true || (storage && storage.resizable)
-      const isCustomVisible = storage === true || (storage && storage.visible)
-      const isCustomFixed = storage === true || (storage && storage.fixed)
-      const isCustomOrder = storage === true || (storage && storage.order)
-      if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomOrder)) {
+      const isAllCustom = storage === true
+      const storageOpts: VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
+      const isCustomResizable = isAllCustom || storageOpts.resizable
+      const isCustomVisible = isAllCustom || storageOpts.visible
+      const isCustomFixed = isAllCustom || storageOpts.fixed
+      const isCustomSort = isAllCustom || storageOpts.sort
+      if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
         const customMap: {
           [key: string]: {
             field?: VxeColumnPropTypes.Field
             resizeWidth?: number
             visible?: boolean
             fixed?: string
-            order?: number
+            sortNumber?: number
           }
         } = {}
         if (!id) {
@@ -929,18 +933,18 @@ export default defineComponent({
           }
         }
         // 自定义顺序
-        if (isCustomOrder) {
-          const columnOrderStorage = getCustomStorageMap(orderStorageKey)[id]
-          if (columnOrderStorage) {
-            // const colOrderSeqs = columnOrderStorage.split(',')
-            // colOrderSeqs.forEach((orderConf: any) => {
-            //   const [colKey, order] = orderConf.split('|')
-            //   if (customMap[colKey]) {
-            //     customMap[colKey].order = order
-            //   } else {
-            //     customMap[colKey] = { order }
-            //   }
-            // })
+        if (isCustomSort) {
+          const columnSortStorage = getCustomStorageMap(sortStorageKey)[id]
+          if (columnSortStorage) {
+            const colOrderSeqs = columnSortStorage.split(',')
+            colOrderSeqs.forEach((orderConf: any) => {
+              const [colKey, sortNumber] = orderConf.split('|')
+              if (customMap[colKey]) {
+                customMap[colKey].sortNumber = sortNumber
+              } else {
+                customMap[colKey] = { sortNumber }
+              }
+            })
           }
         }
         // 自定义隐藏列
@@ -975,7 +979,7 @@ export default defineComponent({
             keyMap[colKey] = column
           }
         })
-        XEUtils.each(customMap, ({ visible, resizeWidth, fixed, order }, colKey) => {
+        XEUtils.each(customMap, ({ visible, resizeWidth, fixed, sortNumber }, colKey) => {
           const column = keyMap[colKey]
           if (column) {
             if (XEUtils.isNumber(resizeWidth)) {
@@ -987,8 +991,8 @@ export default defineComponent({
             if (fixed) {
               column.fixed = fixed
             }
-            if (order) {
-              column.customOrder = order
+            if (sortNumber) {
+              column.renderSortNumber = Number(sortNumber)
             }
           }
         })
@@ -999,7 +1003,7 @@ export default defineComponent({
      * 更新数据列的 Map
      * 牺牲数据组装的耗时，用来换取使用过程中的流畅
      */
-    const cacheColumnMap = () => {
+    const cacheColumnMap = (isInit?: boolean) => {
       const { tableFullColumn, collectColumn } = internalData
       const fullColumnIdData: any = internalData.fullColumnIdData = {}
       const fullColumnFieldData: any = internalData.fullColumnFieldData = {}
@@ -1072,6 +1076,9 @@ export default defineComponent({
         }
         if (fullColumnIdData[colid]) {
           errLog('vxe.error.colRepet', ['colId', colid])
+        }
+        if (isInit) {
+          column.sortNumber = index
         }
         fullColumnIdData[colid] = rest
       }
@@ -1383,7 +1390,7 @@ export default defineComponent({
             }
           }
           if (!allRemoteSort && sortable && order) {
-            orderColumns.push({ column, field, property: field, order, sortTime: column.sortTime })
+            orderColumns.push({ column, field, property: field, order: order, sortTime: column.sortTime })
           }
         })
         if (sortMultiple && chronological && orderColumns.length > 1) {
@@ -2531,7 +2538,7 @@ export default defineComponent({
       internalData.collectColumn = collectColumn
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
-      cacheColumnMap()
+      cacheColumnMap(true)
       restoreCustomStorage()
       parseColumns().then(() => {
         if (reactData.scrollXLoad) {
@@ -3103,7 +3110,7 @@ export default defineComponent({
        */
       getColumnById (colid) {
         const fullColumnIdData = internalData.fullColumnIdData
-        return fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
+        return colid && fullColumnIdData[colid] ? fullColumnIdData[colid].column : null
       },
       /**
        * 根据列的字段名获取列
@@ -3111,7 +3118,7 @@ export default defineComponent({
        */
       getColumnByField (field) {
         const fullColumnFieldData = internalData.fullColumnFieldData
-        return fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
+        return field && fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
       },
       /**
        * 获取当前表格的列
@@ -3187,7 +3194,7 @@ export default defineComponent({
        */
       getRowById (cellValue) {
         const { fullDataRowIdData } = internalData
-        const rowid = XEUtils.eqNull(cellValue) ? '' : encodeURIComponent(cellValue)
+        const rowid = XEUtils.eqNull(cellValue) ? '' : encodeURIComponent(cellValue || '')
         return fullDataRowIdData[rowid] ? fullDataRowIdData[rowid].row : null
       },
       /**
@@ -3308,10 +3315,11 @@ export default defineComponent({
         const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod } = customOpts
-        const opts = Object.assign({
+        const opts: VxeTableCustomStorageObj = Object.assign({
           visible: true,
           resizable: options === true,
-          fixed: options === true
+          fixed: options === true,
+          sort: options === true
         }, options)
         XEUtils.eachTree(collectColumn, (column) => {
           if (opts.resizable) {
@@ -3319,6 +3327,9 @@ export default defineComponent({
           }
           if (opts.fixed) {
             column.fixed = column.defaultFixed
+          }
+          if (opts.sort) {
+            column.renderSortNumber = column.sortNumber
           }
           if (!checkMethod || checkMethod({ column })) {
             column.visible = column.defaultVisible
@@ -3335,8 +3346,16 @@ export default defineComponent({
       /**
        * 刷新列信息
        * 将固定的列左边、右边分别靠边
+       * 如果传 true 则会检查列顺序并排序
        */
-      refreshColumn () {
+      refreshColumn (resiveOrder) {
+        if (resiveOrder) {
+          const columnList = XEUtils.orderBy(internalData.collectColumn, 'renderSortNumber')
+          internalData.collectColumn = columnList
+          const tableFullColumn = getColumnList(columnList)
+          internalData.tableFullColumn = tableFullColumn
+          cacheColumnMap()
+        }
         return parseColumns().then(() => {
           return tableMethods.refreshScroll()
         }).then(() => {
@@ -3855,7 +3874,7 @@ export default defineComponent({
         tableFullColumn.forEach((column) => {
           const { field, order } = column
           if (column.sortable && order) {
-            sortList.push({ column, field, property: field, order, sortTime: column.sortTime })
+            sortList.push({ column, field, property: field, order: order, sortTime: column.sortTime })
           }
         })
         if (multiple && chronological && sortList.length > 1) {
@@ -5257,7 +5276,9 @@ export default defineComponent({
         const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { storage } = customOpts
-        const isCustomFixed = storage === true || (storage && storage.fixed)
+        const isAllStorage = storage === true
+        const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
+        const isCustomFixed = isAllStorage || storageOpts.fixed
         if (customConfig && isCustomFixed) {
           const columnFixedStorageMap = getCustomStorageMap(fixedStorageKey)
           const colFixeds: any[] = []
@@ -5282,7 +5303,9 @@ export default defineComponent({
         const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod, storage } = customOpts
-        const isCustomVisible = storage === true || (storage && storage.visible)
+        const isAllStorage = storage === true
+        const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
+        const isCustomVisible = isAllStorage || storageOpts.visible
         if (customConfig && isCustomVisible) {
           const columnVisibleStorageMap = getCustomStorageMap(visibleStorageKey)
           const colHides: any[] = []
@@ -5313,7 +5336,7 @@ export default defineComponent({
       handleCustom () {
         tablePrivateMethods.saveCustomVisible()
         tablePrivateMethods.analyColumnWidth()
-        return tableMethods.refreshColumn()
+        return tableMethods.refreshColumn(true)
       },
       handleUpdateDataQueue () {
         reactData.upDataFlag++

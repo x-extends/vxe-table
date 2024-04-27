@@ -123,7 +123,7 @@ export interface XEColumnInstance {
   column: ColumnInfo;
 }
 
-export const handleFieldOrColumn = ($xetable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo) => {
+export const handleFieldOrColumn = ($xetable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) => {
   if (fieldOrColumn) {
     return XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
   }
