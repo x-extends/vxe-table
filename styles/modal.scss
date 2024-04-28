@@ -82,13 +82,13 @@
   &.is--animat {
     &.is--mask {
       &:before {
-        @include animatTransition(background-color, .2s);
+        @include createAnimationTransition(background-color, .2s);
       }
     }
     &.type--message {
       .vxe-modal--box {
         &:not(.is--drag) {
-          @include animatTransition(all, .4s, ease-out);
+          @include createAnimationTransition(all, .4s, ease-out);
         }
       }
     }

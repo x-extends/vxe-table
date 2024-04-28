@@ -272,7 +272,7 @@ $iconWidth: 1.6em;
     align-items: center;
     justify-content: center;
     .vxe-input--panel-icon {
-      @include animatTransition(transform, .2s);
+      @include createAnimationTransition(transform, .2s);
     }
   }
 

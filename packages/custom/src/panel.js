@@ -538,7 +538,7 @@ export default {
       if (prevDropTrEl) {
         // 判断是否有拖动
         if (prevDropTrEl !== trEl) {
-          const dragOffset = prevDropTrEl.getAttribute('dragoffset')
+          const dragOffset = prevDropTrEl.getAttribute('drag-pos')
           const colid = trEl.getAttribute('colid')
           const column = $xetable.getColumnById(colid)
           if (!column) {
@@ -557,12 +557,12 @@ export default {
           customColumnList.splice(tcIndex + (dragOffset === 'bottom' ? 1 : 0), 0, column)
         }
         prevDropTrEl.draggable = false
-        prevDropTrEl.removeAttribute('dragoffset')
+        prevDropTrEl.removeAttribute('drag-pos')
         removeClass(prevDropTrEl, 'active--drag-target')
       }
       this.dragColumn = null
       trEl.draggable = false
-      trEl.removeAttribute('dragoffset')
+      trEl.removeAttribute('drag-pos')
       if (dragHintEl) {
         dragHintEl.style.display = ''
       }
@@ -587,7 +587,7 @@ export default {
         const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
         const dragOffset = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
         addClass(trEl, 'active--drag-target')
-        trEl.setAttribute('dragoffset', dragOffset)
+        trEl.setAttribute('drag-pos', dragOffset)
         this.prevDropTrEl = trEl
       }
       updateDropHint(this, evnt)

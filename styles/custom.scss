@@ -205,7 +205,7 @@
 
 .vxe-table-custom-popup--row {
   &.active--drag-target {
-    &[dragoffset="top"] {
+    &[drag-pos="top"] {
       .vxe-table-custom-popup--column-item {
         &::after {
           display: block;
@@ -213,7 +213,7 @@
         }
       }
     }
-    &[dragoffset="bottom"] {
+    &[drag-pos="bottom"] {
       .vxe-table-custom-popup--column-item {
         &::after {
           display: block;
@@ -223,7 +223,7 @@
     }
   }
   &:first-child {
-    &[dragoffset="top"] {
+    &[drag-pos="top"] {
       .vxe-table-custom-popup--column-item {
         &::after {
           top: 0;
@@ -232,7 +232,7 @@
     }
   }
   &:last-child {
-    &[dragoffset="bottom"] {
+    &[drag-pos="bottom"] {
       .vxe-table-custom-popup--column-item {
         &::after {
           bottom: 0;

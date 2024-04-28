@@ -30,7 +30,7 @@
     width: 100%;
     .vxe-input--suffix-icon {
       display: inline-block;
-      @include animatTransition(transform, .2s);
+      @include createAnimationTransition(transform, .2s);
     }
   }
   &.is--active {

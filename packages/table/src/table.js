@@ -1054,7 +1054,7 @@ export default {
     const { leftList, rightList } = columnStore
     return h('div', {
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
-        [`vaild-msg--${validOpts.msgMode}`]: !!editRules,
+        [`valid-msg--${validOpts.msgMode}`]: !!editRules,
         'vxe-editable': !!editConfig,
         'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete',
         'cell--highlight': highlightCell,

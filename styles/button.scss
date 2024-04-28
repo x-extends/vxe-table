@@ -66,7 +66,7 @@ $btnThemeList: (
   white-space: nowrap;
   user-select: none;
   appearance: none;
-  @include animatTransition(border, .2s);
+  @include createAnimationTransition(border, .2s);
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;
@@ -306,7 +306,7 @@ $btnThemeList: (
   display: inline-block;
   font-size: 12px;
   margin-left: 4px;
-  @include animatTransition(transform, .2s);
+  @include createAnimationTransition(transform, .2s);
 }
 
 .vxe-button--dropdown-panel {
