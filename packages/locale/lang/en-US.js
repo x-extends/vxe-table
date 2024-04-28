@@ -8,7 +8,7 @@ export default {
       text: 'Loading...'
     },
     error: {
-      groupFixed: 'If you use group headers, the fixed columns must be set by group.',
+      groupFixed: 'If you use group headers, the freeze columns must be set by group.',
       groupMouseRange: 'Grouping headers and "{0}" cannot be used at the same time, which may cause errors.',
       groupTag: 'Grouping column header should use "{0}" instead of "{1}", which may cause errors.',
       scrollErrProp: 'The parameter "{0}" is not supported when virtual scrolling is enabled.',
@@ -61,7 +61,7 @@ export default {
       customAll: 'All',
       customConfirm: 'Confirm',
       customRestore: 'Reset',
-      maxFixedCol: 'The maximum number of fixed columns cannot exceed {0}'
+      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
     },
     grid: {
       selectOneRecord: 'Please choose at least one piece of record!',
@@ -116,7 +116,7 @@ export default {
         colSort: 'Sort',
         colTitle: 'Title',
         colVisible: 'Visible',
-        colFixed: 'Fixed',
+        colFixed: 'Freeze column',
         fixedLeft: 'Left',
         fixedUnset: 'Unset',
         fixedRight: 'Right'
@@ -199,9 +199,9 @@ export default {
       customAll: 'All',
       customConfirm: 'Confirm',
       customRestore: 'Reset',
-      fixedLeft: 'Fixed on the left side',
-      fixedRight: 'Fixed on the right side',
-      cancelfixed: 'Unfixed'
+      fixedLeft: 'Freeze on the left',
+      fixedRight: 'Freeze on the right',
+      cancelfixed: 'Unfreeze column'
     },
     input: {
       date: {

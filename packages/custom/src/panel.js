@@ -277,7 +277,7 @@ function renderPopupPanel (h, _vm) {
     props: {
       value: customStore.visible,
       title: GlobalConfig.i18n('vxe.custom.cstmTitle'),
-      className: 'vxe-table-custom-popup-warpper vxe-table--ignore-clear',
+      className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
       width: '40vw',
       minWidth: 500,
       height: '50vh',
@@ -301,7 +301,7 @@ function renderPopupPanel (h, _vm) {
           class: 'vxe-table-custom-popup--body'
         }, [
           h('div', {
-            class: 'vxe-table-custom-popup--table-warpper'
+            class: 'vxe-table-custom-popup--table-wrapper'
           }, [
             h('table', {}, [
               h('colgroup', {}, [

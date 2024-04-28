@@ -178,7 +178,7 @@ export default {
             class: 'vxe-modal--header-right'
           }, [
             cornerSlot ? h('span', {
-              class: 'vxe-modal--corner-warpper'
+              class: 'vxe-modal--corner-wrapper'
             }, getSlotVNs(cornerSlot({ $modal: this }))) : _e(),
             showZoom ? h('i', {
               class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],

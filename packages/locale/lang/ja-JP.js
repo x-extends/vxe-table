@@ -8,7 +8,7 @@ export default {
       text: 'Loading...'
     },
     error: {
-      groupFixed: 'グループのヘッダを使用すると、固定列はグループで設定しなければなりません',
+      groupFixed: 'If you use group headers, the freeze columns must be set by group.',
       groupMouseRange: 'グループ化ヘッダーと「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',
       groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
@@ -61,7 +61,7 @@ export default {
       customAll: '全部',
       customConfirm: '确认',
       customRestore: 'リセット',
-      maxFixedCol: '最大固定列的数量不能超过 {0} 个'
+      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
     },
     grid: {
       selectOneRecord: '少なくとも1つのレコードを選択してください',
@@ -116,7 +116,7 @@ export default {
         colSort: 'Sort',
         colTitle: 'Title',
         colVisible: 'Visible',
-        colFixed: 'Fixed',
+        colFixed: 'Freeze column',
         fixedLeft: 'Left',
         fixedUnset: 'Unset',
         fixedRight: 'Right'
@@ -199,8 +199,9 @@ export default {
       customAll: '全部',
       customConfirm: '確定',
       customRestore: 'リセット',
-      fixedLeft: '固定在左侧',
-      fixedRight: '固定在右侧'
+      fixedLeft: 'Freeze on the left',
+      fixedRight: 'Freeze on the right',
+      cancelfixed: 'Unfreeze column'
     },
     input: {
       date: {

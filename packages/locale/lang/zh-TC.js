@@ -8,7 +8,7 @@ export default {
       text: '加載中...'
     },
     error: {
-      groupFixed: '如果使用分組表頭，固定列必須按組設定',
+      groupFixed: '如果使用分組表頭，冻结列必須按組設定',
       groupMouseRange: '分组表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
@@ -61,7 +61,7 @@ export default {
       customAll: '全部',
       customConfirm: '確認',
       customRestore: '重置',
-      maxFixedCol: '最大固定列的數量不能超過 {0} 個'
+      maxFixedCol: '最大冻结列的數量不能超過 {0} 個'
     },
     grid: {
       selectOneRecord: '請至少選擇一條記錄！',
@@ -116,7 +116,7 @@ export default {
         colSort: '排序',
         colTitle: '標題',
         colVisible: '是否顯示',
-        colFixed: '是否固定',
+        colFixed: '冻结列',
         fixedLeft: '左側',
         fixedUnset: '不設定',
         fixedRight: '右側'
@@ -199,9 +199,9 @@ export default {
       customAll: '全部',
       customConfirm: '確認',
       customRestore: '重置',
-      fixedLeft: '固定在左側',
-      fixedRight: '固定在右側',
-      cancelfixed: '取消固定'
+      fixedLeft: '冻结在左側',
+      fixedRight: '冻结在右側',
+      cancelfixed: '取消冻结列'
     },
     input: {
       date: {

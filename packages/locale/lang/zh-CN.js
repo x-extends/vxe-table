@@ -8,7 +8,7 @@ export default {
       text: '加载中...'
     },
     error: {
-      groupFixed: '如果使用分组表头，固定列必须按组设置',
+      groupFixed: '如果使用分组表头，冻结列必须按组设置',
       groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',
       groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
@@ -61,7 +61,7 @@ export default {
       customAll: '全部',
       customConfirm: '确认',
       customRestore: '重置',
-      maxFixedCol: '最大固定列的数量不能超过 {0} 个'
+      maxFixedCol: '最大冻结列的数量不能超过 {0} 个'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',
@@ -116,7 +116,7 @@ export default {
         colSort: '排序',
         colTitle: '标题',
         colVisible: '是否显示',
-        colFixed: '是否固定',
+        colFixed: '冻结列',
         fixedLeft: '左侧',
         fixedUnset: '不设置',
         fixedRight: '右侧'
@@ -199,9 +199,9 @@ export default {
       customAll: '全部',
       customConfirm: '确认',
       customRestore: '重置',
-      fixedLeft: '固定在左侧',
-      fixedRight: '固定在右侧',
-      cancelfixed: '取消固定'
+      fixedLeft: '冻结在左侧',
+      fixedRight: '冻结在右侧',
+      cancelfixed: '取消冻结列'
     },
     input: {
       date: {
