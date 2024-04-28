@@ -8,7 +8,7 @@ export default {
       text: 'Cargando...'
     },
     error: {
-      groupFixed: 'Si se utilizan encabezados de grupo, las columnas fijas deben ser establecidas por grupo.',
+      groupFixed: 'If you use group headers, the freeze columns must be set by group.',
       groupMouseRange: 'Los encabezados de agrupación y "{0}" no pueden ser utilizados al mismo tiempo, lo que puede causar errores.',
       groupTag: 'El encabezado de columna de agrupación debería utilizar "{0}" en lugar de "{1}", lo que puede causar errores.',
       scrollErrProp: 'El parámetro "{0}" no es compatible cuando el desplazamiento virtual está habilitado.',
@@ -61,7 +61,7 @@ export default {
       customAll: 'Todo',
       customConfirm: 'Confirmar',
       customRestore: 'Restaurar',
-      maxFixedCol: '最大固定列的数量不能超过 {0} 个'
+      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
     },
     grid: {
       selectOneRecord: '¡Seleccione al menos un registro!',
@@ -108,7 +108,7 @@ export default {
         colSort: 'Sort',
         colTitle: 'Title',
         colVisible: 'Visible',
-        colFixed: 'Fixed',
+        colFixed: 'Freeze column',
         fixedLeft: 'Left',
         fixedUnset: 'Unset',
         fixedRight: 'Right'
@@ -191,9 +191,9 @@ export default {
       customAll: 'Todo',
       customConfirm: 'Confirmar',
       customRestore: 'Restaurar',
-      fixedLeft: '固定在左侧',
-      fixedRight: '固定在右侧',
-      cancelfixed: '取消固定'
+      fixedLeft: 'Freeze on the left',
+      fixedRight: 'Freeze on the right',
+      cancelfixed: 'Unfreeze column'
     },
     entrada: {
       fecha: {

@@ -6707,7 +6707,7 @@ export default defineComponent({
         ref: refElem,
         class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
           [`size--${vSize}`]: vSize,
-          [`vaild-msg--${validOpts.msgMode}`]: !!editRules,
+          [`valid-msg--${validOpts.msgMode}`]: !!editRules,
           'vxe-editable': !!editConfig,
           'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete',
           'cell--highlight': highlightCell,

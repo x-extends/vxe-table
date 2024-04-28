@@ -96,7 +96,7 @@ export default defineComponent({
       return h(VxeModalComponent, {
         modelValue: storeData.visible,
         title: GlobalConfig.i18n('vxe.import.impTitle'),
-        className: 'vxe-table-import-popup-warpper',
+        className: 'vxe-table-import-popup-wrapper',
         width: 440,
         mask: true,
         lockView: true,

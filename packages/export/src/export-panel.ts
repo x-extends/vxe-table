@@ -193,7 +193,7 @@ export default defineComponent({
       return h(VxeModalComponent, {
         modelValue: storeData.visible,
         title: GlobalConfig.i18n(isPrint ? 'vxe.export.printTitle' : 'vxe.export.expTitle'),
-        className: 'vxe-table-export-popup-warpper',
+        className: 'vxe-table-export-popup-wrapper',
         width: 660,
         mask: true,
         lockView: true,

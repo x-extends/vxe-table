@@ -698,7 +698,7 @@ export default defineComponent({
       if (cornerSlot) {
         rightVNs.push(
           h('span', {
-            class: 'vxe-modal--corner-warpper'
+            class: 'vxe-modal--corner-wrapper'
           }, getSlotVNs(cornerSlot({ $modal: $xemodal })))
         )
       }

@@ -179,7 +179,7 @@ export default defineComponent({
       if (prevDropTrEl) {
         // 判断是否有拖动
         if (prevDropTrEl !== trEl) {
-          const dragOffset = prevDropTrEl.getAttribute('dragoffset')
+          const dragOffset = prevDropTrEl.getAttribute('drag-pos')
           const colid = trEl.getAttribute('colid')
           const column = $xetable.getColumnById(colid)
           if (!column) {
@@ -198,12 +198,12 @@ export default defineComponent({
           customColumnList.splice(tcIndex + (dragOffset === 'bottom' ? 1 : 0), 0, column)
         }
         prevDropTrEl.draggable = false
-        prevDropTrEl.removeAttribute('dragoffset')
+        prevDropTrEl.removeAttribute('drag-pos')
         removeClass(prevDropTrEl, 'active--drag-target')
       }
       dragColumn.value = null
       trEl.draggable = false
-      trEl.removeAttribute('dragoffset')
+      trEl.removeAttribute('drag-pos')
       if (dragHintEl) {
         dragHintEl.style.display = ''
       }
@@ -228,7 +228,7 @@ export default defineComponent({
         const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
         const dragOffset = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
         addClass(trEl, 'active--drag-target')
-        trEl.setAttribute('dragoffset', dragOffset)
+        trEl.setAttribute('drag-pos', dragOffset)
         prevDropTrEl = trEl
       }
       updateDropHint(evnt)
@@ -473,7 +473,7 @@ export default defineComponent({
       })
       return h(VxeModalComponent as ComponentOptions, {
         key: 'popup',
-        className: 'vxe-table-custom-popup-warpper vxe-table--ignore-clear',
+        className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
         modelValue: customStore.visible,
         title: GlobalConfig.i18n('vxe.custom.cstmTitle'),
         width: '40vw',
@@ -496,7 +496,7 @@ export default defineComponent({
             class: 'vxe-table-custom-popup--body'
           }, [
             h('div', {
-              class: 'vxe-table-custom-popup--table-warpper'
+              class: 'vxe-table-custom-popup--table-wrapper'
             }, [
               h('table', {}, [
                 h('colgroup', {}, [
