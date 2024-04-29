@@ -147,7 +147,7 @@ export default {
       },
       modes: {
         current: '表示中のデータ(表示中のページのデータ)',
-        selected: '選択したデータ(現在のページで選択したデータ)',
+        selected: '選択したデータ(表示中のページに選択したデータ)',
         all: '全てのデータ（全てのページのデータを含む）'
       },
       printTitle: '印刷',
@@ -226,7 +226,7 @@ export default {
           datetime: 'yyyy-MM-dd HH:mm:ss',
           week: 'yyyy 年 WW',
           month: 'yyyy-MM',
-          quarter: 'yyyy 年第第 q 四半期',
+          quarter: 'yyyy 年第 q 四半期',
           year: 'yyyy'
         },
         weeks: {
