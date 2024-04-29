@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, resolveComponent, ComponentOptions, createCommentVNode, provide, computed, inject, reactive, watch, nextTick, PropType, onMounted } from 'vue'
+import { defineComponent, h, ref, Ref, createCommentVNode, provide, computed, inject, reactive, watch, nextTick, PropType, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -7,6 +7,7 @@ import { errLog, warnLog } from '../../tools/log'
 import { scrollToView } from '../../tools/dom'
 import { createItem, handleFieldOrItem, isHiddenItem, isActivetem } from './util'
 import { useSize } from '../../hooks/size'
+import VxeTooltipComponent from '../../tooltip'
 import VxeFormConfigItem from './form-config-item'
 import VxeLoading from '../../loading/index'
 import { getSlotVNs } from '../../tools/vn'
@@ -690,7 +691,7 @@ export default defineComponent({
         /**
          * 工具提示
          */
-        hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
+        hasUseTooltip ? h(VxeTooltipComponent, {
           ref: refTooltip,
           ...tooltipOpts
         }) : createCommentVNode()

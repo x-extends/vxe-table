@@ -1,5 +1,6 @@
-import { ComponentOptions, h, resolveComponent } from 'vue'
+import { h } from 'vue'
 import GlobalConfig from '../../v-x-e-table/src/conf'
+import VxeTooltipComponent from '../../tooltip'
 import { VXETable } from '../../v-x-e-table'
 import { getFuncText, isEnableConf } from '../../tools/utils'
 import { getSlotVNs } from '../../tools/vn'
@@ -39,7 +40,7 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
   if (titlePrefix) {
     titVNs.push(
       (titlePrefix.content || titlePrefix.message)
-        ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
+        ? h(VxeTooltipComponent, {
           ...tooltipOpts,
           ...titlePrefix,
           content: getFuncText(titlePrefix.content || titlePrefix.message)
@@ -63,7 +64,7 @@ export function renderTitle ($xeform: VxeFormConstructor & VxeFormPrivateMethods
   if (titleSuffix) {
     fixVNs.push(
       (titleSuffix.content || titleSuffix.message)
-        ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
+        ? h(VxeTooltipComponent, {
           ...tooltipOpts,
           ...titleSuffix,
           content: getFuncText(titleSuffix.content || titleSuffix.message)

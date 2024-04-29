@@ -49,7 +49,7 @@ export namespace VxeButtonPropTypes {
   export type ClassName = string | ((params: { $button: VxeButtonConstructor }) => string)
   export type PopupClassName = string | ((params: { $button: VxeButtonConstructor }) => string)
   export type Name = string | number
-  export type Content = string
+  export type Content = string | number
   export type Placement = string
   export type Status = string
   export type Title = string

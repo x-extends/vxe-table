@@ -1,6 +1,7 @@
-import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, resolveComponent, VNode, ComponentOptions, reactive, nextTick, PropType } from 'vue'
+import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
+import VxeButtonComponent from '../../button'
 import { VXETable } from '../../v-x-e-table'
 import { useSize } from '../../hooks/size'
 import { warnLog, errLog } from '../../tools/log'
@@ -228,7 +229,7 @@ export default defineComponent({
           if (child.visible === false) {
             return createCommentVNode()
           }
-          return h(resolveComponent('vxe-button') as ComponentOptions, {
+          return h(VxeButtonComponent, {
             key: index,
             disabled: child.disabled,
             loading: child.loading,
@@ -270,7 +271,7 @@ export default defineComponent({
               )
             } else {
               btnVNs.push(
-                h(resolveComponent('vxe-button') as ComponentOptions, {
+                h(VxeButtonComponent, {
                   disabled: item.disabled,
                   loading: item.loading,
                   type: item.type,
@@ -321,7 +322,7 @@ export default defineComponent({
               )
             } else {
               btnVNs.push(
-                h(resolveComponent('vxe-button') as ComponentOptions, {
+                h(VxeButtonComponent, {
                   key: tIndex,
                   disabled: item.disabled,
                   loading: item.loading,
@@ -348,7 +349,7 @@ export default defineComponent({
 
     const renderToolImport = () => {
       const importOpts = computeImportOpts.value
-      return h(resolveComponent('vxe-button') as ComponentOptions, {
+      return h(VxeButtonComponent, {
         key: 'import',
         circle: true,
         icon: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT,
@@ -359,7 +360,7 @@ export default defineComponent({
 
     const renderToolExport = () => {
       const exportOpts = computeExportOpts.value
-      return h(resolveComponent('vxe-button') as ComponentOptions, {
+      return h(VxeButtonComponent, {
         key: 'export',
         circle: true,
         icon: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT,
@@ -370,7 +371,7 @@ export default defineComponent({
 
     const renderToolPrint = () => {
       const printOpts = computePrintOpts.value
-      return h(resolveComponent('vxe-button') as ComponentOptions, {
+      return h(VxeButtonComponent, {
         key: 'print',
         circle: true,
         icon: printOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_PRINT,
@@ -381,7 +382,7 @@ export default defineComponent({
 
     const renderToolRefresh = () => {
       const refreshOpts = computeRefreshOpts.value
-      return h(resolveComponent('vxe-button') as ComponentOptions, {
+      return h(VxeButtonComponent, {
         key: 'refresh',
         circle: true,
         icon: reactData.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH),
@@ -392,7 +393,7 @@ export default defineComponent({
 
     const renderToolZoom = () => {
       const zoomOpts = computeZoomOpts.value
-      return $xegrid ? h(resolveComponent('vxe-button') as ComponentOptions, {
+      return $xegrid ? h(VxeButtonComponent, {
         key: 'zoom',
         circle: true,
         icon: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_FULLSCREEN),
@@ -419,7 +420,7 @@ export default defineComponent({
         // 点击触发
         customBtnOns.onClick = handleClickSettingEvent
       }
-      return h(resolveComponent('vxe-button') as ComponentOptions, {
+      return h(VxeButtonComponent, {
         key: 'custom',
         circle: true,
         icon: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM,

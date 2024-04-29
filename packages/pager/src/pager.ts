@@ -1,6 +1,7 @@
-import { defineComponent, h, PropType, computed, inject, resolveComponent, ComponentOptions, ref, Ref, reactive, nextTick, watch } from 'vue'
+import { defineComponent, h, PropType, computed, inject, ref, Ref, reactive, nextTick, watch } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
+import VxeSelectComponent from '../../select'
 import { hasEventKey, EVENT_KEYS } from '../../tools/event'
 import { useSize } from '../../hooks/size'
 import { errLog } from '../../tools/log'
@@ -385,7 +386,7 @@ export default defineComponent({
     // sizes
     const renderSizes = () => {
       const sizeList = computeSizeList.value
-      return h(resolveComponent('vxe-select') as ComponentOptions, {
+      return h(VxeSelectComponent, {
         class: 'vxe-pager--sizes',
         modelValue: props.pageSize,
         placement: 'top',

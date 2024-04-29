@@ -268,105 +268,105 @@ export default {
     plugins: {
       extendCellArea: {
         area: {
-          mergeErr: '无法对合并单元格进行该操作',
-          multiErr: '无法对多重选择区域进行该操作',
-          extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
-          pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
-          cpInvalidErr: '该操作无法进行，您选择的区域中存在被禁止的列（{0}）'
+          mergeErr: 'The operation cannot be performed on merged cells',
+          multiErr: 'The operation cannot be performed on multiple selection areas',
+          extendErr: 'If the extended area contains merged cells, all merged cells need to be the same size',
+          pasteMultiErr: 'Cannot paste, copied area and pasted area of the same size are required to perform this operation',
+          cpInvalidErr: 'This operation cannot be performed because there are prohibited columns in the area you selected ({0})'
         },
         fnr: {
-          title: '查找和替换',
-          findLabel: '查找',
-          replaceLabel: '替换',
-          findTitle: '查找内容：',
-          replaceTitle: '替换为：',
+          title: 'Find and replace',
+          findLabel: 'Find',
+          replaceLabel: 'Replace',
+          findTitle: 'What to find:',
+          replaceTitle: 'Replace with:',
           tabs: {
-            find: '查找',
-            replace: '替换'
+            find: 'Find',
+            replace: 'Replace'
           },
           filter: {
-            re: '正则表达式',
-            whole: '全词匹配',
-            sensitive: '区分大小写'
+            re: 'Regular Expression',
+            whole: 'Whole word',
+            sensitive: 'Case sensitive'
           },
           btns: {
-            findNext: '查找下一个',
-            findAll: '查找全部',
-            replace: '替换',
-            replaceAll: '替换全部',
-            cancel: '取消'
+            findNext: 'Find next',
+            findAll: 'Find all',
+            replace: 'Replace',
+            replaceAll: 'Replace all',
+            cancel: 'Cancel'
           },
           header: {
             seq: '#',
-            cell: '单元格',
-            value: '值'
+            cell: 'Cell',
+            value: 'Value'
           },
-          empty: '(空值)',
-          reError: '无效的正则表达式',
-          recordCount: '已找到 {0} 个单元格',
-          notCell: '找不到匹配的单元格',
-          replaceSuccess: '成功替换 {0} 个单元格'
+          empty: '(Empty)',
+          reError: 'Invalid regular expression',
+          recordCount: 'Found {0} cells',
+          notCell: 'No matching cells were found',
+          replaceSuccess: 'Successfully replaced {0} cells'
         }
       },
       filterComplexInput: {
         menus: {
-          fixedColumn: '锁定列',
-          fixedGroup: '锁定组',
-          cancelFixed: '取消锁定',
-          fixedLeft: '锁定左侧',
-          fixedRight: '锁定右侧'
+          fixedColumn: 'Freeze column',
+          fixedGroup: 'Freeze group',
+          cancelFixed: 'Clear freeze',
+          fixedLeft: 'Freeze the left',
+          fixedRight: 'Freeze the right'
         },
         cases: {
-          equal: '等于',
-          gt: '大于',
-          lt: '小于',
-          begin: '开头是',
-          endin: '结尾是',
-          include: '包含',
-          isSensitive: '区分大小写'
+          equal: 'Equal',
+          gt: 'Greater than',
+          lt: 'Less than',
+          begin: 'Beginning is',
+          endin: 'End is',
+          include: 'Include',
+          isSensitive: 'Case sensitive'
         }
       },
       filterCombination: {
         menus: {
-          clearSort: '清除排序',
-          sortAsc: '升序',
-          sortDesc: '降序',
-          fixedColumn: '锁定列',
-          fixedGroup: '锁定组',
-          cancelFixed: '取消锁定',
-          fixedLeft: '锁定左侧',
-          fixedRight: '锁定右侧',
-          clearFilter: '清除筛选',
-          textOption: '文本筛选',
-          numberOption: '数值筛选'
+          clearSort: 'Clear sort',
+          sortAsc: 'Ascending order',
+          sortDesc: 'Descending order',
+          fixedColumn: 'Freeze column',
+          fixedGroup: 'Freeze group',
+          cancelFixed: 'Clear freeze',
+          fixedLeft: 'Freeze the left',
+          fixedRight: 'Freeze the right',
+          clearFilter: 'Clear filter',
+          textOption: 'Text filter',
+          numberOption: 'Number filter'
         },
         popup: {
-          title: '自定义筛选的方式',
-          currColumnTitle: '当前列：',
-          and: '与',
-          or: '或',
-          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+          title: 'Custom filtering',
+          currColumnTitle: 'Current column:',
+          and: 'And',
+          or: 'Or',
+          describeHtml: 'Use ? To represent a single character <br/> use * to represent any number of characters'
         },
         cases: {
-          equal: '等于',
-          unequal: '不等于',
-          gt: '大于',
-          ge: '大于或等于',
-          lt: '小于',
-          le: '小于或等于',
-          begin: '开头是',
-          notbegin: '开头不是',
-          endin: '结尾是',
-          notendin: '结尾不是',
-          include: '包含',
-          exclude: '不包含',
-          between: '介于',
-          custom: '自定义筛选',
-          insensitive: '不区分大小写',
-          isSensitive: '区分大小写'
+          equal: 'Equal',
+          unequal: 'Not equal',
+          gt: 'Greater than',
+          ge: 'Greater than or equal',
+          lt: 'Less than',
+          le: 'Less than or equal',
+          begin: 'Beginning is',
+          notbegin: 'Beginning is not',
+          endin: 'End is',
+          notendin: 'End is not',
+          include: 'Include',
+          exclude: 'Exclusive',
+          between: 'Betweenness',
+          custom: 'Custom filter',
+          insensitive: 'Case insensitive',
+          isSensitive: 'Case sensitive'
         },
-        empty: '(空白)',
-        notData: '无匹配项'
+        empty: '(Empty)',
+        notData: 'No data'
       }
     },
 

@@ -1,10 +1,14 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, resolveComponent, ComponentOptions, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../tools/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../tools/dom'
 import { errLog } from '../../tools/log'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
+import VxeTableComponent from '../../table'
+import VxePagerComponent from '../../pager'
+import VxeToolbarComponent from '../../toolbar'
+import VxeFormComponent from '../../form'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { useSize } from '../../hooks/size'
@@ -436,7 +440,7 @@ export default defineComponent({
               })
             })
             slotVNs.push(
-              h(resolveComponent('vxe-form') as ComponentOptions, {
+              h(VxeFormComponent, {
                 ref: refForm,
                 ...Object.assign({}, formOpts, {
                   data: proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
@@ -487,7 +491,7 @@ export default defineComponent({
             }
           }
           slotVNs.push(
-            h(resolveComponent('vxe-toolbar') as ComponentOptions, {
+            h(VxeToolbarComponent, {
               ref: refToolbar,
               ...toolbarOpts
             }, toolbarSlots)
@@ -591,7 +595,7 @@ export default defineComponent({
         slotObj.loading = () => loadingSlot({})
       }
       return [
-        h(resolveComponent('vxe-table') as ComponentOptions, {
+        h(VxeTableComponent, {
           ref: refTable,
           key: 'table',
           ...tableProps,
@@ -644,7 +648,7 @@ export default defineComponent({
             }
           }
           slotVNs.push(
-            h(resolveComponent('vxe-pager') as ComponentOptions, {
+            h(VxePagerComponent, {
               ref: refPager,
               ...pagerOpts,
               ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
