@@ -82,10 +82,18 @@ export default {
       pagesize: '{0}/página',
       total: 'Total {0} registro',
       pageClassifier: '',
+      homePage: 'Home',
+      homePageTitle: 'Home page',
       prevPage: 'Página anterior',
+      prevPageTitle: 'Previous page',
       nextPage: 'Siguiente página',
+      nextPageTitle: 'next page',
       prevJump: 'Saltar página anterior',
-      nextJump: 'Saltar siguiente página'
+      prevJumpTitle: 'Jump previous page',
+      nextJump: 'Saltar siguiente página',
+      nextJumpTitle: 'Jump next page',
+      endPage: 'End page',
+      endPageTitle: 'End'
     },
     alert: {
       title: 'System messages'

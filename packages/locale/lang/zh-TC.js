@@ -8,7 +8,7 @@ export default {
       text: '加載中...'
     },
     error: {
-      groupFixed: '如果使用分組表頭，冻结列必須按組設定',
+      groupFixed: '如果使用分組表頭，固冻结列必須按組設定',
       groupMouseRange: '分组表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
@@ -268,29 +268,29 @@ export default {
     plugins: {
       extendCellArea: {
         area: {
-          mergeErr: '无法对合并单元格进行该操作',
-          multiErr: '无法对多重选择区域进行该操作',
-          extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
+          mergeErr: '無法對合併儲存格進行該操作',
+          multiErr: '無法對多重選擇區域進行該操作',
+          extendErr: '如果延伸的區域包含被合併的儲存格，所有合併的儲存格需大小相同',
           pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
-          cpInvalidErr: '该操作无法进行，您选择的区域中存在被禁止的列（{0}）'
+          cpInvalidErr: '該操作無法進行，您選擇的區域中存在被禁止的列（{0}）'
         },
         fnr: {
-          title: '查找和替换',
+          title: '查找和替換',
           findLabel: '查找',
-          replaceLabel: '替换',
-          findTitle: '查找内容：',
-          replaceTitle: '替换为：',
+          replaceLabel: '替換',
+          findTitle: '查找內容：',
+          replaceTitle: '替換為：',
           tabs: {
             find: '查找',
-            replace: '替换'
+            replace: '替換'
           },
           filter: {
-            re: '正则表达式',
-            whole: '全词匹配',
-            sensitive: '区分大小写'
+            re: '規則運算式',
+            whole: '全詞匹配',
+            sensitive: '區分大小寫'
           },
           btns: {
-            findNext: '查找下一个',
+            findNext: '查找下一個',
             findAll: '查找全部',
             replace: '替换',
             replaceAll: '替换全部',
@@ -298,75 +298,75 @@ export default {
           },
           header: {
             seq: '#',
-            cell: '单元格',
+            cell: '儲存格',
             value: '值'
           },
           empty: '(空值)',
-          reError: '无效的正则表达式',
-          recordCount: '已找到 {0} 个单元格',
-          notCell: '找不到匹配的单元格',
-          replaceSuccess: '成功替换 {0} 个单元格'
+          reError: '無效的規則運算式',
+          recordCount: '已找到 {0} 個儲存格',
+          notCell: '找不到匹配的儲存格',
+          replaceSuccess: '成功替換 {0} 個儲存格'
         }
       },
       filterComplexInput: {
         menus: {
-          fixedColumn: '锁定列',
-          fixedGroup: '锁定组',
-          cancelFixed: '取消锁定',
-          fixedLeft: '锁定左侧',
-          fixedRight: '锁定右侧'
+          fixedColumn: '凍結列',
+          fixedGroup: '凍結分组',
+          cancelFixed: '取消凍結',
+          fixedLeft: '凍結左侧',
+          fixedRight: '凍結右侧'
         },
         cases: {
-          equal: '等于',
-          gt: '大于',
-          lt: '小于',
-          begin: '开头是',
-          endin: '结尾是',
+          equal: '等於',
+          gt: '大於',
+          lt: '小於',
+          begin: '開頭是',
+          endin: '結尾是',
           include: '包含',
-          isSensitive: '区分大小写'
+          isSensitive: '區分大小寫'
         }
       },
       filterCombination: {
         menus: {
           clearSort: '清除排序',
-          sortAsc: '升序',
+          sortAsc: '昇冪',
           sortDesc: '降序',
-          fixedColumn: '锁定列',
-          fixedGroup: '锁定组',
-          cancelFixed: '取消锁定',
-          fixedLeft: '锁定左侧',
-          fixedRight: '锁定右侧',
-          clearFilter: '清除筛选',
-          textOption: '文本筛选',
-          numberOption: '数值筛选'
+          fixedColumn: '凍結列',
+          fixedGroup: '凍結分組',
+          cancelFixed: '取消凍結',
+          fixedLeft: '凍結左側',
+          fixedRight: '凍結右側',
+          clearFilter: '清除篩選',
+          textOption: '文字篩選',
+          numberOption: '數值篩選'
         },
         popup: {
-          title: '自定义筛选的方式',
-          currColumnTitle: '当前列：',
-          and: '与',
+          title: '自定義篩選的管道',
+          currColumnTitle: '當前列：',
+          and: '與',
           or: '或',
-          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+          describeHtml: '用 ? 代表單個字元<br/>用 * 代表任意多個字元'
         },
         cases: {
-          equal: '等于',
-          unequal: '不等于',
-          gt: '大于',
-          ge: '大于或等于',
-          lt: '小于',
-          le: '小于或等于',
-          begin: '开头是',
-          notbegin: '开头不是',
-          endin: '结尾是',
-          notendin: '结尾不是',
+          equal: '等於',
+          unequal: '不等於',
+          gt: '大於',
+          ge: '大於或等於',
+          lt: '小於',
+          le: '小於或等於',
+          begin: '開頭是',
+          notbegin: '開頭不是',
+          endin: '結尾是',
+          notendin: '結尾不是',
           include: '包含',
           exclude: '不包含',
-          between: '介于',
-          custom: '自定义筛选',
-          insensitive: '不区分大小写',
-          isSensitive: '区分大小写'
+          between: '介於',
+          custom: '自定義篩選',
+          insensitive: '不區分大小寫',
+          isSensitive: '區分大小寫'
         },
         empty: '(空白)',
-        notData: '无匹配项'
+        notData: '無匹配項'
       }
     },
 

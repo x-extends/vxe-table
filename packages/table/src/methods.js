@@ -1581,6 +1581,16 @@ const Methods = {
     return this.handleCustom()
   },
   handleCustom () {
+    const { mouseConfig } = this
+    if (mouseConfig) {
+      if (this.clearSelected) {
+        this.clearSelected()
+      }
+      if (this.clearCellAreas) {
+        this.clearCellAreas()
+        this.clearCopyCellArea()
+      }
+    }
     this.saveCustomVisible()
     this.analyColumnWidth()
     return this.refreshColumn(true)
@@ -2499,7 +2509,9 @@ const Methods = {
       }
     } else if (mouseConfig) {
       if (!getEventTargetNode(evnt, $el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.$el).flag) && !(ctxWrapper && getEventTargetNode(evnt, ctxWrapper.$el).flag) && !($toolbar && getEventTargetNode(evnt, $toolbar.$el).flag)) {
-        this.clearSelected()
+        if (this.clearSelected) {
+          this.clearSelected()
+        }
         if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
           this.preventEvent(evnt, 'event.clearAreas', {}, () => {
             this.clearCellAreas()
