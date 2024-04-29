@@ -4586,7 +4586,9 @@ export default defineComponent({
         }
       } else if (mouseConfig) {
         if (!getEventTargetNode(evnt, el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xetoolbar && getEventTargetNode(evnt, $xetoolbar.getRefMaps().refElem.value).flag)) {
-          $xetable.clearSelected()
+          if ($xetable.clearSelected) {
+            $xetable.clearSelected()
+          }
           if ($xetable.clearCellAreas) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
               tablePrivateMethods.preventEvent(evnt, 'event.clearAreas', {}, () => {
@@ -5334,6 +5336,16 @@ export default defineComponent({
         }
       },
       handleCustom () {
+        const { mouseConfig } = props
+        if (mouseConfig) {
+          if ($xetable.clearSelected) {
+            $xetable.clearSelected()
+          }
+          if ($xetable.clearCellAreas) {
+            $xetable.clearCellAreas()
+            $xetable.clearCopyCellArea()
+          }
+        }
         tablePrivateMethods.saveCustomVisible()
         tablePrivateMethods.analyColumnWidth()
         return tableMethods.refreshColumn(true)

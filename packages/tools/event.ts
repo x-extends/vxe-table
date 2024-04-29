@@ -75,9 +75,9 @@ export const GlobalEvent = {
 
 if (browse.isDoc) {
   if (!browse.msie) {
-    document.addEventListener('copy', triggerEvent, false)
-    document.addEventListener('cut', triggerEvent, false)
-    document.addEventListener('paste', triggerEvent, false)
+    window.addEventListener('copy', triggerEvent, false)
+    window.addEventListener('cut', triggerEvent, false)
+    window.addEventListener('paste', triggerEvent, false)
   }
   document.addEventListener('keydown', triggerEvent, false)
   document.addEventListener('contextmenu', triggerEvent, false)
