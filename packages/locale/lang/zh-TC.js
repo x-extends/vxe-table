@@ -114,9 +114,10 @@ export default {
       cstmDragTarget: '移動目標：{0}',
       setting: {
         colSort: '排序',
+        sortHelpTip: '點擊並拖動圖標可以調整列的排序',
         colTitle: '標題',
         colVisible: '是否顯示',
-        colFixed: '冻结列',
+        colFixed: '冻结列（最多 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '不設定',
         fixedRight: '右側'

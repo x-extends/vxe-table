@@ -4,7 +4,6 @@ import { ColumnCellRenderParams, TableEmptyRender } from './v-x-e-table'
 import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './module/export'
 import { ColumnFilterOption } from './module/filter'
 import { ColumnEditRule, ColumnEditValidErrMapParams } from './module/validator'
-import { ColumnFooterRenderParams } from './footer'
 import { MenuOptions, MenuFirstOption } from './module/menu'
 
 /* eslint-disable no-use-before-define */
@@ -733,7 +732,7 @@ export declare class VxeTable extends VXETableComponent {
    * 已废弃，请使用 isRowExpandByRow
    * @deprecated
    */
-  isExpandByRow(row: RowInfo): boolean;
+  isRowExpandByRow(row: RowInfo): boolean;
   /**
    * 用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态
    */
@@ -952,7 +951,7 @@ export declare class VxeTable extends VXETableComponent {
    * 请使用 clearEdit
    * @deprecated
    */
-  clearActived(evnt?: Event): Promise<any>
+  clearEdit(evnt?: Event): Promise<any>
   /**
     * 手动清除单元格激活状态
     */
@@ -1161,7 +1160,7 @@ export function TableFooterMethod(params: TableFooterMethodParams): Array<string
 export type TableSpanMethodParams = ColumnCellRenderParams
 export function TableSpanMethod(params: TableSpanMethodParams): { rowspan: number, colspan: number }
 
-export type TableFooterSpanMethodParams = ColumnFooterRenderParams
+export type TableFooterSpanMethodParams = any
 export function TableFooterSpanMethod(params: TableFooterSpanMethodParams): { rowspan: number, colspan: number }
 
 export interface TableOptions {

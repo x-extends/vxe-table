@@ -2415,7 +2415,14 @@ const Methods = {
     }
   },
   preventEvent (evnt, type, args, next, end) {
-    const evntList = VXETable.interceptor.get(type)
+    let evntList = VXETable.interceptor.get(type)
+
+    // 兼容老版本
+    if (!evntList.length && type === 'event.clearEdit') {
+      evntList = VXETable.interceptor.get('event.clearActived')
+    }
+    // 兼容老版本
+
     let rest
     if (!evntList.some(func => func(Object.assign({ $grid: this.$xegrid, $table: this, $event: evnt }, args)) === false)) {
       if (next) {
@@ -2470,33 +2477,33 @@ const Methods = {
           } else if (!this.lastCallTime || this.lastCallTime + 50 < Date.now()) {
             if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
               // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-              this.preventEvent(evnt, 'event.clearActived', actived.args, () => {
-                let isClearActived
+              this.preventEvent(evnt, 'event.clearEdit', actived.args, () => {
+                let isClear
                 if (editOpts.mode === 'row') {
                   const rowNode = getEventTargetNode(evnt, $el, 'vxe-body--row')
                   // row 方式，如果点击了不同行
-                  isClearActived = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
+                  isClear = rowNode.flag ? getRowNode(rowNode.targetElem).item !== actived.args.row : false
                 } else {
                   // cell 方式，如果是非编辑列
-                  isClearActived = !getEventTargetNode(evnt, $el, 'col--edit').flag
+                  isClear = !getEventTargetNode(evnt, $el, 'col--edit').flag
                 }
                 // 如果点击表头行，则清除激活状态
-                if (!isClearActived) {
-                  isClearActived = getEventTargetNode(evnt, $el, 'vxe-header--row').flag
+                if (!isClear) {
+                  isClear = getEventTargetNode(evnt, $el, 'vxe-header--row').flag
                 }
                 // 如果点击表尾行，则清除激活状态
-                if (!isClearActived) {
-                  isClearActived = getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
+                if (!isClear) {
+                  isClear = getEventTargetNode(evnt, $el, 'vxe-footer--row').flag
                 }
                 // 如果固定了高度且点击了行之外的空白处，则清除激活状态
-                if (!isClearActived && this.height && !this.overflowY) {
+                if (!isClear && this.height && !this.overflowY) {
                   const bodyWrapperElem = evnt.target
                   if (hasClass(bodyWrapperElem, 'vxe-table--body-wrapper')) {
-                    isClearActived = evnt.offsetY < bodyWrapperElem.clientHeight
+                    isClear = evnt.offsetY < bodyWrapperElem.clientHeight
                   }
                 }
                 if (
-                  isClearActived ||
+                  isClear ||
                     // 如果点击了当前表格之外
                     !getEventTargetNode(evnt, $el).flag
                 ) {
@@ -5330,7 +5337,7 @@ funcs.forEach(name => {
           errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
         } else if ('setFilter,openFilter,clearFilter,getCheckedFilters'.split(',').includes(name)) {
           errLog('vxe.error.reqModule', ['VxeTableFilterModule'])
-        } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
+        } else if ('insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell'.split(',').includes(name)) {
           errLog('vxe.error.reqModule', ['VxeTableEditModule'])
         } else if ('openCustom'.split(',').includes(name)) {
           errLog('vxe.error.reqModule', ['VxeTableCustomModule'])

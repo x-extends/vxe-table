@@ -415,6 +415,11 @@ export default {
           row: null,
           column: null
         },
+        // 当前被强制聚焦单元格，只会在鼠标点击后算聚焦
+        focused: {
+          row: null,
+          column: null
+        },
         insertList: [],
         insertMaps: {},
         removeList: [],

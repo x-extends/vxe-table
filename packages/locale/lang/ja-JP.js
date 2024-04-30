@@ -114,9 +114,10 @@ export default {
       cstmDragTarget: '移動ターゲット: {0}',
       setting: {
         colSort: 'ソート',
+        sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
         colTitle: 'タイトル',
         colVisible: '表示',
-        colFixed: '列固定',
+        colFixed: '冻结列（最多 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '指定しない',
         fixedRight: '右側'

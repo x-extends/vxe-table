@@ -1,9 +1,7 @@
-import { CreateElement, VNode } from 'vue'
+import { CreateElement } from 'vue'
 import { VXETableComponent, SlotVNodeType } from './component'
 import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './module/filter'
 import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
-import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './header'
-import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './footer'
 import { ColumnEditRenderOptions, ColumnEditSlotParams } from './module/edit'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams, ColumnExportHeaderRenderParams } from './module/export'
 import { TableOverflow } from './table'
@@ -74,11 +72,11 @@ export declare class VxeColumn extends VXETableComponent {
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
+  headerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
+  footerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 格式化显示内容
    */
@@ -219,11 +217,11 @@ export interface ColumnOptions {
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
+  headerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
+  footerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 格式化显示内容
    */
@@ -299,8 +297,8 @@ export interface ColumnOptions {
 
   slots?: {
     default?(params: ColumnDefaultSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
-    header?(params: ColumnHeaderSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
-    footer?(params: ColumnFooterSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    header?(params: any, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    footer?(params: any, h: CreateElement): SlotVNodeType | SlotVNodeType[]
     content?(params: ColumnContentSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
     filter?(params: ColumnFilterSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
     edit?(params: ColumnEditSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]

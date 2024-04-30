@@ -5,7 +5,7 @@ function toType (type) {
   return XEUtils.toValueString(type).replace('_', '').toLowerCase()
 }
 
-const eventTypes = 'created,mounted,activated,beforeDestroy,destroyed,event.clearActived,event.clearFilter,event.clearAreas,event.showMenu,event.keydown,event.export,event.import'.split(',').map(toType)
+const eventTypes = 'created,mounted,activated,beforeDestroy,destroyed,event.clearEdit,event.clearActived,event.clearFilter,event.clearAreas,event.showMenu,event.keydown,event.export,event.import'.split(',').map(toType)
 const storeMap = {}
 
 export const interceptor = {

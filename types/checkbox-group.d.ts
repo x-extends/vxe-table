@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 组件 - 复选框组
  */
-export interface VxeCheckboxGroup extends VXETableComponent {
+export declare class VxeCheckboxGroup extends VXETableComponent {
   /**
    * 绑定值
    */

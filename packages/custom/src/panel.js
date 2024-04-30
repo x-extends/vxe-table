@@ -171,7 +171,7 @@ function renderSimplePanel (h, _vm) {
 
 function renderPopupPanel (h, _vm) {
   const { $xetable, customStore } = _vm
-  const { customOpts, customColumnList, isMaxFixedColumn } = $xetable
+  const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xetable
   const { checkMethod, visibleMethod } = customOpts
   const trVNs = []
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
@@ -279,7 +279,7 @@ function renderPopupPanel (h, _vm) {
       title: GlobalConfig.i18n('vxe.custom.cstmTitle'),
       className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
       width: '40vw',
-      minWidth: 500,
+      minWidth: 520,
       height: '50vh',
       minHeight: 300,
       mask: true,
@@ -307,7 +307,7 @@ function renderPopupPanel (h, _vm) {
               h('colgroup', {}, [
                 h('col', {
                   style: {
-                    width: '60px'
+                    width: '80px'
                   }
                 }),
                 h('col'),
@@ -324,10 +324,27 @@ function renderPopupPanel (h, _vm) {
               ]),
               h('thead', {}, [
                 h('tr', {}, [
-                  h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colSort')),
+                  h('th', {}, [
+                    h('span', {
+                      class: 'vxe-table-custom-popup--table-sort-help-title'
+                    }, GlobalConfig.i18n('vxe.custom.setting.colSort')),
+                    h('vxe-tooltip', {
+                      props: {
+                        enterable: true,
+                        content: '点击并拖动图标可以调整列的排序'
+                      },
+                      scopedSlots: {
+                        default: () => {
+                          return h('i', {
+                            class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
+                          })
+                        }
+                      }
+                    })
+                  ]),
                   h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colTitle')),
                   h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colVisible')),
-                  h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed'))
+                  h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
                 ])
               ]),
               h('transition-group', {

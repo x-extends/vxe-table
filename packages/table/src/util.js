@@ -271,8 +271,8 @@ export function clearTableDefaultStatus (_vm) {
   _vm.clearRowExpand()
   _vm.clearTreeExpand()
   _vm.clearTreeExpandReserve()
-  if (_vm.clearActived && VXETable._edit) {
-    _vm.clearActived()
+  if (_vm.clearEdit && VXETable._edit) {
+    _vm.clearEdit()
   }
   if (_vm.clearSelected && (_vm.keyboardConfig || _vm.mouseConfig)) {
     _vm.clearSelected()

@@ -307,7 +307,7 @@ export default {
       }
       // 如果当前行被激活编辑，则清除激活状态
       if (actived.row && this.findRowIndexOf(rows, actived.row) > -1) {
-        this.clearActived()
+        this.clearEdit()
       }
       // 从新增中移除已删除的数据
       rows.forEach(row => {
@@ -439,7 +439,7 @@ export default {
             }
             this.closeTooltip()
             if (actived.column) {
-              this.clearActived(evnt)
+              this.clearEdit(evnt)
             }
             type = 'edit-activated'
             column.renderHeight = cell.offsetHeight
@@ -532,9 +532,9 @@ export default {
       }
     },
     _clearActived (evnt) {
-      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      //   warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
-      // }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
+      }
       // 即将废弃
       return this.clearEdit(evnt)
     },
@@ -543,7 +543,7 @@ export default {
      */
     _clearEdit (evnt) {
       const { editStore } = this
-      const { actived } = editStore
+      const { actived, focused } = editStore
       const { row, column } = actived
       if (row || column) {
         this._syncActivedCell()
@@ -560,6 +560,8 @@ export default {
           $columnIndex: this.getVMColumnIndex(column)
         }, evnt)
       }
+      focused.row = null
+      focused.column = null
       if (GlobalConfig.cellVaildMode === 'obsolete') {
         if (this.clearValidate) {
           return this.clearValidate()
@@ -707,7 +709,7 @@ export default {
       const selectMethod = () => {
         if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
-            this.clearActived(evnt)
+            this.clearEdit(evnt)
             this.clearSelected(evnt)
             this.clearCellAreas(evnt)
             this.clearCopyCellArea(evnt)

@@ -70,7 +70,7 @@ export default {
             if (activeArea && activeArea.row && activeArea.column) {
               params.row = activeArea.row
               params.column = activeArea.column
-              this.openContextMenu(evnt, type, params)
+              this.handleOpenMenuEvent(evnt, type, params)
               return
             }
           } else if (mouseConfig && mouseOpts.selected) {
@@ -78,7 +78,7 @@ export default {
             if (selected.row && selected.column) {
               params.row = selected.row
               params.column = selected.column
-              this.openContextMenu(evnt, type, params)
+              this.handleOpenMenuEvent(evnt, type, params)
               return
             }
           }
@@ -102,7 +102,7 @@ export default {
               params.row = row
               params.rowIndex = this.getRowIndex(row)
             }
-            this.openContextMenu(evnt, layout, params)
+            this.handleOpenMenuEvent(evnt, layout, params)
             // 在 v4 中废弃事件 cell-context-menu、header-cell-context-menu、footer-cell-context-menu
             if (this.$listeners[`${typePrefix}cell-context-menu`]) {
               if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -117,7 +117,7 @@ export default {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
-              this.openContextMenu(evnt, layout, params)
+              this.handleOpenMenuEvent(evnt, layout, params)
             }
             return
           }
@@ -131,7 +131,7 @@ export default {
     /**
      * 显示快捷菜单
      */
-    openContextMenu (evnt, type, params) {
+    handleOpenMenuEvent (evnt, type, params) {
       const { isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       const config = ctxMenuOpts[type]
       const visibleMethod = ctxMenuOpts.visibleMethod

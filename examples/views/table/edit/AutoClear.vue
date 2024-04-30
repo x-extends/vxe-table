@@ -2,7 +2,7 @@
   <div>
     <p class="tip">
       通过设置 <table-api-link prop="edit-config"/>.<table-api-link prop="autoClear"/> 关闭默认的单元格清除激活行为<br>
-      <span class="red">（注：如果设置为手动模式则不会自动关闭激活状态，需要手动调用 clearActived 关闭编辑状态）</span>
+      <span class="red">（注：如果设置为手动模式则不会自动关闭激活状态，需要手动调用 clearEdit 关闭编辑状态）</span>
     </p>
 
     <vxe-table
@@ -109,13 +109,13 @@ export default {
             },
             saveRowEvent () {
               const $table = this.$refs.xTable
-              $table.clearActived().then(() => {
+              $table.clearEdit().then(() => {
                 this.$XModal.alert('success')
               })
             },
             cancelRowEvent (row) {
               const $table = this.$refs.xTable
-              $table.clearActived()
+              $table.clearEdit()
                 .then(() => $table.revertData(row))
             }
           }
@@ -131,13 +131,13 @@ export default {
     },
     saveRowEvent () {
       const $table = this.$refs.xTable
-      $table.clearActived().then(() => {
+      $table.clearEdit().then(() => {
         this.$XModal.alert('success')
       })
     },
     cancelRowEvent (row) {
       const $table = this.$refs.xTable
-      $table.clearActived()
+      $table.clearEdit()
         .then(() => $table.revertData(row))
     }
   }

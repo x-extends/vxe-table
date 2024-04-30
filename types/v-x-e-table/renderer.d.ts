@@ -5,7 +5,6 @@ import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
 import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from '../module/export'
 import { ColumnEditRenderOptions, ColumnEditRenderParams } from '../module/edit'
-import { ColumnFooterRenderParams } from '../footer'
 import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from '../module/filter'
 import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams, ToolbarToolRenderOptions, ToolbarToolRenderParams } from '../toolbar'
 import { FormItemRenderOptions, FormItemRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
@@ -48,7 +47,7 @@ export interface RendererMapOptions {
   cellStyle?: VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => VNodeStyle)
   renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
   renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
-  renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: any): SlotVNodeType | SlotVNodeType[];
   exportMethod?(params: ColumnExportCellRenderParams): string;
   footerExportMethod?(params: ColumnExportFooterRenderParams): string;
 
