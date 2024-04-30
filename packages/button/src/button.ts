@@ -129,7 +129,43 @@ export default defineComponent({
 
     const computeBtnMode = computed(() => {
       const { type, mode } = props
-      return (mode === 'text' || type === 'text') ? 'text' : 'button'
+      if (mode === 'text' || type === 'text' || ($xebuttonggroup && $xebuttonggroup.props.mode === 'text')) {
+        return 'text'
+      }
+      return 'button'
+    })
+
+    const computeBtnStatus = computed(() => {
+      const { status } = props
+      if (status) {
+        return status
+      }
+      if ($xebuttonggroup) {
+        return $xebuttonggroup.props.status
+      }
+      return ''
+    })
+
+    const computeBtnRound = computed(() => {
+      const { round } = props
+      if (round) {
+        return round
+      }
+      if ($xebuttonggroup) {
+        return $xebuttonggroup.props.round
+      }
+      return false
+    })
+
+    const computeBtnCircle = computed(() => {
+      const { circle } = props
+      if (circle) {
+        return circle
+      }
+      if ($xebuttonggroup) {
+        return $xebuttonggroup.props.circle
+      }
+      return false
     })
 
     const updateZindex = () => {
@@ -394,10 +430,13 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      const { className, popupClassName, transfer, title, type, round, circle, destroyOnClose, status, name, disabled, loading } = props
+      const { className, popupClassName, transfer, title, type, destroyOnClose, name, disabled, loading } = props
       const { inited, showPanel } = reactData
       const isFormBtn = computeIsFormBtn.value
       const btnMode = computeBtnMode.value
+      const btnStatus = computeBtnStatus.value
+      const btnRound = computeBtnRound.value
+      const btnCircle = computeBtnCircle.value
       const vSize = computeSize.value
       if (slots.dropdowns) {
         return h('div', {
@@ -411,9 +450,9 @@ export default defineComponent({
             ref: refButton,
             class: ['vxe-button', `type--${btnMode}`, {
               [`size--${vSize}`]: vSize,
-              [`theme--${status}`]: status,
-              'is--round': round,
-              'is--circle': circle,
+              [`theme--${btnStatus}`]: btnStatus,
+              'is--round': btnRound,
+              'is--circle': btnCircle,
               'is--disabled': disabled || loading,
               'is--loading': loading
             }],
@@ -458,9 +497,9 @@ export default defineComponent({
         ref: refButton,
         class: ['vxe-button', `type--${btnMode}`, className ? (XEUtils.isFunction(className) ? className({ $button: $xebutton }) : className) : '', {
           [`size--${vSize}`]: vSize,
-          [`theme--${status}`]: status,
-          'is--round': round,
-          'is--circle': circle,
+          [`theme--${btnStatus}`]: btnStatus,
+          'is--round': btnRound,
+          'is--circle': btnCircle,
           'is--disabled': disabled || loading,
           'is--loading': loading
         }],

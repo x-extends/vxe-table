@@ -1969,6 +1969,12 @@ export namespace VxeTablePropTypes {
      */
     isChecked?: boolean
     /**
+     * 用于 mouse-config.area，方向键光标锁，开启后将支持两种状态
+     * 非聚焦式输入状态：默认情况下，可以按方向键移动单元格。
+     * 聚焦式输入状态：如果需要移动光标，可以按 F2 键或者鼠标左键点击输入框，切换为聚焦输入状态，就可以用方向键左右移动光标
+     */
+    arrowCursorLock?: boolean
+    /**
      * 用于 mouse-config.area，是否将回车键行为改成 Tab 键行为
      */
     enterToTab?: boolean

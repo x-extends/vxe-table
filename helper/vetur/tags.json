@@ -490,6 +490,7 @@
     "attributes": [
       "mode",
       "size",
+      "status",
       "round",
       "circle",
       "disabled",

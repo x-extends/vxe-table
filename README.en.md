@@ -59,6 +59,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Merged footer items
 * [x] Import/Export/Print
 * [x] Show/Hide column
+* [x] Drag and drop/Customize column sorting
 * [x] Loading
 * [x] Formatted cell
 * [x] Slot - template

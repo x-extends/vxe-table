@@ -10,6 +10,11 @@ export default defineComponent({
   name: 'VxeButtonGroup',
   props: {
     options: Array as PropType<VxeButtonGroupPropTypes.Options>,
+    mode: String as PropType<VxeButtonGroupPropTypes.Mode>,
+    status: String as PropType<VxeButtonGroupPropTypes.Status>,
+    round: Boolean as PropType<VxeButtonGroupPropTypes.Round>,
+    circle: Boolean as PropType<VxeButtonGroupPropTypes.Circle>,
+    className: [String, Function] as PropType<VxeButtonGroupPropTypes.ClassName>,
     disabled: Boolean as PropType<VxeButtonGroupPropTypes.Disabled>,
     size: { type: String as PropType<VxeButtonGroupPropTypes.Size>, default: () => GlobalConfig.buttonGroup.size || GlobalConfig.size }
   },
@@ -51,10 +56,10 @@ export default defineComponent({
     Object.assign($xebuttongroup, buttonGroupMethods, buttonGroupPrivateMethods)
 
     const renderVN = () => {
-      const { options } = props
+      const { className, options } = props
       const defaultSlot = slots.default
       return h('div', {
-        class: 'vxe-button-group'
+        class: ['vxe-button-group', className ? (XEUtils.isFunction(className) ? className({ $buttonGroup: $xebuttongroup }) : className) : '']
       }, defaultSlot ? defaultSlot({}) : (options ? options.map((item, index) => {
         return h(VxeButtonComponent, {
           key: index,

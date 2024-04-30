@@ -26,16 +26,26 @@ export interface VxeButtonGroupConstructor extends VxeComponentBase, VxeButtonGr
 export type VxeButtonGroupProps = {
   size?: VxeButtonGroupPropTypes.Size
   options?: VxeButtonGroupPropTypes.Options
+  mode?: VxeButtonGroupPropTypes.Mode
+  status?: VxeButtonGroupPropTypes.Status
+  round?: VxeButtonGroupPropTypes.Round
+  circle?: VxeButtonGroupPropTypes.Circle
   /**
    * 是否禁用
    */
   disabled?: VxeButtonGroupPropTypes.Disabled
+  className?: VxeButtonGroupPropTypes.ClassName
 }
 
 export namespace VxeButtonGroupPropTypes {
   export type Size = SizeType
   export type Options = VxeButtonProps[]
+  export type Round = boolean
+  export type Circle = boolean
   export type Disabled = boolean
+  export type Mode = VxeButtonPropTypes.Mode
+  export type Status = VxeButtonPropTypes.Status
+  export type ClassName = string | ((params: { $buttonGroup: VxeButtonGroupConstructor }) => string)
 }
 
 export interface ButtonPrivateComputed {
