@@ -6,6 +6,7 @@ import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeModalComponent from '../../modal/src/modal'
 import VxeButtonComponent from '../../button/src/button'
 import VxeRadioGroupComponent from '../../radio/src/group'
+import VxeTooltipComponent from '../../tooltip/src/tooltip'
 import XEUtils from 'xe-utils'
 
 import { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableCustomStoreObj, VxeColumnPropTypes } from '../../../types/all'
@@ -22,7 +23,7 @@ export default defineComponent({
     const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { reactData } = $xetable
-    const { computeCustomOpts, computeIsMaxFixedColumn } = $xetable.getComputeMaps()
+    const { computeCustomOpts, computeColumnOpts, computeIsMaxFixedColumn } = $xetable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const bodyElemRef = ref() as Ref<HTMLDivElement>
@@ -385,6 +386,7 @@ export default defineComponent({
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
       const { checkMethod, visibleMethod } = customOpts
+      const columnOpts = computeColumnOpts.value
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const trVNs: VNode[] = []
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
@@ -477,7 +479,7 @@ export default defineComponent({
         modelValue: customStore.visible,
         title: GlobalConfig.i18n('vxe.custom.cstmTitle'),
         width: '40vw',
-        minWidth: 500,
+        minWidth: 520,
         height: '50vh',
         minHeight: 300,
         mask: true,
@@ -502,10 +504,10 @@ export default defineComponent({
                 h('colgroup', {}, [
                   h('col', {
                     style: {
-                      width: '60px'
+                      width: '80px'
                     }
                   }),
-                  h('col'),
+                  h('col', {}),
                   h('col', {
                     style: {
                       width: '80px'
@@ -519,10 +521,24 @@ export default defineComponent({
                 ]),
                 h('thead', {}, [
                   h('tr', {}, [
-                    h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colSort')),
+                    h('th', {}, [
+                      h('span', {
+                        class: 'vxe-table-custom-popup--table-sort-help-title'
+                      }, GlobalConfig.i18n('vxe.custom.setting.colSort')),
+                      h(VxeTooltipComponent, {
+                        enterable: true,
+                        content: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip')
+                      }, {
+                        default: () => {
+                          return h('i', {
+                            class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
+                          })
+                        }
+                      })
+                    ]),
                     h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colTitle')),
                     h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colVisible')),
-                    h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed'))
+                    h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
                   ])
                 ]),
                 h(TransitionGroup, {

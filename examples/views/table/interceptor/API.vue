@@ -138,7 +138,7 @@ export default defineComponent({
       //   list: []
       // },
       {
-        name: 'event.clearActived',
+        name: 'event.clearEdit',
         desc: '清除激活单元格之前触发，允许返回 false 阻止默认行为',
         version: '',
         type: 'Boolean',
@@ -208,7 +208,7 @@ export default defineComponent({
         `
         import VXETable from 'vxe-table'
 
-        VXETable.interceptor.add('event.clearActived', (params, event) => {
+        VXETable.interceptor.add('event.clearEdit', (params, event) => {
           // 比如点击了某个组件的弹出层面板之后，此时被激活单元格不应该被自动关闭，通过返回 false 可以阻止默认的行为。
           if (event.target.className.indexOf('other-popper') > -1) {
             return false

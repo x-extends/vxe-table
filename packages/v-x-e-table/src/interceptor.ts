@@ -16,7 +16,7 @@ export const interceptor: VxeGlobalInterceptor = {
   add (type, callback) {
     // 检测类型
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      const eventTypes: VxeGlobalInterceptorHandles.Type[] = ['created', 'mounted', 'activated', 'beforeUnmount', 'unmounted', 'event.clearActived', 'event.clearFilter', 'event.clearAreas', 'event.showMenu', 'event.keydown', 'event.export', 'event.import']
+      const eventTypes: VxeGlobalInterceptorHandles.Type[] = ['created', 'mounted', 'activated', 'beforeUnmount', 'unmounted', 'event.clearEdit', 'event.clearActived', 'event.clearFilter', 'event.clearAreas', 'event.showMenu', 'event.keydown', 'event.export', 'event.import']
       if (eventTypes.indexOf(type) === -1) {
         warnLog('vxe.error.errProp', [`Interceptor.${type}`, eventTypes.join('|')])
       }

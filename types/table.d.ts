@@ -954,6 +954,12 @@ export interface TableReactData<D = VxeTableDataRow> {
       column: any
       [key: string]: any
     },
+    // 当前被强制聚焦单元格，只会在鼠标点击后算聚焦
+    focused: {
+      row: D | null
+      column: any
+      [key: string]: any
+    },
     insertMaps: {
       [key: string]: any
     }

@@ -83,7 +83,7 @@ export default defineComponent({
 
     const saveRowEvent = () => {
       const $table = xTable.value
-      $table.clearActived().then(() => {
+      $table.clearEdit().then(() => {
         demo1.loading1 = true
         setTimeout(() => {
           demo1.loading1 = false
@@ -94,7 +94,7 @@ export default defineComponent({
 
     const cancelRowEvent = (row: ItemVO) => {
       const $table = xTable.value
-      $table.clearActived().then(() => {
+      $table.clearEdit().then(() => {
         // 还原行数据
         $table.revertData(row)
       })
@@ -173,7 +173,7 @@ export default defineComponent({
 
             const saveRowEvent = () => {
               const $table = xTable.value
-              $table.clearActived().then(() => {
+              $table.clearEdit().then(() => {
                 demo1.loading1 = true
                 setTimeout(() => {
                   demo1.loading1 = false
@@ -184,7 +184,7 @@ export default defineComponent({
 
             const cancelRowEvent = (row: any) => {
               const $table = xTable.value
-              $table.clearActived().then(() => {
+              $table.clearEdit().then(() => {
                 // 还原行数据
                 $table.revertData(row)
               })

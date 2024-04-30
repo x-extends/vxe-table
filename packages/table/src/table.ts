@@ -187,6 +187,11 @@ export default defineComponent({
           row: null,
           column: null
         },
+        // 当前被强制聚焦单元格，只会在鼠标点击后算聚焦
+        focused: {
+          row: null,
+          column: null
+        },
         insertMaps: {},
         removeMaps: {}
       },
@@ -4046,6 +4051,7 @@ export default defineComponent({
         return !!rowExpandedMaps[rowid]
       },
       isExpandByRow (row) {
+        // 已废弃
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
         }
@@ -4546,7 +4552,7 @@ export default defineComponent({
               // 如果是激活状态，点击了单元格之外
               if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
                 // 如果手动调用了激活单元格，避免触发源被移除后导致重复关闭
-                tablePrivateMethods.preventEvent(evnt, 'event.clearActived', actived.args, () => {
+                tablePrivateMethods.preventEvent(evnt, 'event.clearEdit', actived.args, () => {
                   let isClear
                   if (editOpts.mode === 'row') {
                     const rowTargetNode = getEventTargetNode(evnt, el, 'vxe-body--row')
@@ -5357,7 +5363,14 @@ export default defineComponent({
         reactData.reColumnFlag++
       },
       preventEvent (evnt, type, args, next, end) {
-        const evntList = VXETable.interceptor.get(type)
+        let evntList = VXETable.interceptor.get(type)
+
+        // 兼容老版本
+        if (!evntList.length && type === 'event.clearEdit') {
+          evntList = VXETable.interceptor.get('event.clearActived')
+        }
+        // 兼容老版本
+
         let rest
         if (!evntList.some((func) => func(Object.assign({ $grid: $xegrid, $table: $xetable, $event: evnt }, args)) === false)) {
           if (next) {
@@ -5931,7 +5944,7 @@ export default defineComponent({
         const { lazy } = expandOpts
         const rowid = getRowid($xetable, row)
         if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
-          const expanded = !tableMethods.isExpandByRow(row)
+          const expanded = !tableMethods.isRowExpandByRow(row)
           const columnIndex = tableMethods.getColumnIndex(column)
           const $columnIndex = tableMethods.getVMColumnIndex(column)
           tableMethods.setRowExpand(row, expanded)

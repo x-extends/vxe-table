@@ -114,9 +114,10 @@ export default {
       cstmDragTarget: 'Moving target: {0}',
       setting: {
         colSort: 'Sort',
+        sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
         colTitle: 'Title',
         colVisible: 'Visible',
-        colFixed: 'Freeze column',
+        colFixed: 'Freeze columns (Max. {0})',
         fixedLeft: 'Left',
         fixedUnset: 'Unset',
         fixedRight: 'Right'

@@ -125,6 +125,8 @@
   table {
     width: 100%;
     border: 0;
+    table-layout: fixed;
+    word-break: break-all;
     border-spacing: 0;
     border-collapse: separate;
     th {
@@ -146,6 +148,9 @@
         td {
           border-top: 0;
         }
+      }
+      &:hover {
+        background-color: var(--vxe-table-row-hover-background-color);
       }
     }
     th,
@@ -176,7 +181,6 @@
 }
 
 .vxe-table-custom-popup--name {
-  max-width: 360px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -188,7 +192,6 @@
     &.level--#{$index} {
       .vxe-table-custom-popup--name {
         padding-left: $paddingLeft;
-        max-width: 260px - $paddingLeft;
       }
     }
   }
@@ -271,4 +274,13 @@
   &:active {
     cursor: grabbing;
   }
+}
+
+.vxe-table-custom-popup--table-sort-help-title,
+.vxe-table-custom-popup--table-sort-help-icon {
+  vertical-align: middle;
+}
+.vxe-table-custom-popup--table-sort-help-icon {
+  margin-left: 5px;
+  cursor: help;
 }

@@ -4470,7 +4470,7 @@ const apis = [
         list: []
       },
       {
-        name: 'clearActived()',
+        name: 'clearEdit()',
         desc: '手动清除单元格激活状态',
         version: '',
         type: 'Promise<any>',

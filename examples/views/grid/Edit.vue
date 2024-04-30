@@ -108,7 +108,7 @@ export default defineComponent({
     const saveRowEvent = async () => {
       const $grid = xGrid.value
       if ($grid) {
-        await $grid.clearActived()
+        await $grid.clearEdit()
         gridOptions.loading = true
         // 模拟异步保存
         setTimeout(() => {
@@ -249,7 +249,7 @@ export default defineComponent({
             const saveRowEvent = async () => {
               const $grid = xGrid.value
               if ($grid) {
-                await $grid.clearActived()
+                await $grid.clearEdit()
                 gridOptions.loading = true
                 // 模拟异步保存
                 setTimeout(() => {

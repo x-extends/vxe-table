@@ -21,7 +21,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
     /**
      * 显示快捷菜单
      */
-    const openContextMenu = (evnt: any, type: 'header' | 'body' | 'footer', params: any) => {
+    const handleOpenMenuEvent = (evnt: any, type: 'header' | 'body' | 'footer', params: any) => {
       const { ctxMenuStore } = reactData
       const isMenu = computeIsMenu.value
       const menuOpts = computeMenuOpts.value
@@ -142,6 +142,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
           menuPrivateMethods.ctxMenuLinkEvent(evnt, ctxMenuStore[property])
         }
       },
+      handleOpenMenuEvent,
       /**
        * 快捷菜单事件处理
        */
@@ -170,7 +171,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
               if (activeArea && activeArea.row && activeArea.column) {
                 params.row = activeArea.row
                 params.column = activeArea.column
-                openContextMenu(evnt, type, params)
+                handleOpenMenuEvent(evnt, type, params)
                 return
               }
             } else if (mouseConfig && mouseOpts.selected) {
@@ -178,7 +179,7 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
               if (selected.row && selected.column) {
                 params.row = selected.row
                 params.column = selected.column
-                openContextMenu(evnt, type, params)
+                handleOpenMenuEvent(evnt, type, params)
                 return
               }
             }
@@ -209,14 +210,14 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
                 }
               }
               const eventType = `${typePrefix}cell-menu` as 'cell-menu' | 'header-cell-menu' | 'footer-cell-menu'
-              openContextMenu(evnt, layout, params)
+              handleOpenMenuEvent(evnt, layout, params)
               $xetable.dispatchEvent(eventType, params, evnt)
               return
             } else if (getEventTargetNode(evnt, el, `vxe-table--${layout}-wrapper`, target => target.getAttribute('xid') === xID).flag) {
               if (menuOpts.trigger === 'cell') {
                 evnt.preventDefault()
               } else {
-                openContextMenu(evnt, layout, params)
+                handleOpenMenuEvent(evnt, layout, params)
               }
               return
             }

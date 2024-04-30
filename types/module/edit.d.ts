@@ -108,7 +108,7 @@ export interface TableEditMethods<D = VxeTableDataRow> {
     column: VxeTableDefines.ColumnInfo<D>
   }
   /**
-   * 请使用 clearEdit
+   * 请使用 clearEdit()
    * @deprecated
    */
   clearActived(evnt?: Event): Promise<any>

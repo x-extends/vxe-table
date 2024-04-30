@@ -504,10 +504,10 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
         return null
       },
       clearActived (evnt) {
-        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        //   warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
-        // }
         // 即将废弃
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
+        }
         return this.clearEdit(evnt)
       },
       /**
@@ -515,7 +515,7 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
        */
       clearEdit (evnt) {
         const { editStore } = reactData
-        const { actived } = editStore
+        const { actived, focused } = editStore
         const { row, column } = actived
         if (row || column) {
           syncActivedCell()
@@ -537,6 +537,8 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
             return $xetable.clearValidate()
           }
         }
+        focused.row = null
+        focused.column = null
         return nextTick()
       },
       /**
