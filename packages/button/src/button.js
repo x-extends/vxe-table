@@ -52,8 +52,41 @@ export default {
       return false
     },
     btnMode () {
-      const { mode, type } = this
-      return (mode === 'text' || type === 'text') ? 'text' : 'button'
+      const { $xebuttonggroup, mode, type } = this
+      if (mode === 'text' || type === 'text' || ($xebuttonggroup && $xebuttonggroup.mode === 'text')) {
+        return 'text'
+      }
+      return 'button'
+    },
+    btnStatus () {
+      const { $xebuttonggroup, status } = this
+      if (status) {
+        return status
+      }
+      if ($xebuttonggroup) {
+        return $xebuttonggroup.status
+      }
+      return ''
+    },
+    btnRound () {
+      const { $xebuttonggroup, round } = this
+      if (round) {
+        return round
+      }
+      if ($xebuttonggroup) {
+        return $xebuttonggroup.round
+      }
+      return false
+    },
+    btnCircle () {
+      const { $xebuttonggroup, circle } = this
+      if (circle) {
+        return circle
+      }
+      if ($xebuttonggroup) {
+        return $xebuttonggroup.circle
+      }
+      return false
     }
   },
   created () {
@@ -75,7 +108,7 @@ export default {
     GlobalEvent.off(this, 'mousewheel')
   },
   render (h) {
-    const { $scopedSlots, className, popupClassName, title, inited, type, destroyOnClose, isFormBtn, status, btnMode, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, className, popupClassName, title, inited, type, destroyOnClose, isFormBtn, btnMode, btnStatus, btnRound, btnCircle, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
     return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
@@ -87,9 +120,9 @@ export default {
         ref: 'xBtn',
         class: ['vxe-button', `type--${btnMode}`, {
           [`size--${vSize}`]: vSize,
-          [`theme--${status}`]: status,
-          'is--round': this.round,
-          'is--circle': this.circle,
+          [`theme--${btnStatus}`]: btnStatus,
+          'is--round': btnRound,
+          'is--circle': btnCircle,
           'is--disabled': disabled || loading,
           'is--loading': loading
         }],
@@ -135,9 +168,9 @@ export default {
       ref: 'xBtn',
       class: ['vxe-button', `type--${btnMode}`, className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
-        [`theme--${status}`]: status,
-        'is--round': this.round,
-        'is--circle': this.circle,
+        [`theme--${btnStatus}`]: btnStatus,
+        'is--round': btnRound,
+        'is--circle': btnCircle,
         'is--disabled': disabled || loading,
         'is--loading': loading
       }],

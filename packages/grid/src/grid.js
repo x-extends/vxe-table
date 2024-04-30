@@ -524,7 +524,7 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget, ...args) {
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg } = this
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg, validConfig } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
       const $xetable = $refs.xTable
       let button
@@ -745,7 +745,7 @@ export default {
             let restPromise = Promise.resolve()
             if (editRules) {
               // 只校验新增和修改的数据
-              restPromise = this.validate(body.insertRecords.concat(updateRecords))
+              restPromise = this[validConfig && validConfig.msgMode === 'full' ? 'fullValidate' : 'validate'](body.insertRecords.concat(updateRecords))
             }
             return restPromise.then((errMap) => {
               if (errMap) {
