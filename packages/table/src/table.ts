@@ -5368,6 +5368,11 @@ export default defineComponent({
         // 兼容老版本
         if (!evntList.length && type === 'event.clearEdit') {
           evntList = VXETable.interceptor.get('event.clearActived')
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (evntList.length) {
+              warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
+            }
+          }
         }
         // 兼容老版本
 

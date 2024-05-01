@@ -78,16 +78,16 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 虛擬滾動
 * [x] 虛擬合併
 * [x] CSS 變量主題
-* [x] (Plugin) 儲存格區域選取
-* [x] (Plugin) 儲存格複製/粘貼
-* [x] (Plugin) 儲存格查找和替換
+* [x] (插件) 儲存格區域選取
+* [x] (插件) 儲存格複製/粘貼
+* [x] (插件) 儲存格查找和替換
 
 ## 安裝
 
 版本：[vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
-npm install vxe-table@next
+npm install vxe-table
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
@@ -109,10 +109,10 @@ createApp(App).use(VXETable).mount('#app')
 
 ```HTML
 <!-- 引入樣式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table@next/lib/style.css">
+<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
 <!-- 引入腳本 -->
 <script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table@next"></script>
+<script src="https://unpkg.com/vxe-table"></script>
 ```
 
 ## 示例
@@ -146,10 +146,6 @@ const tableData = ref([
 ## 線上檔案
 
 👉 [官網檔案](https://vxetable.cn)  
-
-參與檔案完善、補充詳細檔案  
-
-💡 [官網檔案源碼](https://github.com/x-extends/vxe-table-docs)
 
 ## 運行項目
 

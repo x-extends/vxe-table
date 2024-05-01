@@ -79,16 +79,16 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Virtual scroller
 * [x] Virtual merger
 * [x] CSS Variable Theme
-* [x] (插件) Cell area selection
-* [x] (插件) Cell copy & paste
-* [x] (插件) Cell find and replace
+* [x] (Plugin) Cell area selection
+* [x] (Plugin) Cell copy & paste
+* [x] (Plugin) Cell find and replace
 
 ## Installing
 
 Version: [vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
-npm install vxe-table@next
+npm install vxe-table
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
@@ -110,10 +110,10 @@ Use a third-party CDN to remember to lock the version number to avoid being affe
 
 ```HTML
 <!-- Style -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table@next/lib/style.css">
+<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
 <!-- Script -->
 <script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table@next"></script>
+<script src="https://unpkg.com/vxe-table"></script>
 ```
 
 ## Example
@@ -147,10 +147,6 @@ const tableData = ref([
 ## Online Documents
 
 👉 [Document](https://vxetable.cn)  
-
-Participate in document improvement and supplement detailed documents.  
-
-💡 [Document source code](https://github.com/x-extends/vxe-table-docs)
 
 ## Run the project
 

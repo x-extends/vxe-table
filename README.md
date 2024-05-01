@@ -89,7 +89,7 @@
 版本：[vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
-npm install vxe-table@next
+npm install vxe-table
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
@@ -111,10 +111,10 @@ createApp(App).use(VXETable).mount('#app')
 
 ```HTML
 <!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table@next/lib/style.css">
+<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
 <!-- 引入脚本 -->
 <script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table@next"></script>
+<script src="https://unpkg.com/vxe-table"></script>
 ```
 
 ## 示例
@@ -148,10 +148,6 @@ const tableData = ref([
 ## 在线文档
 
 👉 [官网文档](https://vxetable.cn)  
-
-参与文档完善、补充详细文档  
-
-💡 [官网文档源码](https://github.com/x-extends/vxe-table-docs)
 
 ## QQ 交流群
 
