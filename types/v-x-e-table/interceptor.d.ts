@@ -3,7 +3,7 @@ import { VxeGridConstructor, VxeGridPrivateMethods } from '../grid'
 
 export namespace VxeGlobalInterceptorHandles {
   export type HookType = 'created' | 'mounted' | 'activated' | 'beforeUnmount' | 'unmounted'
-  export type EventType = 'event.clearEdit' | 'event.clearFilter' | 'event.clearAreas' | 'event.showMenu' | 'event.keydown' | 'event.export' | 'event.import'
+  export type EventType = 'event.clearEdit' | 'event.clearActived' | 'event.clearFilter' | 'event.clearAreas' | 'event.showMenu' | 'event.keydown' | 'event.export' | 'event.import'
   export type Type = HookType | EventType
 
   export type InterceptorCallback = (params: any) => any

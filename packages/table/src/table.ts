@@ -5757,8 +5757,9 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
+        const keyboardOpts = computeKeyboardOpts.value
         const rowOpts = computeRowOpts.value
-        const { actived } = editStore
+        const { actived, focused } = editStore
         const { row, column } = params
         const { type, treeNode } = column
         const isRadioType = type === 'radio'
@@ -5800,6 +5801,11 @@ export default defineComponent({
           }
           // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
           if (isEnableConf(editConfig)) {
+            // 记录点击输入框聚焦状态
+            if (keyboardOpts.arrowCursorLock && evnt && editOpts.mode === 'cell' && evnt.target && /^input|textarea$/i.test((evnt.target as HTMLElement).tagName)) {
+              focused.column = column
+              focused.row = row
+            }
             if (editOpts.trigger === 'manual') {
               if (actived.args && actived.row === row && column !== actived.column) {
                 handleChangeCell(evnt, params)
