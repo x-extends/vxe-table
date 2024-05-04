@@ -3902,8 +3902,8 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt, params) {
-    const { highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, editConfig, editOpts, checkboxOpts, rowOpts } = this
-    const { actived } = editStore
+    const { highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, keyboardOpts, editConfig, editOpts, checkboxOpts, rowOpts } = this
+    const { actived, focused } = editStore
     const { row, column } = params
     const { type, treeNode } = column
     const isRadioType = type === 'radio'
@@ -3945,6 +3945,11 @@ const Methods = {
       }
       // 如果设置了单元格选中功能，则不会使用点击事件去处理（只能支持双击模式）
       if (isEnableConf(editConfig)) {
+        // 记录点击输入框聚焦状态
+        if (keyboardOpts.arrowCursorLock && evnt && editOpts.mode === 'cell' && evnt.target && /^input|textarea$/i.test(evnt.target.tagName)) {
+          focused.column = column
+          focused.row = row
+        }
         if (editOpts.trigger === 'manual') {
           if (actived.args && actived.row === row && column !== actived.column) {
             this.handleChangeCell(evnt, params)

@@ -422,55 +422,46 @@ export default {
     handleActived (params, evnt) {
       const { editStore, editOpts, tableColumn, editConfig, mouseConfig } = this
       const { mode } = editOpts
-      const { actived } = editStore
+      const { actived, focused } = editStore
       const { row, column } = params
       const { editRender } = column
       const cell = params.cell = (params.cell || this.getCell(row, column))
       const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-      if (isEnableConf(editConfig) && isEnableConf(editRender) && !this.hasPendingByRow(row) && cell) {
-        if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
-          // 判断是否禁用编辑
-          let type = 'edit-disabled'
-          if (!beforeEditMethod || beforeEditMethod({ ...params, $table: this, $grid: this.$xegrid })) {
-            if (mouseConfig) {
-              this.clearSelected(evnt)
-              this.clearCellAreas(evnt)
-              this.clearCopyCellArea(evnt)
-            }
-            this.closeTooltip()
-            if (actived.column) {
-              this.clearEdit(evnt)
-            }
-            type = 'edit-activated'
-            column.renderHeight = cell.offsetHeight
-            actived.args = params
-            actived.row = row
-            actived.column = column
-            if (mode === 'row') {
-              tableColumn.forEach(column => this._getColumnModel(row, column))
-            } else {
-              this._getColumnModel(row, column)
-            }
-            const afterEditMethod = editOpts.afterEditMethod
-            this.$nextTick(() => {
-              this.handleFocus(params, evnt)
-              if (afterEditMethod) {
-                afterEditMethod({ ...params, $table: this, $grid: this.$xegrid })
+      if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
+        // 激活编辑
+        if (!this.hasPendingByRow(row)) {
+          if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
+            // 判断是否禁用编辑
+            let type = 'edit-disabled'
+            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: this, $grid: this.$xegrid })) {
+              if (mouseConfig) {
+                this.clearSelected(evnt)
+                this.clearCellAreas(evnt)
+                this.clearCopyCellArea(evnt)
               }
-            })
-          }
-          this.emitEvent(type, {
-            row,
-            rowIndex: this.getRowIndex(row),
-            $rowIndex: this.getVMRowIndex(row),
-            column,
-            columnIndex: this.getColumnIndex(column),
-            $columnIndex: this.getVMColumnIndex(column)
-          }, evnt)
-
-          // v4已废弃
-          if (type === 'edit-activated') {
-            this.emitEvent('edit-actived', {
+              this.closeTooltip()
+              if (actived.column) {
+                this.clearEdit(evnt)
+              }
+              type = 'edit-activated'
+              column.renderHeight = cell.offsetHeight
+              actived.args = params
+              actived.row = row
+              actived.column = column
+              if (mode === 'row') {
+                tableColumn.forEach(column => this._getColumnModel(row, column))
+              } else {
+                this._getColumnModel(row, column)
+              }
+              const afterEditMethod = editOpts.afterEditMethod
+              this.$nextTick(() => {
+                this.handleFocus(params, evnt)
+                if (afterEditMethod) {
+                  afterEditMethod({ ...params, $table: this, $grid: this.$xegrid })
+                }
+              })
+            }
+            this.emitEvent(type, {
               row,
               rowIndex: this.getRowIndex(row),
               $rowIndex: this.getVMRowIndex(row),
@@ -478,29 +469,43 @@ export default {
               columnIndex: this.getColumnIndex(column),
               $columnIndex: this.getVMColumnIndex(column)
             }, evnt)
-          }
-        } else {
-          const { column: oldColumn } = actived
-          if (mouseConfig) {
-            this.clearSelected(evnt)
-            this.clearCellAreas(evnt)
-            this.clearCopyCellArea(evnt)
-          }
-          if (oldColumn !== column) {
-            const { model: oldModel } = oldColumn
-            if (oldModel.update) {
-              UtilTools.setCellValue(row, oldColumn, oldModel.value)
+
+            // v4已废弃
+            if (type === 'edit-activated') {
+              this.emitEvent('edit-actived', {
+                row,
+                rowIndex: this.getRowIndex(row),
+                $rowIndex: this.getVMRowIndex(row),
+                column,
+                columnIndex: this.getColumnIndex(column),
+                $columnIndex: this.getVMColumnIndex(column)
+              }, evnt)
             }
-            this.clearValidate()
+          } else {
+            const { column: oldColumn } = actived
+            if (mouseConfig) {
+              this.clearSelected(evnt)
+              this.clearCellAreas(evnt)
+              this.clearCopyCellArea(evnt)
+            }
+            if (oldColumn !== column) {
+              const { model: oldModel } = oldColumn
+              if (oldModel.update) {
+                UtilTools.setCellValue(row, oldColumn, oldModel.value)
+              }
+              this.clearValidate()
+            }
+            column.renderHeight = cell.offsetHeight
+            actived.args = params
+            actived.column = column
+            setTimeout(() => {
+              this.handleFocus(params, evnt)
+            })
           }
-          column.renderHeight = cell.offsetHeight
-          actived.args = params
-          actived.column = column
-          setTimeout(() => {
-            this.handleFocus(params, evnt)
-          })
+          focused.column = null
+          focused.row = null
+          this.focus()
         }
-        this.focus()
       }
       return this.$nextTick()
     },
@@ -570,9 +575,9 @@ export default {
       return this.$nextTick()
     },
     _getActiveRecord () {
-      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      //   warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
-      // }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
+      }
       // 即将废弃
       return this.getEditRecord()
     },
@@ -586,9 +591,9 @@ export default {
       return null
     },
     _isActiveByRow (row) {
-      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      //   warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
-      // }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
+      }
       // 即将废弃
       return this.isEditByRow(row)
     },
@@ -642,9 +647,9 @@ export default {
       }
     },
     _setActiveRow (row) {
-      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      //   warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
-      // }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
+      }
       // 即将废弃
       return this.setEditRow(row)
     },
@@ -659,9 +664,9 @@ export default {
       return this.setEditCell(row, column)
     },
     _setActiveCell (row) {
-      // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      //   warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
-      // }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
+      }
       // 即将废弃
       return this.setEditCell(row)
     },
