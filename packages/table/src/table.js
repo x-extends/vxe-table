@@ -778,15 +778,15 @@ export default {
     })
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      // if (this.rowId) {
-      //   warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
-      // }
-      // if (this.rowKey) {
-      //   warnLog('vxe.error.delProp', ['row-id', 'row-config.useKey'])
-      // }
-      // if (this.columnKey) {
-      //   warnLog('vxe.error.delProp', ['row-id', 'column-config.useKey'])
-      // }
+      if (this.rowId) {
+        warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
+      }
+      if (this.rowKey) {
+        warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
+      }
+      if (this.columnKey) {
+        warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
+      }
       if (!(this.rowId || rowOpts.keyField) && (this.checkboxOpts.reserve || this.checkboxOpts.checkRowKeys || this.radioOpts.reserve || this.radioOpts.checkRowKey || this.expandOpts.expandRowKeys || this.treeOpts.expandRowKeys)) {
         warnLog('vxe.error.reqProp', ['row-config.keyField'])
       }
