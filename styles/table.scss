@@ -937,20 +937,20 @@
   }
 
   /*树形节点*/
-  &.is--tree-line {
-    .vxe-body--row {
-      &:first-child {
-        .vxe-tree--line {
-          border-width: 0 0 1px 0;
-        }
-      }
-    }
-    .vxe-body--row {
-      .vxe-body--column {
-        background-image: none;
-      }
-    }
-  }
+  // &.is--tree-line {
+  //   .vxe-body--row {
+  //     &:first-child {
+  //       .vxe-tree--line {
+  //         border-width: 0 0 1px 0;
+  //       }
+  //     }
+  //   }
+  //   .vxe-body--row {
+  //     .vxe-body--column {
+  //       background-image: none;
+  //     }
+  //   }
+  // }
   .vxe-tree--line-wrapper {
     position: relative;
     display: block;

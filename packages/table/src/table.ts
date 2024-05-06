@@ -6525,15 +6525,15 @@ export default defineComponent({
         const rowOpts = computeRowOpts.value
 
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          // if (props.rowId) {
-          //   warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
-          // }
-          // if (props.rowKey) {
-          //   warnLog('vxe.error.delProp', ['row-id', 'row-config.useKey'])
-          // }
-          // if (props.columnKey) {
-          //   warnLog('vxe.error.delProp', ['row-id', 'column-config.useKey'])
-          // }
+          if (props.rowId) {
+            warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
+          }
+          if (props.rowKey) {
+            warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
+          }
+          if (props.columnKey) {
+            warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
+          }
           if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
             warnLog('vxe.error.reqProp', ['row-config.keyField'])
           }

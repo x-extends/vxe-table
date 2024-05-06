@@ -78,9 +78,10 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 虛擬滾動
 * [x] 虛擬合併
 * [x] CSS 變量主題
-* [x] (插件) 儲存格區域選取
-* [x] (插件) 儲存格複製/粘貼
-* [x] (插件) 儲存格查找和替換
+* [x] (([企業版](https://vxetable.cn/pluginDocs/))) 儲存格區域選取
+* [x] (([企業版](https://vxetable.cn/pluginDocs/))) 儲存格複製/粘貼
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格查找和替換
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 全鍵盤操作
 
 ## 安裝
 

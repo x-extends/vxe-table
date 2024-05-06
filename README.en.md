@@ -76,12 +76,13 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Keyboard navigation
 * [x] Modal
 * [x] VxeGlobalRenderer
-* [x] Virtual scroller
+* [x] Virtual scroll
 * [x] Virtual merger
 * [x] CSS Variable Theme
-* [x] (Plugin) Cell area selection
-* [x] (Plugin) Cell copy & paste
-* [x] (Plugin) Cell find and replace
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell area selection
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell copy & paste
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell find and replace
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Full keyboard operation
 
 ## Installing
 
