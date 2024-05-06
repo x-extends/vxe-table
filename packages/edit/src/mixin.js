@@ -126,7 +126,10 @@ function handleInsertRowAt (_vm, records, row, isInsertNextRow) {
               if (isInsertNextRow) {
                 targetIndex = targetIndex + 1
               }
-              parentChilds.splice(targetIndex, 0, ...newRecords)
+              // 在开启懒加载的情况下，首次 insert row 会导致重复添加
+              if (parentChilds !== parentMapChilds) {
+                parentChilds.splice(targetIndex, 0, ...newRecords)
+              }
             }
           }
         } else {
