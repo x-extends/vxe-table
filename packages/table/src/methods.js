@@ -567,12 +567,21 @@ const Methods = {
       return this.loadColumn(columns)
     })
   },
+  initColumnSort  () {
+    const { collectColumn } = this
+    collectColumn.forEach((column, index) => {
+      const sortIndex = index + 1
+      column.sortNumber = sortIndex
+      column.renderSortNumber = sortIndex
+    })
+  },
   handleColumn (collectColumn) {
     this.collectColumn = collectColumn
     const tableFullColumn = getColumnList(collectColumn)
     this.tableFullColumn = tableFullColumn
-    this.cacheColumnMap(true)
+    this.initColumnSort()
     this.restoreCustomStorage()
+    this.cacheColumnMap()
     this.parseColumns().then(() => {
       if (this.scrollXLoad) {
         this.loadScrollXData(true)
@@ -699,7 +708,7 @@ const Methods = {
    * 更新数据列的 Map
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
-  cacheColumnMap (isInit) {
+  cacheColumnMap () {
     const { tableFullColumn, collectColumn, fullColumnMap, showOverflow, columnOpts, rowOpts } = this
     const fullColumnIdData = this.fullColumnIdData = {}
     const fullColumnFieldData = this.fullColumnFieldData = {}
@@ -794,9 +803,6 @@ const Methods = {
       }
       if (fullColumnIdData[colid]) {
         errLog('vxe.error.colRepet', ['colId', colid])
-      }
-      if (isInit) {
-        column.sortNumber = index
       }
       fullColumnIdData[colid] = rest
       fullColumnMap.set(column, rest)
@@ -1575,6 +1581,9 @@ const Methods = {
     if (opts.resizable) {
       this.saveCustomResizable(true)
     }
+    if (opts.sort) {
+      this.saveCustomSort(true)
+    }
     if (opts.fixed) {
       this.saveCustomFixed()
     }
@@ -1592,6 +1601,7 @@ const Methods = {
       }
     }
     this.saveCustomVisible()
+    this.saveCustomSort()
     this.analyColumnWidth()
     return this.refreshColumn(true)
   },
@@ -1599,7 +1609,7 @@ const Methods = {
    * 还原自定义列操作状态
    */
   restoreCustomStorage () {
-    const { id, collectColumn, customConfig, customOpts } = this
+    const { id, customConfig, customOpts } = this
     const { storage } = customOpts
     const isAllStorage = storage === true
     const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
@@ -1637,16 +1647,18 @@ const Methods = {
         }
       }
       // 自定义顺序
+      let hasCustomSort = false
       if (isCustomSort) {
         const columnSortStorage = getCustomStorageMap(sortStorageKey)[id]
         if (columnSortStorage) {
-          const colOrderSeqs = columnSortStorage.split(',')
-          colOrderSeqs.forEach((orderConf) => {
-            const [colKey, sortNumber] = orderConf.split('|')
+          XEUtils.each(columnSortStorage, (renderSortNumber, colKey) => {
             if (customMap[colKey]) {
-              customMap[colKey].sortNumber = sortNumber
+              customMap[colKey].renderSortNumber = renderSortNumber
             } else {
-              customMap[colKey] = { sortNumber }
+              customMap[colKey] = { renderSortNumber }
+            }
+            if (!hasCustomSort) {
+              hasCustomSort = true
             }
           })
         }
@@ -1673,6 +1685,7 @@ const Methods = {
           })
         }
       }
+      let { collectColumn } = this
       const keyMap = {}
       XEUtils.eachTree(collectColumn, column => {
         const colKey = column.getKey()
@@ -1680,7 +1693,7 @@ const Methods = {
           keyMap[colKey] = column
         }
       })
-      XEUtils.each(customMap, ({ visible, resizeWidth, fixed, sortNumber }, field) => {
+      XEUtils.each(customMap, ({ visible, resizeWidth, fixed, renderSortNumber }, field) => {
         const column = keyMap[field]
         if (column) {
           if (XEUtils.isNumber(resizeWidth)) {
@@ -1692,11 +1705,17 @@ const Methods = {
           if (fixed) {
             column.fixed = fixed
           }
-          if (sortNumber) {
-            column.colSeq = Number(sortNumber)
+          if (renderSortNumber) {
+            column.renderSortNumber = Number(renderSortNumber)
           }
         }
       })
+      // 如果自定义了顺序
+      if (hasCustomSort) {
+        collectColumn = XEUtils.orderBy(collectColumn, 'renderSortNumber')
+        this.collectColumn = collectColumn
+        this.tableFullColumn = getColumnList(collectColumn)
+      }
     }
   },
   saveCustomFixed () {
@@ -1783,6 +1802,35 @@ const Methods = {
       }
       columnWidthStorageMap[id] = XEUtils.isEmpty(columnWidthStorage) ? undefined : columnWidthStorage
       localStorage.setItem(resizableStorageKey, XEUtils.toJSONString(columnWidthStorageMap))
+    }
+  },
+  saveCustomSort (isReset) {
+    const { id, collectColumn, customConfig, customOpts } = this
+    const { storage } = customOpts
+    const isAllStorage = storage === true
+    const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
+    const isSort = isAllStorage || storageOpts.sort
+    if (customConfig && isSort) {
+      const columnSortStorageMap = getCustomStorageMap(sortStorageKey)
+      let columnWidthStorage
+      if (!id) {
+        errLog('vxe.error.reqProp', ['id'])
+        return
+      }
+      if (!isReset) {
+        columnWidthStorage = XEUtils.isPlainObject(columnSortStorageMap[id]) ? columnSortStorageMap[id] : {}
+        // 排序只支持一级
+        collectColumn.forEach(column => {
+          if (column.sortNumber !== column.renderSortNumber) {
+            const colKey = column.getKey()
+            if (colKey) {
+              columnWidthStorage[colKey] = column.renderSortNumber
+            }
+          }
+        })
+      }
+      columnSortStorageMap[id] = XEUtils.isEmpty(columnWidthStorage) ? undefined : columnWidthStorage
+      localStorage.setItem(sortStorageKey, XEUtils.toJSONString(columnSortStorageMap))
     }
   },
   handleUpdateDataQueue () {

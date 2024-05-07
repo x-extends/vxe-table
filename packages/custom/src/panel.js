@@ -586,9 +586,7 @@ export default {
       removeClass(trEl, 'active--drag-target')
       removeClass(trEl, 'active--drag-origin')
       // 更新顺序
-      customColumnList.forEach((column, index) => {
-        column.renderSortNumber = index
-      })
+      this.updateColumnSort()
     },
     sortDragoverEvent  (evnt) {
       const { $xetable, prevDropTrEl } = this
@@ -608,6 +606,15 @@ export default {
         this.prevDropTrEl = trEl
       }
       updateDropHint(this, evnt)
+    },
+    updateColumnSort () {
+      const { $xetable } = this
+      const { customColumnList } = $xetable
+      // 更新顺序
+      customColumnList.forEach((column, index) => {
+        const sortIndex = index + 1
+        column.renderSortNumber = sortIndex
+      })
     }
   }
 }
