@@ -50,6 +50,7 @@ export default defineComponent({
     }
 
     const confirmCustomEvent = (evnt: Event) => {
+      updateColumnSort()
       $xetable.closeCustom()
       $xetable.emitCustomEvent('confirm', evnt)
     }
@@ -173,6 +174,15 @@ export default defineComponent({
       }
     }
 
+    const updateColumnSort = () => {
+      const { customColumnList } = reactData
+      // 更新顺序
+      customColumnList.forEach((column, index) => {
+        const sortIndex = index + 1
+        column.renderSortNumber = sortIndex
+      })
+    }
+
     const sortDragendEvent = (evnt: DragEvent) => {
       const { customColumnList } = reactData
       const trEl = evnt.currentTarget as HTMLElement
@@ -211,9 +221,7 @@ export default defineComponent({
       removeClass(trEl, 'active--drag-target')
       removeClass(trEl, 'active--drag-origin')
       // 更新顺序
-      customColumnList.forEach((column, index) => {
-        column.renderSortNumber = index
-      })
+      updateColumnSort()
     }
 
     const sortDragoverEvent = (evnt: DragEvent) => {

@@ -103,6 +103,7 @@ declare module '../table' {
        * 是否服务端导出
        */
       remote?: boolean
+      encoding?: string
       /**
        * 只对 remote=true 有效，用于自定义导入逻辑
        */

@@ -759,6 +759,7 @@ export interface TablePrivateMethods<D = VxeTableDataRow> {
   cacheRowMap(isSource?: boolean): void
   cacheSourceMap(fullData: any[]): void
   saveCustomResizable(isReset?: boolean): void
+  saveCustomSort(isReset?: boolean): void
   saveCustomVisible(): void
   saveCustomFixed(): void
   analyColumnWidth(): void
