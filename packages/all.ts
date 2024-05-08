@@ -1,6 +1,7 @@
 import { App } from 'vue'
 import XEUtils from 'xe-utils'
 import { config } from './v-x-e-table'
+import { setTheme } from './v-x-e-table/src/theme'
 
 import { VxeTableFilterModule } from './filter'
 import { VxeTableMenuModule } from './menu'
@@ -92,6 +93,7 @@ config({
 export function install (app: App, options: any) {
   if (XEUtils.isPlainObject(options)) {
     config(options)
+    setTheme(options)
   }
   components.forEach(component => component.install(app))
 }

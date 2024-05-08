@@ -8,6 +8,7 @@ import { formats } from './src/formats'
 import { validators } from './src/validators'
 import { hooks } from './src/hooks'
 import { config } from './src/config'
+import { setTheme } from './src/theme'
 import { getLastZIndex, nextZIndex } from '../tools/utils'
 
 import { VXETableCore } from '../../types/all'
@@ -105,6 +106,8 @@ export const VXETable = {
   setup,
   globalConfs
 } as VXETableCore
+
+setTheme(globalStore)
 
 export * from './src/interceptor'
 export * from './src/renderer'

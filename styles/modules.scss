@@ -1,7 +1,8 @@
-// 该文件已废弃，请使用 vxe-table/style/all.scss
+// 该文件已废弃，请使用 vxe-table/styles/all.scss
 
 @import './variable.scss';
-@import './css-variable.scss';
+@import './theme/default.scss';
+@import './theme/dark.scss';
 @import './filter.scss';
 @import './menu.scss';
 @import './export.scss';

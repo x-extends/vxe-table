@@ -3,7 +3,7 @@ import i18n from '@/i18n'
 import { VXETable } from '../../../packages/all'
 
 // 设置默认参数
-VXETable.setup({
+VXETable.config({
   table: {
     exportConfig: {
       types: ['csv', 'html', 'xml', 'txt']

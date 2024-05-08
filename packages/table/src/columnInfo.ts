@@ -8,10 +8,6 @@ import { warnLog, errLog } from '../../tools/log'
 import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
 
 export class ColumnInfo {
-  title?: string
-  type?: string
-  field?: string
-
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xetable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
     const $xegrid = $xetable.xegrid

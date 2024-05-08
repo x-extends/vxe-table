@@ -32,7 +32,9 @@
   width: 0;
   border: 0;
 }
-
+.vxe-table--render-wrapper {
+  background-color: var(--vxe-table-body-background-color);
+}
 .vxe-table--body-wrapper {
   scroll-behavior: auto;
 }
@@ -607,6 +609,11 @@
   }
   &.cell--area {
     .vxe-table--main-wrapper {
+      user-select: none;
+    }
+  }
+  &.drag--range {
+    .vxe-cell--checkbox {
       user-select: none;
     }
   }

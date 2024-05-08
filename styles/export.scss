@@ -103,6 +103,7 @@
     outline: 0;
     border-radius: var(--vxe-border-radius);
     background-color: var(--vxe-input-background-color);
+    color: inherit;
     user-select: none;
     cursor: pointer;
     &:focus {

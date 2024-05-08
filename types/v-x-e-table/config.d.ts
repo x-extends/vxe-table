@@ -32,6 +32,8 @@ export interface VXETableConfigOptions {
     [key: string]: any
   }): void
 
+  theme?: null | '' | 'default' | 'dark'
+
   size?: SizeType
   zIndex?: number
   version?: number
