@@ -47,11 +47,13 @@ body {
 }
 html,
 body,
-#app {
+#app,
+.app-container {
   height: 100%;
   overflow: hidden;
 }
-#app {
+#app,
+.app-container {
   display: flex;
   flex-direction: column;
 }

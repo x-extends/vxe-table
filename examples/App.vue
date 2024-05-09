@@ -1,5 +1,5 @@
 <template>
-  <div @click="clickEvent">
+  <div class="app-container" @click="clickEvent">
     <header class="page-header">
       <div class="left">
         <a href="/vxe-table/">
