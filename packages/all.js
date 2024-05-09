@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import { VXETable } from './v-x-e-table'
+import { setTheme } from './v-x-e-table/src/theme'
 
 import { Filter } from './filter'
 import { Menu } from './menu'
@@ -84,6 +85,7 @@ const components = [
 export function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
     VXETable.config(options)
+    setTheme(options)
   }
   components.map(component => component.install(Vue))
 }

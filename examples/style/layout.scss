@@ -49,7 +49,7 @@ html,
 body,
 #app {
   height: 100%;
-  overflow: hidden;
+  // overflow: auto;
 }
 #app {
   display: flex;
@@ -216,7 +216,7 @@ body,
   display: flex;
   flex-grow: 1;
   border-bottom: 1px solid #dcdfe6;
-  overflow: hidden;
+  // overflow: hidden;
   > .aside {
     position: relative;
     display: flex;

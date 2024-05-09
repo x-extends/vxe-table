@@ -95,6 +95,10 @@
       </vxe-input>
     </p>
 
+<p>
+  <vxe-input v-model="value603" placeholder="日期选择" type="date" transfer></vxe-input>
+</p>
+
     <pre>
       <pre-code>
         | Tab | 切换到上一个 |

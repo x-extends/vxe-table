@@ -1995,6 +1995,7 @@ export default {
           }
           const { boundingTop, boundingLeft, visibleHeight, visibleWidth } = DomTools.getAbsolutePos(targetElem)
           let panelPlacement = 'bottom'
+          console.log(DomTools.getAbsolutePos(targetElem))
           if (transfer) {
             let left = boundingLeft
             let top = boundingTop + targetHeight

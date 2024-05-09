@@ -133,11 +133,9 @@ export const DomTools = {
     return getNodeOffset(elem, container, { left: 0, top: 0 })
   },
   getAbsolutePos (elem) {
-    // 当主页面嵌套在iframe时，elem.getBoundingClientRect()仅计算在当前body内的边界距离，忽略了body所在的边界距离
-    const bodyBounding = document.body.getBoundingClientRect()
     const bounding = elem.getBoundingClientRect()
-    const boundingTop = bounding.top - bodyBounding.top
-    const boundingLeft = bounding.left - bodyBounding.left
+    const boundingTop = bounding.top
+    const boundingLeft = bounding.left
     const { scrollTop, scrollLeft, visibleHeight, visibleWidth } = getDomNode()
     return { boundingTop, top: scrollTop + boundingTop, boundingLeft, left: scrollLeft + boundingLeft, visibleHeight, visibleWidth }
   },

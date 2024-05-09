@@ -1,3 +1,4 @@
+import VXETable from '../../v-x-e-table'
 import UtilTools from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import GlobalConfig from '../../v-x-e-table/src/conf'
@@ -457,7 +458,19 @@ export default {
       $xetable.emitCustomEvent('reset', evnt)
     },
     resetPopupCustomEvent  (evnt) {
-      this.resetCustomEvent(evnt)
+      if (VXETable.modal) {
+        VXETable.modal.confirm({
+          content: GlobalConfig.i18n('vxe.custom.cstmConfirmRestore'),
+          className: 'vxe-table--ignore-clear',
+          escClosable: true
+        }).then(type => {
+          if (type === 'confirm') {
+            this.resetCustomEvent(evnt)
+          }
+        })
+      } else {
+        this.resetCustomEvent(evnt)
+      }
     },
     handleOptionCheck (column) {
       const { $xetable } = this

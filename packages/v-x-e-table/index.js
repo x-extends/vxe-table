@@ -7,6 +7,7 @@ import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
 import { config } from './src/config'
+import { setTheme } from './src/theme'
 import { UtilTools } from '../tools/utils'
 import { errLog } from '../tools/log'
 
@@ -113,6 +114,8 @@ export const VXETable = {
   config,
   globalConfs
 }
+
+setTheme(globalStore)
 
 export * from './src/interceptor'
 export * from './src/renderer'
