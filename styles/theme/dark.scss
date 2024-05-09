@@ -1,6 +1,8 @@
 @import '../variable.scss';
 
-[data-vxe-table-theme="dark"]:root {
+[data-vxe-table-theme="dark"] {
+  color-scheme: dark;
+  
   /*font*/
   --vxe-font-family: #{$vxe-font-family};
   --vxe-font-size: #{$vxe-font-size};

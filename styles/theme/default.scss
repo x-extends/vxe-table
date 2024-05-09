@@ -1,6 +1,6 @@
 @import '../variable.scss';
 
-[data-vxe-table-theme="default"]:root {
+[data-vxe-table-theme="default"] {
   /*font*/
   --vxe-font-family: #{$vxe-font-family};
   --vxe-font-size: #{$vxe-font-size};
