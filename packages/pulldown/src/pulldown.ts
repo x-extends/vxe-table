@@ -214,9 +214,9 @@ export default defineComponent({
       if (!disabled) {
         if (visiblePanel) {
           if (getEventTargetNode(evnt, panelElem).flag) {
-            updatePlacement()
+            // updatePlacement()
           } else {
-            hidePanel()
+            // hidePanel()
             pulldownMethods.dispatchEvent('hide-panel', {}, evnt)
           }
         }
@@ -231,7 +231,7 @@ export default defineComponent({
       if (!disabled) {
         reactData.isActivated = getEventTargetNode(evnt, el).flag || getEventTargetNode(evnt, panelElem).flag
         if (visiblePanel && !reactData.isActivated) {
-          hidePanel()
+          // hidePanel()
           pulldownMethods.dispatchEvent('hide-panel', {}, evnt)
         }
       }
@@ -240,7 +240,7 @@ export default defineComponent({
     const handleGlobalBlurEvent = (evnt: Event) => {
       if (reactData.visiblePanel) {
         reactData.isActivated = false
-        hidePanel()
+        // hidePanel()
         pulldownMethods.dispatchEvent('hide-panel', {}, evnt)
       }
     }

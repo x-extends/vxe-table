@@ -10,7 +10,9 @@ import { VxeGlobalConfigMethod } from '../../../types/all'
  */
 export const config: VxeGlobalConfigMethod = (options) => {
   if (options) {
-    setTheme(options)
+    if (options.theme) {
+      setTheme(options)
+    }
     if (options.zIndex) {
       DomZIndex.setCurrent(options.zIndex)
     }

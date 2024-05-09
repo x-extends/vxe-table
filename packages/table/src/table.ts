@@ -4524,6 +4524,7 @@ export default defineComponent({
       const el = refElem.value
       const editOpts = computeEditOpts.value
       const validOpts = computeValidOpts.value
+      const areaOpts = computeAreaOpts.value
       const { actived } = editStore
       const $validTooltip = refValidTooltip.value
       const tableFilter = refTableFilter.value
@@ -4613,12 +4614,14 @@ export default defineComponent({
           if ($xetable.clearSelected) {
             $xetable.clearSelected()
           }
-          if ($xetable.clearCellAreas) {
-            if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
-              tablePrivateMethods.preventEvent(evnt, 'event.clearAreas', {}, () => {
-                $xetable.clearCellAreas()
-                $xetable.clearCopyCellArea()
-              })
+          if (areaOpts.autoClear) {
+            if ($xetable.clearCellAreas) {
+              if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
+                tablePrivateMethods.preventEvent(evnt, 'event.clearAreas', {}, () => {
+                  $xetable.clearCellAreas()
+                  $xetable.clearCopyCellArea()
+                })
+              }
             }
           }
         }
