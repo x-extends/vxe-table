@@ -72,7 +72,8 @@ export default defineComponent({
       tablePage: {
         total: 0,
         pageSize: GlobalConfig.pager.pageSize || 10,
-        currentPage: 1
+        currentPage: 1,
+        initedPages: {}
       }
     } as GridReactData<any>)
 
@@ -599,7 +600,18 @@ export default defineComponent({
           ref: refTable,
           key: 'table',
           ...tableProps,
-          ...tableOns
+          ...tableOns,
+          onLoadTableData: (params:any) => {
+            const { tablePage } = reactData
+            const { currentPage } = tablePage
+            if (currentPage === 1) return
+            if (!tablePage.initedPages[currentPage]) {
+              tablePage.initedPages[currentPage] = true
+              if (params && typeof params?.handleReLoadDefaults === 'function') {
+                params.handleReLoadDefaults()
+              }
+            }
+          }
         }, slotObj)
       ]
     }
@@ -781,6 +793,7 @@ export default defineComponent({
                 }
               }
               if (isInited) {
+                tablePage.initedPages = {}
                 const { computeSortOpts } = $xetable.getComputeMaps()
                 const sortOpts = computeSortOpts.value
                 let defaultSort = sortOpts.defaultSort
@@ -800,6 +813,7 @@ export default defineComponent({
                 filterList = $xetable.getCheckedFilters()
               } else {
                 if (isReload) {
+                  tablePage.initedPages = {}
                   $xetable.clearAll()
                 } else {
                   sortList = $xetable.getSortColumns()

@@ -2864,8 +2864,8 @@ export type VxeTableEmits = [
   'valid-error',
   'scroll',
   'custom',
-
-  ...VxeTableProEmits
+  ...VxeTableProEmits,
+  'load-table-data'
 ]
 
 export namespace VxeTableDefines {

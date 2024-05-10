@@ -62,6 +62,7 @@ export interface GridReactData<D = VxeTableDataRow> {
     total: number
     pageSize: number
     currentPage: number
+    initedPages: Record<string,boolean>
   }
 }
 
