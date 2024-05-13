@@ -85,6 +85,7 @@ export default defineComponent({
 
     const renderLine = (params: any) => {
       const { row, column } = params
+      const { afterFullData } = tableInternalData
       const { treeConfig } = tableProps
       const treeOpts = computeTreeOpts.value
       const { slots, treeNode } = column
@@ -102,6 +103,7 @@ export default defineComponent({
       if (slots && slots.line) {
         return $xetable.callSlot(slots.line, params)
       }
+      const isFirstRow = $xetable.eqRow(afterFullData[0], row)
       if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
         return [
           h('div', {
@@ -110,7 +112,7 @@ export default defineComponent({
             h('div', {
               class: 'vxe-tree--line',
               style: {
-                height: `${calcTreeLine(params, items, rIndex)}px`,
+                height: `${isFirstRow ? 1 : calcTreeLine(params, items, rIndex)}px`,
                 left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize() : 0) + 16}px`
               }
             })

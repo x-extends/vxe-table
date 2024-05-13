@@ -112,6 +112,7 @@ const GlobalConfig: VXETableConfigOptions = {
       isEsc: true
     },
     areaConfig: {
+      autoClear: true,
       selectCellByHeader: true
     },
     clipConfig: {

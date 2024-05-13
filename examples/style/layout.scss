@@ -47,11 +47,13 @@ body {
 }
 html,
 body,
-#app {
+#app,
+.app-container {
   height: 100%;
   overflow: hidden;
 }
-#app {
+#app,
+.app-container {
   display: flex;
   flex-direction: column;
 }
@@ -91,8 +93,6 @@ body,
   border-bottom: 1px solid #dcdfe6;
   box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.12);
   display: flex;
-  color: #fff;
-  background-color: #24292e;
   &:after {
     content: "";
     display: block;
@@ -109,7 +109,6 @@ body,
   .title {
     padding: 0 0.4em;
     font-weight: 700;
-    color: #fff;
   }
   .left {
     display: flex;

@@ -2,7 +2,7 @@
 
 [data-vxe-table-theme="dark"] {
   color-scheme: dark;
-  
+
   /*font*/
   --vxe-font-family: #{$vxe-font-family};
   --vxe-font-size: #{$vxe-font-size};
@@ -56,8 +56,8 @@
   --vxe-table-popup-border-color: #424242;
 
   /*table*/
-  --vxe-table-header-font-color: #{$vxe-table-header-font-color};
-  --vxe-table-footer-font-color: #{$vxe-table-footer-font-color};
+  --vxe-table-header-font-color: #98989E;
+  --vxe-table-footer-font-color: #98989E;
   --vxe-table-border-radius: #{$vxe-table-border-radius};
   --vxe-table-border-width: #{$vxe-table-border-width};
   --vxe-table-border-color: #37373A;

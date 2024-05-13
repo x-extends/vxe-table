@@ -1899,6 +1899,10 @@ export namespace VxeTablePropTypes {
      */
     extendByCalc?: boolean
     /**
+     * 当点击表格之外，是否自动清除单元格的选取状态
+     */
+    autoClear?: boolean
+    /**
      * 只对 extendByCalc 启用后有效，重写单元格扩展区域计算值的方法
      * @param params
      */
