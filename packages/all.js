@@ -85,7 +85,9 @@ const components = [
 export function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
     VXETable.config(options)
-    setTheme(options)
+    if (options.theme) {
+      setTheme(options)
+    }
   }
   components.map(component => component.install(Vue))
 }

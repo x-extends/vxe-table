@@ -15,11 +15,11 @@ function updateDropHint (_vm, evnt) {
     return
   }
   if (dragHintEl) {
-    const warpperEl = bodyEl.parentNode
-    const warpperRect = warpperEl.getBoundingClientRect()
+    const wrapperEl = bodyEl.parentNode
+    const wrapperRect = wrapperEl.getBoundingClientRect()
     dragHintEl.style.display = 'block'
-    dragHintEl.style.top = `${Math.min(warpperEl.clientHeight - warpperEl.scrollTop - dragHintEl.clientHeight, evnt.clientY - warpperRect.y)}px`
-    dragHintEl.style.left = `${Math.min(warpperEl.clientWidth - warpperEl.scrollLeft - dragHintEl.clientWidth - 16, evnt.clientX - warpperRect.x)}px`
+    dragHintEl.style.top = `${Math.min(wrapperEl.clientHeight - wrapperEl.scrollTop - dragHintEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
+    dragHintEl.style.left = `${Math.min(wrapperEl.clientWidth - wrapperEl.scrollLeft - dragHintEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
   }
 }
 

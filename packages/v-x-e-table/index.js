@@ -6,7 +6,7 @@ import { commands } from './src/commands'
 import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
-import { config } from './src/config'
+import { setConfig } from './src/config'
 import { setTheme } from './src/theme'
 import { UtilTools } from '../tools/utils'
 import { errLog } from '../tools/log'
@@ -90,7 +90,7 @@ export function _t (key, args) {
 }
 
 export const v = 'v3'
-export const setup = config
+export const setup = setConfig
 
 export const globalStore = {}
 
@@ -99,7 +99,7 @@ export const VXETable = {
   version: process.env.VUE_APP_VXE_TABLE_VERSION,
   reg,
   use,
-  setup,
+  setConfig,
   globalStore,
   interceptor,
   renderer,
@@ -111,7 +111,8 @@ export const VXETable = {
   _t,
 
   // 已废弃
-  config,
+  config: setConfig,
+  setup,
   globalConfs
 }
 

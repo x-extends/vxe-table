@@ -15,7 +15,7 @@ function isVMScrollProcess ($xetable) {
 
 function renderLine (h, _vm, $xetable, params) {
   const { row, column } = params
-  const { treeOpts, treeConfig, fullAllDataRowIdData } = $xetable
+  const { afterFullData, treeOpts, treeConfig, fullAllDataRowIdData } = $xetable
   const { slots, treeNode } = column
   const rowid = getRowid($xetable, row)
   const rest = fullAllDataRowIdData[rowid]
@@ -30,6 +30,7 @@ function renderLine (h, _vm, $xetable, params) {
   if (slots && slots.line) {
     return $xetable.callSlot(slots.line, params, h)
   }
+  const isFirstRow = $xetable.eqRow(afterFullData[0], row)
   if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
     return [
       h('div', {
@@ -38,7 +39,7 @@ function renderLine (h, _vm, $xetable, params) {
         h('div', {
           class: 'vxe-tree--line',
           style: {
-            height: `${calcTreeLine(params, items, rIndex)}px`,
+            height: `${isFirstRow ? 1 : calcTreeLine(params, items, rIndex)}px`,
             left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xetable) : 0) + 16}px`
           }
         })

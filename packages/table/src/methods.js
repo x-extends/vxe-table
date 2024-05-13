@@ -2491,7 +2491,7 @@ const Methods = {
    * 全局按下事件处理
    */
   handleGlobalMousedownEvent (evnt) {
-    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, filterStore, customStore, getRowNode } = this
+    const { $el, $refs, $xegrid, $toolbar, mouseConfig, editStore, ctxMenuStore, editRules, editOpts, validOpts, areaOpts, filterStore, customStore, getRowNode } = this
     const { actived } = editStore
     const { ctxWrapper, filterWrapper, customWrapper, validTip } = $refs
     // 筛选
@@ -2572,11 +2572,13 @@ const Methods = {
         if (this.clearSelected) {
           this.clearSelected()
         }
-        if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
-          this.preventEvent(evnt, 'event.clearAreas', {}, () => {
-            this.clearCellAreas()
-            this.clearCopyCellArea()
-          })
+        if (areaOpts.autoClear) {
+          if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
+            this.preventEvent(evnt, 'event.clearAreas', {}, () => {
+              this.clearCellAreas()
+              this.clearCopyCellArea()
+            })
+          }
         }
       }
     }

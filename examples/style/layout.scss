@@ -49,7 +49,7 @@ html,
 body,
 #app {
   height: 100%;
-  // overflow: auto;
+  overflow: hidden;
 }
 #app {
   display: flex;
@@ -91,8 +91,6 @@ body,
   border-bottom: 1px solid #dcdfe6;
   box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.12);
   display: flex;
-  color: #fff;
-  background-color: #24292e;
   &:after {
     content: "";
     display: block;
@@ -109,7 +107,6 @@ body,
   .title {
     padding: 0 0.4em;
     font-weight: 700;
-    color: #fff;
   }
   .left {
     display: flex;
@@ -216,7 +213,7 @@ body,
   display: flex;
   flex-grow: 1;
   border-bottom: 1px solid #dcdfe6;
-  // overflow: hidden;
+  overflow: hidden;
   > .aside {
     position: relative;
     display: flex;

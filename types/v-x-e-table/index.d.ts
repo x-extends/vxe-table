@@ -1,5 +1,3 @@
-import Vue from 'vue'
-
 import { ModalController } from '../modal'
 import { SaveFileFunction, ReadFileFunction, PrintFunction } from '../module/export'
 
@@ -27,6 +25,7 @@ export interface VxeGlobalStore {
 export const globalStore: VxeGlobalStore
 
 export const config: VxeGlobalConfigMethod
+export const setConfig: VxeGlobalConfigMethod
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
 export const commands: VxeGlobalCommands
@@ -63,7 +62,7 @@ export interface VXETableCore {
   /**
    * 设置全局参数/获取所有参数
    */
-  config: VxeGlobalConfigMethod;
+  setConfig: VxeGlobalConfigMethod;
   /**
    * 读取内部数据
    */
@@ -120,6 +119,7 @@ export interface VXETableCore {
   t: VxeGlobalI18n;
   _t: VxeGlobalTranslate;
 
+  config: VxeGlobalConfigMethod;
   /**
    * 已被 version 替换
    * @deprecated

@@ -969,10 +969,10 @@ export default {
       }
     }
     if (this.autoResize) {
-      const handleWarpperResize = this.resizeOpts.refreshDelay ? XEUtils.throttle(() => this.recalculate(true), this.resizeOpts.refreshDelay, { leading: true, trailing: true }) : null
-      const resizeObserver = createResizeEvent(handleWarpperResize ? () => {
+      const handleWrapperResize = this.resizeOpts.refreshDelay ? XEUtils.throttle(() => this.recalculate(true), this.resizeOpts.refreshDelay, { leading: true, trailing: true }) : null
+      const resizeObserver = createResizeEvent(handleWrapperResize ? () => {
         if (this.autoResize) {
-          requestAnimationFrame(handleWarpperResize)
+          requestAnimationFrame(handleWrapperResize)
         }
       } : () => {
         if (this.autoResize) {

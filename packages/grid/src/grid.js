@@ -409,6 +409,9 @@ export default {
       if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
         warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
       }
+      // if (proxyOpts.props) {
+      //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
+      // }
     }
     this.initPages()
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
@@ -524,8 +527,9 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget, ...args) {
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg, validConfig } = this
-      const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg, validConfig, pagerOpts } = this
+      const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
+      const resConfigs = proxyOpts.response || proxyOpts.props || {}
       const $xetable = $refs.xTable
       let button
       let code
@@ -633,17 +637,20 @@ export default {
               .then(rest => {
                 this.tableLoading = false
                 if (rest) {
-                  if (isEnableConf(pagerConfig)) {
-                    const total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
+                  if (pagerConfig && isEnableConf(pagerOpts)) {
+                    const totalProp = resConfigs.total
+                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: this }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                     tablePage.total = XEUtils.toNumber(total)
-                    this.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
+                    const resultProp = resConfigs.result
+                    this.tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: this }) : XEUtils.get(rest, resultProp || 'result')) || []
                     // 检验当前页码，不能超出当前最大页数
                     const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                     if (tablePage.currentPage > pageCount) {
                       tablePage.currentPage = pageCount
                     }
                   } else {
-                    this.tableData = (proxyProps.list ? XEUtils.get(rest, proxyProps.list) : rest) || []
+                    const listProp = resConfigs.list
+                    this.tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: this }) : XEUtils.get(rest, listProp)) : rest) || []
                   }
                 } else {
                   this.tableData = []
@@ -822,10 +829,11 @@ export default {
       return this.$nextTick()
     },
     getRespMsg (rest, defaultMsg) {
-      const { props: proxyProps = {} } = this.proxyOpts
+      const { proxyOpts } = this
+      const resConfigs = proxyOpts.response || proxyOpts.props || {}
       let msg
-      if (rest && proxyProps.message) {
-        msg = XEUtils.get(rest, proxyProps.message)
+      if (rest && resConfigs.message) {
+        msg = XEUtils.get(rest, resConfigs.message)
       }
       return msg || GlobalConfig.i18n(defaultMsg)
     },

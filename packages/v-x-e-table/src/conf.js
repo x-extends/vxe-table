@@ -110,6 +110,7 @@ export default {
       isEsc: true
     },
     areaConfig: {
+      autoClear: true,
       selectCellByHeader: true
     },
     clipConfig: {
