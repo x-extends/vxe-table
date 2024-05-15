@@ -29,10 +29,8 @@ export default defineComponent({
       resizable: false,
       height: 530,
       rowId: 'id',
-      rowConfig: { keyField: 'id' },
       checkboxConfig: {
-        reserve: true,
-        checkRowKeys: [10001, 100011, 100013]
+        reserve: true
       },
       pagerConfig: {
         pageSize: 10
