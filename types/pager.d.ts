@@ -157,10 +157,10 @@ export interface PagerMethods {
 export interface VxePagerMethods extends PagerMethods { }
 
 export interface PagerPrivateMethods {
-  handlePrevPage(evnt: Event): void,
-  handleNextPage(evnt: Event): void,
-  handlePrevJump(evnt: Event): void,
-  handleNextJump(evnt: Event): void,
+  handlePrevPage(evnt: Event): void
+  handleNextPage(evnt: Event): void
+  handlePrevJump(evnt: Event): void
+  handleNextJump(evnt: Event): void
 }
 export interface VxePagerPrivateMethods extends PagerPrivateMethods { }
 

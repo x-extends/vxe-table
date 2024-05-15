@@ -255,10 +255,11 @@ export default defineComponent({
 
     const getRespMsg = (rest: any, defaultMsg: string) => {
       const proxyOpts = computeProxyOpts.value
-      const { props: proxyProps = {} } = proxyOpts
+      const resConfigs = proxyOpts.response || proxyOpts.props || {}
+      const messageProp = resConfigs.message
       let msg
-      if (rest && proxyProps.message) {
-        msg = XEUtils.get(rest, proxyProps.message)
+      if (rest && messageProp) {
+        msg = XEUtils.isFunction(messageProp) ? messageProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, messageProp)
       }
       return msg || GlobalConfig.i18n(defaultMsg)
     }
@@ -718,7 +719,8 @@ export default defineComponent({
         const proxyOpts = computeProxyOpts.value
         const pagerOpts = computePagerOpts.value
         const toolbarOpts = computeToolbarOpts.value
-        const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
+        const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
+        const resConfigs = proxyOpts.response || proxyOpts.props || {}
         const $xetable = refTable.value
         let button: VxeToolbarPropTypes.ButtonConfig | null = null
         let code: string | null = null
@@ -828,16 +830,19 @@ export default defineComponent({
                   reactData.tableLoading = false
                   if (rest) {
                     if (pagerConfig && isEnableConf(pagerOpts)) {
-                      const total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
+                      const totalProp = resConfigs.total
+                      const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                       tablePage.total = XEUtils.toNumber(total)
-                      reactData.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
+                      const resultProp = resConfigs.result
+                      reactData.tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, resultProp || 'result')) || []
                       // 检验当前页码，不能超出当前最大页数
                       const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                       if (tablePage.currentPage > pageCount) {
                         tablePage.currentPage = pageCount
                       }
                     } else {
-                      reactData.tableData = (proxyProps.list ? XEUtils.get(rest, proxyProps.list) : rest) || []
+                      const listProp = resConfigs.list
+                      reactData.tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, listProp)) : rest) || []
                     }
                   } else {
                     reactData.tableData = []
@@ -1213,6 +1218,13 @@ export default defineComponent({
         if (isEnableConf(proxyConfig) && (data || (proxyOpts.form && formOpts.data))) {
           errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
         }
+
+        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        //   if (proxyOpts.props) {
+        //     warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
+        //   }
+        // }
+
         if (columns && columns.length) {
           $xegrid.loadColumn(columns)
         }

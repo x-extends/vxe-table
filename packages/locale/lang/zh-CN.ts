@@ -202,7 +202,7 @@ export default {
       customRestore: '重置',
       fixedLeft: '冻结在左侧',
       fixedRight: '冻结在右侧',
-      cancelfixed: '取消冻结列'
+      cancelFixed: '取消冻结列'
     },
     input: {
       date: {

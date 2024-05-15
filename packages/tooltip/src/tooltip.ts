@@ -13,8 +13,8 @@ export default defineComponent({
   props: {
     modelValue: Boolean,
     size: { type: String as PropType<VxeTooltipPropTypes.Size>, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
-    trigger: { type: String as PropType<VxeTooltipPropTypes.Trigger>, default: () => GlobalConfig.tooltip.trigger },
-    theme: { type: String as PropType<VxeTooltipPropTypes.Theme>, default: () => GlobalConfig.tooltip.theme },
+    trigger: { type: String as PropType<VxeTooltipPropTypes.Trigger>, default: () => GlobalConfig.tooltip.trigger || 'hover' },
+    theme: { type: String as PropType<VxeTooltipPropTypes.Theme>, default: () => GlobalConfig.tooltip.theme || 'dark' },
     content: { type: [String, Number] as PropType<VxeTooltipPropTypes.Content>, default: null },
     useHTML: Boolean as PropType<VxeTooltipPropTypes.UseHTML>,
     zIndex: [String, Number] as PropType<VxeTooltipPropTypes.ZIndex>,

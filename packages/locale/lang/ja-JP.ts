@@ -202,7 +202,7 @@ export default {
       customRestore: 'リセット',
       fixedLeft: '左側に固定',
       fixedRight: '右側に固定',
-      cancelfixed: '列固定を取消'
+      cancelFixed: '列固定を取消'
     },
     input: {
       date: {

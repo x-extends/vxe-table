@@ -3048,7 +3048,8 @@ export namespace VxeTableDefines {
   export interface CellRenderFooterParams<D = VxeTableDataRow> {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>
     $grid: VxeGridConstructor<D> | null
-    row: any
+    row: D
+    rowIndex: number
     _rowIndex: number
     $rowIndex: number
     column: ColumnInfo<D>
@@ -3059,6 +3060,7 @@ export namespace VxeTableDefines {
     type: string
     data: any[][]
 
+    // 兼容旧
     itemIndex: number
     items: any[]
   }

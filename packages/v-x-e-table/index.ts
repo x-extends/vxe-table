@@ -7,7 +7,7 @@ import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
 import { hooks } from './src/hooks'
-import { config } from './src/config'
+import { setConfig } from './src/config'
 import { setTheme } from './src/theme'
 import { getLastZIndex, nextZIndex } from '../tools/utils'
 
@@ -82,14 +82,14 @@ export const v = 'v4'
 /**
  * @deprecated
  */
-export const setup = config
+export const setup = setConfig
 
 export const globalStore = {}
 
 export const VXETable = {
   v,
   version: process.env.VUE_APP_VXE_TABLE_VERSION,
-  config,
+  setConfig,
   globalStore,
   interceptor,
   renderer,
@@ -103,6 +103,7 @@ export const VXETable = {
   _t,
 
   // 已废弃
+  config: setConfig,
   setup,
   globalConfs
 } as VXETableCore

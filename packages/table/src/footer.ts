@@ -183,6 +183,7 @@ export default defineComponent({
                 $table: $xetable,
                 $grid: $xetable.xegrid,
                 row: list,
+                rowIndex: _rowIndex,
                 _rowIndex,
                 $rowIndex,
                 column,

@@ -414,6 +414,8 @@ export namespace VxeColumnSlotTypes {
   }
 
   export interface FooterSlotParams<D = VxeTableDataRow> {
+    row: D
+    rowIndex: number
     column: VxeTableDefines.ColumnInfo<D>
     columnIndex: number
     _columnIndex: number

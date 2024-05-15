@@ -250,11 +250,11 @@ export default defineComponent({
         return
       }
       if (dragHintEl) {
-        const warpperEl = bodyEl.parentNode as HTMLElement
-        const warpperRect = warpperEl.getBoundingClientRect()
+        const wrapperEl = bodyEl.parentNode as HTMLElement
+        const wrapperRect = wrapperEl.getBoundingClientRect()
         dragHintEl.style.display = 'block'
-        dragHintEl.style.top = `${Math.min(warpperEl.clientHeight - warpperEl.scrollTop - dragHintEl.clientHeight, evnt.clientY - warpperRect.y)}px`
-        dragHintEl.style.left = `${Math.min(warpperEl.clientWidth - warpperEl.scrollLeft - dragHintEl.clientWidth - 16, evnt.clientX - warpperRect.x)}px`
+        dragHintEl.style.top = `${Math.min(wrapperEl.clientHeight - wrapperEl.scrollTop - dragHintEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
+        dragHintEl.style.left = `${Math.min(wrapperEl.clientWidth - wrapperEl.scrollLeft - dragHintEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
       }
     }
 
@@ -315,7 +315,7 @@ export default defineComponent({
                     'is--checked': column.fixed === 'left',
                     'is--disabled': isMaxFixedColumn && !column.fixed
                   }],
-                  title: GlobalConfig.i18n(column.fixed === 'left' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedLeft'),
+                  title: GlobalConfig.i18n(column.fixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft'),
                   onClick: () => {
                     changeFixedOption(column, 'left')
                   }
@@ -325,7 +325,7 @@ export default defineComponent({
                     'is--checked': column.fixed === 'right',
                     'is--disabled': isMaxFixedColumn && !column.fixed
                   }],
-                  title: GlobalConfig.i18n(column.fixed === 'right' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedRight'),
+                  title: GlobalConfig.i18n(column.fixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight'),
                   onClick: () => {
                     changeFixedOption(column, 'right')
                   }
@@ -552,7 +552,7 @@ export default defineComponent({
                 h(TransitionGroup, {
                   class: 'vxe-table-custom--body',
                   tag: 'tbody',
-                  name: 'vxe-table-custom--flip'
+                  name: 'vxe-table-custom--list'
                 }, {
                   default: () => trVNs
                 })

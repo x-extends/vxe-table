@@ -168,6 +168,12 @@ npm run serve
 npm run lib
 ```
 
+## Contributors
+
+Thank you to everyone who contributed to this project.
+
+[![vxe-table](https://contrib.rocks/image?repo=x-extends/vxe-table)](https://github.com/x-extends/vxe-table/graphs/contributors)
+
 ## License
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan

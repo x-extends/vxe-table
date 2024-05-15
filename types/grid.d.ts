@@ -243,11 +243,23 @@ export namespace VxeGridPropTypes {
     sort?: boolean
     filter?: boolean
     form?: boolean
-    props?: {
-      list?: string | null
-      result?: string
-      total?: string
-      message?: string
+    response?: {
+      list?: string | null | ((params: {
+        data: any
+        $grid: VxeGridConstructor<D>
+      }) => any[])
+      result?: string | ((params: {
+        data: any
+        $grid: VxeGridConstructor<D>
+      }) => any[])
+      total?: string | ((params: {
+        data: any
+        $grid: VxeGridConstructor<D>
+      }) => number)
+      message?: string | ((params: {
+        data: any
+        $grid: VxeGridConstructor<D>
+      }) => string)
     }
     ajax?: {
       query?(params: ProxyAjaxQueryParams<D>, ...args: any[]): Promise<any>
@@ -256,6 +268,33 @@ export namespace VxeGridPropTypes {
       save?(params: ProxyAjaxSaveParams<D>, ...args: any[]): Promise<any>
     }
     [key: string]: any
+
+    /**
+     * 已废弃，请使用 proxy-config.response
+     * @deprecated
+     */
+    props?: {
+      /**
+       * 已废弃，请使用 proxy-config.response.list
+       * @deprecated
+       */
+      list?: string | null
+      /**
+       * 已废弃，请使用 proxy-config.response.result
+       * @deprecated
+       */
+      result?: string
+      /**
+       * 已废弃，请使用 proxy-config.response.total
+       * @deprecated
+       */
+      total?: string
+      /**
+       * 已废弃，请使用 proxy-config.response.message
+       * @deprecated
+       */
+      message?: string
+    }
   }
   export interface ProxyOpts<D = VxeTableDataRow> extends ProxyConfig<D> { }
 
