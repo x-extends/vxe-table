@@ -70,8 +70,8 @@ export default {
   props: {
     value: Boolean,
     size: { type: String, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
-    trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
-    theme: { type: String, default: () => GlobalConfig.tooltip.theme },
+    trigger: { type: String, default: () => GlobalConfig.tooltip.trigger || 'hover' },
+    theme: { type: String, default: () => GlobalConfig.tooltip.theme || 'dark' },
     content: { type: [String, Number], default: null },
     useHTML: Boolean,
     zIndex: [String, Number],

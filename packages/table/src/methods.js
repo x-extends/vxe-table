@@ -5214,7 +5214,10 @@ const Methods = {
       errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
     }
     setMerges(this, merges, this.mergeList, this.afterFullData)
-    return this.$nextTick().then(() => this.updateCellAreas())
+    return this.$nextTick().then(() => {
+      this.updateCellAreas()
+      return this.updateStyle()
+    })
   },
   /**
    * 移除单元格合并
@@ -5227,6 +5230,7 @@ const Methods = {
     const rest = removeMerges(this, merges, this.mergeList, this.afterFullData)
     return this.$nextTick().then(() => {
       this.updateCellAreas()
+      this.updateStyle()
       return rest
     })
   },
@@ -5241,7 +5245,9 @@ const Methods = {
    */
   clearMergeCells () {
     this.mergeList = []
-    return this.$nextTick()
+    return this.$nextTick().then(() => {
+      return this.updateStyle()
+    })
   },
   handleDefaultMergeFooterItems () {
     this.setMergeFooterItems(this.mergeFooterItems)
@@ -5251,7 +5257,10 @@ const Methods = {
       errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
     }
     setMerges(this, merges, this.mergeFooterList, null)
-    return this.$nextTick().then(() => this.updateCellAreas())
+    return this.$nextTick().then(() => {
+      this.updateCellAreas()
+      return this.updateStyle()
+    })
   },
   removeMergeFooterItems (merges) {
     if (this.footerSpanMethod) {
@@ -5260,6 +5269,7 @@ const Methods = {
     const rest = removeMerges(this, merges, this.mergeFooterList, null)
     return this.$nextTick().then(() => {
       this.updateCellAreas()
+      this.updateStyle()
       return rest
     })
   },
@@ -5274,7 +5284,9 @@ const Methods = {
    */
   clearMergeFooterItems () {
     this.mergeFooterList = []
-    return this.$nextTick()
+    return this.$nextTick().then(() => {
+      return this.updateStyle()
+    })
   },
   updateZindex () {
     if (this.zIndex) {

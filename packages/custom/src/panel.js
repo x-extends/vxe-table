@@ -82,7 +82,7 @@ function renderSimplePanel (h, _vm) {
                 'is--disabled': isMaxFixedColumn && !column.fixed
               }],
               attrs: {
-                title: GlobalConfig.i18n(column.fixed === 'left' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedLeft')
+                title: GlobalConfig.i18n(column.fixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft')
               },
               on: {
                 click: () => {
@@ -96,7 +96,7 @@ function renderSimplePanel (h, _vm) {
                 'is--disabled': isMaxFixedColumn && !column.fixed
               }],
               attrs: {
-                title: GlobalConfig.i18n(column.fixed === 'right' ? 'vxe.toolbar.cancelfixed' : 'vxe.toolbar.fixedRight')
+                title: GlobalConfig.i18n(column.fixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight')
               },
               on: {
                 click: () => {
@@ -352,7 +352,7 @@ function renderPopupPanel (h, _vm) {
                 class: 'vxe-table-custom--body',
                 props: {
                   tag: 'tbody',
-                  name: 'vxe-table-custom--flip'
+                  name: 'vxe-table-custom--list'
                 }
               }, trVNs)
             ])

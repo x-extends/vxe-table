@@ -202,7 +202,7 @@ export default {
       customRestore: 'Redefinir',
       fixedLeft: 'Freeze on the left',
       fixedRight: 'Freeze on the right',
-      cancelfixed: 'Unfreeze column'
+      cancelFixed: 'Unfreeze column'
     },
     input: {
       date: {
