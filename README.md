@@ -10,7 +10,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、JSON 配置式...  
+一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟树、列拖拽、懒加载、快捷菜单、数据校验、打印导出、表单渲染、自定义模板、渲染器、JSON 配置式...  
 
 * 设计理念
   * 面向现代浏览器，高效的简洁 API 设计
@@ -27,8 +27,6 @@
 
 * [x] 基础表格
 * [x] 配置式表格
-* [x] 基础表单
-* [x] 配置式表单
 * [x] 斑马线条纹
 * [x] 多种边框
 * [x] 单元格样式
@@ -42,8 +40,6 @@
 * [x] 序号
 * [x] 单选框
 * [x] 复选框
-* [x] 下拉选项
-* [x] 开关
 * [x] 排序
 * [x] 多字段排序
 * [x] 筛选
@@ -57,16 +53,12 @@
 * [x] 自定义插槽 - 模板
 * [x] 快捷菜单
 * [x] 展开行
-* [x] 分页
 * [x] 工具栏
-* [x] 下拉容器
-* [x] 虚拟列表
 * [x] 虚拟树
 * [x] 增删改查
 * [x] 数据校验
 * [x] 数据代理
 * [x] 键盘导航
-* [x] 弹窗
 * [x] 渲染器
 * [x] 虚拟滚动
 * [x] 虚拟合并
