@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增删改查、虛擬清單、虛擬樹、懶加載、快捷選單、數據校驗、列印匯出、表單渲染、數據分頁、彈窗、自定義範本、渲染器、JSON 配置式…
+一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增刪改查、虛擬樹、列拖拽、懶加載、快捷菜單、數據校驗、打印導出、表單渲染、自定義模板、渲染器、JSON 配置式…
 
 * 設計理念
   * 面向現代瀏覽器，高效的簡潔 API 設計
@@ -34,8 +34,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 ## 功能點
 
 * [x] 基礎表格
-* [x] 配置式表格
-* [x] 基礎表單
 * [x] 配置式表單
 * [x] 斑馬線條紋
 * [x] 多種邊框
@@ -50,8 +48,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 序號
 * [x] 單選框
 * [x] 核取方塊
-* [x] 下拉選項
-* [x] 開關
 * [x] 排序
 * [x] 多欄位組合排序
 * [x] 篩選
@@ -65,15 +61,11 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 自定義插槽 - 範本
 * [x] 快捷選單
 * [x] 展開行
-* [x] 分頁
 * [x] 工具列
-* [x] 下拉容器
-* [x] 虛擬清單
 * [x] 增删改查
 * [x] 數據校驗
 * [x] 數據代理
 * [x] 鍵盤導航
-* [x] 彈窗
 * [x] 渲染器
 * [x] 虛擬滾動
 * [x] 虛擬合併

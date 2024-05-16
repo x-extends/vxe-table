@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-A [vue](https://www.npmjs.com/package/vue) based PC form component, support add, delete, change, virtual list, virtual tree, lazy load, shortcut menu, data validation, print export, form rendering, data paging, modal window, custom template, renderer, JSON configuration...
+A [vue](https://www.npmjs.com/package/vue) based PC form component, support add delete change check, virtual tree, column drag and drop, lazy loading, shortcut menu, data verification, print export, form rendering, custom template, renderer, JSON configuration...
 
 * Design concept
   * Efficient and concise API design for modern browsers.
@@ -35,8 +35,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 
 * [x] Basic table
 * [x] Configuration grid
-* [x] Base form
-* [x] Configuration form
 * [x] Striped
 * [x] Table with border
 * [x] Cell style
@@ -50,8 +48,6 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Table sequence
 * [x] Radio
 * [x] Checkbox
-* [x] Select
-* [x] Switch
 * [x] Sorting
 * [x] Multi field sorting
 * [x] Filter
@@ -65,16 +61,12 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Slot - template
 * [x] Context menu
 * [x] Detail - Expandable row
-* [x] Pager
 * [x] Toolbar
-* [x] Pulldown
-* [x] Virtual list
 * [x] Virtual tree
 * [x] Editable CRUD
 * [x] Validate
 * [x] Data Proxy
 * [x] Keyboard navigation
-* [x] Modal
 * [x] VxeGlobalRenderer
 * [x] Virtual scroll
 * [x] Virtual merger
