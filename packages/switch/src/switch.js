@@ -16,7 +16,9 @@ export default {
     openValue: { type: [String, Number, Boolean], default: true },
     closeValue: { type: [String, Number, Boolean], default: false },
     openIcon: String,
-    closeIcon: String
+    closeIcon: String,
+    openActiveIcon: String,
+    closeActiveIcon: String
   },
   inject: {
     $xeform: {
