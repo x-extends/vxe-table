@@ -359,12 +359,16 @@ export default {
       const { $xetable } = this
       if ($xetable) {
         $xetable.triggerCustomEvent($event)
+      } else {
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     },
     handleMouseenterSettingEvent ({ $event }) {
       const { $xetable } = this
       if ($xetable) {
         $xetable.customOpenEvent($event)
+      } else {
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     },
     handleMouseleaveSettingEvent ({ $event }) {
