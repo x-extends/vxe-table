@@ -110,13 +110,19 @@ export default defineComponent({
 
     const handleClickSettingEvent = ({ $event }: any) => {
       if ($xetable) {
-        $xetable.triggerCustomEvent($event)
+        if ($xetable.triggerCustomEvent) {
+          $xetable.triggerCustomEvent($event)
+        } else {
+          errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
+        }
       }
     }
 
     const handleMouseenterSettingEvent = ({ $event }: any) => {
       if ($xetable) {
         $xetable.customOpenEvent($event)
+      } else {
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     }
 

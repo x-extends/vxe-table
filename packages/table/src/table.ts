@@ -6341,12 +6341,12 @@ export default defineComponent({
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
         ($xetable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['Export'])
+          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
         }
       })
       'clearValidate,fullValidate,validate'.split(',').forEach(name => {
         ($xetable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['Validator'])
+          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
         }
       })
     }
