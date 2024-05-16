@@ -38,6 +38,8 @@ export type VxeSwitchProps = {
   closeValue?: VxeSwitchPropTypes.CloseValue
   openIcon?: VxeSwitchPropTypes.OpenIcon
   closeIcon?: VxeSwitchPropTypes.CloseIcon
+  openActiveIcon?: VxeSwitchPropTypes.OpenActiveIcon
+  closeActiveIcon?: VxeSwitchPropTypes.CloseActiveIcon
 }
 
 export namespace VxeSwitchPropTypes {
@@ -50,6 +52,8 @@ export namespace VxeSwitchPropTypes {
   export type CloseValue = string | number | boolean
   export type OpenIcon = string
   export type CloseIcon = string
+  export type OpenActiveIcon = string
+  export type CloseActiveIcon = string
 }
 
 export interface SwitchMethods {

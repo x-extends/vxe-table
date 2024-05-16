@@ -17,7 +17,9 @@ export default defineComponent({
     openValue: { type: [String, Number, Boolean] as PropType<VxeSwitchPropTypes.OpenValue>, default: true },
     closeValue: { type: [String, Number, Boolean] as PropType<VxeSwitchPropTypes.CloseValue>, default: false },
     openIcon: String as PropType<VxeSwitchPropTypes.OpenIcon>,
-    closeIcon: String as PropType<VxeSwitchPropTypes.CloseIcon>
+    closeIcon: String as PropType<VxeSwitchPropTypes.CloseIcon>,
+    openActiveIcon: String as PropType<VxeSwitchPropTypes.OpenActiveIcon>,
+    closeActiveIcon: String as PropType<VxeSwitchPropTypes.CloseActiveIcon>
   },
   emits: [
     'update:modelValue',
@@ -113,7 +115,7 @@ export default defineComponent({
     Object.assign($xeswitch, switchMethods)
 
     const renderVN = () => {
-      const { disabled, openIcon, closeIcon } = props
+      const { disabled, openIcon, closeIcon, openActiveIcon, closeActiveIcon } = props
       const isChecked = computeIsChecked.value
       const vSize = computeSize.value
       const onShowLabel = computeOnShowLabel.value
@@ -152,7 +154,13 @@ export default defineComponent({
           ]),
           h('span', {
             class: 'vxe-switch--icon'
-          })
+          }, openActiveIcon || closeActiveIcon
+            ? [
+                h('i', {
+                  class: isChecked ? openActiveIcon : closeActiveIcon
+                })
+              ]
+            : [])
         ])
       ])
     }

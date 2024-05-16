@@ -23,6 +23,7 @@
     .vxe-switch--icon {
       left: 100%;
       transform: translateX(-1.4em);
+      color: var(--vxe-primary-color);
     }
   }
   &.is--off {
@@ -33,6 +34,7 @@
     .vxe-switch--icon {
       left: 0.2em;
       transform: translateX(0);
+      color: var(--vxe-switch-close-background-color);
     }
   }
   &.is--on .vxe-switch--label-off,
@@ -63,10 +65,16 @@
       .vxe-switch--button {
         background-color: var(--vxe-primary-lighten-color);
       }
+      .vxe-switch--icon {
+        color: var(--vxe-primary-lighten-color);
+      }
     }
     &.is--off {
       .vxe-switch--button {
         background-color: var(--vxe-switch-disabled-background-color);
+      }
+      .vxe-switch--icon {
+        color: var(--vxe-switch-disabled-background-color);
       }
     }
   }
@@ -93,6 +101,8 @@
     left: 0;
     width: 1.2em;
     height: 1.2em;
+    line-height: 1.4em;
+    text-align: center;
     border-radius: 50%;
     background-color: var(--vxe-switch-icon-background-color);
   }
