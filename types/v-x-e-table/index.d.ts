@@ -34,7 +34,7 @@ export type VxeGlobalI18n = (key: string, args?: any) => string
 export type VxeGlobalTranslate = (key: string, args?: any) => string
 export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => VXETableCore
 
-export const config: VxeGlobalConfigMethod
+export const setConfig: VxeGlobalConfigMethod
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
 export const commands: VxeGlobalCommands
@@ -50,6 +50,7 @@ export const t: VxeGlobalI18n
 export const _t: VxeGlobalTranslate
 export const use: VxeGlobalUse
 
+export const config: VxeGlobalConfigMethod
 /**
  * 请使用 config
  * @deprecated
@@ -88,7 +89,7 @@ export interface VXETableCore {
   /**
    * 设置全局参数/获取所有参数
    */
-  config: VxeGlobalConfigMethod
+  setConfig: VxeGlobalConfigMethod
   /**
    * 读取内部数据
    */
@@ -149,6 +150,7 @@ export interface VXETableCore {
   t: VxeGlobalI18n
   _t: VxeGlobalTranslate
 
+  config: VxeGlobalConfigMethod
   /**
    * @deprecated 已废弃
    */

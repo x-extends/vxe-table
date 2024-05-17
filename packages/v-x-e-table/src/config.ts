@@ -8,7 +8,7 @@ import { VxeGlobalConfigMethod } from '../../../types/all'
 /**
  * 全局参数设置
  */
-export const config: VxeGlobalConfigMethod = (options) => {
+export const setConfig: VxeGlobalConfigMethod = (options) => {
   if (options) {
     if (options.theme) {
       setTheme(options)
@@ -19,3 +19,5 @@ export const config: VxeGlobalConfigMethod = (options) => {
   }
   return XEUtils.merge(GlobalConfig, options)
 }
+
+export const config = setConfig

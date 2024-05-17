@@ -17,6 +17,11 @@ const tsconfig = require('./tsconfig.json')
 
 const sass = gulpSass(dartSass)
 
+const tsSettings = {
+  ...tsconfig.compilerOptions,
+  target: 'es2016'
+}
+
 const coreName = 'v-x-e-table'
 
 const moduleList = [
@@ -98,7 +103,7 @@ gulp.task('build_modules', () => {
   return gulp.src('packages_temp/**/*.ts')
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_VERSION', `"${pack.version}"`))
     .pipe(replace('process.env.VUE_APP_VXE_TABLE_ENV', 'process.env.NODE_ENV'))
-    .pipe(ts(tsconfig.compilerOptions))
+    .pipe(ts(tsSettings))
     .pipe(gulp.dest('es'))
     .pipe(babel({
       presets: [
@@ -124,7 +129,7 @@ gulp.task('build_i18n', () => {
     const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
     const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
     return gulp.src(`packages_temp/locale/lang/${isZHTC ? 'zh-TC' : code}.ts`)
-      .pipe(ts(tsconfig.compilerOptions))
+      .pipe(ts(tsSettings))
       .pipe(babel({
         moduleId: `vxe-table-lang.${code}`,
         presets: ['@babel/env'],

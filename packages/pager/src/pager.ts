@@ -44,8 +44,8 @@ export default defineComponent({
     iconJumpNext: String as PropType<VxePagerPropTypes.IconJumpNext>,
     iconNextPage: String as PropType<VxePagerPropTypes.IconNextPage>,
     iconJumpMore: String as PropType<VxePagerPropTypes.IconJumpMore>,
-    iconHomePage: String as PropType<VxePagerPropTypes.IconHome>,
-    iconEndPage: String as PropType<VxePagerPropTypes.IconEnd>
+    iconHomePage: String as PropType<VxePagerPropTypes.IconHomePage>,
+    iconEndPage: String as PropType<VxePagerPropTypes.IconEndPage>
   },
   emits: [
     'update:pageSize',

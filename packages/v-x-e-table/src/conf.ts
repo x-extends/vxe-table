@@ -138,6 +138,53 @@ const GlobalConfig: VXETableConfigOptions = {
   export: {
     types: {}
   },
+  grid: {
+    // size: null,
+    // zoomConfig: {
+    //   escRestore: true
+    // },
+    formConfig: {
+      enabled: true
+    },
+    pagerConfig: {
+      enabled: true
+      // perfect: false
+    },
+    toolbarConfig: {
+      enabled: true
+      // perfect: false
+    },
+    proxyConfig: {
+      enabled: true,
+      autoLoad: true,
+      message: true,
+      props: {
+        list: null,
+        result: 'result',
+        total: 'page.total',
+        message: 'message'
+      }
+      // beforeItem: null,
+      // beforeColumn: null,
+      // beforeQuery: null,
+      // afterQuery: null,
+      // beforeDelete: null,
+      // afterDelete: null,
+      // beforeSave: null,
+      // afterSave: null
+    }
+  },
+  toolbar: {
+    // size: null,
+    // import: {
+    //   mode: 'covering'
+    // },
+    // export: {
+    //   types: ['csv', 'html', 'xml', 'txt']
+    // },
+    // buttons: []
+  },
+
   icon: {
     // loading
     LOADING: iconPrefix + 'spinner roll vxe-loading--default-icon',
@@ -220,42 +267,6 @@ const GlobalConfig: VXETableConfigOptions = {
     FORM_FOLDING: iconPrefix + 'arrow-up rotate180',
     FORM_UNFOLDING: iconPrefix + 'arrow-up'
   },
-  grid: {
-    // size: null,
-    // zoomConfig: {
-    //   escRestore: true
-    // },
-    formConfig: {
-      enabled: true
-    },
-    pagerConfig: {
-      enabled: true
-      // perfect: false
-    },
-    toolbarConfig: {
-      enabled: true
-      // perfect: false
-    },
-    proxyConfig: {
-      enabled: true,
-      autoLoad: true,
-      message: true,
-      props: {
-        list: null,
-        result: 'result',
-        total: 'page.total',
-        message: 'message'
-      }
-      // beforeItem: null,
-      // beforeColumn: null,
-      // beforeQuery: null,
-      // afterQuery: null,
-      // beforeDelete: null,
-      // afterDelete: null,
-      // beforeSave: null,
-      // afterSave: null
-    }
-  },
   tooltip: {
     // size: null,
     trigger: 'hover',
@@ -312,16 +323,6 @@ const GlobalConfig: VXETableConfigOptions = {
     //   keyField: '_X_OPTION_KEY'
     // },
     multiCharOverflow: 8
-  },
-  toolbar: {
-    // size: null,
-    // import: {
-    //   mode: 'covering'
-    // },
-    // export: {
-    //   types: ['csv', 'html', 'xml', 'txt']
-    // },
-    // buttons: []
   },
   button: {
     // size: null,

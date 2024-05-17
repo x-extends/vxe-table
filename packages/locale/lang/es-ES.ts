@@ -202,7 +202,7 @@ export default {
       customRestore: 'Restaurar',
       fixedLeft: 'Freeze on the left',
       fixedRight: 'Freeze on the right',
-      cancelfixed: 'Unfreeze column'
+      cancelFixed: 'Unfreeze column'
     },
     entrada: {
       fecha: {

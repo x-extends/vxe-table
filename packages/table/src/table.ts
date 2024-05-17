@@ -4433,7 +4433,10 @@ export default defineComponent({
           errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
         setMerges(merges, reactData.mergeList, internalData.afterFullData)
-        return nextTick().then(() => tableMethods.updateCellAreas())
+        return nextTick().then(() => {
+          tableMethods.updateCellAreas()
+          return updateStyle()
+        })
       },
       /**
        * 移除单元格合并
@@ -4446,6 +4449,7 @@ export default defineComponent({
         const rest = removeMerges(merges, reactData.mergeList, internalData.afterFullData)
         return nextTick().then(() => {
           tableMethods.updateCellAreas()
+          updateStyle()
           return rest
         })
       },
@@ -4460,14 +4464,19 @@ export default defineComponent({
        */
       clearMergeCells () {
         reactData.mergeList = []
-        return nextTick()
+        return nextTick().then(() => {
+          return updateStyle()
+        })
       },
       setMergeFooterItems (merges) {
         if (props.footerSpanMethod) {
           errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
         }
         setMerges(merges, reactData.mergeFooterList)
-        return nextTick().then(() => tableMethods.updateCellAreas())
+        return nextTick().then(() => {
+          tableMethods.updateCellAreas()
+          return updateStyle()
+        })
       },
       removeMergeFooterItems (merges) {
         if (props.footerSpanMethod) {
@@ -4476,6 +4485,7 @@ export default defineComponent({
         const rest = removeMerges(merges, reactData.mergeFooterList)
         return nextTick().then(() => {
           tableMethods.updateCellAreas()
+          updateStyle()
           return rest
         })
       },
@@ -4490,7 +4500,9 @@ export default defineComponent({
        */
       clearMergeFooterItems () {
         reactData.mergeFooterList = []
-        return nextTick()
+        return nextTick().then(() => {
+          return updateStyle()
+        })
       },
       updateCellAreas () {
         const { mouseConfig } = props
@@ -6337,12 +6349,12 @@ export default defineComponent({
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
         ($xetable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['Export'])
+          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
         }
       })
       'clearValidate,fullValidate,validate'.split(',').forEach(name => {
         ($xetable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['Validator'])
+          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
         }
       })
     }
