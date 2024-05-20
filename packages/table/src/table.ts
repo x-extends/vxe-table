@@ -4872,14 +4872,15 @@ export default defineComponent({
               const { delMethod, backMethod } = keyboardOpts
               // 如果是删除键
               if (keyboardOpts.isDel && (selected.row || selected.column)) {
+                const delPaqrams = {
+                  row: selected.row as VxeTableDataRow,
+                  rowIndex: tableMethods.getRowIndex(selected.row),
+                  column: selected.column,
+                  columnIndex: tableMethods.getColumnIndex(selected.column),
+                  $table: $xetable
+                }
                 if (delMethod) {
-                  delMethod({
-                    row: selected.row as VxeTableDataRow,
-                    rowIndex: tableMethods.getRowIndex(selected.row),
-                    column: selected.column,
-                    columnIndex: tableMethods.getColumnIndex(selected.column),
-                    $table: $xetable
-                  })
+                  delMethod(delPaqrams)
                 } else {
                   setCellValue(selected.row, selected.column, null)
                 }
@@ -4899,6 +4900,7 @@ export default defineComponent({
                   // 如果按下 del 键，更新表尾数据
                   tableMethods.updateFooter()
                 }
+                $xetable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
               } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
                 // 如果树形表格回退键关闭当前行返回父节点
                 const { parent: parentRow } = XEUtils.findTree(internalData.afterFullData, item => item === currentRow, { children: childrenField })

@@ -21,6 +21,7 @@ import { Select } from './select'
 import { Optgroup } from './optgroup'
 import { Option } from './option'
 import { Modal } from './modal'
+import { Drawer } from './drawer'
 import { Tooltip } from './tooltip'
 import { Form } from './form'
 import { FormGather } from './form-gather'
@@ -55,6 +56,7 @@ declare module '@vue/runtime-core' {
     VxeOptgroup: typeof Optgroup
     VxeOption: typeof Option
     VxeModal: typeof Modal
+    VxeDrawer: typeof Drawer
     VxeTooltip: typeof Tooltip
     VxeForm: typeof Form
     VxeFormGather: typeof FormGather
@@ -97,6 +99,7 @@ export * from './select'
 export * from './optgroup'
 export * from './option'
 export * from './modal'
+export * from './drawer'
 export * from './tooltip'
 export * from './form'
 export * from './form-gather'

@@ -187,6 +187,7 @@ export default {
         textarea: '文本域',
         select: '下拉框',
         modal: '弹窗',
+        drawer: '抽屉',
         tooltip: '工具提示',
         form: '表单',
         switch: '开关',

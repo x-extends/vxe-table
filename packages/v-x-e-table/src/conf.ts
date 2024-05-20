@@ -372,6 +372,14 @@ const GlobalConfig: VXETableConfigOptions = {
     // storage: false,
     storageKey: 'VXE_MODAL_POSITION'
   },
+  drawer: {
+    // size: null,
+    showHeader: true,
+    lockView: true,
+    mask: true,
+    showTitleOverflow: true,
+    showClose: true
+  },
   list: {
     // size: null,
     scrollY: {

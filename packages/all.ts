@@ -27,6 +27,7 @@ import { VxeTextarea } from './textarea'
 import { VxeButton } from './button'
 import { VxeButtonGroup } from './button-group'
 import { VxeModal } from './modal'
+import { VxeDrawer } from './drawer'
 import { VxeTooltip } from './tooltip'
 import { VxeForm } from './form'
 import { VxeFormItem } from './form-item'
@@ -69,6 +70,7 @@ const components = [
   VxeButton,
   VxeButtonGroup,
   VxeModal,
+  VxeDrawer,
   VxeTooltip,
   VxeForm,
   VxeFormItem,
@@ -129,6 +131,7 @@ export * from './textarea'
 export * from './button'
 export * from './button-group'
 export * from './modal'
+export * from './drawer'
 export * from './tooltip'
 export * from './form'
 export * from './form-item'

@@ -1,6 +1,6 @@
 import { App } from 'vue'
 import XEUtils from 'xe-utils'
-import VxeModalComponent, { allActivedModals } from './src/modal'
+import VxeModalComponent, { allActiveModals } from './src/modal'
 import { VXETable } from '../v-x-e-table'
 import { dynamicApp, dynamicStore, checkDynamic } from '../dynamics'
 
@@ -10,7 +10,7 @@ function openModal (options: VxeModalDefines.ModalOptions): Promise<ModalEventTy
   // 使用动态组件渲染动态弹框
   checkDynamic()
   return new Promise(resolve => {
-    if (options && options.id && allActivedModals.some(comp => comp.props.id === options.id)) {
+    if (options && options.id && allActiveModals.some(comp => comp.props.id === options.id)) {
       resolve('exist')
     } else {
       const _onHide = options.onHide
@@ -32,7 +32,7 @@ function openModal (options: VxeModalDefines.ModalOptions): Promise<ModalEventTy
 }
 
 function getModal (id: VxeModalPropTypes.ID) {
-  return XEUtils.find(allActivedModals, $modal => $modal.props.id === id)
+  return XEUtils.find(allActiveModals, $modal => $modal.props.id === id)
 }
 
 /**
@@ -41,7 +41,7 @@ function getModal (id: VxeModalPropTypes.ID) {
  * 如果不传则关闭所有窗口
  */
 function closeModal (id?: VxeModalPropTypes.ID) {
-  const modals = id ? [getModal(id)] : allActivedModals
+  const modals = id ? [getModal(id)] : allActiveModals
   const restPromises: any[] = []
   modals.forEach($modal => {
     if ($modal) {
@@ -98,13 +98,13 @@ export const modal = ModalController
 
 export const VxeModal = Object.assign(VxeModalComponent, {
   install: function (app: App) {
-    app.component(VxeModalComponent.name, VxeModalComponent)
+    app.component(VxeModalComponent.name as string, VxeModalComponent)
     VXETable.modal = ModalController
   }
 })
 
 export const Modal = VxeModal
 
-dynamicApp.component(VxeModalComponent.name, VxeModalComponent)
+dynamicApp.component(VxeModalComponent.name as string, VxeModalComponent)
 
 export default VxeModal

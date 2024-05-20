@@ -43,6 +43,7 @@ import {
   VxeButton,
   VxeButtonGroup,
   VxeModal,
+  VxeDrawer,
   VxeTooltip,
   VxeForm,
   VxeFormItem,
@@ -90,6 +91,7 @@ app.use(VxeTextarea)
 app.use(VxeButton)
 app.use(VxeButtonGroup)
 app.use(VxeModal)
+app.use(VxeDrawer)
 app.use(VxeSelect)
 app.use(VxeOptgroup)
 app.use(VxeOption)

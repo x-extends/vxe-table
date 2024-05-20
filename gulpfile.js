@@ -52,6 +52,7 @@ const componentList = [
   'button',
   'button-group',
   'modal',
+  'drawer',
   'tooltip',
   'form',
   'form-item',

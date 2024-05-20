@@ -256,6 +256,7 @@ import ModuleTextarea from '../views/textarea/Textarea.vue'
 import ModuleSelect from '../views/select/Select.vue'
 import ModulePager from '../views/pager/Pager.vue'
 import ModuleModal from '../views/modal/Modal.vue'
+import ModuleDrawer from '../views/drawer/Drawer.vue'
 import ModuleTooltip from '../views/tooltip/Tooltip.vue'
 import ModuleToolbar from '../views/toolbar/Toolbar.vue'
 import ModuleForm from '../views/form/Form.vue'
@@ -1514,6 +1515,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/table/module/modal',
     name: 'ModuleModal',
     component: ModuleModal
+  },
+  {
+    path: '/table/module/drawer',
+    name: 'ModuleDrawer',
+    component: ModuleDrawer
   },
   {
     path: '/table/module/tooltip',

@@ -185,6 +185,9 @@ export default {
       zoomOut: '还原',
       close: '关闭'
     },
+    drawer: {
+      close: '关闭'
+    },
     form: {
       folding: '收起',
       unfolding: '展开'

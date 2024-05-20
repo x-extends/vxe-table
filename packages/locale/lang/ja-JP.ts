@@ -185,6 +185,9 @@ export default {
       zoomOut: '縮小',
       close: '閉じる'
     },
+    drawer: {
+      close: '閉じる'
+    },
     form: {
       folding: '展開を戻す',
       unfolding: '展開'

@@ -289,6 +289,13 @@ export default defineComponent({
               keywords: ['modal', '$XModal']
             },
             {
+              label: 'app.aside.nav.drawer',
+              locat: {
+                name: 'ModuleDrawer'
+              },
+              keywords: ['drawer']
+            },
+            {
               label: 'app.aside.nav.file',
               locat: {
                 name: 'ModuleFile'

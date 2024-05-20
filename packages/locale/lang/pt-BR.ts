@@ -185,6 +185,9 @@ export default {
       zoomOut: 'Restaurar',
       close: 'Fechar'
     },
+    drawer: {
+      close: 'Fechar'
+    },
     form: {
       folding: 'Ocultar',
       unfolding: 'Mostrar'

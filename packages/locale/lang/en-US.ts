@@ -185,6 +185,9 @@ export default {
       zoomOut: 'Reduction',
       close: 'Close'
     },
+    drawer: {
+      close: 'Close'
+    },
     form: {
       folding: 'Folding',
       unfolding: 'Unfolding'

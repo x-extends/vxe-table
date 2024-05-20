@@ -6,6 +6,7 @@ import { VxeToolbarProps } from '../toolbar'
 import { VxeTooltipProps } from '../tooltip'
 import { VxePagerProps } from '../pager'
 import { VxeModalProps, ModalController } from '../modal'
+import { VxeDrawerProps, DrawerController } from '../drawer'
 import { VxeFormProps } from '../form'
 import { VxeListProps } from '../list'
 import { VxeSwitchProps } from '../switch'
@@ -76,6 +77,7 @@ export interface VXETableConfigOptions {
   checkboxGroup?: VxeCheckboxGroupProps
   switch?: VxeSwitchProps
   modal?: VxeModalProps
+  drawer?: VxeDrawerProps
   list?: VxeListProps
   translate?(key: string, args?: any): string
   i18n?(key: string, args?: any): string
@@ -137,6 +139,7 @@ export const menus: VxeGlobalMenus
 export const validators: VxeGlobalValidators
 export const hooks: VxeGlobalHooks
 export const modal: ModalController
+export const drawer: DrawerController
 export const saveFile: SaveFileFunction
 export const readFile: ReadFileFunction
 export const print: PrintFunction
@@ -226,6 +229,7 @@ export interface VXETableCore {
    * 弹窗
    */
   modal: ModalController
+  drawer: DrawerController
   /**
    * 读取本地文件
    */

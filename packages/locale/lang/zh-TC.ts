@@ -185,6 +185,9 @@ export default {
       zoomOut: '還原',
       close: '關閉'
     },
+    drawer: {
+      close: '關閉'
+    },
     form: {
       folding: '收起',
       unfolding: '展開'

@@ -22,6 +22,7 @@ export default [
   'cell-mouseenter',
   'cell-mouseleave',
   'cell-selected',
+  'cell-delete-value',
   'header-cell-click',
   'header-cell-dblclick',
   'header-cell-menu',
