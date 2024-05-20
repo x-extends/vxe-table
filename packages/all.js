@@ -84,7 +84,7 @@ const components = [
 // 默认安装
 export function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
-    VXETable.config(options)
+    VXETable.setConfig(options)
     if (options.theme) {
       setTheme(options)
     }
@@ -93,7 +93,7 @@ export function install (Vue, options) {
 }
 
 // 默认中文
-VXETable.config({
+VXETable.setConfig({
   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 

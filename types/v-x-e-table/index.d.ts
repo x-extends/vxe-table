@@ -25,9 +25,7 @@ export interface VXETableConfigOptions {
   zIndex?: number;
   version?: number;
   emptyCell?: string;
-  icon?: {
-    [key: string]: string;
-  };
+  icon?: VxeGlobalIcon;
   table?: any;
   grid?: any;
   export?: {
@@ -52,6 +50,10 @@ export interface VXETableConfigOptions {
   translate?(key: string, args?: any): string;
   i18n?(key: string, args?: any): string;
   [key: string]: any;
+}
+
+export interface VxeGlobalIcon {
+  [ket: string]: string
 }
 
 export type VxeGlobalConfigMethod = (options?: VXETableConfigOptions) => VxeGlobalStore
@@ -103,6 +105,8 @@ export const use: VxeGlobalUse
  */
 export const setup: VXETableSetupOptions
 
+export function setIcon(options?: VxeGlobalIcon): VXETableCore
+
 export interface VXETablePluginObject {
   install(vxetable: VXETableCore, ...options: any[]): void;
   [key: string]: any;
@@ -121,6 +125,7 @@ export interface VXETableCore {
    * 设置全局参数/获取所有参数
    */
   setConfig: VxeGlobalConfigMethod;
+  setIcon: typeof setIcon
   /**
    * 读取内部数据
    */
@@ -198,6 +203,7 @@ export interface VXETableCore {
  * 一个基于 vue 的 PC 端表单/表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、JSON 配置式...
  */
 export const VXETable: VXETableCore
+export const VxeUI: VXETableCore
 
 export * from './renderer'
 export * from './interceptor'

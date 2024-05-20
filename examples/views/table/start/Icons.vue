@@ -6,7 +6,7 @@
       <pre-code class="javascript">
         import VXETable from 'vxe-table'
 
-        VXETable.setup({
+        VXETable.setConfig({
           icon: {
             // loading
             LOADING: 'vxe-icon-spinner roll vxe-loading--default-icon',

@@ -46,7 +46,7 @@ import './renderer'
 import './formatter'
 
 // 设置默认参数
-VXETable.setup({
+VXETable.setConfig({
   table: {
     exportConfig: {
       types: ['csv', 'html', 'xml', 'txt']

@@ -1,4 +1,5 @@
 import XEUtils from 'xe-utils'
+import DomZIndex from 'dom-zindex'
 import GlobalConfig from '../v-x-e-table/src/conf'
 import { interceptor } from './src/interceptor'
 import { renderer } from './src/renderer'
@@ -6,7 +7,6 @@ import { commands } from './src/commands'
 import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
-import { setConfig } from './src/config'
 import { setTheme } from './src/theme'
 import { UtilTools } from '../tools/utils'
 import { errLog, warnLog } from '../tools/log'
@@ -46,6 +46,22 @@ function getExportOrImpotType (types, flag) {
     }
   })
   return rest
+}
+
+/**
+ * 全局参数设置
+ */
+export const setConfig = (options) => {
+  if (options) {
+    if (options.theme) {
+      setTheme(options)
+    }
+    if (options.zIndex) {
+      DomZIndex.setCurrent(options.zIndex)
+    }
+    XEUtils.merge(GlobalConfig, options)
+  }
+  return VXETable
 }
 
 class VXETableConfig {
@@ -113,6 +129,13 @@ export const config = (options) => {
   return setConfig(options)
 }
 
+export function setIcon (options) {
+  if (options) {
+    Object.assign(GlobalConfig.icon, options)
+  }
+  return VXETable
+}
+
 export const globalStore = {}
 
 export const VXETable = {
@@ -121,6 +144,7 @@ export const VXETable = {
   reg,
   use,
   setConfig,
+  setIcon,
   globalStore,
   interceptor,
   renderer,
@@ -137,6 +161,8 @@ export const VXETable = {
   globalConfs
 }
 
+export const VxeUI = VXETable
+
 setTheme(globalStore)
 
 export * from './src/interceptor'
@@ -144,6 +170,5 @@ export * from './src/renderer'
 export * from './src/commands'
 export * from './src/menus'
 export * from './src/formats'
-export * from './src/config'
 
 export default VXETable

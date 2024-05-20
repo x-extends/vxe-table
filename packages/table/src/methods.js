@@ -2778,14 +2778,15 @@ const Methods = {
             const { delMethod, backMethod } = keyboardOpts
             // 如果是删除键
             if (keyboardOpts.isDel && (selected.row || selected.column)) {
+              const delPaqrams = {
+                row: selected.row,
+                rowIndex: this.getRowIndex(selected.row),
+                column: selected.column,
+                columnIndex: this.getColumnIndex(selected.column),
+                $table: this
+              }
               if (delMethod) {
-                delMethod({
-                  row: selected.row,
-                  rowIndex: this.getRowIndex(selected.row),
-                  column: selected.column,
-                  columnIndex: this.getColumnIndex(selected.column),
-                  $table: this
-                })
+                delMethod(delPaqrams)
               } else {
                 setCellValue(selected.row, selected.column, null)
               }
@@ -2805,6 +2806,7 @@ const Methods = {
                 // 如果按下 del 键，更新表尾数据
                 this.updateFooter()
               }
+              this.emitEvent('cell-delete-value', delPaqrams, evnt)
             } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
               const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, { children: childrenField })
