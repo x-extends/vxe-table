@@ -78,6 +78,12 @@ export interface RendererMapOptions {
   itemResetMethod?(params: FormItemResetParams): void;
 
   // 空内容渲染
+  renderTableEmptyView?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 renderTableEmptyView
+   * @deprecated
+   */
   renderEmpty?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): SlotVNodeType | SlotVNodeType[];
 
   [key: string]: any;

@@ -1,3 +1,4 @@
+import { SizeType } from '../component'
 import { ModalController } from '../modal'
 import { SaveFileFunction, ReadFileFunction, PrintFunction } from '../module/export'
 
@@ -7,9 +8,62 @@ import { VxeGlobalCommands } from './commands'
 import { VxeGlobalFormats } from './formats'
 import { VxeGlobalMenus } from './menus'
 import { VxeGlobalValidators } from './validators'
-import { VxeGlobalConfigMethod } from './config'
 
 /* eslint-disable no-use-before-define */
+
+interface DefaultOptions {
+  size?: SizeType;
+  [key: string]: any;
+}
+
+export interface VXETableConfigOptions {
+  /**
+   * 扩展插件授权码
+   */
+  authId?: string
+  size?: SizeType;
+  zIndex?: number;
+  version?: number;
+  emptyCell?: string;
+  icon?: {
+    [key: string]: string;
+  };
+  table?: any;
+  grid?: any;
+  export?: {
+    types?: {
+      [key: string]: 0 | 1 | 2;
+    }
+    [key: string]: any;
+  };
+  tooltip?: DefaultOptions;
+  pager?: any;
+  form?: DefaultOptions;
+  input?: DefaultOptions;
+  textarea?: DefaultOptions;
+  select?: DefaultOptions;
+  toolbar?: any;
+  button?: DefaultOptions;
+  radio?: DefaultOptions;
+  checkbox?: DefaultOptions;
+  switch?: DefaultOptions;
+  modal?: DefaultOptions;
+  list?: DefaultOptions;
+  translate?(key: string, args?: any): string;
+  i18n?(key: string, args?: any): string;
+  [key: string]: any;
+}
+
+export type VxeGlobalConfigMethod = (options?: VXETableConfigOptions) => VxeGlobalStore
+
+/**
+ * @deprecated
+ */
+export type VXETableSetupOptions = (options?: VXETableConfigOptions) => Required<VXETableConfigOptions>
+/**
+ * @deprecated
+ */
+export type VxeGlobalSetup = (options?: VXETableConfigOptions) => Required<VXETableConfigOptions>;
 
 export type VxeGlobalI18n = (key: string, args?: any) => number | string;
 export type VxeGlobalTranslate = (key: string, args?: any) => string;
@@ -24,8 +78,12 @@ export interface VxeGlobalStore {
 }
 export const globalStore: VxeGlobalStore
 
-export const config: VxeGlobalConfigMethod
 export const setConfig: VxeGlobalConfigMethod
+/**
+ * 请使用 setConfig
+ * @deprecated
+ */
+export const config: VXETableSetupOptions
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
 export const commands: VxeGlobalCommands
@@ -40,10 +98,10 @@ export const _t: VxeGlobalTranslate
 export const use: VxeGlobalUse
 
 /**
- * 请使用 config
+ * 请使用 setConfig
  * @deprecated
  */
-export const setup: VxeGlobalConfigMethod
+export const setup: VXETableSetupOptions
 
 export interface VXETablePluginObject {
   install(vxetable: VXETableCore, ...options: any[]): void;
@@ -119,17 +177,21 @@ export interface VXETableCore {
   t: VxeGlobalI18n;
   _t: VxeGlobalTranslate;
 
-  config: VxeGlobalConfigMethod;
+  /**
+   * 请使用 setConfig
+   * @deprecated
+   */
+  config: VXETableSetupOptions;
   /**
    * 已被 version 替换
    * @deprecated
    */
   v: VXETableVersion;
   /**
-   * 请使用 config
+   * 请使用 setConfig
    * @deprecated
    */
-  setup: VxeGlobalConfigMethod;
+  setup: VXETableSetupOptions;
 }
 
 /**
@@ -143,6 +205,5 @@ export * from './commands'
 export * from './formats'
 export * from './menus'
 export * from './validators'
-export * from './config'
 
 export default VXETable

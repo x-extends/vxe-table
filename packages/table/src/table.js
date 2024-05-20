@@ -70,9 +70,9 @@ function renderEmptyContenet (h, _vm) {
     emptyContent = $scopedSlots.empty.call(_vm, params, h)
   } else {
     const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
-    const renderEmpty = compConf ? compConf.renderEmpty : null
-    if (renderEmpty) {
-      emptyContent = getSlotVNs(renderEmpty.call(_vm, h, emptyOpts, params))
+    const renderTableEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
+    if (renderTableEmptyView) {
+      emptyContent = getSlotVNs(renderTableEmptyView.call(_vm, h, emptyOpts, params))
     } else {
       emptyContent = getFuncText(_vm.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
     }

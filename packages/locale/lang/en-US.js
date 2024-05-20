@@ -117,7 +117,7 @@ export default {
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
         colTitle: 'Title',
         colVisible: 'Visible',
-        colFixed: 'Freeze columns (Max {0})',
+        colFixed: 'Freeze columns (Max. {0})',
         fixedLeft: 'Left',
         fixedUnset: 'Unset',
         fixedRight: 'Right'
@@ -260,6 +260,13 @@ export default {
           q3: 'Third quarter',
           q4: 'Fourth quarter'
         }
+      }
+    },
+    formDesign: {
+      widget: {
+        input: 'Input',
+        textarea: 'Textarea',
+        select: 'Select'
       }
     },
 

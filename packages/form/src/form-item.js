@@ -52,7 +52,8 @@ const props = {
   visibleMethod: Function,
   folding: Boolean,
   collapseNode: Boolean,
-  itemRender: Object
+  itemRender: Object,
+  rules: Array
 }
 
 const watch = {}

@@ -169,7 +169,7 @@ export default {
       }
     }, [
       h('div', {
-        class: 'vxe-form--wrapper vxe-row'
+        class: 'vxe-form--wrapper vxe-form--item-row'
       }, customLayout ? (defaultSlot ? this.callSlot(defaultSlot, {}, h) : []) : formItems.map((item, index) => {
         return h(VxeFormConfigItem, {
           key: index,

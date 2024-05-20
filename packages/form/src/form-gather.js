@@ -1,5 +1,5 @@
 import VxeFormItem from './form-item'
-import { errLog } from '../../tools/log'
+import XEUtils from 'xe-utils'
 
 export default {
   name: 'VxeFormGather',
@@ -11,16 +11,11 @@ export default {
       $xeformiteminfo: this
     }
   },
-  created () {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      this.$nextTick(() => {
-        if (this.$xeform && this.$xeform.customLayout) {
-          errLog('vxe.error.errConflicts', ['custom-layout', '<form-gather ...>'])
-        }
-      })
-    }
-  },
   render (h) {
-    return h('div', this.$slots.default)
+    const { $xeform, className, field, itemConfig } = this
+    const span = this.span || ($xeform ? $xeform.props.span : null)
+    return $xeform && $xeform.customLayout ? h('div', {
+      class: ['vxe-form--gather vxe-form--item-row', itemConfig.id, span ? `vxe-form--item-col_${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className({ $form: $xeform, data: $xeform ? $xeform.props.data : {}, item: itemConfig, field, property: field }) : className) : '']
+    }, this.$slots.default) : h('div')
   }
 }

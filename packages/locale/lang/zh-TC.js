@@ -262,6 +262,13 @@ export default {
         }
       }
     },
+    formDesign: {
+      widget: {
+        input: '輸入框',
+        textarea: '文本域',
+        select: '下拉框'
+      }
+    },
 
     /**
      * 扩展插件

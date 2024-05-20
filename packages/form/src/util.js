@@ -30,6 +30,7 @@ class ItemConfig {
       titleClassName: item.titleClassName,
       titleStyle: item.titleStyle,
       itemRender: item.itemRender,
+      rules: item.rules,
       // 渲染属性
       showError: false,
       errRule: null,

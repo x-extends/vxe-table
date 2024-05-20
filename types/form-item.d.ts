@@ -1,5 +1,5 @@
 import { VXETableComponent } from './component'
-import { Form } from './form'
+import { Form, FormRule } from './form'
 import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
 
 /* eslint-disable no-use-before-define */
@@ -119,6 +119,7 @@ export interface FormItemOptions {
    * 项渲染配置项
    */
   itemRender?: FormItemRenderOptions;
+  rules: FormRule[]
 }
 
 export interface FormItemTitleOptions {

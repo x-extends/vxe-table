@@ -128,20 +128,20 @@ export default {
       const validRest = {}
       const { editRules, afterFullData, visibleColumn, treeConfig, treeOpts } = this
       const childrenField = treeOpts.children || treeOpts.childrenField
-      let vaildDatas
+      let validDatas
       if (rows === true) {
-        vaildDatas = afterFullData
+        validDatas = afterFullData
       } else if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
-          vaildDatas = XEUtils.isArray(rows) ? rows : [rows]
+          validDatas = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
-      if (!vaildDatas) {
-        vaildDatas = this.getInsertRecords().concat(this.getUpdateRecords())
+      if (!validDatas) {
+        validDatas = this.getInsertRecords().concat(this.getUpdateRecords())
       }
-      const rowValids = []
+      const rowValidErrs = []
       this.lastCallTime = Date.now()
       this.validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
       this.clearValidate()
@@ -184,15 +184,15 @@ export default {
                 )
               }
             })
-            rowValids.push(Promise.all(colVailds))
+            rowValidErrs.push(Promise.all(colVailds))
           }
         }
         if (treeConfig) {
-          XEUtils.eachTree(vaildDatas, handleVaild, { children: childrenField })
+          XEUtils.eachTree(validDatas, handleVaild, { children: childrenField })
         } else {
-          vaildDatas.forEach(handleVaild)
+          validDatas.forEach(handleVaild)
         }
-        return Promise.all(rowValids).then(() => {
+        return Promise.all(rowValidErrs).then(() => {
           const ruleProps = Object.keys(validRest)
           this.validErrorMaps = this.handleErrMsgMode(validErrMaps)
           return this.$nextTick().then(() => {
@@ -237,9 +237,9 @@ export default {
               const column = firstErrParams.column
               const rowIndex = afterFullData.indexOf(row)
               const columnIndex = visibleColumn.indexOf(column)
-              const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
-              const locatColumn = columnIndex > 0 ? visibleColumn[rowIndex - 1] : column
-              this.scrollToRow(locatRow, locatColumn).then(posAndFinish)
+              const targetRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+              const targetColumn = columnIndex > 0 ? visibleColumn[columnIndex - 1] : column
+              this.scrollToRow(targetRow, targetColumn).then(posAndFinish)
             }
           })
         })
@@ -377,9 +377,9 @@ export default {
         validErrMaps = Object.assign({}, validErrorMaps)
         rowList.forEach(row => {
           colList.forEach((column) => {
-            const vaildKey = `${getRowid(this, row)}:${column.id}`
-            if (validErrMaps[vaildKey]) {
-              delete validErrMaps[vaildKey]
+            const validKey = `${getRowid(this, row)}:${column.id}`
+            if (validErrMaps[validKey]) {
+              delete validErrMaps[validKey]
             }
           })
         })

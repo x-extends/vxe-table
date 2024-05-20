@@ -17,5 +17,3 @@ export function setConfig (options) {
   }
   return XEUtils.merge(GlobalConfig, options)
 }
-
-export const config = setConfig

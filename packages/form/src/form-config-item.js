@@ -65,7 +65,7 @@ const VxeFormConfigItem = {
         })
       })
       return childVNs.length ? h('div', {
-        class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
+        class: ['vxe-form--gather vxe-form--item-row', item.id, span ? `vxe-form--item-col_${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
       }, childVNs) : _e()
     }
     if (rules) {
@@ -94,7 +94,7 @@ const VxeFormConfigItem = {
       class: [
         'vxe-form--item',
         item.id,
-        span ? `vxe-col--${span} is--span` : null,
+        span ? `vxe-form--item-col_${span} is--span` : null,
         className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
         itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
         {

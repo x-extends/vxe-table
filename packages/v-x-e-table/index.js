@@ -9,7 +9,7 @@ import { validators } from './src/validators'
 import { setConfig } from './src/config'
 import { setTheme } from './src/theme'
 import { UtilTools } from '../tools/utils'
-import { errLog } from '../tools/log'
+import { errLog, warnLog } from '../tools/log'
 
 const installedPlugins = []
 
@@ -90,7 +90,28 @@ export function _t (key, args) {
 }
 
 export const v = 'v3'
-export const setup = setConfig
+
+/**
+ * 已废弃，请使用 setConfig
+ * @deprecated
+ */
+export const setup = (options) => {
+  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    warnLog('vxe.error.delFunc', ['setup', 'setConfig'])
+  }
+  return setConfig(options)
+}
+
+/**
+ * 已废弃，请使用 setConfig
+ * @deprecated
+ */
+export const config = (options) => {
+  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    warnLog('vxe.error.delFunc', ['setup', 'setConfig'])
+  }
+  return setConfig(options)
+}
 
 export const globalStore = {}
 
@@ -111,7 +132,7 @@ export const VXETable = {
   _t,
 
   // 已废弃
-  config: setConfig,
+  config,
   setup,
   globalConfs
 }

@@ -29,7 +29,9 @@ export default {
     // 请使用 content
     message: [String, Function],
     content: [String, Function],
+    showCancelButton: { type: Boolean, default: null },
     cancelButtonText: { type: String, default: () => GlobalConfig.modal.cancelButtonText },
+    showConfirmButton: { type: Boolean, default: () => GlobalConfig.modal.showConfirmButton },
     confirmButtonText: { type: String, default: () => GlobalConfig.modal.confirmButtonText },
     lockView: { type: Boolean, default: () => GlobalConfig.modal.lockView },
     lockScroll: Boolean,
@@ -121,7 +123,7 @@ export default {
     }
   },
   render (h) {
-    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, draggable, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, draggable, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose, showCancelButton, showConfirmButton } = this
     const content = this.content || this.message
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
@@ -226,13 +228,15 @@ export default {
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
         }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(footerSlot.call(this, { $modal: this }, h))) : [
-          type === 'confirm' ? h('vxe-button', {
+          XEUtils.isBoolean(showCancelButton) ? showCancelButton : type === 'confirm' ? h('vxe-button', {
+            key: 1,
             ref: 'cancelBtn',
             on: {
               click: this.cancelEvent
             }
           }, this.cancelButtonText || GlobalConfig.i18n('vxe.button.cancel')) : null,
-          h('vxe-button', {
+          XEUtils.isBoolean(showConfirmButton) ? showConfirmButton : (type === 'confirm' || type === 'alert') ? h('vxe-button', {
+            key: 2,
             ref: 'confirmBtn',
             props: {
               status: 'primary'
@@ -240,7 +244,7 @@ export default {
             on: {
               click: this.confirmEvent
             }
-          }, this.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm'))
+          }, this.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm')) : null
         ]) : null,
         !isMsg && resize ? h('span', {
           class: 'vxe-modal--resize'
@@ -590,6 +594,7 @@ export default {
           modalBoxElem.style.left = `${left}px`
           modalBoxElem.style.top = `${top}px`
           modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
+          this.$emit('move', { type: 'move', $event: evnt })
         }
         document.onmouseup = () => {
           document.onmousemove = domMousemove
@@ -742,10 +747,10 @@ export default {
         if (remember && storage) {
           this.savePosStorage()
         }
-        if ($listeners.zoom) {
-          this.$emit('zoom', params)
-        } else if (events.zoom) {
-          events.zoom.call(this, params)
+        if ($listeners.resize) {
+          this.$emit('resize', params)
+        } else if (events.resize) {
+          events.resize.call(this, params)
         }
       }
       document.onmouseup = () => {
