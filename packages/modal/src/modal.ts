@@ -31,7 +31,9 @@ export default defineComponent({
     duration: { type: [Number, String] as PropType<VxeModalPropTypes.Duration>, default: () => GlobalConfig.modal.duration },
     message: [Number, String] as PropType<VxeModalPropTypes.Message>,
     content: [Number, String] as PropType<VxeModalPropTypes.Content>,
+    showCancelButton: { type: Boolean as PropType<VxeModalPropTypes.ShowCancelButton>, default: null },
     cancelButtonText: { type: String as PropType<VxeModalPropTypes.CancelButtonText>, default: () => GlobalConfig.modal.cancelButtonText },
+    showConfirmButton: { type: Boolean as PropType<VxeModalPropTypes.ShowConfirmButton>, default: () => GlobalConfig.modal.showConfirmButton },
     confirmButtonText: { type: String as PropType<VxeModalPropTypes.ConfirmButtonText>, default: () => GlobalConfig.modal.confirmButtonText },
     lockView: { type: Boolean as PropType<VxeModalPropTypes.LockView>, default: () => GlobalConfig.modal.lockView },
     lockScroll: Boolean as PropType<VxeModalPropTypes.LockScroll>,
@@ -71,7 +73,9 @@ export default defineComponent({
     'close',
     'confirm',
     'cancel',
-    'zoom'
+    'zoom',
+    'resize',
+    'move'
   ] as VxeModalEmits,
   setup (props, context) {
     const { slots, emit } = context
@@ -517,6 +521,7 @@ export default defineComponent({
           boxElem.style.left = `${left}px`
           boxElem.style.top = `${top}px`
           boxElem.className = boxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
+          emit('move', { type: 'move', $event: evnt })
         }
         document.onmouseup = () => {
           document.onmousemove = domMousemove
@@ -672,7 +677,7 @@ export default defineComponent({
         if (remember && storage) {
           savePosStorage()
         }
-        modalMethods.dispatchEvent('zoom', params, evnt)
+        modalMethods.dispatchEvent('resize', params, evnt)
       }
       document.onmouseup = () => {
         reactData.zoomLocat = null
@@ -798,25 +803,29 @@ export default defineComponent({
     }
 
     const renderBtns = () => {
-      const { type } = props
+      const { showCancelButton, showConfirmButton, type } = props
       const btnVNs = []
-      if (type === 'confirm') {
+      if (XEUtils.isBoolean(showCancelButton) ? showCancelButton : type === 'confirm') {
         btnVNs.push(
           h(VxeButtonConstructor, {
+            key: 1,
             ref: refCancelBtn,
             content: props.cancelButtonText || GlobalConfig.i18n('vxe.button.cancel'),
             onClick: cancelEvent
           })
         )
       }
-      btnVNs.push(
-        h(VxeButtonConstructor, {
-          ref: refConfirmBtn,
-          status: 'primary',
-          content: props.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm'),
-          onClick: confirmEvent
-        })
-      )
+      if (XEUtils.isBoolean(showConfirmButton) ? showConfirmButton : (type === 'confirm' || type === 'alert')) {
+        btnVNs.push(
+          h(VxeButtonConstructor, {
+            key: 2,
+            ref: refConfirmBtn,
+            status: 'primary',
+            content: props.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm'),
+            onClick: confirmEvent
+          })
+        )
+      }
       return btnVNs
     }
 

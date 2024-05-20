@@ -262,6 +262,13 @@ export default {
         }
       }
     },
+    formDesign: {
+      widget: {
+        input: 'Input',
+        textarea: 'Textarea',
+        select: 'Select'
+      }
+    },
 
     /**
      * 扩展插件

@@ -50,6 +50,7 @@ const GlobalConfig: VXETableConfigOptions = {
     validConfig: {
       showMessage: true,
       autoClear: true,
+      autoPos: true,
       message: 'inline',
       msgMode: 'single'
     },
@@ -367,6 +368,7 @@ const GlobalConfig: VXETableConfigOptions = {
     animat: true,
     showClose: true,
     draggable: true,
+    showConfirmButton: null,
     // storage: false,
     storageKey: 'VXE_MODAL_POSITION'
   },

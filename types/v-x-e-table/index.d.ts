@@ -1,5 +1,24 @@
-import { ModalController } from '../modal'
 import { SaveFileFunction, ReadFileFunction, PrintFunction } from '../module/export'
+import { SizeType } from '../component'
+import { VxeTableProps } from '../table'
+import { VxeGridProps } from '../grid'
+import { VxeToolbarProps } from '../toolbar'
+import { VxeTooltipProps } from '../tooltip'
+import { VxePagerProps } from '../pager'
+import { VxeModalProps, ModalController } from '../modal'
+import { VxeFormProps } from '../form'
+import { VxeListProps } from '../list'
+import { VxeSwitchProps } from '../switch'
+import { VxeSelectProps } from '../select'
+import { VxeInputProps } from '../input'
+import { VxeTextareaProps } from '../textarea'
+import { VxeButtonProps } from '../button'
+import { VxeButtonGroupProps } from '../button-group'
+import { VxeCheckboxProps } from '../checkbox'
+import { VxeCheckboxGroupProps } from '../checkbox-group'
+import { VxeRadioProps } from '../radio'
+import { VxeRadioButtonProps } from '../radio-button'
+import { VxeRadioGroupProps } from '../radio-group'
 
 import { VxeGlobalRenderer } from './renderer'
 import { VxeGlobalInterceptor } from './interceptor'
@@ -8,9 +27,84 @@ import { VxeGlobalFormats } from './formats'
 import { VxeGlobalMenus } from './menus'
 import { VxeGlobalValidators } from './validators'
 import { VxeGlobalHooks } from './hooks'
-import { VxeGlobalConfigMethod } from './config'
 
 /* eslint-disable no-use-before-define */
+
+export interface VXETableConfigOptions {
+  /**
+   * 扩展插件授权码
+   */
+  authId?: string
+  onauth?(event: {
+    status: boolean
+    code: number
+    msg: string
+
+    [key: string]: any
+  }): void
+
+  theme?: null | '' | 'default' | 'dark'
+
+  size?: SizeType
+  zIndex?: number
+  version?: number
+  emptyCell?: string
+  icon?: {
+    [key: string]: string
+  }
+  table?: VxeTableProps
+  grid?: VxeGridProps
+  export?: {
+    types?: {
+      [key: string]: 0 | 1 | 2
+    }
+    [key: string]: any
+  }
+  tooltip?: VxeTooltipProps
+  pager?: VxePagerProps
+  form?: VxeFormProps
+  input?: VxeInputProps
+  textarea?: VxeTextareaProps
+  select?: VxeSelectProps
+  toolbar?: VxeToolbarProps
+  button?: VxeButtonProps
+  buttonGroup?: VxeButtonGroupProps
+  radio?: VxeRadioProps
+  radioButton?: VxeRadioButtonProps
+  radioGroup?: VxeRadioGroupProps
+  checkbox?: VxeCheckboxProps
+  checkboxGroup?: VxeCheckboxGroupProps
+  switch?: VxeSwitchProps
+  modal?: VxeModalProps
+  list?: VxeListProps
+  translate?(key: string, args?: any): string
+  i18n?(key: string, args?: any): string
+
+  /**
+   * 还原旧的单元格校验模式，已废弃
+   * @deprecated
+   */
+  cellVaildMode?: 'obsolete' | '' | null
+
+  [key: string]: any
+}
+
+export type VxeGlobalConfigMethod = (options?: VXETableConfigOptions) => VXETableCore
+
+/**
+ * 请使用 setConfig
+ * @deprecated
+ */
+export type VxeGlobalSetup = (options?: VXETableConfigOptions) => Required<VXETableConfigOptions>
+/**
+ * @deprecated
+ */
+export type VXETableGlobalConfig = (options?: VXETableConfigOptions) => Required<VXETableConfigOptions>
+/**
+ * 请使用 setConfig
+ * @deprecated
+ */
+export type VXETableSetupOptions = (options?: VXETableConfigOptions) => Required<VXETableConfigOptions>
 
 export class VXETableConfig {
   clipboard: {
@@ -49,18 +143,23 @@ export const print: PrintFunction
 export const t: VxeGlobalI18n
 export const _t: VxeGlobalTranslate
 export const use: VxeGlobalUse
-
-export const config: VxeGlobalConfigMethod
 /**
- * 请使用 config
+ * 请使用 setConfig
  * @deprecated
  */
-export const setup: VxeGlobalConfigMethod
+export const config: VXETableGlobalConfig
+/**
+ * 请使用 setConfig
+ * @deprecated
+ */
+export const setup: VXETableSetupOptions
 /**
  * 已废弃
  * @deprecated
  */
 export const globalConfs: VXETableConfig
+
+export function setIcon(options?: VxeGlobalIcon): VXETableCore
 
 export interface VXETablePluginObject {
   install(vxetable: VXETableCore, ...options: any[]): void
@@ -90,6 +189,7 @@ export interface VXETableCore {
    * 设置全局参数/获取所有参数
    */
   setConfig: VxeGlobalConfigMethod
+  setIcon: typeof setIcon
   /**
    * 读取内部数据
    */
@@ -150,7 +250,11 @@ export interface VXETableCore {
   t: VxeGlobalI18n
   _t: VxeGlobalTranslate
 
-  config: VxeGlobalConfigMethod
+  /**
+   * 请使用 setConfig
+   * @deprecated
+   */
+  config: VXETableGlobalConfig
   /**
    * @deprecated 已废弃
    */
@@ -161,10 +265,10 @@ export interface VXETableCore {
    */
   v: VXETableVersion
   /**
-   * 请使用 config
+   * 请使用 setConfig
    * @deprecated
    */
-  setup: VxeGlobalConfigMethod
+  setup: VXETableSetupOptions
 }
 
 /**
@@ -179,6 +283,5 @@ export * from './formats'
 export * from './menus'
 export * from './validators'
 export * from './hooks'
-export * from './config'
 
 export default VXETable

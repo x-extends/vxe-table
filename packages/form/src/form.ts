@@ -191,8 +191,8 @@ export default defineComponent({
             }
           })
         }
-        reactData.staticItems = XEUtils.mapTree(list, item => createItem($xeform, item), { children: 'children' })
       }
+      reactData.staticItems = XEUtils.mapTree(list, item => createItem($xeform, item), { children: 'children' })
       return nextTick()
     }
 
@@ -670,7 +670,7 @@ export default defineComponent({
         onReset: resetEvent
       }, [
         h('div', {
-          class: 'vxe-form--wrapper vxe-row'
+          class: 'vxe-form--wrapper vxe-form--item-row'
         }, customLayout ? (defaultSlot ? defaultSlot({}) : []) : formItems.map((item, index) => {
           return h(VxeFormConfigItem, {
             key: index,

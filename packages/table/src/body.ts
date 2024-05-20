@@ -788,9 +788,9 @@ export default defineComponent({
         emptyContent = $xetable.callSlot(emptySlot, { $table: $xetable, $grid: $xetable.xegrid })
       } else {
         const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
-        const renderEmpty = compConf ? compConf.renderEmpty : null
-        if (renderEmpty) {
-          emptyContent = getSlotVNs(renderEmpty(emptyOpts, { $table: $xetable }))
+        const renderTableEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
+        if (renderTableEmptyView) {
+          emptyContent = getSlotVNs(renderTableEmptyView(emptyOpts, { $table: $xetable }))
         } else {
           emptyContent = tableProps.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
         }

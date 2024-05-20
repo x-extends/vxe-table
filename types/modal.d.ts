@@ -128,7 +128,9 @@ export namespace VxeModalPropTypes {
    * @deprecated
    */
   export type Message = Content
+  export type ShowCancelButton = boolean | null
   export type CancelButtonText = string
+  export type ShowConfirmButton = boolean | null
   export type ConfirmButtonText = string
   export type LockView = boolean
   export type LockScroll = boolean
@@ -174,7 +176,9 @@ export type VxeModalProps = {
   title?: VxeModalPropTypes.Title
   duration?: VxeModalPropTypes.Duration
   content?: VxeModalPropTypes.Content
+  showCancelButton?: VxeModalPropTypes.ShowCancelButton
   cancelButtonText?: VxeModalPropTypes.CancelButtonText
+  showConfirmButton?: VxeModalPropTypes.ShowConfirmButton
   confirmButtonText?: VxeModalPropTypes.ConfirmButtonText
   lockView?: VxeModalPropTypes.LockView
   lockScroll?: VxeModalPropTypes.LockScroll
@@ -241,7 +245,9 @@ export type VxeModalEmits = [
   'close',
   'confirm',
   'cancel',
-  'zoom'
+  'zoom',
+  'resize',
+  'move'
 ]
 
 /**
@@ -344,6 +350,12 @@ export namespace VxeModalDefines {
 
   export interface ZoomParams extends ModalBaseParams { }
   export interface ZoomEventParams extends ModalEventParams, ZoomParams { }
+
+  export interface ResizeParams extends ModalBaseParams { }
+  export interface ResizeEventParams extends ModalEventParams, ResizeParams { }
+
+  export interface MoveParams extends ModalBaseParams { }
+  export interface MoveEventParams extends ModalEventParams, MoveParams { }
 }
 
 export type VxeModalEventProps = {
@@ -354,6 +366,8 @@ export type VxeModalEventProps = {
   onCancel?: VxeModalEvents.Cancel
   onClose?: VxeModalEvents.Close
   onZoom?: VxeModalEvents.Zoom
+  onResize?: VxeModalEvents.Resize
+  onMove?: VxeModalEvents.Move
 }
 
 export interface VxeModalListeners {
@@ -364,6 +378,8 @@ export interface VxeModalListeners {
   cancel?: VxeModalEvents.Cancel
   close?: VxeModalEvents.Close
   zoom?: VxeModalEvents.Zoom
+  resize?: VxeModalEvents.Resize
+  move?: VxeModalEvents.Move
 }
 
 export namespace VxeModalEvents {
@@ -374,6 +390,8 @@ export namespace VxeModalEvents {
   export type Cancel = (params: VxeModalDefines.CancelEventParams) => void
   export type Close = (params: VxeModalDefines.CloseEventParams) => void
   export type Zoom = (params: VxeModalDefines.ZoomEventParams) => void
+  export type Resize = (params: VxeModalDefines.ResizeEventParams) => void
+  export type Move = (params: VxeModalDefines.MoveEventParams) => void
 }
 
 export interface VxeModalSlots {

@@ -54,7 +54,8 @@ export const formItemProps = {
   visible: { type: Boolean as PropType<VxeFormItemPropTypes.Visible>, default: null },
   folding: Boolean as PropType<VxeFormItemPropTypes.Folding>,
   collapseNode: Boolean as PropType<VxeFormItemPropTypes.CollapseNode>,
-  itemRender: Object as PropType<VxeFormItemPropTypes.ItemRender>
+  itemRender: Object as PropType<VxeFormItemPropTypes.ItemRender>,
+  rules: Array as PropType<VxeFormItemPropTypes.Rules>
 }
 
 export default defineComponent({
@@ -166,7 +167,7 @@ export default defineComponent({
         class: [
           'vxe-form--item',
           item.id,
-          span ? `vxe-col--${span} is--span` : '',
+          span ? `vxe-form--item-col--${span} is--span` : '',
           className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
           itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
           {
