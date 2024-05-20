@@ -152,6 +152,8 @@ export const VXETable = {
   globalConfs
 } as VXETableCore
 
+export const VxeUI = VXETable
+
 setTheme(globalStore)
 
 export * from './src/interceptor'
