@@ -1,6 +1,6 @@
 import { App } from 'vue'
 import XEUtils from 'xe-utils'
-import { config } from './v-x-e-table'
+import { setConfig } from './v-x-e-table'
 import { setTheme } from './v-x-e-table/src/theme'
 
 import { VxeTableFilterModule } from './filter'
@@ -87,14 +87,14 @@ const components = [
 ]
 
 // 默认中文
-config({
+setConfig({
   i18n: (key: string, args: any) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 
 // 默认安装
 export function install (app: App, options: any) {
   if (XEUtils.isPlainObject(options)) {
-    config(options)
+    setConfig(options)
     if ((options as any).theme) {
       setTheme(options)
     }
