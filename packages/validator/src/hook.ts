@@ -112,24 +112,24 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const validOpts = computeValidOpts.value
-      let vaildDatas
+      let validDatas
       if (rows === true) {
-        vaildDatas = afterFullData
+        validDatas = afterFullData
       } else if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
-          vaildDatas = XEUtils.isArray(rows) ? rows : [rows]
+          validDatas = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
-      if (!vaildDatas) {
+      if (!validDatas) {
         if ($xetable.getInsertRecords) {
-          vaildDatas = $xetable.getInsertRecords().concat($xetable.getUpdateRecords())
+          validDatas = $xetable.getInsertRecords().concat($xetable.getUpdateRecords())
         } else {
-          vaildDatas = []
+          validDatas = []
         }
       }
-      const rowValids: any = []
+      const rowValidErrs: any = []
       internalData._lastCallTime = Date.now()
       validRuleErr = false // 如果为快速校验，当存在某列校验不通过时将终止执行
       validatorMethods.clearValidate()
@@ -177,15 +177,15 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                 )
               }
             })
-            rowValids.push(Promise.all(colVailds))
+            rowValidErrs.push(Promise.all(colVailds))
           }
         }
         if (treeConfig) {
-          XEUtils.eachTree(vaildDatas, handleVaild, { children: childrenField })
+          XEUtils.eachTree(validDatas, handleVaild, { children: childrenField })
         } else {
-          vaildDatas.forEach(handleVaild)
+          validDatas.forEach(handleVaild)
         }
-        return Promise.all(rowValids).then(() => {
+        return Promise.all(rowValidErrs).then(() => {
           const ruleProps = Object.keys(validRest)
           reactData.validErrorMaps = handleErrMsgMode(validErrMaps)
           return nextTick().then(() => {
@@ -230,9 +230,9 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
               const column = firstErrParams.column
               const rowIndex = afterFullData.indexOf(row)
               const columnIndex = visibleColumn.indexOf(column)
-              const locatRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
-              const locatColumn = columnIndex > 0 ? visibleColumn[rowIndex - 1] : column
-              $xetable.scrollToRow(locatRow, locatColumn).then(posAndFinish)
+              const targetRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
+              const targetColumn = columnIndex > 0 ? visibleColumn[columnIndex - 1] : column
+              $xetable.scrollToRow(targetRow, targetColumn).then(posAndFinish)
             }
           })
         })
@@ -293,9 +293,9 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           validErrMaps = Object.assign({}, validErrorMaps)
           rowList.forEach(row => {
             colList.forEach((column) => {
-              const vaildKey = `${getRowid($xetable, row)}:${column.id}`
-              if (validErrMaps[vaildKey]) {
-                delete validErrMaps[vaildKey]
+              const validKey = `${getRowid($xetable, row)}:${column.id}`
+              if (validErrMaps[validKey]) {
+                delete validErrMaps[validKey]
               }
             })
           })

@@ -3,7 +3,7 @@
     <p class="tip">
       空内容渲染 <table-api-link prop="empty-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
-      renderEmpty (renderOpts, params: { $table }) 空值时显示的内容<br>
+      renderTableEmptyView (renderOpts, params: { $table }) 空值时显示的内容<br>
     </p>
 
     <vxe-table
@@ -44,7 +44,7 @@ export default defineComponent({
         // 创建一个空内容渲染
         VXETable.renderer.add('NotData', {
           // 空内容模板
-          renderEmpty (renderOpts, params) {
+          renderTableEmptyView (renderOpts, params) {
             return [
               <span>
                 <img src="/vxe-table/static/other/img1.gif"/>

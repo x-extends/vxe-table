@@ -13,6 +13,20 @@
   text-align: left;
 }
 
+.vxe-form--item-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  $spans: 4.16667%, 8.33333%, 12.5%, 16.66667%, 20.83333%, 25%, 29.16667%, 33.33333%,
+          37.5%, 41.66667%, 45.83333%, 50%, 54.16667%, 58.33333%, 62.5%, 66.66667%,
+          70.83333%, 75%, 79.16667%, 83.33333%, 87.5%, 91.66667%, 95.83333%, 100%;
+  @for $index from 0 to length($spans) {
+    & > .vxe-form--item-col_#{$index + 1} {
+      width: nth($spans, $index + 1);
+    }
+  }
+}
+
 .vxe-form-slots {
   display: none;
 }
@@ -106,6 +120,9 @@
   .vxe-form--item {
     display: none;
     padding: 0.5em 0.8em 0.5em 0;
+    &.is--vertical {
+      padding: 0.25em 0 0.25em 0;
+    }
     &.is--active {
       &:not(.is--hidden) {
         display: inline-flex;
@@ -217,6 +234,7 @@
     padding: 0 0.8em;
   }
   .vxe-default-textarea {
+    height: calc(var(--vxe-button-height-default) * 2);
     padding: 0.3em 0.6em;
   }
   .vxe-default-input[type="number"] {
@@ -302,9 +320,11 @@
       line-height: calc(var(--vxe-button-height-medium) - 2px);
     }
     .vxe-default-input,
-    .vxe-default-input,
     .vxe-default-select {
       height: var(--vxe-button-height-medium);
+    }
+    .vxe-default-textarea {
+      height: calc(var(--vxe-button-height-medium) * 2);
     }
   }
   &.size--small {
@@ -317,9 +337,11 @@
       line-height: calc(var(--vxe-button-height-small) - 2px);
     }
     .vxe-default-input,
-    .vxe-default-input,
     .vxe-default-select {
       height: var(--vxe-button-height-small);
+    }
+    .vxe-default-textarea {
+      height: calc(var(--vxe-button-height-small) * 2);
     }
   }
   &.size--mini {
@@ -332,9 +354,11 @@
       line-height: calc(var(--vxe-button-height-mini) - 2px);
     }
     .vxe-default-input,
-    .vxe-default-input,
     .vxe-default-select {
       height: var(--vxe-button-height-mini);
+    }
+    .vxe-default-textarea {
+      height: calc(var(--vxe-button-height-mini) * 2);
     }
   }
 }

@@ -2843,6 +2843,7 @@ export type VxeTableEmits = [
   'cell-mouseenter',
   'cell-mouseleave',
   'cell-selected',
+  'cell-delete-value',
   'header-cell-click',
   'header-cell-dblclick',
   'header-cell-menu',
@@ -3191,6 +3192,16 @@ export namespace VxeTableDefines {
   export interface CellMouseleaveParams<D = VxeTableDataRow> extends TableBaseCellParams<D> { }
   export interface CellMouseleaveEventParams<D = VxeTableDataRow> extends TableEventParams<D>, CellMouseleaveParams<D> { }
 
+  export interface CellDeleteValueParams<D = VxeTableDataRow> {
+    row: D
+    rowIndex: number
+    column: VxeTableDefines.ColumnInfo<D>
+    columnIndex: number
+    activeArea: VxeTableProDefines.MouseActiveCellArea<D>
+    cellAreas: VxeTableProDefines.MouseCellArea<D>[]
+   }
+  export interface CellDeleteValueEventParams<D = VxeTableDataRow> extends TableEventParams<D>, CellDeleteValueParams<D> { }
+
   export interface HeaderCellClickParams<D = VxeTableDataRow> extends TableBaseHeaderCellParams<D> {
     triggerResizable: boolean
     triggerSort: boolean
@@ -3318,6 +3329,7 @@ export interface VxeTableEventProps<D = VxeTableDataRow> {
   onCellMenu?: VxeTableEvents.CellMenu<D>
   onCellMouseenter?: VxeTableEvents.CellMouseenter<D>
   onCellMouseleave?: VxeTableEvents.CellMouseleave<D>
+  onCellDeleteValue?: VxeTableEvents.CellDeleteValue<D>
   onHeaderCellClick?: VxeTableEvents.HeaderCellClick<D>
   onHeaderCellDblclick?: VxeTableEvents.HeaderCellDblclick<D>
   onHeaderCellMenu?: VxeTableEvents.HeaderCellMenu<D>
@@ -3368,6 +3380,7 @@ export interface VxeTableListeners<D = VxeTableDataRow> {
   cellMenu?: VxeTableEvents.CellMenu<D>
   cellMouseenter?: VxeTableEvents.CellMouseenter<D>
   cellMouseleave?: VxeTableEvents.CellMouseleave<D>
+  cellDeleteValue?: VxeTableEvents.CellDeleteValue<D>
   headerCellClick?: VxeTableEvents.HeaderCellClick<D>
   headerCellDblclick?: VxeTableEvents.HeaderCellDblclick<D>
   headerCellMenu?: VxeTableEvents.HeaderCellMenu<D>
@@ -3417,6 +3430,7 @@ export namespace VxeTableEvents {
   export type CellMenu<D = any> = (params: VxeTableDefines.CellMenuEventParams<D>) => void
   export type CellMouseenter<D = any> = (params: VxeTableDefines.CellMouseenterEventParams<D>) => void
   export type CellMouseleave<D = any> = (params: VxeTableDefines.CellMouseleaveEventParams<D>) => void
+  export type CellDeleteValue<D = any> = (params: VxeTableDefines.CellDeleteValueEventParams<D>) => void
   export type HeaderCellClick<D = any> = (params: VxeTableDefines.HeaderCellClickEventParams<D>) => void
   export type HeaderCellDblclick<D = any> = (params: VxeTableDefines.HeaderCellDblclickEventParams<D>) => void
   export type HeaderCellMenu<D = any> = (params: VxeTableDefines.HeaderCellMenuEventParams<D>) => void

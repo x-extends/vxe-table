@@ -64,7 +64,13 @@ export interface DefineRendererOption<T> {
   itemResetMethod?(params: VxeGlobalRendererHandles.ItemResetMethodParams): void
 
   // 空内容渲染
-  renderEmpty?(renderOpts: VxeGlobalRendererHandles.RenderEmptyOptions, params: VxeGlobalRendererHandles.RenderEmptyParams): T
+  renderTableEmptyView?(renderOpts: VxeGlobalRendererHandles.RenderTableEmptyViewOptions, params: VxeGlobalRendererHandles.RenderEmptyParams): T
+
+  /**
+   * 已废弃，请使用 renderTableEmptyView
+   * @deprecated
+   */
+  renderEmpty?(renderOpts: VxeGlobalRendererHandles.RenderTableEmptyViewOptions, params: VxeGlobalRendererHandles.RenderEmptyParams): T
 }
 
 export namespace VxeGlobalRendererHandles {
@@ -206,7 +212,7 @@ export namespace VxeGlobalRendererHandles {
   export type ItemVisibleMethodParams = FormItemVisibleParams
   export type ItemResetMethodParams = FormItemResetParams
 
-  export type RenderEmptyOptions = VxeTablePropTypes.EmptyRender
+  export type RenderTableEmptyViewOptions = VxeTablePropTypes.EmptyRender
 
   export interface RenderEmptyParams<D = VxeTableDataRow> {
     $table: VxeTableConstructor<D> & VxeTablePrivateMethods<D>

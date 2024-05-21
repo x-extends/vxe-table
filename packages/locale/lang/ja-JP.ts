@@ -185,6 +185,9 @@ export default {
       zoomOut: '縮小',
       close: '閉じる'
     },
+    drawer: {
+      close: '閉じる'
+    },
     form: {
       folding: '展開を戻す',
       unfolding: '展開'
@@ -260,6 +263,13 @@ export default {
           q3: '第3四半期',
           q4: '第4四半期'
         }
+      }
+    },
+    formDesign: {
+      widget: {
+        input: 'Input',
+        textarea: 'Textarea',
+        select: 'Select'
       }
     },
 

@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from './src/conf'
+import DomZIndex from 'dom-zindex'
 import { interceptor } from './src/interceptor'
 import { renderer } from './src/renderer'
 import { commands } from './src/commands'
@@ -7,11 +8,11 @@ import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
 import { hooks } from './src/hooks'
-import { setConfig } from './src/config'
 import { setTheme } from './src/theme'
 import { getLastZIndex, nextZIndex } from '../tools/utils'
+import { warnLog } from '../tools/log'
 
-import { VXETableCore } from '../../types/all'
+import { VXETableCore, VxeGlobalConfigMethod, VXETableSetupOptions } from '../../types/all'
 
 function getExportOrImpotType (types: any, flag: number) {
   const rest: string[] = []
@@ -42,6 +43,22 @@ export function t (key: any, args?: any) {
 
 export function _t (key: string, args?: any) {
   return key ? XEUtils.toValueString(GlobalConfig.translate ? GlobalConfig.translate(key, args) : key) : ''
+}
+
+/**
+ * 全局参数设置
+ */
+export const setConfig: VxeGlobalConfigMethod = (options) => {
+  if (options) {
+    if (options.theme) {
+      setTheme(options)
+    }
+    if (options.zIndex) {
+      DomZIndex.setCurrent(options.zIndex)
+    }
+    XEUtils.merge(GlobalConfig, options)
+  }
+  return VXETable
 }
 
 class VXETableConfig {
@@ -80,9 +97,35 @@ export const globalConfs = new VXETableConfig()
 export const v = 'v4'
 
 /**
+ * 已废弃，请使用 setConfig
  * @deprecated
  */
-export const setup = setConfig
+export const setup: VXETableSetupOptions = (options) => {
+  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    warnLog('vxe.error.delFunc', ['setup', 'setConfig'])
+  }
+  setConfig(options)
+  return GlobalConfig
+}
+
+/**
+ * 已废弃，请使用 setConfig
+ * @deprecated
+ */
+export const config: VXETableSetupOptions = (options) => {
+  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    warnLog('vxe.error.delFunc', ['setup', 'setConfig'])
+  }
+  setConfig(options)
+  return GlobalConfig
+}
+
+export function setIcon (options?: any) {
+  if (options) {
+    Object.assign(GlobalConfig.icon, options)
+  }
+  return VXETable
+}
 
 export const globalStore = {}
 
@@ -90,6 +133,7 @@ export const VXETable = {
   v,
   version: process.env.VUE_APP_VXE_TABLE_VERSION,
   setConfig,
+  setIcon,
   globalStore,
   interceptor,
   renderer,
@@ -103,10 +147,12 @@ export const VXETable = {
   _t,
 
   // 已废弃
-  config: setConfig,
+  config,
   setup,
   globalConfs
 } as VXETableCore
+
+export const VxeUI = VXETable
 
 setTheme(globalStore)
 
@@ -117,6 +163,5 @@ export * from './src/menus'
 export * from './src/formats'
 export * from './src/validators'
 export * from './src/hooks'
-export * from './src/config'
 
 export default VXETable

@@ -63,7 +63,7 @@ export default defineComponent({
         import i18n from './i18n'
         import VXETable from 'vxe-table'
         
-        VXETable.setup({
+        VXETable.setConfig({
           // 对组件内置的提示语进行国际化翻译
           i18n: (key, args) => i18n.global.t(key, args)
         })
@@ -73,7 +73,7 @@ export default defineComponent({
         createApp(App).use(i18n).use(VXETable).$mount('#app')
         `,
         `
-        VXETable.setup({
+        VXETable.setConfig({
           // 可选，对参数中的列头、校验提示..等进行自动翻译（只对支持国际化的有效）
           translate (key, args) {
             // 例如，只翻译 "app." 开头的键值

@@ -185,6 +185,9 @@ export default {
       zoomOut: 'Reduction',
       close: 'Close'
     },
+    drawer: {
+      close: 'Close'
+    },
     form: {
       folding: 'Folding',
       unfolding: 'Unfolding'
@@ -260,6 +263,13 @@ export default {
           q3: 'Third quarter',
           q4: 'Fourth quarter'
         }
+      }
+    },
+    formDesign: {
+      widget: {
+        input: 'Input',
+        textarea: 'Textarea',
+        select: 'Select'
       }
     },
 

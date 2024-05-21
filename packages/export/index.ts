@@ -24,7 +24,7 @@ export const VxeTableExportModule = {
     VXETable.saveFile = saveFile
     VXETable.readFile = readFile
     VXETable.print = print
-    VXETable.setup({
+    VXETable.setConfig({
       export: {
         types: {
           csv: 0,

@@ -71,7 +71,7 @@ const VxeFormConfigItem = defineComponent({
           })
         })
         return childVNs.length ? h('div', {
-          class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
+          class: ['vxe-form--gather vxe-form--item-row', item.id, span ? `vxe-form--item-col_${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
         }, childVNs) : createCommentVNode()
       }
       let contentVNs: SlotVNodeType[] = []
@@ -117,7 +117,7 @@ const VxeFormConfigItem = defineComponent({
         class: [
           'vxe-form--item',
           item.id,
-          span ? `vxe-col--${span} is--span` : '',
+          span ? `vxe-form--item-col_${span} is--span` : '',
           className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
           itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
           {

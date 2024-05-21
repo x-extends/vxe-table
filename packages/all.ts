@@ -1,6 +1,6 @@
 import { App } from 'vue'
 import XEUtils from 'xe-utils'
-import { config } from './v-x-e-table'
+import { setConfig } from './v-x-e-table'
 import { setTheme } from './v-x-e-table/src/theme'
 
 import { VxeTableFilterModule } from './filter'
@@ -27,6 +27,7 @@ import { VxeTextarea } from './textarea'
 import { VxeButton } from './button'
 import { VxeButtonGroup } from './button-group'
 import { VxeModal } from './modal'
+import { VxeDrawer } from './drawer'
 import { VxeTooltip } from './tooltip'
 import { VxeForm } from './form'
 import { VxeFormItem } from './form-item'
@@ -69,6 +70,7 @@ const components = [
   VxeButton,
   VxeButtonGroup,
   VxeModal,
+  VxeDrawer,
   VxeTooltip,
   VxeForm,
   VxeFormItem,
@@ -85,14 +87,14 @@ const components = [
 ]
 
 // 默认中文
-config({
+setConfig({
   i18n: (key: string, args: any) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 
 // 默认安装
 export function install (app: App, options: any) {
   if (XEUtils.isPlainObject(options)) {
-    config(options)
+    setConfig(options)
     if ((options as any).theme) {
       setTheme(options)
     }
@@ -129,6 +131,7 @@ export * from './textarea'
 export * from './button'
 export * from './button-group'
 export * from './modal'
+export * from './drawer'
 export * from './tooltip'
 export * from './form'
 export * from './form-item'

@@ -185,6 +185,9 @@ export default {
       zoomOut: '还原',
       close: '关闭'
     },
+    drawer: {
+      close: '关闭'
+    },
     form: {
       folding: '收起',
       unfolding: '展开'
@@ -260,6 +263,13 @@ export default {
           q3: '第三季度',
           q4: '第四季度'
         }
+      }
+    },
+    formDesign: {
+      widget: {
+        input: '输入框',
+        textarea: '文本域',
+        select: '下拉框'
       }
     },
 
