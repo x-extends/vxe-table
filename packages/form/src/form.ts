@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, Ref, createCommentVNode, provide, computed, inject, reactive, watch, nextTick, PropType, onMounted } from 'vue'
+import { defineComponent, h, ref, Ref, createCommentVNode, provide, computed, inject, reactive, watch, nextTick, PropType } from 'vue'
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import { VXETable } from '../../v-x-e-table'
@@ -642,17 +642,6 @@ export default defineComponent({
       reactData.collapseAll = !!value
     })
 
-    onMounted(() => {
-      nextTick(() => {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          if (props.customLayout && props.items) {
-            errLog('vxe.error.errConflicts', ['custom-layout', 'items'])
-          }
-        }
-        loadItem(props.items || [])
-      })
-    })
-
     const renderVN = () => {
       const { loading, className, data, customLayout } = props
       const { formItems } = reactData
@@ -699,6 +688,10 @@ export default defineComponent({
     }
 
     $xeform.renderVN = renderVN
+
+    if (props.items) {
+      loadItem(props.items)
+    }
 
     provide('$xeform', $xeform)
     provide('$xeformgather', null)
