@@ -1,4 +1,4 @@
-import { VxeUI, VxeUIExport, setConfig } from 'vxe-pc-ui'
+import { VxeUIExport, setConfig } from 'vxe-pc-ui'
 import VxeColumn from 'vxe-pc-ui/types/components/column'
 import VxeColgroup from 'vxe-pc-ui/types/components/colgroup'
 import VxeTable from 'vxe-pc-ui/types/components/table'
@@ -12,6 +12,15 @@ declare module '@vue/runtime-core' {
     VxeTable: typeof VxeTable
     VxeGrid: typeof VxeGrid
     VxeToolbar: typeof VxeToolbar
+  }
+}
+
+declare global {
+  interface Window {
+    /**
+     * @deprecated
+     */
+    VXETable: VxeUIExport;
   }
 }
 
@@ -30,7 +39,7 @@ export type config = typeof setConfig
  * 已废弃，请使用 VxeUI
  * @deprecated
  */
-export const VXETable = VxeUI
+export const VXETable: VxeUIExport
 
 /**
  * 已废弃，请使用 VxeUIExport
