@@ -1,52 +1,50 @@
 import XEUtils from 'xe-utils'
-import GlobalConfig from '../../v-x-e-table/src/conf'
-import { formats } from '../../v-x-e-table/src/formats'
+import { getI18n, formats, log } from '@vxe-ui/core'
 import { toFilters } from './util'
-import { getFuncText } from '../../tools/utils'
-import { warnLog, errLog } from '../../tools/log'
+import { getFuncText } from '../../ui/src/utils'
 
-import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  constructor ($xetable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
-    const $xegrid = $xetable.xegrid
+  constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
+    const $xeGrid = $xeTable.xegrid
     const formatter: string | any[] = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
       if (_vm.type && types.indexOf(_vm.type) === -1) {
-        warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
+        log.warn('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
       }
       if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
-        warnLog('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+        log.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
       }
       if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
-        warnLog('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+        log.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
       }
       if (_vm.cellRender && _vm.editRender) {
-        warnLog('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
+        log.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }
       if (_vm.type === 'expand') {
-        const { props: tableProps } = $xetable
+        const { props: tableProps } = $xeTable
         const { treeConfig } = tableProps
-        const { computeTreeOpts } = $xetable.getComputeMaps()
+        const { computeTreeOpts } = $xeTable.getComputeMaps()
         const treeOpts = computeTreeOpts.value
         if (treeConfig && (treeOpts.showLine || treeOpts.line)) {
-          errLog('vxe.error.errConflicts', ['tree-config.showLine', 'column.type=expand'])
+          log.err('vxe.error.errConflicts', ['tree-config.showLine', 'column.type=expand'])
         }
       }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
           if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
-            errLog('vxe.error.notFormats', [formatter])
+            log.err('vxe.error.notFormats', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
           const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
           if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
-            errLog('vxe.error.notFormats', [formatter[0]])
+            log.err('vxe.error.notFormats', [formatter[0]])
           }
         }
       }
@@ -134,17 +132,17 @@ export class ColumnInfo {
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots
     })
-    if ($xegrid) {
-      const { computeProxyOpts } = $xegrid.getComputeMaps()
+    if ($xeGrid) {
+      const { computeProxyOpts } = $xeGrid.getComputeMaps()
       const proxyOpts = computeProxyOpts.value
       if (proxyOpts.beforeColumn) {
-        proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
+        proxyOpts.beforeColumn({ $grid: $xeGrid, column: this })
       }
     }
   }
 
   getTitle () {
-    return getFuncText(this.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
+    return getFuncText(this.title || (this.type === 'seq' ? getI18n('vxe.table.seqTitle') : ''))
   }
 
   getKey () {

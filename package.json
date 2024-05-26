@@ -1,7 +1,7 @@
 {
   "name": "vxe-table",
-  "version": "4.6.17-beta.0",
-  "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟树、列拖拽，懒加载、快捷菜单、数据校验、树形结构、打印导出、自定义模板、渲染器、JSON 配置式...",
+  "version": "4.7.0-alpha.8",
+  "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟树、列拖拽，懒加载、快捷菜单、数据校验、树形结构、打印、导入导出、自定义模板、渲染器、JSON 配置式...",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
     "serve": "vue-cli-service serve",
@@ -13,13 +13,13 @@
     "format": "eslint --fix examples/**/*.{js,ts,vue}"
   },
   "files": [
-    "es",
     "lib",
-    "types",
-    "packages",
-    "styles",
+    "es",
+    "src",
     "helper",
-    "scripts"
+    "types",
+    "styles",
+    "packages"
   ],
   "main": "lib/index.common.js",
   "module": "es/index.esm.js",
@@ -28,8 +28,7 @@
   "style": "lib/style.css",
   "typings": "types/index.d.ts",
   "dependencies": {
-    "dom-zindex": "^1.0.2",
-    "xe-utils": "^3.5.26"
+    "vxe-pc-ui": "^1.7.8"
   },
   "devDependencies": {
     "@types/resize-observer-browser": "^0.1.11",
@@ -65,13 +64,8 @@
     "sass": "^1.75.0",
     "sass-loader": "^14.2.0",
     "typescript": "~4.5.5",
-    "vue": "3.3.13",
-    "vue-i18n": "^9.13.1",
-    "vue-router": "^4.3.2",
-    "vuex": "^4.1.0"
-  },
-  "peerDependencies": {
-    "vue": "^3.2.28"
+    "vue": "3.4.27",
+    "vue-router": "^4.3.2"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
@@ -82,10 +76,9 @@
     "url": "git+https://github.com/x-extends/vxe-table.git"
   },
   "keywords": [
-    "vxe-table",
-    "vxe-grid",
-    "vue table",
-    "vue grid"
+    "vxe",
+    "vxe-ui",
+    "vxe-table"
   ],
   "author": {
     "name": "Xu Liangzhan",
@@ -94,6 +87,5 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/x-extends/vxe-table/issues"
-  },
-  "homepage": "https://vxetable.cn/"
+  }
 }

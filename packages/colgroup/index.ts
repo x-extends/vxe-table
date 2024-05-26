@@ -1,19 +1,20 @@
 import { App } from 'vue'
-import VxeTableColgroupComponent from '../table/src/group'
-import { dynamicApp } from '../dynamics'
+import { VxeUI } from '@vxe-ui/core'
+import VxeColgroupComponent from '../table/src/group'
 
-export const VxeColgroup = Object.assign(VxeTableColgroupComponent, {
+export const VxeColgroup = Object.assign({}, VxeColgroupComponent, {
   install (app: App) {
-    app.component(VxeTableColgroupComponent.name, VxeTableColgroupComponent)
+    app.component(VxeColgroupComponent.name as string, VxeColgroupComponent)
     // 兼容旧用法
-    app.component('VxeTableColgroup', VxeTableColgroupComponent)
+    app.component('VxeTableColgroup', VxeColgroupComponent)
   }
 })
 
+if (VxeUI.dynamicApp) {
+  VxeUI.dynamicApp.component(VxeColgroupComponent.name as string, VxeColgroupComponent)
+  // 兼容旧用法
+  VxeUI.dynamicApp.component('VxeTableColgroup', VxeColgroupComponent)
+}
+
 export const Colgroup = VxeColgroup
-
-dynamicApp.component(VxeTableColgroupComponent.name, VxeTableColgroupComponent)
-// 兼容旧用法
-dynamicApp.component('VxeTableColgroup', VxeTableColgroupComponent)
-
 export default VxeColgroup

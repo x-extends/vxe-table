@@ -1,24 +1,24 @@
-import { defineComponent, getCurrentInstance, h, createCommentVNode, ComponentPublicInstance, resolveComponent, ComponentOptions, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
+import { defineComponent, h, createCommentVNode, ComponentPublicInstance, resolveComponent, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../tools/dom'
-import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../tools/utils'
-import { warnLog, errLog } from '../../tools/log'
-import { createResizeEvent, XEResizeObserver } from '../../tools/resize'
-import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
-import { useSize } from '../../hooks/size'
-import { VXETable } from '../../v-x-e-table'
-import GlobalConfig from '../../v-x-e-table/src/conf'
+import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
+import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
+import { VxeUI, getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, log, useSize } from '@vxe-ui/core'
 import Cell from './cell'
 import TableBodyComponent from './body'
 import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import VxeLoading from '../../loading/index'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement, getRootColumn } from './util'
-import { getSlotVNs } from '../../tools/vn'
+import { getSlotVNs } from '../../ui/src/vn'
+import TableCustomPanelComponent from '../module/custom/panel'
+import TableFilterPanelComponent from '../module/filter/panel'
+import TableImportPanelComponent from '../module/export/import-panel'
+import TableExportPanelComponent from '../module/export/export-panel'
+import TableMenuPanelComponent from '../module/menu/panel'
 
-import { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, VxeTooltipInstance, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, VxeTableMethods, TableMethods, VxeTableMenuPanelInstance, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeTableDataRow, VxeTableCustomStorageObj } from '../../../types/all'
+import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent } from 'vxe-pc-ui'
+import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes } from '../../../types'
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -34,13 +34,11 @@ export default defineComponent({
   setup (props, context) {
     const { slots, emit } = context
 
-    const hasUseTooltip = VXETable.tooltip
+    const hasUseTooltip = false
 
     const xID = XEUtils.uniqueId()
 
-    const computeSize = useSize(props)
-
-    const instance = getCurrentInstance()
+    const { computeSize } = useSize(props)
 
     const reactData = reactive<TableReactData>({
       // 低性能的静态列
@@ -334,7 +332,7 @@ export default defineComponent({
     const refTooltip = ref() as Ref<VxeTooltipInstance>
     const refCommTooltip = ref() as Ref<VxeTooltipInstance>
     const refValidTooltip = ref() as Ref<VxeTooltipInstance>
-    const refTableMenu = ref() as Ref<VxeTableMenuPanelInstance>
+    const refTableMenu = ref() as Ref<any>
     const refTableFilter = ref() as Ref<ComponentPublicInstance>
     const refTableCustom = ref() as Ref<ComponentPublicInstance>
 
@@ -353,19 +351,19 @@ export default defineComponent({
     const refCellResizeBar = ref() as Ref<HTMLDivElement>
     const refEmptyPlaceholder = ref() as Ref<HTMLDivElement>
 
-    const $xegrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xegrid', null)
-    let $xetoolbar: VxeToolbarConstructor
+    const $xeGrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xeGrid', null)
+    let $xeToolbar: VxeToolbarConstructor
 
     const computeValidOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
+      return Object.assign({}, getConfig().table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
     })
 
     const computeSXOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.scrollX, props.scrollX) as VxeTablePropTypes.SXOpts
+      return Object.assign({}, getConfig().table.scrollX, props.scrollX) as VxeTablePropTypes.SXOpts
     })
 
     const computeSYOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.scrollY, props.scrollY) as VxeTablePropTypes.SYOpts
+      return Object.assign({}, getConfig().table.scrollY, props.scrollY) as VxeTablePropTypes.SYOpts
     })
 
     const computeRowHeightMaps = computed(() => {
@@ -378,37 +376,37 @@ export default defineComponent({
     })
 
     const computeColumnOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.columnConfig, props.columnConfig) as VxeTablePropTypes.ColumnOpts
+      return Object.assign({}, getConfig().table.columnConfig, props.columnConfig) as VxeTablePropTypes.ColumnOpts
     })
 
     const computeRowOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
+      return Object.assign({}, getConfig().table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
     })
 
     const computeResizeleOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.resizeConfig, props.resizeConfig) as VxeTablePropTypes.ResizeOpts
+      return Object.assign({}, getConfig().table.resizeConfig, props.resizeConfig) as VxeTablePropTypes.ResizeOpts
     })
 
     const computeResizableOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.resizableConfig, props.resizableConfig) as VxeTablePropTypes.ResizableOpts
+      return Object.assign({}, getConfig().table.resizableConfig, props.resizableConfig) as VxeTablePropTypes.ResizableOpts
     })
 
     const computeSeqOpts = computed(() => {
-      return Object.assign({ startIndex: 0 }, GlobalConfig.table.seqConfig, props.seqConfig) as VxeTablePropTypes.SeqOpts
+      return Object.assign({ startIndex: 0 }, getConfig().table.seqConfig, props.seqConfig) as VxeTablePropTypes.SeqOpts
     })
 
     const computeRadioOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.radioConfig, props.radioConfig) as VxeTablePropTypes.RadioOpts
+      return Object.assign({}, getConfig().table.radioConfig, props.radioConfig) as VxeTablePropTypes.RadioOpts
     })
 
     const computeCheckboxOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.checkboxConfig, props.checkboxConfig) as VxeTablePropTypes.CheckboxOpts
+      return Object.assign({}, getConfig().table.checkboxConfig, props.checkboxConfig) as VxeTablePropTypes.CheckboxOpts
     })
 
     let computeTooltipOpts = ref() as ComputedRef<VxeTablePropTypes.TooltipOpts>
 
     computeTooltipOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.tooltip, GlobalConfig.table.tooltipConfig, props.tooltipConfig)
+      return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     })
 
     const computeTipConfig = computed(() => {
@@ -424,39 +422,39 @@ export default defineComponent({
     })
 
     const computeEditOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.editConfig, props.editConfig) as VxeTablePropTypes.EditOpts
+      return Object.assign({}, getConfig().table.editConfig, props.editConfig) as VxeTablePropTypes.EditOpts
     })
 
     const computeSortOpts = computed(() => {
-      return Object.assign({ orders: ['asc', 'desc', null] }, GlobalConfig.table.sortConfig, props.sortConfig) as VxeTablePropTypes.SortOpts
+      return Object.assign({ orders: ['asc', 'desc', null] }, getConfig().table.sortConfig, props.sortConfig) as VxeTablePropTypes.SortOpts
     })
 
     const computeFilterOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.filterConfig, props.filterConfig) as VxeTablePropTypes.FilterOpts
+      return Object.assign({}, getConfig().table.filterConfig, props.filterConfig) as VxeTablePropTypes.FilterOpts
     })
 
     const computeMouseOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.mouseConfig, props.mouseConfig) as VxeTablePropTypes.MouseOpts
+      return Object.assign({}, getConfig().table.mouseConfig, props.mouseConfig) as VxeTablePropTypes.MouseOpts
     })
 
     const computeAreaOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.areaConfig, props.areaConfig) as VxeTablePropTypes.AreaOpts
+      return Object.assign({}, getConfig().table.areaConfig, props.areaConfig) as VxeTablePropTypes.AreaOpts
     })
 
     const computeKeyboardOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.keyboardConfig, props.keyboardConfig) as VxeTablePropTypes.KeyboardOpts
+      return Object.assign({}, getConfig().table.keyboardConfig, props.keyboardConfig) as VxeTablePropTypes.KeyboardOpts
     })
 
     const computeClipOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.clipConfig, props.clipConfig)
+      return Object.assign({}, getConfig().table.clipConfig, props.clipConfig)
     })
 
     const computeFNROpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.fnrConfig, props.fnrConfig) as VxeTablePropTypes.FNROpts
+      return Object.assign({}, getConfig().table.fnrConfig, props.fnrConfig) as VxeTablePropTypes.FNROpts
     })
 
     const computeMenuOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.menuConfig, props.menuConfig) as VxeTablePropTypes.MenuOpts
+      return Object.assign({}, getConfig().table.menuConfig, props.menuConfig) as VxeTablePropTypes.MenuOpts
     })
 
     const computeHeaderMenu = computed(() => {
@@ -497,31 +495,31 @@ export default defineComponent({
     })
 
     const computeExportOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.exportConfig, props.exportConfig) as VxeTablePropTypes.ExportOpts
+      return Object.assign({}, getConfig().table.exportConfig, props.exportConfig) as VxeTablePropTypes.ExportOpts
     })
 
     const computeImportOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.importConfig, props.importConfig) as VxeTablePropTypes.ImportOpts
+      return Object.assign({}, getConfig().table.importConfig, props.importConfig) as VxeTablePropTypes.ImportOpts
     })
 
     const computePrintOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.printConfig, props.printConfig) as VxeTablePropTypes.PrintOpts
+      return Object.assign({}, getConfig().table.printConfig, props.printConfig) as VxeTablePropTypes.PrintOpts
     })
 
     const computeExpandOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.expandConfig, props.expandConfig) as VxeTablePropTypes.ExpandOpts
+      return Object.assign({}, getConfig().table.expandConfig, props.expandConfig) as VxeTablePropTypes.ExpandOpts
     })
 
     const computeTreeOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.treeConfig, props.treeConfig) as VxeTablePropTypes.TreeOpts
+      return Object.assign({}, getConfig().table.treeConfig, props.treeConfig) as VxeTablePropTypes.TreeOpts
     })
 
     const computeEmptyOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.emptyRender, props.emptyRender) as VxeTablePropTypes.EmptyOpts
+      return Object.assign({}, getConfig().table.emptyRender, props.emptyRender) as VxeTablePropTypes.EmptyOpts
     })
 
     const computeLoadingOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.loadingConfig, props.loadingConfig) as VxeTablePropTypes.LoadingOpts
+      return Object.assign({}, getConfig().table.loadingConfig, props.loadingConfig) as VxeTablePropTypes.LoadingOpts
     })
 
     const computeCellOffsetWidth = computed(() => {
@@ -529,7 +527,7 @@ export default defineComponent({
     })
 
     const computeCustomOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.table.customConfig, props.customConfig)
+      return Object.assign({}, getConfig().table.customConfig, props.customConfig)
     })
 
     const computeFixedColumnSize = computed(() => {
@@ -647,17 +645,16 @@ export default defineComponent({
       computeIsAllCheckboxDisabled
     }
 
-    const $xetable = {
+    const $xeTable = {
       xID,
       props: props as VxeTableProps,
       context,
-      instance,
       reactData,
       internalData,
       getRefMaps: () => refMaps,
       getComputeMaps: () => computeMaps,
 
-      xegrid: $xegrid
+      xegrid: $xeGrid
     } as unknown as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
 
     const eqCellValue = (row1: any, row2: any, field: string) => {
@@ -681,7 +678,7 @@ export default defineComponent({
     }
 
     const getCustomStorageMap = (key: string) => {
-      const version = GlobalConfig.version
+      const version = getConfig().version
       const rest = XEUtils.toStringJSON(localStorage.getItem(key) || '')
       return rest && rest._v === version ? rest : { _v: version }
     }
@@ -701,7 +698,7 @@ export default defineComponent({
       const { fullDataRowIdData } = internalData
       const reserveList: any[] = []
       XEUtils.each(reserveRowMap, (item, rowid) => {
-        if (fullDataRowIdData[rowid] && $xetable.findRowIndexOf(reserveList, fullDataRowIdData[rowid].row) === -1) {
+        if (fullDataRowIdData[rowid] && $xeTable.findRowIndexOf(reserveList, fullDataRowIdData[rowid].row) === -1) {
           reserveList.push(fullDataRowIdData[rowid].row)
         }
       })
@@ -788,7 +785,7 @@ export default defineComponent({
           merges = [merges]
         }
         if (treeConfig && merges.length) {
-          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
+          log.err('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
         merges.forEach((item) => {
           let { row, col, rowspan, colspan } = item
@@ -802,7 +799,7 @@ export default defineComponent({
             rowspan = XEUtils.toNumber(rowspan) || 1
             colspan = XEUtils.toNumber(colspan) || 1
             if (rowspan > 1 || colspan > 1) {
-              const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && ((item as any)._col.id === col || item._col.id === (col as VxeTableDefines.ColumnInfo).id))
+              const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xeTable, item._row) === getRowid($xeTable, row)) && ((item as any)._col.id === col || item._col.id === (col as VxeTableDefines.ColumnInfo).id))
               const mergeItem = mList[mcIndex]
               if (mergeItem) {
                 mergeItem.rowspan = rowspan
@@ -810,7 +807,7 @@ export default defineComponent({
                 mergeItem._rowspan = rowspan
                 mergeItem._colspan = colspan
               } else {
-                const mergeRowIndex = rowList ? $xetable.findRowIndexOf(rowList, row) : row
+                const mergeRowIndex = rowList ? $xeTable.findRowIndexOf(rowList, row) : row
                 const mergeColIndex = tableMethods.getVTColumnIndex(col)
                 mList.push({
                   row: mergeRowIndex,
@@ -838,7 +835,7 @@ export default defineComponent({
           merges = [merges]
         }
         if (treeConfig && merges.length) {
-          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
+          log.err('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
         merges.forEach((item) => {
           let { row, col } = item
@@ -848,7 +845,7 @@ export default defineComponent({
           if (XEUtils.isNumber(col)) {
             col = visibleColumn[col]
           }
-          const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xetable, item._row) === getRowid($xetable, row)) && ((item as any)._col.id === col || item._col.id === (col as VxeTableDefines.ColumnInfo).id))
+          const mcIndex = XEUtils.findIndexOf(mList, item => (item._row === row || getRowid($xeTable, item._row) === getRowid($xeTable, row)) && ((item as any)._col.id === col || item._col.id === (col as VxeTableDefines.ColumnInfo).id))
           if (mcIndex > -1) {
             const rItems = mList.splice(mcIndex, 1)
             rest.push(rItems[0])
@@ -873,7 +870,7 @@ export default defineComponent({
         if (val === 'auto') {
           num = parentHeight
         } else {
-          const excludeHeight = $xetable.getExcludeHeight()
+          const excludeHeight = $xeTable.getExcludeHeight()
           if (isScale(val)) {
             num = Math.floor((XEUtils.toInteger(val) || 1) / 100 * parentHeight)
           } else {
@@ -893,7 +890,7 @@ export default defineComponent({
       const customOpts = computeCustomOpts.value
       const { storage } = customOpts
       const isAllCustom = storage === true
-      const storageOpts: VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
+      const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
       const isCustomResizable = isAllCustom || storageOpts.resizable
       const isCustomVisible = isAllCustom || storageOpts.visible
       const isCustomFixed = isAllCustom || storageOpts.fixed
@@ -909,7 +906,7 @@ export default defineComponent({
           }
         } = {}
         if (!id) {
-          errLog('vxe.error.reqProp', ['id'])
+          log.err('vxe.error.reqProp', ['id'])
           return
         }
         // 自定义列宽
@@ -1035,9 +1032,9 @@ export default defineComponent({
         const { id: colid, field, fixed, type, treeNode } = column
         const rest = { column, colid, index, items, parent }
         if (field) {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (fullColumnFieldData[field]) {
-              warnLog('vxe.error.colRepet', ['field', field])
+              log.warn('vxe.error.colRepet', ['field', field])
             }
           }
           fullColumnFieldData[field] = rest
@@ -1049,35 +1046,35 @@ export default defineComponent({
           htmlColumn = column
         }
         if (treeNode) {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (treeNodeColumn) {
-              warnLog('vxe.error.colRepet', ['tree-node', treeNode])
+              log.warn('vxe.error.colRepet', ['tree-node', treeNode])
             }
           }
           if (!treeNodeColumn) {
             treeNodeColumn = column
           }
         } else if (type === 'expand') {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (expandColumn) {
-              warnLog('vxe.error.colRepet', ['type', type])
+              log.warn('vxe.error.colRepet', ['type', type])
             }
           }
           if (!expandColumn) {
             expandColumn = column
           }
         }
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (type === 'checkbox') {
             if (checkboxColumn) {
-              warnLog('vxe.error.colRepet', ['type', type])
+              log.warn('vxe.error.colRepet', ['type', type])
             }
             if (!checkboxColumn) {
               checkboxColumn = column
             }
           } else if (type === 'radio') {
             if (radioColumn) {
-              warnLog('vxe.error.colRepet', ['type', type])
+              log.warn('vxe.error.colRepet', ['type', type])
             }
             if (!radioColumn) {
               radioColumn = column
@@ -1088,7 +1085,7 @@ export default defineComponent({
           isAllOverflow = false
         }
         if (fullColumnIdData[colid]) {
-          errLog('vxe.error.colRepet', ['colId', colid])
+          log.err('vxe.error.colRepet', ['colId', colid])
         }
         fullColumnIdData[colid] = rest
       }
@@ -1101,19 +1098,19 @@ export default defineComponent({
         tableFullColumn.forEach(handleFunc)
       }
 
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (expandColumn && mouseOpts.area) {
-          errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+          log.err('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
         }
       }
 
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (htmlColumn) {
           if (!columnOpts.useKey) {
-            errLog('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
+            log.err('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
           }
           if (!rowOpts.useKey) {
-            errLog('vxe.error.reqProp', ['row-config.useKey', 'column.type=html'])
+            log.err('vxe.error.reqProp', ['row-config.useKey', 'column.type=html'])
           }
         }
       }
@@ -1300,7 +1297,7 @@ export default defineComponent({
       const fullMaps: Record<string, any> = {}
       if (treeConfig) {
         XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           const allrest = fullAllDataRowIdData[rowid]
           const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
           if (allrest) {
@@ -1315,7 +1312,7 @@ export default defineComponent({
         }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
       } else {
         afterFullData.forEach((row, index) => {
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           const allrest = fullAllDataRowIdData[rowid]
           const seq = index + 1
           if (allrest) {
@@ -1346,8 +1343,8 @@ export default defineComponent({
           [key: string]: number
         } = {}
         XEUtils.eachTree(internalData.afterTreeFullData, (row, index, items, path, parent) => {
-          const rowid = getRowid($xetable, row)
-          const parentRowid = getRowid($xetable, parent)
+          const rowid = getRowid($xeTable, row)
+          const parentRowid = getRowid($xeTable, parent)
           if (!parent || (expandMaps[parentRowid] && treeExpandedMaps[parentRowid])) {
             expandMaps[rowid] = 1
             fullData.push(row)
@@ -1413,18 +1410,18 @@ export default defineComponent({
           const handleFilter = (row: any) => {
             return filterColumns.every(({ column, valueList, itemList }) => {
               const { filterMethod, filterRender } = column
-              const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+              const compConf = filterRender ? renderer.get(filterRender.name) : null
               const compFilterMethod = compConf ? compConf.filterMethod : null
               const defaultFilterMethod = compConf ? compConf.defaultFilterMethod : null
               const cellValue = getCellValue(row, column)
               if (filterMethod) {
-                return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
+                return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
               } else if (compFilterMethod) {
-                return itemList.some((item) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
+                return itemList.some((item) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
               } else if (allFilterMethod) {
                 return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
               } else if (defaultFilterMethod) {
-                return itemList.some((item) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xetable }))
+                return itemList.some((item) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
               }
               return valueList.indexOf(XEUtils.get(row, column.field)) > -1
             })
@@ -1454,7 +1451,7 @@ export default defineComponent({
           if (treeConfig && transform) {
             // 虚拟树和列表一样，只能排序根级节点
             if (allSortMethod) {
-              const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: $xetable })
+              const sortRests = allSortMethod({ data: tableTree, sortList: orderColumns, $table: $xeTable })
               tableTree = XEUtils.isArray(sortRests) ? sortRests : tableTree
             } else {
               tableTree = XEUtils.orderBy(tableTree, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
@@ -1462,7 +1459,7 @@ export default defineComponent({
             tableData = tableTree
           } else {
             if (allSortMethod) {
-              const sortRests = allSortMethod({ data: tableData, sortList: orderColumns, $table: $xetable })
+              const sortRests = allSortMethod({ data: tableData, sortList: orderColumns, $table: $xeTable })
               tableData = XEUtils.isArray(sortRests) ? sortRests : tableData
             } else {
               tableData = XEUtils.orderBy(tableData, orderColumns.map(({ column, order }) => [getOrderField(column), order]))
@@ -1730,14 +1727,14 @@ export default defineComponent({
         tableMethods.setCurrentRow(currentRow)
       }
       if (mouseConfig && mouseOpts.selected && editStore.selected.row && editStore.selected.column) {
-        $xetable.addCellSelectedClass()
+        $xeTable.addCellSelectedClass()
       }
       return nextTick()
     }
 
     const checkValidate = (type: any) => {
-      if ($xetable.triggerValidate) {
-        return $xetable.triggerValidate(type)
+      if ($xeTable.triggerValidate) {
+        return $xeTable.triggerValidate(type)
       }
       return nextTick()
     }
@@ -1750,7 +1747,7 @@ export default defineComponent({
       checkValidate('blur')
         .catch((e: any) => e)
         .then(() => {
-          $xetable.handleActived(params, evnt)
+          $xeTable.handleActived(params, evnt)
             .then(() => checkValidate('change'))
             .catch((e: any) => e)
         })
@@ -1821,7 +1818,7 @@ export default defineComponent({
             handleCheckedRadioRow(fullDataRowIdData[rowid].row, true)
           }
           if (reserve) {
-            const rowkey = getRowkey($xetable)
+            const rowkey = getRowkey($xeTable)
             internalData.radioReserveRow = { [rowkey]: rowid }
           }
         }
@@ -1862,7 +1859,7 @@ export default defineComponent({
       const { checkboxReserveRowMap } = internalData
       const checkboxOpts = computeCheckboxOpts.value
       if (checkboxOpts.reserve) {
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (checked) {
           checkboxReserveRowMap[rowid] = row
         } else if (checkboxReserveRowMap[rowid]) {
@@ -1921,7 +1918,7 @@ export default defineComponent({
           const checkValFn = (row: any) => {
             if (isForce || (!checkMethod || checkMethod({ row }))) {
               if (value) {
-                selectRowMaps[getRowid($xetable, row)] = row
+                selectRowMaps[getRowid($xeTable, row)] = row
               }
               XEUtils.set(row, checkField, value)
             }
@@ -1949,7 +1946,7 @@ export default defineComponent({
                */
               XEUtils.eachTree(afterFullData, (row) => {
                 if (isForce || (!checkMethod || checkMethod({ row }))) {
-                  selectRowMaps[getRowid($xetable, row)] = row
+                  selectRowMaps[getRowid($xeTable, row)] = row
                 }
               }, { children: childrenField })
             } else {
@@ -1959,7 +1956,7 @@ export default defineComponent({
                */
               if (!isForce && checkMethod) {
                 XEUtils.eachTree(afterFullData, (row) => {
-                  const rowid = getRowid($xetable, row)
+                  const rowid = getRowid($xeTable, row)
                   if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
                     selectRowMaps[rowid] = row
                   }
@@ -1975,14 +1972,14 @@ export default defineComponent({
                */
               if (!isForce && checkMethod) {
                 afterFullData.forEach((row) => {
-                  const rowid = getRowid($xetable, row)
+                  const rowid = getRowid($xeTable, row)
                   if (selectCheckboxMaps[rowid] || checkMethod({ row })) {
                     selectRowMaps[rowid] = row
                   }
                 })
               } else {
                 afterFullData.forEach(row => {
-                  selectRowMaps[getRowid($xetable, row)] = row
+                  selectRowMaps[getRowid($xeTable, row)] = row
                 })
               }
             } else {
@@ -1993,7 +1990,7 @@ export default defineComponent({
                */
               if (!isForce && checkMethod) {
                 afterFullData.forEach((row) => {
-                  const rowid = getRowid($xetable, row)
+                  const rowid = getRowid($xeTable, row)
                   if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
                     selectRowMaps[rowid] = row
                   }
@@ -2029,12 +2026,12 @@ export default defineComponent({
       const radioOpts = computeRadioOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       // 单选框
-      if (selectRadioRow && !fullAllDataRowIdData[getRowid($xetable, selectRadioRow)]) {
+      if (selectRadioRow && !fullAllDataRowIdData[getRowid($xeTable, selectRadioRow)]) {
         reactData.selectRadioRow = null // 刷新单选行状态
       }
       // 还原保留选中状态
       if (radioOpts.reserve && radioReserveRow) {
-        const rowid = getRowid($xetable, radioReserveRow)
+        const rowid = getRowid($xeTable, radioReserveRow)
         if (fullDataRowIdData[rowid]) {
           handleCheckedRadioRow(fullDataRowIdData[rowid].row, true)
         }
@@ -2045,7 +2042,7 @@ export default defineComponent({
       if (checkboxOpts.reserve) {
         handleCheckedCheckboxRow(handleReserveRow(internalData.checkboxReserveRowMap), true, true)
       }
-      if (currentRow && !fullAllDataRowIdData[getRowid($xetable, currentRow)]) {
+      if (currentRow && !fullAllDataRowIdData[getRowid($xeTable, currentRow)]) {
         reactData.currentRow = null // 刷新当前行状态
       }
       // 行展开
@@ -2075,7 +2072,7 @@ export default defineComponent({
           tableMethods.setAllTreeExpand(true)
         } else if (expandRowKeys) {
           const defExpandeds: any[] = []
-          const rowkey = getRowkey($xetable)
+          const rowkey = getRowkey($xeTable)
           expandRowKeys.forEach((rowid: any) => {
             const matchObj = XEUtils.findTree(tableFullData, item => rowid === XEUtils.get(item, rowkey), { children: childrenField })
             if (matchObj) {
@@ -2096,10 +2093,10 @@ export default defineComponent({
         if (loadMethod) {
           const { treeExpandLazyLoadedMaps } = reactData
           const { fullAllDataRowIdData } = internalData
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           const rest = fullAllDataRowIdData[rowid]
           treeExpandLazyLoadedMaps[rowid] = row
-          loadMethod({ $table: $xetable, row }).then((childRecords: any) => {
+          loadMethod({ $table: $xeTable, row }).then((childRecords: any) => {
             rest.treeLoaded = true
             if (treeExpandLazyLoadedMaps[rowid]) {
               delete treeExpandLazyLoadedMaps[rowid]
@@ -2143,7 +2140,7 @@ export default defineComponent({
       const { treeExpandedReserveRowMap } = internalData
       const treeOpts = computeTreeOpts.value
       if (treeOpts.reserve) {
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (expanded) {
           treeExpandedReserveRowMap[rowid] = row
         } else if (treeExpandedReserveRowMap[rowid]) {
@@ -2159,10 +2156,10 @@ export default defineComponent({
         if (loadMethod) {
           const { fullAllDataRowIdData } = internalData
           const { rowExpandLazyLoadedMaps } = reactData
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           const rest = fullAllDataRowIdData[rowid]
           rowExpandLazyLoadedMaps[rowid] = row
-          loadMethod({ $table: $xetable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).then(() => {
+          loadMethod({ $table: $xeTable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).then(() => {
             const { rowExpandedMaps } = reactData
             rest.expandLoaded = true
             rowExpandedMaps[rowid] = row
@@ -2185,7 +2182,7 @@ export default defineComponent({
       const { rowExpandedReserveRowMap } = internalData
       const expandOpts = computeExpandOpts.value
       if (expandOpts.reserve) {
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (expanded) {
           rowExpandedReserveRowMap[rowid] = row
         } else if (rowExpandedReserveRowMap[rowid]) {
@@ -2258,25 +2255,25 @@ export default defineComponent({
       if (treeConfig) {
         if (transform) {
           // 树结构自动转换
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (!treeOpts.rowField) {
-              errLog('vxe.error.reqProp', ['tree-config.rowField'])
+              log.err('vxe.error.reqProp', ['tree-config.rowField'])
             }
             if (!treeOpts.parentField) {
-              errLog('vxe.error.reqProp', ['tree-config.parentField'])
+              log.err('vxe.error.reqProp', ['tree-config.parentField'])
             }
             if (!childrenField) {
-              errLog('vxe.error.reqProp', ['tree-config.childrenField'])
+              log.err('vxe.error.reqProp', ['tree-config.childrenField'])
             }
             if (!treeOpts.mapChildrenField) {
-              errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
+              log.err('vxe.error.reqProp', ['tree-config.mapChildrenField'])
             }
             if (childrenField === treeOpts.mapChildrenField) {
-              errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
+              log.err('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
             }
             // fullData.forEach(row => {
             //   if (row[treeOpts.children] && row[treeOpts.children].length) {
-            //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+            //     log.warn('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
             //   }
             // })
           }
@@ -2311,22 +2308,22 @@ export default defineComponent({
       if (keepSource) {
         tablePrivateMethods.cacheSourceMap(fullData)
       }
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (sYLoad) {
           if (!(props.height || props.maxHeight)) {
-            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+            log.err('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
           }
           if (!props.showOverflow) {
-            warnLog('vxe.error.reqProp', ['table.show-overflow'])
+            log.warn('vxe.error.reqProp', ['table.show-overflow'])
           }
           if (props.spanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['table.span-method'])
+            log.warn('vxe.error.scrollErrProp', ['table.span-method'])
           }
         }
       }
-      if ($xetable.clearCellAreas && props.mouseConfig) {
-        $xetable.clearCellAreas()
-        $xetable.clearCopyCellArea()
+      if ($xeTable.clearCellAreas && props.mouseConfig) {
+        $xeTable.clearCellAreas()
+        $xeTable.clearCopyCellArea()
       }
       tableMethods.clearMergeCells()
       tableMethods.clearMergeFooterItems()
@@ -2361,9 +2358,9 @@ export default defineComponent({
               }
               // 是否变更虚拟滚动
               if (oldScrollYLoad === sYLoad) {
-                restoreScrollLocation($xetable, targetScrollLeft, targetScrollTop).then(resolve)
+                restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop).then(resolve)
               } else {
-                setTimeout(() => restoreScrollLocation($xetable, targetScrollLeft, targetScrollTop).then(resolve))
+                setTimeout(() => restoreScrollLocation($xeTable, targetScrollLeft, targetScrollTop).then(resolve))
               }
             })
         })
@@ -2455,7 +2452,7 @@ export default defineComponent({
             column.fixed = parent.fixed
           }
           if (parent && column.fixed !== parent.fixed) {
-            errLog('vxe.error.groupFixed')
+            log.err('vxe.error.groupFixed')
           }
           if (isColGroup) {
             column.visible = !!XEUtils.findTree(column.children, (subColumn) => hasChildrenList(subColumn) ? false : subColumn.visible)
@@ -2501,18 +2498,18 @@ export default defineComponent({
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           // if (props.showHeader && !props.showHeaderOverflow) {
-          //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
+          //   log.warn('vxe.error.reqProp', ['show-header-overflow'])
           // }
           // if (props.showFooter && !props.showFooterOverflow) {
-          //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
+          //   log.warn('vxe.error.reqProp', ['show-footer-overflow'])
           // }
           if (props.spanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['span-method'])
+            log.warn('vxe.error.scrollErrProp', ['span-method'])
           }
           if (props.footerSpanMethod) {
-            warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
+            log.warn('vxe.error.scrollErrProp', ['footer-span-method'])
           }
         }
         const { visibleSize } = computeVirtualX()
@@ -2568,14 +2565,14 @@ export default defineComponent({
       tableMethods.clearMergeCells()
       tableMethods.clearMergeFooterItems()
       tablePrivateMethods.handleTableData(true)
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
-          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+          log.warn('vxe.error.scrollErrProp', ['column.type=expand'])
         }
       }
       return nextTick().then(() => {
-        if ($xetoolbar) {
-          $xetoolbar.syncUpdate({ collectColumn, $table: $xetable })
+        if ($xeToolbar) {
+          $xeToolbar.syncUpdate({ collectColumn, $table: $xeTable })
         }
         return tableMethods.recalculate()
       })
@@ -2610,14 +2607,14 @@ export default defineComponent({
       const result: any[] = []
       const columnIndex = tableMethods.getColumnIndex(treeNodeColumn)
       const $columnIndex = tableMethods.getVMColumnIndex(treeNodeColumn)
-      let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xetable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
+      let validRows = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column: treeNodeColumn, columnIndex, $columnIndex, row })) : rows
       if (accordion) {
         validRows = validRows.length ? [validRows[validRows.length - 1]] : []
         // 同一级只能展开一个
         const matchObj = XEUtils.findTree(tableFullData, item => item === validRows[0], { children: childrenField })
         if (matchObj) {
           matchObj.items.forEach(item => {
-            const rowid = getRowid($xetable, item)
+            const rowid = getRowid($xeTable, item)
             if (treeTempExpandedMaps[rowid]) {
               delete treeTempExpandedMaps[rowid]
             }
@@ -2626,7 +2623,7 @@ export default defineComponent({
       }
       if (expanded) {
         validRows.forEach((row: any) => {
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           if (!treeTempExpandedMaps[rowid]) {
             const rest = fullAllDataRowIdData[rowid]
             const isLoad = lazy && row[hasChildField] && !rest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
@@ -2642,7 +2639,7 @@ export default defineComponent({
         })
       } else {
         validRows.forEach(item => {
-          const rowid = getRowid($xetable, item)
+          const rowid = getRowid($xeTable, item)
           if (treeTempExpandedMaps[rowid]) {
             delete treeTempExpandedMaps[rowid]
           }
@@ -2701,7 +2698,7 @@ export default defineComponent({
       return function (row: any) {
         const { fullAllDataRowIdData } = internalData
         if (row) {
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           const rest = fullAllDataRowIdData[rowid]
           if (rest) {
             return rest[prop]
@@ -2732,13 +2729,13 @@ export default defineComponent({
 
     tableMethods = {
       dispatchEvent (type, params, evnt) {
-        emit(type, Object.assign({ $table: $xetable, $grid: $xegrid, $event: evnt }, params))
+        emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
       },
       /**
        * 重置表格的一切数据状态
        */
       clearAll () {
-        return clearTableAllStatus($xetable)
+        return clearTableAllStatus($xeTable)
       },
       /**
        * 同步 data 数据（即将废弃）
@@ -2746,7 +2743,7 @@ export default defineComponent({
        * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
        */
       syncData () {
-        warnLog('vxe.error.delFunc', ['syncData', 'getData'])
+        log.warn('vxe.error.delFunc', ['syncData', 'getData'])
         return nextTick().then(() => {
           reactData.tableData = []
           emit('update:data', internalData.tableFullData)
@@ -2775,7 +2772,7 @@ export default defineComponent({
           return tableMethods.recalculate(true)
         }).then(() => {
           // 存在滚动行为未结束情况
-          setTimeout(() => $xetable.recalculate(), 50)
+          setTimeout(() => $xeTable.recalculate(), 50)
         })
       },
       /**
@@ -2842,8 +2839,8 @@ export default defineComponent({
           }
           reactData.tableData = tableData.slice(0)
         } else {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            warnLog('vxe.error.reqProp', ['keep-source'])
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
+            log.warn('vxe.error.reqProp', ['keep-source'])
           }
         }
         return nextTick()
@@ -2857,22 +2854,22 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
-        const parentRest = fullAllDataRowIdData[getRowid($xetable, row)]
+        const parentRest = fullAllDataRowIdData[getRowid($xeTable, row)]
         const parentLevel = parentRest ? parentRest.level : 0
         return tableMethods.createData(childRecords).then((rows) => {
           if (keepSource) {
-            const rowid = getRowid($xetable, row)
-            const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid($xetable, item), { children: childrenField })
+            const rowid = getRowid($xeTable, row)
+            const matchObj = XEUtils.findTree(tableSourceData, (item) => rowid === getRowid($xeTable, item), { children: childrenField })
             if (matchObj) {
               matchObj.item[childrenField] = XEUtils.clone(rows, true)
             }
             rows.forEach(childRow => {
-              const rowid = getRowid($xetable, childRow)
+              const rowid = getRowid($xeTable, childRow)
               sourceDataRowIdData[rowid] = XEUtils.clone(childRow, true)
             })
           }
           XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
-            const rowid = getRowid($xetable, childRow)
+            const rowid = getRowid($xeTable, childRow)
             const parentRow = parent || parentRest.row
             const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length }
             fullDataRowIdData[rowid] = rest
@@ -2892,7 +2889,7 @@ export default defineComponent({
        * @param {ColumnInfo} columns 列配置
        */
       loadColumn (columns) {
-        const collectColumn = XEUtils.mapTree(columns, column => reactive(Cell.createColumn($xetable, column)))
+        const collectColumn = XEUtils.mapTree(columns, column => reactive(Cell.createColumn($xeTable, column)))
         return handleColumn(collectColumn)
       },
       /**
@@ -3007,8 +3004,8 @@ export default defineComponent({
         const { keepSource } = props
         const { tableSourceData, sourceDataRowIdData } = internalData
         if (!keepSource) {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            warnLog('vxe.error.reqProp', ['keep-source'])
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
+            log.warn('vxe.error.reqProp', ['keep-source'])
           }
           return nextTick()
         }
@@ -3018,12 +3015,12 @@ export default defineComponent({
             targetRows = [rows]
           }
         } else {
-          targetRows = XEUtils.toArray($xetable.getUpdateRecords())
+          targetRows = XEUtils.toArray($xeTable.getUpdateRecords())
         }
         if (targetRows.length) {
           targetRows.forEach((row: any) => {
             if (!tableMethods.isInsertByRow(row)) {
-              const rowid = getRowid($xetable, row)
+              const rowid = getRowid($xeTable, row)
               const oRow = sourceDataRowIdData[rowid]
               if (oRow && row) {
                 if (field) {
@@ -3075,7 +3072,7 @@ export default defineComponent({
        */
       isInsertByRow (row) {
         const { editStore } = reactData
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         return editStore.insertMaps[rowid]
       },
       /**
@@ -3085,7 +3082,7 @@ export default defineComponent({
       removeInsertRow () {
         const { editStore } = reactData
         editStore.insertMaps = {}
-        return $xetable.remove($xetable.getInsertRecords())
+        return $xeTable.remove($xeTable.getInsertRecords())
       },
       /**
        * 检查行或列数据是否发生改变
@@ -3096,7 +3093,7 @@ export default defineComponent({
         const { keepSource } = props
         const { tableFullColumn, fullDataRowIdData, sourceDataRowIdData } = internalData
         if (keepSource) {
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           // 新增的数据不需要检测
           if (!fullDataRowIdData[rowid]) {
             return false
@@ -3205,7 +3202,7 @@ export default defineComponent({
           if (XEUtils.isString(rowOrRowid)) {
             rowid = rowOrRowid
           } else {
-            rowid = getRowid($xetable, rowOrRowid)
+            rowid = getRowid($xeTable, rowOrRowid)
           }
           if (rowid) {
             const rest = fullDataRowIdData[rowid]
@@ -3228,7 +3225,7 @@ export default defineComponent({
        * @param {Row} row 行对象
        */
       getRowid (row) {
-        return getRowid($xetable, row)
+        return getRowid($xeTable, row)
       },
       /**
        * 获取处理后的表格数据
@@ -3249,18 +3246,18 @@ export default defineComponent({
        * 设置为固定列
        */
       setColumnFixed (fieldOrColumn, fixed) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
-        const targetColumn = getRootColumn($xetable, column as any)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        const targetColumn = getRootColumn($xeTable, column as any)
         const isMaxFixedColumn = computeIsMaxFixedColumn.value
         const columnOpts = computeColumnOpts.value
         const { maxFixedSize } = columnOpts
         if (targetColumn && targetColumn.fixed !== fixed) {
           // 是否超过最大固定列数量
           if (!targetColumn.fixed && isMaxFixedColumn) {
-            if (VXETable.modal) {
-              VXETable.modal.message({
+            if (VxeUI.modal) {
+              VxeUI.modal.message({
                 status: 'error',
-                content: GlobalConfig.i18n('vxe.table.maxFixedCol', [maxFixedSize])
+                content: getI18n('vxe.table.maxFixedCol', [maxFixedSize])
               })
             }
             return nextTick()
@@ -3277,8 +3274,8 @@ export default defineComponent({
        * 取消指定固定列
        */
       clearColumnFixed (fieldOrColumn) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
-        const targetColumn = getRootColumn($xetable, column as any)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        const targetColumn = getRootColumn($xeTable, column as any)
         if (targetColumn && targetColumn.fixed) {
           XEUtils.eachTree([targetColumn], (column) => {
             column.fixed = null
@@ -3292,7 +3289,7 @@ export default defineComponent({
        * 隐藏指定列
        */
       hideColumn (fieldOrColumn) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && column.visible) {
           column.visible = false
           return tablePrivateMethods.handleCustom()
@@ -3303,7 +3300,7 @@ export default defineComponent({
        * 显示指定列
        */
       showColumn (fieldOrColumn) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && !column.visible) {
           column.visible = true
           return tablePrivateMethods.handleCustom()
@@ -3311,7 +3308,7 @@ export default defineComponent({
         return nextTick()
       },
       setColumnWidth (fieldOrColumn, width) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
           const colWidth = XEUtils.toInteger(width)
           let rdWidth = colWidth
@@ -3326,7 +3323,7 @@ export default defineComponent({
         return nextTick()
       },
       getColumnWidth (fieldOrColumn) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
           return column.renderWidth
         }
@@ -3341,7 +3338,7 @@ export default defineComponent({
         const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod } = customOpts
-        const opts: VxeTableCustomStorageObj = Object.assign({
+        const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({
           visible: true,
           resizable: options === true,
           fixed: options === true,
@@ -3407,7 +3404,7 @@ export default defineComponent({
         return new Promise(resolve => {
           // 还原滚动条位置
           if (lastScrollLeft || lastScrollTop) {
-            return restoreScrollLocation($xetable, lastScrollLeft, lastScrollTop).then().then(() => {
+            return restoreScrollLocation($xeTable, lastScrollLeft, lastScrollTop).then().then(() => {
               // 存在滚动行为未结束情况
               setTimeout(resolve, 30)
             })
@@ -3518,11 +3515,11 @@ export default defineComponent({
         if (checkField) {
           return XEUtils.get(row, checkField)
         }
-        return !!selectCheckboxMaps[getRowid($xetable, row)]
+        return !!selectCheckboxMaps[getRowid($xeTable, row)]
       },
       isIndeterminateByCheckboxRow (row) {
         const { treeIndeterminateMaps } = reactData
-        return !!treeIndeterminateMaps[getRowid($xetable, row)] && !tableMethods.isCheckedByCheckboxRow(row)
+        return !!treeIndeterminateMaps[getRowid($xeTable, row)] && !tableMethods.isCheckedByCheckboxRow(row)
       },
       /**
        * 多选，切换某一行的选中状态
@@ -3531,7 +3528,7 @@ export default defineComponent({
         const { selectCheckboxMaps } = reactData
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField } = checkboxOpts
-        const value = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xetable, row)]
+        const value = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xeTable, row)]
         tablePrivateMethods.handleSelectRow({ row }, value, true)
         return nextTick()
       },
@@ -3552,13 +3549,13 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
         if (radioOpts.reserve && radioReserveRow) {
-          const rowid = getRowid($xetable, radioReserveRow)
+          const rowid = getRowid($xeTable, radioReserveRow)
           if (isFull) {
             if (!fullDataRowIdData[rowid]) {
               return radioReserveRow
             }
           } else {
-            const rowkey = getRowkey($xetable)
+            const rowkey = getRowkey($xeTable)
             if (treeConfig) {
               const matchObj = XEUtils.findTree(afterFullData, row => rowid === XEUtils.get(row, rowkey), { children: childrenField })
               if (matchObj) {
@@ -3591,11 +3588,11 @@ export default defineComponent({
           const afterFullIdMaps: { [key: string]: number } = {}
           if (treeConfig) {
             XEUtils.eachTree(afterFullData, row => {
-              afterFullIdMaps[getRowid($xetable, row)] = 1
+              afterFullIdMaps[getRowid($xeTable, row)] = 1
             }, { children: childrenField })
           } else {
             afterFullData.forEach(row => {
-              afterFullIdMaps[getRowid($xetable, row)] = 1
+              afterFullIdMaps[getRowid($xeTable, row)] = 1
             })
           }
           XEUtils.each(checkboxReserveRowMap, (oldRow, oldRowid) => {
@@ -3671,13 +3668,13 @@ export default defineComponent({
         reactData.currentRow = row
         if (rowOpts.isCurrent || props.highlightCurrentRow) {
           if (el) {
-            XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xetable, row)}"]`), elem => addClass(elem, 'row--current'))
+            XEUtils.arrayEach(el.querySelectorAll(`[rowid="${getRowid($xeTable, row)}"]`), elem => addClass(elem, 'row--current'))
           }
         }
         return nextTick()
       },
       isCheckedByRadioRow (row) {
-        return $xetable.eqRow(reactData.selectRadioRow, row)
+        return $xeTable.eqRow(reactData.selectRadioRow, row)
       },
       /**
        * 用于单选行，设置某一行为选中状态
@@ -3719,7 +3716,7 @@ export default defineComponent({
         const { fullDataRowIdData, afterFullRowMaps } = internalData
         const { selectRadioRow } = reactData
         if (selectRadioRow) {
-          const rowid = getRowid($xetable, selectRadioRow)
+          const rowid = getRowid($xeTable, selectRadioRow)
           if (isFull) {
             if (fullDataRowIdData[rowid]) {
               return selectRadioRow
@@ -3740,7 +3737,7 @@ export default defineComponent({
        * 用于当前列，设置某列行为高亮状态
        */
       setCurrentColumn (fieldOrColumn) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
           // tableMethods.clearCurrentRow()
           tableMethods.clearCurrentColumn()
@@ -3763,7 +3760,7 @@ export default defineComponent({
         }
         if (status) {
           rows.forEach((row: any) => {
-            const rowid = getRowid($xetable, row)
+            const rowid = getRowid($xeTable, row)
             if (rowid && !pendingMaps[rowid]) {
               pendingList.push(row)
               pendingMaps[rowid] = row
@@ -3771,9 +3768,9 @@ export default defineComponent({
           })
         } else {
           rows.forEach((row: any) => {
-            const rowid = getRowid($xetable, row)
+            const rowid = getRowid($xeTable, row)
             if (rowid && pendingMaps[rowid]) {
-              const pendingIndex = $xetable.findRowIndexOf(pendingList, row)
+              const pendingIndex = $xeTable.findRowIndexOf(pendingList, row)
               if (pendingIndex > -1) {
                 pendingList.splice(pendingIndex, 1)
               }
@@ -3792,10 +3789,10 @@ export default defineComponent({
           rows = [rows]
         }
         rows.forEach((row: any) => {
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           if (rowid) {
             if (pendingMaps[rowid]) {
-              const pendingIndex = $xetable.findRowIndexOf(pendingList, row)
+              const pendingIndex = $xeTable.findRowIndexOf(pendingList, row)
               if (pendingIndex > -1) {
                 pendingList.splice(pendingIndex, 1)
               }
@@ -3812,7 +3809,7 @@ export default defineComponent({
       },
       hasPendingByRow (row) {
         const { pendingRowMaps } = reactData
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         return !!pendingRowMaps[rowid]
       },
       getPendingRecords () {
@@ -3876,7 +3873,7 @@ export default defineComponent({
       clearSort (fieldOrColumn) {
         const sortOpts = computeSortOpts.value
         if (fieldOrColumn) {
-          const column = handleFieldOrColumn($xetable, fieldOrColumn)
+          const column = handleFieldOrColumn($xeTable, fieldOrColumn)
           if (column) {
             column.order = null
           }
@@ -3890,7 +3887,7 @@ export default defineComponent({
       },
       isSort (fieldOrColumn) {
         if (fieldOrColumn) {
-          const column = handleFieldOrColumn($xetable, fieldOrColumn)
+          const column = handleFieldOrColumn($xeTable, fieldOrColumn)
           return column ? column.sortable && !!column.order : false
         }
         return tableMethods.getSortColumns().length > 0
@@ -3925,7 +3922,7 @@ export default defineComponent({
           visible: false
         })
         if (visible) {
-          $xetable.dispatchEvent('filter-visible', { column, property: column.field, field: column.field, filterList: $xetable.getCheckedFilters(), visible: false }, null)
+          $xeTable.dispatchEvent('filter-visible', { column, property: column.field, field: column.field, filterList: $xeTable.getCheckedFilters(), visible: false }, null)
         }
         return nextTick()
       },
@@ -3934,11 +3931,11 @@ export default defineComponent({
        * @param {String} fieldOrColumn 字段名
        */
       isActiveFilterByColumn (fieldOrColumn) {
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column) {
           return column.filters && column.filters.some((option) => option.checked)
         }
-        return $xetable.getCheckedFilters().length > 0
+        return $xeTable.getCheckedFilters().length > 0
       },
       isFilter (fieldOrColumn) {
         return tableMethods.isActiveFilterByColumn(fieldOrColumn)
@@ -3949,7 +3946,7 @@ export default defineComponent({
        */
       isRowExpandLoaded (row) {
         const { fullAllDataRowIdData } = internalData
-        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
+        const rest = fullAllDataRowIdData[getRowid($xeTable, row)]
         return rest && !!rest.expandLoaded
       },
       clearRowExpandLoaded (row) {
@@ -3957,7 +3954,7 @@ export default defineComponent({
         const { fullAllDataRowIdData } = internalData
         const expandOpts = computeExpandOpts.value
         const { lazy } = expandOpts
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         const rest = fullAllDataRowIdData[rowid]
         if (lazy && rest) {
           rest.expandLoaded = false
@@ -3973,7 +3970,7 @@ export default defineComponent({
         const { rowExpandLazyLoadedMaps } = reactData
         const expandOpts = computeExpandOpts.value
         const { lazy } = expandOpts
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (lazy && !rowExpandLazyLoadedMaps[rowid]) {
           tableMethods.clearRowExpandLoaded(row)
             .then(() => handleAsyncRowExpand(row))
@@ -3981,8 +3978,8 @@ export default defineComponent({
         return nextTick()
       },
       reloadExpandContent (row) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
+          log.warn('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
         }
         // 即将废弃
         return tableMethods.reloadRowExpand(row)
@@ -4036,10 +4033,10 @@ export default defineComponent({
             rExpandedMaps = {}
             rows = rows.slice(rows.length - 1, rows.length)
           }
-          const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xetable, expanded, column, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) })) : rows
+          const validRows: any[] = toggleMethod ? rows.filter((row: any) => toggleMethod({ $table: $xeTable, expanded, column, columnIndex, $columnIndex, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) })) : rows
           if (expanded) {
             validRows.forEach((row: any) => {
-              const rowid = getRowid($xetable, row)
+              const rowid = getRowid($xeTable, row)
               if (!rExpandedMaps[rowid]) {
                 const rest = fullAllDataRowIdData[rowid]
                 const isLoad = lazy && !rest.expandLoaded && !rowExpandLazyLoadedMaps[rowid]
@@ -4052,7 +4049,7 @@ export default defineComponent({
             })
           } else {
             validRows.forEach(item => {
-              const rowid = getRowid($xetable, item)
+              const rowid = getRowid($xeTable, item)
               if (rExpandedMaps[rowid]) {
                 delete rExpandedMaps[rowid]
               }
@@ -4071,13 +4068,13 @@ export default defineComponent({
        */
       isRowExpandByRow (row) {
         const { rowExpandedMaps } = reactData
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         return !!rowExpandedMaps[rowid]
       },
       isExpandByRow (row) {
         // 已废弃
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
+          log.warn('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
         }
         return tableMethods.isRowExpandByRow(row)
       },
@@ -4127,7 +4124,7 @@ export default defineComponent({
        */
       isTreeExpandLoaded (row) {
         const { fullAllDataRowIdData } = internalData
-        const rest = fullAllDataRowIdData[getRowid($xetable, row)]
+        const rest = fullAllDataRowIdData[getRowid($xeTable, row)]
         return rest && !!rest.treeLoaded
       },
       clearTreeExpandLoaded (row) {
@@ -4135,7 +4132,7 @@ export default defineComponent({
         const { fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
         const { transform, lazy } = treeOpts
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         const rest = fullAllDataRowIdData[rowid]
         if (lazy && rest) {
           rest.treeLoaded = false
@@ -4158,7 +4155,7 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
         const { transform, lazy } = treeOpts
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
           tableMethods.clearTreeExpandLoaded(row).then(() => {
             return handleAsyncTreeExpandChilds(row)
@@ -4174,8 +4171,8 @@ export default defineComponent({
         return nextTick()
       },
       reloadTreeChilds (row) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
+          log.warn('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
         }
         // 即将废弃
         return tableMethods.reloadTreeExpand(row)
@@ -4240,7 +4237,7 @@ export default defineComponent({
        */
       isTreeExpandByRow (row) {
         const { treeExpandedMaps } = reactData
-        return !!treeExpandedMaps[getRowid($xetable, row)]
+        return !!treeExpandedMaps[getRowid($xeTable, row)]
       },
       /**
        * 手动清空树形节点的展开状态，数据会恢复成未展开的状态
@@ -4324,7 +4321,7 @@ export default defineComponent({
           if (props.treeConfig) {
             rest.push(tablePrivateMethods.scrollToTreeRow(row))
           } else {
-            rest.push(rowToVisible($xetable, row))
+            rest.push(rowToVisible($xeTable, row))
           }
         }
         if (fieldOrColumn) {
@@ -4337,9 +4334,9 @@ export default defineComponent({
        */
       scrollToColumn (fieldOrColumn) {
         const { fullColumnIdData } = internalData
-        const column = handleFieldOrColumn($xetable, fieldOrColumn)
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && fullColumnIdData[column.id]) {
-          return colToVisible($xetable, column)
+          return colToVisible($xeTable, column)
         }
         return nextTick()
       },
@@ -4380,7 +4377,7 @@ export default defineComponent({
         if (showFooter && footerData && footerData.length) {
           footData = footerData.slice(0)
         } else if (showFooter && footerMethod) {
-          footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xetable, $grid: $xegrid }) : []
+          footData = visibleColumn.length ? footerMethod({ columns: visibleColumn, data: afterFullData, $table: $xeTable, $grid: $xeGrid }) : []
         }
         reactData.footerTableData = footData
         return nextTick()
@@ -4399,22 +4396,22 @@ export default defineComponent({
           if (slotParams && tableBody && editRules) {
             const { row, column } = slotParams
             const type = 'change'
-            if ($xetable.hasCellRules) {
-              if ($xetable.hasCellRules(type, row, column)) {
+            if ($xeTable.hasCellRules) {
+              if ($xeTable.hasCellRules(type, row, column)) {
                 const cell = tablePrivateMethods.getCell(row, column)
                 if (cell) {
-                  return $xetable.validCellRules(type, row, column, cellValue)
+                  return $xeTable.validCellRules(type, row, column, cellValue)
                     .then(() => {
                       if (customVal && validStore.visible) {
                         setCellValue(row, column, cellValue)
                       }
-                      $xetable.clearValidate(row, column)
+                      $xeTable.clearValidate(row, column)
                     })
                     .catch(({ rule }) => {
                       if (customVal) {
                         setCellValue(row, column, cellValue)
                       }
-                      $xetable.showValidTooltip({ rule, row, column, cell })
+                      $xeTable.showValidTooltip({ rule, row, column, cell })
                     })
                 }
               }
@@ -4428,7 +4425,7 @@ export default defineComponent({
        */
       setMergeCells (merges) {
         if (props.spanMethod) {
-          errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+          log.err('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
         setMerges(merges, reactData.mergeList, internalData.afterFullData)
         return nextTick().then(() => {
@@ -4442,7 +4439,7 @@ export default defineComponent({
        */
       removeMergeCells (merges) {
         if (props.spanMethod) {
-          errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+          log.err('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
         const rest = removeMerges(merges, reactData.mergeList, internalData.afterFullData)
         return nextTick().then(() => {
@@ -4468,7 +4465,7 @@ export default defineComponent({
       },
       setMergeFooterItems (merges) {
         if (props.footerSpanMethod) {
-          errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+          log.err('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
         }
         setMerges(merges, reactData.mergeFooterList)
         return nextTick().then(() => {
@@ -4478,7 +4475,7 @@ export default defineComponent({
       },
       removeMergeFooterItems (merges) {
         if (props.footerSpanMethod) {
-          errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+          log.err('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
         }
         const rest = removeMerges(merges, reactData.mergeFooterList)
         return nextTick().then(() => {
@@ -4505,8 +4502,8 @@ export default defineComponent({
       updateCellAreas () {
         const { mouseConfig } = props
         const mouseOpts = computeMouseOpts.value
-        if (mouseConfig && mouseOpts.area && $xetable.handleUpdateCellAreas) {
-          return $xetable.handleUpdateCellAreas()
+        if (mouseConfig && mouseOpts.area && $xeTable.handleUpdateCellAreas) {
+          return $xeTable.handleUpdateCellAreas()
         }
         return nextTick()
       },
@@ -4524,10 +4521,10 @@ export default defineComponent({
        */
       connect ($toolbar) {
         if ($toolbar) {
-          $xetoolbar = $toolbar
-          $xetoolbar.syncUpdate({ collectColumn: internalData.collectColumn, $table: $xetable })
+          $xeToolbar = $toolbar
+          $xeToolbar.syncUpdate({ collectColumn: internalData.collectColumn, $table: $xeTable })
         } else {
-          errLog('vxe.error.barUnableLink')
+          log.err('vxe.error.barUnableLink')
         }
         return nextTick()
       }
@@ -4569,8 +4566,8 @@ export default defineComponent({
         } else {
           if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-clear').flag) {
             tablePrivateMethods.preventEvent(evnt, 'event.clearCustom', {}, () => {
-              if ($xetable.closeCustom) {
-                $xetable.closeCustom()
+              if ($xeTable.closeCustom) {
+                $xeTable.closeCustom()
               }
             })
           }
@@ -4595,7 +4592,7 @@ export default defineComponent({
                     const rowTargetNode = getEventTargetNode(evnt, el, 'vxe-body--row')
                     const rowNodeRest = rowTargetNode.flag ? tableMethods.getRowNode(rowTargetNode.targetElem) : null
                     // row 方式，如果点击了不同行
-                    isClear = rowNodeRest ? !$xetable.eqRow(rowNodeRest.item, actived.args.row) : false
+                    isClear = rowNodeRest ? !$xeTable.eqRow(rowNodeRest.item, actived.args.row) : false
                   } else {
                     // cell 方式，如果是非编辑列
                     isClear = !getEventTargetNode(evnt, el, 'col--edit').flag
@@ -4620,7 +4617,7 @@ export default defineComponent({
                       // 如果点击了当前表格之外
                       !getEventTargetNode(evnt, el).flag
                   ) {
-                    setTimeout(() => $xetable.clearEdit(evnt))
+                    setTimeout(() => $xeTable.clearEdit(evnt))
                   }
                 })
               }
@@ -4628,16 +4625,16 @@ export default defineComponent({
           }
         }
       } else if (mouseConfig) {
-        if (!getEventTargetNode(evnt, el).flag && !($xegrid && getEventTargetNode(evnt, $xegrid.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xetoolbar && getEventTargetNode(evnt, $xetoolbar.getRefMaps().refElem.value).flag)) {
-          if ($xetable.clearSelected) {
-            $xetable.clearSelected()
+        if (!getEventTargetNode(evnt, el).flag && !($xeGrid && getEventTargetNode(evnt, $xeGrid.getRefMaps().refElem.value).flag) && !(tableMenu && getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) && !($xeToolbar && getEventTargetNode(evnt, $xeToolbar.getRefMaps().refElem.value).flag)) {
+          if ($xeTable.clearSelected) {
+            $xeTable.clearSelected()
           }
           if (areaOpts.autoClear) {
-            if ($xetable.clearCellAreas) {
+            if ($xeTable.clearCellAreas) {
               if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
                 tablePrivateMethods.preventEvent(evnt, 'event.clearAreas', {}, () => {
-                  $xetable.clearCellAreas()
-                  $xetable.clearCopyCellArea()
+                  $xeTable.clearCellAreas()
+                  $xeTable.clearCopyCellArea()
                 })
               }
             }
@@ -4645,12 +4642,12 @@ export default defineComponent({
         }
       }
       // 如果配置了快捷菜单且，点击了其他地方则关闭
-      if ($xetable.closeMenu) {
+      if ($xeTable.closeMenu) {
         if (ctxMenuStore.visible && tableMenu && !getEventTargetNode(evnt, tableMenu.getRefMaps().refElem.value).flag) {
-          $xetable.closeMenu()
+          $xeTable.closeMenu()
         }
       }
-      const isActivated = getEventTargetNode(evnt, $xegrid ? $xegrid.getRefMaps().refElem.value : el).flag
+      const isActivated = getEventTargetNode(evnt, $xeGrid ? $xeGrid.getRefMaps().refElem.value : el).flag
       // 如果存在校验，点击了表格之外则清除
       if (!isActivated && editRules && validOpts.autoClear) {
         reactData.validErrorMaps = {}
@@ -4664,8 +4661,8 @@ export default defineComponent({
      */
     const handleGlobalBlurEvent = () => {
       tableMethods.closeFilter()
-      if ($xetable.closeMenu) {
-        $xetable.closeMenu()
+      if ($xeTable.closeMenu) {
+        $xeTable.closeMenu()
       }
     }
 
@@ -4674,8 +4671,8 @@ export default defineComponent({
      */
     const handleGlobalMousewheelEvent = () => {
       tableMethods.closeTooltip()
-      if ($xetable.closeMenu) {
-        $xetable.closeMenu()
+      if ($xeTable.closeMenu) {
+        $xeTable.closeMenu()
       }
     }
 
@@ -4688,27 +4685,27 @@ export default defineComponent({
       const mouseOpts = computeMouseOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const { actived } = editStore
-      const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
+      const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
       if (isEsc) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
           tableMethods.dispatchEvent('keydown-start', {}, evnt)
-          if (keyboardConfig && mouseConfig && mouseOpts.area && $xetable.handleKeyboardEvent) {
-            $xetable.handleKeyboardEvent(evnt)
+          if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardEvent) {
+            $xeTable.handleKeyboardEvent(evnt)
           } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
             evnt.stopPropagation()
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
-            if ($xetable.closeMenu) {
-              $xetable.closeMenu()
+            if ($xeTable.closeMenu) {
+              $xeTable.closeMenu()
             }
             tableMethods.closeFilter()
             if (keyboardConfig && keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
-                $xetable.clearEdit(evnt)
+                $xeTable.clearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
-                  nextTick(() => $xetable.handleSelected(params, evnt))
+                  nextTick(() => $xeTable.handleSelected(params, evnt))
                 }
               }
             }
@@ -4739,18 +4736,18 @@ export default defineComponent({
           const { selected, actived } = editStore
           const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
-          const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
-          const isBack = hasEventKey(evnt, EVENT_KEYS.BACKSPACE)
-          const isTab = hasEventKey(evnt, EVENT_KEYS.TAB)
-          const isEnter = hasEventKey(evnt, EVENT_KEYS.ENTER)
-          const isSpacebar = hasEventKey(evnt, EVENT_KEYS.SPACEBAR)
-          const isLeftArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_LEFT)
-          const isUpArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_UP)
-          const isRightArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_RIGHT)
-          const isDwArrow = hasEventKey(evnt, EVENT_KEYS.ARROW_DOWN)
-          const isDel = hasEventKey(evnt, EVENT_KEYS.DELETE)
-          const isF2 = hasEventKey(evnt, EVENT_KEYS.F2)
-          const isContextMenu = hasEventKey(evnt, EVENT_KEYS.CONTEXT_MENU)
+          const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
+          const isBack = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.BACKSPACE)
+          const isTab = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.TAB)
+          const isEnter = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ENTER)
+          const isSpacebar = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.SPACEBAR)
+          const isLeftArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_LEFT)
+          const isUpArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_UP)
+          const isRightArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_RIGHT)
+          const isDwArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_DOWN)
+          const isDel = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.DELETE)
+          const isF2 = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.F2)
+          const isContextMenu = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.CONTEXT_MENU)
           const hasMetaKey = evnt.metaKey
           const hasCtrlKey = evnt.ctrlKey
           const hasShiftKey = evnt.shiftKey
@@ -4763,26 +4760,26 @@ export default defineComponent({
             // 如果配置了右键菜单; 支持方向键操作、回车
             evnt.preventDefault()
             if (ctxMenuStore.showChild && hasChildrenList(ctxMenuStore.selected)) {
-              $xetable.moveCtxMenu(evnt, ctxMenuStore, 'selectChild', isLeftArrow, false, ctxMenuStore.selected.children)
+              $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selectChild', isLeftArrow, false, ctxMenuStore.selected.children)
             } else {
-              $xetable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
+              $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
             }
-          } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xetable.handleKeyboardEvent) {
-            $xetable.handleKeyboardEvent(evnt)
+          } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardEvent) {
+            $xeTable.handleKeyboardEvent(evnt)
           } else if (isEsc) {
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
-            if ($xetable.closeMenu) {
-              $xetable.closeMenu()
+            if ($xeTable.closeMenu) {
+              $xeTable.closeMenu()
             }
             tableMethods.closeFilter()
             if (keyboardConfig && keyboardOpts.isEsc) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
-                $xetable.clearEdit(evnt)
+                $xeTable.clearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
-                  nextTick(() => $xetable.handleSelected(params, evnt))
+                  nextTick(() => $xeTable.handleSelected(params, evnt))
                 }
               }
             }
@@ -4799,7 +4796,7 @@ export default defineComponent({
               // 如果按下了 F2 键
               if (selected.row && selected.column) {
                 evnt.preventDefault()
-                $xetable.handleActived(selected.args, evnt)
+                $xeTable.handleActived(selected.args, evnt)
               }
             }
           } else if (isContextMenu) {
@@ -4815,10 +4812,10 @@ export default defineComponent({
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 params = actived.args
-                $xetable.clearEdit(evnt)
+                $xeTable.clearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
-                  nextTick(() => $xetable.handleSelected(params, evnt))
+                  nextTick(() => $xeTable.handleSelected(params, evnt))
                 }
               }
             } else {
@@ -4827,15 +4824,15 @@ export default defineComponent({
                 const targetArgs = selected.row ? selected.args : actived.args
                 if (hasShiftKey) {
                   if (keyboardOpts.enterToTab) {
-                    $xetable.moveTabSelected(targetArgs, hasShiftKey, evnt)
+                    $xeTable.moveTabSelected(targetArgs, hasShiftKey, evnt)
                   } else {
-                    $xetable.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
+                    $xeTable.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
                   }
                 } else {
                   if (keyboardOpts.enterToTab) {
-                    $xetable.moveTabSelected(targetArgs, hasShiftKey, evnt)
+                    $xeTable.moveTabSelected(targetArgs, hasShiftKey, evnt)
                   } else {
-                    $xetable.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
+                    $xeTable.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
                   }
                 }
               } else if (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
@@ -4845,7 +4842,7 @@ export default defineComponent({
                   evnt.preventDefault()
                   const targetRow = childrens[0]
                   params = {
-                    $table: $xetable,
+                    $table: $xeTable,
                     row: targetRow,
                     rowIndex: tableMethods.getRowIndex(targetRow),
                     $rowIndex: tableMethods.getVMRowIndex(targetRow)
@@ -4860,18 +4857,18 @@ export default defineComponent({
             if (!isEditStatus) {
               // 如果按下了方向键
               if (selected.row && selected.column) {
-                $xetable.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
+                $xeTable.moveSelected(selected.args, isLeftArrow, isUpArrow, isRightArrow, isDwArrow, evnt)
               } else if ((isUpArrow || isDwArrow) && (rowOpts.isCurrent || highlightCurrentRow)) {
                 // 当前行按键上下移动
-                $xetable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
+                $xeTable.moveCurrentRow(isUpArrow, isDwArrow, evnt)
               }
             }
           } else if (isTab && keyboardConfig && keyboardOpts.isTab) {
             // 如果按下了 Tab 键切换
             if (selected.row || selected.column) {
-              $xetable.moveTabSelected(selected.args, hasShiftKey, evnt)
+              $xeTable.moveTabSelected(selected.args, hasShiftKey, evnt)
             } else if (actived.row || actived.column) {
-              $xetable.moveTabSelected(actived.args, hasShiftKey, evnt)
+              $xeTable.moveTabSelected(actived.args, hasShiftKey, evnt)
             }
           } else if (keyboardConfig && isEnableConf(editConfig) && (isDel || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
             if (!isEditStatus) {
@@ -4879,11 +4876,11 @@ export default defineComponent({
               // 如果是删除键
               if (keyboardOpts.isDel && (selected.row || selected.column)) {
                 const delPaqrams = {
-                  row: selected.row as VxeTableDataRow,
+                  row: selected.row,
                   rowIndex: tableMethods.getRowIndex(selected.row),
                   column: selected.column,
                   columnIndex: tableMethods.getColumnIndex(selected.column),
-                  $table: $xetable
+                  $table: $xeTable
                 }
                 if (delMethod) {
                   delMethod(delPaqrams)
@@ -4893,27 +4890,27 @@ export default defineComponent({
                 if (isBack) {
                   if (backMethod) {
                     backMethod({
-                      row: selected.row as VxeTableDataRow,
+                      row: selected.row,
                       rowIndex: tableMethods.getRowIndex(selected.row),
                       column: selected.column,
                       columnIndex: tableMethods.getColumnIndex(selected.column),
-                      $table: $xetable
+                      $table: $xeTable
                     })
                   } else {
-                    $xetable.handleActived(selected.args, evnt)
+                    $xeTable.handleActived(selected.args, evnt)
                   }
                 } else if (isDel) {
                   // 如果按下 del 键，更新表尾数据
                   tableMethods.updateFooter()
                 }
-                $xetable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
+                $xeTable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
               } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
                 // 如果树形表格回退键关闭当前行返回父节点
                 const { parent: parentRow } = XEUtils.findTree(internalData.afterFullData, item => item === currentRow, { children: childrenField })
                 if (parentRow) {
                   evnt.preventDefault()
                   params = {
-                    $table: $xetable,
+                    $table: $xeTable,
                     row: parentRow,
                     rowIndex: tableMethods.getRowIndex(parentRow),
                     $rowIndex: tableMethods.getVMRowIndex(parentRow)
@@ -4933,19 +4930,19 @@ export default defineComponent({
             // 如果是按下非功能键之外允许直接编辑
             if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
               const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xetable, $grid: $xegrid })) {
+              if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xeTable, $grid: $xeGrid })) {
                 if (editMethod) {
                   editMethod({
                     row: selected.row,
                     rowIndex: tableMethods.getRowIndex(selected.row),
                     column: selected.column,
                     columnIndex: tableMethods.getColumnIndex(selected.column),
-                    $table: $xetable,
-                    $grid: $xegrid
+                    $table: $xeTable,
+                    $grid: $xeGrid
                   })
                 } else {
                   setCellValue(selected.row, selected.column, null)
-                  $xetable.handleActived(selected.args, evnt)
+                  $xeTable.handleActived(selected.args, evnt)
                 }
                 const afterEditMethod = editOpts.afterEditMethod
                 if (afterEditMethod) {
@@ -4955,8 +4952,8 @@ export default defineComponent({
                       rowIndex: tableMethods.getRowIndex(selected.row),
                       column: selected.column,
                       columnIndex: tableMethods.getColumnIndex(selected.column),
-                      $table: $xetable,
-                      $grid: $xegrid
+                      $table: $xeTable,
+                      $grid: $xeGrid
                     })
                   })
                 }
@@ -4977,8 +4974,8 @@ export default defineComponent({
       const { actived } = editStore
       if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
-          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xetable.handlePasteCellAreaEvent) {
-            $xetable.handlePasteCellAreaEvent(evnt)
+          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handlePasteCellAreaEvent) {
+            $xeTable.handlePasteCellAreaEvent(evnt)
           }
         }
         tableMethods.dispatchEvent('paste', {}, evnt)
@@ -4994,8 +4991,8 @@ export default defineComponent({
       const { actived } = editStore
       if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
-          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xetable.handleCopyCellAreaEvent) {
-            $xetable.handleCopyCellAreaEvent(evnt)
+          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCopyCellAreaEvent) {
+            $xeTable.handleCopyCellAreaEvent(evnt)
           }
         }
         tableMethods.dispatchEvent('copy', {}, evnt)
@@ -5011,8 +5008,8 @@ export default defineComponent({
       const { actived } = editStore
       if (isActivated && !filterStore.visible) {
         if (!(actived.row || actived.column)) {
-          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xetable.handleCutCellAreaEvent) {
-            $xetable.handleCutCellAreaEvent(evnt)
+          if (keyboardConfig && keyboardOpts.isClip && mouseConfig && mouseOpts.area && $xeTable.handleCutCellAreaEvent) {
+            $xeTable.handleCutCellAreaEvent(evnt)
           }
         }
         tableMethods.dispatchEvent('cut', {}, evnt)
@@ -5020,8 +5017,8 @@ export default defineComponent({
     }
 
     const handleGlobalResizeEvent = () => {
-      if ($xetable.closeMenu) {
-        $xetable.closeMenu()
+      if ($xeTable.closeMenu) {
+        $xeTable.closeMenu()
       }
       tableMethods.updateCellAreas()
       tableMethods.recalculate(true)
@@ -5076,13 +5073,13 @@ export default defineComponent({
      */
     tablePrivateMethods = {
       getSetupOptions () {
-        return GlobalConfig
+        return getConfig()
       },
       updateAfterDataIndex,
       callSlot (slotFunc, params) {
         if (slotFunc) {
-          if ($xegrid) {
-            return $xegrid.callSlot(slotFunc, params)
+          if ($xeGrid) {
+            return $xeGrid.callSlot(slotFunc, params)
           }
           if (XEUtils.isFunction(slotFunc)) {
             return getSlotVNs(slotFunc(params))
@@ -5095,8 +5092,8 @@ export default defineComponent({
        */
       getParentElem () {
         const el = refElem.value
-        if ($xegrid) {
-          const gridEl = $xegrid.getRefMaps().refElem.value
+        if ($xeGrid) {
+          const gridEl = $xeGrid.getRefMaps().refElem.value
           return gridEl ? gridEl.parentNode as HTMLElement : null
         }
         return el ? el.parentNode as HTMLElement : null
@@ -5110,7 +5107,7 @@ export default defineComponent({
         if (el) {
           const parentElem = el.parentNode as HTMLElement
           const parentPaddingSize = height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
-          return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
+          return Math.floor($xeGrid ? $xeGrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
         }
         return 0
       },
@@ -5120,7 +5117,7 @@ export default defineComponent({
        * 如果存在表尾合计滚动条，则需要排除滚动条高度
        */
       getExcludeHeight () {
-        return $xegrid ? $xegrid.getExcludeHeight() : 0
+        return $xeGrid ? $xeGrid.getExcludeHeight() : 0
       },
       /**
        * 定义行数据中的列属性，如果不存在则定义
@@ -5133,7 +5130,7 @@ export default defineComponent({
         const radioOpts = computeRadioOpts.value
         const checkboxOpts = computeCheckboxOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
-        const rowkey = getRowkey($xetable)
+        const rowkey = getRowkey($xeTable)
         if (!XEUtils.isArray(records)) {
           records = [records]
         }
@@ -5182,7 +5179,7 @@ export default defineComponent({
         }
         const tableData = scrollYLoad ? fullList.slice(scrollYStore.startIndex, scrollYStore.endIndex) : fullList.slice(0)
         tableData.forEach((row, $index) => {
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           const rest = fullDataRowIdData[rowid]
           if (rest) {
             rest.$index = $index
@@ -5201,10 +5198,10 @@ export default defineComponent({
         let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
         const childrenField = treeOpts.children || treeOpts.childrenField
         const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
-        const rowkey = getRowkey($xetable)
+        const rowkey = getRowkey($xeTable)
         const isLazy = treeConfig && treeOpts.lazy
         const handleRow = (row: any, index: any, items: any, path?: any[], parent?: any, nodes?: any[]) => {
-          let rowid = getRowid($xetable, row)
+          let rowid = getRowid($xeTable, row)
           const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
           const level = nodes ? nodes.length - 1 : 0
           if (eqEmptyValue(rowid)) {
@@ -5235,10 +5232,10 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         let { sourceDataRowIdData } = internalData
         const sourceData = XEUtils.clone(fullData, true)
-        const rowkey = getRowkey($xetable)
+        const rowkey = getRowkey($xeTable)
         sourceDataRowIdData = internalData.sourceDataRowIdData = {}
         const handleSourceRow = (row: any) => {
-          let rowid = getRowid($xetable, row)
+          let rowid = getRowid($xeTable, row)
           if (eqEmptyValue(rowid)) {
             rowid = getRowUniqueId()
             XEUtils.set(row, rowkey, rowid)
@@ -5304,7 +5301,7 @@ export default defineComponent({
           const columnWidthStorageMap = getCustomStorageMap(resizableStorageKey)
           let columnWidthStorage: any
           if (!id) {
-            errLog('vxe.error.reqProp', ['id'])
+            log.err('vxe.error.reqProp', ['id'])
             return
           }
           if (!isReset) {
@@ -5334,7 +5331,7 @@ export default defineComponent({
           const columnSortStorageMap = getCustomStorageMap(sortStorageKey)
           let columnWidthStorage: any
           if (!id) {
-            errLog('vxe.error.reqProp', ['id'])
+            log.err('vxe.error.reqProp', ['id'])
             return
           }
           if (!isReset) {
@@ -5365,7 +5362,7 @@ export default defineComponent({
           const columnFixedStorageMap = getCustomStorageMap(fixedStorageKey)
           const colFixeds: any[] = []
           if (!id) {
-            errLog('vxe.error.reqProp', ['id'])
+            log.err('vxe.error.reqProp', ['id'])
             return
           }
           XEUtils.eachTree(collectColumn, (column) => {
@@ -5393,7 +5390,7 @@ export default defineComponent({
           const colHides: any[] = []
           const colShows: any[] = []
           if (!id) {
-            errLog('vxe.error.reqProp', ['id'])
+            log.err('vxe.error.reqProp', ['id'])
             return
           }
           XEUtils.eachTree(collectColumn, (column) => {
@@ -5418,12 +5415,12 @@ export default defineComponent({
       handleCustom () {
         const { mouseConfig } = props
         if (mouseConfig) {
-          if ($xetable.clearSelected) {
-            $xetable.clearSelected()
+          if ($xeTable.clearSelected) {
+            $xeTable.clearSelected()
           }
-          if ($xetable.clearCellAreas) {
-            $xetable.clearCellAreas()
-            $xetable.clearCopyCellArea()
+          if ($xeTable.clearCellAreas) {
+            $xeTable.clearCellAreas()
+            $xeTable.clearCopyCellArea()
           }
         }
         tablePrivateMethods.saveCustomVisible()
@@ -5438,21 +5435,21 @@ export default defineComponent({
         reactData.reColumnFlag++
       },
       preventEvent (evnt, type, args, next, end) {
-        let evntList = VXETable.interceptor.get(type)
+        let evntList = interceptor.get(type)
 
         // 兼容老版本
         if (!evntList.length && type === 'event.clearEdit') {
-          evntList = VXETable.interceptor.get('event.clearActived')
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          evntList = interceptor.get('event.clearActived')
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (evntList.length) {
-              warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
+              log.warn('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
             }
           }
         }
         // 兼容老版本
 
         let rest
-        if (!evntList.some((func) => func(Object.assign({ $grid: $xegrid, $table: $xetable, $event: evnt }, args)) === false)) {
+        if (!evntList.some((func) => func(Object.assign({ $grid: $xeGrid, $table: $xeTable, $event: evnt }, args)) === false)) {
           if (next) {
             rest = next()
           }
@@ -5494,9 +5491,9 @@ export default defineComponent({
             isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
             if (treeConfig) {
               if (indeterminateField) {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField) || !!treeIndeterminateMaps[getRowid($xetable, row)])
+                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField) || !!treeIndeterminateMaps[getRowid($xeTable, row)])
               } else {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || !!treeIndeterminateMaps[getRowid($xetable, row)])
+                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || !!treeIndeterminateMaps[getRowid($xeTable, row)])
               }
             } else {
               if (indeterminateField) {
@@ -5513,22 +5510,22 @@ export default defineComponent({
                       disableRows.push(row)
                       return true
                     }
-                    if (selectCheckboxMaps[getRowid($xetable, row)]) {
+                    if (selectCheckboxMaps[getRowid($xeTable, row)]) {
                       checkRows.push(row)
                       return true
                     }
                     return false
                   }
-                : row => selectCheckboxMaps[getRowid($xetable, row)]
+                : row => selectCheckboxMaps[getRowid($xeTable, row)]
             )
             isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
             if (treeConfig) {
               isIndeterminate = !isAllSelected && afterFullData.some((row) => {
-                const itemRid = getRowid($xetable, row)
+                const itemRid = getRowid($xeTable, row)
                 return treeIndeterminateMaps[itemRid] || selectCheckboxMaps[itemRid]
               })
             } else {
-              isIndeterminate = !isAllSelected && afterFullData.some((row) => selectCheckboxMaps[getRowid($xetable, row)])
+              isIndeterminate = !isAllSelected && afterFullData.some((row) => selectCheckboxMaps[getRowid($xeTable, row)])
             }
           }
           reactData.isAllSelected = isAllSelected
@@ -5549,7 +5546,7 @@ export default defineComponent({
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, checkStrictly, checkMethod } = checkboxOpts
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (checkField) {
           if (treeConfig && !checkStrictly) {
             if (value === -1) {
@@ -5563,18 +5560,18 @@ export default defineComponent({
             } else {
               // 更新子节点状态
               XEUtils.eachTree([row], (item) => {
-                if ($xetable.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
+                if ($xeTable.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
                   XEUtils.set(item, checkField, value)
                   if (indeterminateField) {
                     XEUtils.set(row, indeterminateField, false)
                   }
-                  delete treeIndeterminateMaps[getRowid($xetable, item)]
+                  delete treeIndeterminateMaps[getRowid($xeTable, item)]
                   handleCheckboxReserveRow(row, value)
                 }
               }, { children: childrenField })
             }
             // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), { children: childrenField })
+            const matchObj = XEUtils.findTree(afterFullData, item => $xeTable.eqRow(item, row), { children: childrenField })
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems: any[] = []
@@ -5582,19 +5579,19 @@ export default defineComponent({
               if (!isForce && checkMethod) {
                 matchObj.items.forEach((item) => {
                   if (checkMethod({ row: item })) {
-                    const itemRid = getRowid($xetable, item)
+                    const itemRid = getRowid($xeTable, item)
                     vItemMaps[itemRid] = item
                     vItems.push(item)
                   }
                 })
               } else {
                 matchObj.items.forEach(item => {
-                  const itemRid = getRowid($xetable, item)
+                  const itemRid = getRowid($xeTable, item)
                   vItemMaps[itemRid] = item
                   vItems.push(item)
                 })
               }
-              const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid($xetable, item)])
+              const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid($xeTable, item)])
               if (indeterminatesItem) {
                 parentStatus = -1
               } else {
@@ -5604,7 +5601,7 @@ export default defineComponent({
                     selectItems.push(item)
                   }
                 })
-                parentStatus = selectItems.filter(item => vItemMaps[getRowid($xetable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+                parentStatus = selectItems.filter(item => vItemMaps[getRowid($xeTable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
               }
               reactData.selectCheckboxMaps = selectRowMaps
               return tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
@@ -5630,8 +5627,8 @@ export default defineComponent({
             } else {
               // 更新子节点状态
               XEUtils.eachTree([row], (item) => {
-                const itemRid = getRowid($xetable, item)
-                if ($xetable.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
+                const itemRid = getRowid($xeTable, item)
+                if ($xeTable.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
                   if (value) {
                     selectRowMaps[itemRid] = item
                   } else {
@@ -5642,13 +5639,13 @@ export default defineComponent({
                   if (indeterminateField) {
                     XEUtils.set(row, indeterminateField, false)
                   }
-                  delete treeIndeterminateMaps[getRowid($xetable, item)]
+                  delete treeIndeterminateMaps[getRowid($xeTable, item)]
                   handleCheckboxReserveRow(row, value)
                 }
               }, { children: childrenField })
             }
             // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => $xetable.eqRow(item, row), { children: childrenField })
+            const matchObj = XEUtils.findTree(afterFullData, item => $xeTable.eqRow(item, row), { children: childrenField })
             if (matchObj && matchObj.parent) {
               let parentStatus
               const vItems: any[] = []
@@ -5656,30 +5653,30 @@ export default defineComponent({
               if (!isForce && checkMethod) {
                 matchObj.items.forEach((item) => {
                   if (checkMethod({ row: item })) {
-                    const itemRid = getRowid($xetable, item)
+                    const itemRid = getRowid($xeTable, item)
                     vItemMaps[itemRid] = item
                     vItems.push(item)
                   }
                 })
               } else {
                 matchObj.items.forEach(item => {
-                  const itemRid = getRowid($xetable, item)
+                  const itemRid = getRowid($xeTable, item)
                   vItemMaps[itemRid] = item
                   vItems.push(item)
                 })
               }
-              const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid($xetable, item)])
+              const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid($xeTable, item)])
               if (indeterminatesItem) {
                 parentStatus = -1
               } else {
                 const selectItems: any[] = []
                 matchObj.items.forEach(item => {
-                  const itemRid = getRowid($xetable, item)
+                  const itemRid = getRowid($xeTable, item)
                   if (selectRowMaps[itemRid]) {
                     selectItems.push(item)
                   }
                 })
-                parentStatus = selectItems.filter(item => vItemMaps[getRowid($xetable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
+                parentStatus = selectItems.filter(item => vItemMaps[getRowid($xeTable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
               }
               reactData.selectCheckboxMaps = selectRowMaps
               return tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
@@ -5915,12 +5912,12 @@ export default defineComponent({
               checkValidate('blur')
                 .catch((e) => e)
                 .then(() => {
-                  $xetable.handleActived(params, evnt)
+                  $xeTable.handleActived(params, evnt)
                     .then(() => checkValidate('change'))
                     .catch((e) => e)
                 })
             } else if (editOpts.mode === 'cell') {
-              $xetable.handleActived(params, evnt)
+              $xeTable.handleActived(params, evnt)
                 .then(() => checkValidate('change'))
                 .catch((e) => e)
             }
@@ -5937,7 +5934,7 @@ export default defineComponent({
         if (checkField) {
           value = !XEUtils.get(row, checkField)
         } else {
-          value = !selectCheckboxMaps[getRowid($xetable, row)]
+          value = !selectCheckboxMaps[getRowid($xeTable, row)]
         }
         if (evnt) {
           tablePrivateMethods.triggerCheckRowEvent(evnt, params, value)
@@ -6028,7 +6025,7 @@ export default defineComponent({
         const expandOpts = computeExpandOpts.value
         const { row } = params
         const { lazy } = expandOpts
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
           const expanded = !tableMethods.isRowExpandByRow(row)
           const columnIndex = tableMethods.getColumnIndex(column)
@@ -6053,7 +6050,7 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const { row, column } = params
         const { lazy } = treeOpts
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
           const expanded = !tableMethods.isTreeExpandByRow(row)
           const columnIndex = tableMethods.getColumnIndex(column)
@@ -6076,9 +6073,9 @@ export default defineComponent({
           } else {
             tableMethods.sort({ field, order })
           }
-          const params = { $table: $xetable, $event: evnt, column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
-          if (mouseConfig && mouseOpts.area && $xetable.handleSortEvent) {
-            $xetable.handleSortEvent(evnt, params)
+          const params = { $table: $xeTable, $event: evnt, column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
+          if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
+            $xeTable.handleSortEvent(evnt, params)
           }
           tableMethods.dispatchEvent('sort-change', params, evnt)
         }
@@ -6114,7 +6111,7 @@ export default defineComponent({
         if (treeConfig) {
           const treeOpts = computeTreeOpts.value
           const childrenField = treeOpts.children || treeOpts.childrenField
-          const matchObj = XEUtils.findTree(tableFullData, item => $xetable.eqRow(item, row), { children: childrenField })
+          const matchObj = XEUtils.findTree(tableFullData, item => $xeTable.eqRow(item, row), { children: childrenField })
           if (matchObj) {
             const nodes = matchObj.nodes
             nodes.forEach((row, index) => {
@@ -6124,7 +6121,7 @@ export default defineComponent({
             })
           }
         }
-        return Promise.all(rests).then(() => rowToVisible($xetable, row))
+        return Promise.all(rests).then(() => rowToVisible($xeTable, row))
       },
       updateScrollYStatus,
       // 更新横向 X 可视渲染上下剩余空间大小
@@ -6252,7 +6249,7 @@ export default defineComponent({
         tablePrivateMethods.setHoverRow(row)
       },
       setHoverRow (row) {
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         const el = refElem.value
         tablePrivateMethods.clearHoverRow()
         if (el) {
@@ -6268,7 +6265,7 @@ export default defineComponent({
         internalData.hoverRow = null
       },
       getCell (row, column) {
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         const tableBody = refTableBody.value
         const leftBody = refTableLeftBody.value
         const rightBody = refTableRightBody.value
@@ -6301,7 +6298,7 @@ export default defineComponent({
         if (formatter) {
           let formatData
           const { fullAllDataRowIdData } = internalData
-          const rowid = getRowid($xetable, row)
+          const rowid = getRowid($xeTable, row)
           const colid = column.id
           const rest = fullAllDataRowIdData[rowid]
           if (rest) {
@@ -6317,10 +6314,10 @@ export default defineComponent({
           }
           const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
           if (XEUtils.isString(formatter)) {
-            const gFormatOpts = VXETable.formats.get(formatter)
+            const gFormatOpts = formats.get(formatter)
             cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams) : ''
           } else if (XEUtils.isArray(formatter)) {
-            const gFormatOpts = VXETable.formats.get(formatter[0])
+            const gFormatOpts = formats.get(formatter[0])
             cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams, ...formatter.slice(1)) : ''
           } else {
             cellLabel = formatter(formatParams)
@@ -6332,34 +6329,34 @@ export default defineComponent({
         return cellLabel
       },
       findRowIndexOf (list, row) {
-        return row ? XEUtils.findIndexOf(list, item => $xetable.eqRow(item, row)) : -1
+        return row ? XEUtils.findIndexOf(list, item => $xeTable.eqRow(item, row)) : -1
       },
       eqRow (row1, row2) {
         if (row1 && row2) {
           if (row1 === row2) {
             return true
           }
-          return getRowid($xetable, row1) === getRowid($xetable, row2)
+          return getRowid($xeTable, row1) === getRowid($xeTable, row2)
         }
         return false
       }
     }
 
     // 检测对应模块是否安装
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
-        ($xetable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
+        ($xeTable as any)[name] = function () {
+          log.err('vxe.error.reqModule', ['VxeTableExportModule'])
         }
       })
       'clearValidate,fullValidate,validate'.split(',').forEach(name => {
-        ($xetable as any)[name] = function () {
-          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
+        ($xeTable as any)[name] = function () {
+          log.err('vxe.error.reqModule', ['VxeTableValidatorModule'])
         }
       })
     }
 
-    Object.assign($xetable, tableMethods, tablePrivateMethods)
+    Object.assign($xeTable, tableMethods, tablePrivateMethods)
 
     /**
      * 渲染浮固定列
@@ -6376,44 +6373,48 @@ export default defineComponent({
         ref: isFixedLeft ? refLeftContainer : refRightContainer,
         class: `vxe-table--fixed-${fixedType}-wrapper`
       }, [
-        showHeader ? h(TableHeaderComponent, {
-          ref: isFixedLeft ? refTableLeftHeader : refTableRightHeader,
-          fixedType,
-          tableData,
-          tableColumn,
-          tableGroupColumn,
-          fixedColumn
-        }) : createCommentVNode(),
-        h(TableBodyComponent as ComponentOptions, {
+        showHeader
+          ? h(TableHeaderComponent, {
+            ref: isFixedLeft ? refTableLeftHeader : refTableRightHeader,
+            fixedType,
+            tableData,
+            tableColumn,
+            tableGroupColumn,
+            fixedColumn
+          })
+          : createCommentVNode(),
+        h(TableBodyComponent, {
           ref: isFixedLeft ? refTableLeftBody : refTableRightBody,
           fixedType,
           tableData,
           tableColumn,
           fixedColumn
         }),
-        showFooter ? h(TableFooterComponent, {
-          ref: isFixedLeft ? refTableLeftFooter : refTableRightFooter,
-          footerTableData,
-          tableColumn,
-          fixedColumn,
-          fixedType
-        }) : createCommentVNode()
+        showFooter
+          ? h(TableFooterComponent, {
+            ref: isFixedLeft ? refTableLeftFooter : refTableRightFooter,
+            footerTableData,
+            tableColumn,
+            fixedColumn,
+            fixedType
+          })
+          : createCommentVNode()
       ])
     }
 
     const renderEmptyContenet = () => {
       const emptyOpts = computeEmptyOpts.value
-      const params = { $table: $xetable }
+      const params = { $table: $xeTable }
       if (slots.empty) {
         return slots.empty(params)
       } else {
-        const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
+        const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
         const renderTableEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
         if (renderTableEmptyView) {
           return getSlotVNs(renderTableEmptyView(emptyOpts, params))
         }
       }
-      return getFuncText(props.emptyText) || GlobalConfig.i18n('vxe.table.emptyText')
+      return getFuncText(props.emptyText) || getI18n('vxe.table.emptyText')
     }
 
     function handleUupdateResize () {
@@ -6442,14 +6443,14 @@ export default defineComponent({
         if (!inited) {
           handleInitDefaults()
         }
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           // const checkboxOpts = computeCheckboxOpts.value
           // const checkboxColumn = internalData.tableFullColumn.find(column => column.type === 'checkbox')
           // if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
-          //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
+          //   log.warn('vxe.error.checkProp', ['checkbox-config.checkField'])
           // }
           if ((scrollXLoad || scrollYLoad) && expandColumn) {
-            warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
+            log.warn('vxe.error.scrollErrProp', ['column.type=expand'])
           }
         }
         tableMethods.recalculate()
@@ -6563,28 +6564,28 @@ export default defineComponent({
       })
     })
 
-    VXETable.hooks.forEach((options) => {
+    hooks.forEach((options) => {
       const { setupTable } = options
       if (setupTable) {
-        const hookRest = setupTable($xetable)
+        const hookRest = setupTable($xeTable)
         if (hookRest && XEUtils.isObject(hookRest)) {
-          Object.assign($xetable, hookRest)
+          Object.assign($xeTable, hookRest)
         }
       }
     })
 
-    tablePrivateMethods.preventEvent(null, 'created', { $table: $xetable })
+    tablePrivateMethods.preventEvent(null, 'created', { $table: $xeTable })
 
-    let resizeObserver: XEResizeObserver
+    let resizeObserver: ResizeObserver
 
     onActivated(() => {
       tableMethods.recalculate().then(() => tableMethods.refreshScroll())
-      tablePrivateMethods.preventEvent(null, 'activated', { $table: $xetable })
+      tablePrivateMethods.preventEvent(null, 'activated', { $table: $xeTable })
     })
 
     onDeactivated(() => {
       internalData.isActivated = false
-      tablePrivateMethods.preventEvent(null, 'deactivated', { $table: $xetable })
+      tablePrivateMethods.preventEvent(null, 'deactivated', { $table: $xeTable })
     })
 
     onMounted(() => {
@@ -6599,119 +6600,119 @@ export default defineComponent({
         const expandOpts = computeExpandOpts.value
         const rowOpts = computeRowOpts.value
 
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (props.rowId) {
-            warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
+            log.warn('vxe.error.delProp', ['row-id', 'row-config.keyField'])
           }
           if (props.rowKey) {
-            warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
+            log.warn('vxe.error.delProp', ['row-key', 'row-config.useKey'])
           }
           if (props.columnKey) {
-            warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
+            log.warn('vxe.error.delProp', ['column-id', 'column-config.useKey'])
           }
           if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
-            warnLog('vxe.error.reqProp', ['row-config.keyField'])
+            log.warn('vxe.error.reqProp', ['row-config.keyField'])
           }
           if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
-            warnLog('vxe.error.reqProp', ['keep-source'])
+            log.warn('vxe.error.reqProp', ['keep-source'])
           }
           if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
-            warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
+            log.warn('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
           }
           if (treeConfig && props.stripe) {
-            warnLog('vxe.error.noTree', ['stripe'])
+            log.warn('vxe.error.noTree', ['stripe'])
           }
           if (props.showFooter && !(props.footerMethod || props.footerData)) {
-            warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
+            log.warn('vxe.error.reqProp', ['footer-data | footer-method'])
           }
           // if (props.highlightCurrentRow) {
-          //   warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
+          //   log.warn('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
           // }
           // if (props.highlightHoverRow) {
-          //   warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
+          //   log.warn('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
           // }
           // if (props.highlightCurrentColumn) {
-          //   warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
+          //   log.warn('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
           // }
           // if (props.highlightHoverColumn) {
-          //   warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
+          //   log.warn('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
           // }
           // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
           const { exportConfig, importConfig } = props
           const exportOpts = computeExportOpts.value
           const importOpts = computeImportOpts.value
-          if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.globalConfs.importTypes, importOpts.types)) {
-            warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(VXETable.globalConfs.importTypes, type)).join(',') || VXETable.globalConfs.importTypes.join(',')])
+          if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
+            log.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
           }
-          if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(VXETable.globalConfs.exportTypes, exportOpts.types)) {
-            warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(VXETable.globalConfs.exportTypes, type)).join(',') || VXETable.globalConfs.exportTypes.join(',')])
+          if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
+            log.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
           }
         }
 
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           const customOpts = computeCustomOpts.value
           const mouseOpts = computeMouseOpts.value
           const rowOpts = computeRowOpts.value
           if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-            errLog('vxe.error.reqProp', ['id'])
+            log.err('vxe.error.reqProp', ['id'])
           }
           if (props.treeConfig && checkboxOpts.range) {
-            errLog('vxe.error.noTree', ['checkbox-config.range'])
+            log.err('vxe.error.noTree', ['checkbox-config.range'])
           }
           if (rowOpts.height && !props.showOverflow) {
-            warnLog('vxe.error.notProp', ['table.show-overflow'])
+            log.warn('vxe.error.notProp', ['table.show-overflow'])
           }
-          if (!$xetable.handleUpdateCellAreas) {
+          if (!$xeTable.handleUpdateCellAreas) {
             if (props.clipConfig) {
-              warnLog('vxe.error.notProp', ['clip-config'])
+              log.warn('vxe.error.notProp', ['clip-config'])
             }
             if (props.fnrConfig) {
-              warnLog('vxe.error.notProp', ['fnr-config'])
+              log.warn('vxe.error.notProp', ['fnr-config'])
             }
             if (mouseOpts.area) {
-              errLog('vxe.error.notProp', ['mouse-config.area'])
+              log.err('vxe.error.notProp', ['mouse-config.area'])
               return
             }
           }
           if (props.treeConfig && treeOpts.children) {
-            warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
+            log.warn('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
           }
           if (props.treeConfig && treeOpts.line) {
-            warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
+            log.warn('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
           }
           if (mouseOpts.area && mouseOpts.selected) {
-            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+            log.warn('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
           }
           if (mouseOpts.area && checkboxOpts.range) {
-            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+            log.warn('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
           }
           if (props.treeConfig && mouseOpts.area) {
-            errLog('vxe.error.noTree', ['mouse-config.area'])
+            log.err('vxe.error.noTree', ['mouse-config.area'])
           }
           if (props.editConfig && editOpts.activeMethod) {
-            warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+            log.warn('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
           }
           if (props.treeConfig && checkboxOpts.isShiftKey) {
-            errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
+            log.err('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
           }
           if (checkboxOpts.halfField) {
-            warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+            log.warn('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
           }
         }
 
         // 检查是否有安装需要的模块
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          if (props.editConfig && !$xetable.insert) {
-            errLog('vxe.error.reqModule', ['Edit'])
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
+          if (props.editConfig && !$xeTable.insert) {
+            log.err('vxe.error.reqModule', ['Edit'])
           }
-          if (props.editRules && !$xetable.validate) {
-            errLog('vxe.error.reqModule', ['Validator'])
+          if (props.editRules && !$xeTable.validate) {
+            log.err('vxe.error.reqModule', ['Validator'])
           }
-          if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xetable.triggerCellMousedownEvent) {
-            errLog('vxe.error.reqModule', ['Keyboard'])
+          if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.triggerCellMousedownEvent) {
+            log.err('vxe.error.reqModule', ['Keyboard'])
           }
-          if ((props.printConfig || props.importConfig || props.exportConfig) && !$xetable.exportData) {
-            errLog('vxe.error.reqModule', ['Export'])
+          if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
+            log.err('vxe.error.reqModule', ['Export'])
           }
         }
 
@@ -6743,15 +6744,17 @@ export default defineComponent({
           const el = refElem.value
           const parentEl = tablePrivateMethods.getParentElem()
           const handleOptimizeResize = refreshDelay ? XEUtils.throttle(() => tableMethods.recalculate(true), refreshDelay, { leading: true, trailing: true }) : null
-          resizeObserver = createResizeEvent(handleOptimizeResize ? () => {
-            if (props.autoResize) {
-              requestAnimationFrame(handleOptimizeResize)
-            }
-          } : () => {
-            if (props.autoResize) {
-              tableMethods.recalculate(true)
-            }
-          })
+          resizeObserver = globalResize.create(handleOptimizeResize
+            ? () => {
+                if (props.autoResize) {
+                  requestAnimationFrame(handleOptimizeResize)
+                }
+              }
+            : () => {
+                if (props.autoResize) {
+                  tableMethods.recalculate(true)
+                }
+              })
           if (el) {
             resizeObserver.observe(el)
           }
@@ -6760,18 +6763,18 @@ export default defineComponent({
           }
         }
       })
-      GlobalEvent.on($xetable, 'paste', handleGlobalPasteEvent)
-      GlobalEvent.on($xetable, 'copy', handleGlobalCopyEvent)
-      GlobalEvent.on($xetable, 'cut', handleGlobalCutEvent)
-      GlobalEvent.on($xetable, 'mousedown', handleGlobalMousedownEvent)
-      GlobalEvent.on($xetable, 'blur', handleGlobalBlurEvent)
-      GlobalEvent.on($xetable, 'mousewheel', handleGlobalMousewheelEvent)
-      GlobalEvent.on($xetable, 'keydown', handleGlobalKeydownEvent)
-      GlobalEvent.on($xetable, 'resize', handleGlobalResizeEvent)
-      if ($xetable.handleGlobalContextmenuEvent) {
-        GlobalEvent.on($xetable, 'contextmenu', $xetable.handleGlobalContextmenuEvent)
+      globalEvents.on($xeTable, 'paste', handleGlobalPasteEvent)
+      globalEvents.on($xeTable, 'copy', handleGlobalCopyEvent)
+      globalEvents.on($xeTable, 'cut', handleGlobalCutEvent)
+      globalEvents.on($xeTable, 'mousedown', handleGlobalMousedownEvent)
+      globalEvents.on($xeTable, 'blur', handleGlobalBlurEvent)
+      globalEvents.on($xeTable, 'mousewheel', handleGlobalMousewheelEvent)
+      globalEvents.on($xeTable, 'keydown', handleGlobalKeydownEvent)
+      globalEvents.on($xeTable, 'resize', handleGlobalResizeEvent)
+      if ($xeTable.handleGlobalContextmenuEvent) {
+        globalEvents.on($xeTable, 'contextmenu', $xeTable.handleGlobalContextmenuEvent)
       }
-      tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xetable })
+      tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xeTable })
     })
 
     onBeforeUnmount(() => {
@@ -6779,23 +6782,23 @@ export default defineComponent({
         resizeObserver.disconnect()
       }
       tableMethods.closeFilter()
-      if ($xetable.closeMenu) {
-        $xetable.closeMenu()
+      if ($xeTable.closeMenu) {
+        $xeTable.closeMenu()
       }
-      tablePrivateMethods.preventEvent(null, 'beforeUnmount', { $table: $xetable })
+      tablePrivateMethods.preventEvent(null, 'beforeUnmount', { $table: $xeTable })
     })
 
     onUnmounted(() => {
-      GlobalEvent.off($xetable, 'paste')
-      GlobalEvent.off($xetable, 'copy')
-      GlobalEvent.off($xetable, 'cut')
-      GlobalEvent.off($xetable, 'mousedown')
-      GlobalEvent.off($xetable, 'blur')
-      GlobalEvent.off($xetable, 'mousewheel')
-      GlobalEvent.off($xetable, 'keydown')
-      GlobalEvent.off($xetable, 'resize')
-      GlobalEvent.off($xetable, 'contextmenu')
-      tablePrivateMethods.preventEvent(null, 'unmounted', { $table: $xetable })
+      globalEvents.off($xeTable, 'paste')
+      globalEvents.off($xeTable, 'copy')
+      globalEvents.off($xeTable, 'cut')
+      globalEvents.off($xeTable, 'mousedown')
+      globalEvents.off($xeTable, 'blur')
+      globalEvents.off($xeTable, 'mousewheel')
+      globalEvents.off($xeTable, 'keydown')
+      globalEvents.off($xeTable, 'resize')
+      globalEvents.off($xeTable, 'contextmenu')
+      tablePrivateMethods.preventEvent(null, 'unmounted', { $table: $xeTable })
     })
 
     const renderVN = () => {
@@ -6820,7 +6823,7 @@ export default defineComponent({
           [`size--${vSize}`]: vSize,
           [`valid-msg--${validOpts.msgMode}`]: !!editRules,
           'vxe-editable': !!editConfig,
-          'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete',
+          'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
           'cell--highlight': highlightCell,
           'cell--selected': mouseConfig && mouseOpts.selected,
           'cell--area': mouseConfig && mouseOpts.area,
@@ -6859,16 +6862,18 @@ export default defineComponent({
             /**
              * 表头
              */
-            showHeader ? h(TableHeaderComponent, {
-              ref: refTableHeader,
-              tableData,
-              tableColumn,
-              tableGroupColumn
-            }) : createCommentVNode(),
+            showHeader
+              ? h(TableHeaderComponent, {
+                ref: refTableHeader,
+                tableData,
+                tableColumn,
+                tableGroupColumn
+              })
+              : createCommentVNode(),
             /**
              * 表体
              */
-            h(TableBodyComponent as ComponentOptions, {
+            h(TableBodyComponent, {
               ref: refTableBody,
               tableData,
               tableColumn
@@ -6876,11 +6881,13 @@ export default defineComponent({
             /**
              * 表尾
              */
-            showFooter ? h(TableFooterComponent, {
-              ref: refTableFooter,
-              footerTableData,
-              tableColumn
-            }) : createCommentVNode()
+            showFooter
+              ? h(TableFooterComponent, {
+                ref: refTableFooter,
+                footerTableData,
+                tableColumn
+              })
+              : createCommentVNode()
           ]),
           h('div', {
             class: 'vxe-table--fixed-wrapper'
@@ -6918,89 +6925,109 @@ export default defineComponent({
         h('div', {
           ref: refCellResizeBar,
           class: 'vxe-table--resizable-bar',
-          style: overflowX ? {
-            'padding-bottom': `${scrollbarHeight}px`
-          } : null
+          style: overflowX
+            ? {
+                'padding-bottom': `${scrollbarHeight}px`
+              }
+            : null
         }),
         /**
          * 加载中
          */
-        h(VxeLoading, {
+        h(resolveComponent('vxe-loading') as VxeLoadingComponent, {
           class: 'vxe-table--loading',
           modelValue: loading,
           icon: loadingOpts.icon,
           text: loadingOpts.text
-        }, loadingSlot ? {
-          default: () => loadingSlot({ $table: $xetable, $grid: $xegrid })
-        } : {}),
+        }, loadingSlot
+          ? {
+              default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
+            }
+          : {}),
         /**
          * 自定义列
          */
-        initStore.custom ? h(resolveComponent('vxe-table-custom-panel') as ComponentOptions, {
-          ref: refTableCustom,
-          customStore
-        }) : createCommentVNode(),
+        initStore.custom
+          ? h(TableCustomPanelComponent, {
+            ref: refTableCustom,
+            customStore
+          })
+          : createCommentVNode(),
         /**
          * 筛选
          */
-        initStore.filter ? h(resolveComponent('vxe-table-filter-panel') as ComponentOptions, {
-          ref: refTableFilter,
-          filterStore
-        }) : createCommentVNode(),
+        initStore.filter
+          ? h(TableFilterPanelComponent, {
+            ref: refTableFilter,
+            filterStore
+          })
+          : createCommentVNode(),
         /**
          * 导入
          */
-        initStore.import && props.importConfig ? h(resolveComponent('vxe-table-import-panel') as ComponentOptions, {
-          defaultOptions: reactData.importParams,
-          storeData: reactData.importStore
-        }) : createCommentVNode(),
+        initStore.import && props.importConfig
+          ? h(TableImportPanelComponent, {
+            defaultOptions: reactData.importParams,
+            storeData: reactData.importStore
+          })
+          : createCommentVNode(),
         /**
          * 导出/导出
          */
-        initStore.export && (props.exportConfig || props.printConfig) ? h(resolveComponent('vxe-table-export-panel') as ComponentOptions, {
-          defaultOptions: reactData.exportParams,
-          storeData: reactData.exportStore
-        }) : createCommentVNode(),
+        initStore.export && (props.exportConfig || props.printConfig)
+          ? h(TableExportPanelComponent, {
+            defaultOptions: reactData.exportParams,
+            storeData: reactData.exportStore
+          })
+          : createCommentVNode(),
         /**
          * 快捷菜单
          */
-        isMenu ? h(resolveComponent('vxe-table-menu-panel') as ComponentOptions, {
-          ref: refTableMenu
-        }) : createCommentVNode(),
+        isMenu
+          ? h(TableMenuPanelComponent, {
+            ref: refTableMenu
+          })
+          : createCommentVNode(),
         /**
          * 通用提示
          */
-        hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          ref: refCommTooltip,
-          isArrow: false,
-          enterable: false
-        }) : createCommentVNode(),
+        hasUseTooltip
+          ? h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
+            ref: refCommTooltip,
+            isArrow: false,
+            enterable: false
+          })
+          : createCommentVNode(),
         /**
          * 工具提示
          */
-        hasUseTooltip ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          ref: refTooltip,
-          ...tipConfig
-        }) : createCommentVNode(),
+        hasUseTooltip
+          ? h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
+            ref: refTooltip,
+            ...tipConfig as any
+          })
+          : createCommentVNode(),
         /**
          * 校验提示
          */
-        hasUseTooltip && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h(resolveComponent('vxe-tooltip') as ComponentOptions, {
-          ref: refValidTooltip,
-          class: [{
-            'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete'
-          }, 'vxe-table--valid-error'],
-          ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {})
-        }) : createCommentVNode()
+        hasUseTooltip && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+          ? h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
+            ref: refValidTooltip,
+            class: [{
+              'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
+            }, 'vxe-table--valid-error'],
+            ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {}) as any
+          })
+          : createCommentVNode()
       ])
     }
 
-    $xetable.renderVN = renderVN
+    $xeTable.renderVN = renderVN
 
-    provide('xecolgroup', null)
-    provide('$xetable', $xetable)
+    provide('$xeColgroup', null)
+    provide('$xeTable', $xeTable)
 
-    return $xetable
+    return $xeTable
   },
   render () {
     return this.renderVN()

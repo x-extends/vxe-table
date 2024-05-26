@@ -1,15 +1,16 @@
 import { App } from 'vue'
+import { VxeUI } from '@vxe-ui/core'
 import VxeToolbarComponent from './src/toolbar'
-import { dynamicApp } from '../dynamics'
 
-export const VxeToolbar = Object.assign(VxeToolbarComponent, {
-  install: function (app: App) {
-    app.component(VxeToolbarComponent.name, VxeToolbarComponent)
+export const VxeToolbar = Object.assign({}, VxeToolbarComponent, {
+  install (app: App) {
+    app.component(VxeToolbarComponent.name as string, VxeToolbarComponent)
   }
 })
 
+if (VxeUI.dynamicApp) {
+  VxeUI.dynamicApp.component(VxeToolbarComponent.name as string, VxeToolbarComponent)
+}
+
 export const Toolbar = VxeToolbar
-
-dynamicApp.component(VxeToolbarComponent.name, VxeToolbarComponent)
-
 export default VxeToolbar

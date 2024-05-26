@@ -2,7 +2,7 @@ import { defineComponent, h, onUnmounted, inject, ref, Ref, PropType, provide, o
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
-import { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, VxeColumnProps } from '../../../types/all'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, VxeColumnProps } from '../../../types'
 
 export const columnProps = {
   // 列唯一主键
@@ -94,28 +94,35 @@ export default defineComponent({
   props: columnProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>
-    const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTablePrivateMethods)
-    const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
-    const column = Cell.createColumn($xetable, props as VxeColumnProps)
+    const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
+    const parentColgroup = inject('$xeColgroup', null as XEColumnInstance | null)
+    const column = Cell.createColumn($xeTable, props as VxeColumnProps)
     column.slots = slots
-
-    provide('$xegrid', null)
-
-    watchColumn($xetable, props, column)
-
-    onMounted(() => {
-      assemColumn($xetable, refElem.value, column, colgroup)
-    })
-
-    onUnmounted(() => {
-      destroyColumn($xetable, column)
-    })
 
     const renderVN = () => {
       return h('div', {
         ref: refElem
       })
     }
+
+    const $xeColumn = {
+      column,
+
+      renderVN
+    }
+
+    watchColumn($xeTable, props, column)
+
+    onMounted(() => {
+      assemColumn($xeTable, refElem.value, column, parentColgroup)
+    })
+
+    onUnmounted(() => {
+      destroyColumn($xeTable, column)
+    })
+
+    provide('$xeColumn', $xeColumn)
+    provide('$xeGrid', null)
 
     return renderVN
   }

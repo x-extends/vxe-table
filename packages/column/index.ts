@@ -1,19 +1,20 @@
 import { App } from 'vue'
-import VxeTableColumnComponent from '../table/src/column'
-import { dynamicApp } from '../dynamics'
+import { VxeUI } from '@vxe-ui/core'
+import VxeColumnComponent from '../table/src/column'
 
-export const VxeColumn = Object.assign(VxeTableColumnComponent, {
+export const VxeColumn = Object.assign({}, VxeColumnComponent, {
   install (app: App) {
-    app.component(VxeTableColumnComponent.name, VxeTableColumnComponent)
+    app.component(VxeColumnComponent.name as string, VxeColumnComponent)
     // 兼容旧用法
-    app.component('VxeTableColumn', VxeTableColumnComponent)
+    app.component('VxeTableColumn', VxeColumnComponent)
   }
 })
 
+if (VxeUI.dynamicApp) {
+  VxeUI.dynamicApp.component(VxeColumnComponent.name as string, VxeColumnComponent)
+  // 兼容旧用法
+  VxeUI.dynamicApp.component('VxeTableColumn', VxeColumnComponent)
+}
+
 export const Column = VxeColumn
-
-dynamicApp.component(VxeTableColumnComponent.name, VxeTableColumnComponent)
-// 兼容旧用法
-dynamicApp.component('VxeTableColumn', VxeTableColumnComponent)
-
 export default VxeColumn

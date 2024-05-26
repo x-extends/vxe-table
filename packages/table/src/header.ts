@@ -1,9 +1,9 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { convertHeaderColumnToRows, getColReMinWidth } from './util'
-import { hasClass, getOffsetPos, addClass, removeClass } from '../../tools/dom'
+import { hasClass, getOffsetPos, addClass, removeClass } from '../../ui/src/dom'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types/all'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
 
 const renderType = 'header'
 
@@ -17,11 +17,11 @@ export default defineComponent({
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
-    const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
+    const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
-    const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar } = $xetable.getRefMaps()
-    const { computeColumnOpts } = $xetable.getComputeMaps()
+    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
+    const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar } = $xeTable.getRefMaps()
+    const { computeColumnOpts } = $xeTable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
@@ -114,17 +114,17 @@ export default defineComponent({
         resizeBarElem.style.display = 'none'
         tableReactData._isResize = false
         tableInternalData._lastResizeTime = Date.now()
-        $xetable.analyColumnWidth()
-        $xetable.recalculate(true).then(() => {
-          $xetable.saveCustomResizable()
-          $xetable.updateCellAreas()
-          $xetable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
+        $xeTable.analyColumnWidth()
+        $xeTable.recalculate(true).then(() => {
+          $xeTable.saveCustomResizable()
+          $xeTable.updateCellAreas()
+          $xeTable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
         })
         removeClass(tableEl, 'drag--resize')
       }
       updateEvent(evnt)
-      if ($xetable.closeMenu) {
-        $xetable.closeMenu()
+      if ($xeTable.closeMenu) {
+        $xeTable.closeMenu()
       }
     }
 
@@ -133,7 +133,7 @@ export default defineComponent({
     onMounted(() => {
       nextTick(() => {
         const { fixedType } = props
-        const { internalData } = $xetable
+        const { internalData } = $xeTable
         const { elemStore } = internalData
         const prefix = `${fixedType || 'main'}-header-`
         elemStore[`${prefix}wrapper`] = refElem
@@ -148,7 +148,7 @@ export default defineComponent({
 
     onUnmounted(() => {
       const { fixedType } = props
-      const { internalData } = $xetable
+      const { internalData } = $xeTable
       const { elemStore } = internalData
       const prefix = `${fixedType || 'main'}-header-`
       elemStore[`${prefix}wrapper`] = null
@@ -183,10 +183,12 @@ export default defineComponent({
         class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
         xid: xID
       }, [
-        fixedType ? createCommentVNode() : h('div', {
-          ref: refHeaderXSpace,
-          class: 'vxe-body--x-space'
-        }),
+        fixedType
+          ? createCommentVNode()
+          : h('div', {
+            ref: refHeaderXSpace,
+            class: 'vxe-body--x-space'
+          }),
         h('table', {
           ref: refHeaderTable,
           class: 'vxe-table--header',
@@ -205,11 +207,13 @@ export default defineComponent({
               name: column.id,
               key: $columnIndex
             })
-          }).concat(scrollbarWidth ? [
-            h('col', {
-              name: 'col_gutter'
-            })
-          ] : [])),
+          }).concat(scrollbarWidth
+            ? [
+                h('col', {
+                  name: 'col_gutter'
+                })
+              ]
+            : [])),
           /**
            * 头部
            */
@@ -217,8 +221,8 @@ export default defineComponent({
             ref: refHeaderTHead
           }, headerGroups.map((cols, $rowIndex) => {
             return h('tr', {
-              class: ['vxe-header--row', headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowClassName) : ''],
-              style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowStyle) : null
+              class: ['vxe-header--row', headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowClassName) : ''],
+              style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowStyle) : null
             }, cols.map((column, $columnIndex) => {
               const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
               const isColGroup = column.children && column.children.length
@@ -230,12 +234,12 @@ export default defineComponent({
               const showTooltip = headOverflow === true || headOverflow === 'tooltip'
               let hasEllipsis = showTitle || showTooltip || showEllipsis
               const hasFilter = column.filters && column.filters.some((item) => item.checked)
-              const columnIndex = $xetable.getColumnIndex(column)
-              const _columnIndex = $xetable.getVTColumnIndex(column)
-              const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xetable, $grid: $xetable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+              const columnIndex = $xeTable.getColumnIndex(column)
+              const _columnIndex = $xeTable.getVTColumnIndex(column)
+              const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xeTable, $grid: $xeTable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
               const thOns: any = {
-                onClick: (evnt: MouseEvent) => $xetable.triggerHeaderCellClickEvent(evnt, params),
-                onDblclick: (evnt: MouseEvent) => $xetable.triggerHeaderCellDblclickEvent(evnt, params)
+                onClick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, params),
+                onDblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, params)
               }
               // 横向虚拟滚动不支持动态行高
               if (scrollXLoad && !hasEllipsis) {
@@ -243,7 +247,7 @@ export default defineComponent({
               }
               // 按下事件处理
               if (mouseConfig) {
-                thOns.onMousedown = (evnt: MouseEvent) => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
+                thOns.onMousedown = (evnt: MouseEvent) => $xeTable.triggerHeaderCellMousedownEvent(evnt, params)
               }
               return h('th', {
                 class: ['vxe-header--column', column.id, {
@@ -279,18 +283,22 @@ export default defineComponent({
                 /**
                  * 列宽拖动
                  */
-                !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || resizable)) ? h('div', {
-                  class: ['vxe-resizable', {
-                    'is--line': !border || border === 'none'
-                  }],
-                  onMousedown: (evnt: MouseEvent) => resizeMousedown(evnt, params)
-                }) : null
+                !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || resizable))
+                  ? h('div', {
+                    class: ['vxe-resizable', {
+                      'is--line': !border || border === 'none'
+                    }],
+                    onMousedown: (evnt: MouseEvent) => resizeMousedown(evnt, params)
+                  })
+                  : null
               ])
-            }).concat(scrollbarWidth ? [
-              h('th', {
-                class: 'vxe-header--gutter col--gutter'
-              })
-            ] : []))
+            }).concat(scrollbarWidth
+              ? [
+                  h('th', {
+                    class: 'vxe-header--gutter col--gutter'
+                  })
+                ]
+              : []))
           }))
         ]),
         /**

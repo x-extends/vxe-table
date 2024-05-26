@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增刪改查、虛擬樹、列拖拽、懶加載、快捷菜單、數據校驗、打印導出、表單渲染、自定義模板、渲染器、JSON 配置式…
+一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增刪改查、虛擬樹、列拖拽、懶加載、快捷菜單、數據校驗、導入/匯出/列印、表單渲染、自定義模板、渲染器、JSON 配置式…
 
 * 設計理念
   * 面向現代瀏覽器，高效的簡潔 API 設計
@@ -23,7 +23,7 @@
   * [x] ~~v1.0 基於 vue2.6，支持所有主流的瀏覽器，實現表格的一切實用的功能~~
   * [x] ~~v2.0 基於 vue2.6，支持所有主流的瀏覽器，同時兼具功能與效能~~
   * [x] v3.0 基於 vue2.6，支持現代瀏覽器並保留相容IE11
-  * [x] v4.0 基於 vue3.x，只支持現代瀏覽器，不支持IE
+  * [x] v4.0 基于 vue3.x，只支持現代瀏覽器，不支持IE
   * [x] v4.7 基於 vue3.x，重構組件，拆分多餘組件，只保留表格
 
 ## 瀏覽器支持
@@ -90,10 +90,10 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 
 ```javascript
 import { createApp } from 'vue'
-import VXETable from 'vxe-table'
+import VxeUITable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 
-createApp(App).use(VXETable).mount('#app')
+createApp(App).use(VxeUITable).mount('#app')
 ```
 
 ### CDN

@@ -1,8 +1,8 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { updateCellTitle, getPropClass } from '../../tools/dom'
+import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types/all'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types'
 
 const renderType = 'footer'
 
@@ -29,11 +29,11 @@ export default defineComponent({
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
-    const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
+    const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xetable
-    const { refTableHeader, refTableBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeTooltipOpts, computeColumnOpts } = $xetable.getComputeMaps()
+    const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
+    const { refTableHeader, refTableBody, refValidTooltip } = $xeTable.getRefMaps()
+    const { computeTooltipOpts, computeColumnOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterTable = ref() as Ref<HTMLTableElement>
@@ -67,12 +67,12 @@ export default defineComponent({
         bodyElem.scrollLeft = scrollLeft
       }
       if (scrollXLoad && isX) {
-        $xetable.triggerScrollXEvent(evnt)
+        $xeTable.triggerScrollXEvent(evnt)
       }
       if (isX && validTip && validTip.reactData.visible) {
         validTip.updatePlacement()
       }
-      $xetable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
+      $xeTable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }
 
     onMounted(() => {
@@ -125,10 +125,12 @@ export default defineComponent({
         xid: xID,
         onScroll: scrollEvent
       }, [
-        fixedType ? createCommentVNode() : h('div', {
-          ref: refFooterXSpace,
-          class: 'vxe-body--x-space'
-        }),
+        fixedType
+          ? createCommentVNode()
+          : h('div', {
+            ref: refFooterXSpace,
+            class: 'vxe-body--x-space'
+          }),
         h('table', {
           ref: refFooterTable,
           class: 'vxe-table--footer',
@@ -147,11 +149,13 @@ export default defineComponent({
               name: column.id,
               key: $columnIndex
             })
-          }).concat(scrollbarWidth ? [
-            h('col', {
-              name: 'col_gutter'
-            })
-          ] : [])),
+          }).concat(scrollbarWidth
+            ? [
+                h('col', {
+                  name: 'col_gutter'
+                })
+              ]
+            : [])),
           /**
            * 底部
            */
@@ -159,7 +163,7 @@ export default defineComponent({
             ref: refFooterTFoot
           }, footerTableData.map((list, _rowIndex) => {
             const $rowIndex = _rowIndex
-            const rowParams = { $table: $xetable, row: list, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
+            const rowParams = { $table: $xeTable, row: list, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
             return h('tr', {
               class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''],
               style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
@@ -176,12 +180,12 @@ export default defineComponent({
               let hasEllipsis = showTitle || showTooltip || showEllipsis
               const attrs: any = { colid: column.id }
               const tfOns: any = {}
-              const columnIndex = $xetable.getColumnIndex(column)
-              const _columnIndex = $xetable.getVTColumnIndex(column)
+              const columnIndex = $xeTable.getColumnIndex(column)
+              const _columnIndex = $xeTable.getVTColumnIndex(column)
               const itemIndex = _columnIndex
               const cellParams: VxeTableDefines.CellRenderFooterParams = {
-                $table: $xetable,
-                $grid: $xetable.xegrid,
+                $table: $xeTable,
+                $grid: $xeTable.xegrid,
                 row: list,
                 rowIndex: _rowIndex,
                 _rowIndex,
@@ -205,22 +209,22 @@ export default defineComponent({
                   if (showTitle) {
                     updateCellTitle(evnt.currentTarget, column)
                   } else if (showTooltip || showAllTip) {
-                    $xetable.triggerFooterTooltipEvent(evnt, cellParams)
+                    $xeTable.triggerFooterTooltipEvent(evnt, cellParams)
                   }
                 }
               }
               if (showTooltip || showAllTip) {
                 tfOns.onMouseleave = (evnt: MouseEvent) => {
                   if (showTooltip || showAllTip) {
-                    $xetable.handleTargetLeaveEvent(evnt)
+                    $xeTable.handleTargetLeaveEvent(evnt)
                   }
                 }
               }
               tfOns.onClick = (evnt: MouseEvent) => {
-                $xetable.dispatchEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+                $xeTable.dispatchEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
               }
               tfOns.onDblclick = (evnt: MouseEvent) => {
-                $xetable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+                $xeTable.dispatchEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
               }
               // 合并行或列
               if (mergeFooterList.length) {
@@ -272,11 +276,13 @@ export default defineComponent({
                   }]
                 }, column.renderFooter(cellParams))
               ])
-            }).concat(scrollbarWidth ? [
-              h('td', {
-                class: 'vxe-footer--gutter col--gutter'
-              })
-            ] : []))
+            }).concat(scrollbarWidth
+              ? [
+                  h('td', {
+                    class: 'vxe-footer--gutter col--gutter'
+                  })
+                ]
+              : []))
           }))
         ])
       ])

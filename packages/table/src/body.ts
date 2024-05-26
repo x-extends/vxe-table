@@ -1,13 +1,12 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
-import GlobalConfig from '../../v-x-e-table/src/conf'
-import { VXETable } from '../../v-x-e-table'
+import { getI18n, renderer, VxeComponentSlotType } from '@vxe-ui/core'
 import { mergeBodyMethod, getRowid, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
-import { updateCellTitle, getPropClass } from '../../tools/dom'
-import { isEnableConf } from '../../tools/utils'
-import { getSlotVNs } from '../../tools/vn'
+import { updateCellTitle, getPropClass } from '../../ui/src/dom'
+import { isEnableConf } from '../../ui/src/utils'
+import { getSlotVNs } from '../../ui/src/vn'
 
-import { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeGlobalRendererHandles, VxeColumnPropTypes, SizeType } from '../../../types/all'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeColumnPropTypes, VxeComponentSizeType } from '../../../types'
 
 const renderType = 'body'
 
@@ -26,13 +25,13 @@ export default defineComponent({
     fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
   },
   setup (props) {
-    const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
+    const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const xesize = inject('xesize', null as ComputedRef<SizeType> | null)
+    const xesize = inject('xesize', null as ComputedRef<VxeComponentSizeType> | null)
 
-    const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xetable
-    const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xetable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xetable.getComputeMaps()
+    const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
+    const { refTableHeader, refTableBody, refTableFooter, refTableLeftBody, refTableRightBody, refValidTooltip } = $xeTable.getRefMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -67,7 +66,7 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const rowChildren = prevRow[childrenField]
-      if (rowChildren && $xetable.isTreeExpandByRow(prevRow)) {
+      if (rowChildren && $xeTable.isTreeExpandByRow(prevRow)) {
         for (let index = 0; index < rowChildren.length; index++) {
           count += countTreeExpand(rowChildren[index], params)
         }
@@ -90,20 +89,20 @@ export default defineComponent({
       const treeOpts = computeTreeOpts.value
       const { slots, treeNode } = column
       const { fullAllDataRowIdData } = tableInternalData
-      const rowid = getRowid($xetable, row)
+      const rowid = getRowid($xeTable, row)
       const rest = fullAllDataRowIdData[rowid]
       let rLevel = 0
       let rIndex = 0
-      let items = []
+      let items: any[] = []
       if (rest) {
         rLevel = rest.level
         rIndex = rest._index
         items = rest.items
       }
       if (slots && slots.line) {
-        return $xetable.callSlot(slots.line, params)
+        return $xeTable.callSlot(slots.line, params)
       }
-      const isFirstRow = $xetable.eqRow(afterFullData[0], row)
+      const isFirstRow = $xeTable.eqRow(afterFullData[0], row)
       if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
         return [
           h('div', {
@@ -141,12 +140,12 @@ export default defineComponent({
       const { rHeight: scrollYRHeight } = sYOpts
       const { height: rowHeight } = rowOpts
       const renderOpts = editRender || cellRender
-      const compConf = renderOpts ? VXETable.renderer.get(renderOpts.name) : null
+      const compConf = renderOpts ? renderer.get(renderOpts.name) : null
       const compCellClassName = compConf ? compConf.cellClassName : ''
       const compCellStyle = compConf ? compConf.cellStyle : ''
       const showAllTip = tooltipOpts.showAll
-      const columnIndex = $xetable.getColumnIndex(column)
-      const _columnIndex = $xetable.getVTColumnIndex(column)
+      const columnIndex = $xeTable.getColumnIndex(column)
+      const _columnIndex = $xeTable.getVTColumnIndex(column)
       const isEdit = isEnableConf(editRender)
       let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
       const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
@@ -160,7 +159,7 @@ export default defineComponent({
       const errorValidItem = validErrorMaps[`${rowid}:${column.id}`]
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
       const attrs: any = { colid: column.id }
-      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xetable, $grid: $xetable.xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xeTable, $grid: $xeTable.xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
       if (scrollYLoad && !hasEllipsis) {
         showEllipsis = hasEllipsis = true
@@ -175,9 +174,9 @@ export default defineComponent({
             updateCellTitle(evnt.currentTarget, column)
           } else if (showTooltip || showAllTip) {
             // 如果配置了显示 tooltip
-            $xetable.triggerBodyTooltipEvent(evnt, params)
+            $xeTable.triggerBodyTooltipEvent(evnt, params)
           }
-          $xetable.dispatchEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+          $xeTable.dispatchEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, params), evnt)
         }
       }
       // hover 退出事件
@@ -187,24 +186,24 @@ export default defineComponent({
             return
           }
           if (showTooltip || showAllTip) {
-            $xetable.handleTargetLeaveEvent(evnt)
+            $xeTable.handleTargetLeaveEvent(evnt)
           }
-          $xetable.dispatchEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+          $xeTable.dispatchEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, params), evnt)
         }
       }
       // 按下事件处理
       if (checkboxOpts.range || mouseConfig) {
         tdOns.onMousedown = (evnt: MouseEvent) => {
-          $xetable.triggerCellMousedownEvent(evnt, params)
+          $xeTable.triggerCellMousedownEvent(evnt, params)
         }
       }
       // 点击事件处理
       tdOns.onClick = (evnt: MouseEvent) => {
-        $xetable.triggerCellClickEvent(evnt, params)
+        $xeTable.triggerCellClickEvent(evnt, params)
       }
       // 双击事件处理
       tdOns.onDblclick = (evnt: MouseEvent) => {
-        $xetable.triggerCellDblclickEvent(evnt, params)
+        $xeTable.triggerCellDblclickEvent(evnt, params)
       }
       // 合并行或列
       if (mergeList.length) {
@@ -242,9 +241,9 @@ export default defineComponent({
       }
       // 如果编辑列开启显示状态
       if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
-        isDirty = $xetable.isUpdateByRow(row, column.field)
+        isDirty = $xeTable.isUpdateByRow(row, column.field)
       }
-      const tdVNs = []
+      const tdVNs: any[] = []
       if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
         tdVNs.push(
           h('div', {
@@ -271,7 +270,7 @@ export default defineComponent({
             style: {
               maxHeight: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
             },
-            title: showTitle ? $xetable.getCellLabel(row, column) : null
+            title: showTitle ? $xeTable.getCellLabel(row, column) : null
           }, column.renderCell(params))
         )
         if (showValidTip && errorValidItem) {
@@ -281,14 +280,18 @@ export default defineComponent({
           tdVNs.push(
             h('div', {
               class: ['vxe-cell--valid-error-hint', getPropClass(validOpts.className, validParams)],
-              style: errRule && errRule.maxWidth ? {
-                width: `${errRule.maxWidth}px`
-              } : null
-            }, validSlot ? $xetable.callSlot(validSlot, validParams) : [
-              h('span', {
-                class: 'vxe-cell--valid-error-msg'
-              }, errorValidItem.content)
-            ])
+              style: errRule && errRule.maxWidth
+                ? {
+                    width: `${errRule.maxWidth}px`
+                  }
+                : null
+            }, validSlot
+              ? $xeTable.callSlot(validSlot, validParams)
+              : [
+                  h('span', {
+                    class: 'vxe-cell--valid-error-msg'
+                  }, errorValidItem.content)
+                ])
           )
         }
       }
@@ -339,23 +342,23 @@ export default defineComponent({
         const trOn: any = {}
         let rowIndex = $rowIndex
         // 确保任何情况下 rowIndex 都精准指向真实 data 索引
-        rowIndex = $xetable.getRowIndex(row)
+        rowIndex = $xeTable.getRowIndex(row)
         // 事件绑定
         if (rowOpts.isHover || highlightHoverRow) {
           trOn.onMouseenter = (evnt: any) => {
             if (isVMScrollProcess()) {
               return
             }
-            $xetable.triggerHoverEvent(evnt, { row, rowIndex })
+            $xeTable.triggerHoverEvent(evnt, { row, rowIndex })
           }
           trOn.onMouseleave = () => {
             if (isVMScrollProcess()) {
               return
             }
-            $xetable.clearHoverRow()
+            $xeTable.clearHoverRow()
           }
         }
-        const rowid = getRowid($xetable, row)
+        const rowid = getRowid($xeTable, row)
         const rest = fullAllDataRowIdData[rowid]
         let rowLevel = 0
         let seq: string | number = -1
@@ -365,7 +368,7 @@ export default defineComponent({
           seq = rest.seq
           _rowIndex = rest._index
         }
-        const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+        const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
         // 行是否被展开
         const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
         // 树节点是否被展开
@@ -374,11 +377,11 @@ export default defineComponent({
         // 处理新增状态
         let isNewRow = false
         if (editConfig) {
-          isNewRow = $xetable.isInsertByRow(row)
+          isNewRow = $xeTable.isInsertByRow(row)
         }
         if (treeConfig && !scrollYLoad && !transform) {
           rowChildren = row[childrenField]
-          isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
+          isExpandTree = rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
         }
         rows.push(
           h('tr', {
@@ -386,13 +389,13 @@ export default defineComponent({
               'vxe-body--row',
               treeConfig ? `row--level-${rowLevel}` : '',
               {
-                'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
+                'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
                 'is--new': isNewRow,
                 'is--expand-row': isExpandRow,
                 'is--expand-tree': isExpandTree,
                 'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-                'row--radio': radioOpts.highlight && $xetable.eqRow(selectRadioRow, row),
-                'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row),
+                'row--radio': radioOpts.highlight && $xeTable.eqRow(selectRadioRow, row),
+                'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
                 'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
               },
               getPropClass(rowClassName, params)
@@ -418,7 +421,7 @@ export default defineComponent({
           }
           const { showOverflow } = expandColumn
           const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-          const expandParams = { $table: $xetable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
+          const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
           rows.push(
             h('tr', {
               class: 'vxe-body--expanded-row',
@@ -537,7 +540,7 @@ export default defineComponent({
       tableInternalData.lastScrollLeft = scrollLeft
       tableReactData.lastScrollTime = Date.now()
       if (rowOpts.isHover || highlightHoverRow) {
-        $xetable.clearHoverRow()
+        $xeTable.clearHoverRow()
       }
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
@@ -555,7 +558,7 @@ export default defineComponent({
           }
         }
         if (leftElem || rightElem) {
-          $xetable.checkScrolling()
+          $xeTable.checkScrolling()
           if (isRollY) {
             syncBodyScroll(fixedType, scrollTop, leftElem, rightElem)
           }
@@ -564,11 +567,11 @@ export default defineComponent({
       // let isLoadScroll = false
       if (scrollXLoad && isRollX) {
         // isLoadScroll = true
-        $xetable.triggerScrollXEvent(evnt)
+        $xeTable.triggerScrollXEvent(evnt)
       }
       if (scrollYLoad && isRollY) {
         // isLoadScroll = true
-        $xetable.triggerScrollYEvent(evnt)
+        $xeTable.triggerScrollYEvent(evnt)
       }
 
       if (scrollLoadingTime !== null) {
@@ -587,7 +590,7 @@ export default defineComponent({
       if (isRollX && validTip && validTip.reactData.visible) {
         validTip.updatePlacement()
       }
-      $xetable.dispatchEvent('scroll', {
+      $xeTable.dispatchEvent('scroll', {
         type: renderType,
         fixed: fixedType,
         scrollTop,
@@ -648,7 +651,7 @@ export default defineComponent({
           if (isTopWheel ? targerTop < scrollHeight - clientHeight : targerTop >= 0) {
             wheelTime = setTimeout(handleSmooth, 10)
           }
-          $xetable.dispatchEvent('scroll', {
+          $xeTable.dispatchEvent('scroll', {
             type: renderType,
             fixed: fixedType,
             scrollTop: bodyElem.scrollTop,
@@ -698,11 +701,11 @@ export default defineComponent({
         tableInternalData.lastScrollLeft = scrollLeft
         tableReactData.lastScrollTime = Date.now()
         if (rowOpts.isHover || highlightHoverRow) {
-          $xetable.clearHoverRow()
+          $xeTable.clearHoverRow()
         }
         handleWheel(evnt, isTopWheel, deltaTop, isRollX, isRollY)
         if (scrollYLoad) {
-          $xetable.triggerScrollYEvent(evnt)
+          $xeTable.triggerScrollYEvent(evnt)
         }
       }
     }
@@ -782,17 +785,17 @@ export default defineComponent({
           tableColumn = visibleColumn
         }
       }
-      let emptyContent: string | VxeGlobalRendererHandles.RenderResult
+      let emptyContent: string | VxeComponentSlotType | VxeComponentSlotType[]
       const emptySlot = slots ? slots.empty : null
       if (emptySlot) {
-        emptyContent = $xetable.callSlot(emptySlot, { $table: $xetable, $grid: $xetable.xegrid })
+        emptyContent = $xeTable.callSlot(emptySlot, { $table: $xeTable, $grid: $xeTable.xegrid })
       } else {
-        const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
+        const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
         const renderTableEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
         if (renderTableEmptyView) {
-          emptyContent = getSlotVNs(renderTableEmptyView(emptyOpts, { $table: $xetable }))
+          emptyContent = getSlotVNs(renderTableEmptyView(emptyOpts, { $table: $xeTable }))
         } else {
-          emptyContent = tableProps.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
+          emptyContent = tableProps.emptyText || getI18n('vxe.table.emptyText')
         }
       }
       return h('div', {
@@ -801,10 +804,12 @@ export default defineComponent({
         xid: xID,
         ...(sYOpts.mode === 'wheel' ? { onWheel: wheelEvent } : {})
       }, [
-        fixedType ? createCommentVNode() : h('div', {
-          ref: refBodyXSpace,
-          class: 'vxe-body--x-space'
-        }),
+        fixedType
+          ? createCommentVNode()
+          : h('div', {
+            ref: refBodyXSpace,
+            class: 'vxe-body--x-space'
+          }),
         h('div', {
           ref: refBodyYSpace,
           class: 'vxe-body--y-space'
@@ -838,40 +843,46 @@ export default defineComponent({
         h('div', {
           class: 'vxe-table--checkbox-range'
         }),
-        mouseConfig && mouseOpts.area ? h('div', {
-          class: 'vxe-table--cell-area'
-        }, [
-          h('span', {
-            class: 'vxe-table--cell-main-area'
-          }, mouseOpts.extension ? [
+        mouseConfig && mouseOpts.area
+          ? h('div', {
+            class: 'vxe-table--cell-area'
+          }, [
             h('span', {
-              class: 'vxe-table--cell-main-area-btn',
-              onMousedown (evnt: any) {
-                $xetable.triggerCellExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: renderType })
-              }
+              class: 'vxe-table--cell-main-area'
+            }, mouseOpts.extension
+              ? [
+                  h('span', {
+                    class: 'vxe-table--cell-main-area-btn',
+                    onMousedown (evnt: any) {
+                      $xeTable.triggerCellExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
+                    }
+                  })
+                ]
+              : []),
+            h('span', {
+              class: 'vxe-table--cell-copy-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-extend-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-multi-area'
+            }),
+            h('span', {
+              class: 'vxe-table--cell-active-area'
             })
-          ] : []),
-          h('span', {
-            class: 'vxe-table--cell-copy-area'
-          }),
-          h('span', {
-            class: 'vxe-table--cell-extend-area'
-          }),
-          h('span', {
-            class: 'vxe-table--cell-multi-area'
-          }),
-          h('span', {
-            class: 'vxe-table--cell-active-area'
-          })
-        ]) : null,
-        !fixedType ? h('div', {
-          class: 'vxe-table--empty-block',
-          ref: refBodyEmptyBlock
-        }, [
-          h('div', {
-            class: 'vxe-table--empty-content'
-          }, emptyContent)
-        ]) : null
+          ])
+          : null,
+        !fixedType
+          ? h('div', {
+            class: 'vxe-table--empty-block',
+            ref: refBodyEmptyBlock
+          }, [
+            h('div', {
+              class: 'vxe-table--empty-content'
+            }, emptyContent)
+          ])
+          : null
       ])
     }
 

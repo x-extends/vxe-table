@@ -1,25 +1,20 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, getCurrentInstance, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { getLastZIndex, nextZIndex, isEnableConf } from '../../tools/utils'
-import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../tools/dom'
-import { errLog } from '../../tools/log'
-import GlobalConfig from '../../v-x-e-table/src/conf'
-import { VXETable } from '../../v-x-e-table'
+import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
+import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
+import { VxeUI, getConfig, getI18n, commands, hooks, log, createEvent, globalEvents, GLOBAL_EVENT_KEYS, useSize } from '@vxe-ui/core'
 import VxeTableComponent from '../../table'
-import VxePagerComponent from '../../pager'
 import VxeToolbarComponent from '../../toolbar'
-import VxeFormComponent from '../../form'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
-import { useSize } from '../../hooks/size'
-import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
-import { getSlotVNs } from '../../tools/vn'
+import { getSlotVNs } from '../../ui/src/vn'
 
-import { TableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxePagerInstance, VxeToolbarInstance, GridPrivateRef, VxeFormInstance, VxeTableProps, VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods, VxeTableEvents, VxePagerEvents, VxeFormEvents, VxeTableDefines, VxeTableEventProps, VxeFormItemProps, VxeGridProps } from '../../../types/all'
+import type { VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from 'vxe-pc-ui'
+import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
-const tableComponentMethodKeys: (keyof TableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'focus', 'blur', 'connect']
+const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'focus', 'blur', 'connect']
 
 const gridComponentEmits: VxeGridEmits = [
   ...tableComponentEmits,
@@ -48,7 +43,7 @@ export default defineComponent({
     toolbarConfig: Object as PropType<VxeGridPropTypes.ToolbarConfig>,
     formConfig: Object as PropType<VxeGridPropTypes.FormConfig>,
     zoomConfig: Object as PropType<VxeGridPropTypes.ZoomConfig>,
-    size: { type: String as PropType<VxeGridPropTypes.Size>, default: () => GlobalConfig.grid.size || GlobalConfig.size }
+    size: { type: String as PropType<VxeGridPropTypes.Size>, default: () => getConfig().grid.size || getConfig().size }
   },
   emits: gridComponentEmits,
   setup (props, context) {
@@ -56,9 +51,7 @@ export default defineComponent({
 
     const xID = XEUtils.uniqueId()
 
-    const instance = getCurrentInstance()
-
-    const computeSize = useSize(props)
+    const { computeSize } = useSize(props)
 
     const reactData = reactive({
       tableLoading: false,
@@ -71,7 +64,7 @@ export default defineComponent({
       tZindex: 0,
       tablePage: {
         total: 0,
-        pageSize: GlobalConfig.pager.pageSize || 10,
+        pageSize: getConfig().pager?.pageSize || 10,
         currentPage: 1
       }
     } as GridReactData<any>)
@@ -92,28 +85,28 @@ export default defineComponent({
       const funcs: any = {}
       methodKeys.forEach(name => {
         funcs[name] = (...args: any[]) => {
-          const $xetable: any = refTable.value
-          if ($xetable && $xetable[name]) {
-            return $xetable[name](...args)
+          const $xeTable: any = refTable.value
+          if ($xeTable && $xeTable[name]) {
+            return $xeTable[name](...args)
           }
         }
       })
       return funcs
     }
 
-    const gridExtendTableMethods = extendTableMethods(tableComponentMethodKeys) as TableMethods
+    const gridExtendTableMethods = extendTableMethods(tableComponentMethodKeys) as VxeTableMethods
 
     tableComponentMethodKeys.forEach(name => {
       gridExtendTableMethods[name] = (...args: any[]) => {
-        const $xetable: any = refTable.value
-        if ($xetable && $xetable[name]) {
-          return $xetable && $xetable[name](...args)
+        const $xeTable: any = refTable.value
+        if ($xeTable && $xeTable[name]) {
+          return $xeTable && $xeTable[name](...args)
         }
       }
     })
 
     const computeProxyOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.grid.proxyConfig, props.proxyConfig) as VxeGridPropTypes.ProxyConfig
+      return Object.assign({}, getConfig().grid.proxyConfig, props.proxyConfig) as VxeGridPropTypes.ProxyConfig
     })
 
     const computeIsMsg = computed(() => {
@@ -122,19 +115,19 @@ export default defineComponent({
     })
 
     const computePagerOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.grid.pagerConfig, props.pagerConfig) as VxeGridPropTypes.PagerConfig
+      return Object.assign({}, getConfig().grid.pagerConfig, props.pagerConfig) as VxeGridPropTypes.PagerConfig
     })
 
     const computeFormOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.grid.formConfig, props.formConfig) as VxeGridPropTypes.FormOpts
+      return Object.assign({}, getConfig().grid.formConfig, props.formConfig) as VxeGridPropTypes.FormOpts
     })
 
     const computeToolbarOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.grid.toolbarConfig, props.toolbarConfig) as VxeGridPropTypes.ToolbarOpts
+      return Object.assign({}, getConfig().grid.toolbarConfig, props.toolbarConfig) as VxeGridPropTypes.ToolbarOpts
     })
 
     const computeZoomOpts = computed(() => {
-      return Object.assign({}, GlobalConfig.grid.zoomConfig, props.zoomConfig)
+      return Object.assign({}, getConfig().grid.zoomConfig, props.zoomConfig)
     })
 
     const computeStyles = computed(() => {
@@ -166,17 +159,14 @@ export default defineComponent({
       computeZoomOpts
     }
 
-    const $xegrid = {
+    const $xeGrid = {
       xID,
       props: props as VxeGridProps,
       context,
-      instance,
       reactData,
       getRefMaps: () => refMaps,
       getComputeMaps: () => computeMaps
     } as VxeGridConstructor & VxeGridPrivateMethods
-
-    let gridMethods = {} as GridMethods
 
     const computeTableProps = computed(() => {
       const { seqConfig, pagerConfig, loading, editConfig, proxyConfig } = props
@@ -209,10 +199,10 @@ export default defineComponent({
       const toolbarOpts = computeToolbarOpts.value
       if (props.toolbarConfig && isEnableConf(toolbarOpts)) {
         nextTick(() => {
-          const $xetable = refTable.value
-          const $xetoolbar = refToolbar.value
-          if ($xetable && $xetoolbar) {
-            $xetable.connect($xetoolbar)
+          const $xeTable = refTable.value
+          const $xeToolbar = refToolbar.value
+          if ($xeTable && $xeToolbar) {
+            $xeTable.connect($xeToolbar)
           }
         })
       }
@@ -235,20 +225,16 @@ export default defineComponent({
 
     const triggerPendingEvent = (code: string) => {
       const isMsg = computeIsMsg.value
-      const $xetable = refTable.value
-      const selectRecords = $xetable.getCheckboxRecords()
+      const $xeTable = refTable.value
+      const selectRecords = $xeTable.getCheckboxRecords()
       if (selectRecords.length) {
-        $xetable.togglePendingRow(selectRecords)
+        $xeTable.togglePendingRow(selectRecords)
         gridExtendTableMethods.clearCheckboxRow()
       } else {
         if (isMsg) {
-          // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            if (!VXETable.modal) {
-              errLog('vxe.error.reqModule', ['Modal'])
-            }
+          if (VxeUI.modal) {
+            VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
           }
-          VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
         }
       }
     }
@@ -259,9 +245,9 @@ export default defineComponent({
       const messageProp = resConfigs.message
       let msg
       if (rest && messageProp) {
-        msg = XEUtils.isFunction(messageProp) ? messageProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, messageProp)
+        msg = XEUtils.isFunction(messageProp) ? messageProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, messageProp)
       }
-      return msg || GlobalConfig.i18n(defaultMsg)
+      return msg || getI18n(defaultMsg)
     }
 
     const handleDeleteRow = (code: string, alertKey: string, callback: () => void): Promise<void> => {
@@ -269,19 +255,17 @@ export default defineComponent({
       const selectRecords = gridExtendTableMethods.getCheckboxRecords()
       if (isMsg) {
         if (selectRecords.length) {
-          return VXETable.modal.confirm({ id: `cfm_${code}`, content: GlobalConfig.i18n(alertKey), escClosable: true }).then((type) => {
-            if (type === 'confirm') {
-              return callback()
-            }
-          })
-        } else {
-          // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            if (!VXETable.modal) {
-              errLog('vxe.error.reqModule', ['Modal'])
-            }
+          if (VxeUI.modal) {
+            return VxeUI.modal.confirm({ id: `cfm_${code}`, content: getI18n(alertKey), escClosable: true }).then((type) => {
+              if (type === 'confirm') {
+                return callback()
+              }
+            })
           }
-          VXETable.modal.message({ id: `msg_${code}`, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
+        } else {
+          if (VxeUI.modal) {
+            VxeUI.modal.message({ id: `msg_${code}`, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
+          }
         }
       } else {
         if (selectRecords.length) {
@@ -294,22 +278,22 @@ export default defineComponent({
     const pageChangeEvent: VxePagerEvents.PageChange = (params) => {
       const { proxyConfig } = props
       const { tablePage } = reactData
-      const { currentPage, pageSize } = params
+      const { $event, currentPage, pageSize } = params
       const proxyOpts = computeProxyOpts.value
       tablePage.currentPage = currentPage
       tablePage.pageSize = pageSize
-      gridMethods.dispatchEvent('page-change', params)
+      gridMethods.dispatchEvent('page-change', params, $event)
       if (proxyConfig && isEnableConf(proxyOpts)) {
         gridMethods.commitProxy('query').then((rest) => {
-          gridMethods.dispatchEvent('proxy-query', rest, params.$event)
+          gridMethods.dispatchEvent('proxy-query', rest, $event)
         })
       }
     }
 
     const sortChangeEvent: VxeTableEvents.SortChange = (params) => {
-      const $xetable = refTable.value
+      const $xeTable = refTable.value
       const { proxyConfig } = props
-      const { computeSortOpts } = $xetable.getComputeMaps()
+      const { computeSortOpts } = $xeTable.getComputeMaps()
       const proxyOpts = computeProxyOpts.value
       const sortOpts = computeSortOpts.value
       // 如果是服务端排序
@@ -322,13 +306,13 @@ export default defineComponent({
           })
         }
       }
-      gridMethods.dispatchEvent('sort-change', params)
+      gridMethods.dispatchEvent('sort-change', params, params.$event)
     }
 
     const filterChangeEvent: VxeTableEvents.FilterChange = (params) => {
-      const $xetable = refTable.value
+      const $xeTable = refTable.value
       const { proxyConfig } = props
-      const { computeFilterOpts } = $xetable.getComputeMaps()
+      const { computeFilterOpts } = $xeTable.getComputeMaps()
       const proxyOpts = computeProxyOpts.value
       const filterOpts = computeFilterOpts.value
       // 如果是服务端过滤
@@ -341,7 +325,7 @@ export default defineComponent({
           })
         }
       }
-      gridMethods.dispatchEvent('filter-change', params)
+      gridMethods.dispatchEvent('filter-change', params, params.$event)
     }
 
     const submitFormEvent: VxeFormEvents.Submit = (params) => {
@@ -352,28 +336,30 @@ export default defineComponent({
           gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
         })
       }
-      gridMethods.dispatchEvent('form-submit', params)
+      gridMethods.dispatchEvent('form-submit', params, params.$event)
     }
 
     const resetFormEvent: VxeFormEvents.Reset = (params) => {
       const { proxyConfig } = props
+      const { $event } = params
       const proxyOpts = computeProxyOpts.value
       if (proxyConfig && isEnableConf(proxyOpts)) {
         gridMethods.commitProxy('reload').then((rest) => {
-          gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, params.$event)
+          gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, $event)
         })
       }
-      gridMethods.dispatchEvent('form-reset', params)
+      gridMethods.dispatchEvent('form-reset', params, $event)
     }
 
     const submitInvalidEvent: VxeFormEvents.SubmitInvalid = (params) => {
-      gridMethods.dispatchEvent('form-submit-invalid', params)
+      gridMethods.dispatchEvent('form-submit-invalid', params, params.$event)
     }
 
     const collapseEvent: VxeFormEvents.Collapse = (params) => {
+      const { $event } = params
       nextTick(() => gridExtendTableMethods.recalculate(true))
-      gridMethods.dispatchEvent('form-toggle-collapse', params)
-      gridMethods.dispatchEvent('form-collapse', params)
+      gridMethods.dispatchEvent('form-toggle-collapse', params, $event)
+      gridMethods.dispatchEvent('form-collapse', params, $event)
     }
 
     const handleZoom = (isMax?: boolean) => {
@@ -394,8 +380,8 @@ export default defineComponent({
           if (slots[funcSlot]) {
             return slots[funcSlot]
           } else {
-            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              errLog('vxe.error.notSlot', [funcSlot])
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
+              log.err('vxe.error.notSlot', [funcSlot])
             }
           }
         } else {
@@ -413,11 +399,11 @@ export default defineComponent({
       const { formData } = reactData
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
-      const restVNs = []
+      const restVNs: VNode[] = []
       if ((formConfig && isEnableConf(formOpts)) || slots.form) {
-        let slotVNs = []
+        let slotVNs: VNode[] = []
         if (slots.form) {
-          slotVNs = slots.form({ $grid: $xegrid })
+          slotVNs = slots.form({ $grid: $xeGrid })
         } else {
           if (formOpts.items) {
             const formSlots: { [key: string]: () => VNode[] } = {}
@@ -426,7 +412,7 @@ export default defineComponent({
               const beforeItem = proxyOpts.beforeItem
               if (proxyOpts && beforeItem) {
                 formOpts.items.forEach((item) => {
-                  beforeItem({ $grid: $xegrid, item })
+                  beforeItem({ $grid: $xeGrid, item })
                 })
               }
             }
@@ -441,7 +427,7 @@ export default defineComponent({
               })
             })
             slotVNs.push(
-              h(VxeFormComponent, {
+              h(resolveComponent('vxe-form') as VxeFormComponent, {
                 ref: refForm,
                 ...Object.assign({}, formOpts, {
                   data: proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
@@ -471,11 +457,11 @@ export default defineComponent({
     const renderToolbars = () => {
       const { toolbarConfig } = props
       const toolbarOpts = computeToolbarOpts.value
-      const restVNs = []
+      const restVNs: VNode[] = []
       if ((toolbarConfig && isEnableConf(toolbarOpts)) || slots.toolbar) {
-        let slotVNs = []
+        let slotVNs: VNode[] = []
         if (slots.toolbar) {
-          slotVNs = slots.toolbar({ $grid: $xegrid })
+          slotVNs = slots.toolbar({ $grid: $xeGrid })
         } else {
           const toolbarOptSlots = toolbarOpts.slots
           let buttonsSlot: any
@@ -519,7 +505,7 @@ export default defineComponent({
             ref: refTopWrapper,
             key: 'top',
             class: 'vxe-grid--top-wrapper'
-          }, slots.top({ $grid: $xegrid }))
+          }, slots.top({ $grid: $xeGrid }))
         ]
       }
       return []
@@ -530,7 +516,7 @@ export default defineComponent({
     const renderLayout = () => {
       const { layouts } = props
       const vns: any[] = []
-      const currLayouts = (layouts && layouts.length ? layouts : (GlobalConfig.grid.layouts || defaultLayouts))
+      const currLayouts = (layouts && layouts.length ? layouts : (getConfig().grid.layouts || defaultLayouts))
       currLayouts.forEach(name => {
         switch (name) {
           case 'Form':
@@ -552,8 +538,8 @@ export default defineComponent({
             vns.push(renderPagers())
             break
           default:
-            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              errLog('vxe.error.notProp', [`layouts -> ${name}`])
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
+              log.err('vxe.error.notProp', [`layouts -> ${name}`])
             }
             break
         }
@@ -615,7 +601,7 @@ export default defineComponent({
             ref: refBottomWrapper,
             key: 'bottom',
             class: 'vxe-grid--bottom-wrapper'
-          }, slots.bottom({ $grid: $xegrid }))
+          }, slots.bottom({ $grid: $xeGrid }))
         ]
       }
       return []
@@ -628,11 +614,11 @@ export default defineComponent({
       const { proxyConfig, pagerConfig } = props
       const proxyOpts = computeProxyOpts.value
       const pagerOpts = computePagerOpts.value
-      const restVNs = []
+      const restVNs: VNode[] = []
       if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
-        let slotVNs = []
+        let slotVNs: VNode[] = []
         if (slots.pager) {
-          slotVNs = slots.pager({ $grid: $xegrid })
+          slotVNs = slots.pager({ $grid: $xeGrid })
         } else {
           const pagerOptSlots = pagerOpts.slots
           const pagerSlots: { [key: string]: () => VNode[] } = {}
@@ -649,7 +635,7 @@ export default defineComponent({
             }
           }
           slotVNs.push(
-            h(VxePagerComponent, {
+            h(resolveComponent('vxe-pager') as VxePagerComponent, {
               ref: refPager,
               ...pagerOpts,
               ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
@@ -679,7 +665,7 @@ export default defineComponent({
           formOpts.items.forEach(item => {
             const { field, itemRender } = item
             if (field) {
-              let itemValue = null
+              let itemValue: any = null
               if (itemRender) {
                 const { defaultValue } = itemRender
                 if (XEUtils.isFunction(defaultValue)) {
@@ -704,9 +690,9 @@ export default defineComponent({
       }
     }
 
-    gridMethods = {
+    const gridMethods: GridMethods = {
       dispatchEvent (type, params, evnt) {
-        emit(type, Object.assign({ $grid: $xegrid, $event: evnt }, params))
+        emit(type, createEvent(evnt, { $grid: $xeGrid }, params))
       },
       /**
        * 提交指令，支持 code 或 button
@@ -721,7 +707,7 @@ export default defineComponent({
         const toolbarOpts = computeToolbarOpts.value
         const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
         const resConfigs = proxyOpts.response || proxyOpts.props || {}
-        const $xetable = refTable.value
+        const $xeTable = refTable.value
         let button: VxeToolbarPropTypes.ButtonConfig | null = null
         let code: string | null = null
         if (XEUtils.isString(proxyTarget)) {
@@ -736,34 +722,34 @@ export default defineComponent({
         const btnParams = button ? button.params : null
         switch (code) {
           case 'insert':
-            return $xetable.insert({})
+            return $xeTable.insert({})
           case 'insert_edit':
-            return $xetable.insert({}).then(({ row }) => $xetable.setEditRow(row))
+            return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row))
 
             // 已废弃
           case 'insert_actived':
-            return $xetable.insert({}).then(({ row }) => $xetable.setEditRow(row))
+            return $xeTable.insert({}).then(({ row }) => $xeTable.setEditRow(row))
             // 已废弃
 
           case 'mark_cancel':
             triggerPendingEvent(code)
             break
           case 'remove':
-            return handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => $xetable.removeCheckboxRow())
+            return handleDeleteRow(code, 'vxe.grid.removeSelectRecord', () => $xeTable.removeCheckboxRow())
           case 'import':
-            $xetable.importData(btnParams)
+            $xeTable.importData(btnParams)
             break
           case 'open_import':
-            $xetable.openImport(btnParams)
+            $xeTable.openImport(btnParams)
             break
           case 'export':
-            $xetable.exportData(btnParams)
+            $xeTable.exportData(btnParams)
             break
           case 'open_export':
-            $xetable.openExport(btnParams)
+            $xeTable.openExport(btnParams)
             break
           case 'reset_custom':
-            return $xetable.resetColumn(true)
+            return $xeTable.resetColumn(true)
           case '_init':
           case 'reload':
           case 'query': {
@@ -783,7 +769,7 @@ export default defineComponent({
                 }
               }
               if (isInited) {
-                const { computeSortOpts } = $xetable.getComputeMaps()
+                const { computeSortOpts } = $xeTable.getComputeMaps()
                 const sortOpts = computeSortOpts.value
                 let defaultSort = sortOpts.defaultSort
                 // 如果使用默认排序
@@ -791,7 +777,7 @@ export default defineComponent({
                   if (!XEUtils.isArray(defaultSort)) {
                     defaultSort = [defaultSort]
                   }
-                  sortList = defaultSort.map((item) => {
+                  sortList = defaultSort.map((item: any) => {
                     return {
                       field: item.field,
                       property: item.field,
@@ -799,13 +785,13 @@ export default defineComponent({
                     }
                   })
                 }
-                filterList = $xetable.getCheckedFilters()
+                filterList = $xeTable.getCheckedFilters()
               } else {
                 if (isReload) {
-                  $xetable.clearAll()
+                  $xeTable.clearAll()
                 } else {
-                  sortList = $xetable.getSortColumns()
-                  filterList = $xetable.getCheckedFilters()
+                  sortList = $xeTable.getSortColumns()
+                  filterList = $xeTable.getCheckedFilters()
                 }
               }
               const commitParams = {
@@ -813,7 +799,7 @@ export default defineComponent({
                 button,
                 isInited,
                 isReload,
-                $grid: $xegrid,
+                $grid: $xeGrid,
                 page: pageParams,
                 sort: sortList.length ? sortList[0] : {},
                 sorts: sortList,
@@ -831,10 +817,10 @@ export default defineComponent({
                   if (rest) {
                     if (pagerConfig && isEnableConf(pagerOpts)) {
                       const totalProp = resConfigs.total
-                      const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
+                      const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
                       tablePage.total = XEUtils.toNumber(total)
                       const resultProp = resConfigs.result
-                      reactData.tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, resultProp || 'result')) || []
+                      reactData.tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, resultProp || 'result')) || []
                       // 检验当前页码，不能超出当前最大页数
                       const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                       if (tablePage.currentPage > pageCount) {
@@ -842,7 +828,7 @@ export default defineComponent({
                       }
                     } else {
                       const listProp = resConfigs.list
-                      reactData.tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xegrid }) : XEUtils.get(rest, listProp)) : rest) || []
+                      reactData.tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, listProp)) : rest) || []
                     }
                   } else {
                     reactData.tableData = []
@@ -856,8 +842,8 @@ export default defineComponent({
                   return { status: false }
                 })
             } else {
-              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
+              if (process.env.VUE_APP_VXE_ENV === 'development') {
+                log.err('vxe.error.notFunc', ['proxy-config.ajax.query'])
               }
             }
             break
@@ -866,28 +852,24 @@ export default defineComponent({
             const ajaxMethods = ajax.delete
             if (ajaxMethods) {
               const selectRecords = gridExtendTableMethods.getCheckboxRecords()
-              const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
+              const removeRecords = selectRecords.filter(row => !$xeTable.isInsertByRow(row))
               const body = { removeRecords }
-              const commitParams = { $grid: $xegrid, code, button, body, form: formData, options: ajaxMethods }
+              const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
               const applyArgs = [commitParams].concat(args)
               if (selectRecords.length) {
                 return handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                   if (!removeRecords.length) {
-                    return $xetable.remove(selectRecords)
+                    return $xeTable.remove(selectRecords)
                   }
                   reactData.tableLoading = true
                   return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                     .then(rest => {
                       reactData.tableLoading = false
-                      $xetable.setPendingRow(removeRecords, false)
+                      $xeTable.setPendingRow(removeRecords, false)
                       if (isMsg) {
-                        // 检测弹窗模块
-                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                          if (!VXETable.modal) {
-                            errLog('vxe.error.reqModule', ['Modal'])
-                          }
+                        if (VxeUI.modal) {
+                          VxeUI.modal.message({ content: getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                         }
-                        VXETable.modal.message({ content: getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                       }
                       if (afterDelete) {
                         afterDelete(...applyArgs)
@@ -899,30 +881,23 @@ export default defineComponent({
                     .catch(rest => {
                       reactData.tableLoading = false
                       if (isMsg) {
-                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                          if (!VXETable.modal.message) {
-                            errLog('vxe.error.reqModule', ['Modal'])
-                          }
+                        if (VxeUI.modal) {
+                          VxeUI.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                         }
-                        VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
                       return { status: false }
                     })
                 })
               } else {
                 if (isMsg) {
-                  // 检测弹窗模块
-                  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                    if (!VXETable.modal) {
-                      errLog('vxe.error.reqModule', ['Modal'])
-                    }
+                  if (VxeUI.modal) {
+                    VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
                   }
-                  VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
                 }
               }
             } else {
-              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
+              if (process.env.VUE_APP_VXE_ENV === 'development') {
+                log.err('vxe.error.notFunc', ['proxy-config.ajax.delete'])
               }
             }
             break
@@ -930,22 +905,22 @@ export default defineComponent({
           case 'save': {
             const ajaxMethods = ajax.save
             if (ajaxMethods) {
-              const body = $xetable.getRecordset()
+              const body = $xeTable.getRecordset()
               const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-              const commitParams = { $grid: $xegrid, code, button, body, form: formData, options: ajaxMethods }
+              const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
               const applyArgs = [commitParams].concat(args)
               // 排除掉新增且标记为删除的数据
               if (insertRecords.length) {
-                body.pendingRecords = pendingRecords.filter((row) => $xetable.findRowIndexOf(insertRecords, row) === -1)
+                body.pendingRecords = pendingRecords.filter((row) => $xeTable.findRowIndexOf(insertRecords, row) === -1)
               }
               // 排除已标记为删除的数据
               if (pendingRecords.length) {
-                body.insertRecords = insertRecords.filter((row) => $xetable.findRowIndexOf(pendingRecords, row) === -1)
+                body.insertRecords = insertRecords.filter((row) => $xeTable.findRowIndexOf(pendingRecords, row) === -1)
               }
               let restPromise: Promise<any> = Promise.resolve()
               if (editRules) {
                 // 只校验新增和修改的数据
-                restPromise = $xetable[validConfig && validConfig.msgMode === 'full' ? 'fullValidate' : 'validate'](body.insertRecords.concat(updateRecords))
+                restPromise = $xeTable[validConfig && validConfig.msgMode === 'full' ? 'fullValidate' : 'validate'](body.insertRecords.concat(updateRecords))
               }
               return restPromise.then((errMap) => {
                 if (errMap) {
@@ -957,15 +932,11 @@ export default defineComponent({
                   return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
                     .then(rest => {
                       reactData.tableLoading = false
-                      $xetable.clearPendingRow()
+                      $xeTable.clearPendingRow()
                       if (isMsg) {
-                        // 检测弹窗模块
-                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                          if (!VXETable.modal) {
-                            errLog('vxe.error.reqModule', ['Modal'])
-                          }
+                        if (VxeUI.modal) {
+                          VxeUI.modal.message({ content: getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                         }
-                        VXETable.modal.message({ content: getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                       }
                       if (afterSave) {
                         afterSave(...applyArgs)
@@ -977,43 +948,35 @@ export default defineComponent({
                     .catch(rest => {
                       reactData.tableLoading = false
                       if (isMsg) {
-                        // 检测弹窗模块
-                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                          if (!VXETable.modal) {
-                            errLog('vxe.error.reqModule', ['Modal'])
-                          }
+                        if (VxeUI.modal) {
+                          VxeUI.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                         }
-                        VXETable.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                       }
                       return { status: false }
                     })
                 } else {
                   if (isMsg) {
-                    // 检测弹窗模块
-                    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                      if (!VXETable.modal) {
-                        errLog('vxe.error.reqModule', ['Modal'])
-                      }
+                    if (VxeUI.modal) {
+                      VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.dataUnchanged'), status: 'info' })
                     }
-                    VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
                   }
                 }
               })
             } else {
-              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
+              if (process.env.VUE_APP_VXE_ENV === 'development') {
+                log.err('vxe.error.notFunc', ['proxy-config.ajax.save'])
               }
             }
             break
           }
           default: {
-            const gCommandOpts = VXETable.commands.get(code)
+            const gCommandOpts = commands.get(code)
             if (gCommandOpts) {
               if (gCommandOpts.commandMethod) {
-                gCommandOpts.commandMethod({ code, button, $grid: $xegrid, $table: $xetable }, ...args)
+                gCommandOpts.commandMethod({ code, button, $grid: $xeGrid, $table: $xeTable }, ...args)
               } else {
-                if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                  errLog('vxe.error.notCommands', [code])
+                if (process.env.VUE_APP_VXE_ENV === 'development') {
+                  log.err('vxe.error.notCommands', [code])
                 }
               }
             }
@@ -1047,7 +1010,7 @@ export default defineComponent({
         return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
       },
       getProxyInfo () {
-        const $xetable = refTable.value
+        const $xeTable = refTable.value
         if (props.proxyConfig) {
           const { sortData } = reactData
           return {
@@ -1057,7 +1020,7 @@ export default defineComponent({
             sort: sortData.length ? sortData[0] : {},
             sorts: sortData,
             pager: reactData.tablePage,
-            pendingRecords: $xetable ? $xetable.getPendingRecords() : []
+            pendingRecords: $xeTable ? $xeTable.getPendingRecords() : []
           }
         }
         return null
@@ -1083,22 +1046,22 @@ export default defineComponent({
     }
 
     // 检查插槽
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       (gridMethods as any).loadColumn = (columns: any[]): Promise<any> => {
-        const $xetable = refTable.value
+        const $xeTable = refTable.value
         XEUtils.eachTree(columns, (column) => {
           if (column.slots) {
             XEUtils.each(column.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!slots[func]) {
-                  errLog('vxe.error.notSlot', [func])
+                  log.err('vxe.error.notSlot', [func])
                 }
               }
             })
           }
         })
-        if ($xetable) {
-          return $xetable.loadColumn(columns)
+        if ($xeTable) {
+          return $xeTable.loadColumn(columns)
         }
         return nextTick()
       }
@@ -1157,7 +1120,7 @@ export default defineComponent({
       },
       triggerToolbarTolEvent (tool, evnt) {
         gridPrivateMethods.triggerToolbarCommitEvent(tool, evnt)
-        gridMethods.dispatchEvent('toolbar-tool-click', { code: tool.code, tool, $event: evnt })
+        gridMethods.dispatchEvent('toolbar-tool-click', { code: tool.code, tool }, evnt)
       },
       triggerZoomEvent (evnt) {
         gridMethods.zoom()
@@ -1165,7 +1128,7 @@ export default defineComponent({
       }
     }
 
-    Object.assign($xegrid, gridExtendTableMethods, gridMethods, gridPrivateMethods)
+    Object.assign($xeGrid, gridExtendTableMethods, gridMethods, gridPrivateMethods)
 
     const columnFlag = ref(0)
     watch(() => props.columns ? props.columns.length : -1, () => {
@@ -1175,7 +1138,7 @@ export default defineComponent({
       columnFlag.value++
     })
     watch(columnFlag, () => {
-      nextTick(() => $xegrid.loadColumn(props.columns || []))
+      nextTick(() => $xeGrid.loadColumn(props.columns || []))
     })
 
     watch(() => props.toolbarConfig, () => {
@@ -1192,18 +1155,18 @@ export default defineComponent({
 
     const handleGlobalKeydownEvent = (evnt: any) => {
       const zoomOpts = computeZoomOpts.value
-      const isEsc = hasEventKey(evnt, EVENT_KEYS.ESCAPE)
+      const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
       if (isEsc && reactData.isZMax && zoomOpts.escRestore !== false) {
         gridPrivateMethods.triggerZoomEvent(evnt)
       }
     }
 
-    VXETable.hooks.forEach((options) => {
+    hooks.forEach((options) => {
       const { setupGrid } = options
       if (setupGrid) {
-        const hookRest = setupGrid($xegrid)
+        const hookRest = setupGrid($xeGrid)
         if (hookRest && XEUtils.isObject(hookRest)) {
-          Object.assign($xegrid, hookRest)
+          Object.assign($xeGrid, hookRest)
         }
       }
     })
@@ -1216,25 +1179,25 @@ export default defineComponent({
         const proxyOpts = computeProxyOpts.value
         const formOpts = computeFormOpts.value
         if (isEnableConf(proxyConfig) && (data || (proxyOpts.form && formOpts.data))) {
-          errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
+          log.err('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
         }
 
-        // if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        // if (process.env.VUE_APP_VXE_ENV === 'development') {
         //   if (proxyOpts.props) {
         //     warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
         //   }
         // }
 
         if (columns && columns.length) {
-          $xegrid.loadColumn(columns)
+          $xeGrid.loadColumn(columns)
         }
         initToolbar()
       })
-      GlobalEvent.on($xegrid, 'keydown', handleGlobalKeydownEvent)
+      globalEvents.on($xeGrid, 'keydown', handleGlobalKeydownEvent)
     })
 
     onUnmounted(() => {
-      GlobalEvent.off($xegrid, 'keydown')
+      globalEvents.off($xeGrid, 'keydown')
     })
 
     nextTick(() => {
@@ -1257,11 +1220,11 @@ export default defineComponent({
       }, renderLayout())
     }
 
-    $xegrid.renderVN = renderVN
+    $xeGrid.renderVN = renderVN
 
-    provide('$xegrid', $xegrid)
+    provide('$xeGrid', $xeGrid)
 
-    return $xegrid
+    return $xeGrid
   },
   render () {
     return this.renderVN()

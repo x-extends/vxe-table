@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const gulp = require('gulp')
 const XEUtils = require('xe-utils')
 const del = require('del')
@@ -22,154 +23,114 @@ const tsSettings = {
   target: 'es2016'
 }
 
-const coreName = 'v-x-e-table'
+const exportModuleName = 'VxeUITable'
+const esmOutDir = 'es'
+const commOutDir = 'lib'
 
-const moduleList = [
-  'filter',
-  'menu',
-  'edit',
-  'export',
-  'keyboard',
-  'validator',
-  'custom'
-]
+const coreName = 'ui'
 
 const componentList = [
-  'icon',
-  'loading',
+  'table',
   'column',
   'colgroup',
   'toolbar',
-  'grid',
-  'pager',
-  'checkbox',
-  'checkbox-group',
-  'radio',
-  'radio-group',
-  'radio-button',
-  'input',
-  'textarea',
-  'button',
-  'button-group',
-  'modal',
-  'drawer',
-  'tooltip',
-  'form',
-  'form-item',
-  'form-gather',
-  'select',
-  'optgroup',
-  'option',
-  'switch',
-  'list',
-  'pulldown',
-  'table'
-]
-
-const languages = [
-  'zh-CN',
-  'zh-TC',
-  'zh-HK',
-  'zh-MO',
-  'zh-TW',
-  'en-US',
-  'ja-JP',
-  'es-ES',
-  'pt-BR'
+  'grid'
 ]
 
 const styleCode = 'require(\'./style.css\')'
 
-function toExportName (name) {
-  const str = XEUtils.camelCase(name)
-  return `${str.slice(0, 1).toUpperCase()}${str.slice(1)}`
+const delDir = (directory) => {
+  if (fs.existsSync(directory)) {
+    fs.readdirSync(directory).forEach(file => {
+      const currentPath = path.join(directory, file)
+      if (fs.lstatSync(currentPath).isDirectory()) {
+        delDir(currentPath)
+      } else {
+        fs.unlinkSync(currentPath)
+      }
+    })
+    fs.rmdirSync(directory)
+  }
 }
 
-gulp.task('build_modules', () => {
-  moduleList.forEach(name => {
-    const exportName = `VxeModule${toExportName(name)}`
-    const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
-    fs.mkdirSync(`packages_temp/vxe-table-${name}-module`)
-    fs.writeFileSync(`packages_temp/vxe-table-${name}-module/index.ts`, esCode)
-    fs.writeFileSync(`packages_temp/vxe-table-${name}-module/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
-  })
-  componentList.forEach(name => {
+function toExportName (name) {
+  const str = XEUtils.camelCase(name)
+  return name === 'ui' ? 'UI' : `${str.slice(0, 1).toUpperCase()}${str.slice(1)}`
+}
+
+gulp.task('build_escode', function () {
+  [coreName, ...componentList].forEach(name => {
     const exportName = `Vxe${toExportName(name)}`
     const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
     fs.mkdirSync(`packages_temp/vxe-${name}`)
     fs.writeFileSync(`packages_temp/vxe-${name}/index.ts`, esCode)
-    fs.writeFileSync(`packages_temp/vxe-${name}/index.d.ts`, fs.readFileSync(`packages_temp/${name}/index.d.ts`, 'utf-8'))
   })
-
-  return gulp.src('packages_temp/**/*.ts')
-    .pipe(replace('process.env.VUE_APP_VXE_TABLE_VERSION', `"${pack.version}"`))
-    .pipe(replace('process.env.VUE_APP_VXE_TABLE_ENV', 'process.env.NODE_ENV'))
+  return gulp.src([
+    'packages_temp/**.ts',
+    'packages_temp/**/*.ts',
+    '!packages_temp/index.ts'
+  ])
+    .pipe(replace('process.env.VUE_APP_VXE_VERSION', `"${pack.version}"`))
+    .pipe(replace('process.env.VUE_APP_VXE_ENV', 'process.env.NODE_ENV'))
     .pipe(ts(tsSettings))
-    .pipe(gulp.dest('es'))
-    .pipe(babel({
-      presets: [
-        '@babel/env'
-      ],
-      plugins: []
+    .pipe(gulp.dest(esmOutDir))
+})
+
+gulp.task('build_esjs', gulp.series('build_escode', function () {
+  return gulp.src([
+    'packages_temp/index.ts'
+  ])
+    .pipe(replace('process.env.VUE_APP_VXE_VERSION', `"${pack.version}"`))
+    .pipe(replace('process.env.VUE_APP_VXE_ENV', 'process.env.NODE_ENV'))
+    .pipe(ts(tsSettings))
+    .pipe(rename({
+      basename: 'index',
+      extname: '.esm.js'
     }))
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(esmOutDir))
+}))
+
+gulp.task('build_es_all', gulp.series('build_esjs'))
+
+gulp.task('build_commoncode', function () {
+  return gulp.src([
+    'packages_temp/**.ts',
+    'packages_temp/**/*.ts',
+    '!packages_temp/index.ts'
+  ])
+    .pipe(replace('process.env.VUE_APP_VXE_VERSION', `"${pack.version}"`))
+    .pipe(replace('process.env.VUE_APP_VXE_ENV', 'process.env.NODE_ENV'))
+    .pipe(ts(tsSettings))
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+    .pipe(gulp.dest(commOutDir))
     .pipe(uglify())
     .pipe(rename({
       suffix: '.min',
       extname: '.js'
     }))
-    .pipe(gulp.dest('lib'))
+    .pipe(gulp.dest(commOutDir))
 })
 
-gulp.task('build_i18n', () => {
-  languages.forEach(code => {
-    fs.writeFileSync(`lib/locale/lang/${code}.d.ts`, 'declare const langMsgs: { [key: string]: any }\nexport default langMsgs')
-    fs.writeFileSync(`es/locale/lang/${code}.d.ts`, 'declare const langMsgs: { [key: string]: any }\nexport default langMsgs')
-  })
-  const rest = languages.map(code => {
-    const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
-    const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
-    return gulp.src(`packages_temp/locale/lang/${isZHTC ? 'zh-TC' : code}.ts`)
-      .pipe(ts(tsSettings))
-      .pipe(babel({
-        moduleId: `vxe-table-lang.${code}`,
-        presets: ['@babel/env'],
-        plugins: [
-          ['@babel/transform-modules-umd', {
-            globals: {
-              [`vxe-table-language.${code}`]: `VXETableLang${name}`
-            },
-            exactGlobals: true
-          }]
-        ]
-      }))
-      .pipe(rename({
-        basename: code,
-        suffix: '.umd',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib/locale/lang'))
-      .pipe(uglify())
-      .pipe(rename({
-        basename: code,
-        suffix: '.min',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('lib/locale/lang'))
-  })
-  return merge(...rest)
-})
+gulp.task('build_commonjs', gulp.series('build_commoncode', function () {
+  return gulp.src([
+    'packages_temp/index.ts'
+  ])
+    .pipe(replace('process.env.VUE_APP_VXE_VERSION', `"${pack.version}"`))
+    .pipe(replace('process.env.VUE_APP_VXE_ENV', 'process.env.NODE_ENV'))
+    .pipe(ts(tsSettings))
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+    .pipe(rename({
+      basename: 'index',
+      extname: '.common.js'
+    }))
+    .pipe(gulp.dest(commOutDir))
+}))
 
-gulp.task('copy_pack', () => {
-  return gulp.src('packages/**')
-    .pipe(gulp.dest('packages_temp'))
-})
-
-gulp.task('copy_ts', () => {
-  return gulp.src('packages_temp/**/*.d.ts')
-    .pipe(gulp.dest('es'))
-    .pipe(gulp.dest('lib'))
-})
+gulp.task('build_common_all', gulp.series('build_commonjs'))
 
 // eslint-disable-next-line no-control-regex
 const unicodeRE = /[^\x00-\xff]/g
@@ -183,37 +144,35 @@ function toCSSUnicode (css) {
   })
 }
 
-gulp.task('build_lib', () => {
+gulp.task('build_umdcss', () => {
   const styleStr = fs.readFileSync('lib_temp/index.css', 'utf-8')
   fs.writeFileSync('lib_temp/index.css', toCSSUnicode(styleStr))
-  return merge(
-    gulp.src('es/index.common.js')
-      .pipe(rename({
-        basename: 'index',
-        suffix: '.esm',
-        extname: '.js'
-      }))
-      .pipe(gulp.dest('es')),
-    gulp.src('lib_temp/index.umd.js')
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib_temp/index.umd.min.js')
-      .pipe(gulp.dest('lib')),
-    gulp.src('lib_temp/index.css')
-      .pipe(rename({
-        basename: 'style',
-        extname: '.css'
-      }))
-      .pipe(gulp.dest('es'))
-      .pipe(gulp.dest('lib'))
-      .pipe(rename({
-        basename: 'style',
-        suffix: '.min',
-        extname: '.css'
-      }))
-      .pipe(gulp.dest('es'))
-      .pipe(gulp.dest('lib'))
-  )
+  return gulp.src('lib_temp/index.css')
+    .pipe(rename({
+      basename: 'style'
+    }))
+    .pipe(gulp.dest('es'))
+    .pipe(gulp.dest('lib'))
+    .pipe(rename({
+      suffix: '.min',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('es'))
+    .pipe(gulp.dest('lib'))
 })
+
+gulp.task('build_umdjs', () => {
+  return gulp.src('lib_temp/index.umd.js')
+    .pipe(gulp.dest('lib'))
+    .pipe(uglify())
+    .pipe(rename({
+      basename: 'index',
+      extname: '.umd.min.js'
+    }))
+    .pipe(gulp.dest('lib'))
+})
+
+gulp.task('build_umd_all', gulp.parallel('build_umdjs', 'build_umdcss'))
 
 gulp.task('build_icon', () => {
   const timeNow = Date.now()
@@ -243,8 +202,7 @@ gulp.task('build_icon', () => {
 })
 
 function buildStyle (name, dirName) {
-  return gulp.src(`styles/${name}.scss`)
-    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\';\n'))
+  return gulp.src(`styles/components/${name}.scss`)
     .pipe(sass())
     .pipe(prefixer({
       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
@@ -256,10 +214,6 @@ function buildStyle (name, dirName) {
       extname: '.css'
     }))
     .pipe(gulp.dest(`es/${dirName}`))
-    .pipe(rename({
-      basename: 'style',
-      extname: '.css'
-    }))
     .pipe(gulp.dest(`lib/${dirName}/style`))
     .pipe(cleanCSS())
     .pipe(rename({
@@ -267,43 +221,41 @@ function buildStyle (name, dirName) {
       suffix: '.min',
       extname: '.css'
     }))
+    .pipe(gulp.dest(`es/${dirName}`))
     .pipe(gulp.dest(`lib/${dirName}/style`))
 }
 
-gulp.task('build_style', () => {
-  const rest = [coreName, ...moduleList, ...componentList].map(name => {
-    return buildStyle(name, name)
-  })
-  moduleList.forEach(name => {
-    rest.push(buildStyle(name, `vxe-table-${name}-module`))
-  })
-  componentList.forEach(name => {
+gulp.task('build_single_style', () => {
+  const rest = [];
+  [coreName, ...componentList].forEach(name => {
+    rest.push(buildStyle(name, name))
     rest.push(buildStyle(name, `vxe-${name}`))
   })
   return merge(...rest)
 })
 
-gulp.task('build_clean', () => {
-  return del(['lib', 'es'])
+gulp.task('copy_pack', () => {
+  return gulp.src('packages/**')
+    .pipe(gulp.dest('packages_temp'))
 })
 
-gulp.task('build', gulp.series('build_clean', 'copy_pack', 'build_modules', 'build_i18n', 'copy_ts', 'build_style', 'build_icon', 'build_lib', () => {
-  [coreName].forEach(name => {
-    fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
-  })
-  moduleList.forEach(name => {
-    fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
-    fs.writeFileSync(`lib/vxe-table-${name}-module/style/index.js`, styleCode)
-  })
-  componentList.forEach(name => {
+gulp.task('clear', () => {
+  return del([
+    commOutDir,
+    esmOutDir,
+    'packages_temp'
+  ])
+})
+
+gulp.task('build_all', gulp.parallel('build_es_all', 'build_common_all', 'build_umd_all'))
+
+gulp.task('build', gulp.series('clear', 'copy_pack', 'build_all', 'build_single_style', () => {
+  [coreName, ...componentList].forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
     fs.writeFileSync(`lib/vxe-${name}/style/index.js`, styleCode)
   })
   return del([
     'lib_temp',
-    'packages_temp',
-    'lib/index.esm.js',
-    'lib/index.esm.min.js',
-    'es/index.common.js'
+    'packages_temp'
   ])
 }))

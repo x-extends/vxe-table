@@ -1,9 +1,9 @@
 import { watch, reactive } from 'vue'
 import XEUtils from 'xe-utils'
 import { ColumnInfo } from './columnInfo'
-import { isPx, isScale } from '../../tools/dom'
+import { isPx, isScale } from '../../ui/src/dom'
 
-import { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types/all'
+import type { VxeTableConstructor, VxeTablePrivateMethods, VxeTableDefines } from '../../../types'
 
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
@@ -72,15 +72,15 @@ export interface XEBodyScrollElement extends HTMLDivElement {
   _onscroll: ((evnt: Event) => void) | null;
 }
 
-export function restoreScrollLocation ($xetable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
-  const { internalData } = $xetable
-  return $xetable.clearScroll().then(() => {
+export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
+  const { internalData } = $xeTable
+  return $xeTable.clearScroll().then(() => {
     if (scrollLeft || scrollTop) {
       // 重置最后滚动状态
       internalData.lastScrollLeft = 0
       internalData.lastScrollTop = 0
       // 还原滚动状态
-      return $xetable.scrollTo(scrollLeft, scrollTop)
+      return $xeTable.scrollTo(scrollLeft, scrollTop)
     }
   })
 }
@@ -105,17 +105,17 @@ export function getRowUniqueId () {
 }
 
 // 行主键 key
-export function getRowkey ($xetable: VxeTableConstructor) {
-  const { props } = $xetable
-  const { computeRowOpts } = $xetable.getComputeMaps()
+export function getRowkey ($xeTable: VxeTableConstructor) {
+  const { props } = $xeTable
+  const { computeRowOpts } = $xeTable.getComputeMaps()
   const { rowId } = props
   const rowOpts = computeRowOpts.value
   return rowId || rowOpts.keyField || '_X_ROW_KEY'
 }
 
 // 行主键 value
-export function getRowid ($xetable: VxeTableConstructor, row: any) {
-  const rowid = XEUtils.get(row, getRowkey($xetable))
+export function getRowid ($xeTable: VxeTableConstructor, row: any) {
+  const rowid = XEUtils.get(row, getRowkey($xeTable))
   return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
 }
 
@@ -123,9 +123,9 @@ export interface XEColumnInstance {
   column: ColumnInfo;
 }
 
-export const handleFieldOrColumn = ($xetable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) => {
+export const handleFieldOrColumn = ($xeTable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) => {
   if (fieldOrColumn) {
-    return XEUtils.isString(fieldOrColumn) ? $xetable.getColumnByField(fieldOrColumn) : fieldOrColumn
+    return XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
   }
   return null
 }
@@ -270,28 +270,28 @@ export function isColumnInfo (column: any): column is ColumnInfo {
   return column && (column.constructor === ColumnInfo || column instanceof ColumnInfo)
 }
 
-export function createColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any): any {
-  return isColumnInfo(options) ? options : reactive(new ColumnInfo($xetable, options, renderOptions))
+export function createColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, options: VxeTableDefines.ColumnOptions | VxeTableDefines.ColumnInfo, renderOptions: any): any {
+  return isColumnInfo(options) ? options : reactive(new ColumnInfo($xeTable, options, renderOptions))
 }
 
-export function watchColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, props: any, column: ColumnInfo) {
+export function watchColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, props: any, column: ColumnInfo) {
   Object.keys(props).forEach(name => {
     watch(() => props[name], (value: any) => {
       column.update(name, value)
-      if ($xetable) {
+      if ($xeTable) {
         if (name === 'filters') {
-          $xetable.setFilter(column as any, value)
-          $xetable.handleUpdateDataQueue()
+          $xeTable.setFilter(column as any, value)
+          $xeTable.handleUpdateDataQueue()
         } else if (['visible', 'fixed', 'width', 'minWidth', 'maxWidth'].includes(name)) {
-          $xetable.handleRefreshColumnQueue()
+          $xeTable.handleRefreshColumnQueue()
         }
       }
     })
   })
 }
 
-export function assemColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, elem: HTMLElement, column: ColumnInfo, colgroup: XEColumnInstance | null) {
-  const { reactData } = $xetable
+export function assemColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, elem: HTMLElement, column: ColumnInfo, colgroup: XEColumnInstance | null) {
+  const { reactData } = $xeTable
   const { staticColumns } = reactData
   const parentElem = elem.parentNode
   const parentColumn = colgroup ? colgroup.column : null
@@ -302,8 +302,8 @@ export function assemColumn ($xetable: VxeTableConstructor & VxeTablePrivateMeth
   }
 }
 
-export function destroyColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: ColumnInfo) {
-  const { reactData } = $xetable
+export function destroyColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: ColumnInfo) {
+  const { reactData } = $xeTable
   const { staticColumns } = reactData
   const matchObj = XEUtils.findTree(staticColumns, item => item.id === column.id, { children: 'children' })
   if (matchObj) {
@@ -312,8 +312,8 @@ export function destroyColumn ($xetable: VxeTableConstructor & VxeTablePrivateMe
   reactData.staticColumns = staticColumns.slice(0)
 }
 
-export function getRootColumn ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: ColumnInfo) {
-  const { internalData } = $xetable
+export function getRootColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: ColumnInfo) {
+  const { internalData } = $xeTable
   const { fullColumnIdData } = internalData
   if (!column) {
     return null
@@ -343,49 +343,49 @@ export function mergeBodyMethod (mergeList: VxeTableDefines.MergeItem[], _rowInd
   }
 }
 
-export function clearTableDefaultStatus ($xetable: VxeTableConstructor & VxeTablePrivateMethods) {
-  const { props, internalData } = $xetable
+export function clearTableDefaultStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  const { props, internalData } = $xeTable
   internalData.initStatus = false
-  $xetable.clearSort()
-  $xetable.clearCurrentRow()
-  $xetable.clearCurrentColumn()
-  $xetable.clearRadioRow()
-  $xetable.clearRadioReserve()
-  $xetable.clearCheckboxRow()
-  $xetable.clearCheckboxReserve()
-  $xetable.clearRowExpand()
-  $xetable.clearTreeExpand()
-  $xetable.clearTreeExpandReserve()
-  $xetable.clearPendingRow()
-  if ($xetable.clearFilter) {
-    $xetable.clearFilter()
+  $xeTable.clearSort()
+  $xeTable.clearCurrentRow()
+  $xeTable.clearCurrentColumn()
+  $xeTable.clearRadioRow()
+  $xeTable.clearRadioReserve()
+  $xeTable.clearCheckboxRow()
+  $xeTable.clearCheckboxReserve()
+  $xeTable.clearRowExpand()
+  $xeTable.clearTreeExpand()
+  $xeTable.clearTreeExpandReserve()
+  $xeTable.clearPendingRow()
+  if ($xeTable.clearFilter) {
+    $xeTable.clearFilter()
   }
-  if ($xetable.clearSelected && (props.keyboardConfig || props.mouseConfig)) {
-    $xetable.clearSelected()
+  if ($xeTable.clearSelected && (props.keyboardConfig || props.mouseConfig)) {
+    $xeTable.clearSelected()
   }
-  if ($xetable.clearCellAreas && props.mouseConfig) {
-    $xetable.clearCellAreas()
-    $xetable.clearCopyCellArea()
+  if ($xeTable.clearCellAreas && props.mouseConfig) {
+    $xeTable.clearCellAreas()
+    $xeTable.clearCopyCellArea()
   }
-  return $xetable.clearScroll()
+  return $xeTable.clearScroll()
 }
 
-export function clearTableAllStatus ($xetable: VxeTableConstructor & VxeTablePrivateMethods) {
-  if ($xetable.clearFilter) {
-    $xetable.clearFilter()
+export function clearTableAllStatus ($xeTable: VxeTableConstructor & VxeTablePrivateMethods) {
+  if ($xeTable.clearFilter) {
+    $xeTable.clearFilter()
   }
-  return clearTableDefaultStatus($xetable)
+  return clearTableDefaultStatus($xeTable)
 }
 
-export function rowToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
-  const { reactData, internalData } = $xetable
-  const { refTableBody } = $xetable.getRefMaps()
+export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
+  const { reactData, internalData } = $xeTable
+  const { refTableBody } = $xeTable.getRefMaps()
   const { scrollYLoad } = reactData
   const { afterFullData, scrollYStore } = internalData
   const tableBody = refTableBody.value
   const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
   if (bodyElem) {
-    const trElem: HTMLTableRowElement | null = bodyElem.querySelector(`[rowid="${getRowid($xetable, row)}"]`)
+    const trElem: HTMLTableRowElement | null = bodyElem.querySelector(`[rowid="${getRowid($xeTable, row)}"]`)
     if (trElem) {
       const bodyHeight = bodyElem.clientHeight
       const bodySrcollTop = bodyElem.scrollTop
@@ -395,24 +395,24 @@ export function rowToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMet
       // 检测行是否在可视区中
       if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
         // 向上定位
-        return $xetable.scrollTo(null, trOffsetTop)
+        return $xeTable.scrollTo(null, trOffsetTop)
       } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
         // 向下定位
-        return $xetable.scrollTo(null, bodySrcollTop + trHeight)
+        return $xeTable.scrollTo(null, bodySrcollTop + trHeight)
       }
     } else {
       // 如果是虚拟渲染跨行滚动
       if (scrollYLoad) {
-        return $xetable.scrollTo(null, (afterFullData.indexOf(row) - 1) * scrollYStore.rowHeight)
+        return $xeTable.scrollTo(null, (afterFullData.indexOf(row) - 1) * scrollYStore.rowHeight)
       }
     }
   }
   return Promise.resolve()
 }
 
-export function colToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo) {
-  const { reactData, internalData } = $xetable
-  const { refTableBody } = $xetable.getRefMaps()
+export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo) {
+  const { reactData, internalData } = $xeTable
+  const { refTableBody } = $xeTable.getRefMaps()
   const { scrollXLoad } = reactData
   const { visibleColumn } = internalData
   const tableBody = refTableBody.value
@@ -428,10 +428,10 @@ export function colToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMet
       // 检测行是否在可视区中
       if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
         // 向左定位
-        return $xetable.scrollTo(tdOffsetLeft)
+        return $xeTable.scrollTo(tdOffsetLeft)
       } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
         // 向右定位
-        return $xetable.scrollTo(bodySrcollLeft + tdWidth)
+        return $xeTable.scrollTo(bodySrcollLeft + tdWidth)
       }
     } else {
       // 如果是虚拟渲染跨行滚动
@@ -443,7 +443,7 @@ export function colToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMet
           }
           scrollLeft += visibleColumn[index].renderWidth
         }
-        return $xetable.scrollTo(scrollLeft)
+        return $xeTable.scrollTo(scrollLeft)
       }
     }
   }
