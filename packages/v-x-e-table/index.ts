@@ -51,7 +51,7 @@ export function _t (key: string, args?: any) {
 export const setConfig: VxeGlobalConfigMethod = (options) => {
   if (options) {
     if (options.theme) {
-      setTheme(options)
+      setTheme(options.theme)
     }
     if (options.zIndex) {
       DomZIndex.setCurrent(options.zIndex)
@@ -154,7 +154,7 @@ export const VXETable = {
 
 export const VxeUI = VXETable
 
-setTheme(globalStore)
+setTheme('light')
 
 export * from './src/interceptor'
 export * from './src/renderer'

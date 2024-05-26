@@ -24,6 +24,7 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add 
   * [x] ~~v2.0 Based on vue2.6, Support for all major browsers.~~
   * [x] v3.0 Based on vue2.6, supports modern browsers and retains compatibility with IE11.
   * [x] v4.0 Based on vue3.x, Only support modern browser, not IE.
+  * [x] v4.7 Based on vue3.x, refactor the components, split the excess components, and keep only the table.
 
 ## Browser Support
 

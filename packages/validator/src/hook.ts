@@ -112,21 +112,21 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const validOpts = computeValidOpts.value
-      let validDatas
+      let validList
       if (rows === true) {
-        validDatas = afterFullData
+        validList = afterFullData
       } else if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
-          validDatas = XEUtils.isArray(rows) ? rows : [rows]
+          validList = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
-      if (!validDatas) {
+      if (!validList) {
         if ($xetable.getInsertRecords) {
-          validDatas = $xetable.getInsertRecords().concat($xetable.getUpdateRecords())
+          validList = $xetable.getInsertRecords().concat($xetable.getUpdateRecords())
         } else {
-          validDatas = []
+          validList = []
         }
       }
       const rowValidErrs: any = []
@@ -181,9 +181,9 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
           }
         }
         if (treeConfig) {
-          XEUtils.eachTree(validDatas, handleVaild, { children: childrenField })
+          XEUtils.eachTree(validList, handleVaild, { children: childrenField })
         } else {
-          validDatas.forEach(handleVaild)
+          validList.forEach(handleVaild)
         }
         return Promise.all(rowValidErrs).then(() => {
           const ruleProps = Object.keys(validRest)
@@ -300,9 +300,9 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             })
           })
         } else if (rowList.length) {
-          const rowidList = rowList.map(row => `${getRowid($xetable, row)}`)
+          const rowIdList = rowList.map(row => `${getRowid($xetable, row)}`)
           XEUtils.each(validErrorMaps, (item, key) => {
-            if (rowidList.indexOf(key.split(':')[0]) > -1) {
+            if (rowIdList.indexOf(key.split(':')[0]) > -1) {
               validErrMaps[key] = item
             }
           })
@@ -361,7 +361,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
         const { editRules } = props
         const { field } = column
         const errorRules: Rule[] = []
-        const syncVailds: Promise<any>[] = []
+        const syncValidList: Promise<any>[] = []
         if (field && editRules) {
           const rules = XEUtils.get(editRules, field)
           if (rules) {
@@ -407,7 +407,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
                       errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
                     } else if (customValid.catch) {
                       // 如果为异步校验（注：异步校验是并发无序的）
-                      syncVailds.push(
+                      syncValidList.push(
                         customValid.catch((e: any) => {
                           validRuleErr = true
                           errorRules.push(new Rule({ type: 'custom', trigger, content: e && e.message ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
@@ -435,7 +435,7 @@ const validatorHook: VxeGlobalHooksHandles.HookOptions = {
             })
           }
         }
-        return Promise.all(syncVailds).then(() => {
+        return Promise.all(syncValidList).then(() => {
           if (errorRules.length) {
             const rest = { rules: errorRules, rule: errorRules[0] }
             return Promise.reject(rest)

@@ -96,7 +96,7 @@ export function install (app: App, options: any) {
   if (XEUtils.isPlainObject(options)) {
     setConfig(options)
     if ((options as any).theme) {
-      setTheme(options)
+      setTheme((options as any).theme)
     }
   }
   components.forEach(component => component.install(app))

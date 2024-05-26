@@ -98,9 +98,16 @@ const GlobalConfig: VXETableConfigOptions = {
       showAsterisk: true
     },
     importConfig: {
+      _typeMaps: {},
       modes: ['insert', 'covering']
     },
     exportConfig: {
+      _typeMaps: {
+        csv: 1,
+        html: 1,
+        xml: 1,
+        txt: 1
+      },
       modes: ['current', 'selected']
     },
     printConfig: {
