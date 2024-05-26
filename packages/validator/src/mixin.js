@@ -128,18 +128,18 @@ export default {
       const validRest = {}
       const { editRules, afterFullData, visibleColumn, treeConfig, treeOpts } = this
       const childrenField = treeOpts.children || treeOpts.childrenField
-      let validDatas
+      let validList
       if (rows === true) {
-        validDatas = afterFullData
+        validList = afterFullData
       } else if (rows) {
         if (XEUtils.isFunction(rows)) {
           cb = rows
         } else {
-          validDatas = XEUtils.isArray(rows) ? rows : [rows]
+          validList = XEUtils.isArray(rows) ? rows : [rows]
         }
       }
-      if (!validDatas) {
-        validDatas = this.getInsertRecords().concat(this.getUpdateRecords())
+      if (!validList) {
+        validList = this.getInsertRecords().concat(this.getUpdateRecords())
       }
       const rowValidErrs = []
       this.lastCallTime = Date.now()
@@ -188,9 +188,9 @@ export default {
           }
         }
         if (treeConfig) {
-          XEUtils.eachTree(validDatas, handleVaild, { children: childrenField })
+          XEUtils.eachTree(validList, handleVaild, { children: childrenField })
         } else {
-          validDatas.forEach(handleVaild)
+          validList.forEach(handleVaild)
         }
         return Promise.all(rowValidErrs).then(() => {
           const ruleProps = Object.keys(validRest)
@@ -279,7 +279,7 @@ export default {
       const { editRules } = this
       const { property } = column
       const errorRules = []
-      const syncVailds = []
+      const syncValidList = []
       if (property && editRules) {
         const rules = XEUtils.get(editRules, property)
         if (rules) {
@@ -324,7 +324,7 @@ export default {
                     errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
                   } else if (customValid.catch) {
                     // 如果为异步校验（注：异步校验是并发无序的）
-                    syncVailds.push(
+                    syncValidList.push(
                       customValid.catch(e => {
                         this.validRuleErr = true
                         errorRules.push(new Rule({ type: 'custom', trigger, content: e && e.message ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
@@ -352,7 +352,7 @@ export default {
           })
         }
       }
-      return Promise.all(syncVailds).then(() => {
+      return Promise.all(syncValidList).then(() => {
         if (errorRules.length) {
           const rest = { rules: errorRules, rule: errorRules[0] }
           return Promise.reject(rest)
@@ -384,9 +384,9 @@ export default {
           })
         })
       } else if (rowList.length) {
-        const rowidList = rowList.map(row => `${getRowid(this, row)}`)
+        const rowIdList = rowList.map(row => `${getRowid(this, row)}`)
         XEUtils.each(validErrorMaps, (item, key) => {
-          if (rowidList.indexOf(key.split(':')[0]) > -1) {
+          if (rowIdList.indexOf(key.split(':')[0]) > -1) {
             validErrMaps[key] = item
           }
         })

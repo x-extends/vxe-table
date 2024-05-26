@@ -57,6 +57,7 @@ export interface VxeGlobalIcon {
 }
 
 export type VxeGlobalConfigMethod = (options?: VXETableConfigOptions) => VxeGlobalStore
+export type VxeGlobalThemeMethod = (name?: '' | 'light' | 'dark') => VxeGlobalStore
 
 /**
  * @deprecated
@@ -81,6 +82,7 @@ export interface VxeGlobalStore {
 export const globalStore: VxeGlobalStore
 
 export const setConfig: VxeGlobalConfigMethod
+export const setTheme: VxeGlobalThemeMethod
 /**
  * 请使用 setConfig
  * @deprecated
@@ -125,6 +127,7 @@ export interface VXETableCore {
    * 设置全局参数/获取所有参数
    */
   setConfig: VxeGlobalConfigMethod;
+  setTheme: VxeGlobalThemeMethod
   setIcon: typeof setIcon
   /**
    * 读取内部数据

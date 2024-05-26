@@ -1197,8 +1197,14 @@ const Methods = {
     } else {
       const { selectCheckboxMaps, fullDataRowIdData } = this
       XEUtils.each(selectCheckboxMaps, (row, rowid) => {
-        if (isFull ? fullDataRowIdData[rowid] : afterFullRowMaps[rowid]) {
-          rowList.push(row)
+        if (isFull) {
+          if (fullDataRowIdData[rowid]) {
+            rowList.push(fullDataRowIdData[rowid].row)
+          }
+        } else {
+          if (afterFullRowMaps[rowid]) {
+            rowList.push(afterFullRowMaps[rowid])
+          }
         }
       })
     }

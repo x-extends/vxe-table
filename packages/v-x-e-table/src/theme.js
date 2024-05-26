@@ -1,11 +1,14 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 
-export function setTheme (options) {
-  const theme = (options ? options.theme : null) || GlobalConfig.theme || 'default'
+export function setTheme (name) {
+  let theme = name || GlobalConfig.theme
+  if (!theme || theme === 'default') {
+    theme = 'light'
+  }
   if (typeof document !== 'undefined') {
     const documentElement = document.documentElement
     if (documentElement) {
-      documentElement.setAttribute('data-vxe-table-theme', theme)
+      documentElement.setAttribute('data-vxe-ui-theme', theme)
     }
   }
 }

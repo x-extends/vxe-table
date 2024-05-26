@@ -54,7 +54,7 @@ function getExportOrImpotType (types, flag) {
 export const setConfig = (options) => {
   if (options) {
     if (options.theme) {
-      setTheme(options)
+      setTheme(options.theme)
     }
     if (options.zIndex) {
       DomZIndex.setCurrent(options.zIndex)
@@ -163,7 +163,7 @@ export const VXETable = {
 
 export const VxeUI = VXETable
 
-setTheme(globalStore)
+setTheme('light')
 
 export * from './src/interceptor'
 export * from './src/renderer'

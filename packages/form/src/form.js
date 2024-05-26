@@ -141,17 +141,10 @@ export default {
     }
   },
   created () {
-    this.$nextTick(() => {
-      const { items } = this
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (this.customLayout && this.items) {
-          errLog('vxe.error.errConflicts', ['custom-layout', 'items'])
-        }
-      }
-      if (items) {
-        this.loadItem(items)
-      }
-    })
+    const { items } = this
+    if (items && items.length) {
+      this.loadItem(items)
+    }
   },
   render (h) {
     const { _e, loading, className, data, vSize, tooltipOpts, formItems, customLayout } = this

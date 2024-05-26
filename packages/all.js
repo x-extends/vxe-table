@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VXETable } from './v-x-e-table'
+import { setConfig } from './v-x-e-table'
 import { setTheme } from './v-x-e-table/src/theme'
 
 import { Filter } from './filter'
@@ -84,16 +84,16 @@ const components = [
 // 默认安装
 export function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
-    VXETable.setConfig(options)
+    setConfig(options)
     if (options.theme) {
-      setTheme(options)
+      setTheme(options.theme)
     }
   }
   components.map(component => component.install(Vue))
 }
 
 // 默认中文
-VXETable.setConfig({
+setConfig({
   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 

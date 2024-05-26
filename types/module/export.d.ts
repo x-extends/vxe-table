@@ -20,6 +20,9 @@ export declare class Export extends VXETableComponent {}
  * 导出参数
  */
 export interface TableExportConfig {
+  // 内置属性
+  _typeMaps?: Record<string, number>
+
   /**
    * 文件名
    */
@@ -110,6 +113,9 @@ export interface ExportParams extends TableExportConfig {
  * 导入参数
  */
 export interface TableImportConfig {
+  // 内置属性
+  _typeMaps?: Record<string, number>
+
   /**
    * 可选文件类型列表
    */
