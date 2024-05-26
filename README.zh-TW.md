@@ -22,9 +22,10 @@
 * 計劃
   * [x] ~~v1.0 基於 vue2.6，支持所有主流的瀏覽器，實現表格的一切實用的功能~~
   * [x] ~~v2.0 基於 vue2.6，支持所有主流的瀏覽器，同時兼具功能與效能~~
-  * [x] v3.0 基於 vue2.6，支持現代瀏覽器並保留相容IE11
+  * [x] v3.0 基於 vue2.6+，支持現代瀏覽器並保留相容IE11
+  * [ ] v3.9 基於 vue2.6+，重構拆分組件，分爲 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，將支持表單設計器、列表你設計器、流程設計器
   * [x] v4.0 基于 vue3.x，只支持現代瀏覽器，不支持IE
-  * [x] v4.7 基於 vue3.x，重構組件，拆分多餘組件，只保留表格
+  * [x] v4.7 基於 vue3.x，重構拆分組件，分爲 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，將支持表單設計器、列表你設計器、流程設計器
 
 ## 瀏覽器支持
 
