@@ -1,6 +1,7 @@
-import { VxeUI, setConfig, setIcon, VxeGlobalConfig, log } from '@vxe-ui/core'
+import { VxeUI, setConfig, setIcon } from '@vxe-ui/core'
 
-VxeUI.tableVersion = process.env.VUE_APP_VXE_TABLE_VERSION as string
+VxeUI.version = process.env.VUE_APP_VXE_VERSION as string
+VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
 
 setConfig({
   emptyCell: '　',
@@ -228,18 +229,18 @@ setIcon({
   TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE: iconPrefix + 'fixed-right-fill'
 })
 
-export function config (options?: VxeGlobalConfig) {
-  log.warn('vxe.error.delFunc', ['config', 'setConfig'])
-  return setConfig(options)
-}
-
-export function setup (options?: VxeGlobalConfig) {
-  log.warn('vxe.error.delFunc', ['setup', 'setConfig'])
-  return setConfig(options)
-}
-
-// 兼容老版本
+/**
+ * 已废弃，兼容老版本
+ * @deprecated
+ */
 export const VXETable = VxeUI
+
+/**
+ * 已废弃
+ * @deprecated
+ */
+export const globalStore = VxeUI.globalStore || {}
+VxeUI.globalStore = globalStore
 
 export * from '@vxe-ui/core'
 export default VxeUI

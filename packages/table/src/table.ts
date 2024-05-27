@@ -3433,7 +3433,7 @@ export default defineComponent({
       },
       openTooltip (target, content) {
         const $commTip = refCommTooltip.value
-        if ($commTip) {
+        if ($commTip && $commTip.open) {
           return $commTip.open(target, content)
         }
         return nextTick()
@@ -3452,11 +3452,11 @@ export default defineComponent({
             content: null,
             visible: false
           })
-          if ($tooltip) {
+          if ($tooltip && $tooltip.close) {
             $tooltip.close()
           }
         }
-        if ($commTip) {
+        if ($commTip && $commTip.close) {
           $commTip.close()
         }
         return nextTick()
@@ -5028,7 +5028,7 @@ export default defineComponent({
       if (isClear) {
         tableMethods.closeTooltip()
       } else {
-        if ($tooltip) {
+        if ($tooltip && $tooltip.setActived) {
           $tooltip.setActived(true)
         }
       }
@@ -5058,7 +5058,7 @@ export default defineComponent({
         })
         nextTick(() => {
           const $tooltip = refTooltip.value
-          if ($tooltip) {
+          if ($tooltip && $tooltip.open) {
             $tooltip.open(isCellOverflow ? overflowElem : (tipElem || overflowElem), formatText(content))
           }
         })
@@ -5710,7 +5710,7 @@ export default defineComponent({
           // tooltipStore.currOpts = { content: null }
           nextTick(() => {
             const $tooltip = refTooltip.value
-            if ($tooltip) {
+            if ($tooltip && $tooltip.open) {
               $tooltip.open(evnt.currentTarget, content)
             }
           })
@@ -5780,13 +5780,13 @@ export default defineComponent({
       handleTargetLeaveEvent () {
         const tooltipOpts = computeTooltipOpts.value
         let $tooltip = refTooltip.value
-        if ($tooltip) {
+        if ($tooltip && $tooltip.setActived) {
           $tooltip.setActived(false)
         }
         if (tooltipOpts.enterable) {
           internalData.tooltipTimeout = setTimeout(() => {
             $tooltip = refTooltip.value
-            if ($tooltip && !$tooltip.isActived()) {
+            if ($tooltip && $tooltip.isActived && !$tooltip.isActived()) {
               tableMethods.closeTooltip()
             }
           }, tooltipOpts.leaveDelay)
