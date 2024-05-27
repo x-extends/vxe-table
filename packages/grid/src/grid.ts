@@ -1,4 +1,4 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted, createCommentVNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
@@ -394,12 +394,11 @@ export default defineComponent({
     /**
      * 渲染表单
      */
-    const renderForms = () => {
+    const renderForm = () => {
       const { formConfig, proxyConfig } = props
       const { formData } = reactData
       const proxyOpts = computeProxyOpts.value
       const formOpts = computeFormOpts.value
-      const restVNs: VNode[] = []
       if ((formConfig && isEnableConf(formOpts)) || slots.form) {
         let slotVNs: VNode[] = []
         if (slots.form) {
@@ -440,24 +439,21 @@ export default defineComponent({
             )
           }
         }
-        restVNs.push(
-          h('div', {
-            ref: refFormWrapper,
-            key: 'form',
-            class: 'vxe-grid--form-wrapper'
-          }, slotVNs)
-        )
+        return h('div', {
+          ref: refFormWrapper,
+          key: 'form',
+          class: 'vxe-grid--form-wrapper'
+        }, slotVNs)
       }
-      return restVNs
+      return createCommentVNode()
     }
 
     /**
      * 渲染工具栏
      */
-    const renderToolbars = () => {
+    const renderToolbar = () => {
       const { toolbarConfig } = props
       const toolbarOpts = computeToolbarOpts.value
-      const restVNs: VNode[] = []
       if ((toolbarConfig && isEnableConf(toolbarOpts)) || slots.toolbar) {
         let slotVNs: VNode[] = []
         if (slots.toolbar) {
@@ -484,79 +480,53 @@ export default defineComponent({
             }, toolbarSlots)
           )
         }
-        restVNs.push(
-          h('div', {
-            ref: refToolbarWrapper,
-            key: 'toolbar',
-            class: 'vxe-grid--toolbar-wrapper'
-          }, slotVNs)
-        )
+        return h('div', {
+          ref: refToolbarWrapper,
+          key: 'toolbar',
+          class: 'vxe-grid--toolbar-wrapper'
+        }, slotVNs)
       }
-      return restVNs
+      return createCommentVNode()
     }
 
     /**
      * 渲染表格顶部区域
      */
-    const renderTops = () => {
+    const renderTop = () => {
       if (slots.top) {
-        return [
-          h('div', {
-            ref: refTopWrapper,
-            key: 'top',
-            class: 'vxe-grid--top-wrapper'
-          }, slots.top({ $grid: $xeGrid }))
-        ]
+        return h('div', {
+          ref: refTopWrapper,
+          key: 'top',
+          class: 'vxe-grid--top-wrapper'
+        }, slots.top({ $grid: $xeGrid }))
       }
-      return []
+      return createCommentVNode()
     }
 
-    const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
-
-    const renderLayout = () => {
-      const { layouts } = props
-      const vns: any[] = []
-      const currLayouts = (layouts && layouts.length ? layouts : (getConfig().grid.layouts || defaultLayouts))
-      currLayouts.forEach(name => {
-        switch (name) {
-          case 'Form':
-            vns.push(renderForms())
-            break
-          case 'Toolbar':
-            vns.push(renderToolbars())
-            break
-          case 'Top':
-            vns.push(renderTops())
-            break
-          case 'Table':
-            vns.push(renderTables())
-            break
-          case 'Bottom':
-            vns.push(renderBottoms())
-            break
-          case 'Pager':
-            vns.push(renderPagers())
-            break
-          default:
-            if (process.env.VUE_APP_VXE_ENV === 'development') {
-              log.err('vxe.error.notProp', [`layouts -> ${name}`])
-            }
-            break
-        }
-      })
-      return vns
+    const renderTableLeft = () => {
+      const leftSlot = slots.left
+      if (leftSlot) {
+        return h('div', {
+          class: 'vxe-grid--left-wrapper'
+        }, leftSlot({ $grid: $xeGrid }))
+      }
+      return createCommentVNode()
     }
 
-    const tableCompEvents: VxeTableEventProps = {}
-    tableComponentEmits.forEach(name => {
-      const type = XEUtils.camelCase(`on-${name}`) as keyof VxeTableEventProps
-      tableCompEvents[type] = (...args: any[]) => emit(name, ...args)
-    })
+    const renderTableRight = () => {
+      const rightSlot = slots.right
+      if (rightSlot) {
+        return h('div', {
+          class: 'vxe-grid--right-wrapper'
+        }, rightSlot({ $grid: $xeGrid }))
+      }
+      return createCommentVNode()
+    }
 
     /**
      * 渲染表格
      */
-    const renderTables = () => {
+    const renderTable = () => {
       const { proxyConfig } = props
       const tableProps = computeTableProps.value
       const proxyOpts = computeProxyOpts.value
@@ -576,45 +546,43 @@ export default defineComponent({
         loading?(params: any): any
       } = {}
       if (emptySlot) {
-        slotObj.empty = () => emptySlot({})
+        slotObj.empty = () => emptySlot({ $grid: $xeGrid })
       }
       if (loadingSlot) {
-        slotObj.loading = () => loadingSlot({})
+        slotObj.loading = () => loadingSlot({ $grid: $xeGrid })
       }
-      return [
+      return h('div', {
+        class: 'vxe-grid--table-wrapper'
+      }, [
         h(VxeTableComponent, {
           ref: refTable,
-          key: 'table',
           ...tableProps,
           ...tableOns
         }, slotObj)
-      ]
+      ])
     }
 
     /**
      * 渲染表格底部区域
      */
-    const renderBottoms = () => {
+    const renderBottom = () => {
       if (slots.bottom) {
-        return [
-          h('div', {
-            ref: refBottomWrapper,
-            key: 'bottom',
-            class: 'vxe-grid--bottom-wrapper'
-          }, slots.bottom({ $grid: $xeGrid }))
-        ]
+        return h('div', {
+          ref: refBottomWrapper,
+          key: 'bottom',
+          class: 'vxe-grid--bottom-wrapper'
+        }, slots.bottom({ $grid: $xeGrid }))
       }
-      return []
+      return createCommentVNode()
     }
 
     /**
      * 渲染分页
      */
-    const renderPagers = () => {
+    const renderPager = () => {
       const { proxyConfig, pagerConfig } = props
       const proxyOpts = computeProxyOpts.value
       const pagerOpts = computePagerOpts.value
-      const restVNs: VNode[] = []
       if ((pagerConfig && isEnableConf(pagerOpts)) || slots.pager) {
         let slotVNs: VNode[] = []
         if (slots.pager) {
@@ -643,16 +611,65 @@ export default defineComponent({
             }, pagerSlots)
           )
         }
-        restVNs.push(
-          h('div', {
-            ref: refPagerWrapper,
-            key: 'pager',
-            class: 'vxe-grid--pager-wrapper'
-          }, slotVNs)
-        )
+        return h('div', {
+          ref: refPagerWrapper,
+          key: 'pager',
+          class: 'vxe-grid--pager-wrapper'
+        }, slotVNs)
       }
-      return restVNs
+      return createCommentVNode()
     }
+
+    const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
+
+    const renderLayout = () => {
+      const { layouts } = props
+      const vns: VNode[] = []
+      const currLayouts = (layouts && layouts.length ? layouts : (getConfig().grid.layouts || defaultLayouts))
+      currLayouts.forEach(name => {
+        switch (name) {
+          case 'Form':
+            vns.push(renderForm())
+            break
+          case 'Toolbar':
+            vns.push(renderToolbar())
+            break
+          case 'Top':
+            vns.push(renderTop())
+            break
+          case 'Table':
+            vns.push(
+              h('div', {
+                key: 'table',
+                class: 'vxe-grid--table-container'
+              }, [
+                renderTableLeft(),
+                renderTable(),
+                renderTableRight()
+              ])
+            )
+            break
+          case 'Bottom':
+            vns.push(renderBottom())
+            break
+          case 'Pager':
+            vns.push(renderPager())
+            break
+          default:
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
+              log.err('vxe.error.notProp', [`layouts -> ${name}`])
+            }
+            break
+        }
+      })
+      return vns
+    }
+
+    const tableCompEvents: VxeTableEventProps = {}
+    tableComponentEmits.forEach(name => {
+      const type = XEUtils.camelCase(`on-${name}`) as keyof VxeTableEventProps
+      tableCompEvents[type] = (...args: any[]) => emit(name, ...args)
+    })
 
     const initProxy = () => {
       const { proxyConfig, formConfig } = props

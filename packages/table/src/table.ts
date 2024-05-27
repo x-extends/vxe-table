@@ -34,8 +34,6 @@ export default defineComponent({
   setup (props, context) {
     const { slots, emit } = context
 
-    const hasUseTooltip = false
-
     const xID = XEUtils.uniqueId()
 
     const { computeSize } = useSize(props)
@@ -6991,26 +6989,22 @@ export default defineComponent({
         /**
          * 通用提示
          */
-        hasUseTooltip
-          ? h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
-            ref: refCommTooltip,
-            isArrow: false,
-            enterable: false
-          })
-          : createCommentVNode(),
+        h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
+          ref: refCommTooltip,
+          isArrow: false,
+          enterable: false
+        }),
         /**
          * 工具提示
          */
-        hasUseTooltip
-          ? h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
-            ref: refTooltip,
-            ...tipConfig as any
-          })
-          : createCommentVNode(),
+        h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
+          ref: refTooltip,
+          ...tipConfig as any
+        }),
         /**
          * 校验提示
          */
-        hasUseTooltip && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+        props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
           ? h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
             ref: refValidTooltip,
             class: [{

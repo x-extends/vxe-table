@@ -70,7 +70,7 @@
   .vxe-default-input,
   .vxe-default-textarea,
   .vxe-default-select {
-    height: var(--vxe-input-height-default);
+    height: var(--vxe-ui-input-height-default);
   }
   .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
@@ -768,7 +768,7 @@
       .vxe-default-input,
       .vxe-default-textarea,
       .vxe-default-select {
-        height: var(--vxe-input-height-medium);
+        height: var(--vxe-ui-input-height-medium);
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -794,7 +794,7 @@
       .vxe-default-input,
       .vxe-default-textarea,
       .vxe-default-select {
-        height: var(--vxe-input-height-small);
+        height: var(--vxe-ui-input-height-small);
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
@@ -820,7 +820,7 @@
       .vxe-default-input,
       .vxe-default-textarea,
       .vxe-default-select {
-        height: var(--vxe-input-height-mini);
+        height: var(--vxe-ui-input-height-mini);
       }
       .vxe-default-input {
         &[type="date"]::-webkit-inner-spin-button {
