@@ -19,14 +19,6 @@
   * 模块化表格、按需加载
   * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能
 
-* 计划
-  * [x] ~~v1.0 基于 vue2.6，支持所有主流的浏览器，实现表格的一切实用的功能~~
-  * [x] ~~v2.0 基于 vue2.6，支持所有主流的浏览器，同时兼具功能与性能~~
-  * [x] v3.0 基于 vue2.6，支持现代浏览器并保留兼容 IE11
-  * [x] v4.0 基于 vue3.x，只支持现代浏览器，不支持 IE
-  * [x] v4.7 基于 vue3.x，重构组件，拆分多余组件，只保留表格
-  * [ ] 下一阶段：sticky 渲染模式、将虚拟滚动提升到极致、虚拟滚动动态行高、数据图表可视化
-
 ## 浏览器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)

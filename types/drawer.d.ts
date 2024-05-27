@@ -58,7 +58,7 @@ export namespace VxeDrawerPropTypes {
   export type DestroyOnClose = boolean
   export type ShowTitleOverflow = boolean
   export type Transfer = boolean
-  export type BeforeHideMethod = (params: DrawerVisibleParams) => Promise<any>
+  export type BeforeHideMethod = (params: VxeDrawerDefines.DrawerVisibleParams) => Promise<any>
   export type Slots = VxeDrawerSlots
 }
 
@@ -135,49 +135,38 @@ export type VxeDrawerEmits = [
   'cancel'
 ]
 
+/**
+ * 全局窗口控制器
+ */
+export interface DrawerController {
+  /**
+   * 创建窗口
+   * @param options 参数
+   */
+  open(options: VxeDrawerDefines.DrawerOptions): Promise<DrawerEventTypes>
+  /**
+   * 获取动态的活动窗口
+   * @param id 窗口唯一标识
+   */
+  get(id: string): VxeDrawerConstructor & VxeDrawerMethods
+  /**
+   * 关闭动态的活动窗口，如果为空则关闭所有
+   * @param id 窗口唯一标识
+   */
+  close(id?: VxeDrawerPropTypes.ID): Promise<any>
+}
+
 export namespace VxeDrawerDefines {
-  export interface DrawerEventParams extends VxeComponentEvent {
+  export interface DrawerEventParams extends VxeEvent {
     $drawer: VxeDrawerConstructor
   }
 
   export interface DrawerOptions extends VxeDrawerProps, VxeDrawerEventProps {
     key?: string | number
   }
-}
 
-interface DrawerVisibleParams {
-}
-
-export type VxeDrawerEventProps = {
-  onShow?: VxeDrawerEvents.Show
-  onHide?: VxeDrawerEvents.Hide
-  onBeforeHide?: VxeDrawerEvents.BeforeHide
-  onConfirm?: VxeDrawerEvents.Confirm
-  onCancel?: VxeDrawerEvents.Cancel
-  onClose?: VxeDrawerEvents.Close
-}
-
-export interface VxeDrawerListeners {
-  show?: VxeDrawerEvents.Show
-  hide?: VxeDrawerEvents.Hide
-  beforeHide?: VxeDrawerEvents.BeforeHide
-  confirm?: VxeDrawerEvents.Confirm
-  cancel?: VxeDrawerEvents.Cancel
-  close?: VxeDrawerEvents.Close
-}
-
-export namespace VxeDrawerEvents {
-  export type Show = (params: VxeDrawerDefines.ShowEventParams) => void
-  export type Hide = (params: VxeDrawerDefines.HideEventParams) => void
-  export type BeforeHide = (params: VxeDrawerDefines.BeforeHideEventParams) => void
-  export type Confirm = (params: VxeDrawerDefines.ConfirmEventParams) => void
-  export type Cancel = (params: VxeDrawerDefines.CancelEventParams) => void
-  export type Close = (params: VxeDrawerDefines.CloseEventParams) => void
-}
-
-export namespace VxeDrawerSlotTypes {
-  interface DrawerEventParams extends VxeEvent {
-    $drawer: VxeDrawerConstructor & VxeDrawerMethods
+  export interface DrawerVisibleParams {
+    type: DrawerEventTypes
   }
 
   interface DrawerBaseParams extends DrawerVisibleParams { }
@@ -208,7 +197,36 @@ export namespace VxeDrawerSlotTypes {
 
   export interface MoveParams extends DrawerBaseParams { }
   export interface MoveEventParams extends DrawerEventParams, MoveParams { }
+}
 
+export type VxeDrawerEventProps = {
+  onShow?: VxeDrawerEvents.Show
+  onHide?: VxeDrawerEvents.Hide
+  onBeforeHide?: VxeDrawerEvents.BeforeHide
+  onConfirm?: VxeDrawerEvents.Confirm
+  onCancel?: VxeDrawerEvents.Cancel
+  onClose?: VxeDrawerEvents.Close
+}
+
+export interface VxeDrawerListeners {
+  show?: VxeDrawerEvents.Show
+  hide?: VxeDrawerEvents.Hide
+  beforeHide?: VxeDrawerEvents.BeforeHide
+  confirm?: VxeDrawerEvents.Confirm
+  cancel?: VxeDrawerEvents.Cancel
+  close?: VxeDrawerEvents.Close
+}
+
+export namespace VxeDrawerEvents {
+  export type Show = (params: VxeDrawerDefines.ShowEventParams) => void
+  export type Hide = (params: VxeDrawerDefines.HideEventParams) => void
+  export type BeforeHide = (params: VxeDrawerDefines.BeforeHideEventParams) => void
+  export type Confirm = (params: VxeDrawerDefines.ConfirmEventParams) => void
+  export type Cancel = (params: VxeDrawerDefines.CancelEventParams) => void
+  export type Close = (params: VxeDrawerDefines.CloseEventParams) => void
+}
+
+export namespace VxeDrawerSlotTypes {
   export interface DefaultSlotParams {
     $drawer: VxeDrawerConstructor & VxeDrawerMethods
   }
