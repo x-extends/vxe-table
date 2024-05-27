@@ -34,6 +34,19 @@
   .vxe-grid--bottom-wrapper  {
     position: relative;
   }
+  .vxe-grid--table-container {
+    display: flex;
+    flex-direction: row;
+  }
+  .vxe-grid--left-wrapper,
+  .vxe-grid--right-wrapper {
+    flex-shrink: 0;
+    overflow: auto;
+  }
+  .vxe-grid--table-wrapper {
+    flex-grow: 1;
+    overflow: hidden;
+  }
 }
 
 .vxe-grid {
