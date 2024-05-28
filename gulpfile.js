@@ -37,6 +37,18 @@ const componentList = [
   'grid'
 ]
 
+const languages = [
+  'zh-CN',
+  'zh-TC',
+  'zh-HK',
+  'zh-MO',
+  'zh-TW',
+  'en-US',
+  'ja-JP',
+  'es-ES',
+  'pt-BR'
+]
+
 const styleCode = 'require(\'./style.css\')'
 
 const delDir = (directory) => {
@@ -234,6 +246,45 @@ gulp.task('build_single_style', () => {
   return merge(...rest)
 })
 
+gulp.task('build_i18n', () => {
+  languages.forEach(code => {
+    fs.writeFileSync(`lib/locale/lang/${code}.d.ts`, 'declare const langMsgs: { [key: string]: any }\nexport default langMsgs')
+    fs.writeFileSync(`es/locale/lang/${code}.d.ts`, 'declare const langMsgs: { [key: string]: any }\nexport default langMsgs')
+  })
+  const rest = languages.map(code => {
+    const name = XEUtils.camelCase(code).replace(/^[a-z]/, firstChat => firstChat.toUpperCase())
+    const isZHTC = ['zh-HK', 'zh-MO', 'zh-TW'].includes(code)
+    return gulp.src(`packages_temp/locale/lang/${isZHTC ? 'zh-TC' : code}.ts`)
+      .pipe(ts(tsSettings))
+      .pipe(babel({
+        moduleId: `vxe-table-lang.${code}`,
+        presets: ['@babel/env'],
+        plugins: [
+          ['@babel/transform-modules-umd', {
+            globals: {
+              [`vxe-table-language.${code}`]: `VXETableLang${name}`
+            },
+            exactGlobals: true
+          }]
+        ]
+      }))
+      .pipe(rename({
+        basename: code,
+        suffix: '.umd',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('lib/locale/lang'))
+      .pipe(uglify())
+      .pipe(rename({
+        basename: code,
+        suffix: '.min',
+        extname: '.js'
+      }))
+      .pipe(gulp.dest('lib/locale/lang'))
+  })
+  return merge(...rest)
+})
+
 gulp.task('copy_pack', () => {
   return gulp.src('packages/**')
     .pipe(gulp.dest('packages_temp'))
@@ -249,7 +300,7 @@ gulp.task('clear', () => {
 
 gulp.task('build_all', gulp.parallel('build_es_all', 'build_common_all', 'build_umd_all'))
 
-gulp.task('build', gulp.series('clear', 'copy_pack', 'build_all', 'build_single_style', () => {
+gulp.task('build', gulp.series('clear', 'copy_pack', 'build_all', 'build_i18n', 'build_single_style', () => {
   [coreName, ...componentList].forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
     fs.writeFileSync(`lib/vxe-${name}/style/index.js`, styleCode)
