@@ -1,6 +1,6 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { getI18n, renderer, VxeComponentSlotType } from '@vxe-ui/core'
+import { getI18n, renderer, VxeComponentSlotType } from 'vxe-pc-ui'
 import { mergeBodyMethod, getRowid, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'

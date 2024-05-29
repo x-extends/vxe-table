@@ -1,5 +1,5 @@
 import { defineComponent, h, createCommentVNode, ref, Ref, computed, reactive, inject, nextTick, resolveComponent } from 'vue'
-import { getI18n, getIcon } from '@vxe-ui/core'
+import { getI18n, getIcon } from 'vxe-pc-ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
 

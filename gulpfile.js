@@ -23,7 +23,7 @@ const tsSettings = {
   target: 'es2016'
 }
 
-const exportModuleName = 'VxeUITable'
+const exportModuleName = 'VXETable'
 const esmOutDir = 'es'
 const commOutDir = 'lib'
 

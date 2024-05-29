@@ -1,6 +1,6 @@
 import { h, resolveComponent, ComponentOptions } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, renderer, getI18n, log } from '@vxe-ui/core'
+import { getConfig, renderer, getI18n, log } from 'vxe-pc-ui'
 import { getCellValue, setCellValue } from '../../table/src/util'
 import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
 import { getOnName } from '../../ui/src/vn'

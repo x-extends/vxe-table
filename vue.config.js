@@ -11,7 +11,7 @@ process.env.VUE_APP_VXE_ENV = 'development'
 
 const externalMaps = {
   'xe-utils': 'XEUtils',
-  '@vxe-ui/core': 'VxeCore'
+  'vxe-pc-ui': 'VxeUI'
 }
 
 const externals = {}
@@ -49,7 +49,7 @@ module.exports = defineConfig({
       }
     },
     output: {
-      library: 'VxeUITable'
+      library: 'VXETable'
     },
     externals
   }

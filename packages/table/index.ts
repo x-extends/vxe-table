@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { VxeUI } from '@vxe-ui/core'
+import { VxeUI } from 'vxe-pc-ui'
 import VxeTableComponent from './src/table'
 import './module/filter/hook'
 import './module/menu/hook'

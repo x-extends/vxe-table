@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { renderer, hooks } from '@vxe-ui/core'
+import { renderer, hooks } from 'vxe-pc-ui'
 import { toFilters, handleFieldOrColumn } from '../../src/util'
 import { getDomNode, triggerEvent } from '../../../ui/src/dom'
 

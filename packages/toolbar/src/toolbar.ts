@@ -1,6 +1,6 @@
 import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType, resolveComponent } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, getIcon, getI18n, renderer, commands, log, createEvent, useSize } from '@vxe-ui/core'
+import { getConfig, getIcon, getI18n, renderer, commands, log, createEvent, useSize } from 'vxe-pc-ui'
 import { getSlotVNs } from '../../ui/src/vn'
 
 import type { VxeButtonComponent } from 'vxe-pc-ui'

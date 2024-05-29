@@ -2,7 +2,7 @@ import { defineComponent, h, createCommentVNode, ComponentPublicInstance, resolv
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
-import { VxeUI, getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, log, useSize } from '@vxe-ui/core'
+import { VxeUI, getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, log, useSize } from 'vxe-pc-ui'
 import Cell from './cell'
 import TableBodyComponent from './body'
 import TableHeaderComponent from './header'

@@ -1,5 +1,5 @@
 import { defineComponent, h, inject, ref, Ref, VNode, PropType, resolveComponent, TransitionGroup } from 'vue'
-import { VxeUI, getI18n, getIcon } from '@vxe-ui/core'
+import { VxeUI, getI18n, getIcon } from 'vxe-pc-ui'
 import { formatText } from '../../../ui/src/utils'
 import { addClass, removeClass } from '../../../ui/src/dom'
 import XEUtils from 'xe-utils'

@@ -1,6 +1,6 @@
 import { inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { VxeUI, getI18n, hooks, renderer, log } from '@vxe-ui/core'
+import { VxeUI, getI18n, hooks, renderer, log } from 'vxe-pc-ui'
 import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
 import { parseFile, formatText } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'

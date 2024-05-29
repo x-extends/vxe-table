@@ -1,6 +1,6 @@
 import { h, VNode } from 'vue'
 import XEUtils from 'xe-utils'
-import { getI18n, getIcon, renderer, VxeComponentSlotType } from '@vxe-ui/core'
+import { getI18n, getIcon, renderer, VxeComponentSlotType } from 'vxe-pc-ui'
 import { getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { updateCellTitle } from '../../ui/src/dom'
 import { createColumn, getRowid } from './util'

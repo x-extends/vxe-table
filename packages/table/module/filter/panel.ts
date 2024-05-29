@@ -1,5 +1,5 @@
 import { defineComponent, h, computed, inject } from 'vue'
-import { getI18n, getIcon, renderer } from '@vxe-ui/core'
+import { getI18n, getIcon, renderer } from 'vxe-pc-ui'
 import { formatText } from '../../../ui/src/utils'
 import { getPropClass } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'

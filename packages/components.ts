@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { setConfig } from '@vxe-ui/core'
+import { VxeUI } from 'vxe-pc-ui'
 
 import { VxeColumn } from './column'
 import { VxeColgroup } from './colgroup'
@@ -19,7 +19,7 @@ const components = [
 
 // 默认安装
 export function install (app: App, options?: VxeGlobalConfig) {
-  setConfig(options)
+  VxeUI.setConfig(options)
   components.forEach(component => component.install(app))
 }
 

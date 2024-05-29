@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VxeComponentSlotType } from '@vxe-ui/core'
+import { VxeComponentSlotType } from 'vxe-pc-ui'
 
 export function getOnName (type: string) {
   return 'on' + type.substring(0, 1).toLocaleUpperCase() + type.substring(1)

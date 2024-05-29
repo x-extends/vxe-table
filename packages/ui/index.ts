@@ -1,9 +1,9 @@
-import { VxeUI, setConfig, setIcon } from '@vxe-ui/core'
+import { VxeUI } from 'vxe-pc-ui'
 
 VxeUI.version = process.env.VUE_APP_VXE_VERSION as string
 VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
 
-setConfig({
+VxeUI.setConfig({
   emptyCell: '　',
 
   table: {
@@ -193,7 +193,7 @@ setConfig({
 
 const iconPrefix = 'vxe-icon-'
 
-setIcon({
+VxeUI.setIcon({
   // table
   TABLE_SORT_ASC: iconPrefix + 'caret-up',
   TABLE_SORT_DESC: iconPrefix + 'caret-down',
@@ -229,18 +229,59 @@ setIcon({
   TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE: iconPrefix + 'fixed-right-fill'
 })
 
+export const setTheme = VxeUI.setTheme
+export const getTheme = VxeUI.getTheme
+export const setConfig = VxeUI.setConfig
+export const getConfig = VxeUI.getConfig
+export const setIcon = VxeUI.setIcon
+export const getIcon = VxeUI.getIcon
+export const setLanguage = VxeUI.setLanguage
+export const setI18n = VxeUI.setI18n
+export const getI18n = VxeUI.getI18n
+
+export const globalEvents = VxeUI.globalEvents
+export const globalResize = VxeUI.globalResize
+export const renderer = VxeUI.renderer
+export const validators = VxeUI.validators
+export const menus = VxeUI.menus
+export const formats = VxeUI.formats
+export const commands = VxeUI.commands
+export const interceptor = VxeUI.interceptor
+export const clipboard = VxeUI.clipboard
+export const log = VxeUI.log
+
+export const hooks = VxeUI.hooks
+export const use = VxeUI.use
+
+/**
+ * 已废弃
+ * @deprecated
+ */
+export const setup = VxeUI.setup
+/**
+ * 已废弃
+ * @deprecated
+ */
+export const config = VxeUI.config
+/**
+ * 已废弃
+ * @deprecated
+ */
+export const t = VxeUI.t
+/**
+ * 已废弃
+ * @deprecated
+ */
+export const _t = VxeUI._t
+
 /**
  * 已废弃，兼容老版本
  * @deprecated
  */
 export const VXETable = VxeUI
 
-/**
- * 已废弃
- * @deprecated
- */
-export const globalStore = VxeUI.globalStore || {}
-VxeUI.globalStore = globalStore
+export {
+  VxeUI
+}
 
-export * from '@vxe-ui/core'
 export default VxeUI

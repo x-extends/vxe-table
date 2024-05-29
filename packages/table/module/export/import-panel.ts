@@ -1,5 +1,5 @@
 import { defineComponent, h, ref, Ref, computed, inject, reactive, nextTick, resolveComponent } from 'vue'
-import { getI18n, getIcon } from '@vxe-ui/core'
+import { getI18n, getIcon } from 'vxe-pc-ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 

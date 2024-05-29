@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { hooks } from '@vxe-ui/core'
+import { hooks } from 'vxe-pc-ui'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass, getEventTargetNode } from '../../../ui/src/dom'
 
 import type { TableKeyboardPrivateMethods } from '../../../../types'

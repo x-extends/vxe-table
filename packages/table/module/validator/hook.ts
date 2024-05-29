@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, validators, hooks, log } from '@vxe-ui/core'
+import { getConfig, validators, hooks, log } from 'vxe-pc-ui'
 import { getFuncText, eqEmptyValue } from '../../../ui/src/utils'
 import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'

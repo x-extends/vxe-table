@@ -1,6 +1,6 @@
 import { reactive, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, renderer, hooks, log, getI18n } from '@vxe-ui/core'
+import { getConfig, renderer, hooks, log, getI18n } from 'vxe-pc-ui'
 import { isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { browse, removeClass, addClass } from '../../../ui/src/dom'

@@ -2,7 +2,7 @@ import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveCompo
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
-import { VxeUI, getConfig, getI18n, commands, hooks, log, createEvent, globalEvents, GLOBAL_EVENT_KEYS, useSize } from '@vxe-ui/core'
+import { VxeUI, getConfig, getI18n, commands, hooks, log, createEvent, globalEvents, GLOBAL_EVENT_KEYS, useSize } from 'vxe-pc-ui'
 import VxeTableComponent from '../../table'
 import VxeToolbarComponent from '../../toolbar'
 import tableComponentProps from '../../table/src/props'

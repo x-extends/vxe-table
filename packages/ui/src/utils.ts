@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { getConfig } from '@vxe-ui/core'
+import { getConfig } from 'vxe-pc-ui'
 import DomZIndex from 'dom-zindex'
 
 export function isEnableConf (conf: any): boolean {

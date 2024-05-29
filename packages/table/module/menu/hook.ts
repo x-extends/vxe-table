@@ -1,6 +1,6 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { menus, hooks, globalEvents, GLOBAL_EVENT_KEYS } from '@vxe-ui/core'
+import { menus, hooks, globalEvents, GLOBAL_EVENT_KEYS } from 'vxe-pc-ui'
 import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/dom'
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
 

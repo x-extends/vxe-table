@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import { hooks } from '@vxe-ui/core'
+import { hooks } from 'vxe-pc-ui'
 
 import type { TableCustomMethods, TableCustomPrivateMethods } from '../../../../types'
 

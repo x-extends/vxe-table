@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { getI18n, formats, log } from '@vxe-ui/core'
+import { getI18n, formats, log } from 'vxe-pc-ui'
 import { toFilters } from './util'
 import { getFuncText } from '../../ui/src/utils'
 
