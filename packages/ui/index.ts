@@ -95,7 +95,12 @@ VxeUI.setConfig({
       showAsterisk: true
     },
     importConfig: {
-      _typeMaps: {},
+      _typeMaps: {
+        csv: 1,
+        html: 1,
+        xml: 1,
+        txt: 1
+      },
       modes: ['insert', 'covering']
     },
     exportConfig: {
