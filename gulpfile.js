@@ -28,6 +28,7 @@ const esmOutDir = 'es'
 const commOutDir = 'lib'
 
 const coreName = 'ui'
+const oldCoreName = 'v-x-e-table'
 
 const componentList = [
   'table',
@@ -71,7 +72,7 @@ function toExportName (name) {
 }
 
 gulp.task('build_escode', function () {
-  [coreName, ...componentList].forEach(name => {
+  [coreName, oldCoreName, ...componentList].forEach(name => {
     const exportName = `Vxe${toExportName(name)}`
     const esCode = `import ${exportName} from '../${name}'\nexport * from '../${name}'\nexport default ${exportName}`
     fs.mkdirSync(`packages_temp/vxe-${name}`)
@@ -239,7 +240,7 @@ function buildStyle (name, dirName) {
 
 gulp.task('build_single_style', () => {
   const rest = [];
-  [coreName, ...componentList].forEach(name => {
+  [coreName, oldCoreName, ...componentList].forEach(name => {
     rest.push(buildStyle(name, name))
     rest.push(buildStyle(name, `vxe-${name}`))
   })
@@ -301,7 +302,7 @@ gulp.task('clear', () => {
 gulp.task('build_all', gulp.parallel('build_es_all', 'build_common_all', 'build_umd_all'))
 
 gulp.task('build', gulp.series('clear', 'copy_pack', 'build_all', 'build_i18n', 'build_single_style', () => {
-  [coreName, ...componentList].forEach(name => {
+  [coreName, oldCoreName, ...componentList].forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
     fs.writeFileSync(`lib/vxe-${name}/style/index.js`, styleCode)
   })

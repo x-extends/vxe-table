@@ -7,10 +7,16 @@
       highlight-hover-row
       height="400"
       :loading="demo1.loading"
+      :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
+      <vxe-column type="expand" field="role" title="Role">
+        <template #content="{ row }">
+          <div>{{ row.name }}</div>
+        </template>
+      </vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
@@ -32,16 +38,29 @@ const demo1 = reactive({
   loading: false,
   tableData: [] as any[],
   sexList: [
-    {
-      label: '女',
-      value: '0'
-    },
-    {
-      label: '男',
-      value: '1'
-    }
+    { label: '女', value: '0' },
+    { label: '男', value: '1' }
   ],
-  ageOptions: [{ label: '大于16岁', value: 16 }, { label: '大于26岁', value: 26 }, { label: '大于30岁', value: 30 }]
+  ageOptions: [
+    { label: '大于16岁', value: 16 },
+    { label: '大于26岁', value: 26 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 },
+    { label: '大于30岁', value: 30 }
+  ]
 })
 
 const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
@@ -79,6 +98,6 @@ onMounted(() => {
       { id: 10020, name: 'Test20', role: 'Develop', sex: '1', age: 41, address: 'test abc' }
     ]
     demo1.loading = false
-  }, 500)
+  }, 100)
 })
 </script>

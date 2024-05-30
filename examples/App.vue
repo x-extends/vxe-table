@@ -19,7 +19,8 @@ import { VxeUI } from '../packages'
 const navList = ref([
   { name: 'Home', icon: 'vxe-icon-user-fill', routerLink: { path: '/' } },
   { name: 'ToolbarTest', routerLink: { name: 'ToolbarTest' } },
-  { name: 'TableTest', routerLink: { name: 'TableTest' } },
+  { name: 'TableTest1', routerLink: { name: 'TableTest1' } },
+  { name: 'TableTest2', routerLink: { name: 'TableTest2' } },
   { name: 'GridTest', routerLink: { name: 'GridTest' } }
 ])
 

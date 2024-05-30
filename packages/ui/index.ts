@@ -1,4 +1,4 @@
-import { VxeUI } from 'vxe-pc-ui'
+import { VxeUI, modal, drawer, saveFile, readFile } from 'vxe-pc-ui'
 
 VxeUI.version = process.env.VUE_APP_VXE_VERSION as string
 VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
@@ -286,7 +286,11 @@ export const _t = VxeUI._t
 export const VXETable = VxeUI
 
 export {
-  VxeUI
+  VxeUI,
+  modal,
+  drawer,
+  saveFile,
+  readFile
 }
 
 export default VxeUI
