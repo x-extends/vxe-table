@@ -2817,6 +2817,19 @@ export default defineComponent({
           })
       },
       /**
+       * 修改行数据
+       */
+      setRow (rows, record) {
+        if (record) {
+          let rest: any[] = rows
+          if (!XEUtils.isArray(rows)) {
+            rest = [rows]
+          }
+          rest.forEach(item => Object.assign(item, record))
+        }
+        return nextTick()
+      },
+      /**
        * 局部加载行数据并恢复到初始状态
        * 对于行数据需要局部更改的场景中可能会用到
        * @param {Row} row 行对象

@@ -89,6 +89,8 @@ export interface VXETableConfigOptions {
   [key: string]: any
 }
 
+export type VxeGlobalConfig = VXETableConfigOptions
+
 export interface VxeGlobalIcon {
   [ket: string]: string
 }

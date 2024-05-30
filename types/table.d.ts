@@ -133,6 +133,12 @@ export interface TablePublicMethods<DT = VxeTableDataRow> {
    */
   reloadData(data: any[]): Promise<void>
   /**
+   * 修改行数据
+   * @param rows 行对象
+   * @param record 新数据
+   */
+  setRow(rows: any | any[], record?: any): Promise<void>
+  /**
    * 局部加载行数据并恢复到初始状态
    * @param rows 行对象
    * @param record 新数据
