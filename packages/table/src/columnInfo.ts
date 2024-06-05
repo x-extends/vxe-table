@@ -1,10 +1,11 @@
 import XEUtils from 'xe-utils'
-import { getI18n, formats, log } from 'vxe-pc-ui'
+import { VxeUI } from '../../ui'
 import { toFilters } from './util'
 import { getFuncText } from '../../ui/src/utils'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
+const { getI18n, formats, log } = VxeUI
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
@@ -101,6 +102,7 @@ export class ColumnInfo {
       halfVisible: false,
       defaultVisible: visible,
       defaultFixed: _vm.fixed,
+
       checked: false,
       halfChecked: false,
       disabled: false,
@@ -118,6 +120,9 @@ export class ColumnInfo {
       // 列排序
       sortNumber: 0, // 用于记录自定义列顺序
       renderSortNumber: 0, // 用于记录自定义列顺序
+
+      renderFixed: '',
+      renderVisible: false,
 
       renderWidth: 0,
       renderHeight: 0,

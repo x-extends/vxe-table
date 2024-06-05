@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { VxeUI } from 'vxe-pc-ui'
+import { VxeUI } from '../ui'
 import VxeGridComponent from './src/grid'
 
 export const VxeGrid = Object.assign({}, VxeGridComponent, {

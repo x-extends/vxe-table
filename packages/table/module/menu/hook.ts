@@ -1,10 +1,12 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { menus, hooks, globalEvents, GLOBAL_EVENT_KEYS } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import { getDomNode, getAbsolutePos, getEventTargetNode } from '../../../ui/src/dom'
 import { isEnableConf, hasChildrenList } from '../../../ui/src/utils'
 
 import type { TableMenuMethods, TableMenuPrivateMethods } from '../../../../types'
+
+const { menus, hooks, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
 const tableMenuMethodKeys: (keyof TableMenuMethods)[] = ['closeMenu']
 

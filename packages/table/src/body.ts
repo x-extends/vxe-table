@@ -1,12 +1,14 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { getI18n, renderer, VxeComponentSlotType } from 'vxe-pc-ui'
+import { VxeUI } from '../../ui'
 import { mergeBodyMethod, getRowid, removeScrollListener, restoreScrollListener, XEBodyScrollElement } from './util'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeColumnPropTypes, VxeComponentSizeType } from '../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeColumnPropTypes, VxeComponentSlotType, VxeComponentSizeType } from '../../../types'
+
+const { getI18n, renderer } = VxeUI
 
 const renderType = 'body'
 

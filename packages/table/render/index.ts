@@ -1,12 +1,13 @@
 import { h, resolveComponent, ComponentOptions } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, renderer, getI18n, log } from 'vxe-pc-ui'
+import { VxeUI } from '../../ui'
 import { getCellValue, setCellValue } from '../../table/src/util'
 import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
 import { getOnName } from '../../ui/src/vn'
 
-import type { VxeButtonComponent } from 'vxe-pc-ui'
-import type { VxeGlobalRendererHandles, VxeColumnPropTypes } from '../../../types'
+import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeButtonComponent } from '../../../types'
+
+const { getConfig, renderer, getI18n, log } = VxeUI
 
 const componentDefaultModelProp = 'modelValue'
 

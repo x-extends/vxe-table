@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import { VxeUI } from 'vxe-pc-ui'
+import { VxeUI } from '../ui'
 import VxeColumnComponent from '../table/src/column'
 
 export const VxeColumn = Object.assign({}, VxeColumnComponent, {

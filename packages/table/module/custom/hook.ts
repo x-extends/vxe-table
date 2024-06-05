@@ -1,11 +1,12 @@
 import { nextTick } from 'vue'
-import { hooks } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
+import XEUtils from 'xe-utils'
 
-import type { TableCustomMethods, TableCustomPrivateMethods } from '../../../../types'
+import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes } from '../../../../types'
 
 const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom']
 
-hooks.add('tableCustomModule', {
+VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
     const { reactData, internalData } = $xeTable
     const { computeCustomOpts } = $xeTable.getComputeMaps()
@@ -34,9 +35,24 @@ hooks.add('tableCustomModule', {
 
     const openCustom = () => {
       const { initStore, customStore } = reactData
+      const { collectColumn } = internalData
+      const sortMaps: Record<string, number> = {}
+      const fixedMaps: Record<string, VxeColumnPropTypes.Fixed> = {}
+      const visibleMaps: Record<string, boolean> = {}
+      XEUtils.eachTree(collectColumn, column => {
+        const colid = column.getKey()
+        column.renderFixed = column.fixed
+        column.renderVisible = column.visible
+        sortMaps[colid] = column.renderSortNumber
+        fixedMaps[colid] = column.fixed
+        visibleMaps[colid] = column.visible
+      }, { children: 'children' })
+      customStore.oldSortMaps = sortMaps
+      customStore.oldFixedMaps = fixedMaps
+      customStore.oldVisibleMaps = visibleMaps
+      reactData.customColumnList = collectColumn.slice(0)
       customStore.visible = true
       initStore.custom = true
-      reactData.customColumnList = internalData.collectColumn.slice(0)
       checkCustomStatus()
       calcMaxHeight()
       return nextTick().then(() => calcMaxHeight())
@@ -96,7 +112,7 @@ hooks.add('tableCustomModule', {
           $xeTable.emitCustomEvent('open', evnt)
         }
       },
-      customColseEvent (evnt) {
+      customCloseEvent (evnt) {
         const { customStore } = reactData
         if (customStore.visible) {
           customStore.activeBtn = false

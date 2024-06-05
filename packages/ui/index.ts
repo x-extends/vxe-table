@@ -1,4 +1,4 @@
-import { VxeUI, modal, drawer, saveFile, readFile } from 'vxe-pc-ui'
+import { VxeUI } from 'vxe-pc-ui'
 
 VxeUI.version = process.env.VUE_APP_VXE_VERSION as string
 VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
@@ -59,6 +59,7 @@ VxeUI.setConfig({
     // },
     customConfig: {
       allowFixed: true,
+      allowSort: true,
       showFooter: true
       //  storage: false,
       //  checkMethod () {}
@@ -218,6 +219,7 @@ VxeUI.setIcon({
   TABLE_CHECKBOX_INDETERMINATE: iconPrefix + 'checkbox-indeterminate-fill',
   TABLE_RADIO_CHECKED: iconPrefix + 'radio-checked-fill',
   TABLE_RADIO_UNCHECKED: iconPrefix + 'radio-unchecked',
+  TABLE_CUSTOM_SORT: iconPrefix + 'drag-handle',
 
   // toolbar
   TOOLBAR_TOOLS_REFRESH: iconPrefix + 'repeat',
@@ -285,12 +287,11 @@ export const _t = VxeUI._t
  */
 export const VXETable = VxeUI
 
+export const saveFile = VxeUI.readFile
+export const readFile = VxeUI.readFile
+
 export {
-  VxeUI,
-  modal,
-  drawer,
-  saveFile,
-  readFile
+  VxeUI
 }
 
 export default VxeUI

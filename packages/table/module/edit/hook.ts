@@ -1,11 +1,13 @@
 import { reactive, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, renderer, hooks, log, getI18n } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import { isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { browse, removeClass, addClass } from '../../../ui/src/dom'
 
 import type { TableEditMethods, TableEditPrivateMethods } from '../../../../types'
+
+const { getConfig, renderer, hooks, log, getI18n } = VxeUI
 
 const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'insertNextAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
 

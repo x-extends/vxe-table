@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { getConfig } from 'vxe-pc-ui'
+import { VxeUI } from 'vxe-pc-ui'
 import DomZIndex from 'dom-zindex'
 
 export function isEnableConf (conf: any): boolean {
@@ -32,14 +32,14 @@ export function hasChildrenList (item: any) {
 
 export function getFuncText (content?: string | number | boolean | null) {
   if (content) {
-    const translate = getConfig().translate
+    const translate = VxeUI.getConfig().translate
     return XEUtils.toValueString(translate ? translate('' + content) : content)
   }
   return ''
 }
 
 export function formatText (value: any, placeholder?: any) {
-  return '' + (isEmptyValue(value) ? (placeholder ? getConfig().emptyCell : '') : value)
+  return '' + (isEmptyValue(value) ? (placeholder ? VxeUI.getConfig().emptyCell : '') : value)
 }
 
 /**

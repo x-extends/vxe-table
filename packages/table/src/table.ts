@@ -2,7 +2,7 @@ import { defineComponent, h, createCommentVNode, ComponentPublicInstance, resolv
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
-import { VxeUI, getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, log, useSize } from 'vxe-pc-ui'
+import { VxeUI } from '../../ui'
 import Cell from './cell'
 import TableBodyComponent from './body'
 import TableHeaderComponent from './header'
@@ -17,8 +17,9 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent } from 'vxe-pc-ui'
-import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes } from '../../../types'
+import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent } from '../../../types'
+
+const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, log, useFns } = VxeUI
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -36,7 +37,7 @@ export default defineComponent({
 
     const xID = XEUtils.uniqueId()
 
-    const { computeSize } = useSize(props)
+    const { computeSize } = useFns.useSize(props)
 
     const reactData = reactive<TableReactData>({
       // 低性能的静态列
@@ -124,7 +125,10 @@ export default defineComponent({
         activeBtn: false,
         activeWrapper: false,
         visible: false,
-        maxHeight: 0
+        maxHeight: 0,
+        oldSortMaps: {},
+        oldFixedMaps: {},
+        oldVisibleMaps: {}
       },
       customColumnList: [],
       // 当前选中的筛选列
@@ -886,13 +890,16 @@ export default defineComponent({
     const restoreCustomStorage = () => {
       const { id, customConfig } = props
       const customOpts = computeCustomOpts.value
-      const { storage } = customOpts
+      const { storage, restoreStore } = customOpts
       const isAllCustom = storage === true
       const storageOpts: VxeTableDefines.VxeTableCustomStorageObj = isAllCustom ? {} : Object.assign({}, storage || {})
       const isCustomResizable = isAllCustom || storageOpts.resizable
       const isCustomVisible = isAllCustom || storageOpts.visible
       const isCustomFixed = isAllCustom || storageOpts.fixed
       const isCustomSort = isAllCustom || storageOpts.sort
+      if (storage && id && restoreStore) {
+        restoreStore({ id })
+      }
       if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
         const customMap: {
           [key: string]: {

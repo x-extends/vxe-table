@@ -208,7 +208,10 @@
 }
 
 .vxe-table--cell-active-area {
-  border: var(--vxe-ui-table-cell-active-area-border-width) solid var(--vxe-ui-table-cell-active-area-border-color);
+  border-color: var(--vxe-ui-table-cell-active-area-border-color); 
+  border-style: solid;
+  border-width: var(--vxe-ui-table-cell-active-area-border-width);
+  background-color: var(--vxe-ui-table-cell-active-area-background-color);
 }
 
 .vxe-table--cell-multi-area {
@@ -990,7 +993,7 @@
     height: 1em;
     text-align: center;
     transform: translateY(-50%);
-    background-color: var(--vxe-ui-layout-background-color);
+    // background-color: var(--vxe-ui-layout-background-color);
     z-index: 1;
     user-select: none;
     cursor: pointer;

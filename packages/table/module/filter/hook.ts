@@ -1,10 +1,12 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { renderer, hooks } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import { toFilters, handleFieldOrColumn } from '../../src/util'
 import { getDomNode, triggerEvent } from '../../../ui/src/dom'
 
 import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../types'
+
+const { renderer, hooks } = VxeUI
 
 const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['setFilter', 'clearFilter', 'getCheckedFilters']
 

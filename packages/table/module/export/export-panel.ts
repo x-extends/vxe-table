@@ -1,10 +1,11 @@
 import { defineComponent, h, createCommentVNode, ref, Ref, computed, reactive, inject, nextTick, resolveComponent } from 'vue'
-import { getI18n, getIcon } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
 
-import type { VxeModalComponent, VxeInputComponent, VxeCheckboxComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeModalComponent, VxeInputComponent, VxeCheckboxComponent, VxeSelectComponent, VxeButtonComponent } from '../../../../types'
+
+const { getI18n, getIcon } = VxeUI
 
 export default defineComponent({
   name: 'VxeTableExportPanel',

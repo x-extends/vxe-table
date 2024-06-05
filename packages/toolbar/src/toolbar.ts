@@ -1,10 +1,11 @@
 import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, VNode, reactive, nextTick, PropType, resolveComponent } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, getIcon, getI18n, renderer, commands, log, createEvent, useSize } from 'vxe-pc-ui'
+import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeButtonComponent } from 'vxe-pc-ui'
-import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData } from '../../../types'
+import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeButtonComponent } from '../../../types'
+
+const { getConfig, getIcon, getI18n, renderer, commands, log, createEvent, useFns } = VxeUI
 
 export default defineComponent({
   name: 'VxeToolbar',
@@ -31,7 +32,7 @@ export default defineComponent({
 
     const xID = XEUtils.uniqueId()
 
-    const { computeSize } = useSize(props)
+    const { computeSize } = useFns.useSize(props)
 
     const reactData = reactive<ToolbarReactData>({
       isRefresh: false,
@@ -128,7 +129,7 @@ export default defineComponent({
       customStore.activeBtn = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
-          $xeTable.customColseEvent($event)
+          $xeTable.customCloseEvent($event)
         }
       }, 350)
     }

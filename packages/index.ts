@@ -1,4 +1,4 @@
-import * as VxeUITableExport from './components'
+import * as VxeTableExport from './components'
 
 export * from './components'
-export default VxeUITableExport
+export default VxeTableExport

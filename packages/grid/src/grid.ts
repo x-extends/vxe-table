@@ -2,15 +2,16 @@ import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveCompo
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
-import { VxeUI, getConfig, getI18n, commands, hooks, log, createEvent, globalEvents, GLOBAL_EVENT_KEYS, useSize } from 'vxe-pc-ui'
+import { VxeUI } from '../../ui'
 import VxeTableComponent from '../../table'
 import VxeToolbarComponent from '../../toolbar'
 import tableComponentProps from '../../table/src/props'
 import tableComponentEmits from '../../table/src/emits'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from 'vxe-pc-ui'
-import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
+import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps, VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from '../../../types'
+
+const { getConfig, getI18n, commands, hooks, log, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
@@ -51,7 +52,7 @@ export default defineComponent({
 
     const xID = XEUtils.uniqueId()
 
-    const { computeSize } = useSize(props)
+    const { computeSize } = useFns.useSize(props)
 
     const reactData = reactive({
       tableLoading: false,

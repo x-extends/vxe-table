@@ -1,11 +1,13 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
-import { getConfig, validators, hooks, log } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import { getFuncText, eqEmptyValue } from '../../../ui/src/utils'
 import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 
 import type { TableValidatorMethods, TableValidatorPrivateMethods, VxeTableDefines } from '../../../../types'
+
+const { getConfig, validators, hooks, log } = VxeUI
 
 /**
  * 校验规则

@@ -1,10 +1,11 @@
 import { defineComponent, h, ref, Ref, computed, inject, reactive, nextTick, resolveComponent } from 'vue'
-import { getI18n, getIcon } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 
-import type { VxeButtonComponent, VxeModalComponent, VxeRadioGroupComponent, VxeRadioComponent } from 'vxe-pc-ui'
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeButtonComponent, VxeModalComponent, VxeRadioGroupComponent, VxeRadioComponent } from '../../../../types'
+
+const { getI18n, getIcon } = VxeUI
 
 export default defineComponent({
   name: 'VxeTableImportPanel',

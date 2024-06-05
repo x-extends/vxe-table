@@ -1,10 +1,12 @@
 import { defineComponent, h, computed, inject } from 'vue'
-import { getI18n, getIcon, renderer } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
 import { getPropClass } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
 
 import type { VxeTableConstructor, VxeTableMethods, VxeTablePrivateMethods } from '../../../../types'
+
+const { getI18n, getIcon, renderer } = VxeUI
 
 export default defineComponent({
   name: 'VxeTableFilterPanel',

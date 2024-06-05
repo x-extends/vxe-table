@@ -21,6 +21,7 @@ const navList = ref([
   { name: 'ToolbarTest', routerLink: { name: 'ToolbarTest' } },
   { name: 'TableTest1', routerLink: { name: 'TableTest1' } },
   { name: 'TableTest2', routerLink: { name: 'TableTest2' } },
+  { name: 'TableTest3', routerLink: { name: 'TableTest3' } },
   { name: 'GridTest', routerLink: { name: 'GridTest' } }
 ])
 
