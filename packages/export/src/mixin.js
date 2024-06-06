@@ -1399,6 +1399,23 @@ export default {
         }
       })
     },
+    _getPrintHtml (options) {
+      const { printOpts } = this
+      const opts = Object.assign({
+        original: false
+        // beforePrintMethod
+      }, printOpts, options, {
+        type: 'html',
+        download: false,
+        remote: false,
+        print: true
+      })
+      return this.exportData(opts).then(({ content }) => {
+        return {
+          html: content
+        }
+      })
+    },
     _openImport (options) {
       const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.globalConfs.importTypes }, options, this.importOpts)
       const { types } = defOpts
