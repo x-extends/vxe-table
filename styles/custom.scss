@@ -61,7 +61,7 @@
   z-index: 19;
   border: 1px solid $vxe-table-border-color;
   border-radius: $vxe-border-radius;
-  box-shadow: $vxe-border-radius;
+  box-shadow: $vxe-base-popup-box-shadow;
   &.is--active {
     display: block;
   }
