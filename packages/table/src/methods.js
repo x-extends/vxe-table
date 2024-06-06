@@ -1843,11 +1843,9 @@ const Methods = {
         columnWidthStorage = XEUtils.isPlainObject(columnSortStorageMap[id]) ? columnSortStorageMap[id] : {}
         // 排序只支持一级
         collectColumn.forEach(column => {
-          if (column.sortNumber !== column.renderSortNumber) {
-            const colKey = column.getKey()
-            if (colKey) {
-              columnWidthStorage[colKey] = column.renderSortNumber
-            }
+          const colKey = column.getKey()
+          if (colKey) {
+            columnWidthStorage[colKey] = column.renderSortNumber
           }
         })
       }
