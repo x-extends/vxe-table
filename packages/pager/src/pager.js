@@ -154,7 +154,7 @@ export default {
     renderEnd (h) {
       return h('button', {
         class: ['vxe-pager--prev-btn', {
-          'is--disabled': this.currentPage <= 1
+          'is--disabled': this.currentPage >= this.pageCount
         }],
         attrs: {
           type: 'button',

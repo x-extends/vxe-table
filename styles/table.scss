@@ -211,7 +211,10 @@
 }
 
 .vxe-table--cell-active-area {
-  border: $vxe-table-cell-active-area-border-width solid $vxe-table-cell-active-area-border-color;
+  border-color: $vxe-table-cell-active-area-border-color; 
+  border-style: solid;
+  border-width: $vxe-table-cell-active-area-border-width;
+  background-color: $vxe-table-cell-active-area-background-color;
 }
 
 .vxe-table--cell-multi-area {
