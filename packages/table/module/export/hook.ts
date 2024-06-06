@@ -1255,6 +1255,23 @@ hooks.add('tableExportModule', {
           }
         })
       },
+      getPrintHtml (options) {
+        const printOpts = computePrintOpts.value
+        const opts = Object.assign({
+          original: false
+          // beforePrintMethod
+        }, printOpts, options, {
+          type: 'html',
+          download: false,
+          remote: false,
+          print: true
+        })
+        return exportMethods.exportData(opts).then(({ content }) => {
+          return {
+            html: content
+          }
+        })
+      },
       openImport (options) {
         const { treeConfig, importConfig } = props
         const { initStore, importStore, importParams } = reactData

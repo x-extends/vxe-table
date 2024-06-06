@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar ref="toolbarRef" custom></vxe-toolbar>
+    <vxe-toolbar ref="toolbarRef" print custom></vxe-toolbar>
 
     <vxe-table
       border
@@ -9,6 +9,7 @@
       highlight-hover-row
       height="400"
       ref="tableRef"
+      :print-config="{}"
       :custom-config="{mode: 'popup'}"
       :loading="demo1.loading"
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
