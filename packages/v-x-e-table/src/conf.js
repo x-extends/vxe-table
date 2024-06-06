@@ -60,9 +60,10 @@ export default {
     // },
     customConfig: {
       allowFixed: true,
+      allowSort: true,
       showFooter: true
-    //  storage: false,
-    //  checkMethod () {}
+      //  storage: false,
+      //  checkMethod () {}
     },
     sortConfig: {
       // remote: false,
@@ -163,11 +164,12 @@ export default {
     TABLE_EXPAND_LOADED: iconPrefix + 'spinner roll',
     TABLE_EXPAND_OPEN: iconPrefix + 'arrow-right rotate90',
     TABLE_EXPAND_CLOSE: iconPrefix + 'arrow-right',
-    TABLE_CHECKBOX_CHECKED: iconPrefix + 'checkbox-checked',
+    TABLE_CHECKBOX_CHECKED: iconPrefix + 'checkbox-checked-fill',
     TABLE_CHECKBOX_UNCHECKED: iconPrefix + 'checkbox-unchecked',
-    TABLE_CHECKBOX_INDETERMINATE: iconPrefix + 'checkbox-indeterminate',
-    TABLE_RADIO_CHECKED: iconPrefix + 'radio-checked',
+    TABLE_CHECKBOX_INDETERMINATE: iconPrefix + 'checkbox-indeterminate-fill',
+    TABLE_RADIO_CHECKED: iconPrefix + 'radio-checked-fill',
     TABLE_RADIO_UNCHECKED: iconPrefix + 'radio-unchecked',
+    TABLE_CUSTOM_SORT: iconPrefix + 'drag-handle',
 
     // button
     BUTTON_DROPDOWN: iconPrefix + 'arrow-down',
@@ -217,9 +219,9 @@ export default {
     TOOLBAR_TOOLS_MINIMIZE: iconPrefix + 'minimize',
     TOOLBAR_TOOLS_CUSTOM: iconPrefix + 'custom-column',
     TOOLBAR_TOOLS_FIXED_LEFT: iconPrefix + 'fixed-left',
-    TOOLBAR_TOOLS_FIXED_LEFT_ACTIVED: iconPrefix + 'fixed-left-fill',
+    TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE: iconPrefix + 'fixed-left-fill',
     TOOLBAR_TOOLS_FIXED_RIGHT: iconPrefix + 'fixed-right',
-    TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVED: iconPrefix + 'fixed-right-fill',
+    TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE: iconPrefix + 'fixed-right-fill',
 
     // form
     FORM_PREFIX: iconPrefix + 'question-circle-fill',

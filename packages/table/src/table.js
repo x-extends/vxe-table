@@ -357,7 +357,10 @@ export default {
         activeBtn: false,
         activeWrapper: false,
         visible: false,
-        maxHeight: 0
+        maxHeight: 0,
+        oldSortMaps: {},
+        oldFixedMaps: {},
+        oldVisibleMaps: {}
       },
       // 当前选中的筛选列
       filterStore: {

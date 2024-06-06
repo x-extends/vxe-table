@@ -121,6 +121,9 @@ export class ColumnInfo {
       sortNumber: 0, // 用于记录自定义列顺序
       renderSortNumber: 0, // 用于记录自定义列顺序
 
+      renderFixed: '',
+      renderVisible: false,
+
       renderWidth: 0,
       renderHeight: 0,
       resizeWidth: 0,

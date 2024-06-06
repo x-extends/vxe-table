@@ -60,7 +60,8 @@ export default {
       customTitle: 'Configuraciones de columna',
       customAll: 'Todo',
       customConfirm: 'Confirmar',
-      customRestore: 'Restaurar',
+      customCancel: 'Cancel',
+      customRestore: 'Restore default',
       maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
     },
     grid: {

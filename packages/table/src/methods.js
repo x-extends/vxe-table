@@ -1629,13 +1629,16 @@ const Methods = {
    */
   restoreCustomStorage () {
     const { id, customConfig, customOpts } = this
-    const { storage } = customOpts
+    const { storage, restoreStore } = customOpts
     const isAllStorage = storage === true
     const storageOpts = isAllStorage ? {} : Object.assign({}, storage || {})
     const isCustomResizable = isAllStorage || storageOpts.resizable
     const isCustomVisible = isAllStorage || storageOpts.visible
     const isCustomFixed = isAllStorage || storageOpts.fixed
     const isCustomSort = isAllStorage || storageOpts.sort
+    if (storage && id && restoreStore) {
+      restoreStore({ id })
+    }
     if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
       const customMap = {}
       if (!id) {

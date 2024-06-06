@@ -1,10 +1,26 @@
+import XEUtils from 'xe-utils'
+
 export default {
   methods: {
     _openCustom () {
       const { initStore, customStore, collectColumn } = this
+      const sortMaps = {}
+      const fixedMaps = {}
+      const visibleMaps = {}
+      XEUtils.eachTree(collectColumn, column => {
+        const colid = column.getKey()
+        column.renderFixed = column.fixed
+        column.renderVisible = column.visible
+        sortMaps[colid] = column.renderSortNumber
+        fixedMaps[colid] = column.fixed
+        visibleMaps[colid] = column.visible
+      }, { children: 'children' })
+      customStore.oldSortMaps = sortMaps
+      customStore.oldFixedMaps = fixedMaps
+      customStore.oldVisibleMaps = visibleMaps
+      this.customColumnList = collectColumn.slice(0)
       customStore.visible = true
       initStore.custom = true
-      this.customColumnList = collectColumn.slice(0)
       this.checkCustomStatus()
       this.calcMaxHeight()
       return this.$nextTick().then(() => this.calcMaxHeight())

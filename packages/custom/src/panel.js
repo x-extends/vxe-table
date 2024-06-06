@@ -23,11 +23,11 @@ function updateDropHint (_vm, evnt) {
   }
 }
 
-function renderSimplePanel (h, _vm) {
-  const { $xetable, customStore } = _vm
-  const { customOpts, customColumnList, isMaxFixedColumn } = $xetable
+const renderSimplePanel = (h, _vm) => {
+  const { _e, $xetable, customStore } = _vm
+  const { customColumnList, customOpts, isMaxFixedColumn } = $xetable
   const { maxHeight } = customStore
-  const { checkMethod, visibleMethod, trigger } = customOpts
+  const { checkMethod, visibleMethod, allowSort, allowFixed, trigger } = customOpts
   const colVNs = []
   const customWrapperOns = {}
   // hover 触发
@@ -38,7 +38,7 @@ function renderSimplePanel (h, _vm) {
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
     const isVisible = visibleMethod ? visibleMethod({ column }) : true
     if (isVisible) {
-      const isChecked = column.visible
+      const isChecked = column.renderVisible
       const isIndeterminate = column.halfVisible
       const isColGroup = column.children && column.children.length
       const colTitle = formatText(column.getTitle(), 1)
@@ -46,65 +46,100 @@ function renderSimplePanel (h, _vm) {
       colVNs.push(
         h('li', {
           key: column.id,
+          attrs: {
+            colid: column.id
+          },
           class: ['vxe-table-custom--option', `level--${column.level}`, {
             'is--group': isColGroup
-          }]
+          }],
+          on: {
+            dragstart: _vm.sortDragstartEvent,
+            dragend: _vm.sortDragendEvent,
+            dragover: _vm.sortDragoverEvent
+          }
         }, [
           h('div', {
-            title: colTitle,
             class: ['vxe-table-custom--checkbox-option', {
               'is--checked': isChecked,
               'is--indeterminate': isIndeterminate,
               'is--disabled': isDisabled
             }],
+            attrs: {
+              title: GlobalConfig.i18n('vxe.custom.setting.colVisible')
+            },
             on: {
               click: () => {
                 if (!isDisabled) {
                   _vm.changeCheckboxOption(column)
                 }
               }
-
             }
           }, [
             h('span', {
               class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-            }),
-            h('span', {
-              class: 'vxe-checkbox--label'
-            }, colTitle)
-          ]),
-          !parent && customOpts.allowFixed ? h('div', {
-            class: 'vxe-table-custom--fixed-option'
-          }, [
-            h('span', {
-              class: ['vxe-table-custom--fixed-left-option', column.fixed === 'left' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT_ACTIVED : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT, {
-                'is--checked': column.fixed === 'left',
-                'is--disabled': isMaxFixedColumn && !column.fixed
-              }],
-              attrs: {
-                title: GlobalConfig.i18n(column.fixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft')
-              },
-              on: {
-                click: () => {
-                  _vm.changeFixedOption(column, 'left')
-                }
-              }
-            }),
-            h('span', {
-              class: ['vxe-table-custom--fixed-right-option', column.fixed === 'right' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVED : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT, {
-                'is--checked': column.fixed === 'right',
-                'is--disabled': isMaxFixedColumn && !column.fixed
-              }],
-              attrs: {
-                title: GlobalConfig.i18n(column.fixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight')
-              },
-              on: {
-                click: () => {
-                  _vm.changeFixedOption(column, 'right')
-                }
-              }
             })
-          ]) : null
+          ]),
+          allowSort && column.level === 1
+            ? h('div', {
+              class: 'vxe-table-custom--sort-option'
+            }, [
+              h('span', {
+                class: 'vxe-table-custom--sort-btn',
+                attrs: {
+                  title: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip')
+                },
+                on: {
+                  mousedown: _vm.sortMousedownEvent,
+                  mouseup: _vm.sortMouseupEvent
+                }
+              }, [
+                h('i', {
+                  class: GlobalConfig.icon.TABLE_CUSTOM_SORT
+                })
+              ])
+            ])
+            : _e(),
+          h('div', {
+            class: 'vxe-table-custom--checkbox-label',
+            attrs: {
+              title: colTitle
+            }
+          }, colTitle),
+          !parent && allowFixed
+            ? h('div', {
+              class: 'vxe-table-custom--fixed-option'
+            }, [
+              h('span', {
+                class: ['vxe-table-custom--fixed-left-option', column.renderFixed === 'left' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT, {
+                  'is--checked': column.renderFixed === 'left',
+                  'is--disabled': isMaxFixedColumn && !column.renderFixed
+                }],
+                attrs: {
+                  title: GlobalConfig.i18n(column.renderFixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft')
+                },
+                on: {
+                  click: () => {
+                    _vm.changeFixedOption(column, 'left')
+                  }
+                }
+              }),
+              h('span', {
+                class: ['vxe-table-custom--fixed-right-option', column.renderFixed === 'right' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT, {
+                  'is--checked': column.renderFixed === 'right',
+                  'is--disabled': isMaxFixedColumn && !column.renderFixed
+                }],
+                attrs: {
+                  title: GlobalConfig.i18n(column.renderFixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight')
+                },
+                on: {
+
+                  click: () => {
+                    _vm.changeFixedOption(column, 'right')
+                  }
+                }
+              })
+            ])
+            : _e()
         ])
       )
     }
@@ -116,69 +151,96 @@ function renderSimplePanel (h, _vm) {
     class: ['vxe-table-custom-wrapper', {
       'is--active': customStore.visible
     }]
-  }, [
-    h('ul', {
-      class: 'vxe-table-custom--header'
-    }, [
-      h('li', {
-        class: 'vxe-table-custom--option'
-      }, [
-        h('div', {
-          class: ['vxe-table-custom--checkbox-option', {
-            'is--checked': isAllChecked,
-            'is--indeterminate': isAllIndeterminate
-          }],
-          attrs: {
-            title: GlobalConfig.i18n('vxe.table.allTitle')
-          },
-          on: {
-            click: _vm.allCustomEvent
-          }
+  }, customStore.visible
+    ? [
+        h('ul', {
+          class: 'vxe-table-custom--header'
         }, [
-          h('span', {
-            class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-          }),
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, GlobalConfig.i18n('vxe.toolbar.customAll'))
-        ])
-      ])
-    ]),
-    h('ul', {
-      class: 'vxe-table-custom--body',
-      style: maxHeight ? {
-        maxHeight: `${maxHeight}px`
-      } : {},
-      on: customWrapperOns
-    }, colVNs),
-    customOpts.showFooter ? h('div', {
-      class: 'vxe-table-custom--footer'
-    }, [
-      h('button', {
-        class: 'btn--reset',
-        on: {
-          click: _vm.resetCustomEvent
-        }
-      }, customOpts.resetButtonText || GlobalConfig.i18n('vxe.toolbar.customRestore')),
-      h('button', {
-        class: 'btn--confirm',
-        on: {
-          click: _vm.confirmCustomEvent
-        }
-      }, customOpts.confirmButtonText || GlobalConfig.i18n('vxe.toolbar.customConfirm'))
-    ]) : null
-  ])
+          h('li', {
+            class: 'vxe-table-custom--option'
+          }, [
+            h('div', {
+              class: ['vxe-table-custom--checkbox-option', {
+                'is--checked': isAllChecked,
+                'is--indeterminate': isAllIndeterminate
+              }],
+              attrs: {
+                title: GlobalConfig.i18n('vxe.table.allTitle')
+              },
+              on: {
+                click: _vm.allCustomEvent
+              }
+            }, [
+              h('span', {
+                class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+              }),
+              h('span', {
+                class: 'vxe-checkbox--label'
+              }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+            ])
+          ])
+        ]),
+        h('div', {
+          ref: 'bodyElemRef',
+          class: 'vxe-table-custom--list-wrapper'
+        }, [
+          h('transition-group', {
+            class: 'vxe-table-custom--body',
+            props: {
+              name: 'vxe-table-custom--list',
+              tag: 'ul'
+            },
+            style: maxHeight
+              ? {
+                  maxHeight: `${maxHeight}px`
+                }
+              : {},
+            on: customWrapperOns
+          }, colVNs),
+          h('div', {
+            ref: 'dragHintElemRef',
+            class: 'vxe-table-custom-popup--drag-hint'
+          }, GlobalConfig.i18n('vxe.custom.cstmDragTarget', [_vm.dragColumn ? _vm.dragColumn.getTitle() : '']))
+        ]),
+        customOpts.showFooter
+          ? h('div', {
+            class: 'vxe-table-custom--footer'
+          }, [
+            h('button', {
+              class: 'btn--reset',
+              on: {
+                click: _vm.resetCustomEvent
+              }
+            }, customOpts.resetButtonText || GlobalConfig.i18n('vxe.table.customRestore')),
+            customOpts.immediate
+              ? _e()
+              : h('button', {
+                class: 'btn--cancel',
+                on: {
+                  click: _vm.cancelCustomEvent
+                }
+              }, customOpts.resetButtonText || GlobalConfig.i18n('vxe.table.customCancel')),
+            h('button', {
+              class: 'btn--confirm',
+              on: {
+                click: _vm.confirmCustomEvent
+              }
+            }, customOpts.confirmButtonText || GlobalConfig.i18n('vxe.table.customConfirm'))
+          ])
+          : null
+      ]
+    : [])
 }
 
-function renderPopupPanel (h, _vm) {
-  const { $xetable, customStore } = _vm
+const renderPopupPanel = (h, _vm) => {
+  const { _e, $xetable, customStore } = _vm
   const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xetable
-  const { checkMethod, visibleMethod } = customOpts
+  const { allowSort, allowFixed, checkMethod, visibleMethod } = customOpts
   const trVNs = []
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
     const isVisible = visibleMethod ? visibleMethod({ column }) : true
     if (isVisible) {
-      const isChecked = column.visible
+      const isChecked = column.renderVisible
       const isIndeterminate = column.halfVisible
       const colTitle = formatText(column.getTitle(), 1)
       const isColGroup = column.children && column.children.length
@@ -186,43 +248,18 @@ function renderPopupPanel (h, _vm) {
       trVNs.push(
         h('tr', {
           key: column.id,
-          class: [`vxe-table-custom-popup--row level--${column.level}`, {
-            'is--group': isColGroup
-          }],
           attrs: {
             colid: column.id
           },
+          class: [`vxe-table-custom-popup--row level--${column.level}`, {
+            'is--group': isColGroup
+          }],
           on: {
             dragstart: _vm.sortDragstartEvent,
             dragend: _vm.sortDragendEvent,
             dragover: _vm.sortDragoverEvent
           }
         }, [
-          h('td', {
-            class: 'vxe-table-custom-popup--column-item col--sort'
-          }, [
-            column.level === 1 ? h('span', {
-              class: 'vxe-table-custom-popup--column-sort-btn',
-              on: {
-                mousedown: _vm.sortMousedownEvent,
-                mouseup: _vm.sortMouseupEvent
-              }
-            }, [
-              h('i', {
-                class: 'vxe-icon-sort'
-              })
-            ]) : null
-          ]),
-          h('td', {
-            class: 'vxe-table-custom-popup--column-item col--name'
-          }, [
-            h('div', {
-              class: 'vxe-table-custom-popup--name',
-              attrs: {
-                title: colTitle
-              }
-            }, colTitle)
-          ]),
           h('td', {
             class: 'vxe-table-custom-popup--column-item col--visible'
           }, [
@@ -232,6 +269,9 @@ function renderPopupPanel (h, _vm) {
                 'is--indeterminate': isIndeterminate,
                 'is--disabled': isDisabled
               }],
+              attrs: {
+                title: GlobalConfig.i18n('vxe.custom.setting.colVisible')
+              },
               on: {
                 click: () => {
                   if (!isDisabled) {
@@ -245,40 +285,78 @@ function renderPopupPanel (h, _vm) {
               })
             ])
           ]),
+          allowSort
+            ? h('td', {
+              class: 'vxe-table-custom-popup--column-item col--sort'
+            }, [
+              column.level === 1
+                ? h('span', {
+                  class: 'vxe-table-custom-popup--column-sort-btn',
+                  attrs: {
+                    title: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip')
+                  },
+                  on: {
+                    mousedown: _vm.sortMousedownEvent,
+                    mouseup: _vm.sortMouseupEvent
+                  }
+                }, [
+                  h('i', {
+                    class: GlobalConfig.icon.TABLE_CUSTOM_SORT
+                  })
+                ])
+                : null
+            ])
+            : _e(),
           h('td', {
-            class: 'vxe-table-custom-popup--column-item col--fixed'
+            class: 'vxe-table-custom-popup--column-item col--name'
           }, [
-            !parent && customOpts.allowFixed ? h('vxe-radio-group', {
-              props: {
-                value: column.fixed || '',
-                type: 'button',
-                size: 'mini',
-                options: [
-                  { label: GlobalConfig.i18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
-                  { label: GlobalConfig.i18n('vxe.custom.setting.fixedUnset'), value: '' },
-                  { label: GlobalConfig.i18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
-                ]
-              },
-              on: {
-                input (value) {
-                  column.fixed = value
-                },
-                change () {
-                  _vm.changePopupFixedOption(column)
-                }
+            h('div', {
+              class: 'vxe-table-custom-popup--name',
+              attrs: {
+                title: colTitle
               }
-            }) : null
-          ])
+            }, colTitle)
+          ]),
+          allowFixed
+            ? h('td', {
+              class: 'vxe-table-custom-popup--column-item col--fixed'
+            }, [
+              !parent
+                ? h('vxe-radio-group', {
+                  props: {
+                    value: column.renderFixed || '',
+                    type: 'button',
+                    size: 'mini',
+                    options: [
+                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
+                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedUnset'), value: '' },
+                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
+                    ]
+                  },
+                  on: {
+                    input (value) {
+                      column.renderFixed = value
+                    }
+                  // onChange () {
+                  //   changePopupFixedOption(column)
+                  // }
+                  }
+                })
+                : null
+            ])
+            : _e()
         ])
       )
     }
   })
+  const isAllChecked = customStore.isAll
+  const isAllIndeterminate = customStore.isIndeterminate
   return h('vxe-modal', {
     key: 'popup',
     props: {
+      className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
       value: customStore.visible,
       title: GlobalConfig.i18n('vxe.custom.cstmTitle'),
-      className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
       width: '40vw',
       minWidth: 520,
       height: '50vh',
@@ -311,41 +389,74 @@ function renderPopupPanel (h, _vm) {
                     width: '80px'
                   }
                 }),
-                h('col'),
+                allowSort
+                  ? h('col', {
+                    style: {
+                      width: '80px'
+                    }
+                  })
+                  : _e(),
                 h('col', {
                   style: {
-                    width: '80px'
+                    minWidth: '120px'
                   }
                 }),
-                h('col', {
-                  style: {
-                    width: '200px'
-                  }
-                })
+                allowFixed
+                  ? h('col', {
+                    style: {
+                      width: '200px'
+                    }
+                  })
+                  : _e()
               ]),
               h('thead', {}, [
                 h('tr', {}, [
                   h('th', {}, [
-                    h('span', {
-                      class: 'vxe-table-custom-popup--table-sort-help-title'
-                    }, GlobalConfig.i18n('vxe.custom.setting.colSort')),
-                    h('vxe-tooltip', {
-                      props: {
-                        enterable: true,
-                        content: '点击并拖动图标可以调整列的排序'
+                    h('div', {
+                      class: ['vxe-table-custom--checkbox-option', {
+                        'is--checked': isAllChecked,
+                        'is--indeterminate': isAllIndeterminate
+                      }],
+                      attrs: {
+                        title: GlobalConfig.i18n('vxe.table.allTitle')
                       },
-                      scopedSlots: {
-                        default: () => {
-                          return h('i', {
-                            class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
-                          })
-                        }
+                      on: {
+                        click: _vm.allCustomEvent
                       }
-                    })
+
+                    }, [
+                      h('span', {
+                        class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+                      }),
+                      h('span', {
+                        class: 'vxe-checkbox--label'
+                      }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+                    ])
                   ]),
+                  allowSort
+                    ? h('th', {}, [
+                      h('span', {
+                        class: 'vxe-table-custom-popup--table-sort-help-title'
+                      }, GlobalConfig.i18n('vxe.custom.setting.colSort')),
+                      h('vxe-tooltip', {
+                        props: {
+                          enterable: true,
+                          content: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip')
+                        },
+                        scopedSlots: {
+                          default: () => {
+                            return h('i', {
+                              class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
+                            })
+                          }
+                        }
+                      })
+                    ])
+                    : _e(),
                   h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colTitle')),
-                  h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colVisible')),
-                  h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
+                  allowFixed
+                    ? h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
+                    : _e()
                 ])
               ]),
               h('transition-group', {
@@ -372,7 +483,7 @@ function renderPopupPanel (h, _vm) {
               content: customOpts.resetButtonText || GlobalConfig.i18n('vxe.custom.cstmRestore')
             },
             on: {
-              click: _vm.resetPopupCustomEvent
+              click: _vm.resetCustomEvent
             }
           }),
           h('vxe-button', {
@@ -441,21 +552,72 @@ export default {
         }
       }, 300)
     },
+    getStoreData () {
+      return {}
+    },
+    handleSaveStore (type) {
+      const { $xetable } = this
+      const { id, customOpts } = $xetable
+      const { storage, updateStore } = customOpts
+      if (storage && id && updateStore) {
+        updateStore({
+          id,
+          type,
+          storeData: this.getStoreData()
+        })
+      }
+    },
     confirmCustomEvent  (evnt) {
       const { $xetable } = this
+      const { customColumnList } = $xetable
+      customColumnList.forEach((column, index) => {
+        const sortIndex = index + 1
+        column.renderSortNumber = sortIndex
+        column.fixed = column.renderFixed
+        column.visible = column.renderVisible
+      })
       $xetable.closeCustom()
       $xetable.emitCustomEvent('confirm', evnt)
+      this.handleSaveStore('confirm')
     },
     cancelCustomEvent  (evnt) {
       const { $xetable } = this
+      const { customStore, customColumnList } = $xetable
+      const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
+      XEUtils.eachTree(customColumnList, column => {
+        const colid = column.getKey()
+        const visible = !!oldVisibleMaps[colid]
+        const fixed = oldFixedMaps[colid] || ''
+        column.renderVisible = visible
+        column.visible = visible
+        column.renderFixed = fixed
+        column.fixed = fixed
+        column.renderSortNumber = oldSortMaps[colid] || 0
+      }, { children: 'children' })
       $xetable.closeCustom()
       $xetable.emitCustomEvent('cancel', evnt)
     },
-    resetCustomEvent  (evnt) {
+    handleResetCustomEvent (evnt) {
       const { $xetable } = this
       $xetable.resetColumn(true)
       $xetable.closeCustom()
       $xetable.emitCustomEvent('reset', evnt)
+      this.handleSaveStore('confirm')
+    },
+    resetCustomEvent  (evnt) {
+      if (VXETable.modal) {
+        VXETable.modal.confirm({
+          content: GlobalConfig.i18n('vxe.custom.cstmConfirmRestore'),
+          className: 'vxe-table--ignore-clear',
+          escClosable: true
+        }).then(type => {
+          if (type === 'confirm') {
+            this.handleResetCustomEvent(evnt)
+          }
+        })
+      } else {
+        this.handleResetCustomEvent(evnt)
+      }
     },
     resetPopupCustomEvent  (evnt) {
       if (VXETable.modal) {
@@ -488,9 +650,9 @@ export default {
     changeCheckboxOption (column) {
       const { $xetable } = this
       const { customOpts } = $xetable
-      const isChecked = !column.visible
+      const isChecked = !column.renderVisible
       XEUtils.eachTree([column], (item) => {
-        item.visible = isChecked
+        item.renderVisible = isChecked
         item.halfVisible = false
       })
       this.handleOptionCheck(column)
@@ -502,21 +664,23 @@ export default {
     changeFixedOption  (column, colFixed) {
       const { $xetable } = this
       const { isMaxFixedColumn } = $xetable
-      if (column.fixed === colFixed) {
-        $xetable.clearColumnFixed(column)
+      if (column.renderFixed === colFixed) {
+        column.renderFixed = ''
+        // $xeTable.clearColumnFixed(column)
       } else {
-        if (!isMaxFixedColumn || column.fixed) {
-          $xetable.setColumnFixed(column, colFixed)
+        if (!isMaxFixedColumn || column.renderFixed) {
+          column.renderFixed = colFixed
+          // $xeTable.setColumnFixed(column, colFixed)
         }
       }
     },
-    changePopupFixedOption  (column) {
-      const { $xetable } = this
-      const { isMaxFixedColumn } = $xetable
-      if (!isMaxFixedColumn) {
-        $xetable.setColumnFixed(column, column.fixed)
-      }
-    },
+    // changePopupFixedOption  (column) {
+    //   const { $xetable } = this
+    //   const { isMaxFixedColumn } = $xetable
+    //   if (!isMaxFixedColumn) {
+    //     $xetable.setColumnFixed(column, column.fixed)
+    //   }
+    // },
     allCustomEvent () {
       const { $xetable, customStore } = this
       const { customOpts, customColumnList } = $xetable
@@ -524,7 +688,7 @@ export default {
       const isAll = !customStore.isAll
       XEUtils.eachTree(customColumnList, (column) => {
         if (!checkMethod || checkMethod({ column })) {
-          column.visible = isAll
+          column.renderVisible = isAll
           column.halfVisible = false
         }
       })
@@ -598,8 +762,6 @@ export default {
       }
       removeClass(trEl, 'active--drag-target')
       removeClass(trEl, 'active--drag-origin')
-      // 更新顺序
-      this.updateColumnSort()
     },
     sortDragoverEvent  (evnt) {
       const { $xetable, prevDropTrEl } = this
@@ -619,15 +781,6 @@ export default {
         this.prevDropTrEl = trEl
       }
       updateDropHint(this, evnt)
-    },
-    updateColumnSort () {
-      const { $xetable } = this
-      const { customColumnList } = $xetable
-      // 更新顺序
-      customColumnList.forEach((column, index) => {
-        const sortIndex = index + 1
-        column.renderSortNumber = sortIndex
-      })
     }
   }
 }
