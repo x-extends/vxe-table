@@ -58,9 +58,12 @@ VxeUI.setConfig({
     //   visibleMethod () {}
     // },
     customConfig: {
+      allowVisible: true,
+      allowResizable: true,
       allowFixed: true,
       allowSort: true,
-      showFooter: true
+      showFooter: true,
+      placement: 'topRight'
       //  storage: false,
       //  checkMethod () {}
     },

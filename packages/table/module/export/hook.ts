@@ -4,10 +4,11 @@ import { VxeUI } from '../../../ui'
 import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
 import { parseFile, formatText } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'
+import { warnLog, errLog } from '../../../ui/src/log'
 
 import type { VxeGridConstructor, VxeGridPrivateMethods, TableExportMethods } from '../../../../types'
 
-const { getI18n, hooks, renderer, log } = VxeUI
+const { getI18n, hooks, renderer } = VxeUI
 
 let htmlCellElem: any
 
@@ -897,7 +898,7 @@ hooks.add('tableExportModule', {
             $xeTable.preventEvent(null, 'event.import', { file, options, columns: tableFullColumn }, () => {
               const reader = new FileReader()
               reader.onerror = () => {
-                log.err('vxe.error.notType', [type])
+                errLog('vxe.error.notType', [type])
                 _importReject({ status: false })
               }
               reader.onload = (e: any) => {
@@ -909,7 +910,7 @@ hooks.add('tableExportModule', {
         } else {
           // 不支持的浏览器
           if (process.env.VUE_APP_VXE_ENV === 'development') {
-            log.err('vxe.error.notExp')
+            errLog('vxe.error.notExp')
           }
           _importResolve({ status: true })
         }
@@ -1119,7 +1120,7 @@ hooks.add('tableExportModule', {
         // 检查类型，如果为自定义导出，则不需要校验类型
         if (!opts.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
-            log.err('vxe.error.notType', [type])
+            errLog('vxe.error.notType', [type])
           }
           const params = { status: false }
           return Promise.reject(params)
@@ -1143,7 +1144,7 @@ hooks.add('tableExportModule', {
           } else if (mode === 'all') {
             if (process.env.VUE_APP_VXE_ENV === 'development') {
               if (!$xeGrid) {
-                log.warn('vxe.error.errProp', ['all', 'mode=current,selected'])
+                warnLog('vxe.error.errProp', ['all', 'mode=current,selected'])
               }
             }
 
@@ -1156,7 +1157,7 @@ hooks.add('tableExportModule', {
 
               if (process.env.VUE_APP_VXE_ENV === 'development') {
                 if (!ajaxMethods) {
-                  log.warn('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
+                  warnLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
                 }
               }
 
@@ -1237,14 +1238,18 @@ hooks.add('tableExportModule', {
         return new Promise((resolve, reject) => {
           if (VxeUI.print) {
             if (opts.content) {
-              resolve(VxeUI.print({
-                content: opts.content
-              }))
+              resolve(
+                VxeUI.print({
+                  title: opts.sheetName,
+                  html: opts.content
+                })
+              )
             } else {
               resolve(
                 exportMethods.exportData(opts).then(({ content }: any) => {
                   return VxeUI.print({
-                    content
+                    title: opts.sheetName,
+                    html: content
                   })
                 })
               )
@@ -1288,7 +1293,7 @@ hooks.add('tableExportModule', {
           return
         }
         if (!importConfig) {
-          log.err('vxe.error.reqProp', ['import-config'])
+          errLog('vxe.error.reqProp', ['import-config'])
         }
         // 处理类型
         const typeList = types.map((value: any) => {
@@ -1318,7 +1323,7 @@ hooks.add('tableExportModule', {
         const exportOpts = computeExportOpts.value
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!props.exportConfig) {
-            log.err('vxe.error.reqProp', ['export-config'])
+            errLog('vxe.error.reqProp', ['export-config'])
           }
         }
         handleExportAndPrint(Object.assign({}, exportOpts, options))
@@ -1327,7 +1332,7 @@ hooks.add('tableExportModule', {
         const printOpts = computePrintOpts.value
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!props.printConfig) {
-            log.err('vxe.error.reqProp', ['print-config'])
+            errLog('vxe.error.reqProp', ['print-config'])
           }
         }
         handleExportAndPrint(Object.assign({}, printOpts, options), true)

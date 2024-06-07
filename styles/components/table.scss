@@ -1043,6 +1043,7 @@
   }
   .vxe-body--expanded-column {
     border-bottom: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
+    border-right: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
     &.col--ellipsis {
       & > .vxe-body--expanded-cell {
         overflow: hidden;

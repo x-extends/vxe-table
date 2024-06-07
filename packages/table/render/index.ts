@@ -4,10 +4,11 @@ import { VxeUI } from '../../ui'
 import { getCellValue, setCellValue } from '../../table/src/util'
 import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
 import { getOnName } from '../../ui/src/vn'
+import { errLog } from '../../ui/src/log'
 
 import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeButtonComponent } from '../../../types'
 
-const { getConfig, renderer, getI18n, log } = VxeUI
+const { getConfig, renderer, getI18n } = VxeUI
 
 const componentDefaultModelProp = 'modelValue'
 
@@ -181,7 +182,7 @@ function getComponentOns (renderOpts: any, params: any, modelFunc?: any, changeF
     ons[getOnName(key)] = function (...args: any[]) {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (!XEUtils.isFunction(func)) {
-          log.err('vxe.error.errFunc', [func])
+          errLog('vxe.error.errFunc', [func])
         }
       }
       func(params, ...args)

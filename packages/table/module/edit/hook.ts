@@ -4,10 +4,11 @@ import { VxeUI } from '../../../ui'
 import { isEnableConf } from '../../../ui/src/utils'
 import { getCellValue, setCellValue, getRowid } from '../../src/util'
 import { browse, removeClass, addClass } from '../../../ui/src/dom'
+import { warnLog, errLog } from '../../../ui/src/log'
 
 import type { TableEditMethods, TableEditPrivateMethods } from '../../../../types'
 
-const { getConfig, renderer, hooks, log, getI18n } = VxeUI
+const { getConfig, renderer, hooks, getI18n } = VxeUI
 
 const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'insertNextAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
 
@@ -91,7 +92,7 @@ hooks.add('tableEditModule', {
         } else {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (parentRowId) {
-              log.warn('vxe.error.unableInsert')
+              warnLog('vxe.error.unableInsert')
             }
           }
           afterFullData[funcName](item)
@@ -159,7 +160,7 @@ hooks.add('tableEditModule', {
                 if (process.env.VUE_APP_VXE_ENV === 'development') {
                   if (item[treeOpts.parentField]) {
                     if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
-                      log.err('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
+                      errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
                     }
                   }
                 }
@@ -190,7 +191,7 @@ hooks.add('tableEditModule', {
               }
             } else {
               if (process.env.VUE_APP_VXE_ENV === 'development') {
-                log.warn('vxe.error.unableInsert')
+                warnLog('vxe.error.unableInsert')
               }
               insertTreeRow(newRecords, true)
             }
@@ -212,7 +213,7 @@ hooks.add('tableEditModule', {
               afIndex = Math.min(afterFullData.length, afIndex + 1)
             }
             if (afIndex === -1) {
-              throw new Error(log.err('vxe.error.unableInsert'))
+              throw new Error(getI18n('vxe.error.unableInsert'))
             }
             afterFullData.splice(afIndex, 0, ...newRecords)
             tableFullData.splice($xeTable.findRowIndexOf(tableFullData, row), 0, ...newRecords)
@@ -481,7 +482,7 @@ hooks.add('tableEditModule', {
       },
       getActiveRecord () {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
+          warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
         }
         return this.getEditRecord()
       },
@@ -509,7 +510,7 @@ hooks.add('tableEditModule', {
       clearActived (evnt) {
         // 即将废弃
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['clearActived', 'clearEdit'])
+          warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
         }
         return this.clearEdit(evnt)
       },
@@ -557,7 +558,7 @@ hooks.add('tableEditModule', {
       },
       isActiveByRow (row) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
+          warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
         }
         // 即将废弃
         return this.isEditByRow(row)
@@ -572,7 +573,7 @@ hooks.add('tableEditModule', {
       },
       setActiveRow (row) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
+          warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
         }
         // 即将废弃
         return editMethods.setEditRow(row)
@@ -590,7 +591,7 @@ hooks.add('tableEditModule', {
       },
       setActiveCell (row, fieldOrColumn) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
+          warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
         }
         // 即将废弃
         return editMethods.setEditCell(row, fieldOrColumn)

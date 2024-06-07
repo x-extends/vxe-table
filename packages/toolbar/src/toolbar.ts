@@ -2,10 +2,11 @@ import { defineComponent, h, ref, Ref, computed, inject, createCommentVNode, VNo
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
+import { warnLog, errLog } from '../../ui/src/log'
 
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData, VxeButtonComponent } from '../../../types'
 
-const { getConfig, getIcon, getI18n, renderer, commands, log, createEvent, useFns } = VxeUI
+const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
 
 export default defineComponent({
   name: 'VxeToolbar',
@@ -103,7 +104,7 @@ export default defineComponent({
       if ($xeTable) {
         return true
       }
-      log.err('vxe.error.barUnableLink')
+      errLog('vxe.error.barUnableLink')
     }
 
     const handleClickSettingEvent = ({ $event }: any) => {
@@ -111,7 +112,7 @@ export default defineComponent({
         if ($xeTable.triggerCustomEvent) {
           $xeTable.triggerCustomEvent($event)
         } else {
-          log.err('vxe.error.reqModule', ['VxeTableCustomModule'])
+          errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
         }
       }
     }
@@ -120,7 +121,7 @@ export default defineComponent({
       if ($xeTable) {
         $xeTable.customOpenEvent($event)
       } else {
-        log.err('vxe.error.reqModule', ['VxeTableCustomModule'])
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     }
 
@@ -176,7 +177,7 @@ export default defineComponent({
               gCommandOpts.commandMethod(params)
             } else {
               if (process.env.VUE_APP_VXE_ENV === 'development') {
-                log.err('vxe.error.notCommands', [code])
+                errLog('vxe.error.notCommands', [code])
               }
             }
           }
@@ -198,7 +199,7 @@ export default defineComponent({
               gCommandOpts.commandMethod(params)
             } else {
               if (process.env.VUE_APP_VXE_ENV === 'development') {
-                log.err('vxe.error.notCommands', [code])
+                errLog('vxe.error.notCommands', [code])
               }
             }
           }
@@ -459,21 +460,21 @@ export default defineComponent({
       const refreshOpts = computeRefreshOpts.value
       const queryMethod = refreshOpts.queryMethod || refreshOpts.query
       if (refresh && !$xeGrid && !queryMethod) {
-        log.warn('vxe.error.notFunc', ['queryMethod'])
+        warnLog('vxe.error.notFunc', ['queryMethod'])
       }
       const customOpts = computeCustomOpts.value
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (customOpts.isFooter) {
-          log.warn('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
         }
         if (customOpts.showFooter) {
-          log.warn('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
         }
         if (customOpts.immediate) {
-          log.warn('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
         }
         if (customOpts.trigger) {
-          log.warn('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
+          warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
         }
       }
     })

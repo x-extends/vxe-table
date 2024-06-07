@@ -11,6 +11,7 @@ import tableProps from './props'
 import tableEmits from './emits'
 import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, XEBodyScrollElement, getRootColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
+import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
 import TableFilterPanelComponent from '../module/filter/panel'
 import TableImportPanelComponent from '../module/export/import-panel'
@@ -19,7 +20,7 @@ import TableMenuPanelComponent from '../module/menu/panel'
 
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent } from '../../../types'
 
-const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, log, useFns } = VxeUI
+const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns } = VxeUI
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -787,7 +788,7 @@ export default defineComponent({
           merges = [merges]
         }
         if (treeConfig && merges.length) {
-          log.err('vxe.error.noTree', ['merge-cells | merge-footer-items'])
+          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
         merges.forEach((item) => {
           let { row, col, rowspan, colspan } = item
@@ -837,7 +838,7 @@ export default defineComponent({
           merges = [merges]
         }
         if (treeConfig && merges.length) {
-          log.err('vxe.error.noTree', ['merge-cells | merge-footer-items'])
+          errLog('vxe.error.noTree', ['merge-cells | merge-footer-items'])
         }
         merges.forEach((item) => {
           let { row, col } = item
@@ -911,7 +912,7 @@ export default defineComponent({
           }
         } = {}
         if (!id) {
-          log.err('vxe.error.reqProp', ['id'])
+          errLog('vxe.error.reqProp', ['id'])
           return
         }
         // 自定义列宽
@@ -1039,7 +1040,7 @@ export default defineComponent({
         if (field) {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (fullColumnFieldData[field]) {
-              log.warn('vxe.error.colRepet', ['field', field])
+              warnLog('vxe.error.colRepet', ['field', field])
             }
           }
           fullColumnFieldData[field] = rest
@@ -1053,7 +1054,7 @@ export default defineComponent({
         if (treeNode) {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (treeNodeColumn) {
-              log.warn('vxe.error.colRepet', ['tree-node', treeNode])
+              warnLog('vxe.error.colRepet', ['tree-node', treeNode])
             }
           }
           if (!treeNodeColumn) {
@@ -1062,7 +1063,7 @@ export default defineComponent({
         } else if (type === 'expand') {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (expandColumn) {
-              log.warn('vxe.error.colRepet', ['type', type])
+              warnLog('vxe.error.colRepet', ['type', type])
             }
           }
           if (!expandColumn) {
@@ -1072,14 +1073,14 @@ export default defineComponent({
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (type === 'checkbox') {
             if (checkboxColumn) {
-              log.warn('vxe.error.colRepet', ['type', type])
+              warnLog('vxe.error.colRepet', ['type', type])
             }
             if (!checkboxColumn) {
               checkboxColumn = column
             }
           } else if (type === 'radio') {
             if (radioColumn) {
-              log.warn('vxe.error.colRepet', ['type', type])
+              warnLog('vxe.error.colRepet', ['type', type])
             }
             if (!radioColumn) {
               radioColumn = column
@@ -1090,7 +1091,7 @@ export default defineComponent({
           isAllOverflow = false
         }
         if (fullColumnIdData[colid]) {
-          log.err('vxe.error.colRepet', ['colId', colid])
+          errLog('vxe.error.colRepet', ['colId', colid])
         }
         fullColumnIdData[colid] = rest
       }
@@ -1105,17 +1106,17 @@ export default defineComponent({
 
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (expandColumn && mouseOpts.area) {
-          log.err('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
+          errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
         }
       }
 
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (htmlColumn) {
           if (!columnOpts.useKey) {
-            log.err('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
+            errLog('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
           }
           if (!rowOpts.useKey) {
-            log.err('vxe.error.reqProp', ['row-config.useKey', 'column.type=html'])
+            errLog('vxe.error.reqProp', ['row-config.useKey', 'column.type=html'])
           }
         }
       }
@@ -2262,23 +2263,23 @@ export default defineComponent({
           // 树结构自动转换
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (!treeOpts.rowField) {
-              log.err('vxe.error.reqProp', ['tree-config.rowField'])
+              errLog('vxe.error.reqProp', ['tree-config.rowField'])
             }
             if (!treeOpts.parentField) {
-              log.err('vxe.error.reqProp', ['tree-config.parentField'])
+              errLog('vxe.error.reqProp', ['tree-config.parentField'])
             }
             if (!childrenField) {
-              log.err('vxe.error.reqProp', ['tree-config.childrenField'])
+              errLog('vxe.error.reqProp', ['tree-config.childrenField'])
             }
             if (!treeOpts.mapChildrenField) {
-              log.err('vxe.error.reqProp', ['tree-config.mapChildrenField'])
+              errLog('vxe.error.reqProp', ['tree-config.mapChildrenField'])
             }
             if (childrenField === treeOpts.mapChildrenField) {
-              log.err('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
+              errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
             }
             // fullData.forEach(row => {
             //   if (row[treeOpts.children] && row[treeOpts.children].length) {
-            //     log.warn('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
+            //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${treeOpts.children}`])
             //   }
             // })
           }
@@ -2316,13 +2317,13 @@ export default defineComponent({
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (sYLoad) {
           if (!(props.height || props.maxHeight)) {
-            log.err('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
           }
           if (!props.showOverflow) {
-            log.warn('vxe.error.reqProp', ['table.show-overflow'])
+            warnLog('vxe.error.reqProp', ['table.show-overflow'])
           }
           if (props.spanMethod) {
-            log.warn('vxe.error.scrollErrProp', ['table.span-method'])
+            warnLog('vxe.error.scrollErrProp', ['table.span-method'])
           }
         }
       }
@@ -2457,7 +2458,7 @@ export default defineComponent({
             column.fixed = parent.fixed
           }
           if (parent && column.fixed !== parent.fixed) {
-            log.err('vxe.error.groupFixed')
+            errLog('vxe.error.groupFixed')
           }
           if (isColGroup) {
             column.visible = !!XEUtils.findTree(column.children, (subColumn) => hasChildrenList(subColumn) ? false : subColumn.visible)
@@ -2505,16 +2506,16 @@ export default defineComponent({
       if (scrollXLoad) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           // if (props.showHeader && !props.showHeaderOverflow) {
-          //   log.warn('vxe.error.reqProp', ['show-header-overflow'])
+          //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
           // }
           // if (props.showFooter && !props.showFooterOverflow) {
-          //   log.warn('vxe.error.reqProp', ['show-footer-overflow'])
+          //   warnLog('vxe.error.reqProp', ['show-footer-overflow'])
           // }
           if (props.spanMethod) {
-            log.warn('vxe.error.scrollErrProp', ['span-method'])
+            warnLog('vxe.error.scrollErrProp', ['span-method'])
           }
           if (props.footerSpanMethod) {
-            log.warn('vxe.error.scrollErrProp', ['footer-span-method'])
+            warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
           }
         }
         const { visibleSize } = computeVirtualX()
@@ -2572,7 +2573,7 @@ export default defineComponent({
       tablePrivateMethods.handleTableData(true)
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         if ((reactData.scrollXLoad || reactData.scrollYLoad) && reactData.expandColumn) {
-          log.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+          warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }
       }
       return nextTick().then(() => {
@@ -2748,7 +2749,7 @@ export default defineComponent({
        * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
        */
       syncData () {
-        log.warn('vxe.error.delFunc', ['syncData', 'getData'])
+        warnLog('vxe.error.delFunc', ['syncData', 'getData'])
         return nextTick().then(() => {
           reactData.tableData = []
           emit('update:data', internalData.tableFullData)
@@ -2858,7 +2859,7 @@ export default defineComponent({
           reactData.tableData = tableData.slice(0)
         } else {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
-            log.warn('vxe.error.reqProp', ['keep-source'])
+            warnLog('vxe.error.reqProp', ['keep-source'])
           }
         }
         return nextTick()
@@ -3023,7 +3024,7 @@ export default defineComponent({
         const { tableSourceData, sourceDataRowIdData } = internalData
         if (!keepSource) {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
-            log.warn('vxe.error.reqProp', ['keep-source'])
+            warnLog('vxe.error.reqProp', ['keep-source'])
           }
           return nextTick()
         }
@@ -3375,6 +3376,7 @@ export default defineComponent({
           if (!checkMethod || checkMethod({ column })) {
             column.visible = column.defaultVisible
           }
+          column.renderResizeWidth = column.renderWidth
         })
         if (opts.resizable) {
           tablePrivateMethods.saveCustomResizable(true)
@@ -3997,7 +3999,7 @@ export default defineComponent({
       },
       reloadExpandContent (row) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
+          warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
         }
         // 即将废弃
         return tableMethods.reloadRowExpand(row)
@@ -4092,7 +4094,7 @@ export default defineComponent({
       isExpandByRow (row) {
         // 已废弃
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
+          warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
         }
         return tableMethods.isRowExpandByRow(row)
       },
@@ -4190,7 +4192,7 @@ export default defineComponent({
       },
       reloadTreeChilds (row) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
-          log.warn('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
+          warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
         }
         // 即将废弃
         return tableMethods.reloadTreeExpand(row)
@@ -4443,7 +4445,7 @@ export default defineComponent({
        */
       setMergeCells (merges) {
         if (props.spanMethod) {
-          log.err('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+          errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
         setMerges(merges, reactData.mergeList, internalData.afterFullData)
         return nextTick().then(() => {
@@ -4457,7 +4459,7 @@ export default defineComponent({
        */
       removeMergeCells (merges) {
         if (props.spanMethod) {
-          log.err('vxe.error.errConflicts', ['merge-cells', 'span-method'])
+          errLog('vxe.error.errConflicts', ['merge-cells', 'span-method'])
         }
         const rest = removeMerges(merges, reactData.mergeList, internalData.afterFullData)
         return nextTick().then(() => {
@@ -4483,7 +4485,7 @@ export default defineComponent({
       },
       setMergeFooterItems (merges) {
         if (props.footerSpanMethod) {
-          log.err('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+          errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
         }
         setMerges(merges, reactData.mergeFooterList)
         return nextTick().then(() => {
@@ -4493,7 +4495,7 @@ export default defineComponent({
       },
       removeMergeFooterItems (merges) {
         if (props.footerSpanMethod) {
-          log.err('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
+          errLog('vxe.error.errConflicts', ['merge-footer-items', 'footer-span-method'])
         }
         const rest = removeMerges(merges, reactData.mergeFooterList)
         return nextTick().then(() => {
@@ -4525,6 +4527,63 @@ export default defineComponent({
         }
         return nextTick()
       },
+      getCustomStoreData () {
+        const { id } = props
+        const customOpts = computeCustomOpts.value
+        const { collectColumn } = internalData
+        const { checkMethod } = customOpts
+        const resizableData: Record<string, number> = {}
+        const sortData: Record<string, number> = {}
+        const visibleData: Record<string, boolean> = {}
+        const fixedData: Record<string, VxeColumnPropTypes.Fixed> = {}
+        const storeData = {
+          resizableData,
+          sortData,
+          visibleData,
+          fixedData
+        }
+        if (!id) {
+          errLog('vxe.error.reqProp', ['id'])
+          return storeData
+        }
+        XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+          // 排序只支持一级
+          if (!parent) {
+            collectColumn.forEach((column) => {
+              const colKey = column.getKey()
+              if (colKey) {
+                sortData[colKey] = column.renderSortNumber
+              }
+            })
+          }
+          if (column.resizeWidth) {
+            const colKey = column.getKey()
+            if (colKey) {
+              resizableData[colKey] = column.renderWidth
+            }
+          }
+          if (column.fixed && column.fixed !== column.defaultFixed) {
+            const colKey = column.getKey()
+            if (colKey) {
+              fixedData[colKey] = column.fixed
+            }
+          }
+          if (!checkMethod || checkMethod({ column })) {
+            if (!column.visible && column.defaultVisible) {
+              const colKey = column.getKey()
+              if (colKey) {
+                visibleData[colKey] = false
+              }
+            } else if (column.visible && !column.defaultVisible) {
+              const colKey = column.getKey()
+              if (colKey) {
+                visibleData[colKey] = true
+              }
+            }
+          }
+        })
+        return storeData
+      },
       focus () {
         internalData.isActivated = true
         return nextTick()
@@ -4542,7 +4601,7 @@ export default defineComponent({
           $xeToolbar = $toolbar
           $xeToolbar.syncUpdate({ collectColumn: internalData.collectColumn, $table: $xeTable })
         } else {
-          log.err('vxe.error.barUnableLink')
+          errLog('vxe.error.barUnableLink')
         }
         return nextTick()
       }
@@ -5319,7 +5378,7 @@ export default defineComponent({
           const columnWidthStorageMap = getCustomStorageMap(resizableStorageKey)
           let columnWidthStorage: any
           if (!id) {
-            log.err('vxe.error.reqProp', ['id'])
+            errLog('vxe.error.reqProp', ['id'])
             return
           }
           if (!isReset) {
@@ -5349,7 +5408,7 @@ export default defineComponent({
           const columnSortStorageMap = getCustomStorageMap(sortStorageKey)
           let columnWidthStorage: any
           if (!id) {
-            log.err('vxe.error.reqProp', ['id'])
+            errLog('vxe.error.reqProp', ['id'])
             return
           }
           if (!isReset) {
@@ -5378,7 +5437,7 @@ export default defineComponent({
           const columnFixedStorageMap = getCustomStorageMap(fixedStorageKey)
           const colFixeds: any[] = []
           if (!id) {
-            log.err('vxe.error.reqProp', ['id'])
+            errLog('vxe.error.reqProp', ['id'])
             return
           }
           XEUtils.eachTree(collectColumn, (column) => {
@@ -5406,7 +5465,7 @@ export default defineComponent({
           const colHides: any[] = []
           const colShows: any[] = []
           if (!id) {
-            log.err('vxe.error.reqProp', ['id'])
+            errLog('vxe.error.reqProp', ['id'])
             return
           }
           XEUtils.eachTree(collectColumn, (column) => {
@@ -5458,7 +5517,7 @@ export default defineComponent({
           evntList = interceptor.get('event.clearActived')
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (evntList.length) {
-              log.warn('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
+              warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
             }
           }
         }
@@ -6362,12 +6421,12 @@ export default defineComponent({
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       'openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').forEach(name => {
         ($xeTable as any)[name] = function () {
-          log.err('vxe.error.reqModule', ['VxeTableExportModule'])
+          errLog('vxe.error.reqModule', ['VxeTableExportModule'])
         }
       })
       'clearValidate,fullValidate,validate'.split(',').forEach(name => {
         ($xeTable as any)[name] = function () {
-          log.err('vxe.error.reqModule', ['VxeTableValidatorModule'])
+          errLog('vxe.error.reqModule', ['VxeTableValidatorModule'])
         }
       })
     }
@@ -6463,10 +6522,10 @@ export default defineComponent({
           // const checkboxOpts = computeCheckboxOpts.value
           // const checkboxColumn = internalData.tableFullColumn.find(column => column.type === 'checkbox')
           // if (checkboxColumn && internalData.tableFullData.length > 300 && !checkboxOpts.checkField) {
-          //   log.warn('vxe.error.checkProp', ['checkbox-config.checkField'])
+          //   warnLog('vxe.error.checkProp', ['checkbox-config.checkField'])
           // }
           if ((scrollXLoad || scrollYLoad) && expandColumn) {
-            log.warn('vxe.error.scrollErrProp', ['column.type=expand'])
+            warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
           }
         }
         tableMethods.recalculate()
@@ -6618,50 +6677,50 @@ export default defineComponent({
 
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (props.rowId) {
-            log.warn('vxe.error.delProp', ['row-id', 'row-config.keyField'])
+            warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
           }
           if (props.rowKey) {
-            log.warn('vxe.error.delProp', ['row-key', 'row-config.useKey'])
+            warnLog('vxe.error.delProp', ['row-key', 'row-config.useKey'])
           }
           if (props.columnKey) {
-            log.warn('vxe.error.delProp', ['column-id', 'column-config.useKey'])
+            warnLog('vxe.error.delProp', ['column-id', 'column-config.useKey'])
           }
           if (!(props.rowId || rowOpts.keyField) && (checkboxOpts.reserve || checkboxOpts.checkRowKeys || radioOpts.reserve || radioOpts.checkRowKey || expandOpts.expandRowKeys || treeOpts.expandRowKeys)) {
-            log.warn('vxe.error.reqProp', ['row-config.keyField'])
+            warnLog('vxe.error.reqProp', ['row-config.keyField'])
           }
           if (props.editConfig && (editOpts.showStatus || editOpts.showUpdateStatus || editOpts.showInsertStatus) && !props.keepSource) {
-            log.warn('vxe.error.reqProp', ['keep-source'])
+            warnLog('vxe.error.reqProp', ['keep-source'])
           }
           if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
-            log.warn('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
+            warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
           }
           if (treeConfig && props.stripe) {
-            log.warn('vxe.error.noTree', ['stripe'])
+            warnLog('vxe.error.noTree', ['stripe'])
           }
           if (props.showFooter && !(props.footerMethod || props.footerData)) {
-            log.warn('vxe.error.reqProp', ['footer-data | footer-method'])
+            warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
           }
           // if (props.highlightCurrentRow) {
-          //   log.warn('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
+          //   warnLog('vxe.error.delProp', ['highlight-current-row', 'row-config.isCurrent'])
           // }
           // if (props.highlightHoverRow) {
-          //   log.warn('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
+          //   warnLog('vxe.error.delProp', ['highlight-hover-row', 'row-config.isHover'])
           // }
           // if (props.highlightCurrentColumn) {
-          //   log.warn('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
+          //   warnLog('vxe.error.delProp', ['highlight-current-column', 'column-config.isCurrent'])
           // }
           // if (props.highlightHoverColumn) {
-          //   log.warn('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
+          //   warnLog('vxe.error.delProp', ['highlight-hover-column', 'column-config.isHover'])
           // }
           // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
           const { exportConfig, importConfig } = props
           const exportOpts = computeExportOpts.value
           const importOpts = computeImportOpts.value
           if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
-            log.warn('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
+            warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
           }
           if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(exportOpts._typeMaps), exportOpts.types)) {
-            log.warn('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
+            warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter((type: string) => XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)).join(',') || XEUtils.keys(exportOpts._typeMaps).join(',')])
           }
         }
 
@@ -6670,65 +6729,65 @@ export default defineComponent({
           const mouseOpts = computeMouseOpts.value
           const rowOpts = computeRowOpts.value
           if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-            log.err('vxe.error.reqProp', ['id'])
+            errLog('vxe.error.reqProp', ['id'])
           }
           if (props.treeConfig && checkboxOpts.range) {
-            log.err('vxe.error.noTree', ['checkbox-config.range'])
+            errLog('vxe.error.noTree', ['checkbox-config.range'])
           }
           if (rowOpts.height && !props.showOverflow) {
-            log.warn('vxe.error.notProp', ['table.show-overflow'])
+            warnLog('vxe.error.notProp', ['table.show-overflow'])
           }
           if (!$xeTable.handleUpdateCellAreas) {
             if (props.clipConfig) {
-              log.warn('vxe.error.notProp', ['clip-config'])
+              warnLog('vxe.error.notProp', ['clip-config'])
             }
             if (props.fnrConfig) {
-              log.warn('vxe.error.notProp', ['fnr-config'])
+              warnLog('vxe.error.notProp', ['fnr-config'])
             }
             if (mouseOpts.area) {
-              log.err('vxe.error.notProp', ['mouse-config.area'])
+              errLog('vxe.error.notProp', ['mouse-config.area'])
               return
             }
           }
           if (props.treeConfig && treeOpts.children) {
-            log.warn('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
+            warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
           }
           if (props.treeConfig && treeOpts.line) {
-            log.warn('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
+            warnLog('vxe.error.delProp', ['tree-config.line', 'tree-config.showLine'])
           }
           if (mouseOpts.area && mouseOpts.selected) {
-            log.warn('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
+            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
           }
           if (mouseOpts.area && checkboxOpts.range) {
-            log.warn('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
           }
           if (props.treeConfig && mouseOpts.area) {
-            log.err('vxe.error.noTree', ['mouse-config.area'])
+            errLog('vxe.error.noTree', ['mouse-config.area'])
           }
           if (props.editConfig && editOpts.activeMethod) {
-            log.warn('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
+            warnLog('vxe.error.delProp', ['edit-config.activeMethod', 'edit-config.beforeEditMethod'])
           }
           if (props.treeConfig && checkboxOpts.isShiftKey) {
-            log.err('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
+            errLog('vxe.error.errConflicts', ['tree-config', 'checkbox-config.isShiftKey'])
           }
           if (checkboxOpts.halfField) {
-            log.warn('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
+            warnLog('vxe.error.delProp', ['checkbox-config.halfField', 'checkbox-config.indeterminateField'])
           }
         }
 
         // 检查是否有安装需要的模块
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (props.editConfig && !$xeTable.insert) {
-            log.err('vxe.error.reqModule', ['Edit'])
+            errLog('vxe.error.reqModule', ['Edit'])
           }
           if (props.editRules && !$xeTable.validate) {
-            log.err('vxe.error.reqModule', ['Validator'])
+            errLog('vxe.error.reqModule', ['Validator'])
           }
           if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.triggerCellMousedownEvent) {
-            log.err('vxe.error.reqModule', ['Keyboard'])
+            errLog('vxe.error.reqModule', ['Keyboard'])
           }
           if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {
-            log.err('vxe.error.reqModule', ['Export'])
+            errLog('vxe.error.reqModule', ['Export'])
           }
         }
 

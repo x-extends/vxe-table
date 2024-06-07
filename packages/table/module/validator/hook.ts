@@ -4,10 +4,11 @@ import { VxeUI } from '../../../ui'
 import { getFuncText, eqEmptyValue } from '../../../ui/src/utils'
 import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
+import { warnLog, errLog } from '../../../ui/src/log'
 
 import type { TableValidatorMethods, TableValidatorPrivateMethods, VxeTableDefines } from '../../../../types'
 
-const { getConfig, validators, hooks, log } = VxeUI
+const { getConfig, validators, hooks } = VxeUI
 
 /**
  * 校验规则
@@ -253,7 +254,7 @@ hooks.add('tableValidatorModule', {
       fullValidate (rows, cb) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (XEUtils.isFunction(cb)) {
-            log.warn('vxe.error.notValidators', ['fullValidate(rows, callback)', 'fullValidate(rows)'])
+            warnLog('vxe.error.notValidators', ['fullValidate(rows, callback)', 'fullValidate(rows)'])
           }
         }
         return beginValidate(rows, cb, true)
@@ -264,7 +265,7 @@ hooks.add('tableValidatorModule', {
       validate (rows, cb) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (XEUtils.isFunction(cb)) {
-            log.warn('vxe.error.notValidators', ['validate(rows, callback)', 'validate(rows)'])
+            warnLog('vxe.error.notValidators', ['validate(rows, callback)', 'validate(rows)'])
           }
         }
         return beginValidate(rows, cb)
@@ -390,12 +391,12 @@ hooks.add('tableValidatorModule', {
                         customValid = gvItem.cellValidatorMethod(validParams)
                       } else {
                         if (process.env.VUE_APP_VXE_ENV === 'development') {
-                          log.warn('vxe.error.notValidators', [validator])
+                          warnLog('vxe.error.notValidators', [validator])
                         }
                       }
                     } else {
                       if (process.env.VUE_APP_VXE_ENV === 'development') {
-                        log.err('vxe.error.notValidators', [validator])
+                        errLog('vxe.error.notValidators', [validator])
                       }
                     }
                   } else {

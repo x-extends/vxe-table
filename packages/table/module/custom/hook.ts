@@ -2,7 +2,7 @@ import { nextTick } from 'vue'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 
-import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes } from '../../../../types'
+import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../../types'
 
 const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom']
 
@@ -10,27 +10,19 @@ VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
     const { reactData, internalData } = $xeTable
     const { computeCustomOpts } = $xeTable.getComputeMaps()
-    const { refTableHeader, refTableBody, refTableCustom } = $xeTable.getRefMaps()
+    const { refElem } = $xeTable.getRefMaps()
 
     const $xeGrid = $xeTable.xegrid
 
     const calcMaxHeight = () => {
       const { customStore } = reactData
-      const tableHeader = refTableHeader.value
-      const tableBody = refTableBody.value
-      const tableCustom = refTableCustom.value
-      const customWrapperElem = tableCustom ? tableCustom.$el as HTMLDivElement : null
-      const headElem = tableHeader.$el as HTMLDivElement
-      const bodyElem = tableBody.$el as HTMLDivElement
+      const el = refElem.value
       // 判断面板不能大于表格高度
       let tableHeight = 0
-      if (headElem) {
-        tableHeight += headElem.clientHeight
+      if (el) {
+        tableHeight = el.clientHeight - 60
       }
-      if (bodyElem) {
-        tableHeight += bodyElem.clientHeight
-      }
-      customStore.maxHeight = Math.max(0, customWrapperElem ? Math.min(customWrapperElem.clientHeight, tableHeight - 80) : 0)
+      customStore.maxHeight = Math.max(4, tableHeight)
     }
 
     const openCustom = () => {
@@ -43,6 +35,7 @@ VxeUI.hooks.add('tableCustomModule', {
         const colid = column.getKey()
         column.renderFixed = column.fixed
         column.renderVisible = column.visible
+        column.renderResizeWidth = column.renderWidth
         sortMaps[colid] = column.renderSortNumber
         fixedMaps[colid] = column.fixed
         visibleMaps[colid] = column.visible
@@ -80,11 +73,11 @@ VxeUI.hooks.add('tableCustomModule', {
       const { collectColumn } = internalData
       const customOpts = computeCustomOpts.value
       const { checkMethod } = customOpts
-      customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
-      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
+      customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ column }) : false) || column.renderVisible)
+      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ column })) && (column.renderVisible || column.halfVisible))
     }
 
-    const emitCustomEvent = (type: string, evnt: Event) => {
+    const emitCustomEvent = (type: VxeTableDefines.CustomType, evnt: Event) => {
       const comp = $xeGrid || $xeTable
       comp.dispatchEvent('custom', { type }, evnt)
     }

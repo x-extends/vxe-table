@@ -4,7 +4,7 @@ import { formatText } from '../../../ui/src/utils'
 import { addClass, removeClass } from '../../../ui/src/dom'
 import XEUtils from 'xe-utils'
 
-import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeModalComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent } from '../../../../types'
+import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeModalComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
 
@@ -46,10 +46,6 @@ export default defineComponent({
       }, 300)
     }
 
-    const getStoreData = (): VxeTableDefines.CustomStoreData => {
-      return {}
-    }
-
     const handleSaveStore = (type: 'confirm' | 'reset') => {
       const { id } = tableProps
       const customOpts = computeCustomOpts.value
@@ -58,18 +54,35 @@ export default defineComponent({
         updateStore({
           id,
           type,
-          storeData: getStoreData()
+          storeData: $xeTable.getCustomStoreData()
         })
       }
     }
 
     const confirmCustomEvent = (evnt: Event) => {
       const { customColumnList } = reactData
-      customColumnList.forEach((column, index) => {
-        const sortIndex = index + 1
-        column.renderSortNumber = sortIndex
-        column.fixed = column.renderFixed
-        column.visible = column.renderVisible
+      const customOpts = computeCustomOpts.value
+      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
+        if (!parent) {
+          if (allowSort) {
+            const sortIndex = index + 1
+            column.renderSortNumber = sortIndex
+          }
+          if (allowFixed) {
+            column.fixed = column.renderFixed
+          }
+        }
+        if (allowResizable) {
+          if (column.renderVisible && (!column.children || column.children.length)) {
+            if (column.renderResizeWidth !== column.renderWidth) {
+              column.resizeWidth = column.renderResizeWidth
+            }
+          }
+        }
+        if (allowVisible) {
+          column.visible = column.renderVisible
+        }
       })
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', evnt)
@@ -80,15 +93,26 @@ export default defineComponent({
       const { customStore } = props
       const { customColumnList } = reactData
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
+      const customOpts = computeCustomOpts.value
+      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
       XEUtils.eachTree(customColumnList, column => {
         const colid = column.getKey()
         const visible = !!oldVisibleMaps[colid]
         const fixed = oldFixedMaps[colid] || ''
-        column.renderVisible = visible
-        column.visible = visible
-        column.renderFixed = fixed
-        column.fixed = fixed
-        column.renderSortNumber = oldSortMaps[colid] || 0
+        if (allowVisible) {
+          column.renderVisible = visible
+          column.visible = visible
+        }
+        if (allowFixed) {
+          column.renderFixed = fixed
+          column.fixed = fixed
+        }
+        if (allowSort) {
+          column.renderSortNumber = oldSortMaps[colid] || 0
+        }
+        if (allowResizable) {
+          column.renderResizeWidth = column.renderWidth
+        }
       }, { children: 'children' })
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('cancel', evnt)
@@ -98,7 +122,7 @@ export default defineComponent({
       $xeTable.resetColumn(true)
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('reset', evnt)
-      handleSaveStore('confirm')
+      handleSaveStore('reset')
     }
 
     const resetCustomEvent = (evnt: Event) => {
@@ -289,7 +313,7 @@ export default defineComponent({
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
       const { maxHeight } = customStore
-      const { checkMethod, visibleMethod, allowSort, allowFixed, trigger } = customOpts
+      const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const colVNs: VNode[] = []
       const customWrapperOns: any = {}
@@ -317,23 +341,25 @@ export default defineComponent({
               onDragend: sortDragendEvent,
               onDragover: sortDragoverEvent
             }, [
-              h('div', {
-                class: ['vxe-table-custom--checkbox-option', {
-                  'is--checked': isChecked,
-                  'is--indeterminate': isIndeterminate,
-                  'is--disabled': isDisabled
-                }],
-                title: getI18n('vxe.custom.setting.colVisible'),
-                onClick: () => {
-                  if (!isDisabled) {
-                    changeCheckboxOption(column)
+              allowVisible
+                ? h('div', {
+                  class: ['vxe-table-custom--checkbox-option', {
+                    'is--checked': isChecked,
+                    'is--indeterminate': isIndeterminate,
+                    'is--disabled': isDisabled
+                  }],
+                  title: getI18n('vxe.custom.setting.colVisible'),
+                  onClick: () => {
+                    if (!isDisabled) {
+                      changeCheckboxOption(column)
+                    }
                   }
-                }
-              }, [
-                h('span', {
-                  class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                })
-              ]),
+                }, [
+                  h('span', {
+                    class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                  })
+                ])
+                : createCommentVNode(),
               allowSort && column.level === 1
                 ? h('div', {
                   class: 'vxe-table-custom--sort-option'
@@ -389,9 +415,14 @@ export default defineComponent({
       return h('div', {
         ref: refElem,
         key: 'simple',
-        class: ['vxe-table-custom-wrapper', {
+        class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
           'is--active': customStore.visible
-        }]
+        }],
+        style: maxHeight && !['left', 'right'].includes(placement as string)
+          ? {
+              maxHeight: `${maxHeight}px`
+            }
+          : {}
       }, customStore.visible
         ? [
             h('ul', {
@@ -400,21 +431,25 @@ export default defineComponent({
               h('li', {
                 class: 'vxe-table-custom--option'
               }, [
-                h('div', {
-                  class: ['vxe-table-custom--checkbox-option', {
-                    'is--checked': isAllChecked,
-                    'is--indeterminate': isAllIndeterminate
-                  }],
-                  title: getI18n('vxe.table.allTitle'),
-                  onClick: allCustomEvent
-                }, [
-                  h('span', {
-                    class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                  }),
-                  h('span', {
+                allowVisible
+                  ? h('div', {
+                    class: ['vxe-table-custom--checkbox-option', {
+                      'is--checked': isAllChecked,
+                      'is--indeterminate': isAllIndeterminate
+                    }],
+                    title: getI18n('vxe.table.allTitle'),
+                    onClick: allCustomEvent
+                  }, [
+                    h('span', {
+                      class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                    }),
+                    h('span', {
+                      class: 'vxe-checkbox--label'
+                    }, getI18n('vxe.toolbar.customAll'))
+                  ])
+                  : h('span', {
                     class: 'vxe-checkbox--label'
-                  }, getI18n('vxe.toolbar.customAll'))
-                ])
+                  }, getI18n('vxe.table.customTitle'))
               ])
             ]),
             h('div', {
@@ -425,11 +460,6 @@ export default defineComponent({
                 class: 'vxe-table-custom--body',
                 name: 'vxe-table-custom--list',
                 tag: 'ul',
-                style: maxHeight
-                  ? {
-                      maxHeight: `${maxHeight}px`
-                    }
-                  : {},
                 ...customWrapperOns
               }, {
                 default: () => colVNs
@@ -467,7 +497,7 @@ export default defineComponent({
       const { customStore } = props
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
-      const { allowSort, allowFixed, checkMethod, visibleMethod } = customOpts
+      const { allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const trVNs: VNode[] = []
@@ -490,27 +520,29 @@ export default defineComponent({
               onDragend: sortDragendEvent,
               onDragover: sortDragoverEvent
             }, [
-              h('td', {
-                class: 'vxe-table-custom-popup--column-item col--visible'
-              }, [
-                h('div', {
-                  class: ['vxe-table-custom--checkbox-option', {
-                    'is--checked': isChecked,
-                    'is--indeterminate': isIndeterminate,
-                    'is--disabled': isDisabled
-                  }],
-                  title: getI18n('vxe.custom.setting.colVisible'),
-                  onClick: () => {
-                    if (!isDisabled) {
-                      changeCheckboxOption(column)
-                    }
-                  }
+              allowVisible
+                ? h('td', {
+                  class: 'vxe-table-custom-popup--column-item col--visible'
                 }, [
-                  h('span', {
-                    class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                  })
+                  h('div', {
+                    class: ['vxe-table-custom--checkbox-option', {
+                      'is--checked': isChecked,
+                      'is--indeterminate': isIndeterminate,
+                      'is--disabled': isDisabled
+                    }],
+                    title: getI18n('vxe.custom.setting.colVisible'),
+                    onClick: () => {
+                      if (!isDisabled) {
+                        changeCheckboxOption(column)
+                      }
+                    }
+                  }, [
+                    h('span', {
+                      class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                    })
+                  ])
                 ])
-              ]),
+                : createCommentVNode(),
               allowSort
                 ? h('td', {
                   class: 'vxe-table-custom-popup--column-item col--sort'
@@ -526,7 +558,7 @@ export default defineComponent({
                         class: getIcon().TABLE_CUSTOM_SORT
                       })
                     ])
-                    : null
+                    : h('span', '-')
                 ])
                 : createCommentVNode(),
               h('td', {
@@ -537,12 +569,29 @@ export default defineComponent({
                   title: colTitle
                 }, colTitle)
               ]),
+              allowResizable
+                ? h('td', {
+                  class: 'vxe-table-custom-popup--column-item col--resizable'
+                }, [
+                  !isChecked || (column.children && column.children.length)
+                    ? h('span', '-')
+                    : h(resolveComponent('vxe-input') as VxeInputComponent, {
+                      type: 'integer',
+                      min: 40,
+                      modelValue: column.renderResizeWidth,
+                      'onUpdate:modelValue' (value: any) {
+                        column.renderResizeWidth = Math.max(40, Number(value))
+                      }
+                    })
+                ])
+                : createCommentVNode(),
               allowFixed
                 ? h('td', {
                   class: 'vxe-table-custom-popup--column-item col--fixed'
                 }, [
-                  !parent
-                    ? h(resolveComponent('vxe-radio-group') as VxeRadioGroupComponent, {
+                  parent
+                    ? h('span', '-')
+                    : h(resolveComponent('vxe-radio-group') as VxeRadioGroupComponent, {
                       modelValue: column.renderFixed || '',
                       type: 'button',
                       size: 'mini',
@@ -558,7 +607,6 @@ export default defineComponent({
                       //   changePopupFixedOption(column)
                       // }
                     })
-                    : null
                 ])
                 : createCommentVNode()
             ])
@@ -572,10 +620,10 @@ export default defineComponent({
         className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
         modelValue: customStore.visible,
         title: getI18n('vxe.custom.cstmTitle'),
-        width: '40vw',
-        minWidth: 520,
-        height: '50vh',
-        minHeight: 300,
+        width: 700,
+        minWidth: 700,
+        height: 400,
+        minHeight: 400,
         mask: true,
         lockView: true,
         showFooter: true,
@@ -596,11 +644,13 @@ export default defineComponent({
             }, [
               h('table', {}, [
                 h('colgroup', {}, [
-                  h('col', {
-                    style: {
-                      width: '80px'
-                    }
-                  }),
+                  allowVisible
+                    ? h('col', {
+                      style: {
+                        width: '80px'
+                      }
+                    })
+                    : createCommentVNode(),
                   allowSort
                     ? h('col', {
                       style: {
@@ -613,6 +663,13 @@ export default defineComponent({
                       minWidth: '120px'
                     }
                   }),
+                  allowResizable
+                    ? h('col', {
+                      style: {
+                        width: '140px'
+                      }
+                    })
+                    : createCommentVNode(),
                   allowFixed
                     ? h('col', {
                       style: {
@@ -623,23 +680,25 @@ export default defineComponent({
                 ]),
                 h('thead', {}, [
                   h('tr', {}, [
-                    h('th', {}, [
-                      h('div', {
-                        class: ['vxe-table-custom--checkbox-option', {
-                          'is--checked': isAllChecked,
-                          'is--indeterminate': isAllIndeterminate
-                        }],
-                        title: getI18n('vxe.table.allTitle'),
-                        onClick: allCustomEvent
-                      }, [
-                        h('span', {
-                          class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                        }),
-                        h('span', {
-                          class: 'vxe-checkbox--label'
-                        }, getI18n('vxe.toolbar.customAll'))
+                    allowVisible
+                      ? h('th', {}, [
+                        h('div', {
+                          class: ['vxe-table-custom--checkbox-option', {
+                            'is--checked': isAllChecked,
+                            'is--indeterminate': isAllIndeterminate
+                          }],
+                          title: getI18n('vxe.table.allTitle'),
+                          onClick: allCustomEvent
+                        }, [
+                          h('span', {
+                            class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                          }),
+                          h('span', {
+                            class: 'vxe-checkbox--label'
+                          }, getI18n('vxe.toolbar.customAll'))
+                        ])
                       ])
-                    ]),
+                      : createCommentVNode(),
                     allowSort
                       ? h('th', {}, [
                         h('span', {
@@ -658,6 +717,9 @@ export default defineComponent({
                       ])
                       : createCommentVNode(),
                     h('th', {}, getI18n('vxe.custom.setting.colTitle')),
+                    allowResizable
+                      ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
+                      : createCommentVNode(),
                     allowFixed
                       ? h('th', {}, getI18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
                       : createCommentVNode()

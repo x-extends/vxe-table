@@ -2,10 +2,11 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { toFilters } from './util'
 import { getFuncText } from '../../ui/src/utils'
+import { warnLog, errLog } from '../../ui/src/log'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
-const { getI18n, formats, log } = VxeUI
+const { getI18n, formats } = VxeUI
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
@@ -16,16 +17,16 @@ export class ColumnInfo {
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
       if (_vm.type && types.indexOf(_vm.type) === -1) {
-        log.warn('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
+        warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
       }
       if (XEUtils.isBoolean(_vm.cellRender) || (_vm.cellRender && !XEUtils.isObject(_vm.cellRender))) {
-        log.warn('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
+        warnLog('vxe.error.errProp', [`column.cell-render=${_vm.cellRender}`, 'column.cell-render={}'])
       }
       if (XEUtils.isBoolean(_vm.editRender) || (_vm.editRender && !XEUtils.isObject(_vm.editRender))) {
-        log.warn('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
+        warnLog('vxe.error.errProp', [`column.edit-render=${_vm.editRender}`, 'column.edit-render={}'])
       }
       if (_vm.cellRender && _vm.editRender) {
-        log.warn('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
+        warnLog('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }
       if (_vm.type === 'expand') {
         const { props: tableProps } = $xeTable
@@ -33,19 +34,19 @@ export class ColumnInfo {
         const { computeTreeOpts } = $xeTable.getComputeMaps()
         const treeOpts = computeTreeOpts.value
         if (treeConfig && (treeOpts.showLine || treeOpts.line)) {
-          log.err('vxe.error.errConflicts', ['tree-config.showLine', 'column.type=expand'])
+          errLog('vxe.error.errConflicts', ['tree-config.showLine', 'column.type=expand'])
         }
       }
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
           if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
-            log.err('vxe.error.notFormats', [formatter])
+            errLog('vxe.error.notFormats', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
           const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
           if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
-            log.err('vxe.error.notFormats', [formatter[0]])
+            errLog('vxe.error.notFormats', [formatter[0]])
           }
         }
       }
@@ -126,7 +127,9 @@ export class ColumnInfo {
 
       renderWidth: 0,
       renderHeight: 0,
+      renderResizeWidth: 0,
       resizeWidth: 0, // 手动调整
+
       renderLeft: 0,
       renderArgs: [], // 渲染参数可用于扩展
       model: {},
