@@ -602,7 +602,7 @@ hooks.add('tableEditModule', {
         const { editConfig } = props
         const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
         if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
-          return $xeTable.scrollToRow(row, column).then(() => {
+          // return $xeTable.scrollToRow(row, column).then(() => {
             const cell = $xeTable.getCell(row, column)
             if (cell) {
               editPrivateMethods.handleActived({
@@ -616,7 +616,7 @@ hooks.add('tableEditModule', {
               internalData._lastCallTime = Date.now()
             }
             return nextTick()
-          })
+          // })
         }
         return nextTick()
       },
@@ -784,10 +784,11 @@ hooks.add('tableEditModule', {
                 textRange.select()
               }
             }
-          } else {
+          } 
+          // else {
             // 显示到可视区中
-            $xeTable.scrollToRow(row, column)
-          }
+            // $xeTable.scrollToRow(row, column)
+          // }
         }
       },
       /**
