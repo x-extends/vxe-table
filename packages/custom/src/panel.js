@@ -27,7 +27,7 @@ const renderSimplePanel = (h, _vm) => {
   const { _e, $xetable, customStore } = _vm
   const { customColumnList, customOpts, isMaxFixedColumn } = $xetable
   const { maxHeight } = customStore
-  const { checkMethod, visibleMethod, allowSort, allowFixed, trigger } = customOpts
+  const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
   const colVNs = []
   const customWrapperOns = {}
   // hover 触发
@@ -58,7 +58,7 @@ const renderSimplePanel = (h, _vm) => {
             dragover: _vm.sortDragoverEvent
           }
         }, [
-          h('div', {
+          allowVisible ? h('div', {
             class: ['vxe-table-custom--checkbox-option', {
               'is--checked': isChecked,
               'is--indeterminate': isIndeterminate,
@@ -78,7 +78,7 @@ const renderSimplePanel = (h, _vm) => {
             h('span', {
               class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
             })
-          ]),
+          ]) : _e(),
           allowSort && column.level === 1
             ? h('div', {
               class: 'vxe-table-custom--sort-option'
@@ -148,9 +148,14 @@ const renderSimplePanel = (h, _vm) => {
   const isAllIndeterminate = customStore.isIndeterminate
   return h('div', {
     key: 'simple',
-    class: ['vxe-table-custom-wrapper', {
+    class: ['vxe-table-custom-wrapper', `placement--${placement}`, {
       'is--active': customStore.visible
-    }]
+    }],
+    style: maxHeight && !['left', 'right'].includes(placement)
+      ? {
+          maxHeight: `${maxHeight}px`
+        }
+      : {}
   }, customStore.visible
     ? [
         h('ul', {
@@ -159,25 +164,28 @@ const renderSimplePanel = (h, _vm) => {
           h('li', {
             class: 'vxe-table-custom--option'
           }, [
-            h('div', {
-              class: ['vxe-table-custom--checkbox-option', {
-                'is--checked': isAllChecked,
-                'is--indeterminate': isAllIndeterminate
-              }],
-              attrs: {
-                title: GlobalConfig.i18n('vxe.table.allTitle')
-              },
-              on: {
-                click: _vm.allCustomEvent
-              }
-            }, [
-              h('span', {
-                class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
-              }),
-              h('span', {
+            allowVisible
+              ? h('div', {
+                class: ['vxe-table-custom--checkbox-option', {
+                  'is--checked': isAllChecked,
+                  'is--indeterminate': isAllIndeterminate
+                }],
+                attrs: {
+                  title: GlobalConfig.i18n('vxe.table.allTitle')
+                },
+                on: {
+                  click: _vm.allCustomEvent
+                }
+              }, [
+                h('span', {
+                  class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
+                }),
+                h('span', {
+                  class: 'vxe-checkbox--label'
+                }, GlobalConfig.i18n('vxe.toolbar.customAll'))
+              ]) : h('span', {
                 class: 'vxe-checkbox--label'
-              }, GlobalConfig.i18n('vxe.toolbar.customAll'))
-            ])
+              }, GlobalConfig.i18n('vxe.table.customTitle'))
           ])
         ]),
         h('div', {
@@ -190,11 +198,6 @@ const renderSimplePanel = (h, _vm) => {
               name: 'vxe-table-custom--list',
               tag: 'ul'
             },
-            style: maxHeight
-              ? {
-                  maxHeight: `${maxHeight}px`
-                }
-              : {},
             on: customWrapperOns
           }, colVNs),
           h('div', {
@@ -235,7 +238,7 @@ const renderSimplePanel = (h, _vm) => {
 const renderPopupPanel = (h, _vm) => {
   const { _e, $xetable, customStore } = _vm
   const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xetable
-  const { allowSort, allowFixed, checkMethod, visibleMethod } = customOpts
+  const { allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
   const trVNs = []
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
     const isVisible = visibleMethod ? visibleMethod({ column }) : true
@@ -260,7 +263,7 @@ const renderPopupPanel = (h, _vm) => {
             dragover: _vm.sortDragoverEvent
           }
         }, [
-          h('td', {
+          allowVisible ? h('td', {
             class: 'vxe-table-custom-popup--column-item col--visible'
           }, [
             h('div', {
@@ -284,7 +287,7 @@ const renderPopupPanel = (h, _vm) => {
                 class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
               })
             ])
-          ]),
+          ]) : _e(),
           allowSort
             ? h('td', {
               class: 'vxe-table-custom-popup--column-item col--sort'
@@ -304,7 +307,7 @@ const renderPopupPanel = (h, _vm) => {
                     class: GlobalConfig.icon.TABLE_CUSTOM_SORT
                   })
                 ])
-                : null
+                : h('span', '-')
             ])
             : _e(),
           h('td', {
@@ -317,12 +320,33 @@ const renderPopupPanel = (h, _vm) => {
               }
             }, colTitle)
           ]),
+          allowResizable
+            ? h('td', {
+              class: 'vxe-table-custom-popup--column-item col--resizable'
+            }, [
+              !isChecked || (column.children && column.children.length)
+                ? h('span', '-')
+                : h('vxe-input', {
+                  props: {
+                    type: 'integer',
+                    min: 40,
+                    value: column.renderResizeWidth
+                  },
+                  on: {
+                    modelValue (value) {
+                      column.renderResizeWidth = Math.max(40, Number(value))
+                    }
+                  }
+                })
+            ])
+            : _e(),
           allowFixed
             ? h('td', {
               class: 'vxe-table-custom-popup--column-item col--fixed'
             }, [
-              !parent
-                ? h('vxe-radio-group', {
+              parent
+                ? h('span', '-')
+                : h('vxe-radio-group', {
                   props: {
                     value: column.renderFixed || '',
                     type: 'button',
@@ -342,7 +366,6 @@ const renderPopupPanel = (h, _vm) => {
                   // }
                   }
                 })
-                : null
             ])
             : _e()
         ])
@@ -357,10 +380,10 @@ const renderPopupPanel = (h, _vm) => {
       className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
       value: customStore.visible,
       title: GlobalConfig.i18n('vxe.custom.cstmTitle'),
-      width: '40vw',
-      minWidth: 520,
-      height: '50vh',
-      minHeight: 300,
+      width: 700,
+      minWidth: 700,
+      height: 400,
+      minHeight: 400,
       mask: true,
       lockView: true,
       showFooter: true,
@@ -384,11 +407,11 @@ const renderPopupPanel = (h, _vm) => {
           }, [
             h('table', {}, [
               h('colgroup', {}, [
-                h('col', {
+                allowVisible ? h('col', {
                   style: {
                     width: '80px'
                   }
-                }),
+                }) : _e(),
                 allowSort
                   ? h('col', {
                     style: {
@@ -401,6 +424,13 @@ const renderPopupPanel = (h, _vm) => {
                     minWidth: '120px'
                   }
                 }),
+                allowResizable
+                  ? h('col', {
+                    style: {
+                      width: '140px'
+                    }
+                  })
+                  : _e(),
                 allowFixed
                   ? h('col', {
                     style: {
@@ -411,7 +441,7 @@ const renderPopupPanel = (h, _vm) => {
               ]),
               h('thead', {}, [
                 h('tr', {}, [
-                  h('th', {}, [
+                  allowVisible ? h('th', {}, [
                     h('div', {
                       class: ['vxe-table-custom--checkbox-option', {
                         'is--checked': isAllChecked,
@@ -432,7 +462,7 @@ const renderPopupPanel = (h, _vm) => {
                         class: 'vxe-checkbox--label'
                       }, GlobalConfig.i18n('vxe.toolbar.customAll'))
                     ])
-                  ]),
+                  ]) : _e(),
                   allowSort
                     ? h('th', {}, [
                       h('span', {
@@ -454,6 +484,9 @@ const renderPopupPanel = (h, _vm) => {
                     ])
                     : _e(),
                   h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colTitle')),
+                  allowResizable
+                    ? h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colResizable'))
+                    : _e(),
                   allowFixed
                     ? h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
                     : _e()
@@ -563,18 +596,34 @@ export default {
         updateStore({
           id,
           type,
-          storeData: this.getStoreData()
+          storeData: $xetable.getCustomStoreData()
         })
       }
     },
     confirmCustomEvent  (evnt) {
       const { $xetable } = this
-      const { customColumnList } = $xetable
-      customColumnList.forEach((column, index) => {
-        const sortIndex = index + 1
-        column.renderSortNumber = sortIndex
-        column.fixed = column.renderFixed
-        column.visible = column.renderVisible
+      const { customOpts, customColumnList } = $xetable
+      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
+        if (!parent) {
+          if (allowSort) {
+            const sortIndex = index + 1
+            column.renderSortNumber = sortIndex
+          }
+          if (allowFixed) {
+            column.fixed = column.renderFixed
+          }
+        }
+        if (allowResizable) {
+          if (column.renderVisible && (!column.children || column.children.length)) {
+            if (column.renderResizeWidth !== column.renderWidth) {
+              column.resizeWidth = column.renderResizeWidth
+            }
+          }
+        }
+        if (allowVisible) {
+          column.visible = column.renderVisible
+        }
       })
       $xetable.closeCustom()
       $xetable.emitCustomEvent('confirm', evnt)
@@ -582,17 +631,27 @@ export default {
     },
     cancelCustomEvent  (evnt) {
       const { $xetable } = this
-      const { customStore, customColumnList } = $xetable
+      const { customStore, customOpts, customColumnList } = $xetable
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
+      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
       XEUtils.eachTree(customColumnList, column => {
         const colid = column.getKey()
         const visible = !!oldVisibleMaps[colid]
         const fixed = oldFixedMaps[colid] || ''
-        column.renderVisible = visible
-        column.visible = visible
-        column.renderFixed = fixed
-        column.fixed = fixed
-        column.renderSortNumber = oldSortMaps[colid] || 0
+        if (allowVisible) {
+          column.renderVisible = visible
+          column.visible = visible
+        }
+        if (allowFixed) {
+          column.renderFixed = fixed
+          column.fixed = fixed
+        }
+        if (allowSort) {
+          column.renderSortNumber = oldSortMaps[colid] || 0
+        }
+        if (allowResizable) {
+          column.renderResizeWidth = column.renderWidth
+        }
       }, { children: 'children' })
       $xetable.closeCustom()
       $xetable.emitCustomEvent('cancel', evnt)
@@ -602,7 +661,7 @@ export default {
       $xetable.resetColumn(true)
       $xetable.closeCustom()
       $xetable.emitCustomEvent('reset', evnt)
-      this.handleSaveStore('confirm')
+      this.handleSaveStore('reset')
     },
     resetCustomEvent  (evnt) {
       if (VXETable.modal) {

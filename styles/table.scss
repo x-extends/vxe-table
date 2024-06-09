@@ -1032,8 +1032,18 @@
       padding-left: 0.5em;
     }
   }
+  .vxe-body--expanded-row {
+    &.is--padding {
+      & > .vxe-body--expanded-column {
+        & > .vxe-body--expanded-cell {
+          padding: $vxe-table-expand-padding-default;
+        }
+      }
+    }
+  }
   .vxe-body--expanded-column {
     border-bottom: $vxe-table-border-width solid $vxe-table-border-color;
+    border-right: $vxe-table-border-width solid $vxe-table-border-color;
     &.col--ellipsis {
       & > .vxe-body--expanded-cell {
         overflow: hidden;

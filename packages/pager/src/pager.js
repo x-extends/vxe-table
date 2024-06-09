@@ -34,6 +34,10 @@ export default {
     autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
     transfer: { type: Boolean, default: () => GlobalConfig.pager.transfer },
     className: [String, Function],
+    pageSizePlacement: {
+      type: String,
+      default: () => GlobalConfig.pager.pageSizePlacement
+    },
     // 自定义图标
     iconPrevPage: String,
     iconJumpPrev: String,
@@ -271,7 +275,7 @@ export default {
         class: 'vxe-pager--sizes',
         props: {
           value: this.pageSize,
-          placement: 'top',
+          placement: this.pageSizePlacement,
           transfer: this.transfer,
           options: this.sizeList
         },

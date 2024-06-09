@@ -11,6 +11,7 @@ export default {
         const colid = column.getKey()
         column.renderFixed = column.fixed
         column.renderVisible = column.visible
+        column.renderResizeWidth = column.renderWidth
         sortMaps[colid] = column.renderSortNumber
         fixedMaps[colid] = column.fixed
         visibleMaps[colid] = column.visible
@@ -36,25 +37,19 @@ export default {
       return this.$nextTick()
     },
     calcMaxHeight  () {
-      const { $refs, customStore } = this
-      const customWrapperElem = $refs.customWrapper ? $refs.customWrapper.$el : null
-      const headElem = $refs.tableHeader ? $refs.tableHeader.$el : null
-      const bodyElem = $refs.tableBody ? $refs.tableBody.$el : null
+      const { $el, customStore } = this
       // 判断面板不能大于表格高度
       let tableHeight = 0
-      if (headElem) {
-        tableHeight += headElem.clientHeight
+      if ($el) {
+        tableHeight = $el.clientHeight - 30
       }
-      if (bodyElem) {
-        tableHeight += bodyElem.clientHeight
-      }
-      customStore.maxHeight = Math.max(0, customWrapperElem ? Math.min(customWrapperElem.clientHeight, tableHeight - 80) : 0)
+      customStore.maxHeight = Math.max(4, tableHeight)
     },
     checkCustomStatus () {
       const { customStore, collectColumn, customOpts } = this
       const { checkMethod } = customOpts
-      customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
-      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
+      customStore.isAll = collectColumn.every((column) => (checkMethod ? !checkMethod({ column }) : false) || column.renderVisible)
+      customStore.isIndeterminate = !customStore.isAll && collectColumn.some((column) => (!checkMethod || checkMethod({ column })) && (column.renderVisible || column.halfVisible))
     },
     emitCustomEvent (type, evnt) {
       const comp = this.$xegrid || this

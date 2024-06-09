@@ -1596,6 +1596,7 @@ const Methods = {
       if (!checkMethod || checkMethod({ column })) {
         column.visible = column.defaultVisible
       }
+      column.renderResizeWidth = column.renderWidth
     })
     if (opts.resizable) {
       this.saveCustomResizable(true)
@@ -1797,6 +1798,61 @@ const Methods = {
       columnVisibleStorageMap[id] = [colHides.join(',')].concat(colShows.length ? [colShows.join(',')] : []).join('|') || undefined
       localStorage.setItem(visibleStorageKey, XEUtils.toJSONString(columnVisibleStorageMap))
     }
+  },
+  getCustomStoreData () {
+    const { id, collectColumn, customOpts } = this
+    const { checkMethod } = customOpts
+    const resizableData = {}
+    const sortData = {}
+    const visibleData = {}
+    const fixedData = {}
+    const storeData = {
+      resizableData,
+      sortData,
+      visibleData,
+      fixedData
+    }
+    if (!id) {
+      errLog('vxe.error.reqProp', ['id'])
+      return storeData
+    }
+    XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+      // 排序只支持一级
+      if (!parent) {
+        collectColumn.forEach((column) => {
+          const colKey = column.getKey()
+          if (colKey) {
+            sortData[colKey] = column.renderSortNumber
+          }
+        })
+      }
+      if (column.resizeWidth) {
+        const colKey = column.getKey()
+        if (colKey) {
+          resizableData[colKey] = column.renderWidth
+        }
+      }
+      if (column.fixed && column.fixed !== column.defaultFixed) {
+        const colKey = column.getKey()
+        if (colKey) {
+          fixedData[colKey] = column.fixed
+        }
+      }
+      if (!checkMethod || checkMethod({ column })) {
+        if (!column.visible && column.defaultVisible) {
+          const colKey = column.getKey()
+          if (colKey) {
+            visibleData[colKey] = false
+          }
+        } else if (column.visible && !column.defaultVisible) {
+          const colKey = column.getKey()
+          if (colKey) {
+            visibleData[colKey] = true
+          }
+        }
+      }
+    })
+    return storeData
   },
   saveCustomResizable (isReset) {
     const { id, collectColumn, customConfig, customOpts } = this

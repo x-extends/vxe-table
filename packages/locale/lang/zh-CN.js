@@ -117,6 +117,7 @@ export default {
         colSort: '排序',
         sortHelpTip: '点击并拖动图标可以调整列的排序',
         colTitle: '标题',
+        colResizable: '列宽（像素）',
         colVisible: '是否显示',
         colFixed: '冻结列（最多 {0} 列）',
         fixedLeft: '左侧',

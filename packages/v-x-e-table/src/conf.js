@@ -59,9 +59,12 @@ export default {
     //   visibleMethod () {}
     // },
     customConfig: {
+      allowVisible: true,
+      allowResizable: true,
       allowFixed: true,
       allowSort: true,
-      showFooter: true
+      showFooter: true,
+      placement: 'topRight'
       //  storage: false,
       //  checkMethod () {}
     },
@@ -273,6 +276,7 @@ export default {
     leaveDelay: 300
   },
   pager: {
+    pageSizePlacement: 'top'
     // size: null,
     // autoHidden: false,
     // perfect: true,

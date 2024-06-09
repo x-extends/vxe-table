@@ -117,6 +117,7 @@ export default {
         colSort: 'ソート',
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
         colTitle: 'タイトル',
+        colResizable: 'Column width (px)',
         colVisible: '表示',
         colFixed: '冻结列（最多 {0} 列）',
         fixedLeft: '左側',

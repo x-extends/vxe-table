@@ -389,7 +389,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     )
     // 如果行被展开了
     if (isExpandRow) {
-      const { height: expandHeight } = expandOpts
+      const { height: expandHeight, padding } = expandOpts
       const cellStyle = {}
       if (expandHeight) {
         cellStyle.height = `${expandHeight}px`
@@ -402,7 +402,9 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
       const expandParams = { $table: $xetable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
       rows.push(
         h('tr', {
-          class: 'vxe-body--expanded-row',
+          class: ['vxe-body--expanded-row', {
+            'is--padding': padding
+          }],
           key: `expand_${rowid}`,
           style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(expandParams) : rowStyle) : null,
           on: trOn
