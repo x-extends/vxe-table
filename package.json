@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "4.7.7",
+  "version": "4.7.8-beta.1",
   "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟树、列拖拽，懒加载、快捷菜单、数据校验、树形结构、打印、导入导出、自定义模板、渲染器、JSON 配置式...",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
@@ -27,9 +27,6 @@
   "jsdelivr": "lib/index.umd.js",
   "style": "lib/style.css",
   "typings": "types/index.d.ts",
-  "dependencies": {
-    "vxe-pc-ui": "^4.0.0"
-  },
   "devDependencies": {
     "@types/resize-observer-browser": "^0.1.11",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -64,6 +61,7 @@
     "sass": "^1.75.0",
     "sass-loader": "^14.2.0",
     "typescript": "~4.5.5",
+    "vxe-pc-ui": "^4.0.0",
     "vue": "3.4.27",
     "vue-router": "^4.3.2"
   },
