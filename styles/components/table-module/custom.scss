@@ -59,19 +59,19 @@
   border: 1px solid var(--vxe-ui-table-border-color);
   border-radius: var(--vxe-ui-border-radius);
   box-shadow: var(--vxe-ui-base-popup-box-shadow);
-  &.placement--topLeft {
+  &.placement--top-left {
     top: 2px;
     left: 2px;
   }
-  &.placement--topRight {
+  &.placement--top-right {
     top: 2px;
     right: 2px;
   }
-  &.placement--bottomLeft {
+  &.placement--bottom-left {
     bottom: 2px;
     left: 2px;
   }
-  &.placement--bottomRight {
+  &.placement--bottom-right {
     bottom: 2px;
     right: 2px;
   }

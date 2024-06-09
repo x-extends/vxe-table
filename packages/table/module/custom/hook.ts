@@ -20,7 +20,7 @@ VxeUI.hooks.add('tableCustomModule', {
       // 判断面板不能大于表格高度
       let tableHeight = 0
       if (el) {
-        tableHeight = el.clientHeight - 60
+        tableHeight = el.clientHeight - 30
       }
       customStore.maxHeight = Math.max(4, tableHeight)
     }

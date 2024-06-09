@@ -413,7 +413,7 @@ export default defineComponent({
         // 如果行被展开了
         if (isExpandRow) {
           const expandOpts = computeExpandOpts.value
-          const { height: expandHeight } = expandOpts
+          const { height: expandHeight, padding } = expandOpts
           const cellStyle: any = {}
           if (expandHeight) {
             cellStyle.height = `${expandHeight}px`
@@ -426,7 +426,9 @@ export default defineComponent({
           const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
           rows.push(
             h('tr', {
-              class: 'vxe-body--expanded-row',
+              class: ['vxe-body--expanded-row', {
+                'is--padding': padding
+              }],
               key: `expand_${rowid}`,
               style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(expandParams) : rowStyle) : null,
               ...trOn

@@ -63,7 +63,7 @@ VxeUI.setConfig({
       allowFixed: true,
       allowSort: true,
       showFooter: true,
-      placement: 'topRight'
+      placement: 'top-right'
       //  storage: false,
       //  checkMethod () {}
     },
