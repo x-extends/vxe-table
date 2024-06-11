@@ -3,37 +3,35 @@ import { columnProps } from './column'
 import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
-import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 export default defineComponent({
   name: 'VxeColgroup',
   props: columnProps,
   setup (props, { slots }) {
     const refElem = ref() as Ref<HTMLDivElement>
-    const $xetable = inject('$xetable', {} as VxeTableConstructor & VxeTablePrivateMethods)
-    const colgroup = inject('xecolgroup', null as XEColumnInstance | null)
-    const column = Cell.createColumn($xetable, props)
+    const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
+    const parentColgroup = inject('$xeColgroup', null as XEColumnInstance | null)
+    const column = Cell.createColumn($xeTable, props)
     const columnSlots: {
       header?: Slot;
     } = {}
+
     if (slots.header) {
       columnSlots.header = slots.header
     }
-    const xecolumn: XEColumnInstance = { column }
+
     column.slots = columnSlots
     column.children = []
 
-    provide('xecolgroup', xecolumn)
-    provide('$xegrid', null)
-
-    watchColumn($xetable, props, column)
+    watchColumn($xeTable, props, column)
 
     onMounted(() => {
-      assemColumn($xetable, refElem.value, column, colgroup)
+      assemColumn($xeTable, refElem.value, column, parentColgroup)
     })
 
     onUnmounted(() => {
-      destroyColumn($xetable, column)
+      destroyColumn($xeTable, column)
     })
 
     const renderVN = () => {
@@ -41,6 +39,11 @@ export default defineComponent({
         ref: refElem
       }, slots.default ? slots.default() : [])
     }
+
+    const $xeColgroup = { column }
+
+    provide('$xeColgroup', $xeColgroup)
+    provide('$xeGrid', null)
 
     return renderVN
   }

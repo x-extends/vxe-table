@@ -1,15 +1,12 @@
 .DS_Store
 .history
 node_modules
+/lib_temp
+/packages_temp
 /dist
 /es
 /lib
 /docs
-/public/v1
-/public/v2
-/public/v3
-/public/v3.5
-/public/v4
 package-lock.json
 yarn.lock
 

@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-A [vue](https://www.npmjs.com/package/vue) based PC form component, support add delete change check, virtual tree, column drag and drop, lazy loading, shortcut menu, data verification, print export, form rendering, custom template, renderer, JSON configuration...
+A [vue](https://www.npmjs.com/package/vue) based PC form component, support add delete change check, virtual tree, column drag and drop, lazy loading, shortcut menu, data verification, import/export/print, form rendering, custom template, renderer, JSON configuration...
 
 * Design concept
   * Efficient and concise API design for modern browsers.
@@ -22,8 +22,10 @@ A [vue](https://www.npmjs.com/package/vue) based PC form component, support add 
 * Plan
   * [x] ~~v1.0 Based on vue2.6, Support for all major browsers.~~
   * [x] ~~v2.0 Based on vue2.6, Support for all major browsers.~~
-  * [x] v3.0 Based on vue2.6, supports modern browsers and retains compatibility with IE11.
-  * [x] v4.0 Based on vue3.x, Only support modern browser, not IE.
+  * [x] v3.0 Based on vue2.6+, supports modern browsers and retains compatibility with IE11.
+  * [ ] v3.9 Based on vue2.6+, Reconstruct and split the components into [Vxe table](https://github.com/x-extends/vxe-table) and [Vxe UI](https://github.com/x-extends/vxe-pc-ui). Form Designer, list designer, process designer will be supported.
+  * [x] v4.0 Based on vue3.2+, Only support modern browser, not IE.
+  * [x] v4.7 Based on vue3.2+, Reconstruct and split the components into [Vxe table](https://github.com/x-extends/vxe-table) and [Vxe UI](https://github.com/x-extends/vxe-pc-ui). Form Designer, list designer, process designer will be supported.
 
 ## Browser Support
 
@@ -90,10 +92,10 @@ Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.ne
 
 ```javascript
 import { createApp } from 'vue'
-import VXETable from 'vxe-table'
+import VxeUITable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 
-createApp(App).use(VXETable).mount('#app')
+createApp(App).use(VxeUITable).mount('#app')
 ```
 
 ### CDN

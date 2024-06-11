@@ -1,4 +1,4 @@
-import { VXETable } from '../../types/v-x-e-table'
+import VxeUI from '../ui'
 
-export * from '../../types/v-x-e-table'
-export default VXETable
+export * from '../ui'
+export default VxeUI

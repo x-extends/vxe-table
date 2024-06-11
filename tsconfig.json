@@ -4,6 +4,7 @@
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
+    "jsxImportSource": "vue",
     "importHelpers": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
@@ -31,8 +32,8 @@
     ]
   },
   "include": [
-    "packages/**/*.ts",
-    "packages/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "examples/**/*.ts",
     "examples/**/*.tsx",
     "examples/**/*.vue",

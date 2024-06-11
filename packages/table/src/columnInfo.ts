@@ -1,20 +1,20 @@
 import XEUtils from 'xe-utils'
-import GlobalConfig from '../../v-x-e-table/src/conf'
-import { formats } from '../../v-x-e-table/src/formats'
+import { VxeUI } from '../../ui'
 import { toFilters } from './util'
-import { getFuncText } from '../../tools/utils'
-import { warnLog, errLog } from '../../tools/log'
+import { getFuncText } from '../../ui/src/utils'
+import { warnLog, errLog } from '../../ui/src/log'
 
-import { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types/all'
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
+const { getI18n, formats } = VxeUI
 export class ColumnInfo {
   /* eslint-disable @typescript-eslint/no-use-before-define */
-  constructor ($xetable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
-    const $xegrid = $xetable.xegrid
+  constructor ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, _vm: any, { renderHeader, renderCell, renderFooter, renderData }: any = {}) {
+    const $xeGrid = $xeTable.xegrid
     const formatter: string | any[] = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
       if (_vm.type && types.indexOf(_vm.type) === -1) {
         warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])
@@ -29,9 +29,9 @@ export class ColumnInfo {
         warnLog('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }
       if (_vm.type === 'expand') {
-        const { props: tableProps } = $xetable
+        const { props: tableProps } = $xeTable
         const { treeConfig } = tableProps
-        const { computeTreeOpts } = $xetable.getComputeMaps()
+        const { computeTreeOpts } = $xeTable.getComputeMaps()
         const treeOpts = computeTreeOpts.value
         if (treeConfig && (treeOpts.showLine || treeOpts.line)) {
           errLog('vxe.error.errConflicts', ['tree-config.showLine', 'column.type=expand'])
@@ -103,6 +103,7 @@ export class ColumnInfo {
       halfVisible: false,
       defaultVisible: visible,
       defaultFixed: _vm.fixed,
+
       checked: false,
       halfChecked: false,
       disabled: false,
@@ -121,9 +122,14 @@ export class ColumnInfo {
       sortNumber: 0, // 用于记录自定义列顺序
       renderSortNumber: 0, // 用于记录自定义列顺序
 
+      renderFixed: '',
+      renderVisible: false,
+
       renderWidth: 0,
       renderHeight: 0,
+      renderResizeWidth: 0,
       resizeWidth: 0, // 手动调整
+
       renderLeft: 0,
       renderArgs: [], // 渲染参数可用于扩展
       model: {},
@@ -134,17 +140,17 @@ export class ColumnInfo {
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots
     })
-    if ($xegrid) {
-      const { computeProxyOpts } = $xegrid.getComputeMaps()
+    if ($xeGrid) {
+      const { computeProxyOpts } = $xeGrid.getComputeMaps()
       const proxyOpts = computeProxyOpts.value
       if (proxyOpts.beforeColumn) {
-        proxyOpts.beforeColumn({ $grid: $xegrid, column: this })
+        proxyOpts.beforeColumn({ $grid: $xeGrid, column: this })
       }
     }
   }
 
   getTitle () {
-    return getFuncText(this.title || (this.type === 'seq' ? GlobalConfig.i18n('vxe.table.seqTitle') : ''))
+    return getFuncText(this.title || (this.type === 'seq' ? getI18n('vxe.table.seqTitle') : ''))
   }
 
   getKey () {

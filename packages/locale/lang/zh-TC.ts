@@ -1,3 +1,7 @@
+/**
+ * v4保留兼容，已废弃，即将删除文件
+ * @deprecated
+ */
 export default {
   vxe: {
     base: {

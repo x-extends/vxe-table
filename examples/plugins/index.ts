@@ -1,2 +1,0 @@
-import './utils'
-import './table'

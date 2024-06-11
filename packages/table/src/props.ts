@@ -1,7 +1,9 @@
 import { PropType } from 'vue'
-import GlobalConfig from '../../v-x-e-table/src/conf'
+import { VxeUI } from '../../ui'
 
-import { VxeTablePropTypes } from '../../../types/all'
+import type { VxeTablePropTypes } from '../../../types'
+
+const { getConfig } = VxeUI
 
 export default {
   /** 基本属性 */
@@ -11,39 +13,39 @@ export default {
   // 表格的高度
   height: [Number, String] as PropType<VxeTablePropTypes.Height>,
   // 表格的最小高度
-  minHeight: { type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>, default: () => GlobalConfig.table.minHeight },
+  minHeight: { type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>, default: () => getConfig().table.minHeight },
   // 表格的最大高度
   maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
   // 已废弃，被 column-config.resizable 替换
-  resizable: { type: Boolean as PropType<VxeTablePropTypes.Resizable>, default: () => GlobalConfig.table.resizable },
+  resizable: { type: Boolean as PropType<VxeTablePropTypes.Resizable>, default: () => getConfig().table.resizable },
   // 是否带有斑马纹
-  stripe: { type: Boolean as PropType<VxeTablePropTypes.Stripe>, default: () => GlobalConfig.table.stripe },
+  stripe: { type: Boolean as PropType<VxeTablePropTypes.Stripe>, default: () => getConfig().table.stripe },
   // 是否带有边框
-  border: { type: [Boolean, String] as PropType<VxeTablePropTypes.Border>, default: () => GlobalConfig.table.border },
+  border: { type: [Boolean, String] as PropType<VxeTablePropTypes.Border>, default: () => getConfig().table.border },
   // 是否圆角边框
-  round: { type: Boolean as PropType<VxeTablePropTypes.Round>, default: () => GlobalConfig.table.round },
+  round: { type: Boolean as PropType<VxeTablePropTypes.Round>, default: () => getConfig().table.round },
   // 表格的尺寸
-  size: { type: String as PropType<VxeTablePropTypes.Size>, default: () => GlobalConfig.table.size || GlobalConfig.size },
+  size: { type: String as PropType<VxeTablePropTypes.Size>, default: () => getConfig().table.size || getConfig().size },
   // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
-  fit: { type: Boolean as PropType<VxeTablePropTypes.Fit>, default: () => GlobalConfig.table.fit },
+  fit: { type: Boolean as PropType<VxeTablePropTypes.Fit>, default: () => getConfig().table.fit },
   // 表格是否加载中
   loading: Boolean as PropType<VxeTablePropTypes.Loading>,
   // 所有的列对其方式
-  align: { type: String as PropType<VxeTablePropTypes.Align>, default: () => GlobalConfig.table.align },
+  align: { type: String as PropType<VxeTablePropTypes.Align>, default: () => getConfig().table.align },
   // 所有的表头列的对齐方式
-  headerAlign: { type: String as PropType<VxeTablePropTypes.HeaderAlign>, default: () => GlobalConfig.table.headerAlign },
+  headerAlign: { type: String as PropType<VxeTablePropTypes.HeaderAlign>, default: () => getConfig().table.headerAlign },
   // 所有的表尾列的对齐方式
-  footerAlign: { type: String as PropType<VxeTablePropTypes.FooterAlign>, default: () => GlobalConfig.table.footerAlign },
+  footerAlign: { type: String as PropType<VxeTablePropTypes.FooterAlign>, default: () => getConfig().table.footerAlign },
   // 是否显示表头
-  showHeader: { type: Boolean as PropType<VxeTablePropTypes.ShowHeader>, default: () => GlobalConfig.table.showHeader },
+  showHeader: { type: Boolean as PropType<VxeTablePropTypes.ShowHeader>, default: () => getConfig().table.showHeader },
   // （即将废弃）是否要高亮当前选中行
-  highlightCurrentRow: { type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentRow>, default: () => GlobalConfig.table.highlightCurrentRow },
+  highlightCurrentRow: { type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentRow>, default: () => getConfig().table.highlightCurrentRow },
   // （即将废弃）鼠标移到行是否要高亮显示
-  highlightHoverRow: { type: Boolean as PropType<VxeTablePropTypes.HighlightHoverRow>, default: () => GlobalConfig.table.highlightHoverRow },
+  highlightHoverRow: { type: Boolean as PropType<VxeTablePropTypes.HighlightHoverRow>, default: () => getConfig().table.highlightHoverRow },
   // （即将废弃）是否要高亮当前选中列
-  highlightCurrentColumn: { type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentColumn>, default: () => GlobalConfig.table.highlightCurrentColumn },
+  highlightCurrentColumn: { type: Boolean as PropType<VxeTablePropTypes.HighlightCurrentColumn>, default: () => getConfig().table.highlightCurrentColumn },
   // （即将废弃）鼠标移到列是否要高亮显示
-  highlightHoverColumn: { type: Boolean as PropType<VxeTablePropTypes.HighlightHoverColumn>, default: () => GlobalConfig.table.highlightHoverColumn },
+  highlightHoverColumn: { type: Boolean as PropType<VxeTablePropTypes.HighlightHoverColumn>, default: () => getConfig().table.highlightHoverColumn },
   // （即将废弃）激活单元格编辑时是否高亮显示
   highlightCell: Boolean as PropType<VxeTablePropTypes.HighlightCell>,
   // 是否显示表尾合计
@@ -85,11 +87,11 @@ export default {
   // 表尾合并行或列
   footerSpanMethod: Function as PropType<VxeTablePropTypes.FooterSpanMethod>,
   // 设置所有内容过长时显示为省略号
-  showOverflow: { type: [Boolean, String] as PropType<VxeTablePropTypes.ShowOverflow>, default: () => GlobalConfig.table.showOverflow },
+  showOverflow: { type: [Boolean, String] as PropType<VxeTablePropTypes.ShowOverflow>, default: () => getConfig().table.showOverflow },
   // 设置表头所有内容过长时显示为省略号
-  showHeaderOverflow: { type: [Boolean, String] as PropType<VxeTablePropTypes.ShowHeaderOverflow>, default: () => GlobalConfig.table.showHeaderOverflow },
+  showHeaderOverflow: { type: [Boolean, String] as PropType<VxeTablePropTypes.ShowHeaderOverflow>, default: () => getConfig().table.showHeaderOverflow },
   // 设置表尾所有内容过长时显示为省略号
-  showFooterOverflow: { type: [Boolean, String] as PropType<VxeTablePropTypes.ShowFooterOverflow>, default: () => GlobalConfig.table.showFooterOverflow },
+  showFooterOverflow: { type: [Boolean, String] as PropType<VxeTablePropTypes.ShowFooterOverflow>, default: () => getConfig().table.showFooterOverflow },
 
   /** 高级属性 */
   // （即将废弃）columnKey 已废弃，被 column-config.useKey 替换
@@ -97,12 +99,12 @@ export default {
   // （即将废弃）rowKey 已废弃，被 row-config.useKey 替换
   rowKey: Boolean as PropType<VxeTablePropTypes.RowKey>,
   // （即将废弃）rowId 已废弃，被 row-config.keyField 替换
-  rowId: { type: String as PropType<VxeTablePropTypes.RowId>, default: () => GlobalConfig.table.rowId },
+  rowId: { type: String as PropType<VxeTablePropTypes.RowId>, default: () => getConfig().table.rowId },
   zIndex: Number as PropType<VxeTablePropTypes.ZIndex>,
-  emptyText: { type: String as PropType<VxeTablePropTypes.EmptyText>, default: () => GlobalConfig.table.emptyText },
-  keepSource: { type: Boolean as PropType<VxeTablePropTypes.KeepSource>, default: () => GlobalConfig.table.keepSource },
+  emptyText: { type: String as PropType<VxeTablePropTypes.EmptyText>, default: () => getConfig().table.emptyText },
+  keepSource: { type: Boolean as PropType<VxeTablePropTypes.KeepSource>, default: () => getConfig().table.keepSource },
   // 是否自动监听父容器变化去更新响应式表格宽高
-  autoResize: { type: Boolean as PropType<VxeTablePropTypes.AutoResize>, default: () => GlobalConfig.table.autoResize },
+  autoResize: { type: Boolean as PropType<VxeTablePropTypes.AutoResize>, default: () => getConfig().table.autoResize },
   // 是否自动根据状态属性去更新响应式表格宽高
   syncResize: [Boolean, String, Number],
   // 响应式布局配置项
@@ -164,9 +166,9 @@ export default {
   // 纵向虚拟滚动配置项
   scrollY: Object as PropType<VxeTablePropTypes.ScrollY>,
   // （即将废弃）优化相关
-  animat: { type: Boolean as PropType<VxeTablePropTypes.Animat>, default: () => GlobalConfig.table.animat },
+  animat: { type: Boolean as PropType<VxeTablePropTypes.Animat>, default: () => getConfig().table.animat },
   // （可能会被废弃的参数，不要使用）
-  delayHover: { type: Number as PropType<VxeTablePropTypes.DelayHover>, default: () => GlobalConfig.table.delayHover as number },
+  delayHover: { type: Number as PropType<VxeTablePropTypes.DelayHover>, default: () => getConfig().table.delayHover as number },
   // 额外的参数
   params: Object as PropType<VxeTablePropTypes.Params>
 }
