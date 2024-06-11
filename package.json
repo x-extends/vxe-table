@@ -1,7 +1,7 @@
 {
-  "name": "vxe-table",
-  "version": "4.6.15-beta.3",
-  "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟树、列拖拽，懒加载、快捷菜单、数据校验、树形结构、打印导出、自定义模板、渲染器、JSON 配置式...",
+  "name": "vxe-table-cz",
+  "version": "1.0.1",
+  "description": "基于vxe-table 但修复了表格翻页后不能默认勾选的bug",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
     "serve": "vue-cli-service serve",
@@ -19,7 +19,8 @@
     "packages",
     "styles",
     "helper",
-    "scripts"
+    "scripts",
+    "CHANGELOG.md"
   ],
   "main": "lib/index.common.js",
   "module": "es/index.esm.js",
@@ -79,7 +80,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/x-extends/vxe-table.git"
+    "url": "git+https://github.com/WHIPLASHCZ/vxe-table-fix-checkbox.git"
   },
   "keywords": [
     "vxe-table",
