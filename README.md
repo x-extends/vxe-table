@@ -1,4 +1,8 @@
-# vxe-table
+# vxe-table-cz
+
+该项目fork自vxe-table，在此基础上修复了一些bug。  
+vxe-table原仓库：https://github.com/x-extends/vxe-table.git  
+vxe-table-cz仓库：https://github.com/WHIPLASHCZ/vxe-table-fix-checkbox
 
 简体中文 | [繁體中文](README.zh-TW.md) | [English](README.en.md)  
 
@@ -83,6 +87,12 @@
 
 版本：[vue](https://www.npmjs.com/package/vue) 3.x
 
+安装vxe-table-cz：
+```shell
+npm install vxe-table-cz
+```
+
+安装原生vxe-table：
 ```shell
 npm install vxe-table
 ```

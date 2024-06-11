@@ -2388,6 +2388,14 @@ export default defineComponent({
     }
 
     /**
+     * 当翻页、数据重新加载后 加载默认勾选
+     */
+    const handleReLoadDefaults = () => {
+      handleDefaultSelectionChecked()
+      // handleDefaultRadioChecked()
+    }
+
+    /**
      * 处理初始化的默认行为
      * 只会执行一次
      */
@@ -6515,6 +6523,7 @@ export default defineComponent({
         if (!initStatus) {
           handleLoadDefaults()
         }
+        tableMethods.dispatchEvent('load-table-data', { handleReLoadDefaults }, null)
         if (!inited) {
           handleInitDefaults()
         }
