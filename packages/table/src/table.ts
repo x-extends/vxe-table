@@ -5501,6 +5501,7 @@ export default defineComponent({
         tablePrivateMethods.saveCustomVisible()
         tablePrivateMethods.saveCustomSort()
         tablePrivateMethods.analyColumnWidth()
+        tablePrivateMethods.saveCustomResizable()
         return tableMethods.refreshColumn(true)
       },
       handleUpdateDataQueue () {

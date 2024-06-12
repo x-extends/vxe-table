@@ -77,6 +77,7 @@ export default defineComponent({
           if (column.renderVisible && (!column.children || column.children.length)) {
             if (column.renderResizeWidth !== column.renderWidth) {
               column.resizeWidth = column.renderResizeWidth
+              column.renderWidth = column.renderResizeWidth
             }
           }
         }
@@ -620,9 +621,9 @@ export default defineComponent({
         className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
         modelValue: customStore.visible,
         title: getI18n('vxe.custom.cstmTitle'),
-        width: 700,
+        width: 900,
         minWidth: 700,
-        height: 400,
+        height: 500,
         minHeight: 400,
         mask: true,
         lockView: true,
