@@ -49,7 +49,7 @@ export default {
     table: {
       emptyText: 'データがありません',
       allTitle: '全て選択/取消',
-      seqTitle: '#',
+      seqTitle: 'S/N',
       confirmFilter: 'OK',
       resetFilter: 'リセット',
       allFilter: '全て',
