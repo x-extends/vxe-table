@@ -116,7 +116,7 @@ export default defineComponent({
         tableInternalData._lastResizeTime = Date.now()
         $xeTable.analyColumnWidth()
         $xeTable.recalculate(true).then(() => {
-          $xeTable.saveCustomResizable()
+          $xeTable.saveCustomStore('update:visible')
           $xeTable.updateCellAreas()
           $xeTable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
         })
