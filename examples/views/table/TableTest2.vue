@@ -9,6 +9,8 @@
       highlight-hover-row
       height="400"
       ref="tableRef"
+      id="bbbbb"
+      :custom-config="{storage:true}"
       :loading="demo1.loading"
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
@@ -23,7 +25,7 @@
         </vxe-column>
         <vxe-column field="name" title="Name" sortable></vxe-column>
       </vxe-colgroup>
-      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="name1" title="Name1" sortable></vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
         field="age"

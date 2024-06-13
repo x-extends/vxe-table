@@ -19,7 +19,7 @@ export default defineComponent({
   setup (props) {
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { props: tableProps, reactData } = $xeTable
+    const { reactData } = $xeTable
     const { computeCustomOpts, computeColumnOpts, computeIsMaxFixedColumn } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
@@ -46,19 +46,6 @@ export default defineComponent({
       }, 300)
     }
 
-    const handleSaveStore = (type: 'confirm' | 'reset') => {
-      const { id } = tableProps
-      const customOpts = computeCustomOpts.value
-      const { storage, updateStore } = customOpts
-      if (storage && id && updateStore) {
-        updateStore({
-          id,
-          type,
-          storeData: $xeTable.getCustomStoreData()
-        })
-      }
-    }
-
     const confirmCustomEvent = (evnt: Event) => {
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
@@ -77,6 +64,7 @@ export default defineComponent({
           if (column.renderVisible && (!column.children || column.children.length)) {
             if (column.renderResizeWidth !== column.renderWidth) {
               column.resizeWidth = column.renderResizeWidth
+              column.renderWidth = column.renderResizeWidth
             }
           }
         }
@@ -86,7 +74,7 @@ export default defineComponent({
       })
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', evnt)
-      handleSaveStore('confirm')
+      $xeTable.saveCustomStore('confirm')
     }
 
     const cancelCustomEvent = (evnt: Event) => {
@@ -122,7 +110,6 @@ export default defineComponent({
       $xeTable.resetColumn(true)
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('reset', evnt)
-      handleSaveStore('reset')
     }
 
     const resetCustomEvent = (evnt: Event) => {
@@ -164,6 +151,7 @@ export default defineComponent({
       handleOptionCheck(column)
       if (customOpts.immediate) {
         $xeTable.handleCustom()
+        $xeTable.saveCustomStore('update:visible')
       }
       $xeTable.checkCustomStatus()
     }
@@ -497,8 +485,9 @@ export default defineComponent({
       const { customStore } = props
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
-      const { allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+      const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
+      const modalOpts = Object.assign({}, modalOptions)
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const trVNs: VNode[] = []
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
@@ -617,13 +606,13 @@ export default defineComponent({
       const isAllIndeterminate = customStore.isIndeterminate
       return h(resolveComponent('vxe-modal') as VxeModalComponent, {
         key: 'popup',
-        className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
+        className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
         modelValue: customStore.visible,
-        title: getI18n('vxe.custom.cstmTitle'),
-        width: 700,
-        minWidth: 700,
-        height: 400,
-        minHeight: 400,
+        title: modalOpts.title || getI18n('vxe.custom.cstmTitle'),
+        width: modalOpts.width || '50vw',
+        minWidth: modalOpts.minWidth || 700,
+        height: modalOpts.height || '50vh',
+        minHeight: modalOpts.minHeight || 400,
         mask: true,
         lockView: true,
         showFooter: true,

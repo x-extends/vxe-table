@@ -49,7 +49,7 @@ export default {
     table: {
       emptyText: 'No Data',
       allTitle: 'Select all / cancel',
-      seqTitle: '#',
+      seqTitle: 'S/N',
       confirmFilter: 'Confirm',
       resetFilter: 'Reset',
       allFilter: 'All',

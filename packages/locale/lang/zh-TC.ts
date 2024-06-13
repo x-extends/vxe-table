@@ -49,7 +49,7 @@ export default {
     table: {
       emptyText: '暫無資料',
       allTitle: '全選/取消',
-      seqTitle: '#',
+      seqTitle: '序號',
       confirmFilter: '篩選',
       resetFilter: '重置',
       allFilter: '全部',
