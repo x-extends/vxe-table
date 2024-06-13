@@ -249,7 +249,8 @@ export default defineComponent({
         isFooter: false
       },
       scrollVMLoading: false,
-      _isResize: false
+      _isResize: false,
+      _isLoading: false
     })
 
     const internalData: TableInternalData = {
@@ -2493,8 +2494,10 @@ export default defineComponent({
       internalData.collectColumn = collectColumn
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
+      reactData._isLoading = true
       initColumnSort()
       return restoreCustomStorage().then(() => {
+        reactData._isLoading = false
         cacheColumnMap()
         parseColumns().then(() => {
           if (reactData.scrollXLoad) {
@@ -6751,6 +6754,7 @@ export default defineComponent({
       const validTipOpts = computeValidTipOpts.value
       const loadingOpts = computeLoadingOpts.value
       const isMenu = computeIsMenu.value
+      const currLoading = reactData._isLoading || loading
       return h('div', {
         ref: refElem,
         class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
@@ -6772,8 +6776,8 @@ export default defineComponent({
           'is--animat': !!props.animat,
           'is--round': props.round,
           'is--stripe': !treeConfig && stripe,
-          'is--loading': loading,
-          'is--empty': !loading && !tableData.length,
+          'is--loading': currLoading,
+          'is--empty': !currLoading && !tableData.length,
           'is--scroll-y': overflowY,
           'is--scroll-x': overflowX,
           'is--virtual-x': scrollXLoad,
@@ -6870,7 +6874,7 @@ export default defineComponent({
          */
         h(resolveComponent('vxe-loading') as VxeLoadingComponent, {
           class: 'vxe-table--loading',
-          modelValue: loading,
+          modelValue: currLoading,
           icon: loadingOpts.icon,
           text: loadingOpts.text
         }, loadingSlot
