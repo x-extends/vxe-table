@@ -892,12 +892,43 @@ export default defineComponent({
       return num
     }
 
+    const handleCustomRestore = (storeData: VxeTableDefines.CustomStoreData) => {
+      const { tableFullColumn } = internalData
+      let { collectColumn } = internalData
+      const { resizableData, sortData, visibleData, fixedData } = storeData
+      let hasCustomSort = false
+      // 处理还原
+      if (resizableData || sortData || visibleData || fixedData) {
+        tableFullColumn.forEach(column => {
+          const colKey = column.getKey()
+          if (resizableData && XEUtils.isNumber(resizableData[colKey])) {
+            column.resizeWidth = resizableData[colKey]
+          }
+          if (visibleData && XEUtils.isBoolean(visibleData[colKey])) {
+            column.visible = visibleData[colKey]
+          }
+          if (fixedData && fixedData[colKey]) {
+            column.fixed = fixedData[colKey]
+          }
+          if (sortData && XEUtils.isNumber(sortData[colKey])) {
+            hasCustomSort = true
+            column.renderSortNumber = sortData[colKey]
+          }
+        })
+        // 如果自定义了顺序
+        if (hasCustomSort) {
+          collectColumn = XEUtils.orderBy(collectColumn, 'renderSortNumber')
+          internalData.collectColumn = collectColumn
+          internalData.tableFullColumn = getColumnList(collectColumn)
+        }
+      }
+    }
+
     /**
      * 还原自定义列操作状态
      */
-    const restoreCustomStorage = async () => {
+    const restoreCustomStorage = () => {
       const { id, customConfig } = props
-      const { tableFullColumn } = internalData
       const customOpts = computeCustomOpts.value
       const { storage, restoreStore } = customOpts
       const isAllCustom = storage === true
@@ -911,40 +942,18 @@ export default defineComponent({
           errLog('vxe.error.reqProp', ['id'])
           return
         }
-        let storeData: VxeTableDefines.CustomStoreData = getCustomStorageMap(id)
+        const storeData: VxeTableDefines.CustomStoreData = getCustomStorageMap(id)
         if (restoreStore) {
-          storeData = await restoreStore({ id, type: 'restore', storeData })
-        }
-        if (!storeData) {
-          return
-        }
-        let { collectColumn } = internalData
-        const { resizableData, sortData, visibleData, fixedData } = storeData
-        let hasCustomSort = false
-        // 处理还原
-        if (resizableData || sortData || visibleData || fixedData) {
-          tableFullColumn.forEach(column => {
-            const colKey = column.getKey()
-            if (resizableData && XEUtils.isNumber(resizableData[colKey])) {
-              column.resizeWidth = resizableData[colKey]
+          return Promise.resolve(
+            restoreStore({ id, type: 'restore', storeData })
+          ).then(storeData => {
+            if (!storeData) {
+              return
             }
-            if (visibleData && XEUtils.isBoolean(visibleData[colKey])) {
-              column.visible = visibleData[colKey]
-            }
-            if (fixedData && fixedData[colKey]) {
-              column.fixed = fixedData[colKey]
-            }
-            if (sortData && XEUtils.isNumber(sortData[colKey])) {
-              hasCustomSort = true
-              column.renderSortNumber = sortData[colKey]
-            }
-          })
-          // 如果自定义了顺序
-          if (hasCustomSort) {
-            collectColumn = XEUtils.orderBy(collectColumn, 'renderSortNumber')
-            internalData.collectColumn = collectColumn
-            internalData.tableFullColumn = getColumnList(collectColumn)
-          }
+            return handleCustomRestore(storeData)
+          }).catch(e => e)
+        } else {
+          return handleCustomRestore(storeData)
         }
       }
     }
@@ -2496,7 +2505,9 @@ export default defineComponent({
       internalData.tableFullColumn = tableFullColumn
       reactData._isLoading = true
       initColumnSort()
-      return restoreCustomStorage().then(() => {
+      return Promise.resolve(
+        restoreCustomStorage()
+      ).then(() => {
         reactData._isLoading = false
         cacheColumnMap()
         parseColumns().then(() => {
