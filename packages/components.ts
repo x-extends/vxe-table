@@ -1,5 +1,5 @@
 import { App } from 'vue'
-import VxeUIExport, { VxeUI } from 'vxe-pc-ui'
+import { VxeUI } from '@vxe-ui/core'
 
 import { VxeColumn } from './column'
 import { VxeColgroup } from './colgroup'
@@ -23,8 +23,8 @@ export function install (app: App, options?: VxeGlobalConfig) {
   components.forEach(component => component.install(app))
 }
 
-export const modal = VxeUIExport.drawer
-export const drawer = VxeUIExport.drawer
+export const modal = VxeUI.drawer
+export const drawer = VxeUI.drawer
 
 export * from './ui'
 

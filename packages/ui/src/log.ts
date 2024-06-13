@@ -1,4 +1,4 @@
-import { VxeUI } from 'vxe-pc-ui'
+import { VxeUI } from '@vxe-ui/core'
 
 const { log } = VxeUI
 

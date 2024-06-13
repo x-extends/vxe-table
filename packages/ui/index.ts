@@ -1,4 +1,4 @@
-import { VxeUI } from 'vxe-pc-ui'
+import { VxeUI } from '@vxe-ui/core'
 
 VxeUI.version = process.env.VUE_APP_VXE_VERSION as string
 VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
