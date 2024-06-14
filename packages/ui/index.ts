@@ -1,5 +1,7 @@
 import { VxeUI } from '@vxe-ui/core'
 
+import type { VxeUploadDefines, VxeGlobalConfig } from 'vxe-pc-ui'
+
 VxeUI.version = process.env.VUE_APP_VXE_VERSION as string
 VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
 
@@ -267,22 +269,30 @@ export const use = VxeUI.use
  * 已废弃
  * @deprecated
  */
-export const setup = VxeUI.setup
+export const setup = (options?: VxeGlobalConfig) => {
+  return VxeUI.setup(options)
+}
 /**
  * 已废弃
  * @deprecated
  */
-export const config = VxeUI.config
+export const config = (options?: VxeGlobalConfig) => {
+  return VxeUI.config(options)
+}
 /**
  * 已废弃
  * @deprecated
  */
-export const t = VxeUI.t
+export const t = (key: string, args?: any) => {
+  return VxeUI.t(key, args)
+}
 /**
  * 已废弃
  * @deprecated
  */
-export const _t = VxeUI._t
+export const _t = (key: string, args?: any) => {
+  return VxeUI._t(key, args)
+}
 
 /**
  * 已废弃，兼容老版本
@@ -290,8 +300,12 @@ export const _t = VxeUI._t
  */
 export const VXETable = VxeUI
 
-export const saveFile = VxeUI.readFile
-export const readFile = VxeUI.readFile
+export const saveFile: VxeUploadDefines.SaveFileFunction = (options) => {
+  return VxeUI.saveFile(options)
+}
+export const readFile: VxeUploadDefines.ReadFileFunction = (options) => {
+  return VxeUI.readFile(options)
+}
 
 export {
   VxeUI

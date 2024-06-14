@@ -3768,6 +3768,9 @@ export default defineComponent({
         return nextTick()
       },
       hasPendingByRow (row) {
+        return tableMethods.isPendingByRow(row)
+      },
+      isPendingByRow (row) {
         const { pendingRowMaps } = reactData
         const rowid = getRowid($xeTable, row)
         return !!pendingRowMaps[rowid]
