@@ -1,4 +1,5 @@
 import { VxeUI } from '@vxe-ui/core'
+import { getFuncText } from './src/utils'
 
 import type { VxeUploadDefines, VxeGlobalConfig } from 'vxe-pc-ui'
 
@@ -270,28 +271,28 @@ export const use = VxeUI.use
  * @deprecated
  */
 export const setup = (options?: VxeGlobalConfig) => {
-  return VxeUI.setup(options)
+  return VxeUI.setConfig(options)
 }
 /**
  * 已废弃
  * @deprecated
  */
 export const config = (options?: VxeGlobalConfig) => {
-  return VxeUI.config(options)
+  return VxeUI.setConfig(options)
 }
 /**
  * 已废弃
  * @deprecated
  */
 export const t = (key: string, args?: any) => {
-  return VxeUI.t(key, args)
+  return VxeUI.getI18n(key, args)
 }
 /**
  * 已废弃
  * @deprecated
  */
-export const _t = (key: string, args?: any) => {
-  return VxeUI._t(key, args)
+export const _t = (content: string | number | boolean | null | undefined, args?: any) => {
+  return getFuncText(content, args)
 }
 
 /**

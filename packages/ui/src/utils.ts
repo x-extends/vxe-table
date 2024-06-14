@@ -30,10 +30,10 @@ export function hasChildrenList (item: any) {
   return item && item.children && item.children.length > 0
 }
 
-export function getFuncText (content?: string | number | boolean | null) {
+export function getFuncText (content?: string | number | boolean | null, args?: any) {
   if (content) {
     const translate = VxeUI.getConfig().translate
-    return XEUtils.toValueString(translate ? translate('' + content) : content)
+    return XEUtils.toValueString(translate ? translate('' + content, args) : content)
   }
   return ''
 }
