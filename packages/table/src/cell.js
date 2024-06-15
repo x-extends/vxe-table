@@ -96,8 +96,9 @@ function getFooterContent (h, params) {
   }
   if (renderOpts) {
     const compConf = VXETable.renderer.get(renderOpts.name)
-    if (compConf && compConf.renderFooter) {
-      return getSlotVNs(compConf.renderFooter.call($table, h, renderOpts, params))
+    const rtFooter = compConf ? (compConf.renderTableFooter || compConf.renderFooter) : null
+    if (rtFooter) {
+      return getSlotVNs(rtFooter.call($table, h, renderOpts, params))
     }
   }
   // 兼容老模式
@@ -174,8 +175,9 @@ export const Cell = {
     }
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
-      if (compConf && compConf.renderHeader) {
-        return getSlotVNs(renderTitleContent(h, params, compConf.renderHeader.call($table, h, renderOpts, params)))
+      const rtHeader = compConf ? (compConf.renderTableHeader || compConf.renderHeader) : null
+      if (rtHeader) {
+        return getSlotVNs(renderTitleContent(h, params, rtHeader.call($table, h, renderOpts, params)))
       }
     }
     return renderTitleContent(h, params, UtilTools.formatText(column.getTitle(), 1))
@@ -191,10 +193,12 @@ export const Cell = {
       return $table.callSlot(slots.default, params, h)
     }
     if (renderOpts) {
-      const funName = editRender ? 'renderCell' : 'renderDefault'
       const compConf = VXETable.renderer.get(renderOpts.name)
-      if (compConf && compConf[funName]) {
-        return getSlotVNs(compConf[funName].call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
+      const rtDefault = compConf ? (compConf.renderTableDefault || compConf.renderDefault) : null
+      const rtCell = compConf ? (compConf.renderTableCell || compConf.renderCell) : null
+      const renderFn = editRender ? rtCell : rtDefault
+      if (renderFn) {
+        return getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
       }
     }
     const cellValue = $table.getCellLabel(row, column)
@@ -610,8 +614,9 @@ export const Cell = {
     }
     if (contentRender) {
       const compConf = VXETable.renderer.get(contentRender.name)
-      if (compConf && compConf.renderExpand) {
-        return getSlotVNs(compConf.renderExpand.call($table, h, contentRender, params))
+      const rtExpand = compConf ? (compConf.renderTableExpand || compConf.renderExpand) : null
+      if (rtExpand) {
+        return getSlotVNs(rtExpand.call($table, h, contentRender, params))
       }
     }
     return []
@@ -775,12 +780,13 @@ export const Cell = {
     const { $table, column } = params
     const { slots, editRender, formatter } = column
     const compConf = VXETable.renderer.get(editRender.name)
+    const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
     if (isEdit) {
       if (slots && slots.edit) {
         return $table.callSlot(slots.edit, params, h)
       }
-      if (compConf && compConf.renderEdit) {
-        return getSlotVNs(compConf.renderEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params)))
+      if (rtEdit) {
+        return getSlotVNs(rtEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params)))
       }
       return []
     }

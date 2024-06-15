@@ -238,7 +238,8 @@ const renderSimplePanel = (h, _vm) => {
 const renderPopupPanel = (h, _vm) => {
   const { _e, $xetable, customStore } = _vm
   const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xetable
-  const { allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+  const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+  const modalOpts = Object.assign({}, modalOptions)
   const trVNs = []
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
     const isVisible = visibleMethod ? visibleMethod({ column }) : true
@@ -377,13 +378,13 @@ const renderPopupPanel = (h, _vm) => {
   return h('vxe-modal', {
     key: 'popup',
     props: {
-      className: 'vxe-table-custom-popup-wrapper vxe-table--ignore-clear',
+      className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
       value: customStore.visible,
-      title: GlobalConfig.i18n('vxe.custom.cstmTitle'),
-      width: 700,
-      minWidth: 700,
-      height: 400,
-      minHeight: 400,
+      title: modalOpts.title || GlobalConfig.i18n('vxe.custom.cstmTitle'),
+      width: modalOpts.width || '50vw',
+      minWidth: modalOpts.minWidth || 700,
+      height: modalOpts.height || '50vh',
+      minHeight: modalOpts.minHeight || 400,
       mask: true,
       lockView: true,
       showFooter: true,
@@ -618,6 +619,7 @@ export default {
           if (column.renderVisible && (!column.children || column.children.length)) {
             if (column.renderResizeWidth !== column.renderWidth) {
               column.resizeWidth = column.renderResizeWidth
+              column.renderWidth = column.renderResizeWidth
             }
           }
         }

@@ -45,7 +45,7 @@ export default {
     table: {
       emptyText: 'No hay datos',
       allTitle: 'Seleccionar todo / cancelar',
-      seqTitle: '#',
+      seqTitle: 'S/N',
       confirmFilter: 'Confirmar',
       resetFilter: 'Restablecer',
       allFilter: 'Todo',

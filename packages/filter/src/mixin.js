@@ -58,7 +58,7 @@ export default {
         const { target: targetElem, pageX } = evnt
         const { filters, filterMultiple, filterRender } = column
         const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-        const filterRecoverMethod = column.filterRecoverMethod || (compConf ? compConf.filterRecoverMethod : null)
+        const filterRecoverMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
         const { visibleWidth } = DomTools.getDomNode()
         Object.assign(filterStore, {
           args: params,
@@ -206,7 +206,7 @@ export default {
         const { filters, filterRender } = column
         if (filters) {
           const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-          const filterResetMethod = column.filterResetMethod || (compConf ? compConf.filterResetMethod : null)
+          const filterResetMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
           filters.forEach((item) => {
             item._checked = false
             item.checked = false

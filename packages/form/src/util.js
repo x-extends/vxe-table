@@ -39,8 +39,8 @@ class ItemConfig {
     })
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const compConf = item.itemRender ? VXETable.renderer.get(item.itemRender.name) : null
-      if (compConf && !compConf.renderItemContent && compConf.renderItem) {
-        warnLog('vxe.error.delProp', ['item-render.renderItem', 'item-render.renderItemContent'])
+      if (compConf && !(compConf.renderFormItemContent || compConf.renderItemContent) && compConf.renderItem) {
+        warnLog('vxe.error.delProp', ['item-render.renderItem', 'item-render.renderFormItemContent'])
       }
     }
   }
@@ -77,8 +77,9 @@ export function isActivetem ($xeform, formItem) {
     return visible
   }
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-  if (!visibleMethod && compConf && compConf.itemVisibleMethod) {
-    visibleMethod = compConf.itemVisibleMethod
+  const fiVisibleMethod = compConf ? (compConf.formItemVisibleMethod || compConf.itemVisibleMethod) : null
+  if (!visibleMethod && fiVisibleMethod) {
+    visibleMethod = fiVisibleMethod
   }
   if (!visibleMethod) {
     return true

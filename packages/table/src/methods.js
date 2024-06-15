@@ -1287,8 +1287,8 @@ const Methods = {
           if (valueList.length && !allRemoteFilter) {
             const { filterMethod, filterRender, field } = column
             const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-            const compFilterMethod = compConf && compConf.renderFilter ? compConf.filterMethod : null
-            const defaultFilterMethod = compConf ? compConf.defaultFilterMethod : null
+            const compFilterMethod = compConf && compConf.renderFilter ? (compConf.tableFilterMethod || compConf.filterMethod) : null
+            const defaultFilterMethod = compConf ? (compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
             const cellValue = UtilTools.getCellValue(row, column)
             if (filterMethod) {
               return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
@@ -1620,8 +1620,7 @@ const Methods = {
         this.clearCopyCellArea()
       }
     }
-    this.saveCustomVisible()
-    this.saveCustomSort()
+    this.saveCustomStore()
     this.analyColumnWidth()
     return this.refreshColumn(true)
   },
@@ -1853,6 +1852,12 @@ const Methods = {
       }
     })
     return storeData
+  },
+  saveCustomStore () {
+    this.saveCustomVisible()
+    this.saveCustomSort()
+    this.saveCustomFixed()
+    this.saveCustomResizable()
   },
   saveCustomResizable (isReset) {
     const { id, collectColumn, customConfig, customOpts } = this
@@ -3394,8 +3399,11 @@ const Methods = {
   },
   handleToggleCheckRowEvent (evnt, params) {
     const { selectCheckboxMaps, checkboxOpts } = this
-    const { checkField } = checkboxOpts
+    const { checkField, trigger } = checkboxOpts
     const { row } = params
+    if (trigger === 'manual') {
+      return
+    }
     let value = false
     if (checkField) {
       value = !XEUtils.get(row, checkField)
@@ -3410,8 +3418,11 @@ const Methods = {
   },
   triggerCheckRowEvent (evnt, params, value) {
     const { checkboxOpts, afterFullData } = this
-    const { checkMethod } = checkboxOpts
+    const { checkMethod, trigger } = checkboxOpts
     const { row } = params
+    if (trigger === 'manual') {
+      return
+    }
     if (checkboxOpts.isShiftKey && evnt.shiftKey && !this.treeConfig) {
       const checkboxRecords = this.getCheckboxRecords()
       if (checkboxRecords.length) {
@@ -3771,18 +3782,28 @@ const Methods = {
       }
     }
   },
+  handleCheckAllEvent (evnt, value) {
+    this.handleCheckedAllCheckboxRow(value)
+    if (evnt) {
+      this.emitEvent('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value }, evnt)
+    }
+  },
   /**
    * 多选，选中所有事件
    */
   triggerCheckAllEvent (evnt, value) {
-    this.handleCheckedAllCheckboxRow(value)
-    this.emitEvent('checkbox-all', { records: this.getCheckboxRecords(), reserves: this.getCheckboxReserveRecords(), indeterminates: this.getCheckboxIndeterminateRecords(), checked: value }, evnt)
+    const { checkboxOpts } = this
+    const { trigger } = checkboxOpts
+    if (trigger === 'manual') {
+      return
+    }
+    this.handleCheckAllEvent(evnt, value)
   },
   /**
    * 多选，切换所有行的选中状态
    */
   toggleAllCheckboxRow () {
-    this.triggerCheckAllEvent(null, !this.isAllSelected)
+    this.handleCheckAllEvent(null, !this.isAllSelected)
     return this.$nextTick()
   },
   /**
@@ -3838,6 +3859,10 @@ const Methods = {
   triggerRadioRowEvent (evnt, params) {
     const { selectRadioRow: oldValue, radioOpts } = this
     const { row } = params
+    const { trigger } = radioOpts
+    if (trigger === 'manual') {
+      return
+    }
     let newValue = row
     let isChange = oldValue !== newValue
     if (isChange) {
@@ -4413,7 +4438,10 @@ const Methods = {
   triggerRowExpandEvent (evnt, params) {
     const { expandOpts, rowExpandLazyLoadedMaps, expandColumn: column } = this
     const { row } = params
-    const { lazy } = expandOpts
+    const { lazy, trigger } = expandOpts
+    if (trigger === 'manual') {
+      return
+    }
     const rowid = getRowid(this, row)
     if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
       const expanded = !this.isRowExpandByRow(row)
@@ -4688,7 +4716,10 @@ const Methods = {
   triggerTreeExpandEvent (evnt, params) {
     const { treeOpts, treeExpandLazyLoadedMaps } = this
     const { row, column } = params
-    const { lazy } = treeOpts
+    const { lazy, trigger } = treeOpts
+    if (trigger === 'manual') {
+      return
+    }
     const rowid = getRowid(this, row)
     if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
       const expanded = !this.isTreeExpandByRow(row)

@@ -105,7 +105,7 @@ function getLabelData ($xetable, opts, columns, datas) {
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
             const compConf = VXETable.renderer.get(renderOpts.name)
             if (compConf) {
-              bodyExportMethod = compConf.exportMethod || compConf.cellExportMethod
+              bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod || compConf.cellExportMethod
             }
           }
           if (!bodyExportMethod) {
@@ -233,7 +233,7 @@ function getFooterCellValue ($xetable, opts, items, column) {
   if (!footLabelMethod && renderOpts && renderOpts.name) {
     const compConf = VXETable.renderer.get(renderOpts.name)
     if (compConf) {
-      footLabelMethod = compConf.footerExportMethod || compConf.footerCellExportMethod
+      footLabelMethod = compConf.tableFooterExportMethod || compConf.footerExportMethod || compConf.footerCellExportMethod
     }
   }
   if (!footLabelMethod) {

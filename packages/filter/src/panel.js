@@ -1,7 +1,6 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import UtilTools from '../../tools/utils'
-import XEUtils from 'xe-utils'
 import { getSlotVNs } from '../../tools/vn'
 
 export default {
@@ -20,7 +19,7 @@ export default {
     const { args, column } = filterStore
     const filterRender = column ? column.filterRender : null
     const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-    const filterClassName = compConf ? compConf.filterClassName : ''
+    const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
     return h('div', {
       class: [
         'vxe-table--filter-wrapper',
@@ -41,17 +40,18 @@ export default {
       const { $parent: $xetable, filterStore } = this
       const { args, column, multiple, maxHeight } = filterStore
       const { slots } = column
+      const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
       if (slots && slots.filter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
           }, $xetable.callSlot(slots.filter, Object.assign({ $panel: this, context: this }, args), h))
         ]
-      } else if (compConf && compConf.renderFilter) {
+      } else if (rtFilter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, getSlotVNs(compConf.renderFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args))))
+          }, getSlotVNs(rtFilter.call($xetable, h, filterRender, Object.assign({ $panel: this, context: this }, args))))
         ]
       }
       const isAllChecked = multiple ? filterStore.isAllSelected : !filterStore.options.some(item => item._checked)
@@ -122,7 +122,7 @@ export default {
       const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
-      return multiple && (!compConf || (XEUtils.isBoolean(compConf.showFilterFooter) ? compConf.showFilterFooter !== false : compConf.isFooter !== false)) ? [
+      return multiple(compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false || compConf.isFooter === false) : true) ? [
         h('div', {
           class: 'vxe-table--filter-footer'
         }, [

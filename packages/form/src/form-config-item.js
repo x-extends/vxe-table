@@ -30,12 +30,12 @@ const VxeFormConfigItem = {
     const { rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = $xeform
     const { slots, title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, children, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-    const itemClassName = compConf ? compConf.itemClassName : ''
-    const itemStyle = compConf ? compConf.itemStyle : null
-    const itemContentClassName = compConf ? compConf.itemContentClassName : ''
-    const itemContentStyle = compConf ? compConf.itemContentStyle : null
-    const itemTitleClassName = compConf ? compConf.itemTitleClassName : ''
-    const itemTitleStyle = compConf ? compConf.itemTitleStyle : null
+    const itemClassName = compConf ? (compConf.formItemClassName || compConf.itemClassName) : ''
+    const itemStyle = compConf ? (compConf.formItemStyle || compConf.itemStyle) : null
+    const itemContentClassName = compConf ? (compConf.formItemContentClassName || compConf.itemContentClassName) : ''
+    const itemContentStyle = compConf ? (compConf.formItemContentStyle || compConf.itemContentStyle) : null
+    const itemTitleClassName = compConf ? (compConf.formItemTitleClassName || compConf.itemTitleClassName) : ''
+    const itemTitleStyle = compConf ? (compConf.formItemTitleStyle || compConf.itemTitleStyle) : null
     const span = item.span || $xeform.span
     const align = item.align || $xeform.align
     const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
@@ -75,10 +75,11 @@ const VxeFormConfigItem = {
       }
     }
     let contentVNs = []
+    const rfiContent = compConf ? (compConf.renderFormItemContent || compConf.renderItemContent) : null
     if (slots && slots.default) {
       contentVNs = $xeform.callSlot(slots.default, params, h)
-    } else if (compConf && compConf.renderItemContent) {
-      contentVNs = getSlotVNs(compConf.renderItemContent.call($xeform, h, itemRender, params))
+    } else if (rfiContent) {
+      contentVNs = getSlotVNs(rfiContent.call($xeform, h, itemRender, params))
     } else if (compConf && compConf.renderItem) {
       contentVNs = getSlotVNs(compConf.renderItem.call($xeform, h, itemRender, params))
     } else if (field) {

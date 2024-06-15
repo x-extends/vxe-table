@@ -94,8 +94,8 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   const { height: rowHeight } = rowOpts
   const renderOpts = editRender || cellRender
   const compConf = renderOpts ? VXETable.renderer.get(renderOpts.name) : null
-  const compCellClassName = compConf ? compConf.cellClassName : ''
-  const compCellStyle = compConf ? compConf.cellStyle : ''
+  const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : ''
+  const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -561,7 +561,7 @@ export default {
       emptyContent = $scopedSlots.empty.call(this, { $table: $xetable }, h)
     } else {
       const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
-      const renderTableEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
+      const renderTableEmptyView = compConf ? (compConf.renderTableEmptyView || compConf.renderEmpty) : null
       if (renderTableEmptyView) {
         emptyContent = getSlotVNs(renderTableEmptyView.call(this, h, emptyOpts, { $table: $xetable }))
       } else {
