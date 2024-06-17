@@ -18,7 +18,7 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent } from '../../../types'
+import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTableDataRow, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes, VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns } = VxeUI
 
@@ -590,7 +590,7 @@ export default defineComponent({
       return false
     })
 
-    const refMaps: VxeTablePrivateRef = {
+    const refMaps: VxeTableDataRow = {
       refElem,
       refTooltip,
       refValidTooltip,
