@@ -111,17 +111,18 @@ export default defineComponent({
       const { slots } = column
       const filterSlot = slots ? slots.filter : null
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
+      const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
       if (filterSlot) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
           }, $xeTable.callSlot(filterSlot, params))
         ]
-      } else if (compConf && compConf.renderFilter) {
+      } else if (rtFilter) {
         return [
           h('div', {
             class: 'vxe-table--filter-template'
-          }, getSlotVNs(compConf.renderFilter(filterRender, params)))
+          }, getSlotVNs(rtFilter(filterRender, params)))
         ]
       }
       const isAllChecked = multiple ? filterStore.isAllSelected : !filterStore.options.some((item: any) => item._checked)
@@ -192,7 +193,7 @@ export default defineComponent({
       const filterRender = column.filterRender
       const compConf = filterRender ? renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
-      return multiple && (!compConf || compConf.showFilterFooter !== false)
+      return multiple && (compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false) : true)
         ? [
             h('div', {
               class: 'vxe-table--filter-footer'
@@ -218,7 +219,7 @@ export default defineComponent({
       const { column } = filterStore
       const filterRender = column ? column.filterRender : null
       const compConf = filterRender ? renderer.get(filterRender.name) : null
-      const filterClassName = compConf ? compConf.filterClassName : ''
+      const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
       return h('div', {
         class: [

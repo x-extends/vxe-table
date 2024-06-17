@@ -57,7 +57,7 @@ export default defineComponent({
     let toolbarMethods = {} as ToolbarMethods
 
     const $xeGrid = inject('$xeGrid', null as (VxeGridConstructor & GridPrivateMethods) | null)
-    let $xeTable: VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods
+    const refTable = ref<VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>()
 
     const connectFlag = ref(0)
 
@@ -86,9 +86,10 @@ export default defineComponent({
     })
 
     const computeTableCustomOpts = computed(() => {
-      if (connectFlag.value || $xeTable) {
-        if ($xeTable) {
-          const { computeCustomOpts } = $xeTable.getComputeMaps()
+      const $table = refTable.value
+      if (connectFlag.value || $table) {
+        if ($table) {
+          const { computeCustomOpts } = $table.getComputeMaps()
           return computeCustomOpts.value
         }
       }
@@ -101,16 +102,18 @@ export default defineComponent({
     })
 
     const checkTable = () => {
-      if ($xeTable) {
+      const $table = refTable.value
+      if ($table) {
         return true
       }
       errLog('vxe.error.barUnableLink')
     }
 
     const handleClickSettingEvent = ({ $event }: any) => {
-      if ($xeTable) {
-        if ($xeTable.triggerCustomEvent) {
-          $xeTable.triggerCustomEvent($event)
+      const $table = refTable.value
+      if ($table) {
+        if ($table.triggerCustomEvent) {
+          $table.triggerCustomEvent($event)
         } else {
           errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
         }
@@ -118,21 +121,25 @@ export default defineComponent({
     }
 
     const handleMouseenterSettingEvent = ({ $event }: any) => {
-      if ($xeTable) {
-        $xeTable.customOpenEvent($event)
+      const $table = refTable.value
+      if ($table) {
+        $table.customOpenEvent($event)
       } else {
         errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     }
 
     const handleMouseleaveSettingEvent = ({ $event }: any) => {
-      const { customStore } = $xeTable.reactData
-      customStore.activeBtn = false
-      setTimeout(() => {
-        if (!customStore.activeBtn && !customStore.activeWrapper) {
-          $xeTable.customCloseEvent($event)
-        }
-      }, 350)
+      const $table = refTable.value
+      if ($table) {
+        const { customStore } = $table.reactData
+        customStore.activeBtn = false
+        setTimeout(() => {
+          if (!customStore.activeBtn && !customStore.activeWrapper) {
+            $table.customCloseEvent($event)
+          }
+        }, 350)
+      }
     }
 
     const refreshEvent = (evnt: KeyboardEvent) => {
@@ -165,13 +172,14 @@ export default defineComponent({
     }
 
     const btnEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
+      const $table = refTable.value
       const { code } = item
       if (code) {
         if ($xeGrid) {
           $xeGrid.triggerToolbarBtnEvent(item, evnt)
         } else {
           const gCommandOpts = commands.get(code)
-          const params = { code, button: item, $table: $xeTable, $grid: $xeGrid, $event: evnt }
+          const params = { code, button: item, $table: $table!, $grid: $xeGrid, $event: evnt }
           if (gCommandOpts) {
             if (gCommandOpts.commandMethod) {
               gCommandOpts.commandMethod(params)
@@ -187,13 +195,14 @@ export default defineComponent({
     }
 
     const tolEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
+      const $table = refTable.value
       const { code } = item
       if (code) {
         if ($xeGrid) {
           $xeGrid.triggerToolbarTolEvent(item, evnt)
         } else {
           const gCommandOpts = commands.get(code)
-          const params = { code, tool: item, $table: $xeTable, $grid: $xeGrid, $event: evnt }
+          const params = { code, tool: item, $table: $table!, $grid: $xeGrid, $event: evnt }
           if (gCommandOpts) {
             if (gCommandOpts.commandMethod) {
               gCommandOpts.commandMethod(params)
@@ -210,19 +219,28 @@ export default defineComponent({
 
     const importEvent = () => {
       if (checkTable()) {
-        $xeTable.openImport()
+        const $table = refTable.value
+        if ($table) {
+          $table.openImport()
+        }
       }
     }
 
     const exportEvent = () => {
       if (checkTable()) {
-        $xeTable.openExport()
+        const $table = refTable.value
+        if ($table) {
+          $table.openExport()
+        }
       }
     }
 
     const printEvent = () => {
       if (checkTable()) {
-        $xeTable.openPrint()
+        const $table = refTable.value
+        if ($table) {
+          $table.openPrint()
+        }
       }
     }
 
@@ -256,9 +274,10 @@ export default defineComponent({
      */
     const renderBtns = () => {
       const { buttons } = props
+      const $table = refTable.value
       const buttonsSlot = slots.buttons
       if (buttonsSlot) {
-        return getSlotVNs(buttonsSlot({ $grid: $xeGrid, $table: $xeTable }))
+        return getSlotVNs(buttonsSlot({ $grid: $xeGrid, $table: $table }))
       }
       const btnVNs: VNode[] = []
       if (buttons) {
@@ -268,7 +287,7 @@ export default defineComponent({
             const compConf = buttonRender ? renderer.get(buttonRender.name) : null
             if (buttonRender && compConf && compConf.renderToolbarButton) {
               const toolbarButtonClassName = compConf.toolbarButtonClassName
-              const params = { $grid: $xeGrid, $table: $xeTable, button: item }
+              const params = { $grid: $xeGrid, $table: $table!, button: item }
               btnVNs.push(
                 h('span', {
                   class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
@@ -307,9 +326,10 @@ export default defineComponent({
      */
     const renderRightTools = () => {
       const { tools } = props
+      const $table = refTable.value
       const toolsSlot = slots.tools
       if (toolsSlot) {
-        return getSlotVNs(toolsSlot({ $grid: $xeGrid, $table: $xeTable }))
+        return getSlotVNs(toolsSlot({ $grid: $xeGrid, $table: $table }))
       }
       const btnVNs: VNode[] = []
       if (tools) {
@@ -320,7 +340,7 @@ export default defineComponent({
             const compConf = toolRender ? renderer.get(rdName) : null
             if (toolRender && compConf && compConf.renderToolbarTool) {
               const toolbarToolClassName = compConf.toolbarToolClassName
-              const params = { $grid: $xeGrid, $table: $xeTable, tool: item }
+              const params = { $grid: $xeGrid, $table: $table!, tool: item }
               btnVNs.push(
                 h('span', {
                   key: rdName as string,
@@ -447,7 +467,7 @@ export default defineComponent({
       },
       syncUpdate (params) {
         const { collectColumn } = params
-        $xeTable = params.$table
+        refTable.value = params.$table
         reactData.columns = collectColumn
         connectFlag.value++
       }

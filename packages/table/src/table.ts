@@ -1360,8 +1360,8 @@ export default defineComponent({
             return filterColumns.every(({ column, valueList, itemList }) => {
               const { filterMethod, filterRender } = column
               const compConf = filterRender ? renderer.get(filterRender.name) : null
-              const compFilterMethod = compConf ? compConf.filterMethod : null
-              const defaultFilterMethod = compConf ? compConf.defaultFilterMethod : null
+              const compFilterMethod = compConf ? (compConf.tableFilterMethod || compConf.filterMethod) : null
+              const tdFilterMethod = compConf ? (compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
               const cellValue = getCellValue(row, column)
               if (filterMethod) {
                 return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
@@ -1369,8 +1369,8 @@ export default defineComponent({
                 return itemList.some((item) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
               } else if (allFilterMethod) {
                 return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
-              } else if (defaultFilterMethod) {
-                return itemList.some((item) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
+              } else if (tdFilterMethod) {
+                return itemList.some((item) => tdFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
               }
               return valueList.indexOf(XEUtils.get(row, column.field)) > -1
             })
@@ -2623,6 +2623,18 @@ export default defineComponent({
       })
     }
 
+    const handleCheckAllEvent = (evnt: Event | null, value: any) => {
+      handleCheckedAllCheckboxRow(value)
+      if (evnt) {
+        tableMethods.dispatchEvent('checkbox-all', {
+          records: tableMethods.getCheckboxRecords(),
+          reserves: tableMethods.getCheckboxReserveRecords(),
+          indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
+          checked: value
+        }, evnt)
+      }
+    }
+
     /**
      * 纵向 Y 可视渲染处理
      */
@@ -3579,7 +3591,7 @@ export default defineComponent({
        * 多选，切换所有行的选中状态
        */
       toggleAllCheckboxRow () {
-        tablePrivateMethods.triggerCheckAllEvent(null, !reactData.isAllSelected)
+        handleCheckAllEvent(null, !reactData.isAllSelected)
         return nextTick()
       },
       /**
@@ -5879,8 +5891,11 @@ export default defineComponent({
       handleToggleCheckRowEvent (evnt, params) {
         const { selectCheckboxMaps } = reactData
         const checkboxOpts = computeCheckboxOpts.value
-        const { checkField } = checkboxOpts
+        const { checkField, trigger } = checkboxOpts
         const { row } = params
+        if (trigger === 'manual') {
+          return
+        }
         let value = false
         if (checkField) {
           value = !XEUtils.get(row, checkField)
@@ -5897,7 +5912,10 @@ export default defineComponent({
         const checkboxOpts = computeCheckboxOpts.value
         const { row } = params
         const { afterFullData } = internalData
-        const { checkMethod } = checkboxOpts
+        const { checkMethod, trigger } = checkboxOpts
+        if (trigger === 'manual') {
+          return
+        }
         if (checkboxOpts.isShiftKey && evnt.shiftKey && !props.treeConfig) {
           const checkboxRecords = tableMethods.getCheckboxRecords()
           if (checkboxRecords.length) {
@@ -5927,15 +5945,12 @@ export default defineComponent({
        * 多选，选中所有事件
        */
       triggerCheckAllEvent (evnt, value) {
-        handleCheckedAllCheckboxRow(value)
-        if (evnt) {
-          tableMethods.dispatchEvent('checkbox-all', {
-            records: tableMethods.getCheckboxRecords(),
-            reserves: tableMethods.getCheckboxReserveRecords(),
-            indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
-            checked: value
-          }, evnt)
+        const checkboxOpts = computeCheckboxOpts.value
+        const { trigger } = checkboxOpts
+        if (trigger === 'manual') {
+          return
         }
+        handleCheckAllEvent(evnt, value)
       },
       /**
        * 单选，行选中事件
@@ -5944,6 +5959,10 @@ export default defineComponent({
         const { selectRadioRow: oldValue } = reactData
         const { row } = params
         const radioOpts = computeRadioOpts.value
+        const { trigger } = radioOpts
+        if (trigger === 'manual') {
+          return
+        }
         let newValue = row
         let isChange = oldValue !== newValue
         if (isChange) {
@@ -5975,7 +5994,10 @@ export default defineComponent({
         const { rowExpandLazyLoadedMaps, expandColumn: column } = reactData
         const expandOpts = computeExpandOpts.value
         const { row } = params
-        const { lazy } = expandOpts
+        const { lazy, trigger } = expandOpts
+        if (trigger === 'manual') {
+          return
+        }
         const rowid = getRowid($xeTable, row)
         if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
           const expanded = !tableMethods.isRowExpandByRow(row)
@@ -6000,7 +6022,10 @@ export default defineComponent({
         const { treeExpandLazyLoadedMaps } = reactData
         const treeOpts = computeTreeOpts.value
         const { row, column } = params
-        const { lazy } = treeOpts
+        const { lazy, trigger } = treeOpts
+        if (trigger === 'manual') {
+          return
+        }
         const rowid = getRowid($xeTable, row)
         if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
           const expanded = !tableMethods.isTreeExpandByRow(row)
@@ -6360,9 +6385,9 @@ export default defineComponent({
         return slots.empty(params)
       } else {
         const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
-        const renderTableEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
-        if (renderTableEmptyView) {
-          return getSlotVNs(renderTableEmptyView(emptyOpts, params))
+        const rtEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
+        if (rtEmptyView) {
+          return getSlotVNs(rtEmptyView(emptyOpts, params))
         }
       }
       return getFuncText(props.emptyText) || getI18n('vxe.table.emptyText')

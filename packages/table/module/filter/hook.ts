@@ -40,7 +40,7 @@ hooks.add('tableFilterModule', {
           const { visibleWidth } = getDomNode()
           const { filters, filterMultiple, filterRender } = column
           const compConf = filterRender ? renderer.get(filterRender.name) : null
-          const filterRecoverMethod = column.filterRecoverMethod || (compConf ? compConf.filterRecoverMethod : null)
+          const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
           internalData._currFilterParams = params
           Object.assign(filterStore, {
             multiple: filterMultiple,
@@ -53,8 +53,8 @@ hooks.add('tableFilterModule', {
             const { _checked, checked } = option
             option._checked = checked
             if (!checked && _checked !== checked) {
-              if (filterRecoverMethod) {
-                filterRecoverMethod({ option, column, $table: $xeTable })
+              if (frMethod) {
+                frMethod({ option, column, $table: $xeTable })
               }
             }
           })
@@ -119,16 +119,16 @@ hooks.add('tableFilterModule', {
           const { filters, filterRender } = column
           if (filters) {
             const compConf = filterRender ? renderer.get(filterRender.name) : null
-            const filterResetMethod = column.filterResetMethod || (compConf ? compConf.filterResetMethod : null)
+            const frMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
             filters.forEach((item: any) => {
               item._checked = false
               item.checked = false
-              if (!filterResetMethod) {
+              if (!frMethod) {
                 item.data = XEUtils.clone(item.resetValue, true)
               }
             })
-            if (filterResetMethod) {
-              filterResetMethod({ options: filters, column, $table: $xeTable })
+            if (frMethod) {
+              frMethod({ options: filters, column, $table: $xeTable })
             }
           }
         }

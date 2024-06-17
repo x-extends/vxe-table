@@ -760,10 +760,10 @@ hooks.add('tableEditModule', {
           let { autofocus, autoselect } = editRender
           let inputElem
           if (!autofocus && compRender) {
-            autofocus = compRender.autofocus
+            autofocus = compRender.tableAutofocus || compRender.autofocus
           }
           if (!autoselect && compRender) {
-            autoselect = compRender.autoselect
+            autoselect = compRender.tableAutoSelect || compRender.autoselect
           }
           // 如果指定了聚焦 class
           if (XEUtils.isFunction(autofocus)) {

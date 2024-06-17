@@ -353,7 +353,7 @@ hooks.add('tableExportModule', {
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
                 const compConf = renderer.get(renderOpts.name)
                 if (compConf) {
-                  bodyExportMethod = compConf.exportMethod
+                  bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
                 }
               }
               if (!bodyExportMethod) {
@@ -471,7 +471,7 @@ hooks.add('tableExportModule', {
       if (!footLabelMethod && renderOpts && renderOpts.name) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
-          footLabelMethod = compConf.footerExportMethod
+          footLabelMethod = compConf.tableFooterExportMethod || compConf.footerExportMethod
         }
       }
       if (!footLabelMethod) {
