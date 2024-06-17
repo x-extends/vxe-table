@@ -184,8 +184,9 @@ export default defineComponent({
           const gCommandOpts = commands.get(code)
           const params = { code, button: item, $table: $table!, $grid: $xeGrid, $event: evnt }
           if (gCommandOpts) {
-            if (gCommandOpts.commandMethod) {
-              gCommandOpts.commandMethod(params)
+            const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
+            if (tCommandMethod) {
+              tCommandMethod(params)
             } else {
               if (process.env.VUE_APP_VXE_ENV === 'development') {
                 errLog('vxe.error.notCommands', [code])
@@ -207,8 +208,9 @@ export default defineComponent({
           const gCommandOpts = commands.get(code)
           const params = { code, tool: item, $table: $table!, $grid: $xeGrid, $event: evnt }
           if (gCommandOpts) {
-            if (gCommandOpts.commandMethod) {
-              gCommandOpts.commandMethod(params)
+            const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
+            if (tCommandMethod) {
+              tCommandMethod(params)
             } else {
               if (process.env.VUE_APP_VXE_ENV === 'development') {
                 errLog('vxe.error.notCommands', [code])

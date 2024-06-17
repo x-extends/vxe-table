@@ -301,6 +301,9 @@ export const _t = (content: string | number | boolean | null | undefined, args?:
  */
 export const VXETable = VxeUI
 
+VXETable.setup = config
+VXETable.config = config
+
 export const saveFile: VxeUploadDefines.SaveFileFunction = (options) => {
   return VxeUI.saveFile(options)
 }

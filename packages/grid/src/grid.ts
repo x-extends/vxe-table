@@ -999,8 +999,9 @@ export default defineComponent({
           default: {
             const gCommandOpts = commands.get(code)
             if (gCommandOpts) {
-              if (gCommandOpts.commandMethod) {
-                gCommandOpts.commandMethod({ code, button, $grid: $xeGrid, $table: $xeTable }, ...args)
+              const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
+              if (tCommandMethod) {
+                tCommandMethod({ code, button, $grid: $xeGrid, $table: $xeTable }, ...args)
               } else {
                 if (process.env.VUE_APP_VXE_ENV === 'development') {
                   errLog('vxe.error.notCommands', [code])
