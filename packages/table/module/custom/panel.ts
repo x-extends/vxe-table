@@ -1,4 +1,4 @@
-import { defineComponent, h, inject, ref, Ref, VNode, PropType, resolveComponent, TransitionGroup, createCommentVNode } from 'vue'
+import { defineComponent, h, inject, ref, Ref, VNode, PropType, TransitionGroup, createCommentVNode } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
 import { addClass, removeClass } from '../../../ui/src/dom'
@@ -17,6 +17,12 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
+    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+    const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
+
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { reactData } = $xeTable
@@ -564,14 +570,18 @@ export default defineComponent({
                 }, [
                   !isChecked || (column.children && column.children.length)
                     ? h('span', '-')
-                    : h(resolveComponent('vxe-input') as VxeInputComponent, {
-                      type: 'integer',
-                      min: 40,
-                      modelValue: column.renderResizeWidth,
-                      'onUpdate:modelValue' (value: any) {
-                        column.renderResizeWidth = Math.max(40, Number(value))
-                      }
-                    })
+                    : (
+                        VxeUIInputComponent
+                          ? h(VxeUIInputComponent, {
+                            type: 'integer',
+                            min: 40,
+                            modelValue: column.renderResizeWidth,
+                            'onUpdate:modelValue' (value: any) {
+                              column.renderResizeWidth = Math.max(40, Number(value))
+                            }
+                          })
+                          : createCommentVNode()
+                      )
                 ])
                 : createCommentVNode(),
               allowFixed
@@ -580,22 +590,26 @@ export default defineComponent({
                 }, [
                   parent
                     ? h('span', '-')
-                    : h(resolveComponent('vxe-radio-group') as VxeRadioGroupComponent, {
-                      modelValue: column.renderFixed || '',
-                      type: 'button',
-                      size: 'mini',
-                      options: [
-                        { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
-                        { label: getI18n('vxe.custom.setting.fixedUnset'), value: '' },
-                        { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
-                      ],
-                      'onUpdate:modelValue' (value: any) {
-                        column.renderFixed = value
-                      }
-                      // onChange () {
-                      //   changePopupFixedOption(column)
-                      // }
-                    })
+                    : (
+                        VxeUIRadioGroupComponent
+                          ? h(VxeUIRadioGroupComponent, {
+                            modelValue: column.renderFixed || '',
+                            type: 'button',
+                            size: 'mini',
+                            options: [
+                              { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
+                              { label: getI18n('vxe.custom.setting.fixedUnset'), value: '' },
+                              { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
+                            ],
+                            'onUpdate:modelValue' (value: any) {
+                              column.renderFixed = value
+                            }
+                          // onChange () {
+                          //   changePopupFixedOption(column)
+                          // }
+                          })
+                          : createCommentVNode()
+                      )
                 ])
                 : createCommentVNode()
             ])
@@ -604,151 +618,161 @@ export default defineComponent({
       })
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
-      return h(resolveComponent('vxe-modal') as VxeModalComponent, {
-        key: 'popup',
-        className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
-        modelValue: customStore.visible,
-        title: modalOpts.title || getI18n('vxe.custom.cstmTitle'),
-        width: modalOpts.width || '50vw',
-        minWidth: modalOpts.minWidth || 700,
-        height: modalOpts.height || '50vh',
-        minHeight: modalOpts.minHeight || 400,
-        mask: true,
-        lockView: true,
-        showFooter: true,
-        resize: true,
-        escClosable: true,
-        destroyOnClose: true,
-        'onUpdate:modelValue' (value: any) {
-          customStore.visible = value
-        }
-      }, {
-        default: () => {
-          return h('div', {
-            ref: bodyElemRef,
-            class: 'vxe-table-custom-popup--body'
-          }, [
-            h('div', {
-              class: 'vxe-table-custom-popup--table-wrapper'
+      return VxeUIModalComponent
+        ? h(VxeUIModalComponent, {
+          key: 'popup',
+          className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
+          modelValue: customStore.visible,
+          title: modalOpts.title || getI18n('vxe.custom.cstmTitle'),
+          width: modalOpts.width || '50vw',
+          minWidth: modalOpts.minWidth || 700,
+          height: modalOpts.height || '50vh',
+          minHeight: modalOpts.minHeight || 400,
+          mask: true,
+          lockView: true,
+          showFooter: true,
+          resize: true,
+          escClosable: true,
+          destroyOnClose: true,
+          'onUpdate:modelValue' (value: any) {
+            customStore.visible = value
+          }
+        }, {
+          default: () => {
+            return h('div', {
+              ref: bodyElemRef,
+              class: 'vxe-table-custom-popup--body'
             }, [
-              h('table', {}, [
-                h('colgroup', {}, [
-                  allowVisible
-                    ? h('col', {
-                      style: {
-                        width: '80px'
-                      }
-                    })
-                    : createCommentVNode(),
-                  allowSort
-                    ? h('col', {
-                      style: {
-                        width: '80px'
-                      }
-                    })
-                    : createCommentVNode(),
-                  h('col', {
-                    style: {
-                      minWidth: '120px'
-                    }
-                  }),
-                  allowResizable
-                    ? h('col', {
-                      style: {
-                        width: '140px'
-                      }
-                    })
-                    : createCommentVNode(),
-                  allowFixed
-                    ? h('col', {
-                      style: {
-                        width: '200px'
-                      }
-                    })
-                    : createCommentVNode()
-                ]),
-                h('thead', {}, [
-                  h('tr', {}, [
+              h('div', {
+                class: 'vxe-table-custom-popup--table-wrapper'
+              }, [
+                h('table', {}, [
+                  h('colgroup', {}, [
                     allowVisible
-                      ? h('th', {}, [
-                        h('div', {
-                          class: ['vxe-table-custom--checkbox-option', {
-                            'is--checked': isAllChecked,
-                            'is--indeterminate': isAllIndeterminate
-                          }],
-                          title: getI18n('vxe.table.allTitle'),
-                          onClick: allCustomEvent
-                        }, [
-                          h('span', {
-                            class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                          }),
-                          h('span', {
-                            class: 'vxe-checkbox--label'
-                          }, getI18n('vxe.toolbar.customAll'))
-                        ])
-                      ])
+                      ? h('col', {
+                        style: {
+                          width: '80px'
+                        }
+                      })
                       : createCommentVNode(),
                     allowSort
-                      ? h('th', {}, [
-                        h('span', {
-                          class: 'vxe-table-custom-popup--table-sort-help-title'
-                        }, getI18n('vxe.custom.setting.colSort')),
-                        h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
-                          enterable: true,
-                          content: getI18n('vxe.custom.setting.sortHelpTip')
-                        }, {
-                          default: () => {
-                            return h('i', {
-                              class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
-                            })
-                          }
-                        })
-                      ])
+                      ? h('col', {
+                        style: {
+                          width: '80px'
+                        }
+                      })
                       : createCommentVNode(),
-                    h('th', {}, getI18n('vxe.custom.setting.colTitle')),
+                    h('col', {
+                      style: {
+                        minWidth: '120px'
+                      }
+                    }),
                     allowResizable
-                      ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
+                      ? h('col', {
+                        style: {
+                          width: '140px'
+                        }
+                      })
                       : createCommentVNode(),
                     allowFixed
-                      ? h('th', {}, getI18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
+                      ? h('col', {
+                        style: {
+                          width: '200px'
+                        }
+                      })
                       : createCommentVNode()
-                  ])
-                ]),
-                h(TransitionGroup, {
-                  class: 'vxe-table-custom--body',
-                  tag: 'tbody',
-                  name: 'vxe-table-custom--list'
-                }, {
-                  default: () => trVNs
+                  ]),
+                  h('thead', {}, [
+                    h('tr', {}, [
+                      allowVisible
+                        ? h('th', {}, [
+                          h('div', {
+                            class: ['vxe-table-custom--checkbox-option', {
+                              'is--checked': isAllChecked,
+                              'is--indeterminate': isAllIndeterminate
+                            }],
+                            title: getI18n('vxe.table.allTitle'),
+                            onClick: allCustomEvent
+                          }, [
+                            h('span', {
+                              class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                            }),
+                            h('span', {
+                              class: 'vxe-checkbox--label'
+                            }, getI18n('vxe.toolbar.customAll'))
+                          ])
+                        ])
+                        : createCommentVNode(),
+                      allowSort
+                        ? h('th', {}, [
+                          h('span', {
+                            class: 'vxe-table-custom-popup--table-sort-help-title'
+                          }, getI18n('vxe.custom.setting.colSort')),
+                          VxeUITooltipComponent
+                            ? h(VxeUITooltipComponent, {
+                              enterable: true,
+                              content: getI18n('vxe.custom.setting.sortHelpTip')
+                            }, {
+                              default: () => {
+                                return h('i', {
+                                  class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
+                                })
+                              }
+                            })
+                            : createCommentVNode()
+                        ])
+                        : createCommentVNode(),
+                      h('th', {}, getI18n('vxe.custom.setting.colTitle')),
+                      allowResizable
+                        ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
+                        : createCommentVNode(),
+                      allowFixed
+                        ? h('th', {}, getI18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
+                        : createCommentVNode()
+                    ])
+                  ]),
+                  h(TransitionGroup, {
+                    class: 'vxe-table-custom--body',
+                    tag: 'tbody',
+                    name: 'vxe-table-custom--list'
+                  }, {
+                    default: () => trVNs
+                  })
+                ])
+              ]),
+              h('div', {
+                ref: dragHintElemRef,
+                class: 'vxe-table-custom-popup--drag-hint'
+              }, getI18n('vxe.custom.cstmDragTarget', [dragColumn.value ? dragColumn.value.getTitle() : '']))
+            ])
+          },
+          footer: () => {
+            return h('div', {
+              class: 'vxe-table-custom-popup--footer'
+            }, [
+              VxeUIButtonComponent
+                ? h(VxeUIButtonComponent, {
+                  content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore'),
+                  onClick: resetCustomEvent
                 })
-              ])
-            ]),
-            h('div', {
-              ref: dragHintElemRef,
-              class: 'vxe-table-custom-popup--drag-hint'
-            }, getI18n('vxe.custom.cstmDragTarget', [dragColumn.value ? dragColumn.value.getTitle() : '']))
-          ])
-        },
-        footer: () => {
-          return h('div', {
-            class: 'vxe-table-custom-popup--footer'
-          }, [
-            h(resolveComponent('vxe-button') as VxeButtonComponent, {
-              content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore'),
-              onClick: resetCustomEvent
-            }),
-            h(resolveComponent('vxe-button') as VxeButtonComponent, {
-              content: customOpts.resetButtonText || getI18n('vxe.custom.cstmCancel'),
-              onClick: cancelCustomEvent
-            }),
-            h(resolveComponent('vxe-button') as VxeButtonComponent, {
-              status: 'primary',
-              content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm'),
-              onClick: confirmCustomEvent
-            })
-          ])
-        }
-      })
+                : createCommentVNode(),
+              VxeUIButtonComponent
+                ? h(VxeUIButtonComponent, {
+                  content: customOpts.resetButtonText || getI18n('vxe.custom.cstmCancel'),
+                  onClick: cancelCustomEvent
+                })
+                : createCommentVNode(),
+              VxeUIButtonComponent
+                ? h(VxeUIButtonComponent, {
+                  status: 'primary',
+                  content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm'),
+                  onClick: confirmCustomEvent
+                })
+                : createCommentVNode()
+            ])
+          }
+        })
+        : createCommentVNode()
     }
 
     const renderVN = () => {

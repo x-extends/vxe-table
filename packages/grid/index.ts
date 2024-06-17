@@ -12,5 +12,7 @@ if (VxeUI.dynamicApp) {
   VxeUI.dynamicApp.component(VxeGridComponent.name as string, VxeGridComponent)
 }
 
+VxeUI.component(VxeGridComponent)
+
 export const Grid = VxeGrid
 export default VxeGrid

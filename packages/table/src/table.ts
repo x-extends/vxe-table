@@ -1,4 +1,4 @@
-import { defineComponent, h, createCommentVNode, ComponentPublicInstance, resolveComponent, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
+import { defineComponent, h, createCommentVNode, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
@@ -34,6 +34,10 @@ export default defineComponent({
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
+
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
+    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
     const { computeSize } = useFns.useSize(props)
 
@@ -6911,16 +6915,18 @@ export default defineComponent({
         /**
          * 加载中
          */
-        h(resolveComponent('vxe-loading') as VxeLoadingComponent, {
-          class: 'vxe-table--loading',
-          modelValue: currLoading,
-          icon: loadingOpts.icon,
-          text: loadingOpts.text
-        }, loadingSlot
-          ? {
-              default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
-            }
-          : {}),
+        VxeUILoadingComponent
+          ? h(VxeUILoadingComponent, {
+            class: 'vxe-table--loading',
+            modelValue: currLoading,
+            icon: loadingOpts.icon,
+            text: loadingOpts.text
+          }, loadingSlot
+            ? {
+                default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
+              }
+            : {})
+          : createCommentVNode(),
         /**
          * 自定义列
          */
@@ -6968,23 +6974,27 @@ export default defineComponent({
         /**
          * 通用提示
          */
-        h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
-          ref: refCommTooltip,
-          isArrow: false,
-          enterable: false
-        }),
+        VxeUITooltipComponent
+          ? h(VxeUITooltipComponent, {
+            ref: refCommTooltip,
+            isArrow: false,
+            enterable: false
+          })
+          : createCommentVNode(),
         /**
          * 工具提示
          */
-        h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
-          ref: refTooltip,
-          ...tipConfig as any
-        }),
+        VxeUITooltipComponent
+          ? h(VxeUITooltipComponent, {
+            ref: refTooltip,
+            ...tipConfig as any
+          })
+          : createCommentVNode(),
         /**
          * 校验提示
          */
-        props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
-          ? h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
+        VxeUITooltipComponent && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+          ? h(VxeUITooltipComponent, {
             ref: refValidTooltip,
             class: [{
               'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'

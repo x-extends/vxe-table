@@ -464,7 +464,7 @@ hooks.add('tableExportModule', {
       return getLabelData(opts, columns, datas)
     }
 
-    const getFooterCellValue = (opts: any, items: any[], column: any) => {
+    const getFooterCellValue = (opts: any, row: any, column: any) => {
       const columnOpts = computeColumnOpts.value
       const renderOpts = column.editRender || column.cellRender
       let footLabelMethod = column.footerExportMethod
@@ -478,8 +478,14 @@ hooks.add('tableExportModule', {
         footLabelMethod = columnOpts.footerExportMethod
       }
       const _columnIndex = $xeTable.getVTColumnIndex(column)
-      const cellValue = footLabelMethod ? footLabelMethod({ $table: $xeTable, items, itemIndex: _columnIndex, row: items, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
-      return cellValue
+      if (footLabelMethod) {
+        return footLabelMethod({ $table: $xeTable, items: row, itemIndex: _columnIndex, row, _columnIndex, column, options: opts })
+      }
+      // 兼容老模式
+      if (XEUtils.isArray(row)) {
+        return XEUtils.toValueString(row[_columnIndex])
+      }
+      return XEUtils.get(row, column.field)
     }
 
     const toCsv = (opts: any, columns: any[], datas: any[]) => {
@@ -493,8 +499,8 @@ hooks.add('tableExportModule', {
       if (opts.isFooter) {
         const { footerTableData } = reactData
         const footers = getFooterData(opts, footerTableData)
-        footers.forEach((rows: any) => {
-          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, rows, column))).join(',') + enterSymbol
+        footers.forEach((row: any) => {
+          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, row, column))).join(',') + enterSymbol
         })
       }
       return content
@@ -511,8 +517,8 @@ hooks.add('tableExportModule', {
       if (opts.isFooter) {
         const { footerTableData } = reactData
         const footers = getFooterData(opts, footerTableData)
-        footers.forEach((rows: any) => {
-          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, rows, column))).join(',') + enterSymbol
+        footers.forEach((row: any) => {
+          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, row, column))).join(',') + enterSymbol
         })
       }
       return content
@@ -675,12 +681,12 @@ hooks.add('tableExportModule', {
         const footers = getFooterData(opts, footerTableData)
         if (footers.length) {
           tables.push('<tfoot>')
-          footers.forEach((rows: any) => {
+          footers.forEach((row: any) => {
             tables.push(
               `<tr>${columns.map((column: any) => {
                 const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
                 const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-                const cellValue = getFooterCellValue(opts, rows, column)
+                const cellValue = getFooterCellValue(opts, row, column)
                 if (footAlign) {
                   classNames.push(`col--${footAlign}`)
                 }
@@ -726,8 +732,8 @@ hooks.add('tableExportModule', {
       if (opts.isFooter) {
         const { footerTableData } = reactData
         const footers = getFooterData(opts, footerTableData)
-        footers.forEach((rows: any) => {
-          xml += `<Row>${columns.map((column: any) => `<Cell><Data ss:Type="String">${getFooterCellValue(opts, rows, column)}</Data></Cell>`).join('')}</Row>`
+        footers.forEach((row: any) => {
+          xml += `<Row>${columns.map((column: any) => `<Cell><Data ss:Type="String">${getFooterCellValue(opts, row, column)}</Data></Cell>`).join('')}</Row>`
         })
       }
       return `${xml}</Table></Worksheet></Workbook>`

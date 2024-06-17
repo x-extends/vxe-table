@@ -1,4 +1,4 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted, createCommentVNode } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted, createCommentVNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
@@ -52,6 +52,10 @@ export default defineComponent({
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
+
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+    const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
 
     const { computeSize } = useFns.useSize(props)
 
@@ -427,18 +431,20 @@ export default defineComponent({
                 }
               })
             })
-            slotVNs.push(
-              h(resolveComponent('vxe-form') as VxeFormComponent, {
-                ref: refForm,
-                ...Object.assign({}, formOpts, {
-                  data: proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
-                }),
-                onSubmit: submitFormEvent,
-                onReset: resetFormEvent,
-                onSubmitInvalid: submitInvalidEvent,
-                onCollapse: collapseEvent
-              }, formSlots)
-            )
+            if (VxeUIFormComponent) {
+              slotVNs.push(
+                h(VxeUIFormComponent, {
+                  ref: refForm,
+                  ...Object.assign({}, formOpts, {
+                    data: proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
+                  }),
+                  onSubmit: submitFormEvent,
+                  onReset: resetFormEvent,
+                  onSubmitInvalid: submitInvalidEvent,
+                  onCollapse: collapseEvent
+                }, formSlots)
+              )
+            }
           }
         }
         return h('div', {
@@ -604,14 +610,16 @@ export default defineComponent({
               pagerSlots.right = rightSlot
             }
           }
-          slotVNs.push(
-            h(resolveComponent('vxe-pager') as VxePagerComponent, {
-              ref: refPager,
-              ...pagerOpts,
-              ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
-              onPageChange: pageChangeEvent
-            }, pagerSlots)
-          )
+          if (VxeUIPagerComponent) {
+            slotVNs.push(
+              h(VxeUIPagerComponent, {
+                ref: refPager,
+                ...pagerOpts,
+                ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
+                onPageChange: pageChangeEvent
+              }, pagerSlots)
+            )
+          }
         }
         return h('div', {
           ref: refPagerWrapper,

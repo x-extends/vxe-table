@@ -16,5 +16,7 @@ if (VxeUI.dynamicApp) {
   VxeUI.dynamicApp.component('VxeTableColumn', VxeColumnComponent)
 }
 
+VxeUI.component(VxeColumnComponent)
+
 export const Column = VxeColumn
 export default VxeColumn
