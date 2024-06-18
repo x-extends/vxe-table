@@ -1,4 +1,5 @@
-import { VxeUIExport } from 'vxe-pc-ui'
+import { App } from 'vue'
+import { VxeUIExport, VxeGlobalConfig } from 'vxe-pc-ui'
 
 declare global {
   interface Window {
@@ -20,6 +21,8 @@ export const VXETable: VxeUIExport
  * @deprecated
  */
 export type VXETableCore = VxeUIExport
+
+export function install (app: App, options?: VxeGlobalConfig): void
 
 export * from 'vxe-pc-ui/types/ui'
 
