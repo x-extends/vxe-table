@@ -21,4 +21,11 @@ export const VXETable: VxeUIExport
  */
 export type VXETableCore = VxeUIExport
 
-export * from 'vxe-pc-ui'
+export * from 'vxe-pc-ui/types/ui'
+
+// Vxe Table
+export * from 'vxe-pc-ui/types/components/column'
+export * from 'vxe-pc-ui/types/components/colgroup'
+export * from 'vxe-pc-ui/types/components/table'
+export * from 'vxe-pc-ui/types/components/grid'
+export * from 'vxe-pc-ui/types/components/toolbar'

@@ -3,7 +3,8 @@ import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeModalComponent, VxeInputComponent, VxeCheckboxComponent, VxeSelectComponent, VxeButtonComponent } from '../../../../types'
+import type { VxeModalComponent, VxeInputComponent, VxeCheckboxComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
 

@@ -6,7 +6,8 @@ import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
 import { getOnName } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
-import type { VxeGlobalRendererHandles, VxeColumnPropTypes, VxeButtonComponent } from '../../../types'
+import type { VxeButtonComponent } from 'vxe-pc-ui'
+import type { VxeGlobalRendererHandles, VxeColumnPropTypes } from '../../../types'
 
 const { getConfig, renderer, getI18n } = VxeUI
 

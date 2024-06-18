@@ -767,7 +767,7 @@ hooks.add('tableEditModule', {
           }
           // 如果指定了聚焦 class
           if (XEUtils.isFunction(autofocus)) {
-            inputElem = autofocus.call(this, params)
+            inputElem = autofocus(params)
           } else if (autofocus) {
             inputElem = cell.querySelector(autofocus)
             if (inputElem) {

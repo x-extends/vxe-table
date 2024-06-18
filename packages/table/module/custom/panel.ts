@@ -4,7 +4,8 @@ import { formatText } from '../../../ui/src/utils'
 import { addClass, removeClass } from '../../../ui/src/dom'
 import XEUtils from 'xe-utils'
 
-import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeModalComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from '../../../../types'
+import type { VxeModalComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from 'vxe-pc-ui'
+import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
 

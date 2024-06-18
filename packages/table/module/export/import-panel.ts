@@ -3,7 +3,8 @@ import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeButtonComponent, VxeModalComponent, VxeRadioGroupComponent, VxeRadioComponent } from '../../../../types'
+import type { VxeButtonComponent, VxeModalComponent, VxeRadioGroupComponent, VxeRadioComponent } from 'vxe-pc-ui'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
 
