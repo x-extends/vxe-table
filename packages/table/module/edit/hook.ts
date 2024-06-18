@@ -760,7 +760,7 @@ hooks.add('tableEditModule', {
           let { autofocus, autoselect } = editRender
           let inputElem
           if (!autofocus && compRender) {
-            autofocus = compRender.tableAutofocus || compRender.autofocus
+            autofocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
           }
           if (!autoselect && compRender) {
             autoselect = compRender.tableAutoSelect || compRender.autoselect

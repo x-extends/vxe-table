@@ -6392,7 +6392,7 @@ export default defineComponent({
         return slots.empty(params)
       } else {
         const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
-        const rtEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
+        const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
         if (rtEmptyView) {
           return getSlotVNs(rtEmptyView(emptyOpts, params))
         }

@@ -3,7 +3,9 @@ import { getFuncText } from './src/utils'
 
 import type { VxeUploadDefines, VxeGlobalConfig } from 'vxe-pc-ui'
 
-VxeUI.version = process.env.VUE_APP_VXE_VERSION as string
+export const version = process.env.VUE_APP_VXE_VERSION as string
+
+VxeUI.version = version
 VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
 
 VxeUI.setConfig({

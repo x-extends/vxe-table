@@ -1287,7 +1287,11 @@ hooks.add('tableExportModule', {
         const { treeConfig, importConfig } = props
         const { initStore, importStore, importParams } = reactData
         const importOpts = computeImportOpts.value
-        const defOpts = Object.assign({ mode: 'insert', message: true, types: XEUtils.keys(importOpts._typeMaps) }, options, importOpts)
+        const defOpts = Object.assign({
+          mode: 'insert',
+          message: true,
+          types: XEUtils.keys(importOpts._typeMaps)
+        }, importOpts, options)
         const { types } = defOpts
         const isTree = !!treeConfig
         if (isTree) {
@@ -1327,21 +1331,29 @@ hooks.add('tableExportModule', {
       },
       openExport (options: any) {
         const exportOpts = computeExportOpts.value
+        const defOpts = Object.assign({
+          mode: 'insert',
+          message: true,
+          types: XEUtils.keys(exportOpts._typeMaps)
+        }, exportOpts, options)
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!props.exportConfig) {
             errLog('vxe.error.reqProp', ['export-config'])
           }
         }
-        handleExportAndPrint(Object.assign({}, exportOpts, options))
+        handleExportAndPrint(defOpts)
       },
       openPrint (options: any) {
         const printOpts = computePrintOpts.value
+        const defOpts = Object.assign({
+          message: true
+        }, printOpts, options)
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!props.printConfig) {
             errLog('vxe.error.reqProp', ['print-config'])
           }
         }
-        handleExportAndPrint(Object.assign({}, printOpts, options), true)
+        handleExportAndPrint(defOpts, true)
       }
     }
 

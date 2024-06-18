@@ -795,7 +795,7 @@ export default defineComponent({
         emptyContent = $xeTable.callSlot(emptySlot, { $table: $xeTable, $grid: $xeTable.xegrid })
       } else {
         const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
-        const rtEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
+        const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
         if (rtEmptyView) {
           emptyContent = getSlotVNs(rtEmptyView(emptyOpts, { $table: $xeTable }))
         } else {
