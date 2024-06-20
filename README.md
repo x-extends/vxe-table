@@ -28,6 +28,10 @@
   * [x] v4.7 基于 vue3.2+，重构拆分组件，分为 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，将支持可视化组件
   * [ ] 下一阶段：sticky 渲染模式、将虚拟滚动提升到极致、虚拟滚动动态行高、数据图表可视化
 
+## 在 Cloud IDE 中预览
+
+[https://idegithub.com/x-extends/vxe-table](https://idegithub.com/x-extends/vxe-table)
+
 ## 浏览器支持
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
