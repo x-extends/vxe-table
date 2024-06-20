@@ -604,7 +604,7 @@ hooks.add('tableEditModule', {
         const column = XEUtils.isString(fieldOrColumn) ? $xeTable.getColumnByField(fieldOrColumn) : fieldOrColumn
         if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
           return $xeTable.scrollToRow(row, column).then(() => {
-            const cell = $xeTable.getCell(row, column)
+            const cell = $xeTable.getCellElement(row, column)
             if (cell) {
               editPrivateMethods.handleActived({
                 row,
@@ -631,7 +631,7 @@ hooks.add('tableEditModule', {
         if (row && column && editOpts.trigger !== 'manual') {
           const rowIndex = $xeTable.findRowIndexOf(tableData, row)
           if (rowIndex > -1 && column) {
-            const cell = $xeTable.getCell(row, column)
+            const cell = $xeTable.getCellElement(row, column)
             const params = {
               row,
               rowIndex,
@@ -658,7 +658,7 @@ hooks.add('tableEditModule', {
         const { actived, focused } = editStore
         const { row, column } = params
         const { editRender } = column
-        const cell = (params.cell || $xeTable.getCell(row, column))
+        const cell = (params.cell || $xeTable.getCellElement(row, column))
         const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
         params.cell = cell
         if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
@@ -833,7 +833,7 @@ hooks.add('tableEditModule', {
         const { row, column } = selected
         removeCellSelectedClass()
         if (row && column) {
-          const cell = $xeTable.getCell(row, column)
+          const cell = $xeTable.getCellElement(row, column)
           if (cell) {
             addClass(cell, 'col--selected')
           }

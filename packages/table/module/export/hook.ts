@@ -347,7 +347,7 @@ hooks.add('tableExportModule', {
               _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
             }
             columns.forEach((column, $columnIndex) => {
-              let cellValue: string | boolean = ''
+              let cellValue: string | number | boolean = ''
               const renderOpts = column.editRender || column.cellRender
               let bodyExportMethod = column.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
@@ -380,12 +380,12 @@ hooks.add('tableExportModule', {
                     if (opts.original) {
                       cellValue = getCellValue(row, column)
                     } else {
-                      cellValue = $xeTable.getCellLabel(row, column)
+                      cellValue = `${$xeTable.getCellLabel(row, column)}`
                       if (column.type === 'html') {
                         htmlCellElem.innerHTML = cellValue
                         cellValue = htmlCellElem.innerText.trim()
                       } else {
-                        const cell = $xeTable.getCell(row, column)
+                        const cell = $xeTable.getCellElement(row, column)
                         if (cell) {
                           cellValue = cell.innerText.trim()
                         }
@@ -406,7 +406,7 @@ hooks.add('tableExportModule', {
           _row: row
         }
         columns.forEach((column, $columnIndex) => {
-          let cellValue: string | boolean = ''
+          let cellValue: string | number | boolean = ''
           const renderOpts = column.editRender || column.cellRender
           let exportLabelMethod = column.exportMethod
           if (!exportLabelMethod && renderOpts && renderOpts.name) {
@@ -436,12 +436,12 @@ hooks.add('tableExportModule', {
                 if (opts.original) {
                   cellValue = getCellValue(row, column)
                 } else {
-                  cellValue = $xeTable.getCellLabel(row, column)
+                  cellValue = `${$xeTable.getCellLabel(row, column)}`
                   if (column.type === 'html') {
                     htmlCellElem.innerHTML = cellValue
                     cellValue = htmlCellElem.innerText.trim()
                   } else {
-                    const cell = $xeTable.getCell(row, column)
+                    const cell = $xeTable.getCellElement(row, column)
                     if (cell) {
                       cellValue = cell.innerText.trim()
                     }

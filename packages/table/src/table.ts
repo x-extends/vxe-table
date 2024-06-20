@@ -1225,7 +1225,7 @@ export default defineComponent({
         if (sortBy) {
           cellValue = XEUtils.isFunction(sortBy) ? sortBy({ row, column }) : XEUtils.get(row, sortBy)
         } else {
-          cellValue = tablePrivateMethods.getCellLabel(row, column)
+          cellValue = tableMethods.getCellLabel(row, column)
         }
         if (!sortType || sortType === 'auto') {
           return isNaN(cellValue) ? cellValue : XEUtils.toNumber(cellValue)
@@ -3050,6 +3050,80 @@ export default defineComponent({
         }
         return nextTick()
       },
+      getCellElement (row, fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        if (!column) {
+          return null
+        }
+        const rowid = getRowid($xeTable, row)
+        const tableBody = refTableBody.value
+        const leftBody = refTableLeftBody.value
+        const rightBody = refTableRightBody.value
+        let bodyElem
+        if (column) {
+          if (column.fixed) {
+            if (column.fixed === 'left') {
+              if (leftBody) {
+                bodyElem = leftBody.$el as HTMLDivElement
+              }
+            } else {
+              if (rightBody) {
+                bodyElem = rightBody.$el as HTMLDivElement
+              }
+            }
+          }
+          if (!bodyElem) {
+            bodyElem = tableBody.$el as HTMLDivElement
+          }
+          if (bodyElem) {
+            return bodyElem.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
+          }
+        }
+        return null
+      },
+      getCellLabel (row, fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        if (!column) {
+          return null
+        }
+        const formatter = column.formatter
+        const cellValue = getCellValue(row, column)
+        let cellLabel = cellValue
+        if (formatter) {
+          let formatData
+          const { fullAllDataRowIdData } = internalData
+          const rowid = getRowid($xeTable, row)
+          const colid = column.id
+          const rest = fullAllDataRowIdData[rowid]
+          if (rest) {
+            formatData = rest.formatData
+            if (!formatData) {
+              formatData = fullAllDataRowIdData[rowid].formatData = {}
+            }
+            if (rest && formatData[colid]) {
+              if (formatData[colid].value === cellValue) {
+                return formatData[colid].label
+              }
+            }
+          }
+          const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
+          if (XEUtils.isString(formatter)) {
+            const gFormatOpts = formats.get(formatter)
+            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
+            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams) : ''
+          } else if (XEUtils.isArray(formatter)) {
+            const gFormatOpts = formats.get(formatter[0])
+            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
+            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams, ...formatter.slice(1)) : ''
+          } else {
+            cellLabel = formatter(formatParams)
+          }
+          if (formatData) {
+            formatData[colid] = { value: cellValue, label: cellLabel }
+          }
+        }
+        return cellLabel
+      },
       /**
        * 检查是否为临时行数据
        * @param {Row} row 行对象
@@ -3104,6 +3178,13 @@ export default defineComponent({
       getColumns (columnIndex?: number): any {
         const columns = internalData.visibleColumn
         return XEUtils.isUndefined(columnIndex) ? columns.slice(0) : columns[columnIndex]
+      },
+      /**
+       * 根据列获取列的唯一主键
+       */
+      getColid (fieldOrColumn) {
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        return column ? column.id : null
       },
       /**
        * 根据列的唯一主键获取列
@@ -4378,7 +4459,7 @@ export default defineComponent({
             const type = 'change'
             if ($xeTable.hasCellRules) {
               if ($xeTable.hasCellRules(type, row, column)) {
-                const cell = tablePrivateMethods.getCell(row, column)
+                const cell = tableMethods.getCellElement(row, column)
                 if (cell) {
                   return $xeTable.validCellRules(type, row, column, cellValue)
                     .then(() => {
@@ -6245,71 +6326,12 @@ export default defineComponent({
         }
         internalData.hoverRow = null
       },
+      /**
+       * 已废弃，被 getCellElement 替换
+       * @deprecated
+       */
       getCell (row, column) {
-        const rowid = getRowid($xeTable, row)
-        const tableBody = refTableBody.value
-        const leftBody = refTableLeftBody.value
-        const rightBody = refTableRightBody.value
-        let bodyElem
-        if (column) {
-          if (column.fixed) {
-            if (column.fixed === 'left') {
-              if (leftBody) {
-                bodyElem = leftBody.$el as HTMLDivElement
-              }
-            } else {
-              if (rightBody) {
-                bodyElem = rightBody.$el as HTMLDivElement
-              }
-            }
-          }
-          if (!bodyElem) {
-            bodyElem = tableBody.$el as HTMLDivElement
-          }
-          if (bodyElem) {
-            return bodyElem.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
-          }
-        }
-        return null
-      },
-      getCellLabel (row, column) {
-        const formatter = column.formatter
-        const cellValue = getCellValue(row, column)
-        let cellLabel = cellValue
-        if (formatter) {
-          let formatData
-          const { fullAllDataRowIdData } = internalData
-          const rowid = getRowid($xeTable, row)
-          const colid = column.id
-          const rest = fullAllDataRowIdData[rowid]
-          if (rest) {
-            formatData = rest.formatData
-            if (!formatData) {
-              formatData = fullAllDataRowIdData[rowid].formatData = {}
-            }
-            if (rest && formatData[colid]) {
-              if (formatData[colid].value === cellValue) {
-                return formatData[colid].label
-              }
-            }
-          }
-          const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
-          if (XEUtils.isString(formatter)) {
-            const gFormatOpts = formats.get(formatter)
-            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
-            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams) : ''
-          } else if (XEUtils.isArray(formatter)) {
-            const gFormatOpts = formats.get(formatter[0])
-            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
-            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams, ...formatter.slice(1)) : ''
-          } else {
-            cellLabel = formatter(formatParams)
-          }
-          if (formatData) {
-            formatData[colid] = { value: cellValue, label: cellLabel }
-          }
-        }
-        return cellLabel
+        return tableMethods.getCellElement(row, column)
       },
       findRowIndexOf (list, row) {
         return row ? XEUtils.findIndexOf(list, item => $xeTable.eqRow(item, row)) : -1

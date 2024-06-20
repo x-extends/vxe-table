@@ -74,7 +74,7 @@ hooks.add('tableMenuModule', {
               const { keyboard, row, column } = params
               if (keyboard && row && column) {
                 $xeTable.scrollToRow(row, column).then(() => {
-                  const cell = $xeTable.getCell(row, column)
+                  const cell = $xeTable.getCellElement(row, column)
                   if (cell) {
                     const { boundingTop, boundingLeft } = getAbsolutePos(cell)
                     top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)

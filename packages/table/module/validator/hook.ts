@@ -215,7 +215,7 @@ hooks.add('tableValidatorModule', {
               })
             }
             const posAndFinish = () => {
-              firstErrParams.cell = $xeTable.getCell(firstErrParams.row, firstErrParams.column)
+              firstErrParams.cell = $xeTable.getCellElement(firstErrParams.row, firstErrParams.column)
               scrollToView(firstErrParams.cell)
               handleValidError(firstErrParams).then(finish)
             }
