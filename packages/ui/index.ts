@@ -109,8 +109,7 @@ VxeUI.setConfig({
         html: 1,
         xml: 1,
         txt: 1
-      },
-      modes: ['insert', 'covering']
+      }
     },
     exportConfig: {
       _typeMaps: {
@@ -118,11 +117,9 @@ VxeUI.setConfig({
         html: 1,
         xml: 1,
         txt: 1
-      },
-      modes: ['current', 'selected']
+      }
     },
     printConfig: {
-      modes: ['current', 'selected']
     },
     mouseConfig: {
       extension: true

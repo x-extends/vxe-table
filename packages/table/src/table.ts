@@ -6002,6 +6002,7 @@ export default defineComponent({
         if (trigger === 'manual') {
           return
         }
+        evnt.stopPropagation()
         if (checkboxOpts.isShiftKey && evnt.shiftKey && !props.treeConfig) {
           const checkboxRecords = tableMethods.getCheckboxRecords()
           if (checkboxRecords.length) {
@@ -6036,6 +6037,9 @@ export default defineComponent({
         if (trigger === 'manual') {
           return
         }
+        if (evnt) {
+          evnt.stopPropagation()
+        }
         handleCheckAllEvent(evnt, value)
       },
       /**
@@ -6049,6 +6053,7 @@ export default defineComponent({
         if (trigger === 'manual') {
           return
         }
+        evnt.stopPropagation()
         let newValue = row
         let isChange = oldValue !== newValue
         if (isChange) {
@@ -6084,6 +6089,7 @@ export default defineComponent({
         if (trigger === 'manual') {
           return
         }
+        evnt.stopPropagation()
         const rowid = getRowid($xeTable, row)
         if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
           const expanded = !tableMethods.isRowExpandByRow(row)
@@ -6112,6 +6118,7 @@ export default defineComponent({
         if (trigger === 'manual') {
           return
         }
+        evnt.stopPropagation()
         const rowid = getRowid($xeTable, row)
         if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
           const expanded = !tableMethods.isTreeExpandByRow(row)

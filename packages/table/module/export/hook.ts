@@ -942,11 +942,17 @@ hooks.add('tableExportModule', {
       const hasTree = treeConfig
       const customOpts = computeCustomOpts.value
       const selectRecords = $xeTable.getCheckboxRecords()
+      const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {}
       const hasFooter = !!footerTableData.length
       const hasMerge = !hasTree && mergeList.length
-      const defOpts = Object.assign({ message: true, isHeader: showHeader, isFooter: showFooter }, options)
+      const defOpts = Object.assign({
+        message: true,
+        isHeader: showHeader,
+        isFooter: showFooter,
+        modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
+      }, options)
       const types: string[] = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
-      const modes: string[] = defOpts.modes
+      const modes: string[] = defOpts.modes || []
       const checkMethod = customOpts.checkMethod
       const exportColumns = collectColumn.slice(0)
       const { columns } = defOpts
@@ -1304,9 +1310,11 @@ hooks.add('tableExportModule', {
         const defOpts = Object.assign({
           mode: 'insert',
           message: true,
-          types: XEUtils.keys(importOpts._typeMaps)
+          types: XEUtils.keys(importOpts._typeMaps),
+          modes: ['insert', 'covering']
         }, importOpts, options)
-        const { types } = defOpts
+        const types = defOpts.types || []
+        const modes = defOpts.modes || []
         const isTree = !!treeConfig
         if (isTree) {
           if (defOpts.message) {
@@ -1320,13 +1328,13 @@ hooks.add('tableExportModule', {
           errLog('vxe.error.reqProp', ['import-config'])
         }
         // 处理类型
-        const typeList = types.map((value: any) => {
+        const typeList = types.map((value) => {
           return {
             value,
             label: `vxe.export.types.${value}`
           }
         })
-        const modeList = defOpts.modes.map((value: any) => {
+        const modeList = modes.map((value) => {
           return {
             value,
             label: `vxe.import.modes.${value}`
