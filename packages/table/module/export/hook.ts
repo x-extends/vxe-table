@@ -1242,22 +1242,29 @@ hooks.add('tableExportModule', {
           opts.sheetName = document.title
         }
         const beforePrintMethod = opts.beforePrintMethod
+        const tableHtml = opts.html || opts.content
         return new Promise((resolve, reject) => {
           if (VxeUI.print) {
-            if (opts.content) {
+            if (tableHtml) {
               resolve(
                 VxeUI.print({
                   title: opts.sheetName,
-                  html: opts.content
+                  html: tableHtml,
+                  customStyle: opts.style,
+                  beforeMethod: beforePrintMethod
+                    ? ({ html }) => {
+                        return beforePrintMethod({ html, content: html, options: opts, $table: $xeTable })
+                      }
+                    : undefined
                 })
               )
             } else {
               resolve(
                 exportMethods.exportData(opts).then(({ content }: any) => {
-                  debugger
                   return VxeUI.print({
                     title: opts.sheetName,
                     html: content,
+                    customStyle: opts.style,
                     beforeMethod: beforePrintMethod
                       ? ({ html }) => {
                           return beforePrintMethod({ html, content: html, options: opts, $table: $xeTable })
