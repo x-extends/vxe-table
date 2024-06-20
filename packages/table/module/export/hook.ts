@@ -1241,6 +1241,7 @@ hooks.add('tableExportModule', {
         if (!opts.sheetName) {
           opts.sheetName = document.title
         }
+        const beforePrintMethod = opts.beforePrintMethod
         return new Promise((resolve, reject) => {
           if (VxeUI.print) {
             if (opts.content) {
@@ -1253,9 +1254,15 @@ hooks.add('tableExportModule', {
             } else {
               resolve(
                 exportMethods.exportData(opts).then(({ content }: any) => {
+                  debugger
                   return VxeUI.print({
                     title: opts.sheetName,
-                    html: content
+                    html: content,
+                    beforeMethod: beforePrintMethod
+                      ? ({ html }) => {
+                          return beforePrintMethod({ html, content: html, options: opts, $table: $xeTable })
+                        }
+                      : undefined
                   })
                 })
               )
