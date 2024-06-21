@@ -913,7 +913,7 @@ export default {
     this.preventEvent(null, 'mounted')
   },
   activated () {
-    this.recalculate().then(() => this.refreshScroll())
+    this.recalculate().then(() => this.refreshScroll(false))
     this.preventEvent(null, 'activated')
   },
   deactivated () {

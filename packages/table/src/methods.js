@@ -1680,7 +1680,7 @@ const Methods = {
   /**
    * 刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）
    */
-  refreshScroll () {
+  refreshScroll (clearVirtualScroll = true) {
     const { lastScrollLeft, lastScrollTop } = this
     const { $refs } = this
     const { tableBody, leftBody, rightBody, tableFooter } = $refs
@@ -1690,7 +1690,7 @@ const Methods = {
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     // 还原滚动条位置
     if (lastScrollLeft || lastScrollTop) {
-      return restoreScrollLocation(this, lastScrollLeft, lastScrollTop)
+      return restoreScrollLocation(this, lastScrollLeft, lastScrollTop, clearVirtualScroll)
     }
     // 重置
     setScrollTop(tableBodyElem, lastScrollTop)
@@ -4353,7 +4353,7 @@ const Methods = {
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
-  clearScroll () {
+  clearScroll (clearVirtualScroll = true) {
     const { $refs, scrollXStore, scrollYStore } = this
     const { tableBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
@@ -4371,8 +4371,10 @@ const Methods = {
       tableBodyElem.scrollTop = 0
       tableBodyElem.scrollLeft = 0
     }
-    scrollXStore.startIndex = 0
-    scrollYStore.startIndex = 0
+    if (clearVirtualScroll) {
+      scrollXStore.startIndex = 0
+      scrollYStore.startIndex = 0
+    }
     return this.$nextTick()
   },
   /**
