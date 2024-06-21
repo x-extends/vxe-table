@@ -6,7 +6,9 @@ export default {
   vxe: {
     base: {
       pleaseInput: '请输入',
-      pleaseSelect: '请选择'
+      pleaseSelect: '请选择',
+      comma: '，',
+      fullStop: '。'
     },
     loading: {
       text: '加载中...'
@@ -64,7 +66,8 @@ export default {
       customTitle: '列设置',
       customAll: '全部',
       customConfirm: '确认',
-      customRestore: '重置',
+      customCancel: '取消',
+      customRestore: '恢复默认',
       maxFixedCol: '最大冻结列的数量不能超过 {0} 个'
     },
     grid: {
@@ -120,6 +123,7 @@ export default {
         colSort: '排序',
         sortHelpTip: '点击并拖动图标可以调整列的排序',
         colTitle: '标题',
+        colResizable: '列宽（像素）',
         colVisible: '是否显示',
         colFixed: '冻结列（最多 {0} 列）',
         fixedLeft: '左侧',
@@ -185,6 +189,8 @@ export default {
       expCancel: '取消'
     },
     modal: {
+      errTitle: '错误提示',
+      zoomMin: '最小化',
       zoomIn: '最大化',
       zoomOut: '还原',
       close: '关闭'
@@ -269,12 +275,146 @@ export default {
         }
       }
     },
-    formDesign: {
-      widget: {
-        input: '输入框',
-        textarea: '文本域',
-        select: '下拉框'
+    imagePreview: {
+      popupTitle: '预览',
+      operBtn: {
+        zoomOut: '缩小',
+        zoomIn: '放大',
+        pctFull: '等比例缩放',
+        pct11: '显示原始尺寸',
+        rotateLeft: '向左旋转',
+        rotateRight: '向右旋转',
+        print: '点击打印图片',
+        download: '点击下载图片'
       }
+    },
+    upload: {
+      fileBtnText: '点击或拖拽上传',
+      imgBtnText: '点击或拖拽上传',
+      dragPlaceholder: '请把文件拖放到这个区域即可上传',
+      imgSizeHint: '单张{0}',
+      imgCountHint: '最多{0}张',
+      fileTypeHint: '支持 {0} 文件类型',
+      fileSizeHint: '单个文件大小不超过{0}',
+      fileCountHint: '最多可上传{0}个文件',
+      overCountErr: '最多只能选择{0}个文件！',
+      overCountExtraErr: '已超出最大数量{0}个，超出的{1}个文件将被忽略！',
+      overSizeErr: '文件大小最大不能超过{0}！',
+      reUpload: '重新上传',
+      uploadProgress: '上传中 {0}%',
+      uploadErr: '上传失败',
+      uploadSuccess: '上传成功'
+    },
+    formDesign: {
+      formName: '表单名称',
+      defFormTitle: '未命名的表单',
+      widgetPropTab: '控件属性',
+      widgetFormTab: '表单属性',
+      styleSetting: {
+        btn: '样式设置',
+        title: '表单的样式设置',
+        layoutTitle: '控件布局',
+        verticalLayout: '上下布局',
+        horizontalLayout: '横向布局',
+        styleTitle: '标题样式',
+        boldTitle: '标题加粗',
+        fontBold: '加粗',
+        fontNormal: '常规',
+        colonTitle: '显示冒号',
+        colonVisible: '显示',
+        colonHidden: '隐藏',
+        alignTitle: '对齐方式',
+        widthTitle: '标题宽度',
+        alignLeft: '居左',
+        alignRight: '居右',
+        unitPx: '像素',
+        unitPct: '百分比'
+      },
+      widget: {
+        group: {
+          base: '基础控件',
+          layout: '布局控件',
+          advanced: '高级控件'
+        },
+        copyTitle: '副本_{0}',
+        component: {
+          input: '输入框',
+          textarea: '文本域',
+          select: '下拉框',
+          row: '一行多列',
+          title: '文本',
+          subtable: '子表',
+          VxeSwitch: '是/否',
+          VxeInput: '输入框',
+          VxeNumberInput: '数字',
+          VxeDatePicker: '日期',
+          VxeTextarea: '文本域',
+          VxeSelect: '下拉框',
+          VxeRadioGroup: '单选框',
+          VxeCheckboxGroup: '复选框',
+          VxeUploadFile: '文件',
+          VxeUploadImage: '图片'
+        }
+      },
+      widgetProp: {
+        name: '控件名称',
+        placeholder: '提示语',
+        required: '必填校验',
+        displaySetting: {
+          name: '显示设置',
+          pc: '电脑端',
+          mobile: '手机端',
+          visible: '显示',
+          hidden: '隐藏'
+        },
+        dataSource: {
+          name: '数据源',
+          defValue: '选项{0}',
+          addOption: '添加选项',
+          batchEditOption: '批量编辑',
+          batchEditTip: '每行对应一个选项，支持从表格、Excel、WPS 中直接复制粘贴。',
+          batchEditSubTip: '每行对应一个选项，如果是分组，子项可以是空格或制表键开头，支持从表格、Excel、WPS 中直接复制粘贴。',
+          buildOption: '生成选项'
+        },
+        rowProp: {
+          colSize: '列数',
+          col2: '两列',
+          col3: '三列',
+          col4: '四列',
+          col6: '六列',
+          layout: '布局'
+        },
+        textProp: {
+          name: '内容',
+          alignTitle: '对齐方式',
+          alignLeft: '居左',
+          alignCenter: '居中',
+          alignRight: '居右',
+          colorTitle: '字体颜色',
+          sizeTitle: '字体大小',
+          boldTitle: '字体加粗',
+          fontNormal: '常规',
+          fontBold: '加粗'
+        },
+        subtableProp: {
+          seqTitle: '序号',
+          showSeq: '显示序号',
+          showCheckbox: '允许多选',
+          errSubDrag: '子表不支持该控件，请使用其他控件'
+        },
+        uploadProp: {
+          limitFileCount: '文件数量限制',
+          limitFileSize: '文件大小限制',
+          multiFile: '允许上传多个文件',
+          limitImgCount: '图片数量限制',
+          limitImgSize: '图片大小限制',
+          multiImg: '允许上传多张图片'
+        }
+      }
+    },
+    listDesign: {
+      fieldSettingTab: '字段设置',
+      listSettingTab: '列表设置'
     },
 
     /**

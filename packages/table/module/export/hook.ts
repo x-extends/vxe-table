@@ -1259,7 +1259,12 @@ hooks.add('tableExportModule', {
                   customStyle: opts.style,
                   beforeMethod: beforePrintMethod
                     ? ({ html }) => {
-                        return beforePrintMethod({ html, content: html, options: opts, $table: $xeTable })
+                        return beforePrintMethod({
+                          html,
+                          content: html,
+                          options: opts,
+                          $table: $xeTable
+                        })
                       }
                     : undefined
                 })
@@ -1273,7 +1278,12 @@ hooks.add('tableExportModule', {
                     customStyle: opts.style,
                     beforeMethod: beforePrintMethod
                       ? ({ html }) => {
-                          return beforePrintMethod({ html, content: html, options: opts, $table: $xeTable })
+                          return beforePrintMethod({
+                            html,
+                            content: html,
+                            options: opts,
+                            $table: $xeTable
+                          })
                         }
                       : undefined
                   })
