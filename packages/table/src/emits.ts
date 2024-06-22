@@ -23,6 +23,7 @@ export default [
   'cell-mouseleave',
   'cell-selected',
   'cell-delete-value',
+  'cell-backspace-value',
   'header-cell-click',
   'header-cell-dblclick',
   'header-cell-menu',

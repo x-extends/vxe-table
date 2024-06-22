@@ -4876,7 +4876,7 @@ export default defineComponent({
           const childrenField = treeOpts.children || treeOpts.childrenField
           const keyCode = evnt.keyCode
           const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
-          const isBack = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.BACKSPACE)
+          const hasBackspaceKey = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.BACKSPACE)
           const isTab = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.TAB)
           const isEnter = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ENTER)
           const isSpacebar = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.SPACEBAR)
@@ -4884,7 +4884,7 @@ export default defineComponent({
           const isUpArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_UP)
           const isRightArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_RIGHT)
           const isDwArrow = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ARROW_DOWN)
-          const isDel = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.DELETE)
+          const hasDeleteKey = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.DELETE)
           const isF2 = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.F2)
           const isContextMenu = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.CONTEXT_MENU)
           const hasMetaKey = evnt.metaKey
@@ -5009,11 +5009,31 @@ export default defineComponent({
             } else if (actived.row || actived.column) {
               $xeTable.moveTabSelected(actived.args, hasShiftKey, evnt)
             }
-          } else if (keyboardConfig && isEnableConf(editConfig) && (isDel || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
+          } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selected.column)) {
+            // 如果是删除键
+            if (!isEditStatus) {
+              const { delMethod } = keyboardOpts
+              const delPaqrams = {
+                row: selected.row,
+                rowIndex: tableMethods.getRowIndex(selected.row),
+                column: selected.column,
+                columnIndex: tableMethods.getColumnIndex(selected.column),
+                $table: $xeTable
+              }
+              if (delMethod) {
+                delMethod(delPaqrams)
+              } else {
+                setCellValue(selected.row, selected.column, null)
+              }
+              // 如果按下 del 键，更新表尾数据
+              tableMethods.updateFooter()
+              $xeTable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
+            }
+          } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
             if (!isEditStatus) {
               const { delMethod, backMethod } = keyboardOpts
               // 如果是删除键
-              if (keyboardOpts.isDel && (selected.row || selected.column)) {
+              if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
                 const delPaqrams = {
                   row: selected.row,
                   rowIndex: tableMethods.getRowIndex(selected.row),
@@ -5026,39 +5046,34 @@ export default defineComponent({
                 } else {
                   setCellValue(selected.row, selected.column, null)
                 }
-                if (isBack) {
-                  if (backMethod) {
-                    backMethod({
-                      row: selected.row,
-                      rowIndex: tableMethods.getRowIndex(selected.row),
-                      column: selected.column,
-                      columnIndex: tableMethods.getColumnIndex(selected.column),
-                      $table: $xeTable
-                    })
-                  } else {
-                    $xeTable.handleActived(selected.args, evnt)
-                  }
-                } else if (isDel) {
-                  // 如果按下 del 键，更新表尾数据
-                  tableMethods.updateFooter()
+                if (backMethod) {
+                  backMethod({
+                    row: selected.row,
+                    rowIndex: tableMethods.getRowIndex(selected.row),
+                    column: selected.column,
+                    columnIndex: tableMethods.getColumnIndex(selected.column),
+                    $table: $xeTable
+                  })
+                } else {
+                  $xeTable.handleActived(selected.args, evnt)
                 }
-                $xeTable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
-              } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
-                // 如果树形表格回退键关闭当前行返回父节点
-                const { parent: parentRow } = XEUtils.findTree(internalData.afterFullData, item => item === currentRow, { children: childrenField })
-                if (parentRow) {
-                  evnt.preventDefault()
-                  params = {
-                    $table: $xeTable,
-                    row: parentRow,
-                    rowIndex: tableMethods.getRowIndex(parentRow),
-                    $rowIndex: tableMethods.getVMRowIndex(parentRow)
-                  }
-                  tableMethods.setTreeExpand(parentRow, false)
-                    .then(() => tableMethods.scrollToRow(parentRow))
-                    .then(() => tablePrivateMethods.triggerCurrentRowEvent(evnt, params))
-                }
+                $xeTable.dispatchEvent('cell-backspace-value', delPaqrams, evnt)
               }
+            }
+          } else if (hasBackspaceKey && keyboardConfig && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
+            // 如果树形表格回退键关闭当前行返回父节点
+            const { parent: parentRow } = XEUtils.findTree(internalData.afterTreeFullData, item => item === currentRow, { children: childrenField })
+            if (parentRow) {
+              evnt.preventDefault()
+              params = {
+                $table: $xeTable,
+                row: parentRow,
+                rowIndex: tableMethods.getRowIndex(parentRow),
+                $rowIndex: tableMethods.getVMRowIndex(parentRow)
+              }
+              tableMethods.setTreeExpand(parentRow, false)
+                .then(() => tableMethods.scrollToRow(parentRow))
+                .then(() => tablePrivateMethods.triggerCurrentRowEvent(evnt, params))
             }
           } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
             const { editMethod } = keyboardOpts

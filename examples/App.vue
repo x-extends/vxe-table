@@ -22,7 +22,10 @@ const navList = ref([
   { name: 'TableTest1', routerLink: { name: 'TableTest1' } },
   { name: 'TableTest2', routerLink: { name: 'TableTest2' } },
   { name: 'TableTest3', routerLink: { name: 'TableTest3' } },
-  { name: 'GridTest', routerLink: { name: 'GridTest' } }
+  { name: 'GridTest', routerLink: { name: 'GridTest' } },
+  { name: 'TestKeepTest1', routerLink: { name: 'TestKeepTest1' } },
+  { name: 'TestKeepTest2', routerLink: { name: 'TestKeepTest2' } },
+  { name: 'TestKeepTest3', routerLink: { name: 'TestKeepTest3' } }
 ])
 
 const theme = ref((localStorage.getItem('VXE_THEME') as 'default' | 'dark') || 'default')
