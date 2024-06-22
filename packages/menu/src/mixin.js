@@ -180,7 +180,7 @@ export default {
               const { keyboard, row, column } = params
               if (keyboard && row && column) {
                 this.scrollToRow(row, column).then(() => {
-                  const cell = this.getCell(row, column)
+                  const cell = this.getCellElement(row, column)
                   const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(cell)
                   top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)
                   left = boundingLeft + scrollLeft + Math.floor(cell.offsetWidth / 2)

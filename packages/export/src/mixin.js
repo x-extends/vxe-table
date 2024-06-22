@@ -137,7 +137,7 @@ function getLabelData ($xetable, opts, columns, datas) {
                     htmlCellElem.innerHTML = cellValue
                     cellValue = htmlCellElem.innerText.trim()
                   } else {
-                    const cell = $xetable.getCell(row, column)
+                    const cell = $xetable.getCellElement(row, column)
                     if (cell) {
                       cellValue = cell.innerText.trim()
                     }
@@ -193,7 +193,7 @@ function getLabelData ($xetable, opts, columns, datas) {
                 htmlCellElem.innerHTML = cellValue
                 cellValue = htmlCellElem.innerText.trim()
               } else {
-                const cell = $xetable.getCell(row, column)
+                const cell = $xetable.getCellElement(row, column)
                 if (cell) {
                   cellValue = cell.innerText.trim()
                 }
@@ -226,7 +226,7 @@ function getHeaderTitle ($xetable, opts, column) {
   return headExportMethod ? headExportMethod({ column, options: opts, $table: $xetable }) : ((opts.original ? column.property : column.getTitle()) || '')
 }
 
-function getFooterCellValue ($xetable, opts, items, column) {
+function getFooterCellValue ($xetable, opts, row, column) {
   const { columnOpts } = $xetable
   const renderOpts = column.editRender || column.cellRender
   let footLabelMethod = column.footerExportMethod
@@ -240,8 +240,14 @@ function getFooterCellValue ($xetable, opts, items, column) {
     footLabelMethod = columnOpts.footerExportMethod
   }
   const _columnIndex = $xetable.getVTColumnIndex(column)
-  const cellValue = footLabelMethod ? footLabelMethod({ $table: $xetable, items, itemIndex: _columnIndex, row: items, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
-  return cellValue
+  if (footLabelMethod) {
+    return footLabelMethod({ $table: $xetable, items: row, itemIndex: _columnIndex, row, _columnIndex, column, options: opts })
+  }
+  // 兼容老模式
+  if (XEUtils.isArray(row)) {
+    return XEUtils.toValueString(row[_columnIndex])
+  }
+  return XEUtils.get(row, column.field)
 }
 
 function getFooterData (opts, footerTableData) {
@@ -290,8 +296,8 @@ function toCsv ($xetable, opts, columns, datas) {
   if (opts.isFooter) {
     const footerTableData = $xetable.footerTableData
     const footers = getFooterData(opts, footerTableData)
-    footers.forEach(rows => {
-      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, rows, column))).join(',') + enterSymbol
+    footers.forEach(row => {
+      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, row, column))).join(',') + enterSymbol
     })
   }
   return content
@@ -308,8 +314,8 @@ function toTxt ($xetable, opts, columns, datas) {
   if (opts.isFooter) {
     const footerTableData = $xetable.footerTableData
     const footers = getFooterData(opts, footerTableData)
-    footers.forEach(rows => {
-      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, rows, column))).join(',') + enterSymbol
+    footers.forEach(row => {
+      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, row, column))).join(',') + enterSymbol
     })
   }
   return content
@@ -485,12 +491,12 @@ function toHtml ($xetable, opts, columns, datas) {
     const footers = getFooterData(opts, footerTableData)
     if (footers.length) {
       tables.push('<tfoot>')
-      footers.forEach(rows => {
+      footers.forEach(row => {
         tables.push(
           `<tr>${columns.map(column => {
             const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
             const classNames = hasEllipsis($xetable, column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-            const cellValue = getFooterCellValue($xetable, opts, rows, column)
+            const cellValue = getFooterCellValue($xetable, opts, row, column)
             if (footAlign) {
               classNames.push(`col--${footAlign}`)
             }
@@ -536,8 +542,8 @@ function toXML ($xetable, opts, columns, datas) {
   if (opts.isFooter) {
     const footerTableData = $xetable.footerTableData
     const footers = getFooterData(opts, footerTableData)
-    footers.forEach(rows => {
-      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, rows, column)}</Data></Cell>`).join('')}</Row>`
+    footers.forEach(row => {
+      xml += `<Row>${columns.map(column => `<Cell><Data ss:Type="String">${getFooterCellValue($xetable, opts, row, column)}</Data></Cell>`).join('')}</Row>`
     })
   }
   return `${xml}</Table></Worksheet></Workbook>`

@@ -425,7 +425,7 @@ export default {
       const { actived, focused } = editStore
       const { row, column } = params
       const { editRender } = column
-      const cell = params.cell = (params.cell || this.getCell(row, column))
+      const cell = params.cell = (params.cell || this.getCellElement(row, column))
       const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
       if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
         // 激活编辑
@@ -678,7 +678,7 @@ export default {
       const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
       if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
         return this.scrollToRow(row, true).then(() => {
-          const cell = this.getCell(row, column)
+          const cell = this.getCellElement(row, column)
           if (cell) {
             this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
             this.lastCallTime = Date.now()
@@ -696,7 +696,7 @@ export default {
       if (row && column && editOpts.trigger !== 'manual') {
         const rowIndex = this.findRowIndexOf(tableData, row)
         if (rowIndex > -1) {
-          const cell = this.getCell(row, column)
+          const cell = this.getCellElement(row, column)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
@@ -772,7 +772,7 @@ export default {
       const { row, column } = selected
       this.reColSdCls()
       if (row && column) {
-        const cell = this.getCell(row, column)
+        const cell = this.getCellElement(row, column)
         if (cell) {
           DomTools.addClass(cell, 'col--selected')
         }

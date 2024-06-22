@@ -1103,6 +1103,63 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  getCellElement (row, fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (!column) {
+      return null
+    }
+    const { $refs } = this
+    const rowid = getRowid(this, row)
+    let bodyElem = null
+    if (column) {
+      bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
+    }
+    if (bodyElem && bodyElem.$el) {
+      return bodyElem.$el.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
+    }
+    return null
+  },
+  getCellLabel (row, fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    if (!column) {
+      return null
+    }
+    const formatter = column.formatter
+    const cellValue = UtilTools.getCellValue(row, column)
+    let cellLabel = cellValue
+    if (formatter) {
+      let rest, formatData
+      const { fullAllDataRowMap } = this
+      const colid = column.id
+      const cacheFormat = fullAllDataRowMap.has(row)
+      if (cacheFormat) {
+        rest = fullAllDataRowMap.get(row)
+        formatData = rest.formatData
+        if (!formatData) {
+          formatData = fullAllDataRowMap.get(row).formatData = {}
+        }
+        if (rest && formatData[colid]) {
+          if (formatData[colid].value === cellValue) {
+            return formatData[colid].label
+          }
+        }
+      }
+      const formatParams = { cellValue, row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column) }
+      if (XEUtils.isString(formatter)) {
+        const gFormatOpts = formats.get(formatter)
+        cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams) : ''
+      } else if (XEUtils.isArray(formatter)) {
+        const gFormatOpts = formats.get(formatter[0])
+        cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams, ...formatter.slice(1)) : ''
+      } else {
+        cellLabel = formatter(formatParams)
+      }
+      if (formatData) {
+        formatData[colid] = { value: cellValue, label: cellLabel }
+      }
+    }
+    return cellLabel
+  },
   /**
    * 检查是否为临时行数据
    * @param {Row} row 行对象
@@ -1155,6 +1212,13 @@ const Methods = {
   getColumns (columnIndex) {
     const columns = this.visibleColumn
     return XEUtils.isUndefined(columnIndex) ? columns.slice(0) : columns[columnIndex]
+  },
+  /**
+   * 根据列获取列的唯一主键
+   */
+  getColid (fieldOrColumn) {
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    return column ? column.id : null
   },
   /**
    * 根据列的唯一主键获取列
@@ -2734,7 +2798,7 @@ const Methods = {
         const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu, rowOpts } = this
         const { selected, actived } = editStore
         const { keyCode } = evnt
-        const isBack = keyCode === 8
+        const hasBackspaceKey = keyCode === 8
         const isTab = keyCode === 9
         const isEnter = keyCode === 13
         const isEsc = keyCode === 27
@@ -2854,11 +2918,11 @@ const Methods = {
           } else if (actived.row || actived.column) {
             this.moveTabSelected(actived.args, hasShiftKey, evnt)
           }
-        } else if (keyboardConfig && (isDel || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow ? isBack && keyboardOpts.isArrow : isBack))) {
+        } else if (keyboardConfig && (treeConfig || isEnableConf(editConfig)) && (isDel || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow ? hasBackspaceKey && keyboardOpts.isArrow : hasBackspaceKey))) {
           if (!isEditStatus) {
             const { delMethod, backMethod } = keyboardOpts
             // 如果是删除键
-            if (keyboardOpts.isDel && (selected.row || selected.column)) {
+            if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
               const delPaqrams = {
                 row: selected.row,
                 rowIndex: this.getRowIndex(selected.row),
@@ -2871,7 +2935,7 @@ const Methods = {
               } else {
                 setCellValue(selected.row, selected.column, null)
               }
-              if (isBack) {
+              if (hasBackspaceKey) {
                 if (backMethod) {
                   backMethod({
                     row: selected.row,
@@ -2888,7 +2952,7 @@ const Methods = {
                 this.updateFooter()
               }
               this.emitEvent('cell-delete-value', delPaqrams, evnt)
-            } else if (isBack && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
+            } else if (hasBackspaceKey && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
               // 如果树形表格回退键关闭当前行返回父节点
               const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, { children: childrenField })
               if (parentRow) {
@@ -3423,6 +3487,7 @@ const Methods = {
     if (trigger === 'manual') {
       return
     }
+    evnt.stopPropagation()
     if (checkboxOpts.isShiftKey && evnt.shiftKey && !this.treeConfig) {
       const checkboxRecords = this.getCheckboxRecords()
       if (checkboxRecords.length) {
@@ -3797,6 +3862,9 @@ const Methods = {
     if (trigger === 'manual') {
       return
     }
+    if (evnt) {
+      evnt.stopPropagation()
+    }
     this.handleCheckAllEvent(evnt, value)
   },
   /**
@@ -3863,6 +3931,7 @@ const Methods = {
     if (trigger === 'manual') {
       return
     }
+    evnt.stopPropagation()
     let newValue = row
     let isChange = oldValue !== newValue
     if (isChange) {
@@ -4442,6 +4511,7 @@ const Methods = {
     if (trigger === 'manual') {
       return
     }
+    evnt.stopPropagation()
     const rowid = getRowid(this, row)
     if (!lazy || !rowExpandLazyLoadedMaps[rowid]) {
       const expanded = !this.isRowExpandByRow(row)
@@ -4720,6 +4790,7 @@ const Methods = {
     if (trigger === 'manual') {
       return
     }
+    evnt.stopPropagation()
     const rowid = getRowid(this, row)
     if (!lazy || !treeExpandLazyLoadedMaps[rowid]) {
       const expanded = !this.isTreeExpandByRow(row)
@@ -5290,7 +5361,7 @@ const Methods = {
         const type = 'change'
         if (this.hasCellRules) {
           if (this.hasCellRules(type, row, column)) {
-            const cell = this.getCell(row, column)
+            const cell = this.getCellElement(row, column)
             if (cell) {
               return this.validCellRules(type, row, column, cellValue)
                 .then(() => {
@@ -5435,54 +5506,12 @@ const Methods = {
   /*************************
    * Publish methods
    *************************/
+  /**
+   * 已废弃，被 getCellElement 替换
+   * @deprecated
+   */
   getCell (row, column) {
-    const { $refs } = this
-    const rowid = getRowid(this, row)
-    let bodyElem = null
-    if (column) {
-      bodyElem = $refs[`${column.fixed || 'table'}Body`] || $refs.tableBody
-    }
-    if (bodyElem && bodyElem.$el) {
-      return bodyElem.$el.querySelector(`.vxe-body--row[rowid="${rowid}"] .${column.id}`)
-    }
-    return null
-  },
-  getCellLabel (row, column) {
-    const formatter = column.formatter
-    const cellValue = UtilTools.getCellValue(row, column)
-    let cellLabel = cellValue
-    if (formatter) {
-      let rest, formatData
-      const { fullAllDataRowMap } = this
-      const colid = column.id
-      const cacheFormat = fullAllDataRowMap.has(row)
-      if (cacheFormat) {
-        rest = fullAllDataRowMap.get(row)
-        formatData = rest.formatData
-        if (!formatData) {
-          formatData = fullAllDataRowMap.get(row).formatData = {}
-        }
-        if (rest && formatData[colid]) {
-          if (formatData[colid].value === cellValue) {
-            return formatData[colid].label
-          }
-        }
-      }
-      const formatParams = { cellValue, row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column) }
-      if (XEUtils.isString(formatter)) {
-        const gFormatOpts = formats.get(formatter)
-        cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams) : ''
-      } else if (XEUtils.isArray(formatter)) {
-        const gFormatOpts = formats.get(formatter[0])
-        cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams, ...formatter.slice(1)) : ''
-      } else {
-        cellLabel = formatter(formatParams)
-      }
-      if (formatData) {
-        formatData[colid] = { value: cellValue, label: cellLabel }
-      }
-    }
-    return cellLabel
+    return this.getCellElement(row, column)
   },
   findRowIndexOf (list, row) {
     return row ? XEUtils.findIndexOf(list, item => this.eqRow(item, row)) : -1

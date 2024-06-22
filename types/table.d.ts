@@ -1559,6 +1559,10 @@ export interface TableKeyboardConfig {
    */
   isDel?: boolean;
   /**
+   * 是否开启回退键功能
+   */
+  isBack?: boolean
+  /**
    * 是否开启回车移动上下行移动
    */
   isEnter?: boolean;

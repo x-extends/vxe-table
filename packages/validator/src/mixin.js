@@ -221,7 +221,7 @@ export default {
               })
             }
             const posAndFinish = () => {
-              firstErrParams.cell = this.getCell(firstErrParams.row, firstErrParams.column)
+              firstErrParams.cell = this.getCellElement(firstErrParams.row, firstErrParams.column)
               DomTools.scrollToView(firstErrParams.cell)
               this.handleValidError(firstErrParams).then(finish)
             }
