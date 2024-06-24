@@ -2829,6 +2829,9 @@ export default defineComponent({
         }
         return nextTick()
       },
+      getParams () {
+        return props.params
+      },
       /**
        * 用于树结构，给行数据加载子节点
        */

@@ -3,12 +3,10 @@
 [data-vxe-ui-theme="dark"] {
   color-scheme: dark;
 
-  $vxe-ui-font-color: #a0a3a7;
-  
   /*font*/
-  --vxe-ui-font-color: #{$vxe-ui-font-color};
-  --vxe-ui-font-lighten-color: #{lighten($vxe-ui-font-color, 10%)};
-  --vxe-ui-font-darken-color: #{darken($vxe-ui-font-color, 10%)};
+  --vxe-ui-font-color: #a0a3a7;
+  --vxe-ui-font-lighten-color: #babdc0;
+  --vxe-ui-font-darken-color: #86898e;
 
   /*base*/
   --vxe-ui-base-popup-border-color: var(--vxe-ui-layout-background-color);

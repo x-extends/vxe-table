@@ -1,12 +1,10 @@
 @import './base.scss';
 
 [data-vxe-ui-theme="light"] {
-  $vxe-ui-font-color: #606266;
-
   /*font*/
-  --vxe-ui-font-color: #{$vxe-ui-font-color};
-  --vxe-ui-font-lighten-color: #{lighten($vxe-ui-font-color, 10%)};
-  --vxe-ui-font-darken-color: #{darken($vxe-ui-font-color, 10%)};
+  --vxe-ui-font-color: #606266;
+  --vxe-ui-font-lighten-color: #797b80;
+  --vxe-ui-font-darken-color: #47494c;
 
   /*base*/
   --vxe-ui-base-popup-border-color: #DADCE0;
