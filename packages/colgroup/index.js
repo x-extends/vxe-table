@@ -1,4 +1,5 @@
 import VxeTableColgroupComponent from '../table/src/group'
+import VxeUI from '../v-x-e-table'
 
 export const VxeColgroup = Object.assign(VxeTableColgroupComponent, {
   install (Vue) {
@@ -7,6 +8,7 @@ export const VxeColgroup = Object.assign(VxeTableColgroupComponent, {
     Vue.component('VxeTableColgroup', VxeTableColgroupComponent)
   }
 })
+VxeUI.component(VxeTableColgroupComponent)
 
 export const Colgroup = VxeColgroup
 

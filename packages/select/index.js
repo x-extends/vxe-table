@@ -1,6 +1,7 @@
 import VxeSelectComponent from './src/select'
 import VxeOptionComponent from './src/option'
 import VxeOptgroupComponent from './src/optgroup'
+import VxeUI from '../v-x-e-table'
 
 export const VxeSelect = Object.assign(VxeSelectComponent, {
   Option: VxeOptionComponent,
@@ -11,6 +12,7 @@ export const VxeSelect = Object.assign(VxeSelectComponent, {
     Vue.component(VxeOptgroupComponent.name, VxeOptgroupComponent)
   }
 })
+VxeUI.component(VxeSelectComponent)
 
 export const Select = VxeSelect
 

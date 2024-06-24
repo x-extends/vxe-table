@@ -861,11 +861,12 @@ function handleImport ($xetable, content, opts) {
 }
 
 function handleFileImport ($xetable, file, opts) {
+  const { importOpts } = $xetable
   const { importMethod, afterImportMethod } = opts
   const { type, filename } = UtilTools.parseFile(file)
 
   // 检查类型，如果为自定义导出，则不需要校验类型
-  if (!importMethod && !XEUtils.includes(VXETable.globalConfs.importTypes, type)) {
+  if (!importMethod && !XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)) {
     if (opts.message !== false) {
       // 检测弹窗模块
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
@@ -1043,13 +1044,13 @@ export function handlePrint ($xetable, opts, content) {
 }
 
 function handleExportAndPrint ($xetable, options, isPrint) {
-  const { initStore, customOpts, collectColumn, footerTableData, treeConfig, mergeList, isGroup, exportParams } = $xetable
+  const { initStore, customOpts, collectColumn, footerTableData, treeConfig, mergeList, isGroup, exportParams, exportOpts } = $xetable
   const selectRecords = $xetable.getCheckboxRecords()
   const hasFooter = !!footerTableData.length
   const hasTree = treeConfig
   const hasMerge = !hasTree && mergeList.length
   const defOpts = Object.assign({ message: true, isHeader: true }, options)
-  const types = defOpts.types || VXETable.globalConfs.exportTypes
+  const types = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
   const modes = defOpts.modes
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
@@ -1281,7 +1282,7 @@ export default {
       }
 
       // 检查类型，如果为自定义导出，则不需要校验类型
-      if (!opts.exportMethod && !XEUtils.includes(VXETable.globalConfs.exportTypes, type)) {
+      if (!opts.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           errLog('vxe.error.notType', [type])
         }
@@ -1355,11 +1356,12 @@ export default {
       return handleFileImport(this, file, opts)
     },
     _importData (options) {
+      const { importOpts } = this
       const opts = Object.assign({
-        types: VXETable.globalConfs.importTypes
+        types: XEUtils.keys(importOpts._typeMaps)
         // beforeImportMethod: null,
         // afterImportMethod: null
-      }, this.importOpts, options)
+      }, importOpts, options)
       const { beforeImportMethod, afterImportMethod } = opts
       if (beforeImportMethod) {
         beforeImportMethod({ options: opts, $table: this })
@@ -1423,7 +1425,12 @@ export default {
       })
     },
     _openImport (options) {
-      const defOpts = Object.assign({ mode: 'insert', message: true, types: VXETable.globalConfs.importTypes }, options, this.importOpts)
+      const { importOpts } = this
+      const defOpts = Object.assign({
+        mode: 'insert',
+        message: true,
+        types: XEUtils.keys(importOpts._typeMaps)
+      }, options, importOpts)
       const { types } = defOpts
       const isTree = !!this.getTreeStatus()
       if (isTree) {

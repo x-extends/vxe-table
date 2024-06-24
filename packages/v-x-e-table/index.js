@@ -7,7 +7,7 @@ import { commands } from './src/commands'
 import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
-import { setTheme } from './src/theme'
+import { setTheme, getTheme } from './src/theme'
 import { UtilTools } from '../tools/utils'
 import { errLog, warnLog } from '../tools/log'
 
@@ -17,11 +17,11 @@ export function use (Plugin, options) {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   if (Plugin && Plugin.install) {
     if (installedPlugins.indexOf(Plugin) === -1) {
-      Plugin.install(VXETable, options)
+      Plugin.install(VxeUI, options)
       installedPlugins.push(Plugin)
     }
   }
-  return VXETable
+  return VxeUI
 }
 
 /**
@@ -31,22 +31,22 @@ function reg (key) {
   /* eslint-disable @typescript-eslint/no-use-before-define */
   // 检测安装顺序是否正确
   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-    if (VXETable.Table) {
+    if (VxeUI.Table) {
       errLog('vxe.error.useErr', [key])
     }
   }
-  VXETable[`_${key}`] = 1
+  VxeUI[`_${key}`] = 1
 }
 
-function getExportOrImpotType (types, flag) {
-  const rest = []
-  XEUtils.objectEach(types, (val, type) => {
-    if (val === 0 || val === flag) {
-      rest.push(type)
-    }
-  })
-  return rest
-}
+// function getExportOrImpotType (types, flag) {
+//   const rest = []
+//   XEUtils.objectEach(types, (val, type) => {
+//     if (val === 0 || val === flag) {
+//       rest.push(type)
+//     }
+//   })
+//   return rest
+// }
 
 /**
  * 全局参数设置
@@ -61,7 +61,7 @@ export const setConfig = (options) => {
     }
     XEUtils.merge(GlobalConfig, options)
   }
-  return VXETable
+  return VxeUI
 }
 
 class VXETableConfig {
@@ -83,14 +83,14 @@ class VXETableConfig {
    * 获取所有导出类型
    */
   get exportTypes () {
-    return getExportOrImpotType(GlobalConfig.export.types, 1)
+    return XEUtils.keys(GlobalConfig.table.exportConfig._typeMaps)
   }
 
   /**
    * 获取所有导入类型
    */
   get importTypes () {
-    return getExportOrImpotType(GlobalConfig.export.types, 2)
+    return XEUtils.keys(GlobalConfig.table.importConfig._typeMaps)
   }
 }
 
@@ -133,14 +133,30 @@ export function setIcon (options) {
   if (options) {
     Object.assign(GlobalConfig.icon, options)
   }
-  return VXETable
+  return VxeUI
 }
 
 export const globalStore = {}
 
-export const VXETable = {
+const components = {}
+
+export function getComponent (name) {
+  return components[name] || null
+}
+
+export function component (comp) {
+  if (comp && comp.name) {
+    components[comp.name] = comp
+  }
+}
+
+export const version = process.env.VUE_APP_VXE_TABLE_VERSION
+export const tableVersion = version
+
+export const VxeUI = {
   v,
-  version: process.env.VUE_APP_VXE_TABLE_VERSION,
+  version,
+  tableVersion,
   reg,
   use,
   setConfig,
@@ -154,6 +170,10 @@ export const VXETable = {
   validators,
   t,
   _t,
+  setTheme,
+  getTheme,
+  getComponent,
+  component,
 
   // 已废弃
   config,
@@ -161,7 +181,7 @@ export const VXETable = {
   globalConfs
 }
 
-export const VxeUI = VXETable
+export const VXETable = VxeUI
 
 setTheme('light')
 
@@ -171,4 +191,6 @@ export * from './src/commands'
 export * from './src/menus'
 export * from './src/formats'
 
-export default VXETable
+export * from './src/theme'
+
+export default VxeUI

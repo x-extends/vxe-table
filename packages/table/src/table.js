@@ -822,11 +822,11 @@ export default {
       // }
       // 检查导入导出类型，如果自定义导入导出方法，则不校验类型
       const { exportConfig, exportOpts, importConfig, importOpts } = this
-      if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(VXETable.globalConfs.importTypes, importOpts.types)) {
-        warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(VXETable.globalConfs.importTypes, type)).join(',') || VXETable.globalConfs.importTypes.join(',')])
+      if (importConfig && importOpts.types && !importOpts.importMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), importOpts.types)) {
+        warnLog('vxe.error.errProp', [`export-config.types=${importOpts.types.join(',')}`, importOpts.types.filter(type => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
       }
-      if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(VXETable.globalConfs.exportTypes, exportOpts.types)) {
-        warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(VXETable.globalConfs.exportTypes, type)).join(',') || VXETable.globalConfs.exportTypes.join(',')])
+      if (exportConfig && exportOpts.types && !exportOpts.exportMethod && !XEUtils.includeArrays(XEUtils.keys(importOpts._typeMaps), exportOpts.types)) {
+        warnLog('vxe.error.errProp', [`export-config.types=${exportOpts.types.join(',')}`, exportOpts.types.filter(type => XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)).join(',') || XEUtils.keys(importOpts._typeMaps).join(',')])
       }
     }
 

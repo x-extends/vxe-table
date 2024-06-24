@@ -1,13 +1,14 @@
 import VxeGridComponent from './src/grid'
-import VXETable from '../v-x-e-table'
+import VxeUI from '../v-x-e-table'
 
 export const VxeGrid = Object.assign(VxeGridComponent, {
   install (Vue) {
-    VXETable.Grid = VxeGridComponent
-    VXETable.GridComponent = VxeGridComponent
+    VxeUI.Grid = VxeGridComponent
+    VxeUI.GridComponent = VxeGridComponent
     Vue.component(VxeGridComponent.name, VxeGridComponent)
   }
 })
+VxeUI.component(VxeGridComponent)
 
 export const Grid = VxeGrid
 

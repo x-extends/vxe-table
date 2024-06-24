@@ -1,6 +1,6 @@
 import XEUtils from 'xe-utils'
 import VXEModalComponent, { allActivedModals } from './src/modal'
-import VXETable from '../v-x-e-table'
+import VxeUI from '../v-x-e-table'
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
@@ -96,10 +96,10 @@ shortcutTypes.forEach((type, index) => {
 
 export const VxeModal = Object.assign(VXEModalComponent, {
   install (Vue) {
-    VXETable._modal = 1
+    VxeUI._modal = 1
     Vue.component(VXEModalComponent.name, VXEModalComponent)
     ModalClass = Vue.extend(VXEModalComponent)
-    VXETable.modal = ModalController
+    VxeUI.modal = ModalController
     // 兼容老版本
     if (!Vue.prototype.$vxe) {
       Vue.prototype.$vxe = { modal: ModalController }
@@ -108,6 +108,8 @@ export const VxeModal = Object.assign(VXEModalComponent, {
     }
   }
 })
+
+VxeUI.component(VXEModalComponent)
 
 export const Modal = VxeModal
 
