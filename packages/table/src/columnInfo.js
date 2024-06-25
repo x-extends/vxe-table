@@ -127,7 +127,7 @@ export class ColumnInfo {
       renderWidth: 0,
       renderHeight: 0,
       renderResizeWidth: 0,
-      resizeWidth: 0,
+      resizeWidth: 0, // 手动调整
 
       renderLeft: 0,
       renderArgs: [], // 渲染参数可用于扩展

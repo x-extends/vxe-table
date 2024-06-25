@@ -344,6 +344,7 @@ export default {
   button: {
     // size: null,
     // transfer: false
+    trigger: 'hover'
   },
   buttonGroup: {
     // size: null

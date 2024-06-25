@@ -589,18 +589,6 @@ export default {
     getStoreData () {
       return {}
     },
-    handleSaveStore (type) {
-      const { $xetable } = this
-      const { id, customOpts } = $xetable
-      const { storage, updateStore } = customOpts
-      if (storage && id && updateStore) {
-        updateStore({
-          id,
-          type,
-          storeData: $xetable.getCustomStoreData()
-        })
-      }
-    },
     confirmCustomEvent  (evnt) {
       const { $xetable } = this
       const { customOpts, customColumnList } = $xetable
@@ -629,7 +617,7 @@ export default {
       })
       $xetable.closeCustom()
       $xetable.emitCustomEvent('confirm', evnt)
-      this.handleSaveStore('confirm')
+      $xetable.saveCustomStore('confirm')
     },
     cancelCustomEvent  (evnt) {
       const { $xetable } = this
@@ -663,7 +651,6 @@ export default {
       $xetable.resetColumn(true)
       $xetable.closeCustom()
       $xetable.emitCustomEvent('reset', evnt)
-      this.handleSaveStore('reset')
     },
     resetCustomEvent  (evnt) {
       if (VXETable.modal) {
@@ -719,6 +706,7 @@ export default {
       this.handleOptionCheck(column)
       if (customOpts.immediate) {
         $xetable.handleCustom()
+        $xetable.saveCustomStore('update:visible')
       }
       $xetable.checkCustomStatus()
     },

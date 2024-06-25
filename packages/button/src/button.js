@@ -23,6 +23,7 @@ export default {
     title: String,
     disabled: Boolean,
     loading: Boolean,
+    trigger: { type: String, default: () => GlobalConfig.button.trigger },
     destroyOnClose: Boolean,
     className: [String, Function],
     popupClassName: [String, Function],
@@ -36,8 +37,9 @@ export default {
   data () {
     return {
       inited: false,
-      showPanel: false,
+      visiblePanel: false,
       animatVisible: false,
+      isActivated: false,
       panelIndex: 0,
       panelStyle: null,
       panelPlacement: null
@@ -97,6 +99,7 @@ export default {
     // }
 
     GlobalEvent.on(this, 'mousewheel', this.handleGlobalMousewheelEvent)
+    GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
   beforeDestroy () {
     const panelElem = this.$refs.panel
@@ -106,14 +109,25 @@ export default {
   },
   destroyed () {
     GlobalEvent.off(this, 'mousewheel')
+    GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    const { $scopedSlots, className, popupClassName, title, inited, type, destroyOnClose, isFormBtn, btnMode, btnStatus, btnRound, btnCircle, vSize, name, disabled, loading, showPanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, className, popupClassName, trigger, title, inited, type, destroyOnClose, isFormBtn, btnMode, btnStatus, btnRound, btnCircle, vSize, name, disabled, loading, visiblePanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
+    const btnOns = {}
+    const panelOns = {}
+    if (downsSlot && trigger === 'hover') {
+      // hover 触发
+      btnOns.mouseenter = this.mouseenterTargetEvent
+      btnOns.mouseleave = this.mouseleaveTargetEvent
+
+      panelOns.onMouseenter = this.mouseenterDropdownEvent
+      panelOns.onMouseleave = this.mouseleaveDropdownEvent
+    }
     return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
-        'is--active': showPanel
+        'is--active': visiblePanel
       }]
     }, [
       h('button', {
@@ -133,9 +147,8 @@ export default {
           disabled: disabled || loading
         },
         on: {
-          mouseenter: this.mouseenterTargetEvent,
-          mouseleave: this.mouseleaveTargetEvent,
-          click: this.clickEvent
+          click: this.clickTargetEvent,
+          ...btnOns
         }
       }, this.renderContent(h).concat([
         h('i', {
@@ -147,7 +160,7 @@ export default {
         class: ['vxe-button--dropdown-panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $button: this }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           'animat--leave': animatVisible,
-          'animat--enter': showPanel
+          'animat--enter': visiblePanel
         }],
         attrs: {
           placement: panelPlacement
@@ -159,10 +172,9 @@ export default {
           on: {
             mousedown: this.mousedownDropdownEvent,
             click: this.clickDropdownEvent,
-            mouseenter: this.mouseenterDropdownEvent,
-            mouseleave: this.mouseleaveDropdownEvent
+            ...panelOns
           }
-        }, destroyOnClose && !showPanel ? [] : downsSlot.call(this, {}, h))
+        }, destroyOnClose && !visiblePanel ? [] : downsSlot.call(this, {}, h))
       ] : null)
     ]) : h('button', {
       ref: 'xBtn',
@@ -226,8 +238,19 @@ export default {
       return contents
     },
     handleGlobalMousewheelEvent (evnt) {
-      if (this.showPanel && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
+      if (this.visiblePanel && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
         this.closePanel()
+      }
+    },
+    handleGlobalMousedownEvent (evnt) {
+      const { disabled, visiblePanel } = this
+      if (!disabled) {
+        const el = this.$refs.$el
+        const panelElem = this.$refs.panel
+        this.isActivated = DomTools.getEventTargetNode(evnt, el).flag || DomTools.getEventTargetNode(evnt, panelElem).flag
+        if (visiblePanel && !this.isActivated) {
+          this.closePanel()
+        }
       }
     },
     updateZindex () {
@@ -257,7 +280,7 @@ export default {
         if (panelElem) {
           panelElem.dataset.active = 'N'
         }
-        this.showPanel = false
+        this.visiblePanel = false
         setTimeout(() => {
           if (!panelElem || panelElem.dataset.active !== 'Y') {
             this.animatVisible = false
@@ -277,6 +300,42 @@ export default {
       this.$emit('mouseleave', { $event: evnt })
     },
     mouseenterTargetEvent (evnt) {
+      this.openPanel()
+      this.$emit('mouseenter', { $event: evnt })
+    },
+    mouseenterDropdownEvent () {
+      const panelElem = this.$refs.panel
+      panelElem.dataset.active = 'Y'
+      this.animatVisible = true
+      setTimeout(() => {
+        if (panelElem.dataset.active === 'Y') {
+          this.visiblePanel = true
+          this.updateZindex()
+          this.updatePlacement()
+          setTimeout(() => {
+            if (this.visiblePanel) {
+              this.updatePlacement()
+            }
+          }, 50)
+        }
+      }, 20)
+    },
+    mouseleaveDropdownEvent () {
+      this.closePanel()
+    },
+    clickTargetEvent (evnt) {
+      const { trigger } = this
+      if (trigger === 'click') {
+        if (this.visiblePanel) {
+          this.closePanel()
+        } else {
+          this.openPanel()
+        }
+      }
+      this.clickEvent(evnt)
+    },
+    openPanel () {
+      const { trigger } = this
       const panelElem = this.$refs.panel
       panelElem.dataset.active = 'Y'
       if (!this.inited) {
@@ -291,28 +350,8 @@ export default {
         } else {
           this.animatVisible = false
         }
-      }, 250)
-      this.$emit('mouseenter', { $event: evnt })
-    },
-    mouseenterDropdownEvent () {
-      const panelElem = this.$refs.panel
-      panelElem.dataset.active = 'Y'
-      this.animatVisible = true
-      setTimeout(() => {
-        if (panelElem.dataset.active === 'Y') {
-          this.showPanel = true
-          this.updateZindex()
-          this.updatePlacement()
-          setTimeout(() => {
-            if (this.showPanel) {
-              this.updatePlacement()
-            }
-          }, 50)
-        }
-      }, 20)
-    },
-    mouseleaveDropdownEvent () {
-      this.closePanel()
+      }, trigger === 'click' ? 50 : 250)
+      return this.$nextTick()
     },
     closePanel () {
       const panelElem = this.$refs.panel
@@ -321,7 +360,7 @@ export default {
         panelElem.dataset.active = 'N'
         setTimeout(() => {
           if (panelElem.dataset.active !== 'Y') {
-            this.showPanel = false
+            this.visiblePanel = false
             setTimeout(() => {
               if (panelElem.dataset.active !== 'Y') {
                 this.animatVisible = false
@@ -331,8 +370,9 @@ export default {
         }, 100)
       } else {
         this.animatVisible = false
-        this.showPanel = false
+        this.visiblePanel = false
       }
+      return this.$nextTick()
     },
     updatePlacement () {
       return this.$nextTick().then(() => {

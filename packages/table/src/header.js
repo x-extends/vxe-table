@@ -280,7 +280,7 @@ export default {
         $xetable._lastResizeTime = Date.now()
         $xetable.analyColumnWidth()
         $xetable.recalculate(true).then(() => {
-          $xetable.saveCustomResizable()
+          $xetable.saveCustomStore('update:visible')
           $xetable.updateCellAreas()
           $xetable.emitEvent('resizable-change', { ...params, resizeWidth }, evnt)
         })

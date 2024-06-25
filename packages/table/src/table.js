@@ -481,7 +481,8 @@ export default {
         message: true,
         isHeader: false,
         isFooter: false
-      }
+      },
+      _isLoading: false
     }
   },
   computed: {
@@ -1060,6 +1061,7 @@ export default {
       editRules
     } = this
     const { leftList, rightList } = columnStore
+    const currLoading = this._isLoading || loading
     return h('div', {
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         [`valid-msg--${validOpts.msgMode}`]: !!editRules,
@@ -1079,8 +1081,8 @@ export default {
         'is--animat': !!this.animat,
         'is--round': this.round,
         'is--stripe': !treeConfig && stripe,
-        'is--loading': loading,
-        'is--empty': !loading && !tableData.length,
+        'is--loading': currLoading,
+        'is--empty': !currLoading && !tableData.length,
         'is--scroll-y': overflowY,
         'is--scroll-x': overflowX,
         'is--virtual-x': scrollXLoad,
@@ -1184,7 +1186,7 @@ export default {
       h(VxeLoading, {
         class: 'vxe-table--loading',
         props: {
-          value: loading,
+          value: currLoading,
           icon: loadingOpts.icon,
           text: loadingOpts.text
         }

@@ -714,6 +714,7 @@ const renderMap = {
           case 'date':
           case 'week':
           case 'month':
+          case 'quarter':
           case 'year':
             cellValue = getLabelFormatDate(cellValue, props)
             break
