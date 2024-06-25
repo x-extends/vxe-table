@@ -4773,10 +4773,12 @@ export default defineComponent({
           }
           if (areaOpts.autoClear) {
             if ($xeTable.clearCellAreas) {
-              if (!getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
+              const cellAreas = $xeTable.getCellAreas()
+              if (cellAreas.length && !getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
                 tablePrivateMethods.preventEvent(evnt, 'event.clearAreas', {}, () => {
                   $xeTable.clearCellAreas()
                   $xeTable.clearCopyCellArea()
+                  $xeTable.dispatchEvent('clear-cell-area-selection', { cellAreas }, evnt)
                 })
               }
             }
