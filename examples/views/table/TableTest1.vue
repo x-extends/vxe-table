@@ -13,6 +13,11 @@
       <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
       <vxe-column field="role" title="Role"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="age" title="Age" :filters="ageOptions" :filter-method="filterAgeMethod" :filter-recover-method="filterAgeRecoverMethod">
+        <template #filter="{ $panel, column }">
+          <vxe-input class="my-input" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选" />
+        </template>
+      </vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
         field="age"
@@ -26,8 +31,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { VxeColumnPropTypes } from '../../../types'
+
+const ageOptions = ref<VxeColumnPropTypes.Filters>([
+  { data: '' }
+])
 
 const demo1 = reactive({
   loading: false,

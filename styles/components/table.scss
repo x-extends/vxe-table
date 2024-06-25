@@ -45,14 +45,14 @@
 
 /*默认的渲染*/
 .vxe-cell,
-.vxe-table--filter-wrapper {
-  .vxe-default-input,
-  .vxe-default-textarea {
+.vxe-table--filter-template {
+  & > .vxe-default-input,
+  & > .vxe-default-textarea {
     background-color: var(--vxe-ui-layout-background-color);
   }
-  .vxe-default-input,
-  .vxe-default-textarea,
-  .vxe-default-select {
+  & > .vxe-default-input,
+  & > .vxe-default-textarea,
+  & > .vxe-default-select {
     outline: 0;
     padding: 0 2px;
     width: 100%;
@@ -67,12 +67,12 @@
       background-color: var(--vxe-ui-input-disabled-background-color);
     }
   }
-  .vxe-default-input,
-  .vxe-default-textarea,
-  .vxe-default-select {
+  & > .vxe-default-input,
+  & > .vxe-default-textarea,
+  & > .vxe-default-select {
     height: var(--vxe-ui-input-height-default);
   }
-  .vxe-default-input {
+  & > .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
       margin-top: 4px;
     }
@@ -84,21 +84,23 @@
       color: var(--vxe-ui-input-placeholder-color);
     }
   }
-  .vxe-default-textarea {
+  & > .vxe-default-textarea {
     resize: none;
     vertical-align: middle;
   }
-  .vxe-input,
-  .vxe-textarea,
-  .vxe-select {
+  & > .vxe-input,
+  & > .vxe-textarea,
+  & > .vxe-select,
+  & > .vxe-date-picker,
+  & > .vxe-number-input {
     width: 100%;
   }
-  .vxe-input > .vxe-input--inner,
-  .vxe-textarea > .vxe-textarea--inner {
+  & > .vxe-input > .vxe-input--inner,
+  & > .vxe-textarea > .vxe-textarea--inner {
     padding: 0 2px;
   }
-  .vxe-textarea--inner,
-  .vxe-default-textarea {
+  & > .vxe-textarea--inner,
+  & > .vxe-default-textarea {
     resize: none;
   }
 }

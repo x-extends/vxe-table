@@ -233,7 +233,7 @@ export default defineComponent({
           }
         ],
         style: filterStore.style
-      }, initStore.filter && filterStore.visible ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
+      }, initStore.filter ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
     }
 
     return renderVN

@@ -551,11 +551,57 @@ renderer.mixin({
           case 'date':
           case 'week':
           case 'month':
+          case 'quarter':
           case 'year':
             cellValue = getLabelFormatDate(cellValue, props)
             break
           case 'float':
             cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+            break
+        }
+      }
+      return getCellLabelVNs(renderOpts, params, cellValue)
+    },
+    renderDefault: defaultEditRender,
+    renderFilter: defaultFilterRender,
+    defaultFilterMethod: handleFilterMethod
+  },
+  VxeNumberInput: {
+    autofocus: '.vxe-number-input--inner',
+    renderEdit: defaultEditRender,
+    renderCell (renderOpts: any, params: any) {
+      const { props = {} } = renderOpts
+      const { row, column } = params
+      const digits = props.digits || getConfig().numberInput?.digits || 2
+      let cellValue = XEUtils.get(row, column.property)
+      if (cellValue) {
+        switch (props.type) {
+          case 'float':
+            cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+            break
+        }
+      }
+      return getCellLabelVNs(renderOpts, params, cellValue)
+    },
+    renderDefault: defaultEditRender,
+    renderFilter: defaultFilterRender,
+    defaultFilterMethod: handleFilterMethod
+  },
+  VxeDatePicker: {
+    autofocus: '.vxe-date-picker--inner',
+    renderEdit: defaultEditRender,
+    renderCell (renderOpts: any, params: any) {
+      const { props = {} } = renderOpts
+      const { row, column } = params
+      let cellValue = XEUtils.get(row, column.property)
+      if (cellValue) {
+        switch (props.type) {
+          case 'date':
+          case 'week':
+          case 'month':
+          case 'quarter':
+          case 'year':
+            cellValue = getLabelFormatDate(cellValue, props)
             break
         }
       }
@@ -595,18 +641,6 @@ renderer.mixin({
     },
     defaultFilterMethod: handleFilterMethod,
     exportMethod: handleExportSelectMethod
-  },
-  VxeRadio: {
-    autofocus: '.vxe-radio--input'
-  },
-  VxeRadioGroup: {
-    autofocus: '.vxe-radio--input'
-  },
-  VxeCheckbox: {
-    autofocus: '.vxe-checkbox--input'
-  },
-  VxeCheckboxGroup: {
-    autofocus: '.vxe-checkbox--input'
   },
   VxeSwitch: {
     autofocus: '.vxe-switch--button',
