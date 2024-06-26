@@ -122,7 +122,7 @@ export default {
       const filterRender = column.filterRender
       const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
-      return multiple(compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false || compConf.isFooter === false) : true) ? [
+      return multiple && (compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false) : true) ? [
         h('div', {
           class: 'vxe-table--filter-footer'
         }, [

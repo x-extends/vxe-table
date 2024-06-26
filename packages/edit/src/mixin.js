@@ -663,12 +663,12 @@ export default {
       }
       return this.setEditCell(row, column)
     },
-    _setActiveCell (row) {
+    _setActiveCell (row, fieldOrColumn) {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
       }
       // 即将废弃
-      return this.setEditCell(row)
+      return this.setEditCell(row, fieldOrColumn)
     },
     /**
      * 激活单元格编辑
