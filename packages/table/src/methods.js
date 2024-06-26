@@ -685,7 +685,7 @@ const Methods = {
       }
     }
     // 源数据缓存
-    if (treeConfig && !treeOpts.transform) {
+    if (treeConfig) {
       const childrenField = treeOpts.children || treeOpts.childrenField
       XEUtils.eachTree(sourceData, handleSourceRow, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
     } else {
