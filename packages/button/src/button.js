@@ -165,14 +165,14 @@ export default {
         attrs: {
           placement: panelPlacement
         },
-        style: this.panelStyle
+        style: this.panelStyle,
+        on: panelOns
       }, inited ? [
         h('div', {
           class: 'vxe-button--dropdown-wrapper',
           on: {
             mousedown: this.mousedownDropdownEvent,
-            click: this.clickDropdownEvent,
-            ...panelOns
+            click: this.clickDropdownEvent
           }
         }, destroyOnClose && !visiblePanel ? [] : downsSlot.call(this, {}, h))
       ] : null)

@@ -24,6 +24,7 @@ export interface VXETableConfigOptions {
   size?: SizeType;
   zIndex?: number;
   version?: number;
+  tableVersion?: number;
   emptyCell?: string;
   icon?: VxeGlobalIcon;
   table?: any;
