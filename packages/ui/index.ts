@@ -1,7 +1,7 @@
 import { VxeUI } from '@vxe-ui/core'
 import { getFuncText } from './src/utils'
 
-import type { VxeUploadDefines, VxeGlobalConfig } from 'vxe-pc-ui'
+import type { VxeUploadDefines, VxePrintDefines, VxeGlobalConfig } from 'vxe-pc-ui'
 
 export const version = process.env.VUE_APP_VXE_VERSION as string
 
@@ -308,6 +308,9 @@ export const saveFile: VxeUploadDefines.SaveFileFunction = (options) => {
 }
 export const readFile: VxeUploadDefines.ReadFileFunction = (options) => {
   return VxeUI.readFile(options)
+}
+export const print: VxePrintDefines.PrintFunction = (options) => {
+  return VxeUI.print(options)
 }
 
 export {
