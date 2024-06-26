@@ -303,14 +303,81 @@ export const VXETable = VxeUI
 VXETable.setup = config
 VXETable.config = config
 
+/**
+ * 已废弃，兼容老版本
+ * @deprecated
+ */
 export const saveFile: VxeUploadDefines.SaveFileFunction = (options) => {
   return VxeUI.saveFile(options)
 }
+/**
+ * 已废弃，兼容老版本
+ * @deprecated
+ */
 export const readFile: VxeUploadDefines.ReadFileFunction = (options) => {
   return VxeUI.readFile(options)
 }
+/**
+ * 已废弃，兼容老版本
+ * @deprecated
+ */
 export const print: VxePrintDefines.PrintFunction = (options) => {
   return VxeUI.print(options)
+}
+/**
+ * 已废弃，兼容老版本
+ * @deprecated
+ */
+export const modal = {
+  /**
+   * 已废弃，兼容老版本
+   * @deprecated
+   */
+  get (id: any) {
+    return VxeUI.modal.get(id)
+  },
+  /**
+   * 已废弃，兼容老版本
+   * @deprecated
+   */
+  close (id: any) {
+    return VxeUI.modal.close(id)
+  },
+  /**
+   * 已废弃，兼容老版本
+   * @deprecated
+   */
+  open (options: any) {
+    return VxeUI.modal.open(options)
+  },
+  /**
+   * 已废弃，兼容老版本
+   * @deprecated
+   */
+  alert (content: any, title: any, options: any) {
+    return VxeUI.modal.alert(content, title, options)
+  },
+  /**
+   * 已废弃，兼容老版本
+   * @deprecated
+   */
+  confirm (content: any, title: any, options: any) {
+    return VxeUI.modal.confirm(content, title, options)
+  },
+  /**
+   * 已废弃，兼容老版本
+   * @deprecated
+   */
+  message (content: any, options: any) {
+    return VxeUI.modal.message(content, options)
+  },
+  /**
+   * 已废弃，兼容老版本
+   * @deprecated
+   */
+  notification (content: any, title: any, options: any) {
+    return VxeUI.modal.notification(content, title, options)
+  }
 }
 
 export {

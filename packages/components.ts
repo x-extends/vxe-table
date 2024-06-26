@@ -23,9 +23,6 @@ export function install (app: App, options?: VxeGlobalConfig) {
   components.forEach(component => component.install(app))
 }
 
-export const modal = VxeUI.drawer
-export const drawer = VxeUI.drawer
-
 export * from './ui'
 
 // Components
