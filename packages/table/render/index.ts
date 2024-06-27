@@ -647,6 +647,9 @@ renderer.mixin({
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender
   },
+  VxeUpload: {
+    renderDefault: defaultEditRender
+  },
 
   // 以下已废弃
   $input: {
