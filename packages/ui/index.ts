@@ -202,7 +202,7 @@ VxeUI.setConfig({
   }
 })
 
-const iconPrefix = 'vxe-icon-'
+const iconPrefix = 'vxe-table-icon-'
 
 VxeUI.setIcon({
   // table

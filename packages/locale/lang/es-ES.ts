@@ -133,14 +133,17 @@ export default {
     },
     import: {
       modes: {
-        covering: 'Cubriendo',
-        insert: 'Insertar'
+        covering: 'Overwrite mode (directly overwrite table data)',
+        insert: 'Bottom append (appends new data to the bottom of the table)',
+        insertTop: 'Top append (appends new data to the top of the table)',
+        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
       },
       impTitle: 'Importar datos',
       impFile: 'Nombre del archivo',
       impSelect: 'Seleccionar archivo',
       impType: 'Tipo de archivo',
       impOpts: 'Configuración',
+      impMode: 'Import mode',
       impConfirm: 'Importar',
       impCancel: 'Cancelar'
     },

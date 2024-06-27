@@ -4,6 +4,10 @@
       <div>
         <button @click="changeTheme">切换主题</button>
       </div>
+      <div>
+        <button @click="changeLang('zh-CN')">中文</button>
+        <button @click="changeLang('en-US')">英文</button>
+      </div>
       <RouterLink  class="link" v-for="(item, index) in navList" :key="index" :to="item.routerLink">{{ item.name }}</RouterLink>
     </div>
     <div class="page-layout-body">
@@ -35,6 +39,12 @@ const changeTheme = () => {
   theme.value = themeName
   VxeUI.setTheme(themeName)
   localStorage.setItem('VXE_THEME', themeName)
+}
+
+VxeUI.setLanguage((localStorage.getItem('VXE_LANGUAGE') as 'zh-CN' | 'en-US') || 'zh-CN')
+const changeLang = (lang: 'zh-CN' | 'en-US') => {
+  VxeUI.setLanguage(lang)
+  localStorage.setItem('VXE_LANGUAGE', lang)
 }
 </script>
 

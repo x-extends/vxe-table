@@ -133,14 +133,17 @@ export default {
     },
     import: {
       modes: {
-        covering: '覆盖',
-        insert: '新增'
+        covering: 'Overwrite mode (directly overwrite table data)',
+        insert: 'Bottom append (appends new data to the bottom of the table)',
+        insertTop: 'Top append (appends new data to the top of the table)',
+        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
       },
       impTitle: '导入数据',
       impFile: '文件名',
       impSelect: '选择文件',
       impType: '文件类型',
       impOpts: '参数设置',
+      impMode: '导入模式',
       impConfirm: '导入',
       impCancel: '取消'
     },

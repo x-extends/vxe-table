@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar ref="toolbarRef" print custom></vxe-toolbar>
+    <vxe-toolbar ref="toolbarRef" print export import custom></vxe-toolbar>
 
     <vxe-table
       border
@@ -11,6 +11,8 @@
       ref="tableRef"
       id="aaaa"
       :print-config="{}"
+      :import-config="{}"
+      :export-config="{}"
       :custom-config="{mode: 'popup',storage:true}"
       :loading="demo1.loading"
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"

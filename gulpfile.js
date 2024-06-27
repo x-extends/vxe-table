@@ -190,27 +190,16 @@ gulp.task('build_umd_all', gulp.parallel('build_umdjs', 'build_umdcss'))
 gulp.task('build_icon', () => {
   const timeNow = Date.now()
   return merge(
-    gulp.src('lib_temp/index.css')
+    gulp.src('lib/style.css')
       .pipe(replace(' format("woff2")', ` format("woff2"),url("./iconfont.${timeNow}.woff") format("woff"),url("./iconfont.${timeNow}.ttf") format("truetype")`))
-      .pipe(gulp.dest('lib_temp')),
-    gulp.src('lib/icon/style/style.css')
-      .pipe(replace(' format("woff2")', ` format("woff2"),url("./iconfont.${timeNow}.woff") format("woff"),url("./iconfont.${timeNow}.ttf") format("truetype")`))
-      .pipe(gulp.dest('lib/icon/style'))
-      .pipe(gulp.dest('es/icon'))
-      .pipe(rename({
-        basename: 'style',
-        suffix: '.min',
-        extname: '.css'
-      }))
-      .pipe(gulp.dest('lib/icon/style')),
+      .pipe(gulp.dest('lib'))
+      .pipe(gulp.dest('es')),
     gulp.src('styles/icon/*')
       .pipe(rename({
         suffix: `.${timeNow}`
       }))
       .pipe(gulp.dest('lib'))
-      .pipe(gulp.dest('lib/icon/style'))
       .pipe(gulp.dest('es'))
-      .pipe(gulp.dest('es/icon/style'))
   )
 })
 
@@ -301,7 +290,7 @@ gulp.task('clear', () => {
 
 gulp.task('build_all', gulp.parallel('build_es_all', 'build_common_all', 'build_umd_all'))
 
-gulp.task('build', gulp.series('clear', 'copy_pack', 'build_all', 'build_i18n', 'build_single_style', () => {
+gulp.task('build', gulp.series('clear', 'copy_pack', 'build_all', 'build_i18n', 'build_single_style', 'build_icon', () => {
   [coreName, oldCoreName, ...componentList].forEach(name => {
     fs.writeFileSync(`lib/${name}/style/index.js`, styleCode)
     fs.writeFileSync(`lib/vxe-${name}/style/index.js`, styleCode)

@@ -832,7 +832,7 @@ hooks.add('tableExportModule', {
         $xeTable.createData(rows)
           .then((data: any) => {
             let loadRest
-            if (opts.mode === 'insert') {
+            if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
               loadRest = $xeTable.insert(data)
             } else {
               loadRest = $xeTable.reloadData(data)
@@ -888,7 +888,7 @@ hooks.add('tableExportModule', {
         internalData._importResolve = _importResolve
         internalData._importReject = _importReject
         if (window.FileReader) {
-          const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
+          const options = Object.assign({ mode: 'insertBottom' }, opts, { type, filename })
           if (options.remote) {
             if (importMethod) {
               Promise.resolve(importMethod({ file, options, $table: $xeTable })).then(() => {
@@ -949,6 +949,7 @@ hooks.add('tableExportModule', {
         message: true,
         isHeader: showHeader,
         isFooter: showFooter,
+        current: 'current',
         modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
       }, options)
       const types: string[] = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
@@ -960,13 +961,19 @@ hooks.add('tableExportModule', {
       const typeList = types.map((value) => {
         return {
           value,
-          label: `vxe.export.types.${value}`
+          label: getI18n(`vxe.export.types.${value}`)
         }
       })
-      const modeList = modes.map((value) => {
+      const modeList = modes.map((item: any) => {
+        if (item && item.value) {
+          return {
+            value: item.value,
+            label: item.label || item.value
+          }
+        }
         return {
-          value,
-          label: `vxe.export.modes.${value}`
+          value: item,
+          label: getI18n(`vxe.export.modes.${item}`)
         }
       })
       // 默认选中
@@ -1016,11 +1023,11 @@ hooks.add('tableExportModule', {
       Object.assign(exportParams, {
         mode: selectRecords.length ? 'selected' : 'current'
       }, defOpts)
-      if (modes.indexOf(exportParams.mode) === -1) {
-        exportParams.mode = modes[0]
+      if (!modeList.some(item => item.value === exportParams.mode)) {
+        exportParams.mode = modeList[0].value
       }
-      if (types.indexOf(exportParams.type) === -1) {
-        exportParams.type = types[0]
+      if (!typeList.some(item => item.value === exportParams.type)) {
+        exportParams.type = typeList[0].value
       }
       initStore.export = true
       return nextTick()
@@ -1143,9 +1150,8 @@ hooks.add('tableExportModule', {
             beforeExportMethod({ options: opts, $table: $xeTable, $grid: $xeGrid })
           }
         }
-
         if (!opts.data) {
-          opts.data = afterFullData
+          opts.data = []
           if (mode === 'selected') {
             const selectRecords = $xeTable.getCheckboxRecords()
             if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
@@ -1194,6 +1200,8 @@ hooks.add('tableExportModule', {
                   })
               }
             }
+          } else if (mode === 'current') {
+            opts.data = afterFullData
           }
         }
         return handleExport(opts)
@@ -1318,10 +1326,10 @@ hooks.add('tableExportModule', {
         const { initStore, importStore, importParams } = reactData
         const importOpts = computeImportOpts.value
         const defOpts = Object.assign({
-          mode: 'insert',
+          mode: 'insertBottom',
           message: true,
           types: XEUtils.keys(importOpts._typeMaps),
-          modes: ['insert', 'covering']
+          modes: ['insertBottom', 'covering']
         }, importOpts, options)
         const types = defOpts.types || []
         const modes = defOpts.modes || []
@@ -1341,13 +1349,19 @@ hooks.add('tableExportModule', {
         const typeList = types.map((value) => {
           return {
             value,
-            label: `vxe.export.types.${value}`
+            label: getI18n(`vxe.export.types.${value}`)
           }
         })
-        const modeList = modes.map((value) => {
+        const modeList = modes.map((item: any) => {
+          if (item && item.value) {
+            return {
+              value: item.value,
+              label: item.label || item.value
+            }
+          }
           return {
-            value,
-            label: `vxe.import.modes.${value}`
+            value: item,
+            label: getI18n(`vxe.import.modes.${item}`)
           }
         })
         Object.assign(importStore, {
@@ -1359,12 +1373,14 @@ hooks.add('tableExportModule', {
           visible: true
         })
         Object.assign(importParams, defOpts)
+        if (!modeList.some(item => item.value === importParams.mode)) {
+          importParams.mode = modeList[0].value
+        }
         initStore.import = true
       },
       openExport (options: any) {
         const exportOpts = computeExportOpts.value
         const defOpts = Object.assign({
-          mode: 'insert',
           message: true,
           types: XEUtils.keys(exportOpts._typeMaps)
         }, exportOpts, options)

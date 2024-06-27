@@ -133,14 +133,17 @@ export default {
     },
     import: {
       modes: {
-        covering: '上書き',
-        insert: '追加'
+        covering: 'Overwrite mode (directly overwrite table data)',
+        insert: 'Bottom append (appends new data to the bottom of the table)',
+        insertTop: 'Top append (appends new data to the top of the table)',
+        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
       },
       impTitle: 'データインポート',
       impFile: 'ファイル名',
       impSelect: 'ファイル選択',
       impType: 'ファイルの種類',
       impOpts: 'パラメータ指定',
+      impMode: 'Import mode',
       impConfirm: 'インポート',
       impCancel: 'キャンセル'
     },

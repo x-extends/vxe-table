@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar ref="toolbarRef" custom></vxe-toolbar>
+    <vxe-toolbar ref="toolbarRef" custom export import></vxe-toolbar>
 
     <vxe-table
       border
@@ -12,6 +12,8 @@
       id="bbbbb"
       :custom-config="{storage:true}"
       :loading="demo1.loading"
+      :import-config="{modes: importModes}"
+      :export-config="{modes: exportModes}"
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">
@@ -48,6 +50,18 @@ interface RowVO {
 
 const tableRef = ref<VxeTableInstance<RowVO>>()
 const toolbarRef = ref<VxeToolbarInstance>()
+
+const importModes = ref([
+  { label: '自定义25', value: '11' },
+  { label: '自定义11', value: '33' },
+  { label: 'current', value: 'current' }
+])
+
+const exportModes = ref([
+  { label: '自定义25', value: '11' },
+  { label: '自定义11', value: '33' },
+  { label: 'current', value: 'current' }
+])
 
 const demo1 = reactive({
   loading: false,

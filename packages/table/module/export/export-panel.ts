@@ -250,12 +250,7 @@ export default defineComponent({
                           VxeUISelectComponent
                             ? h(VxeUISelectComponent, {
                               modelValue: defaultOptions.type,
-                              options: storeData.typeList.map((item: any) => {
-                                return {
-                                  value: item.value,
-                                  label: getI18n(item.label)
-                                }
-                              }),
+                              options: storeData.typeList,
                               'onUpdate:modelValue' (value: any) {
                                 defaultOptions.type = value
                               }

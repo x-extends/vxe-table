@@ -84,19 +84,37 @@
 版本：[vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
-npm install vxe-table
+npm install vxe-table@next
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
 
-### npm
+### NPM
+
+### 只使用表格
 
 ```javascript
-import { createApp } from 'vue'
-import VxeUITable from 'vxe-table'
+// ...
+import VxeTable from 'vxe-table'
 import 'vxe-table/lib/style.css'
+// ...
 
-createApp(App).use(VxeUITable).mount('#app')
+createApp(App).use(VxeTable).mount('#app')
+```
+
+### 使用表格与 UI 库
+
+```javascript
+// ...
+import VxeTable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+// ...
+
+import VxeUI from 'vxe-pc-ui'
+import 'vxe-pc-ui/lib/style.css'
+// ...
+
+createApp(App).use(VxeUI).use(VxeTable).mount('#app')
 ```
 
 ### CDN
@@ -105,11 +123,15 @@ createApp(App).use(VxeUITable).mount('#app')
 ***不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效***  
 
 ```HTML
-<!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
-<!-- 引入脚本 -->
-<script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table"></script>
+<!-- style -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui/lib/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@next/lib/style.css">
+<!-- vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!-- table -->
+<script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
+<script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui"></script>
+<script src="https://cdn.jsdelivr.net/npm/vxe-table@next"></script>
 ```
 
 ## 示例
@@ -142,7 +164,8 @@ const tableData = ref([
 
 ## 在线文档
 
-👉 [官网文档](https://vxetable.cn)  
+👉 [组件文档](https://vxeui.com)  
+👉 [表格文档](https://vxetable.cn)  
 
 ## QQ 交流群
 

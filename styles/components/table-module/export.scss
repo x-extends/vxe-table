@@ -97,6 +97,7 @@
     }
   }
   .vxe-import-select--file {
+    width: 80%;
     border: 1px dashed var(--vxe-ui-input-border-color);
     padding: 6px 34px;
     outline: 0;
@@ -116,7 +117,7 @@
   }
   .vxe-export--panel-btns {
     text-align: right;
-    padding: 0.25em;
+    padding: 0.8em 0.25em 0.25em 0.25em;
   }
 }
 

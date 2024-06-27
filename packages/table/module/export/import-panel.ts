@@ -3,7 +3,7 @@ import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 
-import type { VxeButtonComponent, VxeModalComponent, VxeRadioGroupComponent, VxeRadioComponent } from 'vxe-pc-ui'
+import type { VxeButtonComponent, VxeModalComponent, VxeSelectComponent } from 'vxe-pc-ui'
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
@@ -17,8 +17,7 @@ export default defineComponent({
   setup (props) {
     const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
     const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-    const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
-    const VxeUIRadioComponent = VxeUI.getComponent<VxeRadioComponent>('VxeRadio')
+    const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
     const { computeImportOpts } = $xeTable.getComputeMaps()
@@ -44,7 +43,7 @@ export default defineComponent({
       const { type, typeList } = storeData
       if (type) {
         const selectItem = XEUtils.find(typeList, item => type === item.value)
-        return selectItem ? getI18n(selectItem.label) : '*.*'
+        return selectItem ? selectItem.label : '*.*'
       }
       return `*.${typeList.map((item: any) => item.value).join(', *.')}`
     })
@@ -102,7 +101,7 @@ export default defineComponent({
           modelValue: storeData.visible,
           title: getI18n('vxe.import.impTitle'),
           className: 'vxe-table-import-popup-wrapper',
-          width: 440,
+          width: 520,
           mask: true,
           lockView: true,
           showFooter: false,
@@ -150,21 +149,15 @@ export default defineComponent({
                     h('td', parseTypeLabel)
                   ]),
                   h('tr', [
-                    h('td', getI18n('vxe.import.impOpts')),
+                    h('td', getI18n('vxe.import.impMode')),
                     h('td', [
-                      VxeUIRadioGroupComponent && VxeUIRadioComponent
-                        ? h(VxeUIRadioGroupComponent, {
+                      VxeUISelectComponent
+                        ? h(VxeUISelectComponent, {
                           modelValue: defaultOptions.mode,
+                          options: storeData.modeList,
                           'onUpdate:modelValue' (value: any) {
                             defaultOptions.mode = value
                           }
-                        }, {
-                          default: () => storeData.modeList.map((item: any) => {
-                            return h(VxeUIRadioComponent, {
-                              label: item.value,
-                              content: getI18n(item.label)
-                            })
-                          })
                         })
                         : createCommentVNode()
                     ])
