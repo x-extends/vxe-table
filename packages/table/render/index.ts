@@ -618,7 +618,16 @@ renderer.mixin({
     renderDefault: defaultCellRender
   },
   VxeButtonGroup: {
-    renderDefault: defaultCellRender
+    renderDefault (renderOpts, params) {
+      const { options } = renderOpts
+      return [
+        h(getDefaultComponent(renderOpts), {
+          options,
+          ...getCellEditProps(renderOpts, params, null),
+          ...getComponentOns(renderOpts, params)
+        })
+      ]
+    }
   },
   VxeSelect: {
     autofocus: '.vxe-input--inner',
