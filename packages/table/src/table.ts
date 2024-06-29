@@ -7059,6 +7059,24 @@ export default defineComponent({
 
     $xeTable.renderVN = renderVN
 
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      nextTick(() => {
+        if (props.loading) {
+          if (!VxeUILoadingComponent) {
+            errLog('vxe.error.reqComp', ['vxe-loading'])
+          }
+        }
+        if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
+          (props.showHeaderOverflow === true || props.showHeaderOverflow === 'tooltip') ||
+          (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
+          props.tooltipConfig || props.editRules) {
+          if (!VxeUITooltipComponent) {
+            errLog('vxe.error.reqComp', ['vxe-tooltip'])
+          }
+        }
+      })
+    }
+
     provide('$xeColgroup', null)
     provide('$xeTable', $xeTable)
 

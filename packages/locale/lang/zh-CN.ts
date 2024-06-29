@@ -23,6 +23,7 @@ export default {
       useErr: '安装 "{0}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
       barUnableLink: '工具栏无法关联表格',
       expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装',
       reqModule: '缺少 "{0}" 模块',
       reqProp: '缺少必要的 "{0}" 参数，这可能会导致出现错误',
       emptyProp: '参数 "{0}" 不允许为空',

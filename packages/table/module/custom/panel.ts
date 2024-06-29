@@ -1,7 +1,8 @@
-import { defineComponent, h, inject, ref, Ref, VNode, PropType, TransitionGroup, createCommentVNode } from 'vue'
+import { defineComponent, h, inject, ref, Ref, VNode, PropType, nextTick, TransitionGroup, createCommentVNode } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
 import { addClass, removeClass } from '../../../ui/src/dom'
+import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
 import type { VxeModalComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from 'vxe-pc-ui'
@@ -782,6 +783,26 @@ export default defineComponent({
         return renderPopupPanel()
       }
       return renderSimplePanel()
+    }
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      nextTick(() => {
+        if (!VxeUIModalComponent) {
+          errLog('vxe.error.reqComp', ['vxe-modal'])
+        }
+        if (!VxeUIButtonComponent) {
+          errLog('vxe.error.reqComp', ['vxe-button'])
+        }
+        if (!VxeUIInputComponent) {
+          errLog('vxe.error.reqComp', ['vxe-input'])
+        }
+        if (!VxeUITooltipComponent) {
+          errLog('vxe.error.reqComp', ['vxe-tooltip'])
+        }
+        if (!VxeUIRadioGroupComponent) {
+          errLog('vxe.error.reqComp', ['vxe-radio-group'])
+        }
+      })
     }
 
     return renderVN

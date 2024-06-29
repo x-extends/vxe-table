@@ -1230,6 +1230,19 @@ export default defineComponent({
     })
 
     nextTick(() => {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
+        if (props.formConfig) {
+          if (!VxeUIFormComponent) {
+            errLog('vxe.error.reqComp', ['vxe-form'])
+          }
+        }
+        if (props.pagerConfig) {
+          if (!VxeUIPagerComponent) {
+            errLog('vxe.error.reqComp', ['vxe-pager'])
+          }
+        }
+      }
+
       initProxy()
     })
 

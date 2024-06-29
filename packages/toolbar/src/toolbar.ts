@@ -553,6 +553,16 @@ export default defineComponent({
 
     $xeToolbar.renderVN = renderVN
 
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      nextTick(() => {
+        if (props.refresh || props.import || props.export || props.print || props.zoom) {
+          if (!VxeUIButtonComponent) {
+            errLog('vxe.error.reqComp', ['vxe-button'])
+          }
+        }
+      })
+    }
+
     return $xeToolbar
   },
   render () {

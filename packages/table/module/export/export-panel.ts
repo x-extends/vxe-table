@@ -2,6 +2,7 @@ import { defineComponent, h, createCommentVNode, ref, Ref, computed, reactive, i
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
+import { errLog } from '../../../ui/src/log'
 
 import type { VxeModalComponent, VxeInputComponent, VxeCheckboxComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
@@ -440,6 +441,26 @@ export default defineComponent({
           }
         })
         : createCommentVNode()
+    }
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      nextTick(() => {
+        if (!VxeUIModalComponent) {
+          errLog('vxe.error.reqComp', ['vxe-modal'])
+        }
+        if (!VxeUIButtonComponent) {
+          errLog('vxe.error.reqComp', ['vxe-button'])
+        }
+        if (!VxeUISelectComponent) {
+          errLog('vxe.error.reqComp', ['vxe-select'])
+        }
+        if (!VxeUIInputComponent) {
+          errLog('vxe.error.reqComp', ['vxe-input'])
+        }
+        if (!VxeUICheckboxComponent) {
+          errLog('vxe.error.reqComp', ['vxe-checkbox'])
+        }
+      })
     }
 
     return renderVN

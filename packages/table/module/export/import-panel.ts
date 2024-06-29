@@ -2,6 +2,7 @@ import { defineComponent, h, ref, Ref, computed, inject, reactive, nextTick, cre
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
+import { errLog } from '../../../ui/src/log'
 
 import type { VxeButtonComponent, VxeModalComponent, VxeSelectComponent } from 'vxe-pc-ui'
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
@@ -186,6 +187,20 @@ export default defineComponent({
           }
         })
         : createCommentVNode()
+    }
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      nextTick(() => {
+        if (!VxeUIModalComponent) {
+          errLog('vxe.error.reqComp', ['vxe-modal'])
+        }
+        if (!VxeUIButtonComponent) {
+          errLog('vxe.error.reqComp', ['vxe-button'])
+        }
+        if (!VxeUISelectComponent) {
+          errLog('vxe.error.reqComp', ['vxe-select'])
+        }
+      })
     }
 
     return renderVN
