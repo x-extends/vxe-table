@@ -1364,7 +1364,7 @@ export default defineComponent({
           const handleFilter = (row: any) => {
             return filterColumns.every(({ column, valueList, itemList }) => {
               const { filterMethod, filterRender } = column
-              const compConf = filterRender ? renderer.get(filterRender.name) : null
+              const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
               const compFilterMethod = compConf ? (compConf.tableFilterMethod || compConf.filterMethod) : null
               const tdFilterMethod = compConf ? (compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
               const cellValue = getCellValue(row, column)

@@ -119,6 +119,7 @@ export default defineComponent({
           $xeTable.saveCustomStore('update:visible')
           $xeTable.updateCellAreas()
           $xeTable.dispatchEvent('resizable-change', { ...params, resizeWidth }, evnt)
+          setTimeout(() => $xeTable.recalculate(true), 300)
         })
         removeClass(tableEl, 'drag--resize')
       }

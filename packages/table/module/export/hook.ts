@@ -279,7 +279,7 @@ function checkImportData (columns: any[], fields: string[]) {
   return fields.some(field => tableFields.indexOf(field) > -1)
 }
 
-const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'openImport', 'openExport', 'openPrint']
+const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'getPrintHtml', 'openImport', 'openExport', 'openPrint']
 
 hooks.add('tableExportModule', {
   setupTable ($xeTable) {

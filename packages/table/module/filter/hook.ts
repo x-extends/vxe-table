@@ -3,6 +3,7 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { toFilters, handleFieldOrColumn } from '../../src/util'
 import { getDomNode, triggerEvent } from '../../../ui/src/dom'
+import { isEnableConf } from '../../../ui/src/utils'
 
 import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../types'
 
@@ -39,7 +40,7 @@ hooks.add('tableFilterModule', {
           const { target: targetElem, pageX } = evnt
           const { visibleWidth } = getDomNode()
           const { filters, filterMultiple, filterRender } = column
-          const compConf = filterRender ? renderer.get(filterRender.name) : null
+          const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
           const frMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
           internalData._currFilterParams = params
           Object.assign(filterStore, {
@@ -118,7 +119,7 @@ hooks.add('tableFilterModule', {
         if (column) {
           const { filters, filterRender } = column
           if (filters) {
-            const compConf = filterRender ? renderer.get(filterRender.name) : null
+            const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
             const frMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
             filters.forEach((item: any) => {
               item._checked = false

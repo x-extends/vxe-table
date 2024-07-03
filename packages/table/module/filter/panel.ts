@@ -1,6 +1,6 @@
 import { defineComponent, h, computed, inject } from 'vue'
 import { VxeUI } from '../../../ui'
-import { formatText } from '../../../ui/src/utils'
+import { formatText, isEnableConf } from '../../../ui/src/utils'
 import { getPropClass } from '../../../ui/src/dom'
 import { getSlotVNs } from '../../../ui/src/vn'
 
@@ -190,8 +190,8 @@ export default defineComponent({
       const { column, multiple } = filterStore
       const filterOpts = computeFilterOpts.value
       const hasCheckOption = computeHasCheckOption.value
-      const filterRender = column.filterRender
-      const compConf = filterRender ? renderer.get(filterRender.name) : null
+      const { filterRender } = column
+      const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       return multiple && (compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false) : true)
         ? [
@@ -218,7 +218,7 @@ export default defineComponent({
       const { initStore } = tableReactData
       const { column } = filterStore
       const filterRender = column ? column.filterRender : null
-      const compConf = filterRender ? renderer.get(filterRender.name) : null
+      const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
       return h('div', {

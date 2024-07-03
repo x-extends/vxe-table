@@ -134,10 +134,10 @@ export default {
     },
     import: {
       modes: {
-        covering: 'Overwrite mode (directly overwrite table data)',
-        insert: 'Bottom append (appends new data to the bottom of the table)',
-        insertTop: 'Top append (appends new data to the top of the table)',
-        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
+        covering: '覆盖方式（直接覆盖表格数据）',
+        insert: '底部追加（在表格的底部追加新数据）',
+        insertTop: '顶部追加（在表格的顶部追加新数据）',
+        insertBottom: '底部追加（在表格的底部追加新数据）'
       },
       impTitle: '导入数据',
       impFile: '文件名',
