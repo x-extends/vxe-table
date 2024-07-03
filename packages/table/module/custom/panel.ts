@@ -495,6 +495,7 @@ export default defineComponent({
       const customOpts = computeCustomOpts.value
       const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
+      const { maxFixedSize } = columnOpts
       const modalOpts = Object.assign({}, modalOptions)
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const trVNs: VNode[] = []
@@ -630,12 +631,15 @@ export default defineComponent({
           minWidth: modalOpts.minWidth || 700,
           height: modalOpts.height || '50vh',
           minHeight: modalOpts.minHeight || 400,
-          mask: true,
-          lockView: true,
-          showFooter: true,
-          resize: true,
-          escClosable: true,
+          showZoom: modalOpts.showZoom,
+          showMaximize: modalOpts.showMaximize,
+          showMinimize: modalOpts.showMinimize,
+          mask: modalOpts.mask,
+          lockView: modalOpts.lockView,
+          resize: modalOpts.resize,
+          escClosable: !!modalOpts.escClosable,
           destroyOnClose: true,
+          showFooter: true,
           'onUpdate:modelValue' (value: any) {
             customStore.visible = value
           }
@@ -729,7 +733,7 @@ export default defineComponent({
                         ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
                         : createCommentVNode(),
                       allowFixed
-                        ? h('th', {}, getI18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
+                        ? h('th', {}, getI18n(`vxe.custom.setting.${maxFixedSize ? 'colFixedMax' : 'colFixed'}`, [maxFixedSize]))
                         : createCommentVNode()
                     ])
                   ]),

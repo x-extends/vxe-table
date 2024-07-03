@@ -1,7 +1,3 @@
-/**
- * v4保留兼容，已废弃，即将删除文件
- * @deprecated
- */
 export default {
   vxe: {
     base: {
@@ -126,7 +122,8 @@ export default {
         colTitle: '标题',
         colResizable: '列宽（像素）',
         colVisible: '是否显示',
-        colFixed: '冻结列（最多 {0} 列）',
+        colFixed: '冻结列',
+        colFixedMax: '冻结列（最多 {0} 列）',
         fixedLeft: '左侧',
         fixedUnset: '不设置',
         fixedRight: '右侧'

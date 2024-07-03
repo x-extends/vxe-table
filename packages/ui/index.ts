@@ -68,9 +68,16 @@ VxeUI.setConfig({
       allowFixed: true,
       allowSort: true,
       showFooter: true,
-      placement: 'top-right'
+      placement: 'top-right',
       //  storage: false,
-      //  checkMethod () {}
+      //  checkMethod () {},
+      modalOptions: {
+        showMaximize: true,
+        mask: true,
+        lockView: true,
+        resize: true,
+        escClosable: true
+      }
     },
     sortConfig: {
       // remote: false,

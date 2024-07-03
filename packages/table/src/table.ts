@@ -541,7 +541,7 @@ export default defineComponent({
       let fixedSize = 0
       // 只判断第一层
       collectColumn.forEach((column) => {
-        if (column.fixed) {
+        if (column.renderFixed) {
           fixedSize++
         }
       })
@@ -898,26 +898,28 @@ export default defineComponent({
     }
 
     const handleCustomRestore = (storeData: VxeTableDefines.CustomStoreData) => {
-      const { tableFullColumn } = internalData
       let { collectColumn } = internalData
       const { resizableData, sortData, visibleData, fixedData } = storeData
       let hasCustomSort = false
       // 处理还原
       if (resizableData || sortData || visibleData || fixedData) {
-        tableFullColumn.forEach(column => {
+        XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
           const colKey = column.getKey()
+          // 支持一级
+          if (!parent) {
+            if (fixedData && fixedData[colKey]) {
+              column.fixed = fixedData[colKey]
+            }
+            if (sortData && XEUtils.isNumber(sortData[colKey])) {
+              hasCustomSort = true
+              column.renderSortNumber = sortData[colKey]
+            }
+          }
           if (resizableData && XEUtils.isNumber(resizableData[colKey])) {
             column.resizeWidth = resizableData[colKey]
           }
           if (visibleData && XEUtils.isBoolean(visibleData[colKey])) {
             column.visible = visibleData[colKey]
-          }
-          if (fixedData && fixedData[colKey]) {
-            column.fixed = fixedData[colKey]
-          }
-          if (sortData && XEUtils.isNumber(sortData[colKey])) {
-            hasCustomSort = true
-            column.renderSortNumber = sortData[colKey]
           }
         })
         // 如果自定义了顺序
@@ -3318,14 +3320,13 @@ export default defineComponent({
         const targetColumn = getRootColumn($xeTable, column as any)
         const isMaxFixedColumn = computeIsMaxFixedColumn.value
         const columnOpts = computeColumnOpts.value
-        const { maxFixedSize } = columnOpts
         if (targetColumn && targetColumn.fixed !== fixed) {
           // 是否超过最大固定列数量
           if (!targetColumn.fixed && isMaxFixedColumn) {
             if (VxeUI.modal) {
               VxeUI.modal.message({
                 status: 'error',
-                content: getI18n('vxe.table.maxFixedCol', [maxFixedSize])
+                content: getI18n('vxe.table.maxFixedCol', [columnOpts.maxFixedSize])
               })
             }
             return nextTick()
@@ -4595,7 +4596,7 @@ export default defineComponent({
         let hasFixedt = 0
         let hasVisible = 0
         XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
-          // 排序只支持一级
+          // 只支持一级
           if (!parent) {
             collectColumn.forEach((column) => {
               const colKey = column.getKey()
@@ -4604,19 +4605,19 @@ export default defineComponent({
                 sortData[colKey] = column.renderSortNumber
               }
             })
+            if (column.fixed && column.fixed !== column.defaultFixed) {
+              const colKey = column.getKey()
+              if (colKey) {
+                hasFixedt = 1
+                fixedData[colKey] = column.fixed
+              }
+            }
           }
           if (column.resizeWidth) {
             const colKey = column.getKey()
             if (colKey) {
               hasResizable = 1
               resizableData[colKey] = column.renderWidth
-            }
-          }
-          if (column.fixed && column.fixed !== column.defaultFixed) {
-            const colKey = column.getKey()
-            if (colKey) {
-              hasFixedt = 1
-              fixedData[colKey] = column.fixed
             }
           }
           if (!checkMethod || checkMethod({ column })) {

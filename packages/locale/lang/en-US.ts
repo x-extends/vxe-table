@@ -1,7 +1,3 @@
-/**
- * v4保留兼容，已废弃，即将删除文件
- * @deprecated
- */
 export default {
   vxe: {
     base: {
@@ -126,7 +122,8 @@ export default {
         colTitle: 'Title',
         colResizable: 'Column width (px)',
         colVisible: 'Display',
-        colFixed: 'Freeze columns (Max. {0})',
+        colFixed: 'Freeze columns',
+        colFixedMax: 'Freeze columns (Max. {0})',
         fixedLeft: 'Left',
         fixedUnset: 'Unset',
         fixedRight: 'Right'
