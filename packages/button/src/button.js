@@ -102,7 +102,7 @@ export default {
     GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
   },
   beforeDestroy () {
-    const panelElem = this.$refs.panel
+    const panelElem = this.$refs.btnPanel
     if (panelElem && panelElem.parentNode) {
       panelElem.parentNode.removeChild(panelElem)
     }
@@ -121,8 +121,8 @@ export default {
       btnOns.mouseenter = this.mouseenterTargetEvent
       btnOns.mouseleave = this.mouseleaveTargetEvent
 
-      panelOns.onMouseenter = this.mouseenterDropdownEvent
-      panelOns.onMouseleave = this.mouseleaveDropdownEvent
+      panelOns.mouseenter = this.mouseenterDropdownEvent
+      panelOns.mouseleave = this.mouseleaveDropdownEvent
     }
     return downsSlot ? h('div', {
       class: ['vxe-button--dropdown', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
@@ -156,7 +156,7 @@ export default {
         })
       ])),
       h('div', {
-        ref: 'panel',
+        ref: 'btnPanel',
         class: ['vxe-button--dropdown-panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $button: this }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           'animat--leave': animatVisible,
@@ -238,7 +238,7 @@ export default {
       return contents
     },
     handleGlobalMousewheelEvent (evnt) {
-      if (this.visiblePanel && !DomTools.getEventTargetNode(evnt, this.$refs.panel).flag) {
+      if (this.visiblePanel && !DomTools.getEventTargetNode(evnt, this.$refs.btnPanel).flag) {
         this.closePanel()
       }
     },
@@ -246,7 +246,7 @@ export default {
       const { disabled, visiblePanel } = this
       if (!disabled) {
         const el = this.$refs.$el
-        const panelElem = this.$refs.panel
+        const panelElem = this.$refs.btnPanel
         this.isActivated = DomTools.getEventTargetNode(evnt, el).flag || DomTools.getEventTargetNode(evnt, panelElem).flag
         if (visiblePanel && !this.isActivated) {
           this.closePanel()
@@ -274,7 +274,7 @@ export default {
     },
     clickDropdownEvent (evnt) {
       const dropdownElem = evnt.currentTarget
-      const panelElem = this.$refs.panel
+      const panelElem = this.$refs.btnPanel
       const { flag, targetElem } = DomTools.getEventTargetNode(evnt, dropdownElem, 'vxe-button')
       if (flag) {
         if (panelElem) {
@@ -304,21 +304,23 @@ export default {
       this.$emit('mouseenter', { $event: evnt })
     },
     mouseenterDropdownEvent () {
-      const panelElem = this.$refs.panel
-      panelElem.dataset.active = 'Y'
-      this.animatVisible = true
-      setTimeout(() => {
-        if (panelElem.dataset.active === 'Y') {
-          this.visiblePanel = true
-          this.updateZindex()
-          this.updatePlacement()
-          setTimeout(() => {
-            if (this.visiblePanel) {
-              this.updatePlacement()
-            }
-          }, 50)
-        }
-      }, 20)
+      const panelElem = this.$refs.btnPanel
+      if (panelElem) {
+        panelElem.dataset.active = 'Y'
+        this.animatVisible = true
+        setTimeout(() => {
+          if (panelElem.dataset.active === 'Y') {
+            this.visiblePanel = true
+            this.updateZindex()
+            this.updatePlacement()
+            setTimeout(() => {
+              if (this.visiblePanel) {
+                this.updatePlacement()
+              }
+            }, 50)
+          }
+        }, 20)
+      }
     },
     mouseleaveDropdownEvent () {
       this.closePanel()
@@ -336,25 +338,27 @@ export default {
     },
     openPanel () {
       const { trigger } = this
-      const panelElem = this.$refs.panel
-      panelElem.dataset.active = 'Y'
-      if (!this.inited) {
-        this.inited = true
-        if (this.transfer) {
-          document.body.appendChild(panelElem)
+      const panelElem = this.$refs.btnPanel
+      if (panelElem) {
+        panelElem.dataset.active = 'Y'
+        if (!this.inited) {
+          this.inited = true
+          if (this.transfer) {
+            document.body.appendChild(panelElem)
+          }
         }
+        this.showTime = setTimeout(() => {
+          if (panelElem.dataset.active === 'Y') {
+            this.mouseenterDropdownEvent()
+          } else {
+            this.animatVisible = false
+          }
+        }, trigger === 'click' ? 50 : 250)
       }
-      this.showTime = setTimeout(() => {
-        if (panelElem.dataset.active === 'Y') {
-          this.mouseenterDropdownEvent()
-        } else {
-          this.animatVisible = false
-        }
-      }, trigger === 'click' ? 50 : 250)
       return this.$nextTick()
     },
     closePanel () {
-      const panelElem = this.$refs.panel
+      const panelElem = this.$refs.btnPanel
       clearTimeout(this.showTime)
       if (panelElem) {
         panelElem.dataset.active = 'N'
@@ -378,7 +382,7 @@ export default {
       return this.$nextTick().then(() => {
         const { $refs, transfer, placement, panelIndex } = this
         const targetElem = $refs.xBtn
-        const panelElem = $refs.panel
+        const panelElem = $refs.btnPanel
         if (panelElem && targetElem) {
           const targetHeight = targetElem.offsetHeight
           const targetWidth = targetElem.offsetWidth
