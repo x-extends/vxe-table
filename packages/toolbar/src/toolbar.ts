@@ -97,7 +97,7 @@ export default defineComponent({
           return computeCustomOpts.value
         }
       }
-      return {}
+      return { trigger: '' }
     })
 
     const computeTrigger = computed(() => {

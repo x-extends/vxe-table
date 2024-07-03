@@ -651,6 +651,18 @@ renderer.mixin({
     defaultFilterMethod: handleFilterMethod,
     exportMethod: handleExportSelectMethod
   },
+  VxeRadio: {
+    renderDefault: defaultCellRender
+  },
+  VxeRadioGroup: {
+    renderDefault: defaultCellRender
+  },
+  VxeCheckbox: {
+    renderDefault: defaultCellRender
+  },
+  VxeCheckboxGroup: {
+    renderDefault: defaultCellRender
+  },
   VxeSwitch: {
     autofocus: '.vxe-switch--button',
     renderEdit: defaultEditRender,
