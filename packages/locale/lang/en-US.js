@@ -119,7 +119,8 @@ export default {
         colTitle: 'Title',
         colResizable: 'Column width (px)',
         colVisible: 'Visible',
-        colFixed: 'Freeze columns (Max. {0})',
+        colFixed: 'Freeze columns',
+        colFixedMax: 'Freeze columns (Max. {0})',
         fixedLeft: 'Left',
         fixedUnset: 'Unset',
         fixedRight: 'Right'
@@ -127,14 +128,17 @@ export default {
     },
     import: {
       modes: {
-        covering: 'Covering',
-        insert: 'Insert'
+        covering: 'Overwrite mode (directly overwrite table data)',
+        insert: 'Bottom append (appends new data to the bottom of the table)',
+        insertTop: 'Top append (appends new data to the top of the table)',
+        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
       },
       impTitle: 'Import data',
       impFile: 'Filename',
       impSelect: 'Select file',
       impType: 'File type',
       impOpts: 'Settings',
+      impMode: 'Import mode',
       impConfirm: 'Import',
       impCancel: 'Cancel'
     },

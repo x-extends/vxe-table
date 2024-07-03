@@ -1364,7 +1364,7 @@ const Methods = {
         return filterColumns.every(({ column, valueList, itemList }) => {
           if (valueList.length && !allRemoteFilter) {
             const { filterMethod, filterRender, field } = column
-            const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+            const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
             const compFilterMethod = compConf && compConf.renderFilter ? (compConf.tableFilterMethod || compConf.filterMethod) : null
             const defaultFilterMethod = compConf ? (compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
             const cellValue = UtilTools.getCellValue(row, column)
@@ -1566,7 +1566,6 @@ const Methods = {
    */
   setColumnFixed (fieldOrColumn, fixed) {
     const { isMaxFixedColumn, columnOpts } = this
-    const { maxFixedSize } = columnOpts
     const column = handleFieldOrColumn(this, fieldOrColumn)
     const targetColumn = getRootColumn(this, column)
     if (targetColumn && targetColumn.fixed !== fixed) {
@@ -1575,7 +1574,7 @@ const Methods = {
         if (VXETable.modal) {
           VXETable.modal.message({
             status: 'error',
-            content: GlobalConfig.i18n('vxe.table.maxFixedCol', [maxFixedSize])
+            content: GlobalConfig.i18n('vxe.table.maxFixedCol', [columnOpts.maxFixedSize])
           })
         }
         return this.$nextTick()
@@ -1702,18 +1701,21 @@ const Methods = {
     if (resizableData || sortData || visibleData || fixedData) {
       tableFullColumn.forEach(column => {
         const colKey = column.getKey()
+        // 支持一级
+        if (!parent) {
+          if (fixedData && fixedData[colKey]) {
+            column.fixed = fixedData[colKey]
+          }
+          if (sortData && XEUtils.isNumber(sortData[colKey])) {
+            hasCustomSort = true
+            column.renderSortNumber = sortData[colKey]
+          }
+        }
         if (resizableData && XEUtils.isNumber(resizableData[colKey])) {
           column.resizeWidth = resizableData[colKey]
         }
         if (visibleData && XEUtils.isBoolean(visibleData[colKey])) {
           column.visible = visibleData[colKey]
-        }
-        if (fixedData && fixedData[colKey]) {
-          column.fixed = fixedData[colKey]
-        }
-        if (sortData && XEUtils.isNumber(sortData[colKey])) {
-          hasCustomSort = true
-          column.renderSortNumber = sortData[colKey]
         }
       })
       // 如果自定义了顺序
@@ -1778,7 +1780,7 @@ const Methods = {
     let hasFixedt = 0
     let hasVisible = 0
     XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
-      // 排序只支持一级
+      // 只支持一级
       if (!parent) {
         collectColumn.forEach((column) => {
           const colKey = column.getKey()
@@ -1787,19 +1789,19 @@ const Methods = {
             sortData[colKey] = column.renderSortNumber
           }
         })
+        if (column.fixed && column.fixed !== column.defaultFixed) {
+          const colKey = column.getKey()
+          if (colKey) {
+            hasFixedt = 1
+            fixedData[colKey] = column.fixed
+          }
+        }
       }
       if (column.resizeWidth) {
         const colKey = column.getKey()
         if (colKey) {
           hasResizable = 1
           resizableData[colKey] = column.renderWidth
-        }
-      }
-      if (column.fixed && column.fixed !== column.defaultFixed) {
-        const colKey = column.getKey()
-        if (colKey) {
-          hasFixedt = 1
-          fixedData[colKey] = column.fixed
         }
       }
       if (!checkMethod || checkMethod({ column })) {

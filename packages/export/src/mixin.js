@@ -826,7 +826,7 @@ function handleImport ($xetable, content, opts) {
     $xetable.createData(rows)
       .then((data) => {
         let loadRest
-        if (opts.mode === 'insert') {
+        if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
           loadRest = $xetable.insert(data)
         } else {
           loadRest = $xetable.reloadData(data)
@@ -894,7 +894,7 @@ function handleFileImport ($xetable, file, opts) {
     $xetable._importResolve = _importResolve
     $xetable._importReject = _importReject
     if (window.FileReader) {
-      const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
+      const options = Object.assign({ mode: 'insertBottom' }, opts, { type, filename })
       if (options.remote) {
         if (importMethod) {
           Promise.resolve(importMethod({ file, options, $table: $xetable })).then(() => {
@@ -1044,28 +1044,40 @@ export function handlePrint ($xetable, opts, content) {
 }
 
 function handleExportAndPrint ($xetable, options, isPrint) {
-  const { initStore, customOpts, collectColumn, footerTableData, treeConfig, mergeList, isGroup, exportParams, exportOpts } = $xetable
+  const { $xegrid, initStore, customOpts, collectColumn, footerTableData, treeConfig, mergeList, isGroup, exportParams, exportOpts } = $xetable
+  const proxyOpts = $xegrid ? $xegrid.proxyOpts : {}
   const selectRecords = $xetable.getCheckboxRecords()
   const hasFooter = !!footerTableData.length
   const hasTree = treeConfig
   const hasMerge = !hasTree && mergeList.length
-  const defOpts = Object.assign({ message: true, isHeader: true }, options)
+  const defOpts = Object.assign({
+    message: true,
+    isHeader: true,
+    current: 'current',
+    modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
+  }, options)
   const types = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
-  const modes = defOpts.modes
+  const modes = defOpts.modes || []
   const checkMethod = customOpts.checkMethod
   const exportColumns = collectColumn.slice(0)
   const { columns } = defOpts
   // 处理类型
-  const typeList = types.map(value => {
+  const typeList = types.map((value) => {
     return {
       value,
-      label: `vxe.export.types.${value}`
+      label: GlobalConfig.i18n(`vxe.export.types.${value}`)
     }
   })
-  const modeList = modes.map(value => {
+  const modeList = modes.map((item) => {
+    if (item && item.value) {
+      return {
+        value: item.value,
+        label: item.label || item.value
+      }
+    }
     return {
-      value,
-      label: `vxe.export.modes.${value}`
+      value: item,
+      label: GlobalConfig.i18n(`vxe.export.modes.${item}`)
     }
   })
   // 默认选中
@@ -1113,11 +1125,11 @@ function handleExportAndPrint ($xetable, options, isPrint) {
   Object.assign(exportParams, {
     mode: selectRecords.length ? 'selected' : 'current'
   }, defOpts)
-  if (modes.indexOf(exportParams.mode) === -1) {
-    exportParams.mode = modes[0]
+  if (!modeList.some(item => item.value === exportParams.mode)) {
+    exportParams.mode = modeList[0].value
   }
-  if (types.indexOf(exportParams.type) === -1) {
-    exportParams.type = types[0]
+  if (!typeList.some(item => item.value === exportParams.type)) {
+    exportParams.type = typeList[0].value
   }
   initStore.export = true
   return $xetable.$nextTick()
@@ -1297,7 +1309,7 @@ export default {
       }
 
       if (!opts.data) {
-        opts.data = afterFullData
+        opts.data = []
         if (mode === 'selected') {
           const selectRecords = this.getCheckboxRecords()
           if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
@@ -1343,6 +1355,8 @@ export default {
                 })
             }
           }
+        } else if (mode === 'current') {
+          opts.data = afterFullData
         }
       }
       return handleExport(this, opts)
@@ -1427,11 +1441,13 @@ export default {
     _openImport (options) {
       const { importOpts } = this
       const defOpts = Object.assign({
-        mode: 'insert',
+        mode: 'insertBottom',
         message: true,
-        types: XEUtils.keys(importOpts._typeMaps)
+        types: XEUtils.keys(importOpts._typeMaps),
+        modes: ['insertBottom', 'covering']
       }, options, importOpts)
-      const { types } = defOpts
+      const types = defOpts.types || []
+      const modes = defOpts.modes || []
       const isTree = !!this.getTreeStatus()
       if (isTree) {
         if (defOpts.message) {
@@ -1443,16 +1459,22 @@ export default {
         errLog('vxe.error.reqProp', ['import-config'])
       }
       // 处理类型
-      const typeList = types.map(value => {
+      const typeList = types.map((value) => {
         return {
           value,
-          label: `vxe.export.types.${value}`
+          label: GlobalConfig.i18n(`vxe.export.types.${value}`)
         }
       })
-      const modeList = defOpts.modes.map(value => {
+      const modeList = modes.map((item) => {
+        if (item && item.value) {
+          return {
+            value: item.value,
+            label: item.label || item.value
+          }
+        }
         return {
-          value,
-          label: `vxe.import.modes.${value}`
+          value: item,
+          label: GlobalConfig.i18n(`vxe.import.modes.${item}`)
         }
       })
       Object.assign(this.importStore, {
@@ -1464,6 +1486,9 @@ export default {
         visible: true
       })
       Object.assign(this.importParams, defOpts)
+      if (!modeList.some(item => item.value === this.importParams.mode)) {
+        this.importParams.mode = modeList[0].value
+      }
       this.initStore.import = true
     },
     _openExport (options) {

@@ -119,7 +119,8 @@ export default {
         colTitle: '標題',
         colResizable: '列宽（像素）',
         colVisible: '是否顯示',
-        colFixed: '冻结列（最多 {0} 列）',
+        colFixed: '冻结列',
+        colFixedMax: '冻结列（最多 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '不設定',
         fixedRight: '右側'
@@ -127,14 +128,17 @@ export default {
     },
     import: {
       modes: {
-        covering: '覆盖',
-        insert: '新增'
+        covering: '覆盖方式（直接覆盖表格数据）',
+        insert: '底部追加（在表格的底部追加新数据）',
+        insertTop: '顶部追加（在表格的顶部追加新数据）',
+        insertBottom: '底部追加（在表格的底部追加新数据）'
       },
       impTitle: '導入數據',
       impFile: '檔名',
       impSelect: '選擇檔案',
       impType: '檔案類型',
       impOpts: '參數設置',
+      impMode: '導入模式',
       impConfirm: '導入',
       impCancel: '取消'
     },

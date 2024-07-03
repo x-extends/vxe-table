@@ -283,6 +283,7 @@ export default {
           $xetable.saveCustomStore('update:visible')
           $xetable.updateCellAreas()
           $xetable.emitEvent('resizable-change', { ...params, resizeWidth }, evnt)
+          setTimeout(() => $xetable.recalculate(true), 300)
         })
         DomTools.removeClass($xetable.$el, 'drag--resize')
       }

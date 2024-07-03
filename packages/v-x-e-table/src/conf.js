@@ -64,9 +64,16 @@ export default {
       allowFixed: true,
       allowSort: true,
       showFooter: true,
-      placement: 'topRight'
+      placement: 'topRight',
       //  storage: false,
-      //  checkMethod () {}
+      //  checkMethod () {},
+      modalOptions: {
+        showZoom: true,
+        mask: true,
+        lockView: true,
+        resize: true,
+        escClosable: true
+      }
     },
     sortConfig: {
       // remote: false,

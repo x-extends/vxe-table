@@ -1,6 +1,6 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import UtilTools from '../../tools/utils'
+import UtilTools, { isEnableConf } from '../../tools/utils'
 import { getSlotVNs } from '../../tools/vn'
 
 export default {
@@ -18,7 +18,7 @@ export default {
     const { $parent: $xetable, filterStore } = this
     const { args, column } = filterStore
     const filterRender = column ? column.filterRender : null
-    const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+    const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
     const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
     return h('div', {
       class: [
@@ -120,7 +120,7 @@ export default {
       const { filterOpts } = $xetable
       const { column, multiple } = filterStore
       const filterRender = column.filterRender
-      const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+      const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
       const isDisabled = !hasCheckOption && !filterStore.isAllSelected && !filterStore.isIndeterminate
       return multiple && (compConf ? !(compConf.showTableFilterFooter === false || compConf.showFilterFooter === false) : true) ? [
         h('div', {

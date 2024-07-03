@@ -239,6 +239,7 @@ const renderPopupPanel = (h, _vm) => {
   const { _e, $xetable, customStore } = _vm
   const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xetable
   const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+  const { maxFixedSize } = columnOpts
   const modalOpts = Object.assign({}, modalOptions)
   const trVNs = []
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
@@ -376,21 +377,22 @@ const renderPopupPanel = (h, _vm) => {
   const isAllChecked = customStore.isAll
   const isAllIndeterminate = customStore.isIndeterminate
   return h('vxe-modal', {
-    key: 'popup',
+    key: 'modal',
     props: {
       className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
       value: customStore.visible,
       title: modalOpts.title || GlobalConfig.i18n('vxe.custom.cstmTitle'),
-      width: modalOpts.width || '50vw',
+      width: modalOpts.width || Math.min(880, document.documentElement.clientWidth),
       minWidth: modalOpts.minWidth || 700,
-      height: modalOpts.height || '50vh',
+      height: modalOpts.height || Math.min(680, document.documentElement.clientHeight),
       minHeight: modalOpts.minHeight || 400,
-      mask: true,
-      lockView: true,
-      showFooter: true,
-      resize: true,
-      escClosable: true,
-      destroyOnClose: true
+      showZoom: !!modalOpts.showZoom,
+      mask: !!modalOpts.mask,
+      lockView: !!modalOpts.lockView,
+      resize: !!modalOpts.resize,
+      escClosable: !!modalOpts.escClosable,
+      destroyOnClose: true,
+      showFooter: true
     },
     on: {
       input (value) {
@@ -489,7 +491,7 @@ const renderPopupPanel = (h, _vm) => {
                     ? h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colResizable'))
                     : _e(),
                   allowFixed
-                    ? h('th', {}, GlobalConfig.i18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
+                    ? h('th', {}, GlobalConfig.i18n(`vxe.custom.setting.${maxFixedSize ? 'colFixedMax' : 'colFixed'}`, [maxFixedSize]))
                     : _e()
                 ])
               ]),
@@ -566,7 +568,7 @@ export default {
   render (h) {
     const { $xetable } = this
     const { customOpts } = $xetable
-    if (customOpts.mode === 'popup') {
+    if (['modal', 'popup'].includes(`${customOpts.mode}`)) {
       return renderPopupPanel(h, this)
     }
     return renderSimplePanel(h, this)

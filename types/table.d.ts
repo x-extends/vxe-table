@@ -836,8 +836,9 @@ export declare class VxeTable extends VXETableComponent {
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
    * @param column 列对象
    * @param options 选项列表
+   * @param update 是否同时更新数据
    */
-  setFilter(column: ColumnInfo, options: ColumnFilterOption[]): Promise<any>;
+  setFilter(column: ColumnInfo, options: ColumnFilterOption[], update?: boolean): Promise<any>;
   /**
    * 手动清空筛选条件
    * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态

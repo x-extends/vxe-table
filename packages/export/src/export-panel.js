@@ -140,21 +140,15 @@ export default {
                 h('td', [
                   h('vxe-select', {
                     props: {
-                      value: defaultOptions.type
+                      value: defaultOptions.type,
+                      options: storeData.typeList
                     },
                     on: {
                       input (value) {
                         defaultOptions.type = value
                       }
                     }
-                  }, storeData.typeList.map(item => {
-                    return h('vxe-option', {
-                      props: {
-                        value: item.value,
-                        label: GlobalConfig.i18n(item.label)
-                      }
-                    })
-                  }))
+                  })
                 ])
               ]),
               isPrint || showSheet ? h('tr', [
@@ -181,21 +175,15 @@ export default {
                 h('td', [
                   h('vxe-select', {
                     props: {
-                      value: defaultOptions.mode
+                      value: defaultOptions.mode,
+                      options: storeData.modeList
                     },
                     on: {
                       input (value) {
                         defaultOptions.mode = value
                       }
                     }
-                  }, storeData.modeList.map(item => {
-                    return h('vxe-option', {
-                      props: {
-                        value: item.value,
-                        label: GlobalConfig.i18n(item.label)
-                      }
-                    })
-                  }))
+                  })
                 ])
               ]),
               h('tr', [

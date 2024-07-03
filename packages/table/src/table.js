@@ -618,7 +618,7 @@ export default {
       const { collectColumn } = this
       let fixedSize = 0
       collectColumn.forEach((column) => {
-        if (column.fixed) {
+        if (column.renderFixed) {
           fixedSize++
         }
       })

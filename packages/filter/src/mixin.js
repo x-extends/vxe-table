@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import DomTools from '../../tools/dom'
 import { toFilters, handleFieldOrColumn } from '../../table/src/util'
+import { isEnableConf } from '../../tools/utils'
 import VXETable from '../../v-x-e-table'
 
 export default {
@@ -29,12 +30,12 @@ export default {
      * @param {ColumnInfo} fieldOrColumn 列
      * @param {Array} options 选项
      */
-    _setFilter (fieldOrColumn, options) {
+    _setFilter (fieldOrColumn, options, update) {
       const column = handleFieldOrColumn(this, fieldOrColumn)
       if (column && column.filters) {
         column.filters = toFilters(options || [])
       }
-      return this.$nextTick()
+      return update ? this.updateData() : this.$nextTick()
     },
     checkFilterOptions () {
       const { filterStore } = this
@@ -57,7 +58,7 @@ export default {
       } else {
         const { target: targetElem, pageX } = evnt
         const { filters, filterMultiple, filterRender } = column
-        const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+        const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
         const filterRecoverMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
         const { visibleWidth } = DomTools.getDomNode()
         Object.assign(filterStore, {
@@ -205,7 +206,7 @@ export default {
       if (column) {
         const { filters, filterRender } = column
         if (filters) {
-          const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
+          const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
           const filterResetMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
           filters.forEach((item) => {
             item._checked = false
