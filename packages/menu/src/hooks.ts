@@ -282,8 +282,9 @@ const tableMenuHook: VxeGlobalHooksHandles.HookOptions = {
         if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
           const gMenuOpts = VXETable.menus.get(menu.code)
           const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xetable, $grid: $xetable.xegrid, $event: evnt })
-          if (gMenuOpts && gMenuOpts.menuMethod) {
-            gMenuOpts.menuMethod(params, evnt)
+          const tmMethod = gMenuOpts ? (gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod) : null
+          if (tmMethod) {
+            tmMethod(params, evnt)
           }
           $xetable.dispatchEvent('menu-click', params, evnt)
           menuMethods.closeMenu()

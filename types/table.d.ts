@@ -1626,7 +1626,7 @@ export namespace VxeTablePropTypes {
     visibleMethod?(params: {
       row: D
     }): boolean
-    trigger?: 'default' | 'cell' | 'row' | '' | null
+    trigger?: 'default' | 'cell' | 'row' | '' | 'manual' | null
     highlight?: boolean
     range?: boolean
 

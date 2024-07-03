@@ -6,7 +6,15 @@ import { VxeGlobalRendererHandles } from './renderer'
 
 export namespace VxeGlobalMenusHandles {
   export type MenusOption<D = VxeTableDataRow> = {
+    /**
+       * 已废弃，请使用 tableMenuMethod
+       * @deprecated
+       */
     menuMethod?: (params: MenuMethodParams<D>, event: Event) => any
+    /**
+       * 表格 - 自定义菜单方法
+       */
+    tableMenuMethod?: (params: MenuMethodParams<D>, event: Event) => any
   }
   export interface MenuMethodParams<D = VxeTableDataRow> extends VxeGlobalRendererHandles.RenderCellParams<D> {
     $grid: VxeGridConstructor<D> | null

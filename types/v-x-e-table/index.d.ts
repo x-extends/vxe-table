@@ -97,6 +97,7 @@ export interface VxeGlobalIcon {
 
 export type VxeGlobalConfigMethod = (options?: VXETableConfigOptions) => VXETableCore
 export type VxeGlobalThemeMethod = (name?: '' | 'light' | 'dark') => VXETableCore
+export type VxeGlobalGetThemeMethod = () => 'light' | 'dark'
 
 /**
  * 请使用 setConfig
@@ -137,6 +138,8 @@ export type VxeGlobalUse = (plugin: VXETablePluginObject, ...options: any[]) => 
 
 export const setConfig: VxeGlobalConfigMethod
 export const setTheme: VxeGlobalThemeMethod
+export const getTheme: VxeGlobalGetThemeMethod
+
 export const interceptor: VxeGlobalInterceptor
 export const renderer: VxeGlobalRenderer
 export const commands: VxeGlobalCommands
@@ -168,6 +171,9 @@ export const setup: VXETableSetupOptions
  */
 export const globalConfs: VXETableConfig
 
+export function getComponent (name: string): any
+export function component (comp: any): any
+
 export function setIcon(options?: VxeGlobalIcon): VXETableCore
 
 export interface VXETablePluginObject {
@@ -194,11 +200,13 @@ export interface VXETableCore {
    * 版本号
    */
   version: string
+  tableVersion?: string;
   /**
    * 设置全局参数/获取所有参数
    */
   setConfig: VxeGlobalConfigMethod
   setTheme: VxeGlobalThemeMethod
+  getTheme: VxeGlobalGetThemeMethod
   setIcon: typeof setIcon
   /**
    * 读取内部数据
@@ -260,6 +268,9 @@ export interface VXETableCore {
    */
   t: VxeGlobalI18n
   _t: VxeGlobalTranslate
+
+  getComponent: typeof getComponent,
+  component: typeof component,
 
   /**
    * 请使用 setConfig

@@ -8,7 +8,7 @@ import { menus } from './src/menus'
 import { formats } from './src/formats'
 import { validators } from './src/validators'
 import { hooks } from './src/hooks'
-import { setTheme } from './src/theme'
+import { setTheme, getTheme } from './src/theme'
 import { getLastZIndex, nextZIndex } from '../tools/utils'
 import { warnLog } from '../tools/log'
 
@@ -129,9 +129,25 @@ export function setIcon (options?: any) {
 
 export const globalStore = {}
 
+const components: any = {}
+
+export function getComponent (name: any) {
+  return components[name] || null
+}
+
+export function component (comp: any) {
+  if (comp && comp.name) {
+    components[comp.name] = comp
+  }
+}
+
+export const version = process.env.VUE_APP_VXE_TABLE_VERSION as string
+export const tableVersion = version
+
 export const VXETable = {
   v,
-  version: process.env.VUE_APP_VXE_TABLE_VERSION,
+  version,
+  tableVersion,
   setConfig,
   setIcon,
   globalStore,
@@ -145,6 +161,9 @@ export const VXETable = {
   use,
   t,
   _t,
+  setTheme,
+  getTheme,
+  getComponent,
 
   // 已废弃
   config,
