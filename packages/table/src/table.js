@@ -990,7 +990,7 @@ export default {
     this.preventEvent(null, 'mounted')
   },
   activated () {
-    this.recalculate().then(() => this.refreshScroll(false))
+    this.recalculate().then(() => this.refreshScroll())
     this.preventEvent(null, 'activated')
   },
   deactivated () {
