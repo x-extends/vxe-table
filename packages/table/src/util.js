@@ -72,8 +72,8 @@ const lineOffsetSizes = {
   medium: 1
 }
 
-export function restoreScrollLocation (_vm, scrollLeft, scrollTop) {
-  return _vm.clearScroll().then(() => {
+export function restoreScrollLocation (_vm, scrollLeft, scrollTop, clearVirtualScroll = true) {
+  return _vm.clearScroll(clearVirtualScroll).then(() => {
     if (scrollLeft || scrollTop) {
       // 重置最后滚动状态
       _vm.lastScrollLeft = 0

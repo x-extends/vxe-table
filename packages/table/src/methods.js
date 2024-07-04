@@ -5221,7 +5221,9 @@ const Methods = {
       tableBodyElem.scrollLeft = 0
     }
     scrollXStore.startIndex = 0
+    scrollXStore.endIndex = scrollXStore.visibleSize
     scrollYStore.startIndex = 0
+    scrollYStore.endIndex = scrollYStore.visibleSize
     return this.$nextTick()
   },
   /**
