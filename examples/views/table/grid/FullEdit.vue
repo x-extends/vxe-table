@@ -20,8 +20,21 @@
 </template>
 
 <script>
-import XEAjax from 'xe-ajax'
 import XEUtils from 'xe-utils'
+
+function postMock (url, body) {
+  return new Promise((resolve) => {
+    console.log(`模拟提交${url}：${JSON.stringify(body)}`)
+    setTimeout(() => {
+      resolve({
+        code: 200,
+        result: {
+          insertRows: 0
+        }
+      })
+    }, 300)
+  })
+}
 
 export default {
   data () {
@@ -64,8 +77,8 @@ export default {
           titleWidth: 100,
           titleAlign: 'right',
           items: [
-            { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'fa fa-exclamation-circle' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
-            { field: 'email', title: '邮件', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
+            { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'vxe-icon-question-circle-fill' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+            { field: 'email', title: '邮件', span: 8, titlePrefix: { useHTML: true, message: '点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>', icon: 'vxe-icon-question-circle-fill' }, itemRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
             { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
             { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
             { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'fa fa-info-circle' }, itemRender: { name: '$select', options: [] } },
@@ -111,10 +124,10 @@ export default {
               filters.forEach(({ property, values }) => {
                 queryParams[property] = values.join(',')
               })
-              return XEAjax.get(`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+              return fetch(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}?${XEUtils.serialize(queryParams)}`).then(response => response.json())
             },
-            delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body),
-            save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+            delete: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body),
+            save: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body)
           }
         },
         columns: [
@@ -124,6 +137,7 @@ export default {
             field: 'role',
             title: 'Role',
             sortable: true,
+            titleHelp: { useHTML: true, content: '点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>' },
             filters: [
               { label: '前端开发', value: '前端' },
               { label: '后端开发', value: '后端' },
@@ -191,6 +205,20 @@ export default {
         `,
         `
         import XEUtils from 'xe-utils'
+
+        function postMock (url, body) {
+          return new Promise((resolve) => {
+            console.log(\`模拟提交\${url}：\${JSON.stringify(body)}\`)
+            setTimeout(() => {
+              resolve({
+                code: 200,
+                result: {
+                  insertRows: 0
+                }
+              })
+            }, 300)
+          })
+        }
         
         export default {
           data () {
@@ -280,10 +308,10 @@ export default {
                       filters.forEach(({ property, values }) => {
                         queryParams[property] = values.join(',')
                       })
-                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                      return fetch(\`https://api.vxetable.cn/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}?\${XEUtils.serialize(queryParams)}\`).then(response => response.json())
                     },
-                    delete: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body),
-                    save: ({ body }) => XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/save', body)
+                    delete: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body),
+                    save: ({ body }) => postMock('https://api.vxetable.cn/demo/api/pub/save', body)
                   }
                 },
                 columns: [
@@ -396,7 +424,7 @@ export default {
               const formBody = new FormData()
               formBody.append('file', file)
               // 上传文件
-              return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/import', formBody).then(data => {
+              return postMock('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
                 const $grid = this.$refs.xGrid
                 this.$XModal.message({ content: \`成功导入 \${data.result.insertRows} 条记录！\`, status: 'success' })
                 // 导入完成，刷新表格
@@ -426,11 +454,11 @@ export default {
                 })
               }
               // 开始服务端导出
-              return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/export', body).then(data => {
+              return postMock('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
                 if (data.id) {
                   this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
                   // 读取路径，请求文件
-                  fetch(\`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/\${data.id}\`)
+                  fetch(\`https://api.vxetable.cn/demo/api/pub/export/download/\${data.id}\`)
                     .then(response => response.blob())
                     .then(blob => {
                       // 开始下载
@@ -487,7 +515,7 @@ export default {
       const formBody = new FormData()
       formBody.append('file', file)
       // 上传文件
-      return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/import', formBody).then(data => {
+      return postMock('https://api.vxetable.cn/demo/api/pub/import', formBody).then(data => {
         const $grid = this.$refs.xGrid
         this.$XModal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
         // 导入完成，刷新表格
@@ -517,11 +545,11 @@ export default {
         })
       }
       // 开始服务端导出
-      return XEAjax.post('https://api.xuliangzhan.com:10443/demo/api/pub/export', body).then(data => {
+      return postMock('https://api.vxetable.cn/demo/api/pub/export', body).then(data => {
         if (data.id) {
           this.$XModal.message({ content: '导出成功，开始下载', status: 'success' })
           // 读取路径，请求文件
-          fetch(`https://api.xuliangzhan.com:10443/demo/api/pub/export/download/${data.id}`)
+          fetch(`https://api.vxetable.cn/demo/api/pub/export/download/${data.id}`)
             .then(response => response.blob())
             .then(blob => {
               // 开始下载

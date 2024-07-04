@@ -1,6 +1,8 @@
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
+import UtilTools, { isEnableConf } from '../../tools/utils'
+import DomTools from '../../tools/dom'
 import VXETable from '../../v-x-e-table'
+import { warnLog } from '../../tools/log'
 
 export default {
   methods: {
@@ -68,7 +70,7 @@ export default {
             if (activeArea && activeArea.row && activeArea.column) {
               params.row = activeArea.row
               params.column = activeArea.column
-              this.openContextMenu(evnt, type, params)
+              this.handleOpenMenuEvent(evnt, type, params)
               return
             }
           } else if (mouseConfig && mouseOpts.selected) {
@@ -76,7 +78,7 @@ export default {
             if (selected.row && selected.column) {
               params.row = selected.row
               params.column = selected.column
-              this.openContextMenu(evnt, type, params)
+              this.handleOpenMenuEvent(evnt, type, params)
               return
             }
           }
@@ -100,11 +102,11 @@ export default {
               params.row = row
               params.rowIndex = this.getRowIndex(row)
             }
-            this.openContextMenu(evnt, layout, params)
+            this.handleOpenMenuEvent(evnt, layout, params)
             // 在 v4 中废弃事件 cell-context-menu、header-cell-context-menu、footer-cell-context-menu
             if (this.$listeners[`${typePrefix}cell-context-menu`]) {
               if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                UtilTools.warn('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
+                warnLog('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
               }
               this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
             } else {
@@ -115,7 +117,7 @@ export default {
             if (ctxMenuOpts.trigger === 'cell') {
               evnt.preventDefault()
             } else {
-              this.openContextMenu(evnt, layout, params)
+              this.handleOpenMenuEvent(evnt, layout, params)
             }
             return
           }
@@ -129,7 +131,7 @@ export default {
     /**
      * 显示快捷菜单
      */
-    openContextMenu (evnt, type, params) {
+    handleOpenMenuEvent (evnt, type, params) {
       const { isCtxMenu, ctxMenuStore, ctxMenuOpts } = this
       const config = ctxMenuOpts[type]
       const visibleMethod = ctxMenuOpts.visibleMethod
@@ -178,7 +180,7 @@ export default {
               const { keyboard, row, column } = params
               if (keyboard && row && column) {
                 this.scrollToRow(row, column).then(() => {
-                  const cell = this.getCell(row, column)
+                  const cell = this.getCellElement(row, column)
                   const { boundingTop, boundingLeft } = DomTools.getAbsolutePos(cell)
                   top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)
                   left = boundingLeft + scrollLeft + Math.floor(cell.offsetWidth / 2)
@@ -247,15 +249,15 @@ export default {
     ctxMenuLinkEvent (evnt, menu) {
       // 如果一级菜单有配置 code 则允许点击，否则不能点击
       if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
-        const ctxMenuMethod = VXETable.menus.get(menu.code)
+        const gMenuOpts = VXETable.menus.get(menu.code)
         const params = Object.assign({ menu, $grid: this.$xegrid, $table: this, $event: evnt }, this.ctxMenuStore.args)
-        if (ctxMenuMethod) {
-          ctxMenuMethod.call(this, params, evnt)
+        if (gMenuOpts && gMenuOpts.menuMethod) {
+          gMenuOpts.menuMethod(params, evnt)
         }
         // 在 v4 中废弃事件 context-menu-click
         if (this.$listeners['context-menu-click']) {
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-            UtilTools.warn('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
+            warnLog('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
           }
           this.emitEvent('context-menu-click', params, evnt)
         } else {

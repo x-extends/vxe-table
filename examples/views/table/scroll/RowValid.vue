@@ -48,7 +48,8 @@
       height="300"
       :loading="loading"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}">
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
+      :scroll-y="{enabled: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable width="200" :edit-render="{name: 'input'}"></vxe-column>

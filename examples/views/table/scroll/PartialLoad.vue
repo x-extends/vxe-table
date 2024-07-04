@@ -20,8 +20,10 @@
       resizable
       show-overflow
       height="500"
-      row-id="id"
-      :loading="loading">
+      :row-config="{keyField: 'id'}"
+      :loading="loading"
+      :scroll-x="{enabled: true}"
+      :scroll-y="{enabled: true}">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>

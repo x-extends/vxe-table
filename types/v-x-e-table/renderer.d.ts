@@ -1,14 +1,15 @@
-import { CreateElement, VNode } from 'vue'
-import { RowInfo } from '../component'
+import { CreateElement } from 'vue'
+import { SlotVNodeType, RowInfo, VNodeStyle, VNodeClassName } from '../component'
 import { Table } from '../table'
 import { Grid } from '../grid'
 import { ColumnInfo, ColumnCellRenderOptions, ColumnContentRenderOptions } from '../column'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from '../export'
-import { ColumnEditRenderOptions, ColumnEditRenderParams } from '../edit'
-import { ColumnFooterRenderParams } from '../footer'
-import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from '../filter'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from '../module/export'
+import { ColumnEditRenderOptions, ColumnEditRenderParams } from '../module/edit'
+import { ColumnFilterRenderOptions, ColumnFilterRenderParams, ColumnFilterMethodParams, ColumnFilterResetParams } from '../module/filter'
 import { ToolbarButtonRenderOptions, ToolbarButtonRenderParams, ToolbarToolRenderOptions, ToolbarToolRenderParams } from '../toolbar'
 import { FormItemRenderOptions, FormItemRenderParams, FormItemVisibleParams, FormItemResetParams } from '../form-item'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 渲染器
@@ -21,42 +22,218 @@ export interface VxeGlobalRenderer {
 }
 
 export interface RendererMapOptions {
-  // 筛选渲染
+  /**
+   * 请使用 filterClassName
+   * @deprecated
+   */
   className?: string;
+  /**
+   * 请使用 showFilterFooter
+   * @deprecated
+   */
   isFooter?: boolean;
-  renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): VNode[] | string[];
+
+  /**
+   * 请使用 tableFilterClassName
+   * @deprecated
+   */
+  filterClassName?: string | ((params: ColumnFilterRenderParams) => string | VNodeClassName)
+  tableFilterClassName?: string | ((params: ColumnFilterRenderParams) => string | VNodeClassName)
+
+  /**
+   * 请使用 showTableFilterFooter
+   * @deprecated
+   */
+  showFilterFooter?: boolean;
+  showTableFilterFooter?: boolean;
+
+  /**
+   * 已废弃，请使用 renderTableFilter
+   * @deprecated
+   */
+  renderFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderTableFilter?(h: CreateElement, renderOpts: ColumnFilterRenderOptions, params: ColumnFilterRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 tableFilterMethod
+   * @deprecated
+   */
   filterMethod?(params: ColumnFilterMethodParams): boolean;
+  tableFilterMethod?(params: ColumnFilterMethodParams): boolean;
+
+  /**
+   * 已废弃，请使用 tableFilterResetMethod
+   * @deprecated
+   */
   filterResetMethod?(params: ColumnFilterResetParams): void;
-  // 默认行为
+  tableFilterResetMethod?(params: ColumnFilterResetParams): void;
+
+  /**
+   * 已废弃，请使用 defaultTableFilterMethod
+   * @deprecated
+   */
   defaultFilterMethod?(params: ColumnFilterMethodParams): boolean;
+  defaultTableFilterMethod?(params: ColumnFilterMethodParams): boolean;
 
-  // 单元格渲染
-  renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
-  renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
-  renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnFooterRenderParams): VNode[] | string[];
+  /**
+   * 已废弃，请使用 tableCellClassName
+   * @deprecated
+   */
+  cellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | VNodeClassName)
+  tableCellClassName?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => string | VNodeClassName)
+
+  /**
+   * 已废弃，请使用 tableCellStyle
+   * @deprecated
+   */
+  cellStyle?: VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => VNodeStyle)
+  tableCellStyle?: VNodeStyle | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => VNodeStyle)
+
+  /**
+   * 已废弃，请使用 renderTableHeader
+   * @deprecated
+   */
+  renderHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderTableHeader?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 renderTableDefault
+   * @deprecated
+   */
+  renderDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderTableDefault?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 renderTableFooter
+   * @deprecated
+   */
+  renderFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: any): SlotVNodeType | SlotVNodeType[];
+  renderTableFooter?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: any): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 tableExportMethod
+   * @deprecated
+   */
   exportMethod?(params: ColumnExportCellRenderParams): string;
+  tableExportMethod?(params: ColumnExportCellRenderParams): string;
+
+  /**
+   * 已废弃，请使用 tableFooterExportMethod
+   * @deprecated
+   */
   footerExportMethod?(params: ColumnExportFooterRenderParams): string;
+  tableFooterExportMethod?(params: ColumnExportFooterRenderParams): string;
 
-  // 编辑渲染
-  autofocus?: string;
-  renderEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
-  renderCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  /**
+   * 已废弃，请使用 tableAutofocus
+   * @deprecated
+   */
+  autofocus?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => HTMLElement | null);
+  tableAutofocus?: string | ((params: ColumnCellRenderParams | ColumnEditRenderParams) => HTMLElement | null);
 
-  // 内容渲染
-  renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): VNode[] | string[];
+  /**
+   * 已废弃，请使用 renderTableEdit
+   * @deprecated
+   */
+  renderEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderTableEdit?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 renderTableCell
+   * @deprecated
+   */
+  renderCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderTableCell?(h: CreateElement, renderOpts: ColumnCellRenderOptions | ColumnEditRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 renderTableExpand
+   * @deprecated
+   */
+  renderExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderTableExpand?(h: CreateElement, renderOpts: ColumnContentRenderOptions, params: ColumnCellRenderParams | ColumnEditRenderParams): SlotVNodeType | SlotVNodeType[];
 
   // 工具栏-按钮渲染
-  renderToolbarButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): VNode[] | string[];
-  renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): VNode[] | string[];
+  toolbarButtonClassName?: string | ((params: ToolbarButtonRenderParams) => string | VNodeClassName)
+  renderToolbarButton?(h: CreateElement, renderOpts: ToolbarButtonRenderOptions, params: ToolbarButtonRenderParams): SlotVNodeType | SlotVNodeType[];
+  toolbarToolClassName?: string | ((params: ToolbarToolRenderParams) => string | VNodeClassName)
+  renderToolbarTool?(h: CreateElement, renderOpts: ToolbarToolRenderOptions, params: ToolbarToolRenderParams): SlotVNodeType | SlotVNodeType[];
 
-  // 表单-项渲染
-  renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
-  renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): VNode[] | string[];
+  /**
+   * 已废弃，请使用 formItemClassName
+   * @deprecated
+   */
+  itemClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+  formItemClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+
+  /**
+   * 已废弃，请使用 formItemStyle
+   * @deprecated
+   */
+  itemStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+  formItemStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+
+  /**
+   * 已废弃，请使用 formItemContentClassName
+   * @deprecated
+   */
+  itemContentClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+  formItemContentClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+
+  /**
+   * 已废弃，请使用 formItemContentStyle
+   * @deprecated
+   */
+  itemContentStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+  formItemContentStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+
+  /**
+   * 已废弃，请使用 formItemTitleClassName
+   * @deprecated
+   */
+  itemTitleClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+  formItemTitleClassName?: string | ((params: FormItemRenderParams) => string | VNodeClassName)
+
+  /**
+   * 已废弃，请使用 formItemTitleStyle
+   * @deprecated
+   */
+  itemTitleStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+  formItemTitleStyle?: VNodeStyle | ((params: FormItemRenderParams) => VNodeStyle)
+
+  /**
+   * 已废弃，请使用 renderFormItemTitle
+   * @deprecated
+   */
+  renderItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderFormItemTitle?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 renderFormItemContent
+   * @deprecated
+   */
+  renderItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderFormItemContent?(h: CreateElement, renderOpts: FormItemRenderOptions, params: FormItemRenderParams): SlotVNodeType | SlotVNodeType[];
+
+  /**
+   * 已废弃，请使用 formItemVisibleMethod
+   * @deprecated
+   */
   itemVisibleMethod?(params: FormItemVisibleParams): boolean;
-  itemResetMethod?(params: FormItemResetParams): void;
+  formItemVisibleMethod?(params: FormItemVisibleParams): boolean;
 
-  // 空内容渲染
-  renderEmpty?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): VNode[] | string[];
+  /**
+   * 已废弃，请使用 formItemResetMethod
+   * @deprecated
+   */
+  itemResetMethod?(params: FormItemResetParams): void;
+  formItemResetMethod?(params: FormItemResetParams): void;
+
+  /**
+   * 已废弃，请使用 renderTableEmptyView
+   * @deprecated
+   */
+  renderEmpty?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): SlotVNodeType | SlotVNodeType[];
+  renderTableEmptyView?(h: CreateElement, renderOpts: TableEmptyRender, params: EmptyRenderParams): SlotVNodeType | SlotVNodeType[];
 
   [key: string]: any;
 }
@@ -80,11 +257,11 @@ export class RenderOptions {
   /**
    * 目标组件渲染的事件
    */
-  events?: { [key: string]: Function };
+  events?: { [key: string]: ((...angs: any[])=>any) };
   /**
    * 目标组件渲染的原生事件
    */
-  nativeEvents?: { [key: string]: Function };
+  nativeEvents?: { [key: string]: ((...angs: any[])=>any) };
   [key: string]: any;
 }
 
@@ -158,16 +335,16 @@ export class TableRenderParams extends RenderParams {
 
 export class GridRenderParams extends TableRenderParams {
   /**
-   * 高级表格实例对象
+   * 配置式表格实例对象
    */
   $grid: Grid;
 }
 
 export class EmptyRenderParams extends TableRenderParams { }
 
-export interface ColumnDefaultSlotParams extends ColumnCellRenderParams { }
-export interface ColumnContentSlotParams extends ColumnContentRenderParams { }
-export interface ColumnIconSlotParams extends ColumnIconRenderParams { }
+export type ColumnDefaultSlotParams = ColumnCellRenderParams
+export type ColumnContentSlotParams = ColumnContentRenderParams
+export type ColumnIconSlotParams = ColumnIconRenderParams
 
-export interface ColumnContentRenderParams extends ColumnCellRenderParams { }
-export interface ColumnIconRenderParams extends ColumnCellRenderParams { }
+export type ColumnContentRenderParams = ColumnCellRenderParams
+export type ColumnIconRenderParams = ColumnCellRenderParams

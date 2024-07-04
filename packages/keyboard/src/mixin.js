@@ -1,6 +1,5 @@
 import XEUtils from 'xe-utils'
-import { DomTools } from '../../tools'
-import { browse } from '../../tools/src/dom'
+import DomTools, { browse } from '../../tools/dom'
 
 function getTargetOffset (target, container) {
   let offsetTop = 0
@@ -94,7 +93,7 @@ export default {
         }
         params.columnIndex = targetColumnIndex
         params.column = targetColumn
-        params.cell = this.getCell(params.row, params.column)
+        params.cell = this.getCellElement(params.row, params.column)
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
@@ -113,11 +112,12 @@ export default {
     // 处理当前行方向键移动
     moveCurrentRow (isUpArrow, isDwArrow, evnt) {
       const { currentRow, treeConfig, treeOpts, afterFullData } = this
+      const childrenField = treeOpts.children || treeOpts.childrenField
       let targetRow
       evnt.preventDefault()
       if (currentRow) {
         if (treeConfig) {
-          const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, treeOpts)
+          const { index, items } = XEUtils.findTree(afterFullData, item => item === currentRow, { children: childrenField })
           if (isUpArrow && index > 0) {
             targetRow = items[index - 1]
           } else if (isDwArrow && index < items.length - 1) {
@@ -165,7 +165,7 @@ export default {
         params.column = visibleColumn[params.columnIndex]
       }
       this.scrollToRow(params.row, params.column).then(() => {
-        params.cell = this.getCell(params.row, params.column)
+        params.cell = this.getCellElement(params.row, params.column)
         this.handleSelected(params, evnt)
       })
     },
@@ -279,7 +279,7 @@ export default {
               })
             } else {
               this.setAllCheckboxRow(false)
-              this.setCheckboxRow(rangeRows, true)
+              this.handleCheckedCheckboxRow(rangeRows, true, false)
             }
             triggerEvent('change', evnt)
           }

@@ -1,7 +1,7 @@
 /**Variable**/
 %ButtonHover {
-  color: lighten($vxe-primary-color, 6%);
-  border-color: lighten($vxe-primary-color, 10%);
+  color: $vxe-primary-lighten-color;
+  border-color: $vxe-primary-lighten-color;
 }
 
 .vxe-form {
@@ -11,6 +11,20 @@
   font-family: $vxe-font-family;
   background-color: $vxe-form-background-color;
   text-align: left;
+}
+
+.vxe-form--item-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  $spans: 4.16667%, 8.33333%, 12.5%, 16.66667%, 20.83333%, 25%, 29.16667%, 33.33333%,
+          37.5%, 41.66667%, 45.83333%, 50%, 54.16667%, 58.33333%, 62.5%, 66.66667%,
+          70.83333%, 75%, 79.16667%, 83.33333%, 87.5%, 91.66667%, 95.83333%, 100%;
+  @for $index from 0 to length($spans) {
+    & > .vxe-form--item-col_#{$index + 1} {
+      width: nth($spans, $index + 1);
+    }
+  }
 }
 
 .vxe-form-slots {
@@ -44,9 +58,6 @@
   .vxe-form--item-title-suffix {
     cursor: help;
     vertical-align: middle;
-    & > i {
-      vertical-align: middle;
-    }
   }
   .vxe-form--item-title-prefix {
     margin-right: 0.25em;
@@ -74,6 +85,7 @@
   user-select: none;
   cursor: pointer;
   .vxe-form--item-trigger-icon {
+    display: inline-block;
     margin: 0 0.25em;
     transition: all 0.1s;
   }
@@ -95,33 +107,31 @@
 
 .vxe-form {
   .vxe-form--gather {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+  }
+  .vxe-form--wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
   }
   .vxe-form--item {
     display: none;
     padding: 0.5em 0.8em 0.5em 0;
+    &.is--vertical {
+      padding: 0.25em 0 0.25em 0;
+    }
     &.is--active {
       &:not(.is--hidden) {
-        display: inline-block;
+        display: inline-flex;
       }
     }
   }
-  &.is--asterisk {
-    .vxe-form--item {
-      &.is--required {
-        .vxe-form--item-title-content {
-          &:before {
-            content: "*";
-            color: $vxe-form-validate-error-color;
-            font-family: Verdana,Arial,Tahoma;
-            margin-right: 0.2em;
-            font-weight: normal;
-            vertical-align: middle;
-          }
-        }
-      }
-    }
-  }
+}
+
+.vxe-form--item {
   &.is--colon {
     .vxe-form--item-title-postfix {
       &:after {
@@ -131,9 +141,35 @@
       }
     }
   }
-}
-
-.vxe-form--item {
+  &.is--asterisk {
+    &.is--required {
+      .vxe-form--item-title-content {
+        &:before {
+          content: "*";
+          color: $vxe-form-validate-error-color;
+          font-family: Verdana,Arial,Tahoma;
+          margin-right: 0.2em;
+          font-weight: normal;
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+  &.is--vertical {
+    .vxe-form--item-inner {
+      flex-direction: column;
+      align-items: initial;
+      .vxe-form--item-title {
+        height: 2.5em;
+        line-height: 2.3em;
+        padding-right: 0;
+        max-width: none;
+      }
+      .vxe-form--item-title-content {
+        flex-grow: initial;
+      }
+    }
+  }
   &.is--span {
     .vxe-default-input:not([type="submit"]):not([type="reset"]),
     .vxe-default-textarea,
@@ -173,12 +209,14 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex-grow: 1;
     .vxe-form--item-title {
       flex-shrink: 0;
     }
     .vxe-form--item-content {
       position: relative;
       flex-grow: 1;
+      word-break: break-all;
     }
   }
   .vxe-default-input,
@@ -196,6 +234,7 @@
     padding: 0 0.8em;
   }
   .vxe-default-textarea {
+    height: calc($vxe-button-height-default * 2);
     padding: 0.3em 0.6em;
   }
   .vxe-default-input[type="number"] {
@@ -227,8 +266,8 @@
       @extend %ButtonHover;
     }
     &:active {
-      color: darken($vxe-primary-color, 2%);
-      border-color: darken($vxe-primary-color, 2%);
+      color: $vxe-primary-darken-color;
+      border-color: $vxe-primary-darken-color;
     }
   }
   .vxe-default-input {
@@ -281,9 +320,11 @@
       line-height: $vxe-button-height-medium - 2px;
     }
     .vxe-default-input,
-    .vxe-default-input,
     .vxe-default-select {
       height: $vxe-button-height-medium;
+    }
+    .vxe-default-textarea {
+      height: calc($vxe-button-height-medium * 2);
     }
   }
   &.size--small {
@@ -296,9 +337,11 @@
       line-height: $vxe-button-height-small - 2px;
     }
     .vxe-default-input,
-    .vxe-default-input,
     .vxe-default-select {
       height: $vxe-button-height-small;
+    }
+    .vxe-default-textarea {
+      height: calc($vxe-button-height-small * 2);
     }
   }
   &.size--mini {
@@ -311,9 +354,11 @@
       line-height: $vxe-button-height-mini - 2px;
     }
     .vxe-default-input,
-    .vxe-default-input,
     .vxe-default-select {
       height: $vxe-button-height-mini;
+    }
+    .vxe-default-textarea {
+      height: calc($vxe-button-height-mini * 2);
     }
   }
 }

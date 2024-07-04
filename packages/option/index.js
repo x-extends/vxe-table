@@ -1,9 +1,13 @@
-import VxeOption from '../select/src/option'
+import VxeOptionComponent from '../select/src/option'
+import VxeUI from '../v-x-e-table'
 
-export const Option = Object.assign(VxeOption, {
+export const VxeOption = Object.assign(VxeOptionComponent, {
   install (Vue) {
-    Vue.component(VxeOption.name, VxeOption)
+    Vue.component(VxeOptionComponent.name, VxeOptionComponent)
   }
 })
+VxeUI.component(VxeOptionComponent)
 
-export default Option
+export const Option = VxeOption
+
+export default VxeOption

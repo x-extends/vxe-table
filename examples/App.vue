@@ -4,48 +4,39 @@
       <div class="left">
         <a href="/vxe-table/">
           <img src="/vxe-table/logo.png" width="18">
-          <span class="title">vxe-table</span>
-        </a>
-        <a href='https://gitee.com/xuliangzhan_admin/vxe-table/stargazers'>
-          <img src='https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=gvp' alt='star'>
-        </a>
-        <a href="https://github.com/x-extends/vxe-table/stargazers">
-          <img src="https://img.shields.io/github/stars/xuliangzhan/vxe-table.svg">
-        </a>
-        <a href="http://npm-stat.com/charts.html?package=vxe-table">
-          <img src="https://img.shields.io/npm/dm/vxe-table.svg">
+          <span class="title">官网文档地址：<a href="https://github.com/x-extends/vxe-table-docs">https://github.com/x-extends/vxe-table-docs</a></span>
         </a>
       </div>
       <div class="right">
         <div class="content">
           <span v-if="usedJSHeapSize && usedJSHeapSize !== '0'" class="performance">Memory used: {{ usedJSHeapSize }} MB.</span>
-          <span>{{ $t('app.body.label.translations') }}:</span>
-          <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
+          <!-- <span>{{ $t('app.body.label.translations') }}:</span> -->
+          <!-- <vxe-select class="locale-switch" size="mini" v-model="$i18n.locale">
             <vxe-option value="zh_CN" label="中文"></vxe-option>
             <vxe-option value="zh_TC" label="繁體中文"></vxe-option>
-            <vxe-option value="en_US" label="English"></vxe-option>
+            <vxe-option value="en_US" label="English"></vxe-option> -->
             <!-- <vxe-option value="ja_JP" label="ジャパン"></vxe-option> -->
-          </vxe-select>
-          <span>{{ $t('app.body.label.version') }}: </span>
-          <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent">
+          <!-- </vxe-select> -->
+          <!-- <span>{{ $t('app.body.label.version') }}: </span> -->
+          <!-- <vxe-select class="version-switch" size="mini" v-model="version" @change="vChangeEvent"> -->
             <!-- <vxe-option value="4.5" :label="$t('app.body.other.v4d5')" disabled></vxe-option> -->
-            <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option>
+            <!-- <vxe-option value="4" :label="$t('app.body.other.v4')"></vxe-option> -->
             <!-- <vxe-option value="3.5" :label="$t('app.body.other.v3d5')" disabled></vxe-option> -->
-            <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
+            <!-- <vxe-option value="3" :label="$t('app.body.other.v3')"></vxe-option>
             <vxe-option value="2" :label="$t('app.body.other.v2')" class-name="due-to-stop"></vxe-option>
             <vxe-option value="1" :label="$t('app.body.other.v1')" class-name="end-of-life"></vxe-option>
-          </vxe-select>
+          </vxe-select> -->
           <router-link class="link donation" :title="$t('app.footer.donationDesc')" :to="{name: 'Donation'}">{{ $t('app.header.label.donation') }}</router-link>
-          <template v-if="apiLoading && showPlugin">
+          <!-- <template v-if="apiLoading && showPlugin">
             <a v-if="disabledPlugin" class="link support" href="/vxe-table/plugins" target="_blank">💡插件</a>
             <a v-else title="维护中" class="link support" style="cursor: no-drop;color: #BFBFBF;background-color:#fff;" @click="$XModal.alert('维护中...', '维护中')">插件</a>
-          </template>
+          </template> -->
         </div>
       </div>
     </header>
     <div class="page-container">
       <div class="aside" :class="{visible: showLeft}">
-        <div class="header">
+        <!-- <div class="header">
           <div class="version-list">
             <template v-if="stableVersionList.length">
               <span class="title">{{  $t('app.body.label.stableVersion')}}</span>
@@ -57,16 +48,16 @@
             </template>
           </div>
           <vxe-input clearable v-model="filterName" type="search" class="search-input" :placeholder="$t('app.body.search.searchPlaceholder')" @keyup="searchEvent" @clear="searchEvent"></vxe-input>
-        </div>
+        </div> -->
         <div class="body">
-          <div class="sponsors" v-if="sponsorList.length">
+          <!-- <div class="sponsors" v-if="sponsorList.length">
             <h4 class="title">赞助商</h4>
             <div v-for="(item, index) in sponsorList" :key="index">
               <a :href="item.url" :title="item.title" target="_blank">
                 <img :src="item.img" :style="{width: item.width, height: item.height}">
               </a>
             </div>
-          </div>
+          </div> -->
           <div class="docs">
             <template v-if="apiList.length">
               <!-- <ul class="nav-child-menu">
@@ -79,7 +70,7 @@
               <ul class="nav-menu">
                 <li v-for="(item, index) in apiList" :key="index" :class="{expand: item.expand}">
                   <a class="nav-link" @click="linkEvent(item)" :title="item.disabled ? $t('app.body.other.newFunc') : item.label" :class="{disabled: item.disabled, active: pageKey === item.value}">
-                    <i class="vxe-icon--arrow-right nav-link-icon"></i>
+                    <i class="vxe-icon-arrow-right nav-link-icon"></i>
                     <span v-html="item.label"></span>
                   </a>
                   <ul v-if="item.children" v-show="item.expand" class="nav-child-menu">
@@ -98,7 +89,7 @@
         </div>
       </div>
       <div class="oper-wrapper" v-show="showOperBtn">
-        <vxe-button class="oper-btn" :icon="showLeft ? 'vxe-icon--arrow-left' : 'vxe-icon--arrow-right'" @click="showLeft = !showLeft"></vxe-button>
+        <vxe-button class="oper-btn" :icon="showLeft ? 'vxe-icon-arrow-left' : 'vxe-icon-arrow-right'" @click="showLeft = !showLeft"></vxe-button>
       </div>
       <div class="body">
         <div class="content" :class="{full: ['VXEAPI', 'Donation', 'Run'].includes($route.name)}">
@@ -134,7 +125,6 @@
 <script>
 import { mapMutations } from 'vuex'
 import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 
 export default {
   data () {
@@ -166,38 +156,38 @@ export default {
               locat: {
                 name: 'StartInstall'
               }
-            },
-            {
-              label: 'app.aside.nav.use',
-              locat: {
-                name: 'StartUse'
-              }
-            },
-            {
-              label: 'app.aside.nav.global',
-              locat: {
-                name: 'StartGlobal'
-              }
-            },
-            {
-              label: 'app.aside.nav.icons',
-              locat: {
-                name: 'StartIcons'
-              }
-            },
-            {
-              label: 'app.aside.nav.theme',
-              locat: {
-                name: 'StartTheme'
-              }
-            },
-            {
-              label: 'app.aside.nav.i18n',
-              demoUrl: 'https://jsrun.pro/SbfKp/edit',
-              locat: {
-                name: 'StartI18n'
-              }
             }
+            // {
+            //   label: 'app.aside.nav.use',
+            //   locat: {
+            //     name: 'StartUse'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.global',
+            //   locat: {
+            //     name: 'StartGlobal'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.icons',
+            //   locat: {
+            //     name: 'StartIcons'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.theme',
+            //   locat: {
+            //     name: 'StartTheme'
+            //   }
+            // },
+            // {
+            //   label: 'app.aside.nav.i18n',
+            //   demoUrl: 'https://jsrun.pro/SbfKp/edit',
+            //   locat: {
+            //     name: 'StartI18n'
+            //   }
+            // }
           ]
         },
         {
@@ -1668,365 +1658,365 @@ export default {
             //   }
             }
           ]
-        },
-        {
-          label: 'app.aside.nav.formats',
-          value: 'formats',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'FormatsAPI'
-              },
-              keywords: ['formats']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.commands',
-          value: 'commands',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'CommandsAPI'
-              },
-              keywords: ['commands']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.menus',
-          value: 'menus',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'MenusAPI'
-              },
-              keywords: ['menus']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.renderer',
-          value: 'renderer',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'RendererAPI'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererFilter',
-              locat: {
-                name: 'RendererFilter'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererDefault',
-              locat: {
-                name: 'RendererDefault'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererEdit',
-              locat: {
-                name: 'RendererEdit'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererExpand',
-              locat: {
-                name: 'RendererExpand'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererToolbar',
-              locat: {
-                name: 'RendererToolbar'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererForm',
-              locat: {
-                name: 'RendererForm'
-              }
-            },
-            {
-              label: 'app.aside.nav.rendererEmpty',
-              locat: {
-                name: 'RendererEmpty'
-              }
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.interceptor',
-          value: 'interceptor',
-          expand: false,
-          children: [
-            {
-              label: 'app.aside.nav.api',
-              locat: {
-                name: 'InterceptorAPI'
-              },
-              keywords: ['interceptor']
-            }
-          ]
-        },
-        {
-          label: 'app.aside.nav.api',
-          value: 'api',
-          expand: false,
-          children: [
-            // {
-            //   label: 'app.footer.donation',
-            //   locat: {
-            //     name: 'Donation'
-            //   }
-            // },
-            {
-              label: 'app.aside.nav.vxeTable',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'table'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeTableColgroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'colgroup'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeTableColumn',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'column'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeGrid',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'grid'
-                }
-              }
-            },
-            // {
-            //   label: 'app.aside.nav.vxeVirtualTree',
-            //   locat: {
-            //     name: 'VXEAPI',
-            //     params: {
-            //       name: 'virtual-tree'
-            //     }
-            //   }
-            // },
-            {
-              label: 'app.aside.nav.vxeToolbar',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'toolbar'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxePager',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'pager'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeRadio',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'radio'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeRadioGroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'radio-group'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeRadioButton',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'radio-button'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeCheckbox',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'checkbox'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeCheckboxGroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'checkbox-group'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeSwitch',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'switch'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeInput',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'input'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeSelect',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'select'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeOptgroup',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'optgroup'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeOption',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'option'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeTextarea',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'textarea'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeButton',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'button'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeModal',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'modal'
-                }
-              }
-            },
-            // {
-            //   label: 'app.aside.nav.vxeTooltip',
-            //   locat: {
-            //     name: 'VXEAPI',
-            //     params: {
-            //       name: 'tooltip'
-            //     }
-            //   }
-            // },
-            {
-              label: 'app.aside.nav.vxeForm',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'form'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeFormGather',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'form-gather'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeFormItem',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'form-item'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxeList',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'list'
-                }
-              }
-            },
-            {
-              label: 'app.aside.nav.vxePulldown',
-              locat: {
-                name: 'VXEAPI',
-                params: {
-                  name: 'pulldown'
-                }
-              }
-            }
-          ]
         }
+        // {
+        //   label: 'app.aside.nav.formats',
+        //   value: 'formats',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'FormatsAPI'
+        //       },
+        //       keywords: ['formats']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.commands',
+        //   value: 'commands',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'CommandsAPI'
+        //       },
+        //       keywords: ['commands']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.menus',
+        //   value: 'menus',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'MenusAPI'
+        //       },
+        //       keywords: ['menus']
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.renderer',
+        //   value: 'renderer',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'RendererAPI'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererFilter',
+        //       locat: {
+        //         name: 'RendererFilter'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererDefault',
+        //       locat: {
+        //         name: 'RendererDefault'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererEdit',
+        //       locat: {
+        //         name: 'RendererEdit'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererExpand',
+        //       locat: {
+        //         name: 'RendererExpand'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererToolbar',
+        //       locat: {
+        //         name: 'RendererToolbar'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererForm',
+        //       locat: {
+        //         name: 'RendererForm'
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.rendererEmpty',
+        //       locat: {
+        //         name: 'RendererEmpty'
+        //       }
+        //     }
+        //   ]
+        // },
+        // {
+        //   label: 'app.aside.nav.interceptor',
+        //   value: 'interceptor',
+        //   expand: false,
+        //   children: [
+        //     {
+        //       label: 'app.aside.nav.api',
+        //       locat: {
+        //         name: 'InterceptorAPI'
+        //       },
+        //       keywords: ['interceptor']
+        //     }
+        //   ]
+        // }
+        // {
+        //   label: 'app.aside.nav.api',
+        //   value: 'api',
+        //   expand: false,
+        //   children: [
+        //     // {
+        //     //   label: 'app.footer.donation',
+        //     //   locat: {
+        //     //     name: 'Donation'
+        //     //   }
+        //     // },
+        //     {
+        //       label: 'app.aside.nav.vxeTable',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'table'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeTableColgroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'colgroup'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeTableColumn',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'column'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeGrid',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'grid'
+        //         }
+        //       }
+        //     },
+        //     // {
+        //     //   label: 'app.aside.nav.vxeVirtualTree',
+        //     //   locat: {
+        //     //     name: 'VXEAPI',
+        //     //     params: {
+        //     //       name: 'virtual-tree'
+        //     //     }
+        //     //   }
+        //     // },
+        //     {
+        //       label: 'app.aside.nav.vxeToolbar',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'toolbar'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxePager',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'pager'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeRadio',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'radio'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeRadioGroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'radio-group'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeRadioButton',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'radio-button'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeCheckbox',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'checkbox'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeCheckboxGroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'checkbox-group'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeSwitch',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'switch'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeInput',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'input'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeSelect',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'select'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeOptgroup',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'optgroup'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeOption',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'option'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeTextarea',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'textarea'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeButton',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'button'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeModal',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'modal'
+        //         }
+        //       }
+        //     },
+        //     // {
+        //     //   label: 'app.aside.nav.vxeTooltip',
+        //     //   locat: {
+        //     //     name: 'VXEAPI',
+        //     //     params: {
+        //     //       name: 'tooltip'
+        //     //     }
+        //     //   }
+        //     // },
+        //     {
+        //       label: 'app.aside.nav.vxeForm',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'form'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeFormGather',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'form-gather'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeFormItem',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'form-item'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxeList',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'list'
+        //         }
+        //       }
+        //     },
+        //     {
+        //       label: 'app.aside.nav.vxePulldown',
+        //       locat: {
+        //         name: 'VXEAPI',
+        //         params: {
+        //           name: 'pulldown'
+        //         }
+        //       }
+        //     }
+        //   ]
+        // }
       ]
     }
   },
@@ -2151,7 +2141,7 @@ export default {
       setTimeout(() => this.defaultExpand(), 1500)
     },
     loadSponsors () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/pub/sponsors').then(data => {
+      fetch('https://api.vxetable.cn/demo/api/pub/sponsors').then(response => response.json()).then(data => {
         this.sponsorList = data
       })
     },
@@ -2169,7 +2159,7 @@ export default {
       }
     },
     getVersion () {
-      XEAjax.get('https://api.xuliangzhan.com:10443/demo/api/npm/versions/vxe-table').then(({ sp, dp, ss, time, tags, versions }) => {
+      fetch('https://api.vxetable.cn/demo/api/npm/versions/vxe-table').then(response => response.json()).then(({ sp, dp, ss, time, tags, versions }) => {
         this.apiLoading = true
         this.apiLoading = true
         this.disabledPlugin = dp

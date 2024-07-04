@@ -1,5 +1,5 @@
 /**Variable**/
-@import './base/checked.scss';
+@import './helpers/mixin.scss';
 
 .vxe-export--panel-column > ul {
   list-style-type: none;
@@ -50,7 +50,7 @@
     user-select: none;
     & > ul {
       & > li {
-        padding: 0.2em 1em 0.2em 2.3em;
+        padding: 0.2em 1em 0.2em 1em;
         @for $i from 2 through 8 {
           $interval: $i - 1 + 0.2;
           &.level--#{$i}{
@@ -103,6 +103,7 @@
     outline: 0;
     border-radius: $vxe-border-radius;
     background-color: $vxe-input-background-color;
+    color: inherit;
     user-select: none;
     cursor: pointer;
     &:focus {
@@ -121,41 +122,5 @@
 }
 
 .vxe-export--panel-column-option {
-  @extend %XECheckbox;
-  .vxe-checkbox--icon {
-    left: 0.6em;
-    top: 0.38em;
-  }
-  &:hover {
-    background-color: $vxe-table-row-hover-background-color;
-  }
-}
-
-.vxe-modal--wrapper {
-  .vxe-export--panel-column-option {
-    & > .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-default;
-    }
-  }
-  &.size--medium {
-    .vxe-export--panel-column-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-medium;
-      }
-    }
-  }
-  &.size--small {
-    .vxe-export--panel-column-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-small;
-      }
-    }
-  }
-  &.size--mini {
-    .vxe-export--panel-column-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-mini;
-      }
-    }
-  }
+  @include createCheckboxIcon();
 }

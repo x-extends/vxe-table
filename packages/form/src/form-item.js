@@ -1,9 +1,10 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, isEnableConf } from '../../tools'
-import { createItem, destroyItem, assemItem } from './util'
+import { isEnableConf, getFuncText } from '../../tools/utils'
+import { createItem, destroyItem, assemItem, isActivetem } from './util'
 import { renderTitle } from './render'
+import { getSlotVNs } from '../../tools/vn'
 
 const props = {
   title: String,
@@ -11,10 +12,39 @@ const props = {
   size: String,
   span: [String, Number],
   align: String,
-  titleAlign: String,
-  titleWidth: [String, Number],
+  titleAlign: {
+    type: String,
+    default: null
+  },
+  titleWidth: {
+    type: [String, Number],
+    default: null
+  },
+  titleColon: {
+    type: Boolean,
+    default: null
+  },
+  titleAsterisk: {
+    type: Boolean,
+    default: null
+  },
+  showTitle: {
+    type: Boolean,
+    default: true
+  },
+  vertical: {
+    type: Boolean,
+    default: null
+  },
   className: [String, Function],
-  titleOverflow: { type: [Boolean, String], default: null },
+  contentClassName: [String, Function],
+  contentStyle: [Object, Function],
+  titleClassName: [String, Function],
+  titleStyle: [Object, Function],
+  titleOverflow: {
+    type: [Boolean, String],
+    default: null
+  },
   titlePrefix: Object,
   titleSuffix: Object,
   resetValue: { default: null },
@@ -22,7 +52,8 @@ const props = {
   visibleMethod: Function,
   folding: Boolean,
   collapseNode: Boolean,
-  itemRender: Object
+  itemRender: Object,
+  rules: Array
 }
 
 const watch = {}
@@ -33,23 +64,31 @@ Object.keys(props).forEach(name => {
 })
 
 const renderItem = (h, _vm, item, slots) => {
-  const { rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
-  const { title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow } = item
+  const { _e, rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = _vm
+  const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+  const itemClassName = compConf ? (compConf.formItemClassName || compConf.itemClassName) : ''
+  const itemStyle = compConf ? (compConf.formItemStyle || compConf.itemStyle) : null
+  const itemContentClassName = compConf ? (compConf.formItemContentClassName || compConf.itemContentClassName) : ''
+  const itemContentStyle = compConf ? (compConf.formItemContentStyle || compConf.itemContentStyle) : null
+  const itemTitleClassName = compConf ? (compConf.formItemTitleClassName || compConf.itemTitleClassName) : ''
+  const itemTitleStyle = compConf ? (compConf.formItemTitleStyle || compConf.itemTitleStyle) : null
   const span = item.span || _vm.span
   const align = item.align || _vm.align
-  const titleAlign = item.titleAlign || _vm.titleAlign
-  const titleWidth = item.titleWidth || _vm.titleWidth
-  let itemVisibleMethod = visibleMethod
+  const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
+  const titleWidth = XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth
+  const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
+  const titleAsterisk = XEUtils.eqNull(item.titleAsterisk) ? allTitleAsterisk : item.titleAsterisk
   const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
-  const showEllipsis = itemOverflow === 'ellipsis'
-  const showTitle = itemOverflow === 'title'
-  const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
-  const hasEllipsis = showTitle || showTooltip || showEllipsis
-  const params = { data, property: field, item, $form: _vm }
+  const itemVertical = (XEUtils.isUndefined(vertical) || XEUtils.isNull(vertical)) ? allVertical : vertical
+  const ovEllipsis = itemOverflow === 'ellipsis'
+  const ovTitle = itemOverflow === 'title'
+  const ovTooltip = itemOverflow === true || itemOverflow === 'tooltip'
+  const hasEllipsis = ovTitle || ovTooltip || ovEllipsis
+  const params = { data, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
   let isRequired
-  if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-    itemVisibleMethod = compConf.itemVisibleMethod
+  if (visible === false) {
+    return _e()
   }
   if (rules) {
     const itemRules = rules[field]
@@ -58,47 +97,74 @@ const renderItem = (h, _vm, item, slots) => {
     }
   }
   let contentVNs = []
+  const rfiContent = compConf ? (compConf.renderFormItemContent || compConf.renderItemContent) : null
   if (slots && slots.default) {
     contentVNs = _vm.callSlot(slots.default, params, h)
-  } else if (compConf && compConf.renderItemContent) {
-    contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
+  } else if (rfiContent) {
+    contentVNs = getSlotVNs(rfiContent.call(_vm, h, itemRender, params))
   } else if (compConf && compConf.renderItem) {
-    contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
+    contentVNs = getSlotVNs(compConf.renderItem.call(_vm, h, itemRender, params))
   } else if (field) {
     contentVNs = [`${XEUtils.get(data, field)}`]
   }
-  const ons = showTooltip ? {
+  const ons = ovTooltip ? {
     mouseenter (evnt) {
-      _vm.triggerHeaderHelpEvent(evnt, params)
+      _vm.triggerTitleTipEvent(evnt, params)
     },
-    mouseleave: _vm.handleTargetLeaveEvent
+    mouseleave: _vm.handleTitleTipLeaveEvent
   } : {}
   return h('div', {
-    class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
-      'is--title': title,
-      'is--required': isRequired,
-      'is--hidden': visible === false || (folding && collapseAll),
-      'is--active': !itemVisibleMethod || itemVisibleMethod(params),
-      'is--error': showError
-    }]
+    class: [
+      'vxe-form--item',
+      item.id,
+      span ? `vxe-col--${span} is--span` : '',
+      className ? (XEUtils.isFunction(className) ? className(params) : className) : '',
+      itemClassName ? (XEUtils.isFunction(itemClassName) ? itemClassName(params) : itemClassName) : '',
+      {
+        'is--title': title,
+        'is--colon': titleColon,
+        'is--vertical': itemVertical,
+        'is--asterisk': titleAsterisk,
+        'is--required': isRequired,
+        'is--hidden': folding && collapseAll,
+        'is--active': isActivetem(_vm, item),
+        'is--error': showError
+      }
+    ],
+    style: XEUtils.isFunction(itemStyle) ? itemStyle(params) : itemStyle
   }, [
     h('div', {
       class: 'vxe-form--item-inner'
     }, [
-      title || (slots && slots.title) ? h('div', {
-        class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null, {
-          'is--ellipsis': hasEllipsis
-        }],
-        style: titleWidth ? {
-          width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
-        } : null,
+      (showTitle !== false) && (title || (slots && slots.title)) ? h('div', {
+        class: [
+          'vxe-form--item-title',
+          titleAlign ? `align--${titleAlign}` : '',
+          hasEllipsis ? 'is--ellipsis' : '',
+          itemTitleClassName ? (XEUtils.isFunction(itemTitleClassName) ? itemTitleClassName(params) : itemTitleClassName) : '',
+          titleClassName ? (XEUtils.isFunction(titleClassName) ? titleClassName(params) : titleClassName) : ''
+        ],
+        style: Object.assign(
+          {},
+          XEUtils.isFunction(itemTitleStyle) ? itemTitleStyle(params) : itemTitleStyle,
+          XEUtils.isFunction(titleStyle) ? titleStyle(params) : titleStyle,
+          titleWidth ? {
+            width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
+          } : null
+        ),
         attrs: {
-          title: showTitle ? UtilTools.getFuncText(title) : null
+          title: ovTitle ? getFuncText(title) : null
         },
         on: ons
       }, renderTitle(h, _vm, item)) : null,
       h('div', {
-        class: ['vxe-form--item-content', align ? `align--${align}` : null]
+        class: [
+          'vxe-form--item-content',
+          align ? `align--${align}` : '',
+          itemContentClassName ? (XEUtils.isFunction(itemContentClassName) ? itemContentClassName(params) : itemContentClassName) : '',
+          contentClassName ? (XEUtils.isFunction(contentClassName) ? contentClassName(params) : contentClassName) : ''
+        ],
+        style: Object.assign({}, XEUtils.isFunction(itemContentStyle) ? itemContentStyle(params) : itemContentStyle, XEUtils.isFunction(contentStyle) ? contentStyle(params) : contentStyle)
       }, contentVNs.concat(
         [
           collapseNode ? h('div', {
@@ -133,8 +199,19 @@ export default {
     $xeform: {
       default: null
     },
-    xeformgather: {
+    $xeformgather: {
       default: null
+    }
+  },
+  provide () {
+    return {
+      $xeformitem: this,
+      $xeformiteminfo: this
+    }
+  },
+  data () {
+    return {
+      itemConfig: null
     }
   },
   watch,

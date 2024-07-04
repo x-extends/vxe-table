@@ -1,7 +1,7 @@
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 
 export default {
-  name: 'VxeTableContextMenu',
+  name: 'VxeTableMenuPanel',
   props: {
     ctxMenuStore: Object,
     ctxMenuOpts: Object
@@ -19,7 +19,9 @@ export default {
     const $xetable = this.$parent
     const { _e, ctxMenuOpts, ctxMenuStore } = this
     return h('div', {
-      class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className],
+      class: ['vxe-table--context-menu-wrapper', ctxMenuOpts.className, {
+        'is--visible': ctxMenuStore.visible
+      }],
       style: ctxMenuStore.style
     }, ctxMenuStore.list.map((options, gIndex) => {
       return options.every(item => item.visible === false) ? _e() : h('ul', {
@@ -53,7 +55,7 @@ export default {
             }),
             h('span', {
               class: 'vxe-context-menu--link-content'
-            }, UtilTools.getFuncText(item.name)),
+            }, getFuncText(item.name)),
             h('i', {
               class: ['vxe-context-menu--link-suffix', hasChildMenus ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
             })
@@ -89,7 +91,7 @@ export default {
                 }),
                 h('span', {
                   class: 'vxe-context-menu--link-content'
-                }, UtilTools.getFuncText(child.name))
+                }, getFuncText(child.name))
               ])
             ])
           })) : null

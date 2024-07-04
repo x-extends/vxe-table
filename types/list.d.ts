@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 列表
  */
-export declare class List extends VXETableComponent {
+export declare class VxeList extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -62,9 +62,10 @@ export declare class List extends VXETableComponent {
    * 刷新滚动操作，手动同步滚动相关位置
    */
   refreshScroll(): Promise<any>;
-  
+
   /**
    * 手动清除滚动相关信息，还原到初始状态
    */
   clearScroll(): Promise<any>;
 }
+export class List extends VxeList {}

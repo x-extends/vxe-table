@@ -30,6 +30,16 @@
       </vxe-checkbox-group>
     </p>
 
+    <p>
+      <vxe-checkbox-group v-model="value20" :max="3">
+        <vxe-checkbox label="1" content="HTML"></vxe-checkbox>
+        <vxe-checkbox label="2" content="CSS"></vxe-checkbox>
+        <vxe-checkbox label="3" content="Javascript"></vxe-checkbox>
+        <vxe-checkbox label="4" content="SASS"></vxe-checkbox>
+        <vxe-checkbox label="5" content="LESS"></vxe-checkbox>
+      </vxe-checkbox-group>
+    </p>
+
     <pre>
       <pre-code>
         | Tab | 切换到上一个 |
@@ -63,6 +73,7 @@ export default {
       value10: true,
       value11: '1',
       value12: ['3'],
+      value20: [],
       demoCodes: [
         `
         <p>

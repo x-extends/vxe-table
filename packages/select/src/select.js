@@ -2,7 +2,10 @@ import XEUtils from 'xe-utils'
 import VxeInput from '../../input/src/input'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools, { getFuncText } from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
+import { getSlotVNs } from '../../tools/vn'
 
 function isOptionVisible (option) {
   return option.visible !== false
@@ -13,7 +16,8 @@ function getOptUniqueId () {
 }
 
 function getOptkey (_vm) {
-  return _vm.optionId || '_X_ID'
+  const { optionOpts } = _vm
+  return optionOpts.keyField || _vm.optionId || '_X_OPTION_KEY'
 }
 
 function getOptid (_vm, option) {
@@ -109,35 +113,59 @@ function findOption (_vm, optionValue) {
   return fullOptionList.find(item => optionValue === item[valueField])
 }
 
+function getRemoteSelectLabel (_vm, value) {
+  const { remoteValueList } = _vm
+  const remoteItem = remoteValueList.find(item => value === item.key)
+  const item = remoteItem ? remoteItem.result : null
+  return XEUtils.toValueString(item ? item[_vm.labelField] : value)
+}
+
 function getSelectLabel (_vm, value) {
   const item = findOption(_vm, value)
   return XEUtils.toValueString(item ? item[_vm.labelField] : value)
 }
 
+function checkOptionDisabled (_vm, isSelected, option, group) {
+  if (option.disabled) {
+    return true
+  }
+  if (group && group.disabled) {
+    return true
+  }
+  if (_vm.isMaximize && !isSelected) {
+    return true
+  }
+  return false
+}
+
 export function renderOption (h, _vm, list, group) {
-  const { isGroup, labelField, valueField, optionKey, value, multiple, currentValue } = _vm
+  const { $scopedSlots, isGroup, labelField, valueField, optionKey, value, multiple, currentValue, optionOpts } = _vm
+  const { useKey } = optionOpts
+  const optionSlot = $scopedSlots.option
   return list.map((option, cIndex) => {
     const { slots } = option
-    const isVisible = !isGroup || isOptionVisible(option)
-    const isDisabled = (group && group.disabled) || option.disabled
     const optionValue = option[valueField]
+    const isSelected = multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue
+    const isVisible = !isGroup || isOptionVisible(option)
+    const isDisabled = checkOptionDisabled(_vm, isSelected, option, group)
     const optid = getOptid(_vm, option)
     const defaultSlot = slots ? slots.default : null
+    const optParams = { option, group: null, $select: _vm }
     return isVisible ? h('div', {
-      key: optionKey ? optid : cIndex,
+      key: useKey || optionKey ? optid : cIndex,
       class: ['vxe-select-option', option.className, {
         'is--disabled': isDisabled,
-        'is--selected': multiple ? (value && value.indexOf(optionValue) > -1) : value === optionValue,
+        'is--selected': isSelected,
         'is--hover': currentValue === optionValue
       }],
       attrs: {
-        optid: optid
+        optid
       },
       on: {
         mousedown: _vm.mousedownOptionEvent,
         click: (evnt) => {
           if (!isDisabled) {
-            _vm.changeOptionEvent(evnt, optionValue)
+            _vm.changeOptionEvent(evnt, optionValue, option)
           }
         },
         mouseenter: () => {
@@ -146,29 +174,32 @@ export function renderOption (h, _vm, list, group) {
           }
         }
       }
-    }, defaultSlot ? _vm.callSlot(defaultSlot, { option, $select: _vm }, h) : UtilTools.formatText(UtilTools.getFuncText(option[labelField]))) : null
+    }, optionSlot ? _vm.callSlot(optionSlot, optParams, h) : (defaultSlot ? _vm.callSlot(defaultSlot, optParams, h) : UtilTools.formatText(getFuncText(option[labelField])))) : null
   })
 }
 
 export function renderOptgroup (h, _vm) {
-  const { optionKey, visibleGroupList, groupLabelField, groupOptionsField } = _vm
+  const { $scopedSlots, optionKey, visibleGroupList, groupLabelField, groupOptionsField, optionOpts } = _vm
+  const { useKey } = optionOpts
+  const optionSlot = $scopedSlots.option
   return visibleGroupList.map((group, gIndex) => {
     const { slots } = group
     const optid = getOptid(_vm, group)
     const isGroupDisabled = group.disabled
     const defaultSlot = slots ? slots.default : null
+    const optParams = { option: group, group, $select: _vm }
     return h('div', {
-      key: optionKey ? optid : gIndex,
+      key: useKey || optionKey ? optid : gIndex,
       class: ['vxe-optgroup', group.className, {
         'is--disabled': isGroupDisabled
       }],
       attrs: {
-        optid: optid
+        optid
       }
     }, [
       h('div', {
         class: 'vxe-optgroup--title'
-      }, defaultSlot ? _vm.callSlot(defaultSlot, { option: group, $select: _vm }, h) : UtilTools.getFuncText(group[groupLabelField])),
+      }, optionSlot ? _vm.callSlot(optionSlot, optParams, h) : (defaultSlot ? _vm.callSlot(defaultSlot, optParams, h) : getFuncText(group[groupLabelField]))),
       h('div', {
         class: 'vxe-optgroup--wrapper'
       }, renderOption(h, _vm, group[groupOptionsField], group))
@@ -177,7 +208,21 @@ export function renderOptgroup (h, _vm) {
 }
 
 function renderOpts (h, _vm) {
-  const { isGroup, visibleGroupList, visibleOptionList } = _vm
+  const { isGroup, visibleGroupList, visibleOptionList, searchLoading } = _vm
+  if (searchLoading) {
+    return [
+      h('div', {
+        class: 'vxe-select--search-loading'
+      }, [
+        h('i', {
+          class: ['vxe-select--search-icon', GlobalConfig.icon.SELECT_LOADED]
+        }),
+        h('span', {
+          class: 'vxe-select--search-text'
+        }, GlobalConfig.i18n('vxe.select.loadingText'))
+      ])
+    ]
+  }
   if (isGroup) {
     if (visibleGroupList.length) {
       return renderOptgroup(h, _vm)
@@ -200,7 +245,10 @@ export default {
   props: {
     value: null,
     clearable: Boolean,
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: () => XEUtils.eqNull(GlobalConfig.select.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseSelect') : GlobalConfig.select.placeholder
+    },
     loading: Boolean,
     disabled: Boolean,
     multiple: Boolean,
@@ -211,15 +259,32 @@ export default {
     optionProps: Object,
     optionGroups: Array,
     optionGroupProps: Object,
+    optionConfig: Object,
     className: [String, Function],
+    popupClassName: [String, Function],
+    max: [String, Number],
     size: { type: String, default: () => GlobalConfig.select.size || GlobalConfig.size },
+    filterable: Boolean,
+    filterMethod: Function,
+    remote: Boolean,
+    remoteMethod: Function,
     emptyText: String,
+    // 已废弃，被 option-config.keyField 替换
     optionId: { type: String, default: () => GlobalConfig.select.optionId },
+    // 已废弃，被 option-config.useKey 替换
     optionKey: Boolean,
     transfer: { type: Boolean, default: () => GlobalConfig.select.transfer }
   },
   components: {
     VxeInput
+  },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
   },
   provide () {
     return {
@@ -234,13 +299,17 @@ export default {
       fullOptionList: [],
       visibleGroupList: [],
       visibleOptionList: [],
+      remoteValueList: [],
       panelIndex: 0,
       panelStyle: null,
       panelPlacement: null,
+      currentOption: null,
       currentValue: null,
       visiblePanel: false,
       animatVisible: false,
-      isActivated: false
+      isActivated: false,
+      searchValue: '',
+      searchLoading: false
     }
   },
   computed: {
@@ -262,6 +331,9 @@ export default {
     groupOptionsField () {
       return this.groupPropsOpts.options || 'options'
     },
+    optionOpts () {
+      return Object.assign({}, GlobalConfig.select.optionConfig, this.optionConfig)
+    },
     isGroup () {
       return this.fullGroupList.some(item => item.options && item.options.length)
     },
@@ -269,9 +341,13 @@ export default {
       return XEUtils.toNumber(this.multiCharOverflow)
     },
     selectLabel () {
-      const { value, multiple, multiMaxCharNum } = this
+      const { value, multiple, remote, multiMaxCharNum } = this
       if (value && multiple) {
-        return (XEUtils.isArray(value) ? value : [value]).map(val => {
+        const vals = (XEUtils.isArray(value) ? value : [value])
+        if (remote) {
+          return vals.map(val => getRemoteSelectLabel(this, val)).join(', ')
+        }
+        return vals.map(val => {
           const label = getSelectLabel(this, val)
           if (multiMaxCharNum > 0 && label.length > multiMaxCharNum) {
             return `${label.substring(0, multiMaxCharNum)}...`
@@ -279,7 +355,17 @@ export default {
           return label
         }).join(', ')
       }
+      if (remote) {
+        return getRemoteSelectLabel(this, value)
+      }
       return getSelectLabel(this, value)
+    },
+    isMaximize () {
+      const { value, multiple, max } = this
+      if (multiple && max) {
+        return (value ? value.length : 0) >= XEUtils.toNumber(max)
+      }
+      return false
     }
   },
   watch: {
@@ -330,13 +416,17 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $scopedSlots, vSize, className, inited, isActivated, loading, disabled, visiblePanel } = this
+    const { _e, $scopedSlots, vSize, className, popupClassName, inited, isActivated, loading, disabled, visiblePanel, filterable } = this
+    const defaultSlot = $scopedSlots.default
     const prefixSlot = $scopedSlots.prefix
+    const headerSlot = $scopedSlots.header
+    const footerSlot = $scopedSlots.footer
     return h('div', {
       class: ['vxe-select', className ? (XEUtils.isFunction(className) ? className({ $select: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
+        'is--filter': filterable,
         'is--loading': loading,
         'is--active': isActivated
       }]
@@ -344,14 +434,14 @@ export default {
       h('div', {
         class: 'vxe-select-slots',
         ref: 'hideOption'
-      }, this.$slots.default),
+      }, defaultSlot ? defaultSlot.call(this, {}) : []),
       h('vxe-input', {
         ref: 'input',
         props: {
           clearable: this.clearable,
           placeholder: this.placeholder,
           readonly: true,
-          disabled: disabled,
+          disabled,
           type: 'text',
           prefixIcon: this.prefixIcon,
           suffixIcon: loading ? GlobalConfig.icon.SELECT_LOADED : (visiblePanel ? GlobalConfig.icon.SELECT_OPEN : GlobalConfig.icon.SELECT_CLOSE),
@@ -365,12 +455,12 @@ export default {
           'suffix-click': this.togglePanelEvent
         },
         scopedSlots: prefixSlot ? {
-          prefix: () => prefixSlot({})
+          prefix: () => prefixSlot.call(this, {})
         } : {}
       }),
       h('div', {
         ref: 'panel',
-        class: ['vxe-table--ignore-clear vxe-select--panel', {
+        class: ['vxe-table--ignore-clear vxe-select--panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $select: this }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           'is--transfer': this.transfer,
           'animat--leave': !loading && this.animatVisible,
@@ -381,11 +471,47 @@ export default {
         },
         style: this.panelStyle
       }, inited ? [
+        filterable ? h('div', {
+          class: 'vxe-select--panel-search'
+        }, [
+          h('vxe-input', {
+            ref: 'inpSearch',
+            class: 'vxe-select-search--input',
+            props: {
+              value: this.searchValue,
+              type: 'text',
+              clearable: true,
+              placeholder: GlobalConfig.i18n('vxe.select.search'),
+              prefixIcon: GlobalConfig.icon.INPUT_SEARCH
+            },
+            on: {
+              modelValue: this.modelSearchEvent,
+              focus: this.focusSearchEvent,
+              keydown: this.keydownSearchEvent,
+              change: this.triggerSearchEvent,
+              search: this.triggerSearchEvent
+            }
+          })
+        ]) : _e(),
         h('div', {
-          ref: 'optWrapper',
-          class: 'vxe-select-option--wrapper'
-        }, renderOpts(h, this))
-      ] : null)
+          class: 'vxe-select--panel-wrapper'
+        }, [
+          headerSlot ? h('div', {
+            class: 'vxe-select--panel-header'
+          }, headerSlot.call(this, {})) : _e(),
+          h('div', {
+            class: 'vxe-select--panel-body'
+          }, [
+            h('div', {
+              ref: 'optWrapper',
+              class: 'vxe-select-option--wrapper'
+            }, renderOpts(h, this))
+          ]),
+          footerSlot ? h('div', {
+            class: 'vxe-select--panel-footer'
+          }, footerSlot.call(this, {})) : _e()
+        ])
+      ] : [])
     ])
   },
   methods: {
@@ -396,7 +522,7 @@ export default {
           slotFunc = $scopedSlots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params, h)
+          return getSlotVNs(slotFunc.call(this, params, h))
         }
       }
       return []
@@ -422,19 +548,32 @@ export default {
       this.refreshOption()
     },
     /**
-     * 刷新选项，当选项被动态显示/隐藏时可能会用到
+     * 刷新选项，当选项被搜索、动态显示/隐藏时可能会用到
      */
     refreshOption () {
-      const { isGroup, fullOptionList, fullGroupList } = this
+      const { isGroup, fullOptionList, fullGroupList, filterable, filterMethod, searchValue, labelField, groupLabelField } = this
       if (isGroup) {
-        this.visibleGroupList = fullGroupList.filter(isOptionVisible)
+        if (filterable && filterMethod) {
+          this.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && filterMethod({ group, option: null, searchValue }))
+        } else if (filterable) {
+          this.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && (!searchValue || `${group[groupLabelField]}`.indexOf(searchValue) > -1))
+        } else {
+          this.visibleGroupList = fullGroupList.filter(isOptionVisible)
+        }
       } else {
-        this.visibleOptionList = fullOptionList.filter(isOptionVisible)
+        if (filterable && filterMethod) {
+          this.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && filterMethod({ group: null, option, searchValue }))
+        } else if (filterable) {
+          this.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && (!searchValue || `${option[labelField]}`.indexOf(searchValue) > -1))
+        } else {
+          this.visibleOptionList = fullOptionList.filter(isOptionVisible)
+        }
       }
       return this.$nextTick()
     },
     setCurrentOption (option) {
       if (option) {
+        this.currentOption = option
         this.currentValue = option[this.valueField]
       }
     },
@@ -465,6 +604,7 @@ export default {
       this.hideOptionPanel()
     },
     clearValueEvent (evnt, selectValue) {
+      this.remoteValueList = []
       this.changeEvent(evnt, selectValue)
       this.$emit('clear', { value: selectValue, $event: evnt })
     },
@@ -472,6 +612,10 @@ export default {
       if (selectValue !== this.value) {
         this.$emit('input', selectValue)
         this.$emit('change', { value: selectValue, $event: evnt })
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, selectValue)
+        }
       }
     },
     mousedownOptionEvent (evnt) {
@@ -480,8 +624,8 @@ export default {
         evnt.stopPropagation()
       }
     },
-    changeOptionEvent (evnt, selectValue) {
-      const { value, multiple } = this
+    changeOptionEvent (evnt, selectValue, option) {
+      const { value, multiple, remoteValueList } = this
       if (multiple) {
         let multipleValue
         if (value) {
@@ -493,8 +637,15 @@ export default {
         } else {
           multipleValue = [selectValue]
         }
+        const remoteItem = remoteValueList.find(item => item.key === selectValue)
+        if (remoteItem) {
+          remoteItem.result = option
+        } else {
+          remoteValueList.push({ key: selectValue, result: option })
+        }
         this.changeEvent(evnt, multipleValue)
       } else {
+        this.remoteValueList = [{ key: selectValue, result: option }]
         this.changeEvent(evnt, selectValue)
         this.hideOptionPanel()
       }
@@ -521,7 +672,7 @@ export default {
       }
     },
     handleGlobalKeydownEvent (evnt) {
-      const { visiblePanel, currentValue, clearable, disabled } = this
+      const { visiblePanel, currentValue, currentOption, clearable, disabled } = this
       if (!disabled) {
         const keyCode = evnt.keyCode
         const isTab = keyCode === 9
@@ -540,7 +691,7 @@ export default {
           } else if (isEnter) {
             evnt.preventDefault()
             evnt.stopPropagation()
-            this.changeOptionEvent(evnt, currentValue)
+            this.changeOptionEvent(evnt, currentValue, currentOption)
           } else if (isUpArrow || isDwArrow) {
             evnt.preventDefault()
             let { firstOption, offsetOption } = findOffsetOption(this, currentValue, isUpArrow)
@@ -571,14 +722,51 @@ export default {
         this.panelIndex = UtilTools.nextZIndex()
       }
     },
-    focusEvent () {
+    handleFocusSearch () {
+      if (this.filterable) {
+        this.$nextTick(() => {
+          if (this.$refs.inpSearch) {
+            this.$refs.inpSearch.focus()
+          }
+        })
+      }
+    },
+    focusEvent (evnt) {
       if (!this.disabled) {
         this.isActivated = true
       }
+      this.$emit('focus', { $event: evnt })
     },
-    blurEvent () {
+    blurEvent (evnt) {
       this.isActivated = false
+      this.$emit('blur', { $event: evnt })
     },
+    modelSearchEvent (value) {
+      this.searchValue = value
+    },
+    focusSearchEvent () {
+      this.isActivated = true
+    },
+    keydownSearchEvent (params) {
+      const { $event } = params
+      const isEnter = hasEventKey($event, EVENT_KEYS.ENTER)
+      if (isEnter) {
+        $event.preventDefault()
+        $event.stopPropagation()
+      }
+    },
+    triggerSearchEvent: XEUtils.debounce(function () {
+      const { remote, remoteMethod, searchValue } = this
+      if (remote && remoteMethod) {
+        this.searchLoading = true
+        Promise.resolve(remoteMethod({ searchValue })).then(() => this.$nextTick()).catch(() => this.$nextTick()).finally(() => {
+          this.searchLoading = false
+          this.refreshOption()
+        })
+      } else {
+        this.refreshOption()
+      }
+    }, 350, { trailing: true }),
     isPanelVisible () {
       return this.visiblePanel
     },
@@ -612,8 +800,9 @@ export default {
       }
     },
     showOptionPanel () {
-      const { loading, disabled } = this
+      const { loading, disabled, filterable } = this
       if (!loading && !disabled) {
+        this.searchList = this.option
         clearTimeout(this.hidePanelTimeout)
         if (!this.inited) {
           this.inited = true
@@ -623,6 +812,9 @@ export default {
         }
         this.isActivated = true
         this.animatVisible = true
+        if (filterable) {
+          this.refreshOption()
+        }
         setTimeout(() => {
           const { value, multiple } = this
           const currOption = findOption(this, multiple && value ? value[0] : value)
@@ -631,15 +823,19 @@ export default {
             this.setCurrentOption(currOption)
             this.scrollToOption(currOption)
           }
+          this.handleFocusSearch()
         }, 10)
         this.updateZindex()
         this.updatePlacement()
       }
     },
     hideOptionPanel () {
+      this.searchValue = ''
+      this.searchLoading = false
       this.visiblePanel = false
       this.hidePanelTimeout = setTimeout(() => {
         this.animatVisible = false
+        this.searchValue = ''
       }, 350)
     },
     updatePlacement () {

@@ -82,13 +82,13 @@
   &.is--animat {
     &.is--mask {
       &:before {
-        @include animatTransition(background-color, .2s);
+        @include createAnimationTransition(background-color, .2s);
       }
     }
     &.type--message {
       .vxe-modal--box {
         &:not(.is--drag) {
-          @include animatTransition(all, .4s, ease-out);
+          @include createAnimationTransition(all, .4s, ease-out);
         }
       }
     }
@@ -150,11 +150,6 @@
     }
   }
 
-  &.type--modal {
-    .vxe-modal--header {
-      padding: 0.6em 4.6em 0.6em 1em;
-    }
-  }
   &.type--alert,
   &.type--confirm {
     .vxe-modal--status-wrapper {
@@ -215,7 +210,7 @@
   }
   &.status--loading {
     .vxe-modal--status-wrapper {
-      color: $vxe-disabled-color;
+      color: $vxe-font-disabled-color;
     }
   }
   .vxe-modal--status-wrapper {
@@ -238,36 +233,43 @@
     flex-grow: 1;
   }
   .vxe-modal--header {
+    display: flex;
+    flex-direction: row;
     flex-shrink: 0;
     font-size: 1.1em;
     font-weight: 700;
-    padding: 0.6em 2.8em 0.6em 1em;
     border-bottom: 1px solid $vxe-modal-border-color;
     background-color: $vxe-modal-header-background-color;
     border-radius: $vxe-border-radius $vxe-border-radius 0 0;
     user-select: none;
-    &.is--drag {
-      cursor: move;
+    &.is--draggable {
+      .vxe-modal--header-title {
+        cursor: move;
+      }
     }
     &.is--ellipsis {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      .vxe-modal--header-title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
     }
+  }
+  .vxe-modal--header-title {
+    flex-grow: 1;
+    padding: 0.6em 0 0.6em 1em;
+  }
+  .vxe-modal--header-right {
+    flex-shrink: 0;
+    padding: 0.6em 1em 0.6em 0;
   }
   .vxe-modal--zoom-btn,
   .vxe-modal--close-btn {
-    position: absolute;
-    right: 14px;
-    top: 0.85em;
-    z-index: 1;
     cursor: pointer;
+    margin-left: 0.6em;
     &:hover {
       color: $vxe-primary-color;
     }
-  }
-  .vxe-modal--zoom-btn {
-    right: 44px;
   }
   .vxe-modal--footer {
     flex-shrink: 0;
@@ -294,7 +296,8 @@
     }
   }
   .vxe-modal--resize {
-    $SpaceSize: 8;
+    $SpaceSize: 8px;
+    $SpaceWidth: 5px;
     .wl-resize,
     .wr-resize,
     .swst-resize,
@@ -308,32 +311,32 @@
     }
     .wl-resize,
     .wr-resize {
-      width: #{$SpaceSize}px;
+      width: $SpaceSize;
       height: 100%;
       top: 0;
       cursor: w-resize;
     }
     .wl-resize {
-      left: -#{$SpaceSize * 0.5 + 1}px;
+      left: -$SpaceWidth;
     }
     .wr-resize {
-      right: -#{$SpaceSize * 0.5 + 1}px;
+      right: -$SpaceWidth;
     }
     .swst-resize,
     .sest-resize,
     .swlb-resize,
     .selb-resize {
-      width: #{$SpaceSize + 2}px;
-      height: #{$SpaceSize + 2}px;
+      width: $SpaceSize + 2;
+      height: $SpaceSize + 2;
       z-index: 101;
     }
     .swst-resize,
     .sest-resize {
-      top: -#{$SpaceSize}px;
+      top: -$SpaceSize;
     }
     .swlb-resize,
     .selb-resize {
-      bottom: -#{$SpaceSize}px;
+      bottom: -$SpaceSize;
     }
     .sest-resize,
     .swlb-resize {
@@ -345,24 +348,24 @@
     }
     .swst-resize,
     .swlb-resize {
-      left: -#{$SpaceSize}px;
+      left: -$SpaceSize;
     }
     .sest-resize,
     .selb-resize {
-      right: -#{$SpaceSize}px;
+      right: -$SpaceSize;
     }
     .st-resize,
     .sb-resize {
       width: 100%;
-      height: #{$SpaceSize}px;
+      height: $SpaceSize;
       left: 0;
       cursor: s-resize;
     }
     .st-resize {
-      top: -#{$SpaceSize * 0.5 + 1}px;
+      top: -$SpaceWidth;
     }
     .sb-resize {
-      bottom: -#{$SpaceSize * 0.5 + 1}px;
+      bottom: -$SpaceWidth;
     }
   }
 }

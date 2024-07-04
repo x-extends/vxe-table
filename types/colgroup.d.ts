@@ -1,18 +1,19 @@
 import { ColumnFixed, ColumnAlign, ColumnFormatterMethodParams, ColumnCellRenderOptions, ColumnContentRenderOptions, Column } from './column'
-import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterMethodParams } from './filter'
+import { ColumnFilterOption, ColumnFilterRenderOptions, ColumnFilterMethodParams } from './module/filter'
 import { ColumnCellRenderParams } from './v-x-e-table/renderer'
-import { ColumnHeaderRenderParams } from './header'
-import { ColumnFooterRenderParams } from './footer'
-import { ColumnEditRenderOptions } from './edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
+import { ColumnEditRenderOptions } from './module/edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './module/export'
 import { TableOverflow } from './table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 组件 - 表格分组列
  */
-export declare class Colgroup extends Column {}
+export declare class VxeColgroup extends Column {}
+export class Colgroup extends VxeColgroup {}
 
-export interface ColgroupOptions extends ColgroupProps {}
+export type ColgroupOptions = ColgroupProps
 
 export interface ColgroupProps {
   /**
@@ -74,11 +75,11 @@ export interface ColgroupProps {
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
+  headerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
+  footerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 格式化显示内容
    */

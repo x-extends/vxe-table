@@ -1,11 +1,13 @@
 import { VXETableComponent } from './component'
-import { Form } from './form'
+import { Form, FormRule } from './form'
 import { RenderParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 表单 - 项
  */
-export class FormItem extends VXETableComponent {
+export class VxeFormItem extends VXETableComponent {
   /**
    * 标题
    */
@@ -38,6 +40,8 @@ export class FormItem extends VXETableComponent {
    * 后缀配置项
    */
   titleSuffix?: FormItemTitleOptions;
+  vertical?: boolean
+  showTitle?: boolean
   /**
    * 重置时的默认值
    */
@@ -45,7 +49,7 @@ export class FormItem extends VXETableComponent {
   /**
    * 该方法的返回值用来决定该项是否显示
    */
-  visibleMethod?(params: { data: any, property: string }): boolean;
+  visibleMethod?(params: { data: any, field: string }): boolean;
   /**
    * 默认收起
    */
@@ -59,6 +63,7 @@ export class FormItem extends VXETableComponent {
    */
   itemRender?: FormItemRenderOptions;
 }
+export class FormItem extends VxeFormItem {}
 
 export interface FormItemOptions {
   /**
@@ -93,6 +98,7 @@ export interface FormItemOptions {
    * 后缀配置项
    */
   titleSuffix?: FormItemTitleOptions;
+  showTitle?: boolean
   /**
    * 重置时的默认值
    */
@@ -100,7 +106,7 @@ export interface FormItemOptions {
   /**
    * 该方法的返回值用来决定该项是否显示
    */
-  visibleMethod?(params: { data: any, property: string }): boolean;
+  visibleMethod?(params: { data: any, field: string }): boolean;
   /**
    * 默认收起
    */
@@ -113,6 +119,7 @@ export interface FormItemOptions {
    * 项渲染配置项
    */
   itemRender?: FormItemRenderOptions;
+  rules: FormRule[]
 }
 
 export interface FormItemTitleOptions {
@@ -164,10 +171,11 @@ export interface FormItemRenderParams extends RenderParams {
    * 表单数据
    */
   data: any;
+  field: string
   /**
-   * 字段名
+   * @deprecated
    */
-  property: string;
+  property: string
 }
 
 /**
@@ -182,10 +190,11 @@ export interface FormItemVisibleParams extends RenderParams {
    * 表单数据
    */
   data: any;
+  field: string
   /**
-   * 字段名
+   * @deprecated
    */
-  property: string;
+  property: string
 }
 
 /**
@@ -200,8 +209,9 @@ export interface FormItemResetParams extends RenderParams {
    * 表单数据
    */
   data: any;
+  field: string
   /**
-   * 字段名
+   * @deprecated
    */
-  property: string;
+  property: string
 }

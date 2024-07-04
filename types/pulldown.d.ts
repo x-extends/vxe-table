@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 组件 - 下拉容器
  */
-export interface Pulldown extends VXETableComponent {
+export declare class VxePulldown extends VXETableComponent {
   /**
    * 是否禁用
    */
@@ -30,15 +30,15 @@ export interface Pulldown extends VXETableComponent {
    * 切换下拉面板
    */
   togglePanel(): Promise<any>;
-  
+
   /**
    * 显示下拉面板
    */
   showPanel(): Promise<any>;
-  
+
   /**
    * 隐藏下拉面板
    */
   hidePanel(): Promise<any>;
-
 }
+export class Pulldown extends VxePulldown {}

@@ -18,6 +18,7 @@
       :sort-config="{trigger: 'cell'}"
       :merge-footer-items="mergeFooterItems"
       :footer-method="footerMethod"
+      :scroll-y="{enabled: true}"
       :loading="loading">
       <vxe-column type="seq" width="100"></vxe-column>
       <vxe-column field="name" title="Name" sortable width="200"></vxe-column>

@@ -1,9 +1,13 @@
-import VxeTextarea from './src/textarea'
+import VxeTextareaComponent from './src/textarea'
+import VxeUI from '../v-x-e-table'
 
-export const Textarea = Object.assign(VxeTextarea, {
+export const VxeTextarea = Object.assign(VxeTextareaComponent, {
   install (Vue) {
-    Vue.component(VxeTextarea.name, VxeTextarea)
+    Vue.component(VxeTextareaComponent.name, VxeTextareaComponent)
   }
 })
+VxeUI.component(VxeTextareaComponent)
 
-export default Textarea
+export const Textarea = VxeTextarea
+
+export default VxeTextarea

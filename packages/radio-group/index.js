@@ -1,9 +1,13 @@
-import VxeRadioGroup from '../radio/src/group'
+import VxeRadioGroupComponent from '../radio/src/group'
+import VxeUI from '../v-x-e-table'
 
-export const RadioGroup = Object.assign(VxeRadioGroup, {
+export const VxeRadioGroup = Object.assign(VxeRadioGroupComponent, {
   install (Vue) {
-    Vue.component(VxeRadioGroup.name, VxeRadioGroup)
+    Vue.component(VxeRadioGroupComponent.name, VxeRadioGroupComponent)
   }
 })
+VxeUI.component(VxeRadioGroupComponent)
 
-export default RadioGroup
+export const RadioGroup = VxeRadioGroup
+
+export default VxeRadioGroup

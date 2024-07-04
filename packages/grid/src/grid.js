@@ -3,8 +3,11 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, GlobalEvent, isEnableConf } from '../../tools'
-import { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/src/dom'
+import UtilTools, { isEnableConf } from '../../tools/utils'
+import DomTools, { getOffsetHeight, getPaddingTopBottomSize } from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
+import { warnLog, errLog } from '../../tools/log'
+import { getSlotVNs } from '../../tools/vn'
 
 const methods = {}
 const propKeys = Object.keys(Table.props)
@@ -59,7 +62,7 @@ function getFuncSlot (_vm, optSlots, slotKey) {
         return $scopedSlots[funcSlot]
       } else {
         if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-          UtilTools.error('vxe.error.notSlot', [funcSlot])
+          errLog('vxe.error.notSlot', [funcSlot])
         }
       }
     } else {
@@ -77,10 +80,10 @@ function getToolbarSlots (_vm) {
   const slots = {}
   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
     if ($scopedSlots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
-      UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
+      warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
     }
     if ($scopedSlots.tools && (!toolbarOptSlots || toolbarOptSlots.tools !== 'tools')) {
-      UtilTools.warn('vxe.error.reqProp', ['toolbar-config.slots.tools'])
+      warnLog('vxe.error.reqProp', ['toolbar-config.slots.tools'])
     }
   }
   if (toolbarOptSlots) {
@@ -134,6 +137,194 @@ function getTableOns (_vm) {
   return ons
 }
 
+/**
+ * 渲染表单
+ */
+function renderForm (h, _vm) {
+  const { _e, $scopedSlots, formConfig } = _vm
+  const formSlot = $scopedSlots.form
+  const hasForm = !!(formSlot || isEnableConf(formConfig))
+
+  if (hasForm) {
+    return h('div', {
+      key: 'form',
+      ref: 'formWrapper',
+      class: 'vxe-grid--form-wrapper'
+    }, formSlot ? formSlot.call(_vm, { $grid: _vm }, h) : renderDefaultForm(h, _vm))
+  }
+  return _e()
+}
+
+/**
+ * 渲染工具栏
+ */
+function renderToolbar (h, _vm) {
+  const { _e, $scopedSlots, toolbarConfig, toolbar } = _vm
+  const toolbarSlot = $scopedSlots.toolbar
+  const hasToolbar = !!(toolbarSlot || isEnableConf(toolbarConfig) || toolbar)
+
+  if (hasToolbar) {
+    return h('div', {
+      key: 'toolbar',
+      ref: 'toolbarWrapper',
+      class: 'vxe-grid--toolbar-wrapper'
+    }, toolbarSlot
+      ? toolbarSlot.call(_vm, { $grid: _vm }, h)
+      : [
+          h('vxe-toolbar', {
+            props: _vm.toolbarOpts,
+            ref: 'xToolbar',
+            scopedSlots: getToolbarSlots(_vm)
+          })
+        ]
+    )
+  }
+  return _e()
+}
+
+/**
+ * 渲染表格顶部区域
+ */
+function renderTop (h, _vm) {
+  const { _e, $scopedSlots } = _vm
+  const topSlot = $scopedSlots.top
+
+  return topSlot ? h('div', {
+    key: 'top',
+    ref: 'topWrapper',
+    class: 'vxe-grid--top-wrapper'
+  }, topSlot.call(_vm, { $grid: _vm }, h)) : _e()
+}
+
+function renderTableLeft (h, _vm) {
+  const { _e, $scopedSlots } = _vm
+  const leftSlot = $scopedSlots.left
+  if (leftSlot) {
+    return h('div', {
+      class: 'vxe-grid--left-wrapper'
+    }, leftSlot({ $grid: _vm }))
+  }
+  return _e()
+}
+
+function renderTableRight (h, _vm) {
+  const { _e, $scopedSlots } = _vm
+  const rightSlot = $scopedSlots.right
+  if (rightSlot) {
+    return h('div', {
+      class: 'vxe-grid--right-wrapper'
+    }, rightSlot({ $grid: _vm }))
+  }
+  return _e()
+}
+
+/**
+ * 渲染表格
+ */
+function renderTable (h, _vm) {
+  const { $scopedSlots, tableProps } = _vm
+
+  return h('div', {
+    class: 'vxe-grid--table-wrapper'
+  }, [
+    h('vxe-table', {
+      key: 'table',
+      props: tableProps,
+      on: getTableOns(_vm),
+      scopedSlots: $scopedSlots,
+      ref: 'xTable'
+    })
+  ])
+}
+
+/**
+ * 渲染表格底部区域
+ */
+function renderBottom (h, _vm) {
+  const { _e, $scopedSlots } = _vm
+  const bottomSlot = $scopedSlots.bottom
+
+  return bottomSlot ? h('div', {
+    key: 'bottom',
+    ref: 'bottomWrapper',
+    class: 'vxe-grid--bottom-wrapper'
+  }, bottomSlot.call(_vm, { $grid: _vm }, h)) : _e()
+}
+
+/**
+ * 渲染分页
+ */
+function renderPager (h, _vm) {
+  const { _e, $scopedSlots, pagerConfig, proxyConfig, tablePage } = _vm
+  const pagerSlot = $scopedSlots.pager
+  const hasPager = !!(pagerSlot || isEnableConf(pagerConfig))
+
+  if (hasPager) {
+    return h('div', {
+      key: 'pager',
+      ref: 'pagerWrapper',
+      class: 'vxe-grid--pager-wrapper'
+    }, pagerSlot
+      ? pagerSlot.call(_vm, { $grid: _vm }, h)
+      : [
+          h('vxe-pager', {
+            props: { ..._vm.pagerOpts, ...(proxyConfig ? tablePage : {}) },
+            on: {
+              'page-change': _vm.pageChangeEvent
+            },
+            scopedSlots: getPagerSlots(_vm)
+          })
+        ]
+    )
+  }
+  return _e()
+}
+
+const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
+
+function renderLayout (h, _vm) {
+  const { layouts } = _vm
+  const vns = []
+  const currLayouts = (layouts && layouts.length ? layouts : (GlobalConfig.grid.layouts || defaultLayouts))
+  currLayouts.forEach(name => {
+    switch (name) {
+      case 'Form':
+        vns.push(renderForm(h, _vm))
+        break
+      case 'Toolbar':
+        vns.push(renderToolbar(h, _vm))
+        break
+      case 'Top':
+        vns.push(renderTop(h, _vm))
+        break
+      case 'Table':
+        vns.push(
+          h('div', {
+            key: 'table',
+            class: 'vxe-grid--table-container'
+          }, [
+            renderTableLeft(h, _vm),
+            renderTable(h, _vm),
+            renderTableRight(h, _vm)
+          ])
+        )
+        break
+      case 'Bottom':
+        vns.push(renderBottom(h, _vm))
+        break
+      case 'Pager':
+        vns.push(renderPager(h, _vm))
+        break
+      default:
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          errLog('vxe.error.notProp', [`layouts -> ${name}`])
+        }
+        break
+    }
+  })
+  return vns
+}
+
 Object.keys(Table.methods).forEach(name => {
   methods[name] = function (...args) {
     return this.$refs.xTable && this.$refs.xTable[name](...args)
@@ -145,6 +336,7 @@ export default {
   mixins: [vSize],
   props: {
     ...Table.props,
+    layouts: Array,
     columns: Array,
     pagerConfig: [Boolean, Object],
     proxyConfig: Object,
@@ -164,14 +356,13 @@ export default {
       tableLoading: false,
       isZMax: false,
       tableData: [],
-      pendingRecords: [],
       filterData: [],
       formData: {},
       sortData: [],
       tZindex: 0,
       tablePage: {
         total: 0,
-        pageSize: 10,
+        pageSize: GlobalConfig.pager.pageSize || 10,
         currentPage: 1
       }
     }
@@ -218,13 +409,12 @@ export default {
       if (proxyConfig) {
         tableProps.loading = loading || tableLoading
         tableProps.data = tableData
-        tableProps.rowClassName = this.handleRowClassName
         if (proxyOpts.seq && isEnableConf(pagerConfig)) {
           tableProps.seqConfig = Object.assign({}, seqConfig, { startIndex: (tablePage.currentPage - 1) * tablePage.pageSize })
         }
       }
       if (editConfig) {
-        tableProps.editConfig = Object.assign({}, editConfig, { activeMethod: this.handleActiveMethod })
+        tableProps.editConfig = Object.assign({}, editConfig)
       }
       return tableProps
     }
@@ -253,18 +443,21 @@ export default {
   created () {
     const { data, formOpts, proxyOpts, proxyConfig } = this
     if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-      UtilTools.error('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
+      errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
     }
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (this.toolbar) {
-        UtilTools.warn('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
+        warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
       }
       if (this.toolbarConfig && !XEUtils.isObject(this.toolbarConfig)) {
-        UtilTools.warn('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
+        warnLog('vxe.error.errProp', [`grid.toolbar-config=${this.toolbarConfig}`, 'grid.toolbar-config={}'])
       }
+      // if (proxyOpts.props) {
+      //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
+      // }
     }
-
+    this.initPages()
     GlobalEvent.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
   mounted () {
@@ -272,17 +465,13 @@ export default {
       this.loadColumn(this.columns)
     }
     this.initToolbar()
-    this.initPages()
     this.initProxy()
   },
   destroyed () {
     GlobalEvent.off(this, 'keydown')
   },
   render (h) {
-    const { $scopedSlots, vSize, isZMax } = this
-    const hasForm = !!($scopedSlots.form || isEnableConf(this.formConfig))
-    const hasToolbar = !!($scopedSlots.toolbar || isEnableConf(this.toolbarConfig) || this.toolbar)
-    const hasPager = !!($scopedSlots.pager || isEnableConf(this.pagerConfig))
+    const { vSize, isZMax } = this
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,
@@ -292,75 +481,7 @@ export default {
         'is--loading': this.loading || this.tableLoading
       }],
       style: this.renderStyle
-    }, [
-      /**
-       * 渲染表单
-       */
-      hasForm ? h('div', {
-        ref: 'formWrapper',
-        class: 'vxe-grid--form-wrapper'
-      }, $scopedSlots.form
-        ? $scopedSlots.form.call(this, { $grid: this }, h)
-        : renderDefaultForm(h, this)
-      ) : null,
-      /**
-       * 渲染工具栏
-       */
-      hasToolbar ? h('div', {
-        ref: 'toolbarWrapper',
-        class: 'vxe-grid--toolbar-wrapper'
-      }, $scopedSlots.toolbar
-        ? $scopedSlots.toolbar.call(this, { $grid: this }, h)
-        : [
-          h('vxe-toolbar', {
-            props: this.toolbarOpts,
-            ref: 'xToolbar',
-            scopedSlots: getToolbarSlots(this)
-          })
-        ]
-      ) : null,
-      /**
-       * 渲染表格顶部区域
-       */
-      $scopedSlots.top ? h('div', {
-        ref: 'topWrapper',
-        class: 'vxe-grid--top-wrapper'
-      }, $scopedSlots.top.call(this, { $grid: this }, h)) : null,
-      /**
-       * 渲染表格
-       */
-      h('vxe-table', {
-        props: this.tableProps,
-        on: getTableOns(this),
-        scopedSlots: $scopedSlots,
-        ref: 'xTable'
-      }),
-      /**
-       * 渲染表格底部区域
-       */
-      $scopedSlots.bottom ? h('div', {
-        ref: 'bottomWrapper',
-        class: 'vxe-grid--bottom-wrapper'
-      }, $scopedSlots.bottom.call(this, { $grid: this }, h)) : null,
-      /**
-       * 渲染分页
-       */
-      hasPager ? h('div', {
-        ref: 'pagerWrapper',
-        class: 'vxe-grid--pager-wrapper'
-      }, $scopedSlots.pager
-        ? $scopedSlots.pager.call(this, { $grid: this }, h)
-        : [
-          h('vxe-pager', {
-            props: { ...this.pagerOpts, ...(this.proxyConfig ? this.tablePage : {}) },
-            on: {
-              'page-change': this.pageChangeEvent
-            },
-            scopedSlots: getPagerSlots(this)
-          })
-        ]
-      ) : null
-    ])
+    }, renderLayout(h, this))
   },
   methods: {
     ...methods,
@@ -371,7 +492,7 @@ export default {
           slotFunc = $scopedSlots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params, h, vNodes)
+          return getSlotVNs(slotFunc.call(this, params, h, vNodes))
         }
       }
       return []
@@ -388,20 +509,6 @@ export default {
       const { formWrapper, toolbarWrapper, topWrapper, bottomWrapper, pagerWrapper } = $refs
       const parentPaddingSize = isZMax || height !== 'auto' ? 0 : getPaddingTopBottomSize($el.parentNode)
       return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
-    },
-    handleRowClassName (params) {
-      const rowClassName = this.rowClassName
-      const clss = []
-      if (this.pendingRecords.some(item => item === params.row)) {
-        clss.push('row--pending')
-      }
-      clss.push(rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : '')
-      return clss
-    },
-    handleActiveMethod (params) {
-      const { editConfig } = this
-      const activeMethod = editConfig ? editConfig.activeMethod : null
-      return this.pendingRecords.indexOf(params.row) === -1 && (!activeMethod || activeMethod(params))
     },
     initToolbar () {
       this.$nextTick(() => {
@@ -447,7 +554,9 @@ export default {
         }
         if (!proxyInited && proxyOpts.autoLoad !== false) {
           this.proxyInited = true
-          this.$nextTick(() => this.commitProxy('_init'))
+          this.$nextTick().then(() => this.commitProxy('_init')).then((rest) => {
+            this.$emit('proxy-query', { ...rest, isInited: true, $grid: this, $event: new Event('init') })
+          })
         }
       }
     },
@@ -462,8 +571,9 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget, ...args) {
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg } = this
-      const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {}, props: proxyProps = {} } = proxyOpts
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg, validConfig, pagerOpts } = this
+      const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
+      const resConfigs = proxyOpts.response || proxyOpts.props || {}
       const $xetable = $refs.xTable
       let button
       let code
@@ -478,11 +588,15 @@ export default {
       const btnParams = button ? button.params : null
       switch (code) {
         case 'insert':
-          this.insert()
-          break
+          return this.insert()
+        case 'insert_edit':
+          return this.insert().then(({ row }) => this.setEditRow(row))
+
+          // 已废弃
         case 'insert_actived':
-          this.insert().then(({ row }) => this.setActiveRow(row))
-          break
+          return this.insert().then(({ row }) => this.setEditRow(row))
+          // 已废弃
+
         case 'mark_cancel':
           this.triggerPendingEvent(code)
           break
@@ -531,6 +645,7 @@ export default {
                 }
                 sortList = defaultSort.map((item) => {
                   return {
+                    field: item.field,
                     property: item.field,
                     order: item.order
                   }
@@ -539,7 +654,6 @@ export default {
               filterList = $xetable.getCheckedFilters()
             } else {
               if (isReload) {
-                this.pendingRecords = []
                 $xetable.clearAll()
               } else {
                 sortList = $xetable.getSortColumns()
@@ -549,6 +663,8 @@ export default {
             const params = {
               code,
               button,
+              isInited,
+              isReload,
               $grid: this,
               page: pageParams,
               sort: sortList.length ? sortList[0] : {},
@@ -562,21 +678,23 @@ export default {
             this.tableLoading = true
             const applyArgs = [params].concat(args)
             return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
-              .catch(e => e)
               .then(rest => {
                 this.tableLoading = false
                 if (rest) {
-                  if (isEnableConf(pagerConfig)) {
-                    const total = XEUtils.get(rest, proxyProps.total || 'page.total') || 0
-                    tablePage.total = total
-                    this.tableData = XEUtils.get(rest, proxyProps.result || 'result') || []
+                  if (pagerConfig && isEnableConf(pagerOpts)) {
+                    const totalProp = resConfigs.total
+                    const total = (XEUtils.isFunction(totalProp) ? totalProp({ data: rest, $grid: this }) : XEUtils.get(rest, totalProp || 'page.total')) || 0
+                    tablePage.total = XEUtils.toNumber(total)
+                    const resultProp = resConfigs.result
+                    this.tableData = (XEUtils.isFunction(resultProp) ? resultProp({ data: rest, $grid: this }) : XEUtils.get(rest, resultProp || 'result')) || []
                     // 检验当前页码，不能超出当前最大页数
                     const pageCount = Math.max(Math.ceil(total / tablePage.pageSize), 1)
                     if (tablePage.currentPage > pageCount) {
                       tablePage.currentPage = pageCount
                     }
                   } else {
-                    this.tableData = (proxyProps.list ? XEUtils.get(rest, proxyProps.list) : rest) || []
+                    const listProp = resConfigs.list
+                    this.tableData = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: this }) : XEUtils.get(rest, listProp)) : rest) || []
                   }
                 } else {
                   this.tableData = []
@@ -584,10 +702,14 @@ export default {
                 if (afterQuery) {
                   afterQuery(...applyArgs)
                 }
+                return { status: true }
+              }).catch(() => {
+                this.tableLoading = false
+                return { status: false }
               })
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              UtilTools.error('vxe.error.notFunc', ['proxy-config.ajax.query'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
             }
           }
           break
@@ -598,7 +720,7 @@ export default {
             const selectRecords = $xetable.getCheckboxRecords()
             const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
             const body = { removeRecords }
-            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            const applyArgs = [{ $grid: this, code, button, body, form: formData, options: ajaxMethods }].concat(args)
             if (selectRecords.length) {
               return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 if (!removeRecords.length) {
@@ -608,12 +730,12 @@ export default {
                 return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
-                    this.pendingRecords = this.pendingRecords.filter(row => removeRecords.indexOf(row) === -1)
+                    $xetable.setPendingRow(removeRecords, false)
                     if (isMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
@@ -623,6 +745,7 @@ export default {
                     } else {
                       this.commitProxy('query')
                     }
+                    return { status: true }
                   })
                   .catch(rest => {
                     this.tableLoading = false
@@ -630,11 +753,12 @@ export default {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
+                    return { status: false }
                   })
               })
             } else {
@@ -642,7 +766,7 @@ export default {
                 // 检测弹窗模块
                 if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                   if (!VXETable.modal) {
-                    UtilTools.error('vxe.error.reqModule', ['Modal'])
+                    errLog('vxe.error.reqModule', ['Modal'])
                   }
                 }
                 VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
@@ -650,7 +774,7 @@ export default {
             }
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              UtilTools.error('vxe.error.notFunc', ['proxy-config.ajax.delete'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
             }
           }
           break
@@ -658,9 +782,9 @@ export default {
         case 'save': {
           const ajaxMethods = ajax.save
           if (ajaxMethods) {
-            const body = Object.assign({ pendingRecords: this.pendingRecords }, this.getRecordset())
+            const body = this.getRecordset()
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-            const applyArgs = [{ $grid: this, code, button, body, options: ajaxMethods }].concat(args)
+            const applyArgs = [{ $grid: this, code, button, body, form: formData, options: ajaxMethods }].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
               body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
@@ -672,7 +796,7 @@ export default {
             let restPromise = Promise.resolve()
             if (editRules) {
               // 只校验新增和修改的数据
-              restPromise = this.validate(body.insertRecords.concat(updateRecords))
+              restPromise = this[validConfig && validConfig.msgMode === 'full' ? 'fullValidate' : 'validate'](body.insertRecords.concat(updateRecords))
             }
             return restPromise.then((errMap) => {
               if (errMap) {
@@ -684,12 +808,12 @@ export default {
                 return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
                   .then(rest => {
                     this.tableLoading = false
-                    this.pendingRecords = []
+                    $xetable.clearPendingRow()
                     if (isMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ content: this.getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
@@ -699,6 +823,7 @@ export default {
                     } else {
                       this.commitProxy('query')
                     }
+                    return { status: true }
                   })
                   .catch(rest => {
                     this.tableLoading = false
@@ -706,18 +831,19 @@ export default {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
-                          UtilTools.error('vxe.error.reqModule', ['Modal'])
+                          errLog('vxe.error.reqModule', ['Modal'])
                         }
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                     }
+                    return { status: false }
                   })
               } else {
                 if (isMsg) {
                   // 检测弹窗模块
                   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                     if (!VXETable.modal) {
-                      UtilTools.error('vxe.error.reqModule', ['Modal'])
+                      errLog('vxe.error.reqModule', ['Modal'])
                     }
                   }
                   VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.dataUnchanged'), status: 'info' })
@@ -726,25 +852,32 @@ export default {
             })
           } else {
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-              UtilTools.error('vxe.error.notFunc', ['proxy-config.ajax.save'])
+              errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
             }
           }
           break
         }
         default: {
-          const btnMethod = VXETable.commands.get(code)
-          if (btnMethod) {
-            btnMethod({ code, button, $grid: this, $table: $xetable }, ...args)
+          const gCommandOpts = VXETable.commands.get(code)
+          if (gCommandOpts) {
+            if (gCommandOpts.commandMethod) {
+              gCommandOpts.commandMethod({ code, button, $grid: this, $table: $xetable }, ...args)
+            } else {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
           }
         }
       }
       return this.$nextTick()
     },
     getRespMsg (rest, defaultMsg) {
-      const { props: proxyProps = {} } = this.proxyOpts
+      const { proxyOpts } = this
+      const resConfigs = proxyOpts.response || proxyOpts.props || {}
       let msg
-      if (rest && proxyProps.message) {
-        msg = XEUtils.get(rest, proxyProps.message)
+      if (rest && resConfigs.message) {
+        msg = XEUtils.get(rest, resConfigs.message)
       }
       return msg || GlobalConfig.i18n(defaultMsg)
     },
@@ -754,14 +887,14 @@ export default {
         if (selectRecords.length) {
           return VXETable.modal.confirm({ id: `cfm_${code}`, content: GlobalConfig.i18n(alertKey), escClosable: true }).then(type => {
             if (type === 'confirm') {
-              callback()
+              return callback()
             }
           })
         } else {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!VXETable.modal) {
-              UtilTools.error('vxe.error.reqModule', ['Modal'])
+              errLog('vxe.error.reqModule', ['Modal'])
             }
           }
           VXETable.modal.message({ id: `msg_${code}`, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
@@ -781,42 +914,34 @@ export default {
       }, { children: 'children' })
       return XEUtils.isUndefined(itemIndex) ? itemList : itemList[itemIndex]
     },
-    getPendingRecords () {
-      return this.pendingRecords
+    triggerToolbarCommitEvent (params, evnt) {
+      const { code } = params
+      return this.commitProxy(params, evnt).then((rest) => {
+        if (code && rest && rest.status && ['query', 'reload', 'delete', 'save'].includes(code)) {
+          this.$emit(code === 'delete' || code === 'save' ? `proxy-${code}` : 'proxy-query', { ...rest, isReload: code === 'reload', $grid: this, $event: evnt })
+        }
+      })
     },
     triggerToolbarBtnEvent (button, evnt) {
-      this.commitProxy(button, evnt)
+      this.triggerToolbarCommitEvent(button, evnt)
       this.$emit('toolbar-button-click', { code: button.code, button, $grid: this, $event: evnt })
     },
     triggerToolbarTolEvent (tool, evnt) {
-      this.commitProxy(tool, evnt)
+      this.triggerToolbarCommitEvent(tool, evnt)
       this.$emit('toolbar-tool-click', { code: tool.code, tool, $grid: this, $event: evnt })
     },
     triggerPendingEvent (code) {
-      const { pendingRecords, isMsg } = this
+      const { isMsg } = this
       const selectRecords = this.getCheckboxRecords()
       if (selectRecords.length) {
-        const plus = []
-        const minus = []
-        selectRecords.forEach(data => {
-          if (pendingRecords.some(item => data === item)) {
-            minus.push(data)
-          } else {
-            plus.push(data)
-          }
-        })
-        if (minus.length) {
-          this.pendingRecords = pendingRecords.filter(item => minus.indexOf(item) === -1).concat(plus)
-        } else if (plus.length) {
-          this.pendingRecords = pendingRecords.concat(plus)
-        }
+        this.togglePendingRow(selectRecords)
         this.clearCheckboxRow()
       } else {
         if (isMsg) {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!VXETable.modal) {
-              UtilTools.error('vxe.error.reqModule', ['Modal'])
+              errLog('vxe.error.reqModule', ['Modal'])
             }
           }
           VXETable.modal.message({ id: code, content: GlobalConfig.i18n('vxe.grid.selectOneRecord'), status: 'warning' })
@@ -830,7 +955,9 @@ export default {
       tablePage.pageSize = pageSize
       this.$emit('page-change', Object.assign({ $grid: this }, params))
       if (proxyConfig) {
-        this.commitProxy('query')
+        this.commitProxy('query').then((rest) => {
+          this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+        })
       }
     },
     sortChangeEvent (params) {
@@ -841,7 +968,9 @@ export default {
         this.sortData = sortList
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
-          this.commitProxy('query')
+          this.commitProxy('query').then((rest) => {
+            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+          })
         }
       }
       this.$emit('sort-change', Object.assign({ $grid: this }, params))
@@ -853,7 +982,9 @@ export default {
         this.filterData = filterList
         if (this.proxyConfig) {
           this.tablePage.currentPage = 1
-          this.commitProxy('query')
+          this.commitProxy('query').then((rest) => {
+            this.$emit('proxy-query', { ...rest, $grid: this, $event: params.$event })
+          })
         }
       }
       this.$emit('filter-change', Object.assign({ $grid: this }, params))
@@ -861,14 +992,18 @@ export default {
     submitEvent (params) {
       const { proxyConfig } = this
       if (proxyConfig) {
-        this.commitProxy('reload')
+        this.commitProxy('reload').then((rest) => {
+          this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
+        })
       }
       this.$emit('form-submit', Object.assign({ $grid: this }, params))
     },
     resetEvent (params) {
       const { proxyConfig } = this
       if (proxyConfig) {
-        this.commitProxy('reload')
+        this.commitProxy('reload').then((rest) => {
+          this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
+        })
       }
       this.$emit('form-reset', Object.assign({ $grid: this }, params))
     },
@@ -907,7 +1042,8 @@ export default {
       return this.$nextTick().then(() => this.recalculate(true)).then(() => this.isZMax)
     },
     getProxyInfo () {
-      const { sortData, proxyConfig } = this
+      const { $refs, sortData, proxyConfig } = this
+      const $xetable = $refs.xTable
       if (proxyConfig) {
         return {
           data: this.tableData,
@@ -916,7 +1052,7 @@ export default {
           sort: sortData.length ? sortData[0] : {},
           sorts: sortData,
           pager: this.tablePage,
-          pendingRecords: this.pendingRecords
+          pendingRecords: $xetable ? $xetable.getPendingRecords() : []
         }
       }
       return null
@@ -930,7 +1066,7 @@ export default {
             XEUtils.each(column.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!$scopedSlots[func]) {
-                  UtilTools.error('vxe.error.notSlot', [func])
+                  errLog('vxe.error.notSlot', [func])
                 }
               }
             })

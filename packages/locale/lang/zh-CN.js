@@ -1,11 +1,17 @@
 export default {
   vxe: {
+    base: {
+      pleaseInput: '请输入',
+      pleaseSelect: '请选择'
+    },
+    loading: {
+      text: '加载中...'
+    },
     error: {
-      groupFixed: '如果使用分组表头，固定列必须按组设置',
+      groupFixed: '如果使用分组表头，冻结列必须按组设置',
       groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',
       groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
       scrollErrProp: '启用虚拟滚动后不支持该参数 "{0}"',
-      scrollXNotGroup: '横向虚拟滚动不支持分组表头，需要设置 "scroll-x.enabled=false" 参数，否则可能会导致出现错误',
       errConflicts: '参数 "{0}" 与 "{1}" 有冲突',
       unableInsert: '无法插入到指定位置，请检查参数是否正确',
       useErr: '安装 "{0}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
@@ -17,10 +23,15 @@ export default {
       errProp: '不支持的参数 "{0}"，可能为 "{1}"',
       colRepet: 'column.{0}="{1}" 重复了，这可能会导致某些功能无法使用',
       notFunc: '方法 "{0}" 不存在',
+      errFunc: '参数 "{0}" 不是一个方法',
+      notValidators: '全局校验 "{0}" 不存在',
+      notFormats: '全局格式化 "{0}" 不存在',
+      notCommands: '全局指令 "{0}" 不存在',
       notSlot: '插槽 "{0}" 不存在',
       noTree: '树结构不支持 "{0}"',
       notProp: '不支持的参数 "{0}"',
-      coverProp: '"{0}" 的参数 "{1}" 被覆盖，这可能会出现错误',
+      checkProp: '当数据量过大时可能会导致复选框卡顿，建议设置参数 "{0}" 提升渲染速度',
+      coverProp: '"{0}" 的参数 "{1}" 重复定义，这可能会出现错误',
       delFunc: '方法 "{0}" 已废弃，请使用 "{1}"',
       delProp: '参数 "{0}" 已废弃，请使用 "{1}"',
       delEvent: '事件 "{0}" 已废弃，请使用 "{1}"',
@@ -31,94 +42,10 @@ export default {
       impFields: '导入失败，请检查字段名和数据格式是否正确',
       treeNotImp: '树表格不支持导入'
     },
-    renderer: {
-      search: '搜索',
-      cases: {
-        equal: '等于',
-        unequal: '不等于',
-        gt: '大于',
-        ge: '大于或等于',
-        lt: '小于',
-        le: '小于或等于',
-        begin: '开头是',
-        notbegin: '开头不是',
-        endin: '结尾是',
-        notendin: '结尾不是',
-        include: '包含',
-        exclude: '不包含',
-        between: '介于',
-        custom: '自定义筛选',
-        insensitive: '不区分大小写',
-        isSensitive: '区分大小写'
-      },
-      combination: {
-        menus: {
-          sortAsc: '升序',
-          sortDesc: '降序',
-          fixedColumn: '锁定列',
-          fixedGroup: '锁定组',
-          cancelFixed: '取消锁定',
-          fixedLeft: '锁定左侧',
-          fixedRight: '锁定右侧',
-          clearFilter: '清除筛选',
-          textOption: '文本筛选',
-          numberOption: '数值筛选'
-        },
-        popup: {
-          title: '自定义筛选的方式',
-          currColumnTitle: '当前列：',
-          and: '与',
-          or: '或',
-          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
-        },
-        empty: '(空白)',
-        notData: '无匹配项'
-      }
-    },
-    pro: {
-      area: {
-        mergeErr: '无法对合并单元格进行该操作',
-        multiErr: '无法对多重选择区域进行该操作',
-        extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同'
-      },
-      fnr: {
-        title: '查找和替换',
-        findLabel: '查找',
-        replaceLabel: '替换',
-        findTitle: '查找内容：',
-        replaceTitle: '替换为：',
-        tabs: {
-          find: '查找',
-          replace: '替换'
-        },
-        filter: {
-          re: '正则表达式',
-          whole: '全词匹配',
-          sensitive: '区分大小写'
-        },
-        btns: {
-          findNext: '查找下一个',
-          findAll: '查找全部',
-          replace: '替换',
-          replaceAll: '替换全部',
-          cancel: '取消'
-        },
-        header: {
-          seq: '#',
-          cell: '单元格',
-          value: '值'
-        },
-        empty: '(空值)',
-        reError: '无效的正则表达式',
-        recordCount: '已找到 {0} 个单元格',
-        notCell: '找不到匹配的单元格',
-        replaceSuccess: '成功替换 {0} 个单元格'
-      }
-    },
     table: {
       emptyText: '暂无数据',
       allTitle: '全选/取消',
-      seqTitle: '#',
+      seqTitle: '序号',
       confirmFilter: '筛选',
       resetFilter: '重置',
       allFilter: '全部',
@@ -133,7 +60,9 @@ export default {
       customTitle: '列设置',
       customAll: '全部',
       customConfirm: '确认',
-      customRestore: '还原'
+      customCancel: '取消',
+      customRestore: '恢复默认',
+      maxFixedCol: '最大冻结列的数量不能超过 {0} 个'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',
@@ -145,6 +74,8 @@ export default {
       operError: '发生错误，操作失败！'
     },
     select: {
+      search: '搜索',
+      loadingText: '加载中',
       emptyText: '暂无数据'
     },
     pager: {
@@ -152,28 +83,62 @@ export default {
       pagesize: '{0}条/页',
       total: '共 {0} 条记录',
       pageClassifier: '页',
+      homePage: '首页',
+      homePageTitle: '首页',
       prevPage: '上一页',
+      prevPageTitle: '上一页',
       nextPage: '下一页',
+      nextPageTitle: '下一页',
       prevJump: '向上跳页',
-      nextJump: '向下跳页'
+      prevJumpTitle: '向上跳页',
+      nextJump: '向下跳页',
+      nextJumpTitle: '向下跳页',
+      endPage: '末页',
+      endPageTitle: '末页'
     },
     alert: {
-      title: '消息提示'
+      title: '系统提示'
     },
     button: {
       confirm: '确认',
       cancel: '取消'
     },
+    filter: {
+      search: '搜索'
+    },
+    custom: {
+      cstmTitle: '列设置',
+      cstmRestore: '恢复默认',
+      cstmCancel: '取消',
+      cstmConfirm: '确定',
+      cstmConfirmRestore: '请确认是否恢复成默认列配置？',
+      cstmDragTarget: '移动目标：{0}',
+      setting: {
+        colSort: '排序',
+        sortHelpTip: '点击并拖动图标可以调整列的排序',
+        colTitle: '标题',
+        colResizable: '列宽（像素）',
+        colVisible: '是否显示',
+        colFixed: '冻结列',
+        colFixedMax: '冻结列（最多 {0} 列）',
+        fixedLeft: '左侧',
+        fixedUnset: '不设置',
+        fixedRight: '右侧'
+      }
+    },
     import: {
       modes: {
-        covering: '覆盖',
-        insert: '新增'
+        covering: '覆盖方式（直接覆盖表格数据）',
+        insert: '底部追加（在表格的底部追加新数据）',
+        insertTop: '顶部追加（在表格的顶部追加新数据）',
+        insertBottom: '底部追加（在表格的底部追加新数据）'
       },
       impTitle: '导入数据',
       impFile: '文件名',
       impSelect: '选择文件',
       impType: '文件类型',
       impOpts: '参数设置',
+      impMode: '导入模式',
       impConfirm: '导入',
       impCancel: '取消'
     },
@@ -240,7 +205,10 @@ export default {
       custom: '列设置',
       customAll: '全部',
       customConfirm: '确认',
-      customRestore: '还原'
+      customRestore: '重置',
+      fixedLeft: '冻结在左侧',
+      fixedRight: '冻结在右侧',
+      cancelFixed: '取消冻结列'
     },
     input: {
       date: {
@@ -298,6 +266,212 @@ export default {
           q3: '第三季度',
           q4: '第四季度'
         }
+      }
+    },
+    formDesign: {
+      widget: {
+        input: '输入框',
+        textarea: '文本域',
+        select: '下拉框'
+      }
+    },
+
+    /**
+     * 扩展插件
+     */
+    plugins: {
+      extendCellArea: {
+        area: {
+          mergeErr: '无法对合并单元格进行该操作',
+          multiErr: '无法对多重选择区域进行该操作',
+          extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
+          pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
+          cpInvalidErr: '该操作无法进行，您选择的区域中存在被禁止的列（{0}）'
+        },
+        fnr: {
+          title: '查找和替换',
+          findLabel: '查找',
+          replaceLabel: '替换',
+          findTitle: '查找内容：',
+          replaceTitle: '替换为：',
+          tabs: {
+            find: '查找',
+            replace: '替换'
+          },
+          filter: {
+            re: '正则表达式',
+            whole: '全词匹配',
+            sensitive: '区分大小写'
+          },
+          btns: {
+            findNext: '查找下一个',
+            findAll: '查找全部',
+            replace: '替换',
+            replaceAll: '替换全部',
+            cancel: '取消'
+          },
+          header: {
+            seq: '#',
+            cell: '单元格',
+            value: '值'
+          },
+          empty: '(空值)',
+          reError: '无效的正则表达式',
+          recordCount: '已找到 {0} 个单元格',
+          notCell: '找不到匹配的单元格',
+          replaceSuccess: '成功替换 {0} 个单元格'
+        }
+      },
+      filterComplexInput: {
+        menus: {
+          fixedColumn: '冻结列',
+          fixedGroup: '冻结分组',
+          cancelFixed: '取消冻结',
+          fixedLeft: '冻结左侧',
+          fixedRight: '冻结右侧'
+        },
+        cases: {
+          equal: '等于',
+          gt: '大于',
+          lt: '小于',
+          begin: '开头是',
+          endin: '结尾是',
+          include: '包含',
+          isSensitive: '区分大小写'
+        }
+      },
+      filterCombination: {
+        menus: {
+          clearSort: '清除排序',
+          sortAsc: '升序',
+          sortDesc: '降序',
+          fixedColumn: '冻结列',
+          fixedGroup: '冻结分组',
+          cancelFixed: '取消冻结',
+          fixedLeft: '冻结左侧',
+          fixedRight: '冻结右侧',
+          clearFilter: '清除筛选',
+          textOption: '文本筛选',
+          numberOption: '数值筛选'
+        },
+        popup: {
+          title: '自定义筛选的方式',
+          currColumnTitle: '当前列：',
+          and: '与',
+          or: '或',
+          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+        },
+        cases: {
+          equal: '等于',
+          unequal: '不等于',
+          gt: '大于',
+          ge: '大于或等于',
+          lt: '小于',
+          le: '小于或等于',
+          begin: '开头是',
+          notbegin: '开头不是',
+          endin: '结尾是',
+          notendin: '结尾不是',
+          include: '包含',
+          exclude: '不包含',
+          between: '介于',
+          custom: '自定义筛选',
+          insensitive: '不区分大小写',
+          isSensitive: '区分大小写'
+        },
+        empty: '(空白)',
+        notData: '无匹配项'
+      }
+    },
+
+    /**
+     * 以下废弃
+     * @deprecated
+     */
+    pro: {
+      area: {
+        mergeErr: '无法对合并单元格进行该操作',
+        multiErr: '无法对多重选择区域进行该操作',
+        extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
+        pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作'
+      },
+      fnr: {
+        title: '查找和替换',
+        findLabel: '查找',
+        replaceLabel: '替换',
+        findTitle: '查找内容：',
+        replaceTitle: '替换为：',
+        tabs: {
+          find: '查找',
+          replace: '替换'
+        },
+        filter: {
+          re: '正则表达式',
+          whole: '全词匹配',
+          sensitive: '区分大小写'
+        },
+        btns: {
+          findNext: '查找下一个',
+          findAll: '查找全部',
+          replace: '替换',
+          replaceAll: '替换全部',
+          cancel: '取消'
+        },
+        header: {
+          seq: '#',
+          cell: '单元格',
+          value: '值'
+        },
+        empty: '(空值)',
+        reError: '无效的正则表达式',
+        recordCount: '已找到 {0} 个单元格',
+        notCell: '找不到匹配的单元格',
+        replaceSuccess: '成功替换 {0} 个单元格'
+      }
+    },
+    renderer: {
+      search: '搜索',
+      cases: {
+        equal: '等于',
+        unequal: '不等于',
+        gt: '大于',
+        ge: '大于或等于',
+        lt: '小于',
+        le: '小于或等于',
+        begin: '开头是',
+        notbegin: '开头不是',
+        endin: '结尾是',
+        notendin: '结尾不是',
+        include: '包含',
+        exclude: '不包含',
+        between: '介于',
+        custom: '自定义筛选',
+        insensitive: '不区分大小写',
+        isSensitive: '区分大小写'
+      },
+      combination: {
+        menus: {
+          clearSort: '清除排序',
+          sortAsc: '升序',
+          sortDesc: '降序',
+          fixedColumn: '锁定列',
+          fixedGroup: '锁定组',
+          cancelFixed: '取消锁定',
+          fixedLeft: '锁定左侧',
+          fixedRight: '锁定右侧',
+          clearFilter: '清除筛选',
+          textOption: '文本筛选',
+          numberOption: '数值筛选'
+        },
+        popup: {
+          title: '自定义筛选的方式',
+          currColumnTitle: '当前列：',
+          and: '与',
+          or: '或',
+          describeHtml: '可用 ? 代表单个字符<br/>用 * 代表任意多个字符'
+        },
+        empty: '(空白)',
+        notData: '无匹配项'
       }
     }
   }

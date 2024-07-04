@@ -1,14 +1,20 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
+import XEUtils from 'xe-utils'
 
 export default {
   name: 'VxePulldown',
   mixins: [vSize],
   props: {
+    value: Boolean,
     disabled: Boolean,
     placement: String,
     size: { type: String, default: () => GlobalConfig.size },
+    className: [String, Function],
+    popupClassName: [String, Function],
     destroyOnClose: Boolean,
     transfer: Boolean
   },
@@ -22,6 +28,15 @@ export default {
       visiblePanel: false,
       animatVisible: false,
       isActivated: false
+    }
+  },
+  watch: {
+    value (value) {
+      if (value) {
+        this.showPanel()
+      } else {
+        this.hidePanel()
+      }
     }
   },
   created () {
@@ -41,11 +56,13 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { $scopedSlots, inited, vSize, destroyOnClose, transfer, isActivated, disabled, animatVisible, visiblePanel, panelStyle, panelPlacement } = this
+    const { _e, $scopedSlots, inited, className, popupClassName, vSize, destroyOnClose, transfer, isActivated, disabled, animatVisible, visiblePanel, panelStyle, panelPlacement } = this
     const defaultSlot = $scopedSlots.default
-    const downSlot = $scopedSlots.dropdown
+    const headerSlot = $scopedSlots.header
+    const footerSlot = $scopedSlots.footer
+    const dropdownSlot = $scopedSlots.dropdown
     return h('div', {
-      class: ['vxe-pulldown', {
+      class: ['vxe-pulldown', className ? (XEUtils.isFunction(className) ? className({ $pulldown: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         'is--visivle': visiblePanel,
         'is--disabled': disabled,
@@ -58,7 +75,7 @@ export default {
       }, defaultSlot ? defaultSlot.call(this, { $pulldown: this }, h) : []),
       h('div', {
         ref: 'panel',
-        class: ['vxe-table--ignore-clear vxe-pulldown--panel', {
+        class: ['vxe-table--ignore-clear vxe-pulldown--panel', popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $pulldown: this }) : popupClassName) : '', {
           [`size--${vSize}`]: vSize,
           'is--transfer': transfer,
           'animat--leave': animatVisible,
@@ -68,11 +85,21 @@ export default {
           placement: panelPlacement
         },
         style: panelStyle
-      }, downSlot ? [
+      }, [
         h('div', {
-          class: 'vxe-pulldown--wrapper'
-        }, !inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : downSlot.call(this, { $pulldown: this }, h))
-      ] : [])
+          class: 'vxe-pulldown--panel-wrapper'
+        }, !inited || (destroyOnClose && !visiblePanel && !animatVisible) ? [] : [
+          headerSlot ? h('div', {
+            class: 'vxe-pulldown--panel-header'
+          }, headerSlot.call(this, { $pulldown: this })) : _e(),
+          h('div', {
+            class: 'vxe-pulldown--panel-body'
+          }, dropdownSlot ? dropdownSlot.call(this, { $pulldown: this }, h) : []),
+          footerSlot ? h('div', {
+            class: 'vxe-pulldown--panel-footer'
+          }, footerSlot.call(this, { $pulldown: this })) : _e()
+        ])
+      ])
     ])
   },
   methods: {
@@ -140,6 +167,7 @@ export default {
           this.animatVisible = true
           setTimeout(() => {
             this.visiblePanel = true
+            this.$emit('update:input', true)
             this.updatePlacement()
             setTimeout(() => {
               resolve(this.updatePlacement())
@@ -156,6 +184,7 @@ export default {
      */
     hidePanel () {
       this.visiblePanel = false
+      this.$emit('update:input', false)
       return new Promise(resolve => {
         if (this.animatVisible) {
           this.hidePanelTimeout = setTimeout(() => {

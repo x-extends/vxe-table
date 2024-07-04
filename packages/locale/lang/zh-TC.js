@@ -1,11 +1,17 @@
 export default {
   vxe: {
+    base: {
+      pleaseInput: '请输入',
+      pleaseSelect: '请选择'
+    },
+    loading: {
+      text: '加載中...'
+    },
     error: {
-      groupFixed: '如果使用分組表頭，固定列必須按組設定',
+      groupFixed: '如果使用分組表頭，固冻结列必須按組設定',
       groupMouseRange: '分组表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支持該參數 "{0}"',
-      scrollXNotGroup: '橫向虛擬滾動不支持分組表頭，需要設定 "scroll-x.enabled=false" 參數，否則可能會導致出現錯誤',
       errConflicts: '參數 "{0}" 與 "{1}" 有衝突',
       unableInsert: '無法插入到指定位置，請檢查參數是否正確',
       useErr: '安裝 "{0}" 模組時發生錯誤，可能順序不正確，依賴的模組需要在Table之前安裝',
@@ -17,10 +23,15 @@ export default {
       errProp: '不支持的參數 "{0}"，可能為 "{1}"',
       colRepet: 'column.{0}="{1}" 重複了，這可能會導致某些功能無法使用',
       notFunc: '方法 "{0}" 不存在',
+      errFunc: '參數 "{0}" 不是一個方法',
+      notValidators: '全局校验 "{0}" 不存在',
+      notFormats: '全局格式化 "{0}" 不存在',
+      notCommands: '全局指令 "{0}" 不存在',
       notSlot: '插槽 "{0}" 不存在',
       noTree: '樹狀結構不支援 {0}',
       notProp: '不支持的參數 "{0}"',
-      coverProp: '"{0}" 的參數 "{1}" 被覆蓋，這可能會出現錯誤',
+      checkProp: '當數據量過大時可能會導致複選框卡頓，建議設置參數 "{0}" 提升渲染速度',
+      coverProp: '"{0}" 的參數 "{1}" 重複定義，這可能會出現錯誤',
       delFunc: '方法 "{0}" 已停用，請使用 "{1}"',
       delProp: '參數 "{0}" 已停用，請使用 "{1}"',
       delEvent: '事件 "{0}" 已停用，請使用 "{1}"',
@@ -31,94 +42,10 @@ export default {
       impFields: '導入失敗，請檢查欄位名和數據格式是否正確',
       treeNotImp: '樹狀表格不支持導入'
     },
-    renderer: {
-      search: '蒐索',
-      cases: {
-        equal: '等於',
-        unequal: '不等於',
-        gt: '大於',
-        ge: '大於或等於',
-        lt: '小於',
-        le: '小於或等於',
-        begin: '開頭是',
-        notbegin: '開頭不是',
-        endin: '結尾是',
-        notendin: '結尾不是',
-        include: '包含',
-        exclude: '不包含',
-        between: '介於',
-        custom: '自定義篩選',
-        insensitive: '不區分大小寫',
-        isSensitive: '區分大小寫'
-      },
-      combination: {
-        menus: {
-          sortAsc: '昇冪',
-          sortDesc: '降序',
-          fixedColumn: '鎖定列',
-          fixedGroup: '鎖定組',
-          cancelFixed: '取消鎖定',
-          fixedLeft: '鎖定左側',
-          fixedRight: '鎖定右側',
-          clearFilter: '清除篩選',
-          textOption: '文字篩選',
-          numberOption: '數值篩選'
-        },
-        popup: {
-          title: '自定義篩選的管道',
-          currColumnTitle: '當前列：',
-          and: '與',
-          or: '或',
-          describeHtml: '用 ? 代表單個字元<br/>用 * 代表任意多個字元'
-        },
-        empty: '(空白)',
-        notData: '無匹配項'
-      }
-    },
-    pro: {
-      area: {
-        mergeErr: '無法對合併儲存格進行該操作',
-        multiErr: '無法對多重選擇區域進行該操作',
-        extendErr: '如果延伸的區域包含被合併的儲存格，所有合併的儲存格需大小相同'
-      },
-      fnr: {
-        title: '查找和替換',
-        findLabel: '查找',
-        replaceLabel: '替換',
-        findTitle: '查找內容：',
-        replaceTitle: '替換為：',
-        tabs: {
-          find: '查找',
-          replace: '替換'
-        },
-        filter: {
-          re: '規則運算式',
-          whole: '全詞匹配',
-          sensitive: '區分大小寫'
-        },
-        btns: {
-          findNext: '查找下一個',
-          findAll: '查找全部',
-          replace: '替换',
-          replaceAll: '替换全部',
-          cancel: '取消'
-        },
-        header: {
-          seq: '#',
-          cell: '儲存格',
-          value: '值'
-        },
-        empty: '(空值)',
-        reError: '無效的規則運算式',
-        recordCount: '已找到 {0} 個儲存格',
-        notCell: '找不到匹配的儲存格',
-        replaceSuccess: '成功替換 {0} 個儲存格'
-      }
-    },
     table: {
       emptyText: '暫無資料',
       allTitle: '全選/取消',
-      seqTitle: '#',
+      seqTitle: '序號',
       confirmFilter: '篩選',
       resetFilter: '重置',
       allFilter: '全部',
@@ -133,7 +60,9 @@ export default {
       customTitle: '列設定',
       customAll: '全部',
       customConfirm: '確認',
-      customRestore: '還原'
+      customCancel: '取消',
+      customRestore: '恢复默认',
+      maxFixedCol: '最大冻结列的數量不能超過 {0} 個'
     },
     grid: {
       selectOneRecord: '請至少選擇一條記錄！',
@@ -145,6 +74,8 @@ export default {
       operError: '發生錯誤，操作失敗！'
     },
     select: {
+      search: '蒐索',
+      loadingText: '加載中',
       emptyText: '暫無資料'
     },
     pager: {
@@ -152,28 +83,62 @@ export default {
       pagesize: '{0}項/頁',
       total: '共 {0} 項記錄',
       pageClassifier: '頁',
+      homePage: '首頁',
+      homePageTitle: '首頁',
       prevPage: '上一頁',
+      prevPageTitle: '上一頁',
       nextPage: '下一頁',
+      nextPageTitle: '下一頁',
       prevJump: '向上跳頁',
-      nextJump: '向下跳頁'
+      prevJumpTitle: '向上跳頁',
+      nextJump: '向下跳頁',
+      nextJumpTitle: '向下跳頁',
+      endPage: '末頁',
+      endPageTitle: '末頁'
     },
     alert: {
-      title: '訊息提示'
+      title: '系統提示'
     },
     button: {
       confirm: '確認',
       cancel: '取消'
     },
+    filter: {
+      search: '搜索'
+    },
+    custom: {
+      cstmTitle: '列設定',
+      cstmRestore: '恢復默認',
+      cstmCancel: '取消',
+      cstmConfirm: '確認',
+      cstmConfirmRestore: '請確認是否恢復成默認列配置？',
+      cstmDragTarget: '移動目標：{0}',
+      setting: {
+        colSort: '排序',
+        sortHelpTip: '點擊並拖動圖標可以調整列的排序',
+        colTitle: '標題',
+        colResizable: '列宽（像素）',
+        colVisible: '是否顯示',
+        colFixed: '冻结列',
+        colFixedMax: '冻结列（最多 {0} 列）',
+        fixedLeft: '左側',
+        fixedUnset: '不設定',
+        fixedRight: '右側'
+      }
+    },
     import: {
       modes: {
-        covering: '覆盖',
-        insert: '新增'
+        covering: '覆盖方式（直接覆盖表格数据）',
+        insert: '底部追加（在表格的底部追加新数据）',
+        insertTop: '顶部追加（在表格的顶部追加新数据）',
+        insertBottom: '底部追加（在表格的底部追加新数据）'
       },
       impTitle: '導入數據',
       impFile: '檔名',
       impSelect: '選擇檔案',
       impType: '檔案類型',
       impOpts: '參數設置',
+      impMode: '導入模式',
       impConfirm: '導入',
       impCancel: '取消'
     },
@@ -240,7 +205,10 @@ export default {
       custom: '列設定',
       customAll: '全部',
       customConfirm: '確認',
-      customRestore: '還原'
+      customRestore: '重置',
+      fixedLeft: '冻结在左側',
+      fixedRight: '冻结在右側',
+      cancelFixed: '取消冻结列'
     },
     input: {
       date: {
@@ -298,6 +266,212 @@ export default {
           q3: '第三季度',
           q4: '第四季度'
         }
+      }
+    },
+    formDesign: {
+      widget: {
+        input: '輸入框',
+        textarea: '文本域',
+        select: '下拉框'
+      }
+    },
+
+    /**
+     * 扩展插件
+     */
+    plugins: {
+      extendCellArea: {
+        area: {
+          mergeErr: '無法對合併儲存格進行該操作',
+          multiErr: '無法對多重選擇區域進行該操作',
+          extendErr: '如果延伸的區域包含被合併的儲存格，所有合併的儲存格需大小相同',
+          pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
+          cpInvalidErr: '該操作無法進行，您選擇的區域中存在被禁止的列（{0}）'
+        },
+        fnr: {
+          title: '查找和替換',
+          findLabel: '查找',
+          replaceLabel: '替換',
+          findTitle: '查找內容：',
+          replaceTitle: '替換為：',
+          tabs: {
+            find: '查找',
+            replace: '替換'
+          },
+          filter: {
+            re: '規則運算式',
+            whole: '全詞匹配',
+            sensitive: '區分大小寫'
+          },
+          btns: {
+            findNext: '查找下一個',
+            findAll: '查找全部',
+            replace: '替换',
+            replaceAll: '替换全部',
+            cancel: '取消'
+          },
+          header: {
+            seq: '#',
+            cell: '儲存格',
+            value: '值'
+          },
+          empty: '(空值)',
+          reError: '無效的規則運算式',
+          recordCount: '已找到 {0} 個儲存格',
+          notCell: '找不到匹配的儲存格',
+          replaceSuccess: '成功替換 {0} 個儲存格'
+        }
+      },
+      filterComplexInput: {
+        menus: {
+          fixedColumn: '凍結列',
+          fixedGroup: '凍結分组',
+          cancelFixed: '取消凍結',
+          fixedLeft: '凍結左侧',
+          fixedRight: '凍結右侧'
+        },
+        cases: {
+          equal: '等於',
+          gt: '大於',
+          lt: '小於',
+          begin: '開頭是',
+          endin: '結尾是',
+          include: '包含',
+          isSensitive: '區分大小寫'
+        }
+      },
+      filterCombination: {
+        menus: {
+          clearSort: '清除排序',
+          sortAsc: '昇冪',
+          sortDesc: '降序',
+          fixedColumn: '凍結列',
+          fixedGroup: '凍結分組',
+          cancelFixed: '取消凍結',
+          fixedLeft: '凍結左側',
+          fixedRight: '凍結右側',
+          clearFilter: '清除篩選',
+          textOption: '文字篩選',
+          numberOption: '數值篩選'
+        },
+        popup: {
+          title: '自定義篩選的管道',
+          currColumnTitle: '當前列：',
+          and: '與',
+          or: '或',
+          describeHtml: '用 ? 代表單個字元<br/>用 * 代表任意多個字元'
+        },
+        cases: {
+          equal: '等於',
+          unequal: '不等於',
+          gt: '大於',
+          ge: '大於或等於',
+          lt: '小於',
+          le: '小於或等於',
+          begin: '開頭是',
+          notbegin: '開頭不是',
+          endin: '結尾是',
+          notendin: '結尾不是',
+          include: '包含',
+          exclude: '不包含',
+          between: '介於',
+          custom: '自定義篩選',
+          insensitive: '不區分大小寫',
+          isSensitive: '區分大小寫'
+        },
+        empty: '(空白)',
+        notData: '無匹配項'
+      }
+    },
+
+    /**
+     * 以下废弃
+     * @deprecated
+     */
+    renderer: {
+      search: '蒐索',
+      cases: {
+        equal: '等於',
+        unequal: '不等於',
+        gt: '大於',
+        ge: '大於或等於',
+        lt: '小於',
+        le: '小於或等於',
+        begin: '開頭是',
+        notbegin: '開頭不是',
+        endin: '結尾是',
+        notendin: '結尾不是',
+        include: '包含',
+        exclude: '不包含',
+        between: '介於',
+        custom: '自定義篩選',
+        insensitive: '不區分大小寫',
+        isSensitive: '區分大小寫'
+      },
+      combination: {
+        menus: {
+          clearSort: '清除排序',
+          sortAsc: '昇冪',
+          sortDesc: '降序',
+          fixedColumn: '鎖定列',
+          fixedGroup: '鎖定組',
+          cancelFixed: '取消鎖定',
+          fixedLeft: '鎖定左側',
+          fixedRight: '鎖定右側',
+          clearFilter: '清除篩選',
+          textOption: '文字篩選',
+          numberOption: '數值篩選'
+        },
+        popup: {
+          title: '自定義篩選的管道',
+          currColumnTitle: '當前列：',
+          and: '與',
+          or: '或',
+          describeHtml: '用 ? 代表單個字元<br/>用 * 代表任意多個字元'
+        },
+        empty: '(空白)',
+        notData: '無匹配項'
+      }
+    },
+    pro: {
+      area: {
+        mergeErr: '無法對合併儲存格進行該操作',
+        multiErr: '無法對多重選擇區域進行該操作',
+        extendErr: '如果延伸的區域包含被合併的儲存格，所有合併的儲存格需大小相同',
+        pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作'
+      },
+      fnr: {
+        title: '查找和替換',
+        findLabel: '查找',
+        replaceLabel: '替換',
+        findTitle: '查找內容：',
+        replaceTitle: '替換為：',
+        tabs: {
+          find: '查找',
+          replace: '替換'
+        },
+        filter: {
+          re: '規則運算式',
+          whole: '全詞匹配',
+          sensitive: '區分大小寫'
+        },
+        btns: {
+          findNext: '查找下一個',
+          findAll: '查找全部',
+          replace: '替换',
+          replaceAll: '替换全部',
+          cancel: '取消'
+        },
+        header: {
+          seq: '#',
+          cell: '儲存格',
+          value: '值'
+        },
+        empty: '(空值)',
+        reError: '無效的規則運算式',
+        recordCount: '已找到 {0} 個儲存格',
+        notCell: '找不到匹配的儲存格',
+        replaceSuccess: '成功替換 {0} 個儲存格'
       }
     }
   }

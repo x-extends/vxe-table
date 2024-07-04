@@ -1,7 +1,7 @@
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { browse } from '../../tools/src/dom'
+import { browse } from '../../tools/dom'
 
 export default {
   name: 'VxeSwitch',
@@ -16,7 +16,17 @@ export default {
     openValue: { type: [String, Number, Boolean], default: true },
     closeValue: { type: [String, Number, Boolean], default: false },
     openIcon: String,
-    closeIcon: String
+    closeIcon: String,
+    openActiveIcon: String,
+    closeActiveIcon: String
+  },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
   },
   data () {
     return {
@@ -30,10 +40,10 @@ export default {
       return this.value === this.openValue
     },
     onShowLabel () {
-      return UtilTools.getFuncText(this.openLabel)
+      return getFuncText(this.openLabel)
     },
     offShowLabel () {
-      return UtilTools.getFuncText(this.closeLabel)
+      return getFuncText(this.closeLabel)
     },
     styles () {
       return browse.msie && this.isChecked ? {
@@ -60,7 +70,7 @@ export default {
         class: 'vxe-switch--button',
         attrs: {
           type: 'button',
-          disabled: disabled
+          disabled
         },
         on: {
           click: this.clickEvent,
@@ -107,6 +117,10 @@ export default {
         }
         this.$emit('input', value)
         this.$emit('change', { value, $event: evnt })
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, value)
+        }
         this.activeTimeout = setTimeout(() => {
           this.hasAnimat = false
         }, 400)

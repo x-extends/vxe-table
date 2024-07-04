@@ -1,11 +1,14 @@
-import VxeTooltip from './src/tooltip'
-import VXETable from '../v-x-e-table'
+import VxeTooltipComponent from './src/tooltip'
+import VxeUI from '../v-x-e-table'
 
-export const Tooltip = Object.assign(VxeTooltip, {
+export const VxeTooltip = Object.assign(VxeTooltipComponent, {
   install (Vue) {
-    VXETable._tooltip = 1
-    Vue.component(VxeTooltip.name, VxeTooltip)
+    VxeUI._tooltip = 1
+    Vue.component(VxeTooltipComponent.name, VxeTooltipComponent)
   }
 })
+VxeUI.component(VxeTooltipComponent)
 
-export default Tooltip
+export const Tooltip = VxeTooltip
+
+export default VxeTooltip

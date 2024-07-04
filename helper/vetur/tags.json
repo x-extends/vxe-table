@@ -1,9 +1,18 @@
 {
+  "vxe-icon": {
+    "attributes": [
+      "name",
+      "status",
+      "roll"
+    ],
+    "description": "图标"
+  },
   "vxe-table": {
     "attributes": [
       "id",
       "data",
       "height",
+      "min-height",
       "max-height",
       "auto-resize",
       "sync-resize",
@@ -34,6 +43,7 @@
       "header-row-style",
       "footer-row-style",
       "show-footer",
+      "footer-data",
       "footer-method",
       "merge-cells",
       "merge-footer-items",
@@ -48,6 +58,7 @@
       "keep-source",
       "column-config",
       "row-config",
+      "resize-config",
       "resizable-config",
       "seq-config",
       "sort-config",
@@ -71,6 +82,7 @@
       "edit-rules",
       "empty-text",
       "empty-render",
+      "loading-config",
       "custom-config",
       "scroll-x",
       "scroll-y",
@@ -131,9 +143,12 @@
       "filter-reset-method",
       "filter-recover-method",
       "filter-render",
+      "header-export-method",
       "export-method",
       "footer-export-method",
       "title-help",
+      "title-prefix",
+      "title-suffix",
       "cell-type",
       "cell-render",
       "edit-render",
@@ -150,6 +165,7 @@
       "columns",
       "data",
       "height",
+      "min-height",
       "max-height",
       "auto-resize",
       "sync-resize",
@@ -180,6 +196,7 @@
       "header-row-style",
       "footer-row-style",
       "show-footer",
+      "footer-data",
       "footer-method",
       "merge-cells",
       "merge-footer-items",
@@ -194,6 +211,7 @@
       "keep-source",
       "column-config",
       "row-config",
+      "resize-config",
       "resizable-config",
       "seq-config",
       "sort-config",
@@ -217,6 +235,7 @@
       "edit-rules",
       "empty-text",
       "empty-render",
+      "loading-config",
       "custom-config",
       "scroll-x",
       "scroll-y",
@@ -225,9 +244,10 @@
       "toolbar-config",
       "pager-config",
       "proxy-config",
-      "zoom-config"
+      "zoom-config",
+      "layouts"
     ],
-    "description": "高级表格"
+    "description": "配置式表格"
   },
   "vxe-toolbar": {
     "attributes": [
@@ -276,6 +296,7 @@
       "content",
       "size",
       "disabled",
+      "strict",
       "name"
     ],
     "description": "单选框"
@@ -283,8 +304,13 @@
   "vxe-radio-group": {
     "attributes": [
       "value",
+      "type",
       "size",
-      "disabled"
+      "type",
+      "disabled",
+      "strict",
+      "options",
+      "option-props"
     ],
     "subtags": [
       "vxe-radio",
@@ -297,7 +323,8 @@
       "value",
       "label",
       "content",
-      "disabled"
+      "disabled",
+      "strict"
     ],
     "description": "单选按钮"
   },
@@ -318,8 +345,11 @@
   "vxe-checkbox-group": {
     "attributes": [
       "value",
+      "max",
       "size",
-      "disabled"
+      "disabled",
+      "options",
+      "option-props"
     ],
     "subtags": [
       "vxe-checkbox"
@@ -352,6 +382,7 @@
       "placeholder",
       "autocomplete",
       "maxlength",
+      "multiple",
       "readonly",
       "disabled",
       "prefix-icon",
@@ -363,8 +394,10 @@
       "align",
       "exponential",
       "controls",
-      "min-date",
-      "max-date",
+      "show-word-count",
+      "count-method",
+      "start-date",
+      "end-date",
       "start-week",
       "start-day",
       "select-day",
@@ -380,12 +413,14 @@
   "vxe-select": {
     "attributes": [
       "value",
+      "max",
       "size",
       "multiple",
       "multi-char-overflow",
       "clearable",
       "placeholder",
       "class-name",
+      "popup-class-name",
       "visible",
       "disabled",
       "prefix-icon",
@@ -394,8 +429,11 @@
       "option-props",
       "option-groups",
       "option-group-props",
+      "option-config",
       "option-id",
       "option-key",
+      "filterable",
+      "filter-method",
       "transfer"
     ],
     "subtags": [
@@ -429,10 +467,13 @@
   "vxe-button": {
     "attributes": [
       "content",
+      "mode",
+      "title",
       "type",
       "size",
       "name",
       "class-name",
+      "popup-class-name",
       "icon",
       "round",
       "circle",
@@ -445,15 +486,29 @@
     ],
     "description": "按钮"
   },
+  "vxe-button-group": {
+    "attributes": [
+      "mode",
+      "size",
+      "round",
+      "circle",
+      "disabled",
+      "class-name",
+      "options"
+    ],
+    "description": "按钮组"
+  },
   "vxe-tooltip": {
     "attributes": [
       "value",
       "content",
       "trigger",
       "theme",
+      "popup-class-name",
       "z-index",
       "is-arrow",
       "enterable",
+      "enter-delay",
       "leave-delay"
     ],
     "description": "工具提示"
@@ -516,6 +571,7 @@
       "title-colon",
       "title-asterisk",
       "title-overflow",
+      "vertical",
       "class-name",
       "collapse-status",
       "custom-layout",
@@ -537,8 +593,14 @@
       "align",
       "title-align",
       "title-width",
+      "title-colon",
+      "title-asterisk",
       "title-overflow",
+      "show-title",
+      "vertical",
       "class-name",
+      "content-class-name",
+      "content-style",
       "visible",
       "visible-method",
       "folding",
@@ -572,7 +634,10 @@
   },
   "vxe-pulldown": {
     "attributes": [
+      "model-value",
       "size",
+      "class-name",
+      "popup-class-name",
       "disabled",
       "placement",
       "destroy-on-close",

@@ -1,7 +1,12 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import UtilTools, { getFuncText } from '../../tools/utils'
+import DomTools from '../../tools/dom'
+import { GlobalEvent } from '../../tools/event'
+import { errLog } from '../../tools/log'
+import { getSlotVNs } from '../../tools/vn'
+import VxeLoading from '../../loading/index'
 
 export const allActivedModals = []
 export const msgQueue = []
@@ -24,7 +29,9 @@ export default {
     // 请使用 content
     message: [String, Function],
     content: [String, Function],
+    showCancelButton: { type: Boolean, default: null },
     cancelButtonText: { type: String, default: () => GlobalConfig.modal.cancelButtonText },
+    showConfirmButton: { type: Boolean, default: () => GlobalConfig.modal.showConfirmButton },
     confirmButtonText: { type: String, default: () => GlobalConfig.modal.confirmButtonText },
     lockView: { type: Boolean, default: () => GlobalConfig.modal.lockView },
     lockScroll: Boolean,
@@ -65,7 +72,7 @@ export default {
       modalTop: 0,
       modalZindex: 0,
       zoomLocat: null,
-      firstOpen: false
+      firstOpen: true
     }
   },
   computed: {
@@ -86,7 +93,7 @@ export default {
   },
   created () {
     if (this.storage && !this.id) {
-      UtilTools.error('vxe.error.reqProp', ['modal.id'])
+      errLog('vxe.error.reqProp', ['modal.id'])
     }
   },
   mounted () {
@@ -116,12 +123,13 @@ export default {
     }
   },
   render (h) {
-    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, draggable, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose } = this
+    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, draggable, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose, showCancelButton, showConfirmButton } = this
     const content = this.content || this.message
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
     const headerSlot = $scopedSlots.header || slots.header
     const titleSlot = $scopedSlots.title || slots.title
+    const cornerSlot = $scopedSlots.corner || slots.corner
     const headerOns = {}
     if (draggable) {
       headerOns.mousedown = this.mousedownEvent
@@ -160,32 +168,39 @@ export default {
       }, [
         this.showHeader ? h('div', {
           class: ['vxe-modal--header', {
-            'is--drag': draggable,
+            'is--draggable': draggable,
             'is--ellipsis': !isMsg && showTitleOverflow
           }],
           on: headerOns
-        }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : headerSlot.call(this, { $modal: this }, h)) : [
-          titleSlot ? titleSlot.call(this, { $modal: this }, h) : h('span', {
-            class: 'vxe-modal--title'
-          }, title ? UtilTools.getFuncText(title) : GlobalConfig.i18n('vxe.alert.title')),
-          showZoom ? h('i', {
-            class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
-            attrs: {
-              title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
-            },
-            on: {
-              click: this.toggleZoomEvent
-            }
-          }) : _e(),
-          showClose ? h('i', {
-            class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
-            attrs: {
-              title: GlobalConfig.i18n('vxe.modal.close')
-            },
-            on: {
-              click: this.closeEvent
-            }
-          }) : _e()
+        }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(headerSlot.call(this, { $modal: this }, h))) : [
+          h('div', {
+            class: 'vxe-modal--header-title'
+          }, titleSlot ? getSlotVNs(titleSlot.call(this, { $modal: this }, h)) : (title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))),
+          h('div', {
+            class: 'vxe-modal--header-right'
+          }, [
+            cornerSlot ? h('span', {
+              class: 'vxe-modal--corner-wrapper'
+            }, getSlotVNs(cornerSlot({ $modal: this }))) : _e(),
+            showZoom ? h('i', {
+              class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
+              attrs: {
+                title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
+              },
+              on: {
+                click: this.toggleZoomEvent
+              }
+            }) : _e(),
+            showClose ? h('i', {
+              class: ['vxe-modal--close-btn', 'trigger--btn', GlobalConfig.icon.MODAL_CLOSE],
+              attrs: {
+                title: GlobalConfig.i18n('vxe.modal.close')
+              },
+              on: {
+                click: this.closeEvent
+              }
+            }) : _e()
+          ])
         ]) : null,
         h('div', {
           class: 'vxe-modal--body'
@@ -199,27 +214,29 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : defaultSlot.call(this, { $modal: this }, h)) : UtilTools.getFuncText(content)),
-          !isMsg ? h('div', {
-            class: ['vxe-loading', {
-              'is--visible': loading
-            }]
-          }, [
-            h('div', {
-              class: 'vxe-loading--spinner'
-            })
-          ]) : null
+          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(defaultSlot.call(this, { $modal: this }, h))) : getFuncText(content)),
+          /**
+           * 加载中
+           */
+          !isMsg ? h(VxeLoading, {
+            class: 'vxe-modal--loading',
+            props: {
+              value: loading
+            }
+          }) : null
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : footerSlot.call(this, { $modal: this }, h)) : [
-          type === 'confirm' ? h('vxe-button', {
+        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(footerSlot.call(this, { $modal: this }, h))) : [
+          XEUtils.isBoolean(showCancelButton) ? showCancelButton : type === 'confirm' ? h('vxe-button', {
+            key: 1,
             ref: 'cancelBtn',
             on: {
               click: this.cancelEvent
             }
           }, this.cancelButtonText || GlobalConfig.i18n('vxe.button.cancel')) : null,
-          h('vxe-button', {
+          XEUtils.isBoolean(showConfirmButton) ? showConfirmButton : (type === 'confirm' || type === 'alert') ? h('vxe-button', {
+            key: 2,
             ref: 'confirmBtn',
             props: {
               status: 'primary'
@@ -227,7 +244,7 @@ export default {
             on: {
               click: this.confirmEvent
             }
-          }, this.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm'))
+          }, this.confirmButtonText || GlobalConfig.i18n('vxe.button.confirm')) : null
         ]) : null,
         !isMsg && resize ? h('span', {
           class: 'vxe-modal--resize'
@@ -235,7 +252,7 @@ export default {
           return h('span', {
             class: `${type}-resize`,
             attrs: {
-              type: type
+              type
             },
             on: {
               mousedown: this.dragEvent
@@ -343,16 +360,20 @@ export default {
         } else {
           this.$nextTick(() => {
             const { firstOpen, fullscreen } = this
-            if (!remember || !firstOpen) {
+            if (!remember || firstOpen) {
               this.updatePosition().then(() => {
                 setTimeout(() => this.updatePosition(), 20)
               })
             }
-            if (!firstOpen) {
-              this.firstOpen = true
+            if (firstOpen) {
+              this.firstOpen = false
               if (this.hasPosStorage()) {
                 this.restorePosStorage()
               } else if (fullscreen) {
+                this.$nextTick(() => this.maximize())
+              }
+            } else {
+              if (fullscreen) {
                 this.$nextTick(() => this.maximize())
               }
             }
@@ -459,7 +480,7 @@ export default {
     maximize () {
       return this.$nextTick().then(() => {
         if (!this.zoomLocat) {
-          const marginSize = this.marginSize
+          const marginSize = Math.max(0, this.marginSize)
           const modalBoxElem = this.getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()
           this.zoomLocat = {
@@ -572,6 +593,8 @@ export default {
           }
           modalBoxElem.style.left = `${left}px`
           modalBoxElem.style.top = `${top}px`
+          modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '') + ' is--drag'
+          this.$emit('move', { type: 'move', $event: evnt })
         }
         document.onmouseup = () => {
           document.onmousemove = domMousemove
@@ -581,6 +604,9 @@ export default {
               this.savePosStorage()
             })
           }
+          setTimeout(() => {
+            modalBoxElem.className = modalBoxElem.className.replace(/\s?is--drag/, '')
+          }, 50)
         }
       }
     },
@@ -721,10 +747,10 @@ export default {
         if (remember && storage) {
           this.savePosStorage()
         }
-        if ($listeners.zoom) {
-          this.$emit('zoom', params)
-        } else if (events.zoom) {
-          events.zoom.call(this, params)
+        if ($listeners.resize) {
+          this.$emit('resize', params)
+        } else if (events.resize) {
+          events.resize.call(this, params)
         }
       }
       document.onmouseup = () => {

@@ -65,23 +65,23 @@
   .vxe-filter--btn {
     &:before,
     &:after {
-      @include animatTransition(border);
+      @include createAnimationTransition(border);
     }
   }
   .vxe-input--wrapper {
     .vxe-input {
-      @include animatTransition(border);
+      @include createAnimationTransition(border);
     }
   }
   .vxe-table--expand-btn,
   .vxe-tree--node-btn {
-    @include animatTransition(transform);
+    @include createAnimationTransition(transform);
   }
   .vxe-checkbox,
   .vxe-radio {
     > input {
       &:checked+span {
-        @include animatTransition(background-color);
+        @include createAnimationTransition(background-color);
       }
     }
   }

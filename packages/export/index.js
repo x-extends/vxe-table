@@ -13,7 +13,7 @@ export function print (options) {
   handlePrint(null, opts, opts.content)
 }
 
-export const Export = {
+export const VxeTableExportModule = {
   ExportPanel,
   ImportPanel,
   install (Vue) {
@@ -21,7 +21,7 @@ export const Export = {
     VXETable.saveFile = saveFile
     VXETable.readFile = readFile
     VXETable.print = print
-    VXETable.setup({
+    VXETable.setConfig({
       export: {
         types: {
           csv: 0,
@@ -37,4 +37,6 @@ export const Export = {
   }
 }
 
-export default Export
+export const Export = VxeTableExportModule
+
+export default VxeTableExportModule

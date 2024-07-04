@@ -1,8 +1,9 @@
 {
   "name": "vxe-table",
-  "version": "3.4.12",
-  "description": "一个基于 vue 的 PC 端表格组件，支持增删改查、虚拟列表、虚拟树、懒加载、快捷菜单、数据校验、树形结构、打印导出、表单渲染、数据分页、弹窗、自定义模板、渲染器、贼灵活的配置项、扩展接口等...",
+  "version": "3.8.10-beta.0",
+  "description": "一个基于 vue 的 PC 端表单/表格组件，支持增删改查、虚拟树、列拖拽，懒加载、快捷菜单、数据校验、树形结构、打印导出、自定义模板、渲染器、JSON 配置式...",
   "scripts": {
+    "update": "npm install --legacy-peer-deps",
     "serve": "vue-cli-service serve",
     "lint": "vue-cli-service lint",
     "build": "vue-cli-service build",
@@ -24,62 +25,57 @@
   "jsdelivr": "lib/index.umd.js",
   "style": "lib/style.css",
   "typings": "types/index.d.ts",
+  "dependencies": {
+    "dom-zindex": "^1.0.4",
+    "xe-utils": "^3.5.26"
+  },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^2.33.0",
-    "@typescript-eslint/parser": "^2.33.0",
-    "@vue/cli-plugin-babel": "~4.4.0",
-    "@vue/cli-plugin-eslint": "~4.4.0",
-    "@vue/cli-plugin-router": "~4.4.0",
-    "@vue/cli-plugin-typescript": "~4.4.0",
-    "@vue/cli-plugin-vuex": "~4.4.0",
-    "@vue/cli-service": "~4.4.0",
-    "@vue/eslint-config-standard": "^5.1.2",
-    "@vue/eslint-config-typescript": "^5.0.2",
-    "core-js": "^3.6.5",
-    "del": "^5.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-import": "^2.20.2",
+    "@types/resize-observer-browser": "^0.1.11",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "@vue/eslint-config-typescript": "^9.1.0",
+    "core-js": "^3.8.3",
+    "del": "^6.1.1",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^8.0.3",
     "gulp": "^4.0.2",
-    "gulp-autoprefixer": "^6.1.0",
+    "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
-    "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.4.0",
-    "gulp-replace": "^1.0.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-sourcemaps": "^2.6.5",
+    "gulp-rename": "^2.0.0",
+    "gulp-replace": "^1.1.4",
+    "gulp-sass": "^5.1.0",
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
-    "node-sass": "^4.14.0",
-    "sass-loader": "^8.0.2",
-    "typescript": "~3.9.3",
-    "vue": "^2.6.14",
-    "vue-class-component": "^7.2.3",
+    "postcss": "^8.2.15",
+    "sass": "^1.75.0",
+    "sass-loader": "^14.2.0",
+    "typescript": "~4.5.5",
+    "vue": "^2.7.14",
     "vue-i18n": "^8.18.1",
-    "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.2.0",
-    "vue-template-compiler": "^2.6.14",
+    "vue-template-compiler": "^2.7.14",
     "vuex": "^3.4.0",
-    "xe-ajax": "^4.0.5",
-    "xe-clipboard": "^1.10.1",
-    "xe-utils": "^3.5.1"
+    "xe-clipboard": "^1.10.1"
   },
   "peerDependencies": {
-    "vue": "^2.6.0",
-    "xe-utils": "^3.5.1"
+    "vue": "^2.6.0"
   },
   "vetur": {
     "tags": "helper/vetur/tags.json",
     "attributes": "helper/vetur/attributes.json"
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
   },
   "repository": {
     "type": "git",
@@ -99,9 +95,5 @@
   "bugs": {
     "url": "https://github.com/x-extends/vxe-table/issues"
   },
-  "homepage": "https://github.com/x-extends/vxe-table#readme",
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+  "homepage": "https://vxetable.cn/"
 }

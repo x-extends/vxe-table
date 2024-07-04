@@ -1,22 +1,22 @@
 import Vue from 'vue'
 import i18n from '@/i18n'
 
-import XEUtils from 'xe-utils'
+import 'xe-utils'
 import {
   VXETable,
 
-  Icon,
   Filter,
   Menu,
   Edit,
   Export,
   Keyboard,
   Validator,
-  Header,
-  Footer,
+  Custom,
 
+  Icon,
   Column,
   Colgroup,
+  Table,
   Grid,
   Toolbar,
   Pager,
@@ -28,6 +28,7 @@ import {
   Input,
   Textarea,
   Button,
+  ButtonGroup,
   Modal,
   Tooltip,
   Form,
@@ -38,16 +39,14 @@ import {
   Option,
   Switch,
   List,
-  Pulldown,
-
-  Table
+  Pulldown
 } from '../../../packages/all'
 
 import './renderer'
 import './formatter'
 
 // 设置默认参数
-VXETable.setup({
+VXETable.setConfig({
   table: {
     exportConfig: {
       types: ['csv', 'html', 'xml', 'txt']
@@ -58,44 +57,42 @@ VXETable.setup({
 })
 
 // 功能模块
+Vue.use(Filter)
+Vue.use(Menu)
+Vue.use(Edit)
+Vue.use(Export)
+Vue.use(Keyboard)
+Vue.use(Validator)
+Vue.use(Custom)
+
+// 可选组件
 Vue.use(Icon)
-  .use(Filter)
-  .use(Menu)
-  .use(Edit)
-  .use(Export)
-  .use(Keyboard)
-  .use(Validator)
-  .use(Header)
-  .use(Footer)
-
-  // 可选组件
-  .use(Column)
-  .use(Colgroup)
-  .use(Grid)
-  .use(Toolbar)
-  .use(Pager)
-  .use(Checkbox)
-  .use(CheckboxGroup)
-  .use(Radio)
-  .use(RadioGroup)
-  .use(RadioButton)
-  .use(Input)
-  .use(Textarea)
-  .use(Button)
-  .use(Modal)
-  .use(Tooltip)
-  .use(Form)
-  .use(FormItem)
-  .use(FormGather)
-  .use(Select)
-  .use(Optgroup)
-  .use(Option)
-  .use(Switch)
-  .use(List)
-  .use(Pulldown)
-
-  // 再安装核心
-  .use(Table)
+Vue.use(Column)
+Vue.use(Colgroup)
+Vue.use(Table)
+Vue.use(Grid)
+Vue.use(Toolbar)
+Vue.use(Pager)
+Vue.use(Checkbox)
+Vue.use(CheckboxGroup)
+Vue.use(Radio)
+Vue.use(RadioGroup)
+Vue.use(RadioButton)
+Vue.use(Input)
+Vue.use(Textarea)
+Vue.use(Button)
+Vue.use(ButtonGroup)
+Vue.use(Modal)
+Vue.use(Tooltip)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(FormGather)
+Vue.use(Select)
+Vue.use(Optgroup)
+Vue.use(Option)
+Vue.use(Switch)
+Vue.use(List)
+Vue.use(Pulldown)
 
 // 给 vue 实例挂载窗口对象
 Vue.prototype.$XModal = VXETable.modal

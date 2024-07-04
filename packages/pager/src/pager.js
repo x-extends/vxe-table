@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
+import { errLog } from '../../tools/log'
 
 export default {
   name: 'VxePager',
@@ -33,16 +34,27 @@ export default {
     autoHidden: { type: Boolean, default: () => GlobalConfig.pager.autoHidden },
     transfer: { type: Boolean, default: () => GlobalConfig.pager.transfer },
     className: [String, Function],
+    pageSizePlacement: {
+      type: String,
+      default: () => GlobalConfig.pager.pageSizePlacement
+    },
     // 自定义图标
     iconPrevPage: String,
     iconJumpPrev: String,
     iconJumpNext: String,
     iconNextPage: String,
-    iconJumpMore: String
+    iconJumpMore: String,
+    iconHomePage: String,
+    iconEndPage: String
   },
   inject: {
     $xegrid: {
       default: null
+    }
+  },
+  data () {
+    return {
+      inpCurrPage: this.currentPage
     }
   },
   computed: {
@@ -75,6 +87,11 @@ export default {
       })
     }
   },
+  watch: {
+    currentPage (value) {
+      this.inpCurrPage = value
+    }
+  },
   render (h) {
     const { $scopedSlots, $xegrid, vSize, align, className } = this
     const childNodes = []
@@ -86,7 +103,13 @@ export default {
       )
     }
     this.layouts.forEach(name => {
-      childNodes.push(this[`render${name}`](h))
+      if (this[`render${name}`](h)) {
+        childNodes.push(this[`render${name}`](h))
+      } else {
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          errLog('vxe.error.notProp', [`layouts -> ${name}`])
+        }
+      }
     })
     if ($scopedSlots.right) {
       childNodes.push(
@@ -112,6 +135,44 @@ export default {
     ])
   },
   methods: {
+    // 首页
+    renderHome (h) {
+      return h('button', {
+        class: ['vxe-pager--prev-btn', {
+          'is--disabled': this.currentPage <= 1
+        }],
+        attrs: {
+          type: 'button',
+          title: GlobalConfig.i18n('vxe.pager.homePageTitle')
+        },
+        on: {
+          click: this.homePage
+        }
+      }, [
+        h('i', {
+          class: ['vxe-pager--btn-icon', this.iconHomePage || GlobalConfig.icon.PAGER_HOME]
+        })
+      ])
+    },
+    // 末页
+    renderEnd (h) {
+      return h('button', {
+        class: ['vxe-pager--prev-btn', {
+          'is--disabled': this.currentPage >= this.pageCount
+        }],
+        attrs: {
+          type: 'button',
+          title: GlobalConfig.i18n('vxe.pager.endPageTitle')
+        },
+        on: {
+          click: this.endPage
+        }
+      }, [
+        h('i', {
+          class: ['vxe-pager--btn-icon', this.iconEndPage || GlobalConfig.icon.PAGER_END]
+        })
+      ])
+    },
     // 上一页
     renderPrevPage (h) {
       return h('button', {
@@ -120,7 +181,7 @@ export default {
         }],
         attrs: {
           type: 'button',
-          title: GlobalConfig.i18n('vxe.pager.prevPage')
+          title: GlobalConfig.i18n('vxe.pager.prevPageTitle')
         },
         on: {
           click: this.prevPage
@@ -140,7 +201,7 @@ export default {
         }],
         attrs: {
           type: 'button',
-          title: GlobalConfig.i18n('vxe.pager.prevJump')
+          title: GlobalConfig.i18n('vxe.pager.prevJumpTitle')
         },
         on: {
           click: this.prevJump
@@ -175,7 +236,7 @@ export default {
         }],
         attrs: {
           type: 'button',
-          title: GlobalConfig.i18n('vxe.pager.nextJump')
+          title: GlobalConfig.i18n('vxe.pager.nextJumpTitle')
         },
         on: {
           click: this.nextJump
@@ -197,7 +258,7 @@ export default {
         }],
         attrs: {
           type: 'button',
-          title: GlobalConfig.i18n('vxe.pager.nextPage')
+          title: GlobalConfig.i18n('vxe.pager.nextPageTitle')
         },
         on: {
           click: this.nextPage
@@ -214,7 +275,7 @@ export default {
         class: 'vxe-pager--sizes',
         props: {
           value: this.pageSize,
-          placement: 'top',
+          placement: this.pageSizePlacement,
           transfer: this.transfer,
           options: this.sizeList
         },
@@ -240,13 +301,14 @@ export default {
         h('input', {
           class: 'vxe-pager--goto',
           domProps: {
-            value: this.currentPage
+            value: this.inpCurrPage
           },
           attrs: {
             type: 'text',
             autocomplete: 'off'
           },
           on: {
+            input: this.jumpInputEvent,
             keydown: this.jumpKeydownEvent,
             blur: this.triggerJumpEvent
           }
@@ -340,6 +402,18 @@ export default {
     getPageCount (total, size) {
       return Math.max(Math.ceil(total / size), 1)
     },
+    homePage () {
+      const { currentPage } = this
+      if (currentPage > 1) {
+        this.jumpPage(1)
+      }
+    },
+    endPage () {
+      const { currentPage, pageCount } = this
+      if (currentPage < pageCount) {
+        this.jumpPage(pageCount)
+      }
+    },
     prevPage () {
       const { currentPage, pageCount } = this
       if (currentPage > 1) {
@@ -365,13 +439,17 @@ export default {
       }
     },
     pageSizeEvent (pageSize) {
-      this.changePageSize(pageSize)
-    },
-    changePageSize (pageSize) {
-      if (pageSize !== this.pageSize) {
-        this.$emit('update:pageSize', pageSize)
-        this.$emit('page-change', { type: 'size', pageSize, currentPage: Math.min(this.currentPage, this.getPageCount(this.total, pageSize)) })
+      const pageCount = this.getPageCount(this.total, pageSize)
+      let currentPage = this.currentPage
+      if (currentPage > pageCount) {
+        currentPage = pageCount
+        this.$emit('update:currentPage', pageCount)
       }
+      this.$emit('update:pageSize', pageSize)
+      this.$emit('page-change', { type: 'size', pageSize, currentPage })
+    },
+    jumpInputEvent (evnt) {
+      this.inpCurrPage = evnt.target.value
     },
     jumpKeydownEvent (evnt) {
       if (evnt.keyCode === 13) {
@@ -385,9 +463,11 @@ export default {
       }
     },
     triggerJumpEvent (evnt) {
-      const value = XEUtils.toNumber(evnt.target.value)
+      const value = XEUtils.toInteger(evnt.target.value)
       const current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
-      evnt.target.value = current
+      const currPage = XEUtils.toValueString(current)
+      evnt.target.value = currPage
+      this.inpCurrPage = currPage
       this.jumpPage(current)
     }
   }

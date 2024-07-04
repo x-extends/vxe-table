@@ -1,16 +1,17 @@
 import { VXETableComponent, RowInfo, RecordInfo } from './component'
 import { ColumnOptions, ColumnInfo } from './column'
 import { ColumnCellRenderParams, TableEmptyRender } from './v-x-e-table'
-import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './export'
-import { ColumnFilterOption } from './filter'
-import { ColumnEditRule, ColumnEditValidErrMapParams } from './validator'
-import { ColumnFooterRenderParams } from './footer'
-import { MenuOptions, MenuFirstOption } from './menu'
+import { TableExportConfig, TableImportConfig, TablePrintConfig, SaveFileOptions, ReadFileOptions, ReadFileParams } from './module/export'
+import { ColumnFilterOption } from './module/filter'
+import { ColumnEditRule, ColumnEditValidErrMapParams } from './module/validator'
+import { MenuOptions, MenuFirstOption } from './module/menu'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 表格
  */
-export declare class Table extends VXETableComponent {
+export declare class VxeTable extends VXETableComponent {
   /**
    * 唯一标识
    */
@@ -23,6 +24,10 @@ export declare class Table extends VXETableComponent {
    * 表格的高度
    */
   height?: number | string;
+  /**
+   * 表格的最小高度
+   */
+  minHeight?: number | string;
   /**
    * 表格的最大高度
    */
@@ -61,22 +66,27 @@ export declare class Table extends VXETableComponent {
   showHeader?: boolean;
   /**
    * 是否要高亮当前选中行
+   * @deprecated
    */
   highlightCurrentRow?: boolean;
   /**
    * 鼠标移到行是否要高亮显示
+   * @deprecated
    */
   highlightHoverRow?: boolean;
   /**
    * 是否要高亮当前选中列
+   * @deprecated
    */
   highlightCurrentColumn?: boolean;
   /**
    * 鼠标移到列是否要高亮显示
+   * @deprecated
    */
   highlightHoverColumn?: boolean;
   /**
    * 激活单元格编辑时是否高亮显示
+   * @deprecated
    */
   highlightCell?: boolean;
   /**
@@ -84,57 +94,61 @@ export declare class Table extends VXETableComponent {
    */
   showFooter?: boolean;
   /**
+   * 表尾数据
+   */
+  footerData: any[]
+  /**
    * 表尾数据获取的方法
    */
   footerMethod?: typeof TableFooterMethod;
   /**
    * 给行附加 className
    */
-  rowClassName?: string | Function;
+  rowClassName?: string | ((params: any) => any);
   /**
    * 给单元格附加 className
    */
-  cellClassName?: string | Function;
+  cellClassName?: string | ((params: any) => any);
   /**
    * 给表头的行附加 className
    */
-  headerRowClassName?: string | Function;
+  headerRowClassName?: string | ((params: any) => any);
   /**
    * 给表头的单元格附加 className
    */
-  headerCellClassName?: string | Function;
+  headerCellClassName?: string | ((params: any) => any);
   /**
    * 给表尾的行附加 className
    */
-  footerRowClassName?: string | Function;
+  footerRowClassName?: string | ((params: any) => any);
   /**
    * 给表尾的单元格附加 className
    */
-  footerCellClassName?: string | Function;
+  footerCellClassName?: string | ((params: any) => any);
   /**
    * 给单元格附加样式
    */
-  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表头单元格附加样式
    */
-  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表尾单元格附加样式
    */
-  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给行附加样式
    */
-  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表头行附加样式
    */
-  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 给表尾行附加样式
    */
-  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   /**
    * 临时合并单元格
    */
@@ -166,8 +180,16 @@ export declare class Table extends VXETableComponent {
 
   /** 高级属性 */
   // 主键配置
+
+  /**
+   * @deprecated
+   */
   columnKey?: boolean;
+  /**
+   * @deprecated
+   */
   rowKey?: boolean;
+
   rowId?: string;
   zIndex?: number;
   keepSource?: boolean;
@@ -175,6 +197,8 @@ export declare class Table extends VXETableComponent {
   autoResize?: boolean;
   // 是否自动根据状态属性去更新响应式表格宽高
   syncResize?: boolean | string | number;
+  // 列的默认参数
+  rowConfig?: TableRowConfig;
   // 列的默认参数
   columnConfig?: TableColumnConfig;
   // 序号配置项
@@ -246,6 +270,7 @@ export declare class Table extends VXETableComponent {
     oSize?: number;
     [key: string]: any;
   };
+
   /**
    * 纵向虚拟滚动配置
    */
@@ -260,6 +285,7 @@ export declare class Table extends VXETableComponent {
     oSize?: number;
     [key: string]: any;
   };
+
   // 额外的参数
   params?: any;
 
@@ -270,6 +296,7 @@ export declare class Table extends VXETableComponent {
    */
   clearAll(): Promise<any>;
   /**
+   * 该方法已废弃！！！
    * 同步 data 数据；如果用了该方法，那么组件将不再记录增删改的状态，只能自行实现对应逻辑
    * 对于某些特殊的场景，比如深层树节点元素发生变动时可能会用到
    * @deprecated
@@ -318,6 +345,7 @@ export declare class Table extends VXETableComponent {
     index: number;
     parent?: RowInfo;
   };
+
   /**
    * 根据 th/td 元素获取对应的 column 信息
    * @param cell 单元格节点元素
@@ -329,6 +357,7 @@ export declare class Table extends VXETableComponent {
     index: number;
     parent?: ColumnInfo;
   };
+
   /**
    * 根据 row 获取相对于 data 中的索引
    * @param row 行对象
@@ -418,6 +447,7 @@ export declare class Table extends VXETableComponent {
     visibleColumn: ColumnInfo[];
     tableColumn: ColumnInfo[];
   };
+
   /**
    * 获取数据，和 data 的行为一致，也可以指定索引获取数据
    */
@@ -441,6 +471,17 @@ export declare class Table extends VXETableComponent {
     tableData: RowInfo[];
     footerData: any[][];
   };
+
+  /**
+   * 设置指定列为固定列
+   * @param columnOrField 列对象或字段名
+   */
+  setColumnFixed(column: ColumnInfo, fixed: string): Promise<void>
+  /**
+   * 取消指定的固定列
+   * @param columnOrField 列对象或字段名
+   */
+  clearColumnFixed(column: ColumnInfo): Promise<void>
   /**
    * 隐藏指定列
    * @param column 列对象
@@ -451,12 +492,20 @@ export declare class Table extends VXETableComponent {
    * @param column 列对象
    */
   showColumn(column: ColumnInfo): Promise<any>;
+  setColumnWidth(column: ColumnInfo | string, width: number | string): Promise<any>;
+  getColumnWidth(column: ColumnInfo | string): number;
   /**
    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
    * @param options 可选参数
    */
-  resetColumn(options: boolean | { visible?: boolean, resizable?: boolean }): Promise<any>;
+  resetColumn(options: boolean | {
+    visible?: boolean
+    resizable?: boolean
+    fixed?: boolean
+    order?: boolean
+   }): Promise<any>;
+
   /**
    * 刷新列配置
    * 对于动态修改属性、显示/隐藏列等场景下可能会用到
@@ -540,7 +589,7 @@ export declare class Table extends VXETableComponent {
    */
   clearCheckboxRow(): Promise<any>;
   /**
-   * 用于 highlight-current-row，设置某一行为高亮状态
+   * 用于 row-config.isCurrent，设置某一行为高亮状态
    * @param row 指定行
    */
   setCurrentRow(row: RowInfo): Promise<any>;
@@ -555,6 +604,22 @@ export declare class Table extends VXETableComponent {
    */
   setRadioRow(row: RowInfo): Promise<any>;
   /**
+   * 将指定行设置为取消/标记待删除状态
+   */
+  setPendingRow(rows: any | any[], status: boolean): Promise<any>
+  /**
+   * 切换指定行的取消/标记待删除状态
+   */
+  togglePendingRow(rows: any | any[]): Promise<any>
+  /**
+   * 获取待删除状态的数据
+   */
+  getPendingRecords(): any[]
+  /**
+   * 清除所有标记状态
+   */
+  clearPendingRow(): Promise<any>
+  /**
    * 手动清除临时合并的单元格
    */
   clearMergeCells(): Promise<any>;
@@ -563,7 +628,7 @@ export declare class Table extends VXETableComponent {
    */
   clearMergeFooterItems(): Promise<any>;
   /**
-   * 用于 highlight-current-row，手动清空当前高亮的状态
+   * 用于 row-config.isCurrent，手动清空当前高亮的状态
    */
   clearCurrentRow(): Promise<any>;
   /**
@@ -579,11 +644,11 @@ export declare class Table extends VXETableComponent {
    */
   getMergeFooterItems(): MergeItem[];
   /**
-   * 用于 highlight-current-column，获取当前列
+   * 用于 column-config.isCurrent，获取当前列
    */
   getCurrentColumn(): ColumnInfo | null;
   /**
-   * 用于 highlight-current-row，获取当前行的行数据
+   * 用于 row-config.isCurrent，获取当前行的行数据
    */
   getCurrentRecord(): RowInfo;
   /**
@@ -591,12 +656,12 @@ export declare class Table extends VXETableComponent {
    */
   getRadioRecord(isFull?: boolean): RowInfo;
   /**
-   * 用于 highlight-current-column，设置某列行为高亮状态
+   * 用于 column-config.isCurrent，设置某列行为高亮状态
    * @param column 列对象
    */
   setCurrentColumn(column: ColumnInfo): Promise<any>;
   /**
-   * 用于 highlight-current-column，手动清空当前高亮的状态
+   * 用于 column-config.isCurrent，手动清空当前高亮的状态
    */
   clearCurrentColumn(): Promise<any>;
   /**
@@ -608,7 +673,7 @@ export declare class Table extends VXETableComponent {
   /**
    * 手动清空排序条件，数据会恢复成未排序的状态
    */
-   clearSort(fieldOrColumn?: string | ColumnInfo | null): Promise<any>;
+  clearSort(fieldOrColumn?: string | ColumnInfo | null): Promise<any>;
   /**
    * 获取当前排序的 column 信息
    */
@@ -620,6 +685,11 @@ export declare class Table extends VXETableComponent {
   /**
    * 判断指定列是否为筛选状态，如果为空则判断所有列
    * @param column 列对象
+   */
+  isActiveFilterByColumn(column: ColumnInfo): boolean;
+  /**
+   * 已废弃，请使用 isFilterByColumn
+   * @deprecated
    */
   isFilter(column: ColumnInfo): boolean;
   /**
@@ -657,7 +727,12 @@ export declare class Table extends VXETableComponent {
    * 用于 expand-config，判断行是否为展开状态
    * @param row 指定行
    */
-  isExpandByRow(row: RowInfo): boolean;
+  isRowExpandByRow(row: RowInfo): boolean;
+  /**
+   * 已废弃，请使用 isRowExpandByRow
+   * @deprecated
+   */
+  isRowExpandByRow(row: RowInfo): boolean;
   /**
    * 用于 type=expand，手动清空展开行状态，数据会恢复成未展开的状态
    */
@@ -719,6 +794,7 @@ export declare class Table extends VXETableComponent {
     scrollTop: number;
     scrollLeft: number;
   };
+
   /**
    * 如果有滚动条，则滚动到对应的位置
    * @param scrollLeft 左边距离
@@ -754,13 +830,15 @@ export declare class Table extends VXETableComponent {
       column: ColumnInfo;
     }
   ): Promise<any>;
+
   /**
    * 用于 filters，修改筛选列表
    * 在筛选条件更新之后可以调用 updateData 函数处理表格数据
    * @param column 列对象
    * @param options 选项列表
+   * @param update 是否同时更新数据
    */
-  setFilter(column: ColumnInfo, options: ColumnFilterOption[]): Promise<any>;
+  setFilter(column: ColumnInfo, options: ColumnFilterOption[], update?: boolean): Promise<any>;
   /**
    * 手动清空筛选条件
    * 如果不传 column 则清空所有筛选条件，数据会恢复成未筛选的状态
@@ -778,6 +856,7 @@ export declare class Table extends VXETableComponent {
     row: RowInfo;
     column: ColumnInfo;
   };
+
   /**
    * 用于 mouse-config.area，用于获取鼠标选择的区域
    */
@@ -813,6 +892,15 @@ export declare class Table extends VXETableComponent {
    */
   insertAt(records: RecordInfo | RecordInfo[], row: RowInfo | -1 | null): Promise<{ row: RowInfo, rows: RowInfo[] }>;
   /**
+   * 往表格在指定行中的下一行插入临时数据
+   * 如果 row 为空则从插入到顶部，如果为树结构，则插入到目标节点顶部
+   * 如果 row 为 -1 则从插入到底部，如果为树结构，则插入到目标节点底部
+   * 如果 row 为有效行则插入到该行的下一行位置，如果为树结构，则有插入到效的目标节点该行的下一行位置
+   * @param records records 新的数据
+   * @param row row 指定行
+   */
+  insertNextAtt(records: RecordInfo | RecordInfo[], row: RowInfo | -1 | null): Promise<{ row: RowInfo, rows: RowInfo[] }>;
+  /**
    * 删除指定行数据，指定 row 或 [row, ...] 删除多条数据，如果为空则删除所有数据
    * @param rows 指定行
    */
@@ -845,7 +933,9 @@ export declare class Table extends VXETableComponent {
     insertRecords: RowInfo[];
     removeRecords: RowInfo[];
     updateRecords: RowInfo[];
+    pendingRecords: RowInfo[]
   };
+
   /**
    * 用于 edit-config，获取新增的临时数据
    */
@@ -859,41 +949,81 @@ export declare class Table extends VXETableComponent {
    */
   getUpdateRecords(): RowInfo[];
   /**
-   * 手动清除单元格激活状态
+   * 请使用 clearEdit
+   * @deprecated
    */
-  clearActived(): Promise<any>;
+  clearEdit(evnt?: Event): Promise<any>
+  /**
+    * 手动清除单元格激活状态
+    */
+  clearEdit(evnt?: Event): Promise<any>
   /**
    * 用于 mouse-config.area，用于清除鼠标选择的区域，可以指定清除的区域
    */
   clearCellAreas(area?: number | MouseCellArea): Promise<any>;
   /**
-   * 用于 edit-config，获取已激活的行数据
+   * 请使用 getEditRecord
+   * @deprecated
    */
   getActiveRecord(): {
-    row: RowInfo;
-    rowIndex: number;
-    $rowIndex: number;
-    column: ColumnInfo;
-    columnIndex: number;
-    $columnIndex: number;
-    cell: HTMLElement;
-  };
+    row: any
+    rowIndex: number
+    $rowIndex: number
+    column: ColumnInfo
+    columnIndex: number
+    $columnIndex: number
+    cell: HTMLElement
+  }
+
   /**
-   * 用于 edit-config，判断行是否为激活编辑状态
-   * @param row 指定行
+   * 用于 edit-config，获取已激活的行数据
    */
-  isActiveByRow(row: RowInfo): boolean;
+  getEditRecord(): {
+    row: any
+    rowIndex: number
+    $rowIndex: number
+    column: ColumnInfo
+    columnIndex: number
+    $columnIndex: number
+    cell: HTMLElement
+  }
+
+  /**
+   * 请使用 isEditByRow
+   * @deprecated
+   */
+  isActiveByRow(row: any): boolean
+  /**
+    * 用于 edit-config，判断行是否为激活编辑状态
+    * @param row 指定行
+    */
+  isEditByRow(row: any): boolean
   /**
    * 用于 edit-config，激活行编辑并激活第一个单元格
    * @param row 指定行
    */
   setActiveRow(row: RowInfo): Promise<any>;
   /**
-   * 用于 edit-config，激活单元格编辑
-   * @param row 指定行
-   * @param field 字段名
+   * 请使用 setEditRow
+   * @deprecated
    */
-  setActiveCell(row: RowInfo, field: string): Promise<any>;
+  setActiveRow(row: any): Promise<any>
+  /**
+   * 用于 edit-config，激活行编辑并默认激活第一个列，也可以指定列
+   * @param row 指定行
+   */
+  setEditRow(row: any, fieldOrColumn?: string | ColumnInfo): Promise<void>
+  /**
+    * 请使用 setEditCell
+    * @deprecated
+    */
+  setActiveCell(row: any, fieldOrColumn: string | ColumnInfo): Promise<any>
+  /**
+    * 用于 edit-config，激活单元格编辑
+    * @param row 指定行
+    * @param field 字段名
+    */
+  setEditCell(row: any, fieldOrColumn: string | ColumnInfo): Promise<any>
   /**
    * 用于 mouse-config.mouse-config，选中某个单元格
    * @param row 指定行
@@ -909,6 +1039,7 @@ export declare class Table extends VXETableComponent {
     column?: number | ColumnInfo;
     row?: number | RowInfo;
   }): Promise<any>;
+
   /**
    * 用于 mouse-config.area，设置活动的区域的单元格
    * @param activeArea
@@ -918,6 +1049,7 @@ export declare class Table extends VXETableComponent {
     column: number | ColumnInfo;
     row: number | RowInfo;
   }): Promise<any>;
+
   /**
    * 临时合并单元格，如果为数组则合并多个
    */
@@ -964,7 +1096,7 @@ export declare class Table extends VXETableComponent {
   importData(options?: TableImportConfig): Promise<any>;
   /**
    * 保存文件到本地
-   * @param options 
+   * @param options
    */
   saveFile(options: SaveFileOptions): Promise<any>;
   /**
@@ -983,13 +1115,21 @@ export declare class Table extends VXETableComponent {
    */
   openPrint(options?: TablePrintConfig): Promise<any>;
   /**
-   * 用于 mouse-config.area，打开单元格查找功能
+   * 打开单元格查找窗口
    */
   openFind(): Promise<any>;
   /**
-   * 用于 mouse-config.area，打开单元格替换功能
+   * 打开单元格替换窗口
    */
   openReplace(): Promise<any>;
+  /**
+   * 手动关闭查找与替换窗口
+   */
+  closeFNR(): Promise<any>;
+  /**
+   * 用于 mouse-config.area，更新已选区域的单元格样式
+   */
+  updateCellAreas(): Promise<void>;
   /**
    * 连接工具栏
    * @param toolbar 工具栏组件实例
@@ -1005,10 +1145,11 @@ export declare class Table extends VXETableComponent {
   blur(): Promise<any>;
   [key: string]: any;
 }
+export class Table extends VxeTable {}
 
-export type TableBorder = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none';
-export type TableAlign = 'left' | 'center' | 'right' | null;
-export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | null;
+export type TableBorder = boolean | 'default' | 'full' | 'outer' | 'inner' | 'none' | '';
+export type TableAlign = 'left' | 'center' | 'right' | '' | null;
+export type TableOverflow = boolean | 'ellipsis' | 'title' | 'tooltip' | '' | null;
 
 export interface TableFooterMethodParams {
   $table: Table;
@@ -1017,10 +1158,10 @@ export interface TableFooterMethodParams {
 }
 export function TableFooterMethod(params: TableFooterMethodParams): Array<string | number | null>[];
 
-export interface TableSpanMethodParams extends ColumnCellRenderParams {}
+export type TableSpanMethodParams = ColumnCellRenderParams
 export function TableSpanMethod(params: TableSpanMethodParams): { rowspan: number, colspan: number }
 
-export interface TableFooterSpanMethodParams extends ColumnFooterRenderParams {}
+export type TableFooterSpanMethodParams = any
 export function TableFooterSpanMethod(params: TableFooterSpanMethodParams): { rowspan: number, colspan: number }
 
 export interface TableOptions {
@@ -1036,25 +1177,46 @@ export interface TableOptions {
   headerAlign?: TableAlign;
   footerAlign?: TableAlign;
   showHeader?: boolean;
+  /**
+   * 不建议使用，被 row-config.isCurrent 替换
+   * @deprecated
+   */
   highlightCurrentRow?: boolean;
+  /**
+   * 不建议使用，被 row-config.isHover 替换
+   * @deprecated
+   */
   highlightHoverRow?: boolean;
+  /**
+   * 不建议使用，被 column-config.isCurrent 替换
+   * @deprecated
+   */
   highlightCurrentColumn?: boolean;
+  /**
+   * 不建议使用，被 column-config.isHover 替换
+   * @deprecated
+   */
   highlightHoverColumn?: boolean;
+  /**
+   * 不建议使用
+   * @deprecated
+   */
   highlightCell?: boolean;
   showFooter?: boolean;
+  footerData?: any[];
   footerMethod?: typeof TableFooterMethod;
-  rowClassName?: string | Function;
-  cellClassName?: string | Function;
-  headerRowClassName?: string | Function;
-  headerCellClassName?: string | Function;
-  footerRowClassName?: string | Function;
-  footerCellClassName?: string | Function;
-  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
-  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | Function;
+  rowClassName?: string | ((params: any) => any);
+  cellClassName?: string | ((params: any) => any);
+  headerRowClassName?: string | ((params: any) => any);
+  headerCellClassName?: string | ((params: any) => any);
+  footerRowClassName?: string | ((params: any) => any);
+  footerCellClassName?: string | ((params: any) => any);
+  cellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  headerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  footerCellStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  rowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  headerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
+  footerRowStyle?: { [key: string]: any } | Array<string | number | boolean | { [key: string]: any }> | ((params: any) => any);
   mergeCells?: TableMergeConfig[];
   mergeFooterItems?: TableMergeConfig[];
   spanMethod?: typeof TableSpanMethod;
@@ -1068,6 +1230,7 @@ export interface TableOptions {
   keepSource?: boolean;
   autoResize?: boolean;
   syncResize?: boolean | string | number;
+  rowConfig?: TableRowConfig;
   columnConfig?: TableColumnConfig;
   customConfig?: TableCustomConfig;
   seqConfig?: TableSeqConfig;
@@ -1111,14 +1274,29 @@ export interface TableOptions {
   [key: string]: any;
 }
 
+export interface TableRowConfig {
+  useKey?: boolean
+  keyField?: string
+  isCurrent?: boolean
+  isHover?: boolean
+  height?: number
+}
+export type RowDefaultConfig = TableRowConfig
+
 /**
  * 列的默认配置
  */
 export interface TableColumnConfig {
-  width?: number;
-  minWidth?: number;
+  useKey?: boolean
+  isCurrent?: boolean
+  isHover?: boolean
+  resizable?: boolean
+  width?: number
+  minWidth?: number
+  maxWidth?: number
+  headerExportMethod?(params: any): string | number
 }
-export interface ColumnDefaultConfig extends TableColumnConfig {}
+export type ColumnDefaultConfig = TableColumnConfig
 
 /**
  * 自定义列配置项
@@ -1127,10 +1305,12 @@ export interface TableCustomConfig {
   storage?: boolean | {
     visible?: boolean;
     resizable?: boolean;
+    fixed?: boolean
+    order?: boolean
   };
   checkMethod?(params: { column: ColumnInfo }): boolean;
 }
-export interface CustomConfig extends TableCustomConfig {}
+export type CustomConfig = TableCustomConfig
 
 /**
  * 序号配置项
@@ -1139,14 +1319,14 @@ export interface TableSeqConfig {
   startIndex?: number;
   seqMethod?(params: ColumnCellRenderParams): number;
 }
-export interface SeqConfig extends TableSeqConfig {}
+export type SeqConfig = TableSeqConfig
+
+export type TableSortOrder = 'asc' | 'desc' | '' | null;
 
 export interface TableSortConfs {
   field: string;
   order?: TableSortOrder;
 }
-
-export type TableSortOrder = 'asc' | 'desc' | null;
 
 /**
  * 排序配置项
@@ -1164,7 +1344,7 @@ export interface TableSortConfig {
   iconAsc?: string;
   iconDesc?: string;
 }
-export interface SortConfig extends TableSortConfig {}
+export type SortConfig = TableSortConfig
 
 /**
  * 筛选配置项
@@ -1175,7 +1355,7 @@ export interface TableFilterConfig {
   iconNone?: string;
   iconMatch?: string;
 }
-export interface FilterConfig extends TableFilterConfig {}
+export type FilterConfig = TableFilterConfig
 
 /**
  * 单选框配置
@@ -1185,10 +1365,10 @@ export interface TableRadioConfig {
   labelField?: string;
   checkRowKey?: string | number;
   checkMethod?(params: { row: RowInfo }): boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   highlight?: boolean;
 }
-export interface RadioConfig extends TableRadioConfig {}
+export type RadioConfig = TableRadioConfig
 
 /**
  * 复选框配置项
@@ -1197,30 +1377,36 @@ export interface TableCheckboxConfig {
   reserve?: boolean;
   labelField?: string;
   checkField?: string;
-  halfField?: string;
+  indeterminateField?: string;
   showHeader?: boolean;
   checkAll?: boolean;
   checkRowKeys?: string[] | number[];
   checkStrictly?: boolean;
   strict?: boolean;
   checkMethod?(params: { row: RowInfo }): boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   highlight?: boolean;
   range?: boolean;
+
+  /**
+   * 请使用 indeterminateField
+   * @deprecated
+   */
+  halfField?: string;
 }
-export interface CheckboxConfig extends TableCheckboxConfig {}
+export type CheckboxConfig = TableCheckboxConfig
 
 /**
  * 提示信息配置项
  */
 export interface TableTooltipConfig {
   enabled?: boolean;
-  theme?: 'dark' | 'light';
+  theme?: 'dark' | 'light' | '';
   enterable?: boolean;
   leaveDelay?: number;
   contentMethod?(params: { items: any[], row: RowInfo, rowIndex: number, $rowIndex: number, column: ColumnInfo, columnIndex: number, $columnIndex: number, type: 'header' | 'body' | 'footer', cell: HTMLElement, $event: any }): string | null | void;
 }
-export interface TooltipConfig extends TableTooltipConfig {}
+export type TooltipConfig = TableTooltipConfig
 
 /**
  * 展开行配置项
@@ -1230,8 +1416,9 @@ export interface TableExpandConfig {
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
   accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
+  height?: number
   loadMethod?(params: { row: RowInfo, rowIndex: number, $rowIndex: number }): Promise<any>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   visibleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
@@ -1240,40 +1427,56 @@ export interface TableExpandConfig {
   iconClose?: string;
   iconLoaded?: string;
 }
-export interface ExpandConfig extends TableExpandConfig {}
+export type ExpandConfig = TableExpandConfig
 
 /**
  * 树形结构配置项
  */
 export interface TableTreeConfig {
-  children?: string;
+  childrenField?: string;
   indent?: number;
-  line?: boolean;
+  showLine?: boolean;
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
   accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
-  hasChild?: string;
+  hasChildField?: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   showIcon?: boolean;
   iconOpen?: string;
   iconClose?: string;
   iconLoaded?: string;
+  /**
+   * 已废弃，请使用 showLine
+   * @deprecated
+   */
+  line?: boolean;
+  /**
+   * 已废弃，请使用 hasChildField
+   * @deprecated
+   */
+  hasChild: string;
+  /**
+   * 已废弃，请使用 childrenField
+   * @deprecated
+   */
+  children?: string
 }
-export interface TreeConfig extends TableTreeConfig {}
+export type TreeConfig = TableTreeConfig
 
 export interface TreeOpts {
-  children: string;
+  childrenField: string;
   indent: number;
   line?: boolean;
   expandAll?: boolean;
   expandRowKeys?: string[] | number[];
   accordion?: boolean;
-  trigger?: 'default' | 'cell' | 'row';
+  trigger?: 'default' | 'cell' | 'row' | '';
   lazy?: boolean;
   hasChild: string;
+  hasChildField: string;
   loadMethod?(params: { row: RowInfo }): Promise<any[]>;
   toggleMethod?(params: { expanded: boolean, row: RowInfo, column: ColumnInfo, columnIndex: number, $columnIndex: number }): boolean;
   showIcon: boolean;
@@ -1289,12 +1492,12 @@ export interface TableMenuConfig {
   header?: MenuOptions;
   body?: MenuOptions;
   footer?: MenuOptions;
-  trigger?: 'default' | 'cell';
+  trigger?: 'default' | 'cell' | '';
   visibleMethod?(params: { type: string, options: MenuFirstOption[], columns: ColumnInfo[], row?: RowInfo, rowIndex?: number, column?: ColumnInfo, columnIndex?: number }): boolean;
   className?: string;
 }
-export interface TableContextMenu extends TableMenuConfig {}
-export interface ContextMenuConfig extends TableContextMenu {}
+export type TableContextMenu = TableMenuConfig
+export type ContextMenuConfig = TableContextMenu
 
 /**
  * 鼠标配置项
@@ -1306,7 +1509,7 @@ export interface TableMouseConfig {
    */
   area?: boolean;
 }
-export interface MouseConfig extends TableMouseConfig {}
+export type MouseConfig = TableMouseConfig
 
 export interface MouseCellArea {
   main: boolean;
@@ -1334,7 +1537,7 @@ export interface TableMergeConfig {
   rowspan: number;
   colspan: number;
 }
-export interface MergeOptions extends TableMergeConfig {}
+export type MergeOptions = TableMergeConfig
 
 export interface MergeItem {
   row: number;
@@ -1357,9 +1560,17 @@ export interface TableKeyboardConfig {
    */
   isDel?: boolean;
   /**
+   * 是否开启回退键功能
+   */
+  isBack?: boolean
+  /**
    * 是否开启回车移动上下行移动
    */
   isEnter?: boolean;
+  /**
+   * 如果功能被支持，用于 mouse-config.area，开启同时按住方向键以活动区域为起始，向指定方向延伸单元格区域
+   */
+  isShift?: boolean
   /**
    * 是否开启TAB键左右移动功能
    */
@@ -1385,7 +1596,7 @@ export interface TableKeyboardConfig {
    */
   editMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number, cell: HTMLElement }): boolean;
 }
-export interface KeyboardConfig extends TableKeyboardConfig {}
+export type KeyboardConfig = TableKeyboardConfig
 
 /**
  * 复制粘贴配置项
@@ -1422,9 +1633,15 @@ export interface TableEditConfig {
   /**
    * 该方法的返回值用来决定该单元格是否允许编辑
    */
+  beforeEditMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
+  afterEditMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): void;
+  /**
+   * 请使用 beforeEditMethod
+   * @deprecated
+   */
   activeMethod?(params: { row: RowInfo, rowIndex: number, column: ColumnInfo, columnIndex: number }): boolean;
 }
-export interface EditConfig extends TableEditConfig {}
+export type EditConfig = TableEditConfig
 
 /**
  * 校验配置项
@@ -1434,7 +1651,7 @@ export interface TableValidConfig {
   message?: string;
   maxWidth?: number;
 }
-export interface ValidConfig extends TableValidConfig {}
+export type ValidConfig = TableValidConfig
 
 /**
  * 校验规则配置项
@@ -1442,4 +1659,4 @@ export interface ValidConfig extends TableValidConfig {}
 export interface EditVaildRules {
   [field: string]: ColumnEditRule[];
 }
-export interface VaildRules extends EditVaildRules {}
+export type VaildRules = EditVaildRules

@@ -1,4 +1,4 @@
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 
@@ -18,6 +18,12 @@ export default {
   inject: {
     $xeradiogroup: {
       default: null
+    },
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
     }
   },
   computed: {
@@ -28,10 +34,13 @@ export default {
     isStrict () {
       const { $xeradiogroup } = this
       return $xeradiogroup ? $xeradiogroup.strict : this.strict
+    },
+    isChecked () {
+      return this.$xeradiogroup ? this.$xeradiogroup.value === this.label : this.value === this.label
     }
   },
   render (h) {
-    const { $scopedSlots, $xeradiogroup, isDisabled, title, vSize, value, label, name, content } = this
+    const { $scopedSlots, $xeradiogroup, isDisabled, isChecked, title, vSize, name, content } = this
     const attrs = {}
     if (title) {
       attrs.title = title
@@ -39,6 +48,7 @@ export default {
     return h('label', {
       class: ['vxe-radio', {
         [`size--${vSize}`]: vSize,
+        'is--checked': isChecked,
         'is--disabled': isDisabled
       }],
       attrs
@@ -51,7 +61,7 @@ export default {
           disabled: isDisabled
         },
         domProps: {
-          checked: $xeradiogroup ? $xeradiogroup.value === label : value === label
+          checked: isChecked
         },
         on: {
           change: this.changeEvent,
@@ -59,11 +69,11 @@ export default {
         }
       }),
       h('span', {
-        class: 'vxe-radio--icon'
+        class: ['vxe-radio--icon', isChecked ? 'vxe-icon-radio-checked' : 'vxe-icon-radio-unchecked']
       }),
       h('span', {
         class: 'vxe-radio--label'
-      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [UtilTools.getFuncText(content)])
+      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [getFuncText(content)])
     ])
   },
   methods: {
@@ -71,10 +81,14 @@ export default {
       const { $xeradiogroup } = this
       const params = { label, $event: evnt }
       if ($xeradiogroup) {
-        $xeradiogroup.handleChecked(params)
+        $xeradiogroup.handleChecked(params, evnt)
       } else {
         this.$emit('input', label)
         this.$emit('change', params)
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, label)
+        }
       }
     },
     changeEvent (evnt) {

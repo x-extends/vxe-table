@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      树表格的懒加载和快捷菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="reloadTreeExpand"/> 方法重新加载子节点
+      树表格的懒加载和右键菜单，通过调用 <table-api-link prop="clearTreeExpandLoaded"/> 方法清除加载完成状态，通过调用 <table-api-link prop="reloadTreeExpand"/> 方法重新加载子节点
     </p>
 
     <vxe-table
@@ -9,10 +9,11 @@
       resizable
       height="400"
       ref="xTree"
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :menu-config="{body: {options: bodyMenus}, visibleMethod}"
       :tree-config="{lazy: true, transform: true, rowField: 'id', parentField: 'parentId', hasChild: 'hasChild', loadMethod: loadChildrenMethod}"
       :data="tableData"
+      :scroll-y="{enabled: true}"
       @menu-click="contextMenuClickEvent">
       <vxe-column field="id" title="ID" width="400" tree-node></vxe-column>
       <vxe-column field="size" title="Size"></vxe-column>

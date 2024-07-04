@@ -1,9 +1,11 @@
 import { VXETableComponent } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 输入框
  */
-export declare class Input extends VXETableComponent {
+export declare class VxeInput extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -118,6 +120,7 @@ export declare class Input extends VXETableComponent {
    */
   blur(): Promise<any>;
 }
+export class Input extends VxeInput {}
 
 export interface InputDateFestivalParams {
   date: Date;

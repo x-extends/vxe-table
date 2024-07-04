@@ -5,10 +5,10 @@ import VxeInput from '../../input/src/input'
 import VxeCheckbox from '../../checkbox/src/checkbox'
 import VxeSelect from '../../select/src/select'
 import VxeOption from '../../select/src/option'
-import { UtilTools } from '../../tools'
+import UtilTools from '../../tools/utils'
 
 export default {
-  name: 'VxeExportPanel',
+  name: 'VxeTableExportPanel',
   props: {
     defaultOptions: Object,
     storeData: Object
@@ -47,19 +47,21 @@ export default {
     }
   },
   render (h) {
-    const { _e, checkedAll, isAll, isIndeterminate, showSheet, supportMerge, supportStyle, defaultOptions, storeData } = this
+    const { _e, checkedAll, isAll: isAllChecked, isIndeterminate: isAllIndeterminate, showSheet, supportMerge, supportStyle, defaultOptions, storeData } = this
     const { hasTree, hasMerge, isPrint, hasColgroup } = storeData
     const { isHeader } = defaultOptions
     const cols = []
     XEUtils.eachTree(storeData.columns, column => {
       const colTitle = UtilTools.formatText(column.getTitle(), 1)
       const isColGroup = column.children && column.children.length
+      const isChecked = column.checked
+      const indeterminate = column.halfChecked
       cols.push(
         h('li', {
           class: ['vxe-export--panel-column-option', `level--${column.level}`, {
             'is--group': isColGroup,
-            'is--checked': column.checked,
-            'is--indeterminate': column.halfChecked,
+            'is--checked': isChecked,
+            'is--indeterminate': indeterminate,
             'is--disabled': column.disabled
           }],
           attrs: {
@@ -74,13 +76,7 @@ export default {
           }
         }, [
           h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+            class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
           }),
           h('span', {
             class: 'vxe-checkbox--label'
@@ -144,21 +140,15 @@ export default {
                 h('td', [
                   h('vxe-select', {
                     props: {
-                      value: defaultOptions.type
+                      value: defaultOptions.type,
+                      options: storeData.typeList
                     },
                     on: {
                       input (value) {
                         defaultOptions.type = value
                       }
                     }
-                  }, storeData.typeList.map(item => {
-                    return h('vxe-option', {
-                      props: {
-                        value: item.value,
-                        label: GlobalConfig.i18n(item.label)
-                      }
-                    })
-                  }))
+                  })
                 ])
               ]),
               isPrint || showSheet ? h('tr', [
@@ -185,21 +175,15 @@ export default {
                 h('td', [
                   h('vxe-select', {
                     props: {
-                      value: defaultOptions.mode
+                      value: defaultOptions.mode,
+                      options: storeData.modeList
                     },
                     on: {
                       input (value) {
                         defaultOptions.mode = value
                       }
                     }
-                  }, storeData.modeList.map(item => {
-                    return h('vxe-option', {
-                      props: {
-                        value: item.value,
-                        label: GlobalConfig.i18n(item.label)
-                      }
-                    })
-                  }))
+                  })
                 ])
               ]),
               h('tr', [
@@ -213,8 +197,8 @@ export default {
                     }, [
                       h('li', {
                         class: ['vxe-export--panel-column-option', {
-                          'is--checked': isAll,
-                          'is--indeterminate': isIndeterminate
+                          'is--checked': isAllChecked,
+                          'is--indeterminate': isAllIndeterminate
                         }],
                         attrs: {
                           title: GlobalConfig.i18n('vxe.table.allTitle')
@@ -224,13 +208,7 @@ export default {
                         }
                       }, [
                         h('span', {
-                          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-                        }),
-                        h('span', {
-                          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-                        }),
-                        h('span', {
-                          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+                          class: ['vxe-checkbox--icon', isAllIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
                         }),
                         h('span', {
                           class: 'vxe-checkbox--label'

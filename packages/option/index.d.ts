@@ -1,4 +1,4 @@
-import { Option } from '../../types/option'
+import { VxeOption } from '../../types/option'
 
 export * from '../../types/option'
-export default Option
+export default VxeOption

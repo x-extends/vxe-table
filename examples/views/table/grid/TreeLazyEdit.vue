@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="tip">懒加载树表格、数据代理、快捷菜单</p>
+    <p class="tip">懒加载树表格、数据代理、右键菜单</p>
 
     <vxe-grid ref="xGrid" v-bind="gridOptions" @menu-click="contextMenuClickEvent">
       <template #toolbar_buttons>

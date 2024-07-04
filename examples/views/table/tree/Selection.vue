@@ -28,7 +28,7 @@
 
     <vxe-table
       resizable
-      row-id="id"
+      :row-config="{keyField: 'id'}"
       :data="tableData2"
       :tree-config="{transform: true}"
       :checkbox-config="{labelField: 'name', checkRowKeys: [10053, 23666]}"

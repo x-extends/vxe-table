@@ -1,11 +1,15 @@
-import VxeTableColumn from '../table/src/column'
+import VxeTableColumnComponent from '../table/src/column'
+import VxeUI from '../v-x-e-table'
 
-export const Column = Object.assign(VxeTableColumn, {
+export const VxeColumn = Object.assign(VxeTableColumnComponent, {
   install (Vue) {
-    Vue.component(VxeTableColumn.name, VxeTableColumn)
+    Vue.component(VxeTableColumnComponent.name, VxeTableColumnComponent)
     // 兼容旧用法
-    Vue.component('VxeTableColumn', VxeTableColumn)
+    Vue.component('VxeTableColumn', VxeTableColumnComponent)
   }
 })
+VxeUI.component(VxeTableColumnComponent)
 
-export default Column
+export const Column = VxeColumn
+
+export default VxeColumn

@@ -2,11 +2,13 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { createItem } from './util'
-import { renderTitle } from './render'
-import { eqEmptyValue } from '../../tools/src/utils'
-import { browse } from '../../tools/src/dom'
+import { isEnableConf, eqEmptyValue, getFuncText } from '../../tools/utils'
+import DomTools, { browse } from '../../tools/dom'
+import { createItem, handleFieldOrItem, isHiddenItem, isActivetem } from './util'
+import { warnLog, errLog } from '../../tools/log'
+import VxeFormConfigItem from './form-config-item'
+import VxeLoading from '../../loading/index'
+import { getSlotVNs } from '../../tools/vn'
 
 class Rule {
   constructor (rule) {
@@ -24,7 +26,7 @@ class Rule {
   }
 
   get content () {
-    return UtilTools.getFuncText(this.$options.content || this.$options.message)
+    return getFuncText(this.$options.content || this.$options.message)
   }
 
   get message () {
@@ -62,114 +64,6 @@ function getResetValue (value, resetValue) {
   return resetValue
 }
 
-function renderItems (h, _vm, itemList) {
-  const { _e, rules, data, collapseAll, validOpts, titleOverflow: allTitleOverflow } = _vm
-  return itemList.map((item, index) => {
-    const { slots, title, folding, visible, visibleMethod, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, children } = item
-    const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-    const span = item.span || _vm.span
-    const align = item.align || _vm.align
-    const titleAlign = item.titleAlign || _vm.titleAlign
-    const titleWidth = item.titleWidth || _vm.titleWidth
-    let itemVisibleMethod = visibleMethod
-    const itemOverflow = (XEUtils.isUndefined(titleOverflow) || XEUtils.isNull(titleOverflow)) ? allTitleOverflow : titleOverflow
-    const showEllipsis = itemOverflow === 'ellipsis'
-    const showTitle = itemOverflow === 'title'
-    const showTooltip = itemOverflow === true || itemOverflow === 'tooltip'
-    const hasEllipsis = showTitle || showTooltip || showEllipsis
-    const params = { data, property: field, item, $form: _vm }
-    let isRequired
-    if (visible === false) {
-      return _e()
-    }
-    // 如果为项集合
-    const isGather = children && children.length > 0
-    if (isGather) {
-      const childVNs = renderItems(h, _vm, item.children)
-      return childVNs.length ? h('div', {
-        class: ['vxe-form--gather vxe-row', item.id, span ? `vxe-col--${span} is--span` : '', className ? (XEUtils.isFunction(className) ? className(params) : className) : '']
-      }, childVNs) : _e()
-    }
-    if (!itemVisibleMethod && compConf && compConf.itemVisibleMethod) {
-      itemVisibleMethod = compConf.itemVisibleMethod
-    }
-    if (rules) {
-      const itemRules = rules[field]
-      if (itemRules) {
-        isRequired = itemRules.some(rule => rule.required)
-      }
-    }
-    let contentVNs = []
-    if (slots && slots.default) {
-      contentVNs = _vm.callSlot(slots.default, params, h)
-    } else if (compConf && compConf.renderItemContent) {
-      contentVNs = compConf.renderItemContent.call(_vm, h, itemRender, params)
-    } else if (compConf && compConf.renderItem) {
-      contentVNs = compConf.renderItem.call(_vm, h, itemRender, params)
-    } else if (field) {
-      contentVNs = [`${XEUtils.get(data, field)}`]
-    }
-    const ons = showTooltip ? {
-      mouseenter (evnt) {
-        _vm.triggerHeaderHelpEvent(evnt, params)
-      },
-      mouseleave: _vm.handleTargetLeaveEvent
-    } : {}
-    return h('div', {
-      class: ['vxe-form--item', item.id, span ? `vxe-col--${span} is--span` : null, className ? (XEUtils.isFunction(className) ? className(params) : className) : '', {
-        'is--title': title,
-        'is--required': isRequired,
-        'is--hidden': folding && collapseAll,
-        'is--active': !itemVisibleMethod || itemVisibleMethod(params),
-        'is--error': showError
-      }],
-      key: index
-    }, [
-      h('div', {
-        class: 'vxe-form--item-inner'
-      }, [
-        title || (slots && slots.title) ? h('div', {
-          class: ['vxe-form--item-title', titleAlign ? `align--${titleAlign}` : null, {
-            'is--ellipsis': hasEllipsis
-          }],
-          style: titleWidth ? {
-            width: isNaN(titleWidth) ? titleWidth : `${titleWidth}px`
-          } : null,
-          attrs: {
-            title: showTitle ? UtilTools.getFuncText(title) : null
-          },
-          on: ons
-        }, renderTitle(h, _vm, item)) : null,
-        h('div', {
-          class: ['vxe-form--item-content', align ? `align--${align}` : null]
-        }, contentVNs.concat(
-          [
-            collapseNode ? h('div', {
-              class: 'vxe-form--item-trigger-node',
-              on: {
-                click: _vm.toggleCollapseEvent
-              }
-            }, [
-              h('span', {
-                class: 'vxe-form--item-trigger-text'
-              }, collapseAll ? GlobalConfig.i18n('vxe.form.unfolding') : GlobalConfig.i18n('vxe.form.folding')),
-              h('i', {
-                class: ['vxe-form--item-trigger-icon', collapseAll ? GlobalConfig.icon.FORM_FOLDING : GlobalConfig.icon.FORM_UNFOLDING]
-              })
-            ]) : null,
-            errRule && validOpts.showMessage ? h('div', {
-              class: 'vxe-form--item-valid',
-              style: errRule.maxWidth ? {
-                width: `${errRule.maxWidth}px`
-              } : null
-            }, errRule.content) : null
-          ])
-        )
-      ])
-    ])
-  })
-}
-
 export default {
   name: 'VxeForm',
   mixins: [vSize],
@@ -185,12 +79,23 @@ export default {
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
     titleAsterisk: { type: Boolean, default: () => GlobalConfig.form.titleAsterisk },
     titleOverflow: { type: [Boolean, String], default: null },
+    vertical: {
+      type: Boolean,
+      default: null
+    },
     className: [String, Function],
+    readonly: Boolean,
     items: Array,
     rules: Object,
     preventSubmit: { type: Boolean, default: () => GlobalConfig.form.preventSubmit },
     validConfig: Object,
+    tooltipConfig: Object,
     customLayout: { type: Boolean, default: () => GlobalConfig.form.customLayout }
+  },
+  inject: {
+    $xegrid: {
+      default: null
+    }
   },
   data () {
     return {
@@ -199,7 +104,6 @@ export default {
       formItems: [],
 
       tooltipTimeout: null,
-      tooltipActive: false,
       tooltipStore: {
         item: null,
         visible: false
@@ -208,19 +112,21 @@ export default {
   },
   provide () {
     return {
-      $xeform: this
+      $xeform: this,
+      $xeformgather: null,
+      $xeformitem: null,
+      $xeformiteminfo: null
     }
   },
   computed: {
+    xegrid () {
+      return this.$xegrid
+    },
     validOpts () {
       return Object.assign({}, GlobalConfig.form.validConfig, this.validConfig)
     },
     tooltipOpts () {
-      const opts = Object.assign({ leaveDelay: 300 }, GlobalConfig.form.tooltipConfig, this.tooltipConfig)
-      if (opts.enterable) {
-        opts.leaveMethod = this.handleTooltipLeaveMethod
-      }
-      return opts
+      return Object.assign({}, GlobalConfig.tooltip, GlobalConfig.form.tooltipConfig, this.tooltipConfig)
     }
   },
   watch: {
@@ -235,26 +141,19 @@ export default {
     }
   },
   created () {
-    this.$nextTick(() => {
-      const { items } = this
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (this.customLayout && this.items) {
-          UtilTools.error('vxe.error.errConflicts', ['custom-layout', 'items'])
-        }
-      }
-      if (items) {
-        this.loadItem(items)
-      }
-    })
+    const { items } = this
+    if (items && items.length) {
+      this.loadItem(items)
+    }
   },
   render (h) {
     const { _e, loading, className, data, vSize, tooltipOpts, formItems, customLayout } = this
     const hasUseTooltip = VXETable._tooltip
+    const defaultSlot = this.$scopedSlots.default
+    const loadingSlot = this.$scopedSlots.loading
     return h('form', {
       class: ['vxe-form', className ? (XEUtils.isFunction(className) ? className({ items: formItems, data, $form: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
-        'is--colon': this.titleColon,
-        'is--asterisk': this.titleAsterisk,
         'is--loading': loading
       }],
       on: {
@@ -263,31 +162,41 @@ export default {
       }
     }, [
       h('div', {
-        class: 'vxe-form--wrapper vxe-row'
-      }, customLayout ? this.$slots.default : renderItems(h, this, formItems)),
+        class: 'vxe-form--wrapper vxe-form--item-row'
+      }, customLayout ? (defaultSlot ? this.callSlot(defaultSlot, {}, h) : []) : formItems.map((item, index) => {
+        return h(VxeFormConfigItem, {
+          key: index,
+          props: {
+            itemConfig: item
+          }
+        })
+      })),
       h('div', {
         class: 'vxe-form-slots',
         ref: 'hideItem'
-      }, customLayout ? [] : this.$slots.default),
-      h('div', {
-        class: ['vxe-loading', {
-          'is--visible': loading
-        }]
-      }, [
-        h('div', {
-          class: 'vxe-loading--spinner'
-        })
-      ]),
+      }, customLayout ? [] : (defaultSlot ? this.callSlot(defaultSlot, {}, h) : [])),
+      /**
+       * 加载中
+       */
+      h(VxeLoading, {
+        class: 'vxe-form--loading',
+        props: {
+          value: loading
+        }
+      }, loadingSlot ? this.callSlot(loadingSlot, {}, h) : []),
       /**
        * 工具提示
        */
       hasUseTooltip ? h('vxe-tooltip', {
         ref: 'tooltip',
-        ...tooltipOpts
+        props: tooltipOpts
       }) : _e()
     ])
   },
   methods: {
+    dispatchEvent (type, params, evnt) {
+      this.$emit(type, Object.assign({ $form: this, $grid: this.xegrid, $event: evnt }, params))
+    },
     callSlot (slotFunc, params, h) {
       if (slotFunc) {
         const { $scopedSlots } = this
@@ -295,7 +204,7 @@ export default {
           slotFunc = $scopedSlots[slotFunc] || null
         }
         if (XEUtils.isFunction(slotFunc)) {
-          return slotFunc.call(this, params, h)
+          return getSlotVNs(slotFunc.call(this, params, h))
         }
       }
       return []
@@ -308,7 +217,7 @@ export default {
             XEUtils.each(item.slots, (func) => {
               if (!XEUtils.isFunction(func)) {
                 if (!$scopedSlots[func]) {
-                  UtilTools.error('vxe.error.notSlot', [func])
+                  errLog('vxe.error.notSlot', [func])
                 }
               }
             })
@@ -325,6 +234,10 @@ export default {
       }, { children: 'children' })
       return itemList
     },
+    getItemByField (field) {
+      const rest = XEUtils.findTree(this.formItems, item => item.field === field, { children: 'children' })
+      return rest ? rest.item : null
+    },
     toggleCollapse () {
       const status = !this.collapseAll
       this.collapseAll = status
@@ -334,16 +247,19 @@ export default {
     toggleCollapseEvent (evnt) {
       this.toggleCollapse()
       const status = this.collapseAll
-      this.$emit('toggle-collapse', { status, collapse: status, data: this.data, $form: this, $event: evnt }, evnt)
-      this.$emit('collapse', { status, collapse: status, data: this.data, $form: this, $event: evnt }, evnt)
+      this.dispatchEvent('toggle-collapse', { status, collapse: status, data: this.data }, evnt)
+      this.dispatchEvent('collapse', { status, collapse: status, data: this.data }, evnt)
     },
     submitEvent (evnt) {
       evnt.preventDefault()
       if (!this.preventSubmit) {
-        this.beginValidate(this.getItems()).then(() => {
-          this.$emit('submit', { data: this.data, $form: this, $event: evnt })
-        }).catch(errMap => {
-          this.$emit('submit-invalid', { data: this.data, errMap, $form: this, $event: evnt })
+        this.clearValidate()
+        this.beginValidate(this.getItems()).then((errMap) => {
+          if (errMap) {
+            this.dispatchEvent('submit-invalid', { data: this.data, errMap }, evnt)
+          } else {
+            this.dispatchEvent('submit', { data: this.data }, evnt)
+          }
         })
       }
     },
@@ -355,10 +271,11 @@ export default {
           const { field, resetValue, itemRender } = item
           if (isEnableConf(itemRender)) {
             const compConf = VXETable.renderer.get(itemRender.name)
-            if (compConf && compConf.itemResetMethod) {
-              compConf.itemResetMethod({ data, property: field, item, $form: this })
+            const fiResetMethod = compConf ? (compConf.formItemResetMethod || compConf.itemResetMethod) : null
+            if (compConf && fiResetMethod) {
+              fiResetMethod({ data, field, property: field, item, $form: this, $grid: this.xegrid })
             } else if (field) {
-              XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : resetValue)
+              XEUtils.set(data, field, resetValue === null ? getResetValue(XEUtils.get(data, field), undefined) : XEUtils.clone(resetValue, true))
             }
           }
         })
@@ -368,16 +285,7 @@ export default {
     resetEvent (evnt) {
       evnt.preventDefault()
       this.reset()
-      this.$emit('reset', { data: this.data, $form: this, $event: evnt })
-    },
-    handleTooltipLeaveMethod () {
-      const { tooltipOpts } = this
-      setTimeout(() => {
-        if (!this.tooltipActive) {
-          this.closeTooltip()
-        }
-      }, tooltipOpts.leaveDelay)
-      return false
+      this.dispatchEvent('reset', { data: this.data }, evnt)
     },
     closeTooltip () {
       const { tooltipStore } = this
@@ -393,7 +301,7 @@ export default {
       }
       return this.$nextTick()
     },
-    triggerHeaderHelpEvent (evnt, params) {
+    triggerTitleTipEvent (evnt, params) {
       const { item } = params
       const { tooltipStore } = this
       const $tooltip = this.$refs.tooltip
@@ -401,8 +309,9 @@ export default {
       const content = (overflowElem.textContent || '').trim()
       const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
       clearTimeout(this.tooltipTimeout)
-      this.tooltipActive = true
-      this.closeTooltip()
+      if (tooltipStore.item !== item) {
+        this.closeTooltip()
+      }
       if (content && isCellOverflow) {
         Object.assign(tooltipStore, {
           item,
@@ -413,13 +322,16 @@ export default {
         }
       }
     },
-    handleTargetLeaveEvent () {
+    handleTitleTipLeaveEvent () {
       const { tooltipOpts } = this
-      this.tooltipActive = false
+      let $tooltip = this.$refs.tooltip
+      if ($tooltip) {
+        $tooltip.setActived(false)
+      }
       if (tooltipOpts.enterable) {
         this.tooltipTimeout = setTimeout(() => {
-          const $tooltip = this.$refs.tooltip
-          if ($tooltip && !$tooltip.isHover) {
+          $tooltip = this.$refs.tooltip
+          if ($tooltip && !$tooltip.isActived()) {
             this.closeTooltip()
           }
         }, tooltipOpts.leaveDelay)
@@ -427,48 +339,61 @@ export default {
         this.closeTooltip()
       }
     },
-    clearValidate (field) {
-      const itemList = this.getItems()
-      if (field) {
-        const item = itemList.find(item => item.field === field)
-        if (item) {
-          item.showError = false
+    clearValidate (fieldOrItem) {
+      if (fieldOrItem) {
+        let fields = fieldOrItem
+        if (!XEUtils.isArray(fieldOrItem)) {
+          fields = [fieldOrItem]
         }
+        fields.forEach((field) => {
+          if (field) {
+            const item = handleFieldOrItem(this, field)
+            if (item) {
+              item.showError = false
+            }
+          }
+        })
       } else {
-        itemList.forEach(item => {
+        this.getItems().forEach(item => {
           item.showError = false
         })
       }
       return this.$nextTick()
     },
     validate (callback) {
+      this.clearValidate()
       return this.beginValidate(this.getItems(), '', callback)
     },
-    validateField (field, callback) {
-      return this.beginValidate(this.getItems().filter(item => item.field === field), '', callback)
+    validateField (fieldOrItem, callback) {
+      let fields = []
+      if (XEUtils.isArray(fieldOrItem)) {
+        fields = fieldOrItem
+      } else {
+        fields = [fieldOrItem]
+      }
+      return this.beginValidate(fields.map(field => handleFieldOrItem(this, field)), '', callback)
     },
     beginValidate (itemList, type, callback) {
       const { data, rules: formRules, validOpts } = this
       const validRest = {}
       const validFields = []
       const itemValids = []
-      this.clearValidate()
       clearTimeout(this.showErrTime)
       if (data && formRules) {
         itemList.forEach(item => {
           const { field } = item
-          if (field) {
+          if (field && !isHiddenItem(this, item) && isActivetem(this, item)) {
             itemValids.push(
               this.validItemRules(type || 'all', field).then(() => {
                 item.errRule = null
-              }).catch(({ rule, rules }) => {
-                const rest = { rule, rules, data, property: field, $form: this }
+              }).catch((errorMaps) => {
+                const rest = errorMaps[field]
                 if (!validRest[field]) {
                   validRest[field] = []
                 }
                 validRest[field].push(rest)
                 validFields.push(field)
-                item.errRule = rule
+                item.errRule = rest[0].rule
                 return Promise.reject(rest)
               })
             )
@@ -479,7 +404,7 @@ export default {
             callback()
           }
         }).catch(() => {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
             this.showErrTime = setTimeout(() => {
               itemList.forEach(item => {
                 if (item.errRule) {
@@ -496,7 +421,7 @@ export default {
               callback(validRest)
               resolve()
             } else {
-              reject(validRest)
+              resolve(validRest)
             }
           })
         })
@@ -520,67 +445,114 @@ export default {
      *  validator=Function({ itemValue, rule, rules, data, property }) 自定义校验，接收一个 Promise
      *  trigger=change 触发方式
      */
-    validItemRules (validType, property, val) {
+    validItemRules (validType, fields, val) {
       const { data, rules: formRules } = this
-      const errorRules = []
-      const syncVailds = []
-      if (property && formRules) {
-        const rules = XEUtils.get(formRules, property)
-        if (rules) {
-          const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
-          rules.forEach(rule => {
-            const { type, trigger, required } = rule
-            if (validType === 'all' || !trigger || validType === rule.trigger) {
-              if (XEUtils.isFunction(rule.validator)) {
-                const customValid = rule.validator({
-                  itemValue,
-                  rule,
-                  rules,
-                  data,
-                  property,
-                  $form: this
-                })
-                if (customValid) {
-                  if (XEUtils.isError(customValid)) {
-                    errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
-                  } else if (customValid.catch) {
-                    // 如果为异步校验（注：异步校验是并发无序的）
-                    syncVailds.push(
-                      customValid.catch(e => {
-                        errorRules.push(new Rule({ type: 'custom', trigger, content: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
-                      })
-                    )
+      const errorMaps = {}
+      if (!XEUtils.isArray(fields)) {
+        fields = [fields]
+      }
+      return Promise.all(
+        fields.map((property) => {
+          const syncVailds = []
+          const errorRules = []
+          if (property && formRules) {
+            const rules = XEUtils.get(formRules, property)
+            if (rules) {
+              const itemValue = XEUtils.isUndefined(val) ? XEUtils.get(data, property) : val
+              rules.forEach(rule => {
+                const { type, trigger, required, validator } = rule
+                if (validType === 'all' || !trigger || validType === rule.trigger) {
+                  if (validator) {
+                    const validParams = {
+                      itemValue,
+                      rule,
+                      rules,
+                      data,
+                      field: property,
+                      property,
+                      $form: this
+                    }
+                    let customValid
+                    if (XEUtils.isString(validator)) {
+                      const gvItem = VXETable.validators.get(validator)
+                      if (gvItem) {
+                        if (gvItem.itemValidatorMethod) {
+                          customValid = gvItem.itemValidatorMethod(validParams)
+                        } else {
+                          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                            warnLog('vxe.error.notValidators', [validator])
+                          }
+                        }
+                      } else {
+                        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                          errLog('vxe.error.notValidators', [validator])
+                        }
+                      }
+                    } else {
+                      customValid = validator(validParams)
+                    }
+                    if (customValid) {
+                      if (XEUtils.isError(customValid)) {
+                        errorRules.push(new Rule({ type: 'custom', trigger, content: customValid.message, rule: new Rule(rule) }))
+                      } else if (customValid.catch) {
+                        // 如果为异步校验（注：异步校验是并发无序的）
+                        syncVailds.push(
+                          customValid.catch(e => {
+                            errorRules.push(new Rule({ type: 'custom', trigger, content: e ? e.message : (rule.content || rule.message), rule: new Rule(rule) }))
+                          })
+                        )
+                      }
+                    }
+                  } else {
+                    const isArrType = type === 'array'
+                    const isArrVal = XEUtils.isArray(itemValue)
+                    let hasEmpty = true
+                    if (isArrType || isArrVal) {
+                      hasEmpty = !isArrVal || !itemValue.length
+                    } else if (XEUtils.isString(itemValue)) {
+                      hasEmpty = eqEmptyValue(itemValue.trim())
+                    } else {
+                      hasEmpty = eqEmptyValue(itemValue)
+                    }
+                    if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
+                      errorRules.push(new Rule(rule))
+                    }
                   }
                 }
-              } else {
-                const isArrType = type === 'array'
-                const hasEmpty = isArrType ? (!XEUtils.isArray(itemValue) || !itemValue.length) : eqEmptyValue(itemValue)
-                if (required ? (hasEmpty || validErrorRuleValue(rule, itemValue)) : (!hasEmpty && validErrorRuleValue(rule, itemValue))) {
-                  errorRules.push(new Rule(rule))
+              })
+            }
+          }
+          return Promise.all(syncVailds).then(() => {
+            if (errorRules.length) {
+              errorMaps[property] = errorRules.map(rule => {
+                return {
+                  $form: this,
+                  rule,
+                  data,
+                  field: property,
+                  property
                 }
-              }
+              })
             }
           })
-        }
-      }
-      return Promise.all(syncVailds).then(() => {
-        if (errorRules.length) {
-          const rest = { rules: errorRules, rule: errorRules[0] }
-          return Promise.reject(rest)
+        })
+      ).then(() => {
+        if (!XEUtils.isEmpty(errorMaps)) {
+          return Promise.reject(errorMaps)
         }
       })
     },
     handleFocus (fields) {
       const { $el } = this
-      const itemList = this.getItems()
-      fields.some((property, index) => {
-        const item = itemList.find(item => item.field === property)
+      for (let i = 0; i < fields.length; i++) {
+        const property = fields[i]
+        const item = this.getItemByField(property)
         if (item && isEnableConf(item.itemRender)) {
           const { itemRender } = item
           const compConf = VXETable.renderer.get(itemRender.name)
           let inputElem
           // 定位到第一个
-          if (!index) {
+          if (!i) {
             DomTools.scrollToView($el.querySelector(`.${item.id}`))
           }
           // 如果指定了聚焦 class
@@ -599,10 +571,27 @@ export default {
               textRange.collapse(false)
               textRange.select()
             }
-            return true
+            break
           }
         }
-      })
+      }
+    },
+    triggerItemEvent (evnt, field, itemValue) {
+      if (field) {
+        return this.validItemRules(evnt ? (['blur'].includes(evnt.type) ? 'blur' : 'change') : 'all', field, itemValue)
+          .then(() => {
+            this.clearValidate(field)
+          })
+          .catch((errorMaps) => {
+            const rest = errorMaps[field]
+            const item = this.getItemByField(field)
+            if (item && rest) {
+              item.showError = true
+              item.errRule = rest[0].rule
+            }
+          })
+      }
+      return this.$nextTick()
     },
     /**
      * 更新项状态
@@ -610,21 +599,8 @@ export default {
      * 如果单元格配置了校验规则，则会进行校验
      */
     updateStatus (scope, itemValue) {
-      const { property } = scope
-      if (property) {
-        this.validItemRules('change', property, itemValue)
-          .then(() => {
-            this.clearValidate(property)
-          })
-          .catch(({ rule }) => {
-            const itemList = this.getItems()
-            const item = itemList.find(item => item.field === property)
-            if (item) {
-              item.showError = true
-              item.errRule = rule
-            }
-          })
-      }
+      const { field } = scope
+      return this.triggerItemEvent(new Event('change'), field, itemValue)
     }
   }
 }

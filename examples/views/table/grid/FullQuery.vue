@@ -32,7 +32,6 @@
 
 <script>
 import XEUtils from 'xe-utils'
-import XEAjax from 'xe-ajax'
 
 export default {
   data () {
@@ -105,10 +104,10 @@ export default {
               filters.forEach(({ property, values }) => {
                 queryParams[property] = values.join(',')
               })
-              return XEAjax.get(`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}`, queryParams)
+              return fetch(`https://api.vxetable.cn/demo/api/pub/page/list/${page.pageSize}/${page.currentPage}?${XEUtils.serialize(queryParams)}`).then(response => response.json())
             },
             // 被某些特殊功能所触发，例如：导出数据 mode=all 时，会触发该方法并对返回的数据进行导出
-            queryAll: () => fetch('https://api.xuliangzhan.com:10443/demo/api/pub/all').then(response => response.json())
+            queryAll: () => fetch('https://api.vxetable.cn/demo/api/pub/all').then(response => response.json())
           }
         },
         toolbarConfig: {
@@ -167,7 +166,6 @@ export default {
         `,
         `
         import XEUtils from 'xe-utils'
-        import XEAjax from 'xe-ajax'
         
         export default {
           data () {
@@ -240,10 +238,10 @@ export default {
                       filters.forEach(({ property, values }) => {
                         queryParams[property] = values.join(',')
                       })
-                      return XEAjax.get(\`https://api.xuliangzhan.com:10443/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}\`, queryParams)
+                      return fetch(\`https://api.vxetable.cn/demo/api/pub/page/list/\${page.pageSize}/\${page.currentPage}?\${XEUtils.serialize(queryParams)}\`).then(response => response.json())
                     },
                     // 被某些特殊功能所触发，例如：导出数据 mode=all 时，会触发该方法并对返回的数据进行导出
-                    queryAll: () => fetch('https://api.xuliangzhan.com:10443/demo/api/pub/all').then(response => response.json())
+                    queryAll: () => fetch('https://api.vxetable.cn/demo/api/pub/all').then(response => response.json())
                   }
                 },
                 toolbarConfig: {

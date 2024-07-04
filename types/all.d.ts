@@ -1,9 +1,9 @@
 import Vue from 'vue'
 
 import { ModalController } from './modal'
-import { VXETableSetupOptions, VXETableCore, VxeGlobalTranslate, VxeGlobalI18n } from './v-x-e-table'
+import { VXETableConfigOptions, VXETableCore, VxeGlobalTranslate, VxeGlobalI18n } from './v-x-e-table'
 
-export function install(app: typeof Vue, options?: VXETableSetupOptions): void;
+export function install(app: typeof Vue, options?: VXETableConfigOptions): void;
 
 export interface VXETableClipboard {
   text: string;
@@ -42,16 +42,12 @@ declare global {
 export * from './v-x-e-table'
 export * from './component'
 
-export * from './header'
-export * from './footer'
-export * from './icon'
-export * from './filter'
-export * from './menu'
-export * from './edit'
-export * from './export'
-export * from './keyboard'
-export * from './validator'
+// Component
+export * from './module'
 
+// Table module
+export * from './icon'
+export * from './loading'
 export * from './table'
 export * from './column'
 export * from './colgroup'
@@ -66,6 +62,7 @@ export * from './radio-button'
 export * from './input'
 export * from './textarea'
 export * from './button'
+export * from './button-group'
 export * from './select'
 export * from './optgroup'
 export * from './option'
@@ -73,6 +70,7 @@ export * from './modal'
 export * from './tooltip'
 export * from './form'
 export * from './form-item'
+export * from './form-gather'
 export * from './switch'
 export * from './list'
 export * from './pulldown'

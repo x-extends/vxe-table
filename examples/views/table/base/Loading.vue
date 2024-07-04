@@ -4,6 +4,7 @@
 
     <vxe-table
       border
+      loading
       highlight-hover-row
       height="300"
       :data="tableData">
@@ -12,6 +13,10 @@
       <vxe-column field="sex" title="Sex"></vxe-column>
       <vxe-column field="age" title="Age"></vxe-column>
       <vxe-column field="address" title="Address" show-overflow></vxe-column>
+
+      <template #loading>
+        <div>xxxxxxxxxxxxx</div>
+      </template>
     </vxe-table>
 
     <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
@@ -28,7 +33,8 @@
       highlight-hover-row
       height="300"
       :loading="loading"
-      :data="tableData">
+      :data="tableData"
+      :loading-config="{icon: 'vxe-icon-indicator roll', text: '正在拼命加载中...'}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>
@@ -55,6 +61,7 @@ export default {
         `
         <vxe-table
           border
+          loading
           highlight-hover-row
           height="300"
           :data="tableData">
@@ -84,7 +91,7 @@ export default {
                 { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'test abc' },
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
               ]
-            }, 3000)
+            }, 60000)
           }
         }
         `,
@@ -94,7 +101,8 @@ export default {
           highlight-hover-row
           height="300"
           :loading="loading"
-          :data="tableData">
+          :data="tableData"
+          :loading-config="{icon: 'vxe-icon-indicator roll', text: '正在拼命加载中...'}">
           <vxe-column type="seq" width="60"></vxe-column>
           <vxe-column field="name" title="Name" sortable></vxe-column>
           <vxe-column field="sex" title="Sex"></vxe-column>
@@ -124,7 +132,7 @@ export default {
                 { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
               ]
               this.loading = false
-            }, 3000)
+            }, 60000)
           }
         }
         `
@@ -145,7 +153,7 @@ export default {
         { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'test abc' }
       ]
       this.loading = false
-    }, 3000)
+    }, 60000)
   }
 }
 </script>

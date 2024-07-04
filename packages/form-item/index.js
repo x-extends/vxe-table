@@ -1,9 +1,13 @@
-import VxeFormItem from '../form/src/form-item'
+import VxeFormItemComponent from '../form/src/form-item'
+import VxeUI from '../v-x-e-table'
 
-export const FormItem = Object.assign(VxeFormItem, {
+export const VxeFormItem = Object.assign(VxeFormItemComponent, {
   install (Vue) {
-    Vue.component(VxeFormItem.name, VxeFormItem)
+    Vue.component(VxeFormItemComponent.name, VxeFormItemComponent)
   }
 })
+VxeUI.component(VxeFormItemComponent)
 
-export default FormItem
+export const FormItem = VxeFormItem
+
+export default VxeFormItem

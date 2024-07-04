@@ -1,4 +1,4 @@
-import { Export } from '../../types/export'
+import { VxeTableExportModule } from '../../types/module/export'
 
-export * from '../../types/export'
-export default Export
+export * from '../../types/module/export'
+export default VxeTableExportModule

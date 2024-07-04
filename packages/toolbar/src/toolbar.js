@@ -2,7 +2,8 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools, GlobalEvent } from '../../tools'
+import { getSlotVNs } from '../../tools/vn'
+import { warnLog, errLog } from '../../tools/log'
 
 const renderDropdowns = (h, _vm, item, isBtn) => {
   const { _e } = _vm
@@ -46,10 +47,12 @@ function renderBtns (h, _vm) {
     }
     if (compConf) {
       const renderToolbarButton = compConf.renderToolbarButton || compConf.renderButton
+      const toolbarButtonClassName = compConf.toolbarButtonClassName
+      const params = { $grid: $xegrid, $table: $xetable, button: item }
       if (renderToolbarButton) {
         return h('span', {
-          class: 'vxe-button--item'
-        }, renderToolbarButton.call(_vm, h, buttonRender, { $grid: $xegrid, $table: $xetable, button: item }))
+          class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
+        }, getSlotVNs(renderToolbarButton.call(_vm, h, buttonRender, params)))
       }
     }
     return h('vxe-button', {
@@ -80,10 +83,10 @@ function renderBtns (h, _vm) {
  * 渲染右侧工具
  */
 function renderRightTools (h, _vm) {
-  const { _e, $scopedSlots, $xegrid, $xetable, tools = [] } = _vm
+  const { _e, $scopedSlots, $xetable, $xegrid, tools = [] } = _vm
   const toolsSlot = $scopedSlots.tools
   if (toolsSlot) {
-    return toolsSlot.call(_vm, { $grid: $xegrid, $table: $xetable }, h)
+    return toolsSlot.call(_vm, { $table: $xetable, $grid: $xegrid }, h)
   }
   return tools.map(item => {
     const { dropdowns, toolRender } = item
@@ -94,9 +97,11 @@ function renderRightTools (h, _vm) {
     if (compConf) {
       const { renderToolbarTool } = compConf
       if (renderToolbarTool) {
+        const toolbarToolClassName = compConf.toolbarToolClassName
+        const params = { $table: $xetable, $grid: $xegrid, tool: item }
         return h('span', {
-          class: 'vxe-tool--item'
-        }, renderToolbarTool.call(_vm, h, toolRender, { $grid: $xegrid, $table: $xetable, tool: item }))
+          class: ['vxe-tool--item', toolbarToolClassName ? (XEUtils.isFunction(toolbarToolClassName) ? toolbarToolClassName(params) : toolbarToolClassName) : '']
+        }, getSlotVNs(renderToolbarTool.call(_vm, h, toolRender, params)))
       }
     }
     return h('vxe-button', {
@@ -123,135 +128,97 @@ function renderRightTools (h, _vm) {
   })
 }
 
-function renderCustoms (h, _vm) {
-  const { $xetable, customStore, customOpts, columns } = _vm
-  const cols = []
+function renderToolImport (h, _vm) {
+  const { importOpts } = _vm
+  return h('vxe-button', {
+    props: {
+      circle: true,
+      title: GlobalConfig.i18n('vxe.toolbar.import'),
+      icon: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT
+    },
+    on: {
+      click: _vm.importEvent
+    }
+  })
+}
+
+function renderToolExport (h, _vm) {
+  const { exportOpts } = _vm
+  return h('vxe-button', {
+    props: {
+      circle: true,
+      title: GlobalConfig.i18n('vxe.toolbar.export'),
+      icon: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT
+    },
+    on: {
+      click: _vm.exportEvent
+    }
+  })
+}
+
+function renderToolPrint (h, _vm) {
+  const { printOpts } = _vm
+  return h('vxe-button', {
+    props: {
+      circle: true,
+      title: GlobalConfig.i18n('vxe.toolbar.print'),
+      icon: printOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_PRINT
+    },
+    on: {
+      click: _vm.printEvent
+    }
+  })
+}
+
+function renderToolRefresh (h, _vm) {
+  const { refreshOpts, isRefresh } = _vm
+  return h('vxe-button', {
+    props: {
+      circle: true,
+      title: GlobalConfig.i18n('vxe.toolbar.refresh'),
+      icon: isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH)
+    },
+    on: {
+      click: _vm.refreshEvent
+    }
+  })
+}
+
+function renderToolZoom (h, _vm) {
+  const { _e, $xegrid, zoomOpts } = _vm
+  return $xegrid ? h('vxe-button', {
+    props: {
+      circle: true,
+      title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`),
+      icon: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_MINIMIZE) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_FULLSCREEN)
+    },
+    on: {
+      click: $xegrid.triggerZoomEvent
+    }
+  }) : _e()
+}
+
+function renderToolCustom (h, _vm) {
+  const { customOpts } = _vm
   const customBtnOns = {}
-  const customWrapperOns = {}
-  const checkMethod = $xetable ? $xetable.customOpts.checkMethod : null
   if (customOpts.trigger === 'manual') {
     // 手动触发
   } else if (customOpts.trigger === 'hover') {
     // hover 触发
     customBtnOns.mouseenter = _vm.handleMouseenterSettingEvent
     customBtnOns.mouseleave = _vm.handleMouseleaveSettingEvent
-    customWrapperOns.mouseenter = _vm.handleWrapperMouseenterEvent
-    customWrapperOns.mouseleave = _vm.handleWrapperMouseleaveEvent
   } else {
     // 点击触发
     customBtnOns.click = _vm.handleClickSettingEvent
   }
-  XEUtils.eachTree(columns, (column) => {
-    const colTitle = UtilTools.formatText(column.getTitle(), 1)
-    const colKey = column.getKey()
-    const isColGroup = column.children && column.children.length
-    const isDisabled = checkMethod ? !checkMethod({ column }) : false
-    if (isColGroup || colKey) {
-      cols.push(
-        h('li', {
-          class: ['vxe-custom--option', `level--${column.level}`, {
-            'is--group': isColGroup,
-            'is--checked': column.visible,
-            'is--indeterminate': column.halfVisible,
-            'is--disabled': isDisabled
-          }],
-          attrs: {
-            title: colTitle
-          },
-          on: {
-            click: () => {
-              if (!isDisabled) {
-                _vm.changeCustomOption(column)
-              }
-            }
-          }
-        }, [
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, colTitle)
-        ])
-      )
-    }
+  return h('vxe-button', {
+    props: {
+      circle: true,
+      title: GlobalConfig.i18n('vxe.toolbar.custom'),
+      icon: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
+    },
+    on: customBtnOns
   })
-  return h('div', {
-    class: ['vxe-custom--wrapper', {
-      'is--active': customStore.visible
-    }],
-    ref: 'customWrapper'
-  }, [
-    h('vxe-button', {
-      props: {
-        circle: true,
-        icon: customOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_CUSTOM
-      },
-      attrs: {
-        title: GlobalConfig.i18n('vxe.toolbar.custom')
-      },
-      on: customBtnOns
-    }),
-    h('div', {
-      class: 'vxe-custom--option-wrapper'
-    }, [
-      h('ul', {
-        class: 'vxe-custom--header'
-      }, [
-        h('li', {
-          class: ['vxe-custom--option', {
-            'is--checked': customStore.isAll,
-            'is--indeterminate': customStore.isIndeterminate
-          }],
-          attrs: {
-            title: GlobalConfig.i18n('vxe.table.allTitle')
-          },
-          on: {
-            click: _vm.allCustomEvent
-          }
-        }, [
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
-          }),
-          h('span', {
-            class: 'vxe-checkbox--label'
-          }, GlobalConfig.i18n('vxe.toolbar.customAll'))
-        ])
-      ]),
-      h('ul', {
-        class: 'vxe-custom--body',
-        on: customWrapperOns
-      }, cols),
-      customOpts.isFooter === false ? null : h('div', {
-        class: 'vxe-custom--footer'
-      }, [
-        h('button', {
-          class: 'btn--confirm',
-          on: {
-            click: _vm.confirmCustomEvent
-          }
-        }, GlobalConfig.i18n('vxe.toolbar.customConfirm')),
-        h('button', {
-          class: 'btn--reset',
-          on: {
-            click: _vm.resetCustomEvent
-          }
-        }, GlobalConfig.i18n('vxe.toolbar.customRestore'))
-      ])
-    ])
-  ])
 }
 
 export default {
@@ -309,36 +276,43 @@ export default {
     }
   },
   created () {
-    const { refresh, refreshOpts } = this
+    const { refresh, refreshOpts, customOpts } = this
     this.$nextTick(() => {
       const $xetable = this.fintTable()
-      if (refresh && !this.$xegrid && !refreshOpts.query) {
-        UtilTools.warn('vxe.error.notFunc', ['query'])
+      const queryMethod = refreshOpts.queryMethod || refreshOpts.query
+      if (refresh && !this.$xegrid && !queryMethod) {
+        warnLog('vxe.error.notFunc', ['queryMethod'])
       }
       if ($xetable) {
         $xetable.connect(this)
       }
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (customOpts.isFooter) {
+          warnLog('vxe.error.delProp', ['toolbar.custom.isFooter', 'table.custom-config.showFooter'])
+        }
+        if (customOpts.showFooter) {
+          warnLog('vxe.error.delProp', ['toolbar.custom.showFooter', 'table.custom-config.showFooter'])
+        }
+        if (customOpts.immediate) {
+          warnLog('vxe.error.delProp', ['toolbar.custom.immediate', 'table.custom-config.immediate'])
+        }
+        if (customOpts.trigger) {
+          warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
+        }
         if (this.buttons) {
           this.buttons.forEach(item => {
             const { buttonRender } = item
             const compConf = buttonRender ? VXETable.renderer.get(buttonRender.name) : null
             if (compConf && compConf.renderButton) {
-              UtilTools.warn('vxe.error.delFunc', ['renderButton', 'renderToolbarButton'])
+              warnLog('vxe.error.delFunc', ['renderButton', 'renderToolbarButton'])
             }
           })
         }
       }
     })
-    GlobalEvent.on(this, 'mousedown', this.handleGlobalMousedownEvent)
-    GlobalEvent.on(this, 'blur', this.handleGlobalBlurEvent)
-  },
-  destroyed () {
-    GlobalEvent.off(this, 'mousedown')
-    GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { _e, $xegrid, perfect, loading, importOpts, exportOpts, refresh, refreshOpts, zoom, zoomOpts, custom, vSize, className } = this
+    const { _e, $xegrid, perfect, loading, refresh, zoom, custom, vSize, className } = this
     return h('div', {
       class: ['vxe-toolbar', className ? (XEUtils.isFunction(className) ? className({ $toolbar: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
@@ -355,67 +329,12 @@ export default {
       h('div', {
         class: 'vxe-tools--operate'
       }, [
-        this.import ? h('vxe-button', {
-          props: {
-            circle: true,
-            icon: importOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_IMPORT
-          },
-          attrs: {
-            title: GlobalConfig.i18n('vxe.toolbar.import')
-          },
-          on: {
-            click: this.importEvent
-          }
-        }) : _e(),
-        this.export ? h('vxe-button', {
-          props: {
-            circle: true,
-            icon: exportOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_EXPORT
-          },
-          attrs: {
-            title: GlobalConfig.i18n('vxe.toolbar.export')
-          },
-          on: {
-            click: this.exportEvent
-          }
-        }) : _e(),
-        this.print ? h('vxe-button', {
-          props: {
-            circle: true,
-            icon: this.printOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_PRINT
-          },
-          attrs: {
-            title: GlobalConfig.i18n('vxe.toolbar.print')
-          },
-          on: {
-            click: this.printEvent
-          }
-        }) : _e(),
-        refresh ? h('vxe-button', {
-          props: {
-            circle: true,
-            icon: this.isRefresh ? (refreshOpts.iconLoading || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH_LOADING) : (refreshOpts.icon || GlobalConfig.icon.TOOLBAR_TOOLS_REFRESH)
-          },
-          attrs: {
-            title: GlobalConfig.i18n('vxe.toolbar.refresh')
-          },
-          on: {
-            click: this.refreshEvent
-          }
-        }) : _e(),
-        zoom && $xegrid ? h('vxe-button', {
-          props: {
-            circle: true,
-            icon: $xegrid.isMaximized() ? (zoomOpts.iconOut || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_OUT) : (zoomOpts.iconIn || GlobalConfig.icon.TOOLBAR_TOOLS_ZOOM_IN)
-          },
-          attrs: {
-            title: GlobalConfig.i18n(`vxe.toolbar.zoom${$xegrid.isMaximized() ? 'Out' : 'In'}`)
-          },
-          on: {
-            click: $xegrid.triggerZoomEvent
-          }
-        }) : _e(),
-        custom ? renderCustoms(h, this) : _e()
+        this.import ? renderToolImport(h, this) : _e(),
+        this.export ? renderToolExport(h, this) : _e(),
+        this.print ? renderToolPrint(h, this) : _e(),
+        refresh ? renderToolRefresh(h, this) : _e(),
+        zoom && $xegrid ? renderToolZoom(h, this) : _e(),
+        custom ? renderToolCustom(h, this) : _e()
       ])
     ])
   },
@@ -434,154 +353,41 @@ export default {
       if (this.$xetable) {
         return true
       }
-      UtilTools.error('vxe.error.barUnableLink')
+      errLog('vxe.error.barUnableLink')
     },
-    showCustom () {
-      this.customStore.visible = true
-      this.checkCustomStatus()
-    },
-    closeCustom () {
-      const { custom, customStore } = this
-      if (customStore.visible) {
-        customStore.visible = false
-        if (custom && !customStore.immediate) {
-          this.handleTableCustom()
-        }
-      }
-    },
-    confirmCustomEvent (evnt) {
-      this.closeCustom()
-      this.emitCustomEvent('confirm', evnt)
-    },
-    customOpenEvent (evnt) {
-      const { customStore } = this
-      if (this.checkTable()) {
-        if (!customStore.visible) {
-          this.showCustom()
-          this.emitCustomEvent('open', evnt)
-        }
-      }
-    },
-    customColseEvent (evnt) {
-      const { customStore } = this
-      if (customStore.visible) {
-        this.closeCustom()
-        this.emitCustomEvent('close', evnt)
-      }
-    },
-    resetCustomEvent (evnt) {
-      const { $xetable, columns } = this
-      const checkMethod = $xetable.customOpts.checkMethod
-      XEUtils.eachTree(columns, column => {
-        if (!checkMethod || checkMethod({ column })) {
-          column.visible = column.defaultVisible
-          column.halfVisible = false
-        }
-        column.resizeWidth = 0
-      })
-      $xetable.saveCustomResizable(true)
-      this.closeCustom()
-      this.emitCustomEvent('reset', evnt)
-    },
-    emitCustomEvent (type, evnt) {
-      const { $xetable, $xegrid } = this
-      const comp = $xegrid || $xetable
-      comp.$emit('custom', { type, $table: $xetable, $grid: $xegrid, $event: evnt })
-    },
-    changeCustomOption (column) {
-      const isChecked = !column.visible
-      XEUtils.eachTree([column], (item) => {
-        item.visible = isChecked
-        item.halfVisible = false
-      })
-      this.handleOptionCheck(column)
-      if (this.custom && this.customOpts.immediate) {
-        this.handleTableCustom()
-      }
-      this.checkCustomStatus()
-    },
-    handleOptionCheck (column) {
-      const matchObj = XEUtils.findTree(this.columns, item => item === column)
-      if (matchObj && matchObj.parent) {
-        const { parent } = matchObj
-        if (parent.children && parent.children.length) {
-          parent.visible = parent.children.every(column => column.visible)
-          parent.halfVisible = !parent.visible && parent.children.some(column => column.visible || column.halfVisible)
-          this.handleOptionCheck(parent)
-        }
-      }
-    },
-    handleTableCustom () {
+    handleClickSettingEvent ({ $event }) {
       const { $xetable } = this
-      $xetable.handleCustom()
-    },
-    checkCustomStatus () {
-      const { $xetable, columns } = this
-      const checkMethod = $xetable.customOpts.checkMethod
-      this.customStore.isAll = columns.every(column => (checkMethod ? !checkMethod({ column }) : false) || column.visible)
-      this.customStore.isIndeterminate = !this.customStore.isAll && columns.some(column => (!checkMethod || checkMethod({ column })) && (column.visible || column.halfVisible))
-    },
-    allCustomEvent () {
-      const { $xetable, columns, customStore } = this
-      const checkMethod = $xetable.customOpts.checkMethod
-      const isAll = !customStore.isAll
-      XEUtils.eachTree(columns, column => {
-        if (!checkMethod || checkMethod({ column })) {
-          column.visible = isAll
-          column.halfVisible = false
-        }
-      })
-      customStore.isAll = isAll
-      this.checkCustomStatus()
-    },
-    handleGlobalMousedownEvent (evnt) {
-      if (!DomTools.getEventTargetNode(evnt, this.$refs.customWrapper).flag) {
-        this.customColseEvent(evnt)
-      }
-    },
-    handleGlobalBlurEvent (evnt) {
-      this.customColseEvent(evnt)
-    },
-    handleClickSettingEvent (evnt) {
-      if (this.customStore.visible) {
-        this.customColseEvent(evnt)
+      if ($xetable) {
+        $xetable.triggerCustomEvent($event)
       } else {
-        this.customOpenEvent(evnt)
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
       }
     },
-    handleMouseenterSettingEvent (evnt) {
-      this.customStore.activeBtn = true
-      this.customOpenEvent(evnt)
+    handleMouseenterSettingEvent ({ $event }) {
+      const { $xetable } = this
+      if ($xetable) {
+        $xetable.customOpenEvent($event)
+      } else {
+        errLog('vxe.error.reqModule', ['VxeTableCustomModule'])
+      }
     },
-    handleMouseleaveSettingEvent (evnt) {
-      const { customStore } = this
+    handleMouseleaveSettingEvent ({ $event }) {
+      const { $xetable, customStore } = this
       customStore.activeBtn = false
       setTimeout(() => {
         if (!customStore.activeBtn && !customStore.activeWrapper) {
-          this.customColseEvent(evnt)
+          $xetable.customColseEvent($event)
         }
-      }, 300)
+      }, 350)
     },
-    handleWrapperMouseenterEvent (evnt) {
-      this.customStore.activeWrapper = true
-      this.customOpenEvent(evnt)
-    },
-    handleWrapperMouseleaveEvent (evnt) {
-      const { customStore } = this
-      customStore.activeWrapper = false
-      setTimeout(() => {
-        if (!customStore.activeBtn && !customStore.activeWrapper) {
-          this.customColseEvent(evnt)
-        }
-      }, 300)
-    },
-    refreshEvent () {
+    refreshEvent (evnt) {
       const { $xegrid, refreshOpts, isRefresh } = this
       if (!isRefresh) {
-        if (refreshOpts.query) {
+        const queryMethod = refreshOpts.queryMethod || refreshOpts.query
+        if (queryMethod) {
           this.isRefresh = true
           try {
-            Promise.resolve(refreshOpts.query()).catch(e => e).then(() => {
+            Promise.resolve(queryMethod({})).catch(e => e).then(() => {
               this.isRefresh = false
             })
           } catch (e) {
@@ -589,7 +395,7 @@ export default {
           }
         } else if ($xegrid) {
           this.isRefresh = true
-          $xegrid.commitProxy('reload').catch(e => e).then(() => {
+          $xegrid.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, evnt).catch(e => e).then(() => {
             this.isRefresh = false
           })
         }
@@ -602,10 +408,16 @@ export default {
         if ($xegrid) {
           $xegrid.triggerToolbarBtnEvent(item, evnt)
         } else {
-          const commandMethod = VXETable.commands.get(code)
-          const params = { code, button: item, $xegrid, $table: $xetable, $event: evnt }
-          if (commandMethod) {
-            commandMethod.call(this, params, evnt)
+          const gCommandOpts = VXETable.commands.get(code)
+          const params = { code, button: item, $table: $xetable, $grid: $xegrid, $event: evnt }
+          if (gCommandOpts) {
+            if (gCommandOpts.commandMethod) {
+              gCommandOpts.commandMethod(params)
+            } else {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
           }
           this.$emit('button-click', params)
         }
@@ -618,10 +430,16 @@ export default {
         if ($xegrid) {
           $xegrid.triggerToolbarTolEvent(item, evnt)
         } else {
-          const commandMethod = VXETable.commands.get(code)
+          const gCommandOpts = VXETable.commands.get(code)
           const params = { code, tool: item, $xegrid, $table: $xetable, $event: evnt }
-          if (commandMethod) {
-            commandMethod.call(this, params, evnt)
+          if (gCommandOpts) {
+            if (gCommandOpts.commandMethod) {
+              gCommandOpts.commandMethod(params)
+            } else {
+              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                errLog('vxe.error.notCommands', [code])
+              }
+            }
           }
           this.$emit('tool-click', params)
         }

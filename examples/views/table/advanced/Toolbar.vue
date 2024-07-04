@@ -12,6 +12,7 @@
       height="300"
       ref="xTable1"
       :print-config="{}"
+      :custom-config="{mode: 'popup'}"
       :data="tableData1">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-colgroup title="分组信息">

@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 
 let autoTxtElem
 
@@ -18,7 +18,10 @@ export default {
     name: String,
     readonly: Boolean,
     disabled: Boolean,
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: () => XEUtils.eqNull(GlobalConfig.textarea.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseInput') : GlobalConfig.textarea.placeholder
+    },
     maxlength: [String, Number],
     rows: { type: [String, Number], default: 2 },
     cols: { type: [String, Number], default: null },
@@ -29,6 +32,14 @@ export default {
     resize: { type: String, default: () => GlobalConfig.textarea.resize },
     className: String,
     size: { type: String, default: () => GlobalConfig.textarea.size || GlobalConfig.size }
+  },
+  inject: {
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
+      default: null
+    }
   },
   data () {
     return {
@@ -84,7 +95,7 @@ export default {
       cols
     }
     if (placeholder) {
-      attrs.placeholder = UtilTools.getFuncText(placeholder)
+      attrs.placeholder = getFuncText(placeholder)
     }
     return h('div', {
       class: ['vxe-textarea', className, {
@@ -132,6 +143,10 @@ export default {
       this.$emit('modelValue', value)
       if (this.value !== value) {
         this.$emit('change', { value, $event: evnt })
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, value)
+        }
       }
     },
     inputEvent (evnt) {
@@ -173,7 +188,7 @@ export default {
         autoTxtElem.className = ['vxe-textarea--autosize', size ? `size--${size}` : ''].join(' ')
         autoTxtElem.style.width = `${textElem.clientWidth}px`
         autoTxtElem.style.padding = textStyle.padding
-        autoTxtElem.innerHTML = ('' + (inputValue || '　')).replace(/\n$/, '\n　')
+        autoTxtElem.innerText = ('' + (inputValue || '　')).replace(/\n$/, '\n　')
       }
     },
     handleResize () {

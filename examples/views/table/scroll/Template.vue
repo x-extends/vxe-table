@@ -14,7 +14,8 @@
       :loading="loading"
       :toolbar-config="tableToolbar"
       :columns="tableColumn"
-      :edit-config="{trigger: 'click', mode: 'cell'}">
+      :edit-config="{trigger: 'click', mode: 'cell'}"
+      :scroll-y="{enabled: true}">
       <template #name_header>
         <div class="first-col">
           <div class="first-col-top">名称</div>
@@ -77,7 +78,7 @@ export default {
             },
             filter: ({ column, $panel }) => {
               return column.filters.map(option => {
-                return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
+                return <input type="type" v-model={ option.data } onInput={ event => this.changeFilterEvent(event, option, $panel) }/>
               })
             },
             edit: ({ row }) => {
@@ -199,7 +200,7 @@ export default {
                     },
                     filter: ({ column, $panel }) => {
                       return column.filters.map(option => {
-                        return <input type="type" v-model={ option.data } onInput={ evnt => this.changeFilterEvent(evnt, option, $panel) }/>
+                        return <input type="type" v-model={ option.data } onInput={ event => this.changeFilterEvent(event, option, $panel) }/>
                       })
                     },
                     edit: ({ row }) => {

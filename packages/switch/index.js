@@ -1,9 +1,13 @@
-import VxeSwitch from './src/switch'
+import VxeSwitchComponent from './src/switch'
+import VxeUI from '../v-x-e-table'
 
-export const Switch = Object.assign(VxeSwitch, {
+export const VxeSwitch = Object.assign(VxeSwitchComponent, {
   install (Vue) {
-    Vue.component(VxeSwitch.name, VxeSwitch)
+    Vue.component(VxeSwitchComponent.name, VxeSwitchComponent)
   }
 })
+VxeUI.component(VxeSwitchComponent)
 
-export default Switch
+export const Switch = VxeSwitch
+
+export default VxeSwitch

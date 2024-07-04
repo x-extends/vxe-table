@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
-import { UtilTools, DomTools } from '../../tools'
-import { handleFieldOrColumn } from '../../table/src/util'
+import DomTools from '../../tools/dom'
+import { toFilters, handleFieldOrColumn } from '../../table/src/util'
+import { isEnableConf } from '../../tools/utils'
 import VXETable from '../../v-x-e-table'
 
 export default {
@@ -29,12 +30,12 @@ export default {
      * @param {ColumnInfo} fieldOrColumn 列
      * @param {Array} options 选项
      */
-    _setFilter (fieldOrColumn, options) {
+    _setFilter (fieldOrColumn, options, update) {
       const column = handleFieldOrColumn(this, fieldOrColumn)
-      if (column && column.filters && options) {
-        column.filters = UtilTools.getFilters(options)
+      if (column && column.filters) {
+        column.filters = toFilters(options || [])
       }
-      return this.$nextTick()
+      return update ? this.updateData() : this.$nextTick()
     },
     checkFilterOptions () {
       const { filterStore } = this
@@ -57,8 +58,8 @@ export default {
       } else {
         const { target: targetElem, pageX } = evnt
         const { filters, filterMultiple, filterRender } = column
-        const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-        const filterRecoverMethod = column.filterRecoverMethod || (compConf ? compConf.filterRecoverMethod : null)
+        const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
+        const filterRecoverMethod = column.filterRecoverMethod || (compConf ? (compConf.tableFilterRecoverMethod || compConf.filterRecoverMethod) : null)
         const { visibleWidth } = DomTools.getDomNode()
         Object.assign(filterStore, {
           args: params,
@@ -130,13 +131,13 @@ export default {
           filterStore.maxHeight = maxHeight
         })
       }
-      this.emitEvent('filter-visible', { column, property: column.property, filterList: this.getCheckedFilters(), visible: filterStore.visible }, evnt)
+      this.emitEvent('filter-visible', { column, field: column.field, property: column.field, filterList: this.getCheckedFilters(), visible: filterStore.visible }, evnt)
     },
     _getCheckedFilters () {
       const { tableFullColumn } = this
       const filterList = []
-      tableFullColumn.filter(column => {
-        const { property, filters } = column
+      tableFullColumn.forEach(column => {
+        const { field, filters } = column
         const valueList = []
         const dataList = []
         if (filters && filters.length) {
@@ -147,7 +148,7 @@ export default {
             }
           })
           if (valueList.length) {
-            filterList.push({ column, property, values: valueList, datas: dataList })
+            filterList.push({ column, field, property: field, values: valueList, datas: dataList })
           }
         }
       })
@@ -159,9 +160,9 @@ export default {
      * @param {Event} evnt 事件
      */
     confirmFilterEvent (evnt) {
-      const { filterStore, filterOpts, scrollXLoad, scrollYLoad } = this
+      const { filterStore, filterOpts, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = this
       const { column } = filterStore
-      const { property } = column
+      const { field } = column
       const values = []
       const datas = []
       column.filters.forEach(item => {
@@ -171,31 +172,42 @@ export default {
         }
       })
       const filterList = this.getCheckedFilters()
+      const params = { $table: this, $event: evnt, column, field, property: field, values, datas, filters: filterList, filterList }
       // 如果是服务端筛选，则跳过本地筛选处理
       if (!filterOpts.remote) {
         this.handleTableData(true)
         this.checkSelectionStatus()
-        this.updateFooter()
-        if (scrollXLoad || scrollYLoad) {
-          this.refreshScroll()
-          if (scrollYLoad) {
+      }
+      if (this.mouseConfig && this.mouseOpts.area && this.handleFilterEvent) {
+        this.handleFilterEvent(evnt, params)
+      }
+      this.emitEvent('filter-change', params, evnt)
+      this.closeFilter()
+      this.updateFooter().then(() => {
+        const { scrollXLoad, scrollYLoad } = this
+        if ((oldScrollXLoad || scrollXLoad) || (oldScrollYLoad || scrollYLoad)) {
+          if ((oldScrollXLoad || scrollXLoad)) {
+            this.updateScrollXSpace()
+          }
+          if ((oldScrollYLoad || scrollYLoad)) {
             this.updateScrollYSpace()
           }
+          return this.refreshScroll()
         }
-      }
-      this.emitEvent('filter-change', { column, property, values, datas, filters: filterList, filterList }, evnt)
-      this.closeFilter()
-      this.$nextTick(() => {
-        this.recalculate()
+      }).then(() => {
         this.updateCellAreas()
+        return this.recalculate(true)
+      }).then(() => {
+        // 存在滚动行为未结束情况
+        setTimeout(() => this.recalculate(), 50)
       })
     },
     handleClearFilter (column) {
       if (column) {
         const { filters, filterRender } = column
         if (filters) {
-          const compConf = filterRender ? VXETable.renderer.get(filterRender.name) : null
-          const filterResetMethod = column.filterResetMethod || (compConf ? compConf.filterResetMethod : null)
+          const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
+          const filterResetMethod = column.filterResetMethod || (compConf ? (compConf.tableFilterResetMethod || compConf.filterResetMethod) : null)
           filters.forEach((item) => {
             item._checked = false
             item.checked = false

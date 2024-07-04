@@ -1,19 +1,20 @@
 import XEUtils from 'xe-utils'
-import { VXETable } from './v-x-e-table'
+import { setConfig } from './v-x-e-table'
+import { setTheme } from './v-x-e-table/src/theme'
 
-import { Icon } from './icon'
 import { Filter } from './filter'
 import { Menu } from './menu'
 import { Edit } from './edit'
 import { Export } from './export'
 import { Keyboard } from './keyboard'
 import { Validator } from './validator'
-import { Header } from './header'
-import { Footer } from './footer'
+import { Custom } from './custom'
 
+import { Icon } from './icon'
 import { Column } from './column'
 import { Colgroup } from './colgroup'
 import { Grid } from './grid'
+import { Table } from './table'
 import { Toolbar } from './toolbar'
 import { Pager } from './pager'
 import { Checkbox } from './checkbox'
@@ -24,6 +25,7 @@ import { RadioButton } from './radio-button'
 import { Input } from './input'
 import { Textarea } from './textarea'
 import { Button } from './button'
+import { ButtonGroup } from './button-group'
 import { Modal } from './modal'
 import { Tooltip } from './tooltip'
 import { Form } from './form'
@@ -36,26 +38,24 @@ import { Switch } from './switch'
 import { List } from './list'
 import { Pulldown } from './pulldown'
 
-import { Table } from './table'
-
 import zhCN from './locale/lang/zh-CN'
 
 // 按需加载的组件
 const components = [
   // 功能模块
-  Header,
-  Footer,
-  Icon,
   Filter,
   Menu,
   Edit,
   Export,
   Keyboard,
   Validator,
+  Custom,
 
   // 可选组件
+  Icon,
   Column,
   Colgroup,
+  Table,
   Grid,
   Toolbar,
   Pager,
@@ -67,6 +67,7 @@ const components = [
   Input,
   Textarea,
   Button,
+  ButtonGroup,
   Modal,
   Tooltip,
   Form,
@@ -77,40 +78,40 @@ const components = [
   Option,
   Switch,
   List,
-  Pulldown,
-
-  // 核心
-  Table
+  Pulldown
 ]
 
 // 默认安装
 export function install (Vue, options) {
   if (XEUtils.isPlainObject(options)) {
-    VXETable.setup(options)
+    setConfig(options)
+    if (options.theme) {
+      setTheme(options.theme)
+    }
   }
   components.map(component => component.install(Vue))
 }
 
 // 默认中文
-VXETable.setup({
+setConfig({
   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args)
 })
 
 export * from './v-x-e-table'
 
-export * from './icon'
 export * from './filter'
 export * from './edit'
+export * from './menu'
 export * from './export'
 export * from './keyboard'
 export * from './validator'
-export * from './header'
-export * from './footer'
+export * from './custom'
 
+export * from './icon'
 export * from './column'
 export * from './colgroup'
+export * from './table'
 export * from './grid'
-export * from './menu'
 export * from './toolbar'
 export * from './pager'
 export * from './checkbox'
@@ -121,6 +122,7 @@ export * from './radio-button'
 export * from './input'
 export * from './textarea'
 export * from './button'
+export * from './button-group'
 export * from './modal'
 export * from './tooltip'
 export * from './form'
@@ -132,5 +134,3 @@ export * from './option'
 export * from './switch'
 export * from './list'
 export * from './pulldown'
-
-export * from './table'

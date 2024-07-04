@@ -1,23 +1,23 @@
 /**Variable**/
-@import './base/checked.scss';
+@import './helpers/mixin.scss';
 
 /*筛选*/
 .vxe-cell--filter {
-  padding: 0 0.1em 0 0.25em;
+  padding: 0 0.1em 0 0.2em;
   text-align: center;
   vertical-align: middle;
   display: inline-block;
   line-height: 0;
-  &.col--active {
+  &.col--filter {
     .vxe-filter--btn {
-      color: $vxe-table-font-color;
+      color: $vxe-font-color;
     }
   }
   .vxe-filter--btn {
     color: $vxe-table-column-icon-border-color;
     cursor: pointer;
     &:hover {
-      color: $vxe-table-font-color;
+      color: $vxe-font-color;
     }
   }
 }
@@ -80,7 +80,7 @@
   &.is--multiple {
     & > ul {
       & > li {
-        padding: 0.25em 0.8em 0.25em 2.3em;
+        padding: 0.25em 0.8em 0.25em 1em;
       }
     }
   }
@@ -92,7 +92,7 @@
       background-color: transparent;
       padding: 0 0.4em;
       border: 0;
-      color: $vxe-table-font-color;
+      color: $vxe-font-color;
       cursor: pointer;
       &:focus {
         outline: none;
@@ -101,7 +101,7 @@
         color: $vxe-primary-color;
       }
       &.is--disabled {
-        color: $vxe-disabled-color;
+        color: $vxe-font-disabled-color;
         cursor: not-allowed;
       }
     }
@@ -109,38 +109,5 @@
 }
 
 .vxe-table--filter-option {
-  @extend %XECheckbox;
-  .vxe-checkbox--icon {
-    left: 0.6em;
-    top: 0.38em;
-  }
-}
-
-.vxe-table {
-  .vxe-table--filter-option {
-    & > .vxe-checkbox--icon {
-      font-size: $vxe-checkbox-font-size-default;
-    }
-  }
-  &.size--medium {
-    .vxe-table--filter-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-medium;
-      }
-    }
-  }
-  &.size--small {
-    .vxe-table--filter-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-small;
-      }
-    }
-  }
-  &.size--mini {
-    .vxe-table--filter-option {
-      & > .vxe-checkbox--icon {
-        font-size: $vxe-checkbox-font-size-mini;
-      }
-    }
-  }
+  @include createCheckboxIcon();
 }

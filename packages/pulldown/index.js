@@ -1,9 +1,13 @@
-import VxePulldown from './src/pulldown'
+import VxePulldownComponent from './src/pulldown'
+import VxeUI from '../v-x-e-table'
 
-export const Pulldown = Object.assign(VxePulldown, {
+export const VxePulldown = Object.assign(VxePulldownComponent, {
   install (Vue) {
-    Vue.component(VxePulldown.name, VxePulldown)
+    Vue.component(VxePulldownComponent.name, VxePulldownComponent)
   }
 })
+VxeUI.component(VxePulldownComponent)
 
-export default Pulldown
+export const Pulldown = VxePulldown
+
+export default VxePulldown

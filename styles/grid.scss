@@ -29,30 +29,23 @@
     padding: 0.5em 1em;
     background-color: $vxe-grid-maximize-background-color;
   }
-  .vxe-body--row {
-    &.row--pending {
-      color: $vxe-table-validate-error-color;
-      text-decoration: line-through;
-      cursor: no-drop;
-      .vxe-body--column {
-        position: relative;
-        &:after {
-          content: "";
-          position: absolute;
-          top: 50%;
-          left: 0;
-          width: 100%;
-          height: 0;
-          border-bottom: 1px solid $vxe-table-validate-error-color;
-          z-index: 1;
-        }
-      }
-    }
-  }
   .vxe-grid--form-wrapper,
   .vxe-grid--top-wrapper,
   .vxe-grid--bottom-wrapper  {
     position: relative;
+  }
+  .vxe-grid--table-container {
+    display: flex;
+    flex-direction: row;
+  }
+  .vxe-grid--left-wrapper,
+  .vxe-grid--right-wrapper {
+    flex-shrink: 0;
+    overflow: auto;
+  }
+  .vxe-grid--table-wrapper {
+    flex-grow: 1;
+    overflow: hidden;
   }
 }
 

@@ -3,7 +3,7 @@ import VXETable from '../v-x-e-table'
 import Panel from './src/panel'
 import mixin from './src/mixin'
 
-export const Menu = {
+export const VxeTableMenuModule = {
   Panel,
   install (Vue) {
     VXETable.reg('menu')
@@ -12,4 +12,6 @@ export const Menu = {
   }
 }
 
-export default Menu
+export const Menu = VxeTableMenuModule
+
+export default VxeTableMenuModule

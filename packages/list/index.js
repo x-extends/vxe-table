@@ -1,9 +1,13 @@
-import VxeList from './src/list'
+import VxeListComponent from './src/list'
+import VxeUI from '../v-x-e-table'
 
-export const List = Object.assign(VxeList, {
+export const VxeList = Object.assign(VxeListComponent, {
   install (Vue) {
-    Vue.component(VxeList.name, VxeList)
+    Vue.component(VxeListComponent.name, VxeListComponent)
   }
 })
+VxeUI.component(VxeListComponent)
 
-export default List
+export const List = VxeList
+
+export default VxeList

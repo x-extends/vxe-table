@@ -1,9 +1,13 @@
-import VxeCheckbox from './src/checkbox'
+import VxeCheckboxComponent from './src/checkbox'
+import VxeUI from '../v-x-e-table'
 
-export const Checkbox = Object.assign(VxeCheckbox, {
+export const VxeCheckbox = Object.assign(VxeCheckboxComponent, {
   install (Vue) {
-    Vue.component(VxeCheckbox.name, VxeCheckbox)
+    Vue.component(VxeCheckboxComponent.name, VxeCheckboxComponent)
   }
 })
+VxeUI.component(VxeCheckboxComponent)
 
-export default Checkbox
+export const Checkbox = VxeCheckbox
+
+export default VxeCheckbox

@@ -1,34 +1,41 @@
 import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { browse } from '../../tools/src/dom'
-
-const { getRowid } = UtilTools
+import GlobalConfig from '../../v-x-e-table/src/conf'
+import UtilTools, { isEnableConf } from '../../tools/utils'
+import { getRowid } from '../../table/src/util'
+import DomTools, { browse } from '../../tools/dom'
+import { warnLog, errLog, getLog } from '../../tools/log'
 
 function insertTreeRow (_vm, newRecords, isAppend) {
   const { tableFullTreeData, afterFullData, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
-  const { rowField, parentField, children, mapChildren } = treeOpts
+  const { rowField, parentField, mapChildrenField } = treeOpts
+  const childrenField = treeOpts.children || treeOpts.childrenField
   const funcName = isAppend ? 'push' : 'unshift'
   newRecords.forEach(item => {
     const parentRowId = item[parentField]
     const rowid = getRowid(_vm, item)
-    const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[rowField], { children: mapChildren }) : null
+    const matchObj = parentRowId ? XEUtils.findTree(tableFullTreeData, item => parentRowId === item[rowField], { children: mapChildrenField }) : null
     if (matchObj) {
       const { item: parentRow } = matchObj
       const parentRest = fullAllDataRowIdData[getRowid(_vm, parentRow)]
       const parentLevel = parentRest ? parentRest.level : 0
-      let parentChilds = parentRow[children]
+      let parentChilds = parentRow[childrenField]
+      let mapChilds = parentRow[mapChildrenField]
       if (!XEUtils.isArray(parentChilds)) {
-        parentChilds = parentRow[children] = []
+        parentChilds = parentRow[childrenField] = []
+      }
+      if (!XEUtils.isArray(mapChilds)) {
+        mapChilds = parentRow[childrenField] = []
       }
       parentChilds[funcName](item)
-      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent, level: parentLevel + 1 }
+      mapChilds[funcName](item)
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (parentRowId) {
-          UtilTools.warn('vxe.error.unableInsert')
+          warnLog('vxe.error.unableInsert')
         }
       }
       afterFullData[funcName](item)
@@ -36,6 +43,156 @@ function insertTreeRow (_vm, newRecords, isAppend) {
       const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
+    }
+  })
+}
+
+function handleInsertRowAt (_vm, records, row, isInsertNextRow) {
+  const { tableFullTreeData, mergeList, afterFullData, editStore, tableFullData, treeConfig, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
+  const { transform, rowField, mapChildrenField } = treeOpts
+  const childrenField = treeOpts.children || treeOpts.childrenField
+  if (!XEUtils.isArray(records)) {
+    records = [records]
+  }
+  const newRecords = _vm.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
+  if (XEUtils.eqNull(row)) {
+  // 如果为虚拟树
+    if (treeConfig && transform) {
+      insertTreeRow(_vm, newRecords, false)
+    } else {
+      afterFullData.unshift(...newRecords)
+      tableFullData.unshift(...newRecords)
+      // 刷新单元格合并
+      mergeList.forEach(mergeItem => {
+        const { row: mergeRowIndex } = mergeItem
+        if (mergeRowIndex > 0) {
+          mergeItem.row = mergeRowIndex + newRecords.length
+        }
+      })
+    }
+  } else {
+    if (row === -1) {
+      // 如果为虚拟树
+      if (treeConfig && transform) {
+        insertTreeRow(_vm, newRecords, true)
+      } else {
+        afterFullData.push(...newRecords)
+        tableFullData.push(...newRecords)
+        // 刷新单元格合并
+        mergeList.forEach(mergeItem => {
+          const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+          if (mergeRowIndex + mergeRowspan > afterFullData.length) {
+            mergeItem.rowspan = mergeRowspan + newRecords.length
+          }
+        })
+      }
+    } else {
+      // 如果为虚拟树
+      if (treeConfig && transform) {
+        const matchMapObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: mapChildrenField })
+        if (matchMapObj) {
+          const { parent: parentRow } = matchMapObj
+          const parentMapChilds = parentRow ? parentRow[mapChildrenField] : tableFullTreeData
+          const parentRest = fullAllDataRowIdData[getRowid(_vm, parentRow)]
+          const parentLevel = parentRest ? parentRest.level : 0
+          newRecords.forEach((item, i) => {
+            const rowid = getRowid(_vm, item)
+            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              if (item[treeOpts.parentField]) {
+                if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
+                  errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
+                }
+              }
+            }
+            if (parentRow) {
+              item[treeOpts.parentField] = parentRow[rowField]
+            }
+            let targetIndex = matchMapObj.index + i
+            if (isInsertNextRow) {
+              targetIndex = targetIndex + 1
+            }
+            parentMapChilds.splice(targetIndex, 0, item)
+            const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1 }
+            fullDataRowIdData[rowid] = rest
+            fullAllDataRowIdData[rowid] = rest
+          })
+
+          // 源
+          if (parentRow) {
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: childrenField })
+            if (matchObj) {
+              const parentChilds = matchObj.items
+              let targetIndex = matchObj.index
+              if (isInsertNextRow) {
+                targetIndex = targetIndex + 1
+              }
+              parentChilds.splice(targetIndex, 0, ...newRecords)
+            }
+          }
+        } else {
+          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            warnLog('vxe.error.unableInsert')
+          }
+          insertTreeRow(_vm, newRecords, true)
+        }
+      } else {
+        if (treeConfig) {
+          throw new Error(getLog('vxe.error.noTree', ['insert']))
+        }
+        let afIndex = -1
+        // 如果是可视索引
+        if (XEUtils.isNumber(row)) {
+          if (row < afterFullData.length) {
+            afIndex = row
+          }
+        } else {
+          afIndex = _vm.findRowIndexOf(afterFullData, row)
+        }
+        // 如果是插入指定行的下一行
+        if (isInsertNextRow) {
+          afIndex = Math.min(afterFullData.length, afIndex + 1)
+        }
+        if (afIndex === -1) {
+          throw new Error(errLog('vxe.error.unableInsert'))
+        }
+        afterFullData.splice(afIndex, 0, ...newRecords)
+        tableFullData.splice(_vm.findRowIndexOf(tableFullData, row), 0, ...newRecords)
+        // 刷新单元格合并
+        mergeList.forEach(mergeItem => {
+          const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
+          if (mergeRowIndex > afIndex) {
+            mergeItem.row = mergeRowIndex + newRecords.length
+          } else if (mergeRowIndex + mergeRowspan > afIndex) {
+            mergeItem.rowspan = mergeRowspan + newRecords.length
+          }
+        })
+      }
+    }
+  }
+  const { insertList, insertMaps } = editStore
+  newRecords.forEach(newRow => {
+    const rowid = getRowid(_vm, newRow)
+    insertMaps[rowid] = newRow
+  })
+  insertList.unshift(...newRecords)
+  _vm.cacheRowMap()
+  _vm.updateScrollYStatus()
+  _vm.handleTableData(treeConfig && transform)
+  if (!(treeConfig && transform)) {
+    _vm.updateAfterDataIndex()
+  }
+  _vm.updateFooter()
+  _vm.checkSelectionStatus()
+  if (_vm.scrollYLoad) {
+    _vm.updateScrollYSpace()
+  }
+  return _vm.$nextTick().then(() => {
+    _vm.updateCellAreas()
+    return _vm.recalculate()
+  }).then(() => {
+    return {
+      row: newRecords.length ? newRecords[newRecords.length - 1] : null,
+      rows: newRecords
     }
   })
 }
@@ -48,7 +205,7 @@ export default {
      * @param {*} records
      */
     _insert (records) {
-      return this.insertAt(records)
+      return handleInsertRowAt(this, records, null)
     },
     /**
      * 往表格指定行中插入临时数据
@@ -57,127 +214,13 @@ export default {
      * 如果 row 为有效行则插入到该行的位置
      * @param {Object/Array} records 新的数据
      * @param {Row} row 指定行
+     * @returns
      */
     _insertAt (records, row) {
-      const { tableFullTreeData, mergeList, afterFullData, editStore, tableFullData, treeConfig, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = this
-      const { transform, rowField, mapChildren } = treeOpts
-      if (!XEUtils.isArray(records)) {
-        records = [records]
-      }
-      const newRecords = records.map(record => this.defineField(Object.assign({}, record)))
-      if (!row) {
-        // 如果为虚拟树
-        if (treeConfig && transform) {
-          insertTreeRow(this, newRecords, false)
-        } else {
-          afterFullData.unshift(...newRecords)
-          tableFullData.unshift(...newRecords)
-          // 刷新单元格合并
-          mergeList.forEach(mergeItem => {
-            const { row: mergeRowIndex } = mergeItem
-            if (mergeRowIndex > 0) {
-              mergeItem.row = mergeRowIndex + newRecords.length
-            }
-          })
-        }
-      } else {
-        if (row === -1) {
-          // 如果为虚拟树
-          if (treeConfig && transform) {
-            insertTreeRow(this, newRecords, true)
-          } else {
-            afterFullData.push(...newRecords)
-            tableFullData.push(...newRecords)
-            // 刷新单元格合并
-            mergeList.forEach(mergeItem => {
-              const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-              if (mergeRowIndex + mergeRowspan > afterFullData.length) {
-                mergeItem.rowspan = mergeRowspan + newRecords.length
-              }
-            })
-          }
-        } else {
-          // 如果为虚拟树
-          if (treeConfig && transform) {
-            const matchObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: mapChildren })
-            if (matchObj) {
-              const { parent: parentRow } = matchObj
-              const parentChilds = matchObj.items
-              const parentRest = fullAllDataRowIdData[getRowid(this, parentRow)]
-              const parentLevel = parentRest ? parentRest.level : 0
-              newRecords.forEach((item, i) => {
-                const rowid = getRowid(this, item)
-                if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                  if (item[treeOpts.parentField]) {
-                    if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
-                      UtilTools.error('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
-                    }
-                  }
-                }
-                if (parentRow) {
-                  item[treeOpts.parentField] = parentRow[rowField]
-                }
-                parentChilds.splice(matchObj.index + i, 0, item)
-                const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
-                fullDataRowIdData[rowid] = rest
-                fullAllDataRowIdData[rowid] = rest
-              })
-            } else {
-              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-                UtilTools.warn('vxe.error.unableInsert')
-              }
-              insertTreeRow(this, newRecords, true)
-            }
-          } else {
-            if (treeConfig) {
-              throw new Error(UtilTools.getLog('vxe.error.noTree', ['insert']))
-            }
-            let afIndex = -1
-            // 如果是可视索引
-            if (XEUtils.isNumber(row)) {
-              if (row < afterFullData.length) {
-                afIndex = row
-              }
-            } else {
-              afIndex = afterFullData.indexOf(row)
-            }
-            if (afIndex === -1) {
-              throw new Error(UtilTools.error('vxe.error.unableInsert'))
-            }
-            afterFullData.splice(afIndex, 0, ...newRecords)
-            tableFullData.splice(tableFullData.indexOf(row), 0, ...newRecords)
-            // 刷新单元格合并
-            mergeList.forEach(mergeItem => {
-              const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
-              if (mergeRowIndex > afIndex) {
-                mergeItem.row = mergeRowIndex + newRecords.length
-              } else if (mergeRowIndex + mergeRowspan > afIndex) {
-                mergeItem.rowspan = mergeRowspan + newRecords.length
-              }
-            })
-          }
-        }
-      }
-      editStore.insertList.unshift(...newRecords)
-      this.handleTableData(treeConfig && transform)
-      if (!(treeConfig && transform)) {
-        this.updateAfterDataIndex()
-      }
-      this.updateFooter()
-      this.cacheRowMap()
-      this.checkSelectionStatus()
-      if (this.scrollYLoad) {
-        this.updateScrollYSpace()
-      }
-      return this.$nextTick().then(() => {
-        this.updateCellAreas()
-        return this.recalculate()
-      }).then(() => {
-        return {
-          row: newRecords.length ? newRecords[newRecords.length - 1] : null,
-          rows: newRecords
-        }
-      })
+      return handleInsertRowAt(this, records, row)
+    },
+    _insertNextAt (records, row) {
+      return handleInsertRowAt(this, records, row, true)
     },
     /**
      * 删除指定行数据
@@ -186,11 +229,12 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows) {
-      const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selection, isInsertByRow, treeOpts } = this
-      const { transform } = treeOpts
-      const { actived, removeList, insertList } = editStore
-      const { checkField: property } = checkboxOpts
-      let rest = []
+      const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selectCheckboxMaps, isInsertByRow, treeOpts } = this
+      const { transform, mapChildrenField } = treeOpts
+      const childrenField = treeOpts.children || treeOpts.childrenField
+      const { actived, removeList, insertList, insertMaps } = editStore
+      const { checkField } = checkboxOpts
+      let delList = []
       if (!rows) {
         rows = tableFullData
       } else if (!XEUtils.isArray(rows)) {
@@ -203,17 +247,19 @@ export default {
         }
       })
       // 如果绑定了多选属性，则更新状态
-      if (!property) {
-        rows.forEach(row => {
-          const sIndex = selection.indexOf(row)
-          if (sIndex > -1) {
-            selection.splice(sIndex, 1)
+      if (!checkField) {
+        const selectRowMaps = { ...selectCheckboxMaps }
+        rows.forEach((row) => {
+          const rowid = getRowid(this, row)
+          if (selectRowMaps[rowid]) {
+            delete selectRowMaps[rowid]
           }
         })
+        this.selectCheckboxMaps = selectRowMaps
       }
       // 从数据源中移除
       if (tableFullData === rows) {
-        rows = rest = tableFullData.slice(0)
+        rows = delList = tableFullData.slice(0)
         this.tableFullData = []
         this.afterFullData = []
         this.clearMergeCells()
@@ -222,24 +268,28 @@ export default {
         if (treeConfig && transform) {
           rows.forEach((row) => {
             const rowid = getRowid(this, row)
-            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), treeOpts)
-            if (matchObj) {
-              const rItems = matchObj.items.splice(matchObj.index, 1)
-              rest.push(rItems[0])
+            const matchMapObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), { children: mapChildrenField })
+            if (matchMapObj) {
+              const rItems = matchMapObj.items.splice(matchMapObj.index, 1)
+              delList.push(rItems[0])
             }
-            const afIndex = afterFullData.indexOf(row)
+            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), { children: childrenField })
+            if (matchObj) {
+              matchObj.items.splice(matchObj.index, 1)
+            }
+            const afIndex = this.findRowIndexOf(afterFullData, row)
             if (afIndex > -1) {
               afterFullData.splice(afIndex, 1)
             }
           })
         } else {
           rows.forEach(row => {
-            const tfIndex = tableFullData.indexOf(row)
+            const tfIndex = this.findRowIndexOf(tableFullData, row)
             if (tfIndex > -1) {
               const rItems = tableFullData.splice(tfIndex, 1)
-              rest.push(rItems[0])
+              delList.push(rItems[0])
             }
-            const afIndex = afterFullData.indexOf(row)
+            const afIndex = this.findRowIndexOf(afterFullData, row)
             if (afIndex > -1) {
               // 刷新单元格合并
               mergeList.forEach(mergeItem => {
@@ -256,15 +306,17 @@ export default {
         }
       }
       // 如果当前行被激活编辑，则清除激活状态
-      if (actived.row && rows.indexOf(actived.row) > -1) {
-        this.clearActived()
+      if (actived.row && this.findRowIndexOf(rows, actived.row) > -1) {
+        this.clearEdit()
       }
       // 从新增中移除已删除的数据
       rows.forEach(row => {
-        const iIndex = insertList.indexOf(row)
+        const rowid = getRowid(this, row)
+        const iIndex = this.findRowIndexOf(insertList, row)
         if (iIndex > -1) {
           insertList.splice(iIndex, 1)
         }
+        delete insertMaps[rowid]
       })
       this.handleTableData(treeConfig && transform)
       if (!(treeConfig && transform)) {
@@ -280,7 +332,7 @@ export default {
         this.updateCellAreas()
         return this.recalculate()
       }).then(() => {
-        return { row: rest.length ? rest[rest.length - 1] : null, rows: rest }
+        return { row: delList.length ? delList[delList.length - 1] : null, rows: delList }
       })
     },
     /**
@@ -319,34 +371,23 @@ export default {
       return {
         insertRecords: this.getInsertRecords(),
         removeRecords: this.getRemoveRecords(),
-        updateRecords: this.getUpdateRecords()
+        updateRecords: this.getUpdateRecords(),
+        pendingRecords: this.getPendingRecords()
       }
     },
     /**
      * 获取新增的临时数据
      */
     _getInsertRecords () {
-      const { treeConfig, tableFullTreeData, tableFullData, treeOpts } = this
+      const { fullAllDataRowIdData } = this
       const insertList = this.editStore.insertList
       const insertRecords = []
-      if (insertList.length) {
-        // 如果为虚拟树
-        if (treeConfig && treeOpts.transform) {
-          insertList.forEach(row => {
-            const rowid = getRowid(this, row)
-            const matchObj = XEUtils.findTree(tableFullTreeData, item => rowid === getRowid(this, item), treeOpts)
-            if (matchObj) {
-              insertRecords.push(row)
-            }
-          })
-        } else {
-          insertList.forEach(row => {
-            if (tableFullData.indexOf(row) > -1) {
-              insertRecords.push(row)
-            }
-          })
+      insertList.forEach(row => {
+        const rowid = getRowid(this, row)
+        if (fullAllDataRowIdData[rowid]) {
+          insertRecords.push(row)
         }
-      }
+      })
       return insertRecords
     },
     /**
@@ -380,67 +421,91 @@ export default {
      */
     handleActived (params, evnt) {
       const { editStore, editOpts, tableColumn, editConfig, mouseConfig } = this
-      const { mode, activeMethod } = editOpts
-      const { actived } = editStore
+      const { mode } = editOpts
+      const { actived, focused } = editStore
       const { row, column } = params
       const { editRender } = column
-      const cell = params.cell = (params.cell || this.getCell(row, column))
-      if (isEnableConf(editConfig) && isEnableConf(editRender) && cell) {
-        if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
-          // 判断是否禁用编辑
-          let type = 'edit-disabled'
-          if (!activeMethod || activeMethod(params)) {
+      const cell = params.cell = (params.cell || this.getCellElement(row, column))
+      const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+      if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
+        // 激活编辑
+        if (!this.hasPendingByRow(row)) {
+          if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
+            // 判断是否禁用编辑
+            let type = 'edit-disabled'
+            if (!beforeEditMethod || beforeEditMethod({ ...params, $table: this, $grid: this.$xegrid })) {
+              if (mouseConfig) {
+                this.clearSelected(evnt)
+                this.clearCellAreas(evnt)
+                this.clearCopyCellArea(evnt)
+              }
+              this.closeTooltip()
+              if (actived.column) {
+                this.clearEdit(evnt)
+              }
+              type = 'edit-activated'
+              column.renderHeight = cell.offsetHeight
+              actived.args = params
+              actived.row = row
+              actived.column = column
+              if (mode === 'row') {
+                tableColumn.forEach(column => this._getColumnModel(row, column))
+              } else {
+                this._getColumnModel(row, column)
+              }
+              const afterEditMethod = editOpts.afterEditMethod
+              this.$nextTick(() => {
+                this.handleFocus(params, evnt)
+                if (afterEditMethod) {
+                  afterEditMethod({ ...params, $table: this, $grid: this.$xegrid })
+                }
+              })
+            }
+            this.emitEvent(type, {
+              row,
+              rowIndex: this.getRowIndex(row),
+              $rowIndex: this.getVMRowIndex(row),
+              column,
+              columnIndex: this.getColumnIndex(column),
+              $columnIndex: this.getVMColumnIndex(column)
+            }, evnt)
+
+            // v4已废弃
+            if (type === 'edit-activated') {
+              this.emitEvent('edit-actived', {
+                row,
+                rowIndex: this.getRowIndex(row),
+                $rowIndex: this.getVMRowIndex(row),
+                column,
+                columnIndex: this.getColumnIndex(column),
+                $columnIndex: this.getVMColumnIndex(column)
+              }, evnt)
+            }
+          } else {
+            const { column: oldColumn } = actived
             if (mouseConfig) {
               this.clearSelected(evnt)
               this.clearCellAreas(evnt)
               this.clearCopyCellArea(evnt)
             }
-            this.closeTooltip()
-            this.clearActived(evnt)
-            type = 'edit-actived'
+            if (oldColumn !== column) {
+              const { model: oldModel } = oldColumn
+              if (oldModel.update) {
+                UtilTools.setCellValue(row, oldColumn, oldModel.value)
+              }
+              this.clearValidate()
+            }
             column.renderHeight = cell.offsetHeight
             actived.args = params
-            actived.row = row
             actived.column = column
-            if (mode === 'row') {
-              tableColumn.forEach(column => this._getColumnModel(row, column))
-            } else {
-              this._getColumnModel(row, column)
-            }
-            this.$nextTick(() => {
+            setTimeout(() => {
               this.handleFocus(params, evnt)
             })
           }
-          this.emitEvent(type, {
-            row,
-            rowIndex: this.getRowIndex(row),
-            $rowIndex: this.getVMRowIndex(row),
-            column,
-            columnIndex: this.getColumnIndex(column),
-            $columnIndex: this.getVMColumnIndex(column)
-          }, evnt)
-        } else {
-          const { column: oldColumn } = actived
-          if (mouseConfig) {
-            this.clearSelected(evnt)
-            this.clearCellAreas(evnt)
-            this.clearCopyCellArea(evnt)
-          }
-          if (oldColumn !== column) {
-            const { model: oldModel } = oldColumn
-            if (oldModel.update) {
-              UtilTools.setCellValue(row, oldColumn, oldModel.value)
-            }
-            this.clearValidate()
-          }
-          column.renderHeight = cell.offsetHeight
-          actived.args = params
-          actived.column = column
-          setTimeout(() => {
-            this.handleFocus(params, evnt)
-          })
+          focused.column = null
+          focused.row = null
+          this.focus()
         }
-        this.focus()
       }
       return this.$nextTick()
     },
@@ -471,12 +536,19 @@ export default {
         }
       }
     },
+    _clearActived (evnt) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
+      }
+      // 即将废弃
+      return this.clearEdit(evnt)
+    },
     /**
      * 清除激活的编辑
      */
-    _clearActived (evnt) {
+    _clearEdit (evnt) {
       const { editStore } = this
-      const { actived } = editStore
+      const { actived, focused } = editStore
       const { row, column } = actived
       if (row || column) {
         this._syncActivedCell()
@@ -493,22 +565,43 @@ export default {
           $columnIndex: this.getVMColumnIndex(column)
         }, evnt)
       }
-      return (VXETable._valid ? this.clearValidate() : this.$nextTick()).then(this.recalculate)
+      focused.row = null
+      focused.column = null
+      if (GlobalConfig.cellVaildMode === 'obsolete') {
+        if (this.clearValidate) {
+          return this.clearValidate()
+        }
+      }
+      return this.$nextTick()
     },
     _getActiveRecord () {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
+      }
+      // 即将废弃
+      return this.getEditRecord()
+    },
+    _getEditRecord () {
       const { $el, editStore, afterFullData } = this
       const { actived } = editStore
       const { args, row } = actived
-      if (args && afterFullData.indexOf(row) > -1 && $el.querySelectorAll('.vxe-body--column.col--actived').length) {
+      if (args && this.findRowIndexOf(afterFullData, row) > -1 && $el.querySelectorAll('.vxe-body--column.col--active').length) {
         return Object.assign({}, args)
       }
       return null
+    },
+    _isActiveByRow (row) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
+      }
+      // 即将废弃
+      return this.isEditByRow(row)
     },
     /**
      * 判断行是否为激活编辑状态
      * @param {Row} row 行对象
      */
-    _isActiveByRow (row) {
+    _isEditByRow (row) {
       return this.editStore.actived.row === row
     },
     /**
@@ -519,18 +612,24 @@ export default {
       const { editRender } = column
       if (isEnableConf(editRender)) {
         const compRender = VXETable.renderer.get(editRender.name)
-        const { autofocus, autoselect } = editRender
+        let { autofocus, autoselect } = editRender
         let inputElem
-        // 如果指定了聚焦 class
-        if (autofocus) {
-          inputElem = cell.querySelector(autofocus)
+        if (!autofocus && compRender) {
+          autofocus = compRender.tableAutofocus || compRender.autofocus
         }
-        // 渲染器的聚焦处理
-        if (!inputElem && compRender && compRender.autofocus) {
-          inputElem = cell.querySelector(compRender.autofocus)
+        if (!autoselect && compRender) {
+          autoselect = compRender.tableAutoSelect || compRender.autoselect
+        }
+        // 如果指定了聚焦 class
+        if (XEUtils.isFunction(autofocus)) {
+          inputElem = autofocus.call(this, params)
+        } else if (autofocus) {
+          inputElem = cell.querySelector(autofocus)
+          if (inputElem) {
+            inputElem.focus()
+          }
         }
         if (inputElem) {
-          inputElem.focus()
           if (autoselect) {
             inputElem.select()
           } else {
@@ -547,21 +646,39 @@ export default {
         }
       }
     },
+    _setActiveRow (row) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
+      }
+      // 即将废弃
+      return this.setEditRow(row)
+    },
     /**
      * 激活行编辑
      */
-    _setActiveRow (row) {
-      return this.setActiveCell(row, XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender)))
+    _setEditRow (row, fieldOrColumn) {
+      let column = XEUtils.find(this.visibleColumn, column => isEnableConf(column.editRender))
+      if (fieldOrColumn) {
+        column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
+      }
+      return this.setEditCell(row, column)
+    },
+    _setActiveCell (row, fieldOrColumn) {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
+      }
+      // 即将废弃
+      return this.setEditCell(row, fieldOrColumn)
     },
     /**
      * 激活单元格编辑
      */
-    _setActiveCell (row, fieldOrColumn) {
+    _setEditCell (row, fieldOrColumn) {
       const { editConfig } = this
       const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
       if (row && column && isEnableConf(editConfig) && isEnableConf(column.editRender)) {
         return this.scrollToRow(row, true).then(() => {
-          const cell = this.getCell(row, column)
+          const cell = this.getCellElement(row, column)
           if (cell) {
             this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
             this.lastCallTime = Date.now()
@@ -577,9 +694,9 @@ export default {
       const { tableData, editOpts, visibleColumn } = this
       const column = XEUtils.isString(fieldOrColumn) ? this.getColumnByField(fieldOrColumn) : fieldOrColumn
       if (row && column && editOpts.trigger !== 'manual') {
-        const rowIndex = tableData.indexOf(row)
+        const rowIndex = this.findRowIndexOf(tableData, row)
         if (rowIndex > -1) {
-          const cell = this.getCell(row, column)
+          const cell = this.getCellElement(row, column)
           const params = { row, rowIndex, column, columnIndex: visibleColumn.indexOf(column), cell }
           this.handleSelected(params, {})
         }
@@ -597,7 +714,7 @@ export default {
       const selectMethod = () => {
         if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
-            this.clearActived(evnt)
+            this.clearEdit(evnt)
             this.clearSelected(evnt)
             this.clearCellAreas(evnt)
             this.clearCopyCellArea(evnt)
@@ -655,7 +772,7 @@ export default {
       const { row, column } = selected
       this.reColSdCls()
       if (row && column) {
-        const cell = this.getCell(row, column)
+        const cell = this.getCellElement(row, column)
         if (cell) {
           DomTools.addClass(cell, 'col--selected')
         }

@@ -2,8 +2,7 @@
   <div>
     <p class="tip">
       虚拟滚动渲染<br>
-      大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数<br>
-      <span class="red">(注：如果要启用横向虚拟滚动，不支持分组表头)</span>
+      大数据不建议使用双向绑定的 <table-api-link name="data"/> 属性（vue 监听会大数据会短暂的卡顿），建议使用 <table-api-link prop="loadData"/>/<table-api-link prop="loadColumn"/> 函数
     </p>
 
     <vxe-grid
@@ -15,7 +14,9 @@
       height="500"
       :loading="loading"
       :toolbar-config="{slots: {buttons: 'toolbar_buttons'}}"
-      :checkbox-config="{checkField: 'checked'}">
+      :checkbox-config="{checkField: 'checked'}"
+      :scroll-x="{enabled: true}"
+      :scroll-y="{enabled: true}">
       <template #toolbar_buttons>
         <vxe-button @click="loadColumnAndData(1000, 20)">1k列20条</vxe-button>
         <vxe-button @click="loadColumnAndData(1000, 100)">1k列100条</vxe-button>

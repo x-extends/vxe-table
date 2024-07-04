@@ -127,7 +127,7 @@
       <template #num1_filter="{ column, $panel }">
         <div>
           <div v-for="(option, index) in column.filters" :key="index">
-            <input type="type" v-model="option.data" @input="changeFilterEvent(evnt, option, $panel)"/>
+            <input type="type" v-model="option.data" @input="changeFilterEvent($event, option, $panel)"/>
           </div>
         </div>
       </template>
@@ -396,7 +396,7 @@ export default {
           <template #num1_filter="{ column, $panel }">
             <div>
               <div v-for="(option, index) in column.filters" :key="index">
-                <input type="type" v-model="option.data" @input="changeFilterEvent(evnt, option, $panel)"/>
+                <input type="type" v-model="option.data" @input="changeFilterEvent($event, option, $panel)"/>
               </div>
             </div>
           </template>

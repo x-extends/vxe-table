@@ -21,6 +21,7 @@
       highlight-hover-row
       ref="xTable"
       height="300"
+      :sort-config="{iconLayout: 'horizontal', iconAsc: 'vxe-icon-sort-asc', iconDesc: 'vxe-icon-sort-desc'}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
@@ -85,7 +86,7 @@
       <pre-code class="javascript">{{ demoCodes[5] }}</pre-code>
     </pre>
 
-    <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段组合排序</p>
+    <p class="tip">配置 <table-api-link prop="multiple"/> 启用多字段排序</p>
 
     <vxe-table
       border

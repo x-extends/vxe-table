@@ -1,15 +1,17 @@
 import Table from '../table'
 import VXETable from '../v-x-e-table'
-import Panel from './src/panel'
+import PanelComponent from './src/panel'
 import mixin from './src/mixin'
 
-export const Filter = {
-  Panel,
+export const VxeTableFilterModule = {
+  Panel: PanelComponent,
   install (Vue) {
     VXETable.reg('filter')
     Table.mixins.push(mixin)
-    Vue.component(Panel.name, Panel)
+    Vue.component(PanelComponent.name, PanelComponent)
   }
 }
 
-export default Filter
+export const Filter = VxeTableFilterModule
+
+export default VxeTableFilterModule

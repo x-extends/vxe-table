@@ -1,10 +1,12 @@
 import { CreateElement, VNode } from 'vue'
 import { VXETableComponent } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 弹窗
  */
-export declare class Modal extends VXETableComponent {
+export declare class VxeModal extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -40,6 +42,7 @@ export declare class Modal extends VXETableComponent {
     top?: number;
     left?: number;
   };
+
   /**
    * 窗口的标题
    */
@@ -157,6 +160,7 @@ export declare class Modal extends VXETableComponent {
     top?: number;
     left?: number;
   } | null;
+
   /**
    * 设置窗口位置
    */
@@ -178,6 +182,7 @@ export declare class Modal extends VXETableComponent {
    */
   revert(): Promise<any>;
 }
+export class Modal extends VxeModal {}
 
 /**
  * 窗口类型
@@ -257,9 +262,9 @@ export interface ModalDefaultSlotParams {
   $modal: Modal;
 }
 
-export interface ModalHeaderSlotParams extends ModalDefaultSlotParams {}
-export interface ModalTitleSlotParams extends ModalDefaultSlotParams {}
-export interface ModalFooterSlotParams extends ModalDefaultSlotParams {}
+export type ModalHeaderSlotParams = ModalDefaultSlotParams
+export type ModalTitleSlotParams = ModalDefaultSlotParams
+export type ModalFooterSlotParams = ModalDefaultSlotParams
 
 export interface ModalEventParams {
   $modal: Modal;

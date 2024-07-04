@@ -1,22 +1,23 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools, isEnableConf } from '../../tools'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener } from './util'
-import { browse } from '../../tools/src/dom'
+import UtilTools, { isEnableConf } from '../../tools/utils'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener, getRowid } from './util'
+import DomTools from '../../tools/dom'
+import { getSlotVNs } from '../../tools/vn'
 
 const renderType = 'body'
 
 // 滚动、拖动过程中不需要触发
-function isOperateMouse ($xetable) {
+function isVMScrollProcess ($xetable) {
   return $xetable._isResize || ($xetable.lastScrollTime && Date.now() < $xetable.lastScrollTime + $xetable.delayHover)
 }
 
 function renderLine (h, _vm, $xetable, params) {
   const { row, column } = params
-  const { treeOpts, treeConfig, fullAllDataRowIdData } = $xetable
+  const { afterFullData, treeOpts, treeConfig, fullAllDataRowIdData } = $xetable
   const { slots, treeNode } = column
-  const rowid = UtilTools.getRowid($xetable, row)
+  const rowid = getRowid($xetable, row)
   const rest = fullAllDataRowIdData[rowid]
   let rLevel = 0
   let rIndex = 0
@@ -29,7 +30,8 @@ function renderLine (h, _vm, $xetable, params) {
   if (slots && slots.line) {
     return $xetable.callSlot(slots.line, params, h)
   }
-  if (treeConfig && treeNode && treeOpts.line) {
+  const isFirstRow = $xetable.eqRow(afterFullData[0], row)
+  if (treeConfig && treeNode && (treeOpts.showLine || treeOpts.line)) {
     return [
       h('div', {
         class: 'vxe-tree--line-wrapper'
@@ -37,7 +39,7 @@ function renderLine (h, _vm, $xetable, params) {
         h('div', {
           class: 'vxe-tree--line',
           style: {
-            height: `${calcTreeLine(params, items, rIndex)}px`,
+            height: `${isFirstRow ? 1 : calcTreeLine(params, items, rIndex)}px`,
             left: `${(rLevel * treeOpts.indent) + (rLevel ? 2 - getOffsetSize($xetable) : 0) + 16}px`
           }
         })
@@ -66,7 +68,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
     isAllOverflow,
     align: allAlign,
     currentColumn,
-    cellClassName,
+    cellClassName: allCellClassName,
     cellStyle,
     mergeList,
     spanMethod,
@@ -81,14 +83,19 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
     editRules,
     validOpts,
     editStore,
-    validStore,
     tooltipConfig,
-    rowOpts
+    rowOpts,
+    columnOpts,
+    validErrorMaps
   } = $xetable
-  const { type, cellRender, editRender, align, showOverflow, className, treeNode } = column
+  const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
   const { actived } = editStore
   const { rHeight: scrollYRHeight } = sYOpts
   const { height: rowHeight } = rowOpts
+  const renderOpts = editRender || cellRender
+  const compConf = renderOpts ? VXETable.renderer.get(renderOpts.name) : null
+  const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : ''
+  const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
   const columnIndex = $xetable.getColumnIndex(column)
   const _columnIndex = $xetable.getVTColumnIndex(column)
@@ -102,13 +109,13 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   let isDirty
   const tdOns = {}
   const cellAlign = align || allAlign
-  const hasValidError = validStore.row === row && validStore.column === column
+  const errorValidItem = validErrorMaps[`${rowid}:${column.id}`]
   const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs = { colid: column.id }
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table: $xetable, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+  const params = { $table: $xetable, $grid: $xetable.$xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true
@@ -116,7 +123,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   // hover 进入事件
   if (showTitle || showTooltip || showAllTip || bindMouseenter || tooltipConfig) {
     tdOns.mouseenter = evnt => {
-      if (isOperateMouse($xetable)) {
+      if (isVMScrollProcess($xetable)) {
         return
       }
       if (showTitle) {
@@ -133,7 +140,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   // hover 退出事件
   if (showTooltip || showAllTip || bindMouseleave || tooltipConfig) {
     tdOns.mouseleave = evnt => {
-      if (isOperateMouse($xetable)) {
+      if (isVMScrollProcess($xetable)) {
         return
       }
       if (showTooltip || showAllTip) {
@@ -204,7 +211,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   }
   // 如果编辑列开启显示状态
   if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
-    isDirty = $xetable.isUpdateByRow(row, column.property)
+    isDirty = $xetable.isUpdateByRow(row, column.field)
   }
   const tdVNs = []
   if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
@@ -238,40 +245,50 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
         }
       }, column.renderCell(h, params))
     )
-    if (showValidTip && hasValidError) {
+    if (showValidTip && errorValidItem) {
+      const errRule = errorValidItem.rule
+      const validSlot = slots ? slots.valid : null
+      const validParams = { ...params, ...errorValidItem }
       tdVNs.push(
         h('div', {
-          class: 'vxe-cell--valid',
-          style: validStore.rule && validStore.rule.maxWidth ? {
-            width: `${validStore.rule.maxWidth}px`
+          class: ['vxe-cell--valid-error-hint', UtilTools.getClass(validOpts.className, errorValidItem)],
+          style: errRule && errRule.maxWidth ? {
+            width: `${errRule.maxWidth}px`
           } : null
-        }, [
+        }, validSlot ? $xetable.callSlot(validSlot, validParams, h) : [
           h('span', {
-            class: 'vxe-cell--valid-msg'
-          }, validStore.content)
+            class: 'vxe-cell--valid-error-msg'
+          }, errorValidItem.content)
         ])
       )
     }
   }
   return h('td', {
-    class: ['vxe-body--column', column.id, {
-      [`col--${cellAlign}`]: cellAlign,
-      [`col--${type}`]: type,
-      'col--last': $columnIndex === columns.length - 1,
-      'col--tree-node': treeNode,
-      'col--edit': isEdit,
-      'col--ellipsis': hasEllipsis,
-      'fixed--hidden': fixedHiddenColumn,
-      'col--dirty': isDirty,
-      'col--actived': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
-      'col--valid-error': hasValidError,
-      'col--current': currentColumn === column
-    }, UtilTools.getClass(className, params), UtilTools.getClass(cellClassName, params)],
-    key: columnKey ? column.id : $columnIndex,
+    class: [
+      'vxe-body--column',
+      column.id,
+      {
+        [`col--${cellAlign}`]: cellAlign,
+        [`col--${type}`]: type,
+        'col--last': $columnIndex === columns.length - 1,
+        'col--tree-node': treeNode,
+        'col--edit': isEdit,
+        'col--ellipsis': hasEllipsis,
+        'fixed--hidden': fixedHiddenColumn,
+        'col--dirty': isDirty,
+        'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
+        'col--valid-error': !!errorValidItem,
+        'col--current': currentColumn === column
+      },
+      UtilTools.getClass(compCellClassName, params),
+      UtilTools.getClass(className, params),
+      UtilTools.getClass(allCellClassName, params)
+    ],
+    key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
       height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
-    }, cellStyle ? (XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle) : null),
+    }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
     on: tdOns
   }, tdVNs)
 }
@@ -287,18 +304,21 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     showOverflow: allColumnOverflow,
     treeConfig,
     treeOpts,
+    expandOpts,
     editOpts,
-    treeExpandeds,
+    treeExpandedMaps,
     scrollYLoad,
-    editStore,
-    rowExpandeds,
+    rowExpandedMaps,
     radioOpts,
     checkboxOpts,
     expandColumn,
     hasFixedColumn,
     fullAllDataRowIdData,
-    rowOpts
+    rowOpts,
+    pendingRowList,
+    pendingRowMaps
   } = $xetable
+  const childrenField = treeOpts.children || treeOpts.childrenField
   const rows = []
   tableData.forEach((row, $rowIndex) => {
     const trOn = {}
@@ -309,75 +329,101 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
     // 事件绑定
     if (rowOpts.isHover || highlightHoverRow) {
       trOn.mouseenter = evnt => {
-        if (isOperateMouse($xetable)) {
+        if (isVMScrollProcess($xetable)) {
           return
         }
         $xetable.triggerHoverEvent(evnt, { row, rowIndex })
       }
       trOn.mouseleave = () => {
-        if (isOperateMouse($xetable)) {
+        if (isVMScrollProcess($xetable)) {
           return
         }
         $xetable.clearHoverRow()
       }
     }
-    const rowid = UtilTools.getRowid($xetable, row)
+    const rowid = getRowid($xetable, row)
     const rest = fullAllDataRowIdData[rowid]
     const rowLevel = rest ? rest.level : 0
     const seq = rest ? rest.seq : -1
     const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
+    // 行是否被展开
+    const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
+    // 树节点是否被展开
+    let isExpandTree = false
+    let rowChildren = []
+    // 是否新增行
     let isNewRow = false
     if (editConfig) {
-      isNewRow = editStore.insertList.indexOf(row) > -1
+      isNewRow = $xetable.isInsertByRow(row)
+    }
+    if (treeConfig && !scrollYLoad && !treeOpts.transform) {
+      rowChildren = row[childrenField]
+      isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
     }
     rows.push(
       h('tr', {
-        class: ['vxe-body--row', {
-          'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
-          'is--new': isNewRow,
-          'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-          'row--radio': radioOpts.highlight && $xetable.selectRow === row,
-          'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row)
-        }, rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''],
+        class: [
+          'vxe-body--row',
+          treeConfig ? `row--level-${rowLevel}` : '',
+          {
+            'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
+            'is--new': isNewRow,
+            'is--expand-row': isExpandRow,
+            'is--expand-tree': isExpandTree,
+            'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
+            'row--radio': radioOpts.highlight && $xetable.selectRadioRow === row,
+            'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row),
+            'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
+          },
+          rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
+        ],
         attrs: {
-          rowid: rowid
+          rowid
         },
         style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-        key: rowKey || treeConfig ? rowid : $rowIndex,
+        key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column, $columnIndex) => {
         return renderColumn(h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了
-    if (expandColumn && rowExpandeds.length && rowExpandeds.indexOf(row) > -1) {
-      let cellStyle
+    if (isExpandRow) {
+      const { height: expandHeight, padding } = expandOpts
+      const cellStyle = {}
+      if (expandHeight) {
+        cellStyle.height = `${expandHeight}px`
+      }
       if (treeConfig) {
-        cellStyle = {
-          paddingLeft: `${(rowLevel * treeOpts.indent) + 30}px`
-        }
+        cellStyle.paddingLeft = `${(rowLevel * treeOpts.indent) + 30}px`
       }
       const { showOverflow } = expandColumn
       const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
       const expandParams = { $table: $xetable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
       rows.push(
         h('tr', {
-          class: 'vxe-body--expanded-row',
+          class: ['vxe-body--expanded-row', {
+            'is--padding': padding
+          }],
           key: `expand_${rowid}`,
           style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(expandParams) : rowStyle) : null,
           on: trOn
         }, [
           h('td', {
-            class: ['vxe-body--expanded-column', {
+            class: {
+              'vxe-body--expanded-column': 1,
               'fixed--hidden': fixedType && !hasFixedColumn,
               'col--ellipsis': hasEllipsis
-            }],
+            },
             attrs: {
               colspan: tableColumn.length
             }
           }, [
             h('div', {
-              class: 'vxe-body--expanded-cell',
+              class: {
+                'vxe-body--expanded-cell': 1,
+                'is--ellipsis': expandHeight
+              },
               style: cellStyle
             }, [
               expandColumn.renderData(h, expandParams)
@@ -387,11 +433,8 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
       )
     }
     // 如果是树形表格
-    if (treeConfig && !scrollYLoad && !treeOpts.transform && treeExpandeds.length) {
-      const rowChildren = row[treeOpts.children]
-      if (rowChildren && rowChildren.length && treeExpandeds.indexOf(row) > -1) {
-        rows.push(...renderRows(h, _vm, $xetable, fixedType, rowChildren, tableColumn))
-      }
+    if (isExpandTree) {
+      rows.push(...renderRows(h, _vm, $xetable, fixedType, rowChildren, tableColumn))
     }
   })
   return rows
@@ -401,7 +444,7 @@ function renderRows (h, _vm, $xetable, fixedType, tableData, tableColumn) {
  * 同步滚动条
  */
 let scrollProcessTimeout
-function syncBodyScroll (scrollTop, elem1, elem2) {
+function syncBodyScroll (_vm, fixedType, scrollTop, elem1, elem2) {
   if (elem1 || elem2) {
     if (elem1) {
       removeScrollListener(elem1)
@@ -412,9 +455,27 @@ function syncBodyScroll (scrollTop, elem1, elem2) {
       elem2.scrollTop = scrollTop
     }
     clearTimeout(scrollProcessTimeout)
-    scrollProcessTimeout = setTimeout(function () {
+    scrollProcessTimeout = setTimeout(() => {
+      // const { tableBody, leftBody, rightBody } = _vm.$refs
+      // const bodyElem = tableBody.$el
+      // const leftElem = leftBody ? leftBody.$el : null
+      // const rightElem = rightBody ? rightBody.$el : null
       restoreScrollListener(elem1)
       restoreScrollListener(elem2)
+      // 检查滚动条是的同步
+      // let targetTop = bodyElem.scrollTop
+      // if (fixedType === 'left') {
+      //   if (leftElem) {
+      //     targetTop = leftElem.scrollTop
+      //   }
+      // } else if (fixedType === 'right') {
+      //   if (rightElem) {
+      //     targetTop = rightElem.scrollTop
+      //   }
+      // }
+      // setScrollTop(bodyElem, targetTop)
+      // setScrollTop(leftElem, targetTop)
+      // setScrollTop(rightElem, targetTop)
     }, 300)
   }
 }
@@ -447,20 +508,37 @@ export default {
     elemStore[`${prefix}xSpace`] = $refs.xSpace
     elemStore[`${prefix}ySpace`] = $refs.ySpace
     elemStore[`${prefix}emptyBlock`] = $refs.emptyBlock
-    this.$el.onscroll = this.scrollEvent
-    this.$el._onscroll = this.scrollEvent
+    if (this.$el) {
+      this.$el.onscroll = this.scrollEvent
+      this.$el._onscroll = this.scrollEvent
+    }
   },
   beforeDestroy () {
     clearTimeout(this.wheelTime)
-    this.$el._onscroll = null
-    this.$el.onscroll = null
+    if (this.$el) {
+      this.$el._onscroll = null
+      this.$el.onscroll = null
+    }
+  },
+  destroyed () {
+    const { $parent: $xetable, fixedType } = this
+    const { elemStore } = $xetable
+    const prefix = `${fixedType || 'main'}-body-`
+    elemStore[`${prefix}wrapper`] = null
+    elemStore[`${prefix}table`] = null
+    elemStore[`${prefix}colgroup`] = null
+    elemStore[`${prefix}list`] = null
+    elemStore[`${prefix}xSpace`] = null
+    elemStore[`${prefix}ySpace`] = null
+    elemStore[`${prefix}emptyBlock`] = null
   },
   render (h) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
-      if (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
+      // 如果存在展开行使用全量渲染
+      if (!expandColumn && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
         if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
           tableColumn = fixedColumn
         } else {
@@ -483,9 +561,9 @@ export default {
       emptyContent = $scopedSlots.empty.call(this, { $table: $xetable }, h)
     } else {
       const compConf = emptyOpts.name ? VXETable.renderer.get(emptyOpts.name) : null
-      const renderEmpty = compConf ? compConf.renderEmpty : null
-      if (renderEmpty) {
-        emptyContent = renderEmpty.call(this, h, emptyOpts, { $table: $xetable })
+      const renderTableEmptyView = compConf ? (compConf.renderTableEmptyView || compConf.renderEmpty) : null
+      if (renderTableEmptyView) {
+        emptyContent = getSlotVNs(renderTableEmptyView.call(this, h, emptyOpts, { $table: $xetable }))
       } else {
         emptyContent = $xetable.emptyText || GlobalConfig.i18n('vxe.table.emptyText')
       }
@@ -595,8 +673,8 @@ export default {
       const rightElem = rightBody ? rightBody.$el : null
       const bodyYElem = elemStore['main-body-ySpace']
       const bodyXElem = elemStore['main-body-xSpace']
-      const bodyHeight = bodyYElem ? bodyYElem.clientHeight : 0
-      const bodyWidth = bodyXElem ? bodyXElem.clientWidth : 0
+      const bodyHeight = scrollYLoad && bodyYElem ? bodyYElem.clientHeight : bodyElem.clientHeight
+      const bodyWidth = scrollXLoad && bodyXElem ? bodyXElem.clientWidth : bodyElem.clientWidth
       let scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isRollX = scrollLeft !== lastScrollLeft
@@ -609,10 +687,10 @@ export default {
       }
       if (leftElem && fixedType === 'left') {
         scrollTop = leftElem.scrollTop
-        syncBodyScroll(scrollTop, bodyElem, rightElem)
+        syncBodyScroll($xetable, fixedType, scrollTop, bodyElem, rightElem)
       } else if (rightElem && fixedType === 'right') {
         scrollTop = rightElem.scrollTop
-        syncBodyScroll(scrollTop, bodyElem, leftElem)
+        syncBodyScroll($xetable, fixedType, scrollTop, bodyElem, leftElem)
       } else {
         if (isRollX) {
           if (headerElem) {
@@ -625,7 +703,7 @@ export default {
         if (leftElem || rightElem) {
           $xetable.checkScrolling()
           if (isRollY) {
-            syncBodyScroll(scrollTop, leftElem, rightElem)
+            syncBodyScroll($xetable, fixedType, scrollTop, leftElem, rightElem)
           }
         }
       }
@@ -638,11 +716,22 @@ export default {
       if (isRollX && validTip && validTip.visible) {
         validTip.updatePlacement()
       }
-      $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop, scrollLeft, bodyHeight, bodyWidth, isX: isRollX, isY: isRollY }, evnt)
+      $xetable.emitEvent('scroll', {
+        type: renderType,
+        fixed: fixedType,
+        scrollTop,
+        scrollLeft,
+        scrollHeight: bodyElem.scrollHeight,
+        scrollWidth: bodyElem.scrollWidth,
+        bodyHeight,
+        bodyWidth,
+        isX: isRollX,
+        isY: isRollY
+      }, evnt)
     },
     handleWheel (evnt, isTopWheel, deltaTop, isRollX, isRollY) {
       const { $parent: $xetable } = this
-      const { $refs, elemStore } = $xetable
+      const { $refs, elemStore, scrollYLoad, scrollXLoad } = $xetable
       const { tableBody, leftBody, rightBody } = $refs
       const bodyElem = tableBody.$el
       const leftElem = leftBody ? leftBody.$el : null
@@ -650,8 +739,8 @@ export default {
       const remainSize = this.isPrevWheelTop === isTopWheel ? Math.max(0, this.wheelYSize - this.wheelYTotal) : 0
       const bodyYElem = elemStore['main-body-ySpace']
       const bodyXElem = elemStore['main-body-xSpace']
-      const bodyHeight = bodyYElem ? bodyYElem.clientHeight : 0
-      const bodyWidth = bodyXElem ? bodyXElem.clientWidth : 0
+      const bodyHeight = scrollYLoad && bodyYElem ? bodyYElem.clientHeight : bodyElem.clientHeight
+      const bodyWidth = scrollXLoad && bodyXElem ? bodyXElem.clientWidth : bodyElem.clientWidth
       this.isPrevWheelTop = isTopWheel
       this.wheelYSize = Math.abs(isTopWheel ? deltaTop - remainSize : deltaTop + remainSize)
       this.wheelYInterval = 0
@@ -666,20 +755,31 @@ export default {
             wheelYInterval = wheelYInterval - (wheelYTotal - wheelYSize)
           }
           const { scrollTop, clientHeight, scrollHeight } = bodyElem
-          const targerTop = scrollTop + (wheelYInterval * (isTopWheel ? -1 : 1))
-          bodyElem.scrollTop = targerTop
+          const targetTop = scrollTop + (wheelYInterval * (isTopWheel ? -1 : 1))
+          bodyElem.scrollTop = targetTop
           if (leftElem) {
-            leftElem.scrollTop = targerTop
+            leftElem.scrollTop = targetTop
           }
           if (rightElem) {
-            rightElem.scrollTop = targerTop
+            rightElem.scrollTop = targetTop
           }
-          if (isTopWheel ? targerTop < scrollHeight - clientHeight : targerTop >= 0) {
+          if (isTopWheel ? targetTop < scrollHeight - clientHeight : targetTop >= 0) {
             this.wheelTime = setTimeout(handleSmooth, 10)
           }
           this.wheelYTotal = wheelYTotal
           this.wheelYInterval = wheelYInterval
-          $xetable.emitEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft: bodyElem.scrollLeft, bodyHeight, bodyWidth, isX: isRollX, isY: isRollY }, evnt)
+          $xetable.emitEvent('scroll', {
+            type: renderType,
+            fixed: fixedType,
+            scrollTop: bodyElem.scrollTop,
+            scrollLeft: bodyElem.scrollLeft,
+            scrollHeight: bodyElem.scrollHeight,
+            scrollWidth: bodyElem.scrollWidth,
+            bodyHeight,
+            bodyWidth,
+            isX: isRollX,
+            isY: isRollY
+          }, evnt)
         }
       }
       handleSmooth()
@@ -694,8 +794,8 @@ export default {
       const { tableBody } = $refs
       const bodyElem = tableBody.$el
 
-      const deltaTop = browse.firefox ? deltaY * 40 : deltaY
-      const deltaLeft = browse.firefox ? deltaX * 40 : deltaX
+      const deltaTop = deltaY
+      const deltaLeft = deltaX
       const isTopWheel = deltaTop < 0
       // 如果滚动位置已经是顶部或底部，则不需要触发
       if (isTopWheel ? scrollBodyElem.scrollTop <= 0 : scrollBodyElem.scrollTop >= scrollBodyElem.scrollHeight - scrollBodyElem.clientHeight) {

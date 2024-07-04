@@ -1,4 +1,4 @@
-import { UtilTools } from '../../tools'
+import { getFuncText } from '../../tools/utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 
 export default {
@@ -14,6 +14,12 @@ export default {
   },
   inject: {
     $xeradiogroup: {
+      default: null
+    },
+    $xeform: {
+      default: null
+    },
+    $xeformiteminfo: {
       default: null
     }
   },
@@ -60,7 +66,7 @@ export default {
       }),
       h('span', {
         class: 'vxe-radio--label'
-      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [UtilTools.getFuncText(content)])
+      }, $scopedSlots.default ? $scopedSlots.default.call(this, {}) : [getFuncText(content)])
     ])
   },
   methods: {
@@ -68,10 +74,14 @@ export default {
       const { $xeradiogroup } = this
       const params = { label, $event: evnt }
       if ($xeradiogroup) {
-        $xeradiogroup.handleChecked(params)
+        $xeradiogroup.handleChecked(params, evnt)
       } else {
         this.$emit('input', label)
         this.$emit('change', params)
+        // 自动更新校验状态
+        if (this.$xeform && this.$xeformiteminfo) {
+          this.$xeform.triggerItemEvent(evnt, this.$xeformiteminfo.itemConfig.field, label)
+        }
       }
     },
     changeEvent (evnt) {

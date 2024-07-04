@@ -1,8 +1,10 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { GlobalEvent, createResizeEvent } from '../../tools'
-import { browse } from '../../tools/src/dom'
+import { createResizeEvent } from '../../tools/resize'
+import { GlobalEvent } from '../../tools/event'
+import { browse } from '../../tools/dom'
+import VxeLoading from '../../loading/index'
 
 export default {
   name: 'VxeList',
@@ -74,6 +76,9 @@ export default {
       this.$resize = resizeObserver
     }
   },
+  activated () {
+    this.recalculate().then(() => this.refreshScroll())
+  },
   beforeDestroy () {
     if (this.$resize) {
       this.$resize.disconnect()
@@ -112,15 +117,15 @@ export default {
           }
         }, $scopedSlots.default ? $scopedSlots.default.call(this, { items, $list: this }, h) : [])
       ]),
-      h('div', {
-        class: ['vxe-list--loading vxe-loading', {
-          'is--visible': loading
-        }]
-      }, [
-        h('div', {
-          class: 'vxe-loading--spinner'
-        })
-      ])
+      /**
+       * 加载中
+       */
+      h(VxeLoading, {
+        class: 'vxe-list--loading',
+        props: {
+          value: loading
+        }
+      })
     ])
   },
   methods: {
@@ -140,7 +145,8 @@ export default {
         visibleSize: 0
       })
       this.fullData = fullData
-      this.scrollYLoad = sYOpts.enabled && sYOpts.gt > -1 && sYOpts.gt <= fullData.length
+      // 如果gt为0，则总是启用
+      this.scrollYLoad = sYOpts.enabled && sYOpts.gt > -1 && (sYOpts.gt === 0 || sYOpts.gt <= fullData.length)
       this.handleData()
       return this.computeScrollLoad().then(() => {
         this.refreshScroll()

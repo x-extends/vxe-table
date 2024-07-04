@@ -1,5 +1,5 @@
 import Cell from '../../table/src/cell'
-import { UtilTools } from '../../tools'
+import UtilTools from '../../tools/utils'
 
 const props = {
   // 列唯一主键
@@ -14,6 +14,8 @@ const props = {
   width: [Number, String],
   // 列最小宽度，把剩余宽度按比例分配
   minWidth: [Number, String],
+  // 列最大宽度
+  maxWidth: [Number, String],
   // 是否允许拖动列宽调整大小
   resizable: { type: Boolean, default: null },
   // 将列固定在左侧或者右侧
@@ -64,12 +66,18 @@ const props = {
   treeNode: Boolean,
   // 是否可视
   visible: { type: Boolean, default: null },
+  // 表头单元格数据导出方法
+  headerExportMethod: Function,
   // 单元格数据导出方法
   exportMethod: Function,
   // 表尾单元格数据导出方法
   footerExportMethod: Function,
-  // 标题帮助图标配置项
+  // 已废弃，被 titlePrefix 替换
   titleHelp: Object,
+  // 标题前缀图标配置项
+  titlePrefix: Object,
+  // 标题后缀图标配置项
+  titleSuffix: Object,
   // 单元格值类型
   cellType: String,
   // 单元格渲染配置项
@@ -86,6 +94,14 @@ const watch = {}
 Object.keys(props).forEach(name => {
   watch[name] = function (value) {
     this.columnConfig.update(name, value)
+    if (this.$xetable) {
+      if (name === 'filters') {
+        this.$xetable.setFilter(this.columnConfig, value)
+        this.$xetable.handleUpdateDataQueue()
+      } else if (['visible', 'fixed', 'width', 'minWidth', 'maxWidth'].includes(name)) {
+        this.$xetable.handleRefreshColumnQueue()
+      }
+    }
   }
 })
 

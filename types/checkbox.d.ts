@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 复选框
  */
-export declare class Checkbox extends VXETableComponent {
+export declare class VxeCheckbox extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -29,3 +29,5 @@ export declare class Checkbox extends VXETableComponent {
    */
   disabled?: boolean;
 }
+
+export class Checkbox extends VxeCheckbox {}

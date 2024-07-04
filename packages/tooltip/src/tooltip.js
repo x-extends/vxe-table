@@ -1,7 +1,8 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import vSize from '../../mixins/size'
-import { UtilTools, DomTools } from '../../tools'
+import UtilTools from '../../tools/utils'
+import DomTools from '../../tools/dom'
 
 function updateTipStyle (_vm) {
   const { $el: wrapperElem, tipTarget, tipStore } = _vm
@@ -26,27 +27,66 @@ function updateTipStyle (_vm) {
   }
 }
 
+function showTip (_vm) {
+  const { $el, tipStore, zIndex } = _vm
+  const parentNode = $el.parentNode
+  if (!parentNode) {
+    document.body.appendChild($el)
+  }
+  _vm.updateValue(true)
+  _vm.updateZindex()
+  tipStore.placement = 'top'
+  tipStore.style = { width: 'auto', left: 0, top: 0, zIndex: zIndex || _vm.tipZindex }
+  tipStore.arrowStyle = { left: '50%' }
+  return _vm.updatePlacement()
+}
+
+function renderContent (h, _vm) {
+  const { $scopedSlots, useHTML, tipContent } = _vm
+  if ($scopedSlots.content) {
+    return h('div', {
+      key: 1,
+      class: 'vxe-table--tooltip-content'
+    }, $scopedSlots.content.call(this, {}))
+  }
+  if (useHTML) {
+    return h('div', {
+      key: 2,
+      class: 'vxe-table--tooltip-content',
+      domProps: {
+        innerHTML: tipContent
+      }
+    })
+  }
+  return h('div', {
+    key: 3,
+    class: 'vxe-table--tooltip-content'
+  }, UtilTools.formatText(tipContent))
+}
+
 export default {
   name: 'VxeTooltip',
   mixins: [vSize],
   props: {
     value: Boolean,
     size: { type: String, default: () => GlobalConfig.tooltip.size || GlobalConfig.size },
-    trigger: { type: String, default: () => GlobalConfig.tooltip.trigger },
-    theme: { type: String, default: () => GlobalConfig.tooltip.theme },
-    content: [String, Number],
+    trigger: { type: String, default: () => GlobalConfig.tooltip.trigger || 'hover' },
+    theme: { type: String, default: () => GlobalConfig.tooltip.theme || 'dark' },
+    content: { type: [String, Number], default: null },
+    useHTML: Boolean,
     zIndex: [String, Number],
+    popupClassName: [String, Function],
     isArrow: { type: Boolean, default: true },
     enterable: Boolean,
-    leaveDelay: { type: Number, default: () => GlobalConfig.tooltip.leaveDelay },
-    leaveMethod: Function
+    enterDelay: { type: Number, default: () => GlobalConfig.tooltip.enterDelay },
+    leaveDelay: { type: Number, default: () => GlobalConfig.tooltip.leaveDelay }
   },
   data () {
     return {
       isUpdate: false,
-      isHover: false,
       visible: false,
-      message: '',
+      tipContent: '',
+      tipActive: false,
       tipTarget: null,
       tipZindex: 0,
       tipStore: {
@@ -58,7 +98,7 @@ export default {
   },
   watch: {
     content (value) {
-      this.message = value
+      this.tipContent = value
     },
     value (value) {
       if (!this.isUpdate) {
@@ -67,40 +107,46 @@ export default {
       this.isUpdate = false
     }
   },
+  created () {
+    this.showDelayTip = XEUtils.debounce(() => {
+      if (this.tipActive) {
+        showTip(this)
+      }
+    }, this.enterDelay, { leading: false, trailing: true })
+  },
   mounted () {
     const { $el, trigger, content, value } = this
     const parentNode = $el.parentNode
-    let target
-    this.message = content
-    this.tipZindex = UtilTools.nextZIndex()
-    XEUtils.arrayEach($el.children, (elem, index) => {
-      if (index > 1) {
-        parentNode.insertBefore(elem, $el)
-        if (!target) {
-          target = elem
+    if (parentNode) {
+      let target
+      this.tipContent = content
+      this.tipZindex = UtilTools.nextZIndex()
+      XEUtils.arrayEach($el.children, (elem, index) => {
+        if (index > 1) {
+          parentNode.insertBefore(elem, $el)
+          if (!target) {
+            target = elem
+          }
+        }
+      })
+      parentNode.removeChild($el)
+      this.target = target
+      if (target) {
+        if (trigger === 'hover') {
+          target.onmouseleave = this.targetMouseleaveEvent
+          target.onmouseenter = this.targetMouseenterEvent
+        } else if (trigger === 'click') {
+          target.onclick = this.clickEvent
         }
       }
-    })
-    parentNode.removeChild($el)
-    this.target = target
-    if (target) {
-      if (trigger === 'hover') {
-        target.onmouseleave = this.targetMouseleaveEvent
-        target.onmouseenter = this.targetMouseenterEvent
-      } else if (trigger === 'click') {
-        target.onclick = this.clickEvent
+      if (value) {
+        this.open()
       }
-    }
-    if (value) {
-      this.open()
     }
   },
   beforeDestroy () {
     const { $el, target, trigger } = this
     const parentNode = $el.parentNode
-    if (parentNode) {
-      parentNode.removeChild($el)
-    }
     if (target) {
       if (trigger === 'hover') {
         target.onmouseenter = null
@@ -109,9 +155,12 @@ export default {
         target.onclick = null
       }
     }
+    if (parentNode) {
+      parentNode.removeChild($el)
+    }
   },
   render (h) {
-    const { $scopedSlots, vSize, theme, message, isHover, isArrow, visible, tipStore, enterable } = this
+    const { $scopedSlots, vSize, popupClassName, theme, tipActive, isArrow, visible, tipStore, enterable } = this
     let on
     if (enterable) {
       on = {
@@ -120,21 +169,19 @@ export default {
       }
     }
     return h('div', {
-      class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, {
+      class: ['vxe-table--tooltip-wrapper', `theme--${theme}`, popupClassName ? (XEUtils.isFunction(popupClassName) ? popupClassName({ $tooltip: this }) : popupClassName) : '', {
         [`size--${vSize}`]: vSize,
         [`placement--${tipStore.placement}`]: tipStore.placement,
         'is--enterable': enterable,
         'is--visible': visible,
         'is--arrow': isArrow,
-        'is--hover': isHover
+        'is--active': tipActive
       }],
       style: tipStore.style,
       ref: 'tipWrapper',
       on
     }, [
-      h('div', {
-        class: 'vxe-table--tooltip-content'
-      }, $scopedSlots.content ? $scopedSlots.content.call(this, {}) : message),
+      renderContent(h, this),
       h('div', {
         class: 'vxe-table--tooltip-arrow',
         style: tipStore.arrowStyle
@@ -142,20 +189,21 @@ export default {
     ].concat($scopedSlots.default ? $scopedSlots.default.call(this, {}) : []))
   },
   methods: {
-    open (target, message) {
-      return this.toVisible(target || this.target, message)
+    open (target, content) {
+      return this.toVisible(target || this.target, content)
     },
     close () {
       this.tipTarget = null
+      this.tipActive = false
       Object.assign(this.tipStore, {
         style: {},
         placement: '',
         arrowStyle: null
       })
-      this.update(false)
+      this.updateValue(false)
       return this.$nextTick()
     },
-    update (value) {
+    updateValue (value) {
       if (value !== this.visible) {
         this.visible = value
         this.isUpdate = true
@@ -169,24 +217,19 @@ export default {
         this.tipZindex = UtilTools.nextZIndex()
       }
     },
-    toVisible (target, message) {
-      this.targetActive = true
+    toVisible (target, content) {
       if (target) {
-        const { $el, tipStore, zIndex } = this
-        const parentNode = $el.parentNode
-        if (!parentNode) {
-          document.body.appendChild($el)
-        }
-        if (message) {
-          this.message = message
-        }
+        const { trigger, enterDelay } = this
+        this.tipActive = true
         this.tipTarget = target
-        this.update(true)
-        this.updateZindex()
-        tipStore.placement = 'top'
-        tipStore.style = { width: 'auto', left: 0, top: 0, zIndex: zIndex || this.tipZindex }
-        tipStore.arrowStyle = { left: '50%' }
-        return this.updatePlacement()
+        if (content) {
+          this.tipContent = content
+        }
+        if (enterDelay && trigger === 'hover') {
+          this.showDelayTip()
+        } else {
+          return showTip(this)
+        }
       }
       return this.$nextTick()
     },
@@ -199,6 +242,12 @@ export default {
         }
       })
     },
+    isActived () {
+      return this.tipActive
+    },
+    setActived (actived) {
+      this.tipActive = !!actived
+    },
     clickEvent () {
       this[this.visible ? 'close' : 'open']()
     },
@@ -207,10 +256,10 @@ export default {
     },
     targetMouseleaveEvent () {
       const { trigger, enterable, leaveDelay } = this
-      this.targetActive = false
+      this.tipActive = false
       if (enterable && trigger === 'hover') {
         setTimeout(() => {
-          if (!this.isHover) {
+          if (!this.tipActive) {
             this.close()
           }
         }, leaveDelay)
@@ -219,19 +268,17 @@ export default {
       }
     },
     wrapperMouseenterEvent () {
-      this.isHover = true
+      this.tipActive = true
     },
-    wrapperMouseleaveEvent (evnt) {
-      const { leaveMethod, trigger, enterable, leaveDelay } = this
-      this.isHover = false
-      if (!leaveMethod || leaveMethod({ $event: evnt }) !== false) {
-        if (enterable && trigger === 'hover') {
-          setTimeout(() => {
-            if (!this.targetActive) {
-              this.close()
-            }
-          }, leaveDelay)
-        }
+    wrapperMouseleaveEvent () {
+      const { trigger, enterable, leaveDelay } = this
+      this.tipActive = false
+      if (enterable && trigger === 'hover') {
+        setTimeout(() => {
+          if (!this.tipActive) {
+            this.close()
+          }
+        }, leaveDelay)
       }
     }
   }

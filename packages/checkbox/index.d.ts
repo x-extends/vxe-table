@@ -1,4 +1,4 @@
-import { Checkbox } from '../../types/checkbox'
+import { VxeCheckbox } from '../../types/checkbox'
 
 export * from '../../types/checkbox'
-export default Checkbox
+export default VxeCheckbox

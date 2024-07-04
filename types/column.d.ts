@@ -1,17 +1,17 @@
-import { CreateElement, VNode } from 'vue'
-import { VXETableComponent } from './component'
-import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './filter'
+import { CreateElement } from 'vue'
+import { VXETableComponent, SlotVNodeType } from './component'
+import { ColumnFilterOption, ColumnFilterParams, ColumnFilterRenderOptions, ColumnFilterSlotParams, ColumnFilterMethodParams } from './module/filter'
 import { ColumnCellRenderParams, ColumnDefaultSlotParams, ColumnIconSlotParams, ColumnContentSlotParams, RenderOptions, OptionProps, OptionGroupProps } from './v-x-e-table'
-import { ColumnHeaderSlotParams, ColumnHeaderRenderParams } from './header'
-import { ColumnFooterSlotParams, ColumnFooterRenderParams } from './footer'
-import { ColumnEditRenderOptions, ColumnEditSlotParams } from './edit'
-import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams } from './export'
+import { ColumnEditRenderOptions, ColumnEditSlotParams } from './module/edit'
+import { ColumnExportCellRenderParams, ColumnExportFooterRenderParams, ColumnExportHeaderRenderParams } from './module/export'
 import { TableOverflow } from './table'
+
+/* eslint-disable no-use-before-define */
 
 /**
  * 列
  */
-export declare class Column extends VXETableComponent {
+export declare class VxeColumn extends VXETableComponent {
   /**
    * 渲染类型
    */
@@ -32,6 +32,7 @@ export declare class Column extends VXETableComponent {
    * 列最小宽度，把剩余宽度按比例分配
    */
   minWidth?: number | string;
+  maxWidth?: number | string;
   /**
    * 是否允许拖动列宽调整大小
    */
@@ -71,11 +72,11 @@ export declare class Column extends VXETableComponent {
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
+  headerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
+  footerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 格式化显示内容
    */
@@ -120,6 +121,7 @@ export declare class Column extends VXETableComponent {
    * 是否可视
    */
   visible?: boolean;
+  headerExportMethod?(params: ColumnExportHeaderRenderParams): string | number;
   /**
    * 自定义单元格数据导出方法
    */
@@ -149,6 +151,7 @@ export declare class Column extends VXETableComponent {
    */
   params?: any;
 }
+export class Column extends VxeColumn {}
 
 export type ColumnAlign = 'left' | 'center' | 'right' | null
 export type ColumnFixed = 'left' | 'right' | null
@@ -174,6 +177,7 @@ export interface ColumnOptions {
    * 列最小宽度，把剩余宽度按比例分配
    */
   minWidth?: number | string;
+  maxWidth?: number | string;
   /**
    * 是否允许拖动列宽调整大小
    */
@@ -213,11 +217,11 @@ export interface ColumnOptions {
   /**
    * 给表头单元格附加 className
    */
-  headerClassName?: string | ((params: ColumnHeaderRenderParams) => string | any[] | { [key: string]: boolean });
+  headerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 给表尾单元格附加 className
    */
-  footerClassName?: string | ((params: ColumnFooterRenderParams) => string | any[] | { [key: string]: boolean });
+  footerClassName?: string | ((params: any) => string | any[] | { [key: string]: boolean });
   /**
    * 格式化显示内容
    */
@@ -292,13 +296,13 @@ export interface ColumnOptions {
   params?: any;
 
   slots?: {
-    default?(params: ColumnDefaultSlotParams, h: CreateElement): VNode[] | string[];
-    header?(params: ColumnHeaderSlotParams, h: CreateElement): VNode[] | string[];
-    footer?(params: ColumnFooterSlotParams, h: CreateElement): VNode[] | string[];
-    content?(params: ColumnContentSlotParams, h: CreateElement): VNode[] | string[];
-    filter?(params: ColumnFilterSlotParams, h: CreateElement): VNode[] | string[];
-    edit?(params: ColumnEditSlotParams, h: CreateElement): VNode[] | string[];
-    icon?(params: ColumnIconSlotParams, h: CreateElement): VNode[] | string[];
+    default?(params: ColumnDefaultSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    header?(params: any, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    footer?(params: any, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    content?(params: ColumnContentSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    filter?(params: ColumnFilterSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    edit?(params: ColumnEditSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
+    icon?(params: ColumnIconSlotParams, h: CreateElement): SlotVNodeType | SlotVNodeType[]
   };
 }
 
@@ -306,15 +310,22 @@ export interface ColumnOptions {
  * 列对象
  */
 export class ColumnInfo {
+  /**
+   * 该属性已废弃，该属性被 field 替换
+   * @deprecated
+   */
+  property: string;
+
+  field: string;
   title: string;
   width: number | string;
   minWidth: number | string;
+  maxWidth: number | string;
   resizable: boolean;
   fixed: string;
   align: ColumnAlign;
   headerAlign: ColumnAlign;
   footerAlign: ColumnAlign;
-  property: string;
   type: string;
   sortable: boolean;
   treeNode: boolean;
@@ -337,6 +348,8 @@ export class ColumnInfo {
   halfChecked: boolean;
   disabled: boolean;
   order: string;
+  sortTime: number
+  customOrder: number
   renderWidth: number;
   renderHeight: number;
   resizeWidth: number;
@@ -344,6 +357,7 @@ export class ColumnInfo {
     update: boolean;
     value: any;
   };
+
   children: ColumnInfo[];
 
   getTitle(): string;

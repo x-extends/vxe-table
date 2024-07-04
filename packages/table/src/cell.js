@@ -1,18 +1,38 @@
 import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, DomTools } from '../../tools'
-import { eqEmptyValue, isEnableConf } from '../../tools/src/utils'
+import DomTools from '../../tools/dom'
+import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
+import { getRowid, getColumnConfig } from './util'
+import { getSlotVNs } from '../../tools/vn'
 
-function renderHelpIcon (h, params) {
+function renderTitlePrefixIcon (h, params) {
   const { $table, column } = params
-  const { titleHelp } = column
-  return titleHelp ? [
+  const titlePrefix = column.titlePrefix || column.titleHelp
+  return titlePrefix ? [
     h('i', {
-      class: ['vxe-cell-help-icon', titleHelp.icon || GlobalConfig.icon.TABLE_HELP],
+      class: ['vxe-cell-title-prefix-icon', titlePrefix.icon || GlobalConfig.icon.TABLE_TITLE_PREFIX],
       on: {
         mouseenter (evnt) {
-          $table.triggerHeaderHelpEvent(evnt, params)
+          $table.triggerHeaderTitleEvent(evnt, titlePrefix, params)
+        },
+        mouseleave (evnt) {
+          $table.handleTargetLeaveEvent(evnt)
+        }
+      }
+    })
+  ] : []
+}
+
+function renderTitleSuffixIcon (h, params) {
+  const { $table, column } = params
+  const titleSuffix = column.titleSuffix
+  return titleSuffix ? [
+    h('i', {
+      class: ['vxe-cell-title-suffix-icon', titleSuffix.icon || GlobalConfig.icon.TABLE_TITLE_SUFFIX],
+      on: {
+        mouseenter (evnt) {
+          $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
         },
         mouseleave (evnt) {
           $table.handleTargetLeaveEvent(evnt)
@@ -63,12 +83,12 @@ function renderTitleContent (h, params, content) {
     }) : h('span', {
       class: 'vxe-cell--title',
       on: ons
-    }, content)
+    }, getSlotVNs(content))
   ]
 }
 
 function getFooterContent (h, params) {
-  const { $table, column, _columnIndex, items } = params
+  const { $table, column, _columnIndex, row, items } = params
   const { slots, editRender, cellRender } = column
   const renderOpts = editRender || cellRender
   if (slots && slots.footer) {
@@ -76,11 +96,16 @@ function getFooterContent (h, params) {
   }
   if (renderOpts) {
     const compConf = VXETable.renderer.get(renderOpts.name)
-    if (compConf && compConf.renderFooter) {
-      return compConf.renderFooter.call($table, h, renderOpts, params)
+    const rtFooter = compConf ? (compConf.renderTableFooter || compConf.renderFooter) : null
+    if (rtFooter) {
+      return getSlotVNs(rtFooter.call($table, h, renderOpts, params))
     }
   }
-  return [UtilTools.formatText(items[_columnIndex], 1)]
+  // 兼容老模式
+  if (XEUtils.isArray(items)) {
+    return [UtilTools.formatText(items[_columnIndex], 1)]
+  }
+  return [UtilTools.formatText(XEUtils.get(row, column.field), 1)]
 }
 
 function getDefaultCellLabel (params) {
@@ -136,7 +161,7 @@ export const Cell = {
           renMaps.renderHeader = this.renderFilterHeader
         }
     }
-    return UtilTools.getColumnConfig($xetable, _vm, renMaps)
+    return getColumnConfig($xetable, _vm, renMaps)
   },
   /**
    * 单元格
@@ -150,14 +175,15 @@ export const Cell = {
     }
     if (renderOpts) {
       const compConf = VXETable.renderer.get(renderOpts.name)
-      if (compConf && compConf.renderHeader) {
-        return renderTitleContent(h, params, compConf.renderHeader.call($table, h, renderOpts, params))
+      const rtHeader = compConf ? (compConf.renderTableHeader || compConf.renderHeader) : null
+      if (rtHeader) {
+        return getSlotVNs(renderTitleContent(h, params, rtHeader.call($table, h, renderOpts, params)))
       }
     }
     return renderTitleContent(h, params, UtilTools.formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (h, params) {
-    return renderHelpIcon(h, params).concat(Cell.renderHeaderTitle(h, params))
+    return renderTitlePrefixIcon(h, params).concat(Cell.renderHeaderTitle(h, params)).concat(renderTitleSuffixIcon(h, params))
   },
   renderDefaultCell (h, params) {
     const { $table, row, column } = params
@@ -167,10 +193,12 @@ export const Cell = {
       return $table.callSlot(slots.default, params, h)
     }
     if (renderOpts) {
-      const funName = editRender ? 'renderCell' : 'renderDefault'
       const compConf = VXETable.renderer.get(renderOpts.name)
-      if (compConf && compConf[funName]) {
-        return compConf[funName].call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))
+      const rtDefault = compConf ? (compConf.renderTableDefault || compConf.renderDefault) : null
+      const rtCell = compConf ? (compConf.renderTableCell || compConf.renderCell) : null
+      const renderFn = editRender ? rtCell : rtDefault
+      if (renderFn) {
+        return getSlotVNs(renderFn.call($table, h, renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
       }
     }
     const cellValue = $table.getCellLabel(row, column)
@@ -182,7 +210,7 @@ export const Cell = {
         // 如果设置占位符
         h('span', {
           class: 'vxe-cell--placeholder'
-        }, UtilTools.formatText(UtilTools.getFuncText(cellPlaceholder), 1))
+        }, UtilTools.formatText(getFuncText(cellPlaceholder), 1))
       ] : UtilTools.formatText(cellValue, 1))
     ]
   },
@@ -202,11 +230,13 @@ export const Cell = {
    */
   renderTreeIcon (h, params, cellVNodes) {
     const { $table, isHidden } = params
-    const { treeOpts, treeExpandeds, treeLazyLoadeds } = $table
+    const { treeOpts, treeExpandedMaps, treeExpandLazyLoadedMaps } = $table
     const { row, column, level } = params
     const { slots } = column
-    const { children, hasChild, indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
-    const rowChilds = row[children]
+    const { indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
+    const rowChilds = row[childrenField]
     let hasLazyChilds = false
     let isAceived = false
     let isLazyLoaded = false
@@ -215,14 +245,17 @@ export const Cell = {
       return $table.callSlot(slots.icon, params, h, cellVNodes)
     }
     if (!isHidden) {
-      isAceived = treeExpandeds.indexOf(row) > -1
+      const rowid = getRowid($table, row)
+      isAceived = !!treeExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = treeLazyLoadeds.indexOf(row) > -1
-        hasLazyChilds = row[hasChild]
+        isLazyLoaded = !!treeExpandLazyLoadedMaps[rowid]
+        hasLazyChilds = row[hasChildField]
       }
     }
     if (!trigger || trigger === 'default') {
-      on.click = evnt => $table.triggerTreeExpandEvent(evnt, params)
+      on.click = evnt => {
+        $table.triggerTreeExpandEvent(evnt, params)
+      }
     }
     return [
       h('div', {
@@ -289,13 +322,13 @@ export const Cell = {
   },
   renderRadioCell (h, params) {
     const { $table, column, isHidden } = params
-    const { radioOpts, selectRow } = $table
+    const { radioOpts, selectRadioRow } = $table
     const { slots } = column
     const { labelField, checkMethod, visibleMethod } = radioOpts
     const { row } = params
     const defaultSlot = slots ? slots.default : null
     const radioSlot = slots ? slots.radio : null
-    const isChecked = row === selectRow
+    const isChecked = row === selectRadioRow
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
     let on
@@ -319,10 +352,7 @@ export const Cell = {
     if (isVisible) {
       radioVNs.push(
         h('span', {
-          class: 'vxe-radio--icon vxe-radio--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-radio--icon vxe-radio--unchecked-icon'
+          class: ['vxe-radio--icon', isChecked ? GlobalConfig.icon.TABLE_RADIO_CHECKED : GlobalConfig.icon.TABLE_RADIO_UNCHECKED]
         })
       )
     }
@@ -352,25 +382,23 @@ export const Cell = {
    */
   renderCheckboxHeader (h, params) {
     const { $table, column, isHidden } = params
-    const { isIndeterminate: isAllCheckboxIndeterminate, isAllCheckboxDisabled } = $table
+    const { isAllSelected: isAllCheckboxSelected, isIndeterminate: isAllCheckboxIndeterminate, isAllCheckboxDisabled } = $table
     const { slots } = column
     const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
     const checkboxOpts = $table.checkboxOpts
     const headerTitle = column.getTitle()
-    let isChecked = false
     let on
     if (!isHidden) {
-      isChecked = isAllCheckboxDisabled ? false : $table.isAllSelected
       on = {
         click (evnt) {
           if (!isAllCheckboxDisabled) {
-            $table.triggerCheckAllEvent(evnt, !isChecked)
+            $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
           }
         }
       }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
+    const checkboxParams = { ...params, checked: isAllCheckboxSelected, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
     if (headerSlot) {
       return renderTitleContent(h, checkboxParams, $table.callSlot(headerSlot, checkboxParams, h))
     }
@@ -384,7 +412,7 @@ export const Cell = {
     return renderTitleContent(h, checkboxParams, [
       h('span', {
         class: ['vxe-cell--checkbox', {
-          'is--checked': isChecked,
+          'is--checked': isAllCheckboxSelected,
           'is--disabled': isAllCheckboxDisabled,
           'is--indeterminate': isAllCheckboxIndeterminate
         }],
@@ -394,13 +422,7 @@ export const Cell = {
         on
       }, [
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       ].concat(titleSlot || headerTitle ? [
         h('span', {
@@ -411,7 +433,7 @@ export const Cell = {
   },
   renderCheckboxCell (h, params) {
     const { $table, row, column, isHidden } = params
-    const { treeConfig, treeIndeterminates } = $table
+    const { treeConfig, treeIndeterminateMaps, selectCheckboxMaps } = $table
     const { labelField, checkMethod, visibleMethod } = $table.checkboxOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
@@ -422,7 +444,8 @@ export const Cell = {
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
-      isChecked = $table.selection.indexOf(row) > -1
+      const rowid = getRowid($table, row)
+      isChecked = !!selectCheckboxMaps[rowid]
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
@@ -434,7 +457,7 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        indeterminate = !!treeIndeterminateMaps[rowid]
       }
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
@@ -445,13 +468,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       )
     }
@@ -467,7 +484,8 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': indeterminate
+          'is--indeterminate': indeterminate,
+          'is--hidden': !isVisible
         }],
         on
       }, checkVNs)
@@ -478,18 +496,20 @@ export const Cell = {
   },
   renderCheckboxCellByProp (h, params) {
     const { $table, row, column, isHidden } = params
-    const { treeConfig, treeIndeterminates } = $table
-    const { labelField, checkField: property, halfField, checkMethod, visibleMethod } = $table.checkboxOpts
+    const { treeConfig, treeIndeterminateMaps, checkboxOpts } = $table
+    const { labelField, checkField, checkMethod, visibleMethod } = checkboxOpts
+    const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     const checkboxSlot = slots ? slots.checkbox : null
-    let indeterminate = false
+    let isIndeterminate = false
     let isChecked = false
     const isVisible = !visibleMethod || visibleMethod({ row })
     let isDisabled = !!checkMethod
     let on
     if (!isHidden) {
-      isChecked = XEUtils.get(row, property)
+      const rowid = getRowid($table, row)
+      isChecked = XEUtils.get(row, checkField)
       on = {
         click (evnt) {
           if (!isDisabled && isVisible) {
@@ -501,10 +521,10 @@ export const Cell = {
         isDisabled = !checkMethod({ row })
       }
       if (treeConfig) {
-        indeterminate = treeIndeterminates.indexOf(row) > -1
+        isIndeterminate = !!treeIndeterminateMaps[rowid]
       }
     }
-    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
+    const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate: isIndeterminate }
     if (checkboxSlot) {
       return $table.callSlot(checkboxSlot, checkboxParams, h)
     }
@@ -512,13 +532,7 @@ export const Cell = {
     if (isVisible) {
       checkVNs.push(
         h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--checked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--unchecked-icon'
-        }),
-        h('span', {
-          class: 'vxe-checkbox--icon vxe-checkbox--indeterminate-icon'
+          class: ['vxe-checkbox--icon', isIndeterminate ? GlobalConfig.icon.TABLE_CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.TABLE_CHECKBOX_CHECKED : GlobalConfig.icon.TABLE_CHECKBOX_UNCHECKED)]
         })
       )
     }
@@ -534,7 +548,8 @@ export const Cell = {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
           'is--disabled': isDisabled,
-          'is--indeterminate': halfField && !isChecked ? row[halfField] : indeterminate
+          'is--indeterminate': indeterminateField && !isChecked ? row[indeterminateField] : isIndeterminate,
+          'is--hidden': !isVisible
         }],
         on
       }, checkVNs)
@@ -549,7 +564,7 @@ export const Cell = {
    */
   renderExpandCell (h, params) {
     const { $table, isHidden, row, column } = params
-    const { expandOpts, rowExpandeds, expandLazyLoadeds } = $table
+    const { expandOpts, rowExpandedMaps, rowExpandLazyLoadedMaps } = $table
     const { lazy, labelField, iconLoaded, showIcon, iconOpen, iconClose, visibleMethod } = expandOpts
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
@@ -559,9 +574,10 @@ export const Cell = {
       return $table.callSlot(slots.icon, params, h)
     }
     if (!isHidden) {
-      isAceived = rowExpandeds.indexOf(params.row) > -1
+      const rowid = getRowid($table, row)
+      isAceived = !!rowExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = expandLazyLoadeds.indexOf(row) > -1
+        isLazyLoaded = !!rowExpandLazyLoadedMaps[rowid]
       }
     }
     return [
@@ -592,8 +608,9 @@ export const Cell = {
     }
     if (contentRender) {
       const compConf = VXETable.renderer.get(contentRender.name)
-      if (compConf && compConf.renderExpand) {
-        return compConf.renderExpand.call($table, h, contentRender, params)
+      const rtExpand = compConf ? (compConf.renderTableExpand || compConf.renderExpand) : null
+      if (rtExpand) {
+        return getSlotVNs(rtExpand.call($table, h, contentRender, params))
       }
     }
     return []
@@ -638,10 +655,10 @@ export const Cell = {
   },
   renderSortIcon (h, params) {
     const { $table, column } = params
-    const { showIcon, iconAsc, iconDesc } = $table.sortOpts
+    const { showIcon, iconLayout, iconAsc, iconDesc } = $table.sortOpts
     return showIcon ? [
       h('span', {
-        class: 'vxe-cell--sort'
+        class: ['vxe-cell--sort', `vxe-cell--sort-${iconLayout}-layout`]
       }, [
         h('i', {
           class: ['vxe-sort--asc-btn', iconAsc || GlobalConfig.icon.TABLE_SORT_ASC, {
@@ -652,6 +669,7 @@ export const Cell = {
           },
           on: {
             click (evnt) {
+              evnt.stopPropagation()
               $table.triggerSortEvent(evnt, column, 'asc')
             }
           }
@@ -665,6 +683,7 @@ export const Cell = {
           },
           on: {
             click (evnt) {
+              evnt.stopPropagation()
               $table.triggerSortEvent(evnt, column, 'desc')
             }
           }
@@ -696,7 +715,9 @@ export const Cell = {
           },
           on: {
             click (evnt) {
-              $table.triggerFilterEvent(evnt, params.column, params)
+              if ($table.triggerFilterEvent) {
+                $table.triggerFilterEvent(evnt, params.column, params)
+              }
             }
           }
         })
@@ -713,7 +734,7 @@ export const Cell = {
     const { sortable, remoteSort, filters, editRender } = column
     let isRequired = false
     if (editRules) {
-      const columnRules = XEUtils.get(editRules, params.column.property)
+      const columnRules = XEUtils.get(editRules, column.field)
       if (columnRules) {
         isRequired = columnRules.some(rule => rule.required)
       }
@@ -753,11 +774,15 @@ export const Cell = {
     const { $table, column } = params
     const { slots, editRender, formatter } = column
     const compConf = VXETable.renderer.get(editRender.name)
+    const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
     if (isEdit) {
       if (slots && slots.edit) {
         return $table.callSlot(slots.edit, params, h)
       }
-      return compConf && compConf.renderEdit ? compConf.renderEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params)) : []
+      if (rtEdit) {
+        return getSlotVNs(rtEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params)))
+      }
+      return []
     }
     if (slots && slots.default) {
       return $table.callSlot(slots.default, params, h)

@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 开关
  */
-export declare class Switch extends VXETableComponent {
+export declare class VxeSwitch extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -19,3 +19,4 @@ export declare class Switch extends VXETableComponent {
   openIcon?: string;
   closeIcon?: string;
 }
+export class Switch extends VxeSwitch {}

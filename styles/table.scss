@@ -1,8 +1,7 @@
 /**Variable**/
 @import './helpers/mixin.scss';
-@import './base/checked.scss';
 @import './base/common.scss';
-@import './base/loading.scss';
+@import './loading.scss';
 
 %DefaultColumnHeight {
   height: $vxe-table-row-height-default;
@@ -34,6 +33,9 @@
   border: 0;
 }
 
+.vxe-table--render-wrapper {
+  background-color: $vxe-table-body-background-color;
+}
 .vxe-table--body-wrapper {
   scroll-behavior: auto;
 }
@@ -57,7 +59,7 @@
     outline: 0;
     padding: 0 2px;
     width: 100%;
-    color: $vxe-table-font-color;
+    color: $vxe-font-color;
     border-radius: $vxe-border-radius;
     border: 1px solid $vxe-input-border-color;
     &:focus {
@@ -209,7 +211,10 @@
 }
 
 .vxe-table--cell-active-area {
-  border: $vxe-table-cell-active-area-border-width solid $vxe-table-cell-active-area-border-color;
+  border-color: $vxe-table-cell-active-area-border-color; 
+  border-style: solid;
+  border-width: $vxe-table-cell-active-area-border-width;
+  background-color: $vxe-table-cell-active-area-background-color;
 }
 
 .vxe-table--cell-multi-area {
@@ -219,84 +224,36 @@
 }
 
 /*圆角*/
-@if $vxe-table-border-radius {
-  .vxe-table--render-default {
-    &.is--round {
-      %AllRadius {
-        border-radius: $vxe-table-border-radius;
-      }
-      %TopRadius {
-        border-radius: $vxe-table-border-radius $vxe-table-border-radius 0 0;
-      }
-      %TopLeftRadius {
-        border-radius: $vxe-table-border-radius 0 0 0;
-      }
-      %TopRightRadius {
-        border-radius: 0 $vxe-table-border-radius 0 0;
-      }
-      %BottomRadius {
-        border-radius: 0 0 $vxe-table-border-radius $vxe-table-border-radius;
-      }
-      %BottomLeftRadius {
-        border-radius: 0 0 0 $vxe-table-border-radius;
-      }
-      %BottomRightRadius {
-        border-radius: 0 0 $vxe-table-border-radius 0;
-      }
+.vxe-table--render-default {
+  &.is--round {
+    %AllRadius {
+      border-radius: $vxe-table-border-radius;
+    }
+    %TopRadius {
+      border-radius: $vxe-table-border-radius $vxe-table-border-radius 0 0;
+    }
+    %TopLeftRadius {
+      border-radius: $vxe-table-border-radius 0 0 0;
+    }
+    %TopRightRadius {
+      border-radius: 0 $vxe-table-border-radius 0 0;
+    }
+    %BottomRadius {
+      border-radius: 0 0 $vxe-table-border-radius $vxe-table-border-radius;
+    }
+    %BottomLeftRadius {
+      border-radius: 0 0 0 $vxe-table-border-radius;
+    }
+    %BottomRightRadius {
+      border-radius: 0 0 $vxe-table-border-radius 0;
+    }
+    @extend %AllRadius;
+    .vxe-table--border-line {
       @extend %AllRadius;
-      .vxe-table--border-line {
-        @extend %AllRadius;
-      }
-      &.is--header {
-        &:not(.is--footer) {
-          .vxe-table--body-wrapper {
-            &.fixed-left--wrapper {
-              @extend %BottomLeftRadius;
-            }
-            &.body--wrapper {
-              @extend %BottomRadius;
-            }
-            &.fixed-right--wrapper {
-              @extend %BottomRightRadius;
-            }
-          }
-        }
-        .vxe-table--header-wrapper {
-          &.fixed-left--wrapper {
-            @extend %TopLeftRadius;
-          }
-          &.body--wrapper {
-            @extend %TopRadius;
-          }
-          &.fixed-right--wrapper {
-            @extend %TopRightRadius;
-          }
-        }
-      }
-      &:not(.is--header) {
-        &:not(.is--footer) {
-          .vxe-table--body-wrapper {
-            &.body--wrapper {
-              @extend %AllRadius;
-            }
-          }
-        }
-      }
-      &.is--footer {
-        &:not(.is--header) {
-          .vxe-table--body-wrapper {
-            &.fixed-left--wrapper {
-              @extend %BottomLeftRadius;
-            }
-            &.body--wrapper {
-              @extend %TopRadius;
-            }
-            &.fixed-right--wrapper {
-              @extend %BottomRightRadius;
-            }
-          }
-        }
-        .vxe-table--footer-wrapper {
+    }
+    &.is--header {
+      &:not(.is--footer) {
+        .vxe-table--body-wrapper {
           &.fixed-left--wrapper {
             @extend %BottomLeftRadius;
           }
@@ -308,6 +265,194 @@
           }
         }
       }
+      .vxe-table--header-wrapper {
+        &.fixed-left--wrapper {
+          @extend %TopLeftRadius;
+        }
+        &.body--wrapper {
+          @extend %TopRadius;
+        }
+        &.fixed-right--wrapper {
+          @extend %TopRightRadius;
+        }
+      }
+    }
+    &:not(.is--header) {
+      &:not(.is--footer) {
+        .vxe-table--body-wrapper {
+          &.body--wrapper {
+            @extend %AllRadius;
+          }
+        }
+      }
+    }
+    &.is--footer {
+      &:not(.is--header) {
+        .vxe-table--body-wrapper {
+          &.fixed-left--wrapper {
+            @extend %BottomLeftRadius;
+          }
+          &.body--wrapper {
+            @extend %TopRadius;
+          }
+          &.fixed-right--wrapper {
+            @extend %BottomRightRadius;
+          }
+        }
+      }
+      .vxe-table--footer-wrapper {
+        &.fixed-left--wrapper {
+          @extend %BottomLeftRadius;
+        }
+        &.body--wrapper {
+          @extend %BottomRadius;
+        }
+        &.fixed-right--wrapper {
+          @extend %BottomRightRadius;
+        }
+      }
+    }
+  }
+}
+
+/*header*/
+.vxe-table {
+  .vxe-table--header-wrapper {
+    color: $vxe-table-header-font-color;
+    .vxe-table--header-border-line {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 0;
+      border-bottom: $vxe-table-border-width solid $vxe-table-border-color;
+    }
+  }
+  /*排序*/
+  .vxe-cell--sort {
+    text-align: center;
+    position: relative;
+    padding: 0 0.1em 0 0.2em;
+  }
+  .vxe-cell--sort-vertical-layout {
+    display: inline-flex;
+    flex-direction: column;
+    height: 1.8em;
+    vertical-align: middle;
+    .vxe-sort--asc-btn,
+    .vxe-sort--desc-btn {
+      height: 0.6em;
+    }
+  }
+  .vxe-cell--sort-horizontal-layout {
+    display: inline-flex;
+    flex-direction: row;
+    .vxe-sort--asc-btn,
+    .vxe-sort--desc-btn {
+      width: 0.5em;
+    }
+  }
+  .vxe-sort--asc-btn,
+  .vxe-sort--desc-btn {
+    color: $vxe-table-column-icon-border-color;
+    cursor: pointer;
+    &:hover {
+      color: $vxe-font-color;
+    }
+    &.sort--active {
+      color: $vxe-primary-color;
+    }
+  }
+}
+
+.vxe-header--column {
+  position: relative;
+  font-weight: $vxe-table-header-font-weight;
+  // user-select: none;
+  &.col--ellipsis {
+    & > .vxe-cell {
+      display: flex;
+      align-items: center;
+      .vxe-cell--title {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      & > i,
+      & > span {
+        &:not(.vxe-cell--title) {
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+  .vxe-cell--required-icon {
+    display: inline-block;
+    color: $vxe-table-validate-error-color;
+    width: 0.8em;
+    height: 1em;
+    line-height: 1em;
+    font-family: $vxe-icon-font-family;
+    font-weight: normal;
+    position: relative;
+    &:before {
+      content: "*";
+      position: absolute;
+      left: 0;
+      top: 0.2em;
+    }
+  }
+  // .vxe-cell--required-icon,
+  // .vxe-cell--edit-icon,
+  // .vxe-cell-title-prefix-icon,
+  // .vxe-cell-title-suffix-icon,
+  // .vxe-cell--title {
+  //   vertical-align: middle;
+  // }
+  .vxe-cell--required-icon {
+    margin-right: 0.1em;
+  }
+  .vxe-cell--edit-icon,
+  .vxe-cell-title-prefix-icon,
+  .vxe-cell-title-suffix-icon {
+    margin-right: 0.2em;
+  }
+  .vxe-cell-title-prefix-icon,
+  .vxe-cell-title-suffix-icon {
+    cursor: help;
+  }
+  .vxe-resizable {
+    position: absolute;
+    right: -7px;
+    bottom: 0;
+    width: 14px;
+    height: 100%;
+    text-align: center;
+    z-index: 1;
+    cursor: col-resize;
+    &.is--line {
+      &:before,
+      &:after {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+      }
+      &:before {
+        width: 1px;
+        height: 50%;
+        background-color: $vxe-table-resizable-line-color;
+      }
+      &:after {
+        width: 0;
+        height: 100%;
+      }
+    }
+  }
+}
+.vxe-table--fixed-right-wrapper {
+  .vxe-header--column {
+    .vxe-resizable {
+      right: auto;
+      left: -7px;
     }
   }
 }
@@ -316,14 +461,18 @@
 .vxe-table--render-default {
   position: relative;
   font-size: $vxe-font-size;
-  color: $vxe-table-font-color;
+  color: $vxe-font-color;
   font-family: $vxe-font-family;
   direction: ltr;
   .vxe-table--body-wrapper {
-    background-color: $vxe-table-body-background-color;
+    table {
+      background-color: $vxe-table-body-background-color;
+    }
   }
   .vxe-table--footer-wrapper {
-    background-color: $vxe-table-footer-background-color;
+    table {
+      background-color: $vxe-table-footer-background-color;
+    }
   }
   .vxe-table--header,
   .vxe-table--body,
@@ -463,7 +612,12 @@
     }
   }
   &.cell--area {
-    .vxe-table--main-wrapper {
+    .vxe-body--row {
+      user-select: none;
+    }
+  }
+  &.drag--range {
+    .vxe-cell--checkbox {
       user-select: none;
     }
   }
@@ -474,7 +628,7 @@
     line-height: $vxe-table-row-line-height;
     text-align: left;
     &:not(.col--ellipsis) {
-      padding: #{floor(($vxe-table-row-height-default - $vxe-table-row-line-height) * 0.5)} 0;
+      padding: $vxe-table-column-padding-default;
     }
     &.col--current {
       background-color: $vxe-table-column-current-background-color;
@@ -515,11 +669,6 @@
       }
     }
   }
-  .vxe-body--column {
-    &.col--checkbox {
-      user-select: none;
-    }
-  }
   
   /*边框*/
   .vxe-table--footer-wrapper {
@@ -553,7 +702,7 @@
       background-position: right top, right bottom;
     }
     .vxe-table--fixed-left-wrapper {
-      // border-right: $vxe-table-border-width solid $vxe-table-border-color;
+      // border-right: 1px solid $vxe-table-border-color;
       .vxe-body--column{
         border-right-color: $vxe-table-border-color;
       }
@@ -579,7 +728,7 @@
   &.border--inner,
   &.border--none {
     .vxe-table--header-wrapper {
-      background-color: $vxe-table-body-background-color;
+      background-color: $vxe-table-header-background-color;
     }
     .vxe-table--fixed-left-wrapper {
       border-right: 0;
@@ -597,9 +746,6 @@
     .vxe-table--header-border-line {
       display: none;
     }
-    .vxe-table--footer-wrapper {
-      border-top: 0;
-    }
   }
   
   &.size--medium {
@@ -612,7 +758,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: #{floor(($vxe-table-row-height-medium - $vxe-table-row-line-height) * 0.5)} 0;
+        padding: $vxe-table-column-padding-medium;
       }
     }
     .vxe-cell {
@@ -638,7 +784,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: #{floor(($vxe-table-row-height-small - $vxe-table-row-line-height) * 0.5)} 0;
+        padding: $vxe-table-column-padding-small;
       }
     }
     .vxe-cell {
@@ -664,7 +810,7 @@
     .vxe-body--column,
     .vxe-footer--column {
       &:not(.col--ellipsis) {
-        padding: #{floor(($vxe-table-row-height-mini - $vxe-table-row-line-height) * 0.5)} 0;
+        padding: $vxe-table-column-padding-mini;
       }
     }
     .vxe-cell {
@@ -694,23 +840,10 @@
 
   // 单选框和复选框
   .vxe-cell--radio {
-    @extend %XERadio;
+    @include createRadioIcon();
   }
   .vxe-cell--checkbox {
-    @extend %XECheckbox;
-  }
-  .vxe-cell--radio .vxe-radio--icon,
-  .vxe-cell--checkbox .vxe-checkbox--icon {
-    left: 0;
-    top: 0.1em;
-  }
-  .vxe-cell--radio .vxe-radio--label,
-  .vxe-cell--checkbox .vxe-checkbox--label {
-    padding-left: 0.5em;
-  }
-  .vxe-cell--radio,
-  .vxe-cell--checkbox {
-    padding-left: 1.2em;
+    @include createCheckboxIcon();
   }
 
   .fixed--hidden {
@@ -815,20 +948,20 @@
   }
 
   /*树形节点*/
-  &.is--tree-line {
-    .vxe-body--row {
-      &:first-child {
-        .vxe-tree--line {
-          border-width: 0 0 1px 0;
-        }
-      }
-    }
-    .vxe-body--row {
-      .vxe-body--column {
-        background-image: none;
-      }
-    }
-  }
+  // &.is--tree-line {
+  //   .vxe-body--row {
+  //     &:first-child {
+  //       .vxe-tree--line {
+  //         border-width: 0 0 1px 0;
+  //       }
+  //     }
+  //   }
+  //   .vxe-body--row {
+  //     .vxe-body--column {
+  //       background-image: none;
+  //     }
+  //   }
+  // }
   .vxe-tree--line-wrapper {
     position: relative;
     display: block;
@@ -860,9 +993,9 @@
   }
   .vxe-tree--node-btn {
     display: block;
-    color: lighten($vxe-table-font-color, 20%);
+    color: $vxe-font-lighten-color;
     &:hover {
-      color: $vxe-table-font-color;
+      color: $vxe-font-color;
     }
   }
   .vxe-tree-cell {
@@ -885,21 +1018,32 @@
   .vxe-table--expanded {
     cursor: pointer;
     .vxe-table--expand-btn {
+      display: inline-block;
       width: 1em;
       height: 1em;
       text-align: center;
       user-select: none;
-      color: lighten($vxe-table-font-color, 20%);
+      color: $vxe-font-lighten-color;
       &:hover {
-        color: $vxe-table-font-color;
+        color: $vxe-font-color;
       }
     }
     &+.vxe-table--expand-label {
       padding-left: 0.5em;
     }
   }
+  .vxe-body--expanded-row {
+    &.is--padding {
+      & > .vxe-body--expanded-column {
+        & > .vxe-body--expanded-cell {
+          padding: $vxe-table-expand-padding-default;
+        }
+      }
+    }
+  }
   .vxe-body--expanded-column {
     border-bottom: $vxe-table-border-width solid $vxe-table-border-color;
+    border-right: $vxe-table-border-width solid $vxe-table-border-color;
     &.col--ellipsis {
       & > .vxe-body--expanded-cell {
         overflow: hidden;
@@ -911,6 +1055,9 @@
   .vxe-body--expanded-cell {
     position: relative;
     z-index: 1;
+    &.is--ellipsis {
+      overflow: auto;
+    }
   }
 
   /*设置列高度*/
@@ -941,7 +1088,7 @@
   .vxe-footer--column {
     &.col--ellipsis {
       @extend %DefaultColumnHeight;
-      &:not(.col--actived) {
+      &:not(.col--active) {
         & > .vxe-cell {
           @extend %TextEllipsis;
         }
@@ -962,10 +1109,10 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon {
+    .vxe-cell--checkbox {
       font-size: $vxe-checkbox-font-size-medium;
     }
-    .vxe-cell--radio .vxe-radio--icon {
+    .vxe-cell--radio {
       font-size: $vxe-radio-font-size-medium;
     }
   }
@@ -980,10 +1127,10 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon {
+    .vxe-cell--checkbox {
       font-size: $vxe-checkbox-font-size-small;
     }
-    .vxe-cell--radio .vxe-radio--icon {
+    .vxe-cell--radio {
       font-size: $vxe-radio-font-size-small;
     }
   }
@@ -998,10 +1145,10 @@
         }
       }
     }
-    .vxe-cell--checkbox .vxe-checkbox--icon {
+    .vxe-cell--checkbox {
       font-size: $vxe-checkbox-font-size-mini;
     }
-    .vxe-cell--radio .vxe-radio--icon {
+    .vxe-cell--radio {
       font-size: $vxe-radio-font-size-mini;
     }
   }
@@ -1047,26 +1194,28 @@
 
   /*校验不通过*/
   .vxe-body--column {
-    &.col--actived,
+    &.col--active,
     &.col--selected {
       position: relative;
     }
     &.col--valid-error {
-      .vxe-cell--valid {
-        width: 320px;
+      .vxe-cell--valid-error-hint {
+        width: 100%;
         position: absolute;
-        bottom: calc(100% + 4px);
         left: 50%;
+        font-size: 12px;
+        line-height: 1.2em;
         transform: translateX(-50%);
-        text-align: center;
+        text-align: left;
         pointer-events: none;
         z-index: 4;
-        .vxe-cell--valid-msg {
+        padding-left: $vxe-table-cell-padding-left;
+        padding-right: $vxe-table-cell-padding-right;
+        .vxe-cell--valid-error-msg {
           display: inline-block;
           border-radius: $vxe-border-radius;
-          padding: 8px 12px;
-          color: $vxe-table-validate-tooltip-error-color;
-          background-color: $vxe-table-validate-tooltip-error-background-color;
+          color: $vxe-table-validate-error-color;
+          background-color: $vxe-table-validate-error-background-color;
           pointer-events: auto;
         }
       }
@@ -1083,20 +1232,90 @@
 
     }
   }
-  .vxe-body--row {
-    &:first-child {
-      .vxe-cell--valid {
-        bottom: auto;
-        top: calc(100% + 4px);
+  &.valid-msg--single {
+    .vxe-body--row {
+      &:last-child {
+        .vxe-cell--valid-error-hint {
+          bottom: calc(100%);
+        }
+        &:first-child {
+          .vxe-cell--valid-error-hint {
+            bottom: auto;
+          }
+        }
       }
     }
   }
-  .vxe-body--column {
-    &:first-child {
-      .vxe-cell--valid {
-        left: 10px;
-        transform: translateX(0);
-        text-align: left;
+  &.valid-msg--full {
+    .vxe-body--row {
+      &:last-child {
+        .vxe-cell--valid-error-hint {
+          top: calc(100% - 1.3em);
+        }
+      }
+    }
+  }
+  /*已废弃，旧的校验样式**/
+  &.old-cell-valid {
+    .vxe-body--column {
+      &.col--valid-error {
+        .vxe-cell--valid-error-hint {
+          width: 320px;
+          position: absolute;
+          bottom: calc(100% + 4px);
+          left: 50%;
+          transform: translateX(-50%);
+          text-align: center;
+          pointer-events: none;
+          z-index: 4;
+          .vxe-cell--valid-error-msg {
+            display: inline-block;
+            border-radius: $vxe-border-radius;
+            padding: 8px 12px;
+            color: #fff;
+            background-color: #f56c6c;
+            pointer-events: auto;
+          }
+        }
+      }
+    }
+    .vxe-body--row {
+      &:first-child {
+        .vxe-cell--valid-error-hint {
+          bottom: auto;
+          top: calc(100% + 4px);
+        }
+      }
+    }
+    .vxe-body--column {
+      &:first-child {
+        .vxe-cell--valid-error-hint {
+          left: 10px;
+          transform: translateX(0);
+          text-align: left;
+        }
+      }
+    }
+  }
+
+  /*单元格标记删除状态*/
+  .vxe-body--row {
+    &.row--pending {
+      color: $vxe-table-validate-error-color;
+      text-decoration: line-through;
+      cursor: no-drop;
+      .vxe-body--column {
+        position: relative;
+        &:after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 100%;
+          height: 0;
+          border-bottom: 1px solid $vxe-table-validate-error-color;
+          z-index: 1;
+        }
       }
     }
   }
@@ -1108,8 +1327,8 @@
         position: relative;
         &:before {
           content: "";
-          top: -$vxe-table-cell-dirty-width;
-          left: -$vxe-table-cell-dirty-width;
+          top: $vxe-table-cell-dirty-width * -1;
+          left: $vxe-table-cell-dirty-width * -1;
           position: absolute;
           border-width: $vxe-table-cell-dirty-width;
           border-style: solid;
@@ -1124,8 +1343,8 @@
       position: relative;
       &:before {
         content: "";
-        top: -$vxe-table-cell-dirty-width;
-        left: -$vxe-table-cell-dirty-width;
+        top: $vxe-table-cell-dirty-width * -1;
+        left: $vxe-table-cell-dirty-width * -1;
         position: absolute;
         border-width: $vxe-table-cell-dirty-width;
         border-style: solid;
@@ -1139,7 +1358,7 @@
   &.vxe-editable {
     &.cell--highlight {
       .vxe-body--column {
-        &.col--actived {
+        &.col--active {
           box-shadow: inset 0px 0px 0px 2px $vxe-primary-color;
           &.col--valid-error {
             box-shadow: inset 0px 0px 0px 2px $vxe-table-validate-error-color;
@@ -1160,7 +1379,7 @@
               }
             }
             .vxe-textarea {
-              height: $vxe-table-row-line-height - 1;
+              height: $vxe-table-row-line-height - 1px;
               .vxe-textarea--inner {
                 border: 0;
               }
@@ -1171,8 +1390,38 @@
     }
     .vxe-body--column {
       padding: 0;
-      &.col--actived {
+      &.col--active {
         padding: 0;
+      }
+    }
+  }
+}
+
+.vxe-table--tooltip-wrapper {
+  &.vxe-table--valid-error {
+    background-color: #f56c6c;
+    color: #fff;
+  }
+}
+
+/*footer*/
+.vxe-table--footer-wrapper {
+  color: $vxe-table-footer-font-color;
+  margin-top: -1px;
+  &.body--wrapper{
+    overflow-x: auto;
+  }
+}
+
+.vxe-footer--column {
+  &.col--ellipsis {
+    & > .vxe-cell {
+      display: flex;
+      align-items: center;
+      .vxe-cell--item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
   }

@@ -35,7 +35,7 @@ $iconWidth: 1.6em;
   }
   &[disabled] {
     cursor: not-allowed;
-    color: $vxe-disabled-color;
+    color: $vxe-font-disabled-color;
     background-color: $vxe-input-disabled-background-color;
   }
 }
@@ -81,6 +81,18 @@ $iconWidth: 1.6em;
   }
 }
 
+.vxe-input--count {
+  position: absolute;
+  top: 1px;
+  right: 0.5em;
+  height: calc(100% - 2px);
+  color: var($vxe-input-count-color);
+  background-color: var($vxe-input-count-background-color);
+  &.is--error {
+    color: var($vxe-input-count-error-color);
+  }
+}
+
 // 前缀图标
 .vxe-input {
   .vxe-input--prefix {
@@ -106,6 +118,14 @@ $iconWidth: 1.6em;
     .vxe-input--inner {
       padding-right: $iconWidth + 0.2em;
     }
+    &.is--count {
+      .vxe-input--inner {
+        padding-right: 5em;
+      }
+    }
+    .vxe-input--count {
+      right: $iconWidth + 0.5em;
+    }
   }
   &.is--left {
     .vxe-input--inner {
@@ -120,6 +140,11 @@ $iconWidth: 1.6em;
   &.is--right {
     .vxe-input--inner {
       text-align: right;
+    }
+  }
+  &.is--count {
+    .vxe-input--inner {
+      padding-right: 3.4em;
     }
   }
   &.is--controls {
@@ -212,6 +237,10 @@ $iconWidth: 1.6em;
       &:active {
         color: $vxe-primary-color;
       }
+      &.is--disabled {
+        cursor: no-drop;
+        color: $vxe-input-number-disabled-color;
+      }
     }
   }
 }
@@ -233,6 +262,9 @@ $iconWidth: 1.6em;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
+    &[class*="vxe-icon-"] {
+      font-size: 1.2em;
+    }
   }
 
   .vxe-input--date-picker-suffix {
@@ -240,7 +272,7 @@ $iconWidth: 1.6em;
     align-items: center;
     justify-content: center;
     .vxe-input--panel-icon {
-      @include animatTransition(transform, .2s);
+      @include createAnimationTransition(transform, .2s);
     }
   }
 
@@ -254,6 +286,7 @@ $iconWidth: 1.6em;
   }
   .vxe-input--number-prev-icon,
   .vxe-input--number-next-icon {
+    line-height: 0.8em;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -298,8 +331,13 @@ $iconWidth: 1.6em;
   }
 }
 
+.vxe-input--panel {
+  pointer-events: none;
+}
+
 .vxe-input--panel-wrapper,
 .vxe-input--panel-layout-wrapper {
+  pointer-events: auto;
   background-color: $vxe-input-panel-background-color;
   border: 1px solid $vxe-table-popup-border-color;
   box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
@@ -312,7 +350,7 @@ $iconWidth: 1.6em;
 }
 
 .vxe-input--panel-layout-wrapper {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
 }
 
@@ -380,6 +418,9 @@ $iconWidth: 1.6em;
   position: absolute;
   right: 0;
   top: 0;
+}
+.vxe-input--time-picker-confirm,
+.vxe-input--date-picker-confirm {
   outline: 0;
   border: 1px solid $vxe-input-border-color;
   border-radius: $vxe-border-radius;
@@ -388,12 +429,12 @@ $iconWidth: 1.6em;
   border-color: $vxe-primary-color;
   background-color: $vxe-primary-color;
   &:hover {
-    background-color: lighten($vxe-primary-color, 6%);
-    border-color: lighten($vxe-primary-color, 6%);
+    background-color: $vxe-primary-lighten-color;
+    border-color: $vxe-primary-lighten-color;
   }
   &:active {
-    background-color: darken($vxe-primary-color, 3%);
-    border-color: darken($vxe-primary-color, 3%);
+    background-color: $vxe-primary-darken-color;
+    border-color: $vxe-primary-darken-color;
   }
 }
 
@@ -427,26 +468,23 @@ $iconWidth: 1.6em;
 }
 .vxe-input--date-picker-label,
 .vxe-input--date-picker-btn {
-  display: inline-block;
   display: flex;
-  border-radius: $vxe-border-radius;
-  border: 1px solid $vxe-input-border-color;
   align-items: center;
   justify-content: center;
   background-color: $vxe-button-default-background-color;
 }
 .vxe-input--date-picker-btn {
   &.is--disabled {
-    color: $vxe-disabled-color;
+    color: $vxe-font-disabled-color;
     cursor: no-drop;
   }
   &:not(.is--disabled) {
     cursor: pointer;
     &:hover {
-      background-color: lighten($vxe-button-default-background-color, 6%);
+      background-color: #fff;
     }
     &:active {
-      background-color: darken($vxe-button-default-background-color, 3%);
+      background-color: #fff;
     }
   }
 }
@@ -472,10 +510,10 @@ $iconWidth: 1.6em;
   td {
     &.is--prev,
     &.is--next {
-      color: $vxe-disabled-color;
+      color: $vxe-font-disabled-color;
       .vxe-input--date-label,
       .vxe-input--date-festival {
-        color: $vxe-disabled-color;
+        color: $vxe-font-disabled-color;
       }
     }
     &.is--now {
@@ -496,6 +534,10 @@ $iconWidth: 1.6em;
     &.is--selected {
       color: $vxe-input-date-picker-selected-color;
       background-color: $vxe-primary-color;
+      &.is--prev,
+      &.is--next {
+        background-color: $vxe-primary-lighten-color;
+      }
       .vxe-input--date-label,
       .vxe-input--date-festival {
         color: $vxe-input-date-picker-festival-selected-color;
@@ -667,6 +709,7 @@ $iconWidth: 1.6em;
 .vxe-input {
   font-size: $vxe-font-size;
   height: $vxe-input-height-default;
+  line-height: $vxe-input-height-default;
   .vxe-input--inner {
     &[type="date"]::-webkit-inner-spin-button,
     &[type="month"]::-webkit-inner-spin-button,
@@ -683,6 +726,7 @@ $iconWidth: 1.6em;
   &.size--medium {
     font-size: $vxe-font-size-medium;
     height: $vxe-input-height-medium;
+    line-height: $vxe-input-height-medium;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,
@@ -694,6 +738,7 @@ $iconWidth: 1.6em;
   &.size--small {
     font-size: $vxe-font-size-small;
     height: $vxe-input-height-small;
+    line-height: $vxe-input-height-small;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,
@@ -705,6 +750,7 @@ $iconWidth: 1.6em;
   &.size--mini {
     font-size: $vxe-font-size-mini;
     height: $vxe-input-height-mini;
+    line-height: $vxe-input-height-mini;
     .vxe-input--inner {
       &[type="date"]::-webkit-inner-spin-button,
       &[type="month"]::-webkit-inner-spin-button,
@@ -779,8 +825,14 @@ $iconWidth: 1.6em;
   }
   .vxe-input--date-picker-btn-wrapper {
     .vxe-input--date-picker-btn {
-      width: 31px - $sizeIndex;
       margin-left: 9px - $sizeIndex;
+    }
+    .vxe-input--date-picker-prev-btn,
+    .vxe-input--date-picker-current-btn,
+    .vxe-input--date-picker-next-btn {
+      width: 31px - $sizeIndex;
+      border-radius: $vxe-border-radius;
+      border: 1px solid $vxe-input-border-color;
     }
   }
   .vxe-input--date-picker-type-wrapper {
@@ -841,12 +893,13 @@ $iconWidth: 1.6em;
       height: nth($titleRowHeightList, $sizeIndex);
     }
   }
-  .vxe-input--time-picker-confirm {
+  .vxe-input--time-picker-confirm,
+  .vxe-input--date-picker-confirm {
     height: 31px - $sizeIndex;
     padding: 0 10px - $sizeIndex;
   }
   .vxe-input--date-label {
-    line-height: nth($fontSizeList, $sizeIndex) + 1;
+    line-height: nth($fontSizeList, $sizeIndex) + 1px;
   }
 }
 

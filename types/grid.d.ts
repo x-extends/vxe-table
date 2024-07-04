@@ -7,10 +7,12 @@ import { ToolbarOptions } from './toolbar'
 import { PagerOptions } from './pager'
 import { RowInfo } from './component'
 
+/* eslint-disable no-use-before-define */
+
 /**
- * 高级表格
+ * 配置式表格
  */
-export declare class Grid extends Table {
+export declare class VxeGrid extends Table {
   /**
    * 列配置
    */
@@ -74,8 +76,10 @@ export declare class Grid extends Table {
     pager: any;
     pendingRecords: any[];
   };
+
   [key: string]: any;
 }
+export class Grid extends VxeGrid {}
 
 export interface GridProxyQueryPageParams {
   pageSize: number;
@@ -99,11 +103,11 @@ export interface GridProxyConfig {
   sort?: boolean;
   filter?: boolean;
   form?: boolean;
-  props?: {
-    list?: string;
-    result?: string;
-    total?: string;
-    message?: string;
+  response?: {
+    list?: string | null | ((params: { data: any }) => any[])
+    result?: string | ((params: { data: any }) => any[])
+    total?: string | ((params: { data: any }) => number)
+    message?: string | ((params: { data: any }) => string)
   };
   ajax?: {
     query?(params: { page: GridProxyQueryPageParams, sort: GridProxyQuerySortParams, filters: GridProxyQueryFiltersParams[], form: any }, ...args: any[]): Promise<any>;
@@ -111,6 +115,33 @@ export interface GridProxyConfig {
     save?(params: { body: { insertRecords: any[], updateRecords: any[], removeRecords: any[], pendingRecords: any[] } }, ...args: any[]): Promise<any>;
   }
   [key: string]: any;
+
+  /**
+   * 已废弃，请使用 proxy-config.response
+   * @deprecated
+   */
+  props?: {
+    /**
+     * 已废弃，请使用 proxy-config.response.list
+     * @deprecated
+     */
+    list?: string | null
+    /**
+     * 已废弃，请使用 proxy-config.response.result
+     * @deprecated
+     */
+    result?: string
+    /**
+     * 已废弃，请使用 proxy-config.response.total
+     * @deprecated
+     */
+    total?: string
+    /**
+     * 已废弃，请使用 proxy-config.response.message
+     * @deprecated
+     */
+    message?: string
+  }
 }
 
 export interface GridPagerConfig extends PagerOptions {

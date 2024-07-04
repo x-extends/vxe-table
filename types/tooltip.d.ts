@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 工具提示
  */
-export declare class Tooltip extends VXETableComponent {
+export declare class VxeTooltip extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -11,15 +11,15 @@ export declare class Tooltip extends VXETableComponent {
   /**
    * 触发方式
    */
-  trigger?: 'manual' | 'hover' | 'click';
+  trigger?: 'manual' | 'hover' | 'click' | '' | null;
   /**
    * 主题样式
    */
-  theme?: 'dark' | 'light';
+  theme?: 'dark' | 'light' | '' | null;
   /**
    * 显示内容
    */
-  content?: string | Function;
+  content?: string | ((params: any) => any);
   /**
    * 自定义堆叠顺序
    */
@@ -37,3 +37,4 @@ export declare class Tooltip extends VXETableComponent {
    */
   leaveDelay?: number;
 }
+export class Tooltip extends VxeTooltip {}

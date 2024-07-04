@@ -2,10 +2,10 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeModal from '../../modal/src/modal'
 import VxeRadio from '../../radio/src/radio'
-import { UtilTools } from '../../tools'
+import UtilTools from '../../tools/utils'
 
 export default {
-  name: 'VxeImportPanel',
+  name: 'VxeTableImportPanel',
   props: {
     defaultOptions: Object,
     storeData: Object
@@ -34,7 +34,7 @@ export default {
       const { type, typeList } = storeData
       if (type) {
         const selectItem = XEUtils.find(typeList, item => type === item.value)
-        return selectItem ? GlobalConfig.i18n(selectItem.label) : '*.*'
+        return selectItem ? selectItem.label : '*.*'
       }
       return `*.${typeList.map(item => item.value).join(', *.')}`
     }
@@ -46,7 +46,7 @@ export default {
       props: {
         value: storeData.visible,
         title: GlobalConfig.i18n('vxe.import.impTitle'),
-        width: 440,
+        width: 520,
         mask: true,
         lockView: true,
         showFooter: false,
@@ -105,24 +105,19 @@ export default {
               h('td', parseTypeLabel)
             ]),
             h('tr', [
-              h('td', GlobalConfig.i18n('vxe.import.impOpts')),
+              h('td', GlobalConfig.i18n('vxe.import.impMode')),
               h('td', [
-                h('vxe-radio-group', {
+                h('vxe-select', {
                   props: {
-                    value: defaultOptions.mode
+                    value: defaultOptions.mode,
+                    options: storeData.modeList
                   },
                   on: {
                     input (value) {
                       defaultOptions.mode = value
                     }
                   }
-                }, storeData.modeList.map(item => {
-                  return h('vxe-radio', {
-                    props: {
-                      label: item.value
-                    }
-                  }, GlobalConfig.i18n(item.label))
-                }))
+                })
               ])
             ])
           ])

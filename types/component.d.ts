@@ -1,4 +1,4 @@
-import Vue from 'vue'
+import Vue, { VNode } from 'vue'
 
 declare type SizeType = null | '' | 'medium' | 'small' | 'mini'
 
@@ -22,3 +22,8 @@ export interface RecordInfo {
 export interface RowInfo {
   [key: string]: any;
 }
+
+export type VNodeStyle = Record<string, string | number>
+export type VNodeClassName = Record<string, boolean>
+
+export type SlotVNodeType = VNode | string | number

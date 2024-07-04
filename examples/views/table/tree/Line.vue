@@ -9,7 +9,7 @@
       resizable
       show-overflow
       highlight-hover-row
-      row-key
+      :row-config="{useKey: true}"
       :tree-config="{transform: true, rowField: 'id', parentField: 'parentId', line: true}"
       :data="tableData1"
       :scroll-y="{enabled: false}">
@@ -26,9 +26,9 @@
       show-overflow
       highlight-hover-row
       highlight-current-row
-      row-key
       size="medium"
-      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon--caret-right rotate45', iconClose: 'vxe-icon--caret-right'}"
+      :row-config="{useKey: true}"
+      :tree-config="{transform: true, accordion: true, line: true, iconOpen: 'vxe-icon-caret-right rotate45', iconClose: 'vxe-icon-caret-right'}"
       :checkbox-config="{labelField: 'name'}"
       :data="tableData2"
       :scroll-y="{enabled: false}">
@@ -44,10 +44,10 @@
       resizable
       show-overflow
       highlight-hover-row
-      row-key
       size="small"
+      :row-config="{useKey: true}"
       :radio-config="{labelField: 'name'}"
-      :tree-config="{accordion: true, line: true, iconOpen: 'vxe-icon--remove', iconClose: 'vxe-icon--circle-plus'}"
+      :tree-config="{accordion: true, line: true, iconOpen: 'vxe-icon-minus', iconClose: 'vxe-icon-add'}"
       :data="tableData3"
       :scroll-y="{enabled: false}">
       <vxe-column type="radio" title="Name" tree-node></vxe-column>
@@ -62,11 +62,11 @@
       resizable
       show-overflow
       highlight-hover-row
-      row-key
       ref="xTree"
       size="mini"
+      :row-config="{useKey: true}"
       :checkbox-config="{labelField: 'name'}"
-      :tree-config="{line: true, iconOpen: 'vxe-icon--remove', iconClose: 'vxe-icon--circle-plus'}"
+      :tree-config="{line: true, iconOpen: 'vxe-icon-minus', iconClose: 'vxe-icon-add'}"
       :data="tableData4"
       :scroll-y="{enabled: false}">
       <vxe-column type="checkbox" title="Name" tree-node>

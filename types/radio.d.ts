@@ -3,7 +3,7 @@ import { VXETableComponent } from './component'
 /**
  * 单选框
  */
-export declare class Radio extends VXETableComponent {
+export declare class VxeRadio extends VXETableComponent {
   /**
    * 绑定值
    */
@@ -29,3 +29,4 @@ export declare class Radio extends VXETableComponent {
    */
   name?: string;
 }
+export class Radio extends VxeRadio {}

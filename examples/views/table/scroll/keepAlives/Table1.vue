@@ -7,7 +7,8 @@
       show-overflow
       ref="xTable"
       height="400"
-      :loading="loading">
+      :loading="loading"
+      :scroll-y="{enabled: true}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>
       <vxe-column field="sex" title="Sex"></vxe-column>

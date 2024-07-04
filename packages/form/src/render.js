@@ -1,6 +1,7 @@
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
-import { UtilTools, isEnableConf } from '../../tools'
+import { isEnableConf, getFuncText } from '../../tools/utils'
+import { getSlotVNs } from '../../tools/vn'
 
 function renderPrefixIcon (h, titlePrefix) {
   return h('span', {
@@ -23,10 +24,10 @@ function renderSuffixIcon (h, titleSuffix) {
 }
 
 export function renderTitle (h, _vm, item) {
-  const { data } = _vm
+  const { data, tooltipOpts } = _vm
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-  const params = { data, property: field, item, $form: _vm }
+  const params = { data, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
   const contVNs = []
   const titVNs = []
   if (titlePrefix) {
@@ -34,9 +35,9 @@ export function renderTitle (h, _vm, item) {
       (titlePrefix.content || titlePrefix.message)
         ? h('vxe-tooltip', {
           props: {
-            content: UtilTools.getFuncText(titlePrefix.content || titlePrefix.message),
-            enterable: titlePrefix.enterable,
-            theme: titlePrefix.theme
+            ...tooltipOpts,
+            ...titlePrefix,
+            content: getFuncText(titlePrefix.content || titlePrefix.message)
           }
         }, [
           renderPrefixIcon(h, titlePrefix)
@@ -44,10 +45,11 @@ export function renderTitle (h, _vm, item) {
         : renderPrefixIcon(h, titlePrefix)
     )
   }
+  const rfiTitle = compConf ? (compConf.renderFormItemTitle || compConf.renderItemTitle) : null
   titVNs.push(
     h('span', {
       class: 'vxe-form--item-title-label'
-    }, compConf && compConf.renderItemTitle ? compConf.renderItemTitle(itemRender, params) : (slots && slots.title ? _vm.callSlot(slots.title, params, h) : UtilTools.getFuncText(item.title)))
+    }, rfiTitle ? getSlotVNs(rfiTitle(itemRender, params)) : (slots && slots.title ? _vm.callSlot(slots.title, params, h) : getFuncText(item.title)))
   )
   contVNs.push(
     h('div', {
@@ -60,9 +62,9 @@ export function renderTitle (h, _vm, item) {
       (titleSuffix.content || titleSuffix.message)
         ? h('vxe-tooltip', {
           props: {
-            content: UtilTools.getFuncText(titleSuffix.content || titleSuffix.message),
-            enterable: titleSuffix.enterable,
-            theme: titleSuffix.theme
+            ...tooltipOpts,
+            ...titlePrefix,
+            content: getFuncText(titleSuffix.content || titleSuffix.message)
           }
         }, [
           renderSuffixIcon(h, titleSuffix)

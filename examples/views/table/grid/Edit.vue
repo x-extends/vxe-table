@@ -170,7 +170,7 @@ export default {
             },
             saveRowEvent () {
               const $grid = this.$refs.xGrid
-              $grid.clearActived().then(() => {
+              $grid.clearEdit().then(() => {
                 this.gridOptions.loading = true
                 setTimeout(() => {
                   this.gridOptions.loading = false
@@ -241,7 +241,7 @@ export default {
     },
     saveRowEvent () {
       const $grid = this.$refs.xGrid
-      $grid.clearActived().then(() => {
+      $grid.clearEdit().then(() => {
         this.gridOptions.loading = true
         setTimeout(() => {
           this.gridOptions.loading = false

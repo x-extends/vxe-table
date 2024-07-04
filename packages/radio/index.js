@@ -1,9 +1,13 @@
-import VxeRadio from './src/radio'
+import VxeRadioComponent from './src/radio'
+import VxeUI from '../v-x-e-table'
 
-export const Radio = Object.assign(VxeRadio, {
+export const VxeRadio = Object.assign(VxeRadioComponent, {
   install (Vue) {
-    Vue.component(VxeRadio.name, VxeRadio)
+    Vue.component(VxeRadioComponent.name, VxeRadioComponent)
   }
 })
+VxeUI.component(VxeRadioComponent)
 
-export default Radio
+export const Radio = VxeRadio
+
+export default VxeRadio

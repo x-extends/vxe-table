@@ -1,13 +1,14 @@
-@import './icon.scss';
-@import './table.scss';
-@import './column.scss';
-@import './colgroup.scss';
-@import './header.scss';
-@import './footer.scss';
+// 该文件已废弃，请使用 vxe-table/style/all.scss
+
+@import './variable.scss';
+// @import './css-variable.scss';
 @import './filter.scss';
 @import './menu.scss';
 @import './export.scss';
+@import './custom.scss';
 
+@import './icon.scss';
+@import './table.scss';
 @import './grid.scss';
 @import './toolbar.scss';
 @import './pager.scss';
@@ -19,10 +20,12 @@
 @import './input.scss';
 @import './textarea.scss';
 @import './button.scss';
+@import './button-group.scss';
 @import './modal.scss';
 @import './tooltip.scss';
 @import './form.scss';
 @import './form-item.scss';
+@import './form-gather.scss';
 @import './select.scss';
 @import './optgroup.scss';
 @import './option.scss';

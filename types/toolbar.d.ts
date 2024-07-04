@@ -3,10 +3,12 @@ import { VXETableComponent } from './component'
 import { ColumnInfo } from './column'
 import { GridRenderParams, RenderOptions } from './v-x-e-table'
 
+/* eslint-disable no-use-before-define */
+
 /**
  * 工具栏
  */
-export declare class Toolbar extends VXETableComponent {
+export declare class VxeToolbar extends VXETableComponent {
   /**
    * 唯一 ID 标识
    */
@@ -21,6 +23,7 @@ export declare class Toolbar extends VXETableComponent {
   resizable?: boolean | {
     storage?: boolean;
   };
+
   /**
    * 刷新按钮配置
    */
@@ -29,6 +32,7 @@ export declare class Toolbar extends VXETableComponent {
     icon?: string;
     iconLoading?: string;
   };
+
   /**
    * 导入按钮配置
    */
@@ -36,6 +40,7 @@ export declare class Toolbar extends VXETableComponent {
     icon?: string;
     [key: string]: any;
   };
+
   /**
    * 导出按钮配置
    */
@@ -43,6 +48,7 @@ export declare class Toolbar extends VXETableComponent {
     icon?: string;
     [key: string]: any;
   };
+
   /**
    * 自定义列配置
    */
@@ -51,10 +57,17 @@ export declare class Toolbar extends VXETableComponent {
     immediate?: boolean;
     storage?: boolean;
     checkMethod?(params: { column: ColumnInfo }): boolean;
-    isFooter?: Boolean;
+    showFooter?: boolean;
     icon?: string;
+    /**
+     * 已废弃，请使用 showFooter
+     * @deprecated
+     */
+    isFooter?: boolean
+
     [key: string]: any;
   };
+
   /**
    * 按钮列表
    */
@@ -64,6 +77,7 @@ export declare class Toolbar extends VXETableComponent {
    */
   perfect?: boolean;
 }
+export class Toolbar extends VxeToolbar {}
 
 export interface ToolbarOptions {
   /**
@@ -110,7 +124,7 @@ export interface ToolbarOptions {
     immediate?: boolean;
     storage?: boolean;
     checkMethod?(params: { column: ColumnInfo }): boolean;
-    isFooter?: Boolean;
+    isFooter?: boolean;
     icon?: string;
     [key: string]: any;
   };
@@ -130,14 +144,14 @@ export interface ToolbarOptions {
   [key: string]: any;
 }
 
-export interface ToolbarButtonsSlotParams extends GridRenderParams {}
-export interface ToolbarToolsSlotParams extends ToolbarButtonsSlotParams {}
+export type ToolbarButtonsSlotParams = GridRenderParams
+export type ToolbarToolsSlotParams = ToolbarButtonsSlotParams
 
 /**
  * 按钮渲染配置项
  */
-export interface ToolbarButtonRenderOptions extends RenderOptions {}
-export interface ToolbarToolRenderOptions extends RenderOptions {}
+export type ToolbarButtonRenderOptions = RenderOptions
+export type ToolbarToolRenderOptions = RenderOptions
 
 /**
  * 按钮渲染渲染参数

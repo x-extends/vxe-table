@@ -1,6 +1,7 @@
 import XEUtils from 'xe-utils'
 import VXETable from '../../v-x-e-table'
-import { UtilTools } from '../../tools'
+import { warnLog } from '../../tools/log'
+import { isEnableConf } from '../../tools/utils'
 
 class ItemConfig {
   constructor ($xeform, item) {
@@ -12,16 +13,24 @@ class ItemConfig {
       align: item.align,
       titleAlign: item.titleAlign,
       titleWidth: item.titleWidth,
+      titleColon: item.titleColon,
+      titleAsterisk: item.titleAsterisk,
       titlePrefix: item.titlePrefix,
       titleSuffix: item.titleSuffix,
       titleOverflow: item.titleOverflow,
+      showTitle: item.showTitle,
       resetValue: item.resetValue,
       visible: item.visible,
       visibleMethod: item.visibleMethod,
       folding: item.folding,
       collapseNode: item.collapseNode,
       className: item.className,
+      contentClassName: item.className,
+      contentStyle: item.contentStyle,
+      titleClassName: item.titleClassName,
+      titleStyle: item.titleStyle,
       itemRender: item.itemRender,
+      rules: item.rules,
       // 渲染属性
       showError: false,
       errRule: null,
@@ -30,8 +39,8 @@ class ItemConfig {
     })
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       const compConf = item.itemRender ? VXETable.renderer.get(item.itemRender.name) : null
-      if (compConf && !compConf.renderItemContent && compConf.renderItem) {
-        UtilTools.warn('vxe.error.delProp', ['item-render.renderItem', 'item-render.renderItemContent'])
+      if (compConf && !(compConf.renderFormItemContent || compConf.renderItemContent) && compConf.renderItem) {
+        warnLog('vxe.error.delProp', ['item-render.renderItem', 'item-render.renderFormItemContent'])
       }
     }
   }
@@ -49,6 +58,36 @@ export function getItemConfig ($xeform, _vm, options) {
   return isItem(_vm) ? _vm : new ItemConfig($xeform, _vm, options)
 }
 
+export const handleFieldOrItem = ($xeform, fieldOrItem) => {
+  if (fieldOrItem) {
+    return XEUtils.isString(fieldOrItem) ? $xeform.getItemByField(fieldOrItem) : fieldOrItem
+  }
+  return null
+}
+
+export function isHiddenItem ($xeform, formItem) {
+  const { collapseAll } = $xeform
+  const { folding, visible } = formItem
+  return visible === false || (folding && collapseAll)
+}
+
+export function isActivetem ($xeform, formItem) {
+  let { visibleMethod, itemRender, visible, field } = formItem
+  if (visible === false) {
+    return visible
+  }
+  const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
+  const fiVisibleMethod = compConf ? (compConf.formItemVisibleMethod || compConf.itemVisibleMethod) : null
+  if (!visibleMethod && fiVisibleMethod) {
+    visibleMethod = fiVisibleMethod
+  }
+  if (!visibleMethod) {
+    return true
+  }
+  const { data } = $xeform
+  return visibleMethod({ data, field, property: field, item: formItem, $form: $xeform, $grid: $xeform.xegrid })
+}
+
 export function createItem ($xeform, _vm) {
   return getItemConfig($xeform, _vm)
 }
@@ -62,14 +101,14 @@ export function destroyItem (_vm) {
 }
 
 export function assemItem (_vm) {
-  const { $el, $xeform, xeformgather, itemConfig } = _vm
-  const itemGather = xeformgather ? xeformgather.itemConfig : null
+  const { $el, $xeform, $xeformgather, itemConfig } = _vm
+  const itemGather = $xeformgather ? $xeformgather.itemConfig : null
   itemConfig.slots = _vm.$scopedSlots
   if (itemGather) {
     if (!itemGather.children) {
       itemGather.children = []
     }
-    itemGather.children.splice([].indexOf.call(xeformgather.$el.children, $el), 0, itemConfig)
+    itemGather.children.splice([].indexOf.call($xeformgather.$el.children, $el), 0, itemConfig)
   } else {
     $xeform.staticItems.splice([].indexOf.call($xeform.$refs.hideItem.children, $el), 0, itemConfig)
   }
