@@ -289,7 +289,7 @@ function nativeEditRender (renderOpts: any, params: any) {
   ]
 }
 
-function defaultCellRender (renderOpts: any, params: any) {
+function buttonCellRender (renderOpts: any, params: any) {
   return [
     h(getDefaultComponent(renderOpts), {
       ...getCellEditProps(renderOpts, params, null),
@@ -298,7 +298,7 @@ function defaultCellRender (renderOpts: any, params: any) {
   ]
 }
 
-function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
   const { row, column } = params
   const cellValue = getCellValue(row, column)
   return [
@@ -309,11 +309,24 @@ function defaultEditRender (renderOpts: VxeGlobalRendererHandles.RenderEditOptio
   ]
 }
 
+function radioAndCheckboxEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+  const { options } = renderOpts
+  const { row, column } = params
+  const cellValue = getCellValue(row, column)
+  return [
+    h(getDefaultComponent(renderOpts), {
+      options,
+      ...getCellEditProps(renderOpts, params, cellValue),
+      ...getEditOns(renderOpts, params)
+    })
+  ]
+}
+
 /**
  * 已废弃
  * @deprecated
  */
-function oldEditRender (renderOpts: VxeGlobalRendererHandles.RenderEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
+function oldEditRender (renderOpts: VxeGlobalRendererHandles.RenderTableEditOptions, params: VxeGlobalRendererHandles.RenderEditParams) {
   const { row, column } = params
   const cellValue = getCellValue(row, column)
   return [
@@ -520,12 +533,12 @@ renderer.mixin({
   select: {
     renderEdit: nativeSelectEditRender,
     renderDefault: nativeSelectEditRender,
-    renderCell (renderOpts: any, params: any) {
+    renderCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (renderOpts: any, params: any) {
+    renderFilter (renderOpts, params) {
       const { column } = params
-      return column.filters.map((option: any, oIndex: any) => {
+      return column.filters.map((option, oIndex) => {
         return h('select', {
           key: oIndex,
           class: 'vxe-default-select',
@@ -541,7 +554,7 @@ renderer.mixin({
   VxeInput: {
     autofocus: '.vxe-input--inner',
     renderEdit: defaultEditRender,
-    renderCell (renderOpts: any, params: any) {
+    renderCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || getConfig().input?.digits || 2
@@ -569,7 +582,7 @@ renderer.mixin({
   VxeNumberInput: {
     autofocus: '.vxe-number-input--inner',
     renderEdit: defaultEditRender,
-    renderCell (renderOpts: any, params: any) {
+    renderCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || getConfig().numberInput?.digits || 2
@@ -590,7 +603,7 @@ renderer.mixin({
   VxeDatePicker: {
     autofocus: '.vxe-date-picker--inner',
     renderEdit: defaultEditRender,
-    renderCell (renderOpts: any, params: any) {
+    renderCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       let cellValue = XEUtils.get(row, column.property)
@@ -615,7 +628,7 @@ renderer.mixin({
     autofocus: '.vxe-textarea--inner'
   },
   VxeButton: {
-    renderDefault: defaultCellRender
+    renderDefault: buttonCellRender
   },
   VxeButtonGroup: {
     renderDefault (renderOpts, params) {
@@ -633,13 +646,13 @@ renderer.mixin({
     autofocus: '.vxe-input--inner',
     renderEdit: defaultSelectEditRender,
     renderDefault: defaultSelectEditRender,
-    renderCell (renderOpts: any, params: any) {
+    renderCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (renderOpts: any, params: any) {
+    renderFilter (renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
-      return column.filters.map((option: any, oIndex: any) => {
+      return column.filters.map((option, oIndex) => {
         const optionValue = option.data
         return h(getDefaultComponent(renderOpts), {
           key: oIndex,
@@ -651,17 +664,11 @@ renderer.mixin({
     defaultFilterMethod: handleFilterMethod,
     exportMethod: handleExportSelectMethod
   },
-  VxeRadio: {
-    renderDefault: defaultCellRender
-  },
   VxeRadioGroup: {
-    renderDefault: defaultCellRender
-  },
-  VxeCheckbox: {
-    renderDefault: defaultCellRender
+    renderDefault: radioAndCheckboxEditRender
   },
   VxeCheckboxGroup: {
-    renderDefault: defaultCellRender
+    renderDefault: radioAndCheckboxEditRender
   },
   VxeSwitch: {
     autofocus: '.vxe-switch--button',
@@ -676,7 +683,7 @@ renderer.mixin({
   $input: {
     autofocus: '.vxe-input--inner',
     renderEdit: oldEditRender,
-    renderCell (renderOpts: any, params: any) {
+    renderCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || getConfig().input?.digits || 2
@@ -713,13 +720,13 @@ renderer.mixin({
     autofocus: '.vxe-input--inner',
     renderEdit: oldSelectEditRender,
     renderDefault: oldSelectEditRender,
-    renderCell (renderOpts: any, params: any) {
+    renderCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (renderOpts: any, params: any) {
+    renderFilter (renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
-      return column.filters.map((option: any, oIndex: any) => {
+      return column.filters.map((option, oIndex) => {
         const optionValue = option.data
         return h(getOldComponent(renderOpts), {
           key: oIndex,
