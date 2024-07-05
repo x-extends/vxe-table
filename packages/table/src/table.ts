@@ -5882,7 +5882,7 @@ export default defineComponent({
         }
         tableMethods.dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
         if (columnOpts.isCurrent || props.highlightCurrentColumn) {
-          tableMethods.setCurrentColumn(column)
+          tablePrivateMethods.triggerCurrentColumnEvent(evnt, params)
         }
       },
       triggerHeaderCellDblclickEvent (evnt, params) {
@@ -6092,13 +6092,25 @@ export default defineComponent({
           tableMethods.dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
         }
       },
+      triggerCurrentColumnEvent (evnt, params) {
+        const columnOpts = computeColumnOpts
+        const { currentMethod } = columnOpts.value
+        const { column } = params
+        if (!currentMethod || currentMethod({ column })) {
+          tableMethods.setCurrentColumn(column)
+        }
+      },
       triggerCurrentRowEvent (evnt, params) {
         const { currentRow: oldValue } = reactData
+        const rowOpts = computeRowOpts
+        const { currentMethod } = rowOpts.value
         const { row: newValue } = params
         const isChange = oldValue !== newValue
-        tableMethods.setCurrentRow(newValue)
-        if (isChange) {
-          tableMethods.dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
+        if (!currentMethod || currentMethod({ row: newValue })) {
+          tableMethods.setCurrentRow(newValue)
+          if (isChange) {
+            tableMethods.dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
+          }
         }
       },
       /**
@@ -6718,9 +6730,9 @@ export default defineComponent({
           if (mouseOpts.area && mouseOpts.selected) {
             warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
           }
-          if (mouseOpts.area && checkboxOpts.range) {
-            warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
-          }
+          // if (mouseOpts.area && checkboxOpts.range) {
+          //   warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+          // }
           if (props.treeConfig && mouseOpts.area) {
             errLog('vxe.error.noTree', ['mouse-config.area'])
           }
@@ -6843,6 +6855,7 @@ export default defineComponent({
       const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
       const validOpts = computeValidOpts.value
+      const checkboxOpts = computeCheckboxOpts.value
       const treeOpts = computeTreeOpts.value
       const rowOpts = computeRowOpts.value
       const columnOpts = computeColumnOpts.value
@@ -6865,6 +6878,7 @@ export default defineComponent({
           'cell--area': mouseConfig && mouseOpts.area,
           'row--highlight': rowOpts.isHover || highlightHoverRow,
           'column--highlight': columnOpts.isHover || highlightHoverColumn,
+          'checkbox--range': checkboxOpts.range,
           'is--header': showHeader,
           'is--footer': showFooter,
           'is--group': isGroup,
