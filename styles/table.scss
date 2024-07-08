@@ -611,8 +611,15 @@
       }
     }
   }
+  &.checkbox--range,
+  &.cell--selected {
+    .vxe-body--column {
+      user-select: none;
+    }
+  }
   &.cell--area {
-    .vxe-body--row {
+    .vxe-table--body-wrapper,
+    .vxe-body--column {
       user-select: none;
     }
   }

@@ -863,9 +863,9 @@ export default {
       if (this.mouseOpts.area && this.mouseOpts.selected) {
         warnLog('vxe.error.errConflicts', ['mouse-config.area', 'mouse-config.selected'])
       }
-      if (this.mouseOpts.area && this.checkboxOpts.range) {
-        warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
-      }
+      // if (this.mouseOpts.area && this.checkboxOpts.range) {
+      //   warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
+      // }
       if (this.treeConfig && this.mouseOpts.area) {
         errLog('vxe.error.noTree', ['mouse-config.area'])
       }
@@ -1057,6 +1057,7 @@ export default {
       hasTip,
       columnOpts,
       rowOpts,
+      checkboxOpts,
       loadingOpts,
       editRules
     } = this
@@ -1072,6 +1073,7 @@ export default {
         'cell--area': mouseConfig && mouseOpts.area,
         'row--highlight': rowOpts.isHover || highlightHoverRow,
         'column--highlight': columnOpts.isHover || highlightHoverColumn,
+        'checkbox--range': checkboxOpts.range,
         'is--header': showHeader,
         'is--footer': showFooter,
         'is--group': isGroup,
