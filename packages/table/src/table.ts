@@ -203,7 +203,8 @@ export default defineComponent({
         row: null,
         column: null,
         content: null,
-        visible: false
+        visible: false,
+        currOpts: {}
       },
       // 存放数据校验相关信息
       validStore: {
@@ -3514,7 +3515,8 @@ export default defineComponent({
             row: null,
             column: null,
             content: null,
-            visible: false
+            visible: false,
+            currOpts: {}
           })
           if ($tooltip && $tooltip.close) {
             $tooltip.close()
@@ -5218,7 +5220,8 @@ export default defineComponent({
         Object.assign(tooltipStore, {
           row,
           column,
-          visible: true
+          visible: true,
+          currOpts: {}
         })
         nextTick(() => {
           const $tooltip = refTooltip.value
@@ -5781,7 +5784,7 @@ export default defineComponent({
           tooltipStore.row = null
           tooltipStore.column = column
           tooltipStore.visible = true
-          // tooltipStore.currOpts = { content: null }
+          tooltipStore.currOpts = iconParams
           nextTick(() => {
             const $tooltip = refTooltip.value
             if ($tooltip && $tooltip.open) {
@@ -6850,7 +6853,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore } = reactData
+      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
@@ -7054,10 +7057,9 @@ export default defineComponent({
          * 工具提示
          */
         VxeUITooltipComponent
-          ? h(VxeUITooltipComponent, {
-            ref: refTooltip,
-            ...tipConfig as any
-          })
+          ? h(VxeUITooltipComponent, Object.assign({
+            ref: refTooltip
+          }, tipConfig, tooltipStore.currOpts))
           : createCommentVNode(),
         /**
          * 校验提示

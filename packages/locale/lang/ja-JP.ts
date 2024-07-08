@@ -19,7 +19,7 @@ export default {
       useErr: '"{0}" モジュールをインストールする際にエラーが発生し、順序が正しくない可能性がある。依存するモジュールはTableの前にインストールする必要がある',
       barUnableLink: 'ツールバーはフォームを関連付けることができない',
       expandContent: '拡張行スロットは "content" である必要があります。確認してください',
-      reqComp: 'Require "{0}" component, check whether the install is correct',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxetable.cn/#/start/useGlobal',
       reqModule: '"{0}" モジュールが必要です',
       reqProp: '必要な "{0}" パラメーターが欠落しているため、エラーが発生する可能性があります',
       emptyProp: '"{0}" プロパティは空白が許可されていません',

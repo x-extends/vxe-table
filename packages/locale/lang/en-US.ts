@@ -19,7 +19,7 @@ export default {
       useErr: 'Error installing "{0}" module, possibly in the wrong order, dependent modules need to be installed before Table.',
       barUnableLink: 'Toolbar cannot associate table.',
       expandContent: 'Expand row slot should be "content", please check if it is correct.',
-      reqComp: 'Require "{0}" component, check whether the install is correct',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxetable.cn/#/start/useGlobal',
       reqModule: 'require "{0}" module.',
       reqProp: 'Missing the necessary "{0}" parameter, which can cause error.',
       emptyProp: 'The property "{0}" is not allowed to be empty.',

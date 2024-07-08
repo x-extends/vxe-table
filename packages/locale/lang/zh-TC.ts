@@ -19,7 +19,7 @@ export default {
       useErr: '安裝 "{0}" 模組時發生錯誤，可能順序不正確，依賴的模組需要在Table之前安裝',
       barUnableLink: '工具欄無法關聯表格',
       expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
-      reqComp: '缺少 "{0}" 組件，请检查是否正确安装',
+      reqComp: '缺少 "{0}" 組件，请检查是否正确安装 https://vxetable.cn/#/start/useGlobal',
       reqModule: '缺少 "{0}" 模組',
       reqProp: '缺少必要的 "{0}" 參數，可能會導致出現錯誤',
       emptyProp: '參數 "{0}" 不允許為空',

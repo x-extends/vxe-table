@@ -19,7 +19,7 @@ export default {
       useErr: 'Error al instalar el módulo "{0}", posiblemente en el orden equivocado, los módulos dependientes deben ser instalados antes de la tabla.',
       barUnableLink: 'La barra de herramientas no puede asociarse con la tabla.',
       expandContent: 'La ranura de fila expandible debería ser "contenido", por favor revise si está correcta.',
-      reqComp: 'Require "{0}" component, check whether the install is correct',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxetable.cn/#/start/useGlobal',
       reqModule: 'Requerir el módulo "{0}".',
       reqProp: 'Falta el parámetro necesario "{0}", lo que puede causar errores.',
       emptyProp: 'La propiedad "{0}" no se permite estar vacía.',
