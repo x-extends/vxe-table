@@ -1,11 +1,13 @@
 import { App } from 'vue'
-import VxeUIExport, { VxeUI } from 'vxe-pc-ui'
+import { VxeUI } from '@vxe-ui/core'
 
 import { VxeColumn } from './column'
 import { VxeColgroup } from './colgroup'
 import { VxeGrid } from './grid'
 import { VxeTable } from './table'
 import { VxeToolbar } from './toolbar'
+
+import zhCN from './locale/lang/zh-CN'
 
 import type { VxeGlobalConfig } from '../types'
 
@@ -23,8 +25,11 @@ export function install (app: App, options?: VxeGlobalConfig) {
   components.forEach(component => component.install(app))
 }
 
-export const modal = VxeUIExport.drawer
-export const drawer = VxeUIExport.drawer
+// 保留兼容老版本
+const defaultLanguage = 'zh-CN'
+VxeUI.setI18n(defaultLanguage, zhCN)
+VxeUI.setLanguage(defaultLanguage)
+VxeUI.setTheme('light')
 
 export * from './ui'
 

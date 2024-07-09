@@ -4,6 +4,10 @@
       <div>
         <button @click="changeTheme">切换主题</button>
       </div>
+      <div>
+        <button @click="changeLang('zh-CN')">中文</button>
+        <button @click="changeLang('en-US')">英文</button>
+      </div>
       <RouterLink  class="link" v-for="(item, index) in navList" :key="index" :to="item.routerLink">{{ item.name }}</RouterLink>
     </div>
     <div class="page-layout-body">
@@ -22,7 +26,11 @@ const navList = ref([
   { name: 'TableTest1', routerLink: { name: 'TableTest1' } },
   { name: 'TableTest2', routerLink: { name: 'TableTest2' } },
   { name: 'TableTest3', routerLink: { name: 'TableTest3' } },
-  { name: 'GridTest', routerLink: { name: 'GridTest' } }
+  { name: 'TableTest4', routerLink: { name: 'TableTest4' } },
+  { name: 'GridTest', routerLink: { name: 'GridTest' } },
+  { name: 'TestKeepTest1', routerLink: { name: 'TestKeepTest1' } },
+  { name: 'TestKeepTest2', routerLink: { name: 'TestKeepTest2' } },
+  { name: 'TestKeepTest3', routerLink: { name: 'TestKeepTest3' } }
 ])
 
 const theme = ref((localStorage.getItem('VXE_THEME') as 'default' | 'dark') || 'default')
@@ -32,6 +40,12 @@ const changeTheme = () => {
   theme.value = themeName
   VxeUI.setTheme(themeName)
   localStorage.setItem('VXE_THEME', themeName)
+}
+
+VxeUI.setLanguage((localStorage.getItem('VXE_LANGUAGE') as 'zh-CN' | 'en-US') || 'zh-CN')
+const changeLang = (lang: 'zh-CN' | 'en-US') => {
+  VxeUI.setLanguage(lang)
+  localStorage.setItem('VXE_LANGUAGE', lang)
 }
 </script>
 

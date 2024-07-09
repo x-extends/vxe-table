@@ -154,8 +154,11 @@
       outline: none;
     }
     &:hover {
-      color: var(--vxe-ui-font-primary-color);
+      color: var(--vxe-ui-font-primary-lighten-color);
     }
+  }
+  .btn--confirm {
+    color: var(--vxe-ui-font-primary-color);
   }
 }
 

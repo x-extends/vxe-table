@@ -104,8 +104,11 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams) {
   }
   if (renderOpts) {
     const compConf = renderer.get(renderOpts.name)
-    if (compConf && compConf.renderFooter) {
-      return getSlotVNs(compConf.renderFooter(renderOpts, params))
+    if (compConf) {
+      const rtFooter = compConf.renderTableFooter || compConf.renderFooter
+      if (rtFooter) {
+        return getSlotVNs(rtFooter(renderOpts, params))
+      }
     }
   }
   // 兼容老模式
@@ -187,8 +190,11 @@ export const Cell = {
     }
     if (renderOpts) {
       const compConf = renderer.get(renderOpts.name)
-      if (compConf && compConf.renderHeader) {
-        return renderTitleContent(params, getSlotVNs(compConf.renderHeader(renderOpts, params)))
+      if (compConf) {
+        const rtHeader = compConf.renderTableHeader || compConf.renderHeader
+        if (rtHeader) {
+          return renderTitleContent(params, getSlotVNs(rtHeader(renderOpts, params)))
+        }
       }
     }
     return renderTitleContent(params, formatText(column.getTitle(), 1))
@@ -205,11 +211,14 @@ export const Cell = {
       return $table.callSlot(defaultSlot, params)
     }
     if (renderOpts) {
-      const funName = editRender ? 'renderCell' : 'renderDefault'
       const compConf = renderer.get(renderOpts.name)
-      const compFn = compConf ? compConf[funName] : null
-      if (compFn) {
-        return getSlotVNs(compFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
+      if (compConf) {
+        const rtCell = compConf.renderTableCell || compConf.renderCell
+        const rtDefault = compConf.renderTableDefault || compConf.renderDefault
+        const renderFn = editRender ? rtCell : rtDefault
+        if (renderFn) {
+          return getSlotVNs(renderFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
+        }
       }
     }
     const cellValue = $table.getCellLabel(row, column)
@@ -271,7 +280,6 @@ export const Cell = {
     }
     if (!trigger || trigger === 'default') {
       ons.onClick = (evnt: Event) => {
-        evnt.stopPropagation()
         $table.triggerTreeExpandEvent(evnt, params)
       }
     }
@@ -366,7 +374,6 @@ export const Cell = {
       ons = {
         onClick (evnt: Event) {
           if (!isDisabled && isVisible) {
-            evnt.stopPropagation()
             $table.triggerRadioRowEvent(evnt, params)
           }
         }
@@ -427,7 +434,6 @@ export const Cell = {
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isAllCheckboxDisabled) {
-            evnt.stopPropagation()
             $table.triggerCheckAllEvent(evnt, !isAllCheckboxSelected)
           }
         }
@@ -488,7 +494,6 @@ export const Cell = {
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isDisabled && isVisible) {
-            evnt.stopPropagation()
             $table.triggerCheckRowEvent(evnt, params, !isChecked)
           }
         }
@@ -557,7 +562,6 @@ export const Cell = {
       ons = {
         onClick (evnt: MouseEvent) {
           if (!isDisabled && isVisible) {
-            evnt.stopPropagation()
             $table.triggerCheckRowEvent(evnt, params, !isChecked)
           }
         }
@@ -636,7 +640,6 @@ export const Cell = {
             'is--active': isAceived
           }],
           onClick (evnt: MouseEvent) {
-            evnt.stopPropagation()
             $table.triggerRowExpandEvent(evnt, params)
           }
         }, [
@@ -661,8 +664,11 @@ export const Cell = {
     }
     if (contentRender) {
       const compConf = renderer.get(contentRender.name)
-      if (compConf && compConf.renderExpand) {
-        return getSlotVNs(compConf.renderExpand(contentRender, params))
+      if (compConf) {
+        const rtExpand = compConf.renderTableExpand || compConf.renderExpand
+        if (rtExpand) {
+          return getSlotVNs(rtExpand(contentRender, params))
+        }
       }
     }
     return []
@@ -839,12 +845,13 @@ export const Cell = {
     const defaultSlot = slots ? slots.default : null
     const editSlot = slots ? slots.edit : null
     const compConf = renderer.get(editRender.name)
+    const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
     if (isEdit) {
       if (editSlot) {
         return $table.callSlot(editSlot, params)
       }
-      if (compConf && compConf.renderEdit) {
-        return getSlotVNs(compConf.renderEdit(editRender, Object.assign({ $type: 'edit' }, params)))
+      if (rtEdit) {
+        return getSlotVNs(rtEdit(editRender, Object.assign({ $type: 'edit' }, params)))
       }
       return []
     }

@@ -1,12 +1,10 @@
-/**
- * v4保留兼容，已废弃，即将删除文件
- * @deprecated
- */
 export default {
   vxe: {
     base: {
       pleaseInput: 'Please input',
-      pleaseSelect: 'Select'
+      pleaseSelect: 'Select',
+      comma: ',',
+      fullStop: '.'
     },
     loading: {
       text: 'Loading...'
@@ -21,6 +19,7 @@ export default {
       useErr: '"{0}" モジュールをインストールする際にエラーが発生し、順序が正しくない可能性がある。依存するモジュールはTableの前にインストールする必要がある',
       barUnableLink: 'ツールバーはフォームを関連付けることができない',
       expandContent: '拡張行スロットは "content" である必要があります。確認してください',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxetable.cn/#/start/useGlobal',
       reqModule: '"{0}" モジュールが必要です',
       reqProp: '必要な "{0}" パラメーターが欠落しているため、エラーが発生する可能性があります',
       emptyProp: '"{0}" プロパティは空白が許可されていません',
@@ -49,7 +48,7 @@ export default {
     table: {
       emptyText: 'データがありません',
       allTitle: '全て選択/取消',
-      seqTitle: 'S/N',
+      seqTitle: 'N/S',
       confirmFilter: 'OK',
       resetFilter: 'リセット',
       allFilter: '全て',
@@ -63,8 +62,9 @@ export default {
       expSrcFilename: 'エクスポート_ソース_{0}',
       customTitle: '列設定',
       customAll: '全部',
-      customConfirm: 'OK',
-      customRestore: 'リセット',
+      customConfirm: 'Confirm',
+      customCancel: 'Cancel',
+      customRestore: 'Restore',
       maxFixedCol: '最大固定列数が {0} です。'
     },
     grid: {
@@ -120,8 +120,10 @@ export default {
         colSort: 'ソート',
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
         colTitle: 'タイトル',
-        colVisible: '表示',
-        colFixed: '冻结列（最多 {0} 列）',
+        colResizable: 'Column width (px)',
+        colVisible: 'Display',
+        colFixed: '冻结列',
+        colFixedMax: '冻结列（最多 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '指定しない',
         fixedRight: '右側'
@@ -129,14 +131,17 @@ export default {
     },
     import: {
       modes: {
-        covering: '上書き',
-        insert: '追加'
+        covering: 'Overwrite mode (directly overwrite table data)',
+        insert: 'Bottom append (appends new data to the bottom of the table)',
+        insertTop: 'Top append (appends new data to the top of the table)',
+        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
       },
       impTitle: 'データインポート',
       impFile: 'ファイル名',
       impSelect: 'ファイル選択',
       impType: 'ファイルの種類',
       impOpts: 'パラメータ指定',
+      impMode: 'Import mode',
       impConfirm: 'インポート',
       impCancel: 'キャンセル'
     },
@@ -185,7 +190,9 @@ export default {
       expCancel: 'キャンセル'
     },
     modal: {
-      zoomIn: '最大化',
+      errTitle: 'Error',
+      zoomMin: 'Minimize',
+      zoomIn: 'Maximize',
       zoomOut: '縮小',
       close: '閉じる'
     },
@@ -269,12 +276,146 @@ export default {
         }
       }
     },
-    formDesign: {
-      widget: {
-        input: 'Input',
-        textarea: 'Textarea',
-        select: 'Select'
+    imagePreview: {
+      popupTitle: 'Preview',
+      operBtn: {
+        zoomOut: 'Reduce',
+        zoomIn: 'Enlarge',
+        pctFull: 'Proportional scaling',
+        pct11: 'Show original size',
+        rotateLeft: 'Rotate left',
+        rotateRight: 'Rotate right',
+        print: 'Click to print',
+        download: 'Click to download'
       }
+    },
+    upload: {
+      fileBtnText: 'Click or drag',
+      imgBtnText: 'Click or drag',
+      dragPlaceholder: 'Please drag and drop the file into this area to upload it.',
+      imgSizeHint: 'Single {0}',
+      imgCountHint: 'Up to {0}',
+      fileTypeHint: 'Support {0} file types',
+      fileSizeHint: 'Single file size does not exceed {0}',
+      fileCountHint: 'Up to {0} file can be uploaded',
+      overCountErr: 'You can only choose {0} file!',
+      overCountExtraErr: 'It has exceeded the maximum number {0}, and more than {0} file will be ignored!超出最大数量 1 个，超出的 1 个文件将被忽略！',
+      overSizeErr: 'The size of the file is not more than {0}}!',
+      reUpload: 'Re upload',
+      uploadProgress: 'Uploading {0}%',
+      uploadErr: 'Fail to upload',
+      uploadSuccess: 'Successfully upload'
+    },
+    formDesign: {
+      formName: 'Form name',
+      defFormTitle: 'Unnamed form',
+      widgetPropTab: 'Field property',
+      widgetFormTab: 'Form property',
+      styleSetting: {
+        btn: 'Style setting',
+        title: 'Form style setting',
+        layoutTitle: 'Field layout',
+        verticalLayout: 'Vertical layout',
+        horizontalLayout: 'Horizontal layout',
+        styleTitle: 'Title style',
+        boldTitle: 'Bold title',
+        fontBold: 'Bold',
+        fontNormal: 'Normal',
+        colonTitle: 'Display colon',
+        colonVisible: 'Visible',
+        colonHidden: 'Hidden',
+        alignTitle: 'Title align',
+        widthTitle: 'Title width',
+        alignLeft: 'Left',
+        alignRight: 'Right',
+        unitPx: 'Px',
+        unitPct: 'Pct'
+      },
+      widget: {
+        group: {
+          base: 'Base control',
+          layout: 'Layout control',
+          advanced: 'Advanced control'
+        },
+        copyTitle: 'Copy_{0}',
+        component: {
+          input: 'Input',
+          textarea: 'Textarea',
+          select: 'Select',
+          row: 'Row/column',
+          title: 'Text',
+          subtable: 'Subtable',
+          VxeSwitch: 'Yes/no',
+          VxeInput: 'Input',
+          VxeNumberInput: 'Number',
+          VxeDatePicker: 'Date',
+          VxeTextarea: 'Textarea',
+          VxeSelect: 'Select',
+          VxeRadioGroup: 'Radio',
+          VxeCheckboxGroup: 'Checkbox',
+          VxeUploadFile: 'File',
+          VxeUploadImage: 'Image'
+        }
+      },
+      widgetProp: {
+        name: 'Field name',
+        placeholder: 'Field placeholder',
+        required: 'Required',
+        displaySetting: {
+          name: 'Display setting',
+          pc: 'PC',
+          mobile: 'Mobile',
+          visible: 'Visible',
+          hidden: 'Hidden'
+        },
+        dataSource: {
+          name: 'Data source',
+          defValue: 'Option {0}',
+          addOption: 'Add option',
+          batchEditOption: 'Batch edit',
+          batchEditTip: 'Each row corresponds to an option, supporting direct copying and pasting from tables, Excel, and WPS.',
+          batchEditSubTip: 'Each row corresponds to an option. If grouped, the sub items can start with spaces or tab keys, and can be directly copied and pasted from tables, Excel, or WPS.',
+          buildOption: 'Build option'
+        },
+        rowProp: {
+          colSize: 'Number of columns',
+          col2: 'Two columns',
+          col3: 'Three columns',
+          col4: 'Four columns',
+          col6: 'Six columns',
+          layout: 'Layout'
+        },
+        textProp: {
+          name: 'Content',
+          alignTitle: 'Align',
+          alignLeft: 'Left',
+          alignCenter: 'Center',
+          alignRight: 'Right',
+          colorTitle: 'Color',
+          sizeTitle: 'Font size',
+          boldTitle: 'Font bold',
+          fontNormal: 'Normal',
+          fontBold: 'Bold'
+        },
+        subtableProp: {
+          seqTitle: 'S/N',
+          showSeq: 'Display serial number',
+          showCheckbox: 'Allow multiple selections',
+          errSubDrag: 'The sub table does not support this control. Please use another control.'
+        },
+        uploadProp: {
+          limitFileCount: 'File quantity limitation',
+          limitFileSize: 'File size limitation',
+          multiFile: 'Allows multiple files',
+          limitImgCount: 'Image quantity limitation',
+          limitImgSize: 'Image size limitation',
+          multiImg: 'Allows multiple images'
+        }
+      }
+    },
+    listDesign: {
+      fieldSettingTab: 'Field setting',
+      listSettingTab: 'List setting'
     },
 
     /**

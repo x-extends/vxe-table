@@ -1,10 +1,12 @@
-import { defineComponent, h, inject, ref, Ref, VNode, PropType, resolveComponent, TransitionGroup, createCommentVNode } from 'vue'
+import { defineComponent, h, inject, ref, Ref, VNode, PropType, nextTick, TransitionGroup, createCommentVNode } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
 import { addClass, removeClass } from '../../../ui/src/dom'
+import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
-import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeModalComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from '../../../../types'
+import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from 'vxe-pc-ui'
+import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
 
@@ -17,6 +19,13 @@ export default defineComponent({
     }
   },
   setup (props) {
+    const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
+    const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
+    const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+    const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+    const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
+
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { reactData } = $xeTable
@@ -485,9 +494,12 @@ export default defineComponent({
       const { customStore } = props
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
-      const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+      const { modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
+      const { maxFixedSize } = columnOpts
+      const { mode } = customOpts
       const modalOpts = Object.assign({}, modalOptions)
+      const drawerOpts = Object.assign({}, drawerOptions)
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
       const trVNs: VNode[] = []
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
@@ -564,14 +576,18 @@ export default defineComponent({
                 }, [
                   !isChecked || (column.children && column.children.length)
                     ? h('span', '-')
-                    : h(resolveComponent('vxe-input') as VxeInputComponent, {
-                      type: 'integer',
-                      min: 40,
-                      modelValue: column.renderResizeWidth,
-                      'onUpdate:modelValue' (value: any) {
-                        column.renderResizeWidth = Math.max(40, Number(value))
-                      }
-                    })
+                    : (
+                        VxeUIInputComponent
+                          ? h(VxeUIInputComponent, {
+                            type: 'integer',
+                            min: 40,
+                            modelValue: column.renderResizeWidth,
+                            'onUpdate:modelValue' (value: any) {
+                              column.renderResizeWidth = Math.max(40, Number(value))
+                            }
+                          })
+                          : createCommentVNode()
+                      )
                 ])
                 : createCommentVNode(),
               allowFixed
@@ -580,22 +596,26 @@ export default defineComponent({
                 }, [
                   parent
                     ? h('span', '-')
-                    : h(resolveComponent('vxe-radio-group') as VxeRadioGroupComponent, {
-                      modelValue: column.renderFixed || '',
-                      type: 'button',
-                      size: 'mini',
-                      options: [
-                        { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
-                        { label: getI18n('vxe.custom.setting.fixedUnset'), value: '' },
-                        { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
-                      ],
-                      'onUpdate:modelValue' (value: any) {
-                        column.renderFixed = value
-                      }
-                      // onChange () {
-                      //   changePopupFixedOption(column)
-                      // }
-                    })
+                    : (
+                        VxeUIRadioGroupComponent
+                          ? h(VxeUIRadioGroupComponent, {
+                            modelValue: column.renderFixed || '',
+                            type: 'button',
+                            size: 'mini',
+                            options: [
+                              { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
+                              { label: getI18n('vxe.custom.setting.fixedUnset'), value: '' },
+                              { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
+                            ],
+                            'onUpdate:modelValue' (value: any) {
+                              column.renderFixed = value
+                            }
+                          // onChange () {
+                          //   changePopupFixedOption(column)
+                          // }
+                          })
+                          : createCommentVNode()
+                      )
                 ])
                 : createCommentVNode()
             ])
@@ -604,25 +624,7 @@ export default defineComponent({
       })
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
-      return h(resolveComponent('vxe-modal') as VxeModalComponent, {
-        key: 'popup',
-        className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
-        modelValue: customStore.visible,
-        title: modalOpts.title || getI18n('vxe.custom.cstmTitle'),
-        width: modalOpts.width || '50vw',
-        minWidth: modalOpts.minWidth || 700,
-        height: modalOpts.height || '50vh',
-        minHeight: modalOpts.minHeight || 400,
-        mask: true,
-        lockView: true,
-        showFooter: true,
-        resize: true,
-        escClosable: true,
-        destroyOnClose: true,
-        'onUpdate:modelValue' (value: any) {
-          customStore.visible = value
-        }
-      }, {
+      const scopedSlots = {
         default: () => {
           return h('div', {
             ref: bodyElemRef,
@@ -693,16 +695,18 @@ export default defineComponent({
                         h('span', {
                           class: 'vxe-table-custom-popup--table-sort-help-title'
                         }, getI18n('vxe.custom.setting.colSort')),
-                        h(resolveComponent('vxe-tooltip') as VxeTooltipComponent, {
-                          enterable: true,
-                          content: getI18n('vxe.custom.setting.sortHelpTip')
-                        }, {
-                          default: () => {
-                            return h('i', {
-                              class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
-                            })
-                          }
-                        })
+                        VxeUITooltipComponent
+                          ? h(VxeUITooltipComponent, {
+                            enterable: true,
+                            content: getI18n('vxe.custom.setting.sortHelpTip')
+                          }, {
+                            default: () => {
+                              return h('i', {
+                                class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
+                              })
+                            }
+                          })
+                          : createCommentVNode()
                       ])
                       : createCommentVNode(),
                     h('th', {}, getI18n('vxe.custom.setting.colTitle')),
@@ -710,7 +714,7 @@ export default defineComponent({
                       ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
                       : createCommentVNode(),
                     allowFixed
-                      ? h('th', {}, getI18n('vxe.custom.setting.colFixed', [columnOpts.maxFixedSize || 0]))
+                      ? h('th', {}, getI18n(`vxe.custom.setting.${maxFixedSize ? 'colFixedMax' : 'colFixed'}`, [maxFixedSize]))
                       : createCommentVNode()
                   ])
                 ]),
@@ -733,30 +737,98 @@ export default defineComponent({
           return h('div', {
             class: 'vxe-table-custom-popup--footer'
           }, [
-            h(resolveComponent('vxe-button') as VxeButtonComponent, {
-              content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore'),
-              onClick: resetCustomEvent
-            }),
-            h(resolveComponent('vxe-button') as VxeButtonComponent, {
-              content: customOpts.resetButtonText || getI18n('vxe.custom.cstmCancel'),
-              onClick: cancelCustomEvent
-            }),
-            h(resolveComponent('vxe-button') as VxeButtonComponent, {
-              status: 'primary',
-              content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm'),
-              onClick: confirmCustomEvent
-            })
+            VxeUIButtonComponent
+              ? h(VxeUIButtonComponent, {
+                content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore'),
+                onClick: resetCustomEvent
+              })
+              : createCommentVNode(),
+            VxeUIButtonComponent
+              ? h(VxeUIButtonComponent, {
+                content: customOpts.resetButtonText || getI18n('vxe.custom.cstmCancel'),
+                onClick: cancelCustomEvent
+              })
+              : createCommentVNode(),
+            VxeUIButtonComponent
+              ? h(VxeUIButtonComponent, {
+                status: 'primary',
+                content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm'),
+                onClick: confirmCustomEvent
+              })
+              : createCommentVNode()
           ])
         }
-      })
+      }
+      if (mode === 'drawer') {
+        return VxeUIDrawerComponent
+          ? h(VxeUIDrawerComponent, {
+            key: 'drawer',
+            className: ['vxe-table-custom-drawer-wrapper', 'vxe-table--ignore-clear', drawerOpts.className || ''].join(' '),
+            modelValue: customStore.visible,
+            title: drawerOpts.title || getI18n('vxe.custom.cstmTitle'),
+            width: drawerOpts.width || Math.min(880, document.documentElement.clientWidth),
+            position: drawerOpts.position,
+            escClosable: !!drawerOpts.escClosable,
+            destroyOnClose: true,
+            showFooter: true,
+            'onUpdate:modelValue' (value: any) {
+              customStore.visible = value
+            }
+          }, scopedSlots)
+          : createCommentVNode()
+      }
+      return VxeUIModalComponent
+        ? h(VxeUIModalComponent, {
+          key: 'modal',
+          className: ['vxe-table-custom-modal-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
+          modelValue: customStore.visible,
+          title: modalOpts.title || getI18n('vxe.custom.cstmTitle'),
+          width: modalOpts.width || Math.min(880, document.documentElement.clientWidth),
+          minWidth: modalOpts.minWidth || 700,
+          height: modalOpts.height || Math.min(680, document.documentElement.clientHeight),
+          minHeight: modalOpts.minHeight || 400,
+          showZoom: modalOpts.showZoom,
+          showMaximize: modalOpts.showMaximize,
+          showMinimize: modalOpts.showMinimize,
+          mask: modalOpts.mask,
+          lockView: modalOpts.lockView,
+          resize: modalOpts.resize,
+          escClosable: !!modalOpts.escClosable,
+          destroyOnClose: true,
+          showFooter: true,
+          'onUpdate:modelValue' (value: any) {
+            customStore.visible = value
+          }
+        }, scopedSlots)
+        : createCommentVNode()
     }
 
     const renderVN = () => {
       const customOpts = computeCustomOpts.value
-      if (customOpts.mode === 'popup') {
+      if (['modal', 'drawer', 'popup'].includes(`${customOpts.mode}`)) {
         return renderPopupPanel()
       }
       return renderSimplePanel()
+    }
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      nextTick(() => {
+        if (!VxeUIModalComponent) {
+          errLog('vxe.error.reqComp', ['vxe-modal'])
+        }
+        if (!VxeUIButtonComponent) {
+          errLog('vxe.error.reqComp', ['vxe-button'])
+        }
+        if (!VxeUIInputComponent) {
+          errLog('vxe.error.reqComp', ['vxe-input'])
+        }
+        if (!VxeUITooltipComponent) {
+          errLog('vxe.error.reqComp', ['vxe-tooltip'])
+        }
+        if (!VxeUIRadioGroupComponent) {
+          errLog('vxe.error.reqComp', ['vxe-radio-group'])
+        }
+      })
     }
 
     return renderVN

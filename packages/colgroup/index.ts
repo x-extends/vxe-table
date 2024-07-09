@@ -16,5 +16,7 @@ if (VxeUI.dynamicApp) {
   VxeUI.dynamicApp.component('VxeTableColgroup', VxeColgroupComponent)
 }
 
+VxeUI.component(VxeColgroupComponent)
+
 export const Colgroup = VxeColgroup
 export default VxeColgroup

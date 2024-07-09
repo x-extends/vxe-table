@@ -6,7 +6,7 @@ body:
   id: issue_link
   attributes:
     label: "可复现的链接："
-    description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。如何创建，点击 v3：[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsfiddle](https://jsfiddle.net/86p7Ltny/)、[jsrun](https://jsrun.net/vIyKp/edit) 或 v4：[codesandbox](https://codesandbox.io/s/vxe-table-wentiyanshi-forked-54v2j)、[jsfiddle](https://jsfiddle.net/9qoghkbj/)、[jsrun](https://jsrun.net/K5IKp/edit)，将代码示例编辑后保存。"
+    description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。"
   validations:
     required: true
 - type: textarea
@@ -17,7 +17,7 @@ body:
     required: true
 - type: markdown
   attributes:
-    value: "在发布问题之前，请仔细阅读所填写的步骤，以确保是详细和清晰的。"
+    value: "在发布问题之前，请先查阅[最新文档](https://vxetable.cn/)确保使用的是最新版本，并仔细阅读所填写的步骤，以确保是详细和清晰的。"
 - type: input
   id: issue_expect
   attributes:
@@ -40,13 +40,28 @@ body:
   id: issue_vue_version
   attributes:
     label: "vue 版本："
-    placeholder: "例如：2.6.0"
+    placeholder: "例如：3.4.27"
   validations:
     required: true
 - type: input
-  id: issue_vxe_version
+  id: issue_vxe_ui_version
   attributes:
-    label: "vxe-table 版本："
-    placeholder: "例如：3.4.0"
+    label: "vxe-pc-ui 版本："
+    placeholder: "例如：4.0.49"
   validations:
     required: true
+- type: input
+  id: issue_vxe_table_version
+  attributes:
+    label: "vxe-table 版本："
+    placeholder: "例如：4.7.45"
+  validations:
+    required: true
+- type: checkboxes
+  id: issue_confirm_latest_version
+  attributes:
+    label: "是否使用当前最新版本？"
+    description: "官方只维护最新版本，如果不是最新版本，请先更新到[最新版本](https://vxetable.cn/)之后再提！"
+    options:
+    - label: "我已确认是使用当前的最新版本。"
+      required: true

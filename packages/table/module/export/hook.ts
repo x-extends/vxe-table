@@ -279,7 +279,7 @@ function checkImportData (columns: any[], fields: string[]) {
   return fields.some(field => tableFields.indexOf(field) > -1)
 }
 
-const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'openImport', 'openExport', 'openPrint']
+const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'getPrintHtml', 'openImport', 'openExport', 'openPrint']
 
 hooks.add('tableExportModule', {
   setupTable ($xeTable) {
@@ -347,13 +347,13 @@ hooks.add('tableExportModule', {
               _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
             }
             columns.forEach((column, $columnIndex) => {
-              let cellValue: string | boolean = ''
+              let cellValue: string | number | boolean = ''
               const renderOpts = column.editRender || column.cellRender
               let bodyExportMethod = column.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
                 const compConf = renderer.get(renderOpts.name)
                 if (compConf) {
-                  bodyExportMethod = compConf.exportMethod
+                  bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
                 }
               }
               if (!bodyExportMethod) {
@@ -380,12 +380,12 @@ hooks.add('tableExportModule', {
                     if (opts.original) {
                       cellValue = getCellValue(row, column)
                     } else {
-                      cellValue = $xeTable.getCellLabel(row, column)
+                      cellValue = `${$xeTable.getCellLabel(row, column)}`
                       if (column.type === 'html') {
                         htmlCellElem.innerHTML = cellValue
                         cellValue = htmlCellElem.innerText.trim()
                       } else {
-                        const cell = $xeTable.getCell(row, column)
+                        const cell = $xeTable.getCellElement(row, column)
                         if (cell) {
                           cellValue = cell.innerText.trim()
                         }
@@ -406,7 +406,7 @@ hooks.add('tableExportModule', {
           _row: row
         }
         columns.forEach((column, $columnIndex) => {
-          let cellValue: string | boolean = ''
+          let cellValue: string | number | boolean = ''
           const renderOpts = column.editRender || column.cellRender
           let exportLabelMethod = column.exportMethod
           if (!exportLabelMethod && renderOpts && renderOpts.name) {
@@ -436,12 +436,12 @@ hooks.add('tableExportModule', {
                 if (opts.original) {
                   cellValue = getCellValue(row, column)
                 } else {
-                  cellValue = $xeTable.getCellLabel(row, column)
+                  cellValue = `${$xeTable.getCellLabel(row, column)}`
                   if (column.type === 'html') {
                     htmlCellElem.innerHTML = cellValue
                     cellValue = htmlCellElem.innerText.trim()
                   } else {
-                    const cell = $xeTable.getCell(row, column)
+                    const cell = $xeTable.getCellElement(row, column)
                     if (cell) {
                       cellValue = cell.innerText.trim()
                     }
@@ -464,22 +464,28 @@ hooks.add('tableExportModule', {
       return getLabelData(opts, columns, datas)
     }
 
-    const getFooterCellValue = (opts: any, items: any[], column: any) => {
+    const getFooterCellValue = (opts: any, row: any, column: any) => {
       const columnOpts = computeColumnOpts.value
       const renderOpts = column.editRender || column.cellRender
       let footLabelMethod = column.footerExportMethod
       if (!footLabelMethod && renderOpts && renderOpts.name) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
-          footLabelMethod = compConf.footerExportMethod
+          footLabelMethod = compConf.tableFooterExportMethod || compConf.footerExportMethod
         }
       }
       if (!footLabelMethod) {
         footLabelMethod = columnOpts.footerExportMethod
       }
       const _columnIndex = $xeTable.getVTColumnIndex(column)
-      const cellValue = footLabelMethod ? footLabelMethod({ $table: $xeTable, items, itemIndex: _columnIndex, row: items, _columnIndex, column, options: opts }) : XEUtils.toValueString(items[_columnIndex])
-      return cellValue
+      if (footLabelMethod) {
+        return footLabelMethod({ $table: $xeTable, items: row, itemIndex: _columnIndex, row, _columnIndex, column, options: opts })
+      }
+      // 兼容老模式
+      if (XEUtils.isArray(row)) {
+        return XEUtils.toValueString(row[_columnIndex])
+      }
+      return XEUtils.get(row, column.field)
     }
 
     const toCsv = (opts: any, columns: any[], datas: any[]) => {
@@ -493,8 +499,8 @@ hooks.add('tableExportModule', {
       if (opts.isFooter) {
         const { footerTableData } = reactData
         const footers = getFooterData(opts, footerTableData)
-        footers.forEach((rows: any) => {
-          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, rows, column))).join(',') + enterSymbol
+        footers.forEach((row: any) => {
+          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, row, column))).join(',') + enterSymbol
         })
       }
       return content
@@ -511,8 +517,8 @@ hooks.add('tableExportModule', {
       if (opts.isFooter) {
         const { footerTableData } = reactData
         const footers = getFooterData(opts, footerTableData)
-        footers.forEach((rows: any) => {
-          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, rows, column))).join(',') + enterSymbol
+        footers.forEach((row: any) => {
+          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, row, column))).join(',') + enterSymbol
         })
       }
       return content
@@ -675,12 +681,12 @@ hooks.add('tableExportModule', {
         const footers = getFooterData(opts, footerTableData)
         if (footers.length) {
           tables.push('<tfoot>')
-          footers.forEach((rows: any) => {
+          footers.forEach((row: any) => {
             tables.push(
               `<tr>${columns.map((column: any) => {
                 const footAlign = column.footerAlign || column.align || allFooterAlign || allAlign
                 const classNames = hasEllipsis(column, 'showOverflow', allColumnOverflow) ? ['col--ellipsis'] : []
-                const cellValue = getFooterCellValue(opts, rows, column)
+                const cellValue = getFooterCellValue(opts, row, column)
                 if (footAlign) {
                   classNames.push(`col--${footAlign}`)
                 }
@@ -726,8 +732,8 @@ hooks.add('tableExportModule', {
       if (opts.isFooter) {
         const { footerTableData } = reactData
         const footers = getFooterData(opts, footerTableData)
-        footers.forEach((rows: any) => {
-          xml += `<Row>${columns.map((column: any) => `<Cell><Data ss:Type="String">${getFooterCellValue(opts, rows, column)}</Data></Cell>`).join('')}</Row>`
+        footers.forEach((row: any) => {
+          xml += `<Row>${columns.map((column: any) => `<Cell><Data ss:Type="String">${getFooterCellValue(opts, row, column)}</Data></Cell>`).join('')}</Row>`
         })
       }
       return `${xml}</Table></Worksheet></Workbook>`
@@ -826,7 +832,7 @@ hooks.add('tableExportModule', {
         $xeTable.createData(rows)
           .then((data: any) => {
             let loadRest
-            if (opts.mode === 'insert') {
+            if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
               loadRest = $xeTable.insert(data)
             } else {
               loadRest = $xeTable.reloadData(data)
@@ -882,7 +888,7 @@ hooks.add('tableExportModule', {
         internalData._importResolve = _importResolve
         internalData._importReject = _importReject
         if (window.FileReader) {
-          const options = Object.assign({ mode: 'insert' }, opts, { type, filename })
+          const options = Object.assign({ mode: 'insertBottom' }, opts, { type, filename })
           if (options.remote) {
             if (importMethod) {
               Promise.resolve(importMethod({ file, options, $table: $xeTable })).then(() => {
@@ -936,11 +942,18 @@ hooks.add('tableExportModule', {
       const hasTree = treeConfig
       const customOpts = computeCustomOpts.value
       const selectRecords = $xeTable.getCheckboxRecords()
+      const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {}
       const hasFooter = !!footerTableData.length
       const hasMerge = !hasTree && mergeList.length
-      const defOpts = Object.assign({ message: true, isHeader: showHeader, isFooter: showFooter }, options)
+      const defOpts = Object.assign({
+        message: true,
+        isHeader: showHeader,
+        isFooter: showFooter,
+        current: 'current',
+        modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
+      }, options)
       const types: string[] = defOpts.types || XEUtils.keys(exportOpts._typeMaps)
-      const modes: string[] = defOpts.modes
+      const modes: string[] = defOpts.modes || []
       const checkMethod = customOpts.checkMethod
       const exportColumns = collectColumn.slice(0)
       const { columns } = defOpts
@@ -948,13 +961,19 @@ hooks.add('tableExportModule', {
       const typeList = types.map((value) => {
         return {
           value,
-          label: `vxe.export.types.${value}`
+          label: getI18n(`vxe.export.types.${value}`)
         }
       })
-      const modeList = modes.map((value) => {
+      const modeList = modes.map((item: any) => {
+        if (item && item.value) {
+          return {
+            value: item.value,
+            label: item.label || item.value
+          }
+        }
         return {
-          value,
-          label: `vxe.export.modes.${value}`
+          value: item,
+          label: getI18n(`vxe.export.modes.${item}`)
         }
       })
       // 默认选中
@@ -1004,11 +1023,11 @@ hooks.add('tableExportModule', {
       Object.assign(exportParams, {
         mode: selectRecords.length ? 'selected' : 'current'
       }, defOpts)
-      if (modes.indexOf(exportParams.mode) === -1) {
-        exportParams.mode = modes[0]
+      if (!modeList.some(item => item.value === exportParams.mode)) {
+        exportParams.mode = modeList[0].value
       }
-      if (types.indexOf(exportParams.type) === -1) {
-        exportParams.type = types[0]
+      if (!typeList.some(item => item.value === exportParams.type)) {
+        exportParams.type = typeList[0].value
       }
       initStore.export = true
       return nextTick()
@@ -1131,9 +1150,8 @@ hooks.add('tableExportModule', {
             beforeExportMethod({ options: opts, $table: $xeTable, $grid: $xeGrid })
           }
         }
-
         if (!opts.data) {
-          opts.data = afterFullData
+          opts.data = []
           if (mode === 'selected') {
             const selectRecords = $xeTable.getCheckboxRecords()
             if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
@@ -1182,6 +1200,8 @@ hooks.add('tableExportModule', {
                   })
               }
             }
+          } else if (mode === 'current') {
+            opts.data = afterFullData
           }
         }
         return handleExport(opts)
@@ -1235,13 +1255,26 @@ hooks.add('tableExportModule', {
         if (!opts.sheetName) {
           opts.sheetName = document.title
         }
+        const beforePrintMethod = opts.beforePrintMethod
+        const tableHtml = opts.html || opts.content
         return new Promise((resolve, reject) => {
           if (VxeUI.print) {
-            if (opts.content) {
+            if (tableHtml) {
               resolve(
                 VxeUI.print({
                   title: opts.sheetName,
-                  html: opts.content
+                  html: tableHtml,
+                  customStyle: opts.style,
+                  beforeMethod: beforePrintMethod
+                    ? ({ html }) => {
+                        return beforePrintMethod({
+                          html,
+                          content: html,
+                          options: opts,
+                          $table: $xeTable
+                        })
+                      }
+                    : undefined
                 })
               )
             } else {
@@ -1249,7 +1282,18 @@ hooks.add('tableExportModule', {
                 exportMethods.exportData(opts).then(({ content }: any) => {
                   return VxeUI.print({
                     title: opts.sheetName,
-                    html: content
+                    html: content,
+                    customStyle: opts.style,
+                    beforeMethod: beforePrintMethod
+                      ? ({ html }) => {
+                          return beforePrintMethod({
+                            html,
+                            content: html,
+                            options: opts,
+                            $table: $xeTable
+                          })
+                        }
+                      : undefined
                   })
                 })
               )
@@ -1281,8 +1325,14 @@ hooks.add('tableExportModule', {
         const { treeConfig, importConfig } = props
         const { initStore, importStore, importParams } = reactData
         const importOpts = computeImportOpts.value
-        const defOpts = Object.assign({ mode: 'insert', message: true, types: XEUtils.keys(importOpts._typeMaps) }, options, importOpts)
-        const { types } = defOpts
+        const defOpts = Object.assign({
+          mode: 'insertBottom',
+          message: true,
+          types: XEUtils.keys(importOpts._typeMaps),
+          modes: ['insertBottom', 'covering']
+        }, importOpts, options)
+        const types = defOpts.types || []
+        const modes = defOpts.modes || []
         const isTree = !!treeConfig
         if (isTree) {
           if (defOpts.message) {
@@ -1296,16 +1346,22 @@ hooks.add('tableExportModule', {
           errLog('vxe.error.reqProp', ['import-config'])
         }
         // 处理类型
-        const typeList = types.map((value: any) => {
+        const typeList = types.map((value) => {
           return {
             value,
-            label: `vxe.export.types.${value}`
+            label: getI18n(`vxe.export.types.${value}`)
           }
         })
-        const modeList = defOpts.modes.map((value: any) => {
+        const modeList = modes.map((item: any) => {
+          if (item && item.value) {
+            return {
+              value: item.value,
+              label: item.label || item.value
+            }
+          }
           return {
-            value,
-            label: `vxe.import.modes.${value}`
+            value: item,
+            label: getI18n(`vxe.import.modes.${item}`)
           }
         })
         Object.assign(importStore, {
@@ -1317,25 +1373,35 @@ hooks.add('tableExportModule', {
           visible: true
         })
         Object.assign(importParams, defOpts)
+        if (!modeList.some(item => item.value === importParams.mode)) {
+          importParams.mode = modeList[0].value
+        }
         initStore.import = true
       },
       openExport (options: any) {
         const exportOpts = computeExportOpts.value
+        const defOpts = Object.assign({
+          message: true,
+          types: XEUtils.keys(exportOpts._typeMaps)
+        }, exportOpts, options)
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!props.exportConfig) {
             errLog('vxe.error.reqProp', ['export-config'])
           }
         }
-        handleExportAndPrint(Object.assign({}, exportOpts, options))
+        handleExportAndPrint(defOpts)
       },
       openPrint (options: any) {
         const printOpts = computePrintOpts.value
+        const defOpts = Object.assign({
+          message: true
+        }, printOpts, options)
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!props.printConfig) {
             errLog('vxe.error.reqProp', ['print-config'])
           }
         }
-        handleExportAndPrint(Object.assign({}, printOpts, options), true)
+        handleExportAndPrint(defOpts, true)
       }
     }
 

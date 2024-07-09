@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar ref="toolbarRef" print custom></vxe-toolbar>
+    <vxe-toolbar ref="toolbarRef" print export import custom></vxe-toolbar>
 
     <vxe-table
       border
@@ -11,6 +11,8 @@
       ref="tableRef"
       id="aaaa"
       :print-config="{}"
+      :import-config="{}"
+      :export-config="{}"
       :custom-config="{mode: 'popup',storage:true}"
       :loading="demo1.loading"
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
@@ -18,7 +20,7 @@
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
-      <vxe-colgroup title="分组1">
+      <vxe-colgroup title="分组1" field="g1">
         <vxe-column type="expand" field="role" title="Role">
           <template #content="{ row }">
             <div>{{ row.name }}</div>

@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { VxeUI } from 'vxe-pc-ui'
+import { VxeUI } from '../../../ui'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass, getEventTargetNode } from '../../../ui/src/dom'
 
 import type { TableKeyboardPrivateMethods } from '../../../../types'
@@ -276,7 +276,7 @@ hooks.add('tableKeyboardModule', {
           }
           params.columnIndex = targetColumnIndex
           params.column = targetColumn
-          params.cell = $xeTable.getCell(params.row, params.column)
+          params.cell = $xeTable.getCellElement(params.row, params.column)
           if (editConfig) {
             if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
               if (editOpts.mode === 'row') {
@@ -356,7 +356,7 @@ hooks.add('tableKeyboardModule', {
           params.column = visibleColumn[params.columnIndex]
         }
         $xeTable.scrollToRow(params.row, params.column).then(() => {
-          params.cell = $xeTable.getCell(params.row, params.column)
+          params.cell = $xeTable.getCellElement(params.row, params.column)
           $xeTable.handleSelected(params, evnt)
         })
       },

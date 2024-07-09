@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vxe-toolbar ref="toolbarRef" custom export import></vxe-toolbar>
+    <vxe-toolbar ref="toolbarRef" print export import custom></vxe-toolbar>
 
     <vxe-table
       border
@@ -9,17 +9,18 @@
       highlight-hover-row
       height="400"
       ref="tableRef"
-      id="bbbbb"
-      :custom-config="{storage:true}"
+      id="aaaa"
+      :print-config="{}"
+      :import-config="{}"
+      :export-config="{}"
+      :custom-config="{mode: 'drawer', storage: true}"
       :loading="demo1.loading"
-      :import-config="{modes: importModes}"
-      :export-config="{modes: exportModes}"
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
-      <vxe-colgroup title="分组1">
+      <vxe-colgroup title="分组1" field="g1">
         <vxe-column type="expand" field="role" title="Role">
           <template #content="{ row }">
             <div>{{ row.name }}</div>
@@ -27,7 +28,7 @@
         </vxe-column>
         <vxe-column field="name" title="Name" sortable></vxe-column>
       </vxe-colgroup>
-      <vxe-column field="name1" title="Name1" sortable></vxe-column>
+      <vxe-column field="sex11" title="Sex11" :visible="false"></vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
         field="age"
@@ -50,18 +51,6 @@ interface RowVO {
 
 const tableRef = ref<VxeTableInstance<RowVO>>()
 const toolbarRef = ref<VxeToolbarInstance>()
-
-const importModes = ref([
-  { label: '自定义25', value: '11' },
-  { label: '自定义11', value: '33' },
-  { label: 'current', value: 'current' }
-])
-
-const exportModes = ref([
-  { label: '自定义25', value: '11' },
-  { label: '自定义11', value: '33' },
-  { label: 'current', value: 'current' }
-])
 
 const demo1 = reactive({
   loading: false,

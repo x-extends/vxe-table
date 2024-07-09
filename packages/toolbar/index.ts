@@ -12,5 +12,7 @@ if (VxeUI.dynamicApp) {
   VxeUI.dynamicApp.component(VxeToolbarComponent.name as string, VxeToolbarComponent)
 }
 
+VxeUI.component(VxeToolbarComponent)
+
 export const Toolbar = VxeToolbar
 export default VxeToolbar

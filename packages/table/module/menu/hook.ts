@@ -74,7 +74,7 @@ hooks.add('tableMenuModule', {
               const { keyboard, row, column } = params
               if (keyboard && row && column) {
                 $xeTable.scrollToRow(row, column).then(() => {
-                  const cell = $xeTable.getCell(row, column)
+                  const cell = $xeTable.getCellElement(row, column)
                   if (cell) {
                     const { boundingTop, boundingLeft } = getAbsolutePos(cell)
                     top = boundingTop + scrollTop + Math.floor(cell.offsetHeight / 2)
@@ -283,8 +283,9 @@ hooks.add('tableMenuModule', {
         if (!menu.disabled && (menu.code || !menu.children || !menu.children.length)) {
           const gMenuOpts = menus.get(menu.code)
           const params = Object.assign({}, internalData._currMenuParams, { menu, $table: $xeTable, $grid: $xeTable.xegrid, $event: evnt })
-          if (gMenuOpts && gMenuOpts.menuMethod) {
-            gMenuOpts.menuMethod(params, evnt)
+          const tmMethod = gMenuOpts ? (gMenuOpts.tableMenuMethod || gMenuOpts.menuMethod) : null
+          if (tmMethod) {
+            tmMethod(params, evnt)
           }
           $xeTable.dispatchEvent('menu-click', params, evnt)
           menuMethods.closeMenu()

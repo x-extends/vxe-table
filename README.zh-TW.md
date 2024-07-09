@@ -4,7 +4,7 @@
 
 [![star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
-[![npm build](https://travis-ci.com/x-extends/vxe-table.svg?branch=master)](https://travis-ci.com/x-extends/vxe-table)
+[![NodeJS with Webpack](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml/badge.svg)](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml)
 [![npm downloads](https://img.shields.io/npm/dt/vxe-table.svg?style=flat-square)](https://npm-stat.com/charts.html?package=vxe-table)
 [![issues](https://img.shields.io/github/issues/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues)
 [![issues closed](https://img.shields.io/github/issues-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues?q=is%3Aissue+is%3Aclosed)
@@ -13,19 +13,6 @@
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
 一個基於 [vue](https://www.npmjs.com/package/vue) 的PC端表格組件，支持增刪改查、虛擬樹、列拖拽、懶加載、快捷菜單、數據校驗、導入/匯出/列印、表單渲染、自定義模板、渲染器、JSON 配置式…
-
-* 設計理念
-  * 面向現代瀏覽器，高效的簡潔 API 設計
-  * 模組化表格、按需加載
-  * 為單行編輯表格而設計，支持增删改查及更多擴展，强大的功能的同時兼具效能
-
-* 計劃
-  * [x] ~~v1.0 基於 vue2.6，支持所有主流的瀏覽器，實現表格的一切實用的功能~~
-  * [x] ~~v2.0 基於 vue2.6，支持所有主流的瀏覽器，同時兼具功能與效能~~
-  * [x] v3.0 基於 vue2.6+，支持現代瀏覽器並保留相容IE11
-  * [ ] v3.9 基於 vue2.6+，重構拆分組件，分爲 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，將支持表單設計器、列表你設計器、流程設計器
-  * [x] v4.0 基于 vue3.x，只支持現代瀏覽器，不支持IE
-  * [x] v4.7 基於 vue3.x，重構拆分組件，分爲 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，將支持表單設計器、列表你設計器、流程設計器
 
 ## 瀏覽器支持
 
@@ -82,19 +69,37 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 版本：[vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
-npm install vxe-table
+npm install vxe-table@next
 ```
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
 
-### npm
+### NPM
+
+### 使用表格
 
 ```javascript
-import { createApp } from 'vue'
-import VxeUITable from 'vxe-table'
+// ...
+import VxeTable from 'vxe-table'
 import 'vxe-table/lib/style.css'
+// ...
 
-createApp(App).use(VxeUITable).mount('#app')
+createApp(App).use(VxeTable).mount('#app')
+```
+
+### 使用表格与 UI 库
+
+```javascript
+// ...
+import VxeTable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+// ...
+
+import VxeUI from 'vxe-pc-ui'
+import 'vxe-pc-ui/lib/style.css'
+// ...
+
+createApp(App).use(VxeUI).use(VxeTable).mount('#app')
 ```
 
 ### CDN
@@ -103,11 +108,15 @@ createApp(App).use(VxeUITable).mount('#app')
 ***不建議將第三方的 CDN 地址用於正式環境，因爲該連接隨時都可能會失效***  
 
 ```HTML
-<!-- 引入樣式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table/lib/style.css">
-<!-- 引入腳本 -->
-<script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table"></script>
+<!-- style -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui/lib/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@next/lib/style.css">
+<!-- vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<!-- table -->
+<script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
+<script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui"></script>
+<script src="https://cdn.jsdelivr.net/npm/vxe-table@next"></script>
 ```
 
 ## 示例
@@ -140,14 +149,15 @@ const tableData = ref([
 
 ## 線上檔案
 
-👉 [官網檔案](https://vxetable.cn)  
+👉 [組件文檔](https://vxeui.com)  
+👉 [表格文檔](https://vxetable.cn)  
 
 ## 運行項目
 
 安裝依賴
 
 ```shell
-npm install
+npm run update
 ```
 
 啓動本地調試

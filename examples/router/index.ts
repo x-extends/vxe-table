@@ -41,9 +41,35 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/table/TableTest3.vue')
   },
   {
+    path: '/component/table4',
+    name: 'TableTest4',
+    component: () => import('../views/table/TableTest4.vue')
+  },
+  {
     path: '/component/grid',
     name: 'GridTest',
     component: () => import('../views/grid/GridTest.vue')
+  },
+  {
+    path: '/keepAlives',
+    component: () => import('../views/keepAlives/TestKeepAlive.vue'),
+    children: [
+      {
+        path: 'keepTest1',
+        name: 'TestKeepTest1',
+        component: () => import('../views/keepAlives/pages/Table1.vue')
+      },
+      {
+        path: 'keepTest2',
+        name: 'TestKeepTest2',
+        component: () => import('../views/keepAlives/pages/Table2.vue')
+      },
+      {
+        path: 'keepTest3',
+        name: 'TestKeepTest3',
+        component: () => import('../views/keepAlives/pages/Table3.vue')
+      }
+    ]
   }
 ]
 

@@ -20,5 +20,7 @@ if (VxeUI.dynamicApp) {
   VxeUI.dynamicApp.component(VxeTableComponent.name as string, VxeTableComponent)
 }
 
+VxeUI.component(VxeTableComponent)
+
 export const Table = VxeTable
 export default VxeTable

@@ -1,4 +1,4 @@
-import { defineComponent, h, PropType, ref, Ref, computed, provide, resolveComponent, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted, createCommentVNode } from 'vue'
+import { defineComponent, h, PropType, ref, Ref, computed, provide, reactive, onUnmounted, watch, nextTick, VNode, ComponentPublicInstance, onMounted, createCommentVNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { getLastZIndex, nextZIndex, isEnableConf } from '../../ui/src/utils'
 import { getOffsetHeight, getPaddingTopBottomSize, getDomNode } from '../../ui/src/dom'
@@ -10,13 +10,14 @@ import tableComponentEmits from '../../table/src/emits'
 import { getSlotVNs } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
-import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps, VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from '../../../types'
+import type { VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from 'vxe-pc-ui'
+import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
 
 const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
 
 const tableComponentPropKeys = Object.keys(tableComponentProps as any)
 
-const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'focus', 'blur', 'connect']
+const tableComponentMethodKeys: (keyof VxeTableMethods)[] = ['clearAll', 'syncData', 'updateData', 'loadData', 'reloadData', 'reloadRow', 'loadColumn', 'reloadColumn', 'getRowNode', 'getColumnNode', 'getRowIndex', 'getVTRowIndex', 'getVMRowIndex', 'getColumnIndex', 'getVTColumnIndex', 'getVMColumnIndex', 'createData', 'createRow', 'revertData', 'clearData', 'isInsertByRow', 'isUpdateByRow', 'getColumns', 'getColumnById', 'getColumnByField', 'getTableColumn', 'getData', 'getCheckboxRecords', 'getParentRow', 'getRowSeq', 'getRowById', 'getRowid', 'getTableData', 'setColumnFixed', 'clearColumnFixed', 'setColumnWidth', 'getColumnWidth', 'hideColumn', 'showColumn', 'resetColumn', 'refreshColumn', 'refreshScroll', 'recalculate', 'closeTooltip', 'isAllCheckboxChecked', 'isAllCheckboxIndeterminate', 'getCheckboxIndeterminateRecords', 'setCheckboxRow', 'isCheckedByCheckboxRow', 'isIndeterminateByCheckboxRow', 'toggleCheckboxRow', 'setAllCheckboxRow', 'getRadioReserveRecord', 'clearRadioReserve', 'getCheckboxReserveRecords', 'clearCheckboxReserve', 'toggleAllCheckboxRow', 'clearCheckboxRow', 'setCurrentRow', 'isCheckedByRadioRow', 'setRadioRow', 'clearCurrentRow', 'clearRadioRow', 'getCurrentRecord', 'getRadioRecord', 'getCurrentColumn', 'setCurrentColumn', 'clearCurrentColumn', 'setPendingRow', 'togglePendingRow', 'getPendingRecords', 'clearPendingRow', 'sort', 'clearSort', 'isSort', 'getSortColumns', 'closeFilter', 'isFilter', 'isActiveFilterByColumn', 'isRowExpandLoaded', 'clearRowExpandLoaded', 'reloadRowExpand', 'reloadRowExpand', 'toggleRowExpand', 'setAllRowExpand', 'setRowExpand', 'isExpandByRow', 'isRowExpandByRow', 'clearRowExpand', 'clearRowExpandReserve', 'getRowExpandRecords', 'getTreeExpandRecords', 'isTreeExpandLoaded', 'clearTreeExpandLoaded', 'reloadTreeExpand', 'reloadTreeChilds', 'toggleTreeExpand', 'setAllTreeExpand', 'setTreeExpand', 'isTreeExpandByRow', 'clearTreeExpand', 'clearTreeExpandReserve', 'getScroll', 'scrollTo', 'scrollToRow', 'scrollToColumn', 'clearScroll', 'updateFooter', 'updateStatus', 'setMergeCells', 'removeInsertRow', 'removeMergeCells', 'getMergeCells', 'clearMergeCells', 'setMergeFooterItems', 'removeMergeFooterItems', 'getMergeFooterItems', 'clearMergeFooterItems', 'openTooltip', 'getCellLabel', 'getCellElement', 'focus', 'blur', 'connect']
 
 const gridComponentEmits: VxeGridEmits = [
   ...tableComponentEmits,
@@ -52,6 +53,10 @@ export default defineComponent({
     const { slots, emit } = context
 
     const xID = XEUtils.uniqueId()
+
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+    const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
 
     const { computeSize } = useFns.useSize(props)
 
@@ -427,18 +432,20 @@ export default defineComponent({
                 }
               })
             })
-            slotVNs.push(
-              h(resolveComponent('vxe-form') as VxeFormComponent, {
-                ref: refForm,
-                ...Object.assign({}, formOpts, {
-                  data: proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
-                }),
-                onSubmit: submitFormEvent,
-                onReset: resetFormEvent,
-                onSubmitInvalid: submitInvalidEvent,
-                onCollapse: collapseEvent
-              }, formSlots)
-            )
+            if (VxeUIFormComponent) {
+              slotVNs.push(
+                h(VxeUIFormComponent, {
+                  ref: refForm,
+                  ...Object.assign({}, formOpts, {
+                    data: proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
+                  }),
+                  onSubmit: submitFormEvent,
+                  onReset: resetFormEvent,
+                  onSubmitInvalid: submitInvalidEvent,
+                  onCollapse: collapseEvent
+                }, formSlots)
+              )
+            }
           }
         }
         return h('div', {
@@ -604,14 +611,16 @@ export default defineComponent({
               pagerSlots.right = rightSlot
             }
           }
-          slotVNs.push(
-            h(resolveComponent('vxe-pager') as VxePagerComponent, {
-              ref: refPager,
-              ...pagerOpts,
-              ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
-              onPageChange: pageChangeEvent
-            }, pagerSlots)
-          )
+          if (VxeUIPagerComponent) {
+            slotVNs.push(
+              h(VxeUIPagerComponent, {
+                ref: refPager,
+                ...pagerOpts,
+                ...(proxyConfig && isEnableConf(proxyOpts) ? reactData.tablePage : {}),
+                onPageChange: pageChangeEvent
+              }, pagerSlots)
+            )
+          }
         }
         return h('div', {
           ref: refPagerWrapper,
@@ -991,8 +1000,9 @@ export default defineComponent({
           default: {
             const gCommandOpts = commands.get(code)
             if (gCommandOpts) {
-              if (gCommandOpts.commandMethod) {
-                gCommandOpts.commandMethod({ code, button, $grid: $xeGrid, $table: $xeTable }, ...args)
+              const tCommandMethod = gCommandOpts.tableCommandMethod || gCommandOpts.commandMethod
+              if (tCommandMethod) {
+                tCommandMethod({ code, button, $grid: $xeGrid, $table: $xeTable }, ...args)
               } else {
                 if (process.env.VUE_APP_VXE_ENV === 'development') {
                   errLog('vxe.error.notCommands', [code])
@@ -1220,6 +1230,19 @@ export default defineComponent({
     })
 
     nextTick(() => {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
+        if (props.formConfig) {
+          if (!VxeUIFormComponent) {
+            errLog('vxe.error.reqComp', ['vxe-form'])
+          }
+        }
+        if (props.pagerConfig) {
+          if (!VxeUIPagerComponent) {
+            errLog('vxe.error.reqComp', ['vxe-pager'])
+          }
+        }
+      }
+
       initProxy()
     })
 

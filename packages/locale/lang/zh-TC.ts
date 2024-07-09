@@ -1,12 +1,10 @@
-/**
- * v4保留兼容，已废弃，即将删除文件
- * @deprecated
- */
 export default {
   vxe: {
     base: {
       pleaseInput: '请输入',
-      pleaseSelect: '请选择'
+      pleaseSelect: '请选择',
+      comma: '，',
+      fullStop: '。'
     },
     loading: {
       text: '加載中...'
@@ -21,6 +19,7 @@ export default {
       useErr: '安裝 "{0}" 模組時發生錯誤，可能順序不正確，依賴的模組需要在Table之前安裝',
       barUnableLink: '工具欄無法關聯表格',
       expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
+      reqComp: '缺少 "{0}" 組件，请检查是否正确安装 https://vxetable.cn/#/start/useGlobal',
       reqModule: '缺少 "{0}" 模組',
       reqProp: '缺少必要的 "{0}" 參數，可能會導致出現錯誤',
       emptyProp: '參數 "{0}" 不允許為空',
@@ -49,7 +48,7 @@ export default {
     table: {
       emptyText: '暫無資料',
       allTitle: '全選/取消',
-      seqTitle: '序號',
+      seqTitle: '序号',
       confirmFilter: '篩選',
       resetFilter: '重置',
       allFilter: '全部',
@@ -63,8 +62,9 @@ export default {
       expSrcFilename: '匯出_從_{0}',
       customTitle: '列設定',
       customAll: '全部',
-      customConfirm: '確認',
-      customRestore: '重置',
+      customConfirm: '确认',
+      customCancel: '取消',
+      customRestore: '恢复默认',
       maxFixedCol: '最大冻结列的數量不能超過 {0} 個'
     },
     grid: {
@@ -120,8 +120,10 @@ export default {
         colSort: '排序',
         sortHelpTip: '點擊並拖動圖標可以調整列的排序',
         colTitle: '標題',
+        colResizable: '列宽（像素）',
         colVisible: '是否顯示',
-        colFixed: '冻结列（最多 {0} 列）',
+        colFixed: '冻结列',
+        colFixedMax: '冻结列（最多 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '不設定',
         fixedRight: '右側'
@@ -129,14 +131,17 @@ export default {
     },
     import: {
       modes: {
-        covering: '覆盖',
-        insert: '新增'
+        covering: '覆盖方式（直接覆盖表格数据）',
+        insert: '底部追加（在表格的底部追加新数据）',
+        insertTop: '顶部追加（在表格的顶部追加新数据）',
+        insertBottom: '底部追加（在表格的底部追加新数据）'
       },
       impTitle: '導入數據',
       impFile: '檔名',
       impSelect: '選擇檔案',
       impType: '檔案類型',
       impOpts: '參數設置',
+      impMode: '導入模式',
       impConfirm: '導入',
       impCancel: '取消'
     },
@@ -185,6 +190,8 @@ export default {
       expCancel: '取消'
     },
     modal: {
+      errTitle: '错误提示',
+      zoomMin: '最小化',
       zoomIn: '最大化',
       zoomOut: '還原',
       close: '關閉'
@@ -205,8 +212,6 @@ export default {
       zoomOut: '還原',
       custom: '列設定',
       customAll: '全部',
-      customConfirm: '確認',
-      customRestore: '重置',
       fixedLeft: '冻结在左側',
       fixedRight: '冻结在右側',
       cancelFixed: '取消冻结列'
@@ -269,12 +274,148 @@ export default {
         }
       }
     },
-    formDesign: {
-      widget: {
-        input: '輸入框',
-        textarea: '文本域',
-        select: '下拉框'
+    imagePreview: {
+      popupTitle: '预览',
+      operBtn: {
+        zoomOut: '缩小',
+        zoomIn: '放大',
+        pctFull: '等比例缩放',
+        pct11: '显示原始尺寸',
+        rotateLeft: '向左旋转',
+        rotateRight: '向右旋转',
+        print: '点击打印图片',
+        download: '点击下载图片'
       }
+    },
+    upload: {
+      fileBtnText: '点击或拖拽上传',
+      imgBtnText: '点击或拖拽上传',
+      dragPlaceholder: '请把文件拖放到这个区域即可上传',
+      imgSizeHint: '单张{0}',
+      imgCountHint: '最多{0}张',
+      fileTypeHint: '支持 {0} 文件类型',
+      fileSizeHint: '单个文件大小不超过{0}',
+      fileCountHint: '最多可上传{0}个文件',
+      overCountErr: '最多只能选择{0}个文件！',
+      overCountExtraErr: '已超出最大数量{0}个，超出的{1}个文件将被忽略！',
+      overSizeErr: '文件大小最大不能超过{0}！',
+      reUpload: '重新上传',
+      uploadProgress: '上传中 {0}%',
+      uploadErr: '上传失败',
+      uploadSuccess: '上传成功'
+    },
+    formDesign: {
+      formName: '表单名称',
+      defFormTitle: '未命名的表单',
+      widgetPropTab: '控件属性',
+      widgetFormTab: '表单属性',
+      styleSetting: {
+        btn: '样式设置',
+        title: '表单的样式设置',
+        layoutTitle: '控件布局',
+        verticalLayout: '上下布局',
+        horizontalLayout: '横向布局',
+        styleTitle: '标题样式',
+        boldTitle: '标题加粗',
+        fontBold: '加粗',
+        fontNormal: '常规',
+        colonTitle: '显示冒号',
+        colonVisible: '显示',
+        colonHidden: '隐藏',
+        alignTitle: '对齐方式',
+        widthTitle: '标题宽度',
+        alignLeft: '居左',
+        alignRight: '居右',
+        unitPx: '像素',
+        unitPct: '百分比'
+      },
+      widget: {
+        group: {
+          base: '基础控件',
+          layout: '布局控件',
+          advanced: '高级控件'
+        },
+        copyTitle: '副本_{0}',
+        component: {
+          input: '输入框',
+          textarea: '文本域',
+          select: '下拉框',
+          row: '一行多列',
+          title: '文本',
+          subtable: '子表',
+          VxeSwitch: '是/否',
+          VxeInput: '输入框',
+          VxeNumberInput: '数字',
+          VxeDatePicker: '日期',
+          VxeTextarea: '文本域',
+          VxeSelect: '下拉框',
+          VxeRadioGroup: '单选框',
+          VxeCheckboxGroup: '复选框',
+          VxeUploadFile: '文件',
+          VxeUploadImage: '图片'
+        }
+      },
+      widgetProp: {
+        name: '控件名称',
+        placeholder: '控件提示',
+        required: '必填校验',
+        displaySetting: {
+          name: '显示设置',
+          pc: '电脑端',
+          mobile: '手机端',
+          visible: '显示',
+          hidden: '隐藏'
+        },
+        dataSource: {
+          name: '数据源',
+          defValue: '选项{0}',
+          addOption: '添加选项',
+          batchEditOption: '批量编辑',
+          batchEditTip: '每行对应一个选项，支持从表格、Excel、WPS 中直接复制粘贴。',
+          batchEditSubTip: '每行对应一个选项，如果是分组，子项可以是空格或制表键开头，支持从表格、Excel、WPS 中直接复制粘贴。',
+          buildOption: '生成选项'
+        },
+        rowProp: {
+          colSize: '列数',
+          col2: '两列',
+          col3: '三列',
+          col4: '四列',
+          col6: '六列',
+          layout: '布局'
+        },
+        textProp: {
+          name: '内容',
+          alignTitle: '对齐方式',
+          alignLeft: '居左',
+          alignCenter: '居中',
+          alignRight: '居右',
+          colorTitle: '字体颜色',
+          sizeTitle: '字体大小',
+          boldTitle: '字体加粗',
+          fontNormal: '常规',
+          fontBold: '加粗'
+        },
+        subtableProp: {
+          seqTitle: '序号',
+          showSeq: '显示序号',
+          showCheckbox: '允许多选',
+          errSubDrag: '子表不支持该控件，请使用其他控件'
+        },
+        uploadProp: {
+          uploadProp: {
+            limitFileCount: '文件数量限制',
+            limitFileSize: '文件大小限制',
+            multiFile: '允许上传多个文件',
+            limitImgCount: '图片数量限制',
+            limitImgSize: '图片大小限制',
+            multiImg: '允许上传多张图片'
+          }
+        }
+      }
+    },
+    listDesign: {
+      fieldSettingTab: '字段设置',
+      listSettingTab: '列表设置'
     },
 
     /**

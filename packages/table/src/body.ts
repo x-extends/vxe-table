@@ -143,8 +143,8 @@ export default defineComponent({
       const { height: rowHeight } = rowOpts
       const renderOpts = editRender || cellRender
       const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-      const compCellClassName = compConf ? compConf.cellClassName : ''
-      const compCellStyle = compConf ? compConf.cellStyle : ''
+      const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : null
+      const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
       const showAllTip = tooltipOpts.showAll
       const columnIndex = $xeTable.getColumnIndex(column)
       const _columnIndex = $xeTable.getVTColumnIndex(column)
@@ -795,9 +795,9 @@ export default defineComponent({
         emptyContent = $xeTable.callSlot(emptySlot, { $table: $xeTable, $grid: $xeTable.xegrid })
       } else {
         const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
-        const renderTableEmptyView = compConf ? compConf.renderTableEmptyView || compConf.renderEmpty : null
-        if (renderTableEmptyView) {
-          emptyContent = getSlotVNs(renderTableEmptyView(emptyOpts, { $table: $xeTable }))
+        const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
+        if (rtEmptyView) {
+          emptyContent = getSlotVNs(rtEmptyView(emptyOpts, { $table: $xeTable }))
         } else {
           emptyContent = tableProps.emptyText || getI18n('vxe.table.emptyText')
         }
