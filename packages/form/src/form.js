@@ -84,6 +84,7 @@ export default {
       default: null
     },
     className: [String, Function],
+    disabled: Boolean,
     readonly: Boolean,
     items: Array,
     rules: Object,
@@ -251,9 +252,14 @@ export default {
       this.dispatchEvent('collapse', { status, collapse: status, data: this.data }, evnt)
     },
     submitEvent (evnt) {
+      const { readonly } = this
       evnt.preventDefault()
       if (!this.preventSubmit) {
         this.clearValidate()
+        if (readonly) {
+          this.dispatchEvent('submit', { data: this.data }, evnt)
+          return
+        }
         this.beginValidate(this.getItems()).then((errMap) => {
           if (errMap) {
             this.dispatchEvent('submit-invalid', { data: this.data, errMap }, evnt)
@@ -361,10 +367,18 @@ export default {
       return this.$nextTick()
     },
     validate (callback) {
+      const { readonly } = this
       this.clearValidate()
+      if (readonly) {
+        return this.$nextTick()
+      }
       return this.beginValidate(this.getItems(), '', callback)
     },
     validateField (fieldOrItem, callback) {
+      const { readonly } = this
+      if (readonly) {
+        return this.$nextTick()
+      }
       let fields = []
       if (XEUtils.isArray(fieldOrItem)) {
         fields = fieldOrItem

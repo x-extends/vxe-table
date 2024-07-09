@@ -64,7 +64,7 @@ Object.keys(props).forEach(name => {
 })
 
 const renderItem = (h, _vm, item, slots) => {
-  const { _e, rules, data, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = _vm
+  const { _e, rules, data, disabled, readonly, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = _vm
   const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const itemClassName = compConf ? (compConf.formItemClassName || compConf.itemClassName) : ''
@@ -85,12 +85,12 @@ const renderItem = (h, _vm, item, slots) => {
   const ovTitle = itemOverflow === 'title'
   const ovTooltip = itemOverflow === true || itemOverflow === 'tooltip'
   const hasEllipsis = ovTitle || ovTooltip || ovEllipsis
-  const params = { data, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
+  const params = { data, disabled, readonly, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
   let isRequired
   if (visible === false) {
     return _e()
   }
-  if (rules) {
+  if (!readonly && rules) {
     const itemRules = rules[field]
     if (itemRules) {
       isRequired = itemRules.some(rule => rule.required)

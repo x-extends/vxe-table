@@ -24,10 +24,10 @@ function renderSuffixIcon (h, titleSuffix) {
 }
 
 export function renderTitle (h, _vm, item) {
-  const { data, tooltipOpts } = _vm
+  const { data, readonly, disabled, tooltipOpts } = _vm
   const { slots, field, itemRender, titlePrefix, titleSuffix } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
-  const params = { data, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
+  const params = { data, readonly, disabled, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
   const contVNs = []
   const titVNs = []
   if (titlePrefix) {

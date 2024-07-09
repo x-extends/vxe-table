@@ -2978,7 +2978,7 @@ const Methods = {
       tooltipStore.row = null
       tooltipStore.column = column
       tooltipStore.visible = true
-      // tooltipStore.currOpts = { content: null }
+      tooltipStore.currOpts = iconParams
       this.$nextTick(() => {
         const $tooltip = $refs.tooltip
         if ($tooltip) {
@@ -3064,7 +3064,8 @@ const Methods = {
       Object.assign(tooltipStore, {
         row,
         column,
-        visible: true
+        visible: true,
+        currOpts: {}
       })
       this.$nextTick(() => {
         const $tooltip = $refs.tooltip
@@ -3095,7 +3096,8 @@ const Methods = {
         row: null,
         column: null,
         content: null,
-        visible: false
+        visible: false,
+        currOpts: {}
       })
       if (tooltip) {
         tooltip.close()

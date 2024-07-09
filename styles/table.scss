@@ -611,8 +611,7 @@
       }
     }
   }
-  &.checkbox--range,
-  &.cell--selected {
+  &.checkbox--range {
     .vxe-body--column {
       user-select: none;
     }

@@ -432,7 +432,8 @@ export default {
       tooltipStore: {
         row: null,
         column: null,
-        visible: false
+        visible: false,
+        currOpts: {}
       },
       // 存放数据校验相关信息
       validStore: {
@@ -1254,7 +1255,7 @@ export default {
        */
       hasTip ? h('vxe-tooltip', {
         ref: 'tooltip',
-        props: this.tipConfig
+        props: Object.assign({}, this.tipConfig, this.tooltipStore.currOpts)
       }) : _e(),
       /**
        * 校验提示
