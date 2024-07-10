@@ -108,7 +108,7 @@ export default defineComponent({
     const renderOptions = (filterRender: any, compConf: any) => {
       const { filterStore } = props
       const { column, multiple, maxHeight } = filterStore
-      const { slots } = column
+      const slots = column ? column.slots : null
       const filterSlot = slots ? slots.filter : null
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
       const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
@@ -233,7 +233,7 @@ export default defineComponent({
           }
         ],
         style: filterStore.style
-      }, initStore.filter ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
+      }, initStore.filter && column ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
     }
 
     return renderVN
