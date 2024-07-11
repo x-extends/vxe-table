@@ -1,3 +1,7 @@
+/**
+ * 已废弃
+ * @deprecated
+ */
 export default {
   vxe: {
     base: {
@@ -19,7 +23,7 @@ export default {
       useErr: 'Erro ao instalar o módulo "{0}", possivelmente na ordem errada, os módulos dependentes precisam ser instalados antes da Tabela.',
       barUnableLink: 'A barra de ferramentas não pode ser associada à tabela.',
       expandContent: 'O slot de linha expandida deve ser "content", verifique se está correto.',
-      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxetable.cn/#/start/useGlobal',
+      reqComp: 'Require "{0}" component, check whether the install is correct',
       reqModule: 'requerir o módulo "{0}".',
       reqProp: 'Faltando o parâmetro necessário "{0}", o que pode causar um erro.',
       emptyProp: 'A propriedade "{0}" não pode estar vazia.',
@@ -351,6 +355,7 @@ export default {
           VxeDatePicker: 'Date',
           VxeTextarea: 'Textarea',
           VxeSelect: 'Select',
+          VxeTreeSelect: 'Tree select',
           VxeRadioGroup: 'Radio',
           VxeCheckboxGroup: 'Checkbox',
           VxeUploadFile: 'File',
@@ -361,6 +366,7 @@ export default {
         name: 'Field name',
         placeholder: 'Field placeholder',
         required: 'Required',
+        multiple: 'Allow to select multiple',
         displaySetting: {
           name: 'Display setting',
           pc: 'PC',

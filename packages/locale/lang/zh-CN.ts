@@ -1,3 +1,7 @@
+/**
+ * 已废弃
+ * @deprecated
+ */
 export default {
   vxe: {
     base: {
@@ -19,7 +23,7 @@ export default {
       useErr: '安装 "{0}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
       barUnableLink: '工具栏无法关联表格',
       expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
-      reqComp: '缺少 "{0}" 组件，请检查是否正确安装 https://vxetable.cn/#/start/useGlobal',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装',
       reqModule: '缺少 "{0}" 模块',
       reqProp: '缺少必要的 "{0}" 参数，这可能会导致出现错误',
       emptyProp: '参数 "{0}" 不允许为空',
@@ -341,7 +345,7 @@ export default {
         component: {
           input: '输入框',
           textarea: '文本域',
-          select: '下拉框',
+          select: '下拉选择',
           row: '一行多列',
           title: '文本',
           subtable: '子表',
@@ -350,7 +354,8 @@ export default {
           VxeNumberInput: '数字',
           VxeDatePicker: '日期',
           VxeTextarea: '文本域',
-          VxeSelect: '下拉框',
+          VxeSelect: '下拉选择',
+          VxeTreeSelect: '树形选择',
           VxeRadioGroup: '单选框',
           VxeCheckboxGroup: '复选框',
           VxeUploadFile: '文件',
@@ -361,6 +366,7 @@ export default {
         name: '控件名称',
         placeholder: '提示语',
         required: '必填校验',
+        multiple: '允许多选',
         displaySetting: {
           name: '显示设置',
           pc: '电脑端',

@@ -90,10 +90,10 @@
       cursor: pointer;
     }
     &:hover {
+      color: var(--vxe-ui-font-primary-color);
       & > i {
         display: block;
       }
-      color: var(--vxe-ui-font-primary-color);
     }
   }
   .vxe-import-select--file {

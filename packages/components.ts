@@ -26,10 +26,14 @@ export function install (app: App, options?: VxeGlobalConfig) {
 }
 
 // 保留兼容老版本
-const defaultLanguage = 'zh-CN'
-VxeUI.setI18n(defaultLanguage, zhCN)
-VxeUI.setLanguage(defaultLanguage)
 VxeUI.setTheme('light')
+setTimeout(() => {
+  if (!VxeUI.hasLanguage('zh-CN')) {
+    const defaultLanguage = 'zh-CN'
+    VxeUI.setI18n(defaultLanguage, zhCN)
+    VxeUI.setLanguage(defaultLanguage)
+  }
+})
 
 export * from './ui'
 

@@ -464,6 +464,18 @@ function defaultSelectEditRender (renderOpts: any, params: any) {
   ]
 }
 
+function defaultTreeSelectEditRender (renderOpts: any, params: any) {
+  const { row, column } = params
+  const { options, optionProps } = renderOpts
+  const cellValue = getCellValue(row, column)
+  return [
+    h(getDefaultComponent(renderOpts), {
+      ...getCellEditProps(renderOpts, params, cellValue, { options, optionProps }),
+      ...getEditOns(renderOpts, params)
+    })
+  ]
+}
+
 /**
  * 已废弃
  * @deprecated
@@ -481,13 +493,13 @@ function oldSelectEditRender (renderOpts: any, params: any) {
 }
 
 function getSelectCellValue (renderOpts: any, { row, column }: any) {
-  const { props = {}, options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
+  const { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
   const cellValue = XEUtils.get(row, column.property)
   let selectItem: any
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   if (!isEmptyValue(cellValue)) {
-    return XEUtils.map(props.multiple ? cellValue : [cellValue],
+    return XEUtils.map(XEUtils.isArray(cellValue) ? cellValue : [cellValue],
       optionGroups
         ? (value) => {
             const groupOptions = optionGroupProps.options || 'options'
@@ -513,6 +525,31 @@ function getSelectCellValue (renderOpts: any, { row, column }: any) {
 function handleExportSelectMethod (params: any) {
   const { row, column, options } = params
   return options.original ? getCellValue(row, column) : getSelectCellValue(column.editRender || column.cellRender, params)
+}
+
+function getTreeSelectCellValue (renderOpts: any, { row, column }: any) {
+  const { options, optionProps = {} } = renderOpts
+  const cellValue = XEUtils.get(row, column.property)
+  const labelProp = optionProps.label || 'label'
+  const valueProp = optionProps.value || 'value'
+  const childrenProp = optionProps.children || 'children'
+  if (!isEmptyValue(cellValue)) {
+    const keyMaps: Record<string, any> = {}
+    XEUtils.eachTree(options, item => {
+      keyMaps[XEUtils.get(item, valueProp)] = item
+    }, { children: childrenProp })
+    return XEUtils.map(XEUtils.isArray(cellValue) ? cellValue : [cellValue], (value) => {
+      const item = keyMaps[value]
+      return item ? XEUtils.get(item, labelProp) : item
+    }
+    ).join(', ')
+  }
+  return ''
+}
+
+function handleExportTreeSelectMethod (params: any) {
+  const { row, column, options } = params
+  return options.original ? getCellValue(row, column) : getTreeSelectCellValue(column.editRender || column.cellRender, params)
 }
 
 /**
@@ -663,6 +700,14 @@ renderer.mixin({
     },
     defaultFilterMethod: handleFilterMethod,
     exportMethod: handleExportSelectMethod
+  },
+  VxeTreeSelect: {
+    autofocus: '.vxe-input--inner',
+    renderEdit: defaultTreeSelectEditRender,
+    renderCell (renderOpts, params) {
+      return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
+    },
+    exportMethod: handleExportTreeSelectMethod
   },
   VxeRadioGroup: {
     renderDefault: radioAndCheckboxEditRender
