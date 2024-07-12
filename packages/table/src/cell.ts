@@ -252,9 +252,10 @@ export const Cell = {
    */
   renderTreeIcon (params: VxeTableDefines.CellRenderBodyParams, cellVNodes: VxeComponentSlotType[]) {
     const { $table, isHidden } = params
-    const { reactData } = $table
+    const { reactData, internalData } = $table
     const { computeTreeOpts } = $table.getComputeMaps()
     const { treeExpandedMaps, treeExpandLazyLoadedMaps } = reactData
+    const { fullAllDataRowIdData } = internalData
     const treeOpts = computeTreeOpts.value
     const { row, column, level } = params
     const { slots } = column
@@ -262,9 +263,11 @@ export const Cell = {
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowChilds = row[childrenField]
+    const hasChild = rowChilds && rowChilds.length
     const iconSlot = slots ? slots.icon : null
     let hasLazyChilds = false
     let isAceived = false
+    let isLazyLoading = false
     let isLazyLoaded = false
     const ons: any = {}
     if (iconSlot) {
@@ -274,8 +277,10 @@ export const Cell = {
       const rowid = getRowid($table, row)
       isAceived = !!treeExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = !!treeExpandLazyLoadedMaps[rowid]
+        const rest = fullAllDataRowIdData[rowid]
+        isLazyLoading = !!treeExpandLazyLoadedMaps[rowid]
         hasLazyChilds = row[hasChildField]
+        isLazyLoaded = !!rest.treeLoaded
       }
     }
     if (!trigger || trigger === 'default') {
@@ -292,14 +297,14 @@ export const Cell = {
           paddingLeft: `${level * indent}px`
         }
       }, [
-        showIcon && ((rowChilds && rowChilds.length) || hasLazyChilds)
+        showIcon && (lazy ? (isLazyLoaded ? hasChild : hasLazyChilds) : hasChild)
           ? [
               h('div', {
                 class: 'vxe-tree--btn-wrapper',
                 ...ons
               }, [
                 h('i', {
-                  class: ['vxe-tree--node-btn', isLazyLoaded ? (iconLoaded || getIcon().TABLE_TREE_LOADED) : (isAceived ? (iconOpen || getIcon().TABLE_TREE_OPEN) : (iconClose || getIcon().TABLE_TREE_CLOSE))]
+                  class: ['vxe-tree--node-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_TREE_LOADED) : (isAceived ? (iconOpen || getIcon().TABLE_TREE_OPEN) : (iconClose || getIcon().TABLE_TREE_CLOSE))]
                 })
               ])
             ]
@@ -622,7 +627,7 @@ export const Cell = {
     const defaultSlot = slots ? slots.default : null
     const iconSlot = slots ? slots.icon : null
     let isAceived = false
-    let isLazyLoaded = false
+    let isLazyLoading = false
     if (iconSlot) {
       return $table.callSlot(iconSlot, params)
     }
@@ -630,7 +635,7 @@ export const Cell = {
       const rowid = getRowid($table, row)
       isAceived = !!rowExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = !!rowExpandLazyLoadedMaps[rowid]
+        isLazyLoading = !!rowExpandLazyLoadedMaps[rowid]
       }
     }
     return [
@@ -644,7 +649,7 @@ export const Cell = {
           }
         }, [
           h('i', {
-            class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))]
+            class: ['vxe-table--expand-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))]
           })
         ])
         : null,

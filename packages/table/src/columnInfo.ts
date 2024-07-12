@@ -128,6 +128,7 @@ export class ColumnInfo {
       renderWidth: 0,
       renderHeight: 0,
       renderResizeWidth: 0,
+      renderAutoWidth: 0,
       resizeWidth: 0, // 手动调整
 
       renderLeft: 0,

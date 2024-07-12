@@ -43,6 +43,7 @@ export default defineComponent({
     const { computeSize } = useFns.useSize(props)
 
     const reactData = reactive<TableReactData>({
+      isCalcColumn: false,
       // 低性能的静态列
       staticColumns: [],
       // 渲染的列分组
@@ -155,7 +156,8 @@ export default defineComponent({
         pxMinList: [],
         scaleList: [],
         scaleMinList: [],
-        autoList: []
+        autoList: [],
+        remainList: []
       },
       // 存放快捷菜单的信息
       ctxMenuStore: {
@@ -537,6 +539,11 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.customConfig, props.customConfig)
     })
 
+    const computeAutoWidthColumnList = computed(() => {
+      const { visibleColumn } = internalData
+      return visibleColumn.filter(column => column.width === 'auto')
+    })
+
     const computeFixedColumnSize = computed(() => {
       const { collectColumn } = internalData
       let fixedSize = 0
@@ -883,7 +890,7 @@ export default defineComponent({
       const val = props[key]
       let num = 0
       if (val) {
-        if (val === 'auto') {
+        if (val === 'fill' || val === 'auto') {
           num = parentHeight
         } else {
           const excludeHeight = $xeTable.getExcludeHeight()
@@ -1084,6 +1091,40 @@ export default defineComponent({
       internalData.customMaxHeight = calcHeight('maxHeight')
     }
 
+    const calcCellWidth = () => {
+      const { tableData } = reactData
+      const autoWidthColumnList = computeAutoWidthColumnList.value
+      if (!tableData.length || !autoWidthColumnList.length) {
+        reactData.isCalcColumn = false
+        return nextTick()
+      }
+      reactData.isCalcColumn = true
+      return nextTick().then(() => {
+        const el = refElem.value
+        if (el) {
+          autoWidthColumnList.forEach(column => {
+            const cellElList = el.querySelectorAll(`.vxe-body--column.${column.id}>.vxe-cell`)
+            const firstCellEl = cellElList[0]
+            let paddingSize = 0
+            if (firstCellEl) {
+              const cellStyle = getComputedStyle(firstCellEl)
+              paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
+            }
+            let colWidth = column.renderAutoWidth - paddingSize + 2
+            XEUtils.arrayEach(cellElList, (cellEl) => {
+              const labelEl = cellEl.firstChild as HTMLElement
+              if (labelEl) {
+                colWidth = Math.max(colWidth, labelEl.offsetWidth)
+              }
+            })
+            column.renderAutoWidth = colWidth + paddingSize
+          })
+          tablePrivateMethods.analyColumnWidth()
+        }
+        reactData.isCalcColumn = false
+      })
+    }
+
     /**
      * 列宽算法
      * 支持 px、%、固定 混合分配
@@ -1107,7 +1148,7 @@ export default defineComponent({
       let meanWidth = remainWidth / 100
       const { fit } = props
       const { columnStore } = reactData
-      const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
+      const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList, remainList } = columnStore
       // 最小宽
       pxMinList.forEach((column) => {
         const minWidth = XEUtils.toInteger(column.minWidth)
@@ -1132,6 +1173,12 @@ export default defineComponent({
         tableWidth += width
         column.renderWidth = width
       })
+      // 自适应宽
+      autoList.forEach((column) => {
+        const width = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+        tableWidth += width
+        column.renderWidth = width
+      })
       // 调整了列宽
       resizeList.forEach((column) => {
         const width = XEUtils.toInteger(column.resizeWidth)
@@ -1139,7 +1186,7 @@ export default defineComponent({
         column.renderWidth = width
       })
       remainWidth -= tableWidth
-      meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoList.length)) : 0
+      meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + remainList.length)) : 0
       if (fit) {
         if (remainWidth > 0) {
           scaleMinList.concat(pxMinList).forEach((column) => {
@@ -1150,8 +1197,8 @@ export default defineComponent({
       } else {
         meanWidth = minCellWidth
       }
-      // 自适应
-      autoList.forEach((column) => {
+      // 剩余均分
+      remainList.forEach((column) => {
         const width = Math.max(meanWidth, minCellWidth)
         column.renderWidth = width
         tableWidth += width
@@ -1161,7 +1208,7 @@ export default defineComponent({
          * 偏移量算法
          * 如果所有列足够放的情况下，从最后动态列开始分配
          */
-        const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoList)
+        const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(remainList)
         let dynamicSize = dynamicList.length - 1
         if (dynamicSize > 0) {
           let odiffer = bodyWidth - tableWidth
@@ -2053,7 +2100,9 @@ export default defineComponent({
           const rowid = getRowid($xeTable, row)
           const rest = fullAllDataRowIdData[rowid]
           treeExpandLazyLoadedMaps[rowid] = row
-          loadMethod({ $table: $xeTable, row }).then((childRecords: any) => {
+          Promise.resolve(
+            loadMethod({ $table: $xeTable, row })
+          ).then((childRecords: any) => {
             rest.treeLoaded = true
             if (treeExpandLazyLoadedMaps[rowid]) {
               delete treeExpandLazyLoadedMaps[rowid]
@@ -3486,6 +3535,7 @@ export default defineComponent({
        * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
        */
       recalculate (refull?: boolean) {
+        calcCellWidth()
         autoCellWidth()
         if (refull === true) {
           // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
@@ -5203,7 +5253,6 @@ export default defineComponent({
     /**
      * 处理显示 tooltip
      * @param {Event} evnt 事件
-     * @param {ColumnInfo} column 列配置
      * @param {Row} row 行对象
      */
     const handleTooltip = (evnt: MouseEvent, cell: HTMLTableCellElement, overflowElem: HTMLElement, tipElem: HTMLElement | null, params: any) => {
@@ -5271,7 +5320,7 @@ export default defineComponent({
         const el = refElem.value
         if (el) {
           const parentElem = el.parentNode as HTMLElement
-          const parentPaddingSize = height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+          const parentPaddingSize = height === 'fill' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
           return Math.floor($xeGrid ? $xeGrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
         }
         return 0
@@ -5423,12 +5472,13 @@ export default defineComponent({
         const { tableFullColumn } = internalData
         const columnOpts = computeColumnOpts.value
         const { width: defaultWidth, minWidth: defaultMinWidth } = columnOpts
-        const resizeList: any[] = []
-        const pxList: any[] = []
-        const pxMinList: any[] = []
-        const scaleList: any[] = []
-        const scaleMinList: any[] = []
-        const autoList: any[] = []
+        const resizeList: VxeTableDefines.ColumnInfo[] = []
+        const pxList: VxeTableDefines.ColumnInfo[] = []
+        const pxMinList: VxeTableDefines.ColumnInfo[] = []
+        const scaleList: VxeTableDefines.ColumnInfo[] = []
+        const scaleMinList: VxeTableDefines.ColumnInfo[] = []
+        const autoList: VxeTableDefines.ColumnInfo[] = []
+        const remainList: VxeTableDefines.ColumnInfo[] = []
         tableFullColumn.forEach((column) => {
           if (defaultWidth && !column.width) {
             column.width = defaultWidth
@@ -5439,6 +5489,8 @@ export default defineComponent({
           if (column.visible) {
             if (column.resizeWidth) {
               resizeList.push(column)
+            } else if (column.width === 'auto') {
+              autoList.push(column)
             } else if (isPx(column.width)) {
               pxList.push(column)
             } else if (isScale(column.width)) {
@@ -5448,11 +5500,11 @@ export default defineComponent({
             } else if (isScale(column.minWidth)) {
               scaleMinList.push(column)
             } else {
-              autoList.push(column)
+              remainList.push(column)
             }
           }
         })
-        Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList })
+        Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList, remainList })
       },
       saveCustomStore (type) {
         const { id } = props
@@ -6853,7 +6905,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
+      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
@@ -6882,6 +6934,7 @@ export default defineComponent({
           'row--highlight': rowOpts.isHover || highlightHoverRow,
           'column--highlight': columnOpts.isHover || highlightHoverColumn,
           'checkbox--range': checkboxOpts.range,
+          'column--calc': isCalcColumn,
           'is--header': showHeader,
           'is--footer': showFooter,
           'is--group': isGroup,

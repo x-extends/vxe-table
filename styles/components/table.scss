@@ -315,6 +315,19 @@
   }
 }
 
+/*列宽*/
+.vxe-table {
+  &.column--calc {
+    .vxe-header--column,
+    .vxe-body--column {
+      .vxe-cell {
+        word-break: break-all;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
 /*header*/
 .vxe-table {
   .vxe-table--header-wrapper {
@@ -620,11 +633,6 @@
       }
     }
   }
-  &.checkbox--range {
-    .vxe-body--column {
-      user-select: none;
-    }
-  }
   &.cell--area {
     .vxe-table--body-wrapper,
     .vxe-body--column {
@@ -632,7 +640,7 @@
     }
   }
   &.drag--range {
-    .vxe-cell--checkbox {
+    .vxe-body--column {
       user-select: none;
     }
   }
