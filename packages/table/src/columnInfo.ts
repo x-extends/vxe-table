@@ -73,6 +73,7 @@ export class ColumnInfo {
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
       formatter: formatter,
+      footerFormatter: _vm.footerFormatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
       sortType: _vm.sortType,

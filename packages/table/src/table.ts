@@ -890,7 +890,7 @@ export default defineComponent({
       const val = props[key]
       let num = 0
       if (val) {
-        if (val === 'fill' || val === 'auto') {
+        if (val === '100%' || val === 'auto') {
           num = parentHeight
         } else {
           const excludeHeight = $xeTable.getExcludeHeight()

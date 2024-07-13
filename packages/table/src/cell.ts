@@ -6,9 +6,9 @@ import { updateCellTitle } from '../../ui/src/dom'
 import { createColumn, getRowid } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTableConstructor, VxeTableDefines, VxeTablePrivateMethods, VxeComponentSlotType } from '../../../types'
+import type { VxeTableConstructor, VxeTableDefines, VxeColumnPropTypes, VxeTablePrivateMethods, VxeComponentSlotType } from '../../../types'
 
-const { getI18n, getIcon, renderer } = VxeUI
+const { getI18n, getIcon, renderer, formats } = VxeUI
 
 function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params
@@ -94,9 +94,28 @@ function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, con
   ]
 }
 
+function formatFooterLabel (footerFormatter: VxeColumnPropTypes.FooterFormatter, params: {
+  itemValue: any
+  column: VxeTableDefines.ColumnInfo
+  row: any
+  items: any[]
+  _columnIndex: number
+}) {
+  if (XEUtils.isFunction(footerFormatter)) {
+    return footerFormatter(params)
+  }
+  const isArr = XEUtils.isArray(footerFormatter)
+  const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
+  const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
+  if (footerFormatMethod) {
+    return isArr ? footerFormatMethod(params, ...footerFormatter.slice(1)) : footerFormatMethod(params)
+  }
+  return ''
+}
+
 function getFooterContent (params: VxeTableDefines.CellRenderFooterParams) {
   const { $table, column, _columnIndex, items, row } = params
-  const { slots, editRender, cellRender } = column
+  const { slots, editRender, cellRender, footerFormatter } = column
   const renderOpts = editRender || cellRender
   const footerSlot = slots ? slots.footer : null
   if (footerSlot) {
@@ -111,11 +130,34 @@ function getFooterContent (params: VxeTableDefines.CellRenderFooterParams) {
       }
     }
   }
+  let itemValue = ''
   // 兼容老模式
   if (XEUtils.isArray(items)) {
-    return [formatText(items[_columnIndex], 1)]
+    itemValue = items[_columnIndex]
+    return [
+      footerFormatter
+        ? formatFooterLabel(footerFormatter, {
+          itemValue,
+          column,
+          row,
+          items,
+          _columnIndex
+        })
+        : formatText(itemValue, 1)
+    ]
   }
-  return [formatText(XEUtils.get(row, column.field), 1)]
+  itemValue = XEUtils.get(row, column.field)
+  return [
+    footerFormatter
+      ? formatFooterLabel(footerFormatter, {
+        itemValue,
+        column,
+        row,
+        items,
+        _columnIndex
+      })
+      : formatText(itemValue, 1)
+  ]
 }
 
 function getDefaultCellLabel (params: VxeTableDefines.CellRenderBodyParams) {
