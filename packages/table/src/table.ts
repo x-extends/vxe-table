@@ -1103,7 +1103,7 @@ export default defineComponent({
         const el = refElem.value
         if (el) {
           autoWidthColumnList.forEach(column => {
-            const cellElList = el.querySelectorAll(`.vxe-body--column.${column.id}>.vxe-cell`)
+            const cellElList = el.querySelectorAll(`.vxe-header--column.${column.id}>.vxe-cell,.vxe-body--column.${column.id}>.vxe-cell,.vxe-footer--column.${column.id}>.vxe-cell`)
             const firstCellEl = cellElList[0]
             let paddingSize = 0
             if (firstCellEl) {

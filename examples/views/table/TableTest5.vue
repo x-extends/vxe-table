@@ -4,18 +4,20 @@
       border
       stripe
       resizable
-      highlight-hover-row
+      show-footer
       height="400"
+      :row-config="{isHover: true}"
       :loading="demo1.loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
-      :data="demo1.tableData">
+      :data="demo1.tableData"
+      :footer-data="demo1.footerData">
       <vxe-column type="seq" width="auto"></vxe-column>
       <vxe-column type="checkbox" title="ID" width="auto"></vxe-column>
       <vxe-column field="role" title="Role" width="auto"></vxe-column>
-      <vxe-column field="name" title="Name" width="auto"></vxe-column>
+      <vxe-column field="name" title="Name Name Name Name Name" width="auto"></vxe-column>
       <vxe-column field="age" title="Age" width="auto"></vxe-column>
       <vxe-column field="sex" title="Sex" width="auto"></vxe-column>
-      <vxe-column field="address" title="Address" width="auto" show-overflow></vxe-column>
+      <vxe-column field="address" title="Address Address Address" width="auto" show-overflow></vxe-column>
     </vxe-table>
   </div>
 </template>
@@ -25,7 +27,10 @@ import { onMounted, reactive } from 'vue'
 
 const demo1 = reactive({
   loading: false,
-  tableData: [] as any[]
+  tableData: [] as any[],
+  footerData: [
+    { name: 'xxx xxx x xxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx x', address: 'xxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xx' }
+  ]
 })
 
 onMounted(() => {
