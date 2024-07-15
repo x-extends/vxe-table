@@ -33,13 +33,13 @@ export default {
         }
       ],
       style: filterStore.style
-    }, filterStore.visible ? this.renderOptions(h, filterRender, compConf).concat(this.renderFooter(h)) : [])
+    }, filterStore.visible && column ? this.renderOptions(h, filterRender, compConf).concat(this.renderFooter(h)) : [])
   },
   methods: {
     renderOptions (h, filterRender, compConf) {
       const { $parent: $xetable, filterStore } = this
       const { args, column, multiple, maxHeight } = filterStore
-      const { slots } = column
+      const slots = column ? column.slots : null
       const rtFilter = compConf ? (compConf.renderTableFilter || compConf.renderFilter) : null
       if (slots && slots.filter) {
         return [

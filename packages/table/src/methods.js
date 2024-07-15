@@ -2005,6 +2005,7 @@ const Methods = {
     const scaleList = []
     const scaleMinList = []
     const autoList = []
+    const remainList = []
     this.tableFullColumn.forEach(column => {
       if (defaultWidth && !column.width) {
         column.width = defaultWidth
@@ -2015,6 +2016,8 @@ const Methods = {
       if (column.visible) {
         if (column.resizeWidth) {
           resizeList.push(column)
+        } else if (column.width === 'auto') {
+          autoList.push(column)
         } else if (DomTools.isPx(column.width)) {
           pxList.push(column)
         } else if (DomTools.isScale(column.width)) {
@@ -2024,11 +2027,11 @@ const Methods = {
         } else if (DomTools.isScale(column.minWidth)) {
           scaleMinList.push(column)
         } else {
-          autoList.push(column)
+          remainList.push(column)
         }
       }
     })
-    Object.assign(this.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList })
+    Object.assign(this.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList, remainList })
   },
   /**
    * 刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）
@@ -2069,6 +2072,7 @@ const Methods = {
     const headerElem = tableHeader ? tableHeader.$el : null
     const footerElem = tableFooter ? tableFooter.$el : null
     if (bodyElem) {
+      this.calcCellWidth()
       this.autoCellWidth(headerElem, bodyElem, footerElem)
       if (refull === true) {
         // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
@@ -2079,6 +2083,38 @@ const Methods = {
       }
     }
     return this.computeScrollLoad()
+  },
+  calcCellWidth () {
+    const { autoWidthColumnList, tableData } = this
+    if (!tableData.length || !autoWidthColumnList.length) {
+      this.isCalcColumn = false
+      return this.$nextTick()
+    }
+    this.isCalcColumn = true
+    return this.$nextTick().then(() => {
+      const el = this.$el
+      if (el) {
+        autoWidthColumnList.forEach(column => {
+          const cellElList = el.querySelectorAll(`.vxe-body--column.${column.id}>.vxe-cell`)
+          const firstCellEl = cellElList[0]
+          let paddingSize = 0
+          if (firstCellEl) {
+            const cellStyle = getComputedStyle(firstCellEl)
+            paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
+          }
+          let colWidth = column.renderAutoWidth - paddingSize + 2
+          XEUtils.arrayEach(cellElList, (cellEl) => {
+            const labelEl = cellEl.firstChild
+            if (labelEl) {
+              colWidth = Math.max(colWidth, labelEl.offsetWidth)
+            }
+          })
+          column.renderAutoWidth = colWidth + paddingSize
+        })
+        this.analyColumnWidth()
+      }
+      this.isCalcColumn = false
+    })
   },
   /**
    * 列宽算法
@@ -2097,7 +2133,7 @@ const Methods = {
     let remainWidth = bodyWidth
     let meanWidth = remainWidth / 100
     const { fit, columnStore } = this
-    const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList } = columnStore
+    const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList, remainList } = columnStore
     // 最小宽
     pxMinList.forEach(column => {
       const minWidth = parseInt(column.minWidth)
@@ -2122,6 +2158,12 @@ const Methods = {
       tableWidth += width
       column.renderWidth = width
     })
+    // 自适应宽
+    autoList.forEach((column) => {
+      const width = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+      tableWidth += width
+      column.renderWidth = width
+    })
     // 调整了列宽
     resizeList.forEach(column => {
       const width = parseInt(column.resizeWidth)
@@ -2129,7 +2171,7 @@ const Methods = {
       column.renderWidth = width
     })
     remainWidth -= tableWidth
-    meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoList.length)) : 0
+    meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + remainList.length)) : 0
     if (fit) {
       if (remainWidth > 0) {
         scaleMinList.concat(pxMinList).forEach(column => {
@@ -2140,8 +2182,8 @@ const Methods = {
     } else {
       meanWidth = minCellWidth
     }
-    // 自适应
-    autoList.forEach(column => {
+    // 剩余均分
+    remainList.forEach(column => {
       const width = Math.max(meanWidth, minCellWidth)
       column.renderWidth = width
       tableWidth += width
@@ -2151,7 +2193,7 @@ const Methods = {
        * 偏移量算法
        * 如果所有列足够放的情况下，从最后动态列开始分配
        */
-      const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoList)
+      const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(remainList)
       let dynamicSize = dynamicList.length - 1
       if (dynamicSize > 0) {
         let odiffer = bodyWidth - tableWidth

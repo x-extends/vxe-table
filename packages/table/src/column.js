@@ -40,6 +40,8 @@ const props = {
   footerClassName: [String, Function],
   // 格式化显示内容
   formatter: [Function, Array, String],
+  // 格式化表尾显示内容
+  footerFormatter: [Function, Array, String],
   // 是否允许排序
   sortable: Boolean,
   // 在 v3 中废弃

@@ -74,6 +74,7 @@ export class ColumnInfo {
       headerClassName: _vm.headerClassName,
       footerClassName: _vm.footerClassName,
       formatter,
+      footerFormatter: _vm.footerFormatter,
       sortable: _vm.sortable,
       sortBy: _vm.sortBy,
       sortType: _vm.sortType,
@@ -127,6 +128,7 @@ export class ColumnInfo {
       renderWidth: 0,
       renderHeight: 0,
       renderResizeWidth: 0,
+      renderAutoWidth: 0,
       resizeWidth: 0, // 手动调整
 
       renderLeft: 0,

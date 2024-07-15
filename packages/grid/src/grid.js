@@ -401,9 +401,9 @@ export default {
       const tableProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
-          tableProps.maxHeight = 'auto'
+          tableProps.maxHeight = '100%'
         } else {
-          tableProps.height = 'auto'
+          tableProps.height = '100%'
         }
       }
       if (proxyConfig) {
@@ -507,7 +507,7 @@ export default {
     getExcludeHeight () {
       const { $refs, $el, isZMax, height } = this
       const { formWrapper, toolbarWrapper, topWrapper, bottomWrapper, pagerWrapper } = $refs
-      const parentPaddingSize = isZMax || height !== 'auto' ? 0 : getPaddingTopBottomSize($el.parentNode)
+      const parentPaddingSize = isZMax || !(height === 'auto' || height === '100%') ? 0 : getPaddingTopBottomSize($el.parentNode)
       return parentPaddingSize + getPaddingTopBottomSize($el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
     },
     initToolbar () {

@@ -2,6 +2,7 @@ import XEUtils from 'xe-utils'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VXETable from '../../v-x-e-table'
 import DomTools from '../../tools/dom'
+import { formats } from '../../v-x-e-table/src/formats'
 import UtilTools, { eqEmptyValue, isEnableConf, getFuncText } from '../../tools/utils'
 import { getRowid, getColumnConfig } from './util'
 import { getSlotVNs } from '../../tools/vn'
@@ -87,9 +88,22 @@ function renderTitleContent (h, params, content) {
   ]
 }
 
+function formatFooterLabel (footerFormatter, params) {
+  if (XEUtils.isFunction(footerFormatter)) {
+    return footerFormatter(params)
+  }
+  const isArr = XEUtils.isArray(footerFormatter)
+  const gFormatOpts = isArr ? formats.get(footerFormatter[0]) : formats.get(footerFormatter)
+  const footerFormatMethod = gFormatOpts ? gFormatOpts.tableFooterCellFormatMethod : null
+  if (footerFormatMethod) {
+    return isArr ? footerFormatMethod(params, ...footerFormatter.slice(1)) : footerFormatMethod(params)
+  }
+  return ''
+}
+
 function getFooterContent (h, params) {
   const { $table, column, _columnIndex, row, items } = params
-  const { slots, editRender, cellRender } = column
+  const { slots, editRender, cellRender, footerFormatter } = column
   const renderOpts = editRender || cellRender
   if (slots && slots.footer) {
     return $table.callSlot(slots.footer, params, h)
@@ -101,11 +115,34 @@ function getFooterContent (h, params) {
       return getSlotVNs(rtFooter.call($table, h, renderOpts, params))
     }
   }
+  let itemValue = ''
   // 兼容老模式
   if (XEUtils.isArray(items)) {
-    return [UtilTools.formatText(items[_columnIndex], 1)]
+    itemValue = items[_columnIndex]
+    return [
+      footerFormatter
+        ? formatFooterLabel(footerFormatter, {
+          itemValue,
+          column,
+          row,
+          items,
+          _columnIndex
+        })
+        : UtilTools.formatText(itemValue, 1)
+    ]
   }
-  return [UtilTools.formatText(XEUtils.get(row, column.field), 1)]
+  itemValue = XEUtils.get(row, column.field)
+  return [
+    footerFormatter
+      ? formatFooterLabel(footerFormatter, {
+        itemValue,
+        column,
+        row,
+        items,
+        _columnIndex
+      })
+      : UtilTools.formatText(itemValue, 1)
+  ]
 }
 
 function getDefaultCellLabel (params) {
@@ -230,15 +267,17 @@ export const Cell = {
    */
   renderTreeIcon (h, params, cellVNodes) {
     const { $table, isHidden } = params
-    const { treeOpts, treeExpandedMaps, treeExpandLazyLoadedMaps } = $table
+    const { treeOpts, treeExpandedMaps, treeExpandLazyLoadedMaps, fullAllDataRowIdData } = $table
     const { row, column, level } = params
     const { slots } = column
     const { indent, lazy, trigger, iconLoaded, showIcon, iconOpen, iconClose } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowChilds = row[childrenField]
+    const hasChild = rowChilds && rowChilds.length
     let hasLazyChilds = false
     let isAceived = false
+    let isLazyLoading = false
     let isLazyLoaded = false
     const on = {}
     if (slots && slots.icon) {
@@ -248,8 +287,10 @@ export const Cell = {
       const rowid = getRowid($table, row)
       isAceived = !!treeExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = !!treeExpandLazyLoadedMaps[rowid]
+        const rest = fullAllDataRowIdData[rowid]
+        isLazyLoading = !!treeExpandLazyLoadedMaps[rowid]
         hasLazyChilds = row[hasChildField]
+        isLazyLoaded = !!rest.treeLoaded
       }
     }
     if (!trigger || trigger === 'default') {
@@ -266,13 +307,13 @@ export const Cell = {
           paddingLeft: `${level * indent}px`
         }
       }, [
-        showIcon && ((rowChilds && rowChilds.length) || hasLazyChilds) ? [
+        showIcon && (lazy ? (isLazyLoaded ? hasChild : hasLazyChilds) : hasChild) ? [
           h('div', {
             class: 'vxe-tree--btn-wrapper',
             on
           }, [
             h('i', {
-              class: ['vxe-tree--node-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.TABLE_TREE_LOADED) : (isAceived ? (iconOpen || GlobalConfig.icon.TABLE_TREE_OPEN) : (iconClose || GlobalConfig.icon.TABLE_TREE_CLOSE))]
+              class: ['vxe-tree--node-btn', isLazyLoading ? (iconLoaded || GlobalConfig.icon.TABLE_TREE_LOADED) : (isAceived ? (iconOpen || GlobalConfig.icon.TABLE_TREE_OPEN) : (iconClose || GlobalConfig.icon.TABLE_TREE_CLOSE))]
             })
           ])
         ] : null,
@@ -569,7 +610,7 @@ export const Cell = {
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     let isAceived = false
-    let isLazyLoaded = false
+    let isLazyLoading = false
     if (slots && slots.icon) {
       return $table.callSlot(slots.icon, params, h)
     }
@@ -577,7 +618,7 @@ export const Cell = {
       const rowid = getRowid($table, row)
       isAceived = !!rowExpandedMaps[rowid]
       if (lazy) {
-        isLazyLoaded = !!rowExpandLazyLoadedMaps[rowid]
+        isLazyLoading = !!rowExpandLazyLoadedMaps[rowid]
       }
     }
     return [
@@ -592,7 +633,7 @@ export const Cell = {
         }
       }, [
         h('i', {
-          class: ['vxe-table--expand-btn', isLazyLoaded ? (iconLoaded || GlobalConfig.icon.TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || GlobalConfig.icon.TABLE_EXPAND_OPEN) : (iconClose || GlobalConfig.icon.TABLE_EXPAND_CLOSE))]
+          class: ['vxe-table--expand-btn', isLazyLoading ? (iconLoaded || GlobalConfig.icon.TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || GlobalConfig.icon.TABLE_EXPAND_OPEN) : (iconClose || GlobalConfig.icon.TABLE_EXPAND_CLOSE))]
         })
       ]) : null,
       defaultSlot || labelField ? h('span', {

@@ -219,7 +219,7 @@ export default {
     MODAL_CLOSE: iconPrefix + 'close',
     MODAL_INFO: iconPrefix + 'info-circle-fill',
     MODAL_SUCCESS: iconPrefix + 'success-circle-fill',
-    MODAL_WARNING: iconPrefix + 'warnion-circle-fill',
+    MODAL_WARNING: iconPrefix + 'warning-circle-fill',
     MODAL_ERROR: iconPrefix + 'error-circle-fill',
     MODAL_QUESTION: iconPrefix + 'question-circle-fill',
     MODAL_LOADING: iconPrefix + 'spinner roll',

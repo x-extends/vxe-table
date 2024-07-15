@@ -273,6 +273,7 @@ export default {
   data () {
     return {
       tId: `${XEUtils.uniqueId()}`,
+      isCalcColumn: false,
       // 低性能的静态列
       staticColumns: [],
       // 渲染的列分组
@@ -614,6 +615,10 @@ export default {
     },
     customOpts () {
       return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig)
+    },
+    autoWidthColumnList () {
+      const { visibleColumn } = this
+      return visibleColumn.filter(column => column.width === 'auto')
     },
     fixedColumnSize () {
       const { collectColumn } = this
@@ -1022,6 +1027,7 @@ export default {
       _e,
       $scopedSlots,
       tId,
+      isCalcColumn,
       tableData,
       tableColumn,
       tableGroupColumn,
@@ -1075,6 +1081,7 @@ export default {
         'row--highlight': rowOpts.isHover || highlightHoverRow,
         'column--highlight': columnOpts.isHover || highlightHoverColumn,
         'checkbox--range': checkboxOpts.range,
+        'column--calc': isCalcColumn,
         'is--header': showHeader,
         'is--footer': showFooter,
         'is--group': isGroup,

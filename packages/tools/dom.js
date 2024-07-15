@@ -159,7 +159,7 @@ export const DomTools = {
     const val = $xetable[key]
     let num = 0
     if (val) {
-      if (val === 'auto') {
+      if (val === '100%' || val === 'auto') {
         num = $xetable.parentHeight
       } else {
         const excludeHeight = $xetable.getExcludeHeight()
