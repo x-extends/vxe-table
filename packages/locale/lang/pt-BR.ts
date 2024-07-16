@@ -198,7 +198,8 @@ export default {
       zoomMin: 'Minimize',
       zoomIn: 'Maximize',
       zoomOut: 'Restaurar',
-      close: 'Fechar'
+      close: 'Fechar',
+      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.'
     },
     drawer: {
       close: 'Fechar'

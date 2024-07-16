@@ -198,7 +198,8 @@ export default {
       zoomMin: 'Minimize',
       zoomIn: 'Maximize',
       zoomOut: 'Reduction',
-      close: 'Close'
+      close: 'Close',
+      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.'
     },
     drawer: {
       close: 'Close'

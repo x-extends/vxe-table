@@ -198,7 +198,8 @@ export default {
       zoomMin: '最小化',
       zoomIn: '最大化',
       zoomOut: '還原',
-      close: '關閉'
+      close: '關閉',
+      miniMaxSize: '最小化窗口的數量不能超過 {0} 個'
     },
     drawer: {
       close: '關閉'

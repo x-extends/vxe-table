@@ -198,7 +198,8 @@ export default {
       zoomMin: 'Minimize',
       zoomIn: 'Maximize',
       zoomOut: '縮小',
-      close: '閉じる'
+      close: '閉じる',
+      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.'
     },
     drawer: {
       close: '閉じる'

@@ -1242,21 +1242,16 @@ export default defineComponent({
         })
       }
       internalData.headerHeight = headerHeight
-
       let overflowX = false
       let footerHeight = 0
       let scrollbarHeight = 0
       if (footerElem) {
         footerHeight = footerElem.offsetHeight
         overflowX = tableWidth > footerElem.clientWidth
-        if (overflowX) {
-          scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
-        }
+        scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
       } else {
         overflowX = tableWidth > bodyWidth
-        if (overflowX) {
-          scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
-        }
+        scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
       }
       internalData.footerHeight = footerHeight
       reactData.overflowX = overflowX
