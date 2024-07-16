@@ -14,7 +14,7 @@ const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['setFilter', 'clear
 hooks.add('tableFilterModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
-    const { refTableBody, refTableFilter } = $xeTable.getRefMaps()
+    const { refTableHeader, refTableBody, refTableFilter } = $xeTable.getRefMaps()
     const { computeFilterOpts, computeMouseOpts } = $xeTable.getComputeMaps()
 
     const filterPrivateMethods: TableFilterPrivateMethods = {
@@ -63,31 +63,34 @@ hooks.add('tableFilterModule', {
           filterStore.visible = true
           initStore.filter = true
           nextTick(() => {
+            const tableHeader = refTableHeader.value
             const tableBody = refTableBody.value
+            const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
             const bodyElem = tableBody.$el as HTMLDivElement
+            if (!bodyElem) {
+              return
+            }
             const tableFilter = refTableFilter.value
             const filterWrapperElem = tableFilter ? tableFilter.$el as HTMLDivElement : null
-            let filterWidth = 0
-            let filterHeight = 0
-            let filterHeadElem: HTMLDivElement | null = null
-            let filterFootElem: HTMLDivElement | null = null
-            if (filterWrapperElem) {
-              filterWidth = filterWrapperElem.offsetWidth
-              filterHeight = filterWrapperElem.offsetHeight
-              filterHeadElem = filterWrapperElem.querySelector('.vxe-table--filter-header')
-              filterFootElem = filterWrapperElem.querySelector('.vxe-table--filter-footer')
+            if (!filterWrapperElem) {
+              return
             }
+            const filterWidth = filterWrapperElem.offsetWidth
+            const filterHeight = filterWrapperElem.offsetHeight
+            const filterHeadElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-header')
+            const filterFootElem = filterWrapperElem.querySelector<HTMLDivElement>('.vxe-table--filter-footer')
             const centerWidth = filterWidth / 2
             const minMargin = 10
             const maxLeft = bodyElem.clientWidth - filterWidth - minMargin
             let left, right
             const style: any = {
-              top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight + 8}px`
+              top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight}px`
             }
             // 判断面板不能大于表格高度
             let maxHeight: number | null = null
-            if (filterHeight >= bodyElem.clientHeight) {
-              maxHeight = Math.max(60, bodyElem.clientHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
+            const bodyHeight = bodyElem.clientHeight - (headerElem ? headerElem.clientHeight / 2 : 0)
+            if (filterHeight >= bodyHeight) {
+              maxHeight = Math.max(40, bodyHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
             }
             if (column.fixed === 'left') {
               left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth
