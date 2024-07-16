@@ -580,10 +580,9 @@ export default defineComponent({
                         VxeUIInputComponent
                           ? h(VxeUIInputComponent, {
                             type: 'integer',
-                            min: 40,
                             modelValue: column.renderResizeWidth,
                             'onUpdate:modelValue' (value: any) {
-                              column.renderResizeWidth = Math.max(40, Number(value))
+                              column.renderResizeWidth = Math.max(0, Number(value))
                             }
                           })
                           : createCommentVNode()
