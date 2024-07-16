@@ -2095,7 +2095,7 @@ const Methods = {
       const el = this.$el
       if (el) {
         autoWidthColumnList.forEach(column => {
-          const cellElList = el.querySelectorAll(`.vxe-body--column.${column.id}>.vxe-cell`)
+          const cellElList = el.querySelectorAll(`.vxe-header--column.${column.id}>.vxe-cell,.vxe-body--column.${column.id}>.vxe-cell,.vxe-footer--column.${column.id}>.vxe-cell`)
           const firstCellEl = cellElList[0]
           let paddingSize = 0
           if (firstCellEl) {
@@ -2223,19 +2223,23 @@ const Methods = {
     } else {
       this.headerHeight = 0
     }
+    let overflowX = false
+    let footerHeight = 0
+    let scrollbarHeight = 0
     if (footerElem) {
-      const footerHeight = footerElem.offsetHeight
-      this.scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
-      this.overflowX = tableWidth > footerElem.clientWidth
-      this.footerHeight = footerHeight
+      footerHeight = footerElem.offsetHeight
+      overflowX = tableWidth > footerElem.clientWidth
+      scrollbarHeight = Math.max(footerHeight - footerElem.clientHeight, 0)
     } else {
-      this.footerHeight = 0
-      this.scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
-      this.overflowX = tableWidth > bodyWidth
+      overflowX = tableWidth > bodyWidth
+      scrollbarHeight = Math.max(tableHeight - bodyElem.clientHeight, 0)
     }
+    this.footerHeight = footerHeight
+    this.overflowX = tableWidth > bodyWidth
+    this.scrollbarHeight = scrollbarHeight
     this.updateHeight()
     this.parentHeight = Math.max(this.headerHeight + this.footerHeight + 20, this.getParentHeight())
-    if (this.overflowX) {
+    if (overflowX) {
       this.checkScrolling()
     }
   },

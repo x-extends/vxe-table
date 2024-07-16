@@ -66,12 +66,12 @@ export default {
   },
   data () {
     return {
-      inited: false,
+      initialized: false,
       visible: false,
       contentVisible: false,
       modalTop: 0,
       modalZindex: 0,
-      zoomLocat: null,
+      revertLocat: null,
       firstOpen: true
     }
   },
@@ -123,7 +123,7 @@ export default {
     }
   },
   render (h) {
-    const { _e, $scopedSlots, slots = {}, inited, vSize, className, type, resize, showClose, showZoom, animat, draggable, loading, status, iconStatus, showFooter, zoomLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose, showCancelButton, showConfirmButton } = this
+    const { _e, $scopedSlots, slots = {}, initialized, vSize, className, type, resize, showClose, showZoom, animat, draggable, loading, status, iconStatus, showFooter, revertLocat, modalTop, dblclickZoom, contentVisible, visible, title, lockScroll, lockView, mask, isMsg, showTitleOverflow, destroyOnClose, showCancelButton, showConfirmButton } = this
     const content = this.content || this.message
     const defaultSlot = $scopedSlots.default || slots.default
     const footerSlot = $scopedSlots.footer || slots.footer
@@ -146,7 +146,7 @@ export default {
         'lock--view': lockView,
         'is--resize': resize,
         'is--mask': mask,
-        'is--maximize': zoomLocat,
+        'is--maximize': revertLocat,
         'is--visible': contentVisible,
         'is--active': visible,
         'is--loading': loading
@@ -172,7 +172,7 @@ export default {
             'is--ellipsis': !isMsg && showTitleOverflow
           }],
           on: headerOns
-        }, headerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(headerSlot.call(this, { $modal: this }, h))) : [
+        }, headerSlot ? (!initialized || (destroyOnClose && !visible) ? [] : getSlotVNs(headerSlot.call(this, { $modal: this }, h))) : [
           h('div', {
             class: 'vxe-modal--header-title'
           }, titleSlot ? getSlotVNs(titleSlot.call(this, { $modal: this }, h)) : (title ? getFuncText(title) : GlobalConfig.i18n('vxe.alert.title'))),
@@ -183,9 +183,9 @@ export default {
               class: 'vxe-modal--corner-wrapper'
             }, getSlotVNs(cornerSlot({ $modal: this }))) : _e(),
             showZoom ? h('i', {
-              class: ['vxe-modal--zoom-btn', 'trigger--btn', zoomLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
+              class: ['vxe-modal--zoom-btn', 'trigger--btn', revertLocat ? GlobalConfig.icon.MODAL_ZOOM_OUT : GlobalConfig.icon.MODAL_ZOOM_IN],
               attrs: {
-                title: GlobalConfig.i18n(`vxe.modal.zoom${zoomLocat ? 'Out' : 'In'}`)
+                title: GlobalConfig.i18n(`vxe.modal.zoom${revertLocat ? 'Out' : 'In'}`)
               },
               on: {
                 click: this.toggleZoomEvent
@@ -214,7 +214,7 @@ export default {
           ]) : null,
           h('div', {
             class: 'vxe-modal--content'
-          }, defaultSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(defaultSlot.call(this, { $modal: this }, h))) : getFuncText(content)),
+          }, defaultSlot ? (!initialized || (destroyOnClose && !visible) ? [] : getSlotVNs(defaultSlot.call(this, { $modal: this }, h))) : getFuncText(content)),
           /**
            * 加载中
            */
@@ -227,7 +227,7 @@ export default {
         ]),
         showFooter ? h('div', {
           class: 'vxe-modal--footer'
-        }, footerSlot ? (!inited || (destroyOnClose && !visible) ? [] : getSlotVNs(footerSlot.call(this, { $modal: this }, h))) : [
+        }, footerSlot ? (!initialized || (destroyOnClose && !visible) ? [] : getSlotVNs(footerSlot.call(this, { $modal: this }, h))) : [
           XEUtils.isBoolean(showCancelButton) ? showCancelButton : type === 'confirm' ? h('vxe-button', {
             key: 1,
             ref: 'cancelBtn',
@@ -318,9 +318,9 @@ export default {
       this.close(type)
     },
     open () {
-      const { $refs, events = {}, inited, duration, visible, isMsg, remember, showFooter } = this
-      if (!inited) {
-        this.inited = true
+      const { $refs, events = {}, initialized, duration, visible, isMsg, remember, showFooter } = this
+      if (!initialized) {
+        this.initialized = true
         if (this.transfer) {
           document.body.appendChild(this.$el)
         }
@@ -440,7 +440,7 @@ export default {
             }
             this.contentVisible = false
             if (!remember) {
-              this.zoomLocat = null
+              this.revertLocat = null
             }
             XEUtils.remove(allActivedModals, item => item === this)
             this.$emit('before-hide', params)
@@ -475,15 +475,15 @@ export default {
       return this.$refs.modalBox
     },
     isMaximized () {
-      return !!this.zoomLocat
+      return !!this.revertLocat
     },
     maximize () {
       return this.$nextTick().then(() => {
-        if (!this.zoomLocat) {
+        if (!this.revertLocat) {
           const marginSize = Math.max(0, this.marginSize)
           const modalBoxElem = this.getBox()
           const { visibleHeight, visibleWidth } = DomTools.getDomNode()
-          this.zoomLocat = {
+          this.revertLocat = {
             top: modalBoxElem.offsetTop,
             left: modalBoxElem.offsetLeft,
             width: modalBoxElem.offsetWidth + (modalBoxElem.style.width ? 0 : 1),
@@ -501,26 +501,26 @@ export default {
     },
     revert () {
       return this.$nextTick().then(() => {
-        const zoomLocat = this.zoomLocat
-        if (zoomLocat) {
+        const revertLocat = this.revertLocat
+        if (revertLocat) {
           const modalBoxElem = this.getBox()
-          this.zoomLocat = null
+          this.revertLocat = null
           Object.assign(modalBoxElem.style, {
-            top: `${zoomLocat.top}px`,
-            left: `${zoomLocat.left}px`,
-            width: `${zoomLocat.width}px`,
-            height: `${zoomLocat.height}px`
+            top: `${revertLocat.top}px`,
+            left: `${revertLocat.left}px`,
+            width: `${revertLocat.width}px`,
+            height: `${revertLocat.height}px`
           })
           this.savePosStorage()
         }
       })
     },
     zoom () {
-      return this[this.zoomLocat ? 'revert' : 'maximize']().then(() => this.isMaximized())
+      return this[this.revertLocat ? 'revert' : 'maximize']().then(() => this.isMaximized())
     },
     toggleZoomEvent (evnt) {
-      const { $listeners, zoomLocat, events = {} } = this
-      const params = { type: zoomLocat ? 'revert' : 'max', $modal: this, $event: evnt }
+      const { $listeners, revertLocat, events = {} } = this
+      const params = { type: revertLocat ? 'revert' : 'max', $modal: this, $event: evnt }
       return this.zoom().then(() => {
         if ($listeners.zoom) {
           this.$emit('zoom', params)
@@ -560,9 +560,9 @@ export default {
       }
     },
     mousedownEvent (evnt) {
-      const { remember, storage, marginSize, zoomLocat } = this
+      const { remember, storage, marginSize, revertLocat } = this
       const modalBoxElem = this.getBox()
-      if (!zoomLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
+      if (!revertLocat && evnt.button === 0 && !DomTools.getEventTargetNode(evnt, modalBoxElem, 'trigger--btn').flag) {
         evnt.preventDefault()
         const domMousemove = document.onmousemove
         const domMouseup = document.onmouseup
@@ -754,7 +754,7 @@ export default {
         }
       }
       document.onmouseup = () => {
-        this.zoomLocat = null
+        this.revertLocat = null
         document.onmousemove = domMousemove
         document.onmouseup = domMouseup
         setTimeout(() => {
@@ -791,7 +791,7 @@ export default {
             modalBoxElem.style.height = `${height}px`
           }
           if (zoomLeft && zoomTop) {
-            this.zoomLocat = {
+            this.revertLocat = {
               left: zoomLeft,
               top: zoomTop,
               width: zoomWidth,
@@ -802,7 +802,7 @@ export default {
       }
     },
     savePosStorage () {
-      const { id, remember, storage, storageKey, zoomLocat } = this
+      const { id, remember, storage, storageKey, revertLocat } = this
       if (remember && storage) {
         const modalBoxElem = this.getBox()
         const posStorageMap = this.getStorageMap(storageKey)
@@ -811,11 +811,11 @@ export default {
           modalBoxElem.style.top,
           modalBoxElem.style.width,
           modalBoxElem.style.height
-        ].concat(zoomLocat ? [
-          zoomLocat.left,
-          zoomLocat.top,
-          zoomLocat.width,
-          zoomLocat.height
+        ].concat(revertLocat ? [
+          revertLocat.left,
+          revertLocat.top,
+          revertLocat.width,
+          revertLocat.height
         ] : []).map(val => val ? XEUtils.toNumber(val) : '').join(',')
         localStorage.setItem(storageKey, XEUtils.toJSONString(posStorageMap))
       }

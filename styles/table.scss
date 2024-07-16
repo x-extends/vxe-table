@@ -319,7 +319,8 @@
 .vxe-table {
   &.column--calc {
     .vxe-header--column,
-    .vxe-body--column {
+    .vxe-body--column,
+    .vxe-footer--column {
       .vxe-cell {
         word-break: break-all;
         white-space: nowrap;

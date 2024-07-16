@@ -83,29 +83,32 @@ export default {
         this.initStore.filter = true
         this.$nextTick(() => {
           const { $refs } = this
-          const bodyElem = $refs.tableBody.$el
-          const filterWrapperElem = $refs.filterWrapper.$el
-          let filterWidth = 0
-          let filterHeight = 0
-          let filterHeadElem = null
-          let filterFootElem = null
-          if (filterWrapperElem) {
-            filterWidth = filterWrapperElem.offsetWidth
-            filterHeight = filterWrapperElem.offsetHeight
-            filterHeadElem = filterWrapperElem.querySelector('.vxe-table--filter-header')
-            filterFootElem = filterWrapperElem.querySelector('.vxe-table--filter-footer')
+          const { tableHeader, tableBody, filterWrapper } = $refs
+          const bodyElem = tableBody.$el
+          const headerElem = tableHeader ? tableHeader.$el : null
+          if (!bodyElem) {
+            return
           }
+          const filterWrapperElem = filterWrapper.$el
+          if (!filterWrapperElem) {
+            return
+          }
+          const filterWidth = filterWrapperElem.offsetWidth
+          const filterHeight = filterWrapperElem.offsetHeight
+          const filterHeadElem = filterWrapperElem.querySelector('.vxe-table--filter-header')
+          const filterFootElem = filterWrapperElem.querySelector('.vxe-table--filter-footer')
           const centerWidth = filterWidth / 2
           const minMargin = 10
           const maxLeft = bodyElem.clientWidth - filterWidth - minMargin
           let left, right
           const style = {
-            top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight + 8}px`
+            top: `${targetElem.offsetTop + targetElem.offsetParent.offsetTop + targetElem.offsetHeight}px`
           }
           // 判断面板不能大于表格高度
           let maxHeight = null
-          if (filterHeight >= bodyElem.clientHeight) {
-            maxHeight = Math.max(60, bodyElem.clientHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
+          const bodyHeight = bodyElem.clientHeight - (headerElem ? headerElem.clientHeight / 2 : 0)
+          if (filterHeight >= bodyHeight) {
+            maxHeight = Math.max(40, bodyHeight - (filterFootElem ? filterFootElem.offsetHeight : 0) - (filterHeadElem ? filterHeadElem.offsetHeight : 0))
           }
           if (column.fixed === 'left') {
             left = targetElem.offsetLeft + targetElem.offsetParent.offsetLeft - centerWidth
