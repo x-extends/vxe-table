@@ -11,11 +11,11 @@
 
 /*checkbox*/
 .vxe-checkbox {
-  @include createCheckboxIcon();
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
   line-height: 1;
+  @include createCheckboxIcon();
   &+.vxe-checkbox {
     margin-left: 10px;
   }

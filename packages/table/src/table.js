@@ -384,7 +384,8 @@ export default {
         pxMinList: [],
         scaleList: [],
         scaleMinList: [],
-        autoList: []
+        autoList: [],
+        remainList: []
       },
       // 存放快捷菜单的信息
       ctxMenuStore: {

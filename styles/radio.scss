@@ -15,11 +15,11 @@
 
 /*radio*/
 .vxe-radio {
-  @include createRadioIcon();
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
   line-height: 1;
+  @include createRadioIcon();
   > input {
     &[type="radio"] {
       position: absolute;

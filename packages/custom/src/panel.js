@@ -331,12 +331,11 @@ const renderPopupPanel = (h, _vm) => {
                 : h('vxe-input', {
                   props: {
                     type: 'integer',
-                    min: 40,
                     value: column.renderResizeWidth
                   },
                   on: {
                     modelValue (value) {
-                      column.renderResizeWidth = Math.max(40, Number(value))
+                      column.renderResizeWidth = Math.max(0, Number(value))
                     }
                   }
                 })
