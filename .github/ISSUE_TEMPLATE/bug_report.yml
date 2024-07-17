@@ -5,7 +5,7 @@ body:
 - type: input
   id: issue_link
   attributes:
-    label: "可复现的链接："
+    label: "可复现的链接（包含复现链接与示例代码）："
     description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。"
   validations:
     required: true
@@ -63,5 +63,5 @@ body:
     label: "是否使用当前最新版本？"
     description: "官方只维护最新版本，如果不是最新版本，请先更新到[最新版本](https://vxetable.cn/)之后再提！"
     options:
-    - label: "我已确认是使用当前的最新版本。"
+    - label: "我已确认是使用当前的最新版本并已按要求提供复现链接与示例代码。"
       required: true

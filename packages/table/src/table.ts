@@ -3432,7 +3432,8 @@ export default defineComponent({
             const bodyWidth = bodyElem ? bodyElem.clientWidth - 1 : 0
             rdWidth = Math.floor(colWidth * bodyWidth)
           }
-          column.renderWidth = rdWidth
+          column.resizeWidth = rdWidth
+          return tableMethods.refreshColumn()
         }
         return nextTick()
       },
