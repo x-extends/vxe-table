@@ -290,7 +290,7 @@ export function watchColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMeth
   })
 }
 
-export function assemColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, elem: HTMLElement, column: ColumnInfo, colgroup: XEColumnInstance | null) {
+export function assembleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, elem: HTMLElement, column: ColumnInfo, colgroup: XEColumnInstance | null) {
   const { reactData } = $xeTable
   const { staticColumns } = reactData
   const parentElem = elem.parentNode

@@ -2911,7 +2911,7 @@ export default defineComponent({
           }, { children: childrenField })
           row[childrenField] = rows
           if (transform) {
-            row[mapChildrenField] = rows
+            row[mapChildrenField] = XEUtils.clone(rows, false)
           }
           updateAfterDataIndex()
           return rows

@@ -156,7 +156,8 @@ export class ColumnInfo {
   }
 
   getKey () {
-    return this.field || (this.type ? `type=${this.type}` : null)
+    const { type } = this
+    return this.field || (type ? `type=${type}` : null)
   }
 
   update (name: string, value: any) {

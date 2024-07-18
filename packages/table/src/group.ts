@@ -1,6 +1,6 @@
 import { defineComponent, h, onUnmounted, provide, inject, ref, Ref, onMounted, Slot } from 'vue'
 import { columnProps } from './column'
-import { XEColumnInstance, watchColumn, assemColumn, destroyColumn } from '../../table/src/util'
+import { XEColumnInstance, watchColumn, assembleColumn, destroyColumn } from '../../table/src/util'
 import Cell from '../../table/src/cell'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
@@ -27,7 +27,7 @@ export default defineComponent({
     watchColumn($xeTable, props, column)
 
     onMounted(() => {
-      assemColumn($xeTable, refElem.value, column, parentColgroup)
+      assembleColumn($xeTable, refElem.value, column, parentColgroup)
     })
 
     onUnmounted(() => {
