@@ -480,9 +480,7 @@ export default {
     maximize () {
       return this.$nextTick().then(() => {
         if (!this.revertLocat) {
-          const marginSize = Math.max(0, this.marginSize)
           const modalBoxElem = this.getBox()
-          const { visibleHeight, visibleWidth } = DomTools.getDomNode()
           this.revertLocat = {
             top: modalBoxElem.offsetTop,
             left: modalBoxElem.offsetLeft,
@@ -490,10 +488,10 @@ export default {
             height: modalBoxElem.offsetHeight + (modalBoxElem.style.height ? 0 : 1)
           }
           Object.assign(modalBoxElem.style, {
-            top: `${marginSize}px`,
-            left: `${marginSize}px`,
-            width: `${visibleWidth - marginSize * 2}px`,
-            height: `${visibleHeight - marginSize * 2}px`
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%'
           })
           this.savePosStorage()
         }

@@ -1,6 +1,6 @@
 {
   "name": "vxe-table",
-  "version": "3.8.14",
+  "version": "3.8.15",
   "description": "一个基于 vue 的 PC 端表单/表格组件，支持增删改查、虚拟树、列拖拽，懒加载、快捷菜单、数据校验、树形结构、打印导出、自定义模板、渲染器、JSON 配置式...",
   "scripts": {
     "update": "npm install --legacy-peer-deps",
@@ -60,8 +60,8 @@
     "gulp-typescript": "^5.0.1",
     "gulp-uglify": "^3.0.2",
     "postcss": "^8.2.15",
-    "sass": "^1.75.0",
-    "sass-loader": "^14.2.0",
+    "sass": "^1.77.8",
+    "sass-loader": "^14.2.1",
     "typescript": "~4.5.5",
     "vue": "^2.7.14",
     "vue-i18n": "^8.18.1",

@@ -1635,7 +1635,8 @@ const Methods = {
         const bodyWidth = tableBodyElem ? tableBodyElem.clientWidth - 1 : 0
         rdWidth = Math.floor(colWidth * bodyWidth)
       }
-      column.renderWidth = rdWidth
+      column.resizeWidth = rdWidth
+      return this.refreshColumn()
     }
     return this.$nextTick()
   },

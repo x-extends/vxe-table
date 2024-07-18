@@ -155,6 +155,11 @@ npm run serve
 npm run lib
 ```
 
+## PR
+
+1. 如果是修复 bug，必须有示例的复现链接
+2. 如果新功能，涉及代码风格、质量、还需有对应的示例页面
+
 ## Contributors
 
 Thank you to everyone who contributed to this project.
