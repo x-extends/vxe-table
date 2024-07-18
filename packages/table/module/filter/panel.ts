@@ -39,22 +39,12 @@ export default defineComponent({
      *************************/
     // 确认筛选
     const confirmFilter = (evnt: Event) => {
-      const { filterStore } = props
-      filterStore.options.forEach((option: any) => {
-        option.checked = option._checked
-      })
-      $xeTable.confirmFilterEvent(evnt)
+      $xeTable.handleFilterConfirmFilter(evnt)
     }
 
     // （单选）筛选发生改变
     const changeRadioOption = (evnt: Event, checked: boolean, item: any) => {
-      const { filterStore } = props
-      filterStore.options.forEach((option: any) => {
-        option._checked = false
-      })
-      item._checked = checked
-      $xeTable.checkFilterOptions()
-      confirmFilter(evnt)
+      $xeTable.handleFilterChangeRadioOption(evnt, checked, item)
     }
 
     /**
@@ -63,25 +53,17 @@ export default defineComponent({
      * @param {Event} evnt 事件
      */
     const resetFilter = (evnt: Event) => {
-      const { filterStore } = props
-      $xeTable.handleClearFilter(filterStore.column)
-      $xeTable.confirmFilterEvent(evnt)
+      $xeTable.handleFilterResetFilter(evnt)
     }
 
     // （多选）筛选发生改变
     const changeMultipleOption = (evnt: Event, checked: boolean, item: any) => {
-      item._checked = checked
-      $xeTable.checkFilterOptions()
+      $xeTable.handleFilterChangeMultipleOption(evnt, checked, item)
     }
 
     // 筛选发生改变
     const changeOption = (evnt: Event, checked: boolean, item: any) => {
-      const { filterStore } = props
-      if (filterStore.multiple) {
-        changeMultipleOption(evnt, checked, item)
-      } else {
-        changeRadioOption(evnt, checked, item)
-      }
+      $xeTable.handleFilterChangeOption(evnt, checked, item)
     }
 
     const changeAllOption = (evnt: Event, checked: boolean) => {

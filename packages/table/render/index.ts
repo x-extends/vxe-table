@@ -441,6 +441,13 @@ function handleFilterMethod ({ option, row, column }: any) {
   return cellValue == data
 }
 
+function handleInputFilterMethod ({ option, row, column }: any) {
+  const { data } = option
+  const cellValue = XEUtils.get(row, column.property)
+  /* eslint-disable eqeqeq */
+  return XEUtils.toValueString(cellValue).indexOf(data) > -1
+}
+
 function nativeSelectEditRender (renderOpts: any, params: any) {
   return [
     h('select', {
@@ -561,7 +568,7 @@ renderer.mixin({
     renderEdit: nativeEditRender,
     renderDefault: nativeEditRender,
     renderFilter: nativeFilterRender,
-    defaultFilterMethod: handleFilterMethod
+    defaultFilterMethod: handleInputFilterMethod
   },
   textarea: {
     autofocus: 'textarea',
@@ -614,7 +621,7 @@ renderer.mixin({
     },
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleFilterMethod
+    defaultFilterMethod: handleInputFilterMethod
   },
   VxeNumberInput: {
     autofocus: '.vxe-number-input--inner',
@@ -635,7 +642,7 @@ renderer.mixin({
     },
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleFilterMethod
+    defaultFilterMethod: handleInputFilterMethod
   },
   VxeDatePicker: {
     autofocus: '.vxe-date-picker--inner',
@@ -750,7 +757,7 @@ renderer.mixin({
     },
     renderDefault: oldEditRender,
     renderFilter: oldFilterRender,
-    defaultFilterMethod: handleFilterMethod
+    defaultFilterMethod: handleInputFilterMethod
   },
   $textarea: {
     autofocus: '.vxe-textarea--inner'

@@ -9,13 +9,50 @@ import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../
 
 const { renderer, hooks } = VxeUI
 
-const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['setFilter', 'clearFilter', 'getCheckedFilters']
+const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['openFilter', 'setFilter', 'clearFilter', 'getCheckedFilters', 'updateFilterOptionStatus']
 
 hooks.add('tableFilterModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
     const { refTableHeader, refTableBody, refTableFilter } = $xeTable.getRefMaps()
     const { computeFilterOpts, computeMouseOpts } = $xeTable.getComputeMaps()
+
+    // 确认筛选
+    const confirmFilter = (evnt: Event) => {
+      const { filterStore } = reactData
+      filterStore.options.forEach((option: any) => {
+        option.checked = option._checked
+      })
+      $xeTable.confirmFilterEvent(evnt)
+    }
+
+    // （单选）筛选发生改变
+    const changeRadioOption = (evnt: Event, checked: boolean, item: any) => {
+      const { filterStore } = reactData
+      filterStore.options.forEach((option: any) => {
+        option._checked = false
+      })
+      item._checked = checked
+      $xeTable.checkFilterOptions()
+      confirmFilter(evnt)
+    }
+
+    // （多选）筛选发生改变
+    const changeMultipleOption = (evnt: Event, checked: boolean, item: any) => {
+      item._checked = checked
+      $xeTable.checkFilterOptions()
+    }
+
+    /**
+     * 重置筛选
+     * 当筛选面板中的重置按钮被按下时触发
+     * @param {Event} evnt 事件
+     */
+    const resetFilter = (evnt: Event) => {
+      const { filterStore } = reactData
+      $xeTable.handleClearFilter(filterStore.column)
+      $xeTable.confirmFilterEvent(evnt)
+    }
 
     const filterPrivateMethods: TableFilterPrivateMethods = {
       checkFilterOptions () {
@@ -187,7 +224,20 @@ hooks.add('tableFilterModule', {
           // 存在滚动行为未结束情况
           setTimeout(() => $xeTable.recalculate(), 50)
         })
-      }
+      },
+      handleFilterChangeRadioOption: changeRadioOption,
+      handleFilterChangeMultipleOption: changeMultipleOption,
+      // 筛选发生改变
+      handleFilterChangeOption (evnt: Event, checked: boolean, item: any) {
+        const { filterStore } = reactData
+        if (filterStore.multiple) {
+          changeMultipleOption(evnt, checked, item)
+        } else {
+          changeRadioOption(evnt, checked, item)
+        }
+      },
+      handleFilterConfirmFilter: confirmFilter,
+      handleFilterResetFilter: resetFilter
     }
 
     const filterMethods: TableFilterMethods = {
@@ -277,6 +327,11 @@ hooks.add('tableFilterModule', {
           }
         })
         return filterList
+      },
+      updateFilterOptionStatus (item: any, checked: boolean) {
+        item._checked = checked
+        item.checked = checked
+        return nextTick()
       }
     }
 
