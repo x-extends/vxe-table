@@ -129,7 +129,7 @@ export default {
     this.columnConfig = this.createColumn(this.$xetable, this)
   },
   mounted () {
-    UtilTools.assemColumn(this)
+    UtilTools.assembleColumn(this)
   },
   destroyed () {
     UtilTools.destroyColumn(this)

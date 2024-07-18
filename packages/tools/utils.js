@@ -48,7 +48,7 @@ export const UtilTools = {
     return XEUtils.set(row, column.field, value)
   },
   // 组装列配置
-  assemColumn (_vm) {
+  assembleColumn (_vm) {
     const { $el, $xetable, $xecolumn, columnConfig } = _vm
     const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
     columnConfig.slots = _vm.$scopedSlots

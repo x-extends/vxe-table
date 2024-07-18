@@ -418,6 +418,13 @@ function handleFilterMethod ({ option, row, column }) {
   return cellValue == data
 }
 
+function handleInputFilterMethod ({ option, row, column }) {
+  const { data } = option
+  const cellValue = XEUtils.get(row, column.property)
+  /* eslint-disable eqeqeq */
+  return XEUtils.toValueString(cellValue).indexOf(data) > -1
+}
+
 function nativeSelectEditRender (h, renderOpts, params) {
   return [
     h('select', {
@@ -662,7 +669,7 @@ const renderMap = {
     renderEdit: nativeEditRender,
     renderDefault: nativeEditRender,
     renderFilter: nativeFilterRender,
-    defaultFilterMethod: handleFilterMethod,
+    defaultFilterMethod: handleInputFilterMethod,
     renderItemContent: nativeItemRender
   },
   textarea: {
@@ -727,7 +734,7 @@ const renderMap = {
     },
     renderDefault: defaultEditRender,
     renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleFilterMethod,
+    defaultFilterMethod: handleInputFilterMethod,
     renderItemContent: defaultItemRender
   },
   VxeTextarea: {
@@ -838,7 +845,7 @@ const renderMap = {
     },
     renderDefault: oldEditRender,
     renderFilter: oldFilterRender,
-    defaultFilterMethod: handleFilterMethod,
+    defaultFilterMethod: handleInputFilterMethod,
     renderItemContent: oldItemRender
   },
   $textarea: {
