@@ -261,6 +261,11 @@ export default {
         })
       }
       return this.updateData()
+    },
+    _updateFilterOptionStatus (item, checked) {
+      item._checked = checked
+      item.checked = checked
+      return this.$nextTick()
     }
   }
 }
