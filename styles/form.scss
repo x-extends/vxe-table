@@ -234,7 +234,7 @@
     padding: 0 0.8em;
   }
   .vxe-default-textarea {
-    height: calc($vxe-button-height-default * 2);
+    height: $vxe-button-height-default * 2;
     padding: 0.3em 0.6em;
   }
   .vxe-default-input[type="number"] {
@@ -324,7 +324,7 @@
       height: $vxe-button-height-medium;
     }
     .vxe-default-textarea {
-      height: calc($vxe-button-height-medium * 2);
+      height: $vxe-button-height-medium * 2;
     }
   }
   &.size--small {
@@ -341,7 +341,7 @@
       height: $vxe-button-height-small;
     }
     .vxe-default-textarea {
-      height: calc($vxe-button-height-small * 2);
+      height: $vxe-button-height-small * 2;
     }
   }
   &.size--mini {
@@ -358,7 +358,7 @@
       height: $vxe-button-height-mini;
     }
     .vxe-default-textarea {
-      height: calc($vxe-button-height-mini * 2);
+      height: $vxe-button-height-mini * 2;
     }
   }
 }
