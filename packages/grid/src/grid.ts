@@ -116,9 +116,14 @@ export default defineComponent({
       return Object.assign({}, getConfig().grid.proxyConfig, props.proxyConfig) as VxeGridPropTypes.ProxyConfig
     })
 
-    const computeIsMsg = computed(() => {
+    const computeIsRespMsg = computed(() => {
       const proxyOpts = computeProxyOpts.value
-      return proxyOpts.message !== false
+      return XEUtils.isBoolean(proxyOpts.message) ? proxyOpts.message : proxyOpts.showResponseMsg
+    })
+
+    const computeIsActiveMsg = computed(() => {
+      const proxyOpts = computeProxyOpts.value
+      return proxyOpts.showActiveMsg
     })
 
     const computePagerOpts = computed(() => {
@@ -231,14 +236,14 @@ export default defineComponent({
     }
 
     const triggerPendingEvent = (code: string) => {
-      const isMsg = computeIsMsg.value
+      const isActiveMsg = computeIsActiveMsg.value
       const $xeTable = refTable.value
       const selectRecords = $xeTable.getCheckboxRecords()
       if (selectRecords.length) {
         $xeTable.togglePendingRow(selectRecords)
         gridExtendTableMethods.clearCheckboxRow()
       } else {
-        if (isMsg) {
+        if (isActiveMsg) {
           if (VxeUI.modal) {
             VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
           }
@@ -258,9 +263,9 @@ export default defineComponent({
     }
 
     const handleDeleteRow = (code: string, alertKey: string, callback: () => void): Promise<void> => {
-      const isMsg = computeIsMsg.value
+      const isActiveMsg = computeIsActiveMsg.value
       const selectRecords = gridExtendTableMethods.getCheckboxRecords()
-      if (isMsg) {
+      if (isActiveMsg) {
         if (selectRecords.length) {
           if (VxeUI.modal) {
             return VxeUI.modal.confirm({ id: `cfm_${code}`, content: getI18n(alertKey), escClosable: true }).then((type) => {
@@ -729,7 +734,8 @@ export default defineComponent({
       commitProxy (proxyTarget: string | VxeToolbarPropTypes.ButtonConfig, ...args: any[]) {
         const { toolbarConfig, pagerConfig, editRules, validConfig } = props
         const { tablePage, formData } = reactData
-        const isMsg = computeIsMsg.value
+        const isActiveMsg = computeIsActiveMsg.value
+        const isRespMsg = computeIsRespMsg.value
         const proxyOpts = computeProxyOpts.value
         const pagerOpts = computePagerOpts.value
         const toolbarOpts = computeToolbarOpts.value
@@ -894,7 +900,7 @@ export default defineComponent({
                     .then(rest => {
                       reactData.tableLoading = false
                       $xeTable.setPendingRow(removeRecords, false)
-                      if (isMsg) {
+                      if (isRespMsg) {
                         if (VxeUI.modal) {
                           VxeUI.modal.message({ content: getRespMsg(rest, 'vxe.grid.delSuccess'), status: 'success' })
                         }
@@ -908,7 +914,7 @@ export default defineComponent({
                     })
                     .catch(rest => {
                       reactData.tableLoading = false
-                      if (isMsg) {
+                      if (isRespMsg) {
                         if (VxeUI.modal) {
                           VxeUI.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                         }
@@ -917,7 +923,7 @@ export default defineComponent({
                     })
                 })
               } else {
-                if (isMsg) {
+                if (isActiveMsg) {
                   if (VxeUI.modal) {
                     VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.selectOneRecord'), status: 'warning' })
                   }
@@ -961,7 +967,7 @@ export default defineComponent({
                     .then(rest => {
                       reactData.tableLoading = false
                       $xeTable.clearPendingRow()
-                      if (isMsg) {
+                      if (isRespMsg) {
                         if (VxeUI.modal) {
                           VxeUI.modal.message({ content: getRespMsg(rest, 'vxe.grid.saveSuccess'), status: 'success' })
                         }
@@ -975,7 +981,7 @@ export default defineComponent({
                     })
                     .catch(rest => {
                       reactData.tableLoading = false
-                      if (isMsg) {
+                      if (isRespMsg) {
                         if (VxeUI.modal) {
                           VxeUI.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                         }
@@ -983,7 +989,7 @@ export default defineComponent({
                       return { status: false }
                     })
                 } else {
-                  if (isMsg) {
+                  if (isActiveMsg) {
                     if (VxeUI.modal) {
                       VxeUI.modal.message({ id: code, content: getI18n('vxe.grid.dataUnchanged'), status: 'info' })
                     }

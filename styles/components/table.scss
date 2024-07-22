@@ -1278,11 +1278,8 @@
         border-color: var(--vxe-ui-table-validate-error-color);
       }
       .vxe-input {
-        > .vxe-input--inner {
-          border-color: var(--vxe-ui-table-validate-error-color);
-        }
+        border-color: var(--vxe-ui-table-validate-error-color);
       }
-
     }
   }
   &.valid-msg--single {

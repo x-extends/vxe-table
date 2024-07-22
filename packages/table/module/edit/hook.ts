@@ -428,11 +428,18 @@ hooks.add('tableEditModule', {
        * 获取表格数据集，包含新增、删除、修改、标记
        */
       getRecordset () {
+        const removeRecords = editMethods.getRemoveRecords()
+        const pendingRecords = $xeTable.getPendingRecords()
+        const delRecords = removeRecords.concat(pendingRecords)
+        // 如果已经被删除，则无需放到更新数组
+        const updateRecords = editMethods.getUpdateRecords().filter(row => {
+          return !delRecords.some(item => $xeTable.eqRow(item, row))
+        })
         return {
           insertRecords: editMethods.getInsertRecords(),
-          removeRecords: editMethods.getRemoveRecords(),
-          updateRecords: editMethods.getUpdateRecords(),
-          pendingRecords: $xeTable.getPendingRecords()
+          removeRecords,
+          updateRecords,
+          pendingRecords
         }
       },
       /**

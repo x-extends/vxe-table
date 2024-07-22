@@ -180,7 +180,8 @@ VxeUI.setConfig({
     proxyConfig: {
       enabled: true,
       autoLoad: true,
-      message: true,
+      showResponseMsg: true,
+      showActiveMsg: true,
       props: {
         list: null,
         result: 'result',

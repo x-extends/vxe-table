@@ -6,7 +6,7 @@ import { parseFile, formatText } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeGridConstructor, VxeGridPrivateMethods, TableExportMethods } from '../../../../types'
+import type { VxeGridConstructor, VxeGridPrivateMethods, TableExportMethods, VxeGridPropTypes } from '../../../../types'
 
 const { getI18n, hooks, renderer } = VxeUI
 
@@ -944,7 +944,7 @@ hooks.add('tableExportModule', {
       const hasTree = treeConfig
       const customOpts = computeCustomOpts.value
       const selectRecords = $xeTable.getCheckboxRecords()
-      const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {}
+      const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
       const hasFooter = !!footerTableData.length
       const hasMerge = !hasTree && mergeList.length
       const defOpts = Object.assign({
