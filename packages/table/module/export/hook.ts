@@ -833,6 +833,8 @@ hooks.add('tableExportModule', {
           .then((data: any) => {
             let loadRest
             if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
+              loadRest = $xeTable.insertAt(data, -1)
+            } if (opts.mode === 'insertTop') {
               loadRest = $xeTable.insert(data)
             } else {
               loadRest = $xeTable.reloadData(data)
@@ -888,7 +890,7 @@ hooks.add('tableExportModule', {
         internalData._importResolve = _importResolve
         internalData._importReject = _importReject
         if (window.FileReader) {
-          const options = Object.assign({ mode: 'insertBottom' }, opts, { type, filename })
+          const options = Object.assign({ mode: 'insertTop' }, opts, { type, filename })
           if (options.remote) {
             if (importMethod) {
               Promise.resolve(importMethod({ file, options, $table: $xeTable })).then(() => {
@@ -1326,10 +1328,10 @@ hooks.add('tableExportModule', {
         const { initStore, importStore, importParams } = reactData
         const importOpts = computeImportOpts.value
         const defOpts = Object.assign({
-          mode: 'insertBottom',
+          mode: 'insertTop',
           message: true,
           types: XEUtils.keys(importOpts._typeMaps),
-          modes: ['insertBottom', 'covering']
+          modes: ['insertTop', 'covering']
         }, importOpts, options)
         const types = defOpts.types || []
         const modes = defOpts.modes || []

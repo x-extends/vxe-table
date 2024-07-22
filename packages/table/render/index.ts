@@ -728,7 +728,23 @@ renderer.mixin({
     renderDefault: defaultEditRender
   },
   VxeUpload: {
+    renderEdit: defaultEditRender,
+    renderCell: defaultEditRender,
     renderDefault: defaultEditRender
+  },
+  VxeImage: {
+    renderDefault (renderOpts, params) {
+      const { row, column } = params
+      const { props } = renderOpts
+      const cellValue = getCellValue(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          ...props,
+          src: cellValue,
+          ...getEditOns(renderOpts, params)
+        })
+      ]
+    }
   },
 
   // 以下已废弃
