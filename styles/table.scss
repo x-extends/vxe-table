@@ -48,10 +48,10 @@
 
 /*默认的渲染*/
 .vxe-cell,
-.vxe-table--filter-wrapper {
+.vxe-table--filter-template {
   .vxe-default-input,
   .vxe-default-textarea {
-    background-color: $vxe-table-body-background-color;
+    background-color: var(--vxe-ui-layout-background-color);
   }
   .vxe-default-input,
   .vxe-default-textarea,
@@ -59,21 +59,21 @@
     outline: 0;
     padding: 0 2px;
     width: 100%;
-    color: $vxe-font-color;
-    border-radius: $vxe-border-radius;
-    border: 1px solid $vxe-input-border-color;
+    color: var(--vxe-ui-font-color);
+    border-radius: var(--vxe-ui-border-radius);
+    border: 1px solid var(--vxe-ui-input-border-color);
     &:focus {
-      border: 1px solid $vxe-primary-color;
+      border: 1px solid var(--vxe-ui-font-primary-color);
     }
     &[disabled] {
       cursor: not-allowed;
-      background-color: $vxe-input-disabled-background-color;
+      background-color: var(--vxe-ui-input-disabled-background-color);
     }
   }
   .vxe-default-input,
   .vxe-default-textarea,
   .vxe-default-select {
-    height: $vxe-input-height-default;
+    height: var(--vxe-ui-input-height-default);
   }
   .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
@@ -84,26 +84,46 @@
       height: 24px;
     }
     &::placeholder {
-      color: $vxe-input-placeholder-color;
+      color: var(--vxe-ui-input-placeholder-color);
     }
   }
   .vxe-default-textarea {
     resize: none;
     vertical-align: middle;
   }
-  .vxe-input,
-  .vxe-textarea,
-  .vxe-select {
+  & > .vxe-input,
+  & > .vxe-textarea,
+  & > .vxe-select,
+  & > .vxe-tree-select,
+  & > .vxe-date-picker,
+  & > .vxe-number-input {
     width: 100%;
-    display: block;
   }
-  .vxe-input > .vxe-input--inner,
-  .vxe-textarea > .vxe-textarea--inner {
+  & > .vxe-input > .vxe-input--inner,
+  & > .vxe-textarea > .vxe-textarea--inner {
     padding: 0 2px;
   }
-  .vxe-textarea--inner,
-  .vxe-default-textarea {
+  & > .vxe-textarea--inner,
+  & > .vxe-default-textarea {
     resize: none;
+  }
+  & > .vxe-cell--tree-node {
+    .vxe-input,
+    .vxe-textarea,
+    .vxe-select,
+    .vxe-tree-select,
+    .vxe-date-picker,
+    .vxe-number-input {
+      width: 100%;
+    }
+    .vxe-input > .vxe-input--inner,
+    .vxe-textarea > .vxe-textarea--inner {
+      padding: 0 2px;
+    }
+    .vxe-textarea--inner,
+    .vxe-default-textarea {
+      resize: none;
+    }
   }
 }
 

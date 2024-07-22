@@ -368,11 +368,18 @@ export default {
      * 获取表格数据集，包含新增、删除、修改
      */
     _getRecordset () {
+      const removeRecords = this.getRemoveRecords()
+      const pendingRecords = this.getPendingRecords()
+      const delRecords = removeRecords.concat(pendingRecords)
+      // 如果已经被删除，则无需放到更新数组
+      const updateRecords = this.getUpdateRecords().filter(row => {
+        return !delRecords.some(item => this.eqRow(item, row))
+      })
       return {
         insertRecords: this.getInsertRecords(),
-        removeRecords: this.getRemoveRecords(),
-        updateRecords: this.getUpdateRecords(),
-        pendingRecords: this.getPendingRecords()
+        removeRecords,
+        updateRecords,
+        pendingRecords
       }
     },
     /**

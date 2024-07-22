@@ -392,11 +392,11 @@ const Methods = {
           if (childrenField === treeOpts.mapChildrenField) {
             errLog('vxe.error.errConflicts', ['tree-config.childrenField', 'tree-config.mapChildrenField'])
           }
-          fullData.forEach(row => {
-            if (row[childrenField] && row[childrenField].length) {
-              warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${childrenField}`])
-            }
-          })
+          // fullData.forEach(row => {
+          //   if (row[childrenField] && row[childrenField].length) {
+          //     warnLog('vxe.error.errConflicts', ['tree-config.transform', `row.${childrenField}`])
+          //   }
+          // })
         }
         treeData = XEUtils.toArrayTree(fullData, {
           key: treeOpts.rowField,

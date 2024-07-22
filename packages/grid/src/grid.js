@@ -368,8 +368,12 @@ export default {
     }
   },
   computed: {
-    isMsg () {
-      return this.proxyOpts.message !== false
+    isRespMsg () {
+      const { proxyOpts } = this
+      return XEUtils.isBoolean(proxyOpts.message) ? proxyOpts.message : proxyOpts.showResponseMsg
+    },
+    isActiveMsg () {
+      return this.proxyOpts.showActiveMsg
     },
     proxyOpts () {
       return Object.assign({}, GlobalConfig.grid.proxyConfig, this.proxyConfig)
@@ -571,7 +575,7 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget, ...args) {
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isMsg, validConfig, pagerOpts } = this
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isRespMsg, isActiveMsg, validConfig, pagerOpts } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
       const resConfigs = proxyOpts.response || proxyOpts.props || {}
       const $xetable = $refs.xTable
@@ -731,7 +735,7 @@ export default {
                   .then(rest => {
                     this.tableLoading = false
                     $xetable.setPendingRow(removeRecords, false)
-                    if (isMsg) {
+                    if (isRespMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
@@ -749,7 +753,7 @@ export default {
                   })
                   .catch(rest => {
                     this.tableLoading = false
-                    if (isMsg) {
+                    if (isRespMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
@@ -762,7 +766,7 @@ export default {
                   })
               })
             } else {
-              if (isMsg) {
+              if (isActiveMsg) {
                 // 检测弹窗模块
                 if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                   if (!VXETable.modal) {
@@ -809,7 +813,7 @@ export default {
                   .then(rest => {
                     this.tableLoading = false
                     $xetable.clearPendingRow()
-                    if (isMsg) {
+                    if (isRespMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
@@ -827,7 +831,7 @@ export default {
                   })
                   .catch(rest => {
                     this.tableLoading = false
-                    if (isMsg) {
+                    if (isRespMsg) {
                       // 检测弹窗模块
                       if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                         if (!VXETable.modal) {
@@ -839,7 +843,7 @@ export default {
                     return { status: false }
                   })
               } else {
-                if (isMsg) {
+                if (isActiveMsg) {
                   // 检测弹窗模块
                   if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
                     if (!VXETable.modal) {
@@ -883,7 +887,7 @@ export default {
     },
     handleDeleteRow (code, alertKey, callback) {
       const selectRecords = this.getCheckboxRecords()
-      if (this.isMsg) {
+      if (this.isActiveMsg) {
         if (selectRecords.length) {
           return VXETable.modal.confirm({ id: `cfm_${code}`, content: GlobalConfig.i18n(alertKey), escClosable: true }).then(type => {
             if (type === 'confirm') {
@@ -931,13 +935,13 @@ export default {
       this.$emit('toolbar-tool-click', { code: tool.code, tool, $grid: this, $event: evnt })
     },
     triggerPendingEvent (code) {
-      const { isMsg } = this
+      const { isActiveMsg } = this
       const selectRecords = this.getCheckboxRecords()
       if (selectRecords.length) {
         this.togglePendingRow(selectRecords)
         this.clearCheckboxRow()
       } else {
-        if (isMsg) {
+        if (isActiveMsg) {
           // 检测弹窗模块
           if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
             if (!VXETable.modal) {

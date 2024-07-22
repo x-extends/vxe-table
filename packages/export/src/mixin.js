@@ -828,6 +828,8 @@ function handleImport ($xetable, content, opts) {
       .then((data) => {
         let loadRest
         if (opts.mode === 'insert' || opts.mode === 'insertBottom') {
+          loadRest = $xetable.insertAt(data, -1)
+        } if (opts.mode === 'insertTop') {
           loadRest = $xetable.insert(data)
         } else {
           loadRest = $xetable.reloadData(data)
@@ -895,7 +897,7 @@ function handleFileImport ($xetable, file, opts) {
     $xetable._importResolve = _importResolve
     $xetable._importReject = _importReject
     if (window.FileReader) {
-      const options = Object.assign({ mode: 'insertBottom' }, opts, { type, filename })
+      const options = Object.assign({ mode: 'insertTop' }, opts, { type, filename })
       if (options.remote) {
         if (importMethod) {
           Promise.resolve(importMethod({ file, options, $table: $xetable })).then(() => {
@@ -1442,10 +1444,10 @@ export default {
     _openImport (options) {
       const { importOpts } = this
       const defOpts = Object.assign({
-        mode: 'insertBottom',
+        mode: 'insertTop',
         message: true,
         types: XEUtils.keys(importOpts._typeMaps),
-        modes: ['insertBottom', 'covering']
+        modes: ['insertTop', 'covering']
       }, options, importOpts)
       const types = defOpts.types || []
       const modes = defOpts.modes || []
