@@ -5,8 +5,8 @@
 export default {
   vxe: {
     base: {
-      pleaseInput: 'Please input',
-      pleaseSelect: 'Select',
+      pleaseInput: '入力してください',
+      pleaseSelect: '選択してください',
       comma: ',',
       fullStop: '.'
     },
@@ -14,9 +14,9 @@ export default {
       text: 'Loading...'
     },
     error: {
-      groupFixed: 'グループ化ヘッダーを使用する場合、固定列はグループで設定しなければなりません',
-      groupMouseRange: 'グループ化ヘッダーと「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',
-      groupTag: 'グループ化ヘッダーは "{0}" を使ってください。 "{1}" はエラーが発生する可能性があります',
+      groupFixed: 'ヘッダー結合を使用する場合、固定列はグループで設定しなければなりません',
+      groupMouseRange: 'ヘッダー結合と「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',
+      groupTag: 'ヘッダー結合は "{0}" を使ってください。 "{1}" はエラーが発生する可能性があります',
       scrollErrProp: '仮想スクロールはこのパラメータを使えません： "{0}"',
       errConflicts: 'パラメータ "{0}" と "{1}" は同時に使えません',
       unableInsert: '指定された位置に挿入できない',
@@ -66,13 +66,13 @@ export default {
       expSrcFilename: 'エクスポート_ソース_{0}',
       customTitle: '列設定',
       customAll: '全部',
-      customConfirm: 'Confirm',
+      customConfirm: 'OK',
       customCancel: 'Cancel',
-      customRestore: 'Restore',
+      customRestore: 'リセット',
       maxFixedCol: '最大固定列数が {0} です。'
     },
     grid: {
-      selectOneRecord: '1つ以上ののレコードを選択してください',
+      selectOneRecord: '1つ以上のレコードを選択してください',
       deleteSelectRecord: 'レコードを削除してもよろしいですか？',
       removeSelectRecord: 'レコードを削除してもよろしいですか？',
       dataUnchanged: 'データが変更されませんでした',
@@ -104,7 +104,7 @@ export default {
       endPageTitle: '最後ページ'
     },
     alert: {
-      title: 'System messages'
+      title: '確認'
     },
     button: {
       confirm: 'OK',
@@ -122,12 +122,12 @@ export default {
       cstmDragTarget: '移動ターゲット: {0}',
       setting: {
         colSort: 'ソート',
-        sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
+        sortHelpTip: 'ドラッグして列を並べ替えます',
         colTitle: 'タイトル',
-        colResizable: 'Column width (px)',
-        colVisible: 'Display',
-        colFixed: '冻结列',
-        colFixedMax: '冻结列（最多 {0} 列）',
+        colResizable: '列の幅 (px)',
+        colVisible: '表示する',
+        colFixed: '列固定',
+        colFixedMax: '列固定（最大 {0} 列）',
         fixedLeft: '左側',
         fixedUnset: '指定しない',
         fixedRight: '右側'
@@ -135,17 +135,17 @@ export default {
     },
     import: {
       modes: {
-        covering: 'Overwrite mode (directly overwrite table data)',
-        insert: 'Bottom append (appends new data to the bottom of the table)',
-        insertTop: 'Top append (appends new data to the top of the table)',
-        insertBottom: 'Bottom append (appends new data to the bottom of the table)'
+        covering: '上書きモード',
+        insert: '追加モード（最後行に追加）',
+        insertTop: '追加モード（先頭行に追加）',
+        insertBottom: '追加モード（最後行に追加）'
       },
       impTitle: 'データインポート',
       impFile: 'ファイル名',
       impSelect: 'ファイル選択',
       impType: 'ファイルの種類',
       impOpts: 'パラメータ指定',
-      impMode: 'Import mode',
+      impMode: 'インポートモード',
       impConfirm: 'インポート',
       impCancel: 'キャンセル'
     },
@@ -194,9 +194,9 @@ export default {
       expCancel: 'キャンセル'
     },
     modal: {
-      errTitle: 'Error',
-      zoomMin: 'Minimize',
-      zoomIn: 'Maximize',
+      errTitle: 'エラー',
+      zoomMin: '最小化',
+      zoomIn: '最大化',
       zoomOut: '縮小',
       close: '閉じる',
       miniMaxSize: 'The number of minimized Windows cannot exceed {0}.'
