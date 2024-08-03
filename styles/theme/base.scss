@@ -8,11 +8,6 @@
   --vxe-ui-font-size-small: 13px;
   --vxe-ui-font-size-mini: 12px;
 
-  /*font color*/
-  --vxe-ui-font-primary-color: #409eff;
-  --vxe-ui-font-lighten-color: lighten(#606266, 10%);
-  --vxe-ui-font-disabled-color: #BFBFBF;
-
   /*base border*/
   --vxe-ui-border-radius: 4px;
 
@@ -79,8 +74,8 @@
   --vxe-ui-table-checkbox-range-border-color: #006af1;
   --vxe-ui-table-checkbox-range-background-color: rgba(50,128,252,0.2);
 
-  --vxe-ui-table-fixed-left-scrolling-box-shadow: 8px 0px 10px -5px rgba(0, 0, 0, 0.12);
-  --vxe-ui-table-fixed-right-scrolling-box-shadow: -8px 0px 10px -5px rgba(0, 0, 0, 0.12);
+  --vxe-ui-table-fixed-left-scrolling-box-shadow: 8px 0px 10px -5px var(--vxe-ui-table-fixed-scrolling-box-shadow-color);
+  --vxe-ui-table-fixed-right-scrolling-box-shadow: -8px 0px 10px -5px var(--vxe-ui-table-fixed-scrolling-box-shadow-color);
 
   --vxe-ui-table-menu-item-width: 178px;
   --vxe-ui-table-menu-background-color: #fff;

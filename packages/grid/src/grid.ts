@@ -113,7 +113,7 @@ export default defineComponent({
     })
 
     const computeProxyOpts = computed(() => {
-      return Object.assign({}, getConfig().grid.proxyConfig, props.proxyConfig) as VxeGridPropTypes.ProxyConfig
+      return XEUtils.merge({}, getConfig().grid.proxyConfig, props.proxyConfig) as VxeGridPropTypes.ProxyConfig
     })
 
     const computeIsRespMsg = computed(() => {
@@ -788,12 +788,14 @@ export default defineComponent({
           case 'reload':
           case 'query': {
             const ajaxMethods = ajax.query
+            const querySuccessMethods = ajax.querySuccess
+            const queryErrorMethods = ajax.queryError
             if (ajaxMethods) {
               const isInited = code === '_init'
               const isReload = code === 'reload'
               let sortList: any[] = []
               let filterList: VxeTableDefines.FilterCheckedParams[] = []
-              let pageParams = {}
+              let pageParams: any = {}
               if (pagerConfig) {
                 if (isInited || isReload) {
                   tablePage.currentPage = 1
@@ -844,8 +846,7 @@ export default defineComponent({
               reactData.sortData = sortList
               reactData.filterData = filterList
               reactData.tableLoading = true
-              const applyArgs = [commitParams].concat(args)
-              return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
+              return Promise.resolve((beforeQuery || ajaxMethods)(commitParams, ...args))
                 .then(rest => {
                   reactData.tableLoading = false
                   if (rest) {
@@ -868,11 +869,17 @@ export default defineComponent({
                     reactData.tableData = []
                   }
                   if (afterQuery) {
-                    afterQuery(...applyArgs)
+                    afterQuery(commitParams, ...args)
+                  }
+                  if (querySuccessMethods) {
+                    querySuccessMethods({ ...commitParams, response: rest })
                   }
                   return { status: true }
-                }).catch(() => {
+                }).catch((rest) => {
                   reactData.tableLoading = false
+                  if (queryErrorMethods) {
+                    queryErrorMethods({ ...commitParams, response: rest })
+                  }
                   return { status: false }
                 })
             } else {
@@ -884,19 +891,20 @@ export default defineComponent({
           }
           case 'delete': {
             const ajaxMethods = ajax.delete
+            const deleteSuccessMethods = ajax.deleteSuccess
+            const deleteErrorMethods = ajax.deleteError
             if (ajaxMethods) {
               const selectRecords = gridExtendTableMethods.getCheckboxRecords()
               const removeRecords = selectRecords.filter(row => !$xeTable.isInsertByRow(row))
               const body = { removeRecords }
               const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
-              const applyArgs = [commitParams].concat(args)
               if (selectRecords.length) {
                 return handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                   if (!removeRecords.length) {
                     return $xeTable.remove(selectRecords)
                   }
                   reactData.tableLoading = true
-                  return Promise.resolve((beforeDelete || ajaxMethods)(...applyArgs))
+                  return Promise.resolve((beforeDelete || ajaxMethods)(commitParams, ...args))
                     .then(rest => {
                       reactData.tableLoading = false
                       $xeTable.setPendingRow(removeRecords, false)
@@ -906,9 +914,12 @@ export default defineComponent({
                         }
                       }
                       if (afterDelete) {
-                        afterDelete(...applyArgs)
+                        afterDelete(commitParams, ...args)
                       } else {
                         gridMethods.commitProxy('query')
+                      }
+                      if (deleteSuccessMethods) {
+                        deleteSuccessMethods({ ...commitParams, response: rest })
                       }
                       return { status: true }
                     })
@@ -918,6 +929,9 @@ export default defineComponent({
                         if (VxeUI.modal) {
                           VxeUI.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                         }
+                      }
+                      if (deleteErrorMethods) {
+                        deleteErrorMethods({ ...commitParams, response: rest })
                       }
                       return { status: false }
                     })
@@ -938,11 +952,12 @@ export default defineComponent({
           }
           case 'save': {
             const ajaxMethods = ajax.save
+            const saveSuccessMethods = ajax.saveSuccess
+            const saveErrorMethods = ajax.saveError
             if (ajaxMethods) {
               const body = $xeTable.getRecordset()
               const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
               const commitParams = { $grid: $xeGrid, code, button, body, form: formData, options: ajaxMethods }
-              const applyArgs = [commitParams].concat(args)
               // 排除掉新增且标记为删除的数据
               if (insertRecords.length) {
                 body.pendingRecords = pendingRecords.filter((row) => $xeTable.findRowIndexOf(insertRecords, row) === -1)
@@ -963,7 +978,7 @@ export default defineComponent({
                 }
                 if (body.insertRecords.length || removeRecords.length || updateRecords.length || body.pendingRecords.length) {
                   reactData.tableLoading = true
-                  return Promise.resolve((beforeSave || ajaxMethods)(...applyArgs))
+                  return Promise.resolve((beforeSave || ajaxMethods)(commitParams, ...args))
                     .then(rest => {
                       reactData.tableLoading = false
                       $xeTable.clearPendingRow()
@@ -973,9 +988,12 @@ export default defineComponent({
                         }
                       }
                       if (afterSave) {
-                        afterSave(...applyArgs)
+                        afterSave(commitParams, ...args)
                       } else {
                         gridMethods.commitProxy('query')
+                      }
+                      if (saveSuccessMethods) {
+                        saveSuccessMethods({ ...commitParams, response: rest })
                       }
                       return { status: true }
                     })
@@ -985,6 +1003,9 @@ export default defineComponent({
                         if (VxeUI.modal) {
                           VxeUI.modal.message({ id: code, content: getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
                         }
+                      }
+                      if (saveErrorMethods) {
+                        saveErrorMethods({ ...commitParams, response: rest })
                       }
                       return { status: false }
                     })

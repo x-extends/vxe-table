@@ -3,10 +3,12 @@
 [data-vxe-ui-theme="dark"] {
   color-scheme: dark;
 
-  /*font*/
+  /*font color*/
   --vxe-ui-font-color: #a0a3a7;
+  --vxe-ui-font-primary-color: #409eff;
   --vxe-ui-font-lighten-color: #babdc0;
   --vxe-ui-font-darken-color: #86898e;
+  --vxe-ui-font-disabled-color: #BFBFBF;
 
   /*base*/
   --vxe-ui-base-popup-border-color: var(--vxe-ui-layout-background-color);
@@ -35,4 +37,5 @@
   --vxe-ui-table-row-hover-checkbox-checked-background-color: #6e5326;
   --vxe-ui-table-row-current-background-color: #18222c;
   --vxe-ui-table-row-hover-current-background-color: #262727;
+  --vxe-ui-table-fixed-scrolling-box-shadow-color: rgba(0, 0, 0, 0.8);
 }

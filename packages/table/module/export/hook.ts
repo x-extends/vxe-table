@@ -1171,9 +1171,12 @@ hooks.add('tableExportModule', {
             if ($xeGrid && !opts.remote) {
               const { reactData: gridReactData } = $xeGrid
               const { computeProxyOpts } = $xeGrid.getComputeMaps()
+              const { sortData } = gridReactData
               const proxyOpts = computeProxyOpts.value
               const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = proxyOpts
               const ajaxMethods = ajax.queryAll
+              const queryAllSuccessMethods = ajax.queryAllSuccess
+              const queryAllErrorMethods = ajax.queryAllError
 
               if (process.env.VUE_APP_VXE_ENV === 'development') {
                 if (!ajaxMethods) {
@@ -1185,20 +1188,27 @@ hooks.add('tableExportModule', {
                 const params = {
                   $table: $xeTable,
                   $grid: $xeGrid,
-                  sort: gridReactData.sortData,
+                  sort: sortData.length ? sortData[0] : {} as any,
+                  sorts: sortData as any[],
                   filters: gridReactData.filterData,
                   form: gridReactData.formData,
-                  target: ajaxMethods,
                   options: opts
                 }
                 return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
-                  .catch(e => e)
                   .then(rest => {
                     opts.data = (props.list ? XEUtils.get(rest, props.list) : rest) || []
                     if (afterQueryAll) {
                       afterQueryAll(params)
                     }
+                    if (queryAllSuccessMethods) {
+                      queryAllSuccessMethods({ ...params, response: rest })
+                    }
                     return handleExport(opts)
+                  })
+                  .catch((rest) => {
+                    if (queryAllErrorMethods) {
+                      queryAllErrorMethods({ ...params, response: rest })
+                    }
                   })
               }
             }

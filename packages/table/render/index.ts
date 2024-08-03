@@ -505,7 +505,7 @@ function getSelectCellValue (renderOpts: any, { row, column }: any) {
   let selectItem: any
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
-  if (!isEmptyValue(cellValue)) {
+  if (!(cellValue === null || cellValue === undefined)) {
     return XEUtils.map(XEUtils.isArray(cellValue) ? cellValue : [cellValue],
       optionGroups
         ? (value) => {
@@ -540,7 +540,7 @@ function getTreeSelectCellValue (renderOpts: any, { row, column }: any) {
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const childrenProp = optionProps.children || 'children'
-  if (!isEmptyValue(cellValue)) {
+  if (!(cellValue === null || cellValue === undefined)) {
     const keyMaps: Record<string, any> = {}
     XEUtils.eachTree(options, item => {
       keyMaps[XEUtils.get(item, valueProp)] = item
@@ -596,7 +596,7 @@ renderer.mixin({
     exportMethod: handleExportSelectMethod
   },
   VxeInput: {
-    autofocus: '.vxe-input--inner',
+    autofocus: 'input',
     renderEdit: defaultEditRender,
     renderCell (renderOpts, params) {
       const { props = {} } = renderOpts
@@ -624,7 +624,7 @@ renderer.mixin({
     defaultFilterMethod: handleInputFilterMethod
   },
   VxeNumberInput: {
-    autofocus: '.vxe-number-input--inner',
+    autofocus: 'input',
     renderEdit: defaultEditRender,
     renderCell (renderOpts, params) {
       const { props = {} } = renderOpts
@@ -645,7 +645,7 @@ renderer.mixin({
     defaultFilterMethod: handleInputFilterMethod
   },
   VxeDatePicker: {
-    autofocus: '.vxe-date-picker--inner',
+    autofocus: 'input',
     renderEdit: defaultEditRender,
     renderCell (renderOpts, params) {
       const { props = {} } = renderOpts
@@ -669,7 +669,7 @@ renderer.mixin({
     defaultFilterMethod: handleFilterMethod
   },
   VxeTextarea: {
-    autofocus: '.vxe-textarea--inner'
+    autofocus: 'VxeTextarea'
   },
   VxeButton: {
     renderDefault: buttonCellRender
@@ -687,7 +687,7 @@ renderer.mixin({
     }
   },
   VxeSelect: {
-    autofocus: '.vxe-input--inner',
+    autofocus: 'input',
     renderEdit: defaultSelectEditRender,
     renderDefault: defaultSelectEditRender,
     renderCell (renderOpts, params) {
@@ -709,7 +709,7 @@ renderer.mixin({
     exportMethod: handleExportSelectMethod
   },
   VxeTreeSelect: {
-    autofocus: '.vxe-input--inner',
+    autofocus: 'input',
     renderEdit: defaultTreeSelectEditRender,
     renderCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
@@ -723,7 +723,7 @@ renderer.mixin({
     renderDefault: radioAndCheckboxEditRender
   },
   VxeSwitch: {
-    autofocus: '.vxe-switch--button',
+    autofocus: 'button',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender
   },
