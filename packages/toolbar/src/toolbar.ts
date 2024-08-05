@@ -315,6 +315,7 @@ export default defineComponent({
                     round: item.round,
                     status: item.status,
                     content: item.name,
+                    permissionCode: item.permissionCode,
                     destroyOnClose: item.destroyOnClose,
                     placement: item.placement,
                     transfer: item.transfer,

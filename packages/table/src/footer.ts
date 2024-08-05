@@ -172,7 +172,7 @@ export default defineComponent({
               const showAllTip = tooltipOpts.showAll
               const isColGroup = column.children && column.children.length
               const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
-              const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
+              const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
               const footAlign = footerAlign || align || allFooterAlign || allAlign
               let showEllipsis = footOverflow === 'ellipsis'
               const showTitle = footOverflow === 'title'

@@ -228,7 +228,7 @@ export default defineComponent({
               const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
               const isColGroup = column.children && column.children.length
               const fixedHiddenColumn = fixedType ? (column.fixed !== fixedType && !isColGroup) : !!column.fixed && overflowX
-              const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+              const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
               const headAlign = headerAlign || align || allHeaderAlign || allAlign
               let showEllipsis = headOverflow === 'ellipsis'
               const showTitle = headOverflow === 'title'
