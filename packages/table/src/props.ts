@@ -7,7 +7,7 @@ const { getConfig } = VxeUI
 
 export default {
   /** 基本属性 */
-  id: String as PropType<VxeTablePropTypes.ID>,
+  id: [String, Function] as PropType<VxeTablePropTypes.ID>,
   // 数据
   data: Array as PropType<any[]>,
   // 表格的高度

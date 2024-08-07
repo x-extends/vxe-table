@@ -363,6 +363,17 @@ export default defineComponent({
     const $xeGrid = inject<(VxeGridConstructor & VxeGridPrivateMethods) | null>('$xeGrid', null)
     let $xeToolbar: VxeToolbarConstructor
 
+    const computeTableId = computed(() => {
+      const { id } = props
+      if (id) {
+        if (XEUtils.isFunction(id)) {
+          return `${id({ $table: $xeTable, $grid: $xeGrid }) || ''}`
+        }
+        return `${id}`
+      }
+      return ''
+    })
+
     const computeValidOpts = computed(() => {
       return Object.assign({}, getConfig().table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
     })
@@ -622,6 +633,7 @@ export default defineComponent({
 
     const computeMaps: VxeTablePrivateComputed = {
       computeSize,
+      computeTableId,
       computeValidOpts,
       computeSXOpts,
       computeSYOpts,
@@ -943,7 +955,8 @@ export default defineComponent({
      * 还原自定义列操作状态
      */
     const restoreCustomStorage = () => {
-      const { id, customConfig } = props
+      const { customConfig } = props
+      const tableId = computeTableId.value
       const customOpts = computeCustomOpts.value
       const { storage, restoreStore } = customOpts
       const isAllCustom = storage === true
@@ -953,14 +966,14 @@ export default defineComponent({
       const isCustomFixed = isAllCustom || storageOpts.fixed
       const isCustomSort = isAllCustom || storageOpts.sort
       if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
-        if (!id) {
+        if (!tableId) {
           errLog('vxe.error.reqProp', ['id'])
           return
         }
-        const storeData: VxeTableDefines.CustomStoreData = getCustomStorageMap(id)
+        const storeData: VxeTableDefines.CustomStoreData = getCustomStorageMap(tableId)
         if (restoreStore) {
           return Promise.resolve(
-            restoreStore({ id, type: 'restore', storeData })
+            restoreStore({ id: tableId, type: 'restore', storeData })
           ).then(storeData => {
             if (!storeData) {
               return
@@ -4823,9 +4836,9 @@ export default defineComponent({
             $xeTable.clearSelected()
           }
           if (areaOpts.autoClear) {
-            if ($xeTable.clearCellAreas) {
+            if ($xeTable.getCellAreas) {
               const cellAreas = $xeTable.getCellAreas()
-              if (cellAreas.length && !getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
+              if (cellAreas && cellAreas.length && !getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
                 tablePrivateMethods.preventEvent(evnt, 'event.clearAreas', {}, () => {
                   $xeTable.clearCellAreas()
                   $xeTable.clearCopyCellArea()
@@ -5503,7 +5516,7 @@ export default defineComponent({
         Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList, remainList })
       },
       saveCustomStore (type) {
-        const { id } = props
+        const tableId = computeTableId.value
         const customOpts = computeCustomOpts.value
         const { updateStore, storage } = customOpts
         const isAllCustom = storage === true
@@ -5513,7 +5526,7 @@ export default defineComponent({
         const isCustomFixed = isAllCustom || storageOpts.fixed
         const isCustomSort = isAllCustom || storageOpts.sort
         if (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort) {
-          if (!id) {
+          if (!tableId) {
             errLog('vxe.error.reqProp', ['id'])
             return nextTick()
           }
@@ -5527,12 +5540,12 @@ export default defineComponent({
             : tableMethods.getCustomStoreData()
           if (updateStore) {
             return updateStore({
-              id,
+              id: tableId,
               type,
               storeData
             })
           } else {
-            setCustomStorageMap(id, type === 'reset' ? null : storeData)
+            setCustomStorageMap(tableId, type === 'reset' ? null : storeData)
           }
         }
         return nextTick()
@@ -7093,34 +7106,37 @@ export default defineComponent({
           })
           : createCommentVNode(),
         /**
-         * 通用提示
+         * 提示相关
          */
         VxeUITooltipComponent
-          ? h(VxeUITooltipComponent, {
-            ref: refCommTooltip,
-            isArrow: false,
-            enterable: false
-          })
-          : createCommentVNode(),
-        /**
-         * 工具提示
-         */
-        VxeUITooltipComponent
-          ? h(VxeUITooltipComponent, Object.assign({
-            ref: refTooltip
-          }, tipConfig, tooltipStore.currOpts))
-          : createCommentVNode(),
-        /**
-         * 校验提示
-         */
-        VxeUITooltipComponent && props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
-          ? h(VxeUITooltipComponent, {
-            ref: refValidTooltip,
-            class: [{
-              'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
-            }, 'vxe-table--valid-error'],
-            ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {}) as any
-          })
+          ? h('div', {}, [
+            /**
+             * 通用提示
+             */
+            h(VxeUITooltipComponent, {
+              ref: refCommTooltip,
+              isArrow: false,
+              enterable: false
+            }),
+            /**
+              * 工具提示
+              */
+            h(VxeUITooltipComponent, Object.assign({
+              ref: refTooltip
+            }, tipConfig, tooltipStore.currOpts)),
+            /**
+              * 校验提示
+              */
+            props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+              ? h(VxeUITooltipComponent, {
+                ref: refValidTooltip,
+                class: [{
+                  'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
+                }, 'vxe-table--valid-error'],
+                ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {}) as any
+              })
+              : createCommentVNode()
+          ])
           : createCommentVNode()
       ])
     }

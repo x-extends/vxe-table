@@ -1,6 +1,6 @@
 # vxe-table
 
-[简体中文](README.md) | 繁體中文 | [English](README.en.md)  
+[简体中文](README.md) | 繁體中文 | [English](README.en.md) | [日本語](README.ja-JP.md)  
 
 [![star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
@@ -59,8 +59,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 虛擬滾動
 * [x] 虛擬合併
 * [x] CSS 變量主題
-* [x] (([企業版](https://vxetable.cn/pluginDocs/))) 儲存格區域選取
-* [x] (([企業版](https://vxetable.cn/pluginDocs/))) 儲存格複製/粘貼
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格區域選取
+* [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格複製/粘貼
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格查找和替換
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 全鍵盤操作
 

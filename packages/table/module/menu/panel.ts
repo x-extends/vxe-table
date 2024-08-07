@@ -19,7 +19,7 @@ export default defineComponent({
       refElem
     }
 
-    const $xemenupanel: any = {
+    const $xeMenuPanel: any = {
       xID,
       props,
       context,
@@ -123,9 +123,9 @@ export default defineComponent({
       ])
     }
 
-    $xemenupanel.renderVN = renderVN
+    $xeMenuPanel.renderVN = renderVN
 
-    return $xemenupanel
+    return $xeMenuPanel
   },
   render () {
     return this.renderVN()
