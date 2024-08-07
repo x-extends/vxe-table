@@ -1694,13 +1694,12 @@ const Methods = {
     return this.refreshColumn(true)
   },
   handleCustomRestore (storeData) {
-    const { tableFullColumn } = this
     let { collectColumn } = this
     const { resizableData, sortData, visibleData, fixedData } = storeData
     let hasCustomSort = false
     // 处理还原
     if (resizableData || sortData || visibleData || fixedData) {
-      tableFullColumn.forEach(column => {
+      XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
         const colKey = column.getKey()
         // 支持一级
         if (!parent) {
@@ -1731,7 +1730,7 @@ const Methods = {
    * 还原自定义列操作状态
    */
   restoreCustomStorage () {
-    const { id, customConfig, customOpts } = this
+    const { tableId, customConfig, customOpts } = this
     const { storage, restoreStore } = customOpts
     const isAllCustom = storage === true
     const storageOpts = isAllCustom ? {} : Object.assign({}, storage || {})
@@ -1740,14 +1739,14 @@ const Methods = {
     const isCustomFixed = isAllCustom || storageOpts.fixed
     const isCustomSort = isAllCustom || storageOpts.sort
     if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
-      if (!id) {
+      if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return
       }
-      const storeData = getCustomStorageMap(id)
+      const storeData = getCustomStorageMap(tableId)
       if (restoreStore) {
         return Promise.resolve(
-          restoreStore({ id, type: 'restore', storeData })
+          restoreStore({ id: tableId, type: 'restore', storeData })
         ).then(storeData => {
           if (!storeData) {
             return
@@ -1836,7 +1835,7 @@ const Methods = {
     return storeData
   },
   saveCustomStore (type) {
-    const { id, customOpts } = this
+    const { tableId, customOpts } = this
     const { updateStore, storage } = customOpts
     const isAllCustom = storage === true
     const storageOpts = isAllCustom ? {} : Object.assign({}, storage || {})
@@ -1845,7 +1844,7 @@ const Methods = {
     const isCustomFixed = isAllCustom || storageOpts.fixed
     const isCustomSort = isAllCustom || storageOpts.sort
     if (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort) {
-      if (!id) {
+      if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return this.$nextTick()
       }
@@ -1859,12 +1858,12 @@ const Methods = {
         : this.getCustomStoreData()
       if (updateStore) {
         return updateStore({
-          id,
+          id: tableId,
           type,
           storeData
         })
       } else {
-        setCustomStorageMap(id, type === 'reset' ? null : storeData)
+        setCustomStorageMap(tableId, type === 'reset' ? null : storeData)
       }
     }
     return this.$nextTick()

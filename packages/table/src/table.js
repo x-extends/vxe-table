@@ -92,7 +92,7 @@ export default {
   mixins: [vSize],
   props: {
     /** 基本属性 */
-    id: String,
+    id: [String, Function],
     // 数据
     data: Array,
     // 表格的高度
@@ -489,6 +489,16 @@ export default {
     }
   },
   computed: {
+    tableId () {
+      const { id } = this
+      if (id) {
+        if (XEUtils.isFunction(id)) {
+          return `${id({ $table: this }) || ''}`
+        }
+        return `${id}`
+      }
+      return ''
+    },
     validOpts () {
       return Object.assign({ message: 'default' }, GlobalConfig.table.validConfig, this.validConfig)
     },
