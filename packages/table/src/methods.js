@@ -2655,13 +2655,15 @@ const Methods = {
           this.clearSelected()
         }
         if (areaOpts.autoClear) {
-          const cellAreas = this.getCellAreas()
-          if (cellAreas.length && !getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
-            this.preventEvent(evnt, 'event.clearAreas', {}, () => {
-              this.clearCellAreas()
-              this.clearCopyCellArea()
-              this.emitEvent('clear-cell-area-selection', { cellAreas }, evnt)
-            })
+          if (this.getCellAreas) {
+            const cellAreas = this.getCellAreas()
+            if (cellAreas && cellAreas.length && !getEventTargetNode(evnt, document.body, 'vxe-table--ignore-areas-clear').flag) {
+              this.preventEvent(evnt, 'event.clearAreas', {}, () => {
+                this.clearCellAreas()
+                this.clearCopyCellArea()
+                this.emitEvent('clear-cell-area-selection', { cellAreas }, evnt)
+              })
+            }
           }
         }
       }

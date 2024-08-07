@@ -470,7 +470,7 @@ function getSelectCellValue (renderOpts, { row, column }) {
   let selectItem
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
-  if (!isEmptyValue(cellValue)) {
+  if (!(cellValue === null || cellValue === undefined)) {
     return XEUtils.map(props.multiple ? cellValue : [cellValue], optionGroups ? (value) => {
       const groupOptions = optionGroupProps.options || 'options'
       for (let index = 0; index < optionGroups.length; index++) {

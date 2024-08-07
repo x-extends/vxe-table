@@ -1330,6 +1330,8 @@ export default {
           if ($xegrid && !opts.remote) {
             const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
             const ajaxMethods = ajax.queryAll
+            const queryAllSuccessMethods = ajax.queryAllSuccess
+            const queryAllErrorMethods = ajax.queryAllError
 
             if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
               if (!ajaxMethods) {
@@ -1348,13 +1350,20 @@ export default {
                 options: opts
               }
               return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
-                .catch(e => e)
                 .then(rest => {
                   opts.data = (props.list ? XEUtils.get(rest, props.list) : rest) || []
                   if (afterQueryAll) {
                     afterQueryAll(params)
                   }
+                  if (queryAllSuccessMethods) {
+                    queryAllSuccessMethods({ ...params, response: rest })
+                  }
                   return handleExport(this, opts)
+                })
+                .catch((rest) => {
+                  if (queryAllErrorMethods) {
+                    queryAllErrorMethods({ ...params, response: rest })
+                  }
                 })
             }
           }

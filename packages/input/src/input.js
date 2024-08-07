@@ -628,8 +628,8 @@ export default {
       type: String,
       default: () => XEUtils.eqNull(GlobalConfig.input.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseInput') : GlobalConfig.input.placeholder
     },
-    maxlength: [String, Number],
-    autocomplete: { type: String, default: 'off' },
+    maxLength: [String, Number],
+    autoComplete: { type: String, default: 'off' },
     align: String,
     form: String,
     className: String,
@@ -673,7 +673,12 @@ export default {
     prefixIcon: String,
     suffixIcon: String,
     placement: String,
-    transfer: { type: Boolean, default: () => GlobalConfig.input.transfer }
+    transfer: { type: Boolean, default: () => GlobalConfig.input.transfer },
+
+    // 已废弃
+    maxlength: [String, Number],
+    // 已废弃
+    autocomplete: String
   },
   inject: {
     $xeform: {
@@ -722,7 +727,8 @@ export default {
       return XEUtils.getSize(this.inputValue)
     },
     isCountError () {
-      return this.maxlength && this.inputCount > XEUtils.toNumber(this.maxlength)
+      const { maxLength, maxlength } = this
+      return (maxLength || maxlength) && this.inputCount > XEUtils.toNumber(maxLength || maxlength)
     },
     stepValue () {
       const { type, step } = this
@@ -1047,9 +1053,9 @@ export default {
       return type
     },
     inpMaxlength () {
-      const { isNumType, maxlength } = this
+      const { isNumType, maxLength, maxlength } = this
       // 数值最大长度限制 16 位，包含小数
-      return isNumType && !XEUtils.toNumber(maxlength) ? 16 : maxlength
+      return isNumType && !XEUtils.toNumber(maxLength || maxlength) ? 16 : (maxLength || maxlength)
     },
     inpReadonly () {
       const { type, readonly, editable, multiple } = this
@@ -1135,7 +1141,7 @@ export default {
     GlobalEvent.off(this, 'blur')
   },
   render (h) {
-    const { name, form, inputType, inpPlaceholder, inpMaxlength, inpReadonly, className, controls, showWordCount, countMethod, inputValue, isDatePickerType, visiblePanel, isActivated, vSize, type, align, readonly, disabled, autocomplete } = this
+    const { name, form, inputType, inpPlaceholder, inpMaxlength, inpReadonly, className, controls, showWordCount, countMethod, inputValue, isDatePickerType, visiblePanel, isActivated, vSize, type, align, readonly, disabled, autoComplete, autocomplete } = this
     const childs = []
     const prefix = rendePrefixIcon(h, this)
     const suffix = renderSuffixIcon(h, this)
@@ -1159,7 +1165,7 @@ export default {
           maxlength: inpMaxlength,
           readonly: inpReadonly,
           disabled,
-          autocomplete
+          autocomplete: autoComplete || autocomplete
         },
         on: {
           keydown: this.keydownEvent,

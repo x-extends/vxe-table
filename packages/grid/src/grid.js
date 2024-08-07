@@ -376,7 +376,7 @@ export default {
       return this.proxyOpts.showActiveMsg
     },
     proxyOpts () {
-      return Object.assign({}, GlobalConfig.grid.proxyConfig, this.proxyConfig)
+      return XEUtils.merge({}, GlobalConfig.grid.proxyConfig, this.proxyConfig)
     },
     pagerOpts () {
       return Object.assign({}, GlobalConfig.grid.pagerConfig, this.pagerConfig)
@@ -625,6 +625,8 @@ export default {
         case 'reload':
         case 'query': {
           const ajaxMethods = ajax.query
+          const querySuccessMethods = ajax.querySuccess
+          const queryErrorMethods = ajax.queryError
           if (ajaxMethods) {
             const isInited = code === '_init'
             const isReload = code === 'reload'
@@ -664,7 +666,7 @@ export default {
                 filterList = $xetable.getCheckedFilters()
               }
             }
-            const params = {
+            const commitParams = {
               code,
               button,
               isInited,
@@ -680,7 +682,7 @@ export default {
             this.sortData = sortList
             this.filterData = filterList
             this.tableLoading = true
-            const applyArgs = [params].concat(args)
+            const applyArgs = [commitParams].concat(args)
             return Promise.resolve((beforeQuery || ajaxMethods)(...applyArgs))
               .then(rest => {
                 this.tableLoading = false
@@ -706,9 +708,15 @@ export default {
                 if (afterQuery) {
                   afterQuery(...applyArgs)
                 }
+                if (querySuccessMethods) {
+                  querySuccessMethods({ ...commitParams, response: rest })
+                }
                 return { status: true }
-              }).catch(() => {
+              }).catch((rest) => {
                 this.tableLoading = false
+                if (queryErrorMethods) {
+                  queryErrorMethods({ ...commitParams, response: rest })
+                }
                 return { status: false }
               })
           } else {
@@ -720,11 +728,14 @@ export default {
         }
         case 'delete': {
           const ajaxMethods = ajax.delete
+          const deleteSuccessMethods = ajax.deleteSuccess
+          const deleteErrorMethods = ajax.deleteError
           if (ajaxMethods) {
             const selectRecords = $xetable.getCheckboxRecords()
             const removeRecords = selectRecords.filter(row => !$xetable.isInsertByRow(row))
             const body = { removeRecords }
-            const applyArgs = [{ $grid: this, code, button, body, form: formData, options: ajaxMethods }].concat(args)
+            const commitParams = { $grid: this, code, button, body, form: formData, options: ajaxMethods }
+            const applyArgs = [commitParams].concat(args)
             if (selectRecords.length) {
               return this.handleDeleteRow(code, 'vxe.grid.deleteSelectRecord', () => {
                 if (!removeRecords.length) {
@@ -749,6 +760,9 @@ export default {
                     } else {
                       this.commitProxy('query')
                     }
+                    if (deleteSuccessMethods) {
+                      deleteSuccessMethods({ ...commitParams, response: rest })
+                    }
                     return { status: true }
                   })
                   .catch(rest => {
@@ -761,6 +775,9 @@ export default {
                         }
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                    }
+                    if (deleteErrorMethods) {
+                      deleteErrorMethods({ ...commitParams, response: rest })
                     }
                     return { status: false }
                   })
@@ -785,10 +802,13 @@ export default {
         }
         case 'save': {
           const ajaxMethods = ajax.save
+          const saveSuccessMethods = ajax.saveSuccess
+          const saveErrorMethods = ajax.saveError
           if (ajaxMethods) {
             const body = this.getRecordset()
             const { insertRecords, removeRecords, updateRecords, pendingRecords } = body
-            const applyArgs = [{ $grid: this, code, button, body, form: formData, options: ajaxMethods }].concat(args)
+            const commitParams = { $grid: this, code, button, body, form: formData, options: ajaxMethods }
+            const applyArgs = [commitParams].concat(args)
             // 排除掉新增且标记为删除的数据
             if (insertRecords.length) {
               body.pendingRecords = pendingRecords.filter(row => insertRecords.indexOf(row) === -1)
@@ -827,6 +847,9 @@ export default {
                     } else {
                       this.commitProxy('query')
                     }
+                    if (saveSuccessMethods) {
+                      saveSuccessMethods({ ...commitParams, response: rest })
+                    }
                     return { status: true }
                   })
                   .catch(rest => {
@@ -839,6 +862,9 @@ export default {
                         }
                       }
                       VXETable.modal.message({ id: code, content: this.getRespMsg(rest, 'vxe.grid.operError'), status: 'error' })
+                    }
+                    if (saveErrorMethods) {
+                      saveErrorMethods({ ...commitParams, response: rest })
                     }
                     return { status: false }
                   })
