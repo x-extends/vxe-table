@@ -1,6 +1,6 @@
 # vxe-table
 
-简体中文 | [繁體中文](README.zh-TW.md) | [English](README.en.md) | [日本語](README.ja-JP.md)  
+[简体中文](README.md) | [繁體中文](README.zh-TW.md) | [English](README.en.md) | 日本語
 
 [![star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
@@ -12,86 +12,72 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表单/表格组件，支持增删改查、虚拟树、列拖拽、懒加载、快捷菜单、数据校验、导入/导出/打印、表单渲染、自定义模板、渲染器、JSON 配置式...  
+[vue](https://www.npmjs.com/package/vue) ベースのPCフォームコンポーネントで、追加、削除、変更、チェック、仮想ツリー、列のドラッグアンドドロップ、遅延読み込み、ショートカットメニュー、データ検証、インポート/エクスポート/印刷、フォームレンダリング、カスタムテンプレート、レンダラー、JSON構成をサポートします...
 
-* 设计理念
-  * 面向现代浏览器，高效的简洁 API 设计
-  * 模块化表格、按需加载
-  * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能
-
-* 计划
-  * [x] ~~v1.0 基于 vue2.6，支持所有主流的浏览器，实现表格的一切实用的功能~~
-  * [x] ~~v2.0 基于 vue2.6，支持所有主流的浏览器，同时兼具功能与性能~~
-  * [x] v3.0 基于 vue2.6+，支持现代浏览器并保留兼容 IE11
-  * [ ] v3.9 基于 vue2.6+，重构拆分组件，分为 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，将支持可视化组件
-  * [x] v4.0 基于 vue3.2+，只支持现代浏览器，不支持 IE
-  * [x] v4.7 基于 vue3.2+，重构拆分组件，分为 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，将支持可视化组件
-  * [ ] 下一阶段：sticky 渲染模式、将虚拟滚动提升到极致、虚拟滚动动态行高、数据图表可视化
-
-## 浏览器支持
+## ブラウザサポート
 
 ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
-80+ ✔ | 80+ ✔ | 90+ ✔ | 75+ ✔ | 10+ ✔ |
+最新 ✔ | 最新 ✔ | 最新 ✔ | 最新 ✔ | 最新 ✔ |
 
-## 功能点
+## 機能
 
-* [x] 基础表格
-* [x] 配置式表格
-* [x] 斑马线条纹
-* [x] 多种边框
-* [x] 单元格样式
-* [x] 列宽拖动
-* [x] 最小/最大高度
-* [x] 自适应宽高
+* [x] 基本テーブル
+* [x] 構成グリッド
+* [x] ストライプ
+* [x] 境界線付きテーブル
+* [x] セルスタイル
+* [x] 列のサイズ変更
+* [x] 最小/最大高さ
+* [x] 高さと幅のリサイズ
 * [x] 固定列
-* [x] 多级表头
-* [x] 表尾数据
-* [x] 高亮行或列
-* [x] 序号
-* [x] 单选框
-* [x] 复选框
-* [x] 排序
-* [x] 多字段排序
-* [x] 筛选
-* [x] 合并单元格
-* [x] 合并表尾
-* [x] 导入/导出/打印
-* [x] 显示/隐藏列
-* [x] 拖拽/自定义列排序
-* [x] 加载中
-* [x] 格式化内容
-* [x] 自定义插槽 - 模板
-* [x] 快捷菜单
-* [x] 展开行
-* [x] 工具栏
-* [x] 虚拟树
-* [x] 增删改查
-* [x] 数据校验
-* [x] 数据代理
-* [x] 键盘导航
-* [x] 渲染器
-* [x] 虚拟滚动
-* [x] 虚拟合并
-* [x] CSS 变量主题
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格区域选取
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换
-* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 全键盘操作
+* [x] グループ化テーブルヘッダー
+* [x] テーブルフッター
+* [x] 行と列のハイライト
+* [x] テーブルシーケンス
+* [x] ラジオ
+* [x] チェックボックス
+* [x] ソート
+* [x] 複数フィールドのソート
+* [x] フィルター
+* [x] セルの結合
+* [x] フッター項目の結合
+* [x] インポート/エクスポート/印刷
+* [x] 列の表示/非表示
+* [x] ドラッグアンドドロップ/カスタマイズ列の並べ替え
+* [x] ローディング
+* [x] フォーマットされたセル
+* [x] スロット - テンプレート
+* [x] コンテキストメニュー
+* [x] 詳細 - 展開可能な行
+* [x] ツールバー
+* [x] 仮想ツリー
+* [x] 編集可能なCRUD
+* [x] 検証
+* [x] データプロキシ
+* [x] キーボードナビゲーション
+* [x] VxeGlobalRenderer
+* [x] 仮想スクロール
+* [x] 仮想マージ
+* [x] CSS変数テーマ
+* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セル領域選択
+* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルのコピー＆ペースト
+* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルの検索と置換
+* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) フルキーボード操作
 
-## 安装
+## インストール
 
-版本：[vue](https://www.npmjs.com/package/vue) 3.x
+バージョン: [vue](https://www.npmjs.com/package/vue) 3.x
 
 ```shell
 npm install vxe-table@next
 ```
 
-Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
+[unpkg](https://unpkg.com/vxe-table/) および [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/) で入手可能
 
 ### NPM
 
-### 只使用表格
+### テーブルの使用
 
 ```javascript
 // ...
@@ -102,7 +88,7 @@ import 'vxe-table/lib/style.css'
 createApp(App).use(VxeTable).mount('#app')
 ```
 
-### 使用表格与 UI 库
+### テーブルとUIの使用
 
 ```javascript
 // ...
@@ -119,8 +105,8 @@ createApp(App).use(VxeUI).use(VxeTable).mount('#app')
 
 ### CDN
 
-使用第三方 CDN 方式记得锁定版本号，避免受到非兼容性更新的影响  
-***不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效***  
+サードパーティのCDNを使用する場合は、バージョン番号をロックして、互換性のない更新の影響を受けないようにしてください。  
+***サードパーティのCDNアドレスを正式な環境で使用することはお勧めしません。接続がいつでも失敗する可能性があるためです***  
 
 ```HTML
 <!-- style -->
@@ -134,7 +120,7 @@ createApp(App).use(VxeUI).use(VxeTable).mount('#app')
 <script src="https://cdn.jsdelivr.net/npm/vxe-table@next"></script>
 ```
 
-## 示例
+## 例
 
 ```html
 <template>
@@ -162,44 +148,37 @@ const tableData = ref([
 </script>
 ```
 
-## 在线文档
+## オンラインドキュメント
 
-👉 [组件文档](https://vxeui.com)  
-👉 [表格文档](https://vxetable.cn)  
+👉 [UIドキュメント](https://vxeui.com)  
+👉 [テーブルドキュメント](https://vxetable.cn)  
 
-## QQ 交流群
+## プロジェクトの実行
 
-该群供大家交流問題，如果群人数已满，将会不定期剔除不活跃的。  
-
-![qq](https://vxetable.cn/static/donation/qq1.png)
-![qq](https://vxetable.cn/static/donation/qq2.png)
-
-## 运行项目
-
-安装依赖
+依存関係をインストールする
 
 ```shell
 npm run update
 ```
 
-启动本地调试
+ローカルデバッグを開始する
 
 ```shell
 npm run serve
 ```
 
-编译打包，生成编译后的目录：es,lib
+コンパイルパッケージング、生成されたコンパイルディレクトリ: es,lib
 
 ```shell
 npm run lib
 ```
 
-## Contributors
+## 貢献者
 
-Thank you to everyone who contributed to this project.
+このプロジェクトに貢献してくれたすべての人に感謝します。
 
 [![vxe-table](https://contrib.rocks/image?repo=x-extends/vxe-table)](https://github.com/x-extends/vxe-table/graphs/contributors)
 
-## License
+## ライセンス
 
 [MIT](LICENSE) © 2019-present, Xu Liangzhan
