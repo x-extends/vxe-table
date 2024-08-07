@@ -1258,33 +1258,35 @@ export default {
           ctxMenuOpts
         }
       }) : _e(),
-      /**
-       * 通用提示
-       */
-      hasTip ? h('vxe-tooltip', {
-        ref: 'commTip',
-        props: {
-          isArrow: false,
-          enterable: false
-        }
-      }) : _e(),
-      /**
-       * 工具提示
-       */
-      hasTip ? h('vxe-tooltip', {
-        ref: 'tooltip',
-        props: Object.assign({}, this.tipConfig, this.tooltipStore.currOpts)
-      }) : _e(),
-      /**
-       * 校验提示
-       */
-      hasTip && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
-        ref: 'validTip',
-        class: [{
-          'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete'
-        }, 'vxe-table--valid-error'],
-        props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null
-      }) : _e()
+      h('div', {}, [
+        /**
+         * 通用提示
+         */
+        hasTip ? h('vxe-tooltip', {
+          ref: 'commTip',
+          props: {
+            isArrow: false,
+            enterable: false
+          }
+        }) : _e(),
+        /**
+         * 工具提示
+         */
+        hasTip ? h('vxe-tooltip', {
+          ref: 'tooltip',
+          props: Object.assign({}, this.tipConfig, this.tooltipStore.currOpts)
+        }) : _e(),
+        /**
+         * 校验提示
+         */
+        hasTip && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip') ? h('vxe-tooltip', {
+          ref: 'validTip',
+          class: [{
+            'old-cell-valid': editRules && GlobalConfig.cellVaildMode === 'obsolete'
+          }, 'vxe-table--valid-error'],
+          props: validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : null
+        }) : _e()
+      ])
     ])
   },
   methods
