@@ -403,7 +403,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     } else {
       // 如果是虚拟渲染跨行滚动
       if (scrollYLoad) {
-        return $xeTable.scrollTo(null, (afterFullData.indexOf(row) - 1) * scrollYStore.rowHeight)
+        return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * scrollYStore.rowHeight)
       }
     }
   }
@@ -438,10 +438,11 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
       if (scrollXLoad) {
         let scrollLeft = 0
         for (let index = 0; index < visibleColumn.length; index++) {
-          if (visibleColumn[index] === column) {
+          const currCol = visibleColumn[index]
+          if (currCol === column || currCol.id === column.id) {
             break
           }
-          scrollLeft += visibleColumn[index].renderWidth
+          scrollLeft += currCol.renderWidth
         }
         return $xeTable.scrollTo(scrollLeft)
       }
