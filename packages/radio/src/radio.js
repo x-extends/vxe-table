@@ -69,7 +69,7 @@ export default {
         }
       }),
       h('span', {
-        class: ['vxe-radio--icon', isChecked ? 'vxe-icon-radio-checked' : 'vxe-icon-radio-unchecked']
+        class: ['vxe-radio--icon', isChecked ? GlobalConfig.icon.RADIO_CHECKED : GlobalConfig.icon.RADIO_UNCHECKED]
       }),
       h('span', {
         class: 'vxe-radio--label'

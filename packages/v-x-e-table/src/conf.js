@@ -204,6 +204,15 @@ export default {
     PAGER_NEXT_PAGE: iconPrefix + 'arrow-right',
     PAGER_JUMP_MORE: iconPrefix + 'ellipsis-h',
 
+    // radio
+    RADIO_CHECKED: iconPrefix + 'radio-checked-fill',
+    RADIO_UNCHECKED: iconPrefix + 'radio-unchecked',
+
+    // checkbox
+    CHECKBOX_INDETERMINATE: iconPrefix + 'checkbox-indeterminate-fill',
+    CHECKBOX_CHECKED: iconPrefix + 'checkbox-checked-fill',
+    CHECKBOX_UNCHECKED: iconPrefix + 'checkbox-unchecked',
+
     // input
     INPUT_CLEAR: iconPrefix + 'error-circle-fill',
     INPUT_PWD: iconPrefix + 'eye-fill',

@@ -78,7 +78,7 @@ export default {
         }
       }),
       h('span', {
-        class: ['vxe-checkbox--icon', indeterminate ? 'vxe-icon-checkbox-indeterminate' : (isChecked ? 'vxe-icon-checkbox-checked-fill' : 'vxe-icon-checkbox-unchecked')]
+        class: ['vxe-checkbox--icon', indeterminate ? GlobalConfig.icon.CHECKBOX_INDETERMINATE : (isChecked ? GlobalConfig.icon.CHECKBOX_CHECKED : GlobalConfig.icon.CHECKBOX_UNCHECKED)]
       }),
       h('span', {
         class: 'vxe-checkbox--label'
