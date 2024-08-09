@@ -11,13 +11,17 @@
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData"
       :footer-data="demo1.footerData">
-      <vxe-column type="seq" width="auto"></vxe-column>
-      <vxe-column type="checkbox" title="ID" width="auto"></vxe-column>
-      <vxe-column field="role" title="Role" width="auto"></vxe-column>
-      <vxe-column field="name" title="Name Name Name Name Name" width="auto"></vxe-column>
-      <vxe-column field="age" title="Age" width="auto"></vxe-column>
-      <vxe-column field="sex" title="Sex" width="auto"></vxe-column>
-      <vxe-column field="address" title="Address Address Address" width="auto" show-overflow></vxe-column>
+      <vxe-column type="seq" min-width="auto"></vxe-column>
+      <vxe-column type="checkbox" title="ID" min-width="auto"></vxe-column>
+      <vxe-column field="role" title="Role" min-width="auto"></vxe-column>
+      <vxe-column field="name" title="Name Name Name Name Name" min-width="auto"></vxe-column>
+      <vxe-column field="age" title="Age" min-width="auto"></vxe-column>
+      <vxe-column field="sex" title="Sex" min-width="auto">
+        <template #default="{ row }">
+          <vxe-input v-model="row.sex"></vxe-input>
+        </template>
+      </vxe-column>
+      <vxe-column field="address" title="Address Address Address" min-width="auto" show-overflow></vxe-column>
     </vxe-table>
   </div>
 </template>

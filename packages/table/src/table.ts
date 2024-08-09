@@ -154,6 +154,7 @@ export default defineComponent({
         resizeList: [],
         pxList: [],
         pxMinList: [],
+        autoMinList: [],
         scaleList: [],
         scaleMinList: [],
         autoList: [],
@@ -552,7 +553,8 @@ export default defineComponent({
 
     const computeAutoWidthColumnList = computed(() => {
       const { visibleColumn } = internalData
-      return visibleColumn.filter(column => column.width === 'auto')
+      const { tableColumn } = reactData
+      return tableColumn.length || visibleColumn.length ? visibleColumn.filter(column => column.width === 'auto' || column.minWidth === 'auto') : []
     })
 
     const computeFixedColumnSize = computed(() => {
@@ -1123,11 +1125,11 @@ export default defineComponent({
               const cellStyle = getComputedStyle(firstCellEl)
               paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
             }
-            let colWidth = column.renderAutoWidth - paddingSize + 2
+            let colWidth = column.renderAutoWidth - paddingSize
             XEUtils.arrayEach(cellElList, (cellEl) => {
               const labelEl = cellEl.firstChild as HTMLElement
               if (labelEl) {
-                colWidth = Math.max(colWidth, labelEl.offsetWidth)
+                colWidth = Math.max(colWidth, Math.ceil(labelEl.offsetWidth) + 4)
               }
             })
             column.renderAutoWidth = colWidth + paddingSize
@@ -1161,12 +1163,18 @@ export default defineComponent({
       let meanWidth = remainWidth / 100
       const { fit } = props
       const { columnStore } = reactData
-      const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList, remainList } = columnStore
+      const { resizeList, pxMinList, autoMinList, pxList, scaleList, scaleMinList, autoList, remainList } = columnStore
       // 最小宽
       pxMinList.forEach((column) => {
         const minWidth = XEUtils.toInteger(column.minWidth)
         tableWidth += minWidth
         column.renderWidth = minWidth
+      })
+      // 最小自适应
+      autoMinList.forEach((column) => {
+        const scaleWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+        tableWidth += scaleWidth
+        column.renderWidth = scaleWidth
       })
       // 最小百分比
       scaleMinList.forEach((column) => {
@@ -1199,10 +1207,10 @@ export default defineComponent({
         column.renderWidth = width
       })
       remainWidth -= tableWidth
-      meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + remainList.length)) : 0
+      meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoMinList.length + remainList.length)) : 0
       if (fit) {
         if (remainWidth > 0) {
-          scaleMinList.concat(pxMinList).forEach((column) => {
+          scaleMinList.concat(pxMinList).concat(autoMinList).forEach((column) => {
             tableWidth += meanWidth
             column.renderWidth += meanWidth
           })
@@ -1221,7 +1229,7 @@ export default defineComponent({
          * 偏移量算法
          * 如果所有列足够放的情况下，从最后动态列开始分配
          */
-        const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(remainList)
+        const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoMinList).concat(remainList)
         let dynamicSize = dynamicList.length - 1
         if (dynamicSize > 0) {
           let odiffer = bodyWidth - tableWidth
@@ -5484,6 +5492,7 @@ export default defineComponent({
         const resizeList: VxeTableDefines.ColumnInfo[] = []
         const pxList: VxeTableDefines.ColumnInfo[] = []
         const pxMinList: VxeTableDefines.ColumnInfo[] = []
+        const autoMinList: VxeTableDefines.ColumnInfo[] = []
         const scaleList: VxeTableDefines.ColumnInfo[] = []
         const scaleMinList: VxeTableDefines.ColumnInfo[] = []
         const autoList: VxeTableDefines.ColumnInfo[] = []
@@ -5506,6 +5515,8 @@ export default defineComponent({
               scaleList.push(column)
             } else if (isPx(column.minWidth)) {
               pxMinList.push(column)
+            } else if (column.minWidth === 'auto') {
+              autoMinList.push(column)
             } else if (isScale(column.minWidth)) {
               scaleMinList.push(column)
             } else {
@@ -5513,7 +5524,7 @@ export default defineComponent({
             }
           }
         })
-        Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList, remainList })
+        Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, autoMinList, scaleList, scaleMinList, autoList, remainList })
       },
       saveCustomStore (type) {
         const tableId = computeTableId.value
