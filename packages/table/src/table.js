@@ -382,6 +382,7 @@ export default {
         resizeList: [],
         pxList: [],
         pxMinList: [],
+        autoMinList: [],
         scaleList: [],
         scaleMinList: [],
         autoList: [],
@@ -628,8 +629,8 @@ export default {
       return Object.assign({}, GlobalConfig.table.customConfig, this.customConfig)
     },
     autoWidthColumnList () {
-      const { visibleColumn } = this
-      return visibleColumn.filter(column => column.width === 'auto')
+      const { tableColumn, visibleColumn } = this
+      return tableColumn.length || visibleColumn.length ? visibleColumn.filter(column => column.width === 'auto' || column.minWidth === 'auto') : []
     },
     fixedColumnSize () {
       const { collectColumn } = this

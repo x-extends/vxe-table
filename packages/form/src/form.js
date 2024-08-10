@@ -380,10 +380,12 @@ export default {
         return this.$nextTick()
       }
       let fields = []
-      if (XEUtils.isArray(fieldOrItem)) {
-        fields = fieldOrItem
-      } else {
-        fields = [fieldOrItem]
+      if (fieldOrItem) {
+        if (XEUtils.isArray(fieldOrItem)) {
+          fields = fieldOrItem
+        } else {
+          fields = [fieldOrItem]
+        }
       }
       return this.beginValidate(fields.map(field => handleFieldOrItem(this, field)), '', callback)
     },

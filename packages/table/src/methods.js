@@ -2002,6 +2002,7 @@ const Methods = {
     const resizeList = []
     const pxList = []
     const pxMinList = []
+    const autoMinList = []
     const scaleList = []
     const scaleMinList = []
     const autoList = []
@@ -2024,6 +2025,8 @@ const Methods = {
           scaleList.push(column)
         } else if (DomTools.isPx(column.minWidth)) {
           pxMinList.push(column)
+        } else if (column.minWidth === 'auto') {
+          autoMinList.push(column)
         } else if (DomTools.isScale(column.minWidth)) {
           scaleMinList.push(column)
         } else {
@@ -2031,7 +2034,7 @@ const Methods = {
         }
       }
     })
-    Object.assign(this.columnStore, { resizeList, pxList, pxMinList, scaleList, scaleMinList, autoList, remainList })
+    Object.assign(this.columnStore, { resizeList, pxList, pxMinList, autoMinList, scaleList, scaleMinList, autoList, remainList })
   },
   /**
    * 刷新滚动操作，手动同步滚动相关位置（对于某些特殊的操作，比如滚动条错位、固定列不同步）
@@ -2102,11 +2105,11 @@ const Methods = {
             const cellStyle = getComputedStyle(firstCellEl)
             paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
           }
-          let colWidth = column.renderAutoWidth - paddingSize + 2
+          let colWidth = column.renderAutoWidth - paddingSize
           XEUtils.arrayEach(cellElList, (cellEl) => {
             const labelEl = cellEl.firstChild
             if (labelEl) {
-              colWidth = Math.max(colWidth, labelEl.offsetWidth)
+              colWidth = Math.max(colWidth, Math.ceil(labelEl.offsetWidth) + 4)
             }
           })
           column.renderAutoWidth = colWidth + paddingSize
@@ -2133,12 +2136,18 @@ const Methods = {
     let remainWidth = bodyWidth
     let meanWidth = remainWidth / 100
     const { fit, columnStore } = this
-    const { resizeList, pxMinList, pxList, scaleList, scaleMinList, autoList, remainList } = columnStore
+    const { resizeList, pxMinList, pxList, autoMinList, scaleList, scaleMinList, autoList, remainList } = columnStore
     // 最小宽
     pxMinList.forEach(column => {
       const minWidth = parseInt(column.minWidth)
       tableWidth += minWidth
       column.renderWidth = minWidth
+    })
+    // 最小自适应
+    autoMinList.forEach((column) => {
+      const scaleWidth = Math.max(60, XEUtils.toInteger(column.renderAutoWidth))
+      tableWidth += scaleWidth
+      column.renderWidth = scaleWidth
     })
     // 最小百分比
     scaleMinList.forEach(column => {
@@ -2171,10 +2180,10 @@ const Methods = {
       column.renderWidth = width
     })
     remainWidth -= tableWidth
-    meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + remainList.length)) : 0
+    meanWidth = remainWidth > 0 ? Math.floor(remainWidth / (scaleMinList.length + pxMinList.length + autoMinList.length + remainList.length)) : 0
     if (fit) {
       if (remainWidth > 0) {
-        scaleMinList.concat(pxMinList).forEach(column => {
+        scaleMinList.concat(pxMinList).concat(autoMinList).forEach(column => {
           tableWidth += meanWidth
           column.renderWidth += meanWidth
         })
@@ -2193,7 +2202,7 @@ const Methods = {
        * 偏移量算法
        * 如果所有列足够放的情况下，从最后动态列开始分配
        */
-      const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(remainList)
+      const dynamicList = scaleList.concat(scaleMinList).concat(pxMinList).concat(autoMinList).concat(remainList)
       let dynamicSize = dynamicList.length - 1
       if (dynamicSize > 0) {
         let odiffer = bodyWidth - tableWidth
