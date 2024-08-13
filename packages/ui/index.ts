@@ -280,6 +280,7 @@ export const use = VxeUI.use
 export const setup = (options?: VxeGlobalConfig) => {
   return VxeUI.setConfig(options)
 }
+VxeUI.setup = setup
 /**
  * 已废弃
  * @deprecated
@@ -287,6 +288,7 @@ export const setup = (options?: VxeGlobalConfig) => {
 export const config = (options?: VxeGlobalConfig) => {
   return VxeUI.setConfig(options)
 }
+VxeUI.config = config
 /**
  * 已废弃
  * @deprecated
@@ -294,6 +296,7 @@ export const config = (options?: VxeGlobalConfig) => {
 export const t = (key: string, args?: any) => {
   return VxeUI.getI18n(key, args)
 }
+VxeUI.t = t
 /**
  * 已废弃
  * @deprecated
@@ -301,15 +304,13 @@ export const t = (key: string, args?: any) => {
 export const _t = (content: string | number | boolean | null | undefined, args?: any) => {
   return getFuncText(content, args)
 }
+VxeUI._t = _t
 
 /**
  * 已废弃，兼容老版本
  * @deprecated
  */
 export const VXETable = VxeUI
-
-VXETable.setup = config
-VXETable.config = config
 
 /**
  * 已废弃，兼容老版本

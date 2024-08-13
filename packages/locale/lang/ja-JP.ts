@@ -1,7 +1,3 @@
-/**
- * 已废弃
- * @deprecated
- */
 export default {
   vxe: {
     base: {
@@ -23,7 +19,7 @@ export default {
       useErr: '"{0}" モジュールをインストールする際にエラーが発生し、順序が正しくない可能性がある。依存するモジュールはTableの前にインストールする必要がある',
       barUnableLink: 'ツールバーはフォームを関連付けることができない',
       expandContent: '拡張行スロットは "content" である必要があります。確認してください',
-      reqComp: 'Require "{0}" component, check whether the install is correct',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxeui.com/#/start/useGlobal',
       reqModule: '"{0}" モジュールが必要です',
       reqProp: '必要な "{0}" パラメーターが欠落しているため、エラーが発生する可能性があります',
       emptyProp: '"{0}" プロパティは空白が許可されていません',
@@ -53,6 +49,7 @@ export default {
       emptyText: 'データがありません',
       allTitle: '全て選択/取消',
       seqTitle: 'N/S',
+      actionTitle: 'Action',
       confirmFilter: 'OK',
       resetFilter: 'リセット',
       allFilter: '全て',
@@ -348,7 +345,8 @@ export default {
           textarea: 'Textarea',
           select: 'Select',
           row: 'Row/column',
-          title: 'Text',
+          title: 'Title',
+          text: 'Text',
           subtable: 'Subtable',
           VxeSwitch: 'Yes/no',
           VxeInput: 'Input',
@@ -422,7 +420,15 @@ export default {
     },
     listDesign: {
       fieldSettingTab: 'Field setting',
-      listSettingTab: 'List setting'
+      listSettingTab: 'List setting',
+      activeBtn: {
+        ActionButtonUpdate: 'Edit',
+        ActionButtonDelete: 'Delete'
+      }
+    },
+    text: {
+      copySuccess: 'Successfully copied to clipboard.',
+      copyError: 'The current environment does not support this operation.'
     },
 
     /**

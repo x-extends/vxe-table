@@ -1,7 +1,3 @@
-/**
- * 已废弃
- * @deprecated
- */
 export default {
   vxe: {
     base: {
@@ -23,7 +19,7 @@ export default {
       useErr: 'Error installing "{0}" module, possibly in the wrong order, dependent modules need to be installed before Table.',
       barUnableLink: 'Toolbar cannot associate table.',
       expandContent: 'Expand row slot should be "content", please check if it is correct.',
-      reqComp: 'Require "{0}" component, check whether the install is correct',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxeui.com/#/start/useGlobal',
       reqModule: 'require "{0}" module.',
       reqProp: 'Missing the necessary "{0}" parameter, which can cause error.',
       emptyProp: 'The property "{0}" is not allowed to be empty.',
@@ -53,6 +49,7 @@ export default {
       emptyText: 'No Data',
       allTitle: 'Select all / cancel',
       seqTitle: 'N/S',
+      actionTitle: 'Action',
       confirmFilter: 'Confirm',
       resetFilter: 'Reset',
       allFilter: 'All',
@@ -348,7 +345,8 @@ export default {
           textarea: 'Textarea',
           select: 'Select',
           row: 'Row/column',
-          title: 'Text',
+          title: 'Title',
+          text: 'Text',
           subtable: 'Subtable',
           VxeSwitch: 'Yes/no',
           VxeInput: 'Input',
@@ -422,7 +420,15 @@ export default {
     },
     listDesign: {
       fieldSettingTab: 'Field setting',
-      listSettingTab: 'List setting'
+      listSettingTab: 'List setting',
+      activeBtn: {
+        ActionButtonUpdate: 'Edit',
+        ActionButtonDelete: 'Delete'
+      }
+    },
+    text: {
+      copySuccess: 'Successfully copied to clipboard.',
+      copyError: 'The current environment does not support this operation.'
     },
 
     /**

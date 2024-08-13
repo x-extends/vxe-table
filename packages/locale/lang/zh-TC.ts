@@ -1,7 +1,3 @@
-/**
- * 已废弃
- * @deprecated
- */
 export default {
   vxe: {
     base: {
@@ -23,7 +19,7 @@ export default {
       useErr: '安裝 "{0}" 模組時發生錯誤，可能順序不正確，依賴的模組需要在Table之前安裝',
       barUnableLink: '工具欄無法關聯表格',
       expandContent: '展開行的插槽應該是 “content”，請檢查是否正確',
-      reqComp: '缺少 "{0}" 組件，请检查是否正确安装',
+      reqComp: '缺少 "{0}" 組件，请检查是否正确安装。 https://vxeui.com/#/start/useGlobal',
       reqModule: '缺少 "{0}" 模組',
       reqProp: '缺少必要的 "{0}" 參數，可能會導致出現錯誤',
       emptyProp: '參數 "{0}" 不允許為空',
@@ -53,6 +49,7 @@ export default {
       emptyText: '暫無資料',
       allTitle: '全選/取消',
       seqTitle: '序号',
+      actionTitle: '操作',
       confirmFilter: '篩選',
       resetFilter: '重置',
       allFilter: '全部',
@@ -310,25 +307,25 @@ export default {
       uploadSuccess: '上传成功'
     },
     formDesign: {
-      formName: '表单名称',
-      defFormTitle: '未命名的表单',
-      widgetPropTab: '控件属性',
-      widgetFormTab: '表单属性',
+      formName: '表單名稱',
+      defFormTitle: '未命名的表單',
+      widgetPropTab: '控件屬性',
+      widgetFormTab: '表單屬性',
       styleSetting: {
-        btn: '样式设置',
-        title: '表单的样式设置',
-        layoutTitle: '控件布局',
-        verticalLayout: '上下布局',
-        horizontalLayout: '横向布局',
-        styleTitle: '标题样式',
-        boldTitle: '标题加粗',
+        btn: '樣式設置',
+        title: '表單的樣式設置',
+        layoutTitle: '控件佈局',
+        verticalLayout: '上下佈局',
+        horizontalLayout: '橫向佈局',
+        styleTitle: '標題樣式',
+        boldTitle: '標題加粗',
         fontBold: '加粗',
-        fontNormal: '常规',
-        colonTitle: '显示冒号',
-        colonVisible: '显示',
-        colonHidden: '隐藏',
-        alignTitle: '对齐方式',
-        widthTitle: '标题宽度',
+        fontNormal: '常規',
+        colonTitle: '顯示冒號',
+        colonVisible: '顯示',
+        colonHidden: '隱藏',
+        alignTitle: '對齊方式',
+        widthTitle: '標題寬度',
         alignLeft: '居左',
         alignRight: '居右',
         unitPx: '像素',
@@ -342,87 +339,96 @@ export default {
         },
         copyTitle: '副本_{0}',
         component: {
-          input: '输入框',
+          input: '輸入框',
           textarea: '文本域',
-          select: '下拉选择',
+          select: '下拉選擇',
           row: '一行多列',
-          title: '文本',
+          title: '標題',
+          text: '文本',
           subtable: '子表',
           VxeSwitch: '是/否',
-          VxeInput: '输入框',
-          VxeNumberInput: '数字',
+          VxeInput: '輸入框',
+          VxeNumberInput: '數字',
           VxeDatePicker: '日期',
           VxeTextarea: '文本域',
-          VxeSelect: '下拉选择',
-          VxeTreeSelect: '树形选择',
-          VxeRadioGroup: '单选框',
-          VxeCheckboxGroup: '复选框',
+          VxeSelect: '下拉選擇',
+          VxeTreeSelect: '樹形選擇',
+          VxeRadioGroup: '單選框',
+          VxeCheckboxGroup: '複選框',
           VxeUploadFile: '文件',
-          VxeUploadImage: '图片'
+          VxeUploadImage: '圖片'
         }
       },
       widgetProp: {
-        name: '控件名称',
+        name: '控件名稱',
         placeholder: '控件提示',
-        required: '必填校验',
-        multiple: '允许多选',
+        required: '必填校驗',
+        multiple: '允許多選',
         displaySetting: {
-          name: '显示设置',
-          pc: '电脑端',
-          mobile: '手机端',
-          visible: '显示',
-          hidden: '隐藏'
+          name: '顯示設置',
+          pc: '電腦端',
+          mobile: '手機端',
+          visible: '顯示',
+          hidden: '隱藏'
         },
         dataSource: {
-          name: '数据源',
-          defValue: '选项{0}',
-          addOption: '添加选项',
-          batchEditOption: '批量编辑',
-          batchEditTip: '每行对应一个选项，支持从表格、Excel、WPS 中直接复制粘贴。',
-          batchEditSubTip: '每行对应一个选项，如果是分组，子项可以是空格或制表键开头，支持从表格、Excel、WPS 中直接复制粘贴。',
-          buildOption: '生成选项'
+          name: '數據源',
+          defValue: '選項{0}',
+          addOption: '添加選項',
+          batchEditOption: '批量編輯',
+          batchEditTip: '每行對應一個選項，支持從表格、Excel、WPS 中直接複製粘貼。',
+          batchEditSubTip: '每行對應一個選項，如果是分組，子項可以是空格或製表鍵開頭，支持從表格、Excel、WPS 中直接複製粘貼。',
+          buildOption: '生成選項'
         },
         rowProp: {
-          colSize: '列数',
+          colSize: '列數',
           col2: '两列',
           col3: '三列',
           col4: '四列',
           col6: '六列',
-          layout: '布局'
+          layout: '佈局'
         },
         textProp: {
           name: '内容',
-          alignTitle: '对齐方式',
+          alignTitle: '對齊方式',
           alignLeft: '居左',
           alignCenter: '居中',
           alignRight: '居右',
-          colorTitle: '字体颜色',
-          sizeTitle: '字体大小',
-          boldTitle: '字体加粗',
-          fontNormal: '常规',
+          colorTitle: '字體顏色',
+          sizeTitle: '字體大小',
+          boldTitle: '字體加粗',
+          fontNormal: '常規',
           fontBold: '加粗'
         },
         subtableProp: {
-          seqTitle: '序号',
-          showSeq: '显示序号',
-          showCheckbox: '允许多选',
-          errSubDrag: '子表不支持该控件，请使用其他控件'
+          seqTitle: '序號',
+          showSeq: '顯示序號',
+          showCheckbox: '允許多選',
+          errSubDrag: '子表不支持該控件，請使用其他控件'
         },
         uploadProp: {
           uploadProp: {
-            limitFileCount: '文件数量限制',
+            limitFileCount: '文件數量限制',
             limitFileSize: '文件大小限制',
-            multiFile: '允许上传多个文件',
-            limitImgCount: '图片数量限制',
-            limitImgSize: '图片大小限制',
-            multiImg: '允许上传多张图片'
+            multiFile: '允許上傳多個文件',
+            limitImgCount: '圖片數量限制',
+            limitImgSize: '圖片大小限制',
+            multiImg: '允許上傳多張圖片'
           }
         }
       }
     },
     listDesign: {
-      fieldSettingTab: '字段设置',
-      listSettingTab: '列表设置'
+      fieldSettingTab: '字段設置',
+      listSettingTab: '列表設置',
+      activeBtn: {
+        ActionButtonUpdate: '編輯',
+        ActionButtonDelete: '刪除'
+      }
+    },
+    text: {
+      copySuccess: '已複製到剪貼板',
+      copyError: '當前環境不支持該操作'
     },
 
     /**

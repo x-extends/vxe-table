@@ -1,7 +1,3 @@
-/**
- * 已废弃
- * @deprecated
- */
 export default {
   vxe: {
     base: {
@@ -23,7 +19,7 @@ export default {
       useErr: 'Error al instalar el módulo "{0}", posiblemente en el orden equivocado, los módulos dependientes deben ser instalados antes de la tabla.',
       barUnableLink: 'La barra de herramientas no puede asociarse con la tabla.',
       expandContent: 'La ranura de fila expandible debería ser "contenido", por favor revise si está correcta.',
-      reqComp: 'Require "{0}" component, check whether the install is correct',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxeui.com/#/start/useGlobal',
       reqModule: 'Requerir el módulo "{0}".',
       reqProp: 'Falta el parámetro necesario "{0}", lo que puede causar errores.',
       emptyProp: 'La propiedad "{0}" no se permite estar vacía.',
@@ -53,6 +49,7 @@ export default {
       emptyText: 'No hay datos',
       allTitle: 'Seleccionar todo / cancelar',
       seqTitle: 'N/S',
+      actionTitle: 'Action',
       confirmFilter: 'Confirmar',
       resetFilter: 'Restablecer',
       allFilter: 'Todo',
@@ -348,7 +345,8 @@ export default {
           textarea: 'Textarea',
           select: 'Select',
           row: 'Row/column',
-          title: 'Text',
+          title: 'Title',
+          text: 'Text',
           subtable: 'Subtable',
           VxeSwitch: 'Yes/no',
           VxeInput: 'Input',
@@ -422,7 +420,15 @@ export default {
     },
     listDesign: {
       fieldSettingTab: 'Field setting',
-      listSettingTab: 'List setting'
+      listSettingTab: 'List setting',
+      activeBtn: {
+        ActionButtonUpdate: 'Edit',
+        ActionButtonDelete: 'Delete'
+      }
+    },
+    text: {
+      copySuccess: 'Successfully copied to clipboard.',
+      copyError: 'The current environment does not support this operation.'
     },
 
     /**

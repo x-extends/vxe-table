@@ -49,7 +49,6 @@ export default {
       emptyText: '暂无数据',
       allTitle: '全选/取消',
       seqTitle: '序号',
-      actionTitle: '操作',
       confirmFilter: '筛选',
       resetFilter: '重置',
       allFilter: '全部',
@@ -345,8 +344,7 @@ export default {
           textarea: '文本域',
           select: '下拉选择',
           row: '一行多列',
-          title: '标题',
-          text: '文本',
+          title: '文本',
           subtable: '子表',
           VxeSwitch: '是/否',
           VxeInput: '输入框',
@@ -420,15 +418,7 @@ export default {
     },
     listDesign: {
       fieldSettingTab: '字段设置',
-      listSettingTab: '列表设置',
-      activeBtn: {
-        ActionButtonUpdate: '编辑',
-        ActionButtonDelete: '删除'
-      }
-    },
-    text: {
-      copySuccess: '已复制到剪贴板',
-      copyError: '当前环境不支持该操作'
+      listSettingTab: '列表设置'
     },
 
     /**
