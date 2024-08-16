@@ -1110,6 +1110,9 @@ export default {
         'is--virtual-x': scrollXLoad,
         'is--virtual-y': scrollYLoad
       }],
+      attrs: {
+        spellcheck: false
+      },
       on: {
         keydown: this.keydownEvent
       }

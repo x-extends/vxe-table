@@ -1165,7 +1165,8 @@ export default {
           maxlength: inpMaxlength,
           readonly: inpReadonly,
           disabled,
-          autocomplete: autoComplete || autocomplete
+          autocomplete: autoComplete || autocomplete,
+          spellcheck: false
         },
         on: {
           keydown: this.keydownEvent,

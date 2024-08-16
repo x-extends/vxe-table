@@ -157,6 +157,9 @@ export default {
         [`size--${vSize}`]: vSize,
         'is--loading': loading
       }],
+      attrs: {
+        spellcheck: false
+      },
       on: {
         submit: this.submitEvent,
         reset: this.resetEvent

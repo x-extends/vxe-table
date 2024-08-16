@@ -104,7 +104,10 @@ export default {
         'is--disabled': disabled,
         'def--rows': !XEUtils.eqNull(rows),
         'def--cols': !XEUtils.eqNull(cols)
-      }]
+      }],
+      attrs: {
+        spellcheck: false
+      }
     }, [
       h('textarea', {
         ref: 'textarea',
