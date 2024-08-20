@@ -445,10 +445,10 @@ export default {
     }
   },
   created () {
-    const { data, formOpts, proxyOpts, proxyConfig } = this
-    if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
-      errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
-    }
+    // const { data, formOpts, proxyOpts, proxyConfig } = this
+    // if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
+    //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
+    // }
 
     if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
       if (this.toolbar) {
@@ -538,7 +538,7 @@ export default {
       const { proxyInited, proxyConfig, proxyOpts, formConfig, formOpts } = this
       if (proxyConfig) {
         if (isEnableConf(formConfig) && proxyOpts.form && formOpts.items) {
-          const formData = {}
+          const fData = {}
           formOpts.items.forEach(item => {
             const { field, itemRender } = item
             if (field) {
@@ -551,10 +551,10 @@ export default {
                   itemValue = defaultValue
                 }
               }
-              formData[field] = itemValue
+              fData[field] = itemValue
             }
           })
-          this.formData = formData
+          this.formData = fData
         }
         if (!proxyInited && proxyOpts.autoLoad !== false) {
           this.proxyInited = true
@@ -575,10 +575,11 @@ export default {
      * @param {String/Object} code 字符串或对象
      */
     commitProxy (proxyTarget, ...args) {
-      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, formData, isRespMsg, isActiveMsg, validConfig, pagerOpts } = this
+      const { $refs, toolbar, toolbarConfig, toolbarOpts, proxyOpts, tablePage, pagerConfig, editRules, isRespMsg, isActiveMsg, validConfig, pagerOpts } = this
       const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
       const resConfigs = proxyOpts.response || proxyOpts.props || {}
       const $xetable = $refs.xTable
+      const formData = this.getFormData()
       let button
       let code
       if (XEUtils.isString(proxyTarget)) {
@@ -936,6 +937,10 @@ export default {
       }
       return Promise.resolve()
     },
+    getFormData () {
+      const { proxyConfig, proxyOpts, formOpts, formData } = this
+      return proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
+    },
     getFormItems (itemIndex) {
       const { formConfig, formOpts } = this
       const itemList = []
@@ -1078,7 +1083,7 @@ export default {
         return {
           data: this.tableData,
           filter: this.filterData,
-          form: this.formData,
+          form: this.getFormData(),
           sort: sortData.length ? sortData[0] : {},
           sorts: sortData,
           pager: this.tablePage,

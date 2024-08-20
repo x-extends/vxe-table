@@ -318,7 +318,8 @@ export default {
     tooltipConfig: {
       enterable: true
     },
-    titleAsterisk: true
+    titleAsterisk: true,
+    padding: true
   },
   input: {
     // size: null,

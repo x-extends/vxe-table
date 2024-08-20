@@ -74,6 +74,7 @@ export default {
     size: { type: String, default: () => GlobalConfig.form.size || GlobalConfig.size },
     span: { type: [String, Number], default: () => GlobalConfig.form.span },
     align: { type: String, default: () => GlobalConfig.form.align },
+    titleBold: { type: String, default: () => GlobalConfig.form.titleBold },
     titleAlign: { type: String, default: () => GlobalConfig.form.titleAlign },
     titleWidth: { type: [String, Number], default: () => GlobalConfig.form.titleWidth },
     titleColon: { type: Boolean, default: () => GlobalConfig.form.titleColon },
@@ -83,6 +84,7 @@ export default {
       type: Boolean,
       default: null
     },
+    padding: { type: Boolean, default: () => GlobalConfig.form.padding },
     className: [String, Function],
     disabled: Boolean,
     readonly: Boolean,
@@ -574,13 +576,10 @@ export default {
           if (!i) {
             DomTools.scrollToView($el.querySelector(`.${item.id}`))
           }
+          const autoFocus = itemRender.autoFocus || itemRender.autofocus || (compConf ? compConf.formItemAutoFocus : null)
           // 如果指定了聚焦 class
-          if (itemRender.autofocus) {
-            inputElem = $el.querySelector(`.${item.id} ${itemRender.autofocus}`)
-          }
-          // 渲染器的聚焦处理
-          if (!inputElem && compConf && compConf.autofocus) {
-            inputElem = $el.querySelector(`.${item.id} ${compConf.autofocus}`)
+          if (autoFocus) {
+            inputElem = $el.querySelector(`.${item.id} ${autoFocus}`)
           }
           if (inputElem) {
             inputElem.focus()

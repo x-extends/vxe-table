@@ -473,7 +473,8 @@ const renderPopupPanel = (h, _vm) => {
                       h('vxe-tooltip', {
                         props: {
                           enterable: true,
-                          content: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip')
+                          content: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip'),
+                          popupClassName: 'vxe-table--ignore-clear'
                         },
                         scopedSlots: {
                           default: () => {

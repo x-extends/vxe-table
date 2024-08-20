@@ -1250,6 +1250,11 @@ const Methods = {
     const fullColumnFieldData = this.fullColumnFieldData
     return fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
   },
+  getParentColumn (fieldOrColumn) {
+    const fullColumnIdData = this.fullColumnIdData
+    const column = handleFieldOrColumn(this, fieldOrColumn)
+    return column && column.parentId && fullColumnIdData[column.parentId] ? fullColumnIdData[column.parentId].column : null
+  },
   /**
    * 获取当前表格的列
    * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列

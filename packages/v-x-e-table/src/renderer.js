@@ -665,7 +665,7 @@ function oldFormItemRadioAndCheckboxRender (h, renderOpts, params) {
  */
 const renderMap = {
   input: {
-    autofocus: 'input',
+    autoFocus: 'input',
     renderEdit: nativeEditRender,
     renderDefault: nativeEditRender,
     renderFilter: nativeFilterRender,
@@ -673,7 +673,7 @@ const renderMap = {
     renderItemContent: nativeItemRender
   },
   textarea: {
-    autofocus: 'textarea',
+    autoFocus: 'textarea',
     renderEdit: nativeEditRender,
     renderItemContent: nativeItemRender
   },
@@ -709,7 +709,7 @@ const renderMap = {
     cellExportMethod: handleExportSelectMethod
   },
   VxeInput: {
-    autofocus: '.vxe-input--inner',
+    autoFocus: '.vxe-input--inner',
     renderEdit: defaultEditRender,
     renderCell (h, renderOpts, params) {
       const { props = {} } = renderOpts
@@ -738,7 +738,7 @@ const renderMap = {
     renderItemContent: defaultItemRender
   },
   VxeTextarea: {
-    autofocus: '.vxe-textarea--inner',
+    autoFocus: '.vxe-textarea--inner',
     renderItemContent: defaultItemRender
   },
   VxeButton: {
@@ -761,7 +761,7 @@ const renderMap = {
     }
   },
   VxeSelect: {
-    autofocus: '.vxe-input--inner',
+    autoFocus: '.vxe-input--inner',
     renderEdit: defaultSelectEditRender,
     renderDefault: defaultSelectEditRender,
     renderCell (h, renderOpts, params) {
@@ -797,23 +797,23 @@ const renderMap = {
     cellExportMethod: handleExportSelectMethod
   },
   VxeRadio: {
-    autofocus: '.vxe-radio--input',
+    autoFocus: '.vxe-radio--input',
     renderItemContent: defaultFormItemRender
   },
   VxeRadioGroup: {
-    autofocus: '.vxe-radio--input',
+    autoFocus: '.vxe-radio--input',
     renderItemContent: formItemRadioAndCheckboxRender
   },
   VxeCheckbox: {
-    autofocus: '.vxe-checkbox--input',
+    autoFocus: '.vxe-checkbox--input',
     renderItemContent: defaultFormItemRender
   },
   VxeCheckboxGroup: {
-    autofocus: '.vxe-checkbox--input',
+    autoFocus: '.vxe-checkbox--input',
     renderItemContent: formItemRadioAndCheckboxRender
   },
   VxeSwitch: {
-    autofocus: '.vxe-switch--button',
+    autoFocus: '.vxe-switch--button',
     renderEdit: defaultEditRender,
     renderDefault: defaultEditRender,
     renderItemContent: defaultItemRender
@@ -821,7 +821,7 @@ const renderMap = {
 
   // 以下已废弃
   $input: {
-    autofocus: '.vxe-input--inner',
+    autoFocus: '.vxe-input--inner',
     renderEdit: oldEditRender,
     renderCell (h, renderOpts, params) {
       const { props = {} } = renderOpts
@@ -849,7 +849,7 @@ const renderMap = {
     renderItemContent: oldItemRender
   },
   $textarea: {
-    autofocus: '.vxe-textarea--inner',
+    autoFocus: '.vxe-textarea--inner',
     renderItemContent: oldItemRender
   },
   $button: {
@@ -861,7 +861,7 @@ const renderMap = {
     renderItemContent: oldButtonsItemRender
   },
   $select: {
-    autofocus: '.vxe-input--inner',
+    autoFocus: '.vxe-input--inner',
     renderEdit: oldSelectEditRender,
     renderDefault: oldSelectEditRender,
     renderCell (h, renderOpts, params) {
@@ -897,15 +897,15 @@ const renderMap = {
     cellExportMethod: handleExportSelectMethod
   },
   $radio: {
-    autofocus: '.vxe-radio--input',
+    autoFocus: '.vxe-radio--input',
     renderItemContent: oldFormItemRadioAndCheckboxRender
   },
   $checkbox: {
-    autofocus: '.vxe-checkbox--input',
+    autoFocus: '.vxe-checkbox--input',
     renderItemContent: oldFormItemRadioAndCheckboxRender
   },
   $switch: {
-    autofocus: '.vxe-switch--button',
+    autoFocus: '.vxe-switch--button',
     renderEdit: oldEditRender,
     renderDefault: oldEditRender,
     renderItemContent: oldItemRender

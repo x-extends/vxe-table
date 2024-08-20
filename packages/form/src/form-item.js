@@ -12,6 +12,10 @@ const props = {
   size: String,
   span: [String, Number],
   align: String,
+  titleBold: {
+    type: Boolean,
+    default: null
+  },
   titleAlign: {
     type: String,
     default: null
@@ -33,6 +37,10 @@ const props = {
     default: true
   },
   vertical: {
+    type: Boolean,
+    default: null
+  },
+  padding: {
     type: Boolean,
     default: null
   },
@@ -64,8 +72,8 @@ Object.keys(props).forEach(name => {
 })
 
 const renderItem = (h, _vm, item, slots) => {
-  const { _e, rules, data, disabled, readonly, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = _vm
-  const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
+  const { _e, rules, data, disabled, readonly, collapseAll, validOpts, titleBold: allTitleBold, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical, padding: allPadding } = _vm
+  const { title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, padding, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
   const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
   const itemClassName = compConf ? (compConf.formItemClassName || compConf.itemClassName) : ''
   const itemStyle = compConf ? (compConf.formItemStyle || compConf.itemStyle) : null
@@ -75,7 +83,9 @@ const renderItem = (h, _vm, item, slots) => {
   const itemTitleStyle = compConf ? (compConf.formItemTitleStyle || compConf.itemTitleStyle) : null
   const span = item.span || _vm.span
   const align = item.align || _vm.align
+  const itemPadding = XEUtils.eqNull(padding) ? allPadding : padding
   const itemVertical = XEUtils.eqNull(vertical) ? allVertical : vertical
+  const titleBold = XEUtils.eqNull(item.titleBold) ? allTitleBold : item.titleBold
   const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
   const titleWidth = itemVertical ? null : (XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth)
   const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
@@ -86,13 +96,15 @@ const renderItem = (h, _vm, item, slots) => {
   const ovTooltip = itemOverflow === true || itemOverflow === 'tooltip'
   const hasEllipsis = ovTitle || ovTooltip || ovEllipsis
   const params = { data, disabled, readonly, field, property: field, item, $form: _vm, $grid: _vm.xegrid }
-  let isRequired
+  let isRequired = false
+  let isValid = false
   if (visible === false) {
     return _e()
   }
   if (!readonly && rules) {
     const itemRules = rules[field]
-    if (itemRules) {
+    if (itemRules && itemRules.length) {
+      isValid = true
       isRequired = itemRules.some(rule => rule.required)
     }
   }
@@ -123,8 +135,11 @@ const renderItem = (h, _vm, item, slots) => {
       {
         'is--title': title,
         'is--colon': titleColon,
+        'is--bold': titleBold,
+        'is--padding': itemPadding,
         'is--vertical': itemVertical,
         'is--asterisk': titleAsterisk,
+        'is--valid': isValid,
         'is--required': isRequired,
         'is--hidden': folding && collapseAll,
         'is--active': isActivetem(_vm, item),

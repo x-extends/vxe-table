@@ -14,6 +14,8 @@ class ItemConfig {
       titleAlign: item.titleAlign,
       titleWidth: item.titleWidth,
       titleColon: item.titleColon,
+      vertical: item.vertical,
+      padding: item.padding,
       titleAsterisk: item.titleAsterisk,
       titlePrefix: item.titlePrefix,
       titleSuffix: item.titleSuffix,

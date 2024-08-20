@@ -119,10 +119,6 @@
   }
   .vxe-form--item {
     display: none;
-    padding: 0.5em 0.8em 0.5em 0;
-    &.is--vertical {
-      padding: 0.25em 0 0.25em 0;
-    }
     &.is--active {
       &:not(.is--hidden) {
         display: inline-flex;
@@ -132,6 +128,12 @@
 }
 
 .vxe-form--item {
+  &.is--padding {
+    padding: 0.6em;
+    &.is--vertical {
+      padding: 0.4em 0.6em;
+    }
+  }
   &.is--colon {
     .vxe-form--item-title-postfix {
       &:after {

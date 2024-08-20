@@ -27,8 +27,8 @@ const VxeFormConfigItem = {
   },
   render (h) {
     const { _e, $xeform, itemConfig: item } = this
-    const { rules, data, disabled, readonly, collapseAll, validOpts, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical } = $xeform
-    const { slots, title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, children, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
+    const { rules, data, disabled, readonly, collapseAll, validOpts, titleBold: allTitleBold, titleAlign: allTitleAlign, titleWidth: allTitleWidth, titleColon: allTitleColon, titleAsterisk: allTitleAsterisk, titleOverflow: allTitleOverflow, vertical: allVertical, padding: allPadding } = $xeform
+    const { slots, title, folding, visible, field, collapseNode, itemRender, showError, errRule, className, titleOverflow, vertical, padding, children, showTitle, contentClassName, contentStyle, titleClassName, titleStyle } = item
     const compConf = isEnableConf(itemRender) ? VXETable.renderer.get(itemRender.name) : null
     const itemClassName = compConf ? (compConf.formItemClassName || compConf.itemClassName) : ''
     const itemStyle = compConf ? (compConf.formItemStyle || compConf.itemStyle) : null
@@ -38,7 +38,9 @@ const VxeFormConfigItem = {
     const itemTitleStyle = compConf ? (compConf.formItemTitleStyle || compConf.itemTitleStyle) : null
     const span = item.span || $xeform.span
     const align = item.align || $xeform.align
+    const itemPadding = XEUtils.eqNull(padding) ? allPadding : padding
     const itemVertical = XEUtils.eqNull(vertical) ? allVertical : vertical
+    const titleBold = XEUtils.eqNull(item.titleBold) ? allTitleBold : item.titleBold
     const titleAlign = XEUtils.eqNull(item.titleAlign) ? allTitleAlign : item.titleAlign
     const titleWidth = itemVertical ? null : (XEUtils.eqNull(item.titleWidth) ? allTitleWidth : item.titleWidth)
     const titleColon = XEUtils.eqNull(item.titleColon) ? allTitleColon : item.titleColon
@@ -49,7 +51,8 @@ const VxeFormConfigItem = {
     const ovTooltip = itemOverflow === true || itemOverflow === 'tooltip'
     const hasEllipsis = ovTitle || ovTooltip || ovEllipsis
     const params = { data, disabled, readonly, field, property: field, item, $form: $xeform, $grid: $xeform.xegrid }
-    let isRequired
+    let isRequired = false
+    let isValid = false
     if (visible === false) {
       return _e()
     }
@@ -70,7 +73,8 @@ const VxeFormConfigItem = {
     }
     if (!readonly && rules) {
       const itemRules = rules[field]
-      if (itemRules) {
+      if (itemRules && itemRules.length) {
+        isValid = true
         isRequired = itemRules.some(rule => rule.required)
       }
     }
@@ -101,8 +105,11 @@ const VxeFormConfigItem = {
         {
           'is--title': title,
           'is--colon': titleColon,
+          'is--bold': titleBold,
+          'is--padding': itemPadding,
           'is--vertical': itemVertical,
           'is--asterisk': titleAsterisk,
+          'is--valid': isValid,
           'is--required': isRequired,
           'is--hidden': folding && collapseAll,
           'is--active': isActivetem($xeform, item),
