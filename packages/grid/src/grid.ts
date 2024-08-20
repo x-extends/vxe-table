@@ -220,6 +220,14 @@ export default defineComponent({
       }
     }
 
+    const getFormData = () => {
+      const { proxyConfig } = props
+      const { formData } = reactData
+      const proxyOpts = computeProxyOpts.value
+      const formOpts = computeFormOpts.value
+      return proxyConfig && isEnableConf(proxyOpts) && proxyOpts.form ? formData : formOpts.data
+    }
+
     const initPages = () => {
       const { tablePage } = reactData
       const { pagerConfig } = props
@@ -694,7 +702,7 @@ export default defineComponent({
       const formOpts = computeFormOpts.value
       if (proxyConfig && isEnableConf(proxyOpts)) {
         if (formConfig && isEnableConf(formOpts) && proxyOpts.form && formOpts.items) {
-          const formData: any = {}
+          const fData: any = {}
           formOpts.items.forEach(item => {
             const { field, itemRender } = item
             if (field) {
@@ -707,10 +715,10 @@ export default defineComponent({
                   itemValue = defaultValue
                 }
               }
-              formData[field] = itemValue
+              fData[field] = itemValue
             }
           })
-          reactData.formData = formData
+          reactData.formData = fData
         }
         if (!proxyInited) {
           reactData.proxyInited = true
@@ -733,7 +741,7 @@ export default defineComponent({
        */
       commitProxy (proxyTarget: string | VxeToolbarPropTypes.ButtonConfig, ...args: any[]) {
         const { toolbarConfig, pagerConfig, editRules, validConfig } = props
-        const { tablePage, formData } = reactData
+        const { tablePage } = reactData
         const isActiveMsg = computeIsActiveMsg.value
         const isRespMsg = computeIsRespMsg.value
         const proxyOpts = computeProxyOpts.value
@@ -742,6 +750,7 @@ export default defineComponent({
         const { beforeQuery, afterQuery, beforeDelete, afterDelete, beforeSave, afterSave, ajax = {} } = proxyOpts
         const resConfigs = proxyOpts.response || proxyOpts.props || {}
         const $xeTable = refTable.value
+        const formData = getFormData()
         let button: VxeToolbarPropTypes.ButtonConfig | null = null
         let code: string | null = null
         if (XEUtils.isString(proxyTarget)) {
@@ -1055,6 +1064,7 @@ export default defineComponent({
       revert () {
         return handleZoom()
       },
+      getFormData,
       getFormItems (itemIndex?: number): any {
         const formOpts = computeFormOpts.value
         const { formConfig } = props
@@ -1072,7 +1082,7 @@ export default defineComponent({
           return {
             data: reactData.tableData,
             filter: reactData.filterData,
-            form: reactData.formData,
+            form: getFormData(),
             sort: sortData.length ? sortData[0] : {},
             sorts: sortData,
             pager: reactData.tablePage,
@@ -1231,12 +1241,13 @@ export default defineComponent({
 
     onMounted(() => {
       nextTick(() => {
-        const { data, columns, proxyConfig } = props
-        const proxyOpts = computeProxyOpts.value
-        const formOpts = computeFormOpts.value
-        if (isEnableConf(proxyConfig) && (data || (proxyOpts.form && formOpts.data))) {
-          errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
-        }
+        const { columns } = props
+        // const { data, columns, proxyConfig } = props
+        // const proxyOpts = computeProxyOpts.value
+        // const formOpts = computeFormOpts.value
+        // if (isEnableConf(proxyConfig) && (data || (proxyOpts.form && formOpts.data))) {
+        //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
+        // }
 
         // if (process.env.VUE_APP_VXE_ENV === 'development') {
         //   if (proxyOpts.props) {

@@ -306,7 +306,9 @@ export default {
       reUpload: '重新上传',
       uploadProgress: '上传中 {0}%',
       uploadErr: '上传失败',
-      uploadSuccess: '上传成功'
+      uploadSuccess: '上传成功',
+      moreBtnText: '更多（{0}）',
+      viewItemTitle: '点击查看'
     },
     formDesign: {
       formName: '表单名称',
@@ -337,6 +339,7 @@ export default {
         group: {
           base: '基础控件',
           layout: '布局控件',
+          system: '系统控件',
           advanced: '高级控件'
         },
         copyTitle: '副本_{0}',

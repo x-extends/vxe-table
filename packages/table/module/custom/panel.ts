@@ -185,7 +185,7 @@ export default defineComponent({
     //   }
     // }
 
-    const allCustomEvent = () => {
+    const allOptionEvent = () => {
       const { customStore } = props
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
@@ -435,7 +435,7 @@ export default defineComponent({
                       'is--indeterminate': isAllIndeterminate
                     }],
                     title: getI18n('vxe.table.allTitle'),
-                    onClick: allCustomEvent
+                    onClick: allOptionEvent
                   }, [
                     h('span', {
                       class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
@@ -678,7 +678,7 @@ export default defineComponent({
                             'is--indeterminate': isAllIndeterminate
                           }],
                           title: getI18n('vxe.table.allTitle'),
-                          onClick: allCustomEvent
+                          onClick: allOptionEvent
                         }, [
                           h('span', {
                             class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
@@ -697,7 +697,8 @@ export default defineComponent({
                         VxeUITooltipComponent
                           ? h(VxeUITooltipComponent, {
                             enterable: true,
-                            content: getI18n('vxe.custom.setting.sortHelpTip')
+                            content: getI18n('vxe.custom.setting.sortHelpTip'),
+                            popupClassName: 'vxe-table--ignore-clear'
                           }, {
                             default: () => {
                               return h('i', {

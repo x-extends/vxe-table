@@ -294,7 +294,7 @@ hooks.add('tableExportModule', {
       return row[childrenField] && row[childrenField].length
     }
 
-    const getSeq = (row: any, $rowIndex: any, column: any, $columnIndex: any) => {
+    const getSeq = (cellValue: any, row: any, $rowIndex: any, column: any, $columnIndex: any) => {
       const seqOpts = computeSeqOpts.value
       const seqMethod = seqOpts.seqMethod || column.seqMethod
       if (seqMethod) {
@@ -307,7 +307,7 @@ hooks.add('tableExportModule', {
           $columnIndex
         })
       }
-      return $xeTable.getRowSeq(row)
+      return cellValue
     }
 
     function getHeaderTitle (opts: any, column: any) {
@@ -363,9 +363,11 @@ hooks.add('tableExportModule', {
                 cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
               } else {
                 switch (column.type) {
-                  case 'seq':
-                    cellValue = mode === 'all' ? path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('') : getSeq(row, $rowIndex, column, $columnIndex)
+                  case 'seq': {
+                    const seqVal = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+                    cellValue = mode === 'all' ? seqVal : getSeq(seqVal, row, $rowIndex, column, $columnIndex)
                     break
+                  }
                   case 'checkbox':
                     cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
                     item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
@@ -419,9 +421,11 @@ hooks.add('tableExportModule', {
             cellValue = exportLabelMethod({ $table: $xeTable, row, column, options: opts })
           } else {
             switch (column.type) {
-              case 'seq':
-                cellValue = mode === 'all' ? $rowIndex + 1 : getSeq(row, $rowIndex, column, $columnIndex)
+              case 'seq': {
+                const seqValue = $rowIndex + 1
+                cellValue = mode === 'all' ? seqValue : getSeq(seqValue, row, $rowIndex, column, $columnIndex)
                 break
+              }
               case 'checkbox':
                 cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
                 item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''

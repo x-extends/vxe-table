@@ -18,7 +18,7 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent } from 'vxe-pc-ui'
+import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns } = VxeUI
@@ -39,6 +39,8 @@ export default defineComponent({
     // 使用已安装的组件，如果未安装则不渲染
     const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+
+    const $xeTabs = inject<(VxeTabsConstructor & VxeTabsPrivateMethods) | null>('$xeTabs', null)
 
     const { computeSize } = useFns.useSize(props)
 
@@ -3273,6 +3275,11 @@ export default defineComponent({
         const fullColumnFieldData = internalData.fullColumnFieldData
         return field && fullColumnFieldData[field] ? fullColumnFieldData[field].column : null
       },
+      getParentColumn (fieldOrColumn) {
+        const fullColumnIdData = internalData.fullColumnIdData
+        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+        return column && column.parentId && fullColumnIdData[column.parentId] ? fullColumnIdData[column.parentId].column : null
+      },
       /**
        * 获取当前表格的列
        * 收集到的全量列、全量表头列、处理条件之后的全量表头列、当前渲染中的表头列
@@ -3551,10 +3558,14 @@ export default defineComponent({
        * 计算单元格列宽，动态分配可用剩余空间
        * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
        */
-      recalculate (refull?: boolean) {
+      recalculate (reFull?: boolean) {
+        const el = refElem.value
+        if (!el || !el.clientWidth) {
+          return nextTick()
+        }
         calcCellWidth()
         autoCellWidth()
-        if (refull === true) {
+        if (reFull === true) {
           // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
           return computeScrollLoad().then(() => {
             autoCellWidth()
@@ -5251,6 +5262,10 @@ export default defineComponent({
       if ($xeTable.closeMenu) {
         $xeTable.closeMenu()
       }
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return nextTick()
+      }
       tableMethods.updateCellAreas()
       tableMethods.recalculate(true)
     }
@@ -6686,6 +6701,12 @@ export default defineComponent({
       })
     })
 
+    if ($xeTabs) {
+      watch(() => $xeTabs ? $xeTabs.reactData.resizeFlag : null, () => {
+        handleGlobalResizeEvent()
+      })
+    }
+
     hooks.forEach((options) => {
       const { setupTable } = options
       if (setupTable) {
@@ -6971,6 +6992,7 @@ export default defineComponent({
           'is--virtual-x': scrollXLoad,
           'is--virtual-y': scrollYLoad
         }],
+        spellcheck: false,
         onKeydown: keydownEvent
       }, [
         /**

@@ -306,7 +306,9 @@ export default {
       reUpload: 'Re upload',
       uploadProgress: 'Uploading {0}%',
       uploadErr: 'Fail to upload',
-      uploadSuccess: 'Successfully upload'
+      uploadSuccess: 'Successfully upload',
+      moreBtnText: 'More ({0})',
+      viewItemTitle: 'click to view'
     },
     formDesign: {
       formName: 'Form name',
@@ -337,6 +339,7 @@ export default {
         group: {
           base: 'Base control',
           layout: 'Layout control',
+          system: 'System control',
           advanced: 'Advanced control'
         },
         copyTitle: 'Copy_{0}',

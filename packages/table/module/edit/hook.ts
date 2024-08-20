@@ -764,25 +764,26 @@ hooks.add('tableEditModule', {
         const { editRender } = column
         if (isEnableConf(editRender)) {
           const compRender = renderer.get(editRender.name)
-          let { autofocus, autoselect } = editRender
+          let autoFocus = editRender.autofocus || editRender.autoFocus
+          let autoSelect = editRender.autoSelect || editRender.autoselect
           let inputElem
-          if (!autofocus && compRender) {
-            autofocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
+          if (!autoFocus && compRender) {
+            autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
           }
-          if (!autoselect && compRender) {
-            autoselect = compRender.tableAutoSelect || compRender.autoselect
+          if (!autoSelect && compRender) {
+            autoSelect = compRender.tableAutoSelect || compRender.autoselect
           }
           // 如果指定了聚焦 class
-          if (XEUtils.isFunction(autofocus)) {
-            inputElem = autofocus(params)
-          } else if (autofocus) {
-            inputElem = cell.querySelector(autofocus)
+          if (XEUtils.isFunction(autoFocus)) {
+            inputElem = autoFocus(params)
+          } else if (autoFocus) {
+            inputElem = cell.querySelector(autoFocus)
             if (inputElem) {
               inputElem.focus()
             }
           }
           if (inputElem) {
-            if (autoselect) {
+            if (autoSelect) {
               inputElem.select()
             } else {
               // 保持一致行为，光标移到末端

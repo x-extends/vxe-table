@@ -436,14 +436,14 @@ function oldFilterRender (renderOpts: any, params: any) {
 
 function handleFilterMethod ({ option, row, column }: any) {
   const { data } = option
-  const cellValue = XEUtils.get(row, column.property)
+  const cellValue = XEUtils.get(row, column.field)
   /* eslint-disable eqeqeq */
   return cellValue == data
 }
 
 function handleInputFilterMethod ({ option, row, column }: any) {
   const { data } = option
-  const cellValue = XEUtils.get(row, column.property)
+  const cellValue = XEUtils.get(row, column.field)
   /* eslint-disable eqeqeq */
   return XEUtils.toValueString(cellValue).indexOf(data) > -1
 }
@@ -501,7 +501,7 @@ function oldSelectEditRender (renderOpts: any, params: any) {
 
 function getSelectCellValue (renderOpts: any, { row, column }: any) {
   const { options, optionGroups, optionProps = {}, optionGroupProps = {} } = renderOpts
-  const cellValue = XEUtils.get(row, column.property)
+  const cellValue = XEUtils.get(row, column.field)
   let selectItem: any
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
@@ -536,7 +536,7 @@ function handleExportSelectMethod (params: any) {
 
 function getTreeSelectCellValue (renderOpts: any, { row, column }: any) {
   const { options, optionProps = {} } = renderOpts
-  const cellValue = XEUtils.get(row, column.property)
+  const cellValue = XEUtils.get(row, column.field)
   const labelProp = optionProps.label || 'label'
   const valueProp = optionProps.value || 'value'
   const childrenProp = optionProps.children || 'children'
@@ -564,23 +564,23 @@ function handleExportTreeSelectMethod (params: any) {
  */
 renderer.mixin({
   input: {
-    autofocus: 'input',
-    renderEdit: nativeEditRender,
-    renderDefault: nativeEditRender,
-    renderFilter: nativeFilterRender,
-    defaultFilterMethod: handleInputFilterMethod
+    tableAutoFocus: 'input',
+    renderTableEdit: nativeEditRender,
+    renderTableDefault: nativeEditRender,
+    renderTableFilter: nativeFilterRender,
+    tableFilterDefaultMethod: handleInputFilterMethod
   },
   textarea: {
-    autofocus: 'textarea',
-    renderEdit: nativeEditRender
+    tableAutoFocus: 'textarea',
+    renderTableEdit: nativeEditRender
   },
   select: {
-    renderEdit: nativeSelectEditRender,
-    renderDefault: nativeSelectEditRender,
-    renderCell (renderOpts, params) {
+    renderTableEdit: nativeSelectEditRender,
+    renderTableDefault: nativeSelectEditRender,
+    renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (renderOpts, params) {
+    renderTableFilter (renderOpts, params) {
       const { column } = params
       return column.filters.map((option, oIndex) => {
         return h('select', {
@@ -592,17 +592,17 @@ renderer.mixin({
         renderOpts.optionGroups ? renderNativeOptgroups(renderOpts, params, renderNativeOptions) : renderNativeOptions(renderOpts.options, renderOpts, params))
       })
     },
-    defaultFilterMethod: handleFilterMethod,
-    exportMethod: handleExportSelectMethod
+    tableFilterDefaultMethod: handleFilterMethod,
+    tableExportMethod: handleExportSelectMethod
   },
   VxeInput: {
-    autofocus: 'input',
-    renderEdit: defaultEditRender,
-    renderCell (renderOpts, params) {
+    tableAutoFocus: 'input',
+    renderTableEdit: defaultEditRender,
+    renderTableCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || getConfig().input?.digits || 2
-      let cellValue = XEUtils.get(row, column.property)
+      let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
         switch (props.type) {
           case 'date':
@@ -619,18 +619,18 @@ renderer.mixin({
       }
       return getCellLabelVNs(renderOpts, params, cellValue)
     },
-    renderDefault: defaultEditRender,
-    renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleInputFilterMethod
+    renderTableDefault: defaultEditRender,
+    renderTableFilter: defaultFilterRender,
+    tableFilterDefaultMethod: handleInputFilterMethod
   },
   VxeNumberInput: {
-    autofocus: 'input',
-    renderEdit: defaultEditRender,
-    renderCell (renderOpts, params) {
+    tableAutoFocus: 'input',
+    renderTableEdit: defaultEditRender,
+    renderTableCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || getConfig().numberInput?.digits || 2
-      let cellValue = XEUtils.get(row, column.property)
+      let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
         switch (props.type) {
           case 'float':
@@ -640,17 +640,17 @@ renderer.mixin({
       }
       return getCellLabelVNs(renderOpts, params, cellValue)
     },
-    renderDefault: defaultEditRender,
-    renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleInputFilterMethod
+    renderTableDefault: defaultEditRender,
+    renderTableFilter: defaultFilterRender,
+    tableFilterDefaultMethod: handleInputFilterMethod
   },
   VxeDatePicker: {
-    autofocus: 'input',
-    renderEdit: defaultEditRender,
-    renderCell (renderOpts, params) {
+    tableAutoFocus: 'input',
+    renderTableEdit: defaultEditRender,
+    renderTableCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
-      let cellValue = XEUtils.get(row, column.property)
+      let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
         switch (props.type) {
           case 'date':
@@ -664,18 +664,18 @@ renderer.mixin({
       }
       return getCellLabelVNs(renderOpts, params, cellValue)
     },
-    renderDefault: defaultEditRender,
-    renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleFilterMethod
+    renderTableDefault: defaultEditRender,
+    renderTableFilter: defaultFilterRender,
+    tableFilterDefaultMethod: handleFilterMethod
   },
   VxeTextarea: {
-    autofocus: 'VxeTextarea'
+    tableAutoFocus: 'VxeTextarea'
   },
   VxeButton: {
-    renderDefault: buttonCellRender
+    renderTableDefault: buttonCellRender
   },
   VxeButtonGroup: {
-    renderDefault (renderOpts, params) {
+    renderTableDefault (renderOpts, params) {
       const { options } = renderOpts
       return [
         h(getDefaultComponent(renderOpts), {
@@ -687,13 +687,13 @@ renderer.mixin({
     }
   },
   VxeSelect: {
-    autofocus: 'input',
-    renderEdit: defaultSelectEditRender,
-    renderDefault: defaultSelectEditRender,
-    renderCell (renderOpts, params) {
+    tableAutoFocus: 'input',
+    renderTableEdit: defaultSelectEditRender,
+    renderTableDefault: defaultSelectEditRender,
+    renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (renderOpts, params) {
+    renderTableFilter (renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       return column.filters.map((option, oIndex) => {
@@ -705,35 +705,46 @@ renderer.mixin({
         })
       })
     },
-    defaultFilterMethod: handleFilterMethod,
-    exportMethod: handleExportSelectMethod
+    tableFilterDefaultMethod: handleFilterMethod,
+    tableExportMethod: handleExportSelectMethod
   },
   VxeTreeSelect: {
-    autofocus: 'input',
-    renderEdit: defaultTreeSelectEditRender,
-    renderCell (renderOpts, params) {
+    tableAutoFocus: 'input',
+    renderTableEdit: defaultTreeSelectEditRender,
+    renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
-    exportMethod: handleExportTreeSelectMethod
+    tableExportMethod: handleExportTreeSelectMethod
+  },
+  VxeIconPicker: {
+    tableAutoFocus: 'input',
+    renderTableEdit: defaultEditRender,
+    renderTableCell (renderOpts, params) {
+      const { row, column } = params
+      const cellValue = XEUtils.get(row, column.field)
+      return h('i', {
+        class: cellValue
+      })
+    }
   },
   VxeRadioGroup: {
-    renderDefault: radioAndCheckboxEditRender
+    renderTableDefault: radioAndCheckboxEditRender
   },
   VxeCheckboxGroup: {
-    renderDefault: radioAndCheckboxEditRender
+    renderTableDefault: radioAndCheckboxEditRender
   },
   VxeSwitch: {
-    autofocus: 'button',
-    renderEdit: defaultEditRender,
-    renderDefault: defaultEditRender
+    tableAutoFocus: 'button',
+    renderTableEdit: defaultEditRender,
+    renderTableDefault: defaultEditRender
   },
   VxeUpload: {
-    renderEdit: defaultEditRender,
-    renderCell: defaultEditRender,
-    renderDefault: defaultEditRender
+    renderTableEdit: defaultEditRender,
+    renderTableCell: defaultEditRender,
+    renderTableDefault: defaultEditRender
   },
   VxeImage: {
-    renderDefault (renderOpts, params) {
+    renderTableDefault (renderOpts, params) {
       const { row, column } = params
       const { props } = renderOpts
       const cellValue = getCellValue(row, column)
@@ -747,7 +758,7 @@ renderer.mixin({
     }
   },
   VxeImageGroup: {
-    renderDefault (renderOpts, params) {
+    renderTableDefault (renderOpts, params) {
       const { row, column } = params
       const { props } = renderOpts
       const cellValue = getCellValue(row, column)
@@ -763,13 +774,13 @@ renderer.mixin({
 
   // 以下已废弃
   $input: {
-    autofocus: '.vxe-input--inner',
-    renderEdit: oldEditRender,
-    renderCell (renderOpts, params) {
+    tableAutoFocus: '.vxe-input--inner',
+    renderTableEdit: oldEditRender,
+    renderTableCell (renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || getConfig().input?.digits || 2
-      let cellValue = XEUtils.get(row, column.property)
+      let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
         switch (props.type) {
           case 'date':
@@ -785,27 +796,27 @@ renderer.mixin({
       }
       return getCellLabelVNs(renderOpts, params, cellValue)
     },
-    renderDefault: oldEditRender,
-    renderFilter: oldFilterRender,
-    defaultFilterMethod: handleInputFilterMethod
+    renderTableDefault: oldEditRender,
+    renderTableFilter: oldFilterRender,
+    tableFilterDefaultMethod: handleInputFilterMethod
   },
   $textarea: {
-    autofocus: '.vxe-textarea--inner'
+    tableAutoFocus: '.vxe-textarea--inner'
   },
   $button: {
-    renderDefault: oldButtonEditRender
+    renderTableDefault: oldButtonEditRender
   },
   $buttons: {
-    renderDefault: oldButtonsEditRender
+    renderTableDefault: oldButtonsEditRender
   },
   $select: {
-    autofocus: '.vxe-input--inner',
-    renderEdit: oldSelectEditRender,
-    renderDefault: oldSelectEditRender,
-    renderCell (renderOpts, params) {
+    tableAutoFocus: '.vxe-input--inner',
+    renderTableEdit: oldSelectEditRender,
+    renderTableDefault: oldSelectEditRender,
+    renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (renderOpts, params) {
+    renderTableFilter (renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       return column.filters.map((option, oIndex) => {
@@ -817,19 +828,19 @@ renderer.mixin({
         })
       })
     },
-    defaultFilterMethod: handleFilterMethod,
-    exportMethod: handleExportSelectMethod
+    tableFilterDefaultMethod: handleFilterMethod,
+    tableExportMethod: handleExportSelectMethod
   },
   $radio: {
-    autofocus: '.vxe-radio--input'
+    tableAutoFocus: '.vxe-radio--input'
   },
   $checkbox: {
-    autofocus: '.vxe-checkbox--input'
+    tableAutoFocus: '.vxe-checkbox--input'
   },
   $switch: {
-    autofocus: '.vxe-switch--button',
-    renderEdit: oldEditRender,
-    renderDefault: oldEditRender
+    tableAutoFocus: '.vxe-switch--button',
+    renderTableEdit: oldEditRender,
+    renderTableDefault: oldEditRender
   }
   // 以上已废弃
 })
