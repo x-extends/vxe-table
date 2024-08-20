@@ -4,7 +4,7 @@ import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeButtonComponent } from 'vxe-pc-ui'
+import type { VxeButtonComponent, VxeButtonEvents } from 'vxe-pc-ui'
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
@@ -146,7 +146,7 @@ export default defineComponent({
       }
     }
 
-    const refreshEvent = (evnt: KeyboardEvent) => {
+    const refreshEvent: VxeButtonEvents.Click = ({ $event }) => {
       const { isRefresh } = reactData
       const refreshOpts = computeRefreshOpts.value
       if (!isRefresh) {
@@ -162,16 +162,16 @@ export default defineComponent({
           }
         } else if ($xeGrid) {
           reactData.isRefresh = true
-          $xeGrid.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, evnt).catch((e) => e).then(() => {
+          $xeGrid.triggerToolbarCommitEvent({ code: refreshOpts.code || 'reload' }, $event).catch((e) => e).then(() => {
             reactData.isRefresh = false
           })
         }
       }
     }
 
-    const zoomEvent = (evnt: Event) => {
+    const zoomEvent: VxeButtonEvents.Click = ({ $event }) => {
       if ($xeGrid) {
-        $xeGrid.triggerZoomEvent(evnt)
+        $xeGrid.triggerZoomEvent($event)
       }
     }
 
@@ -270,7 +270,7 @@ export default defineComponent({
               round: child.round,
               status: child.status,
               content: child.name,
-              onClick: (evnt: Event) => isBtn ? btnEvent(evnt, child) : tolEvent(evnt, child)
+              onClick: ({ $event }) => isBtn ? btnEvent($event, child) : tolEvent($event, child)
             })
             : createCommentVNode()
         })
@@ -319,7 +319,7 @@ export default defineComponent({
                     destroyOnClose: item.destroyOnClose,
                     placement: item.placement,
                     transfer: item.transfer,
-                    onClick: (evnt: Event) => btnEvent(evnt, item)
+                    onClick: ({ $event }) => btnEvent($event, item)
                   }, dropdowns && dropdowns.length
                     ? {
                         dropdowns: () => renderDropdowns(item, true)
@@ -377,7 +377,7 @@ export default defineComponent({
                     destroyOnClose: item.destroyOnClose,
                     placement: item.placement,
                     transfer: item.transfer,
-                    onClick: (evnt: Event) => tolEvent(evnt, item)
+                    onClick: ({ $event }) => tolEvent($event, item)
                   }, dropdowns && dropdowns.length
                     ? {
                         dropdowns: () => renderDropdowns(item, false)

@@ -5,7 +5,7 @@ import { addClass, removeClass } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
-import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from 'vxe-pc-ui'
+import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent, VxeButtonEvents } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes } from '../../../../types'
 
 const { getI18n, getIcon } = VxeUI
@@ -55,7 +55,7 @@ export default defineComponent({
       }, 300)
     }
 
-    const confirmCustomEvent = (evnt: Event) => {
+    const confirmCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
@@ -82,11 +82,11 @@ export default defineComponent({
         }
       })
       $xeTable.closeCustom()
-      $xeTable.emitCustomEvent('confirm', evnt)
+      $xeTable.emitCustomEvent('confirm', $event)
       $xeTable.saveCustomStore('confirm')
     }
 
-    const cancelCustomEvent = (evnt: Event) => {
+    const cancelCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
       const { customStore } = props
       const { customColumnList } = reactData
       const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
@@ -112,7 +112,7 @@ export default defineComponent({
         }
       }, { children: 'children' })
       $xeTable.closeCustom()
-      $xeTable.emitCustomEvent('cancel', evnt)
+      $xeTable.emitCustomEvent('cancel', $event)
     }
 
     const handleResetCustomEvent = (evnt: Event) => {
@@ -121,7 +121,7 @@ export default defineComponent({
       $xeTable.emitCustomEvent('reset', evnt)
     }
 
-    const resetCustomEvent = (evnt: Event) => {
+    const resetCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
       if (VxeUI.modal) {
         VxeUI.modal.confirm({
           content: getI18n('vxe.custom.cstmConfirmRestore'),
@@ -129,11 +129,11 @@ export default defineComponent({
           escClosable: true
         }).then(type => {
           if (type === 'confirm') {
-            handleResetCustomEvent(evnt)
+            handleResetCustomEvent($event)
           }
         })
       } else {
-        handleResetCustomEvent(evnt)
+        handleResetCustomEvent($event)
       }
     }
 
