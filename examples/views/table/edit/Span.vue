@@ -126,7 +126,7 @@ export default {
               const $table = this.$refs.xTable
               const record = {}
               $table.insert(record).then(({ row }) => {
-                $table.setActiveCell(row, 'role')
+                $table.setEditCell(row, 'role')
               })
             },
             async saveEvent () {
@@ -175,7 +175,7 @@ export default {
       const $table = this.$refs.xTable
       const record = {}
       $table.insert(record).then(({ row }) => {
-        $table.setActiveCell(row, 'role')
+        $table.setEditCell(row, 'role')
       })
     },
     async saveEvent () {

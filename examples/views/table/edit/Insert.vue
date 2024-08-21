@@ -141,7 +141,6 @@ export default {
         date12: '2021-01-01'
       }
       const { row: newRow } = await $table.insertAt(record, row)
-      debugger
       await $table.setActiveCell(newRow, 'sex')
     },
     getInsertEvent () {

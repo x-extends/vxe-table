@@ -665,25 +665,25 @@ function oldFormItemRadioAndCheckboxRender (h, renderOpts, params) {
  */
 const renderMap = {
   input: {
-    autoFocus: 'input',
-    renderEdit: nativeEditRender,
-    renderDefault: nativeEditRender,
-    renderFilter: nativeFilterRender,
-    defaultFilterMethod: handleInputFilterMethod,
-    renderItemContent: nativeItemRender
+    tableAutofocus: 'input',
+    renderTableEdit: nativeEditRender,
+    renderTableDefault: nativeEditRender,
+    renderTableFilter: nativeFilterRender,
+    defaultTableFilterMethod: handleInputFilterMethod,
+    renderFormItemContent: nativeItemRender
   },
   textarea: {
-    autoFocus: 'textarea',
-    renderEdit: nativeEditRender,
-    renderItemContent: nativeItemRender
+    tableAutofocus: 'textarea',
+    renderTableEdit: nativeEditRender,
+    renderFormItemContent: nativeItemRender
   },
   select: {
-    renderEdit: nativeSelectEditRender,
-    renderDefault: nativeSelectEditRender,
-    renderCell (h, renderOpts, params) {
+    renderTableEdit: nativeSelectEditRender,
+    renderTableDefault: nativeSelectEditRender,
+    renderTableCell (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (h, renderOpts, params) {
+    renderTableFilter (h, renderOpts, params) {
       const { column } = params
       return column.filters.map((option, oIndex) => {
         return h('select', {
@@ -695,8 +695,8 @@ const renderMap = {
         renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeOptions) : renderNativeOptions(h, renderOpts.options, renderOpts, params))
       })
     },
-    defaultFilterMethod: handleFilterMethod,
-    renderItemContent (h, renderOpts, params) {
+    defaultTableFilterMethod: handleFilterMethod,
+    renderFormItemContent (h, renderOpts, params) {
       return [
         h('select', {
           class: 'vxe-default-select',
@@ -706,12 +706,12 @@ const renderMap = {
         renderOpts.optionGroups ? renderNativeOptgroups(h, renderOpts, params, renderNativeFormOptions) : renderNativeFormOptions(h, renderOpts.options, renderOpts, params))
       ]
     },
-    cellExportMethod: handleExportSelectMethod
+    tableExportMethod: handleExportSelectMethod
   },
   VxeInput: {
-    autoFocus: '.vxe-input--inner',
-    renderEdit: defaultEditRender,
-    renderCell (h, renderOpts, params) {
+    tableAutofocus: '.vxe-input--inner',
+    renderTableEdit: defaultEditRender,
+    renderTableCell (h, renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || GlobalConfig.input.digits
@@ -732,22 +732,22 @@ const renderMap = {
       }
       return getCellLabelVNs(h, renderOpts, params, cellValue)
     },
-    renderDefault: defaultEditRender,
-    renderFilter: defaultFilterRender,
-    defaultFilterMethod: handleInputFilterMethod,
-    renderItemContent: defaultItemRender
+    renderTableDefault: defaultEditRender,
+    renderTableFilter: defaultFilterRender,
+    defaultTableFilterMethod: handleInputFilterMethod,
+    renderFormItemContent: defaultItemRender
   },
   VxeTextarea: {
-    autoFocus: '.vxe-textarea--inner',
-    renderItemContent: defaultItemRender
+    tableAutofocus: '.vxe-textarea--inner',
+    renderFormItemContent: defaultItemRender
   },
   VxeButton: {
-    renderDefault: defaultCellRender,
-    renderItemContent: defaultFormItemRender
+    renderTableDefault: defaultCellRender,
+    renderFormItemContent: defaultFormItemRender
   },
   VxeButtonGroup: {
-    renderDefault: defaultCellRender,
-    renderItemContent (h, renderOpts, params) {
+    renderTableDefault: defaultCellRender,
+    renderFormItemContent (h, renderOpts, params) {
       const { options } = renderOpts
       const { data, property } = params
       const itemValue = XEUtils.get(data, property)
@@ -761,13 +761,13 @@ const renderMap = {
     }
   },
   VxeSelect: {
-    autoFocus: '.vxe-input--inner',
-    renderEdit: defaultSelectEditRender,
-    renderDefault: defaultSelectEditRender,
-    renderCell (h, renderOpts, params) {
+    tableAutofocus: '.vxe-input--inner',
+    renderTableEdit: defaultSelectEditRender,
+    renderTableDefault: defaultSelectEditRender,
+    renderTableCell (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (h, renderOpts, params) {
+    renderTableFilter (h, renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       const nativeOn = getNativeOns(renderOpts, params)
@@ -781,8 +781,8 @@ const renderMap = {
         })
       })
     },
-    defaultFilterMethod: handleFilterMethod,
-    renderItemContent (h, renderOpts, params) {
+    defaultTableFilterMethod: handleFilterMethod,
+    renderFormItemContent (h, renderOpts, params) {
       const { data, property } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       const itemValue = XEUtils.get(data, property)
@@ -794,36 +794,36 @@ const renderMap = {
         })
       ]
     },
-    cellExportMethod: handleExportSelectMethod
+    tableExportMethod: handleExportSelectMethod
   },
   VxeRadio: {
-    autoFocus: '.vxe-radio--input',
-    renderItemContent: defaultFormItemRender
+    tableAutofocus: '.vxe-radio--input',
+    renderFormItemContent: defaultFormItemRender
   },
   VxeRadioGroup: {
-    autoFocus: '.vxe-radio--input',
-    renderItemContent: formItemRadioAndCheckboxRender
+    tableAutofocus: '.vxe-radio--input',
+    renderFormItemContent: formItemRadioAndCheckboxRender
   },
   VxeCheckbox: {
-    autoFocus: '.vxe-checkbox--input',
-    renderItemContent: defaultFormItemRender
+    tableAutofocus: '.vxe-checkbox--input',
+    renderFormItemContent: defaultFormItemRender
   },
   VxeCheckboxGroup: {
-    autoFocus: '.vxe-checkbox--input',
-    renderItemContent: formItemRadioAndCheckboxRender
+    tableAutofocus: '.vxe-checkbox--input',
+    renderFormItemContent: formItemRadioAndCheckboxRender
   },
   VxeSwitch: {
-    autoFocus: '.vxe-switch--button',
-    renderEdit: defaultEditRender,
-    renderDefault: defaultEditRender,
-    renderItemContent: defaultItemRender
+    tableAutofocus: '.vxe-switch--button',
+    renderTableEdit: defaultEditRender,
+    renderTableDefault: defaultEditRender,
+    renderFormItemContent: defaultItemRender
   },
 
   // 以下已废弃
   $input: {
-    autoFocus: '.vxe-input--inner',
-    renderEdit: oldEditRender,
-    renderCell (h, renderOpts, params) {
+    tableAutofocus: '.vxe-input--inner',
+    renderTableEdit: oldEditRender,
+    renderTableCell (h, renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
       const digits = props.digits || GlobalConfig.input.digits
@@ -843,31 +843,31 @@ const renderMap = {
       }
       return getCellLabelVNs(h, renderOpts, params, cellValue)
     },
-    renderDefault: oldEditRender,
-    renderFilter: oldFilterRender,
-    defaultFilterMethod: handleInputFilterMethod,
-    renderItemContent: oldItemRender
+    renderTableDefault: oldEditRender,
+    renderTableFilter: oldFilterRender,
+    defaultTableFilterMethod: handleInputFilterMethod,
+    renderFormItemContent: oldItemRender
   },
   $textarea: {
-    autoFocus: '.vxe-textarea--inner',
-    renderItemContent: oldItemRender
+    tableAutofocus: '.vxe-textarea--inner',
+    renderFormItemContent: oldItemRender
   },
   $button: {
-    renderDefault: oldButtonEditRender,
-    renderItemContent: oldButtonItemRender
+    renderTableDefault: oldButtonEditRender,
+    renderFormItemContent: oldButtonItemRender
   },
   $buttons: {
-    renderDefault: oldButtonsEditRender,
-    renderItemContent: oldButtonsItemRender
+    renderTableDefault: oldButtonsEditRender,
+    renderFormItemContent: oldButtonsItemRender
   },
   $select: {
-    autoFocus: '.vxe-input--inner',
-    renderEdit: oldSelectEditRender,
-    renderDefault: oldSelectEditRender,
-    renderCell (h, renderOpts, params) {
+    tableAutofocus: '.vxe-input--inner',
+    renderTableEdit: oldSelectEditRender,
+    renderTableDefault: oldSelectEditRender,
+    renderTableCell (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getSelectCellValue(renderOpts, params))
     },
-    renderFilter (h, renderOpts, params) {
+    renderTableFilter (h, renderOpts, params) {
       const { column } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       const nativeOn = getNativeOns(renderOpts, params)
@@ -881,8 +881,8 @@ const renderMap = {
         })
       })
     },
-    defaultFilterMethod: handleFilterMethod,
-    renderItemContent (h, renderOpts, params) {
+    defaultTableFilterMethod: handleFilterMethod,
+    renderFormItemContent (h, renderOpts, params) {
       const { data, property } = params
       const { options, optionProps, optionGroups, optionGroupProps } = renderOpts
       const itemValue = XEUtils.get(data, property)
@@ -894,21 +894,21 @@ const renderMap = {
         })
       ]
     },
-    cellExportMethod: handleExportSelectMethod
+    tableExportMethod: handleExportSelectMethod
   },
   $radio: {
-    autoFocus: '.vxe-radio--input',
-    renderItemContent: oldFormItemRadioAndCheckboxRender
+    tableAutofocus: '.vxe-radio--input',
+    renderFormItemContent: oldFormItemRadioAndCheckboxRender
   },
   $checkbox: {
-    autoFocus: '.vxe-checkbox--input',
-    renderItemContent: oldFormItemRadioAndCheckboxRender
+    tableAutofocus: '.vxe-checkbox--input',
+    renderFormItemContent: oldFormItemRadioAndCheckboxRender
   },
   $switch: {
-    autoFocus: '.vxe-switch--button',
-    renderEdit: oldEditRender,
-    renderDefault: oldEditRender,
-    renderItemContent: oldItemRender
+    tableAutofocus: '.vxe-switch--button',
+    renderTableEdit: oldEditRender,
+    renderTableDefault: oldEditRender,
+    renderFormItemContent: oldItemRender
   }
   // 以上已废弃
 }

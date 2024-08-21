@@ -2761,7 +2761,7 @@ const Methods = {
         const isUpArrow = keyCode === 38
         const isRightArrow = keyCode === 39
         const isDwArrow = keyCode === 40
-        const isDel = keyCode === 46
+        const hasDeleteKey = keyCode === 46
         const isF2 = keyCode === 113
         const isContextMenu = keyCode === 93
         const hasMetaKey = evnt.metaKey
@@ -2772,6 +2772,7 @@ const Methods = {
         const operCtxMenu = isCtxMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
         const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
         const childrenField = treeOpts.children || treeOpts.childrenField
+        const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
         let params
         if (filterStore.visible) {
           if (isEsc) {
@@ -2872,9 +2873,32 @@ const Methods = {
           } else if (actived.row || actived.column) {
             this.moveTabSelected(actived.args, hasShiftKey, evnt)
           }
-        } else if (keyboardConfig && (treeConfig || isEnableConf(editConfig)) && (isDel || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow ? hasBackspaceKey && keyboardOpts.isArrow : hasBackspaceKey))) {
+        } else if (keyboardConfig && keyboardOpts.isDel && hasDeleteKey && isEnableConf(editConfig) && (selected.row || selected.column)) {
+          // 如果是删除键
           if (!isEditStatus) {
-            const { delMethod, backMethod } = keyboardOpts
+            const { delMethod } = keyboardOpts
+            const delPaqrams = {
+              row: selected.row,
+              rowIndex: this.getRowIndex(selected.row),
+              column: selected.column,
+              columnIndex: this.getColumnIndex(selected.column),
+              $table: this
+            }
+            // 是否被禁用
+            if (!beforeEditMethod || beforeEditMethod(params)) {
+              if (delMethod) {
+                delMethod(delPaqrams)
+              } else {
+                setCellValue(selected.row, selected.column, null)
+              }
+              // 如果按下 del 键，更新表尾数据
+              this.updateFooter()
+              this.emitEvent('cell-delete-value', delPaqrams, evnt)
+            }
+          }
+        } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
+          if (!isEditStatus) {
+            const { backMethod } = keyboardOpts
             // 如果是删除键
             if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
               const delPaqrams = {
@@ -2884,12 +2908,8 @@ const Methods = {
                 columnIndex: this.getColumnIndex(selected.column),
                 $table: this
               }
-              if (delMethod) {
-                delMethod(delPaqrams)
-              } else {
-                setCellValue(selected.row, selected.column, null)
-              }
-              if (hasBackspaceKey) {
+              // 是否被禁用
+              if (!beforeEditMethod || beforeEditMethod(params)) {
                 if (backMethod) {
                   backMethod({
                     row: selected.row,
@@ -2899,24 +2919,27 @@ const Methods = {
                     $table: this
                   })
                 } else {
+                  setCellValue(selected.row, selected.column, null)
                   this.handleActived(selected.args, evnt)
                 }
-              } else if (isDel) {
-                // 如果按下 del 键，更新表尾数据
-                this.updateFooter()
-              }
-              this.emitEvent('cell-delete-value', delPaqrams, evnt)
-            } else if (hasBackspaceKey && keyboardOpts.isArrow && treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
-              // 如果树形表格回退键关闭当前行返回父节点
-              const { parent: parentRow } = XEUtils.findTree(this.afterFullData, item => item === currentRow, { children: childrenField })
-              if (parentRow) {
-                evnt.preventDefault()
-                params = { $table: this, row: parentRow }
-                this.setTreeExpand(parentRow, false)
-                  .then(() => this.scrollToRow(parentRow))
-                  .then(() => this.triggerCurrentRowEvent(evnt, params))
+                this.emitEvent('cell-backspace-value', delPaqrams, evnt)
               }
             }
+          }
+        } else if (hasBackspaceKey && keyboardConfig && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
+          // 如果树形表格回退键关闭当前行返回父节点
+          const { parent: parentRow } = XEUtils.findTree(this.afterTreeFullData, item => item === currentRow, { children: childrenField })
+          if (parentRow) {
+            evnt.preventDefault()
+            params = {
+              $table: this,
+              row: parentRow,
+              rowIndex: this.getRowIndex(parentRow),
+              $rowIndex: this.getVMRowIndex(parentRow)
+            }
+            this.setTreeExpand(parentRow, false)
+              .then(() => this.scrollToRow(parentRow))
+              .then(() => this.triggerCurrentRowEvent(evnt, params))
           }
         } else if (keyboardConfig && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
           const { editMethod } = keyboardOpts

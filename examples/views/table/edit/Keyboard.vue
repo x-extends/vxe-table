@@ -24,7 +24,7 @@
       :mouse-config="{selected: true}"
       :checkbox-config="{range: true}"
       :menu-config="tableMenu"
-      :keyboard-config="{isArrow: true, isDel: true, isEnter: true, isTab: true, isEdit: true, isChecked: true}"
+      :keyboard-config="{isArrow: true, isBack: true, isDel: true, isEnter: true, isTab: true, isEdit: true, isChecked: true}"
       :edit-config="{trigger: 'dblclick', mode: 'cell'}">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column type="checkbox" width="60"></vxe-column>

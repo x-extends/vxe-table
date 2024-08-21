@@ -623,10 +623,10 @@ export default {
         let autoSelect = editRender.autoSelect || editRender.autoselect
         let inputElem
         if (!autoFocus && compRender) {
-          autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
+          autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autoFocus || compRender.autofocus
         }
         if (!autoSelect && compRender) {
-          autoSelect = compRender.tableAutoSelect || compRender.autoselect
+          autoSelect = compRender.tableAutoSelect || compRender.autoSelect || compRender.autoselect
         }
         // 如果指定了聚焦 class
         if (XEUtils.isFunction(autoFocus)) {

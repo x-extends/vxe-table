@@ -166,7 +166,7 @@ function getLabelData ($xetable, opts, columns, datas) {
       if (!exportLabelMethod && renderOpts && renderOpts.name) {
         const compConf = VXETable.renderer.get(renderOpts.name)
         if (compConf) {
-          exportLabelMethod = compConf.exportMethod || compConf.cellExportMethod
+          exportLabelMethod = compConf.tableExportMethod || compConf.exportMethod || compConf.cellExportMethod
         }
       }
       if (exportLabelMethod) {
