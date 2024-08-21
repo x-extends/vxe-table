@@ -4982,6 +4982,7 @@ export default defineComponent({
           const operArrow = isLeftArrow || isUpArrow || isRightArrow || isDwArrow
           const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
+          const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
           let params: any
           if (operCtxMenu) {
             // 如果配置了右键菜单; 支持方向键操作、回车
@@ -5108,18 +5109,21 @@ export default defineComponent({
                 columnIndex: tableMethods.getColumnIndex(selected.column),
                 $table: $xeTable
               }
-              if (delMethod) {
-                delMethod(delPaqrams)
-              } else {
-                setCellValue(selected.row, selected.column, null)
+              // 是否被禁用
+              if (!beforeEditMethod || beforeEditMethod(params)) {
+                if (delMethod) {
+                  delMethod(delPaqrams)
+                } else {
+                  setCellValue(selected.row, selected.column, null)
+                }
+                // 如果按下 del 键，更新表尾数据
+                tableMethods.updateFooter()
+                $xeTable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
               }
-              // 如果按下 del 键，更新表尾数据
-              tableMethods.updateFooter()
-              $xeTable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
             }
           } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
             if (!isEditStatus) {
-              const { delMethod, backMethod } = keyboardOpts
+              const { backMethod } = keyboardOpts
               // 如果是删除键
               if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
                 const delPaqrams = {
@@ -5129,23 +5133,22 @@ export default defineComponent({
                   columnIndex: tableMethods.getColumnIndex(selected.column),
                   $table: $xeTable
                 }
-                if (delMethod) {
-                  delMethod(delPaqrams)
-                } else {
-                  setCellValue(selected.row, selected.column, null)
+                // 是否被禁用
+                if (!beforeEditMethod || beforeEditMethod(params)) {
+                  if (backMethod) {
+                    backMethod({
+                      row: selected.row,
+                      rowIndex: tableMethods.getRowIndex(selected.row),
+                      column: selected.column,
+                      columnIndex: tableMethods.getColumnIndex(selected.column),
+                      $table: $xeTable
+                    })
+                  } else {
+                    setCellValue(selected.row, selected.column, null)
+                    $xeTable.handleActived(selected.args, evnt)
+                  }
+                  $xeTable.dispatchEvent('cell-backspace-value', delPaqrams, evnt)
                 }
-                if (backMethod) {
-                  backMethod({
-                    row: selected.row,
-                    rowIndex: tableMethods.getRowIndex(selected.row),
-                    column: selected.column,
-                    columnIndex: tableMethods.getColumnIndex(selected.column),
-                    $table: $xeTable
-                  })
-                } else {
-                  $xeTable.handleActived(selected.args, evnt)
-                }
-                $xeTable.dispatchEvent('cell-backspace-value', delPaqrams, evnt)
               }
             }
           } else if (hasBackspaceKey && keyboardConfig && treeConfig && keyboardOpts.isBack && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
