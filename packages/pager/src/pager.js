@@ -298,17 +298,21 @@ export default {
         isFull ? h('span', {
           class: 'vxe-pager--goto-text'
         }, GlobalConfig.i18n('vxe.pager.goto')) : null,
-        h('input', {
+        h('vxe-input', {
           class: 'vxe-pager--goto',
-          domProps: {
-            value: this.inpCurrPage
-          },
-          attrs: {
-            type: 'text',
-            autocomplete: 'off'
+          props: {
+            value: this.inpCurrPage,
+            placeholder: GlobalConfig.i18n('vxe.pager.gotoTitle'),
+            align: 'center',
+            type: 'integer',
+            max: this.pageCount,
+            min: 1,
+            controls: false
           },
           on: {
-            input: this.jumpInputEvent,
+            modelValue: (val) => {
+              this.inpCurrPage = val
+            },
             keydown: this.jumpKeydownEvent,
             blur: this.triggerJumpEvent
           }
@@ -448,25 +452,24 @@ export default {
       this.$emit('update:pageSize', pageSize)
       this.$emit('page-change', { type: 'size', pageSize, currentPage })
     },
-    jumpInputEvent (evnt) {
-      this.inpCurrPage = evnt.target.value
-    },
-    jumpKeydownEvent (evnt) {
-      if (evnt.keyCode === 13) {
-        this.triggerJumpEvent(evnt)
-      } else if (evnt.keyCode === 38) {
-        evnt.preventDefault()
+    jumpKeydownEvent (params) {
+      const { $event } = params
+      if ($event.keyCode === 13) {
+        this.triggerJumpEvent(params)
+      } else if ($event.keyCode === 38) {
+        $event.preventDefault()
         this.nextPage()
-      } else if (evnt.keyCode === 40) {
-        evnt.preventDefault()
+      } else if ($event.keyCode === 40) {
+        $event.preventDefault()
         this.prevPage()
       }
     },
-    triggerJumpEvent (evnt) {
-      const value = XEUtils.toInteger(evnt.target.value)
+    triggerJumpEvent (params) {
+      const { $event } = params
+      const value = XEUtils.toInteger($event.target.value)
       const current = value <= 0 ? 1 : value >= this.pageCount ? this.pageCount : value
       const currPage = XEUtils.toValueString(current)
-      evnt.target.value = currPage
+      $event.target.value = currPage
       this.inpCurrPage = currPage
       this.jumpPage(current)
     }

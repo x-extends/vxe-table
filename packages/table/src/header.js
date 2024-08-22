@@ -117,6 +117,7 @@ export default {
           }, cols.map((column, $columnIndex) => {
             const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
             // const { enabled } = tooltipOpts
+            const colid = column.id
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -145,7 +146,7 @@ export default {
               thOns.mousedown = evnt => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
             }
             return h('th', {
-              class: ['vxe-header--column', column.id, {
+              class: ['vxe-header--column', colid, {
                 [`col--${headAlign}`]: headAlign,
                 [`col--${type}`]: type,
                 'col--last': $columnIndex === cols.length - 1,
@@ -159,13 +160,13 @@ export default {
                 'col--current': currentColumn === column
               }, UtilTools.getClass(headerClassName, params), UtilTools.getClass(headerCellClassName, params)],
               attrs: {
-                colid: column.id,
+                colid,
                 colspan: column.colSpan > 1 ? column.colSpan : null,
                 rowspan: column.rowSpan > 1 ? column.rowSpan : null
               },
               style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
               on: thOns,
-              key: columnKey || columnOpts.useKey || isColGroup ? column.id : $columnIndex
+              key: columnKey || columnOpts.useKey || isColGroup ? colid : $columnIndex
             }, [
               h('div', {
                 class: ['vxe-cell', {

@@ -20,6 +20,9 @@ $vxe-info-color: #909399 !default;
 $vxe-warning-color: #e6a23c !default;
 $vxe-danger-color: #f56c6c !default;
 
+/*layout*/
+$vxe-layout-background-color: #fff !default;
+
 $vxe-font-lighten-color: lighten($vxe-font-color, 10%) !default;
 $vxe-primary-lighten-color: lighten($vxe-primary-color, 10%) !default;
 $vxe-success-lighten-color: lighten($vxe-success-color, 10%) !default;
@@ -102,6 +105,7 @@ $vxe-table-cell-dirty-update-color: #f56c6c !default;
 $vxe-table-cell-dirty-insert-color: #19A15F !default;
 $vxe-table-cell-area-border-color: $vxe-primary-color !default;
 $vxe-table-cell-area-border-width: 1px !default;
+$vxe-table-cell-area-status-border-width: $vxe-table-cell-area-border-width !default;
 $vxe-table-cell-main-area-extension-border-color: #fff;
 $vxe-table-cell-main-area-extension-background-color: $vxe-primary-color !default;
 $vxe-table-cell-extend-area-border-width: 2px !default;

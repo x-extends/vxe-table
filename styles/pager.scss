@@ -152,11 +152,6 @@
     line-height: 2em;
     display: inline-block;
   }
-  .vxe-pager--jump .vxe-pager--goto,
-  .vxe-pager--sizes > .vxe-input {
-    height: 2.15em;
-    line-height: 2.15em;
-  }
   .vxe-pager--sizes > .vxe-select--panel .vxe-select-option {
     text-align: center;
   }
@@ -244,18 +239,6 @@
       }
     }
   }
-  .vxe-pager--jump .vxe-pager--goto {
-    border-radius: $vxe-border-radius;
-    border: 1px solid $vxe-input-border-color;
-    color: $vxe-font-color;
-    transition: border .2s ease-in-out;
-    padding: 0 0.4em;
-    background-color: $vxe-input-background-color;
-    &:focus {
-      border: 1px solid $vxe-primary-color;
-      outline: 0;
-    }
-  }
   .vxe-pager--jump {
     .vxe-pager--goto-text {
       margin-right: 0.25em;
@@ -264,8 +247,7 @@
       margin-left: 0.25em;
     }
     .vxe-pager--goto {
-      width: 3.2em;
-      text-align: center;
+      width: 4em;
     }
   }
 }

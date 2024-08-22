@@ -44,6 +44,7 @@
 .vxe-table--fixed-right-body-wrapper {
   overflow-y: auto;
   overflow-x: auto;
+  outline: 0;
 }
 
 /*默认的渲染*/
@@ -51,7 +52,7 @@
 .vxe-table--filter-template {
   .vxe-default-input,
   .vxe-default-textarea {
-    background-color: var(--vxe-ui-layout-background-color);
+    background-color: $vxe-layout-background-color;
   }
   .vxe-default-input,
   .vxe-default-textarea,
@@ -59,21 +60,21 @@
     outline: 0;
     padding: 0 2px;
     width: 100%;
-    color: var(--vxe-ui-font-color);
-    border-radius: var(--vxe-ui-border-radius);
-    border: 1px solid var(--vxe-ui-input-border-color);
+    color: $vxe-font-color;
+    border-radius: $vxe-border-radius;
+    border: 1px solid $vxe-input-border-color;
     &:focus {
-      border: 1px solid var(--vxe-ui-font-primary-color);
+      border: 1px solid $vxe-primary-color;
     }
     &[disabled] {
       cursor: not-allowed;
-      background-color: var(--vxe-ui-input-disabled-background-color);
+      background-color: $vxe-input-disabled-background-color;
     }
   }
   .vxe-default-input,
   .vxe-default-textarea,
   .vxe-default-select {
-    height: var(--vxe-ui-input-height-default);
+    height: $vxe-input-height-default;
   }
   .vxe-default-input {
     &[type="date"]::-webkit-inner-spin-button {
@@ -84,7 +85,7 @@
       height: 24px;
     }
     &::placeholder {
-      color: var(--vxe-ui-input-placeholder-color);
+      color: $vxe-input-placeholder-color;
     }
   }
   .vxe-default-textarea {
@@ -900,6 +901,7 @@
     overflow: hidden;
     background-color: inherit;
     transition: 0.3s box-shadow;
+    outline: 0;
     .vxe-table--body-wrapper {
       overflow-x: hidden;
     }
@@ -940,6 +942,7 @@
     &.fixed-right--wrapper {
       position: absolute;
       top: 0;
+      outline: 0;
     }
     &.fixed-left--wrapper {
       left: 0;
@@ -1099,6 +1102,7 @@
     z-index: 1;
     &.is--ellipsis {
       overflow: auto;
+      outline: 0;
     }
   }
 
@@ -1205,6 +1209,7 @@
     overflow: hidden;
     width: 100%;
     pointer-events: none;
+    outline: 0;
   }
   .vxe-table--empty-block {
     display: none;
@@ -1452,6 +1457,7 @@
   margin-top: -1px;
   &.body--wrapper{
     overflow-x: auto;
+    outline: 0;
   }
 }
 

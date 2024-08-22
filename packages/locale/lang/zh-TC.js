@@ -80,6 +80,7 @@ export default {
     },
     pager: {
       goto: '前往',
+      gotoTitle: '页数',
       pagesize: '{0}項/頁',
       total: '共 {0} 項記錄',
       pageClassifier: '頁',

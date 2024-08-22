@@ -80,6 +80,7 @@ export default {
     },
     pager: {
       goto: 'Go to',
+      gotoTitle: 'Number',
       pagesize: '{0}/page',
       total: 'Total {0} record',
       pageClassifier: '',

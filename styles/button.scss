@@ -262,6 +262,7 @@ $btnThemeList: (
 }
 .vxe-button--dropdown {
   position: relative;
+  outline: 0;
   &+.vxe-button-wrapper,
   &+.vxe-button.type--button,
   &+.vxe-button--dropdown {

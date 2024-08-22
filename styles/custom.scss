@@ -100,6 +100,7 @@
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
+  outline: 0;
 }
 
 .vxe-table-custom--header,
@@ -221,6 +222,7 @@
 .vxe-table-custom-popup--body {
   overflow: auto;
   height: 100%;
+  outline: 0;
 }
 
 .vxe-table-custom-popup--table-wrapper {

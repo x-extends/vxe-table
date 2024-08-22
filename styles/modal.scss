@@ -12,6 +12,7 @@
   color: $vxe-font-color;
   font-family: $vxe-font-family;
   transition: top .4s ease-in-out;
+  outline: 0;
   &.is--active {
     display: block;
   }
@@ -166,6 +167,7 @@
     text-align: left;
     pointer-events: auto;
     opacity: 0;
+    outline: 0;
     &.is--drag {
       cursor: move;
      .vxe-modal--body,
@@ -231,6 +233,7 @@
   .vxe-modal--body {
     display: flex;
     flex-grow: 1;
+    outline: 0;
   }
   .vxe-modal--header {
     display: flex;

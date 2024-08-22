@@ -86,10 +86,10 @@ $iconWidth: 1.6em;
   top: 1px;
   right: 0.5em;
   height: calc(100% - 2px);
-  color: var($vxe-input-count-color);
-  background-color: var($vxe-input-count-background-color);
+  color: $vxe-input-count-color;
+  background-color: $vxe-input-count-background-color;
   &.is--error {
-    color: var($vxe-input-count-error-color);
+    color: $vxe-input-count-error-color;
   }
 }
 

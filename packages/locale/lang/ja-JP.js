@@ -80,6 +80,7 @@ export default {
     },
     pager: {
       goto: '移動',
+      gotoTitle: '页数',
       pagesize: '{0}件/ページ',
       total: '全 {0} 件',
       pageClassifier: 'ページ',
