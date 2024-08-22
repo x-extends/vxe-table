@@ -42,6 +42,7 @@
 .vxe-table--fixed-right-body-wrapper {
   overflow-y: auto;
   overflow-x: auto;
+  outline: 0;
 }
 
 /*默认的渲染*/
@@ -529,12 +530,14 @@
   .vxe-table--footer-wrapper {
     overflow-x: hidden;
     overflow-y: hidden;
+    outline: 0;
   }
   &:not(.is--empty) {
     &.is--footer {
       &.is--scroll-x {
         .vxe-table--body-wrapper {
           overflow-x: scroll;
+          outline: 0;
         }
       }
     }
@@ -909,8 +912,10 @@
     overflow: hidden;
     background-color: inherit;
     transition: 0.3s box-shadow;
+    outline: 0;
     .vxe-table--body-wrapper {
       overflow-x: hidden;
+      outline: 0;
     }
   }
   .vxe-table--fixed-left-wrapper {
@@ -949,6 +954,7 @@
     &.fixed-right--wrapper {
       position: absolute;
       top: 0;
+      outline: 0;
     }
     &.fixed-left--wrapper {
       left: 0;
@@ -1111,6 +1117,7 @@
     z-index: 1;
     &.is--ellipsis {
       overflow: auto;
+      outline: 0;
     }
   }
 
@@ -1219,6 +1226,7 @@
     overflow: hidden;
     width: 100%;
     pointer-events: none;
+    outline: 0;
   }
   .vxe-table--empty-block {
     display: none;
@@ -1470,6 +1478,7 @@ div.vxe-table--tooltip-wrapper {
   margin-top: -1px;
   &.body--wrapper{
     overflow-x: auto;
+    outline: 0;
   }
 }
 

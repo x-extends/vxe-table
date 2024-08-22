@@ -331,6 +331,10 @@ export default defineComponent({
       fullDataRowIdData: {},
       fullColumnIdData: {},
       fullColumnFieldData: {},
+      // 列选取状态
+      columnStatusMaps: {},
+      // 行选取状态
+      rowStatusMaps: {},
       inited: false,
       tooltipTimeout: null,
       initStatus: false,

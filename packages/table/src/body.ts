@@ -141,6 +141,7 @@ export default defineComponent({
       const { actived } = editStore
       const { rHeight: scrollYRHeight } = sYOpts
       const { height: rowHeight } = rowOpts
+      const colid = column.id
       const renderOpts = editRender || cellRender
       const compConf = renderOpts ? renderer.get(renderOpts.name) : null
       const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : null
@@ -158,9 +159,9 @@ export default defineComponent({
       let isDirty
       const tdOns: any = {}
       const cellAlign = align || allAlign
-      const errorValidItem = validErrorMaps[`${rowid}:${column.id}`]
+      const errorValidItem = validErrorMaps[`${rowid}:${colid}`]
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
-      const attrs: any = { colid: column.id }
+      const attrs: any = { colid }
       const params: VxeTableDefines.CellRenderBodyParams = { $table: $xeTable, $grid: $xeTable.xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
       // 虚拟滚动不支持动态高度
       if (scrollYLoad && !hasEllipsis) {
@@ -301,7 +302,7 @@ export default defineComponent({
       return h('td', {
         class: [
           'vxe-body--column',
-          column.id,
+          colid,
           {
             [`col--${cellAlign}`]: cellAlign,
             [`col--${type}`]: type,
@@ -319,7 +320,7 @@ export default defineComponent({
           getPropClass(className, params),
           getPropClass(allCellClassName, params)
         ],
-        key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
+        key: columnKey || columnOpts.useKey ? colid : $columnIndex,
         ...attrs,
         style: Object.assign({
           height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''

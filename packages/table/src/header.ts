@@ -226,6 +226,7 @@ export default defineComponent({
               style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowStyle) : null
             }, cols.map((column, $columnIndex) => {
               const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
+              const colid = column.id
               const isColGroup = column.children && column.children.length
               const fixedHiddenColumn = fixedType ? (column.fixed !== fixedType && !isColGroup) : !!column.fixed && overflowX
               const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
@@ -251,7 +252,7 @@ export default defineComponent({
                 thOns.onMousedown = (evnt: MouseEvent) => $xeTable.triggerHeaderCellMousedownEvent(evnt, params)
               }
               return h('th', {
-                class: ['vxe-header--column', column.id, {
+                class: ['vxe-header--column', colid, {
                   [`col--${headAlign}`]: headAlign,
                   [`col--${type}`]: type,
                   'col--last': $columnIndex === cols.length - 1,
@@ -267,12 +268,12 @@ export default defineComponent({
                 headerClassName ? (XEUtils.isFunction(headerClassName) ? headerClassName(params) : headerClassName) : '',
                 headerCellClassName ? (XEUtils.isFunction(headerCellClassName) ? headerCellClassName(params) : headerCellClassName) : ''
                 ],
-                colid: column.id,
+                colid,
                 colspan: column.colSpan > 1 ? column.colSpan : null,
                 rowspan: column.rowSpan > 1 ? column.rowSpan : null,
                 style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
                 ...thOns,
-                key: columnKey || columnOpts.useKey || isColGroup ? column.id : $columnIndex
+                key: columnKey || columnOpts.useKey || isColGroup ? colid : $columnIndex
               }, [
                 h('div', {
                   class: ['vxe-cell', {
