@@ -2773,7 +2773,6 @@ const Methods = {
         const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
         const childrenField = treeOpts.children || treeOpts.childrenField
         const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-        let params
         if (filterStore.visible) {
           if (isEsc) {
             this.closeFilter()
@@ -2819,7 +2818,7 @@ const Methods = {
           if (hasCtrlKey) {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
-              params = actived.args
+              const params = actived.args
               this.clearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
               if (mouseConfig && mouseOpts.selected) {
@@ -2849,7 +2848,7 @@ const Methods = {
               if (childrens && childrens.length) {
                 evnt.preventDefault()
                 const targetRow = childrens[0]
-                params = { $table: this, row: targetRow }
+                const params = { $table: this, row: targetRow }
                 this.setTreeExpand(currentRow, true)
                   .then(() => this.scrollToRow(targetRow))
                   .then(() => this.triggerCurrentRowEvent(evnt, params))
@@ -2877,23 +2876,24 @@ const Methods = {
           // 如果是删除键
           if (!isEditStatus) {
             const { delMethod } = keyboardOpts
-            const delPaqrams = {
+            const params = {
               row: selected.row,
               rowIndex: this.getRowIndex(selected.row),
               column: selected.column,
               columnIndex: this.getColumnIndex(selected.column),
-              $table: this
+              $table: this,
+              $grid: this.$xegrid
             }
             // 是否被禁用
             if (!beforeEditMethod || beforeEditMethod(params)) {
               if (delMethod) {
-                delMethod(delPaqrams)
+                delMethod(params)
               } else {
                 setCellValue(selected.row, selected.column, null)
               }
               // 如果按下 del 键，更新表尾数据
               this.updateFooter()
-              this.emitEvent('cell-delete-value', delPaqrams, evnt)
+              this.emitEvent('cell-delete-value', params, evnt)
             }
           }
         } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
@@ -2901,28 +2901,23 @@ const Methods = {
             const { backMethod } = keyboardOpts
             // 如果是删除键
             if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
-              const delPaqrams = {
+              const params = {
                 row: selected.row,
                 rowIndex: this.getRowIndex(selected.row),
                 column: selected.column,
                 columnIndex: this.getColumnIndex(selected.column),
-                $table: this
+                $table: this,
+                $grid: this.$xegrid
               }
               // 是否被禁用
               if (!beforeEditMethod || beforeEditMethod(params)) {
                 if (backMethod) {
-                  backMethod({
-                    row: selected.row,
-                    rowIndex: this.getRowIndex(selected.row),
-                    column: selected.column,
-                    columnIndex: this.getColumnIndex(selected.column),
-                    $table: this
-                  })
+                  backMethod(params)
                 } else {
                   setCellValue(selected.row, selected.column, null)
                   this.handleActived(selected.args, evnt)
                 }
-                this.emitEvent('cell-backspace-value', delPaqrams, evnt)
+                this.emitEvent('cell-backspace-value', params, evnt)
               }
             }
           }
@@ -2931,11 +2926,12 @@ const Methods = {
           const { parent: parentRow } = XEUtils.findTree(this.afterTreeFullData, item => item === currentRow, { children: childrenField })
           if (parentRow) {
             evnt.preventDefault()
-            params = {
-              $table: this,
+            const params = {
               row: parentRow,
               rowIndex: this.getRowIndex(parentRow),
-              $rowIndex: this.getVMRowIndex(parentRow)
+              $rowIndex: this.getVMRowIndex(parentRow),
+              $table: this,
+              $grid: this.$xegrid
             }
             this.setTreeExpand(parentRow, false)
               .then(() => this.scrollToRow(parentRow))
@@ -2950,16 +2946,17 @@ const Methods = {
           // 如果是按下非功能键之外允许直接编辑
           if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
             const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-            if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: this, $grid: this.$xegrid })) {
+            const params = {
+              row: selected.row,
+              rowIndex: this.getRowIndex(selected.row),
+              column: selected.column,
+              columnIndex: this.getColumnIndex(selected.column),
+              $table: this,
+              $grid: this.$xegrid
+            }
+            if (!beforeEditMethod || beforeEditMethod(params)) {
               if (editMethod) {
-                editMethod({
-                  row: selected.row,
-                  rowIndex: this.getRowIndex(selected.row),
-                  column: selected.column,
-                  columnIndex: this.getColumnIndex(selected.column),
-                  $table: this,
-                  $grid: this.$xegrid
-                })
+                editMethod(params)
               } else {
                 setCellValue(selected.row, selected.column, null)
                 this.handleActived(selected.args, evnt)
@@ -2967,14 +2964,7 @@ const Methods = {
               const afterEditMethod = editOpts.afterEditMethod
               if (afterEditMethod) {
                 this.$nextTick(() => {
-                  afterEditMethod({
-                    row: selected.row,
-                    rowIndex: this.getRowIndex(selected.row),
-                    column: selected.column,
-                    columnIndex: this.getColumnIndex(selected.column),
-                    $table: this,
-                    $grid: this.$xegrid
-                  })
+                  afterEditMethod(params)
                 })
               }
             }
