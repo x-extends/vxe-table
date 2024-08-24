@@ -10,6 +10,7 @@ export default {
       text: '加載中...'
     },
     error: {
+      downErr: '下载失败',
       groupFixed: '如果使用分組表頭，固冻结列必須按組設定',
       groupMouseRange: '分组表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
@@ -35,6 +36,7 @@ export default {
       notProp: '不支持的參數 "{0}"',
       checkProp: '當數據量過大時可能會導致複選框卡頓，建議設置參數 "{0}" 提升渲染速度',
       coverProp: '"{0}" 的參數 "{1}" 重複定義，這可能會出現錯誤',
+      uniField: '字段名 "{0}" 重複定義，這可能會出現錯誤',
       delFunc: '方法 "{0}" 已停用，請使用 "{1}"',
       delProp: '參數 "{0}" 已停用，請使用 "{1}"',
       delEvent: '事件 "{0}" 已停用，請使用 "{1}"',
@@ -84,6 +86,7 @@ export default {
     },
     pager: {
       goto: '前往',
+      gotoTitle: '页数',
       pagesize: '{0}項/頁',
       total: '共 {0} 項記錄',
       pageClassifier: '頁',
@@ -191,7 +194,7 @@ export default {
       expCancel: '取消'
     },
     modal: {
-      errTitle: '错误提示',
+      errTitle: '錯誤提示',
       zoomMin: '最小化',
       zoomIn: '最大化',
       zoomOut: '還原',
@@ -277,34 +280,34 @@ export default {
       }
     },
     imagePreview: {
-      popupTitle: '预览',
+      popupTitle: '預覽',
       operBtn: {
-        zoomOut: '缩小',
+        zoomOut: '縮小',
         zoomIn: '放大',
-        pctFull: '等比例缩放',
-        pct11: '显示原始尺寸',
-        rotateLeft: '向左旋转',
-        rotateRight: '向右旋转',
-        print: '点击打印图片',
-        download: '点击下载图片'
+        pctFull: '等比例縮放',
+        pct11: '顯示原始尺寸',
+        rotateLeft: '向左旋轉',
+        rotateRight: '向右旋轉',
+        print: '點擊打印圖片',
+        download: '點擊下載圖片'
       }
     },
     upload: {
-      fileBtnText: '点击或拖拽上传',
-      imgBtnText: '点击或拖拽上传',
-      dragPlaceholder: '请把文件拖放到这个区域即可上传',
-      imgSizeHint: '单张{0}',
-      imgCountHint: '最多{0}张',
-      fileTypeHint: '支持 {0} 文件类型',
-      fileSizeHint: '单个文件大小不超过{0}',
-      fileCountHint: '最多可上传{0}个文件',
-      overCountErr: '最多只能选择{0}个文件！',
-      overCountExtraErr: '已超出最大数量{0}个，超出的{1}个文件将被忽略！',
-      overSizeErr: '文件大小最大不能超过{0}！',
-      reUpload: '重新上传',
-      uploadProgress: '上传中 {0}%',
-      uploadErr: '上传失败',
-      uploadSuccess: '上传成功',
+      fileBtnText: '點擊或拖拽上傳',
+      imgBtnText: '點擊或拖拽上傳',
+      dragPlaceholder: '請把文件拖放到這個區域即可上傳',
+      imgSizeHint: '單張{0}',
+      imgCountHint: '最多{0}張',
+      fileTypeHint: '支持 {0} 文件類型',
+      fileSizeHint: '單個文件大小不超過{0}',
+      fileCountHint: '最多可上傳{0}个文件',
+      overCountErr: '最多隻能選擇{0}个文件！',
+      overCountExtraErr: '已超出最大數量{0}個，超出的{1}個文件將被忽略！',
+      overSizeErr: '文件大小最大不能超過{0}！',
+      reUpload: '重新上傳',
+      uploadProgress: '上傳中 {0}%',
+      uploadErr: '上傳失敗',
+      uploadSuccess: '上傳成功',
       moreBtnText: '更多（{0}）',
       viewItemTitle: '點擊查看'
     },
@@ -313,6 +316,10 @@ export default {
       defFormTitle: '未命名的表單',
       widgetPropTab: '控件屬性',
       widgetFormTab: '表單屬性',
+      error: {
+        wdFormUni: '該類型的控件在表單中只允許添加一個',
+        wdSubUni: '該類型的控件在子表中只允許添加一個'
+      },
       styleSetting: {
         btn: '樣式設置',
         title: '表單的樣式設置',
@@ -335,10 +342,12 @@ export default {
       },
       widget: {
         group: {
-          base: '基础控件',
-          layout: '布局控件',
+          base: '基礎控件',
+          layout: '佈局控件',
           system: '系統控件',
-          advanced: '高级控件'
+          module: '模塊控件',
+          chart: '圖表控件',
+          advanced: '高級控件'
         },
         copyTitle: '副本_{0}',
         component: {
@@ -423,10 +432,18 @@ export default {
     },
     listDesign: {
       fieldSettingTab: '字段設置',
-      listSettingTab: '列表設置',
+      listSettingTab: '参数设置',
+      searchTitle: '查询条件',
+      listTitle: '列表字段',
+      searchField: '查询字段',
+      listField: '列表字段',
       activeBtn: {
         ActionButtonUpdate: '編輯',
         ActionButtonDelete: '刪除'
+      },
+      search: {
+        addBtn: '编辑',
+        emptyText: '未配置查询条件'
       }
     },
     text: {

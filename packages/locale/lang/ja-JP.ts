@@ -10,6 +10,7 @@ export default {
       text: 'Loading...'
     },
     error: {
+      downErr: '下载失败',
       groupFixed: 'ヘッダー結合を使用する場合、固定列はグループで設定しなければなりません',
       groupMouseRange: 'ヘッダー結合と「{0}」は同時に使用できません。これによりエラーが発生する可能性があります',
       groupTag: 'ヘッダー結合は "{0}" を使ってください。 "{1}" はエラーが発生する可能性があります',
@@ -35,6 +36,7 @@ export default {
       notProp: 'サポートされていないパラメータ "{0}"',
       checkProp: 'パフマンス低下になる可能性があります。パラメータ "{0}" の値を指定してください',
       coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
+      uniField: '字段名 "{0}" 重复定义，这可能会出现错误',
       delFunc: '"{0}" functionが非推奨です。"{1}"を使用してください',
       delProp: '"{0}" propertyが非推奨です。"{1}"を使用してください',
       delEvent: 'イベント "{0}" が廃止されました。 "{1}" を使用してください',
@@ -84,6 +86,7 @@ export default {
     },
     pager: {
       goto: '移動',
+      gotoTitle: '页数',
       pagesize: '{0}件/ページ',
       total: '全 {0} 件',
       pageClassifier: 'ページ',
@@ -315,6 +318,10 @@ export default {
       defFormTitle: 'Unnamed form',
       widgetPropTab: 'Field property',
       widgetFormTab: 'Form property',
+      error: {
+        wdFormUni: '该类型的控件在表单中只允许添加一个',
+        wdSubUni: '该类型的控件在子表中只允许添加一个'
+      },
       styleSetting: {
         btn: 'Style setting',
         title: 'Form style setting',
@@ -340,6 +347,8 @@ export default {
           base: 'Base control',
           layout: 'Layout control',
           system: 'System control',
+          module: 'Module control',
+          chart: 'Chart control',
           advanced: 'Advanced control'
         },
         copyTitle: 'Copy_{0}',
@@ -422,11 +431,19 @@ export default {
       }
     },
     listDesign: {
-      fieldSettingTab: 'Field setting',
-      listSettingTab: 'List setting',
+      fieldSettingTab: 'Field',
+      listSettingTab: 'Parameter',
+      searchTitle: 'Search',
+      listTitle: 'List',
+      searchField: 'Search field',
+      listField: 'List field',
       activeBtn: {
         ActionButtonUpdate: 'Edit',
         ActionButtonDelete: 'Delete'
+      },
+      search: {
+        addBtn: 'Edit',
+        emptyText: 'No filter condition is configured.'
       }
     },
     text: {

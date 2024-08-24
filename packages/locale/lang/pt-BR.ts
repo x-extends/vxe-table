@@ -10,6 +10,7 @@ export default {
       text: 'Carregando...'
     },
     error: {
+      downErr: '下载失败',
       groupFixed: 'If you use group headers, the freeze columns must be set by group.',
       groupMouseRange: 'Agrupar cabeçalhos e "{0}" não podem ser usados ao mesmo tempo, o que pode causar erros.',
       groupTag: 'O cabeçalho da coluna de agrupamento deve usar "{0}" em vez de "{1}", o que pode causar erros.',
@@ -35,6 +36,7 @@ export default {
       notProp: 'Parâmetros não suportados "{0}"',
       checkProp: 'A caixa de seleção pode travar quando a quantidade de dados é muito grande, é recomendado definir o parâmetro "{0}" para aumentar a velocidade de renderização ',
       coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
+      uniField: '字段名 "{0}" 重复定义，这可能会出现错误',
       delFunc: 'A função "{0}" está obsoleta, por favor, use "{1}".',
       delProp: 'A propriedade "{0}" está obsoleta, por favor, use "{1}".',
       delEvent: 'O evento "{0}" está obsoleto, por favor, use "{1}".',
@@ -84,6 +86,7 @@ export default {
     },
     pager: {
       goto: 'Ir para',
+      gotoTitle: 'Number',
       pagesize: '{0}/página',
       total: 'Total de {0} registros',
       pageClassifier: '',
@@ -315,6 +318,10 @@ export default {
       defFormTitle: 'Unnamed form',
       widgetPropTab: 'Field property',
       widgetFormTab: 'Form property',
+      error: {
+        wdFormUni: '该类型的控件在表单中只允许添加一个',
+        wdSubUni: '该类型的控件在子表中只允许添加一个'
+      },
       styleSetting: {
         btn: 'Style setting',
         title: 'Form style setting',
@@ -340,6 +347,8 @@ export default {
           base: 'Base control',
           layout: 'Layout control',
           system: 'System control',
+          module: 'Module control',
+          chart: 'Chart control',
           advanced: 'Advanced control'
         },
         copyTitle: 'Copy_{0}',
@@ -423,10 +432,18 @@ export default {
     },
     listDesign: {
       fieldSettingTab: 'Field setting',
-      listSettingTab: 'List setting',
+      listSettingTab: 'Parameter setting',
+      searchTitle: 'Search',
+      listTitle: 'List',
+      searchField: 'Search field',
+      listField: 'List field',
       activeBtn: {
         ActionButtonUpdate: 'Edit',
         ActionButtonDelete: 'Delete'
+      },
+      search: {
+        addBtn: 'Edit',
+        emptyText: 'No filter condition is configured.'
       }
     },
     text: {

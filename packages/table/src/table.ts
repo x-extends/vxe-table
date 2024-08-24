@@ -4987,7 +4987,6 @@ export default defineComponent({
           const operCtxMenu = isMenu && ctxMenuStore.visible && (isEnter || isSpacebar || operArrow)
           const isEditStatus = isEnableConf(editConfig) && actived.column && actived.row
           const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
-          let params: any
           if (operCtxMenu) {
             // 如果配置了右键菜单; 支持方向键操作、回车
             evnt.preventDefault()
@@ -5043,7 +5042,7 @@ export default defineComponent({
             if (hasCtrlKey) {
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
-                params = actived.args
+                const params = actived.args
                 $xeTable.clearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
@@ -5073,7 +5072,7 @@ export default defineComponent({
                 if (childrens && childrens.length) {
                   evnt.preventDefault()
                   const targetRow = childrens[0]
-                  params = {
+                  const params = {
                     $table: $xeTable,
                     row: targetRow,
                     rowIndex: tableMethods.getRowIndex(targetRow),
@@ -5106,23 +5105,24 @@ export default defineComponent({
             // 如果是删除键
             if (!isEditStatus) {
               const { delMethod } = keyboardOpts
-              const delPaqrams = {
+              const params = {
                 row: selected.row,
                 rowIndex: tableMethods.getRowIndex(selected.row),
                 column: selected.column,
                 columnIndex: tableMethods.getColumnIndex(selected.column),
-                $table: $xeTable
+                $table: $xeTable,
+                $grid: $xeGrid
               }
               // 是否被禁用
               if (!beforeEditMethod || beforeEditMethod(params)) {
                 if (delMethod) {
-                  delMethod(delPaqrams)
+                  delMethod(params)
                 } else {
                   setCellValue(selected.row, selected.column, null)
                 }
                 // 如果按下 del 键，更新表尾数据
                 tableMethods.updateFooter()
-                $xeTable.dispatchEvent('cell-delete-value', delPaqrams, evnt)
+                $xeTable.dispatchEvent('cell-delete-value', params, evnt)
               }
             }
           } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
@@ -5130,28 +5130,23 @@ export default defineComponent({
               const { backMethod } = keyboardOpts
               // 如果是删除键
               if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
-                const delPaqrams = {
+                const params = {
                   row: selected.row,
                   rowIndex: tableMethods.getRowIndex(selected.row),
                   column: selected.column,
                   columnIndex: tableMethods.getColumnIndex(selected.column),
-                  $table: $xeTable
+                  $table: $xeTable,
+                  $grid: $xeGrid
                 }
                 // 是否被禁用
                 if (!beforeEditMethod || beforeEditMethod(params)) {
                   if (backMethod) {
-                    backMethod({
-                      row: selected.row,
-                      rowIndex: tableMethods.getRowIndex(selected.row),
-                      column: selected.column,
-                      columnIndex: tableMethods.getColumnIndex(selected.column),
-                      $table: $xeTable
-                    })
+                    backMethod(params)
                   } else {
                     setCellValue(selected.row, selected.column, null)
                     $xeTable.handleActived(selected.args, evnt)
                   }
-                  $xeTable.dispatchEvent('cell-backspace-value', delPaqrams, evnt)
+                  $xeTable.dispatchEvent('cell-backspace-value', params, evnt)
                 }
               }
             }
@@ -5160,11 +5155,12 @@ export default defineComponent({
             const { parent: parentRow } = XEUtils.findTree(internalData.afterTreeFullData, item => item === currentRow, { children: childrenField })
             if (parentRow) {
               evnt.preventDefault()
-              params = {
-                $table: $xeTable,
+              const params = {
                 row: parentRow,
                 rowIndex: tableMethods.getRowIndex(parentRow),
-                $rowIndex: tableMethods.getVMRowIndex(parentRow)
+                $rowIndex: tableMethods.getVMRowIndex(parentRow),
+                $table: $xeTable,
+                $grid: $xeGrid
               }
               tableMethods.setTreeExpand(parentRow, false)
                 .then(() => tableMethods.scrollToRow(parentRow))
@@ -5179,16 +5175,17 @@ export default defineComponent({
             // 如果是按下非功能键之外允许直接编辑
             if (selected.column && selected.row && isEnableConf(selected.column.editRender)) {
               const beforeEditMethod = editOpts.beforeEditMethod || editOpts.activeMethod
+              const params = {
+                row: selected.row,
+                rowIndex: tableMethods.getRowIndex(selected.row),
+                column: selected.column,
+                columnIndex: tableMethods.getColumnIndex(selected.column),
+                $table: $xeTable,
+                $grid: $xeGrid
+              }
               if (!beforeEditMethod || beforeEditMethod({ ...selected.args, $table: $xeTable, $grid: $xeGrid })) {
                 if (editMethod) {
-                  editMethod({
-                    row: selected.row,
-                    rowIndex: tableMethods.getRowIndex(selected.row),
-                    column: selected.column,
-                    columnIndex: tableMethods.getColumnIndex(selected.column),
-                    $table: $xeTable,
-                    $grid: $xeGrid
-                  })
+                  editMethod(params)
                 } else {
                   setCellValue(selected.row, selected.column, null)
                   $xeTable.handleActived(selected.args, evnt)
@@ -5196,14 +5193,7 @@ export default defineComponent({
                 const afterEditMethod = editOpts.afterEditMethod
                 if (afterEditMethod) {
                   nextTick(() => {
-                    afterEditMethod({
-                      row: selected.row as any,
-                      rowIndex: tableMethods.getRowIndex(selected.row),
-                      column: selected.column,
-                      columnIndex: tableMethods.getColumnIndex(selected.column),
-                      $table: $xeTable,
-                      $grid: $xeGrid
-                    })
+                    afterEditMethod(params)
                   })
                 }
               }

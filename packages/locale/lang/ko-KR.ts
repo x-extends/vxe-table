@@ -10,6 +10,7 @@ export default {
       text: '加载中...'
     },
     error: {
+      downErr: '下载失败',
       groupFixed: '如果使用分组表头，冻结列必须按组设置',
       groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',
       groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
@@ -35,6 +36,7 @@ export default {
       notProp: '不支持的参数 "{0}"',
       checkProp: '当数据量过大时可能会导致复选框卡顿，建议设置参数 "{0}" 提升渲染速度',
       coverProp: '"{0}" 的参数 "{1}" 重复定义，这可能会出现错误',
+      uniField: '字段名 "{0}" 重复定义，这可能会出现错误',
       delFunc: '方法 "{0}" 已废弃，请使用 "{1}"',
       delProp: '参数 "{0}" 已废弃，请使用 "{1}"',
       delEvent: '事件 "{0}" 已废弃，请使用 "{1}"',
@@ -84,6 +86,7 @@ export default {
     },
     pager: {
       goto: '前往',
+      gotoTitle: '页数',
       pagesize: '{0}条/页',
       total: '共 {0} 条记录',
       pageClassifier: '页',
@@ -315,6 +318,10 @@ export default {
       defFormTitle: '未命名的表单',
       widgetPropTab: '控件属性',
       widgetFormTab: '表单属性',
+      error: {
+        wdFormUni: '该类型的控件在表单中只允许添加一个',
+        wdSubUni: '该类型的控件在子表中只允许添加一个'
+      },
       styleSetting: {
         btn: '样式设置',
         title: '表单的样式设置',
@@ -340,6 +347,8 @@ export default {
           base: '基础控件',
           layout: '布局控件',
           system: '系统控件',
+          module: '模块控件',
+          chart: '图表控件',
           advanced: '高级控件'
         },
         copyTitle: '副本_{0}',
@@ -423,10 +432,18 @@ export default {
     },
     listDesign: {
       fieldSettingTab: '字段设置',
-      listSettingTab: '列表设置',
+      listSettingTab: '参数设置',
+      searchTitle: '查询条件',
+      listTitle: '列表字段',
+      searchField: '查询字段',
+      listField: '列表字段',
       activeBtn: {
         ActionButtonUpdate: '编辑',
         ActionButtonDelete: '删除'
+      },
+      search: {
+        addBtn: '编辑',
+        emptyText: '未配置查询条件'
       }
     },
     text: {
