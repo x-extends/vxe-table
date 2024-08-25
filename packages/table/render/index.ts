@@ -29,6 +29,7 @@ function getChangeEvent (renderOpts: any) {
     case 'input':
     case 'textarea':
     case 'VxeInput':
+    case 'VxeNumberInput':
     case 'VxeTextarea':
     case '$input':
     case '$textarea':
@@ -215,15 +216,14 @@ function getEditOns (renderOpts: any, params: any) {
   const isImmediate = isImmediateCell(renderOpts, params)
   return getComponentOns(renderOpts, params, (cellValue: any) => {
     // 处理 model 值双向绑定
+    model.update = true
+    model.value = cellValue
     if (isImmediate) {
       setCellValue(row, column, cellValue)
-    } else {
-      model.update = true
-      model.value = cellValue
     }
   }, (eventParams: any) => {
     // 处理 change 事件相关逻辑
-    if (!isImmediate && (['VxeInput', 'VxeTextarea', '$input', '$textarea'].includes(name))) {
+    if (!isImmediate && (['VxeInput', 'VxeNumberInput', 'VxeTextarea', '$input', '$textarea'].includes(name))) {
       const cellValue = eventParams.value
       model.update = true
       model.value = cellValue

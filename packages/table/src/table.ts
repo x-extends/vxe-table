@@ -1438,7 +1438,7 @@ export default defineComponent({
               const { filterMethod, filterRender } = column
               const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
               const compFilterMethod = compConf ? (compConf.tableFilterMethod || compConf.filterMethod) : null
-              const tdFilterMethod = compConf ? (compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
+              const tdFilterMethod = compConf ? (compConf.tableFilterDefaultMethod || compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
               const cellValue = getCellValue(row, column)
               if (filterMethod) {
                 return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: $xeTable }))
