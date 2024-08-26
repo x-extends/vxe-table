@@ -10,6 +10,8 @@
       height="400"
       ref="tableRef"
       id="bbbbb"
+      :row-config="{useKey: true}"
+      :column-config="{useKey: true}"
       :custom-config="{storage:true}"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"
@@ -27,6 +29,8 @@
         </vxe-column>
         <vxe-column field="name" title="Name" sortable></vxe-column>
       </vxe-colgroup>
+      <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html"></vxe-column>
+      <vxe-column field="sex22" title="<span style='color:red;'>Sex1111</span>" type="html" :visible="false"></vxe-column>
       <vxe-column field="name1" title="Name1" sortable></vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column

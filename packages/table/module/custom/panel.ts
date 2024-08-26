@@ -35,7 +35,7 @@ export default defineComponent({
     const bodyElemRef = ref() as Ref<HTMLDivElement>
     const dragHintElemRef = ref() as Ref<HTMLDivElement>
 
-    const dragColumn = ref<VxeTableDefines.ColumnInfo | null>()
+    const dragColumnRef = ref<VxeTableDefines.ColumnInfo | null>()
 
     let prevDropTrEl: any
 
@@ -208,7 +208,7 @@ export default defineComponent({
       const colid = trEl.getAttribute('colid')
       const column = $xeTable.getColumnById(colid)
       trEl.draggable = true
-      dragColumn.value = column
+      dragColumnRef.value = column
       addClass(trEl, 'active--drag-origin')
     }
 
@@ -218,7 +218,7 @@ export default defineComponent({
       const trEl = tdEl.parentNode as HTMLElement
       const dragHintEl = dragHintElemRef.value
       trEl.draggable = false
-      dragColumn.value = null
+      dragColumnRef.value = null
       removeClass(trEl, 'active--drag-origin')
       if (dragHintEl) {
         dragHintEl.style.display = ''
@@ -261,7 +261,7 @@ export default defineComponent({
         prevDropTrEl.removeAttribute('drag-pos')
         removeClass(prevDropTrEl, 'active--drag-target')
       }
-      dragColumn.value = null
+      dragColumnRef.value = null
       trEl.draggable = false
       trEl.removeAttribute('drag-pos')
       if (dragHintEl) {
@@ -373,10 +373,16 @@ export default defineComponent({
                   ])
                 ])
                 : createCommentVNode(),
-              h('div', {
-                class: 'vxe-table-custom--checkbox-label',
-                title: colTitle
-              }, colTitle),
+              column.type === 'html'
+                ? h('div', {
+                  key: '1',
+                  class: 'vxe-table-custom--checkbox-label',
+                  innerHTML: colTitle
+                })
+                : h('div', {
+                  key: '0',
+                  class: 'vxe-table-custom--checkbox-label'
+                }, colTitle),
               !parent && allowFixed
                 ? h('div', {
                   class: 'vxe-table-custom--fixed-option'
@@ -409,6 +415,7 @@ export default defineComponent({
       })
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
+      const dragColumn = dragColumnRef.value
       return h('div', {
         ref: refElem,
         key: 'simple',
@@ -464,7 +471,7 @@ export default defineComponent({
               h('div', {
                 ref: dragHintElemRef,
                 class: 'vxe-table-custom-popup--drag-hint'
-              }, getI18n('vxe.custom.cstmDragTarget', [dragColumn.value ? dragColumn.value.getTitle() : '']))
+              }, getI18n('vxe.custom.cstmDragTarget', [dragColumn && dragColumn.type !== 'html' ? dragColumn.getTitle() : '']))
             ]),
             customOpts.showFooter
               ? h('div', {
@@ -565,10 +572,17 @@ export default defineComponent({
               h('td', {
                 class: 'vxe-table-custom-popup--column-item col--name'
               }, [
-                h('div', {
-                  class: 'vxe-table-custom-popup--name',
-                  title: colTitle
-                }, colTitle)
+                column.type === 'html'
+                  ? h('div', {
+                    key: '1',
+                    class: 'vxe-table-custom-popup--name',
+                    innerHTML: colTitle
+                  })
+                  : h('div', {
+                    key: '0',
+                    class: 'vxe-table-custom-popup--name',
+                    title: colTitle
+                  }, colTitle)
               ]),
               allowResizable
                 ? h('td', {
@@ -623,6 +637,7 @@ export default defineComponent({
       })
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
+      const dragColumn = dragColumnRef.value
       const scopedSlots = {
         default: () => {
           return h('div', {
@@ -730,7 +745,7 @@ export default defineComponent({
             h('div', {
               ref: dragHintElemRef,
               class: 'vxe-table-custom-popup--drag-hint'
-            }, getI18n('vxe.custom.cstmDragTarget', [dragColumn.value ? dragColumn.value.getTitle() : '']))
+            }, getI18n('vxe.custom.cstmDragTarget', [dragColumn ? dragColumn.getTitle() : '']))
           ])
         },
         footer: () => {

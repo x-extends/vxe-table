@@ -171,15 +171,17 @@ export default defineComponent({
         const isColGroup = column.children && column.children.length
         const isChecked = column.checked
         const indeterminate = column.halfChecked
+        const isHtml = column.type === 'html'
         cols.push(
           h('li', {
+            key: column.id,
             class: ['vxe-export--panel-column-option', `level--${column.level}`, {
               'is--group': isColGroup,
               'is--checked': isChecked,
               'is--indeterminate': indeterminate,
               'is--disabled': column.disabled
             }],
-            title: colTitle,
+            title: isHtml ? '' : colTitle,
             onClick: () => {
               if (!column.disabled) {
                 changeOption(column)
@@ -189,9 +191,16 @@ export default defineComponent({
             h('span', {
               class: ['vxe-checkbox--icon', indeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
             }),
-            h('span', {
-              class: 'vxe-checkbox--label'
-            }, colTitle)
+            isHtml
+              ? h('span', {
+                key: '1',
+                class: 'vxe-checkbox--label',
+                innerHTML: colTitle
+              })
+              : h('span', {
+                key: '0',
+                class: 'vxe-checkbox--label'
+              }, colTitle)
           ])
         )
       })
