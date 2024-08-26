@@ -1,8 +1,11 @@
 import { defineComponent, h, Teleport, inject, ref, Ref, createCommentVNode } from 'vue'
+import { VxeUI } from '../../../ui'
 import { getFuncText } from '../../../ui/src/utils'
 import XEUtils from 'xe-utils'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods } from '../../../../types'
+
+const { getIcon } = VxeUI
 
 export default defineComponent({
   name: 'VxeTableMenuPanel',
@@ -49,6 +52,8 @@ export default defineComponent({
               key: gIndex
             }, options.map((item, index) => {
               const hasChildMenus = item.children && item.children.some((child: any) => child.visible !== false)
+              const prefixOpts = Object.assign({}, item.prefixConfig)
+              const suffixOpts = Object.assign({}, item.suffixConfig)
               return item.visible === false
                 ? null
                 : h('li', {
@@ -70,15 +75,25 @@ export default defineComponent({
                       $xeTable.ctxMenuMouseoutEvent(evnt, item)
                     }
                   }, [
-                    h('i', {
-                      class: ['vxe-context-menu--link-prefix', item.prefixIcon]
-                    }),
-                    h('span', {
+                    h('div', {
+                      class: ['vxe-context-menu--link-prefix', prefixOpts.className || '']
+                    }, [
+                      h('i', {
+                        class: prefixOpts.icon || item.prefixIcon
+                      }),
+                      prefixOpts.content ? h('span', {}, `${prefixOpts.content}`) : createCommentVNode()
+                    ]),
+                    h('div', {
                       class: 'vxe-context-menu--link-content'
                     }, getFuncText(item.name)),
-                    h('i', {
-                      class: ['vxe-context-menu--link-suffix', hasChildMenus ? item.suffixIcon || 'suffix--haschild' : item.suffixIcon]
-                    })
+                    h('div', {
+                      class: ['vxe-context-menu--link-suffix', suffixOpts.className || '']
+                    }, [
+                      h('i', {
+                        class: (suffixOpts.icon || item.suffixIcon) || (hasChildMenus ? getIcon().TABLE_MENU_OPTIONS : '')
+                      }),
+                      suffixOpts.content ? h('span', `${suffixOpts.content}`) : createCommentVNode()
+                    ])
                   ]),
                   hasChildMenus
                     ? h('ul', {
@@ -86,6 +101,8 @@ export default defineComponent({
                         'is--show': item === ctxMenuStore.selected && ctxMenuStore.showChild
                       }]
                     }, item.children.map((child: any, cIndex: any) => {
+                      const childPrefixOpts = Object.assign({}, child.prefixConfig)
+                      const childSuffixOpts = Object.assign({}, child.suffixConfig)
                       return child.visible === false
                         ? null
                         : h('li', {
@@ -107,12 +124,25 @@ export default defineComponent({
                               $xeTable.ctxMenuMouseoutEvent(evnt, item)
                             }
                           }, [
-                            h('i', {
-                              class: ['vxe-context-menu--link-prefix', child.prefixIcon]
-                            }),
-                            h('span', {
+                            h('div', {
+                              class: ['vxe-context-menu--link-prefix', childPrefixOpts.className || '']
+                            }, [
+                              h('i', {
+                                class: childPrefixOpts.icon || child.prefixIcon
+                              }),
+                              childPrefixOpts.content ? h('span', `${childPrefixOpts.content}`) : createCommentVNode()
+                            ]),
+                            h('div', {
                               class: 'vxe-context-menu--link-content'
-                            }, getFuncText(child.name))
+                            }, getFuncText(child.name)),
+                            h('div', {
+                              class: ['vxe-context-menu--link-suffix', childSuffixOpts.className || '']
+                            }, [
+                              h('i', {
+                                class: childSuffixOpts.icon
+                              }),
+                              childSuffixOpts.content ? h('span', `${childSuffixOpts.content}`) : createCommentVNode()
+                            ])
                           ])
                         ])
                     }))

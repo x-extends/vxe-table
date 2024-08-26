@@ -9,6 +9,7 @@
       :row-config="{isHover: true}"
       :loading="demo1.loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
+      :menu-config="menuConfig"
       :data="demo1.tableData"
       :footer-data="demo1.footerData">
       <vxe-column type="seq" min-width="auto"></vxe-column>
@@ -28,6 +29,7 @@
 
 <script lang="ts" setup>
 import { onMounted, reactive } from 'vue'
+import { VxeTablePropTypes } from '../../../types'
 
 const demo1 = reactive({
   loading: false,
@@ -35,6 +37,46 @@ const demo1 = reactive({
   footerData: [
     { name: 'xxx xxx x xxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx x', address: 'xxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xx' }
   ]
+})
+
+const menuConfig = reactive<VxeTablePropTypes.MenuConfig>({
+  className: 'my-menus',
+  header: {
+    options: [
+      [
+        { code: 'exportAll', name: '导出所有.csv', suffixConfig: { content: 'xx' } }
+      ]
+    ]
+  },
+  body: {
+    options: [
+      [
+        { code: 'copy', name: '复制1（Ctrl+C）', suffixConfig: { content: 'xx' } },
+        { code: 'copy', name: '复制2（Ctrl+C）', suffixConfig: { icon: 'vxe-icon-delete-fill' } }
+      ],
+      [
+        { code: 'remove', name: '删除1', prefixConfig: { content: 'oo' } },
+        { code: 'remove', name: '删除2', prefixConfig: { icon: 'vxe-icon-close' } },
+        {
+          code: 'sort',
+          name: '排序',
+          children: [
+            { code: 'clearSort', name: '清除排序', suffixIcon: 'vxe-icon-close' },
+            { code: 'sortAsc', name: '升序', suffixIcon: 'vxe-icon-sort-alpha-asc color-orange' },
+            { code: 'sortDesc', name: '倒序', suffixIcon: 'vxe-icon-sort-alpha-desc color-orange' }
+          ]
+        },
+        { code: 'print', name: '打印（Ctrl+PC）', suffixIcon: 'vxe-icon-print' }
+      ]
+    ]
+  },
+  footer: {
+    options: [
+      [
+        { code: 'clearAll', name: '清空数据', suffixIcon: 'vxe-icon-close' }
+      ]
+    ]
+  }
 })
 
 onMounted(() => {
