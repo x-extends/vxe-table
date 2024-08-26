@@ -1371,7 +1371,7 @@ const Methods = {
             const { filterMethod, filterRender, field } = column
             const compConf = isEnableConf(filterRender) ? VXETable.renderer.get(filterRender.name) : null
             const compFilterMethod = compConf && compConf.renderFilter ? (compConf.tableFilterMethod || compConf.filterMethod) : null
-            const defaultFilterMethod = compConf ? (compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
+            const defaultFilterMethod = compConf ? (compConf.tableFilterDefaultMethod || compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
             const cellValue = UtilTools.getCellValue(row, column)
             if (filterMethod) {
               return itemList.some((item) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))

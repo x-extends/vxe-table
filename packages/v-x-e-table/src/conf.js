@@ -185,6 +185,7 @@ export default {
     TABLE_RADIO_CHECKED: iconPrefix + 'radio-checked-fill',
     TABLE_RADIO_UNCHECKED: iconPrefix + 'radio-unchecked',
     TABLE_CUSTOM_SORT: iconPrefix + 'drag-handle',
+    TABLE_MENU_OPTIONS: iconPrefix + 'arrow-right',
 
     // button
     BUTTON_DROPDOWN: iconPrefix + 'arrow-down',

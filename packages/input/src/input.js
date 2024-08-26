@@ -1297,11 +1297,18 @@ export default {
         const isShiftKey = evnt.shiftKey
         const isAltKey = evnt.altKey
         const keyCode = evnt.keyCode
+        const isEsc = keyCode === 27
+        const isUpArrow = keyCode === 38
+        const isDwArrow = keyCode === 40
         if (!isCtrlKey && !isShiftKey && !isAltKey && (keyCode === 32 || ((!exponential || keyCode !== 69) && (keyCode >= 65 && keyCode <= 90)) || (keyCode >= 186 && keyCode <= 188) || keyCode >= 191)) {
           evnt.preventDefault()
         }
-        if (controls) {
-          this.numberKeydownEvent(evnt)
+        if (isEsc) {
+          this.afterCheckValue()
+        } else if (isUpArrow || isDwArrow) {
+          if (controls) {
+            this.numberKeydownEvent(evnt)
+          }
         }
       }
       this.triggerEvent(evnt)

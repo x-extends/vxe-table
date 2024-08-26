@@ -552,19 +552,20 @@ export default {
      */
     refreshOption () {
       const { isGroup, fullOptionList, fullGroupList, filterable, filterMethod, searchValue, labelField, groupLabelField } = this
+      const searchStr = `${searchValue || ''}`.toLowerCase()
       if (isGroup) {
         if (filterable && filterMethod) {
-          this.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && filterMethod({ group, option: null, searchValue }))
+          this.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && filterMethod({ group, option: null, searchValue: searchStr }))
         } else if (filterable) {
-          this.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && (!searchValue || `${group[groupLabelField]}`.indexOf(searchValue) > -1))
+          this.visibleGroupList = fullGroupList.filter(group => isOptionVisible(group) && (!searchStr || `${group[groupLabelField]}`.toLowerCase().indexOf(searchStr) > -1))
         } else {
           this.visibleGroupList = fullGroupList.filter(isOptionVisible)
         }
       } else {
         if (filterable && filterMethod) {
-          this.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && filterMethod({ group: null, option, searchValue }))
+          this.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && filterMethod({ group: null, option, searchValue: searchStr }))
         } else if (filterable) {
-          this.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && (!searchValue || `${option[labelField]}`.indexOf(searchValue) > -1))
+          this.visibleOptionList = fullOptionList.filter(option => isOptionVisible(option) && (!searchStr || `${option[labelField]}`.toLowerCase().indexOf(searchStr) > -1))
         } else {
           this.visibleOptionList = fullOptionList.filter(isOptionVisible)
         }

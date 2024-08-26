@@ -21,8 +21,26 @@ export interface MenuOptions {
 export interface MenuFirstOption {
   code?: string;
   name?: string;
-  prefixIcon?: string;
-  suffixIcon?: string;
+  prefixConfig?: {
+    icon?: string
+    content?: string
+    className?: string
+  }
+  /**
+   * 请使用 prefixConfig
+   * @deprecated
+   */
+  prefixIcon?: string
+  suffixConfig?: {
+    icon?: string
+    content?: string
+    className?: string
+  }
+  /**
+   * 请使用 suffixConfig
+   * @deprecated
+   */
+  suffixIcon?: string
   className?: string;
   visible?: boolean;
   disabled?: boolean;
@@ -34,7 +52,26 @@ export interface MenuFirstOption {
 export interface MenuChildOption {
   code?: string;
   name?: string;
-  prefixIcon?: string;
+  prefixConfig?: {
+    icon?: string
+    content?: string
+    className?: string
+  }
+  /**
+   * 请使用 prefixConfig
+   * @deprecated
+   */
+  prefixIcon?: string
+  suffixConfig?: {
+    icon?: string
+    content?: string
+    className?: string
+  }
+  /**
+   * 请使用 suffixConfig
+   * @deprecated
+   */
+  suffixIcon?: string
   className?: string;
   visible?: boolean;
   disabled?: boolean;

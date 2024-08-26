@@ -24,7 +24,7 @@ function updateDropHint (_vm, evnt) {
 }
 
 const renderSimplePanel = (h, _vm) => {
-  const { _e, $xetable, customStore } = _vm
+  const { _e, $xetable, customStore, dragColumn } = _vm
   const { customColumnList, customOpts, isMaxFixedColumn } = $xetable
   const { maxHeight } = customStore
   const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
@@ -99,12 +99,20 @@ const renderSimplePanel = (h, _vm) => {
               ])
             ])
             : _e(),
-          h('div', {
-            class: 'vxe-table-custom--checkbox-label',
-            attrs: {
-              title: colTitle
-            }
-          }, colTitle),
+          column.type === 'html'
+            ? h('div', {
+              key: '1',
+              class: 'vxe-table-custom--checkbox-label',
+              domProps: {
+                innerHTML: colTitle
+              }
+            }) : h('div', {
+              key: '0',
+              class: 'vxe-table-custom--checkbox-label',
+              attrs: {
+                title: colTitle
+              }
+            }, colTitle),
           !parent && allowFixed
             ? h('div', {
               class: 'vxe-table-custom--fixed-option'
@@ -203,7 +211,7 @@ const renderSimplePanel = (h, _vm) => {
           h('div', {
             ref: 'dragHintElemRef',
             class: 'vxe-table-custom-popup--drag-hint'
-          }, GlobalConfig.i18n('vxe.custom.cstmDragTarget', [_vm.dragColumn ? _vm.dragColumn.getTitle() : '']))
+          }, GlobalConfig.i18n('vxe.custom.cstmDragTarget', [dragColumn && dragColumn.type !== 'html' ? dragColumn.getTitle() : '']))
         ]),
         customOpts.showFooter
           ? h('div', {
@@ -315,12 +323,20 @@ const renderPopupPanel = (h, _vm) => {
           h('td', {
             class: 'vxe-table-custom-popup--column-item col--name'
           }, [
-            h('div', {
-              class: 'vxe-table-custom-popup--name',
-              attrs: {
-                title: colTitle
-              }
-            }, colTitle)
+            column.type === 'html'
+              ? h('div', {
+                key: '1',
+                class: 'vxe-table-custom-popup--name',
+                domProps: {
+                  innerHTML: colTitle
+                }
+              }) : h('div', {
+                key: '0',
+                class: 'vxe-table-custom-popup--name',
+                attrs: {
+                  title: colTitle
+                }
+              }, colTitle)
           ]),
           allowResizable
             ? h('td', {

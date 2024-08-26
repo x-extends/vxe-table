@@ -69,11 +69,16 @@ export interface RendererMapOptions {
   tableFilterResetMethod?(params: ColumnFilterResetParams): void;
 
   /**
-   * 已废弃，请使用 defaultTableFilterMethod
+   * 已废弃，请使用 tableFilterDefaultMethod
    * @deprecated
    */
   defaultFilterMethod?(params: ColumnFilterMethodParams): boolean;
+  /**
+   * 已废弃，请使用 tableFilterDefaultMethod
+   * @deprecated
+   */
   defaultTableFilterMethod?(params: ColumnFilterMethodParams): boolean;
+  tableFilterDefaultMethod?(params: ColumnFilterMethodParams): boolean;
 
   /**
    * 已废弃，请使用 tableCellClassName
