@@ -66,6 +66,7 @@ export default {
       customTitle: 'Configuraciones de columna',
       customAll: 'Todo',
       customConfirm: 'Confirm',
+      customClose: 'Close',
       customCancel: 'Cancel',
       customRestore: 'Restore',
       maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
@@ -418,7 +419,8 @@ export default {
           seqTitle: 'S/N',
           showSeq: 'Display serial number',
           showCheckbox: 'Allow multiple selections',
-          errSubDrag: 'The sub table does not support this control. Please use another control.'
+          errSubDrag: 'The sub table does not support this control. Please use another control.',
+          colPlace: 'Drag the control in.'
         },
         uploadProp: {
           limitFileCount: 'File quantity limitation',
@@ -443,12 +445,27 @@ export default {
       },
       search: {
         addBtn: 'Edit',
-        emptyText: 'No filter condition is configured.'
+        emptyText: 'No filter condition is configured.',
+        editPopupTitle: 'Edit search fields'
+      },
+      searchPopup: {
+        colTitle: 'Title',
+        saveBtn: 'Save'
       }
     },
     text: {
       copySuccess: 'Successfully copied to clipboard.',
       copyError: 'The current environment does not support this operation.'
+    },
+    countdown: {
+      formats: {
+        yyyy: 'Year',
+        MM: 'Moon',
+        dd: 'Day',
+        HH: 'Hour',
+        mm: 'Minute',
+        ss: 'Second'
+      }
     },
 
     /**

@@ -66,6 +66,7 @@ export default {
       customTitle: 'Configurações de coluna',
       customAll: 'Todos',
       customConfirm: 'Confirm',
+      customClose: '关闭',
       customCancel: 'Cancel',
       customRestore: 'Restore',
       maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
@@ -418,7 +419,8 @@ export default {
           seqTitle: 'S/N',
           showSeq: 'Display serial number',
           showCheckbox: 'Allow multiple selections',
-          errSubDrag: 'The sub table does not support this control. Please use another control.'
+          errSubDrag: 'The sub table does not support this control. Please use another control.',
+          colPlace: '将控件拖拽进来'
         },
         uploadProp: {
           limitFileCount: 'File quantity limitation',
@@ -443,12 +445,27 @@ export default {
       },
       search: {
         addBtn: 'Edit',
-        emptyText: 'No filter condition is configured.'
+        emptyText: 'No filter condition is configured.',
+        editPopupTitle: '编辑查询字段'
+      },
+      searchPopup: {
+        colTitle: '标题',
+        saveBtn: '保存'
       }
     },
     text: {
       copySuccess: 'Successfully copied to clipboard.',
       copyError: 'The current environment does not support this operation.'
+    },
+    countdown: {
+      formats: {
+        yyyy: '年',
+        MM: '月',
+        dd: '天',
+        HH: '时',
+        mm: '分',
+        ss: '秒'
+      }
     },
 
     /**

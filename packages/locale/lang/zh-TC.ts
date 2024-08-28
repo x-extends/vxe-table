@@ -66,6 +66,7 @@ export default {
       customTitle: '列設定',
       customAll: '全部',
       customConfirm: '确认',
+      customClose: '关闭',
       customCancel: '取消',
       customRestore: '恢复默认',
       maxFixedCol: '最大冻结列的數量不能超過 {0} 個'
@@ -416,7 +417,8 @@ export default {
           seqTitle: '序號',
           showSeq: '顯示序號',
           showCheckbox: '允許多選',
-          errSubDrag: '子表不支持該控件，請使用其他控件'
+          errSubDrag: '子表不支持該控件，請使用其他控件',
+          colPlace: '将控件拖拽进来'
         },
         uploadProp: {
           uploadProp: {
@@ -443,12 +445,27 @@ export default {
       },
       search: {
         addBtn: '编辑',
-        emptyText: '未配置查询条件'
+        emptyText: '未配置查询条件',
+        editPopupTitle: '编辑查询字段'
+      },
+      searchPopup: {
+        colTitle: '标题',
+        saveBtn: '保存'
       }
     },
     text: {
       copySuccess: '已複製到剪貼板',
       copyError: '當前環境不支持該操作'
+    },
+    countdown: {
+      formats: {
+        yyyy: '年',
+        MM: '月',
+        dd: '天',
+        HH: '时',
+        mm: '分',
+        ss: '秒'
+      }
     },
 
     /**

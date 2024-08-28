@@ -26,29 +26,39 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/toolbar/ToolbarTest.vue')
   },
   {
-    path: '/component/table1',
-    name: 'TableTest1',
-    component: () => import('../views/table/TableTest1.vue')
-  },
-  {
-    path: '/component/table2',
-    name: 'TableTest2',
-    component: () => import('../views/table/TableTest2.vue')
-  },
-  {
-    path: '/component/table3',
-    name: 'TableTest3',
-    component: () => import('../views/table/TableTest3.vue')
-  },
-  {
-    path: '/component/table4',
-    name: 'TableTest4',
-    component: () => import('../views/table/TableTest4.vue')
-  },
-  {
-    path: '/component/table5',
-    name: 'TableTest5',
-    component: () => import('../views/table/TableTest5.vue')
+    path: '/component/table',
+    children: [
+      {
+        path: 'table1',
+        name: 'TableTest1',
+        component: () => import('../views/table/TableTest1.vue')
+      },
+      {
+        path: 'table2',
+        name: 'TableTest2',
+        component: () => import('../views/table/TableTest2.vue')
+      },
+      {
+        path: 'table3',
+        name: 'TableTest3',
+        component: () => import('../views/table/TableTest3.vue')
+      },
+      {
+        path: 'table4',
+        name: 'TableTest4',
+        component: () => import('../views/table/TableTest4.vue')
+      },
+      {
+        path: 'table5',
+        name: 'TableTest5',
+        component: () => import('../views/table/TableTest5.vue')
+      },
+      {
+        path: 'table6',
+        name: 'TableTest6',
+        component: () => import('../views/table/TableTest6.vue')
+      }
+    ]
   },
   {
     path: '/component/grid',

@@ -66,6 +66,7 @@ export default {
       customTitle: '列设置',
       customAll: '全部',
       customConfirm: '确认',
+      customClose: '关闭',
       customCancel: '取消',
       customRestore: '恢复默认',
       maxFixedCol: '最大冻结列的数量不能超过 {0} 个'
@@ -418,7 +419,8 @@ export default {
           seqTitle: '序号',
           showSeq: '显示序号',
           showCheckbox: '允许多选',
-          errSubDrag: '子表不支持该控件，请使用其他控件'
+          errSubDrag: '子表不支持该控件，请使用其他控件',
+          colPlace: '将控件拖拽进来'
         },
         uploadProp: {
           limitFileCount: '文件数量限制',
@@ -443,12 +445,27 @@ export default {
       },
       search: {
         addBtn: '编辑',
-        emptyText: '未配置查询条件'
+        emptyText: '未配置查询条件',
+        editPopupTitle: '编辑查询字段'
+      },
+      searchPopup: {
+        colTitle: '标题',
+        saveBtn: '保存'
       }
     },
     text: {
       copySuccess: '已复制到剪贴板',
       copyError: '当前环境不支持该操作'
+    },
+    countdown: {
+      formats: {
+        yyyy: '年',
+        MM: '月',
+        dd: '天',
+        HH: '时',
+        mm: '分',
+        ss: '秒'
+      }
     },
 
     /**
