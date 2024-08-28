@@ -60,6 +60,7 @@ export default {
       customTitle: '列設定',
       customAll: '全部',
       customConfirm: 'OK',
+      customClose: '关闭',
       customCancel: 'Cancel',
       customRestore: 'Restore default',
       maxFixedCol: '最大固定列数が {0} です。'

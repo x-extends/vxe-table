@@ -24,6 +24,7 @@ export default {
     disabled: Boolean,
     loading: Boolean,
     trigger: { type: String, default: () => GlobalConfig.button.trigger },
+    align: String,
     destroyOnClose: Boolean,
     className: [String, Function],
     popupClassName: [String, Function],
@@ -112,7 +113,7 @@ export default {
     GlobalEvent.off(this, 'mousedown')
   },
   render (h) {
-    const { $scopedSlots, className, popupClassName, trigger, title, inited, type, destroyOnClose, isFormBtn, btnMode, btnStatus, btnRound, btnCircle, vSize, name, disabled, loading, visiblePanel, animatVisible, panelPlacement } = this
+    const { $scopedSlots, className, popupClassName, trigger, align, title, inited, type, destroyOnClose, isFormBtn, btnMode, btnStatus, btnRound, btnCircle, vSize, name, disabled, loading, visiblePanel, animatVisible, panelPlacement } = this
     const downsSlot = $scopedSlots.dropdowns
     const btnOns = {}
     const panelOns = {}
@@ -132,7 +133,7 @@ export default {
     }, [
       h('button', {
         ref: 'xBtn',
-        class: ['vxe-button', `type--${btnMode}`, {
+        class: ['vxe-button', `type--${btnMode}`, align ? `align--${align}` : '', {
           [`size--${vSize}`]: vSize,
           [`theme--${btnStatus}`]: btnStatus,
           'is--round': btnRound,
@@ -178,7 +179,7 @@ export default {
       ] : null)
     ]) : h('button', {
       ref: 'xBtn',
-      class: ['vxe-button', `type--${btnMode}`, className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
+      class: ['vxe-button', `type--${btnMode}`, align ? `align--${align}` : '', className ? (XEUtils.isFunction(className) ? className({ $button: this }) : className) : '', {
         [`size--${vSize}`]: vSize,
         [`theme--${btnStatus}`]: btnStatus,
         'is--round': btnRound,

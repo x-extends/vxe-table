@@ -17,7 +17,7 @@
       ref="xTable1"
       height="400"
       id="toolbar_demo3"
-      :custom-config="{storage: true}"
+      :custom-config="{storage: true,immediate:true}"
       :data="tableData">
       <vxe-column type="seq" width="60"></vxe-column>
       <vxe-column field="name" title="Name"></vxe-column>

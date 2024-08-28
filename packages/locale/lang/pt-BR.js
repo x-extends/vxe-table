@@ -60,6 +60,7 @@ export default {
       customTitle: 'Configurações de coluna',
       customAll: 'Todos',
       customConfirm: 'Confirmar',
+      customClose: '关闭',
       customCancel: 'Cancel',
       customRestore: 'Restore default',
       maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'

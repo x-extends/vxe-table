@@ -67,6 +67,15 @@ $btnThemeList: (
   user-select: none;
   appearance: none;
   @include createAnimationTransition(border, .2s);
+  &.align--left {
+    text-align: left;
+  }
+  &.align--center {
+    text-align: center;
+  }
+  &.align--right {
+    text-align: right;
+  }
   &:not(.is--disabled) {
     color: $vxe-font-color;
     cursor: pointer;

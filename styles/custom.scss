@@ -146,21 +146,9 @@
   flex-direction: row;
   flex-shrink: 0;
   border-top: 1px solid $vxe-table-popup-border-color;
-  text-align: right;
   button {
-    background-color: transparent;
-    width: 50%;
+    flex-grow: 1;
     height: 2.8em;
-    border: 0;
-    color: $vxe-font-color;
-    text-align: center;
-    cursor: pointer;
-    &:focus {
-      outline: none;
-    }
-    &:hover {
-      color: $vxe-primary-color;
-    }
   }
 }
 

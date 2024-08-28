@@ -3,6 +3,7 @@ import UtilTools from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import XEUtils from 'xe-utils'
+import VxeButtonComponent from '../../button/src/button'
 
 const { formatText } = UtilTools
 const { addClass, removeClass } = DomTools
@@ -182,7 +183,7 @@ const renderSimplePanel = (h, _vm) => {
                   title: GlobalConfig.i18n('vxe.table.allTitle')
                 },
                 on: {
-                  click: _vm.allCustomEvent
+                  click: _vm.allOptionEvent
                 }
               }, [
                 h('span', {
@@ -217,26 +218,46 @@ const renderSimplePanel = (h, _vm) => {
           ? h('div', {
             class: 'vxe-table-custom--footer'
           }, [
-            h('button', {
-              class: 'btn--reset',
+            h(VxeButtonComponent, {
+              props: {
+                mode: 'text',
+                content: customOpts.resetButtonText || GlobalConfig.i18n('vxe.table.customRestore')
+              },
               on: {
                 click: _vm.resetCustomEvent
               }
-            }, customOpts.resetButtonText || GlobalConfig.i18n('vxe.table.customRestore')),
+            }),
             customOpts.immediate
-              ? _e()
-              : h('button', {
-                class: 'btn--cancel',
+              ? h(VxeButtonComponent, {
+                props: {
+                  mode: 'text',
+                  content: customOpts.closeButtonText || GlobalConfig.i18n('vxe.table.customClose')
+                },
+                on: {
+                  click: _vm.cancelCloseEvent
+                }
+              })
+              : h(VxeButtonComponent, {
+                props: {
+                  mode: 'text',
+                  content: customOpts.resetButtonText || GlobalConfig.i18n('vxe.table.customCancel')
+                },
                 on: {
                   click: _vm.cancelCustomEvent
                 }
-              }, customOpts.resetButtonText || GlobalConfig.i18n('vxe.table.customCancel')),
-            h('button', {
-              class: 'btn--confirm',
-              on: {
-                click: _vm.confirmCustomEvent
-              }
-            }, customOpts.confirmButtonText || GlobalConfig.i18n('vxe.table.customConfirm'))
+              }),
+            customOpts.immediate
+              ? _e()
+              : h(VxeButtonComponent, {
+                props: {
+                  mode: 'text',
+                  status: 'primary',
+                  content: customOpts.confirmButtonText || GlobalConfig.i18n('vxe.table.customConfirm')
+                },
+                on: {
+                  click: _vm.confirmCustomEvent
+                }
+              })
           ])
           : null
       ]
@@ -378,9 +399,6 @@ const renderPopupPanel = (h, _vm) => {
                     input (value) {
                       column.renderFixed = value
                     }
-                  // onChange () {
-                  //   changePopupFixedOption(column)
-                  // }
                   }
                 })
             ])
@@ -469,7 +487,7 @@ const renderPopupPanel = (h, _vm) => {
                         title: GlobalConfig.i18n('vxe.table.allTitle')
                       },
                       on: {
-                        click: _vm.allCustomEvent
+                        click: _vm.allOptionEvent
                       }
 
                     }, [
@@ -530,7 +548,7 @@ const renderPopupPanel = (h, _vm) => {
         return h('div', {
           class: 'vxe-table-custom-popup--footer'
         }, [
-          h('vxe-button', {
+          h(VxeButtonComponent, {
             props: {
               content: customOpts.resetButtonText || GlobalConfig.i18n('vxe.custom.cstmRestore')
             },
@@ -538,7 +556,7 @@ const renderPopupPanel = (h, _vm) => {
               click: _vm.resetCustomEvent
             }
           }),
-          h('vxe-button', {
+          h(VxeButtonComponent, {
             props: {
               content: customOpts.resetButtonText || GlobalConfig.i18n('vxe.custom.cstmCancel')
             },
@@ -546,7 +564,7 @@ const renderPopupPanel = (h, _vm) => {
               click: _vm.cancelCustomEvent
             }
           }),
-          h('vxe-button', {
+          h(VxeButtonComponent, {
             props: {
               status: 'primary',
               content: customOpts.confirmButtonText || GlobalConfig.i18n('vxe.custom.cstmConfirm')
@@ -637,6 +655,11 @@ export default {
       $xetable.emitCustomEvent('confirm', evnt)
       $xetable.saveCustomStore('confirm')
     },
+    cancelCloseEvent ({ $event }) {
+      const { $xetable } = this
+      $xetable.closeCustom()
+      $xetable.emitCustomEvent('cancel', $event)
+    },
     cancelCustomEvent  (evnt) {
       const { $xetable } = this
       const { customStore, customOpts, customColumnList } = $xetable
@@ -717,49 +740,73 @@ export default {
       const { $xetable } = this
       const { customOpts } = $xetable
       const isChecked = !column.renderVisible
-      XEUtils.eachTree([column], (item) => {
-        item.renderVisible = isChecked
-        item.halfVisible = false
-      })
-      this.handleOptionCheck(column)
       if (customOpts.immediate) {
+        XEUtils.eachTree([column], (item) => {
+          item.visible = isChecked
+          item.renderVisible = isChecked
+          item.halfVisible = false
+        })
         $xetable.handleCustom()
         $xetable.saveCustomStore('update:visible')
+      } else {
+        XEUtils.eachTree([column], (item) => {
+          item.renderVisible = isChecked
+          item.halfVisible = false
+        })
       }
+      this.handleOptionCheck(column)
       $xetable.checkCustomStatus()
     },
     changeFixedOption  (column, colFixed) {
       const { $xetable } = this
-      const { isMaxFixedColumn } = $xetable
-      if (column.renderFixed === colFixed) {
-        column.renderFixed = ''
-        // $xeTable.clearColumnFixed(column)
+      const { isMaxFixedColumn, customOpts } = $xetable
+      if (customOpts.immediate) {
+        if (column.renderFixed === colFixed) {
+          column.fixed = ''
+          column.renderFixed = ''
+        } else {
+          if (!isMaxFixedColumn || column.renderFixed) {
+            column.fixed = colFixed
+            column.renderFixed = colFixed
+          }
+        }
+        $xetable.handleCustom()
+        $xetable.saveCustomStore('update:fixed')
       } else {
-        if (!isMaxFixedColumn || column.renderFixed) {
-          column.renderFixed = colFixed
-          // $xeTable.setColumnFixed(column, colFixed)
+        if (column.renderFixed === colFixed) {
+          column.renderFixed = ''
+        } else {
+          if (!isMaxFixedColumn || column.renderFixed) {
+            column.renderFixed = colFixed
+          }
         }
       }
     },
-    // changePopupFixedOption  (column) {
-    //   const { $xetable } = this
-    //   const { isMaxFixedColumn } = $xetable
-    //   if (!isMaxFixedColumn) {
-    //     $xetable.setColumnFixed(column, column.fixed)
-    //   }
-    // },
-    allCustomEvent () {
+    allOptionEvent () {
       const { $xetable, customStore } = this
-      const { customOpts, customColumnList } = $xetable
+      const { customColumnList, customOpts } = $xetable
       const { checkMethod } = customOpts
       const isAll = !customStore.isAll
-      XEUtils.eachTree(customColumnList, (column) => {
-        if (!checkMethod || checkMethod({ column })) {
-          column.renderVisible = isAll
-          column.halfVisible = false
-        }
-      })
-      customStore.isAll = isAll
+      if (customOpts.immediate) {
+        XEUtils.eachTree(customColumnList, (column) => {
+          if (!checkMethod || checkMethod({ column })) {
+            column.visible = isAll
+            column.renderVisible = isAll
+            column.halfVisible = false
+          }
+        })
+        customStore.isAll = isAll
+        $xetable.handleCustom()
+        $xetable.saveCustomStore('update:visible')
+      } else {
+        XEUtils.eachTree(customColumnList, (column) => {
+          if (!checkMethod || checkMethod({ column })) {
+            column.renderVisible = isAll
+            column.halfVisible = false
+          }
+        })
+        customStore.isAll = isAll
+      }
       $xetable.checkCustomStatus()
     },
     sortMousedownEvent (evnt) {
@@ -793,7 +840,7 @@ export default {
     },
     sortDragendEvent (evnt) {
       const { $xetable, prevDropTrEl } = this
-      const { customColumnList } = $xetable
+      const { customColumnList, customOpts } = $xetable
       const trEl = evnt.currentTarget
       const dragHintEl = this.$refs.dragHintElemRef
       if (prevDropTrEl) {
@@ -829,6 +876,17 @@ export default {
       }
       removeClass(trEl, 'active--drag-target')
       removeClass(trEl, 'active--drag-origin')
+
+      if (customOpts.immediate) {
+        XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
+          if (!parent) {
+            const sortIndex = index + 1
+            column.renderSortNumber = sortIndex
+          }
+        })
+        $xetable.handleCustom()
+        $xetable.saveCustomStore('update:sort')
+      }
     },
     sortDragoverEvent  (evnt) {
       const { $xetable, prevDropTrEl } = this
