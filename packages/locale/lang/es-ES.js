@@ -2,12 +2,15 @@ export default {
   vxe: {
     base: {
       pleaseInput: 'Please input',
-      pleaseSelect: 'Select'
+      pleaseSelect: 'Select',
+      comma: ',',
+      fullStop: '.'
     },
     loading: {
       text: 'Cargando...'
     },
     error: {
+      downErr: 'Download failed.',
       groupFixed: 'If you use group headers, the freeze columns must be set by group.',
       groupMouseRange: 'Los encabezados de agrupación y "{0}" no pueden ser utilizados al mismo tiempo, lo que puede causar errores.',
       groupTag: 'El encabezado de columna de agrupación debería utilizar "{0}" en lugar de "{1}", lo que puede causar errores.',
@@ -17,6 +20,7 @@ export default {
       useErr: 'Error al instalar el módulo "{0}", posiblemente en el orden equivocado, los módulos dependientes deben ser instalados antes de la tabla.',
       barUnableLink: 'La barra de herramientas no puede asociarse con la tabla.',
       expandContent: 'La ranura de fila expandible debería ser "contenido", por favor revise si está correcta.',
+      reqComp: 'Require "{0}" component, check whether the install is correct. https://vxeui.com/#/start/useGlobal',
       reqModule: 'Requerir el módulo "{0}".',
       reqProp: 'Falta el parámetro necesario "{0}", lo que puede causar errores.',
       emptyProp: 'La propiedad "{0}" no se permite estar vacía.',
@@ -31,7 +35,8 @@ export default {
       noTree: 'La estructura de árbol no soporta "{0}".',
       notProp: 'Parámetros no compatibles "{0}"',
       checkProp: 'La casilla de verificación puede detenerse cuando la cantidad de datos es demasiado grande, se recomienda establecer el parámetro "{0}" para aumentar la velocidad de representación',
-      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
+      coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error.',
+      uniField: 'The field "{0}" is repeatedly defined, which may cause an error.',
       delFunc: 'La función "{0}" está en desuso, por favor use "{1}".',
       delProp: 'La propiedad "{0}" está en desuso, por favor use "{1}".',
       delEvent: 'El evento "{0}" está en desuso, por favor use "{1}"',
@@ -45,7 +50,8 @@ export default {
     table: {
       emptyText: 'No hay datos',
       allTitle: 'Seleccionar todo / cancelar',
-      seqTitle: 'S/N',
+      seqTitle: 'N/S',
+      actionTitle: 'Action',
       confirmFilter: 'Confirmar',
       resetFilter: 'Restablecer',
       allFilter: 'Todo',
@@ -59,10 +65,10 @@ export default {
       expOriginFilename: 'Exportar_original_{0}',
       customTitle: 'Configuraciones de columna',
       customAll: 'Todo',
-      customConfirm: 'Confirmar',
+      customConfirm: 'Confirm',
       customClose: 'Close',
       customCancel: 'Cancel',
-      customRestore: 'Restore default',
+      customRestore: 'Restore',
       maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
     },
     grid: {
@@ -120,7 +126,7 @@ export default {
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
         colTitle: 'Title',
         colResizable: 'Column width (px)',
-        colVisible: 'Visible',
+        colVisible: 'Display',
         colFixed: 'Freeze columns',
         colFixedMax: 'Freeze columns (Max {0})',
         fixedLeft: 'Left',
@@ -189,8 +195,14 @@ export default {
       expCancel: 'Cancelar'
     },
     modal: {
-      zoomIn: 'Maximizar',
+      errTitle: 'Error',
+      zoomMin: 'Minimize',
+      zoomIn: 'Maximize',
       zoomOut: 'Reducir',
+      close: 'Cerrar',
+      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.'
+    },
+    drawer: {
       close: 'Cerrar'
     },
     form: {
@@ -270,11 +282,189 @@ export default {
         }
       }
     },
+    imagePreview: {
+      popupTitle: 'Preview',
+      operBtn: {
+        zoomOut: 'Reduce',
+        zoomIn: 'Enlarge',
+        pctFull: 'Proportional scaling',
+        pct11: 'Show original size',
+        rotateLeft: 'Rotate left',
+        rotateRight: 'Rotate right',
+        print: 'Click to print',
+        download: 'Click to download'
+      }
+    },
+    upload: {
+      fileBtnText: 'Click or drag',
+      imgBtnText: 'Click or drag',
+      dragPlaceholder: 'Please drag and drop the file into this area to upload it.',
+      imgSizeHint: 'Single {0}',
+      imgCountHint: 'Up to {0}',
+      fileTypeHint: 'Support {0} file types',
+      fileSizeHint: 'Single file size does not exceed {0}',
+      fileCountHint: 'Up to {0} file can be uploaded',
+      overCountErr: 'You can only choose {0} file!',
+      overCountExtraErr: 'It has exceeded the maximum number {0}, and more than {0} file will be ignored!超出最大数量 1 个，超出的 1 个文件将被忽略！',
+      overSizeErr: 'The size of the file is not more than {0}}!',
+      reUpload: 'Re upload',
+      uploadProgress: 'Uploading {0}%',
+      uploadErr: 'Fail to upload',
+      uploadSuccess: 'Successfully upload',
+      moreBtnText: 'More ({0})',
+      viewItemTitle: 'click to view'
+    },
     formDesign: {
+      formName: 'Form name',
+      defFormTitle: 'Unnamed form',
+      widgetPropTab: 'Field property',
+      widgetFormTab: 'Form property',
+      error: {
+        wdFormUni: '该类型的控件在表单中只允许添加一个',
+        wdSubUni: '该类型的控件在子表中只允许添加一个'
+      },
+      styleSetting: {
+        btn: 'Style setting',
+        title: 'Form style setting',
+        layoutTitle: 'Field layout',
+        verticalLayout: 'Vertical layout',
+        horizontalLayout: 'Horizontal layout',
+        styleTitle: 'Title style',
+        boldTitle: 'Bold title',
+        fontBold: 'Bold',
+        fontNormal: 'Normal',
+        colonTitle: 'Display colon',
+        colonVisible: 'Visible',
+        colonHidden: 'Hidden',
+        alignTitle: 'Title align',
+        widthTitle: 'Title width',
+        alignLeft: 'Left',
+        alignRight: 'Right',
+        unitPx: 'Px',
+        unitPct: 'Pct'
+      },
       widget: {
-        input: 'Input',
-        textarea: 'Textarea',
-        select: 'Select'
+        group: {
+          base: 'Base control',
+          layout: 'Layout control',
+          system: 'System control',
+          module: 'Module control',
+          chart: 'Chart control',
+          advanced: 'Advanced control'
+        },
+        copyTitle: 'Copy_{0}',
+        component: {
+          input: 'Input',
+          textarea: 'Textarea',
+          select: 'Select',
+          row: 'Row/column',
+          title: 'Title',
+          text: 'Text',
+          subtable: 'Subtable',
+          VxeSwitch: 'Yes/no',
+          VxeInput: 'Input',
+          VxeNumberInput: 'Number',
+          VxeDatePicker: 'Date',
+          VxeTextarea: 'Textarea',
+          VxeSelect: 'Select',
+          VxeTreeSelect: 'Tree select',
+          VxeRadioGroup: 'Radio',
+          VxeCheckboxGroup: 'Checkbox',
+          VxeUploadFile: 'File',
+          VxeUploadImage: 'Image'
+        }
+      },
+      widgetProp: {
+        name: 'Field name',
+        placeholder: 'Field placeholder',
+        required: 'Required',
+        multiple: 'Allow to select multiple',
+        displaySetting: {
+          name: 'Display setting',
+          pc: 'PC',
+          mobile: 'Mobile',
+          visible: 'Visible',
+          hidden: 'Hidden'
+        },
+        dataSource: {
+          name: 'Data source',
+          defValue: 'Option {0}',
+          addOption: 'Add option',
+          batchEditOption: 'Batch edit',
+          batchEditTip: 'Each row corresponds to an option, supporting direct copying and pasting from tables, Excel, and WPS.',
+          batchEditSubTip: 'Each row corresponds to an option. If grouped, the sub items can start with spaces or tab keys, and can be directly copied and pasted from tables, Excel, or WPS.',
+          buildOption: 'Build option'
+        },
+        rowProp: {
+          colSize: 'Number of columns',
+          col2: 'Two columns',
+          col3: 'Three columns',
+          col4: 'Four columns',
+          col6: 'Six columns',
+          layout: 'Layout'
+        },
+        textProp: {
+          name: 'Content',
+          alignTitle: 'Align',
+          alignLeft: 'Left',
+          alignCenter: 'Center',
+          alignRight: 'Right',
+          colorTitle: 'Color',
+          sizeTitle: 'Font size',
+          boldTitle: 'Font bold',
+          fontNormal: 'Normal',
+          fontBold: 'Bold'
+        },
+        subtableProp: {
+          seqTitle: 'S/N',
+          showSeq: 'Display serial number',
+          showCheckbox: 'Allow multiple selections',
+          errSubDrag: 'The sub table does not support this control. Please use another control.',
+          colPlace: 'Drag the control in.'
+        },
+        uploadProp: {
+          limitFileCount: 'File quantity limitation',
+          limitFileSize: 'File size limitation',
+          multiFile: 'Allows multiple files',
+          limitImgCount: 'Image quantity limitation',
+          limitImgSize: 'Image size limitation',
+          multiImg: 'Allows multiple images'
+        }
+      }
+    },
+    listDesign: {
+      fieldSettingTab: 'Field',
+      listSettingTab: 'Parameter',
+      searchTitle: 'Search',
+      listTitle: 'List',
+      searchField: 'Search field',
+      listField: 'List field',
+      activeBtn: {
+        ActionButtonUpdate: 'Edit',
+        ActionButtonDelete: 'Delete'
+      },
+      search: {
+        addBtn: 'Edit',
+        emptyText: 'No filter condition is configured.',
+        editPopupTitle: 'Edit search fields'
+      },
+      searchPopup: {
+        colTitle: 'Title',
+        saveBtn: 'Save'
+      }
+    },
+    text: {
+      copySuccess: 'Successfully copied to clipboard.',
+      copyError: 'The current environment does not support this operation.'
+    },
+    countdown: {
+      formats: {
+        yyyy: 'Year',
+        MM: 'Moon',
+        dd: 'Day',
+        HH: 'Hour',
+        mm: 'Minute',
+        ss: 'Second'
       }
     },
 

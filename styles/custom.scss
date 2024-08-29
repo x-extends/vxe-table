@@ -170,9 +170,15 @@
 .vxe-table-custom--sort-btn {
   padding-left: 0.2em;
   padding-right: 0.4em;
-  cursor: grabbing;
-  &:hover {
-    color: $vxe-primary-color;
+  &:not(.is--disabled) {
+    cursor: grabbing;
+    &:hover {
+      color: $vxe-primary-color;
+    }
+  }
+  &.is--disabled {
+    color: $vxe-input-disabled-color;
+    cursor: not-allowed;
   }
 }
 .vxe-table-custom--checkbox-label  {
@@ -189,22 +195,6 @@
   flex-direction: row;
   align-items: center;
   user-select: none;
-}
-
-.vxe-table-custom--fixed-left-option,
-.vxe-table-custom--fixed-right-option {
-  line-height: 1.34em;
-  font-size: 1.1em;
-  padding: 0 0.2em;
-  cursor: pointer;
-  &.is--checked,
-  &:hover {
-    color: $vxe-primary-color;
-  }
-  &.is--disabled {
-    cursor: no-drop;
-    color: $vxe-input-disabled-color;
-  }
 }
 
 .vxe-table-custom-popup--body {
@@ -371,12 +361,18 @@
 .vxe-table-custom-popup--column-sort-btn {
   font-size: 1.2em;
   padding: 0.2em 0.5em;
-  cursor: grab;
-  &:hover {
-    color:  $vxe-primary-color;
+  &:not(.is--disabled) {
+    cursor: grab;
+    &:hover {
+      color:  $vxe-primary-color;
+    }
+    &:active {
+      cursor: grabbing;
+    }
   }
-  &:active {
-    cursor: grabbing;
+  &.is--disabled {
+    color: $vxe-input-disabled-color;
+    cursor: not-allowed;
   }
 }
 

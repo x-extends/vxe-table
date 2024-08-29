@@ -44,6 +44,7 @@ const renderSimplePanel = (h, _vm) => {
       const isColGroup = column.children && column.children.length
       const colTitle = formatText(column.getTitle(), 1)
       const isDisabled = checkMethod ? !checkMethod({ column }) : false
+      const isHidden = !isChecked
       colVNs.push(
         h('li', {
           key: column.id,
@@ -51,6 +52,7 @@ const renderSimplePanel = (h, _vm) => {
             colid: column.id
           },
           class: ['vxe-table-custom--option', `level--${column.level}`, {
+            'is--hidden': isHidden,
             'is--group': isColGroup
           }],
           on: {
@@ -85,11 +87,13 @@ const renderSimplePanel = (h, _vm) => {
               class: 'vxe-table-custom--sort-option'
             }, [
               h('span', {
-                class: 'vxe-table-custom--sort-btn',
+                class: ['vxe-table-custom--sort-btn', {
+                  'is--disabled': isHidden
+                }],
                 attrs: {
                   title: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip')
                 },
-                on: {
+                on: isHidden ? {} : {
                   mousedown: _vm.sortMousedownEvent,
                   mouseup: _vm.sortMouseupEvent
                 }
@@ -118,12 +122,12 @@ const renderSimplePanel = (h, _vm) => {
             ? h('div', {
               class: 'vxe-table-custom--fixed-option'
             }, [
-              h('span', {
-                class: ['vxe-table-custom--fixed-left-option', column.renderFixed === 'left' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT, {
-                  'is--checked': column.renderFixed === 'left',
-                  'is--disabled': isMaxFixedColumn && !column.renderFixed
-                }],
-                attrs: {
+              h(VxeButtonComponent, {
+                props: {
+                  mode: 'text',
+                  icon: column.renderFixed === 'left' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_LEFT,
+                  status: column.renderFixed === 'left' ? 'primary' : '',
+                  disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
                   title: GlobalConfig.i18n(column.renderFixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft')
                 },
                 on: {
@@ -132,16 +136,15 @@ const renderSimplePanel = (h, _vm) => {
                   }
                 }
               }),
-              h('span', {
-                class: ['vxe-table-custom--fixed-right-option', column.renderFixed === 'right' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT, {
-                  'is--checked': column.renderFixed === 'right',
-                  'is--disabled': isMaxFixedColumn && !column.renderFixed
-                }],
-                attrs: {
+              h(VxeButtonComponent, {
+                props: {
+                  mode: 'text',
+                  icon: column.renderFixed === 'right' ? GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE : GlobalConfig.icon.TOOLBAR_TOOLS_FIXED_RIGHT,
+                  status: column.renderFixed === 'right' ? 'primary' : '',
+                  disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
                   title: GlobalConfig.i18n(column.renderFixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight')
                 },
                 on: {
-
                   click: () => {
                     _vm.changeFixedOption(column, 'right')
                   }
@@ -279,6 +282,7 @@ const renderPopupPanel = (h, _vm) => {
       const colTitle = formatText(column.getTitle(), 1)
       const isColGroup = column.children && column.children.length
       const isDisabled = checkMethod ? !checkMethod({ column }) : false
+      const isHidden = !isChecked
       trVNs.push(
         h('tr', {
           key: column.id,
@@ -325,11 +329,13 @@ const renderPopupPanel = (h, _vm) => {
             }, [
               column.level === 1
                 ? h('span', {
-                  class: 'vxe-table-custom-popup--column-sort-btn',
+                  class: ['vxe-table-custom-popup--column-sort-btn', {
+                    'is--disabled': isHidden
+                  }],
                   attrs: {
                     title: GlobalConfig.i18n('vxe.custom.setting.sortHelpTip')
                   },
-                  on: {
+                  on: isHidden ? {} : {
                     mousedown: _vm.sortMousedownEvent,
                     mouseup: _vm.sortMouseupEvent
                   }
@@ -363,11 +369,12 @@ const renderPopupPanel = (h, _vm) => {
             ? h('td', {
               class: 'vxe-table-custom-popup--column-item col--resizable'
             }, [
-              !isChecked || (column.children && column.children.length)
+              column.children && column.children.length
                 ? h('span', '-')
                 : h('vxe-input', {
                   props: {
                     type: 'integer',
+                    disabled: isHidden,
                     value: column.renderResizeWidth
                   },
                   on: {
@@ -389,10 +396,11 @@ const renderPopupPanel = (h, _vm) => {
                     value: column.renderFixed || '',
                     type: 'button',
                     size: 'mini',
+                    disabled: isHidden,
                     options: [
-                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
-                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedUnset'), value: '' },
-                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
+                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isHidden || isMaxFixedColumn },
+                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedUnset'), value: '', disabled: isHidden },
+                      { label: GlobalConfig.i18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isHidden || isMaxFixedColumn }
                     ]
                   },
                   on: {

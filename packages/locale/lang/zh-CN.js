@@ -2,12 +2,15 @@ export default {
   vxe: {
     base: {
       pleaseInput: '请输入',
-      pleaseSelect: '请选择'
+      pleaseSelect: '请选择',
+      comma: '，',
+      fullStop: '。'
     },
     loading: {
       text: '加载中...'
     },
     error: {
+      downErr: '下载失败',
       groupFixed: '如果使用分组表头，冻结列必须按组设置',
       groupMouseRange: '分组表头与 "{0}" 不能同时使用，这可能会出现错误',
       groupTag: '分组列头应该使用 "{0}" 而不是 "{1}"，这可能会出现错误',
@@ -17,6 +20,7 @@ export default {
       useErr: '安装 "{0}" 模块时发生错误，可能顺序不正确，依赖的模块需要在 Table 之前安装',
       barUnableLink: '工具栏无法关联表格',
       expandContent: '展开行的插槽应该是 "content"，请检查是否正确',
+      reqComp: '缺少 "{0}" 组件，请检查是否正确安装。 https://vxeui.com/#/start/useGlobal',
       reqModule: '缺少 "{0}" 模块',
       reqProp: '缺少必要的 "{0}" 参数，这可能会导致出现错误',
       emptyProp: '参数 "{0}" 不允许为空',
@@ -32,6 +36,7 @@ export default {
       notProp: '不支持的参数 "{0}"',
       checkProp: '当数据量过大时可能会导致复选框卡顿，建议设置参数 "{0}" 提升渲染速度',
       coverProp: '"{0}" 的参数 "{1}" 重复定义，这可能会出现错误',
+      uniField: '字段名 "{0}" 重复定义，这可能会出现错误',
       delFunc: '方法 "{0}" 已废弃，请使用 "{1}"',
       delProp: '参数 "{0}" 已废弃，请使用 "{1}"',
       delEvent: '事件 "{0}" 已废弃，请使用 "{1}"',
@@ -46,6 +51,7 @@ export default {
       emptyText: '暂无数据',
       allTitle: '全选/取消',
       seqTitle: '序号',
+      actionTitle: '操作',
       confirmFilter: '筛选',
       resetFilter: '重置',
       allFilter: '全部',
@@ -189,8 +195,14 @@ export default {
       expCancel: '取消'
     },
     modal: {
+      errTitle: '错误提示',
+      zoomMin: '最小化',
       zoomIn: '最大化',
       zoomOut: '还原',
+      close: '关闭',
+      miniMaxSize: '最小化窗口的数量不能超过 {0} 个'
+    },
+    drawer: {
       close: '关闭'
     },
     form: {
@@ -270,11 +282,189 @@ export default {
         }
       }
     },
+    imagePreview: {
+      popupTitle: '预览',
+      operBtn: {
+        zoomOut: '缩小',
+        zoomIn: '放大',
+        pctFull: '等比例缩放',
+        pct11: '显示原始尺寸',
+        rotateLeft: '向左旋转',
+        rotateRight: '向右旋转',
+        print: '点击打印图片',
+        download: '点击下载图片'
+      }
+    },
+    upload: {
+      fileBtnText: '点击或拖拽上传',
+      imgBtnText: '点击或拖拽上传',
+      dragPlaceholder: '请把文件拖放到这个区域即可上传',
+      imgSizeHint: '单张{0}',
+      imgCountHint: '最多{0}张',
+      fileTypeHint: '支持 {0} 文件类型',
+      fileSizeHint: '单个文件大小不超过{0}',
+      fileCountHint: '最多可上传{0}个文件',
+      overCountErr: '最多只能选择{0}个文件！',
+      overCountExtraErr: '已超出最大数量{0}个，超出的{1}个文件将被忽略！',
+      overSizeErr: '文件大小最大不能超过{0}！',
+      reUpload: '重新上传',
+      uploadProgress: '上传中 {0}%',
+      uploadErr: '上传失败',
+      uploadSuccess: '上传成功',
+      moreBtnText: '更多（{0}）',
+      viewItemTitle: '点击查看'
+    },
     formDesign: {
+      formName: '表单名称',
+      defFormTitle: '未命名的表单',
+      widgetPropTab: '控件属性',
+      widgetFormTab: '表单属性',
+      error: {
+        wdFormUni: '该类型的控件在表单中只允许添加一个',
+        wdSubUni: '该类型的控件在子表中只允许添加一个'
+      },
+      styleSetting: {
+        btn: '样式设置',
+        title: '表单的样式设置',
+        layoutTitle: '控件布局',
+        verticalLayout: '上下布局',
+        horizontalLayout: '横向布局',
+        styleTitle: '标题样式',
+        boldTitle: '标题加粗',
+        fontBold: '加粗',
+        fontNormal: '常规',
+        colonTitle: '显示冒号',
+        colonVisible: '显示',
+        colonHidden: '隐藏',
+        alignTitle: '对齐方式',
+        widthTitle: '标题宽度',
+        alignLeft: '居左',
+        alignRight: '居右',
+        unitPx: '像素',
+        unitPct: '百分比'
+      },
       widget: {
-        input: '输入框',
-        textarea: '文本域',
-        select: '下拉框'
+        group: {
+          base: '基础控件',
+          layout: '布局控件',
+          system: '系统控件',
+          module: '模块控件',
+          chart: '图表控件',
+          advanced: '高级控件'
+        },
+        copyTitle: '副本_{0}',
+        component: {
+          input: '输入框',
+          textarea: '文本域',
+          select: '下拉选择',
+          row: '一行多列',
+          title: '标题',
+          text: '文本',
+          subtable: '子表',
+          VxeSwitch: '是/否',
+          VxeInput: '输入框',
+          VxeNumberInput: '数字',
+          VxeDatePicker: '日期',
+          VxeTextarea: '文本域',
+          VxeSelect: '下拉选择',
+          VxeTreeSelect: '树形选择',
+          VxeRadioGroup: '单选框',
+          VxeCheckboxGroup: '复选框',
+          VxeUploadFile: '文件',
+          VxeUploadImage: '图片'
+        }
+      },
+      widgetProp: {
+        name: '控件名称',
+        placeholder: '提示语',
+        required: '必填校验',
+        multiple: '允许多选',
+        displaySetting: {
+          name: '显示设置',
+          pc: '电脑端',
+          mobile: '手机端',
+          visible: '显示',
+          hidden: '隐藏'
+        },
+        dataSource: {
+          name: '数据源',
+          defValue: '选项{0}',
+          addOption: '添加选项',
+          batchEditOption: '批量编辑',
+          batchEditTip: '每行对应一个选项，支持从表格、Excel、WPS 中直接复制粘贴。',
+          batchEditSubTip: '每行对应一个选项，如果是分组，子项可以是空格或制表键开头，支持从表格、Excel、WPS 中直接复制粘贴。',
+          buildOption: '生成选项'
+        },
+        rowProp: {
+          colSize: '列数',
+          col2: '两列',
+          col3: '三列',
+          col4: '四列',
+          col6: '六列',
+          layout: '布局'
+        },
+        textProp: {
+          name: '内容',
+          alignTitle: '对齐方式',
+          alignLeft: '居左',
+          alignCenter: '居中',
+          alignRight: '居右',
+          colorTitle: '字体颜色',
+          sizeTitle: '字体大小',
+          boldTitle: '字体加粗',
+          fontNormal: '常规',
+          fontBold: '加粗'
+        },
+        subtableProp: {
+          seqTitle: '序号',
+          showSeq: '显示序号',
+          showCheckbox: '允许多选',
+          errSubDrag: '子表不支持该控件，请使用其他控件',
+          colPlace: '将控件拖拽进来'
+        },
+        uploadProp: {
+          limitFileCount: '文件数量限制',
+          limitFileSize: '文件大小限制',
+          multiFile: '允许上传多个文件',
+          limitImgCount: '图片数量限制',
+          limitImgSize: '图片大小限制',
+          multiImg: '允许上传多张图片'
+        }
+      }
+    },
+    listDesign: {
+      fieldSettingTab: '字段设置',
+      listSettingTab: '参数设置',
+      searchTitle: '查询条件',
+      listTitle: '列表字段',
+      searchField: '查询字段',
+      listField: '列表字段',
+      activeBtn: {
+        ActionButtonUpdate: '编辑',
+        ActionButtonDelete: '删除'
+      },
+      search: {
+        addBtn: '编辑',
+        emptyText: '未配置查询条件',
+        editPopupTitle: '编辑查询字段'
+      },
+      searchPopup: {
+        colTitle: '标题',
+        saveBtn: '保存'
+      }
+    },
+    text: {
+      copySuccess: '已复制到剪贴板',
+      copyError: '当前环境不支持该操作'
+    },
+    countdown: {
+      formats: {
+        yyyy: '年',
+        MM: '月',
+        dd: '天',
+        HH: '时',
+        mm: '分',
+        ss: '秒'
       }
     },
 
