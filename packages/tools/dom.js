@@ -92,7 +92,7 @@ function isNodeElement (elem) {
 export const DomTools = {
   browse,
   isPx (val) {
-    return val && /^\d+(px)?$/.test(val)
+    return val && /^\d+(\.\d+)?(px)?$/.test(val)
   },
   isScale,
   hasClass,
