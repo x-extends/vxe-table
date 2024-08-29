@@ -369,6 +369,7 @@ export default defineComponent({
           const isColGroup = column.children && column.children.length
           const colTitle = formatText(column.getTitle(), 1)
           const isDisabled = checkMethod ? !checkMethod({ column }) : false
+          const isHidden = !isChecked
           colVNs.push(
             h('li', {
               key: column.id,
@@ -404,10 +405,16 @@ export default defineComponent({
                   class: 'vxe-table-custom--sort-option'
                 }, [
                   h('span', {
-                    class: 'vxe-table-custom--sort-btn',
+                    class: ['vxe-table-custom--sort-btn', {
+                      'is--disabled': isHidden
+                    }],
                     title: getI18n('vxe.custom.setting.sortHelpTip'),
-                    onMousedown: sortMousedownEvent,
-                    onMouseup: sortMouseupEvent
+                    ...(isHidden
+                      ? {}
+                      : {
+                          onMousedown: sortMousedownEvent,
+                          onMouseup: sortMouseupEvent
+                        })
                   }, [
                     h('i', {
                       class: getIcon().TABLE_CUSTOM_SORT
@@ -429,26 +436,30 @@ export default defineComponent({
                 ? h('div', {
                   class: 'vxe-table-custom--fixed-option'
                 }, [
-                  h('span', {
-                    class: ['vxe-table-custom--fixed-left-option', column.renderFixed === 'left' ? getIcon().TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_LEFT, {
-                      'is--checked': column.renderFixed === 'left',
-                      'is--disabled': isMaxFixedColumn && !column.renderFixed
-                    }],
-                    title: getI18n(column.renderFixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft'),
-                    onClick: () => {
-                      changeFixedOption(column, 'left')
-                    }
-                  }),
-                  h('span', {
-                    class: ['vxe-table-custom--fixed-right-option', column.renderFixed === 'right' ? getIcon().TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_RIGHT, {
-                      'is--checked': column.renderFixed === 'right',
-                      'is--disabled': isMaxFixedColumn && !column.renderFixed
-                    }],
-                    title: getI18n(column.renderFixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight'),
-                    onClick: () => {
-                      changeFixedOption(column, 'right')
-                    }
-                  })
+                  VxeUIButtonComponent
+                    ? h(VxeUIButtonComponent, {
+                      mode: 'text',
+                      icon: column.renderFixed === 'left' ? getIcon().TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_LEFT,
+                      status: column.renderFixed === 'left' ? 'primary' : '',
+                      disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
+                      title: getI18n(column.renderFixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft'),
+                      onClick: () => {
+                        changeFixedOption(column, 'left')
+                      }
+                    })
+                    : createCommentVNode(),
+                  VxeUIButtonComponent
+                    ? h(VxeUIButtonComponent, {
+                      mode: 'text',
+                      icon: column.renderFixed === 'right' ? getIcon().TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_RIGHT,
+                      status: column.renderFixed === 'right' ? 'primary' : '',
+                      disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
+                      title: getI18n(column.renderFixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight'),
+                      onClick: () => {
+                        changeFixedOption(column, 'right')
+                      }
+                    })
+                    : createCommentVNode()
                 ])
                 : createCommentVNode()
             ])
@@ -519,30 +530,38 @@ export default defineComponent({
               ? h('div', {
                 class: 'vxe-table-custom--footer'
               }, [
-                h(VxeUIButtonComponent, {
-                  mode: 'text',
-                  content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
-                  onClick: resetCustomEvent
-                }),
-                customOpts.immediate
+                VxeUIButtonComponent
                   ? h(VxeUIButtonComponent, {
                     mode: 'text',
-                    content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
-                    onClick: cancelCloseEvent
+                    content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
+                    onClick: resetCustomEvent
                   })
-                  : h(VxeUIButtonComponent, {
-                    mode: 'text',
-                    content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
-                    onClick: cancelCustomEvent
-                  }),
+                  : createCommentVNode(),
+                customOpts.immediate
+                  ? (VxeUIButtonComponent
+                      ? h(VxeUIButtonComponent, {
+                        mode: 'text',
+                        content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
+                        onClick: cancelCloseEvent
+                      })
+                      : createCommentVNode())
+                  : (VxeUIButtonComponent
+                      ? h(VxeUIButtonComponent, {
+                        mode: 'text',
+                        content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
+                        onClick: cancelCustomEvent
+                      })
+                      : createCommentVNode()),
                 customOpts.immediate
                   ? createCommentVNode()
-                  : h(VxeUIButtonComponent, {
-                    mode: 'text',
-                    status: 'primary',
-                    content: customOpts.confirmButtonText || getI18n('vxe.table.customConfirm'),
-                    onClick: confirmCustomEvent
-                  })
+                  : (VxeUIButtonComponent
+                      ? h(VxeUIButtonComponent, {
+                        mode: 'text',
+                        status: 'primary',
+                        content: customOpts.confirmButtonText || getI18n('vxe.table.customConfirm'),
+                        onClick: confirmCustomEvent
+                      })
+                      : createCommentVNode())
               ])
               : null
           ]
@@ -569,6 +588,7 @@ export default defineComponent({
           const colTitle = formatText(column.getTitle(), 1)
           const isColGroup = column.children && column.children.length
           const isDisabled = checkMethod ? !checkMethod({ column }) : false
+          const isHidden = !isChecked
           trVNs.push(
             h('tr', {
               key: column.id,
@@ -609,10 +629,16 @@ export default defineComponent({
                 }, [
                   column.level === 1
                     ? h('span', {
-                      class: 'vxe-table-custom-popup--column-sort-btn',
+                      class: ['vxe-table-custom-popup--column-sort-btn', {
+                        'is--disabled': isHidden
+                      }],
                       title: getI18n('vxe.custom.setting.sortHelpTip'),
-                      onMousedown: sortMousedownEvent,
-                      onMouseup: sortMouseupEvent
+                      ...(isHidden
+                        ? {}
+                        : {
+                            onMousedown: sortMousedownEvent,
+                            onMouseup: sortMouseupEvent
+                          })
                     }, [
                       h('i', {
                         class: getIcon().TABLE_CUSTOM_SORT
@@ -640,12 +666,13 @@ export default defineComponent({
                 ? h('td', {
                   class: 'vxe-table-custom-popup--column-item col--resizable'
                 }, [
-                  !isChecked || (column.children && column.children.length)
+                  column.children && column.children.length
                     ? h('span', '-')
                     : (
                         VxeUIInputComponent
                           ? h(VxeUIInputComponent, {
                             type: 'integer',
+                            disabled: isHidden,
                             modelValue: column.renderResizeWidth,
                             'onUpdate:modelValue' (value: any) {
                               column.renderResizeWidth = Math.max(0, Number(value))
@@ -667,10 +694,11 @@ export default defineComponent({
                             modelValue: column.renderFixed || '',
                             type: 'button',
                             size: 'mini',
+                            disabled: isHidden,
                             options: [
-                              { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isMaxFixedColumn },
-                              { label: getI18n('vxe.custom.setting.fixedUnset'), value: '' },
-                              { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isMaxFixedColumn }
+                              { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isHidden || isMaxFixedColumn },
+                              { label: getI18n('vxe.custom.setting.fixedUnset'), value: '', disabled: isHidden },
+                              { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isHidden || isMaxFixedColumn }
                             ],
                             'onUpdate:modelValue' (value: any) {
                               column.renderFixed = value
