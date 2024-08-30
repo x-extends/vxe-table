@@ -311,7 +311,12 @@ export default {
       uploadErr: '上传失败',
       uploadSuccess: '上传成功',
       moreBtnText: '更多（{0}）',
-      viewItemTitle: '点击查看'
+      viewItemTitle: '点击查看',
+      morePopup: {
+        readTitle: '查看列表',
+        imageTitle: '上传图片',
+        fileTitle: '上传文件'
+      }
     },
     formDesign: {
       formName: '表单名称',

@@ -312,7 +312,12 @@ export default {
       uploadErr: 'Fail to upload',
       uploadSuccess: 'Successfully upload',
       moreBtnText: 'More ({0})',
-      viewItemTitle: 'click to view'
+      viewItemTitle: 'click to view',
+      morePopup: {
+        readTitle: 'List',
+        imageTitle: 'Upload image',
+        fileTitle: 'Upload file'
+      }
     },
     formDesign: {
       formName: 'Form name',

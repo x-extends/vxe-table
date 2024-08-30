@@ -312,7 +312,12 @@ export default {
       uploadErr: 'Fail to upload',
       uploadSuccess: 'Successfully upload',
       moreBtnText: 'More ({0})',
-      viewItemTitle: 'click to view'
+      viewItemTitle: 'click to view',
+      morePopup: {
+        readTitle: '查看列表',
+        imageTitle: '上传图片',
+        fileTitle: '上传文件'
+      }
     },
     formDesign: {
       formName: 'Form name',
