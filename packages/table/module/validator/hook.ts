@@ -66,7 +66,7 @@ hooks.add('tableValidatorModule', {
           $xeTable.dispatchEvent('valid-error', params, null)
           resolve()
         } else {
-          $xeTable.handleActived(params, { type: 'valid-error', trigger: 'call' }).then(() => {
+          $xeTable.handleEdit(params, { type: 'valid-error', trigger: 'call' }).then(() => {
             resolve(validatorPrivateMethods.showValidTooltip(params))
           })
         }

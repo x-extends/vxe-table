@@ -60,7 +60,10 @@ export default defineComponent({
       const customOpts = computeCustomOpts.value
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
-        if (!parent) {
+        if (parent) {
+          // 更新子列信息
+          column.fixed = parent.fixed
+        } else {
           if (allowSort) {
             const sortIndex = index + 1
             column.renderSortNumber = sortIndex
@@ -181,22 +184,30 @@ export default defineComponent({
       const customOpts = computeCustomOpts.value
       if (customOpts.immediate) {
         if (column.renderFixed === colFixed) {
-          column.fixed = ''
-          column.renderFixed = ''
+          XEUtils.eachTree([column], col => {
+            col.fixed = ''
+            col.renderFixed = ''
+          })
         } else {
           if (!isMaxFixedColumn || column.renderFixed) {
-            column.fixed = colFixed
-            column.renderFixed = colFixed
+            XEUtils.eachTree([column], col => {
+              col.fixed = colFixed
+              col.renderFixed = colFixed
+            })
           }
         }
         $xeTable.handleCustom()
         $xeTable.saveCustomStore('update:fixed')
       } else {
         if (column.renderFixed === colFixed) {
-          column.renderFixed = ''
+          XEUtils.eachTree([column], col => {
+            col.renderFixed = ''
+          })
         } else {
           if (!isMaxFixedColumn || column.renderFixed) {
-            column.renderFixed = colFixed
+            XEUtils.eachTree([column], col => {
+              col.renderFixed = colFixed
+            })
           }
         }
       }

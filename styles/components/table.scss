@@ -89,6 +89,9 @@
   .vxe-default-textarea {
     resize: none;
     vertical-align: middle;
+    &:not([rows]) {
+      height: var(--vxe-ui-input-height-default);
+    }
   }
   & > .vxe-input,
   & > .vxe-textarea,
@@ -1219,6 +1222,7 @@
   /*暂无数据*/
   .vxe-table--empty-placeholder,
   .vxe-table--empty-block {
+    color: var(--vxe-ui-input-placeholder-color);
     min-height: var(--vxe-ui-table-row-height-default);
     justify-content: center;
     align-items: center;
@@ -1430,19 +1434,10 @@
               border: 0;
               padding: 0;
             }
-            .vxe-default-input {
-              height: var(--vxe-ui-table-row-line-height);
-            }
             .vxe-input {
               .vxe-input--inner {
                 border: 0;
                 padding-left: 0;
-              }
-            }
-            .vxe-textarea {
-              height: calc(var(--vxe-ui-table-row-line-height) - 1px);
-              .vxe-textarea--inner {
-                border: 0;
               }
             }
           }

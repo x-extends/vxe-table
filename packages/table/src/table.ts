@@ -1773,7 +1773,7 @@ export default defineComponent({
       checkValidate('blur')
         .catch((e: any) => e)
         .then(() => {
-          $xeTable.handleActived(params, evnt)
+          $xeTable.handleEdit(params, evnt)
             .then(() => checkValidate('change'))
             .catch((e: any) => e)
         })
@@ -3514,8 +3514,8 @@ export default defineComponent({
        * 将固定的列左边、右边分别靠边
        * 如果传 true 则会检查列顺序并排序
        */
-      refreshColumn (resiveOrder) {
-        if (resiveOrder) {
+      refreshColumn (initOrder) {
+        if (initOrder) {
           const columnList = XEUtils.orderBy(internalData.collectColumn, 'renderSortNumber')
           internalData.collectColumn = columnList
           const tableFullColumn = getColumnList(columnList)
@@ -5027,7 +5027,7 @@ export default defineComponent({
               // 如果按下了 F2 键
               if (selected.row && selected.column) {
                 evnt.preventDefault()
-                $xeTable.handleActived(selected.args, evnt)
+                $xeTable.handleEdit(selected.args, evnt)
               }
             }
           } else if (isContextMenu) {
@@ -5144,7 +5144,7 @@ export default defineComponent({
                     backMethod(params)
                   } else {
                     setCellValue(selected.row, selected.column, null)
-                    $xeTable.handleActived(selected.args, evnt)
+                    $xeTable.handleEdit(selected.args, evnt)
                   }
                   $xeTable.dispatchEvent('cell-backspace-value', params, evnt)
                 }
@@ -5188,7 +5188,7 @@ export default defineComponent({
                   editMethod(params)
                 } else {
                   setCellValue(selected.row, selected.column, null)
-                  $xeTable.handleActived(selected.args, evnt)
+                  $xeTable.handleEdit(selected.args, evnt)
                 }
                 const afterEditMethod = editOpts.afterEditMethod
                 if (afterEditMethod) {
@@ -6071,12 +6071,12 @@ export default defineComponent({
               checkValidate('blur')
                 .catch((e) => e)
                 .then(() => {
-                  $xeTable.handleActived(params, evnt)
+                  $xeTable.handleEdit(params, evnt)
                     .then(() => checkValidate('change'))
                     .catch((e) => e)
                 })
             } else if (editOpts.mode === 'cell') {
-              $xeTable.handleActived(params, evnt)
+              $xeTable.handleEdit(params, evnt)
                 .then(() => checkValidate('change'))
                 .catch((e) => e)
             }

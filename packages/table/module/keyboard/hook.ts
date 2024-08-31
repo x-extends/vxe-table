@@ -280,7 +280,7 @@ hooks.add('tableKeyboardModule', {
           if (editConfig) {
             if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
               if (editOpts.mode === 'row') {
-                $xeTable.handleActived(params, evnt)
+                $xeTable.handleEdit(params, evnt)
               } else {
                 $xeTable.scrollToRow(params.row, params.column)
                   .then(() => $xeTable.handleSelected(params, evnt))

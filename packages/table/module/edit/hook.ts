@@ -613,7 +613,7 @@ hooks.add('tableEditModule', {
           return $xeTable.scrollToRow(row, column).then(() => {
             const cell = $xeTable.getCellElement(row, column)
             if (cell) {
-              editPrivateMethods.handleActived({
+              editPrivateMethods.handleEdit({
                 row,
                 rowIndex: $xeTable.getRowIndex(row),
                 column,
@@ -657,7 +657,7 @@ hooks.add('tableEditModule', {
       /**
        * 处理激活编辑
        */
-      handleActived (params, evnt) {
+      handleEdit (params, evnt) {
         const { editConfig, mouseConfig } = props
         const { editStore, tableColumn } = reactData
         const editOpts = computeEditOpts.value
@@ -755,6 +755,12 @@ hooks.add('tableEditModule', {
           }
         }
         return nextTick()
+      },
+      /**
+       * @deprecated
+       */
+      handleActived (params, evnt) {
+        return editPrivateMethods.handleEdit(params, evnt)
       },
       /**
        * 处理聚焦

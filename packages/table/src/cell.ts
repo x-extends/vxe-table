@@ -893,26 +893,28 @@ export const Cell = {
     const editSlot = slots ? slots.edit : null
     const compConf = renderer.get(editRender.name)
     const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
+    const cellParams = Object.assign({ $type: '', isEdit }, params)
     if (isEdit) {
+      cellParams.$type = 'edit'
       if (editSlot) {
-        return $table.callSlot(editSlot, params)
+        return $table.callSlot(editSlot, cellParams)
       }
       if (rtEdit) {
-        return getSlotVNs(rtEdit(editRender, Object.assign({ $type: 'edit' }, params)))
+        return getSlotVNs(rtEdit(editRender, cellParams))
       }
       return []
     }
     if (defaultSlot) {
-      return $table.callSlot(defaultSlot, params)
+      return $table.callSlot(defaultSlot, cellParams)
     }
     if (formatter) {
       return [
         h('span', {
           class: 'vxe-cell--label'
-        }, getDefaultCellLabel(params))
+        }, getDefaultCellLabel(cellParams))
       ]
     }
-    return Cell.renderDefaultCell(params)
+    return Cell.renderDefaultCell(cellParams)
   }
 }
 
