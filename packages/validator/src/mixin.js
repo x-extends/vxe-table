@@ -94,7 +94,7 @@ export default {
           this.emitEvent('valid-error', params)
           resolve()
         } else {
-          this.handleActived(params, { type: 'valid-error', trigger: 'call' }).then(() => {
+          this.handleEdit(params, { type: 'valid-error', trigger: 'call' }).then(() => {
             setTimeout(() => {
               resolve(this.showValidTooltip(params))
             }, 10)

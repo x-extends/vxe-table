@@ -426,7 +426,7 @@ export default {
     /**
      * 处理激活编辑
      */
-    handleActived (params, evnt) {
+    handleEdit (params, evnt) {
       const { editStore, editOpts, tableColumn, editConfig, mouseConfig } = this
       const { mode } = editOpts
       const { actived, focused } = editStore
@@ -515,6 +515,12 @@ export default {
         }
       }
       return this.$nextTick()
+    },
+    /**
+     * @deprecated
+     */
+    handleActived (params, evnt) {
+      return this.handleEdit(params, evnt)
     },
     _getColumnModel (row, column) {
       const { model, editRender } = column
@@ -688,7 +694,7 @@ export default {
         return this.scrollToRow(row, true).then(() => {
           const cell = this.getCellElement(row, column)
           if (cell) {
-            this.handleActived({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
+            this.handleEdit({ row, rowIndex: this.getRowIndex(row), column, columnIndex: this.getColumnIndex(column), cell, $table: this })
             this.lastCallTime = Date.now()
           }
         })

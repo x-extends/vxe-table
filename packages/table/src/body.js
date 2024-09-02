@@ -115,7 +115,7 @@ function renderColumn (h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, r
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table: $xetable, $grid: $xetable.$xegrid, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+  const params = { $table: $xetable, $grid: $xetable.$xegrid, isEdit: false, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
   // 虚拟滚动不支持动态高度
   if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
     showEllipsis = hasEllipsis = true

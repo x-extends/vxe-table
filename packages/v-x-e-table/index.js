@@ -64,6 +64,10 @@ export const setConfig = (options) => {
   return VxeUI
 }
 
+export function getConfig (key, defaultValue) {
+  return arguments.length ? XEUtils.get(GlobalConfig, key, defaultValue) : GlobalConfig
+}
+
 class VXETableConfig {
   /**
    * 获取当前的 zIndex
@@ -160,6 +164,7 @@ export const VxeUI = {
   reg,
   use,
   setConfig,
+  getConfig,
   setIcon,
   globalStore,
   interceptor,

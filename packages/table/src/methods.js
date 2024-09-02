@@ -1882,8 +1882,8 @@ const Methods = {
   /**
    * 刷新列配置
    */
-  refreshColumn (resiveOrder) {
-    if (resiveOrder) {
+  refreshColumn (initOrder) {
+    if (initOrder) {
       const columnList = XEUtils.orderBy(this.collectColumn, 'renderSortNumber')
       this.collectColumn = columnList
       const tableFullColumn = getColumnList(columnList)
@@ -2803,7 +2803,7 @@ const Methods = {
             if (selected.row && selected.column) {
               evnt.stopPropagation()
               evnt.preventDefault()
-              this.handleActived(selected.args, evnt)
+              this.handleEdit(selected.args, evnt)
             }
           }
         } else if (isContextMenu) {
@@ -2915,7 +2915,7 @@ const Methods = {
                   backMethod(params)
                 } else {
                   setCellValue(selected.row, selected.column, null)
-                  this.handleActived(selected.args, evnt)
+                  this.handleEdit(selected.args, evnt)
                 }
                 this.emitEvent('cell-backspace-value', params, evnt)
               }
@@ -2959,7 +2959,7 @@ const Methods = {
                 editMethod(params)
               } else {
                 setCellValue(selected.row, selected.column, null)
-                this.handleActived(selected.args, evnt)
+                this.handleEdit(selected.args, evnt)
               }
               const afterEditMethod = editOpts.afterEditMethod
               if (afterEditMethod) {
@@ -4082,7 +4082,7 @@ const Methods = {
     this.checkValidate('blur')
       .catch(e => e)
       .then(() => {
-        this.handleActived(params, evnt)
+        this.handleEdit(params, evnt)
           .then(() => this.checkValidate('change'))
           .catch(e => e)
       })
@@ -4173,12 +4173,12 @@ const Methods = {
           this.checkValidate('blur')
             .catch(e => e)
             .then(() => {
-              this.handleActived(params, evnt)
+              this.handleEdit(params, evnt)
                 .then(() => this.checkValidate('change'))
                 .catch(e => e)
             })
         } else if (editOpts.mode === 'cell') {
-          this.handleActived(params, evnt)
+          this.handleEdit(params, evnt)
             .then(() => this.checkValidate('change'))
             .catch(e => e)
         }

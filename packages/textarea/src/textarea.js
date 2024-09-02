@@ -23,7 +23,7 @@ export default {
       default: () => XEUtils.eqNull(GlobalConfig.textarea.placeholder) ? GlobalConfig.i18n('vxe.base.pleaseInput') : GlobalConfig.textarea.placeholder
     },
     maxlength: [String, Number],
-    rows: { type: [String, Number], default: 2 },
+    rows: { type: [String, Number], default: null },
     cols: { type: [String, Number], default: null },
     showWordCount: Boolean,
     countMethod: Function,
@@ -102,8 +102,8 @@ export default {
         [`size--${vSize}`]: vSize,
         'is--autosize': autosize,
         'is--disabled': disabled,
-        'def--rows': !XEUtils.eqNull(rows),
-        'def--cols': !XEUtils.eqNull(cols)
+        'is--rows': !XEUtils.eqNull(rows),
+        'is--cols': !XEUtils.eqNull(cols)
       }],
       attrs: {
         spellcheck: false

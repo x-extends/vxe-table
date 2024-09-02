@@ -43,11 +43,12 @@ function showTip (_vm) {
 
 function renderContent (h, _vm) {
   const { $scopedSlots, useHTML, tipContent } = _vm
-  if ($scopedSlots.content) {
+  const contentSlot = $scopedSlots.content
+  if (contentSlot) {
     return h('div', {
       key: 1,
       class: 'vxe-table--tooltip-content'
-    }, $scopedSlots.content.call(this, {}))
+    }, contentSlot.call(this, {}))
   }
   if (useHTML) {
     return h('div', {
@@ -102,7 +103,11 @@ export default {
     },
     value (value) {
       if (!this.isUpdate) {
-        this[value ? 'open' : 'close']()
+        if (value) {
+          this.handleVisible(this.target, this.content)
+        } else {
+          this.close()
+        }
       }
       this.isUpdate = false
     }
@@ -140,7 +145,7 @@ export default {
         }
       }
       if (value) {
-        this.open()
+        this.handleVisible(target, content)
       }
     }
   },
@@ -190,7 +195,7 @@ export default {
   },
   methods: {
     open (target, content) {
-      return this.toVisible(target || this.target, content)
+      return this.handleVisible(target || this.target, content)
     },
     close () {
       this.tipTarget = null
@@ -218,6 +223,13 @@ export default {
       }
     },
     toVisible (target, content) {
+      return this.handleVisible(target, content)
+    },
+    handleVisible (target, content) {
+      const contentSlot = this.$scopedSlots.default
+      if (!contentSlot && (content === '' || XEUtils.eqNull(content))) {
+        return this.$nextTick()
+      }
       if (target) {
         const { trigger, enterDelay } = this
         this.tipActive = true
@@ -249,10 +261,14 @@ export default {
       this.tipActive = !!actived
     },
     clickEvent () {
-      this[this.visible ? 'close' : 'open']()
+      if (this.visible) {
+        this.close()
+      } else {
+        this.handleVisible(this.target, this.content)
+      }
     },
     targetMouseenterEvent () {
-      this.open()
+      this.handleVisible(this.target, this.content)
     },
     targetMouseleaveEvent () {
       const { trigger, enterable, leaveDelay } = this

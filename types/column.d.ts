@@ -336,30 +336,86 @@ export class ColumnInfo {
   editRender: ColumnEditRenderOptions;
   contentRender: ColumnContentRenderOptions;
 
+  /**
+   * @private
+   */
   id: string;
+  /**
+   * @private
+   */
   parentId: string;
+  /**
+   * @private
+   */
   level: number;
+  /**
+   * @private
+   */
   rowSpan: number;
+  /**
+   * @private
+   */
   colSpan: number;
+  /**
+   * @private
+   */
   visible: boolean;
+  /**
+   * @private
+   */
   halfVisible: boolean;
+  /**
+   * @private
+   */
   defaultVisible: any;
+  /**
+   * @private
+   */
   checked: boolean;
+  /**
+   * @private
+   */
   halfChecked: boolean;
+  /**
+   * @private
+   */
   disabled: boolean;
+  /**
+   * @private
+   */
   order: string;
+  /**
+   * @private
+   */
   sortTime: number
+  /**
+   * @private
+   */
   customOrder: number
+  /**
+   * @private
+   */
   renderWidth: number;
+  /**
+   * @private
+   */
   renderHeight: number;
+  /**
+   * @private
+   */
   resizeWidth: number;
+  /**
+   * @private
+   */
   model: {
     update: boolean;
     value: any;
   };
 
   children: ColumnInfo[];
-
+  /**
+   * 获取列标题
+   */
   getTitle(): string;
   [key: string]: any;
 }

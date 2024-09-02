@@ -2,8 +2,9 @@
 
 .vxe-textarea {
   position: relative;
-  display: inline-block;
-  &:not(.def--cols) {
+  display: inline-flex;
+  flex-direction: row;
+  &:not(.is--cols) {
     width: 100%;
     .vxe-textarea--inner {
       width: 100%;

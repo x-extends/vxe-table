@@ -23,7 +23,7 @@
 
     <p>
       <vxe-tooltip v-model="value1" content="自定义提示内容" trigger="manual">
-        <vxe-button @mouseenter="value1 = true" @mouseleave="value1 = false">手动模式</vxe-button>
+        <button @mouseenter="value1 = true" @mouseleave="value1 = false">手动模式</button>
       </vxe-tooltip>
     </p>
 

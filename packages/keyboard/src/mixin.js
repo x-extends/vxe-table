@@ -97,7 +97,7 @@ export default {
         if (editConfig) {
           if (editOpts.trigger === 'click' || editOpts.trigger === 'dblclick') {
             if (editOpts.mode === 'row') {
-              this.handleActived(params, evnt)
+              this.handleEdit(params, evnt)
             } else {
               this.scrollToRow(params.row, params.column)
                 .then(() => this.handleSelected(params, evnt))

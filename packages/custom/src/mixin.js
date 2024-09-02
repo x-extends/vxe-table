@@ -41,7 +41,7 @@ export default {
       // 判断面板不能大于表格高度
       let tableHeight = 0
       if ($el) {
-        tableHeight = $el.clientHeight - 30
+        tableHeight = $el.clientHeight - 28
       }
       customStore.maxHeight = Math.max(4, tableHeight)
     },

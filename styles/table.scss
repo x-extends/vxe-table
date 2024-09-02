@@ -1202,6 +1202,7 @@
   /*暂无数据*/
   .vxe-table--empty-placeholder,
   .vxe-table--empty-block {
+    color: $vxe-input-placeholder-color;
     min-height: $vxe-table-row-height-default;
     justify-content: center;
     align-items: center;

@@ -816,26 +816,27 @@ export const Cell = {
     const { slots, editRender, formatter } = column
     const compConf = VXETable.renderer.get(editRender.name)
     const rtEdit = compConf ? (compConf.renderTableEdit || compConf.renderEdit) : null
+    const cellParams = Object.assign({ $type: '', isEdit }, params)
     if (isEdit) {
       if (slots && slots.edit) {
-        return $table.callSlot(slots.edit, params, h)
+        return $table.callSlot(slots.edit, cellParams, h)
       }
       if (rtEdit) {
-        return getSlotVNs(rtEdit.call($table, h, editRender, Object.assign({ $type: 'edit' }, params)))
+        return getSlotVNs(rtEdit.call($table, h, editRender, cellParams))
       }
       return []
     }
     if (slots && slots.default) {
-      return $table.callSlot(slots.default, params, h)
+      return $table.callSlot(slots.default, cellParams, h)
     }
     if (formatter) {
       return [
         h('span', {
           class: 'vxe-cell--label'
-        }, [getDefaultCellLabel(params)])
+        }, [getDefaultCellLabel(cellParams)])
       ]
     }
-    return Cell.renderDefaultCell.call(_vm, h, params)
+    return Cell.renderDefaultCell.call(_vm, h, cellParams)
   }
 }
 
