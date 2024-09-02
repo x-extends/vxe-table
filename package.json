@@ -95,5 +95,9 @@
   "bugs": {
     "url": "https://github.com/x-extends/vxe-table/issues"
   },
-  "homepage": "https://vxetable.cn/"
+  "homepage": "https://vxetable.cn/",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions"
+  ]
 }
