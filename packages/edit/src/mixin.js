@@ -156,7 +156,7 @@ function handleInsertRowAt (_vm, records, row, isInsertNextRow) {
           throw new Error(errLog('vxe.error.unableInsert'))
         }
         afterFullData.splice(afIndex, 0, ...newRecords)
-        tableFullData.splice(_vm.findRowIndexOf(tableFullData, row), 0, ...newRecords)
+        tableFullData.splice(_vm.findRowIndexOf(tableFullData, row) + (isInsertNextRow ? 1 : 0), 0, ...newRecords)
         // 刷新单元格合并
         mergeList.forEach(mergeItem => {
           const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
