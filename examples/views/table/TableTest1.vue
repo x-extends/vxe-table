@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div style="height: 400px;overflow: hidden;">
     <vxe-table
       border
       stripe
       resizable
       highlight-hover-row
-      height="400"
+      height="100%"
       :loading="demo1.loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">

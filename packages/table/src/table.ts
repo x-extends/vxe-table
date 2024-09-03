@@ -5349,7 +5349,7 @@ export default defineComponent({
         const el = refElem.value
         if (el) {
           const parentElem = el.parentNode as HTMLElement
-          const parentPaddingSize = height === 'fill' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+          const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
           return Math.floor($xeGrid ? $xeGrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
         }
         return 0
