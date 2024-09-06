@@ -1904,34 +1904,25 @@ export default defineComponent({
       return nextTick()
     }
 
-    const handleCheckedCheckboxRow = (rows: any, value: boolean, isForce?: boolean) => {
+    const handleCheckedCheckboxRow = (rows: any[], value: boolean, isForce?: boolean) => {
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      rows.forEach((row: any) => tablePrivateMethods.handleSelectRow({ row }, !!value, isForce))
+      tablePrivateMethods.handleBatchSelectRows(rows, !!value, isForce)
+      tablePrivateMethods.checkSelectionStatus()
       return nextTick()
     }
 
     const handleCheckedAllCheckboxRow = (value: boolean, isForce?: boolean) => {
       const { treeConfig } = props
       const { selectCheckboxMaps } = reactData
-      const { afterFullData, afterFullRowMaps, checkboxReserveRowMap } = internalData
+      const { afterFullData, checkboxReserveRowMap } = internalData
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const checkboxOpts = computeCheckboxOpts.value
       const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
       const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
       const selectRowMaps: Record<string, any> = {}
-
-      // 疑惑！
-      if (!treeConfig) {
-        XEUtils.each(selectCheckboxMaps, (row, rowid) => {
-          if (!afterFullRowMaps[rowid]) {
-            selectRowMaps[rowid] = row
-          }
-        })
-      }
-      // 疑惑！
 
       if (checkStrictly) {
         reactData.isAllSelected = value
@@ -2867,7 +2858,13 @@ export default defineComponent({
           if (!XEUtils.isArray(rows)) {
             rest = [rows]
           }
-          rest.forEach(item => Object.assign(item, record))
+          const rowkey = getRowkey($xeTable)
+          rest.forEach(row => {
+            const rowid = getRowid($xeTable, row)
+            const newRecord = XEUtils.clone(Object.assign({}, record), true)
+            XEUtils.set(newRecord, rowkey, rowid)
+            Object.assign(row, newRecord)
+          })
         }
         return nextTick()
       },
@@ -2887,11 +2884,14 @@ export default defineComponent({
           const oRow = tableSourceData[rowIndex]
           if (oRow && row) {
             if (field) {
-              const newValue = XEUtils.get(record || row, field)
+              const newValue = XEUtils.clone(XEUtils.get(record || row, field), true)
               XEUtils.set(row, field, newValue)
               XEUtils.set(oRow, field, newValue)
             } else {
-              const newRecord = XEUtils.clone({ ...record }, true)
+              const rowkey = getRowkey($xeTable)
+              const rowid = getRowid($xeTable, row)
+              const newRecord = XEUtils.clone(Object.assign({}, record), true)
+              XEUtils.set(newRecord, rowkey, rowid)
               XEUtils.destructuring(oRow, Object.assign(row, newRecord))
             }
           }
@@ -3651,7 +3651,10 @@ export default defineComponent({
        * @param {Array/Row} rows 行数据
        * @param {Boolean} value 是否选中
        */
-      setCheckboxRow (rows: any, value) {
+      setCheckboxRow (rows, value) {
+        if (rows && !XEUtils.isArray(rows)) {
+          rows = [rows]
+        }
         return handleCheckedCheckboxRow(rows, value, true)
       },
       isCheckedByCheckboxRow (row) {
@@ -3676,6 +3679,7 @@ export default defineComponent({
         const { checkField } = checkboxOpts
         const value = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xeTable, row)]
         tablePrivateMethods.handleSelectRow({ row }, value, true)
+        tablePrivateMethods.checkSelectionStatus()
         return nextTick()
       },
       /**
@@ -5692,13 +5696,63 @@ export default defineComponent({
         }
       },
       /**
+       * 多行
+       * 多选，行选中事件
+       * value 选中true 不选false 半选-1
+       */
+      handleBatchSelectRows (rows, value, isForce) {
+        const { treeConfig } = props
+        const { selectCheckboxMaps } = reactData
+        const selectRowMaps = Object.assign({}, selectCheckboxMaps)
+        const checkboxOpts = computeCheckboxOpts.value
+        const { checkField, checkStrictly, checkMethod } = checkboxOpts
+        if (checkField) {
+          if (treeConfig && !checkStrictly) {
+            rows.forEach(row => {
+              tablePrivateMethods.handleSelectRow({ row }, value, isForce)
+            })
+          } else {
+            rows.forEach(row => {
+              if (isForce || (!checkMethod || checkMethod({ row }))) {
+                XEUtils.set(row, checkField, value)
+                handleCheckboxReserveRow(row, value)
+              }
+            })
+          }
+        } else {
+          if (treeConfig && !checkStrictly) {
+            rows.forEach(row => {
+              tablePrivateMethods.handleSelectRow({ row }, value, isForce)
+            })
+          } else {
+            rows.forEach(row => {
+              const rowid = getRowid($xeTable, row)
+              if (isForce || (!checkMethod || checkMethod({ row }))) {
+                if (value) {
+                  if (!selectRowMaps[rowid]) {
+                    selectRowMaps[rowid] = row
+                  }
+                } else {
+                  if (selectRowMaps[rowid]) {
+                    delete selectRowMaps[rowid]
+                  }
+                }
+                handleCheckboxReserveRow(row, value)
+              }
+            })
+          }
+        }
+        reactData.selectCheckboxMaps = selectRowMaps
+      },
+      /**
+       * 单行
        * 多选，行选中事件
        * value 选中true 不选false 半选-1
        */
       handleSelectRow ({ row }, value, isForce) {
         const { treeConfig } = props
         const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
-        const selectRowMaps = { ...selectCheckboxMaps }
+        const selectRowMaps = Object.assign({}, selectCheckboxMaps)
         const { afterFullData } = internalData
         const treeOpts = computeTreeOpts.value
         const childrenField = treeOpts.children || treeOpts.childrenField
@@ -5763,7 +5817,8 @@ export default defineComponent({
                 parentStatus = selectItems.filter(item => vItemMaps[getRowid($xeTable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
               }
               reactData.selectCheckboxMaps = selectRowMaps
-              return tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
+              tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
+              return
             }
           } else {
             if (isForce || (!checkMethod || checkMethod({ row }))) {
@@ -5838,7 +5893,8 @@ export default defineComponent({
                 parentStatus = selectItems.filter(item => vItemMaps[getRowid($xeTable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
               }
               reactData.selectCheckboxMaps = selectRowMaps
-              return tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
+              tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
+              return
             }
           } else {
             if (isForce || (!checkMethod || checkMethod({ row }))) {
@@ -5856,7 +5912,6 @@ export default defineComponent({
           }
         }
         reactData.selectCheckboxMaps = selectRowMaps
-        tablePrivateMethods.checkSelectionStatus()
       },
       triggerHeaderTitleEvent (evnt, iconParams, params) {
         const tipContent = iconParams.content || (iconParams as any).message
@@ -6102,6 +6157,7 @@ export default defineComponent({
           tablePrivateMethods.triggerCheckRowEvent(evnt, params, value)
         } else {
           tablePrivateMethods.handleSelectRow(params, value)
+          tablePrivateMethods.checkSelectionStatus()
         }
       },
       triggerCheckRowEvent (evnt: MouseEvent, params, value) {
@@ -6130,6 +6186,7 @@ export default defineComponent({
         }
         if (!checkMethod || checkMethod({ row })) {
           tablePrivateMethods.handleSelectRow(params, value)
+          tablePrivateMethods.checkSelectionStatus()
           tableMethods.dispatchEvent('checkbox-change', Object.assign({
             records: tableMethods.getCheckboxRecords(),
             reserves: tableMethods.getCheckboxReserveRecords(),

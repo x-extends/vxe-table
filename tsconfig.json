@@ -37,8 +37,8 @@
     "examples/**/*.ts",
     "examples/**/*.tsx",
     "examples/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "packages/**/*.ts",
+    "packages/**/*.tsx"
   ],
   "exclude": [
     "node_modules"
