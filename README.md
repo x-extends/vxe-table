@@ -1,8 +1,8 @@
 # vxe-table
 
-[![star](https://gitee.com/xuliangzhan_admin/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/xuliangzhan_admin/vxe-table/stargazers)
+[![star](https://gitee.com/xuliangzhan/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/xuliangzhan/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
-[![npm build](https://app.travis-ci.com/x-extends/vxe-table.svg?branch=v3)](https://app.travis-ci.com/x-extends/vxe-table)
+[![NodeJS with Webpack](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml/badge.svg)](https://github.com/x-extends/vxe-table/actions/workflows/webpack.yml)
 [![npm downloads](https://img.shields.io/npm/dt/vxe-table.svg?style=flat-square)](https://npm-stat.com/charts.html?package=vxe-table)
 [![issues](https://img.shields.io/github/issues/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues)
 [![issues closed](https://img.shields.io/github/issues-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/issues?q=is%3Aissue+is%3Aclosed)
@@ -10,18 +10,13 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表格组件，支持增删改查、虚拟树、列拖拽、懒加载、快捷菜单、数据校验、打印导出、表单渲染、自定义模板、渲染器、JSON 配置式...  
-
-* 设计理念
-  * 面向现代浏览器，高效的简洁 API 设计
-  * 模块化表格、按需加载
-  * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能
+一个基于 [vue](https://www.npmjs.com/package/vue) 的 PC 端表单/表格组件，支持增删改查、虚拟树、列拖拽、懒加载、快捷菜单、数据校验、导入/导出/打印、表单渲染、自定义模板、渲染器、JSON 配置式...  
 
 ## 浏览器支持
 
-![IE](https://raw.github.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
---- | --- | --- | --- | --- | --- |
-11+ ✔ | 80+ ✔ | 80+ ✔ | 90+ ✔ | 75+ ✔ | 10+ ✔ |
+![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
+--- | --- | --- | --- | --- |
+80+ ✔ | 80+ ✔ | 90+ ✔ | 75+ ✔ | 10+ ✔ |
 
 ## 功能点
 
@@ -62,6 +57,7 @@
 * [x] 渲染器
 * [x] 虚拟滚动
 * [x] 虚拟合并
+* [x] CSS 变量主题
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格区域选取
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换
@@ -69,7 +65,7 @@
 
 ## 安装
 
-版本：[vue](https://www.npmjs.com/package/vue) 2.6.x
+版本：[vue](https://www.npmjs.com/package/vue) 2.x
 
 ```shell
 npm install vxe-table@3
@@ -77,14 +73,39 @@ npm install vxe-table@3
 
 Get on [unpkg](https://unpkg.com/vxe-table/) and [cdnjs](https://cdn.jsdelivr.net/npm/vxe-table/)
 
-### npm
+### NPM
+
+```shell
+npm install vxe-table@3 vxe-pc-ui@3
+```
+
+### 只使用表格
 
 ```javascript
 import Vue from 'vue'
-import VXETable from 'vxe-table'
+// ...
+import VxeTable from 'vxe-table'
 import 'vxe-table/lib/style.css'
+// ...
 
-Vue.use(VXETable)
+Vue.use(VxeTable)
+```
+
+### 使用表格与 UI 库
+
+```javascript
+import Vue from 'vue'
+// ...
+import VxeTable from 'vxe-table'
+import 'vxe-table/lib/style.css'
+// ...
+
+import VxeUI from 'vxe-pc-ui'
+import 'vxe-pc-ui/lib/style.css'
+// ...
+
+Vue.use(VxeUI)
+Vue.use(VxeTable)
 ```
 
 ### CDN
@@ -93,72 +114,21 @@ Vue.use(VXETable)
 ***不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效***  
 
 ```HTML
-<!-- 引入样式 -->
-<link rel="stylesheet" href="https://unpkg.com/vxe-table@legacy/lib/style.css">
-<!-- 引入脚本 -->
-<script src="https://unpkg.com/xe-utils"></script>
-<script src="https://unpkg.com/vxe-table@legacy"></script>
+<!-- style -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3/lib/style.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@3/lib/style.css">
+<!-- vue -->
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<!-- table -->
+<script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
+<script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/vxe-table@3"></script>
 ```
 
-## 示例
+## 在线文档
 
-```html
-<template>
-  <div>
-    <vxe-table :data="tableData">
-      <vxe-column type="seq" title="Seq" width="60"></vxe-column>
-      <vxe-column field="name" title="Name"></vxe-column>
-      <vxe-colgroup title="Group1">
-        <vxe-column field="sex" title="Sex"></vxe-column>
-        <vxe-column field="address" title="Address"></vxe-column>
-      </vxe-colgroup>
-    </vxe-table>
-  </div>
-</template>
-
-<script>
-export default {
-  data () {
-    return {
-      tableData: [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
-      ]
-    }
-  }
-}
-</script>
-```
-
-## 文档
-
-👉 [查看文档](https://vxetable.cn)  
-
-## 运行项目
-
-安装依赖
-
-```shell
-npm run update
-```
-
-启动本地调试
-
-```shell
-npm run serve
-```
-
-编译打包，生成编译后的目录：lib
-
-```shell
-npm run lib
-```
-
-## PR
-
-1. 如果是修复 bug，必须有示例的复现链接
-2. 如果新功能，涉及代码风格、质量、还需有对应的示例页面
+👉 [组件文档](https://vxeui.com)  
+👉 [表格文档](https://vxetable.cn)  
 
 ## Contributors
 

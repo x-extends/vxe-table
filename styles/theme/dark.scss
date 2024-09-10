@@ -1,0 +1,41 @@
+@import './base.scss';
+
+[data-vxe-ui-theme="dark"] {
+  color-scheme: dark;
+
+  /*font color*/
+  --vxe-ui-font-color: #a0a3a7;
+  --vxe-ui-font-primary-color: #409eff;
+  --vxe-ui-font-lighten-color: #babdc0;
+  --vxe-ui-font-darken-color: #86898e;
+  --vxe-ui-font-disabled-color: #BFBFBF;
+
+  /*base*/
+  --vxe-ui-base-popup-border-color: var(--vxe-ui-layout-background-color);
+  --vxe-ui-base-popup-box-shadow: 0px 12px 30px 8px rgba(0, 0, 0, 0.5);
+
+  /*layout*/
+  --vxe-ui-layout-background-color: #121212;
+
+  /*input*/
+  --vxe-ui-input-border-color: #424242;
+  --vxe-ui-input-placeholder-color: #8D9095;
+  --vxe-ui-input-disabled-background-color: #262727;
+
+  /*loading*/
+  --vxe-ui-loading-background-color: rgba(255, 255, 255, 0.1);
+
+  /*table*/
+  --vxe-ui-table-header-background-color: #28282a;
+  --vxe-ui-table-border-color: #37373a;
+  --vxe-ui-table-row-hover-background-color: #262727;
+  --vxe-ui-table-row-striped-background-color: #1D1D1D;
+  --vxe-ui-table-row-hover-striped-background-color: #262727;
+  --vxe-ui-table-row-radio-checked-background-color: #604820;
+  --vxe-ui-table-row-hover-radio-checked-background-color: #6e5326;
+  --vxe-ui-table-row-checkbox-checked-background-color: #604820;
+  --vxe-ui-table-row-hover-checkbox-checked-background-color: #6e5326;
+  --vxe-ui-table-row-current-background-color: #18222c;
+  --vxe-ui-table-row-hover-current-background-color: #262727;
+  --vxe-ui-table-fixed-scrolling-box-shadow-color: rgba(0, 0, 0, 0.8);
+}

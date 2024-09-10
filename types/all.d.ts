@@ -1,76 +1,51 @@
-import Vue from 'vue'
-
-import { ModalController } from './modal'
-import { VXETableConfigOptions, VXETableCore, VxeGlobalTranslate, VxeGlobalI18n } from './v-x-e-table'
-
-export function install(app: typeof Vue, options?: VXETableConfigOptions): void;
-
-export interface VXETableClipboard {
-  text: string;
-  [key: string]: any;
-}
-
-export interface VXETableByVueProperty {
-  /**
-   * 读取内置国际化
-   */
-  t: VxeGlobalI18n;
-  _t: VxeGlobalTranslate;
-  /**
-   * 全局的弹窗
-   */
-  modal: ModalController;
-  /**
-   * 剪贴板
-   */
-  clipboard: VXETableClipboard;
-}
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    $vxe: VXETableByVueProperty;
-  }
-}
+import { App } from 'vue'
+import { VxeUIExport, VxeGlobalConfig } from 'vxe-pc-ui'
 
 declare global {
   interface Window {
-    VXETable: VXETableCore;
+    /**
+     * @deprecated
+     */
+    VXETable: VxeUIExport;
   }
 }
 
-// Constructor
-export * from './v-x-e-table'
-export * from './component'
+/**
+ * 已废弃，请使用 VxeUI
+ * @deprecated
+ */
+export const VXETable: VxeUIExport
 
-// Component
-export * from './module'
+/**
+ * 已废弃，请使用 VxeUIExport
+ * @deprecated
+ */
+export type VXETableCore = VxeUIExport
 
-// Table module
-export * from './icon'
-export * from './loading'
-export * from './table'
-export * from './column'
-export * from './colgroup'
-export * from './grid'
-export * from './toolbar'
-export * from './pager'
-export * from './checkbox'
-export * from './checkbox-group'
-export * from './radio'
-export * from './radio-group'
-export * from './radio-button'
-export * from './input'
-export * from './textarea'
-export * from './button'
-export * from './button-group'
-export * from './select'
-export * from './optgroup'
-export * from './option'
-export * from './modal'
-export * from './tooltip'
-export * from './form'
-export * from './form-item'
-export * from './form-gather'
-export * from './switch'
-export * from './list'
-export * from './pulldown'
+export function install (app: App, options?: VxeGlobalConfig): void
+
+// Vxe core
+export * from 'vxe-pc-ui/types/ui'
+
+// Vxe Table
+export * from 'vxe-pc-ui/types/components/column'
+export * from 'vxe-pc-ui/types/components/colgroup'
+export * from 'vxe-pc-ui/types/components/table'
+export * from 'vxe-pc-ui/types/components/grid'
+export * from 'vxe-pc-ui/types/components/toolbar'
+
+// 已废弃，兼容老版本类型
+export * from 'vxe-pc-ui/types/components/textarea'
+export * from 'vxe-pc-ui/types/components/select'
+export * from 'vxe-pc-ui/types/components/switch'
+export * from 'vxe-pc-ui/types/components/optgroup'
+export * from 'vxe-pc-ui/types/components/option'
+export * from 'vxe-pc-ui/types/components/pager'
+export * from 'vxe-pc-ui/types/components/form'
+export * from 'vxe-pc-ui/types/components/form-item'
+export * from 'vxe-pc-ui/types/components/modal'
+export * from 'vxe-pc-ui/types/components/button'
+export * from 'vxe-pc-ui/types/components/button-group'
+export * from 'vxe-pc-ui/types/components/input'
+export * from 'vxe-pc-ui/types/components/pulldown'
+export * from 'vxe-pc-ui/types/components/tooltip'

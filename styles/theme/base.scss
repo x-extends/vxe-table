@@ -1,0 +1,89 @@
+:root {
+  /*font*/
+  --vxe-ui-font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+  
+  /*font size*/
+  --vxe-ui-font-size-default: 14px;
+  --vxe-ui-font-size-medium: 14px;
+  --vxe-ui-font-size-small: 13px;
+  --vxe-ui-font-size-mini: 12px;
+
+  /*base border*/
+  --vxe-ui-border-radius: 4px;
+
+  /*input*/
+  --vxe-ui-input-disabled-color: #dcdfe6;
+  --vxe-ui-input-height-default: 34px;
+  --vxe-ui-input-height-medium: 32px;
+  --vxe-ui-input-height-small: 30px;
+  --vxe-ui-input-height-mini: 28px;
+
+  /*table*/
+  --vxe-ui-table-header-font-color: var(--vxe-ui-font-color);
+  --vxe-ui-table-footer-font-color: var(--vxe-ui-font-color);
+  --vxe-ui-table-border-radius: var(--vxe-ui-border-radius);
+  --vxe-ui-table-border-width: 1px;
+  --vxe-ui-table-resizable-line-color: #D9DDDF;
+  --vxe-ui-table-resizable-drag-line-color: var(--vxe-ui-font-primary-color);
+  --vxe-ui-table-footer-background-color: var(--vxe-ui-layout-background-color);
+  --vxe-ui-table-tree-node-line-color:#909399;
+  --vxe-ui-table-tree-node-line-style: dotted;
+  --vxe-ui-table-header-font-weight: 700;
+
+  --vxe-ui-table-row-height-default: 48px;
+  --vxe-ui-table-row-height-medium: 44px;
+  --vxe-ui-table-row-height-small: 40px;
+  --vxe-ui-table-row-height-mini: 36px;
+  --vxe-ui-table-row-line-height: 22px;
+
+  --vxe-ui-table-column-padding-default: 13px 0;
+  --vxe-ui-table-column-padding-medium: 11px 0;
+  --vxe-ui-table-column-padding-small: 9px 0;
+  --vxe-ui-table-column-padding-mini: 7px 0;
+  --vxe-ui-table-column-hover-background-color: #d7effb;
+  --vxe-ui-table-column-current-background-color: #e6f7ff;
+  --vxe-ui-table-column-icon-border-color: #c0c4cc;
+  --vxe-ui-table-column-icon-border-hover-color: #515A6E;
+
+  --vxe-ui-table-cell-placeholder-color: #C0C4CC;
+  --vxe-ui-table-cell-padding-left: 10px;
+  --vxe-ui-table-cell-padding-right: 10px;
+  --vxe-ui-table-cell-input-height-default: var(--vxe-ui-table-row-height-default) - 6;
+  --vxe-ui-table-cell-input-height-medium: var(--vxe-ui-table-row-height-medium) - 6;
+  --vxe-ui-table-cell-input-height-small: var(--vxe-ui-table-row-height-small) - 6;
+  --vxe-ui-table-cell-input-height-mini: var(--vxe-ui-table-row-height-mini) - 6;
+  --vxe-ui-table-cell-dirty-width: 5px;
+  --vxe-ui-table-cell-dirty-update-color: #f56c6c;
+  --vxe-ui-table-cell-dirty-insert-color: #19A15F;
+  --vxe-ui-table-cell-area-border-color: var(--vxe-ui-font-primary-color);
+  --vxe-ui-table-cell-area-border-width: 1px;
+  --vxe-ui-table-cell-area-status-border-width: var(--vxe-ui-table-cell-area-border-width);
+  --vxe-ui-table-cell-main-area-extension-border-color: #fff;
+  --vxe-ui-table-cell-main-area-extension-background-color: var(--vxe-ui-font-primary-color);
+  --vxe-ui-table-cell-extend-area-border-width: 2px;
+  --vxe-ui-table-cell-copy-area-border-width: 3px;
+  --vxe-ui-table-cell-active-area-border-width: 2px;
+  --vxe-ui-table-cell-active-area-background-color: transparent;
+  --vxe-ui-table-cell-copy-area-border-color: var(--vxe-ui-table-cell-area-border-color);
+  --vxe-ui-table-cell-extend-area-border-color: var(--vxe-ui-table-cell-area-border-color);
+  --vxe-ui-table-cell-active-area-border-color: var(--vxe-ui-table-cell-area-border-color);
+  --vxe-ui-table-cell-area-background-color: rgba(64,158,255,0.2);
+
+  --vxe-ui-table-expand-padding-default: 16px;
+
+  --vxe-ui-table-checkbox-range-border-width: 1px;
+  --vxe-ui-table-checkbox-range-border-color: #006af1;
+  --vxe-ui-table-checkbox-range-background-color: rgba(50,128,252,0.2);
+
+  --vxe-ui-table-fixed-left-scrolling-box-shadow: 8px 0px 10px -5px var(--vxe-ui-table-fixed-scrolling-box-shadow-color);
+  --vxe-ui-table-fixed-right-scrolling-box-shadow: -8px 0px 10px -5px var(--vxe-ui-table-fixed-scrolling-box-shadow-color);
+
+  --vxe-ui-table-menu-item-width: 198px;
+  --vxe-ui-table-menu-background-color: #fff;
+
+  --vxe-ui-table-validate-error-color: #f56c6c;
+  --vxe-ui-table-validate-error-background-color: var(--vxe-ui-layout-background-color);
+
+  /*toolbar*/
+  --vxe-ui-toolbar-custom-active-background-color: #D9DADB;
+}

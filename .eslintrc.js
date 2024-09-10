@@ -14,9 +14,7 @@ module.exports = {
   rules: {
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    'vue/multi-word-component-names': 'off',
-    'vue/no-v-text-v-html-on-component': 'off',
-    'multiline-ternary': 'off'
+    '@typescript-eslint/no-this-alias': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
   }
 }

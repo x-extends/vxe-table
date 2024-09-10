@@ -4,15 +4,20 @@
     "module": "esnext",
     "strict": true,
     "jsx": "preserve",
+    "jsxImportSource": "vue",
     "importHelpers": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env"
+      "webpack-env",
+      "resize-observer-browser"
     ],
     "paths": {
       "@/*": [
@@ -30,8 +35,8 @@
     "examples/**/*.ts",
     "examples/**/*.tsx",
     "examples/**/*.vue",
-    "types/**/*.ts",
-    "types/**/*.tsx", "examples/api/form-gather.js",
+    "packages/**/*.ts",
+    "packages/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

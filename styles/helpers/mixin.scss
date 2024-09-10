@@ -7,31 +7,34 @@
     font-size: 1.34em;
   }
   .vxe-checkbox--icon {
-    color: $vxe-input-border-color;
+    color: var(--vxe-ui-input-border-color);
     vertical-align: middle;
     font-weight: 700;
     user-select: none;
   }
   &.is--checked,
   &.is--indeterminate {
-    color: $vxe-primary-color;
+    color: var(--vxe-ui-font-primary-color);
     .vxe-checkbox--icon {
-      color: $vxe-primary-color;
+      color: var(--vxe-ui-font-primary-color);
     }
   }
   &:not(.is--disabled) {
     cursor: pointer;
     &:hover {
       .vxe-checkbox--icon {
-        color: $vxe-primary-color;
+        color: var(--vxe-ui-font-primary-color);
       }
     }
   }
+  &.is--hidden {
+    cursor: default;
+  }
   &.is--disabled {
-    color: $vxe-font-disabled-color;
+    color: var(--vxe-ui-font-disabled-color);
     cursor: not-allowed;
     .vxe-checkbox--icon {
-      color: $vxe-input-disabled-color;
+      color: var(--vxe-ui-input-disabled-color);
     }
   }
   .vxe-checkbox--label {
@@ -46,30 +49,30 @@
     font-size: 1.4em;
   }
   .vxe-radio--icon {
-    color: $vxe-input-border-color;
+    color: var(--vxe-ui-input-border-color);
     vertical-align: middle;
     font-weight: 700;
     user-select: none;
   }
   &.is--checked {
-    color: $vxe-primary-color;
+    color: var(--vxe-ui-font-primary-color);
     .vxe-radio--icon {
-      color: $vxe-primary-color;
+      color: var(--vxe-ui-font-primary-color);
     }
   }
   &:not(.is--disabled) {
     cursor: pointer;
     &:hover {
       .vxe-radio--icon {
-        color: $vxe-primary-color;
+        color: var(--vxe-ui-font-primary-color);
       }
     }
   }
   &.is--disabled {
-    color: $vxe-font-disabled-color;
+    color: var(--vxe-ui-font-disabled-color);
     cursor: not-allowed;
     .vxe-radio--icon {
-      color: $vxe-input-disabled-color;
+      color: var(--vxe-ui-input-disabled-color);
     }
   }
   .vxe-radio--label {
