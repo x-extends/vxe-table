@@ -165,7 +165,28 @@ export default defineComponent({
       const errorValidItem = validErrorMaps[`${rowid}:${colid}`]
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
       const attrs: any = { colid }
-      const params: VxeTableDefines.CellRenderBodyParams = { $table: $xeTable, $grid: $xeTable.xegrid, isEdit: false, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+      const params: VxeTableDefines.CellRenderBodyParams = {
+        $table: $xeTable,
+        $grid: $xeTable.xegrid,
+        isEdit: false,
+        seq,
+        rowid,
+        row,
+        rowIndex,
+        $rowIndex,
+        _rowIndex,
+        column,
+        columnIndex,
+        $columnIndex,
+        _columnIndex,
+        fixed: fixedType,
+        type: renderType,
+        isHidden: fixedHiddenColumn,
+        level: rowLevel,
+        visibleData: afterFullData,
+        data: tableData,
+        items
+      }
       // 虚拟滚动不支持动态高度
       if (scrollYLoad && !hasEllipsis) {
         showEllipsis = hasEllipsis = true
