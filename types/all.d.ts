@@ -1,4 +1,4 @@
-import { App } from 'vue'
+import { VueConstructor } from 'vue'
 import { VxeUIExport, VxeGlobalConfig } from 'vxe-pc-ui'
 
 declare global {
@@ -22,7 +22,7 @@ export const VXETable: VxeUIExport
  */
 export type VXETableCore = VxeUIExport
 
-export function install (app: App, options?: VxeGlobalConfig): void
+export function install (app: VueConstructor, options?: VxeGlobalConfig): void
 
 // Vxe core
 export * from 'vxe-pc-ui/types/ui'

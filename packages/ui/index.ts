@@ -271,7 +271,6 @@ export const interceptor = VxeUI.interceptor
 export const clipboard = VxeUI.clipboard
 export const log = VxeUI.log
 
-export const hooks = VxeUI.hooks
 export const use = VxeUI.use
 
 /**
