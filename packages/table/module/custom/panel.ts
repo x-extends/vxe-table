@@ -916,8 +916,13 @@ export default defineComponent({
 
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       nextTick(() => {
+        const customOpts = computeCustomOpts.value
+        const { mode } = customOpts
         if (!VxeUIModalComponent) {
           errLog('vxe.error.reqComp', ['vxe-modal'])
+        }
+        if (!VxeUIDrawerComponent && (mode === 'drawer')) {
+          errLog('vxe.error.reqComp', ['vxe-drawer'])
         }
         if (!VxeUIButtonComponent) {
           errLog('vxe.error.reqComp', ['vxe-button'])

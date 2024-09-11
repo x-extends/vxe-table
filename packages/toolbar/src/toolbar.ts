@@ -4,8 +4,8 @@ import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeButtonComponent, VxeButtonEvents } from 'vxe-pc-ui'
-import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, ToolbarPrivateRef, VxeTableMethods, VxeTablePrivateMethods, ToolbarReactData } from '../../../types'
+import type { ValueOf, VxeButtonComponent, VxeButtonEvents } from 'vxe-pc-ui'
+import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
 
@@ -19,10 +19,22 @@ export default defineComponent({
     print: [Boolean, Object] as PropType<VxeToolbarPropTypes.Print>,
     zoom: [Boolean, Object] as PropType< VxeToolbarPropTypes.Zoom>,
     custom: [Boolean, Object] as PropType<VxeToolbarPropTypes.Custom>,
-    buttons: { type: Array as PropType<VxeToolbarPropTypes.Buttons>, default: () => getConfig().toolbar.buttons },
-    tools: { type: Array as PropType<VxeToolbarPropTypes.Tools>, default: () => getConfig().toolbar.tools },
-    perfect: { type: Boolean as PropType<VxeToolbarPropTypes.Perfect>, default: () => getConfig().toolbar.perfect },
-    size: { type: String as PropType<VxeToolbarPropTypes.Size>, default: () => getConfig().toolbar.size || getConfig().size },
+    buttons: {
+      type: Array as PropType<VxeToolbarPropTypes.Buttons>,
+      default: () => getConfig().toolbar.buttons
+    },
+    tools: {
+      type: Array as PropType<VxeToolbarPropTypes.Tools>,
+      default: () => getConfig().toolbar.tools
+    },
+    perfect: {
+      type: Boolean as PropType<VxeToolbarPropTypes.Perfect>,
+      default: () => getConfig().toolbar.perfect
+    },
+    size: {
+      type: String as PropType<VxeToolbarPropTypes.Size>,
+      default: () => getConfig().toolbar.size || getConfig().size
+    },
     className: [String, Function] as PropType<VxeToolbarPropTypes.ClassName>
   },
   emits: [
@@ -41,8 +53,13 @@ export default defineComponent({
 
     const reactData = reactive<ToolbarReactData>({
       isRefresh: false,
+      connectFlag: 0,
       columns: []
     })
+
+    const internalData: ToolbarInternalData = {
+      connectTable: null
+    }
 
     const refElem = ref() as Ref<HTMLDivElement>
 
@@ -55,15 +72,13 @@ export default defineComponent({
       props,
       context,
       reactData,
+      internalData,
       getRefMaps: () => refMaps
     } as unknown as VxeToolbarConstructor
 
     let toolbarMethods = {} as ToolbarMethods
 
-    const $xeGrid = inject('$xeGrid', null as (VxeGridConstructor & GridPrivateMethods) | null)
-    const refTable = ref<VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>()
-
-    const connectFlag = ref(0)
+    const $xeGrid = inject<(VxeGridConstructor & GridPrivateMethods) | null>('$xeGrid', null)
 
     const computeRefreshOpts = computed(() => {
       return Object.assign({}, getConfig().toolbar.refresh, props.refresh) as VxeToolbarPropTypes.RefreshOpts
@@ -90,8 +105,9 @@ export default defineComponent({
     })
 
     const computeTableCustomOpts = computed(() => {
-      const $table = refTable.value
-      if (connectFlag.value || $table) {
+      const { connectTable } = internalData
+      const $table = connectTable
+      if (reactData.connectFlag || $table) {
         if ($table) {
           const { computeCustomOpts } = $table.getComputeMaps()
           return computeCustomOpts.value
@@ -106,7 +122,8 @@ export default defineComponent({
     })
 
     const checkTable = () => {
-      const $table = refTable.value
+      const { connectTable } = internalData
+      const $table = connectTable
       if ($table) {
         return true
       }
@@ -114,7 +131,8 @@ export default defineComponent({
     }
 
     const handleClickSettingEvent = ({ $event }: any) => {
-      const $table = refTable.value
+      const { connectTable } = internalData
+      const $table = connectTable
       if ($table) {
         if ($table.triggerCustomEvent) {
           $table.triggerCustomEvent($event)
@@ -125,7 +143,8 @@ export default defineComponent({
     }
 
     const handleMouseenterSettingEvent = ({ $event }: any) => {
-      const $table = refTable.value
+      const { connectTable } = internalData
+      const $table = connectTable
       if ($table) {
         $table.customOpenEvent($event)
       } else {
@@ -134,7 +153,8 @@ export default defineComponent({
     }
 
     const handleMouseleaveSettingEvent = ({ $event }: any) => {
-      const $table = refTable.value
+      const { connectTable } = internalData
+      const $table = connectTable
       if ($table) {
         const { customStore } = $table.reactData
         customStore.activeBtn = false
@@ -176,7 +196,8 @@ export default defineComponent({
     }
 
     const btnEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
-      const $table = refTable.value
+      const { connectTable } = internalData
+      const $table = connectTable
       const { code } = item
       if (code) {
         if ($xeGrid) {
@@ -200,7 +221,8 @@ export default defineComponent({
     }
 
     const tolEvent = (evnt: Event, item: VxeToolbarPropTypes.ButtonConfig) => {
-      const $table = refTable.value
+      const { connectTable } = internalData
+      const $table = connectTable
       const { code } = item
       if (code) {
         if ($xeGrid) {
@@ -225,7 +247,8 @@ export default defineComponent({
 
     const importEvent = () => {
       if (checkTable()) {
-        const $table = refTable.value
+        const { connectTable } = internalData
+        const $table = connectTable
         if ($table) {
           $table.openImport()
         }
@@ -234,7 +257,8 @@ export default defineComponent({
 
     const exportEvent = () => {
       if (checkTable()) {
-        const $table = refTable.value
+        const { connectTable } = internalData
+        const $table = connectTable
         if ($table) {
           $table.openExport()
         }
@@ -243,12 +267,28 @@ export default defineComponent({
 
     const printEvent = () => {
       if (checkTable()) {
-        const $table = refTable.value
+        const { connectTable } = internalData
+        const $table = connectTable
         if ($table) {
           $table.openPrint()
         }
       }
     }
+
+    const dispatchEvent = (type: ValueOf<VxeToolbarEmits>, params: Record<string, any>, evnt: Event | null) => {
+      emit(type, createEvent(evnt, { $toolbar: $xeToolbar }, params))
+    }
+
+    toolbarMethods = {
+      dispatchEvent,
+      syncUpdate (params) {
+        internalData.connectTable = params.$table
+        reactData.columns = params.collectColumn
+        reactData.connectFlag++
+      }
+    }
+
+    Object.assign($xeToolbar, toolbarMethods)
 
     const renderDropdowns = (item: VxeToolbarPropTypes.ButtonConfig, isBtn: boolean) => {
       const { dropdowns } = item
@@ -283,11 +323,8 @@ export default defineComponent({
      */
     const renderBtns = () => {
       const { buttons } = props
-      const $table = refTable.value
-      const buttonsSlot = slots.buttons
-      if (buttonsSlot) {
-        return getSlotVNs(buttonsSlot({ $grid: $xeGrid, $table: $table }))
-      }
+      const { connectTable } = internalData
+      const $table = connectTable
       const btnVNs: VNode[] = []
       if (buttons) {
         buttons.forEach((item) => {
@@ -339,11 +376,8 @@ export default defineComponent({
      */
     const renderRightTools = () => {
       const { tools } = props
-      const $table = refTable.value
-      const toolsSlot = slots.tools
-      if (toolsSlot) {
-        return getSlotVNs(toolsSlot({ $grid: $xeGrid, $table: $table }))
-      }
+      const { connectTable } = internalData
+      const $table = connectTable
       const btnVNs: VNode[] = []
       if (tools) {
         tools.forEach((item, tIndex) => {
@@ -487,19 +521,42 @@ export default defineComponent({
         : createCommentVNode()
     }
 
-    toolbarMethods = {
-      dispatchEvent (type, params, evnt) {
-        emit(type, createEvent(evnt, { $toolbar: $xeToolbar }, params))
-      },
-      syncUpdate (params) {
-        const { collectColumn } = params
-        refTable.value = params.$table
-        reactData.columns = collectColumn
-        connectFlag.value++
-      }
+    const renderVN = () => {
+      const { perfect, loading, refresh, zoom, custom, className } = props
+      const { connectTable } = internalData
+      const vSize = computeSize.value
+      const toolsSlot = slots.tools
+      const buttonsSlot = slots.buttons
+      const $table = connectTable
+
+      return h('div', {
+        ref: refElem,
+        class: ['vxe-toolbar', className ? (XEUtils.isFunction(className) ? className({ $toolbar: $xeToolbar }) : className) : '', {
+          [`size--${vSize}`]: vSize,
+          'is--perfect': perfect,
+          'is--loading': loading
+        }]
+      }, [
+        h('div', {
+          class: 'vxe-buttons--wrapper'
+        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $table: $table }) : renderBtns()),
+        h('div', {
+          class: 'vxe-tools--wrapper'
+        }, toolsSlot ? toolsSlot({ $grid: $xeGrid, $table: $table }) : renderRightTools()),
+        h('div', {
+          class: 'vxe-tools--operate'
+        }, [
+          props.import ? renderToolImport() : createCommentVNode(),
+          props.export ? renderToolExport() : createCommentVNode(),
+          props.print ? renderToolPrint() : createCommentVNode(),
+          refresh ? renderToolRefresh() : createCommentVNode(),
+          zoom && $xeGrid ? renderToolZoom() : createCommentVNode(),
+          custom ? renderToolCustom() : createCommentVNode()
+        ])
+      ])
     }
 
-    Object.assign($xeToolbar, toolbarMethods)
+    $xeToolbar.renderVN = renderVN
 
     nextTick(() => {
       const { refresh } = props
@@ -523,49 +580,14 @@ export default defineComponent({
           warnLog('vxe.error.delProp', ['toolbar.custom.trigger', 'table.custom-config.trigger'])
         }
       }
-    })
-
-    const renderVN = () => {
-      const { perfect, loading, refresh, zoom, custom, className } = props
-      const vSize = computeSize.value
-      return h('div', {
-        ref: refElem,
-        class: ['vxe-toolbar', className ? (XEUtils.isFunction(className) ? className({ $toolbar: $xeToolbar }) : className) : '', {
-          [`size--${vSize}`]: vSize,
-          'is--perfect': perfect,
-          'is--loading': loading
-        }]
-      }, [
-        h('div', {
-          class: 'vxe-buttons--wrapper'
-        }, renderBtns()),
-        h('div', {
-          class: 'vxe-tools--wrapper'
-        }, renderRightTools()),
-        h('div', {
-          class: 'vxe-tools--operate'
-        }, [
-          props.import ? renderToolImport() : createCommentVNode(),
-          props.export ? renderToolExport() : createCommentVNode(),
-          props.print ? renderToolPrint() : createCommentVNode(),
-          refresh ? renderToolRefresh() : createCommentVNode(),
-          zoom && $xeGrid ? renderToolZoom() : createCommentVNode(),
-          custom ? renderToolCustom() : createCommentVNode()
-        ])
-      ])
-    }
-
-    $xeToolbar.renderVN = renderVN
-
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      nextTick(() => {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (props.refresh || props.import || props.export || props.print || props.zoom) {
           if (!VxeUIButtonComponent) {
             errLog('vxe.error.reqComp', ['vxe-button'])
           }
         }
-      })
-    }
+      }
+    })
 
     return $xeToolbar
   },

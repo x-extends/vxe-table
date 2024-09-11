@@ -1,6 +1,6 @@
-import { defineComponent, h, onUnmounted, inject, ref, Ref, PropType, provide, onMounted } from 'vue'
-import { XEColumnInstance, watchColumn, assembleColumn, destroyColumn } from '../../table/src/util'
-import Cell from '../../table/src/cell'
+import { defineComponent, h, onUnmounted, inject, ref, PropType, provide, onMounted, createCommentVNode } from 'vue'
+import { XEColumnInstance, watchColumn, assembleColumn, destroyColumn } from './util'
+import Cell from './cell'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods, VxeColumnPropTypes, VxeColumnProps } from '../../../types'
 
@@ -20,7 +20,10 @@ export const columnProps = {
   // 列最大宽度
   maxWidth: [Number, String] as PropType<VxeColumnPropTypes.MaxWidth>,
   // 是否允许拖动列宽调整大小
-  resizable: { type: Boolean as PropType<VxeColumnPropTypes.Resizable>, default: null },
+  resizable: {
+    type: Boolean as PropType<VxeColumnPropTypes.Resizable>,
+    default: null
+  },
   // 将列固定在左侧或者右侧
   fixed: String as PropType<VxeColumnPropTypes.Fixed>,
   // 列对其方式
@@ -30,11 +33,20 @@ export const columnProps = {
   // 表尾列的对齐方式
   footerAlign: String as PropType<VxeColumnPropTypes.FooterAlign>,
   // 当内容过长时显示为省略号
-  showOverflow: { type: [Boolean, String] as PropType<VxeColumnPropTypes.ShowOverflow>, default: null },
+  showOverflow: {
+    type: [Boolean, String] as PropType<VxeColumnPropTypes.ShowOverflow>,
+    default: null
+  },
   // 当表头内容过长时显示为省略号
-  showHeaderOverflow: { type: [Boolean, String] as PropType<VxeColumnPropTypes.ShowHeaderOverflow>, default: null },
+  showHeaderOverflow: {
+    type: [Boolean, String] as PropType<VxeColumnPropTypes.ShowHeaderOverflow>,
+    default: null
+  },
   // 当表尾内容过长时显示为省略号
-  showFooterOverflow: { type: [Boolean, String] as PropType<VxeColumnPropTypes.ShowFooterOverflow>, default: null },
+  showFooterOverflow: {
+    type: [Boolean, String] as PropType<VxeColumnPropTypes.ShowFooterOverflow>,
+    default: null
+  },
   // 给单元格附加 className
   className: [String, Function] as PropType<VxeColumnPropTypes.ClassName>,
   // 给表头单元格附加 className
@@ -52,9 +64,15 @@ export const columnProps = {
   // 排序的字段类型，比如字符串转数值等
   sortType: String as PropType<VxeColumnPropTypes.SortType>,
   // 配置筛选条件数组
-  filters: { type: Array as PropType<VxeColumnPropTypes.Filters>, default: null },
+  filters: {
+    type: Array as PropType<VxeColumnPropTypes.Filters>,
+    default: null
+  },
   // 筛选是否允许多选
-  filterMultiple: { type: Boolean as PropType<VxeColumnPropTypes.FilterMultiple>, default: true },
+  filterMultiple: {
+    type: Boolean as PropType<VxeColumnPropTypes.FilterMultiple>,
+    default: true
+  },
   // 自定义筛选方法
   filterMethod: Function as PropType<VxeColumnPropTypes.FilterMethod<any>>,
   // 筛选重置方法
@@ -66,7 +84,10 @@ export const columnProps = {
   // 指定为树节点
   treeNode: Boolean as PropType<VxeColumnPropTypes.TreeNode>,
   // 是否可视
-  visible: { type: Boolean as PropType<VxeColumnPropTypes.Visible>, default: null },
+  visible: {
+    type: Boolean as PropType<VxeColumnPropTypes.Visible>,
+    default: null
+  },
   // 表头单元格数据导出方法
   headerExportMethod: Function as PropType<VxeColumnPropTypes.HeaderExportMethod>,
   // 单元格数据导出方法
@@ -95,11 +116,14 @@ export default defineComponent({
   name: 'VxeColumn',
   props: columnProps,
   setup (props, { slots }) {
-    const refElem = ref() as Ref<HTMLDivElement>
-    const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
-    const parentColgroup = inject('$xeColgroup', null as XEColumnInstance | null)
-    const column = Cell.createColumn($xeTable, props as VxeColumnProps)
-    column.slots = slots
+    const refElem = ref<HTMLDivElement>()
+    const $xeTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
+    const $xeColgroup = inject<XEColumnInstance | null>('$xeColgroup', null)
+    if (!$xeTable) {
+      return () => createCommentVNode()
+    }
+    const columnConfig = Cell.createColumn($xeTable, props as VxeColumnProps)
+    columnConfig.slots = slots
 
     const renderVN = () => {
       return h('div', {
@@ -108,19 +132,22 @@ export default defineComponent({
     }
 
     const $xeColumn = {
-      column,
+      columnConfig,
 
       renderVN
-    }
+    } as XEColumnInstance
 
-    watchColumn($xeTable, props, column)
+    watchColumn($xeTable, props, columnConfig)
 
     onMounted(() => {
-      assembleColumn($xeTable, refElem.value, column, parentColgroup)
+      const elem = refElem.value
+      if (elem) {
+        assembleColumn($xeTable, elem, columnConfig, $xeColgroup)
+      }
     })
 
     onUnmounted(() => {
-      destroyColumn($xeTable, column)
+      destroyColumn($xeTable, columnConfig)
     })
 
     provide('$xeColumn', $xeColumn)

@@ -6968,9 +6968,7 @@ export default defineComponent({
       globalEvents.on($xeTable, 'mousewheel', handleGlobalMousewheelEvent)
       globalEvents.on($xeTable, 'keydown', handleGlobalKeydownEvent)
       globalEvents.on($xeTable, 'resize', handleGlobalResizeEvent)
-      if ($xeTable.handleGlobalContextmenuEvent) {
-        globalEvents.on($xeTable, 'contextmenu', $xeTable.handleGlobalContextmenuEvent)
-      }
+      globalEvents.on($xeTable, 'contextmenu', $xeTable.handleGlobalContextmenuEvent)
       tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xeTable })
     })
 
@@ -7176,7 +7174,7 @@ export default defineComponent({
           })
           : createCommentVNode(),
         /**
-         * 导出/导出
+         * 导出
          */
         initStore.export && (props.exportConfig || props.printConfig)
           ? h(TableExportPanelComponent, {

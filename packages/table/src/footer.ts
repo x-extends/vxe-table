@@ -23,10 +23,22 @@ function mergeFooterMethod (mergeFooterList: VxeTableDefines.MergeItem[], _rowIn
 export default defineComponent({
   name: 'VxeTableFooter',
   props: {
-    footerTableData: { type: Array as PropType<any[][]>, default: () => [] },
-    tableColumn: { type: Array as PropType<VxeTableDefines.ColumnInfo[]>, default: () => [] },
-    fixedColumn: { type: Array as PropType<VxeTableDefines.ColumnInfo[]>, default: () => [] },
-    fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
+    footerTableData: {
+      type: Array as PropType<any[][]>,
+      default: () => []
+    },
+    tableColumn: {
+      type: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+      default: () => []
+    },
+    fixedColumn: {
+      type: Array as PropType<VxeTableDefines.ColumnInfo[]>,
+      default: () => []
+    },
+    fixedType: {
+      type: String as PropType<VxeColumnPropTypes.Fixed>,
+      default: null
+    }
   },
   setup (props) {
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)

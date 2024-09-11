@@ -120,7 +120,7 @@ export function getRowid ($xeTable: VxeTableConstructor, row: any) {
 }
 
 export interface XEColumnInstance {
-  column: ColumnInfo;
+  columnConfig: ColumnInfo;
 }
 
 export const handleFieldOrColumn = ($xeTable: VxeTableConstructor, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null) => {
@@ -294,7 +294,7 @@ export function assembleColumn ($xeTable: VxeTableConstructor & VxeTablePrivateM
   const { reactData } = $xeTable
   const { staticColumns } = reactData
   const parentElem = elem.parentNode
-  const parentColumn = colgroup ? colgroup.column : null
+  const parentColumn = colgroup ? colgroup.columnConfig : null
   const parentCols = parentColumn ? parentColumn.children : staticColumns
   if (parentElem && parentCols) {
     parentCols.splice(XEUtils.arrayIndexOf(parentElem.children, elem), 0, column)

@@ -72,17 +72,17 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'keepTest1',
         name: 'TestKeepTest1',
-        component: () => import('../views/keepAlives/pages/Table1.vue')
+        component: () => import('../views/keepAlives/pages/TestTable1.vue')
       },
       {
         path: 'keepTest2',
         name: 'TestKeepTest2',
-        component: () => import('../views/keepAlives/pages/Table2.vue')
+        component: () => import('../views/keepAlives/pages/TestTable2.vue')
       },
       {
         path: 'keepTest3',
         name: 'TestKeepTest3',
-        component: () => import('../views/keepAlives/pages/Table3.vue')
+        component: () => import('../views/keepAlives/pages/TestTable3.vue')
       }
     ]
   }

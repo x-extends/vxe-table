@@ -10,7 +10,7 @@ import tableComponentEmits from '../../table/src/emits'
 import { getSlotVNs } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
-import type { VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from 'vxe-pc-ui'
+import type { ValueOf, VxePagerComponent, VxeFormComponent, VxeFormEvents, VxeFormInstance, VxePagerEvents, VxeFormItemProps, VxePagerInstance } from 'vxe-pc-ui'
 import type { VxeTableMethods, VxeGridConstructor, VxeGridEmits, GridReactData, VxeGridPropTypes, VxeToolbarPropTypes, GridMethods, GridPrivateMethods, VxeGridPrivateComputed, VxeGridPrivateMethods, VxeToolbarInstance, GridPrivateRef, VxeTableProps, VxeTableConstructor, VxeTablePrivateMethods, VxeTableEvents, VxeTableDefines, VxeTableEventProps, VxeGridProps } from '../../../types'
 
 const { getConfig, getI18n, commands, hooks, useFns, createEvent, globalEvents, GLOBAL_EVENT_KEYS } = VxeUI
@@ -46,7 +46,10 @@ export default defineComponent({
     toolbarConfig: Object as PropType<VxeGridPropTypes.ToolbarConfig>,
     formConfig: Object as PropType<VxeGridPropTypes.FormConfig>,
     zoomConfig: Object as PropType<VxeGridPropTypes.ZoomConfig>,
-    size: { type: String as PropType<VxeGridPropTypes.Size>, default: () => getConfig().grid.size || getConfig().size }
+    size: {
+      type: String as PropType<VxeGridPropTypes.Size>,
+      default: () => getConfig().grid.size || getConfig().size
+    }
   },
   emits: gridComponentEmits,
   setup (props, context) {
@@ -60,7 +63,7 @@ export default defineComponent({
 
     const { computeSize } = useFns.useSize(props)
 
-    const reactData = reactive({
+    const reactData = reactive<GridReactData>({
       tableLoading: false,
       proxyInited: false,
       isZMax: false,
@@ -74,7 +77,7 @@ export default defineComponent({
         pageSize: getConfig().pager?.pageSize || 10,
         currentPage: 1
       }
-    } as GridReactData<any>)
+    })
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refTable = ref() as Ref<ComponentPublicInstance<VxeTableProps, VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods>>
@@ -155,31 +158,6 @@ export default defineComponent({
       return rest
     })
 
-    const refMaps: GridPrivateRef = {
-      refElem,
-      refTable,
-      refForm,
-      refToolbar,
-      refPager
-    }
-
-    const computeMaps: VxeGridPrivateComputed = {
-      computeProxyOpts,
-      computePagerOpts,
-      computeFormOpts,
-      computeToolbarOpts,
-      computeZoomOpts
-    }
-
-    const $xeGrid = {
-      xID,
-      props: props as VxeGridProps,
-      context,
-      reactData,
-      getRefMaps: () => refMaps,
-      getComputeMaps: () => computeMaps
-    } as VxeGridConstructor & VxeGridPrivateMethods
-
     const computeTableProps = computed(() => {
       const { seqConfig, pagerConfig, loading, editConfig, proxyConfig } = props
       const { isZMax, tableLoading, tablePage, tableData } = reactData
@@ -206,6 +184,39 @@ export default defineComponent({
       }
       return tableProps
     })
+
+    const computeCurrLayout = computed(() => {
+      const { layouts } = props
+      if (layouts && layouts.length) {
+        return layouts
+      }
+      return getConfig().grid.layouts || ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
+    })
+
+    const refMaps: GridPrivateRef = {
+      refElem,
+      refTable,
+      refForm,
+      refToolbar,
+      refPager
+    }
+
+    const computeMaps: VxeGridPrivateComputed = {
+      computeProxyOpts,
+      computePagerOpts,
+      computeFormOpts,
+      computeToolbarOpts,
+      computeZoomOpts
+    }
+
+    const $xeGrid = {
+      xID,
+      props: props as VxeGridProps,
+      context,
+      reactData,
+      getRefMaps: () => refMaps,
+      getComputeMaps: () => computeMaps
+    } as VxeGridConstructor & VxeGridPrivateMethods
 
     const initToolbar = () => {
       const toolbarOpts = computeToolbarOpts.value
@@ -644,12 +655,9 @@ export default defineComponent({
       return createCommentVNode()
     }
 
-    const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
-
     const renderLayout = () => {
-      const { layouts } = props
       const vns: VNode[] = []
-      const currLayouts = (layouts && layouts.length ? layouts : (getConfig().grid.layouts || defaultLayouts))
+      const currLayouts = computeCurrLayout.value
       currLayouts.forEach(name => {
         switch (name) {
           case 'Form':
@@ -731,10 +739,20 @@ export default defineComponent({
       }
     }
 
+    const handleGlobalKeydownEvent = (evnt: any) => {
+      const zoomOpts = computeZoomOpts.value
+      const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
+      if (isEsc && reactData.isZMax && zoomOpts.escRestore !== false) {
+        gridPrivateMethods.triggerZoomEvent(evnt)
+      }
+    }
+
+    const dispatchEvent = (type: ValueOf<VxeGridEmits>, params: Record<string, any>, evnt: Event | null) => {
+      emit(type, createEvent(evnt, { $grid: $xeGrid }, params))
+    }
+
     const gridMethods: GridMethods = {
-      dispatchEvent (type, params, evnt) {
-        emit(type, createEvent(evnt, { $grid: $xeGrid }, params))
-      },
+      dispatchEvent,
       /**
        * 提交指令，支持 code 或 button
        * @param {String/Object} code 字符串或对象
@@ -1218,14 +1236,6 @@ export default defineComponent({
     watch(() => props.proxyConfig, () => {
       initProxy()
     })
-
-    const handleGlobalKeydownEvent = (evnt: any) => {
-      const zoomOpts = computeZoomOpts.value
-      const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
-      if (isEsc && reactData.isZMax && zoomOpts.escRestore !== false) {
-        gridPrivateMethods.triggerZoomEvent(evnt)
-      }
-    }
 
     hooks.forEach((options) => {
       const { setupGrid } = options

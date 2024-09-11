@@ -24,7 +24,10 @@ export default defineComponent({
     tableData: Array as PropType<any[]>,
     tableColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
-    fixedType: { type: String as PropType<VxeColumnPropTypes.Fixed>, default: null }
+    fixedType: {
+      type: String as PropType<VxeColumnPropTypes.Fixed>,
+      default: null
+    }
   },
   setup (props) {
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)

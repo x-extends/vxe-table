@@ -268,14 +268,15 @@ export const Cell = {
     return [
       h('span', {
         class: 'vxe-cell--label'
-      }, editRender && eqEmptyValue(cellValue)
-        ? [
-            // 如果设置占位符
-            h('span', {
-              class: 'vxe-cell--placeholder'
-            }, formatText(getFuncText(cellPlaceholder), 1))
-          ]
-        : formatText(cellValue, 1))
+      }, [
+        // 如果设置占位符
+        editRender && eqEmptyValue(cellValue)
+          ? h('span', {
+            class: 'vxe-cell--placeholder'
+          }, formatText(getFuncText(cellPlaceholder), 1))
+          : h('span', formatText(cellValue, 1))
+      ]
+      )
     ]
   },
   renderTreeCell (params: VxeTableDefines.CellRenderBodyParams) {

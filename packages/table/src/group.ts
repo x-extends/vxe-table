@@ -1,7 +1,7 @@
-import { defineComponent, h, onUnmounted, provide, inject, ref, Ref, onMounted, Slot } from 'vue'
+import { defineComponent, h, onUnmounted, provide, inject, ref, onMounted, Slot, createCommentVNode } from 'vue'
 import { columnProps } from './column'
-import { XEColumnInstance, watchColumn, assembleColumn, destroyColumn } from '../../table/src/util'
-import Cell from '../../table/src/cell'
+import { XEColumnInstance, watchColumn, assembleColumn, destroyColumn } from './util'
+import Cell from './cell'
 
 import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
@@ -9,10 +9,13 @@ export default defineComponent({
   name: 'VxeColgroup',
   props: columnProps,
   setup (props, { slots }) {
-    const refElem = ref() as Ref<HTMLDivElement>
-    const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTablePrivateMethods)
-    const parentColgroup = inject('$xeColgroup', null as XEColumnInstance | null)
-    const column = Cell.createColumn($xeTable, props)
+    const refElem = ref<HTMLDivElement>()
+    const $xeTable = inject<(VxeTableConstructor & VxeTablePrivateMethods) | null>('$xeTable', null)
+    const $xeParentColgroup = inject<XEColumnInstance | null>('$xeColgroup', null)
+    if (!$xeTable) {
+      return () => createCommentVNode()
+    }
+    const columnConfig = Cell.createColumn($xeTable, props)
     const columnSlots: {
       header?: Slot;
     } = {}
@@ -21,17 +24,20 @@ export default defineComponent({
       columnSlots.header = slots.header
     }
 
-    column.slots = columnSlots
-    column.children = []
+    columnConfig.slots = columnSlots
+    columnConfig.children = []
 
-    watchColumn($xeTable, props, column)
+    watchColumn($xeTable, props, columnConfig)
 
     onMounted(() => {
-      assembleColumn($xeTable, refElem.value, column, parentColgroup)
+      const elem = refElem.value
+      if (elem) {
+        assembleColumn($xeTable, elem, columnConfig, $xeParentColgroup)
+      }
     })
 
     onUnmounted(() => {
-      destroyColumn($xeTable, column)
+      destroyColumn($xeTable, columnConfig)
     })
 
     const renderVN = () => {
@@ -40,7 +46,7 @@ export default defineComponent({
       }, slots.default ? slots.default() : [])
     }
 
-    const $xeColgroup = { column }
+    const $xeColgroup = { columnConfig } as XEColumnInstance
 
     provide('$xeColgroup', $xeColgroup)
     provide('$xeGrid', null)
