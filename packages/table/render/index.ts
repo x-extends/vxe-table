@@ -3,39 +3,16 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getCellValue, setCellValue } from '../src/util'
 import { getFuncText, formatText, isEmptyValue } from '../../ui/src/utils'
-import { getOnName } from '../../ui/src/vn'
+import { getOnName, getModelEvent, getChangeEvent } from '../../ui/src/vn'
 import { errLog } from '../../ui/src/log'
 
 import type { VxeGlobalRendererHandles, VxeColumnPropTypes } from '../../../types'
 
 const { getConfig, renderer, getI18n } = VxeUI
 
-const componentDefaultModelProp = 'modelValue'
+const componentDefaultModelProp = 'value'
 
 const defaultCompProps = { transfer: true }
-
-function getModelEvent (renderOpts: any) {
-  switch (renderOpts.name) {
-    case 'input':
-    case 'textarea':
-      return 'input'
-  }
-  return 'update:modelValue'
-}
-
-function getChangeEvent (renderOpts: any) {
-  switch (renderOpts.name) {
-    case 'input':
-    case 'textarea':
-    case 'VxeInput':
-    case 'VxeNumberInput':
-    case 'VxeTextarea':
-    case '$input':
-    case '$textarea':
-      return 'input'
-  }
-  return 'change'
-}
 
 function parseDate (value: any, props: any) {
   return value && props.valueFormat ? XEUtils.toStringDate(value, props.valueFormat) : value
@@ -132,7 +109,7 @@ function getCellLabelVNs (h: CreateElement, renderOpts: any, params: any, cellLa
  * @param modelFunc
  * @param changeFunc
  */
-function getElementOns (renderOpts: any, params: any, modelFunc?: any, changeFunc?: any) {
+function getNativeElementOns (renderOpts: any, params: any, modelFunc?: any, changeFunc?: any) {
   const { events } = renderOpts
   const modelEvent = getModelEvent(renderOpts)
   const changeEvent = getChangeEvent(renderOpts)
@@ -245,7 +222,7 @@ function getFilterOns (renderOpts: any, params: any, option: any) {
 function getNativeEditOns (renderOpts: any, params: any) {
   const { $table, row, column } = params
   const { model } = column
-  return getElementOns(renderOpts, params, (evnt: any) => {
+  return getNativeElementOns(renderOpts, params, (evnt: any) => {
     // 处理 model 值双向绑定
     const cellValue = evnt.target.value
     if (isImmediateCell(renderOpts, params)) {
@@ -262,7 +239,7 @@ function getNativeEditOns (renderOpts: any, params: any) {
 }
 
 function getNativeFilterOns (renderOpts: any, params: any, option: any) {
-  return getElementOns(renderOpts, params, (evnt: any) => {
+  return getNativeElementOns(renderOpts, params, (evnt: any) => {
     // 处理 model 值双向绑定
     option.data = evnt.target.value
   }, () => {
@@ -368,7 +345,7 @@ function renderNativeOptgroups (h: CreateElement, renderOpts: any, params: any, 
   return optionGroups.map((group: any, gIndex: any) => {
     return h('optgroup', {
       key: gIndex,
-      props: {
+      attrs: {
         label: group[groupLabel]
       }
     }, renderOptionsMethods(h, group[groupOptions], renderOpts, params))
