@@ -84,11 +84,11 @@
 }
 
 .vxe-table-custom--checkbox-option {
-  @include createCheckboxIcon();
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex-grow: 1;
+  @include createCheckboxIcon();
 }
 
 .vxe-table-custom--fixed-option {

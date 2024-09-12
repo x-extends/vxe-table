@@ -36,7 +36,7 @@ export interface VXETableConfigOptions {
    * 扩展插件授权码
    */
   authId?: string
-  onauth?(event: {
+  onAuth?(event: {
     status: boolean
     code: number
     msg: string

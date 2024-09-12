@@ -187,9 +187,9 @@ export default defineComponent({
       const tableProps = Object.assign({}, tableExtendProps)
       if (isZMax) {
         if (tableExtendProps.maxHeight) {
-          tableProps.maxHeight = 'auto'
+          tableProps.maxHeight = '100%'
         } else {
-          tableProps.height = 'auto'
+          tableProps.height = '100%'
         }
       }
       if (proxyConfig && isEnableConf(proxyOpts)) {
@@ -1133,7 +1133,7 @@ export default defineComponent({
         const topWrapper = refTopWrapper.value
         const bottomWrapper = refBottomWrapper.value
         const pagerWrapper = refPagerWrapper.value
-        const parentPaddingSize = isZMax || height !== 'auto' ? 0 : getPaddingTopBottomSize(el.parentNode as HTMLElement)
+        const parentPaddingSize = isZMax || !(height === 'auto' || height === '100%') ? 0 : getPaddingTopBottomSize(el.parentNode as HTMLElement)
         return parentPaddingSize + getPaddingTopBottomSize(el) + getOffsetHeight(formWrapper) + getOffsetHeight(toolbarWrapper) + getOffsetHeight(topWrapper) + getOffsetHeight(bottomWrapper) + getOffsetHeight(pagerWrapper)
       },
       getParentHeight () {

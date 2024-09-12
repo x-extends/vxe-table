@@ -870,7 +870,7 @@ export default defineComponent({
       const val = props[key]
       let num = 0
       if (val) {
-        if (val === 'auto') {
+        if (val === '100%' || val === 'auto') {
           num = parentHeight
         } else {
           const excludeHeight = $xetable.getExcludeHeight()
@@ -5122,7 +5122,7 @@ export default defineComponent({
         const el = refElem.value
         if (el) {
           const parentElem = el.parentNode as HTMLElement
-          const parentPaddingSize = height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
+          const parentPaddingSize = height === '100%' || height === 'auto' ? getPaddingTopBottomSize(parentElem) : 0
           return Math.floor($xegrid ? $xegrid.getParentHeight() : XEUtils.toNumber(getComputedStyle(parentElem).height) - parentPaddingSize)
         }
         return 0

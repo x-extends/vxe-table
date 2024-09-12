@@ -91,10 +91,10 @@
       cursor: pointer;
     }
     &:hover {
+      color: var(--vxe-primary-color);
       & > i {
         display: block;
       }
-      color: var(--vxe-primary-color);
     }
   }
   .vxe-import-select--file {
