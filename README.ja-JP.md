@@ -1,6 +1,6 @@
 # vxe-table
 
-[简体中文](README.md) | [繁體中文](README.zh-TW.md) | [English](README.en.md) | 日本語
+[简体中文](README.md) | [繁體中文](README.zh-TW.md) | [English](README.en.md) | 日本語  
 
 [![star](https://gitee.com/xuliangzhan/vxe-table/badge/star.svg?theme=gvp)](https://gitee.com/xuliangzhan/vxe-table/stargazers)
 [![npm version](https://img.shields.io/npm/v/vxe-table.svg?style=flat-square)](https://www.npmjs.com/package/vxe-table)
