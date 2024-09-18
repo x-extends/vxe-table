@@ -484,7 +484,8 @@ export default {
     globalEvents.off(this, 'keydown')
   },
   render (this: any, h: CreateElement) {
-    const { vSize, isZMax } = this
+    const { computeSize, isZMax } = this
+    const vSize = computeSize
     return h('div', {
       class: ['vxe-grid', {
         [`size--${vSize}`]: vSize,

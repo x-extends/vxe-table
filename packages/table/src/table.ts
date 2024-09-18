@@ -1001,7 +1001,7 @@ export default {
       treeConfig,
       mouseConfig,
       mouseOpts,
-      vSize,
+      computeSize,
       validOpts,
       showFooter,
       overflowX,
@@ -1030,6 +1030,7 @@ export default {
     } = this
     const { leftList, rightList } = columnStore
     const currLoading = this._isLoading || loading
+    const vSize = computeSize
     return h('div', {
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         [`valid-msg--${validOpts.msgMode}`]: !!editRules,

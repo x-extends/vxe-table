@@ -3,10 +3,13 @@ import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { formatText } from '../../../ui/src/utils'
 
-const { getI18n, getIcon } = VxeUI
+const { getI18n, getIcon, globalMixins } = VxeUI
 
 export default {
   name: 'VxeTableExportPanel',
+  mixins: [
+    globalMixins.sizeMixin
+  ],
   props: {
     defaultOptions: Object,
     storeData: Object
@@ -26,9 +29,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     checkedAll () {
       return this.storeData.columns.every((column: any) => column.checked)
     },

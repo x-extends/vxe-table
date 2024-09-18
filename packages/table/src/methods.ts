@@ -107,9 +107,10 @@ function computeVirtualX (_vm: any) {
 }
 
 function computeVirtualY (_vm: any) {
-  const { $refs, vSize, rowHeightMaps } = _vm
+  const { $refs, computeSize, rowHeightMaps } = _vm
   const { tableHeader, tableBody } = $refs
   const tableBodyElem = tableBody ? tableBody.$el : null
+  const vSize = computeSize
   if (tableBodyElem) {
     const tableHeaderElem = tableHeader ? tableHeader.$el : null
     let rowHeight = 0

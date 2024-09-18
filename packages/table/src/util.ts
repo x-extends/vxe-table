@@ -271,7 +271,8 @@ function countTreeExpand (prevRow: any, params: any) {
 }
 
 export function getOffsetSize ($xetable: any) {
-  return lineOffsetSizes[$xetable.vSize] || 0
+  const vSize = $xetable.computeSize
+  return lineOffsetSizes[vSize] || 0
 }
 
 export function calcTreeLine (params: any, items: any, rIndex: any) {

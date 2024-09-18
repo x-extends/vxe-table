@@ -4,10 +4,13 @@ import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
 // import { errLog } from '../../../ui/src/log'
 
-const { getI18n, getIcon } = VxeUI
+const { getI18n, getIcon, globalMixins } = VxeUI
 
 export default {
   name: 'VxeTableImportPanel',
+  mixins: [
+    globalMixins.sizeMixin
+  ],
   props: {
     defaultOptions: Object,
     storeData: Object
@@ -22,9 +25,6 @@ export default {
     }
   },
   computed: {
-    vSize () {
-      return this.size || this.$parent.size || this.$parent.vSize
-    },
     selectName () {
       return `${this.storeData.filename}.${this.storeData.type}`
     },
