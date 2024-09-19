@@ -14,7 +14,15 @@
       :footer-data="demo1.footerData">
       <vxe-column type="seq" min-width="auto"></vxe-column>
       <vxe-column type="checkbox" title="ID" min-width="auto"></vxe-column>
-      <vxe-column field="role" title="Role" min-width="auto"></vxe-column>
+      <vxe-column
+        field="role"
+        title="Role sdf sdf dsfsdf dfs sfd gfd fdg gfdddgdfgd "
+        min-width="auto"
+        sortable
+        :filters="roleOptions"
+        :title-prefix="{content: 'sdf', icon: 'vxe-icon-edit'}"
+        :title-suffix="{content: 'sdf', icon: 'vxe-icon-edit'}">
+      </vxe-column>
       <vxe-column field="name" title="Name Name Name Name Name" min-width="auto"></vxe-column>
       <vxe-column field="age" title="Age" min-width="auto"></vxe-column>
       <vxe-column field="sex" title="Sex" min-width="auto">
@@ -41,6 +49,9 @@ export default Vue.extend({
           { name: 'xxx xxx x xxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx xxxx xxx x', address: 'xxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xxxxx xx' }
         ]
       },
+      roleOptions: [
+        { label: 'Test', value: 'Test' }
+      ],
       menuConfig: {
         className: 'my-menus',
         header: {

@@ -2131,10 +2131,20 @@ const Methods = {
             paddingSize = Math.floor(XEUtils.toNumber(cellStyle.paddingLeft) + XEUtils.toNumber(cellStyle.paddingRight)) + 2
           }
           let colWidth = column.renderAutoWidth - paddingSize
-          XEUtils.arrayEach(cellElList, (cellEl: any) => {
-            const labelEl = cellEl.firstChild
-            if (labelEl) {
-              colWidth = Math.max(colWidth, Math.ceil(labelEl.offsetWidth) + 4)
+          XEUtils.arrayEach(cellElList, (itemEl) => {
+            const cellEl = itemEl as HTMLElement
+            const thElem = cellEl.parentNode as HTMLElement
+            let titleWidth = 0
+            if (`${thElem.tagName}`.toLowerCase() === 'th') {
+              XEUtils.arrayEach(cellEl.children, (btnEl) => {
+                titleWidth += (btnEl as HTMLElement).offsetWidth + 1
+              })
+            } else {
+              const labelEl = cellEl.firstChild as HTMLElement
+              titleWidth = labelEl.offsetWidth
+            }
+            if (titleWidth) {
+              colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
             }
           })
           column.renderAutoWidth = colWidth + paddingSize
