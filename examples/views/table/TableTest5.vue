@@ -13,8 +13,16 @@
       :data="demo1.tableData"
       :footer-data="demo1.footerData">
       <vxe-column type="seq" min-width="auto"></vxe-column>
-      <vxe-column type="checkbox" title="ID" min-width="auto"></vxe-column>
-      <vxe-column field="role" title="Role" min-width="auto"></vxe-column>
+      <vxe-column type="checkbox" title="ID"  min-width="auto"></vxe-column>
+      <vxe-column
+        field="role"
+        title="Role sdf sdf dsfsdf dfs sfd gfd fdg gfdddgdfgd "
+        min-width="auto"
+        sortable
+        :filters="roleOptions"
+        :title-prefix="{content: 'sdf', icon: 'vxe-icon-edit'}"
+        :title-suffix="{content: 'sdf', icon: 'vxe-icon-edit'}">
+      </vxe-column>
       <vxe-column field="name" title="Name Name Name Name Name" min-width="auto"></vxe-column>
       <vxe-column field="age" title="Age" min-width="auto"></vxe-column>
       <vxe-column field="sex" title="Sex" min-width="auto">
@@ -28,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue'
+import { ref, onMounted, reactive } from 'vue'
 import { VxeTablePropTypes } from '../../../types'
 
 const demo1 = reactive({
@@ -78,6 +86,10 @@ const menuConfig = reactive<VxeTablePropTypes.MenuConfig>({
     ]
   }
 })
+
+const roleOptions = ref([
+  { label: 'Test', value: 'Test' }
+])
 
 onMounted(() => {
   demo1.loading = true
