@@ -385,18 +385,33 @@ export default {
       return this.proxyOpts.showActiveMsg
     },
     proxyOpts () {
+      return this.computeProxyOpts
+    },
+    computeProxyOpts () {
       return XEUtils.merge({}, getConfig().grid.proxyConfig, this.proxyConfig)
     },
     pagerOpts () {
+      return this.computePagerOpts
+    },
+    computePagerOpts () {
       return Object.assign({}, getConfig().grid.pagerConfig, this.pagerConfig)
     },
     formOpts () {
+      return this.computeFormOpts
+    },
+    computeFormOpts () {
       return Object.assign({}, getConfig().grid.formConfig, this.formConfig)
     },
     toolbarOpts () {
+      return this.computeToolbarOpts
+    },
+    computeToolbarOpts () {
       return Object.assign({}, getConfig().grid.toolbarConfig, this.toolbarConfig || this.toolbar)
     },
     zoomOpts () {
+      return this.computeZoomOpts
+    },
+    computeZoomOpts () {
       return Object.assign({}, getConfig().grid.zoomConfig, this.zoomConfig)
     },
     renderStyle () {
