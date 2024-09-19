@@ -410,7 +410,7 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
     })
 
-    const computeResizeleOpts = computed(() => {
+    const computeResizeOpts = computed(() => {
       return Object.assign({}, getConfig().table.resizeConfig, props.resizeConfig) as VxeTablePropTypes.ResizeOpts
     })
 
@@ -647,7 +647,7 @@ export default defineComponent({
       computeSYOpts,
       computeColumnOpts,
       computeRowOpts,
-      computeResizeleOpts,
+      computeResizeOpts,
       computeResizableOpts,
       computeSeqOpts,
       computeRadioOpts,
@@ -6936,7 +6936,7 @@ export default defineComponent({
         })
 
         if (props.autoResize) {
-          const resizeOpts = computeResizeleOpts.value
+          const resizeOpts = computeResizeOpts.value
           const { refreshDelay } = resizeOpts
           const el = refElem.value
           const parentEl = tablePrivateMethods.getParentElem()

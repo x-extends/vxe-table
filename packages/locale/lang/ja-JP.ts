@@ -472,10 +472,6 @@ export default {
         ss: '秒'
       }
     },
-
-    /**
-     * 扩展插件
-     */
     plugins: {
       extendCellArea: {
         area: {
@@ -580,11 +576,6 @@ export default {
         notData: 'データなし'
       }
     },
-
-    /**
-     * 以下废弃
-     * @deprecated
-     */
     renderer: {
       search: '搜索',
       cases: {

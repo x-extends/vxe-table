@@ -472,10 +472,6 @@ export default {
         ss: '秒'
       }
     },
-
-    /**
-     * 扩展插件
-     */
     plugins: {
       extendCellArea: {
         area: {
@@ -580,11 +576,6 @@ export default {
         notData: '无匹配项'
       }
     },
-
-    /**
-     * 以下废弃
-     * @deprecated
-     */
     pro: {
       area: {
         mergeErr: '无法对合并单元格进行该操作',
