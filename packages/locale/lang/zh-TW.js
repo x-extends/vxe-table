@@ -1,3 +1,3 @@
-import zhTC from './zh-TC'
+import zhCHT from './zh-CHT'
 
-export default zhTC
+export default zhCHT
