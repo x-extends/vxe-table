@@ -20,26 +20,26 @@ $vxe-info-color: #909399 !default;
 $vxe-warning-color: #e6a23c !default;
 $vxe-danger-color: #f56c6c !default;
 
-$vxe-font-lighten-color: lighten($vxe-font-color, 10%) !default;
-$vxe-primary-lighten-color: lighten($vxe-primary-color, 10%) !default;
-$vxe-success-lighten-color: lighten($vxe-success-color, 10%) !default;
-$vxe-info-lighten-color: lighten($vxe-info-color, 10%) !default;
-$vxe-warning-lighten-color: lighten($vxe-warning-color, 10%) !default;
-$vxe-danger-lighten-color: lighten($vxe-danger-color, 10%) !default;
+$vxe-font-lighten-color: #797b80 !default;
+$vxe-primary-lighten-color: #73b8ff !default;
+$vxe-success-lighten-color: #85cf60!default;
+$vxe-info-lighten-color: #abadb1 !default;
+$vxe-warning-lighten-color: #ecb869 !default;
+$vxe-danger-lighten-color: #f89c9c !default;
 
-$vxe-font-darken-color: darken($vxe-font-color, 10%) !default;
-$vxe-primary-darken-color: darken($vxe-primary-color, 10%) !default;
-$vxe-success-darken-color: darken($vxe-success-color, 10%) !default;
-$vxe-info-darken-color: darken($vxe-info-color, 10%) !default;
-$vxe-warning-darken-color: darken($vxe-warning-color, 10%) !default;
-$vxe-danger-darken-color: darken($vxe-danger-color, 10%) !default;
+$vxe-font-darken-color: #47494c !default;
+$vxe-primary-darken-color: #0d84ff !default;
+$vxe-success-darken-color: #529b2e !default;
+$vxe-info-darken-color: #767980 !default;
+$vxe-warning-darken-color: #d48a1b !default;
+$vxe-danger-darken-color: #f56c6c !default;
 
 $vxe-font-disabled-color: #BFBFBF !default;
-$vxe-primary-disabled-color: lighten($vxe-primary-color, 20%) !default;
-$vxe-success-disabled-color: lighten($vxe-success-color, 20%) !default;
-$vxe-info-disabled-color: lighten($vxe-info-color, 20%) !default;
-$vxe-warning-disabled-color: lighten($vxe-warning-color, 20%) !default;
-$vxe-danger-disabled-color: lighten($vxe-danger-color, 20%) !default;
+$vxe-primary-disabled-color: #a6d2ff !default;
+$vxe-success-disabled-color: #a3db87 !default;
+$vxe-info-disabled-color: #c5c7ca !default;
+$vxe-warning-disabled-color: l#d48a1b !default;
+$vxe-danger-disabled-color: #f5a8a8 !default;
 
 /*input/radio/checkbox*/
 $vxe-input-border-color: #dcdfe6 !default;

@@ -68,6 +68,7 @@ const componentList = [
 
 const languages = [
   'zh-CN',
+  'zh-CHT',
   'zh-TC',
   'zh-HK',
   'zh-MO',
@@ -75,7 +76,11 @@ const languages = [
   'en-US',
   'ja-JP',
   'es-ES',
-  'pt-BR'
+  'pt-BR',
+  'hu-HU',
+  'ko-KR',
+  'ru-RU',
+  'uk-UA'
 ]
 
 const styleCode = 'require(\'./style.css\')'
