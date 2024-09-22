@@ -357,7 +357,9 @@ export default defineVxeComponent({
                 circle: child.circle,
                 round: child.round,
                 status: child.status,
-                content: child.name
+                content: child.name,
+                routerLink: item.routerLink,
+                permissionCode: item.permissionCode
               },
               on: {
                 click: ({ $event }: any) => isBtn ? $xeToolbar.btnEvent($event, child) : $xeToolbar.tolEvent($event, child)
@@ -411,6 +413,7 @@ export default defineVxeComponent({
                       round: item.round,
                       status: item.status,
                       content: item.name,
+                      routerLink: item.routerLink,
                       permissionCode: item.permissionCode,
                       destroyOnClose: item.destroyOnClose,
                       placement: item.placement,
@@ -479,6 +482,8 @@ export default defineVxeComponent({
                       round: item.round,
                       status: item.status,
                       content: item.name,
+                      routerLink: item.routerLink,
+                      permissionCode: item.permissionCode,
                       destroyOnClose: item.destroyOnClose,
                       placement: item.placement,
                       transfer: item.transfer

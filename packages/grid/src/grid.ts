@@ -668,8 +668,11 @@ export default {
               }
             }
             if (isInited) {
-              const { sortOpts } = $xetable
-              let defaultSort = sortOpts.defaultSort
+              let defaultSort = null
+              if ($xetable) {
+                const { sortOpts } = $xetable
+                defaultSort = sortOpts.defaultSort
+              }
               // 如果使用默认排序
               if (defaultSort) {
                 if (!XEUtils.isArray(defaultSort)) {
@@ -683,13 +686,17 @@ export default {
                   }
                 })
               }
-              filterList = $xetable.getCheckedFilters()
-            } else {
-              if (isReload) {
-                $xetable.clearAll()
-              } else {
-                sortList = $xetable.getSortColumns()
+              if ($xetable) {
                 filterList = $xetable.getCheckedFilters()
+              }
+            } else {
+              if ($xetable) {
+                if (isReload) {
+                  $xetable.clearAll()
+                } else {
+                  sortList = $xetable.getSortColumns()
+                  filterList = $xetable.getCheckedFilters()
+                }
               }
             }
             const commitParams = {
