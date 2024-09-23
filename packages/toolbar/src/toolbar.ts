@@ -310,6 +310,8 @@ export default defineComponent({
               round: child.round,
               status: child.status,
               content: child.name,
+              routerLink: item.routerLink,
+              permissionCode: item.permissionCode,
               onClick: ({ $event }) => isBtn ? btnEvent($event, child) : tolEvent($event, child)
             })
             : createCommentVNode()
@@ -352,6 +354,7 @@ export default defineComponent({
                     round: item.round,
                     status: item.status,
                     content: item.name,
+                    routerLink: item.routerLink,
                     permissionCode: item.permissionCode,
                     destroyOnClose: item.destroyOnClose,
                     placement: item.placement,
@@ -408,6 +411,8 @@ export default defineComponent({
                     round: item.round,
                     status: item.status,
                     content: item.name,
+                    routerLink: item.routerLink,
+                    permissionCode: item.permissionCode,
                     destroyOnClose: item.destroyOnClose,
                     placement: item.placement,
                     transfer: item.transfer,

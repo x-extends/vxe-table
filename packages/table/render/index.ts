@@ -25,7 +25,7 @@ function getFormatDate (value: any, props: any, defaultFormat: string) {
 }
 
 function getLabelFormatDate (value: any, props: any) {
-  return getFormatDate(value, props, getI18n(`vxe.input.date.labelFormat.${props.type}`))
+  return getFormatDate(value, props, getI18n(`vxe.input.date.labelFormat.${props.type || 'date'}`))
 }
 
 /**
@@ -629,15 +629,7 @@ renderer.mixin({
       const { row, column } = params
       let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
-        switch (props.type) {
-          case 'date':
-          case 'week':
-          case 'month':
-          case 'quarter':
-          case 'year':
-            cellValue = getLabelFormatDate(cellValue, props)
-            break
-        }
+        cellValue = getLabelFormatDate(cellValue, props)
       }
       return getCellLabelVNs(renderOpts, params, cellValue)
     },

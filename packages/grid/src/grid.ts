@@ -832,9 +832,12 @@ export default defineComponent({
                 }
               }
               if (isInited) {
-                const { computeSortOpts } = $xeTable.getComputeMaps()
-                const sortOpts = computeSortOpts.value
-                let defaultSort = sortOpts.defaultSort
+                let defaultSort = null
+                if ($xeTable) {
+                  const { computeSortOpts } = $xeTable.getComputeMaps()
+                  const sortOpts = computeSortOpts.value
+                  defaultSort = sortOpts.defaultSort
+                }
                 // 如果使用默认排序
                 if (defaultSort) {
                   if (!XEUtils.isArray(defaultSort)) {
@@ -848,13 +851,17 @@ export default defineComponent({
                     }
                   })
                 }
-                filterList = $xeTable.getCheckedFilters()
-              } else {
-                if (isReload) {
-                  $xeTable.clearAll()
-                } else {
-                  sortList = $xeTable.getSortColumns()
+                if ($xeTable) {
                   filterList = $xeTable.getCheckedFilters()
+                }
+              } else {
+                if ($xeTable) {
+                  if (isReload) {
+                    $xeTable.clearAll()
+                  } else {
+                    sortList = $xeTable.getSortColumns()
+                    filterList = $xeTable.getCheckedFilters()
+                  }
                 }
               }
               const commitParams = {
