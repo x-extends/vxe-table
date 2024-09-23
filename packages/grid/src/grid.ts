@@ -9,13 +9,20 @@ import tableComponentProps from '../../table/src/props'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-const { getConfig, getI18n, commands, globalEvents, globalMixins } = VxeUI
+import type { VxeFormComponent, VxePagerComponent } from 'vxe-pc-ui'
+
+const { getConfig, getI18n, commands, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
 const methods: any = {}
 const propKeys = Object.keys(tableComponentProps)
 
-function renderDefaultForm (h: CreateElement, _vm: any) {
-  const { $scopedSlots, proxyConfig, proxyOpts, formData, formConfig, formOpts } = _vm
+function renderDefaultForm (h: CreateElement, $xeGrid: any) {
+  const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+  const props = $xeGrid
+  const slots = $xeGrid.$scopedSlots
+
+  const { proxyConfig, formConfig } = props
+  const { proxyOpts, formData, formOpts } = $xeGrid
   if (isEnableConf(formConfig) && formOpts.items && formOpts.items.length) {
     const formSlots: any = {}
     if (!formOpts.inited) {
@@ -23,7 +30,7 @@ function renderDefaultForm (h: CreateElement, _vm: any) {
       const beforeItem = proxyOpts.beforeItem
       if (proxyOpts && beforeItem) {
         formOpts.items.forEach((item: any) => {
-          beforeItem.call(_vm, { $grid: _vm, item })
+          beforeItem.call($xeGrid, { $grid: $xeGrid, item })
         })
       }
     }
@@ -31,39 +38,42 @@ function renderDefaultForm (h: CreateElement, _vm: any) {
     formOpts.items.forEach((item: any) => {
       XEUtils.each(item.slots, (func) => {
         if (!XEUtils.isFunction(func)) {
-          if ($scopedSlots[func]) {
-            formSlots[func] = $scopedSlots[func]
+          if (slots[func]) {
+            formSlots[func] = slots[func]
           }
         }
       })
     })
     return [
-      h('vxe-form', {
-        props: Object.assign({}, formOpts, {
-          data: proxyConfig && proxyOpts.form ? formData : formOpts.data
-        }),
-        on: {
-          submit: _vm.submitEvent,
-          reset: _vm.resetEvent,
-          collapse: _vm.collapseEvent,
-          'submit-invalid': _vm.submitInvalidEvent
-        },
-        scopedSlots: formSlots
-      })
+      VxeUIFormComponent
+        ? h(VxeUIFormComponent, {
+          props: Object.assign({}, formOpts, {
+            data: proxyConfig && proxyOpts.form ? formData : formOpts.data
+          }),
+          on: {
+            submit: $xeGrid.submitEvent,
+            reset: $xeGrid.resetEvent,
+            collapse: $xeGrid.collapseEvent,
+            'submit-invalid': $xeGrid.submitInvalidEvent
+          },
+          scopedSlots: formSlots
+        })
+        : renderEmptyElement($xeGrid)
     ]
   }
   return []
 }
 
-function getFuncSlot (_vm: any, optSlots: any, slotKey: any) {
-  const { $scopedSlots } = _vm
+function getFuncSlot ($xeGrid: any, optSlots: any, slotKey: any) {
+  const slots = $xeGrid.$scopedSlots
+
   const funcSlot = optSlots[slotKey]
   if (funcSlot) {
     if (XEUtils.isString(funcSlot)) {
-      if ($scopedSlots[funcSlot]) {
-        return $scopedSlots[funcSlot]
+      if (slots[funcSlot]) {
+        return slots[funcSlot]
       } else {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           errLog('vxe.error.notSlot', [funcSlot])
         }
       }
@@ -80,7 +90,7 @@ function getToolbarSlots (_vm: any) {
   let buttonsSlot
   let toolsSlot
   const slots: any = {}
-  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+  if (process.env.VUE_APP_VXE_ENV === 'development') {
     if ($scopedSlots.buttons && (!toolbarOptSlots || toolbarOptSlots.buttons !== 'buttons')) {
       warnLog('vxe.error.reqProp', ['toolbar-config.slots.buttons'])
     }
@@ -260,8 +270,12 @@ function renderBottom (h: CreateElement, _vm: any) {
 /**
  * 渲染分页
  */
-function renderPager (h: CreateElement, _vm: any) {
-  const { _e, $scopedSlots, pagerConfig, proxyConfig, tablePage } = _vm
+function renderPager (h: CreateElement, $xeGrid: any) {
+  const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+  const props = $xeGrid
+
+  const { pagerConfig, proxyConfig } = props
+  const { $scopedSlots, tablePage } = $xeGrid
   const pagerSlot = $scopedSlots.pager
   const hasPager = !!(pagerSlot || isEnableConf(pagerConfig))
 
@@ -271,19 +285,21 @@ function renderPager (h: CreateElement, _vm: any) {
       ref: 'pagerWrapper',
       class: 'vxe-grid--pager-wrapper'
     }, pagerSlot
-      ? pagerSlot.call(_vm, { $grid: _vm }, h)
+      ? pagerSlot.call($xeGrid, { $grid: $xeGrid }, h)
       : [
-          h('vxe-pager', {
-            props: { ..._vm.pagerOpts, ...(proxyConfig ? tablePage : {}) },
-            on: {
-              'page-change': _vm.pageChangeEvent
-            },
-            scopedSlots: getPagerSlots(_vm)
-          })
+          VxeUIPagerComponent
+            ? h(VxeUIPagerComponent, {
+              props: { ...$xeGrid.pagerOpts, ...(proxyConfig ? tablePage : {}) },
+              on: {
+                'page-change': $xeGrid.pageChangeEvent
+              },
+              scopedSlots: getPagerSlots($xeGrid)
+            })
+            : renderEmptyElement($xeGrid)
         ]
     )
   }
-  return _e()
+  return renderEmptyElement($xeGrid)
 }
 
 const defaultLayouts = ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
@@ -322,7 +338,7 @@ function renderLayout (h: CreateElement, _vm: any) {
         vns.push(renderPager(h, _vm))
         break
       default:
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           errLog('vxe.error.notProp', [`layouts -> ${name}`])
         }
         break
@@ -371,7 +387,7 @@ export default {
       tZindex: 0,
       tablePage: {
         total: 0,
-        pageSize: getConfig().pager.pageSize || 10,
+        pageSize: getConfig().pager?.pageSize || 10,
         currentPage: 1
       }
     }
@@ -469,12 +485,15 @@ export default {
     }
   } as any,
   created (this: any) {
+    const $xeGrid = this
+    const props = $xeGrid
+
     // const { data, formOpts, proxyOpts, proxyConfig } = this
     // if (proxyConfig && (data || (proxyOpts.form && formOpts.data))) {
     //   errLog('vxe.error.errConflicts', ['grid.data', 'grid.proxy-config'])
     // }
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if (this.toolbar) {
         warnLog('vxe.error.delProp', ['grid.toolbar', 'grid.toolbar-config'])
       }
@@ -485,6 +504,26 @@ export default {
       //   warnLog('vxe.error.delProp', ['proxy-config.props', 'proxy-config.response'])
       // }
     }
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      // 使用已安装的组件，如果未安装则不渲染
+      const VxeUIFormComponent = VxeUI.getComponent<VxeFormComponent>('VxeForm')
+      const VxeUIPagerComponent = VxeUI.getComponent<VxePagerComponent>('VxePager')
+
+      $xeGrid.$nextTick(() => {
+        if (props.formConfig) {
+          if (!VxeUIFormComponent) {
+            errLog('vxe.error.reqComp', ['vxe-form'])
+          }
+        }
+        if (props.pagerConfig) {
+          if (!VxeUIPagerComponent) {
+            errLog('vxe.error.reqComp', ['vxe-pager'])
+          }
+        }
+      })
+    }
+
     this.initPages()
     globalEvents.on(this, 'keydown', this.handleGlobalKeydownEvent)
   },
@@ -753,7 +792,7 @@ export default {
                 return { status: false }
               })
           } else {
-            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
               errLog('vxe.error.notFunc', ['proxy-config.ajax.query'])
             }
           }
@@ -781,7 +820,7 @@ export default {
                     $xetable.setPendingRow(removeRecords, false)
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                      if (process.env.VUE_APP_VXE_ENV === 'development') {
                         if (!VxeUI.modal) {
                           errLog('vxe.error.reqModule', ['Modal'])
                         }
@@ -802,7 +841,7 @@ export default {
                     this.tableLoading = false
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                      if (process.env.VUE_APP_VXE_ENV === 'development') {
                         if (!VxeUI.modal) {
                           errLog('vxe.error.reqModule', ['Modal'])
                         }
@@ -818,7 +857,7 @@ export default {
             } else {
               if (isActiveMsg) {
                 // 检测弹窗模块
-                if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                if (process.env.VUE_APP_VXE_ENV === 'development') {
                   if (!VxeUI.modal) {
                     errLog('vxe.error.reqModule', ['Modal'])
                   }
@@ -827,7 +866,7 @@ export default {
               }
             }
           } else {
-            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
               errLog('vxe.error.notFunc', ['proxy-config.ajax.delete'])
             }
           }
@@ -868,7 +907,7 @@ export default {
                     $xetable.clearPendingRow()
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                      if (process.env.VUE_APP_VXE_ENV === 'development') {
                         if (!VxeUI.modal) {
                           errLog('vxe.error.reqModule', ['Modal'])
                         }
@@ -889,7 +928,7 @@ export default {
                     this.tableLoading = false
                     if (isRespMsg) {
                       // 检测弹窗模块
-                      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                      if (process.env.VUE_APP_VXE_ENV === 'development') {
                         if (!VxeUI.modal) {
                           errLog('vxe.error.reqModule', ['Modal'])
                         }
@@ -904,7 +943,7 @@ export default {
               } else {
                 if (isActiveMsg) {
                   // 检测弹窗模块
-                  if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+                  if (process.env.VUE_APP_VXE_ENV === 'development') {
                     if (!VxeUI.modal) {
                       errLog('vxe.error.reqModule', ['Modal'])
                     }
@@ -914,7 +953,7 @@ export default {
               }
             })
           } else {
-            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
               errLog('vxe.error.notFunc', ['proxy-config.ajax.save'])
             }
           }
@@ -926,7 +965,7 @@ export default {
             if (gCommandOpts.commandMethod) {
               gCommandOpts.commandMethod({ code, button, $grid: this, $table: $xetable }, ...args)
             } else {
-              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              if (process.env.VUE_APP_VXE_ENV === 'development') {
                 errLog('vxe.error.notCommands', [code])
               }
             }
@@ -955,7 +994,7 @@ export default {
           })
         } else {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (!VxeUI.modal) {
               errLog('vxe.error.reqModule', ['Modal'])
             }
@@ -1006,7 +1045,7 @@ export default {
       } else {
         if (isActiveMsg) {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (!VxeUI.modal) {
               errLog('vxe.error.reqModule', ['Modal'])
             }
@@ -1125,7 +1164,7 @@ export default {
       return null
     },
     // 检查插槽
-    ...(process.env.VUE_APP_VXE_TABLE_ENV === 'development'
+    ...(process.env.VUE_APP_VXE_ENV === 'development'
       ? {
           loadColumn (columns: any[]) {
             const { $scopedSlots } = this

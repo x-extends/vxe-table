@@ -151,7 +151,7 @@ export function assembleColumn (_vm: any) {
   const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
   columnConfig.slots = _vm.$scopedSlots
   if (groupConfig) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if ($xecolumn.$options._componentTag === 'vxe-table-column') {
         errLog('vxe.error.groupTag', [`<vxe-table-colgroup title=${$xecolumn.title} ...>`, `<vxe-table-column title=${$xecolumn.title} ...>`])
       } else if ($xecolumn.$options._componentTag === 'vxe-column') {

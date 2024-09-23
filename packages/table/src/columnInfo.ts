@@ -14,7 +14,7 @@ export class ColumnInfo {
     const formatter = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
       if (_vm.type && types.indexOf(_vm.type) === -1) {
         warnLog('vxe.error.errProp', [`type=${_vm.type}`, types.join(', ')])

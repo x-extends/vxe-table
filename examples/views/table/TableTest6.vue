@@ -136,7 +136,7 @@ export default Vue.extend({
         { id: 10020, name: 'Test20', role: 'Develop', sex: '1', age: 41, address: 'test abc' }
       ]
       this.demo1.loading = false
-    }, 100)
+    }, 800)
   }
 })
 </script>

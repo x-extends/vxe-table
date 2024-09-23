@@ -584,7 +584,7 @@ function downloadFile ($xetable: any, opts: any, content: any) {
   saveLocalFile({ filename, type, content }).then(() => {
     if (opts.message !== false) {
       // 检测弹窗模块
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (!VxeUI.modal) {
           errLog('vxe.error.reqModule', ['Modal'])
         }
@@ -813,7 +813,7 @@ function handleImport ($xetable: any, content: any, opts: any) {
         }
         if (opts.message !== false) {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (!VxeUI.modal) {
               errLog('vxe.error.reqModule', ['Modal'])
             }
@@ -828,7 +828,7 @@ function handleImport ($xetable: any, content: any, opts: any) {
       })
   } else if (opts.message !== false) {
     // 检测弹窗模块
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if (!VxeUI.modal) {
         errLog('vxe.error.reqModule', ['Modal'])
       }
@@ -849,7 +849,7 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
   if (!importMethod && !XEUtils.includes(XEUtils.keys(importOpts._typeMaps), type)) {
     if (opts.message !== false) {
       // 检测弹窗模块
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (!VxeUI.modal) {
           errLog('vxe.error.reqModule', ['Modal'])
         }
@@ -900,7 +900,7 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
       }
     } else {
       // 不支持的浏览器
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         errLog('vxe.error.notExp')
       }
       _importResolve({ status: true })
@@ -957,7 +957,7 @@ export function readLocalFile (options: any = {}) {
       } else {
         if (options.message !== false) {
           // 检测弹窗模块
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (!VxeUI.modal) {
               errLog('vxe.error.reqModule', ['Modal'])
             }
@@ -1277,7 +1277,7 @@ export default {
 
       // 检查类型，如果为自定义导出，则不需要校验类型
       if (!opts.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           errLog('vxe.error.notType', [type])
         }
         const params = { status: false }
@@ -1300,7 +1300,7 @@ export default {
             opts.data = selectRecords
           }
         } else if (mode === 'all') {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             if (!$xegrid) {
               warnLog('vxe.error.errProp', ['all', 'mode=current,selected'])
             }
@@ -1312,7 +1312,7 @@ export default {
             const queryAllSuccessMethods = ajax.queryAllSuccess
             const queryAllErrorMethods = ajax.queryAllError
 
-            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
               if (!ajaxMethods) {
                 warnLog('vxe.error.notFunc', ['proxy-config.ajax.queryAll'])
               }
@@ -1484,7 +1484,7 @@ export default {
     },
     _openExport (options: any) {
       const { exportOpts } = this
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (!this.exportConfig) {
           errLog('vxe.error.reqProp', ['export-config'])
         }
@@ -1493,7 +1493,7 @@ export default {
     },
     _openPrint (options: any) {
       const { printOpts } = this
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (!this.printConfig) {
           errLog('vxe.error.reqProp', ['print-config'])
         }

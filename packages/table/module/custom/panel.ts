@@ -7,7 +7,7 @@ import XEUtils from 'xe-utils'
 
 import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent } from 'vxe-pc-ui'
 
-const { getI18n, getIcon } = VxeUI
+const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
 function updateDropHint (_vm: any, evnt: any) {
   const { $refs } = _vm
@@ -277,7 +277,11 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
 }
 
 const renderPopupPanel = (h: CreateElement, _vm: any) => {
+  const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
   const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+  const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+  const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+  const $xeTableCustomPanel = _vm
 
   const { _e, $xetable, customStore } = _vm
   const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xetable
@@ -387,18 +391,21 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
             }, [
               column.children && column.children.length
                 ? h('span', '-')
-                : h('vxe-input', {
-                  props: {
-                    type: 'integer',
-                    disabled: isHidden,
-                    value: column.renderResizeWidth
-                  },
-                  on: {
-                    modelValue (value: any) {
-                      column.renderResizeWidth = Math.max(0, Number(value))
-                    }
-                  }
-                })
+                : (VxeUIInputComponent
+                    ? h(VxeUIInputComponent, {
+                      props: {
+                        type: 'integer',
+                        disabled: isHidden,
+                        value: column.renderResizeWidth
+                      },
+                      on: {
+                        modelValue (value: any) {
+                          column.renderResizeWidth = Math.max(0, Number(value))
+                        }
+                      }
+                    })
+                    : renderEmptyElement($xeTableCustomPanel)
+                  )
             ])
             : _e(),
           allowFixed
@@ -433,178 +440,182 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   })
   const isAllChecked = customStore.isAll
   const isAllIndeterminate = customStore.isIndeterminate
-  return h('vxe-modal', {
-    key: 'modal',
-    props: {
-      className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
-      value: customStore.visible,
-      title: modalOpts.title || getI18n('vxe.custom.cstmTitle'),
-      width: modalOpts.width || Math.min(880, document.documentElement.clientWidth),
-      minWidth: modalOpts.minWidth || 700,
-      height: modalOpts.height || Math.min(680, document.documentElement.clientHeight),
-      minHeight: modalOpts.minHeight || 400,
-      showZoom: !!modalOpts.showZoom,
-      mask: !!modalOpts.mask,
-      lockView: !!modalOpts.lockView,
-      resize: !!modalOpts.resize,
-      escClosable: !!modalOpts.escClosable,
-      destroyOnClose: true,
-      showFooter: true
-    },
-    on: {
-      input (value: any) {
-        customStore.visible = value
-      }
-    },
-    scopedSlots: {
-      default: () => {
-        return h('div', {
-          ref: 'bodyElemRef',
-          class: 'vxe-table-custom-popup--body'
-        }, [
-          h('div', {
-            class: 'vxe-table-custom-popup--table-wrapper'
+  return VxeUIModalComponent
+    ? h(VxeUIModalComponent, {
+      key: 'modal',
+      props: {
+        className: ['vxe-table-custom-popup-wrapper', 'vxe-table--ignore-clear', modalOpts.className || ''].join(' '),
+        value: customStore.visible,
+        title: modalOpts.title || getI18n('vxe.custom.cstmTitle'),
+        width: modalOpts.width || Math.min(880, document.documentElement.clientWidth),
+        minWidth: modalOpts.minWidth || 700,
+        height: modalOpts.height || Math.min(680, document.documentElement.clientHeight),
+        minHeight: modalOpts.minHeight || 400,
+        showZoom: !!modalOpts.showZoom,
+        mask: !!modalOpts.mask,
+        lockView: !!modalOpts.lockView,
+        resize: !!modalOpts.resize,
+        escClosable: !!modalOpts.escClosable,
+        destroyOnClose: true,
+        showFooter: true
+      },
+      on: {
+        input (value: any) {
+          customStore.visible = value
+        }
+      },
+      scopedSlots: {
+        default: () => {
+          return h('div', {
+            ref: 'bodyElemRef',
+            class: 'vxe-table-custom-popup--body'
           }, [
-            h('table', {}, [
-              h('colgroup', {}, [
-                allowVisible
-                  ? h('col', {
-                    style: {
-                      width: '80px'
-                    }
-                  })
-                  : _e(),
-                allowSort
-                  ? h('col', {
-                    style: {
-                      width: '80px'
-                    }
-                  })
-                  : _e(),
-                h('col', {
-                  style: {
-                    minWidth: '120px'
-                  }
-                }),
-                allowResizable
-                  ? h('col', {
-                    style: {
-                      width: '140px'
-                    }
-                  })
-                  : _e(),
-                allowFixed
-                  ? h('col', {
-                    style: {
-                      width: '200px'
-                    }
-                  })
-                  : _e()
-              ]),
-              h('thead', {}, [
-                h('tr', {}, [
+            h('div', {
+              class: 'vxe-table-custom-popup--table-wrapper'
+            }, [
+              h('table', {}, [
+                h('colgroup', {}, [
                   allowVisible
-                    ? h('th', {}, [
-                      h('div', {
-                        class: ['vxe-table-custom--checkbox-option', {
-                          'is--checked': isAllChecked,
-                          'is--indeterminate': isAllIndeterminate
-                        }],
-                        attrs: {
-                          title: getI18n('vxe.table.allTitle')
-                        },
-                        on: {
-                          click: _vm.allOptionEvent
-                        }
-
-                      }, [
-                        h('span', {
-                          class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                        }),
-                        h('span', {
-                          class: 'vxe-checkbox--label'
-                        }, getI18n('vxe.toolbar.customAll'))
-                      ])
-                    ])
+                    ? h('col', {
+                      style: {
+                        width: '80px'
+                      }
+                    })
                     : _e(),
                   allowSort
-                    ? h('th', {}, [
-                      h('span', {
-                        class: 'vxe-table-custom-popup--table-sort-help-title'
-                      }, getI18n('vxe.custom.setting.colSort')),
-                      h('vxe-tooltip', {
-                        props: {
-                          enterable: true,
-                          content: getI18n('vxe.custom.setting.sortHelpTip'),
-                          popupClassName: 'vxe-table--ignore-clear'
-                        },
-                        scopedSlots: {
-                          default: () => {
-                            return h('i', {
-                              class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
-                            })
-                          }
-                        }
-                      })
-                    ])
+                    ? h('col', {
+                      style: {
+                        width: '80px'
+                      }
+                    })
                     : _e(),
-                  h('th', {}, getI18n('vxe.custom.setting.colTitle')),
+                  h('col', {
+                    style: {
+                      minWidth: '120px'
+                    }
+                  }),
                   allowResizable
-                    ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
+                    ? h('col', {
+                      style: {
+                        width: '140px'
+                      }
+                    })
                     : _e(),
                   allowFixed
-                    ? h('th', {}, getI18n(`vxe.custom.setting.${maxFixedSize ? 'colFixedMax' : 'colFixed'}`, [maxFixedSize]))
+                    ? h('col', {
+                      style: {
+                        width: '200px'
+                      }
+                    })
                     : _e()
-                ])
-              ]),
-              h('transition-group', {
-                class: 'vxe-table-custom--body',
-                props: {
-                  tag: 'tbody',
-                  name: 'vxe-table-custom--list'
-                }
-              }, trVNs)
-            ])
-          ]),
-          h('div', {
-            ref: 'dragHintElemRef',
-            class: 'vxe-table-custom-popup--drag-hint'
-          }, getI18n('vxe.custom.cstmDragTarget', [_vm.dragColumn ? _vm.dragColumn.getTitle() : '']))
-        ])
-      },
-      footer: () => {
-        return h('div', {
-          class: 'vxe-table-custom-popup--footer'
-        }, [
-          h(VxeUIButtonComponent, {
-            props: {
-              content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore')
-            },
-            on: {
-              click: _vm.resetCustomEvent
-            }
-          }),
-          h(VxeUIButtonComponent, {
-            props: {
-              content: customOpts.resetButtonText || getI18n('vxe.custom.cstmCancel')
-            },
-            on: {
-              click: _vm.cancelCustomEvent
-            }
-          }),
-          h(VxeUIButtonComponent, {
-            props: {
-              status: 'primary',
-              content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm')
-            },
-            on: {
-              click: _vm.confirmCustomEvent
-            }
-          })
-        ])
+                ]),
+                h('thead', {}, [
+                  h('tr', {}, [
+                    allowVisible
+                      ? h('th', {}, [
+                        h('div', {
+                          class: ['vxe-table-custom--checkbox-option', {
+                            'is--checked': isAllChecked,
+                            'is--indeterminate': isAllIndeterminate
+                          }],
+                          attrs: {
+                            title: getI18n('vxe.table.allTitle')
+                          },
+                          on: {
+                            click: _vm.allOptionEvent
+                          }
+
+                        }, [
+                          h('span', {
+                            class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                          }),
+                          h('span', {
+                            class: 'vxe-checkbox--label'
+                          }, getI18n('vxe.toolbar.customAll'))
+                        ])
+                      ])
+                      : _e(),
+                    allowSort
+                      ? h('th', {}, [
+                        h('span', {
+                          class: 'vxe-table-custom-popup--table-sort-help-title'
+                        }, getI18n('vxe.custom.setting.colSort')),
+                        VxeUITooltipComponent
+                          ? h(VxeUITooltipComponent, {
+                            props: {
+                              enterable: true,
+                              content: getI18n('vxe.custom.setting.sortHelpTip'),
+                              popupClassName: 'vxe-table--ignore-clear'
+                            },
+                            scopedSlots: {
+                              default: () => {
+                                return h('i', {
+                                  class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
+                                })
+                              }
+                            }
+                          })
+                          : renderEmptyElement($xeTableCustomPanel)
+                      ])
+                      : _e(),
+                    h('th', {}, getI18n('vxe.custom.setting.colTitle')),
+                    allowResizable
+                      ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
+                      : _e(),
+                    allowFixed
+                      ? h('th', {}, getI18n(`vxe.custom.setting.${maxFixedSize ? 'colFixedMax' : 'colFixed'}`, [maxFixedSize]))
+                      : _e()
+                  ])
+                ]),
+                h('transition-group', {
+                  class: 'vxe-table-custom--body',
+                  props: {
+                    tag: 'tbody',
+                    name: 'vxe-table-custom--list'
+                  }
+                }, trVNs)
+              ])
+            ]),
+            h('div', {
+              ref: 'dragHintElemRef',
+              class: 'vxe-table-custom-popup--drag-hint'
+            }, getI18n('vxe.custom.cstmDragTarget', [_vm.dragColumn ? _vm.dragColumn.getTitle() : '']))
+          ])
+        },
+        footer: () => {
+          return h('div', {
+            class: 'vxe-table-custom-popup--footer'
+          }, [
+            h(VxeUIButtonComponent, {
+              props: {
+                content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore')
+              },
+              on: {
+                click: _vm.resetCustomEvent
+              }
+            }),
+            h(VxeUIButtonComponent, {
+              props: {
+                content: customOpts.resetButtonText || getI18n('vxe.custom.cstmCancel')
+              },
+              on: {
+                click: _vm.cancelCustomEvent
+              }
+            }),
+            h(VxeUIButtonComponent, {
+              props: {
+                status: 'primary',
+                content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm')
+              },
+              on: {
+                click: _vm.confirmCustomEvent
+              }
+            })
+          ])
+        }
       }
-    }
-  })
+    })
+    : renderEmptyElement($xeTableCustomPanel)
 }
 
 export default {

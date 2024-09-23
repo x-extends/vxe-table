@@ -34,7 +34,7 @@ function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (parentRowId) {
           warnLog('vxe.error.unableInsert')
         }
@@ -98,7 +98,7 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
           const parentLevel = parentRest ? parentRest.level : 0
           newRecords.forEach((item: any, i: any) => {
             const rowid = getRowid(_vm, item)
-            if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+            if (process.env.VUE_APP_VXE_ENV === 'development') {
               if (item[treeOpts.parentField]) {
                 if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
                   errLog('vxe.error.errProp', [`${treeOpts.parentField}=${item[treeOpts.parentField]}`, `${treeOpts.parentField}=${parentRow[rowField]}`])
@@ -131,7 +131,7 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
             }
           }
         } else {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             warnLog('vxe.error.unableInsert')
           }
           insertTreeRow(_vm, newRecords, true)
@@ -551,7 +551,7 @@ export default {
       }
     },
     _clearActived (evnt: any) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
       }
       // 即将废弃
@@ -589,7 +589,7 @@ export default {
       return this.$nextTick()
     },
     _getActiveRecord () {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['getActiveRecord', 'getEditRecord'])
       }
       // 即将废弃
@@ -605,7 +605,7 @@ export default {
       return null
     },
     _isActiveByRow (row: any) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['isActiveByRow', 'isEditByRow'])
       }
       // 即将废弃
@@ -662,7 +662,7 @@ export default {
       }
     },
     _setActiveRow (row: any) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['setActiveRow', 'setEditRow'])
       }
       // 即将废弃
@@ -679,7 +679,7 @@ export default {
       return this.setEditCell(row, column)
     },
     _setActiveCell (row: any, fieldOrColumn: any) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['setActiveCell', 'setEditCell'])
       }
       // 即将废弃

@@ -2,7 +2,9 @@ import { CreateElement } from 'vue'
 import { VxeUI } from '../../../ui'
 import XEUtils from 'xe-utils'
 import { parseFile } from '../../../ui/src/utils'
-// import { errLog } from '../../../ui/src/log'
+import { errLog } from '../../../ui/src/log'
+
+import type { VxeModalComponent, VxeSelectComponent, VxeButtonComponent } from 'vxe-pc-ui'
 
 const { getI18n, getIcon, globalMixins } = VxeUI
 
@@ -41,6 +43,27 @@ export default {
       return `*.${typeList.map((item: any) => item.value).join(', *.')}`
     }
   } as any,
+  created (this: any) {
+    const $xeTableImportPanel = this
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
+      const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
+      const VxeUISelectComponent = VxeUI.getComponent<VxeSelectComponent>('VxeSelect')
+
+      $xeTableImportPanel.$nextTick(() => {
+        if (!VxeUIModalComponent) {
+          errLog('vxe.error.reqComp', ['vxe-modal'])
+        }
+        if (!VxeUIButtonComponent) {
+          errLog('vxe.error.reqComp', ['vxe-button'])
+        }
+        if (!VxeUISelectComponent) {
+          errLog('vxe.error.reqComp', ['vxe-select'])
+        }
+      })
+    }
+  },
   render (this: any, h: CreateElement) {
     const { hasFile, parseTypeLabel, defaultOptions, storeData, selectName } = this
     return h('vxe-modal', {

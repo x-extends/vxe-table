@@ -23,6 +23,8 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
+import type { VxeLoadingComponent, VxeTooltipComponent } from 'vxe-pc-ui'
+
 const { getConfig, getI18n, renderer, globalResize, globalEvents, globalMixins } = VxeUI
 
 /**
@@ -489,10 +491,6 @@ export default {
     computeFNROpts () {
       return Object.assign({}, getConfig().table.fnrConfig, this.fnrConfig)
     },
-    hasTip () {
-      return true
-      // return VXETable._tooltip
-    },
     headerCtxMenu () {
       const headerOpts = this.ctxMenuOpts.header
       return headerOpts && headerOpts.options ? headerOpts.options : []
@@ -745,7 +743,7 @@ export default {
       fullColumnFieldData: {}
     })
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if (this.rowId) {
         warnLog('vxe.error.delProp', ['row-id', 'row-config.keyField'])
       }
@@ -795,7 +793,7 @@ export default {
       }
     }
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       const customOpts = this.customOpts
       if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
         errLog('vxe.error.reqProp', ['id'])
@@ -836,7 +834,7 @@ export default {
     }
 
     // v4 中只支持对象类型
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       // 在 v3.0 中废弃 context-menu
       if (this.contextMenu) {
         warnLog('vxe.error.delProp', ['context-menu', 'menu-config'])
@@ -880,7 +878,7 @@ export default {
     }
 
     // 检查是否有安装需要的模块
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if (this.editConfig && !this._insert) {
         errLog('vxe.error.reqModule', ['Edit'])
       }
@@ -927,7 +925,10 @@ export default {
     this.preventEvent(null, 'created')
   },
   mounted () {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    const $xeTable = this
+    const props = $xeTable
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       const { $listeners } = this
       if (!this.menuConfig && ($listeners['menu-click'] || $listeners['cell-menu'] || $listeners['header-cell-menu'] || $listeners['footer-cell-menu'])) {
         warnLog('vxe.error.reqProp', ['menu-config'])
@@ -935,6 +936,28 @@ export default {
       if (!this.tooltipConfig && ($listeners['cell-mouseenter'] || $listeners['cell-mouseleave'])) {
         warnLog('vxe.error.reqProp', ['tooltip-config'])
       }
+    }
+
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      // 使用已安装的组件，如果未安装则不渲染
+      const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
+      const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+
+      $xeTable.$nextTick(() => {
+        if (props.loading) {
+          if (!VxeUILoadingComponent) {
+            errLog('vxe.error.reqComp', ['vxe-loading'])
+          }
+        }
+        if ((props.showOverflow === true || props.showOverflow === 'tooltip') ||
+          (props.showHeaderOverflow === true || props.showHeaderOverflow === 'tooltip') ||
+          (props.showFooterOverflow === true || props.showFooterOverflow === 'tooltip') ||
+          props.tooltipConfig || props.editRules) {
+          if (!VxeUITooltipComponent) {
+            errLog('vxe.error.reqComp', ['vxe-tooltip'])
+          }
+        }
+      })
     }
     if (this.autoResize) {
       const handleWrapperResize = this.resizeOpts.refreshDelay ? XEUtils.throttle(() => this.recalculate(true), this.resizeOpts.refreshDelay, { leading: true, trailing: true }) : null
@@ -983,6 +1006,10 @@ export default {
     this.preventEvent(null, 'destroyed')
   },
   render (h: CreateElement) {
+    // 使用已安装的组件，如果未安装则不渲染
+    const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
+    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
+
     const {
       _e,
       $scopedSlots,
@@ -1021,7 +1048,6 @@ export default {
       ctxMenuStore,
       ctxMenuOpts,
       footerTableData,
-      hasTip,
       columnOpts,
       rowOpts,
       checkboxOpts,
@@ -1163,14 +1189,16 @@ export default {
       /**
        * 加载中
        */
-      h('vxe-loading', {
-        class: 'vxe-table--loading',
-        props: {
-          value: currLoading,
-          icon: loadingOpts.icon,
-          text: loadingOpts.text
-        }
-      }, this.callSlot($scopedSlots.loading, {}, h)),
+      VxeUILoadingComponent
+        ? h(VxeUILoadingComponent, {
+          class: 'vxe-table--loading',
+          props: {
+            value: currLoading,
+            icon: loadingOpts.icon,
+            text: loadingOpts.text
+          }
+        }, this.callSlot($scopedSlots.loading, {}, h))
+        : _e(),
       /**
        * 自定义列
        */
@@ -1231,8 +1259,8 @@ export default {
         /**
          * 通用提示
          */
-        hasTip
-          ? h('vxe-tooltip', {
+        VxeUITooltipComponent
+          ? h(VxeUITooltipComponent, {
             ref: 'commTip',
             props: {
               isArrow: false,
@@ -1243,8 +1271,8 @@ export default {
         /**
          * 工具提示
          */
-        hasTip
-          ? h('vxe-tooltip', {
+        VxeUITooltipComponent
+          ? h(VxeUITooltipComponent, {
             ref: 'tooltip',
             props: Object.assign({}, this.tipConfig, this.tooltipStore.currOpts)
           })
@@ -1252,8 +1280,8 @@ export default {
         /**
          * 校验提示
          */
-        hasTip && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
-          ? h('vxe-tooltip', {
+        VxeUITooltipComponent && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+          ? h(VxeUITooltipComponent, {
             ref: 'validTip',
             class: [{
               'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'

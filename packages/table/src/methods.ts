@@ -396,7 +396,7 @@ const Methods = {
     if (treeConfig) {
       // 树结构自动转换
       if (treeOpts.transform) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!treeOpts.rowField) {
             errLog('vxe.error.reqProp', ['table.tree-config.rowField'])
           }
@@ -450,7 +450,7 @@ const Methods = {
     if (keepSource) {
       this.cacheSourceMap(fullData)
     }
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if (sYLoad) {
         if (!(this.height || this.maxHeight)) {
           errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
@@ -581,7 +581,7 @@ const Methods = {
       }
       this.tableData = tableData.slice(0)
     } else {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.reqProp', ['keep-source'])
       }
     }
@@ -633,7 +633,7 @@ const Methods = {
       this.clearMergeCells()
       this.clearMergeFooterItems()
       this.handleTableData(true)
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if ((this.scrollXLoad || this.scrollYLoad) && this.expandColumn) {
           warnLog('vxe.error.scrollErrProp', ['column.type=expand'])
         }
@@ -771,7 +771,7 @@ const Methods = {
       const { id: colid, field, fixed, type, treeNode } = column
       const rest = { column, colid, index, items, parent }
       if (field) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (fullColumnFieldData[field]) {
             warnLog('vxe.error.colRepet', ['field', field])
           }
@@ -787,7 +787,7 @@ const Methods = {
       }
 
       if (treeNode) {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (treeNodeColumn) {
             warnLog('vxe.error.colRepet', ['tree-node', treeNode])
           }
@@ -796,7 +796,7 @@ const Methods = {
           treeNodeColumn = column
         }
       } else if (type === 'expand') {
-        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (expandColumn) {
             warnLog('vxe.error.colRepet', ['type', type])
           }
@@ -805,7 +805,7 @@ const Methods = {
           expandColumn = column
         }
       }
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (type === 'checkbox') {
           if (checkboxColumn) {
             warnLog('vxe.error.colRepet', ['type', type])
@@ -822,7 +822,7 @@ const Methods = {
           }
         }
       }
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (this.showOverflow && column.showOverflow === false) {
           warnLog('vxe.error.errConflicts', [`table.show-overflow=${this.showOverflow}`, `column.show-overflow=${column.showOverflow}`])
         }
@@ -834,7 +834,7 @@ const Methods = {
         }
       }
 
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (htmlColumn) {
           if (!columnOpts.useKey) {
             errLog('vxe.error.reqProp', ['column-config.useKey', 'column.type=html'])
@@ -864,7 +864,7 @@ const Methods = {
       tableFullColumn.forEach(handleFunc)
     }
 
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if (expandColumn && this.mouseOpts.area) {
         errLog('vxe.error.errConflicts', ['mouse-config.area', 'column.type=expand'])
       }
@@ -936,7 +936,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   _getRowIndex (row: any) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['_getRowIndex', 'getVTRowIndex'])
     }
     return this.getVTRowIndex(row)
@@ -950,7 +950,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   $getRowIndex (row: any) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['$getRowIndex', 'getVMRowIndex'])
     }
     return this.getVMRowIndex(row)
@@ -971,7 +971,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   _getColumnIndex (column: any) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['_getColumnIndex', 'getVTColumnIndex'])
     }
     return this.getVTColumnIndex(column)
@@ -985,7 +985,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   $getColumnIndex (column: any) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['$getColumnIndex', 'getVMColumnIndex'])
     }
     return this.getVMColumnIndex(column)
@@ -1072,7 +1072,7 @@ const Methods = {
   revertData (rows: any, field: any) {
     const { keepSource, tableSourceData, treeConfig } = this
     if (!keepSource) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.reqProp', ['keep-source'])
       }
       return this.$nextTick()
@@ -1983,7 +1983,7 @@ const Methods = {
     this.hasFixedColumn = leftList.length > 0 || rightList.length > 0
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad) {
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         // if (this.showHeader && !this.showHeaderOverflow) {
         //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
         // }
@@ -2601,7 +2601,7 @@ const Methods = {
     // 兼容老版本
     if (!evntList.length && type === 'event.clearEdit') {
       evntList = interceptor.get('event.clearActived')
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (evntList.length) {
           warnLog('vxe.error.delEvent', ['event.clearActived', 'event.clearEdit'])
         }
@@ -4405,7 +4405,7 @@ const Methods = {
   },
   // 在 v3 中废弃
   getSortColumn () {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['getSortColumn', 'getSortColumns'])
     }
     return XEUtils.find(this.tableFullColumn, column => (column.sortable || column.remoteSort) && column.order)
@@ -4502,7 +4502,7 @@ const Methods = {
     return this.$nextTick()
   },
   reloadExpandContent (row: any) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['reloadExpandContent', 'reloadRowExpand'])
     }
     // 即将废弃
@@ -4664,7 +4664,7 @@ const Methods = {
     return !!rowExpandedMaps[rowid]
   },
   isExpandByRow (row: any) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['isExpandByRow', 'isRowExpandByRow'])
     }
     // 即将废弃
@@ -4781,7 +4781,7 @@ const Methods = {
     return this.$nextTick()
   },
   reloadTreeChilds (row: any) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       warnLog('vxe.error.delFunc', ['reloadTreeChilds', 'reloadTreeExpand'])
     }
     // 即将废弃
@@ -5548,7 +5548,7 @@ const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,updateFilterOp
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
       if (!this[`_${name}`]) {
         if ('openExport,openPrint,exportData,openImport,importData,saveFile,readFile,importByFile,print'.split(',').includes(name)) {
           errLog('vxe.error.reqModule', ['VxeTableExportModule'])

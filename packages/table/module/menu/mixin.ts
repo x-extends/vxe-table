@@ -107,7 +107,7 @@ export default {
             this.handleOpenMenuEvent(evnt, layout, params)
             // 在 v4 中废弃事件 cell-context-menu、header-cell-context-menu、footer-cell-context-menu
             if (this.$listeners[`${typePrefix}cell-context-menu`]) {
-              if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+              if (process.env.VUE_APP_VXE_ENV === 'development') {
                 warnLog('vxe.error.delEvent', [`${typePrefix}cell-context-menu`, `${typePrefix}cell-menu`])
               }
               this.emitEvent(`${typePrefix}cell-context-menu`, params, evnt)
@@ -258,7 +258,7 @@ export default {
         }
         // 在 v4 中废弃事件 context-menu-click
         if (this.$listeners['context-menu-click']) {
-          if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
+          if (process.env.VUE_APP_VXE_ENV === 'development') {
             warnLog('vxe.error.delEvent', ['context-menu-click', 'menu-click'])
           }
           this.emitEvent('context-menu-click', params, evnt)
