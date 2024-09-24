@@ -358,8 +358,11 @@ export default defineVxeComponent({
                 round: child.round,
                 status: child.status,
                 content: child.name,
-                routerLink: item.routerLink,
-                permissionCode: item.permissionCode
+                title: child.title,
+                routerLink: child.routerLink,
+                permissionCode: child.permissionCode,
+                prefixTooltip: child.prefixTooltip,
+                suffixTooltip: child.suffixTooltip
               },
               on: {
                 click: ({ $event }: any) => isBtn ? $xeToolbar.btnEvent($event, child) : $xeToolbar.tolEvent($event, child)
@@ -413,8 +416,11 @@ export default defineVxeComponent({
                       round: item.round,
                       status: item.status,
                       content: item.name,
+                      title: item.title,
                       routerLink: item.routerLink,
                       permissionCode: item.permissionCode,
+                      prefixTooltip: item.prefixTooltip,
+                      suffixTooltip: item.suffixTooltip,
                       destroyOnClose: item.destroyOnClose,
                       placement: item.placement,
                       transfer: item.transfer
@@ -482,8 +488,11 @@ export default defineVxeComponent({
                       round: item.round,
                       status: item.status,
                       content: item.name,
+                      title: item.title,
                       routerLink: item.routerLink,
                       permissionCode: item.permissionCode,
+                      prefixTooltip: item.prefixTooltip,
+                      suffixTooltip: item.suffixTooltip,
                       destroyOnClose: item.destroyOnClose,
                       placement: item.placement,
                       transfer: item.transfer
