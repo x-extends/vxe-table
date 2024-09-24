@@ -1,4 +1,7 @@
+import { PropType } from 'vue'
 import { VxeUI } from '../../ui'
+
+import type { VxeTablePropTypes } from '../../../types'
 
 const { getConfig } = VxeUI
 
@@ -10,39 +13,89 @@ export default {
   // 表格的高度
   height: [Number, String],
   // 表格的最小高度
-  minHeight: { type: [Number, String], default: () => getConfig().table.minHeight },
+  minHeight: {
+    type: [Number, String],
+    default: () => getConfig().table.minHeight
+  },
   // 表格的最大高度
   maxHeight: [Number, String],
   // 已废弃，被 column-config.resizable 替换
-  resizable: { type: Boolean, default: () => getConfig().table.resizable },
+  resizable: {
+    type: Boolean,
+    default: () => getConfig().table.resizable
+  },
   // 是否带有斑马纹
-  stripe: { type: Boolean, default: () => getConfig().table.stripe },
+  stripe: {
+    type: Boolean,
+    default: () => getConfig().table.stripe
+  },
   // 是否带有边框
-  border: { type: [Boolean, String], default: () => getConfig().table.border },
+  border: {
+    type: [Boolean, String],
+    default: () => getConfig().table.border
+  },
+  // 单元格是否有边距
+  padding: {
+    type: Boolean as PropType<VxeTablePropTypes.Padding>,
+    default: () => getConfig().table.padding
+  },
   // 是否圆角边框
-  round: { type: Boolean, default: () => getConfig().table.round },
+  round: {
+    type: Boolean,
+    default: () => getConfig().table.round
+  },
   // 表格的尺寸
-  size: { type: String, default: () => getConfig().table.size || getConfig().size },
+  size: {
+    type: String,
+    default: () => getConfig().table.size || getConfig().size
+  },
   // 列的宽度是否自撑开（可能会被废弃的参数，不要使用）
-  fit: { type: Boolean, default: () => getConfig().table.fit },
+  fit: {
+    type: Boolean,
+    default: () => getConfig().table.fit
+  },
   // 表格是否加载中
   loading: Boolean,
   // 所有的列对其方式
-  align: { type: String, default: () => getConfig().table.align },
+  align: {
+    type: String,
+    default: () => getConfig().table.align
+  },
   // 所有的表头列的对齐方式
-  headerAlign: { type: String, default: () => getConfig().table.headerAlign },
+  headerAlign: {
+    type: String,
+    default: () => getConfig().table.headerAlign
+  },
   // 所有的表尾列的对齐方式
-  footerAlign: { type: String, default: () => getConfig().table.footerAlign },
+  footerAlign: {
+    type: String,
+    default: () => getConfig().table.footerAlign
+  },
   // 是否显示表头
-  showHeader: { type: Boolean, default: () => getConfig().table.showHeader },
+  showHeader: {
+    type: Boolean,
+    default: () => getConfig().table.showHeader
+  },
   // 已废弃，被 row-config.isCurrent 替换
-  highlightCurrentRow: { type: Boolean, default: () => getConfig().table.highlightCurrentRow },
+  highlightCurrentRow: {
+    type: Boolean,
+    default: () => getConfig().table.highlightCurrentRow
+  },
   // 已废弃，被 row-config.isHover 替换
-  highlightHoverRow: { type: Boolean, default: () => getConfig().table.highlightHoverRow },
+  highlightHoverRow: {
+    type: Boolean,
+    default: () => getConfig().table.highlightHoverRow
+  },
   // 已废弃，被 column-config.isCurrent 替换
-  highlightCurrentColumn: { type: Boolean, default: () => getConfig().table.highlightCurrentColumn },
+  highlightCurrentColumn: {
+    type: Boolean,
+    default: () => getConfig().table.highlightCurrentColumn
+  },
   // 已废弃，被 column-config.isHover 替换
-  highlightHoverColumn: { type: Boolean, default: () => getConfig().table.highlightHoverColumn },
+  highlightHoverColumn: {
+    type: Boolean,
+    default: () => getConfig().table.highlightHoverColumn
+  },
   // 已废弃，直接删除
   highlightCell: Boolean,
   // 是否显示表尾合计

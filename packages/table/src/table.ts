@@ -1076,6 +1076,7 @@ export default {
         'is--fixed-left': leftList.length,
         'is--fixed-right': rightList.length,
         'is--animat': !!this.animat,
+        'is--padding': this.padding,
         'is--round': this.round,
         'is--stripe': !treeConfig && stripe,
         'is--loading': currLoading,

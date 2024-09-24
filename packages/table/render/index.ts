@@ -649,7 +649,8 @@ renderer.mixin({
     tableFilterDefaultMethod: handleFilterMethod
   },
   VxeTextarea: {
-    tableAutoFocus: 'VxeTextarea'
+    tableAutoFocus: 'textarea',
+    renderTableEdit: defaultEditRender
   },
   VxeButton: {
     renderTableDefault: buttonCellRender
