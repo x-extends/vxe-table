@@ -6,6 +6,7 @@
       resizable
       highlight-hover-row
       height="100%"
+      :padding="false"
       :loading="demo1.loading"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">

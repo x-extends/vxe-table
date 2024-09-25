@@ -7045,6 +7045,7 @@ export default defineComponent({
           'is--fixed-left': leftList.length,
           'is--fixed-right': rightList.length,
           'is--animat': !!props.animat,
+          'is--padding': props.padding,
           'is--round': props.round,
           'is--stripe': !treeConfig && stripe,
           'is--loading': currLoading,

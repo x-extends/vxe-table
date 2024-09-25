@@ -34,6 +34,11 @@ export default {
     type: [Boolean, String] as PropType<VxeTablePropTypes.Border>,
     default: () => getConfig().table.border
   },
+  // 单元格是否有边距
+  padding: {
+    type: Boolean as PropType<VxeTablePropTypes.Padding>,
+    default: () => getConfig().table.padding
+  },
   // 是否圆角边框
   round: {
     type: Boolean as PropType<VxeTablePropTypes.Round>,

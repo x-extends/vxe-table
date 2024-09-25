@@ -17,6 +17,7 @@ VxeUI.setConfig({
     animat: true,
     delayHover: 250,
     autoResize: true,
+    padding: true,
     minHeight: 144,
     // keepSource: false,
     // showOverflow: null,

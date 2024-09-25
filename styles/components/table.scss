@@ -130,6 +130,22 @@
     }
   }
 }
+.vxe-body--column {
+  &.col--height {
+    & > .vxe-cell {
+      height: 100%;
+      & > .vxe-textarea,
+      & > .vxe-default-textarea {
+        height: 100%;
+      }
+    }
+  }
+  .vxe-cell--label {
+    &.is--textarea {
+      white-space: pre-line;
+    }
+  }
+}
 
 .vxe-table--checkbox-range,
 .vxe-table--cell-main-area,
@@ -678,15 +694,25 @@
       }
     }
   }
+  &.is--padding {
+    .vxe-body--column {
+      &:not(.col--ellipsis) {
+        padding: var(--vxe-ui-table-column-padding-default);
+      }
+    }
+  }
+  .vxe-header--column,
+  .vxe-footer--column {
+    &:not(.col--ellipsis) {
+      padding: var(--vxe-ui-table-column-padding-default);
+    }
+  }
   .vxe-header--column,
   .vxe-body--column,
   .vxe-footer--column {
     position: relative;
     line-height: var(--vxe-ui-table-row-line-height);
     text-align: left;
-    &:not(.col--ellipsis) {
-      padding: var(--vxe-ui-table-column-padding-default);
-    }
     &.col--current {
       background-color: var(--vxe-ui-table-column-current-background-color);
       // .vxe-tree--btn-wrapper {
@@ -731,6 +757,27 @@
   .vxe-table--footer-wrapper {
     border-top: var(--vxe-ui-table-border-width) solid var(--vxe-ui-table-border-color);
   }
+  // &.border--default,
+  // &.border--full,
+  // &.border--inner,
+  // &.border--outer {
+  //   .vxe-body--row {
+  //     &:last-child {
+  //       & > .vxe-body--column {
+  //         & > .vxe-cell {
+  //           border-bottom: 1px solid transparent;
+  //         }
+  //       }
+  //     }
+  //   }
+  //   .vxe-body--column {
+  //     &:first-child {
+  //       & > .vxe-cell {
+  //         border-left: 1px solid transparent;
+  //       }
+  //     }
+  //   }
+  // }
   &.border--default,
   &.border--full,
   &.border--outer {
@@ -883,11 +930,16 @@
       }
     }
   }
+
+  &.is--padding {
+    .vxe-cell {
+      padding-left: var(--vxe-ui-table-cell-padding-left);
+      padding-right: var(--vxe-ui-table-cell-padding-right);
+    }
+  }
   .vxe-cell {
     white-space: pre-line;
     word-break: break-all;
-    padding-left: var(--vxe-ui-table-cell-padding-left);
-    padding-right: var(--vxe-ui-table-cell-padding-right);
   }
 
   // 单元格占位符
@@ -1146,6 +1198,7 @@
     }
   }
 
+
   /*溢出列*/
   .vxe-header--column,
   .vxe-body--column,
@@ -1159,8 +1212,10 @@
           white-space: nowrap;
         }
       }
-      & > .vxe-cell {
-        max-height: var(--vxe-ui-table-row-height-default);
+      &:not(.col--height) {
+        & > .vxe-cell {
+          max-height: var(--vxe-ui-table-row-height-default);
+        }
       }
     }
   }
@@ -1170,8 +1225,10 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
-        & > .vxe-cell {
-          max-height: var(--vxe-ui-table-row-height-medium);
+        &:not(.col--height) {
+          & > .vxe-cell {
+            max-height: var(--vxe-ui-table-row-height-medium);
+          }
         }
       }
     }
@@ -1188,8 +1245,10 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
-        & > .vxe-cell {
-          max-height: var(--vxe-ui-table-row-height-small);
+        &:not(.col--height) {
+          & > .vxe-cell {
+            max-height: var(--vxe-ui-table-row-height-small);
+          }
         }
       }
     }
@@ -1206,8 +1265,10 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
-        & > .vxe-cell {
-          max-height: var(--vxe-ui-table-row-height-mini);
+        &:not(.col--height) {
+          & > .vxe-cell {
+            max-height: var(--vxe-ui-table-row-height-mini);
+          }
         }
       }
     }

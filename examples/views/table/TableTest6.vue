@@ -131,7 +131,7 @@ onMounted(() => {
       { id: 10020, name: 'Test20', role: 'Develop', sex: '1', age: 41, address: 'test abc' }
     ]
     demo1.loading = false
-  }, 100)
+  }, 800)
 })
 
 nextTick(() => {

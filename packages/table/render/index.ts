@@ -89,10 +89,10 @@ function isImmediateCell (renderOpts: VxeColumnPropTypes.EditRender, params: any
 }
 
 function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any) {
-  const { placeholder } = renderOpts
+  const { name, placeholder } = renderOpts
   return [
     h('span', {
-      class: 'vxe-cell--label'
+      class: ['vxe-cell--label', ['VxeTextarea', 'textarea'].includes(name) ? 'is--textarea' : '']
     }, placeholder && isEmptyValue(cellLabel)
       ? [
           h('span', {
@@ -638,7 +638,13 @@ renderer.mixin({
     tableFilterDefaultMethod: handleFilterMethod
   },
   VxeTextarea: {
-    tableAutoFocus: 'VxeTextarea'
+    tableAutoFocus: 'textarea',
+    renderTableEdit: defaultEditRender,
+    renderTableCell (renderOpts, params) {
+      const { row, column } = params
+      const cellValue = XEUtils.get(row, column.field)
+      return getCellLabelVNs(renderOpts, params, cellValue)
+    }
   },
   VxeButton: {
     renderTableDefault: buttonCellRender

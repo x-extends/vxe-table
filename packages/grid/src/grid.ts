@@ -1257,6 +1257,21 @@ export default defineComponent({
     initPages()
 
     onMounted(() => {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
+        nextTick(() => {
+          if (props.formConfig) {
+            if (!VxeUIFormComponent) {
+              errLog('vxe.error.reqComp', ['vxe-form'])
+            }
+          }
+          if (props.pagerConfig) {
+            if (!VxeUIPagerComponent) {
+              errLog('vxe.error.reqComp', ['vxe-pager'])
+            }
+          }
+        })
+      }
+
       nextTick(() => {
         const { columns } = props
         // const { data, columns, proxyConfig } = props
@@ -1276,29 +1291,13 @@ export default defineComponent({
           $xeGrid.loadColumn(columns)
         }
         initToolbar()
+        initProxy()
       })
       globalEvents.on($xeGrid, 'keydown', handleGlobalKeydownEvent)
     })
 
     onUnmounted(() => {
       globalEvents.off($xeGrid, 'keydown')
-    })
-
-    nextTick(() => {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (props.formConfig) {
-          if (!VxeUIFormComponent) {
-            errLog('vxe.error.reqComp', ['vxe-form'])
-          }
-        }
-        if (props.pagerConfig) {
-          if (!VxeUIPagerComponent) {
-            errLog('vxe.error.reqComp', ['vxe-pager'])
-          }
-        }
-      }
-
-      initProxy()
     })
 
     const renderVN = () => {
