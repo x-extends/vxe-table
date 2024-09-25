@@ -3133,7 +3133,7 @@ const Methods = {
     const { showAll, enabled, contentMethod } = tooltipOpts
     const customContent = contentMethod ? contentMethod(params) : null
     const useCustom = contentMethod && !XEUtils.eqNull(customContent)
-    const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerText : overflowElem.textContent).trim()
+    const content = useCustom ? customContent : (column.type === 'html' ? overflowElem.innerHTML : overflowElem.textContent).trim()
     const isCellOverflow = overflowElem.scrollWidth > overflowElem.clientWidth
     if (content && (showAll || enabled || useCustom || isCellOverflow)) {
       Object.assign(tooltipStore, {
