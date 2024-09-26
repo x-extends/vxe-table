@@ -1390,8 +1390,8 @@ const Methods = {
           if (valueList.length && !allRemoteFilter) {
             const { filterMethod, filterRender, field } = column
             const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
-            const compFilterMethod = compConf && compConf.renderFilter ? (compConf.tableFilterMethod || compConf.filterMethod) : null
-            const defaultFilterMethod = compConf ? (compConf.tableFilterDefaultMethod || compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
+            const compFilterMethod = compConf ? (compConf.tableFilterMethod || compConf.filterMethod) : null
+            const tdFilterMethod = compConf ? (compConf.tableFilterDefaultMethod || compConf.defaultTableFilterMethod || compConf.defaultFilterMethod) : null
             const cellValue = getCellValue(row, column)
             if (filterMethod) {
               return itemList.some((item: any) => filterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
@@ -1399,8 +1399,8 @@ const Methods = {
               return itemList.some((item: any) => compFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
             } else if (allFilterMethod) {
               return allFilterMethod({ options: itemList, values: valueList, cellValue, row, column })
-            } else if (defaultFilterMethod) {
-              return itemList.some((item: any) => defaultFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
+            } else if (tdFilterMethod) {
+              return itemList.some((item: any) => tdFilterMethod({ value: item.value, option: item, cellValue, row, column, $table: this }))
             }
             return valueList.indexOf(XEUtils.get(row, field)) > -1
           }

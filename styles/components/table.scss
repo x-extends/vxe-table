@@ -528,12 +528,12 @@
   font-family: var(--vxe-ui-font-family);
   direction: ltr;
   .vxe-table--body-wrapper {
-    table {
+    & > table {
       background-color: var(--vxe-ui-layout-background-color);
     }
   }
   .vxe-table--footer-wrapper {
-    table {
+    & > table {
       background-color: var(--vxe-ui-table-footer-background-color);
     }
   }
@@ -1210,11 +1210,6 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
-        }
-        &.col--height {
-          & > .vxe-cell {
-            overflow: auto;
-          }
         }
       }
       &:not(.col--height) {

@@ -622,6 +622,7 @@ export default {
      * 处理聚焦
      */
     handleFocus (params: any) {
+      const { editOpts } = this
       const { row, column, cell } = params
       const { editRender } = column
       if (isEnableConf(editRender)) {
@@ -629,19 +630,22 @@ export default {
         let autoFocus = editRender.autofocus || editRender.autoFocus
         let autoSelect = editRender.autoSelect || editRender.autoselect
         let inputElem
-        if (!autoFocus && compRender) {
-          autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || (compRender as any).autoFocus || compRender.autofocus
-        }
-        if (!autoSelect && compRender) {
-          autoSelect = compRender.tableAutoSelect || (compRender as any).autoSelect || compRender.autoselect
-        }
-        // 如果指定了聚焦 class
-        if (XEUtils.isFunction(autoFocus)) {
-          inputElem = autoFocus.call(this, params)
-        } else if (autoFocus) {
-          inputElem = cell.querySelector(autoFocus)
-          if (inputElem) {
-            inputElem.focus()
+        // 是否启用聚焦
+        if (editOpts.autoFocus) {
+          if (!autoFocus && compRender) {
+            autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || (compRender as any).autoFocus || compRender.autofocus
+          }
+          if (!autoSelect && compRender) {
+            autoSelect = compRender.tableAutoSelect || (compRender as any).autoSelect || compRender.autoselect
+          }
+          // 如果指定了聚焦 class
+          if (XEUtils.isFunction(autoFocus)) {
+            inputElem = autoFocus.call(this, params)
+          } else if (autoFocus) {
+            inputElem = cell.querySelector(autoFocus)
+            if (inputElem) {
+              inputElem.focus()
+            }
           }
         }
         if (inputElem) {
@@ -656,8 +660,13 @@ export default {
             }
           }
         } else {
-          // 显示到可视区中
-          this.scrollToRow(row, column)
+          // 是否自动定位
+          if (editOpts.autoPos) {
+            if (!column.fixed) {
+              // 显示到可视区中
+              this.scrollToRow(row, column)
+            }
+          }
         }
       }
     },
