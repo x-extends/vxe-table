@@ -768,24 +768,28 @@ hooks.add('tableEditModule', {
       handleFocus (params) {
         const { row, column, cell } = params
         const { editRender } = column
+        const editOpts = computeEditOpts.value
         if (isEnableConf(editRender)) {
           const compRender = renderer.get(editRender.name)
           let autoFocus = editRender.autofocus || editRender.autoFocus
           let autoSelect = editRender.autoSelect || editRender.autoselect
           let inputElem
-          if (!autoFocus && compRender) {
-            autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
-          }
-          if (!autoSelect && compRender) {
-            autoSelect = compRender.tableAutoSelect || compRender.autoselect
-          }
-          // 如果指定了聚焦 class
-          if (XEUtils.isFunction(autoFocus)) {
-            inputElem = autoFocus(params)
-          } else if (autoFocus) {
-            inputElem = cell.querySelector(autoFocus)
-            if (inputElem) {
-              inputElem.focus()
+          // 是否启用聚焦
+          if (editOpts.autoFocus) {
+            if (!autoFocus && compRender) {
+              autoFocus = compRender.tableAutoFocus || compRender.tableAutofocus || compRender.autofocus
+            }
+            if (!autoSelect && compRender) {
+              autoSelect = compRender.tableAutoSelect || compRender.autoselect
+            }
+            // 如果指定了聚焦 class
+            if (XEUtils.isFunction(autoFocus)) {
+              inputElem = autoFocus(params)
+            } else if (autoFocus) {
+              inputElem = cell.querySelector(autoFocus)
+              if (inputElem) {
+                inputElem.focus()
+              }
             }
           }
           if (inputElem) {
@@ -800,8 +804,13 @@ hooks.add('tableEditModule', {
               }
             }
           } else {
-            // 显示到可视区中
-            $xeTable.scrollToRow(row, column)
+            // 是否自动定位
+            if (editOpts.autoPos) {
+              if (!column.fixed) {
+                // 显示到可视区中
+                $xeTable.scrollToRow(row, column)
+              }
+            }
           }
         }
       },

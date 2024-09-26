@@ -109,7 +109,8 @@ VxeUI.setConfig({
     editConfig: {
       // mode: 'cell',
       showIcon: true,
-      showAsterisk: true
+      showAsterisk: true,
+      autoFocus: true
     },
     importConfig: {
       _typeMaps: {
