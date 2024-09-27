@@ -200,7 +200,8 @@ export default {
       zoomIn: 'maximalizálni',
       zoomOut: 'csökkentés',
       close: 'bezárás',
-      miniMaxSize: 'A minimalizált ablakok száma nem haladhatja meg a következőt: {0}'
+      miniMaxSize: 'A minimalizált ablakok száma nem haladhatja meg a következőt: {0}',
+      footPropErr: 'show-footer 仅用于启用表尾，需配合 show-confirm-button | show-cancel-button | 插槽使用'
     },
     drawer: {
       close: 'bezárás'

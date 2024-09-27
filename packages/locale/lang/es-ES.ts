@@ -200,7 +200,8 @@ export default {
       zoomIn: 'Maximize',
       zoomOut: 'Reducir',
       close: 'Cerrar',
-      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.'
+      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.',
+      footPropErr: '"show-footer" is only used to enable table tails and needs to be used in conjunction with "show-confirm-button" | "show-cancel-button" | slots'
     },
     drawer: {
       close: 'Cerrar'

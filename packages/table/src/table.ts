@@ -6625,6 +6625,237 @@ export default defineComponent({
       }
     }
 
+    const renderVN = () => {
+      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
+      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
+      const { leftList, rightList } = columnStore
+      const loadingSlot = slots.loading
+      const tipConfig = computeTipConfig.value
+      const validOpts = computeValidOpts.value
+      const checkboxOpts = computeCheckboxOpts.value
+      const treeOpts = computeTreeOpts.value
+      const rowOpts = computeRowOpts.value
+      const columnOpts = computeColumnOpts.value
+      const vSize = computeSize.value
+      const tableBorder = computeTableBorder.value
+      const mouseOpts = computeMouseOpts.value
+      const validTipOpts = computeValidTipOpts.value
+      const loadingOpts = computeLoadingOpts.value
+      const isMenu = computeIsMenu.value
+      const currLoading = reactData._isLoading || loading
+      return h('div', {
+        ref: refElem,
+        class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
+          [`size--${vSize}`]: vSize,
+          [`valid-msg--${validOpts.msgMode}`]: !!editRules,
+          'vxe-editable': !!editConfig,
+          'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
+          'cell--highlight': highlightCell,
+          'cell--selected': mouseConfig && mouseOpts.selected,
+          'cell--area': mouseConfig && mouseOpts.area,
+          'row--highlight': rowOpts.isHover || highlightHoverRow,
+          'column--highlight': columnOpts.isHover || highlightHoverColumn,
+          'checkbox--range': checkboxOpts.range,
+          'column--calc': isCalcColumn,
+          'is--header': showHeader,
+          'is--footer': showFooter,
+          'is--group': isGroup,
+          'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
+          'is--fixed-left': leftList.length,
+          'is--fixed-right': rightList.length,
+          'is--animat': !!props.animat,
+          'is--padding': props.padding,
+          'is--round': props.round,
+          'is--stripe': !treeConfig && stripe,
+          'is--loading': currLoading,
+          'is--empty': !currLoading && !tableData.length,
+          'is--scroll-y': overflowY,
+          'is--scroll-x': overflowX,
+          'is--virtual-x': scrollXLoad,
+          'is--virtual-y': scrollYLoad
+        }],
+        spellcheck: false,
+        onKeydown: keydownEvent
+      }, [
+        /**
+         * 隐藏列
+         */
+        h('div', {
+          class: 'vxe-table-slots'
+        }, slots.default ? slots.default({}) : []),
+        h('div', {
+          class: 'vxe-table--render-wrapper'
+        }, [
+          h('div', {
+            class: 'vxe-table--main-wrapper'
+          }, [
+            /**
+             * 表头
+             */
+            showHeader
+              ? h(TableHeaderComponent, {
+                ref: refTableHeader,
+                tableData,
+                tableColumn,
+                tableGroupColumn
+              })
+              : createCommentVNode(),
+            /**
+             * 表体
+             */
+            h(TableBodyComponent, {
+              ref: refTableBody,
+              tableData,
+              tableColumn
+            }),
+            /**
+             * 表尾
+             */
+            showFooter
+              ? h(TableFooterComponent, {
+                ref: refTableFooter,
+                footerTableData,
+                tableColumn
+              })
+              : createCommentVNode()
+          ]),
+          h('div', {
+            class: 'vxe-table--fixed-wrapper'
+          }, [
+            /**
+             * 左侧固定区域
+             */
+            leftList && leftList.length && overflowX ? renderFixed('left') : createCommentVNode(),
+            /**
+             * 右侧固定区域
+             */
+            rightList && rightList.length && overflowX ? renderFixed('right') : createCommentVNode()
+          ])
+        ]),
+        /**
+         * 空数据
+         */
+        h('div', {
+          ref: refEmptyPlaceholder,
+          class: 'vxe-table--empty-placeholder'
+        }, [
+          h('div', {
+            class: 'vxe-table--empty-content'
+          }, renderEmptyContenet())
+        ]),
+        /**
+         * 边框线
+         */
+        h('div', {
+          class: 'vxe-table--border-line'
+        }),
+        /**
+         * 列宽线
+         */
+        h('div', {
+          ref: refCellResizeBar,
+          class: 'vxe-table--resizable-bar',
+          style: overflowX
+            ? {
+                'padding-bottom': `${scrollbarHeight}px`
+              }
+            : null
+        }),
+        /**
+         * 加载中
+         */
+        VxeUILoadingComponent
+          ? h(VxeUILoadingComponent, {
+            class: 'vxe-table--loading',
+            modelValue: currLoading,
+            icon: loadingOpts.icon,
+            text: loadingOpts.text
+          }, loadingSlot
+            ? {
+                default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
+              }
+            : {})
+          : createCommentVNode(),
+        /**
+         * 自定义列
+         */
+        initStore.custom
+          ? h(TableCustomPanelComponent, {
+            ref: refTableCustom,
+            customStore
+          })
+          : createCommentVNode(),
+        /**
+         * 筛选
+         */
+        initStore.filter
+          ? h(TableFilterPanelComponent, {
+            ref: refTableFilter,
+            filterStore
+          })
+          : createCommentVNode(),
+        /**
+         * 导入
+         */
+        initStore.import && props.importConfig
+          ? h(TableImportPanelComponent, {
+            defaultOptions: reactData.importParams,
+            storeData: reactData.importStore
+          })
+          : createCommentVNode(),
+        /**
+         * 导出
+         */
+        initStore.export && (props.exportConfig || props.printConfig)
+          ? h(TableExportPanelComponent, {
+            defaultOptions: reactData.exportParams,
+            storeData: reactData.exportStore
+          })
+          : createCommentVNode(),
+        /**
+         * 快捷菜单
+         */
+        isMenu
+          ? h(TableMenuPanelComponent, {
+            ref: refTableMenu
+          })
+          : createCommentVNode(),
+        /**
+         * 提示相关
+         */
+        VxeUITooltipComponent
+          ? h('div', {}, [
+            /**
+             * 通用提示
+             */
+            h(VxeUITooltipComponent, {
+              ref: refCommTooltip,
+              isArrow: false,
+              enterable: false
+            }),
+            /**
+              * 工具提示
+              */
+            h(VxeUITooltipComponent, Object.assign({
+              ref: refTooltip
+            }, tipConfig, tooltipStore.currOpts)),
+            /**
+              * 校验提示
+              */
+            props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
+              ? h(VxeUITooltipComponent, {
+                ref: refValidTooltip,
+                class: [{
+                  'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
+                }, 'vxe-table--valid-error'],
+                ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {}) as any
+              })
+              : createCommentVNode()
+          ])
+          : createCommentVNode()
+      ])
+    }
+
     const dataFlag = ref(0)
     watch(() => props.data ? props.data.length : -1, () => {
       dataFlag.value++
@@ -7006,239 +7237,6 @@ export default defineComponent({
       tablePrivateMethods.preventEvent(null, 'unmounted', { $table: $xeTable })
     })
 
-    const renderVN = () => {
-      const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
-      const { leftList, rightList } = columnStore
-      const loadingSlot = slots.loading
-      const tipConfig = computeTipConfig.value
-      const validOpts = computeValidOpts.value
-      const checkboxOpts = computeCheckboxOpts.value
-      const treeOpts = computeTreeOpts.value
-      const rowOpts = computeRowOpts.value
-      const columnOpts = computeColumnOpts.value
-      const vSize = computeSize.value
-      const tableBorder = computeTableBorder.value
-      const mouseOpts = computeMouseOpts.value
-      const validTipOpts = computeValidTipOpts.value
-      const loadingOpts = computeLoadingOpts.value
-      const isMenu = computeIsMenu.value
-      const currLoading = reactData._isLoading || loading
-      return h('div', {
-        ref: refElem,
-        class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
-          [`size--${vSize}`]: vSize,
-          [`valid-msg--${validOpts.msgMode}`]: !!editRules,
-          'vxe-editable': !!editConfig,
-          'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
-          'cell--highlight': highlightCell,
-          'cell--selected': mouseConfig && mouseOpts.selected,
-          'cell--area': mouseConfig && mouseOpts.area,
-          'row--highlight': rowOpts.isHover || highlightHoverRow,
-          'column--highlight': columnOpts.isHover || highlightHoverColumn,
-          'checkbox--range': checkboxOpts.range,
-          'column--calc': isCalcColumn,
-          'is--header': showHeader,
-          'is--footer': showFooter,
-          'is--group': isGroup,
-          'is--tree-line': treeConfig && (treeOpts.showLine || treeOpts.line),
-          'is--fixed-left': leftList.length,
-          'is--fixed-right': rightList.length,
-          'is--animat': !!props.animat,
-          'is--padding': props.padding,
-          'is--round': props.round,
-          'is--stripe': !treeConfig && stripe,
-          'is--loading': currLoading,
-          'is--empty': !currLoading && !tableData.length,
-          'is--scroll-y': overflowY,
-          'is--scroll-x': overflowX,
-          'is--virtual-x': scrollXLoad,
-          'is--virtual-y': scrollYLoad
-        }],
-        spellcheck: false,
-        onKeydown: keydownEvent
-      }, [
-        /**
-         * 隐藏列
-         */
-        h('div', {
-          class: 'vxe-table-slots'
-        }, slots.default ? slots.default({}) : []),
-        h('div', {
-          class: 'vxe-table--render-wrapper'
-        }, [
-          h('div', {
-            class: 'vxe-table--main-wrapper'
-          }, [
-            /**
-             * 表头
-             */
-            showHeader
-              ? h(TableHeaderComponent, {
-                ref: refTableHeader,
-                tableData,
-                tableColumn,
-                tableGroupColumn
-              })
-              : createCommentVNode(),
-            /**
-             * 表体
-             */
-            h(TableBodyComponent, {
-              ref: refTableBody,
-              tableData,
-              tableColumn
-            }),
-            /**
-             * 表尾
-             */
-            showFooter
-              ? h(TableFooterComponent, {
-                ref: refTableFooter,
-                footerTableData,
-                tableColumn
-              })
-              : createCommentVNode()
-          ]),
-          h('div', {
-            class: 'vxe-table--fixed-wrapper'
-          }, [
-            /**
-             * 左侧固定区域
-             */
-            leftList && leftList.length && overflowX ? renderFixed('left') : createCommentVNode(),
-            /**
-             * 右侧固定区域
-             */
-            rightList && rightList.length && overflowX ? renderFixed('right') : createCommentVNode()
-          ])
-        ]),
-        /**
-         * 空数据
-         */
-        h('div', {
-          ref: refEmptyPlaceholder,
-          class: 'vxe-table--empty-placeholder'
-        }, [
-          h('div', {
-            class: 'vxe-table--empty-content'
-          }, renderEmptyContenet())
-        ]),
-        /**
-         * 边框线
-         */
-        h('div', {
-          class: 'vxe-table--border-line'
-        }),
-        /**
-         * 列宽线
-         */
-        h('div', {
-          ref: refCellResizeBar,
-          class: 'vxe-table--resizable-bar',
-          style: overflowX
-            ? {
-                'padding-bottom': `${scrollbarHeight}px`
-              }
-            : null
-        }),
-        /**
-         * 加载中
-         */
-        VxeUILoadingComponent
-          ? h(VxeUILoadingComponent, {
-            class: 'vxe-table--loading',
-            modelValue: currLoading,
-            icon: loadingOpts.icon,
-            text: loadingOpts.text
-          }, loadingSlot
-            ? {
-                default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
-              }
-            : {})
-          : createCommentVNode(),
-        /**
-         * 自定义列
-         */
-        initStore.custom
-          ? h(TableCustomPanelComponent, {
-            ref: refTableCustom,
-            customStore
-          })
-          : createCommentVNode(),
-        /**
-         * 筛选
-         */
-        initStore.filter
-          ? h(TableFilterPanelComponent, {
-            ref: refTableFilter,
-            filterStore
-          })
-          : createCommentVNode(),
-        /**
-         * 导入
-         */
-        initStore.import && props.importConfig
-          ? h(TableImportPanelComponent, {
-            defaultOptions: reactData.importParams,
-            storeData: reactData.importStore
-          })
-          : createCommentVNode(),
-        /**
-         * 导出
-         */
-        initStore.export && (props.exportConfig || props.printConfig)
-          ? h(TableExportPanelComponent, {
-            defaultOptions: reactData.exportParams,
-            storeData: reactData.exportStore
-          })
-          : createCommentVNode(),
-        /**
-         * 快捷菜单
-         */
-        isMenu
-          ? h(TableMenuPanelComponent, {
-            ref: refTableMenu
-          })
-          : createCommentVNode(),
-        /**
-         * 提示相关
-         */
-        VxeUITooltipComponent
-          ? h('div', {}, [
-            /**
-             * 通用提示
-             */
-            h(VxeUITooltipComponent, {
-              ref: refCommTooltip,
-              isArrow: false,
-              enterable: false
-            }),
-            /**
-              * 工具提示
-              */
-            h(VxeUITooltipComponent, Object.assign({
-              ref: refTooltip
-            }, tipConfig, tooltipStore.currOpts)),
-            /**
-              * 校验提示
-              */
-            props.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
-              ? h(VxeUITooltipComponent, {
-                ref: refValidTooltip,
-                class: [{
-                  'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'
-                }, 'vxe-table--valid-error'],
-                ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {}) as any
-              })
-              : createCommentVNode()
-          ])
-          : createCommentVNode()
-      ])
-    }
-
-    $xeTable.renderVN = renderVN
-
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       nextTick(() => {
         if (props.loading) {
@@ -7259,6 +7257,8 @@ export default defineComponent({
 
     provide('$xeColgroup', null)
     provide('$xeTable', $xeTable)
+
+    $xeTable.renderVN = renderVN
 
     return $xeTable
   },

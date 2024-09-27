@@ -746,6 +746,20 @@ renderer.mixin({
       ]
     }
   },
+  VxeTextEllipsis: {
+    renderTableDefault (renderOpts, params) {
+      const { row, column } = params
+      const { props } = renderOpts
+      const cellValue = getCellValue(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          ...props,
+          content: cellValue,
+          ...getEditOns(renderOpts, params)
+        })
+      ]
+    }
+  },
 
   // 以下已废弃
   $input: {
