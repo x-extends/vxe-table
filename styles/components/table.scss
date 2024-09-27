@@ -132,8 +132,12 @@
 }
 .vxe-body--column {
   &.col--height {
+    &.col--active {
+      & > .vxe-cell {
+        height: 100%;
+      }
+    }
     & > .vxe-cell {
-      height: 100%;
       & > .vxe-textarea,
       & > .vxe-default-textarea {
         height: 100%;

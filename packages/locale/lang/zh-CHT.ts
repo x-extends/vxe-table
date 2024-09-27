@@ -200,7 +200,8 @@ export default {
       zoomIn: '最大化',
       zoomOut: '還原',
       close: '關閉',
-      miniMaxSize: '最小化視窗的數量不能超過 {0} 個'
+      miniMaxSize: '最小化視窗的數量不能超過 {0} 個',
+      footPropErr: 'show-footer 仅用于启用表尾，需配合 show-confirm-button | show-cancel-button | 插槽使用'
     },
     drawer: {
       close: '關閉'
