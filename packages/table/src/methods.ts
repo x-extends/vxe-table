@@ -2999,12 +2999,6 @@ const Methods = {
                 setCellValue(selected.row, selected.column, null)
                 this.handleEdit(selected.args, evnt)
               }
-              const afterEditMethod = editOpts.afterEditMethod
-              if (afterEditMethod) {
-                this.$nextTick(() => {
-                  afterEditMethod(params)
-                })
-              }
             }
           }
         }
