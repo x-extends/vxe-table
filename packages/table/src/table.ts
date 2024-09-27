@@ -5204,12 +5204,6 @@ export default defineComponent({
                   setCellValue(selected.row, selected.column, null)
                   $xeTable.handleEdit(selected.args, evnt)
                 }
-                const afterEditMethod = editOpts.afterEditMethod
-                if (afterEditMethod) {
-                  nextTick(() => {
-                    afterEditMethod(params)
-                  })
-                }
               }
             }
           }
