@@ -404,31 +404,31 @@ export default {
       return this.computeProxyOpts
     },
     computeProxyOpts () {
-      return XEUtils.merge({}, getConfig().grid.proxyConfig, this.proxyConfig)
+      return XEUtils.merge({}, XEUtils.clone(getConfig().grid.proxyConfig, true), this.proxyConfig)
     },
     pagerOpts () {
       return this.computePagerOpts
     },
     computePagerOpts () {
-      return Object.assign({}, getConfig().grid.pagerConfig, this.pagerConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().grid.pagerConfig, true), this.pagerConfig)
     },
     formOpts () {
       return this.computeFormOpts
     },
     computeFormOpts () {
-      return Object.assign({}, getConfig().grid.formConfig, this.formConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().grid.formConfig, true), this.formConfig)
     },
     toolbarOpts () {
       return this.computeToolbarOpts
     },
     computeToolbarOpts () {
-      return Object.assign({}, getConfig().grid.toolbarConfig, this.toolbarConfig || this.toolbar)
+      return Object.assign({}, XEUtils.clone(getConfig().grid.toolbarConfig, true), this.toolbarConfig || this.toolbar)
     },
     zoomOpts () {
       return this.computeZoomOpts
     },
     computeZoomOpts () {
-      return Object.assign({}, getConfig().grid.zoomConfig, this.zoomConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().grid.zoomConfig, true), this.zoomConfig)
     },
     renderStyle () {
       return this.isZMax ? { zIndex: this.tZindex } : null

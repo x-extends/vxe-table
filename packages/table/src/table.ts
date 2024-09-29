@@ -367,19 +367,19 @@ export default {
       return this.computeValidOpts
     },
     computeValidOpts () {
-      return Object.assign({ message: 'default' }, getConfig().table.validConfig, this.validConfig)
+      return Object.assign({ message: 'default' }, XEUtils.clone(getConfig().table.validConfig, true), this.validConfig)
     },
     sXOpts () {
       return this.computeSXOpts
     },
     computeSXOpts () {
-      return Object.assign({}, getConfig().table.scrollX, this.scrollX)
+      return Object.assign({}, XEUtils.clone(getConfig().table.scrollX, true), this.scrollX)
     },
     sYOpts () {
       return this.computeSYOpts
     },
     computeSYOpts () {
-      return Object.assign({}, getConfig().table.scrollY, this.scrollY)
+      return Object.assign({}, XEUtils.clone(getConfig().table.scrollY, true), this.scrollY)
     },
     rowHeightMaps () {
       return {
@@ -393,49 +393,49 @@ export default {
       return this.computeColumnOpts
     },
     computeColumnOpts () {
-      return Object.assign({}, getConfig().table.columnConfig, this.columnConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.columnConfig, true), this.columnConfig)
     },
     rowOpts () {
       return this.computeRowOpts
     },
     computeRowOpts () {
-      return Object.assign({}, getConfig().table.rowConfig, this.rowConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.rowConfig, true), this.rowConfig)
     },
     resizeOpts () {
       return this.computeResizeOpts
     },
     computeResizeOpts () {
-      return Object.assign({}, getConfig().table.resizeConfig, this.resizeConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.resizeConfig, true), this.resizeConfig)
     },
     resizableOpts () {
       return this.computeResizableOpts
     },
     computeResizableOpts () {
-      return Object.assign({}, getConfig().table.resizableConfig, this.resizableConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.resizableConfig, true), this.resizableConfig)
     },
     seqOpts () {
       return this.computeSeqOpts
     },
     computeSeqOpts () {
-      return Object.assign({ startIndex: 0 }, getConfig().table.seqConfig, this.seqConfig)
+      return Object.assign({ startIndex: 0 }, XEUtils.clone(getConfig().table.seqConfig, true), this.seqConfig)
     },
     radioOpts () {
       return this.computeRadioOpts
     },
     computeRadioOpts () {
-      return Object.assign({}, getConfig().table.radioConfig, this.radioConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.radioConfig, true), this.radioConfig)
     },
     checkboxOpts () {
       return this.computeCheckboxOpts
     },
     computeCheckboxOpts () {
-      return Object.assign({}, getConfig().table.checkboxConfig, this.checkboxConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.checkboxConfig, true), this.checkboxConfig)
     },
     tooltipOpts () {
       return this.computeTooltipOpts
     },
     computeTooltipOpts () {
-      return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, this.tooltipConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().tooltip, true), XEUtils.clone(getConfig().table.tooltipConfig, true), this.tooltipConfig)
     },
     tipConfig () {
       return { ...this.tooltipOpts }
@@ -447,49 +447,49 @@ export default {
       return this.computeEditOpts
     },
     computeEditOpts () {
-      return Object.assign({}, getConfig().table.editConfig, this.editConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.editConfig, true), this.editConfig)
     },
     sortOpts () {
       return this.computeSortOpts
     },
     computeSortOpts () {
-      return Object.assign({ orders: ['asc', 'desc', null] }, getConfig().table.sortConfig, this.sortConfig)
+      return Object.assign({ orders: ['asc', 'desc', null] }, XEUtils.clone(getConfig().table.sortConfig, true), this.sortConfig)
     },
     filterOpts () {
       return this.computeFilterOpts
     },
     computeFilterOpts () {
-      return Object.assign({}, getConfig().table.filterConfig, this.filterConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.filterConfig, true), this.filterConfig)
     },
     mouseOpts () {
       return this.computeMouseOpts
     },
     computeMouseOpts () {
-      return Object.assign({}, getConfig().table.mouseConfig, this.mouseConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.mouseConfig, true), this.mouseConfig)
     },
     areaOpts () {
       return this.computeAreaOpts
     },
     computeAreaOpts () {
-      return Object.assign({}, getConfig().table.areaConfig, this.areaConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.areaConfig, true), this.areaConfig)
     },
     keyboardOpts () {
       return this.computeKeyboardOpts
     },
     computeKeyboardOpts () {
-      return Object.assign({}, getConfig().table.keyboardConfig, this.keyboardConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.keyboardConfig, true), this.keyboardConfig)
     },
     clipOpts () {
       return this.computeClipOpts
     },
     computeClipOpts () {
-      return Object.assign({}, getConfig().table.clipConfig, this.clipConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.clipConfig, true), this.clipConfig)
     },
     fnrOpts () {
       return this.computeFNROpts
     },
     computeFNROpts () {
-      return Object.assign({}, getConfig().table.fnrConfig, this.fnrConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.fnrConfig, true), this.fnrConfig)
     },
     headerCtxMenu () {
       const headerOpts = this.ctxMenuOpts.header
@@ -519,49 +519,49 @@ export default {
       return this.computeMenuOpts
     },
     computeMenuOpts () {
-      return Object.assign({}, getConfig().table.menuConfig, this.contextMenu, this.menuConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.menuConfig, true), this.contextMenu, this.menuConfig)
     },
     exportOpts () {
       return this.computeExportOpts
     },
     computeExportOpts () {
-      return Object.assign({}, getConfig().table.exportConfig, this.exportConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.exportConfig, true), this.exportConfig)
     },
     importOpts () {
       return this.computeImportOpts
     },
     computeImportOpts () {
-      return Object.assign({}, getConfig().table.importConfig, this.importConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.importConfig, true), this.importConfig)
     },
     printOpts () {
       return this.computePrintOpts
     },
     computePrintOpts () {
-      return Object.assign({}, getConfig().table.printConfig, this.printConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.printConfig, true), this.printConfig)
     },
     expandOpts () {
       return this.computeExpandOpts
     },
     computeExpandOpts () {
-      return Object.assign({}, getConfig().table.expandConfig, this.expandConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.expandConfig, true), this.expandConfig)
     },
     treeOpts () {
       return this.computeTreeOpts
     },
     computeTreeOpts () {
-      return Object.assign({}, getConfig().table.treeConfig, this.treeConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.treeConfig, true), this.treeConfig)
     },
     emptyOpts () {
       return this.computeEmptyOpts
     },
     computeEmptyOpts () {
-      return Object.assign({}, getConfig().table.emptyRender, this.emptyRender)
+      return Object.assign({}, XEUtils.clone(getConfig().table.emptyRender, true), this.emptyRender)
     },
     loadingOpts () {
       return this.computeLoadingOpts
     },
     computeLoadingOpts () {
-      return Object.assign({}, getConfig().table.loadingConfig, this.loadingConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.loadingConfig, true), this.loadingConfig)
     },
     cellOffsetWidth () {
       return this.border ? Math.max(2, Math.ceil(this.scrollbarWidth / this.tableColumn.length)) : 1
@@ -570,7 +570,7 @@ export default {
       return this.computeCustomOpts
     },
     computeCustomOpts () {
-      return Object.assign({}, getConfig().table.customConfig, this.customConfig)
+      return Object.assign({}, XEUtils.clone(getConfig().table.customConfig, true), this.customConfig)
     },
     autoWidthColumnList () {
       const { tableColumn, visibleColumn } = this
