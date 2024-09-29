@@ -81,27 +81,27 @@ export default defineComponent({
     const $xeGrid = inject<(VxeGridConstructor & GridPrivateMethods) | null>('$xeGrid', null)
 
     const computeRefreshOpts = computed(() => {
-      return Object.assign({}, getConfig().toolbar.refresh, props.refresh) as VxeToolbarPropTypes.RefreshOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.refresh, true), props.refresh) as VxeToolbarPropTypes.RefreshOpts
     })
 
     const computeImportOpts = computed(() => {
-      return Object.assign({}, getConfig().toolbar.import, props.import) as VxeToolbarPropTypes.ImportOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.import, true), props.import) as VxeToolbarPropTypes.ImportOpts
     })
 
     const computeExportOpts = computed(() => {
-      return Object.assign({}, getConfig().toolbar.export, props.export) as VxeToolbarPropTypes.ExportOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.export, true), props.export) as VxeToolbarPropTypes.ExportOpts
     })
 
     const computePrintOpts = computed(() => {
-      return Object.assign({}, getConfig().toolbar.print, props.print) as VxeToolbarPropTypes.PrintOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.print, true), props.print) as VxeToolbarPropTypes.PrintOpts
     })
 
     const computeZoomOpts = computed(() => {
-      return Object.assign({}, getConfig().toolbar.zoom, props.zoom) as VxeToolbarPropTypes.ZoomOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.zoom, true), props.zoom) as VxeToolbarPropTypes.ZoomOpts
     })
 
     const computeCustomOpts = computed(() => {
-      return Object.assign({}, getConfig().toolbar.custom, props.custom) as VxeToolbarPropTypes.CustomOpts
+      return Object.assign({}, XEUtils.clone(getConfig().toolbar.custom, true), props.custom) as VxeToolbarPropTypes.CustomOpts
     })
 
     const computeTableCustomOpts = computed(() => {
