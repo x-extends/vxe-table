@@ -118,7 +118,7 @@ Vue.use(VxeTable)
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3/lib/style.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@3/lib/style.css">
 <!-- vue -->
-<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 <!-- table -->
 <script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
 <script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3"></script>
