@@ -40,12 +40,12 @@ export class ColumnInfo {
       if (formatter) {
         if (XEUtils.isString(formatter)) {
           const gFormatOpts = formats.get(formatter) || XEUtils[formatter]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod)) {
             errLog('vxe.error.notFormats', [formatter])
           }
         } else if (XEUtils.isArray(formatter)) {
           const gFormatOpts = formats.get(formatter[0]) || XEUtils[formatter[0]]
-          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.cellFormatMethod)) {
+          if (!gFormatOpts || !XEUtils.isFunction(gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod)) {
             errLog('vxe.error.notFormats', [formatter[0]])
           }
         }

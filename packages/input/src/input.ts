@@ -1031,7 +1031,7 @@ export default defineComponent({
       if (!disabled && !readonly && !isDisabledSubtractNumber) {
         numberChange(false, evnt)
       }
-      inputMethods.dispatchEvent('next-number', {}, evnt)
+      inputMethods.dispatchEvent('next-number', { value: reactData.inputValue }, evnt)
     }
 
     const numberDownNextEvent = (evnt: Event) => {
@@ -1048,7 +1048,7 @@ export default defineComponent({
       if (!disabled && !readonly && !isDisabledAddNumber) {
         numberChange(true, evnt)
       }
-      inputMethods.dispatchEvent('prev-number', {}, evnt)
+      inputMethods.dispatchEvent('prev-number', { value: reactData.inputValue }, evnt)
     }
 
     const numberKeydownEvent = (evnt: KeyboardEvent) => {
@@ -1160,7 +1160,8 @@ export default defineComponent({
 
     const datePrevEvent = (evnt: Event) => {
       const { type } = props
-      const { datePanelType, selectMonth } = reactData
+      const { datePanelType, selectMonth, inputValue } = reactData
+      const value = inputValue
       const isDisabledPrevDateBtn = computeIsDisabledPrevDateBtn.value
       if (!isDisabledPrevDateBtn) {
         if (type === 'year') {
@@ -1180,7 +1181,7 @@ export default defineComponent({
             reactData.selectMonth = XEUtils.getWhatMonth(selectMonth, -1, 'first')
           }
         }
-        inputMethods.dispatchEvent('date-prev', { type }, evnt)
+        inputMethods.dispatchEvent('date-prev', { value, type }, evnt)
       }
     }
 
@@ -1195,7 +1196,8 @@ export default defineComponent({
 
     const dateNextEvent = (evnt: Event) => {
       const { type } = props
-      const { datePanelType, selectMonth } = reactData
+      const { datePanelType, selectMonth, inputValue } = reactData
+      const value = inputValue
       const isDisabledNextDateBtn = computeIsDisabledNextDateBtn.value
       if (!isDisabledNextDateBtn) {
         if (type === 'year') {
@@ -1215,7 +1217,7 @@ export default defineComponent({
             reactData.selectMonth = XEUtils.getWhatMonth(selectMonth, 1, 'first')
           }
         }
-        inputMethods.dispatchEvent('date-next', { type }, evnt)
+        inputMethods.dispatchEvent('date-next', { value, type }, evnt)
       }
     }
 

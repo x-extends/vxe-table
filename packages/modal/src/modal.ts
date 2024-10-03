@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import { useSize } from '../../hooks/size'
 import { getDomNode, getEventTargetNode } from '../../tools/dom'
 import { getLastZIndex, nextZIndex, getFuncText } from '../../tools/utils'
-import { errLog } from '../../tools/log'
+import { warnLog, errLog } from '../../tools/log'
 import { GlobalEvent, hasEventKey, EVENT_KEYS } from '../../tools/event'
 import GlobalConfig from '../../v-x-e-table/src/conf'
 import VxeButtonComponent from '../../button/src/button'
@@ -928,6 +928,11 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
+        if (props.type === 'modal' && props.showFooter && !(props.showConfirmButton || props.showCancelButton || slots.footer)) {
+          warnLog('vxe.modal.footPropErr')
+        }
+      }
       nextTick(() => {
         if (props.storage && !props.id) {
           errLog('vxe.error.reqProp', ['modal.id'])

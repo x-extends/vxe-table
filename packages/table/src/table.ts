@@ -6331,10 +6331,12 @@ export default defineComponent({
           const formatParams = { cellValue, row, rowIndex: tableMethods.getRowIndex(row), column, columnIndex: tableMethods.getColumnIndex(column) }
           if (XEUtils.isString(formatter)) {
             const gFormatOpts = VXETable.formats.get(formatter)
-            cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams) : ''
+            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
+            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams) : ''
           } else if (XEUtils.isArray(formatter)) {
             const gFormatOpts = VXETable.formats.get(formatter[0])
-            cellLabel = gFormatOpts && gFormatOpts.cellFormatMethod ? gFormatOpts.cellFormatMethod(formatParams, ...formatter.slice(1)) : ''
+            const tcFormatMethod = gFormatOpts ? (gFormatOpts.tableCellFormatMethod || gFormatOpts.cellFormatMethod) : null
+            cellLabel = tcFormatMethod ? tcFormatMethod(formatParams, ...formatter.slice(1)) : ''
           } else {
             cellLabel = formatter(formatParams)
           }
