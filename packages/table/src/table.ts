@@ -23,7 +23,7 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
-import type { VxeLoadingComponent, VxeTooltipComponent } from 'vxe-pc-ui'
+import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
 
 const { getConfig, getI18n, renderer, globalResize, globalEvents, globalMixins } = VxeUI
 
@@ -126,6 +126,9 @@ export default {
     }
   },
   inject: {
+    $xeTabs: {
+      default: null
+    },
     $xeGrid: {
       default: null
     },
@@ -353,6 +356,9 @@ export default {
     }
   },
   computed: {
+    ...({} as {
+      $xeTabs(): (VxeTabsConstructor & VxeTabsPrivateMethods) | null
+    }),
     tableId () {
       const { id } = this
       if (id) {
@@ -623,6 +629,12 @@ export default {
         return true
       }
       return false
+    },
+    tabsResizeFlag () {
+      const $xeTable = this
+      const $xeTabs = $xeTable.$xeTabs
+
+      return $xeTabs ? $xeTabs.reactData.resizeFlag : null
     }
   } as any,
   watch: {
@@ -683,6 +695,9 @@ export default {
           setTimeout(() => handleUupdateResize(this))
         })
       }
+    },
+    tabsResizeFlag () {
+      this.handleGlobalResizeEvent()
     },
     mergeCells (value: any) {
       this.clearMergeCells()

@@ -71,7 +71,7 @@ export default {
       props: {
         value: storeData.visible,
         title: getI18n('vxe.import.impTitle'),
-        width: 520,
+        width: 540,
         mask: true,
         lockView: true,
         showFooter: false,
