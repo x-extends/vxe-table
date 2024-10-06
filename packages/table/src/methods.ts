@@ -2101,6 +2101,10 @@ const Methods = {
     const bodyElem = tableBody ? tableBody.$el : null
     const headerElem = tableHeader ? tableHeader.$el : null
     const footerElem = tableFooter ? tableFooter.$el : null
+    const el = this.$el
+    if (!el || !el.clientWidth) {
+      return this.$nextTick()
+    }
     if (bodyElem) {
       this.calcCellWidth()
       this.autoCellWidth(headerElem, bodyElem, footerElem)

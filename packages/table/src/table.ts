@@ -964,7 +964,7 @@ export default {
       const resizeObserver = globalResize.create(handleWrapperResize
         ? () => {
             if (this.autoResize) {
-              requestAnimationFrame(handleWrapperResize)
+              handleWrapperResize()
             }
           }
         : () => {
