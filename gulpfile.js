@@ -101,6 +101,9 @@ gulp.task('build_esjs', gulp.series('build_escode', function () {
     .pipe(replace('process.env.VUE_APP_VXE_VERSION', `"${pack.version}"`))
     .pipe(replace('process.env.VUE_APP_VXE_ENV', 'process.env.NODE_ENV'))
     .pipe(ts(tsSettings))
+    .pipe(babel({
+      presets: ['@babel/preset-env']
+    }))
     .pipe(rename({
       basename: 'index',
       extname: '.esm.js'
@@ -120,7 +123,7 @@ gulp.task('build_commoncode', function () {
     .pipe(replace('process.env.VUE_APP_VXE_ENV', 'process.env.NODE_ENV'))
     .pipe(ts(tsSettings))
     .pipe(babel({
-      presets: ['@babel/env']
+      presets: ['@babel/preset-env']
     }))
     .pipe(gulp.dest(commOutDir))
     .pipe(uglify())
