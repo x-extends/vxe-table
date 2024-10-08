@@ -770,9 +770,9 @@ export default defineComponent({
             }
           }
         }
-        return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(8, visibleSize) }
+        return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(6, visibleSize) }
       }
-      return { toVisibleIndex: 0, visibleSize: 8 }
+      return { toVisibleIndex: 0, visibleSize: 6 }
     }
 
     const computeVirtualY = () => {
@@ -7179,7 +7179,7 @@ export default defineComponent({
           resizeObserver = globalResize.create(handleOptimizeResize
             ? () => {
                 if (props.autoResize) {
-                  requestAnimationFrame(handleOptimizeResize)
+                  handleOptimizeResize()
                 }
               }
             : () => {

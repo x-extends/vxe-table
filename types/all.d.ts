@@ -7,6 +7,7 @@ declare global {
      * @deprecated
      */
     VXETable: VxeUIExport;
+    VxeUITable: VxeUIExport;
   }
 }
 

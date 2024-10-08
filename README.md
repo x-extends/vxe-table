@@ -16,16 +16,15 @@
 
 * 设计理念
   * 面向现代浏览器，高效的简洁 API 设计
-  * 模块化表格、按需加载
-  * 为单行编辑表格而设计，支持增删改查及更多扩展，强大的功能的同时兼具性能
+  * 按需加载
 
 * 计划
   * [x] ~~v1.0 基于 vue2.6，支持所有主流的浏览器，实现表格的一切实用的功能~~
   * [x] ~~v2.0 基于 vue2.6，支持所有主流的浏览器，同时兼具功能与性能~~
   * [x] v3.0 基于 vue2.6+，支持现代浏览器并保留兼容 IE11
-  * [x] v3.9 基于 vue2.6+，重构拆分组件，分为 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，将支持可视化组件
+  * [x] v3.9 基于 vue2.6+，内部重构，只支持现代浏览器，不支持 IE
   * [x] v4.0 基于 vue3.2+，只支持现代浏览器，不支持 IE
-  * [x] v4.7 基于 vue3.2+，重构拆分组件，分为 [Vxe table](https://github.com/x-extends/vxe-table) 和 [Vxe UI](https://github.com/x-extends/vxe-pc-ui)，将支持可视化组件
+  * [x] v4.7 基于 vue3.2+，内部重构，只支持现代浏览器，不支持 IE
   * [ ] 下一阶段：sticky 渲染模式、将虚拟滚动提升到极致、虚拟滚动动态行高、数据图表可视化
 
 ## 浏览器支持
