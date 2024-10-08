@@ -5446,11 +5446,13 @@ export default defineComponent({
       cacheRowMap (isSource) {
         const { treeConfig } = props
         const treeOpts = computeTreeOpts.value
-        let { fullDataRowIdData, fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
+        const { fullAllDataRowIdData, tableFullData, tableFullTreeData } = internalData
         const childrenField = treeOpts.children || treeOpts.childrenField
         const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
         const rowkey = getRowkey($xeTable)
         const isLazy = treeConfig && treeOpts.lazy
+        const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+        const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
         const handleRow = (row: any, index: any, items: any, path?: any[], parent?: any, nodes?: any[]) => {
           let rowid = getRowid($xeTable, row)
           const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
@@ -5462,16 +5464,20 @@ export default defineComponent({
           if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
             row[childrenField] = null
           }
-          const rest = { row, rowid, seq, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level }
-          if (isSource) {
-            fullDataRowIdData[rowid] = rest
+          let cacheItem = fullAllDataRowIdData[rowid]
+          if (!cacheItem) {
+            cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent, level }
           }
-          fullAllDataRowIdData[rowid] = rest
+          if (isSource) {
+            cacheItem.index = treeConfig && parent ? -1 : index
+            fullDataRowIdMaps[rowid] = cacheItem
+          }
+          fullAllDataRowIdMaps[rowid] = cacheItem
         }
         if (isSource) {
-          fullDataRowIdData = internalData.fullDataRowIdData = {}
+          internalData.fullDataRowIdData = fullDataRowIdMaps
         }
-        fullAllDataRowIdData = internalData.fullAllDataRowIdData = {}
+        internalData.fullAllDataRowIdData = fullAllDataRowIdMaps
         if (treeConfig) {
           XEUtils.eachTree(tableFullTreeData, handleRow, { children: childrenField })
         } else {

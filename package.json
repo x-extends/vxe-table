@@ -28,7 +28,7 @@
   "style": "lib/style.css",
   "typings": "types/index.d.ts",
   "dependencies": {
-    "vxe-pc-ui": "^4.2.16"
+    "vxe-pc-ui": "^4.2.18"
   },
   "devDependencies": {
     "@types/resize-observer-browser": "^0.1.11",

@@ -122,15 +122,54 @@ createApp(App).use(VxeUI).use(VxeTable).mount('#app')
 ***不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效***  
 
 ```HTML
-<!-- style -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui/lib/style.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@next/lib/style.css">
-<!-- vue -->
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<!-- table -->
-<script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
-<script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui"></script>
-<script src="https://cdn.jsdelivr.net/npm/vxe-table@next"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <!-- style -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui@4/lib/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@4/lib/style.css">
+  <!-- vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <!-- table -->
+  <script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vxe-table@4"></script>
+</head>
+<body>
+  <div id="app">
+    <div>
+      <vxe-table :data="tableData">
+        <vxe-column type="seq" title="Seq" width="60"></vxe-column>
+        <vxe-column field="name" title="Name"></vxe-column>
+        <vxe-column field="role" title="Role"></vxe-column>
+        <vxe-colgroup title="Group1">
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="address" title="Address"></vxe-column>
+        </vxe-colgroup>
+      </vxe-table>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var App = {
+        data() {
+          return {
+            tableData: [
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+            ]
+          }
+        }
+      }
+      Vue.createApp(App).use(VxeUI).use(VXETable).mount('#app')
+    })()
+  </script>
+</body>
+</html>
 ```
 
 ## 示例
@@ -150,14 +189,18 @@ createApp(App).use(VxeUI).use(VxeTable).mount('#app')
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref } from 'vue'
-
-const tableData = ref([
-  { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
-  { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
-  { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
-])
+<script>
+export default {
+  data() {
+    return {
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+      ]
+    }
+  }
+}
 </script>
 ```
 
