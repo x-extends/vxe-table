@@ -928,7 +928,7 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (props.type === 'modal' && props.showFooter && !(props.showConfirmButton || props.showCancelButton || slots.footer)) {
           warnLog('vxe.modal.footPropErr')
         }
