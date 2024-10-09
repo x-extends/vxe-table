@@ -89,7 +89,7 @@ export default {
       goto: 'Go to',
       gotoTitle: 'Number',
       pagesize: '{0}/page',
-      total: 'Total {0} record',
+      total: 'Total {0} records',
       pageClassifier: '',
       homePage: 'Home',
       homePageTitle: 'Home page',
@@ -319,6 +319,9 @@ export default {
         imageTitle: 'Upload image',
         fileTitle: 'Upload file'
       }
+    },
+    empty: {
+      defText: 'No Data'
     },
     formDesign: {
       formName: 'Form name',

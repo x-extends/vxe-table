@@ -410,25 +410,25 @@ export default {
       return this.computePagerOpts
     },
     computePagerOpts () {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.pagerConfig, true), this.pagerConfig)
+      return Object.assign({}, getConfig().grid.pagerConfig, this.pagerConfig)
     },
     formOpts () {
       return this.computeFormOpts
     },
     computeFormOpts () {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.formConfig, true), this.formConfig)
+      return Object.assign({}, getConfig().grid.formConfig, this.formConfig)
     },
     toolbarOpts () {
       return this.computeToolbarOpts
     },
     computeToolbarOpts () {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.toolbarConfig, true), this.toolbarConfig || this.toolbar)
+      return Object.assign({}, getConfig().grid.toolbarConfig, this.toolbarConfig || this.toolbar)
     },
     zoomOpts () {
       return this.computeZoomOpts
     },
     computeZoomOpts () {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.zoomConfig, true), this.zoomConfig)
+      return Object.assign({}, getConfig().grid.zoomConfig, this.zoomConfig)
     },
     renderStyle () {
       return this.isZMax ? { zIndex: this.tZindex } : null

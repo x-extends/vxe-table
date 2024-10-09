@@ -114,15 +114,86 @@ Vue.use(VxeTable)
 ***不建议将第三方的 CDN 地址用于正式环境，因为该连接随时都可能会失效***  
 
 ```HTML
-<!-- style -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3/lib/style.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@3/lib/style.css">
-<!-- vue -->
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
-<!-- table -->
-<script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
-<script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/vxe-table@3"></script>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <!-- style -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3/lib/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vxe-table@3/lib/style.css">
+  <!-- vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+  <!-- table -->
+  <script src="https://cdn.jsdelivr.net/npm/xe-utils"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vxe-pc-ui@3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vxe-table@3"></script>
+</head>
+<body>
+  <div id="app">
+    <div>
+      <vxe-table :data="tableData">
+        <vxe-column type="seq" title="Seq" width="60"></vxe-column>
+        <vxe-column field="name" title="Name"></vxe-column>
+        <vxe-column field="role" title="Role"></vxe-column>
+        <vxe-colgroup title="Group1">
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="address" title="Address"></vxe-column>
+        </vxe-colgroup>
+      </vxe-table>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var App = {
+        data() {
+          return {
+            tableData: [
+              { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+              { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+              { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+            ]
+          }
+        }
+      }
+      new Vue(App).$mount('#app')
+    })()
+  </script>
+</body>
+</html>
+```
+
+## 示例
+
+```html
+<template>
+  <div>
+    <vxe-table :data="tableData">
+      <vxe-column type="seq" title="Seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="role" title="Role"></vxe-column>
+      <vxe-colgroup title="Group1">
+        <vxe-column field="sex" title="Sex"></vxe-column>
+        <vxe-column field="address" title="Address"></vxe-column>
+      </vxe-colgroup>
+    </vxe-table>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      tableData: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', address: 'Shenzhen' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: 'Man', address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', address: 'Shanghai' }
+      ]
+    }
+  }
+}
+</script>
 ```
 
 ## 在线文档

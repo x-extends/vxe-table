@@ -320,6 +320,9 @@ export default {
         fileTitle: 'Upload file'
       }
     },
+    empty: {
+      defText: 'No Data'
+    },
     formDesign: {
       formName: 'Form name',
       defFormTitle: 'Unnamed form',

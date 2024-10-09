@@ -7,6 +7,8 @@ import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible,
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
+import type { VxeTableDefines } from '../../../types'
+
 const { getConfig, getI18n, renderer, formats, interceptor } = VxeUI
 
 const isWebkit = browse['-webkit'] && !browse.edge
@@ -650,13 +652,14 @@ const Methods = {
    * 更新数据行的 Map
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
-  cacheRowMap (source: any) {
-    const { treeConfig, treeOpts, tableFullData, fullDataRowMap, fullAllDataRowMap, tableFullTreeData } = this
-    let { fullDataRowIdData, fullAllDataRowIdData } = this
+  cacheRowMap (isSource?: boolean) {
+    const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData, fullAllDataRowMap, tableFullTreeData } = this
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowkey = getRowkey(this)
     const isLazy = treeConfig && treeOpts.lazy
+    const fullAllDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
+    const fullDataRowIdMaps: Record<string, VxeTableDefines.RowCacheItem> = {}
     const handleCache = (row: any, index: any, items: any, path: any, parent: any, nodes: any) => {
       let rowid = getRowid(this, row)
       const seq = treeConfig && path ? toTreePathSeq(path) : index + 1
@@ -668,19 +671,20 @@ const Methods = {
       if (isLazy && row[hasChildField] && XEUtils.isUndefined(row[childrenField])) {
         row[childrenField] = null
       }
-      const rest = { row, rowid, seq, index: treeConfig && parent ? -1 : index, _index: -1, $index: -1, items, parent, level }
-      if (source) {
-        fullDataRowIdData[rowid] = rest
-        fullDataRowMap.set(row, rest)
+      let cacheItem = fullAllDataRowIdData[rowid]
+      if (!cacheItem) {
+        cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent, level }
       }
-      fullAllDataRowIdData[rowid] = rest
-      fullAllDataRowMap.set(row, rest)
+      if (isSource) {
+        cacheItem.index = treeConfig && parent ? -1 : index
+        fullDataRowIdMaps[rowid] = cacheItem
+      }
+      fullAllDataRowIdMaps[rowid] = cacheItem
     }
-    if (source) {
-      fullDataRowIdData = this.fullDataRowIdData = {}
-      fullDataRowMap.clear()
+    if (isSource) {
+      this.fullDataRowIdData = fullDataRowIdMaps
     }
-    fullAllDataRowIdData = this.fullAllDataRowIdData = {}
+    this.fullAllDataRowIdData = fullAllDataRowIdMaps
     fullAllDataRowMap.clear()
     if (treeConfig) {
       XEUtils.eachTree(tableFullTreeData, handleCache, { children: childrenField })

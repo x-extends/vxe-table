@@ -320,6 +320,9 @@ export default {
         fileTitle: 'Fájlok feltöltése'
       }
     },
+    empty: {
+      defText: '暂无数据'
+    },
     formDesign: {
       formName: 'forma neve',
       defFormTitle: 'névtelen forma',

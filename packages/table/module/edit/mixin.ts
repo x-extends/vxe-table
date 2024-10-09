@@ -469,25 +469,11 @@ export default {
                 }
               })
             }
-            this.emitEvent(type, {
-              row,
-              rowIndex: this.getRowIndex(row),
-              $rowIndex: this.getVMRowIndex(row),
-              column,
-              columnIndex: this.getColumnIndex(column),
-              $columnIndex: this.getVMColumnIndex(column)
-            }, evnt)
+            this.emitEvent(type, params, evnt)
 
             // v4已废弃
             if (type === 'edit-activated') {
-              this.emitEvent('edit-actived', {
-                row,
-                rowIndex: this.getRowIndex(row),
-                $rowIndex: this.getVMRowIndex(row),
-                column,
-                columnIndex: this.getColumnIndex(column),
-                $columnIndex: this.getVMColumnIndex(column)
-              }, evnt)
+              this.emitEvent('edit-actived', params, evnt)
             }
           } else {
             const { column: oldColumn } = actived

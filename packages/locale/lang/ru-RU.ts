@@ -320,6 +320,9 @@ export default {
         fileTitle: 'Загрузить файлы'
       }
     },
+    empty: {
+      defText: '暂无数据'
+    },
     formDesign: {
       formName: 'имя формы',
       defFormTitle: 'безымянная форма',

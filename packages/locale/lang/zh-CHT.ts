@@ -320,6 +320,9 @@ export default {
         fileTitle: '上傳文件'
       }
     },
+    empty: {
+      defText: '暂无数据'
+    },
     formDesign: {
       formName: '表單名稱',
       defFormTitle: '未命名的表單',
