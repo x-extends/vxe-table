@@ -130,19 +130,19 @@ export default defineComponent({
     })
 
     const computePagerOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.pagerConfig, true), props.pagerConfig) as VxeGridPropTypes.PagerConfig
+      return Object.assign({}, getConfig().grid.pagerConfig, props.pagerConfig) as VxeGridPropTypes.PagerConfig
     })
 
     const computeFormOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.formConfig, true), props.formConfig) as VxeGridPropTypes.FormOpts
+      return Object.assign({}, getConfig().grid.formConfig, props.formConfig) as VxeGridPropTypes.FormOpts
     })
 
     const computeToolbarOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.toolbarConfig, true), props.toolbarConfig) as VxeGridPropTypes.ToolbarOpts
+      return Object.assign({}, getConfig().grid.toolbarConfig, props.toolbarConfig) as VxeGridPropTypes.ToolbarOpts
     })
 
     const computeZoomOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().grid.zoomConfig, true), props.zoomConfig)
+      return Object.assign({}, getConfig().grid.zoomConfig, props.zoomConfig)
     })
 
     const computeStyles = computed(() => {

@@ -382,15 +382,15 @@ export default defineComponent({
     })
 
     const computeValidOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.validConfig, true), props.validConfig) as VxeTablePropTypes.ValidOpts
+      return Object.assign({}, getConfig().table.validConfig, props.validConfig) as VxeTablePropTypes.ValidOpts
     })
 
     const computeSXOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.scrollX, true), props.scrollX) as VxeTablePropTypes.SXOpts
+      return Object.assign({}, getConfig().table.scrollX, props.scrollX) as VxeTablePropTypes.SXOpts
     })
 
     const computeSYOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.scrollY, true), props.scrollY) as VxeTablePropTypes.SYOpts
+      return Object.assign({}, getConfig().table.scrollY, props.scrollY) as VxeTablePropTypes.SYOpts
     })
 
     const computeRowHeightMaps = computed(() => {
@@ -403,37 +403,37 @@ export default defineComponent({
     })
 
     const computeColumnOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.columnConfig, true), props.columnConfig) as VxeTablePropTypes.ColumnOpts
+      return Object.assign({}, getConfig().table.columnConfig, props.columnConfig) as VxeTablePropTypes.ColumnOpts
     })
 
     const computeRowOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.rowConfig, true), props.rowConfig) as VxeTablePropTypes.RowOpts
+      return Object.assign({}, getConfig().table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
     })
 
     const computeResizeOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.resizeConfig, true), props.resizeConfig) as VxeTablePropTypes.ResizeOpts
+      return Object.assign({}, getConfig().table.resizeConfig, props.resizeConfig) as VxeTablePropTypes.ResizeOpts
     })
 
     const computeResizableOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.resizableConfig, true), props.resizableConfig) as VxeTablePropTypes.ResizableOpts
+      return Object.assign({}, getConfig().table.resizableConfig, props.resizableConfig) as VxeTablePropTypes.ResizableOpts
     })
 
     const computeSeqOpts = computed(() => {
-      return Object.assign({ startIndex: 0 }, XEUtils.clone(getConfig().table.seqConfig, true), props.seqConfig) as VxeTablePropTypes.SeqOpts
+      return Object.assign({ startIndex: 0 }, getConfig().table.seqConfig, props.seqConfig) as VxeTablePropTypes.SeqOpts
     })
 
     const computeRadioOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.radioConfig, true), props.radioConfig) as VxeTablePropTypes.RadioOpts
+      return Object.assign({}, getConfig().table.radioConfig, props.radioConfig) as VxeTablePropTypes.RadioOpts
     })
 
     const computeCheckboxOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.checkboxConfig, true), props.checkboxConfig) as VxeTablePropTypes.CheckboxOpts
+      return Object.assign({}, getConfig().table.checkboxConfig, props.checkboxConfig) as VxeTablePropTypes.CheckboxOpts
     })
 
     let computeTooltipOpts = ref() as ComputedRef<VxeTablePropTypes.TooltipOpts>
 
     computeTooltipOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().tooltip, true), XEUtils.clone(getConfig().table.tooltipConfig, true), props.tooltipConfig)
+      return Object.assign({}, getConfig().tooltip, getConfig().table.tooltipConfig, props.tooltipConfig)
     })
 
     const computeTipConfig = computed(() => {
@@ -449,39 +449,39 @@ export default defineComponent({
     })
 
     const computeEditOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.editConfig, true), props.editConfig) as VxeTablePropTypes.EditOpts
+      return Object.assign({}, getConfig().table.editConfig, props.editConfig) as VxeTablePropTypes.EditOpts
     })
 
     const computeSortOpts = computed(() => {
-      return Object.assign({ orders: ['asc', 'desc', null] }, XEUtils.clone(getConfig().table.sortConfig, true), props.sortConfig) as VxeTablePropTypes.SortOpts
+      return Object.assign({ orders: ['asc', 'desc', null] }, getConfig().table.sortConfig, props.sortConfig) as VxeTablePropTypes.SortOpts
     })
 
     const computeFilterOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.filterConfig, true), props.filterConfig) as VxeTablePropTypes.FilterOpts
+      return Object.assign({}, getConfig().table.filterConfig, props.filterConfig) as VxeTablePropTypes.FilterOpts
     })
 
     const computeMouseOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.mouseConfig, true), props.mouseConfig) as VxeTablePropTypes.MouseOpts
+      return Object.assign({}, getConfig().table.mouseConfig, props.mouseConfig) as VxeTablePropTypes.MouseOpts
     })
 
     const computeAreaOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.areaConfig, true), props.areaConfig) as VxeTablePropTypes.AreaOpts
+      return Object.assign({}, getConfig().table.areaConfig, props.areaConfig) as VxeTablePropTypes.AreaOpts
     })
 
     const computeKeyboardOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.keyboardConfig, true), props.keyboardConfig) as VxeTablePropTypes.KeyboardOpts
+      return Object.assign({}, getConfig().table.keyboardConfig, props.keyboardConfig) as VxeTablePropTypes.KeyboardOpts
     })
 
     const computeClipOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.clipConfig, true), props.clipConfig)
+      return Object.assign({}, getConfig().table.clipConfig, props.clipConfig)
     })
 
     const computeFNROpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.fnrConfig, true), props.fnrConfig) as VxeTablePropTypes.FNROpts
+      return Object.assign({}, getConfig().table.fnrConfig, props.fnrConfig) as VxeTablePropTypes.FNROpts
     })
 
     const computeMenuOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.menuConfig, true), props.menuConfig) as VxeTablePropTypes.MenuOpts
+      return Object.assign({}, getConfig().table.menuConfig, props.menuConfig) as VxeTablePropTypes.MenuOpts
     })
 
     const computeHeaderMenu = computed(() => {
@@ -522,31 +522,31 @@ export default defineComponent({
     })
 
     const computeExportOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.exportConfig, true), props.exportConfig) as VxeTablePropTypes.ExportOpts
+      return Object.assign({}, getConfig().table.exportConfig, props.exportConfig) as VxeTablePropTypes.ExportOpts
     })
 
     const computeImportOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.importConfig, true), props.importConfig) as VxeTablePropTypes.ImportOpts
+      return Object.assign({}, getConfig().table.importConfig, props.importConfig) as VxeTablePropTypes.ImportOpts
     })
 
     const computePrintOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.printConfig, true), props.printConfig) as VxeTablePropTypes.PrintOpts
+      return Object.assign({}, getConfig().table.printConfig, props.printConfig) as VxeTablePropTypes.PrintOpts
     })
 
     const computeExpandOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.expandConfig, true), props.expandConfig) as VxeTablePropTypes.ExpandOpts
+      return Object.assign({}, getConfig().table.expandConfig, props.expandConfig) as VxeTablePropTypes.ExpandOpts
     })
 
     const computeTreeOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.treeConfig, true), props.treeConfig) as VxeTablePropTypes.TreeOpts
+      return Object.assign({}, getConfig().table.treeConfig, props.treeConfig) as VxeTablePropTypes.TreeOpts
     })
 
     const computeEmptyOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.emptyRender, true), props.emptyRender) as VxeTablePropTypes.EmptyOpts
+      return Object.assign({}, getConfig().table.emptyRender, props.emptyRender) as VxeTablePropTypes.EmptyOpts
     })
 
     const computeLoadingOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.loadingConfig, true), props.loadingConfig) as VxeTablePropTypes.LoadingOpts
+      return Object.assign({}, getConfig().table.loadingConfig, props.loadingConfig) as VxeTablePropTypes.LoadingOpts
     })
 
     const computeCellOffsetWidth = computed(() => {
@@ -554,7 +554,7 @@ export default defineComponent({
     })
 
     const computeCustomOpts = computed(() => {
-      return Object.assign({}, XEUtils.clone(getConfig().table.customConfig, true), props.customConfig)
+      return Object.assign({}, getConfig().table.customConfig, props.customConfig)
     })
 
     const computeAutoWidthColumnList = computed(() => {
