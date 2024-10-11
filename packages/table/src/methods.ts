@@ -914,10 +914,10 @@ const Methods = {
    * @param {Row} row 行对象
    */
   getRowSeq (row: any) {
-    const { fullDataRowIdData } = this
+    const { fullAllDataRowIdData } = this
     if (row) {
       const rowid = getRowid(this, row)
-      const rest = fullDataRowIdData[rowid]
+      const rest = fullAllDataRowIdData[rowid]
       if (rest) {
         return rest.seq
       }
@@ -929,14 +929,30 @@ const Methods = {
    * @param {Row} row 行对象
    */
   getRowIndex (row: any) {
-    return this.fullDataRowMap.has(row) ? this.fullDataRowMap.get(row).index : -1
+    const { fullAllDataRowIdData } = this
+    if (row) {
+      const rowid = getRowid(this, row)
+      const rest = fullAllDataRowIdData[rowid]
+      if (rest) {
+        return rest.index
+      }
+    }
+    return -1
   },
   /**
    * 根据 row 获取相对于当前数据中的索引
    * @param {Row} row 行对象
    */
   getVTRowIndex (row: any) {
-    return this.afterFullData.indexOf(row)
+    const { fullAllDataRowIdData } = this
+    if (row) {
+      const rowid = getRowid(this, row)
+      const rest = fullAllDataRowIdData[rowid]
+      if (rest) {
+        return rest._index
+      }
+    }
+    return -1
   },
   // 在 v3 中废弃
   _getRowIndex (row: any) {
@@ -950,7 +966,15 @@ const Methods = {
    * @param {Row} row 行对象
    */
   getVMRowIndex (row: any) {
-    return this.tableData.indexOf(row)
+    const { fullAllDataRowIdData } = this
+    if (row) {
+      const rowid = getRowid(this, row)
+      const rest = fullAllDataRowIdData[rowid]
+      if (rest) {
+        return rest.$index
+      }
+    }
+    return -1
   },
   // 在 v3 中废弃
   $getRowIndex (row: any) {
@@ -964,14 +988,28 @@ const Methods = {
    * @param {ColumnInfo} column 列配置
    */
   getColumnIndex (column: any) {
-    return this.fullColumnMap.has(column) ? this.fullColumnMap.get(column).index : -1
+    const { fullColumnIdData } = this
+    if (column) {
+      const rest = fullColumnIdData[column.id]
+      if (rest) {
+        return rest.index
+      }
+    }
+    return -1
   },
   /**
    * 根据 column 获取相对于当前表格列中的索引
    * @param {ColumnInfo} column 列配置
    */
   getVTColumnIndex (column: any) {
-    return this.visibleColumn.indexOf(column)
+    const { fullColumnIdData } = this
+    if (column) {
+      const rest = fullColumnIdData[column.id]
+      if (rest) {
+        return rest._index
+      }
+    }
+    return -1
   },
   // 在 v3 中废弃
   _getColumnIndex (column: any) {
@@ -985,7 +1023,14 @@ const Methods = {
    * @param {ColumnInfo} column 列配置
    */
   getVMColumnIndex (column: any) {
-    return this.tableColumn.indexOf(column)
+    const { fullColumnIdData } = this
+    if (column) {
+      const rest = fullColumnIdData[column.id]
+      if (rest) {
+        return rest.$index
+      }
+    }
+    return -1
   },
   // 在 v3 中废弃
   $getColumnIndex (column: any) {
@@ -2151,7 +2196,9 @@ const Methods = {
               })
             } else {
               const labelEl = cellEl.firstChild as HTMLElement
-              titleWidth = labelEl.offsetWidth
+              if (labelEl) {
+                titleWidth = labelEl.offsetWidth
+              }
             }
             if (titleWidth) {
               colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
