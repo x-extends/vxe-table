@@ -305,8 +305,9 @@ export default {
                 if (XEUtils.isString(validator)) {
                   const gvItem = validators.get(validator)
                   if (gvItem) {
-                    if (gvItem.cellValidatorMethod) {
-                      customValid = gvItem.cellValidatorMethod(validParams)
+                    const tcvMethod = gvItem.tableCellValidatorMethod || gvItem.cellValidatorMethod
+                    if (tcvMethod) {
+                      customValid = tcvMethod(validParams)
                     } else {
                       if (process.env.VUE_APP_VXE_ENV === 'development') {
                         warnLog('vxe.error.notValidators', [validator])
