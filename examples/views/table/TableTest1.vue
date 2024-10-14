@@ -1,104 +1,477 @@
 <template>
-  <div style="height: 400px;overflow: hidden;">
+  <div>
+    <p class="tip">
+      通过表尾来实现合计功能，设置 <table-api-link prop="show-footer"/> show-footer 和 <table-api-link prop="footer-method"/> 设置表尾数据，结果返回一个二维数组<br>
+      需要注意的是表尾的调用并非实时的，而是在 data 初始化时才会触发执行；如果要达到实时调用请手动调用 <table-api-link prop="updateFooter"/> 方法<br>
+      <span class="red">（注：<table-api-link prop="footer-method"/> 表尾的数据都是自行生成的，该示例仅供参考）</span>
+    </p>
+
     <vxe-table
+      class="mytable-footer"
       border
-      stripe
-      resizable
-      highlight-hover-row
-      height="100%"
-      :loading="demo1.loading"
-      :checkbox-config="{labelField: 'id', highlight: true, range: true}"
-      :data="demo1.tableData">
+      show-footer
+      max-height="400"
+      :row-config="{isHover: true}"
+      :footer-method="footerMethod1"
+      :data="tableData1">
       <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
-      <vxe-column field="role" title="Role"></vxe-column>
       <vxe-column field="name" title="Name" sortable></vxe-column>
-      <vxe-column field="age" title="Age" :filters="ageOptions" :filter-method="filterAgeMethod">
-        <template #filter="{ $panel, column }">
-          <vxe-input class="my-input" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选" />
-        </template>
-      </vxe-column>
-      <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
-      <vxe-column field="address" title="Address" show-overflow></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="amount" title="Amount"></vxe-column>
     </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[0] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[1] }}</pre-code>
+    </pre>
+
+    <p class="tip">还可以配合 <table-api-link prop="footer-cell-class-name"/> 自定义不同列颜色</p>
+
+    <vxe-table
+      class="mytable-footer"
+      border
+      show-footer
+      height="400"
+      :footer-method="footerMethod"
+      :footer-cell-class-name="footerCellClassName2"
+      :data="tableData2">
+      <vxe-column type="seq" width="60"></vxe-column>
+      <vxe-column field="name" title="Name" sortable></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+      <vxe-column field="amount" title="Amount"></vxe-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[2] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[3] }}</pre-code>
+      <pre-code class="css">{{ demoCodes[4] }}</pre-code>
+    </pre>
+
+    <p class="tip">还可以固定列</p>
+
+    <vxe-toolbar>
+      <template #buttons>
+        <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
+        <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
+      </template>
+    </vxe-toolbar>
+
+    <vxe-table
+      class="mytable-footer"
+      border
+      height="400"
+      show-overflow
+      :show-header="showHeader"
+      :show-footer="showFooter"
+      :footer-method="footerMethod"
+      :footer-cell-class-name="footerCellClassName3"
+      :data="tableData3">
+      <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+      <vxe-colgroup title="基本信息">
+        <vxe-column field="name" title="Name" min-width="600" sortable></vxe-column>
+        <vxe-column field="age" title="Age" min-width="600"></vxe-column>
+      </vxe-colgroup>
+      <vxe-column field="date" title="Date" min-width="600"></vxe-column>
+      <vxe-column field="amount" title="Amount" width="200" fixed="right"></vxe-column>
+    </vxe-table>
+
+    <p class="demo-code">{{ $t('app.body.button.showCode') }}</p>
+
+    <pre>
+      <pre-code class="xml">{{ demoCodes[5] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[6] }}</pre-code>
+      <pre-code class="javascript">{{ demoCodes[7] }}</pre-code>
+    </pre>
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-
-export default Vue.extend({
+<script>
+export default {
   data () {
     return {
-      ageOptions: [
-        { data: '' }
+      showHeader: true,
+      showFooter: true,
+      tableData1: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'test abc' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'test abc' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'test abc' }
       ],
-      demo1: {
-        loading: false,
-        tableData: [] as any[],
-        sexList: [
-          { label: '女', value: '0' },
-          { label: '男', value: '1' }
-        ],
-        ageOptions: [
-          { label: '大于16岁', value: 16 },
-          { label: '大于26岁', value: 26 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 },
-          { label: '大于30岁', value: 30 }
-        ]
-      }
+      footerData1: [
+        ['合计', '2', '44', '67', '-']
+      ],
+      tableData2: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'test abc' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'test abc' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'test abc' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'test abc' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'test abc' }
+      ],
+      tableData3: [
+        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'test abc' },
+        { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+        { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+        { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'test abc' },
+        { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+        { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'test abc' },
+        { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'test abc' },
+        { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'test abc' }
+      ],
+      demoCodes: [
+        `
+        <vxe-table
+          class="mytable-footer"
+          border
+          show-footer
+          max-height="400"
+          :row-config="{isHover: true}"
+          :footer-method="footerMethod1"
+          :data="tableData1">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="amount" title="Amount"></vxe-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData1: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'test abc' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'test abc' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'test abc' }
+              ],
+              footerData1: [
+                ['合计', '2', '44', '67', '-']
+              ]
+            }
+          },
+          methods: {
+            footerMethod1 () {
+              // 返回一个二维数组的表尾合计
+              return this.footerData1
+            }
+          }
+        }
+        `,
+        `
+        <vxe-table
+          class="mytable-footer"
+          border
+          show-footer
+          height="400"
+          :footer-method="footerMethod"
+          :footer-cell-class-name="footerCellClassName2"
+          :data="tableData2">
+          <vxe-column type="seq" width="60"></vxe-column>
+          <vxe-column field="name" title="Name" sortable></vxe-column>
+          <vxe-column field="sex" title="Sex"></vxe-column>
+          <vxe-column field="age" title="Age"></vxe-column>
+          <vxe-column field="amount" title="Amount"></vxe-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              tableData2: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'test abc' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'test abc' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'test abc' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'test abc' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'test abc' }
+              ]
+            }
+          },
+          methods: {
+            footerCellClassName2 ({ $rowIndex, column, columnIndex }) {
+              if (columnIndex === 0) {
+                if ($rowIndex === 0) {
+                  return 'col-blue'
+                } else {
+                  return 'col-red'
+                }
+              }
+            },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
+            footerMethod ({ columns, data }) {
+              const means = []
+              const sums = []
+              const others = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                  others.push('其他')
+                } else {
+                  let meanCell = null
+                  let sumCell = null
+                  let otherCell = '-'
+                  switch (column.field) {
+                    case 'age':
+                    case 'amount':
+                      meanCell = this.meanNum(data, column.field)
+                      sumCell = this.sumNum(data, column.field)
+                      break
+                    case 'sex':
+                      otherCell = '无'
+                      break
+                  }
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                  others.push(otherCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [means, sums, others]
+            }
+          }
+        }
+        `,
+        `
+        .mytable-footer .col-blue {
+          background-color: #2db7f5;
+          color: #fff;
+        }
+        .mytable-footer .col-red {
+          background-color: red;
+          color: #fff;
+        }
+        `,
+        `
+        <vxe-toolbar>
+          <template #buttons>
+            <vxe-button @click="showHeader = !showHeader">显示/隐藏表头</vxe-button>
+            <vxe-button @click="showFooter = !showFooter">显示/隐藏表尾</vxe-button>
+          </template>
+        </vxe-toolbar>
+
+        <vxe-table
+          class="mytable-footer"
+          border
+          height="400"
+          show-overflow
+          :show-header="showHeader"
+          :show-footer="showFooter"
+          :footer-method="footerMethod"
+          :footer-cell-class-name="footerCellClassName3"
+          :data="tableData3">
+          <vxe-column type="seq" width="60" fixed="left"></vxe-column>
+          <vxe-colgroup title="基本信息">
+            <vxe-column field="name" title="Name" min-width="600" sortable></vxe-column>
+            <vxe-column field="age" title="Age" min-width="600"></vxe-column>
+          </vxe-colgroup>
+          <vxe-column field="date" title="Date" min-width="600"></vxe-column>
+          <vxe-column field="rate" title="Rate" width="200" fixed="right"></vxe-column>
+        </vxe-table>
+        `,
+        `
+        export default {
+          data () {
+            return {
+              showFooter: true,
+              tableData3: [
+                { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, amount: 888, address: 'test abc' },
+                { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, amount: 666, address: 'Guangzhou' },
+                { id: 10003, name: 'Test3', role: 'PM', sex: '1', age: 32, amount: 89, address: 'Shanghai' },
+                { id: 10004, name: 'Test4', role: 'Designer', sex: '0', age: 23, amount: 1000, address: 'test abc' },
+                { id: 10005, name: 'Test5', role: 'Develop', sex: '0', age: 30, amount: 999, address: 'Shanghai' },
+                { id: 10006, name: 'Test6', role: 'Designer', sex: '0', age: 21, amount: 998, address: 'test abc' },
+                { id: 10007, name: 'Test7', role: 'Test', sex: '1', age: 29, amount: 2000, address: 'test abc' },
+                { id: 10008, name: 'Test8', role: 'Develop', sex: '1', age: 35, amount: 999, address: 'test abc' }
+              ]
+            }
+          },
+          methods: {
+            footerCellClassName3 ({ $rowIndex, column }) {
+              if (column.type === 'seq') {
+                if ($rowIndex === 0) {
+                  return 'col-blue'
+                } else {
+                  return 'col-red'
+                }
+              } else if (column.field === 'age') {
+                if ($rowIndex === 1) {
+                  return 'col-red'
+                }
+              }
+            },
+            meanNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count / list.length
+            },
+            sumNum (list, field) {
+              let count = 0
+              list.forEach(item => {
+                count += Number(item[field])
+              })
+              return count
+            },
+            footerMethod ({ columns, data }) {
+              const means = []
+              const sums = []
+              const others = []
+              columns.forEach((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  means.push('平均')
+                  sums.push('和值')
+                  others.push('其他')
+                } else {
+                  let meanCell = null
+                  let sumCell = null
+                  let otherCell = '-'
+                  switch (column.field) {
+                    case 'age':
+                    case 'amount':
+                      meanCell = this.meanNum(data, column.field)
+                      sumCell = this.sumNum(data, column.field)
+                      break
+                    case 'sex':
+                      otherCell = '无'
+                      break
+                  }
+                  means.push(meanCell)
+                  sums.push(sumCell)
+                  others.push(otherCell)
+                }
+              })
+              // 返回一个二维数组的表尾合计
+              return [means, sums, others]
+            }
+          }
+        }
+        `,
+        `
+        .mytable-footer .col-blue {
+          background-color: #2db7f5;
+          color: #fff;
+        }
+        .mytable-footer .col-red {
+          background-color: red;
+          color: #fff;
+        }
+        `
+      ]
     }
   },
   methods: {
-    formatterSex ({ cellValue }: any) {
-      const item = this.demo1.sexList.find(item => item.value === cellValue)
-      return item ? item.label : ''
+    footerCellClassName2 ({ $rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        if ($rowIndex === 0) {
+          return 'col-blue'
+        } else {
+          return 'col-red'
+        }
+      }
     },
-    filterAgeMethod ({ value, row }: any) {
-      return row.age >= value
+    footerCellClassName3 ({ $rowIndex, column }) {
+      if (column.type === 'seq') {
+        if ($rowIndex === 0) {
+          return 'col-blue'
+        } else {
+          return 'col-red'
+        }
+      } else if (column.field === 'age') {
+        if ($rowIndex === 1) {
+          return 'col-red'
+        }
+      }
+    },
+    footerMethod1 () {
+      // 返回一个二维数组的表尾合计
+      return this.footerData1
+    },
+    meanNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count / list.length
+    },
+    sumNum (list, field) {
+      let count = 0
+      list.forEach(item => {
+        count += Number(item[field])
+      })
+      return count
+    },
+    footerMethod ({ columns, data }) {
+      const means = []
+      const sums = []
+      const others = []
+      columns.forEach((column, columnIndex) => {
+        if (columnIndex === 0) {
+          means.push('平均')
+          sums.push('和值')
+          others.push('其他')
+        } else {
+          let meanCell = null
+          let sumCell = null
+          let otherCell = '-'
+          switch (column.field) {
+            case 'age':
+            case 'amount':
+              meanCell = this.meanNum(data, column.field)
+              sumCell = this.sumNum(data, column.field)
+              break
+            case 'sex':
+              otherCell = '无'
+              break
+          }
+          means.push(meanCell)
+          sums.push(sumCell)
+          others.push(otherCell)
+        }
+      })
+      // 返回一个二维数组的表尾合计
+      return [means, sums, others]
     }
-  },
-  mounted () {
-    this.demo1.loading = true
-    setTimeout(() => {
-      this.demo1.tableData = [
-        { id: 10001, name: 'Test1', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
-        { id: 10002, name: 'Test2', role: 'Test', sex: '1', age: 22, address: 'Guangzhou' },
-        { id: 10003, name: 'Test3', role: 'PM', sex: '0', age: 32, address: 'Shanghai' },
-        { id: 10004, name: 'Test4', role: 'Designer', sex: '1', age: 23, address: 'test abc' },
-        { id: 10005, name: 'Test5', role: 'Develop', sex: '1', age: 30, address: 'Shanghai' },
-        { id: 10006, name: 'Test6', role: 'Designer', sex: '1', age: 21, address: 'test abc' },
-        { id: 10007, name: 'Test7', role: 'Test', sex: '0', age: 29, address: 'test abc' },
-        { id: 10008, name: 'Test8', role: 'Develop', sex: '0', age: 35, address: 'test abc' },
-        { id: 10009, name: 'Test9', role: 'Test', sex: '1', age: 21, address: 'test abc' },
-        { id: 10010, name: 'Test10', role: 'Develop', sex: '0', age: 28, address: 'test abc' },
-        { id: 10011, name: 'Test11', role: 'Test', sex: '0', age: 29, address: 'test abc' },
-        { id: 10012, name: 'Test12', role: 'Develop', sex: '1', age: 27, address: 'test abc' },
-        { id: 10013, name: 'Test13', role: 'Test', sex: '0', age: 24, address: 'test abc' },
-        { id: 10014, name: 'Test14', role: 'Develop', sex: '1', age: 34, address: 'test abc' },
-        { id: 10015, name: 'Test15', role: 'Test', sex: '1', age: 21, address: 'test abc' },
-        { id: 10016, name: 'Test16', role: 'Develop', sex: '0', age: 20, address: 'test abc' },
-        { id: 10017, name: 'Test17', role: 'Test', sex: '1', age: 31, address: 'test abc' },
-        { id: 10018, name: 'Test18', role: 'Develop', sex: '0', age: 32, address: 'test abc' },
-        { id: 10019, name: 'Test19', role: 'Test', sex: '1', age: 37, address: 'test abc' },
-        { id: 10020, name: 'Test20', role: 'Develop', sex: '1', age: 41, address: 'test abc' }
-      ]
-      this.demo1.loading = false
-    }, 100)
   }
-})
+}
 </script>
+
+<style lang="scss" scoped>
+:deep(.mytable-footer .col-blue) {
+  background-color: #2db7f5;
+  color: #fff;
+}
+:deep(.mytable-footer .col-red) {
+  background-color: red;
+  color: #fff;
+}
+</style>

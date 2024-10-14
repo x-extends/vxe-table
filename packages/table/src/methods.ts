@@ -1975,7 +1975,7 @@ const Methods = {
     const leftList: any[] = []
     const centerList: any[] = []
     const rightList: any[] = []
-    const { collectColumn, tableFullColumn, isGroup, columnStore, sXOpts, scrollXStore } = this
+    const { collectColumn, tableFullColumn, isGroup, columnStore, sXOpts, scrollXStore, fullColumnIdData } = this
     // 如果是分组表头，如果子列全部被隐藏，则根列也隐藏
     if (isGroup) {
       const leftGroupList: any[] = []
@@ -2060,6 +2060,13 @@ const Methods = {
       this.clearMergeFooterItems()
     }
     this.scrollXLoad = scrollXLoad
+    visibleColumn.forEach((column, index) => {
+      const colid = column.id
+      const rest = fullColumnIdData[colid]
+      if (rest) {
+        rest._index = index
+      }
+    })
     this.visibleColumn = visibleColumn
     this.handleTableColumn()
     return this.updateFooter().then(() => {
