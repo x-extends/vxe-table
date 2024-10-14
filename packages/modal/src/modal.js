@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 import UtilTools, { getFuncText } from '../../tools/utils'
 import DomTools from '../../tools/dom'
 import { GlobalEvent } from '../../tools/event'
-import { errLog } from '../../tools/log'
+import { warnLog, errLog } from '../../tools/log'
 import { getSlotVNs } from '../../tools/vn'
 import VxeLoading from '../../loading/index'
 
@@ -98,6 +98,11 @@ export default {
   },
   mounted () {
     const { $listeners, events = {} } = this
+    if (process.env.VUE_APP_VXE_ENV === 'development') {
+      if (this.type === 'modal' && this.showFooter && !(this.showConfirmButton || this.showCancelButton || this.$scopedSlots.footer)) {
+        warnLog('vxe.modal.footPropErr')
+      }
+    }
     if (this.value) {
       this.open()
     }

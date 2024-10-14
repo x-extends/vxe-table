@@ -200,7 +200,8 @@ export default {
       zoomIn: 'Maximize',
       zoomOut: 'Reduction',
       close: 'Close',
-      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.'
+      miniMaxSize: 'The number of minimized Windows cannot exceed {0}.',
+      footPropErr: 'show-footer 仅用于启用表尾，需配合 show-confirm-button | show-cancel-button | 插槽使用'
     },
     drawer: {
       close: 'Close'
