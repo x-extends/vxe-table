@@ -683,8 +683,8 @@ renderer.mixin({
         const optionValue = option.data
         return h(getDefaultComponent(renderOpts), {
           key: oIndex,
-          ...getCellEditFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
-          ...getFilterOns(renderOpts, params, option)
+          props: getCellEditFilterProps(renderOpts, params, optionValue, { options, optionProps, optionGroups, optionGroupProps }),
+          on: getFilterOns(renderOpts, params, option)
         })
       })
     },

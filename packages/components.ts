@@ -1,4 +1,3 @@
-import { VueConstructor } from 'vue'
 import { VxeUI } from '@vxe-ui/core'
 
 import { VxeColumn } from './column'
@@ -20,7 +19,7 @@ const components = [
 ]
 
 // 默认安装
-export function install (app: VueConstructor, options?: VxeGlobalConfig) {
+export function install (app: any, options?: VxeGlobalConfig) {
   VxeUI.setConfig(options)
   components.forEach(component => component.install(app))
 }
