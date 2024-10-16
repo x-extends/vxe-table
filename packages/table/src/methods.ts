@@ -338,7 +338,6 @@ const Methods = {
     const { scrollXLoad, scrollYLoad } = this
     return this.handleTableData(true).then(() => {
       this.updateFooter()
-      this.checkSelectionStatus()
       if (scrollXLoad || scrollYLoad) {
         if (scrollXLoad) {
           this.updateScrollXSpace()
@@ -3352,7 +3351,8 @@ const Methods = {
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
-    rows.forEach((row: any) => this.handleSelectRow({ row }, !!value, isForce))
+    this.handleBatchSelectRows(rows, !!value, isForce)
+    this.checkSelectionStatus()
     return this.$nextTick()
   },
   /**
@@ -3361,6 +3361,9 @@ const Methods = {
    * @param {Boolean} value 是否选中
    */
   setCheckboxRow (rows: any, value: any) {
+    if (rows && !XEUtils.isArray(rows)) {
+      rows = [rows]
+    }
     return this.handleCheckedCheckboxRow(rows, value, true)
   },
   isCheckedByCheckboxRow (row: any) {
@@ -3374,6 +3377,56 @@ const Methods = {
   isIndeterminateByCheckboxRow (row: any) {
     const { treeIndeterminateMaps } = this
     return !!treeIndeterminateMaps[getRowid(this, row)] && !this.isCheckedByCheckboxRow(row)
+  },
+  /**
+   * 多行
+   * 多选，行选中事件
+   * value 选中true 不选false 半选-1
+   */
+  handleBatchSelectRows (rows: any[], value: any, isForce: any) {
+    const $xeTable = this
+    const { treeConfig } = $xeTable
+
+    const { selectCheckboxMaps, checkboxOpts } = this
+    const { checkField, checkStrictly, checkMethod } = checkboxOpts
+    if (checkField) {
+      if (treeConfig && !checkStrictly) {
+        rows.forEach(row => {
+          this.handleSelectRow({ row }, value, isForce)
+        })
+      } else {
+        rows.forEach(row => {
+          if (isForce || (!checkMethod || checkMethod({ row }))) {
+            XEUtils.set(row, checkField, value)
+            this.handleCheckboxReserveRow(row, value)
+          }
+        })
+      }
+    } else {
+      if (treeConfig && !checkStrictly) {
+        rows.forEach(row => {
+          this.handleSelectRow({ row }, value, isForce)
+        })
+      } else {
+        const selectRowMaps = Object.assign({}, selectCheckboxMaps)
+        rows.forEach(row => {
+          const rowid = getRowid($xeTable, row)
+          if (isForce || (!checkMethod || checkMethod({ row }))) {
+            if (value) {
+              if (!selectRowMaps[rowid]) {
+                selectRowMaps[rowid] = row
+              }
+            } else {
+              if (selectRowMaps[rowid]) {
+                delete selectRowMaps[rowid]
+              }
+            }
+            this.handleCheckboxReserveRow(row, value)
+          }
+        })
+        this.selectCheckboxMaps = selectRowMaps
+      }
+    }
   },
   /**
    * 多选，行选中事件
@@ -3536,7 +3589,6 @@ const Methods = {
       }
     }
     this.selectCheckboxMaps = selectRowMaps
-    this.checkSelectionStatus()
   },
   handleToggleCheckRowEvent (evnt: any, params: any) {
     const { selectCheckboxMaps, checkboxOpts } = this
@@ -3555,6 +3607,7 @@ const Methods = {
       this.triggerCheckRowEvent(evnt, params, value)
     } else {
       this.handleSelectRow(params, value)
+      this.checkSelectionStatus()
     }
   },
   triggerCheckRowEvent (evnt: any, params: any, value: any) {
@@ -3582,6 +3635,7 @@ const Methods = {
     }
     if (!checkMethod || checkMethod({ row })) {
       this.handleSelectRow(params, value)
+      this.checkSelectionStatus()
       this.emitEvent('checkbox-change', Object.assign({
         records: this.getCheckboxRecords(),
         reserves: this.getCheckboxReserveRecords(),
@@ -3598,6 +3652,7 @@ const Methods = {
     const { checkField } = checkboxOpts
     const value = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid(this, row)]
     this.handleSelectRow({ row }, value, true)
+    this.checkSelectionStatus()
     return this.$nextTick()
   },
   handleCheckedAllCheckboxRow (value: any, isForce: any) {
