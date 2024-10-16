@@ -374,28 +374,35 @@ export function rowToVisible ($xetable: any, row: any) {
   return Promise.resolve()
 }
 
-export function colToVisible ($xetable: any, column: any) {
-  const { tableBody } = $xetable.$refs
+export function colToVisible ($xeTable: any, column: any) {
+  const { columnStore, scrollXLoad, visibleColumn } = $xeTable
+  const { tableBody } = $xeTable.$refs
+  const { leftList, rightList } = columnStore
   const bodyElem = tableBody ? tableBody.$el : null
+  let offsetFixedLeft = 0
+  leftList.forEach((item: any) => {
+    offsetFixedLeft += item.renderWidth
+  })
+  let offsetFixedRight = 0
+  rightList.forEach((item: any) => {
+    offsetFixedRight += item.renderWidth
+  })
   if (bodyElem) {
+    const bodyWidth = bodyElem.clientWidth
+    const bodySrcollLeft = bodyElem.scrollLeft
     const tdElem = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {
-      const bodyWidth = bodyElem.clientWidth
-      const bodySrcollLeft = bodyElem.scrollLeft
       const tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
       const tdWidth = tdElem.clientWidth
       // 检测行是否在可视区中
-      if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
-        // 向左定位
-        return $xetable.scrollTo(tdOffsetLeft)
-      } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
-        // 向右定位
-        return $xetable.scrollTo(bodySrcollLeft + tdWidth)
+      if (tdOffsetLeft < (bodySrcollLeft + offsetFixedLeft)) {
+        return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - 1)
+      } else if ((tdOffsetLeft + tdWidth) >= (bodyWidth + bodySrcollLeft - offsetFixedRight)) {
+        return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - offsetFixedRight + 1)
       }
     } else {
-      // 如果是虚拟渲染跨行滚动
-      if ($xetable.scrollXLoad) {
-        const visibleColumn = $xetable.visibleColumn
+      // 检测是否在虚拟渲染可视区中
+      if (scrollXLoad) {
         let scrollLeft = 0
         for (let index = 0; index < visibleColumn.length; index++) {
           if (visibleColumn[index] === column) {
@@ -403,7 +410,10 @@ export function colToVisible ($xetable: any, column: any) {
           }
           scrollLeft += visibleColumn[index].renderWidth
         }
-        return $xetable.scrollTo(scrollLeft)
+        if (scrollLeft < bodySrcollLeft) {
+          return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - 1)
+        }
+        return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - offsetFixedRight + 1)
       }
     }
   }

@@ -133,7 +133,7 @@ function computeVirtualY (_vm: any) {
   return { rowHeight: 0, visibleSize: 8 }
 }
 
-function calculateMergerOffserIndex (list: any, offsetItem: any, type: any) {
+function calculateMergerOffsetIndex (list: any, offsetItem: any, type: any) {
   for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
     const mergeItem = list[mcIndex]
     const { startIndex, endIndex } = offsetItem
@@ -1383,6 +1383,7 @@ const Methods = {
    */
   handleVirtualTreeToList () {
     const { treeOpts, treeConfig, treeExpandedMaps, afterTreeFullData, afterFullData } = this
+    const childrenField = treeOpts.children || treeOpts.childrenField
     if (treeConfig && treeOpts.transform) {
       const fullData: any[] = []
       const expandMaps: any = {}
@@ -1393,7 +1394,7 @@ const Methods = {
           expandMaps[rowid] = 1
           fullData.push(row)
         }
-      }, { children: treeOpts.mapChildrenField })
+      }, { children: childrenField })
       this.afterFullData = fullData
       this.updateScrollYStatus(fullData)
       return fullData
@@ -1409,6 +1410,7 @@ const Methods = {
     const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
     const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
     const { transform } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
     let tableData: any[] = []
     let tableTree: any[] = []
     const filterColumns: any[] = []
@@ -1460,7 +1462,12 @@ const Methods = {
       }
       if (treeConfig && transform) {
         // 筛选虚拟树
-        tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, { ...treeOpts, original: true })
+        tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
+          original: true,
+          isEvery: true,
+          children: treeOpts.mapChildrenField,
+          mapChildren: childrenField
+        })
         tableData = tableTree
       } else {
         tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
@@ -1469,7 +1476,12 @@ const Methods = {
     } else {
       if (treeConfig && transform) {
         // 还原虚拟树
-        tableTree = XEUtils.searchTree(tableFullTreeData, () => true, { ...treeOpts, original: true })
+        tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
+          original: true,
+          isEvery: true,
+          children: treeOpts.mapChildrenField,
+          mapChildren: childrenField
+        })
         tableData = tableTree
       } else {
         tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
@@ -5135,7 +5147,7 @@ const Methods = {
       startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
       endIndex: toVisibleIndex + visibleSize + offsetSize
     }
-    calculateMergerOffserIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
+    calculateMergerOffsetIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
     const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
       if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
@@ -5175,7 +5187,7 @@ const Methods = {
       startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
       endIndex: toVisibleIndex + visibleSize + offsetSize
     }
-    calculateMergerOffserIndex(mergeList, offsetItem, 'row')
+    calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
     const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
     if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
       if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
