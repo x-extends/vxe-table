@@ -801,7 +801,7 @@ export default defineComponent({
       return { rowHeight: 0, visibleSize: 8 }
     }
 
-    const calculateMergerOffserIndex = (list: any[], offsetItem: any, type: 'row' | 'col') => {
+    const calculateMergerOffsetIndex = (list: any[], offsetItem: any, type: 'row' | 'col') => {
       for (let mcIndex = 0, len = list.length; mcIndex < len; mcIndex++) {
         const mergeItem = list[mcIndex]
         const { startIndex, endIndex } = offsetItem
@@ -1142,7 +1142,9 @@ export default defineComponent({
                 })
               } else {
                 const labelEl = cellEl.firstChild as HTMLElement
-                titleWidth = labelEl.offsetWidth
+                if (labelEl) {
+                  titleWidth = labelEl.offsetWidth
+                }
               }
               if (titleWidth) {
                 colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
@@ -1373,6 +1375,7 @@ export default defineComponent({
       const { treeConfig } = props
       const { treeExpandedMaps } = reactData
       const treeOpts = computeTreeOpts.value
+      const childrenField = treeOpts.children || treeOpts.childrenField
       if (treeConfig && treeOpts.transform) {
         const fullData: any[] = []
         const expandMaps: {
@@ -1385,7 +1388,7 @@ export default defineComponent({
             expandMaps[rowid] = 1
             fullData.push(row)
           }
-        }, { children: treeOpts.mapChildrenField })
+        }, { children: childrenField })
         internalData.afterFullData = fullData
         updateScrollYStatus(fullData)
         return fullData
@@ -1403,6 +1406,7 @@ export default defineComponent({
       const filterOpts = computeFilterOpts.value
       const sortOpts = computeSortOpts.value
       const treeOpts = computeTreeOpts.value
+      const childrenField = treeOpts.children || treeOpts.childrenField
       const { transform } = treeOpts
       const { remote: allRemoteFilter, filterMethod: allFilterMethod } = filterOpts
       const { remote: allRemoteSort, sortMethod: allSortMethod, multiple: sortMultiple, chronological } = sortOpts
@@ -1464,7 +1468,12 @@ export default defineComponent({
           }
           if (treeConfig && transform) {
             // 筛选虚拟树
-            tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, { ...treeOpts, original: true })
+            tableTree = XEUtils.searchTree(tableFullTreeData, handleFilter, {
+              original: true,
+              isEvery: true,
+              children: treeOpts.mapChildrenField,
+              mapChildren: childrenField
+            })
             tableData = tableTree
           } else {
             tableData = treeConfig ? tableFullTreeData.filter(handleFilter) : tableFullData.filter(handleFilter)
@@ -1473,7 +1482,12 @@ export default defineComponent({
         } else {
           if (treeConfig && transform) {
             // 还原虚拟树
-            tableTree = XEUtils.searchTree(tableFullTreeData, () => true, { ...treeOpts, original: true })
+            tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
+              original: true,
+              isEvery: true,
+              children: treeOpts.mapChildrenField,
+              mapChildren: childrenField
+            })
             tableData = tableTree
           } else {
             tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
@@ -1506,7 +1520,12 @@ export default defineComponent({
       } else {
         if (treeConfig && transform) {
           // 还原虚拟树
-          tableTree = XEUtils.searchTree(tableFullTreeData, () => true, { ...treeOpts, original: true })
+          tableTree = XEUtils.searchTree(tableFullTreeData, () => true, {
+            original: true,
+            isEvery: true,
+            children: treeOpts.mapChildrenField,
+            mapChildren: childrenField
+          })
           tableData = tableTree
         } else {
           tableData = treeConfig ? tableFullTreeData.slice(0) : tableFullData.slice(0)
@@ -2441,7 +2460,7 @@ export default defineComponent({
         startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
         endIndex: toVisibleIndex + visibleSize + offsetSize
       }
-      calculateMergerOffserIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
+      calculateMergerOffsetIndex(mergeList.concat(mergeFooterList), offsetItem, 'col')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
         if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {
@@ -2729,7 +2748,7 @@ export default defineComponent({
         startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
         endIndex: toVisibleIndex + visibleSize + offsetSize
       }
-      calculateMergerOffserIndex(mergeList, offsetItem, 'row')
+      calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
       if (toVisibleIndex <= startIndex || toVisibleIndex >= endIndex - visibleSize - 1) {
         if (startIndex !== offsetStartIndex || endIndex !== offsetEndIndex) {

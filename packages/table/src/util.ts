@@ -413,28 +413,35 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
 export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo) {
   const { reactData, internalData } = $xeTable
   const { refTableBody } = $xeTable.getRefMaps()
-  const { scrollXLoad } = reactData
+  const { columnStore, scrollXLoad } = reactData
   const { visibleColumn } = internalData
+  const { leftList, rightList } = columnStore
   const tableBody = refTableBody.value
   const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+  let offsetFixedLeft = 0
+  leftList.forEach(item => {
+    offsetFixedLeft += item.renderWidth
+  })
+  let offsetFixedRight = 0
+  rightList.forEach(item => {
+    offsetFixedRight += item.renderWidth
+  })
   if (bodyElem) {
+    const bodyWidth = bodyElem.clientWidth
+    const bodySrcollLeft = bodyElem.scrollLeft
     const tdElem: HTMLTableCellElement | null = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {
-      const bodyWidth = bodyElem.clientWidth
-      const bodySrcollLeft = bodyElem.scrollLeft
       const tdOffsetParent = tdElem.offsetParent as HTMLElement
       const tdOffsetLeft = tdElem.offsetLeft + (tdOffsetParent ? tdOffsetParent.offsetLeft : 0)
       const tdWidth = tdElem.clientWidth
-      // 检测行是否在可视区中
-      if (tdOffsetLeft < bodySrcollLeft || tdOffsetLeft > bodySrcollLeft + bodyWidth) {
-        // 向左定位
-        return $xeTable.scrollTo(tdOffsetLeft)
-      } else if (tdOffsetLeft + tdWidth >= bodyWidth + bodySrcollLeft) {
-        // 向右定位
-        return $xeTable.scrollTo(bodySrcollLeft + tdWidth)
+      // 检测是否在可视区中
+      if (tdOffsetLeft < (bodySrcollLeft + offsetFixedLeft)) {
+        return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - 1)
+      } else if ((tdOffsetLeft + tdWidth) >= (bodyWidth + bodySrcollLeft - offsetFixedRight)) {
+        return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - offsetFixedRight + 1)
       }
     } else {
-      // 如果是虚拟渲染跨行滚动
+      // 检测是否在虚拟渲染可视区中
       if (scrollXLoad) {
         let scrollLeft = 0
         for (let index = 0; index < visibleColumn.length; index++) {
@@ -444,7 +451,10 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
           }
           scrollLeft += currCol.renderWidth
         }
-        return $xeTable.scrollTo(scrollLeft)
+        if (scrollLeft < bodySrcollLeft) {
+          return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - 1)
+        }
+        return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - offsetFixedRight + 1)
       }
     }
   }
