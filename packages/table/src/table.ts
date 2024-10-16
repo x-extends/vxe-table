@@ -5732,7 +5732,6 @@ export default defineComponent({
       handleBatchSelectRows (rows, value, isForce) {
         const { treeConfig } = props
         const { selectCheckboxMaps } = reactData
-        const selectRowMaps = Object.assign({}, selectCheckboxMaps)
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, checkStrictly, checkMethod } = checkboxOpts
         if (checkField) {
@@ -5754,6 +5753,7 @@ export default defineComponent({
               tablePrivateMethods.handleSelectRow({ row }, value, isForce)
             })
           } else {
+            const selectRowMaps = Object.assign({}, selectCheckboxMaps)
             rows.forEach(row => {
               const rowid = getRowid($xeTable, row)
               if (isForce || (!checkMethod || checkMethod({ row }))) {
@@ -5769,9 +5769,9 @@ export default defineComponent({
                 handleCheckboxReserveRow(row, value)
               }
             })
+            reactData.selectCheckboxMaps = selectRowMaps
           }
         }
-        reactData.selectCheckboxMaps = selectRowMaps
       },
       /**
        * 单行
