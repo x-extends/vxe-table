@@ -433,17 +433,18 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
     if (tdElem) {
       const tdOffsetParent = tdElem.offsetParent as HTMLElement
       const tdOffsetLeft = tdElem.offsetLeft + (tdOffsetParent ? tdOffsetParent.offsetLeft : 0)
-      const tdWidth = tdElem.clientWidth
+      const cellWidth = tdElem.clientWidth
       // 检测是否在可视区中
       if (tdOffsetLeft < (bodySrcollLeft + offsetFixedLeft)) {
         return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - 1)
-      } else if ((tdOffsetLeft + tdWidth) >= (bodyWidth + bodySrcollLeft - offsetFixedRight)) {
-        return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - offsetFixedRight + 1)
+      } else if ((tdOffsetLeft + cellWidth - bodySrcollLeft) > (bodyWidth - offsetFixedRight)) {
+        return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - offsetFixedRight - 1))
       }
     } else {
       // 检测是否在虚拟渲染可视区中
       if (scrollXLoad) {
         let scrollLeft = 0
+        const cellWidth = column.renderWidth
         for (let index = 0; index < visibleColumn.length; index++) {
           const currCol = visibleColumn[index]
           if (currCol === column || currCol.id === column.id) {
@@ -454,7 +455,7 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
         if (scrollLeft < bodySrcollLeft) {
           return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - 1)
         }
-        return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - offsetFixedRight + 1)
+        return $xeTable.scrollTo((scrollLeft + cellWidth) - (bodyWidth - offsetFixedRight - 1))
       }
     }
   }
