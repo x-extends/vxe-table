@@ -749,7 +749,6 @@ export default {
       // 渲染所有列
       visibleColumn: [],
       // 缓存数据集
-      fullAllDataRowMap: new Map(),
       fullAllDataRowIdData: {},
       fullDataRowMap: new Map(),
       fullDataRowIdData: {},

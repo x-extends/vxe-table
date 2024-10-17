@@ -652,7 +652,7 @@ const Methods = {
    * 牺牲数据组装的耗时，用来换取使用过程中的流畅
    */
   cacheRowMap (isSource?: boolean) {
-    const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData, fullAllDataRowMap, tableFullTreeData } = this
+    const { treeConfig, treeOpts, tableFullData, fullAllDataRowIdData, tableFullTreeData } = this
     const childrenField = treeOpts.children || treeOpts.childrenField
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowkey = getRowkey(this)
@@ -684,7 +684,6 @@ const Methods = {
       this.fullDataRowIdData = fullDataRowIdMaps
     }
     this.fullAllDataRowIdData = fullAllDataRowIdMaps
-    fullAllDataRowMap.clear()
     if (treeConfig) {
       XEUtils.eachTree(tableFullTreeData, handleCache, { children: childrenField })
     } else {
@@ -720,11 +719,13 @@ const Methods = {
     return this.params
   },
   loadTreeChildren (row: any, childRecords: any) {
-    const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullDataRowMap, fullAllDataRowMap, fullAllDataRowIdData, sourceDataRowIdData } = this
+    const $xeTable = this
+
+    const { keepSource, tableSourceData, treeOpts, fullDataRowIdData, fullAllDataRowIdData, sourceDataRowIdData } = this
     const { transform, mapChildrenField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
-    const rest = fullAllDataRowIdData[getRowid(this, row)]
-    const parentLevel = rest ? rest.level : 0
+    const parentRest = fullAllDataRowIdData[getRowid($xeTable, row)]
+    const parentLevel = parentRest ? parentRest.level : 0
     return this.createData(childRecords).then((rows: any) => {
       if (keepSource) {
         const rowid = getRowid(this, row)
@@ -738,13 +739,11 @@ const Methods = {
         })
       }
       XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
-        const rowid = getRowid(this, childRow)
-        const parentRow = parent || row
+        const rowid = getRowid($xeTable, childRow)
+        const parentRow = parent || parentRest.row
         const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length }
         fullDataRowIdData[rowid] = rest
-        fullDataRowMap.set(childRow, rest)
         fullAllDataRowIdData[rowid] = rest
-        fullAllDataRowMap.set(childRow, rest)
       }, { children: childrenField })
       row[childrenField] = rows
       if (transform) {
@@ -1202,6 +1201,8 @@ const Methods = {
     return null
   },
   getCellLabel (row: any, fieldOrColumn: any) {
+    const $xeTable = this
+
     const column = handleFieldOrColumn(this, fieldOrColumn)
     if (!column) {
       return null
@@ -1210,15 +1211,15 @@ const Methods = {
     const cellValue = getCellValue(row, column)
     let cellLabel = cellValue
     if (formatter) {
-      let rest, formatData
-      const { fullAllDataRowMap } = this
+      let formatData
+      const { fullAllDataRowIdData } = $xeTable
+      const rowid = getRowid($xeTable, row)
       const colid = column.id
-      const cacheFormat = fullAllDataRowMap.has(row)
-      if (cacheFormat) {
-        rest = fullAllDataRowMap.get(row)
+      const rest = fullAllDataRowIdData[rowid]
+      if (rest) {
         formatData = rest.formatData
         if (!formatData) {
-          formatData = fullAllDataRowMap.get(row).formatData = {}
+          formatData = fullAllDataRowIdData[rowid].formatData = {}
         }
         if (rest && formatData[colid]) {
           if (formatData[colid].value === cellValue) {
@@ -1596,8 +1597,10 @@ const Methods = {
    * @param {Row} row 行对象
    */
   getRowid (row: any) {
-    const fullAllDataRowMap = this.fullAllDataRowMap
-    return fullAllDataRowMap.has(row) ? fullAllDataRowMap.get(row).rowid : null
+    const $xeTable = this
+
+    const rowid = XEUtils.get(row, getRowkey($xeTable))
+    return XEUtils.eqNull(rowid) ? '' : encodeURIComponent(rowid)
   },
   /**
    * 获取处理后的表格数据
@@ -3859,9 +3862,11 @@ const Methods = {
   },
   // 还原展开、选中等相关状态
   handleReserveStatus () {
-    const { expandColumn, treeOpts, treeConfig, fullDataRowIdData, fullAllDataRowMap, currentRow, selectRadioRow, radioReserveRow, radioOpts, checkboxOpts, selectCheckboxMaps, rowExpandedMaps, treeExpandedMaps, expandOpts } = this
+    const $xeTable = this
+
+    const { expandColumn, treeOpts, treeConfig, fullDataRowIdData, fullAllDataRowIdData, currentRow, selectRadioRow, radioReserveRow, radioOpts, checkboxOpts, selectCheckboxMaps, rowExpandedMaps, treeExpandedMaps, expandOpts } = this
     // 单选框
-    if (selectRadioRow && !fullAllDataRowMap.has(selectRadioRow)) {
+    if (selectRadioRow && !fullAllDataRowIdData[getRowid($xeTable, selectRadioRow)]) {
       this.selectRadioRow = null // 刷新单选行状态
     }
     // 还原保留选中状态
@@ -3877,7 +3882,7 @@ const Methods = {
     if (checkboxOpts.reserve) {
       this.handleCheckedCheckboxRow(handleReserveRow(this, this.checkboxReserveRowMap), true, true)
     }
-    if (currentRow && !fullAllDataRowMap.has(currentRow)) {
+    if (currentRow && !this.fullAllDataRowIdData[getRowid($xeTable, currentRow)]) {
       this.currentRow = null // 刷新当前行状态
     }
     // 行展开
@@ -4594,14 +4599,19 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isRowExpandLoaded (row: any) {
-    const rest = this.fullAllDataRowMap.get(row)
-    return rest && rest.expandLoaded
+    const $xeTable = this
+
+    const { fullAllDataRowIdData } = this
+    const rest = fullAllDataRowIdData[getRowid($xeTable, row)]
+    return rest && !!rest.expandLoaded
   },
   clearRowExpandLoaded (row: any) {
-    const { expandOpts, rowExpandLazyLoadedMaps, fullAllDataRowMap } = this
+    const $xeTable = this
+
+    const { expandOpts, rowExpandLazyLoadedMaps, fullAllDataRowIdData } = this
     const { lazy } = expandOpts
-    const rowid = getRowid(this, row)
-    const rest = fullAllDataRowMap.get(row)
+    const rowid = getRowid($xeTable, row)
+    const rest = fullAllDataRowIdData[rowid]
     if (lazy && rest) {
       rest.expandLoaded = false
       const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
@@ -4695,32 +4705,28 @@ const Methods = {
     return this.setRowExpand(expandedRows, expanded)
   },
   handleAsyncRowExpand (row: any) {
-    const { fullAllDataRowMap, expandOpts } = this
-    const rest = fullAllDataRowMap.get(row)
+    const $xeTable = this
+
     return new Promise<void>(resolve => {
+      const { expandOpts } = this
       const { loadMethod } = expandOpts
       if (loadMethod) {
-        const { rowExpandLazyLoadedMaps } = this
-        const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
-        const rowid = getRowid(this, row)
-        rowTempExpandLazyLoadedMaps[rowid] = row
-        this.rowExpandLazyLoadedMaps = rowTempExpandLazyLoadedMaps
-        loadMethod({ $table: this, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
-          rest.expandLoaded = true
+        const { rowExpandLazyLoadedMaps, fullAllDataRowIdData } = this
+        const rowid = getRowid($xeTable, row)
+        const rest = fullAllDataRowIdData[rowid]
+        rowExpandLazyLoadedMaps[rowid] = row
+        loadMethod({ $table: $xeTable, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
           const { rowExpandedMaps } = this
-          const rowTempExpandedMaps = { ...rowExpandedMaps }
-          rowTempExpandedMaps[rowid] = row
-          this.rowExpandedMaps = rowTempExpandedMaps
+          rest.expandLoaded = true
+          rowExpandedMaps[rowid] = row
         }).catch(() => {
           rest.expandLoaded = false
         }).finally(() => {
           const { rowExpandLazyLoadedMaps } = this
-          const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
-          if (rowTempExpandLazyLoadedMaps[rowid]) {
-            delete rowTempExpandLazyLoadedMaps[rowid]
+          if (rowExpandLazyLoadedMaps[rowid]) {
+            delete rowExpandLazyLoadedMaps[rowid]
           }
-          this.rowExpandLazyLoadedMaps = rowTempExpandLazyLoadedMaps
-          resolve(this.$nextTick().then(this.recalculate))
+          this.$nextTick().then(() => this.recalculate()).then(() => resolve())
         })
       } else {
         resolve()
@@ -4862,14 +4868,19 @@ const Methods = {
    * @param {Row} row 行对象
    */
   isTreeExpandLoaded (row: any) {
-    const rest = this.fullAllDataRowMap.get(row)
-    return rest && rest.treeLoaded
+    const $xeTable = this
+
+    const { fullAllDataRowIdData } = this
+    const rest = fullAllDataRowIdData[getRowid($xeTable, row)]
+    return rest && !!rest.treeLoaded
   },
   clearTreeExpandLoaded (row: any) {
-    const { treeOpts, treeExpandedMaps, fullAllDataRowMap } = this
+    const $xeTable = this
+
+    const { treeOpts, treeExpandedMaps, fullAllDataRowIdData } = this
     const { transform, lazy } = treeOpts
-    const rowid = getRowid(this, row)
-    const rest = fullAllDataRowMap.get(row)
+    const rowid = getRowid($xeTable, row)
+    const rest = fullAllDataRowIdData[rowid]
     if (lazy && rest) {
       rest.treeLoaded = false
       if (treeExpandedMaps[rowid]) {
@@ -4962,35 +4973,36 @@ const Methods = {
     }
   },
   handleAsyncTreeExpandChilds (row: any) {
+    const $xeTable = this
+
     const { treeOpts, checkboxOpts } = this
     const { transform, loadMethod } = treeOpts
     const { checkStrictly } = checkboxOpts
     return new Promise<void>(resolve => {
       if (loadMethod) {
-        const { fullAllDataRowMap, treeExpandLazyLoadedMaps } = this
-        const rowid = getRowid(this, row)
-        const rest = fullAllDataRowMap.get(row)
+        const { treeExpandLazyLoadedMaps, fullAllDataRowIdData } = this
+        const rowid = getRowid($xeTable, row)
+        const rest = fullAllDataRowIdData[rowid]
         treeExpandLazyLoadedMaps[rowid] = row
-        loadMethod({ $table: this, row }).then((childRecords: any) => {
-          // 响应成功后则展开行，并将子节点挂载到该节点下
+        Promise.resolve(
+          loadMethod({ $table: $xeTable, row })
+        ).then((childRecords: any) => {
           rest.treeLoaded = true
           if (treeExpandLazyLoadedMaps[rowid]) {
-            treeExpandLazyLoadedMaps[rowid] = null
+            delete treeExpandLazyLoadedMaps[rowid]
           }
           if (!XEUtils.isArray(childRecords)) {
             childRecords = []
           }
           if (childRecords) {
-            return this.loadTreeChildren(row, childRecords).then((childRows: any) => {
+            return this.loadTreeChildren(row, childRecords).then((childRows: any[]) => {
               const { treeExpandedMaps } = this
-              const treeTempExpandedMaps = { ...treeExpandedMaps }
-              if (childRows.length && !treeTempExpandedMaps[rowid]) {
-                treeTempExpandedMaps[rowid] = row
-                this.treeExpandedMaps = treeTempExpandedMaps
+              if (childRows.length && !treeExpandedMaps[rowid]) {
+                treeExpandedMaps[rowid] = row
               }
               // 如果当前节点已选中，则展开后子节点也被选中
               if (!checkStrictly && this.isCheckedByCheckboxRow(row)) {
-                this.handleCheckedCheckboxRow(childRows, true, true)
+                this.handleCheckedCheckboxRow(childRows, true)
               }
               return this.$nextTick().then(() => {
                 if (transform) {
@@ -5000,11 +5012,10 @@ const Methods = {
             })
           }
         }).catch(() => {
-        // 如果响应异常，则不展开，再次点击后将重新触发懒加载
-          rest.treeLoaded = false
           const { treeExpandLazyLoadedMaps } = this
+          rest.treeLoaded = false
           if (treeExpandLazyLoadedMaps[rowid]) {
-            treeExpandLazyLoadedMaps[rowid] = null
+            delete treeExpandLazyLoadedMaps[rowid]
           }
         }).finally(() => {
           this.$nextTick().then(() => this.recalculate()).then(() => resolve())
@@ -5038,7 +5049,7 @@ const Methods = {
    * @returns
    */
   handleBaseTreeExpand (rows: any, expanded: any) {
-    const { fullAllDataRowMap, tableFullData, treeExpandedMaps, treeOpts, treeExpandLazyLoadedMaps, treeNodeColumn } = this
+    const { fullAllDataRowIdData, tableFullData, treeExpandedMaps, treeOpts, treeExpandLazyLoadedMaps, treeNodeColumn } = this
     const { reserve, lazy, accordion, toggleMethod } = treeOpts
     const treeTempExpandedMaps = { ...treeExpandedMaps }
     const childrenField = treeOpts.children || treeOpts.childrenField
@@ -5064,7 +5075,7 @@ const Methods = {
       validRows.forEach((row: any) => {
         const rowid = getRowid(this, row)
         if (!treeTempExpandedMaps[rowid]) {
-          const rest = fullAllDataRowMap.get(row)
+          const rest = fullAllDataRowIdData[rowid]
           const isLoad = lazy && row[hasChildField] && !rest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
           // 是否使用懒加载
           if (isLoad) {
