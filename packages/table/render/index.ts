@@ -760,6 +760,9 @@ renderer.mixin({
       ]
     }
   },
+  VxeRate: {
+    renderTableDefault: defaultEditRender
+  },
 
   // 以下已废弃
   $input: {

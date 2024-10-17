@@ -2135,7 +2135,7 @@ export default defineComponent({
       const checkboxOpts = computeCheckboxOpts.value
       const { transform, loadMethod } = treeOpts
       const { checkStrictly } = checkboxOpts
-      return new Promise(resolve => {
+      return new Promise<void>(resolve => {
         if (loadMethod) {
           const { treeExpandLazyLoadedMaps } = reactData
           const { fullAllDataRowIdData } = internalData
@@ -2198,7 +2198,7 @@ export default defineComponent({
     }
 
     const handleAsyncRowExpand = (row: any): Promise<void> => {
-      return new Promise(resolve => {
+      return new Promise<void>(resolve => {
         const expandOpts = computeExpandOpts.value
         const { loadMethod } = expandOpts
         if (loadMethod) {
