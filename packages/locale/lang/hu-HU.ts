@@ -320,6 +320,9 @@ export default {
         fileTitle: 'Fájlok feltöltése'
       }
     },
+    empty: {
+      defText: '暂无数据'
+    },
     formDesign: {
       formName: 'forma neve',
       defFormTitle: 'névtelen forma',
@@ -377,7 +380,9 @@ export default {
           VxeRadioGroup: 'rádió gomb',
           VxeCheckboxGroup: 'jelölőnégyzetet',
           VxeUploadFile: 'dokumentum',
-          VxeUploadImage: 'kép'
+          VxeUploadImage: 'kép',
+          VxeRate: 'Rate',
+          VxeSlider: 'Slider'
         }
       },
       widgetProp: {

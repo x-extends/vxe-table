@@ -320,6 +320,9 @@ export default {
         fileTitle: '上传文件'
       }
     },
+    empty: {
+      defText: '暂无数据'
+    },
     formDesign: {
       formName: '表单名称',
       defFormTitle: '未命名的表单',
@@ -377,7 +380,9 @@ export default {
           VxeRadioGroup: '单选框',
           VxeCheckboxGroup: '复选框',
           VxeUploadFile: '文件',
-          VxeUploadImage: '图片'
+          VxeUploadImage: '图片',
+          VxeRate: '评分',
+          VxeSlider: '滑块'
         }
       },
       widgetProp: {

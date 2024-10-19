@@ -320,6 +320,9 @@ export default {
         fileTitle: 'Загрузить файлы'
       }
     },
+    empty: {
+      defText: '暂无数据'
+    },
     formDesign: {
       formName: 'имя формы',
       defFormTitle: 'безымянная форма',
@@ -377,7 +380,9 @@ export default {
           VxeRadioGroup: 'переключатель',
           VxeCheckboxGroup: 'флажок',
           VxeUploadFile: 'документ',
-          VxeUploadImage: 'картина'
+          VxeUploadImage: 'картина',
+          VxeRate: 'Rate',
+          VxeSlider: 'Slider'
         }
       },
       widgetProp: {

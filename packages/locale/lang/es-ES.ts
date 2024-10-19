@@ -320,6 +320,9 @@ export default {
         fileTitle: 'Upload file'
       }
     },
+    empty: {
+      defText: 'No Data'
+    },
     formDesign: {
       formName: 'Form name',
       defFormTitle: 'Unnamed form',
@@ -377,7 +380,9 @@ export default {
           VxeRadioGroup: 'Radio',
           VxeCheckboxGroup: 'Checkbox',
           VxeUploadFile: 'File',
-          VxeUploadImage: 'Image'
+          VxeUploadImage: 'Image',
+          VxeRate: 'Rate',
+          VxeSlider: 'Slider'
         }
       },
       widgetProp: {
