@@ -777,6 +777,9 @@ renderer.mixin({
   VxeRate: {
     renderTableDefault: defaultEditRender
   },
+  VxeSlider: {
+    renderTableDefault: defaultEditRender
+  },
 
   // 以下已废弃
   $input: {

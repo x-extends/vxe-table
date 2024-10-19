@@ -380,7 +380,9 @@ export default {
           VxeRadioGroup: '单选框',
           VxeCheckboxGroup: '复选框',
           VxeUploadFile: '文件',
-          VxeUploadImage: '图片'
+          VxeUploadImage: '图片',
+          VxeRate: '评分',
+          VxeSlider: '滑块'
         }
       },
       widgetProp: {

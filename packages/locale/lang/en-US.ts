@@ -380,7 +380,9 @@ export default {
           VxeRadioGroup: 'Radio',
           VxeCheckboxGroup: 'Checkbox',
           VxeUploadFile: 'File',
-          VxeUploadImage: 'Image'
+          VxeUploadImage: 'Image',
+          VxeRate: 'Rate',
+          VxeSlider: 'Slider'
         }
       },
       widgetProp: {

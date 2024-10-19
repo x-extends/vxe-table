@@ -380,7 +380,9 @@ export default {
           VxeRadioGroup: 'переключатель',
           VxeCheckboxGroup: 'флажок',
           VxeUploadFile: 'документ',
-          VxeUploadImage: 'картина'
+          VxeUploadImage: 'картина',
+          VxeRate: 'Rate',
+          VxeSlider: 'Slider'
         }
       },
       widgetProp: {

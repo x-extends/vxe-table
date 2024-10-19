@@ -380,7 +380,9 @@ export default {
           VxeRadioGroup: 'rádió gomb',
           VxeCheckboxGroup: 'jelölőnégyzetet',
           VxeUploadFile: 'dokumentum',
-          VxeUploadImage: 'kép'
+          VxeUploadImage: 'kép',
+          VxeRate: 'Rate',
+          VxeSlider: 'Slider'
         }
       },
       widgetProp: {
