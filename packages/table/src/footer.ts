@@ -1,9 +1,12 @@
 import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
+import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
 import { updateCellTitle } from '../../ui/src/dom'
 
 const cellType = 'footer'
+
+const { renderer } = VxeUI
 
 function mergeFooterMethod (mergeFooterList: any, _rowIndex: any, _columnIndex: any) {
   for (let mIndex = 0; mIndex < mergeFooterList.length; mIndex++) {
@@ -143,12 +146,14 @@ export default {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''],
             style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
           }, tableColumn.map((column: any, $columnIndex: any) => {
-            const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
+            const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
+            const renderOpts = editRender || cellRender
+            const compConf = renderOpts ? renderer.get(renderOpts.name) : null
             const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
-            const footAlign = footerAlign || align || allFooterAlign || allAlign
+            const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
             let showEllipsis = footOverflow === 'ellipsis'
             const showTitle = footOverflow === 'title'
             const showTooltip = footOverflow === true || footOverflow === 'tooltip'

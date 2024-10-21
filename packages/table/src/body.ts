@@ -110,7 +110,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   let hasEllipsis = showTitle || showTooltip || showEllipsis
   let isDirty: any
   const tdOns: any = {}
-  const cellAlign = align || allAlign
+  const cellAlign = align || (compConf ? compConf.tableCellAlign : '') || allAlign
   const errorValidItem = validErrorMaps[`${rowid}:${column.id}`]
   const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
   const attrs: any = { colid: column.id }

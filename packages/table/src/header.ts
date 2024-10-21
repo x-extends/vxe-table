@@ -1,8 +1,11 @@
 import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
+import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
 import { getOffsetPos, hasClass, addClass, removeClass } from '../../ui/src/dom'
 import { convertHeaderColumnToRows, getColReMinWidth } from './util'
+
+const { renderer } = VxeUI
 
 const cellType = 'header'
 
@@ -120,13 +123,15 @@ export default {
             class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowClassName : ''],
             style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowStyle) : null
           }, cols.map((column: any, $columnIndex: any) => {
-            const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
+            const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
             // const { enabled } = tooltipOpts
             const colid = column.id
+            const renderOpts = editRender || cellRender
+            const compConf = renderOpts ? renderer.get(renderOpts.name) : null
             const isColGroup = column.children && column.children.length
             const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
             const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-            const headAlign = headerAlign || align || allHeaderAlign || allAlign
+            const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
             let showEllipsis = headOverflow === 'ellipsis'
             const showTitle = headOverflow === 'title'
             const showTooltip = headOverflow === true || headOverflow === 'tooltip'
