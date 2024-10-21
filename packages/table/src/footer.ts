@@ -1,8 +1,11 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
+import { VxeUI } from '../../ui'
 import { updateCellTitle, getPropClass } from '../../ui/src/dom'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types'
+
+const { renderer } = VxeUI
 
 const renderType = 'footer'
 
@@ -180,12 +183,14 @@ export default defineComponent({
               class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''],
               style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
             }, tableColumn.map((column, $columnIndex) => {
-              const { type, showFooterOverflow, footerAlign, align, footerClassName } = column
+              const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
+              const renderOpts = editRender || cellRender
+              const compConf = renderOpts ? renderer.get(renderOpts.name) : null
               const showAllTip = tooltipOpts.showAll
               const isColGroup = column.children && column.children.length
               const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
               const footOverflow = XEUtils.eqNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
-              const footAlign = footerAlign || align || allFooterAlign || allAlign
+              const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
               let showEllipsis = footOverflow === 'ellipsis'
               const showTitle = footOverflow === 'title'
               const showTooltip = footOverflow === true || footOverflow === 'tooltip'

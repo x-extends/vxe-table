@@ -161,7 +161,7 @@ export default defineComponent({
       let hasEllipsis = showTitle || showTooltip || showEllipsis
       let isDirty
       const tdOns: any = {}
-      const cellAlign = align || allAlign
+      const cellAlign = align || (compConf ? compConf.tableCellAlign : '') || allAlign
       const errorValidItem = validErrorMaps[`${rowid}:${colid}`]
       const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
       const attrs: any = { colid }

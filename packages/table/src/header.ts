@@ -1,9 +1,12 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
+import { VxeUI } from '../../ui'
 import { convertHeaderColumnToRows, getColReMinWidth } from './util'
 import { hasClass, getOffsetPos, addClass, removeClass } from '../../ui/src/dom'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
+
+const { renderer } = VxeUI
 
 const renderType = 'header'
 
@@ -228,12 +231,14 @@ export default defineComponent({
               class: ['vxe-header--row', headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowClassName) : ''],
               style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }) : headerRowStyle) : null
             }, cols.map((column, $columnIndex) => {
-              const { type, showHeaderOverflow, headerAlign, align, headerClassName } = column
+              const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
               const colid = column.id
+              const renderOpts = editRender || cellRender
+              const compConf = renderOpts ? renderer.get(renderOpts.name) : null
               const isColGroup = column.children && column.children.length
               const fixedHiddenColumn = fixedType ? (column.fixed !== fixedType && !isColGroup) : !!column.fixed && overflowX
               const headOverflow = XEUtils.eqNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-              const headAlign = headerAlign || align || allHeaderAlign || allAlign
+              const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
               let showEllipsis = headOverflow === 'ellipsis'
               const showTitle = headOverflow === 'title'
               const showTooltip = headOverflow === true || headOverflow === 'tooltip'
