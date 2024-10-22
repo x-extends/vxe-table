@@ -3,7 +3,7 @@ import XEUtils from 'xe-utils'
 import type { VxeComponentSlotType } from '../../../types'
 
 export function getOnName (type: string) {
-  return type
+  return XEUtils.kebabCase(type)
 }
 
 export function getModelEvent (renderOpts: any) {
