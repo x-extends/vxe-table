@@ -12,7 +12,7 @@
       id="bbbbb"
       :row-config="{useKey: true}"
       :column-config="{useKey: true}"
-      :custom-config="{storage:true}"
+      :custom-config="customConfig"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"
       :export-config="{modes: exportModes}"
@@ -61,6 +61,12 @@ export default Vue.extend({
         { label: '自定义11', value: '33' },
         { label: 'current', value: 'current' }
       ],
+      customConfig: {
+        storage: true,
+        visibleMethod ({ column }: any) {
+          return column.field !== 'address'
+        }
+      },
       demo1: {
         loading: false,
         tableData: [] as any[],

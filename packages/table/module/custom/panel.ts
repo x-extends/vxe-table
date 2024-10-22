@@ -55,7 +55,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
             colid: column.id
           },
           class: ['vxe-table-custom--option', `level--${column.level}`, {
-            'is--hidden': isHidden,
+            'is--hidden': isDisabled || isHidden,
             'is--group': isColGroup
           }],
           on: {
@@ -93,12 +93,12 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
             }, [
               h('span', {
                 class: ['vxe-table-custom--sort-btn', {
-                  'is--disabled': isHidden
+                  'is--disabled': isDisabled || isHidden
                 }],
                 attrs: {
                   title: getI18n('vxe.custom.setting.sortHelpTip')
                 },
-                on: isHidden
+                on: isDisabled || isHidden
                   ? {}
                   : {
                       mousedown: _vm.sortMousedownEvent,
@@ -135,7 +135,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
                   mode: 'text',
                   icon: column.renderFixed === 'left' ? getIcon().TOOLBAR_TOOLS_FIXED_LEFT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_LEFT,
                   status: column.renderFixed === 'left' ? 'primary' : '',
-                  disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
+                  disabled: isDisabled || isHidden || (isMaxFixedColumn && !column.renderFixed),
                   title: getI18n(column.renderFixed === 'left' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedLeft')
                 },
                 on: {
@@ -149,7 +149,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
                   mode: 'text',
                   icon: column.renderFixed === 'right' ? getIcon().TOOLBAR_TOOLS_FIXED_RIGHT_ACTIVE : getIcon().TOOLBAR_TOOLS_FIXED_RIGHT,
                   status: column.renderFixed === 'right' ? 'primary' : '',
-                  disabled: isHidden || (isMaxFixedColumn && !column.renderFixed),
+                  disabled: isDisabled || isHidden || (isMaxFixedColumn && !column.renderFixed),
                   title: getI18n(column.renderFixed === 'right' ? 'vxe.toolbar.cancelFixed' : 'vxe.toolbar.fixedRight')
                 },
                 on: {
@@ -347,12 +347,12 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
               column.level === 1
                 ? h('span', {
                   class: ['vxe-table-custom-popup--column-sort-btn', {
-                    'is--disabled': isHidden
+                    'is--disabled': isDisabled || isHidden
                   }],
                   attrs: {
                     title: getI18n('vxe.custom.setting.sortHelpTip')
                   },
-                  on: isHidden
+                  on: isDisabled || isHidden
                     ? {}
                     : {
                         mousedown: _vm.sortMousedownEvent,
@@ -395,7 +395,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                     ? h(VxeUIInputComponent, {
                       props: {
                         type: 'integer',
-                        disabled: isHidden,
+                        disabled: isDisabled || isHidden,
                         value: column.renderResizeWidth
                       },
                       on: {
@@ -419,11 +419,11 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                     value: column.renderFixed || '',
                     type: 'button',
                     size: 'mini',
-                    disabled: isHidden,
+                    disabled: isDisabled || isHidden,
                     options: [
-                      { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isHidden || isMaxFixedColumn },
-                      { label: getI18n('vxe.custom.setting.fixedUnset'), value: '', disabled: isHidden },
-                      { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isHidden || isMaxFixedColumn }
+                      { label: getI18n('vxe.custom.setting.fixedLeft'), value: 'left', disabled: isDisabled || isHidden || isMaxFixedColumn },
+                      { label: getI18n('vxe.custom.setting.fixedUnset'), value: '', disabled: isDisabled || isHidden },
+                      { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isDisabled || isHidden || isMaxFixedColumn }
                     ]
                   },
                   on: {
@@ -869,25 +869,33 @@ export default {
     allOptionEvent () {
       const { $xetable, customStore } = this
       const { customColumnList, customOpts } = $xetable
-      const { checkMethod } = customOpts
+      const { checkMethod, visibleMethod } = customOpts
       const isAll = !customStore.isAll
       if (customOpts.immediate) {
         XEUtils.eachTree(customColumnList, (column) => {
-          if (!checkMethod || checkMethod({ column })) {
-            column.visible = isAll
-            column.renderVisible = isAll
-            column.halfVisible = false
+          if (visibleMethod && !visibleMethod({ column })) {
+            return
           }
+          if (checkMethod && !checkMethod({ column })) {
+            return
+          }
+          column.visible = isAll
+          column.renderVisible = isAll
+          column.halfVisible = false
         })
         customStore.isAll = isAll
         $xetable.handleCustom()
         $xetable.saveCustomStore('update:visible')
       } else {
         XEUtils.eachTree(customColumnList, (column) => {
-          if (!checkMethod || checkMethod({ column })) {
-            column.renderVisible = isAll
-            column.halfVisible = false
+          if (visibleMethod && !visibleMethod({ column })) {
+            return
           }
+          if (checkMethod && !checkMethod({ column })) {
+            return
+          }
+          column.renderVisible = isAll
+          column.halfVisible = false
         })
         customStore.isAll = isAll
       }
