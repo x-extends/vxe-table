@@ -12,7 +12,7 @@
       id="bbbbb"
       :row-config="{useKey: true}"
       :column-config="{useKey: true}"
-      :custom-config="{storage:true}"
+      :custom-config="customConfig"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"
       :export-config="{modes: exportModes}"
@@ -48,7 +48,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref, reactive, nextTick } from 'vue'
-import { VxeColumnPropTypes, VxeTableInstance, VxeToolbarInstance } from '../../../types'
+import { VxeColumnPropTypes, VxeTablePropTypes, VxeTableInstance, VxeToolbarInstance } from '../../../types'
 
 interface RowVO {
   [key: string]: any
@@ -68,6 +68,16 @@ const exportModes = ref([
   { label: '自定义11', value: '33' },
   { label: 'current', value: 'current' }
 ])
+
+const customConfig = reactive<VxeTablePropTypes.CustomConfig>({
+  storage: true,
+  checkMethod ({ column }) {
+    return column.type !== 'seq'
+  },
+  visibleMethod ({ column }) {
+    return column.field !== 'address'
+  }
+})
 
 const demo1 = reactive({
   loading: false,
