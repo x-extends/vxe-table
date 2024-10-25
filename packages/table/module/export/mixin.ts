@@ -309,7 +309,7 @@ function toTxt ($xetable: any, opts: any, columns: any[], datas: any[]) {
     const footerTableData = $xetable.footerTableData
     const footers = getFooterData(opts, footerTableData)
     footers.forEach((row: any) => {
-      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, row, column))).join(',') + enterSymbol
+      content += columns.map(column => toTxtCellLabel(getFooterCellValue($xetable, opts, row, column))).join('\t') + enterSymbol
     })
   }
   return content
