@@ -691,6 +691,14 @@ renderer.mixin({
     },
     tableExportMethod: handleExportTreeSelectMethod
   },
+  VxeTableSelect: {
+    tableAutoFocus: 'input',
+    renderTableEdit: defaultTreeSelectEditRender,
+    renderTableCell (renderOpts, params) {
+      return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
+    },
+    tableExportMethod: handleExportTreeSelectMethod
+  },
   VxeIconPicker: {
     tableAutoFocus: 'input',
     renderTableEdit: defaultEditRender,

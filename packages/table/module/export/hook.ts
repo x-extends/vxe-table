@@ -522,7 +522,7 @@ hooks.add('tableExportModule', {
         const { footerTableData } = reactData
         const footers = getFooterData(opts, footerTableData)
         footers.forEach((row: any) => {
-          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, row, column))).join(',') + enterSymbol
+          content += columns.map((column: any) => toTxtCellLabel(getFooterCellValue(opts, row, column))).join('\t') + enterSymbol
         })
       }
       return content

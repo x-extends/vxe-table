@@ -1,48 +1,52 @@
 <template>
-  <div>树形表格</div>
-  <vxe-table
-    ref="tableRef1"
-    :tree-config="{ rowField: 'id' }"
-    :checkbox-config="{ labelField: 'id' }"
-    :data="tableData1"
-  >
-    <vxe-column type="checkbox" field="id" title="id" tree-node></vxe-column>
-  </vxe-table>
-  <button @click="selectRow1">选中第一行（有bug）</button>
-
-  <div>非树形表格</div>
-  <vxe-table
-    ref="tableRef2"
-    :checkbox-config="{ labelField: 'id' }"
-    :data="tableData2"
-  >
-    <vxe-column type="checkbox" field="id" title="id"></vxe-column>
-  </vxe-table>
-  <button @click="selectRow2">选中第一行（可以正常工作）</button>
+  <div>
+    <vxe-button @click="exportEvent">直接导出 Txt 文件</vxe-button>
+    <vxe-table
+      show-footer
+      ref="tableRef"
+      :export-config="{}"
+      :footer-data="footerData"
+      :data="tableData">
+      <vxe-column field="seq" type="seq" width="70"></vxe-column>
+      <vxe-column field="name" title="Name"></vxe-column>
+      <vxe-column field="sex" title="Sex"></vxe-column>
+      <vxe-column field="age" title="Age"></vxe-column>
+    </vxe-table>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { VxeTableInstance } from '../../../types'
 
-const tableRef1 = ref()
-
-const selectRow1 = () => {
-  tableRef1.value.setCheckboxRow([tableData1.value[0]], true)
+interface RowVO {
+  id: number
+  name: string
+  role: string
+  sex: string
+  age: number
+  address: string
 }
 
-const tableData1 = ref([
-  { id: 10000 },
-  { id: 10050, children: [{ id: 24300, children: [{ id: 20045 }] }] }
+const tableRef = ref<VxeTableInstance>()
+
+const tableData = ref<RowVO[]>([
+  { id: 10001, name: 'Test1', role: 'Develop', sex: 'Man', age: 28, address: 'test abc' },
+  { id: 10002, name: 'Test2', role: 'Test', sex: 'Women', age: 22, address: 'Guangzhou' },
+  { id: 10003, name: 'Test3', role: 'PM', sex: 'Man', age: 32, address: 'Shanghai' },
+  { id: 10004, name: 'Test4', role: 'Designer', sex: 'Women', age: 24, address: 'Shanghai' }
 ])
 
-const tableRef2 = ref()
+const footerData = ref([
+  { seq: '合计', sex: '666', age: '999' }
+])
 
-const selectRow2 = () => {
-  tableRef2.value.setCheckboxRow([tableData2.value[0]], true)
+const exportEvent = () => {
+  const $table = tableRef.value
+  if ($table) {
+    $table.exportData({
+      type: 'txt'
+    })
+  }
 }
-
-const tableData2 = ref([
-  { id: 10000 },
-  { id: 10050, children: [{ id: 24300, children: [{ id: 20045 }] }] }
-])
 </script>
