@@ -151,8 +151,10 @@ export default defineComponent({
   width: auto;
   flex-grow: 1;
 }
-.edit-down-input:deep() .vxe-input--inner {
-  border-radius: 4px 0 0 4px;
+::v-deep(.edit-down-input) {
+  .vxe-input--inner {
+    border-radius: 4px 0 0 4px;
+  }
 }
 .edit-popup-button.vxe-button {
   flex-shrink: 0;

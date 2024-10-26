@@ -1,3 +1,8 @@
+// 兼容
+$vxe-ui-font-color: #606266 !default;
+$vxe-ui-font-primary-color: #409eff !default;
+// 兼容
+
 /*font*/
 $vxe-font-family: -apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol !default;
 $vxe-font-size: 14px !default;
@@ -13,8 +18,8 @@ $vxe-icon-font-family: Verdana,Arial,Tahoma !default;
 $vxe-icon-background-color: #fff !default;
 
 /*color*/
-$vxe-font-color: #606266 !default;
-$vxe-primary-color: #409eff !default;
+$vxe-font-color: $vxe-ui-font-color !default;
+$vxe-primary-color: $vxe-ui-font-primary-color!default;
 $vxe-success-color: #67c23a !default;
 $vxe-info-color: #909399 !default;
 $vxe-warning-color: #e6a23c !default;

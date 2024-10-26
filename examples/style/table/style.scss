@@ -1,7 +1,7 @@
-@use '../variable.scss' as *;
-@use '../../../styles/variable.scss';
+@use '../custom-variable.scss';
+@use '../../../styles/variable.scss' with (
+  // 修改样式变量
+  $vxe-font-color: #606266,
+  $vxe-primary-color: custom-variable.$themeColor
+);
 @use '../../../styles/modules.scss';
-
-// 修改样式变量
-$vxe-font-color: #606266;
-$vxe-primary-color: $themeColor;
