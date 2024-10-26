@@ -1,4 +1,4 @@
-@import '../../helpers/mixin.scss';
+@use '../../helpers/baseMixin.scss';
 
 .vxe-table-custom--option {
   position: relative;
@@ -148,7 +148,7 @@
 }
 
 .vxe-table-custom--checkbox-option {
-  @include createCheckboxIcon();
+  @include baseMixin.createCheckboxIcon();
 }
 .vxe-table-custom--checkbox-option,
 .vxe-table-custom--sort-option {

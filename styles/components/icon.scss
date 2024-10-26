@@ -1,4 +1,6 @@
-@import './old-icon.scss';
+@use "sass:map";
+@use "sass:list";
+@use './old-icon.scss';
 
 @font-face {
   font-family: "vxetableiconfont";
@@ -69,10 +71,10 @@ $btnThemeList: (
   &.roll {
     animation: rollCircle 1s infinite linear;
   }
-  @for $index from 0 to length($btnThemeList) {
-    $item: nth($btnThemeList, $index + 1);
-    &.theme--#{map-get($item, name)} {
-      color: map-get($item, textColor);
+  @for $index from 0 to list.length($btnThemeList) {
+    $item: list.nth($btnThemeList, $index + 1);
+    &.theme--#{map.get($item, name)} {
+      color: map.get($item, textColor);
     }
   }
 }

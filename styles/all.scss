@@ -1,7 +1,7 @@
-@import './base.scss';
+@use './base.scss';
 
-@import './components/column.scss';
-@import './components/colgroup.scss';
-@import './components/table.scss';
-@import './components/grid.scss';
-@import './components/toolbar.scss';
+@use './components/column.scss';
+@use './components/colgroup.scss';
+@use './components/table.scss';
+@use './components/grid.scss';
+@use './components/toolbar.scss';

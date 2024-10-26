@@ -1,5 +1,5 @@
-@import './theme/light.scss';
-@import './theme/dark.scss';
+@use './theme/light.scss';
+@use './theme/dark.scss';
 
 %boxSizing {
   box-sizing: border-box;
