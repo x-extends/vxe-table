@@ -1,6 +1,6 @@
-@import '../helpers/mixin.scss';
-@import './icon.scss';
-@import './table-module/all.scss';
+@use '../helpers/baseMixin.scss';
+@use './icon.scss';
+@use './table-module/all.scss';
 
 %DefaultColumnHeight {
   height: var(--vxe-ui-table-row-height-default);
@@ -427,7 +427,7 @@
 .vxe-filter--btn {
   &:before,
   &:after {
-    @include createAnimationTransition(border);
+    @include baseMixin.createAnimationTransition(border);
   }
 }
 
@@ -953,10 +953,10 @@
 
   // 单选框和复选框
   .vxe-cell--radio {
-    @include createRadioIcon();
+    @include baseMixin.createRadioIcon();
   }
   .vxe-cell--checkbox {
-    @include createCheckboxIcon();
+    @include baseMixin.createCheckboxIcon();
   }
 
   .fixed--hidden {
@@ -1111,7 +1111,7 @@
   .vxe-tree--node-btn {
     display: block;
     color: var(--vxe-ui-font-lighten-color);
-    @include createAnimationTransition(transform);
+    @include baseMixin.createAnimationTransition(transform);
     &:hover {
       color: var(--vxe-ui-font-color);
     }
@@ -1142,7 +1142,7 @@
       text-align: center;
       user-select: none;
       color: var(--vxe-ui-font-lighten-color);
-      @include createAnimationTransition(transform);
+      @include baseMixin.createAnimationTransition(transform);
       &:hover {
         color: var(--vxe-ui-font-color);
       }
