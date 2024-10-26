@@ -1,6 +1,6 @@
-/**Variable**/
 @use 'sass:map';
 @use 'sass:list';
+@use './variable.scss' as *;
 @use './helpers/baseMixin.scss';
 
 $btnThemeList: (

@@ -249,7 +249,6 @@ gulp.task('build_icon', () => {
 
 function buildStyle (name, dirName) {
   return gulp.src(`styles/${name}.scss`)
-    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@use \'./variable.scss\';\n'))
     .pipe(sass())
     .pipe(prefixer({
       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
