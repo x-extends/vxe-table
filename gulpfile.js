@@ -222,7 +222,7 @@ gulp.task('build_icon', () => {
 
 function buildStyle (name, dirName) {
   return gulp.src(`styles/${name}.scss`)
-    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\';\n'))
+    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\' as *;\n'))
     .pipe(sass())
     .pipe(prefixer({
       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],

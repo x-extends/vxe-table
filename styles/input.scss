@@ -1,5 +1,6 @@
-/**Variable**/
-@import './helpers/mixin.scss';
+@use 'sass:list';
+@use './variable.scss' as *;
+@use './helpers/baseMixin.scss';
 
 $iconWidth: 1.6em;
 
@@ -272,7 +273,7 @@ $iconWidth: 1.6em;
     align-items: center;
     justify-content: center;
     .vxe-input--panel-icon {
-      @include createAnimationTransition(transform, .2s);
+      @include baseMixin.createAnimationTransition(transform, .2s);
     }
   }
 
@@ -768,7 +769,7 @@ $iconWidth: 1.6em;
   $quarterRowHeightList: $vxe-input-date-quarter-row-height-default, $vxe-input-date-quarter-row-height-medium, $vxe-input-date-quarter-row-height-small, $vxe-input-date-quarter-row-height-mini;
   $titleRowHeightList: $vxe-input-date-title-height-default, $vxe-input-date-title-height-medium, $vxe-input-date-title-height-small, $vxe-input-date-title-height-mini;
   
-  font-size: nth($fontSizeList, $sizeIndex);
+  font-size: list.nth($fontSizeList, $sizeIndex);
   .vxe-input--panel-wrapper {
     max-height: 400px - $sizeIndex * 20;
   }
@@ -788,25 +789,25 @@ $iconWidth: 1.6em;
   &.type--year {
     .vxe-input--panel-wrapper {
       $widthList: 336px, 336px, 312px, 288px;
-      width: nth($widthList, $sizeIndex);
+      width: list.nth($widthList, $sizeIndex);
     }
   }
   &.type--week {
     .vxe-input--panel-wrapper {
       $widthList: 380px, 380px, 354px, 326px;
-      width: nth($widthList, $sizeIndex);
+      width: list.nth($widthList, $sizeIndex);
     }
   }
   &.type--time {
     .vxe-input--panel-wrapper {
       $widthList: 170px, 168px, 154px, 146px;
-      width: nth($widthList, $sizeIndex);
+      width: list.nth($widthList, $sizeIndex);
     }
   }
   &.type--datetime {
     .vxe-input--panel-left-wrapper {
       $widthList: 336px, 336px, 312px, 288px;
-      width: nth($widthList, $sizeIndex);
+      width: list.nth($widthList, $sizeIndex);
     }
     .vxe-input--panel-left-wrapper,
     .vxe-input--panel-right-wrapper {
@@ -844,20 +845,20 @@ $iconWidth: 1.6em;
   .vxe-input--time-picker-header,
   .vxe-input--date-picker-header {
     $paddingBottomList: 8px, 7px, 6px, 5px;
-    padding-bottom: nth($paddingBottomList, $sizeIndex);
+    padding-bottom: list.nth($paddingBottomList, $sizeIndex);
   }
   .vxe-input--date-picker-body table,
   .vxe-input--time-picker-body {
-    height: nth($timeWeekRowHeightList, $sizeIndex) * 6 + nth($titleRowHeightList, $sizeIndex);
+    height: list.nth($timeWeekRowHeightList, $sizeIndex) * 6 + list.nth($titleRowHeightList, $sizeIndex);
   }
   .vxe-input--time-picker-body {
     $ulWidthList: 48px, 48px, 44px, 42px;
     & > ul {
-      width: nth($ulWidthList, $sizeIndex);
+      width: list.nth($ulWidthList, $sizeIndex);
       &:before,
       &:after {
         $heightList: 120px, 120px, 110px, 100px;
-        height: nth($heightList, $sizeIndex);
+        height: list.nth($heightList, $sizeIndex);
       }
       & > li {
         height: 26px;
@@ -865,32 +866,32 @@ $iconWidth: 1.6em;
       }
     }
     .vxe-input--time-picker-minute-list {
-      left: nth($ulWidthList, $sizeIndex);
+      left: list.nth($ulWidthList, $sizeIndex);
     }
     .vxe-input--time-picker-second-list {
-      left: nth($ulWidthList, $sizeIndex) * 2;
+      left: list.nth($ulWidthList, $sizeIndex) * 2;
     }
   }
   .vxe-input--date-day-view,
   .vxe-input--date-week-view {
     td {
-      height: nth($timeWeekRowHeightList, $sizeIndex);
+      height: list.nth($timeWeekRowHeightList, $sizeIndex);
     }
   }
   .vxe-input--date-quarter-view {
     td {
-      height: nth($quarterRowHeightList, $sizeIndex);
+      height: list.nth($quarterRowHeightList, $sizeIndex);
     }
   }
   .vxe-input--date-month-view,
   .vxe-input--date-year-view {
     td {
-      height: nth($monthYearRowHeightList, $sizeIndex);
+      height: list.nth($monthYearRowHeightList, $sizeIndex);
     }
   }
   .vxe-input--date-picker-body {
     th {
-      height: nth($titleRowHeightList, $sizeIndex);
+      height: list.nth($titleRowHeightList, $sizeIndex);
     }
   }
   .vxe-input--time-picker-confirm,
@@ -899,7 +900,7 @@ $iconWidth: 1.6em;
     padding: 0 10px - $sizeIndex;
   }
   .vxe-input--date-label {
-    line-height: nth($fontSizeList, $sizeIndex) + 1px;
+    line-height: list.nth($fontSizeList, $sizeIndex) + 1px;
   }
 }
 

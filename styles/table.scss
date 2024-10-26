@@ -1,7 +1,7 @@
-/**Variable**/
-@import './helpers/mixin.scss';
-@import './base/common.scss';
-@import './loading.scss';
+@use './variable.scss' as *;
+@use './helpers/baseMixin.scss';
+@use './base/common.scss';
+@use './loading.scss';
 
 %DefaultColumnHeight {
   height: $vxe-table-row-height-default;
@@ -883,10 +883,10 @@
 
   // 单选框和复选框
   .vxe-cell--radio {
-    @include createRadioIcon();
+    @include baseMixin.createRadioIcon();
   }
   .vxe-cell--checkbox {
-    @include createCheckboxIcon();
+    @include baseMixin.createCheckboxIcon();
   }
 
   .fixed--hidden {

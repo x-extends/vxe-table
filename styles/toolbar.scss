@@ -1,5 +1,5 @@
-/**Variable**/
-@import './helpers/mixin.scss';
+@use './variable.scss' as *;
+@use './helpers/baseMixin.scss';
 
 /*toolbar*/
 .vxe-toolbar {

@@ -1,6 +1,6 @@
-/**Variable**/
-@import './helpers/mixin.scss';
-@import './base/common.scss';
+@use './variable.scss' as *;
+@use './helpers/baseMixin.scss';
+@use './base/common.scss';
 
 /*radio-group*/
 .vxe-radio-group {
@@ -19,7 +19,7 @@
   vertical-align: middle;
   white-space: nowrap;
   line-height: 1;
-  @include createRadioIcon();
+  @include baseMixin.createRadioIcon();
   > input {
     &[type="radio"] {
       position: absolute;
