@@ -1,7 +1,7 @@
 /**Variable**/
-@import './helpers/mixin.scss';
-@import './base/common.scss';
-@import './loading.scss';
+@use './helpers/baseMixin.scss';
+@use './base/common.scss';
+@use './loading.scss';
 
 %DefaultColumnHeight {
   height: var(--vxe-table-row-height-default);
@@ -839,10 +839,10 @@
 
   // 单选框和复选框
   .vxe-cell--radio {
-    @include createRadioIcon();
+    @include baseMixin.createRadioIcon();
   }
   .vxe-cell--checkbox {
-    @include createCheckboxIcon();
+    @include baseMixin.createCheckboxIcon();
   }
 
   .fixed--hidden {
@@ -1258,7 +1258,7 @@
           z-index: 4;
           .vxe-cell--valid-error-msg {
             display: inline-block;
-            border-radius: $vxe-border-radius;
+            border-radius: var(--vxe-border-radius);
             padding: 8px 12px;
             color: #fff;
             background-color: #f56c6c;

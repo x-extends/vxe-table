@@ -1,5 +1,4 @@
-@import './variable.scss';
-@import './helpers/mixin.scss';
+@use './variable.scss';
 
 [class*="vxe-icon--"] {
   display: inline-block;

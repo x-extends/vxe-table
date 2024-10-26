@@ -1121,61 +1121,15 @@ export interface TableInternalData<D = VxeTableDataRow> {
   // 渲染所有列
   visibleColumn: VxeTableDefines.ColumnInfo<D>[]
   // 缓存数据集
-  fullAllDataRowIdData: {
-    [key: string]: {
-      row: D
-      rowid: string
-      seq: string | number
-      index: number
-      $index: number
-      _index: number
-      items: any[]
-      parent: any
-      level: number
-      treeLoaded?: boolean
-      expandLoaded?: boolean
-      formatData?: {
-        [key: string]: {
-          value: any
-          label: any
-        }
-      }
-    }
-  }
+  fullAllDataRowIdData: Record<string, VxeTableDefines.RowCacheItem<D>>
   sourceDataRowIdData: Record<string, D>
-  fullDataRowIdData: {
-    [key: string]: {
-      row: D
-      rowid: string
-      seq: string | number
-      index: number
-      $index: number
-      _index: number
-      items: any[]
-      parent: any
-      level: number
-    }
-  }
-  fullColumnIdData: {
-    [key: string]: {
-      column: VxeTableDefines.ColumnInfo<D>
-      colid: string
-      index: number
-      $index: number
-      _index: number
-      items: VxeTableDefines.ColumnInfo<D>[]
-      parent: VxeTableDefines.ColumnInfo<D>
-    }
-  }
-  fullColumnFieldData: {
-    [key: string]: {
-      column: VxeTableDefines.ColumnInfo<D>
-      colid: string
-      index: number
-      items: VxeTableDefines.ColumnInfo<D>[]
-      parent: VxeTableDefines.ColumnInfo<D>
-    }
-  }
+  fullDataRowIdData: Record<string, VxeTableDefines.RowCacheItem<D>>
+  fullColumnIdData: Record<string, VxeTableDefines.ColumnCacheItem<D>>
+  fullColumnFieldData: Record<string, VxeTableDefines.ColumnCacheItem<D>>
+  // 列选取状态
+  columnStatusMaps: Record<string, boolean>
+  // 行选取状态
+  rowStatusMaps: Record<string, boolean>
 
   // 特殊标识
   inited: boolean
@@ -2909,6 +2863,36 @@ export namespace VxeTableDefines {
   export interface ColumnOptions<D = VxeTableDataRow> extends VxeColumnProps<D> {
     children?: ColumnOptions<D>[]
     slots?: VxeColumnPropTypes.Slots<D>
+  }
+
+  export interface RowCacheItem<D = any> {
+    row: D
+    rowid: string
+    seq: string | number
+    index: number
+    $index: number
+    _index: number
+    items: any[]
+    parent: any
+    level: number
+    treeLoaded?: boolean
+    expandLoaded?: boolean
+    formatData?: {
+      [key: string]: {
+        value: any
+        label: any
+      }
+    }
+  }
+
+  export interface ColumnCacheItem<D = any> {
+    column: VxeTableDefines.ColumnInfo<D>
+    colid: string
+    index: number
+    $index: number
+    _index: number
+    items: VxeTableDefines.ColumnInfo<D>[]
+    parent: VxeTableDefines.ColumnInfo<D>
   }
 
   /**

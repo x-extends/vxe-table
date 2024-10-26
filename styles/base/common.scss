@@ -1,3 +1,6 @@
+@use 'sass:list';
+@use '../helpers/baseMixin.scss';
+
 %boxSizing {
   box-sizing: border-box;
 }
@@ -50,10 +53,10 @@
     overflow: hidden;
     visibility: hidden;
   }
-  @for $index from 0 to length($spans) {
+  @for $index from 0 to list.length($spans) {
     & > .vxe-col--#{$index + 1} {
       float: left;
-      width: nth($spans, $index + 1);
+      width: list.nth($spans, $index + 1);
     }
   }
 }
@@ -65,23 +68,23 @@
   .vxe-filter--btn {
     &:before,
     &:after {
-      @include createAnimationTransition(border);
+      @include baseMixin.createAnimationTransition(border);
     }
   }
   .vxe-input--wrapper {
     .vxe-input {
-      @include createAnimationTransition(border);
+      @include baseMixin.createAnimationTransition(border);
     }
   }
   .vxe-table--expand-btn,
   .vxe-tree--node-btn {
-    @include createAnimationTransition(transform);
+    @include baseMixin.createAnimationTransition(transform);
   }
   .vxe-checkbox,
   .vxe-radio {
     > input {
       &:checked+span {
-        @include createAnimationTransition(background-color);
+        @include baseMixin.createAnimationTransition(background-color);
       }
     }
   }

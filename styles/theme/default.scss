@@ -1,4 +1,4 @@
-@import '../variable.scss';
+@use '../variable.scss' as *;
 
 [data-vxe-ui-theme="light"] {
   /*font*/

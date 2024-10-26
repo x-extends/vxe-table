@@ -1,6 +1,6 @@
 /**Variable**/
-@import './helpers/mixin.scss';
-@import './base/common.scss';
+@use './helpers/baseMixin.scss';
+@use './base/common.scss';
 
 .vxe-table-custom--option {
   display: flex;
@@ -88,7 +88,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   flex-grow: 1;
-  @include createCheckboxIcon();
+  @include baseMixin.createCheckboxIcon();
 }
 
 .vxe-table-custom--fixed-option {

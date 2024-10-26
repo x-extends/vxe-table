@@ -1,4 +1,4 @@
-@import './variable.scss';
+@use './variable.scss';
 
 body {
   margin: 0;
@@ -18,7 +18,7 @@ body {
   }
   .link {
     cursor: pointer;
-    color: $themeColor;
+    color: variable.$themeColor;
     text-decoration: none;
     &:hover {
       text-decoration: underline;
@@ -71,7 +71,7 @@ body,
   }
   p {
     &.tip {
-      border-left: 4px solid $themeColor;
+      border-left: 4px solid variable.$themeColor;
       padding: 12px 24px 12px 30px;
       margin: 2em 0;
       background-color: #f8f8f8;
@@ -116,7 +116,7 @@ body,
     flex-shrink: 0;
     font-size: 22px;
     a {
-      color: $themeColor;
+      color: variable.$themeColor;
       text-decoration: none;
       cursor: pointer;
       img {
@@ -323,7 +323,7 @@ body,
         line-height: 30px;
         &.router-link-active,
         &:hover {
-          color: $themeColor;
+          color: variable.$themeColor;
         }
         &.router-link-active {
           font-size: 16px;
@@ -437,14 +437,14 @@ body,
   background-color: #fff;
   cursor: pointer;
   &:active {
-    border-color: $themeColor;
+    border-color: variable.$themeColor;
   }
 }
 
 .demo-code {
   cursor: pointer;
   font-size: 15px;
-  color: $themeColor;
+  color: variable.$themeColor;
   font-weight: bold;
   text-align: center;
   user-select: none;

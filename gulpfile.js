@@ -243,13 +243,13 @@ gulp.task('build_icon', () => {
       .pipe(gulp.dest('lib'))
       .pipe(gulp.dest('lib/icon/style'))
       .pipe(gulp.dest('es'))
-      .pipe(gulp.dest('es/icon/style'))
+      .pipe(gulp.dest('es/icon'))
   )
 })
 
 function buildStyle (name, dirName) {
   return gulp.src(`styles/${name}.scss`)
-    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@import \'./variable.scss\';\n'))
+    .pipe(replace(/(\/\*\*Variable\*\*\/)/, '@use \'./variable.scss\';\n'))
     .pipe(sass())
     .pipe(prefixer({
       borwsers: ['last 1 version', '> 1%', 'not ie <= 8'],
