@@ -532,14 +532,10 @@
   font-family: var(--vxe-ui-font-family);
   direction: ltr;
   .vxe-table--body-wrapper {
-    & > table {
-      background-color: var(--vxe-ui-layout-background-color);
-    }
+    background-color: var(--vxe-ui-layout-background-color);
   }
   .vxe-table--footer-wrapper {
-    & > table {
-      background-color: var(--vxe-ui-table-footer-background-color);
-    }
+    background-color: var(--vxe-ui-table-footer-background-color);
   }
   .vxe-table--header,
   .vxe-table--body,
@@ -934,6 +930,48 @@
       }
     }
   }
+  // 滚动条
+  .vxe-table--scroll-x-virtual,
+  .vxe-table--scroll-y-virtual {
+    position: absolute;
+    z-index: 7;
+    overflow: hidden;
+  }
+  .vxe-table--scroll-x-handle,
+  .vxe-table--scroll-y-handle {
+    position: absolute;
+    div {
+      display: block;
+    }
+  }
+  .vxe-table--scroll-x-virtual,
+  .vxe-table--scroll-x-handle {
+    width: 100%;
+    left: 0;
+    bottom: 0;
+  }
+  .vxe-table--scroll-x-handle {
+    overflow-y: hidden;
+    overflow-x: auto;
+    height: 18px;
+  }
+  .vxe-table--scroll-y-virtual,
+  .vxe-table--scroll-y-handle {
+    height: 100%;
+    right: 0;
+    top: 0;
+  }
+  .vxe-table--scroll-y-handle {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 18px;
+  }
+  .vxe-table--scroll-x-space {
+    height: 1px;
+  }
+  .vxe-table--scroll-y-space {
+    width: 1px;
+  }
 
   &.is--padding {
     .vxe-cell {
@@ -972,6 +1010,7 @@
     background-color: inherit;
     transition: 0.3s box-shadow;
     outline: 0;
+    background-color: var(--vxe-ui-layout-background-color);
     .vxe-table--body-wrapper {
       overflow-x: hidden;
       outline: 0;

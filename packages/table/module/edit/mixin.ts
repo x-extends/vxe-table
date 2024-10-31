@@ -30,7 +30,7 @@ function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
       }
       parentChilds[funcName](item)
       mapChilds[funcName](item)
-      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1, height: 0 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     } else {
@@ -41,7 +41,7 @@ function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
       }
       afterFullData[funcName](item)
       tableFullTreeData[funcName](item)
-      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0 }
+      const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0, height: 0 }
       fullDataRowIdData[rowid] = rest
       fullAllDataRowIdData[rowid] = rest
     }
@@ -113,7 +113,7 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
               targetIndex = targetIndex + 1
             }
             parentMapChilds.splice(targetIndex, 0, item)
-            const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1 }
+            const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0 }
             fullDataRowIdData[rowid] = rest
             fullAllDataRowIdData[rowid] = rest
           })

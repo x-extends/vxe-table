@@ -52,6 +52,9 @@ export default Vue.extend({
 
     const gridOptions: VxeGridProps<RowVO> = {
       border: true,
+      showOverflow: true,
+      showHeaderOverflow: true,
+      showFooterOverflow: true,
       loading: false,
       height: 800,
       columnConfig: {

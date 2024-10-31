@@ -3,6 +3,8 @@ import { ColumnInfo } from './columnInfo'
 import { isScale, isPx } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 
+import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
+
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
   columns.forEach((column: any) => {
@@ -86,18 +88,6 @@ export function restoreScrollLocation (_vm: any, scrollLeft: any, scrollTop: any
 
 export function toTreePathSeq (path: any) {
   return path.map((num: any, i: any) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-}
-
-export function removeScrollListener (scrollElem: any) {
-  if (scrollElem && scrollElem._onscroll) {
-    scrollElem.onscroll = null
-  }
-}
-
-export function restoreScrollListener (scrollElem: any) {
-  if (scrollElem && scrollElem._onscroll) {
-    scrollElem.onscroll = scrollElem._onscroll
-  }
 }
 
 /**
@@ -346,28 +336,60 @@ export function createColumn ($xeTable: any, options: any, renderOptions: any): 
   return isColumnInfo(options) ? options : new ColumnInfo($xeTable, options, renderOptions)
 }
 
-export function rowToVisible ($xetable: any, row: any) {
-  const { tableBody } = $xetable.$refs
-  const bodyElem = tableBody ? tableBody.$el : null
+export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
+  const { reactData, internalData } = $xeTable
+  const tableProps = $xeTable
+  const { showOverflow } = tableProps
+  const tableBody: any = $xeTable.$refs.tableBody
+  const { columnStore, scrollYLoad } = reactData
+  const { afterFullData, scrollYStore, fullAllDataRowIdData } = internalData
+  const { leftList, rightList } = columnStore
+  const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+  const rowid = getRowid($xeTable, row)
+  let offsetFixedLeft = 0
+  leftList.forEach(item => {
+    offsetFixedLeft += item.renderWidth
+  })
+  let offsetFixedRight = 0
+  rightList.forEach(item => {
+    offsetFixedRight += item.renderWidth
+  })
   if (bodyElem) {
-    const trElem = bodyElem.querySelector(`[rowid="${getRowid($xetable, row)}"]`)
+    const bodyHeight = bodyElem.clientHeight
+    const bodyScrollTop = bodyElem.scrollTop
+    const trElem: HTMLTableRowElement | null = bodyElem.querySelector(`[rowid="${rowid}"]`)
     if (trElem) {
-      const bodyHeight = bodyElem.clientHeight
-      const bodySrcollTop = bodyElem.scrollTop
-      const trOffsetTop = trElem.offsetTop + (trElem.offsetParent ? trElem.offsetParent.offsetTop : 0)
+      const trOffsetParent = trElem.offsetParent as HTMLElement
+      const trOffsetTop = trElem.offsetTop + (trOffsetParent ? trOffsetParent.offsetTop : 0)
       const trHeight = trElem.clientHeight
       // 检测行是否在可视区中
-      if (trOffsetTop < bodySrcollTop || trOffsetTop > bodySrcollTop + bodyHeight) {
-        // 向上定位
-        return $xetable.scrollTo(null, trOffsetTop)
-      } else if (trOffsetTop + trHeight >= bodyHeight + bodySrcollTop) {
-        // 向下定位
-        return $xetable.scrollTo(null, bodySrcollTop + trHeight)
+      if (trOffsetTop < bodyScrollTop || trOffsetTop > bodyScrollTop + bodyHeight) {
+        return $xeTable.scrollTo(null, trOffsetTop)
+      } else if (trOffsetTop + trHeight >= bodyHeight + bodyScrollTop) {
+        return $xeTable.scrollTo(null, bodyScrollTop + trHeight)
       }
     } else {
-      // 如果是虚拟渲染跨行滚动
-      if ($xetable.scrollYLoad) {
-        return $xetable.scrollTo(null, ($xetable.afterFullData.indexOf(row) - 1) * $xetable.scrollYStore.rowHeight)
+      // 如果是虚拟渲染滚动
+      if (scrollYLoad) {
+        if (showOverflow) {
+          return $xeTable.scrollTo(null, ($xeTable.findRowIndexOf(afterFullData, row) - 1) * scrollYStore.rowHeight)
+        }
+        let scrollTop = 0
+        const rest = fullAllDataRowIdData[rowid]
+        const rHeight = rest ? rest.height : 0
+        for (let i = 0; i < afterFullData.length; i++) {
+          const currRow = afterFullData[i]
+          const currRowid = getRowid($xeTable, currRow)
+          if (currRow === row || currRowid === rowid) {
+            break
+          }
+          const rest = fullAllDataRowIdData[currRowid]
+          scrollTop += rest ? rest.height : 0
+        }
+        if (scrollTop < bodyScrollTop) {
+          return $xeTable.scrollTo(null, scrollTop - offsetFixedLeft - 1)
+        }
+        return $xeTable.scrollTo(null, (scrollTop + rHeight) - (bodyHeight - offsetFixedRight - 1))
       }
     }
   }
@@ -376,9 +398,12 @@ export function rowToVisible ($xetable: any, row: any) {
 
 export function colToVisible ($xeTable: any, column: any) {
   const { columnStore, scrollXLoad, visibleColumn } = $xeTable
-  const { tableBody } = $xeTable.$refs
+  const tableBody: any = $xeTable.$refs.tableBody
   const { leftList, rightList } = columnStore
   const bodyElem = tableBody ? tableBody.$el : null
+  if (column.fixed) {
+    return Promise.resolve()
+  }
   let offsetFixedLeft = 0
   leftList.forEach((item: any) => {
     offsetFixedLeft += item.renderWidth
@@ -389,15 +414,15 @@ export function colToVisible ($xeTable: any, column: any) {
   })
   if (bodyElem) {
     const bodyWidth = bodyElem.clientWidth
-    const bodySrcollLeft = bodyElem.scrollLeft
+    const bodyScrollLeft = bodyElem.scrollLeft
     const tdElem = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {
       const tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
       const cellWidth = tdElem.clientWidth
       // 检测是否在可视区中
-      if (tdOffsetLeft < (bodySrcollLeft + offsetFixedLeft)) {
+      if (tdOffsetLeft < (bodyScrollLeft + offsetFixedLeft)) {
         return $xeTable.scrollTo(tdOffsetLeft - offsetFixedLeft - 1)
-      } else if ((tdOffsetLeft + cellWidth - bodySrcollLeft) > (bodyWidth - offsetFixedRight)) {
+      } else if ((tdOffsetLeft + cellWidth - bodyScrollLeft) > (bodyWidth - offsetFixedRight)) {
         return $xeTable.scrollTo((tdOffsetLeft + cellWidth) - (bodyWidth - offsetFixedRight - 1))
       }
     } else {
@@ -405,13 +430,13 @@ export function colToVisible ($xeTable: any, column: any) {
       if (scrollXLoad) {
         let scrollLeft = 0
         const cellWidth = column.renderWidth
-        for (let index = 0; index < visibleColumn.length; index++) {
-          if (visibleColumn[index] === column) {
+        for (let i = 0; i < visibleColumn.length; i++) {
+          if (visibleColumn[i] === column) {
             break
           }
-          scrollLeft += visibleColumn[index].renderWidth
+          scrollLeft += visibleColumn[i].renderWidth
         }
-        if (scrollLeft < bodySrcollLeft) {
+        if (scrollLeft < bodyScrollLeft) {
           return $xeTable.scrollTo(scrollLeft - offsetFixedLeft - 1)
         }
         return $xeTable.scrollTo((scrollLeft + cellWidth) - (bodyWidth - offsetFixedRight - 1))

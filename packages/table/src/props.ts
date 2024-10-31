@@ -7,31 +7,31 @@ const { getConfig } = VxeUI
 
 export default {
   /** 基本属性 */
-  id: [String, Function],
+  id: [String, Function] as PropType<VxeTablePropTypes.ID>,
   // 数据
-  data: Array,
+  data: Array as PropType<any[]>,
   // 表格的高度
-  height: [Number, String],
+  height: [Number, String] as PropType<VxeTablePropTypes.Height>,
   // 表格的最小高度
   minHeight: {
-    type: [Number, String],
+    type: [Number, String] as PropType<VxeTablePropTypes.MinHeight>,
     default: () => getConfig().table.minHeight
   },
   // 表格的最大高度
-  maxHeight: [Number, String],
+  maxHeight: [Number, String] as PropType<VxeTablePropTypes.MaxHeight>,
   // 已废弃，被 column-config.resizable 替换
   resizable: {
-    type: Boolean,
+    type: Boolean as PropType<VxeTablePropTypes.Resizable>,
     default: () => getConfig().table.resizable
   },
   // 是否带有斑马纹
   stripe: {
-    type: Boolean,
+    type: Boolean as PropType<VxeTablePropTypes.Stripe>,
     default: () => getConfig().table.stripe
   },
   // 是否带有边框
   border: {
-    type: [Boolean, String],
+    type: [Boolean, String] as PropType<VxeTablePropTypes.Border>,
     default: () => getConfig().table.border
   },
   // 单元格是否有边距

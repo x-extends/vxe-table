@@ -3,13 +3,13 @@ import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetN
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, restoreScrollListener, getRootColumn } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableDefines } from '../../../types'
+import type { VxeTableDefines, VxeTableEmits, ValueOf } from '../../../types'
 
-const { getConfig, getI18n, renderer, formats, interceptor } = VxeUI
+const { getConfig, getI18n, renderer, formats, interceptor, createEvent } = VxeUI
 
 const isWebkit = browse['-webkit'] && !browse.edge
 const debounceScrollYDuration = browse.msie ? 80 : 20
@@ -81,7 +81,7 @@ function handleReserveRow (_vm: any, reserveRowMap: any) {
   return reserveList
 }
 
-function computeVirtualX (_vm: any) {
+function handleVirtualXVisible (_vm: any) {
   const { $refs, visibleColumn } = _vm
   const { tableBody } = $refs
   const tableBodyElem = tableBody ? tableBody.$el : null
@@ -108,14 +108,16 @@ function computeVirtualX (_vm: any) {
   return { toVisibleIndex: 0, visibleSize: 6 }
 }
 
-function computeVirtualY (_vm: any) {
-  const { $refs, computeSize, rowHeightMaps } = _vm
-  const { tableHeader, tableBody } = $refs
-  const tableBodyElem = tableBody ? tableBody.$el : null
+const computeRowHeight = ($xeTable: any) => {
+  const { $refs, computeSize } = $xeTable
+  const tableHeader = $refs.tableHeader
+  const tableBody = $refs.tableBody
+  const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
   const vSize = computeSize
+  const rowHeightMaps = $xeTable.rowHeightMaps
+  let rowHeight = 0
   if (tableBodyElem) {
-    const tableHeaderElem = tableHeader ? tableHeader.$el : null
-    let rowHeight = 0
+    const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
     let firstTrElem
     firstTrElem = tableBodyElem.querySelector('tr')
     if (!firstTrElem && tableHeaderElem) {
@@ -127,10 +129,42 @@ function computeVirtualY (_vm: any) {
     if (!rowHeight) {
       rowHeight = rowHeightMaps[vSize || 'default']
     }
-    const visibleSize = Math.max(8, Math.ceil(tableBodyElem.clientHeight / rowHeight) + 2)
-    return { rowHeight, visibleSize }
   }
-  return { rowHeight: 0, visibleSize: 8 }
+  return rowHeight
+}
+
+function handleVirtualYVisible ($xeTable: any) {
+  const { $refs, scrollYStore, afterFullData, fullAllDataRowIdData } = $xeTable
+  const tableBody: any = $refs.tableBody
+  const tableBodyElem = tableBody ? tableBody.$el : null
+  const { rowHeight } = scrollYStore
+  if (tableBodyElem) {
+    const { scrollTop, clientHeight } = tableBodyElem
+    const endHeight = scrollTop + clientHeight
+    let toVisibleIndex = -1
+    let offsetTop = 0
+    let visibleSize = 0
+    for (let rIndex = 0, rLen = afterFullData.length; rIndex < rLen; rIndex++) {
+      const row = afterFullData[rIndex]
+      const rowid = getRowid($xeTable, row)
+      const rest = fullAllDataRowIdData[rowid]
+      if (!rest) {
+        break
+      }
+      offsetTop += rest.height || rowHeight
+      if (toVisibleIndex === -1 && scrollTop < offsetTop) {
+        toVisibleIndex = rIndex
+      }
+      if (toVisibleIndex >= 0) {
+        visibleSize++
+        if (offsetTop > endHeight) {
+          break
+        }
+      }
+    }
+    return { toVisibleIndex: Math.max(0, toVisibleIndex), visibleSize: Math.max(8, visibleSize) }
+  }
+  return { toVisibleIndex: 0, visibleSize: 8 }
 }
 
 function calculateMergerOffsetIndex (list: any, offsetItem: any, type: any) {
@@ -234,7 +268,7 @@ function clearAllSort (_vm: any) {
   })
 }
 
-function calcHeight (_vm: any, key: 'height' | 'minHeight' | 'maxHeight') {
+function calcTableHeight (_vm: any, key: 'height' | 'minHeight' | 'maxHeight') {
   const { parentHeight } = _vm
   const val = _vm[key]
   let num = 0
@@ -252,6 +286,26 @@ function calcHeight (_vm: any, key: 'height' | 'minHeight' | 'maxHeight') {
     }
   }
   return num
+}
+
+const calcCellHeight = ($xeTable: any) => {
+  const { tableData, scrollYLoad, fullAllDataRowIdData } = $xeTable
+  const el = $xeTable.$el
+  if (scrollYLoad && el) {
+    tableData.forEach((row: any) => {
+      const rowid = getRowid($xeTable, row)
+      const rest = fullAllDataRowIdData[rowid]
+      const trList = el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`)
+      if (rest && trList.length) {
+        let height = 0
+        for (let i = 0; i < trList.length; i++) {
+          const trEl = trList[i] as HTMLTableRowElement
+          height = Math.max(height, trEl.offsetHeight)
+        }
+        rest.height = height
+      }
+    })
+  }
 }
 
 function getOrderField (_vm: any, column: any) {
@@ -456,9 +510,9 @@ const Methods = {
         if (!(this.height || this.maxHeight)) {
           errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
         }
-        if (!this.showOverflow) {
-          warnLog('vxe.error.reqProp', ['table.show-overflow'])
-        }
+        // if (!this.showOverflow) {
+        //   warnLog('vxe.error.reqProp', ['table.show-overflow'])
+        // }
         if (this.spanMethod) {
           warnLog('vxe.error.scrollErrProp', ['table.span-method'])
         }
@@ -672,7 +726,7 @@ const Methods = {
       }
       let cacheItem = fullAllDataRowIdData[rowid]
       if (!cacheItem) {
-        cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent, level }
+        cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent, level, height: 0 }
       }
       if (isSource) {
         cacheItem.index = treeConfig && parent ? -1 : index
@@ -741,7 +795,7 @@ const Methods = {
       XEUtils.eachTree(rows, (childRow, index, items, path, parent, nodes) => {
         const rowid = getRowid($xeTable, childRow)
         const parentRow = parent || parentRest.row
-        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length }
+        const rest = { row: childRow, rowid, seq: -1, index, _index: -1, $index: -1, items, parent: parentRow, level: parentLevel + nodes.length, height: 0 }
         fullDataRowIdData[rowid] = rest
         fullAllDataRowIdData[rowid] = rest
       }, { children: childrenField })
@@ -771,7 +825,7 @@ const Methods = {
     let hasFixed: any
     const handleFunc = (column: any, index: any, items: any, path: any, parent: any) => {
       const { id: colid, field, fixed, type, treeNode } = column
-      const rest = { column, colid, index, items, parent }
+      const rest = { column, colid, index, items, parent: parent || null, width: 0 }
       if (field) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (fullColumnFieldData[field]) {
@@ -885,9 +939,15 @@ const Methods = {
     if (tr) {
       const { fullAllDataRowIdData } = this
       const rowid = tr.getAttribute('rowid')
-      const rest = fullAllDataRowIdData[rowid]
-      if (rest) {
-        return { rowid: rest.rowid, item: rest.row, index: rest.index, items: rest.items, parent: rest.parent }
+      const rowRest = fullAllDataRowIdData[rowid]
+      if (rowRest) {
+        return {
+          rowid: rowRest.rowid,
+          item: rowRest.row,
+          index: rowRest.index,
+          items: rowRest.items,
+          parent: rowRest.parent
+        }
       }
     }
     return null
@@ -900,9 +960,17 @@ const Methods = {
     if (cell) {
       const { fullColumnIdData } = this
       const colid = cell.getAttribute('colid')
-      const rest = fullColumnIdData[colid]
-      if (rest) {
-        return { colid: rest.colid, item: rest.column, index: rest.index, items: rest.items, parent: rest.parent }
+      if (colid) {
+        const colRest = fullColumnIdData[colid]
+        if (colRest) {
+          return {
+            colid: colRest.colid,
+            item: colRest.column,
+            index: colRest.index,
+            items: colRest.items,
+            parent: colRest.parent
+          }
+        }
       }
     }
     return null
@@ -1215,13 +1283,13 @@ const Methods = {
       const { fullAllDataRowIdData } = $xeTable
       const rowid = getRowid($xeTable, row)
       const colid = column.id
-      const rest = fullAllDataRowIdData[rowid]
-      if (rest) {
-        formatData = rest.formatData
+      const rowRest = fullAllDataRowIdData[rowid]
+      if (rowRest) {
+        formatData = rowRest.formatData
         if (!formatData) {
           formatData = fullAllDataRowIdData[rowid].formatData = {}
         }
-        if (rest && formatData[colid]) {
+        if (rowRest && formatData[colid]) {
           if (formatData[colid].value === cellValue) {
             return formatData[colid].label
           }
@@ -1534,13 +1602,13 @@ const Methods = {
     if (treeConfig) {
       XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
         const rowid = getRowid(this, row)
-        const allrest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid]
         const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-        if (allrest) {
-          allrest.seq = seq
-          allrest._index = index
+        if (rowRest) {
+          rowRest.seq = seq
+          rowRest._index = index
         } else {
-          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
@@ -1549,13 +1617,13 @@ const Methods = {
     } else {
       afterFullData.forEach((row: any, index: any) => {
         const rowid = getRowid(this, row)
-        const allrest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid]
         const seq = index + 1
-        if (allrest) {
-          allrest.seq = seq
-          allrest._index = index
+        if (rowRest) {
+          rowRest.seq = seq
+          rowRest._index = index
         } else {
-          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0 }
+          const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
           fullAllDataRowIdData[rowid] = rest
           fullDataRowIdData[rowid] = rest
         }
@@ -2062,7 +2130,7 @@ const Methods = {
           warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
         }
       }
-      const { visibleSize } = computeVirtualX(this)
+      const { visibleSize } = handleVirtualXVisible(this)
       scrollXStore.startIndex = 0
       scrollXStore.endIndex = visibleSize
       scrollXStore.visibleSize = visibleSize
@@ -2076,9 +2144,9 @@ const Methods = {
     this.scrollXLoad = scrollXLoad
     visibleColumn.forEach((column, index) => {
       const colid = column.id
-      const rest = fullColumnIdData[colid]
-      if (rest) {
-        rest._index = index
+      const colRest = fullColumnIdData[colid]
+      if (colRest) {
+        colRest._index = index
       }
     })
     this.visibleColumn = visibleColumn
@@ -2165,30 +2233,27 @@ const Methods = {
    * 计算单元格列宽，动态分配可用剩余空间
    * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
    */
-  recalculate (refull: any) {
-    const { $refs } = this
-    const { tableBody, tableHeader, tableFooter } = $refs
-    const bodyElem = tableBody ? tableBody.$el : null
-    const headerElem = tableHeader ? tableHeader.$el : null
-    const footerElem = tableFooter ? tableFooter.$el : null
+  recalculate (reFull?: boolean) {
     const el = this.$el
     if (!el || !el.clientWidth) {
       return this.$nextTick()
     }
-    if (bodyElem) {
-      this.calcCellWidth()
-      this.autoCellWidth(headerElem, bodyElem, footerElem)
-      if (refull === true) {
-        // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-        return this.computeScrollLoad().then(() => {
-          this.autoCellWidth(headerElem, bodyElem, footerElem)
-          return this.computeScrollLoad()
-        })
-      }
+    calcCellHeight(this)
+    this.calcCellWidth()
+    this.autoCellWidth()
+    if (reFull === true) {
+      // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
+      return this.computeScrollLoad().then(() => {
+        calcCellHeight(this)
+        this.autoCellWidth()
+        return this.computeScrollLoad()
+      })
     }
     return this.computeScrollLoad()
   },
   calcCellWidth () {
+    const $xeTable = this
+
     const { autoWidthColumnList, tableData } = this
     if (!tableData.length || !autoWidthColumnList.length) {
       this.isCalcColumn = false
@@ -2196,9 +2261,14 @@ const Methods = {
     }
     this.isCalcColumn = true
     return this.$nextTick().then(() => {
+      const internalData = $xeTable
+
+      const { fullColumnIdData } = internalData
       const el = this.$el
       if (el) {
         autoWidthColumnList.forEach((column: any) => {
+          const colid = column.id
+          const colRest = fullColumnIdData[colid]
           const cellElList = el.querySelectorAll(`.vxe-header--column.${column.id}>.vxe-cell,.vxe-body--column.${column.id}>.vxe-cell,.vxe-footer--column.${column.id}>.vxe-cell`)
           const firstCellEl = cellElList[0]
           let paddingSize = 0
@@ -2225,6 +2295,9 @@ const Methods = {
               colWidth = Math.max(colWidth, Math.ceil(titleWidth) + 4)
             }
           })
+          if (colRest) {
+            colRest.width = Math.max(colWidth, colRest.width)
+          }
           column.renderAutoWidth = colWidth + paddingSize
         })
         this.analyColumnWidth()
@@ -2237,12 +2310,14 @@ const Methods = {
    * 支持 px、%、固定 混合分配
    * 支持动态列表调整分配
    * 支持自动分配偏移量
-   * @param {Element} headerElem
-   * @param {Element} bodyElem
-   * @param {Element} footerElem
-   * @param {Number} bodyWidth
    */
-  autoCellWidth (headerElem: any, bodyElem: any, footerElem: any) {
+  autoCellWidth () {
+    const { $refs } = this
+    const { tableBody, tableHeader, tableFooter } = $refs
+    const bodyElem = tableBody ? tableBody.$el : null
+    const headerElem = tableHeader ? tableHeader.$el : null
+    const footerElem = tableFooter ? tableFooter.$el : null
+
     let tableWidth = 0
     const minCellWidth = 40 // 列宽最少限制 40px
     const bodyWidth = bodyElem.clientWidth - 1
@@ -2365,12 +2440,38 @@ const Methods = {
       this.checkScrolling()
     }
   },
+  calcCellHeight () {
+    const $xeTable = this
+    const reactData = $xeTable
+    const internalData = $xeTable
+
+    const { tableData, scrollYLoad } = reactData
+    const { fullAllDataRowIdData } = internalData
+    const el = $xeTable.$el
+    if (scrollYLoad && el) {
+      tableData.forEach((row: any) => {
+        const rowid = getRowid($xeTable, row)
+        const rowRest = fullAllDataRowIdData[rowid]
+        const trList = el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`)
+        if (rowRest && trList.length) {
+          let height = 0
+          for (let i = 0; i < trList.length; i++) {
+            const trEl = trList[i] as HTMLTableRowElement
+            height = Math.max(height, trEl.offsetHeight)
+          }
+          rowRest.height = height
+        }
+      })
+    }
+  },
   updateHeight () {
-    this.customHeight = calcHeight(this, 'height')
-    this.customMinHeight = calcHeight(this, 'minHeight')
-    this.customMaxHeight = calcHeight(this, 'maxHeight')
+    this.customHeight = calcTableHeight(this, 'height')
+    this.customMinHeight = calcTableHeight(this, 'minHeight')
+    this.customMaxHeight = calcTableHeight(this, 'maxHeight')
   },
   updateStyle () {
+    const $xeTable = this
+
     let {
       $refs,
       isGroup,
@@ -2392,6 +2493,7 @@ const Methods = {
       scrollbarWidth,
       scrollXLoad,
       scrollYLoad,
+      overflowX,
       cellOffsetWidth,
       columnStore,
       elemStore,
@@ -2406,7 +2508,7 @@ const Methods = {
       footerSpanMethod,
       isAllOverflow,
       visibleColumn
-    } = this
+    } = $xeTable
     const containerList = ['main', 'left', 'right']
     const emptyPlaceholderElem = $refs.emptyPlaceholder
     const bodyWrapperElem = elemStore['main-body-wrapper']
@@ -2419,6 +2521,33 @@ const Methods = {
         customHeight += scrollbarHeight
       }
     }
+
+    const scrollXVirtualEl = $xeTable.$refs.refScrollXVirtualElem
+    if (scrollXVirtualEl) {
+      scrollXVirtualEl.style.height = `${scrollbarHeight}px`
+    }
+
+    const scrollYVirtualEl = $xeTable.$refs.refScrollYVirtualElem
+    if (scrollYVirtualEl) {
+      let bodyHeight = 0
+      let bodyMaxHeight = 0
+      const bodyMinHeight = customMinHeight - headerHeight - footerHeight
+      if (customMaxHeight) {
+        bodyMaxHeight = customMaxHeight - headerHeight - footerHeight
+        bodyMaxHeight = Math.max(bodyMinHeight, bodyMaxHeight)
+      }
+      if (customHeight) {
+        bodyHeight = customHeight - headerHeight - footerHeight
+        if (bodyMaxHeight) {
+          bodyHeight = Math.min(bodyMaxHeight, bodyHeight)
+        }
+        bodyHeight = Math.max(bodyMinHeight, bodyHeight)
+      }
+      scrollYVirtualEl.style.top = `${headerHeight}px`
+      scrollYVirtualEl.style.width = `${scrollbarWidth}px`
+      scrollYVirtualEl.style.height = `${bodyHeight + (overflowX ? -Math.max(1, scrollbarHeight) : 0)}px`
+    }
+
     containerList.forEach((name, index) => {
       const fixedType = index > 0 ? name : ''
       const layoutList = ['header', 'body', 'footer']
@@ -2592,7 +2721,8 @@ const Methods = {
               colElem.style.width = `${scrollbarWidth}px`
             }
             if (fullColumnIdData[colid]) {
-              const column = fullColumnIdData[colid].column
+              const colRest = fullColumnIdData[colid]
+              const column = colRest.column
               const { showHeaderOverflow, showFooterOverflow, showOverflow } = column
               let cellOverflow
               colElem.style.width = `${column.renderWidth}px`
@@ -2654,18 +2784,22 @@ const Methods = {
    * 处理固定列的显示状态
    */
   checkScrolling () {
-    const { tableBody, leftContainer, rightContainer } = this.$refs
+    const $xeTable = this
+
+    const { tableBody, leftContainer, rightContainer } = $xeTable.$refs
     const bodyElem = tableBody ? tableBody.$el : null
-    if (bodyElem) {
+    const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+    const bodtTargetEl = xHandleEl || bodyElem
+    if (bodtTargetEl) {
       if (leftContainer) {
-        if (bodyElem.scrollLeft > 0) {
+        if (bodtTargetEl.scrollLeft > 0) {
           addClass(leftContainer, 'scrolling--middle')
         } else {
           removeClass(leftContainer, 'scrolling--middle')
         }
       }
       if (rightContainer) {
-        if (bodyElem.clientWidth < bodyElem.scrollWidth - Math.ceil(bodyElem.scrollLeft)) {
+        if (bodtTargetEl.clientWidth < bodtTargetEl.scrollWidth - Math.ceil(bodtTargetEl.scrollLeft)) {
           addClass(rightContainer, 'scrolling--middle')
         } else {
           removeClass(rightContainer, 'scrolling--middle')
@@ -4602,8 +4736,8 @@ const Methods = {
     const $xeTable = this
 
     const { fullAllDataRowIdData } = this
-    const rest = fullAllDataRowIdData[getRowid($xeTable, row)]
-    return rest && !!rest.expandLoaded
+    const rowRest = fullAllDataRowIdData[getRowid($xeTable, row)]
+    return rowRest && !!rowRest.expandLoaded
   },
   clearRowExpandLoaded (row: any) {
     const $xeTable = this
@@ -4611,9 +4745,9 @@ const Methods = {
     const { expandOpts, rowExpandLazyLoadedMaps, fullAllDataRowIdData } = this
     const { lazy } = expandOpts
     const rowid = getRowid($xeTable, row)
-    const rest = fullAllDataRowIdData[rowid]
-    if (lazy && rest) {
-      rest.expandLoaded = false
+    const rowRest = fullAllDataRowIdData[rowid]
+    if (lazy && rowRest) {
+      rowRest.expandLoaded = false
       const rowTempExpandLazyLoadedMaps = { ...rowExpandLazyLoadedMaps }
       if (rowTempExpandLazyLoadedMaps[rowid]) {
         delete rowTempExpandLazyLoadedMaps[rowid]
@@ -4713,14 +4847,14 @@ const Methods = {
       if (loadMethod) {
         const { rowExpandLazyLoadedMaps, fullAllDataRowIdData } = this
         const rowid = getRowid($xeTable, row)
-        const rest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid]
         rowExpandLazyLoadedMaps[rowid] = row
         loadMethod({ $table: $xeTable, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
           const { rowExpandedMaps } = this
-          rest.expandLoaded = true
+          rowRest.expandLoaded = true
           rowExpandedMaps[rowid] = row
         }).catch(() => {
-          rest.expandLoaded = false
+          rowRest.expandLoaded = false
         }).finally(() => {
           const { rowExpandLazyLoadedMaps } = this
           if (rowExpandLazyLoadedMaps[rowid]) {
@@ -4761,8 +4895,8 @@ const Methods = {
         validRows.forEach((row: any) => {
           const rowid = getRowid(this, row)
           if (!rExpandedMaps[rowid]) {
-            const rest = fullAllDataRowIdData[rowid]
-            const isLoad = lazy && !rest.expandLoaded && !rowExpandLazyLoadedMaps[rowid]
+            const rowRest = fullAllDataRowIdData[rowid]
+            const isLoad = lazy && !rowRest.expandLoaded && !rowExpandLazyLoadedMaps[rowid]
             if (isLoad) {
               lazyRests.push(this.handleAsyncRowExpand(row))
             } else {
@@ -4871,8 +5005,8 @@ const Methods = {
     const $xeTable = this
 
     const { fullAllDataRowIdData } = this
-    const rest = fullAllDataRowIdData[getRowid($xeTable, row)]
-    return rest && !!rest.treeLoaded
+    const rowRest = fullAllDataRowIdData[getRowid($xeTable, row)]
+    return rowRest && !!rowRest.treeLoaded
   },
   clearTreeExpandLoaded (row: any) {
     const $xeTable = this
@@ -4880,9 +5014,9 @@ const Methods = {
     const { treeOpts, treeExpandedMaps, fullAllDataRowIdData } = this
     const { transform, lazy } = treeOpts
     const rowid = getRowid($xeTable, row)
-    const rest = fullAllDataRowIdData[rowid]
-    if (lazy && rest) {
-      rest.treeLoaded = false
+    const rowRest = fullAllDataRowIdData[rowid]
+    if (lazy && rowRest) {
+      rowRest.treeLoaded = false
       if (treeExpandedMaps[rowid]) {
         delete treeExpandedMaps[rowid]
       }
@@ -4982,12 +5116,12 @@ const Methods = {
       if (loadMethod) {
         const { treeExpandLazyLoadedMaps, fullAllDataRowIdData } = this
         const rowid = getRowid($xeTable, row)
-        const rest = fullAllDataRowIdData[rowid]
+        const rowRest = fullAllDataRowIdData[rowid]
         treeExpandLazyLoadedMaps[rowid] = row
         Promise.resolve(
           loadMethod({ $table: $xeTable, row })
         ).then((childRecords: any) => {
-          rest.treeLoaded = true
+          rowRest.treeLoaded = true
           if (treeExpandLazyLoadedMaps[rowid]) {
             delete treeExpandLazyLoadedMaps[rowid]
           }
@@ -5013,7 +5147,7 @@ const Methods = {
           }
         }).catch(() => {
           const { treeExpandLazyLoadedMaps } = this
-          rest.treeLoaded = false
+          rowRest.treeLoaded = false
           if (treeExpandLazyLoadedMaps[rowid]) {
             delete treeExpandLazyLoadedMaps[rowid]
           }
@@ -5075,8 +5209,8 @@ const Methods = {
       validRows.forEach((row: any) => {
         const rowid = getRowid(this, row)
         if (!treeTempExpandedMaps[rowid]) {
-          const rest = fullAllDataRowIdData[rowid]
-          const isLoad = lazy && row[hasChildField] && !rest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
+          const rowRest = fullAllDataRowIdData[rowid]
+          const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
           // 是否使用懒加载
           if (isLoad) {
             result.push(this.handleAsyncTreeExpandChilds(row))
@@ -5208,7 +5342,7 @@ const Methods = {
   loadScrollXData () {
     const { mergeList, mergeFooterList, scrollXStore } = this
     const { startIndex, endIndex, offsetSize } = scrollXStore
-    const { toVisibleIndex, visibleSize } = computeVirtualX(this)
+    const { toVisibleIndex, visibleSize } = handleVirtualXVisible(this)
     const offsetItem = {
       startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
       endIndex: toVisibleIndex + visibleSize + offsetSize
@@ -5224,31 +5358,121 @@ const Methods = {
     }
     this.closeTooltip()
   },
+  handleScrollEvent (evnt: Event, isRollY: boolean, isRollX: boolean, params: any) {
+    const $xeTable = this
+    const props = $xeTable
+
+    const { highlightHoverRow } = props
+    const tableBody = $xeTable.$refs.tableBody
+    const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+    const rowOpts = $xeTable.computeRowOpts
+    const validTip = $xeTable.$refs.validTip
+    const tooltip = $xeTable.$refs.tooltip
+    if (rowOpts.isHover || highlightHoverRow) {
+      $xeTable.clearHoverRow()
+    }
+    if (validTip && validTip.visible) {
+      validTip.close()
+    }
+    if (tooltip && tooltip.visible) {
+      tooltip.close()
+    }
+    if (isRollX) {
+      $xeTable.checkScrolling()
+    }
+    const bodyHeight = bodyElem ? bodyElem.clientHeight : 0
+    const bodyWidth = bodyElem ? bodyElem.clientWidth : 0
+    const scrollHeight = bodyElem ? bodyElem.scrollHeight : 0
+    const scrollWidth = bodyElem ? bodyElem.scrollWidth : 0
+    $xeTable.dispatchEvent('scroll', {
+      bodyHeight,
+      bodyWidth,
+      scrollHeight,
+      scrollWidth,
+      isX: isRollX,
+      isY: isRollY,
+      ...params
+    }, evnt)
+  },
   /**
    * 纵向 Y 可视渲染事件处理
    */
-  triggerScrollYEvent (evnt: any) {
+  triggerScrollYEvent () {
     const { scrollYStore } = this
     const { adaptive, offsetSize, visibleSize } = scrollYStore
     // webkit 浏览器使用最佳的渲染方式，且最高渲染量不能大于 40 条
     if (isWebkit && adaptive && (offsetSize * 2 + visibleSize) <= 40) {
-      this.loadScrollYData(evnt)
+      this.loadScrollYData()
     } else {
-      this.debounceScrollY(evnt)
+      this.debounceScrollYData()
     }
+    this.debounceScrollYCalculate()
   },
-  debounceScrollY: XEUtils.debounce(function (this: any, evnt) {
-    this.loadScrollYData(evnt)
+  debounceScrollYData: XEUtils.debounce(function () {
+    this.loadScrollYData()
   }, debounceScrollYDuration, { leading: false, trailing: true }),
+  scrollXEvent (evnt: Event) {
+    const $xeTable = this
+
+    const wrapperEl = evnt.currentTarget as HTMLDivElement
+    const tableHeader = $xeTable.$refs.tableHeader
+    const tableBody = $xeTable.$refs.tableBody
+    const tableFooter = $xeTable.$refs.tableFooter
+    const bodyElem = tableBody.$el as HTMLDivElement
+    const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+    const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+    const { scrollTop, scrollLeft } = wrapperEl
+    const isRollX = true
+    const isRollY = false
+    $xeTable.lastScrollLeft = scrollLeft
+    $xeTable.lastScrollTime = Date.now()
+    setScrollLeft(bodyElem, scrollLeft)
+    setScrollLeft(headerElem, scrollLeft)
+    setScrollLeft(footerElem, scrollLeft)
+    $xeTable.triggerScrollXEvent(evnt)
+    $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+      type: 'table',
+      fixed: '',
+      scrollTop,
+      scrollLeft
+    })
+  },
+  debounceScrollYCalculate: XEUtils.debounce(function () {
+    this.updateScrollYSpace()
+  }, 1000, { leading: false, trailing: true }),
+  scrollYEvent (evnt: Event) {
+    const $xeTable = this
+
+    const wrapperEl = evnt.currentTarget as HTMLDivElement
+    const tableBody = $xeTable.$refs.tableBody
+    const leftBody = $xeTable.$refs.leftBody
+    const rightBody = $xeTable.$refs.rightBody
+    const bodyElem = tableBody.$el as HTMLDivElement
+    const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
+    const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
+    const { scrollTop, scrollLeft } = wrapperEl
+    const isRollX = false
+    const isRollY = true
+    $xeTable.lastScrollTop = scrollTop
+    $xeTable.lastScrollTime = Date.now()
+    setScrollTop(bodyElem, scrollTop)
+    setScrollTop(leftElem, scrollTop)
+    setScrollTop(rightElem, scrollTop)
+    $xeTable.triggerScrollYEvent(evnt)
+    $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+      type: 'table',
+      fixed: '',
+      scrollTop,
+      scrollLeft
+    })
+  },
   /**
    * 纵向 Y 可视渲染处理
    */
-  loadScrollYData (evnt: any) {
+  loadScrollYData () {
     const { mergeList, scrollYStore } = this
-    const { startIndex, endIndex, visibleSize, offsetSize, rowHeight } = scrollYStore
-    const scrollBodyElem = evnt.currentTarget || evnt.target
-    const scrollTop = scrollBodyElem.scrollTop
-    const toVisibleIndex = Math.floor(scrollTop / rowHeight)
+    const { startIndex, endIndex, offsetSize } = scrollYStore
+    const { toVisibleIndex, visibleSize } = handleVirtualYVisible(this)
     const offsetItem = {
       startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
       endIndex: toVisibleIndex + visibleSize + offsetSize
@@ -5269,7 +5493,7 @@ const Methods = {
       const { sYOpts, sXOpts, scrollXLoad, scrollYLoad, scrollXStore, scrollYStore } = this
       // 计算 X 逻辑
       if (scrollXLoad) {
-        const { visibleSize: visibleXSize } = computeVirtualX(this)
+        const { visibleSize: visibleXSize } = handleVirtualXVisible(this)
         const offsetXSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
         scrollXStore.offsetSize = offsetXSize
         scrollXStore.visibleSize = visibleXSize
@@ -5278,9 +5502,12 @@ const Methods = {
       } else {
         this.updateScrollXSpace()
       }
+      calcCellHeight(this)
       // 计算 Y 逻辑
-      const { rowHeight, visibleSize: visibleYSize } = computeVirtualY(this)
+      const rowHeight = computeRowHeight(this)
       scrollYStore.rowHeight = rowHeight
+      this.rowHeight = rowHeight
+      const { visibleSize: visibleYSize } = handleVirtualYVisible(this)
       if (scrollYLoad) {
         const offsetYSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
         scrollYStore.offsetSize = offsetYSize
@@ -5290,13 +5517,20 @@ const Methods = {
       } else {
         this.updateScrollYSpace()
       }
-      this.rowHeight = rowHeight
       this.$nextTick(this.updateStyle)
     })
   },
   handleTableColumn () {
-    const { scrollXLoad, visibleColumn, scrollXStore } = this
-    this.tableColumn = scrollXLoad ? visibleColumn.slice(scrollXStore.startIndex, scrollXStore.endIndex) : visibleColumn.slice(0)
+    const { scrollXLoad, visibleColumn, scrollXStore, fullColumnIdData } = this
+    const tableColumn: any[] = scrollXLoad ? visibleColumn.slice(scrollXStore.startIndex, scrollXStore.endIndex) : visibleColumn.slice(0)
+    tableColumn.forEach((column, $index) => {
+      const colid = column.id
+      const colRest = fullColumnIdData[colid]
+      if (colRest) {
+        colRest.$index = $index
+      }
+    })
+    this.tableColumn = tableColumn
   },
   updateScrollXData () {
     // this.tableColumn = []
@@ -5307,7 +5541,9 @@ const Methods = {
   },
   // 更新横向 X 可视渲染上下剩余空间大小
   updateScrollXSpace () {
-    const { $refs, isGroup, elemStore, visibleColumn, scrollXStore, scrollXLoad, tableWidth, scrollbarWidth } = this
+    const $xeTable = this
+
+    const { $refs, isGroup, elemStore, visibleColumn, scrollXStore, scrollXLoad, tableWidth, scrollbarWidth } = $xeTable
     const { tableHeader, tableBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
     if (tableBodyElem) {
@@ -5338,26 +5574,56 @@ const Methods = {
           }
         })
       })
+      const scrollXSpaceEl = $xeTable.$refs.refScrollXSpaceElem
+      if (scrollXSpaceEl) {
+        scrollXSpaceEl.style.width = `${tableWidth + scrollbarWidth}px`
+      }
       this.$nextTick(this.updateStyle)
     }
   },
   updateScrollYData () {
+    const $xeTable = this
+
     // this.tableData = []
     this.$nextTick(() => {
       this.handleTableData()
+      calcCellHeight($xeTable)
       this.updateScrollYSpace()
     })
   },
   // 更新纵向 Y 可视渲染上下剩余空间大小
   updateScrollYSpace () {
-    const { elemStore, scrollYStore, scrollYLoad, afterFullData } = this
+    const $xeTable = this
+
+    const { showOverflow, elemStore, scrollYStore, scrollYLoad, afterFullData, fullAllDataRowIdData } = this
     const { startIndex, rowHeight } = scrollYStore
-    const bodyHeight = afterFullData.length * rowHeight
-    const topSpaceHeight = Math.max(0, startIndex * rowHeight)
+    let bodyHeight = 0
+    let topSpaceHeight = 0
     const containerList = ['main', 'left', 'right']
     let marginTop = ''
     let ySpaceHeight = ''
     if (scrollYLoad) {
+      if (showOverflow) {
+        bodyHeight = afterFullData.length * rowHeight
+        topSpaceHeight = Math.max(0, startIndex * rowHeight)
+      } else {
+        for (let i = 0; i < afterFullData.length; i++) {
+          const row = afterFullData[i]
+          const rowid = getRowid($xeTable, row)
+          const rowRest = fullAllDataRowIdData[rowid]
+          if (rowRest) {
+            bodyHeight += rowRest.height || rowHeight
+          }
+        }
+        for (let i = 0; i < startIndex; i++) {
+          const row = afterFullData[i]
+          const rowid = getRowid($xeTable, row)
+          const rowRest = fullAllDataRowIdData[rowid]
+          if (rowRest) {
+            topSpaceHeight += rowRest.height || rowHeight
+          }
+        }
+      }
       marginTop = `${topSpaceHeight}px`
       ySpaceHeight = `${bodyHeight}px`
     }
@@ -5374,6 +5640,10 @@ const Methods = {
         }
       })
     })
+    const scrollYSpaceEl = $xeTable.$refs.refScrollYSpaceElem
+    if (scrollYSpaceEl) {
+      scrollYSpaceEl.style.height = ySpaceHeight
+    }
     this.$nextTick(this.updateStyle)
   },
   /**
@@ -5454,28 +5724,44 @@ const Methods = {
    * 手动清除滚动相关信息，还原到初始状态
    */
   clearScroll () {
-    const { $refs, scrollXStore, scrollYStore } = this
-    const { tableBody, rightBody, tableFooter } = $refs
+    const $xeTable = this
+
+    const { $refs, scrollXStore, scrollYStore } = $xeTable
+    const { tableBody, tableHeader, leftBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
+    const leftBodyElem = leftBody ? leftBody.$el : null
     const rightBodyElem = rightBody ? rightBody.$el : null
+    const tableHeaderElem = tableHeader ? tableHeader.$el : null
     const tableFooterElem = tableFooter ? tableFooter.$el : null
-    if (rightBodyElem) {
-      restoreScrollListener(rightBodyElem)
-      rightBodyElem.scrollTop = 0
+    const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+    if (xHandleEl) {
+      setScrollLeft(xHandleEl, 0)
+    } else {
+      setScrollLeft(tableBodyElem, 0)
+      setScrollLeft(tableHeaderElem, 0)
+      setScrollLeft(tableFooterElem, 0)
     }
-    if (tableFooterElem) {
-      tableFooterElem.scrollLeft = 0
-    }
-    if (tableBodyElem) {
-      restoreScrollListener(tableBodyElem)
-      tableBodyElem.scrollTop = 0
-      tableBodyElem.scrollLeft = 0
+    const yHandleEl = $xeTable.$refs.refScrollYHandleElem
+    if (yHandleEl) {
+      setScrollTop(yHandleEl, 0)
+    } else {
+      setScrollTop(tableBodyElem, 0)
+      setScrollTop(leftBodyElem, 0)
+      setScrollTop(rightBodyElem, 0)
     }
     scrollXStore.startIndex = 0
     scrollXStore.endIndex = scrollXStore.visibleSize
     scrollYStore.startIndex = 0
     scrollYStore.endIndex = scrollYStore.visibleSize
-    return this.$nextTick()
+    return $xeTable.$nextTick().then(() => {
+      setScrollLeft(tableBodyElem, 0)
+      setScrollLeft(tableHeaderElem, 0)
+      setScrollLeft(tableFooterElem, 0)
+
+      setScrollTop(tableBodyElem, 0)
+      setScrollTop(leftBodyElem, 0)
+      setScrollTop(rightBodyElem, 0)
+    })
   },
   /**
    * 更新表尾合计
@@ -5626,6 +5912,11 @@ const Methods = {
     }
     return this.$nextTick()
   },
+  dispatchEvent (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) {
+    const $xeTable = this
+    $xeTable.$emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeTable.$xegrid }, params))
+  },
+  // 已废弃，使用 dispatchEvent
   emitEvent (type: any, params: any, evnt: any) {
     this.$emit(type, Object.assign({ $table: this, $grid: this.$xegrid, $event: evnt }, params))
   },

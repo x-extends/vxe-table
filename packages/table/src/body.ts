@@ -2,8 +2,8 @@ import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { isEnableConf, getClass } from '../../ui/src/utils'
-import { getOffsetSize, calcTreeLine, mergeBodyMethod, removeScrollListener, restoreScrollListener, getRowid } from './util'
-import { updateCellTitle } from '../../ui/src/dom'
+import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid } from './util'
+import { updateCellTitle, setScrollTop, setScrollLeft } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
 const { getI18n, renderer } = VxeUI
@@ -57,13 +57,13 @@ function renderLine (h: CreateElement, _vm: any, $xetable: any, params: any) {
 function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fixedType: any, rowLevel: any, row: any, rowIndex: any, $rowIndex: any, _rowIndex: any, column: any, $columnIndex: any, columns: any, items: any) {
   const {
     $listeners: tableListeners,
+    fullAllDataRowIdData,
     afterFullData,
     tableData,
     height,
     columnKey,
     overflowX,
     sYOpts,
-    scrollXLoad,
     scrollYLoad,
     highlightCurrentRow,
     showOverflow: allColumnOverflow,
@@ -104,12 +104,13 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   const isEdit = isEnableConf(editRender)
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-  let showEllipsis = cellOverflow === 'ellipsis'
+  const showEllipsis = cellOverflow === 'ellipsis'
   const showTitle = cellOverflow === 'title'
   const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-  let hasEllipsis = showTitle || showTooltip || showEllipsis
+  const hasEllipsis = showTitle || showTooltip || showEllipsis
   let isDirty: any
   const tdOns: any = {}
+  const rest = fullAllDataRowIdData[rowid]
   const cellAlign = align || (compConf ? compConf.tableCellAlign : '') || allAlign
   const errorValidItem = validErrorMaps[`${rowid}:${column.id}`]
   const showValidTip = editRules && validOpts.showMessage && (validOpts.message === 'default' ? (height || tableData.length > 1) : validOpts.message === 'inline')
@@ -118,10 +119,6 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
   const params = { $table: $xetable, $grid: $xetable.$xegrid, isEdit: false, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
-  // 虚拟滚动不支持动态高度
-  if ((scrollXLoad || scrollYLoad) && !hasEllipsis) {
-    showEllipsis = hasEllipsis = true
-  }
   // hover 进入事件
   if (showTitle || showTooltip || showAllTip || bindMouseenter || tooltipConfig) {
     tdOns.mouseenter = (evnt: any) => {
@@ -294,7 +291,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
-      height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
+      height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : (scrollYLoad ? `${rest.height || scrollYRHeight || rowHeight}px` : '')
     }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
     on: tdOns
   }, tdVNs)
@@ -447,46 +444,6 @@ function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, 
   return rows
 }
 
-/**
- * 同步滚动条
- */
-let scrollProcessTimeout: any
-function syncBodyScroll (_vm: any, fixedType: any, scrollTop: any, elem1: any, elem2: any) {
-  if (elem1 || elem2) {
-    if (elem1) {
-      removeScrollListener(elem1)
-      elem1.scrollTop = scrollTop
-    }
-    if (elem2) {
-      removeScrollListener(elem2)
-      elem2.scrollTop = scrollTop
-    }
-    clearTimeout(scrollProcessTimeout)
-    scrollProcessTimeout = setTimeout(() => {
-      // const { tableBody, leftBody, rightBody } = _vm.$refs
-      // const bodyElem = tableBody.$el
-      // const leftElem = leftBody ? leftBody.$el : null
-      // const rightElem = rightBody ? rightBody.$el : null
-      restoreScrollListener(elem1)
-      restoreScrollListener(elem2)
-      // 检查滚动条是的同步
-      // let targetTop = bodyElem.scrollTop
-      // if (fixedType === 'left') {
-      //   if (leftElem) {
-      //     targetTop = leftElem.scrollTop
-      //   }
-      // } else if (fixedType === 'right') {
-      //   if (rightElem) {
-      //     targetTop = rightElem.scrollTop
-      //   }
-      // }
-      // setScrollTop(bodyElem, targetTop)
-      // setScrollTop(leftElem, targetTop)
-      // setScrollTop(rightElem, targetTop)
-    }, 300)
-  }
-}
-
 export default {
   name: 'VxeTableBody',
   props: {
@@ -515,17 +472,9 @@ export default {
     elemStore[`${prefix}xSpace`] = $refs.xSpace
     elemStore[`${prefix}ySpace`] = $refs.ySpace
     elemStore[`${prefix}emptyBlock`] = $refs.emptyBlock
-    if (this.$el) {
-      this.$el.onscroll = this.scrollEvent
-      this.$el._onscroll = this.scrollEvent
-    }
   },
   beforeDestroy (this: any) {
     clearTimeout(this.wheelTime)
-    if (this.$el) {
-      this.$el._onscroll = null
-      this.$el.onscroll = null
-    }
   },
   destroyed (this: any) {
     const { $parent: $xetable, fixedType } = this
@@ -580,11 +529,9 @@ export default {
       attrs: {
         xid: tId
       },
-      on: scrollYLoad && sYOpts.mode === 'wheel'
-        ? {
-            wheel: this.wheelEvent
-          }
-        : {}
+      on: Object.assign({
+        scroll: this.scrollEvent
+      }, scrollYLoad && sYOpts.mode === 'wheel' ? { wheel: this.wheelEvent } : null)
     }, [
       fixedType
         ? _e()
@@ -679,72 +626,57 @@ export default {
      * 如果存在列固定左侧，同步更新滚动状态
      * 如果存在列固定右侧，同步更新滚动状态
      */
-    scrollEvent (evnt: any) {
-      const { $el: scrollBodyElem, $parent: $xetable, fixedType } = this
-      const { $refs, elemStore, highlightHoverRow, scrollXLoad, scrollYLoad, lastScrollTop, lastScrollLeft, rowOpts } = $xetable
-      const { tableHeader, tableBody, leftBody, rightBody, tableFooter, validTip } = $refs
+    scrollEvent (evnt: Event) {
+      const { $el: scrollBodyElem, $parent: $xeTable, fixedType } = this
+      const { $refs, lastScrollTop, lastScrollLeft } = $xeTable
+      const { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
       const bodyElem = tableBody.$el
       const leftElem = leftBody ? leftBody.$el : null
       const rightElem = rightBody ? rightBody.$el : null
-      const bodyYElem = elemStore['main-body-ySpace']
-      const bodyXElem = elemStore['main-body-xSpace']
-      const bodyHeight = scrollYLoad && bodyYElem ? bodyYElem.clientHeight : bodyElem.clientHeight
-      const bodyWidth = scrollXLoad && bodyXElem ? bodyXElem.clientWidth : bodyElem.clientWidth
-      let scrollTop = scrollBodyElem.scrollTop
+      const scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isRollX = scrollLeft !== lastScrollLeft
       const isRollY = scrollTop !== lastScrollTop
-      $xetable.lastScrollTop = scrollTop
-      $xetable.lastScrollLeft = scrollLeft
-      $xetable.lastScrollTime = Date.now()
-      if (rowOpts.isHover || highlightHoverRow) {
-        $xetable.clearHoverRow()
-      }
-      if (leftElem && fixedType === 'left') {
-        scrollTop = leftElem.scrollTop
-        syncBodyScroll($xetable, fixedType, scrollTop, bodyElem, rightElem)
-      } else if (rightElem && fixedType === 'right') {
-        scrollTop = rightElem.scrollTop
-        syncBodyScroll($xetable, fixedType, scrollTop, bodyElem, leftElem)
-      } else {
-        if (isRollX) {
-          if (headerElem) {
-            headerElem.scrollLeft = bodyElem.scrollLeft
-          }
-          if (footerElem) {
-            footerElem.scrollLeft = bodyElem.scrollLeft
-          }
+      const xHandleEl = $refs.refScrollXHandleElem
+      const yHandleEl = $refs.refScrollYHandleElem
+      if (yHandleEl) {
+        yHandleEl.scrollTop = scrollTop
+      } else if (isRollY) {
+        $xeTable.lastScrollTop = scrollTop
+        $xeTable.lastScrollLeft = scrollLeft
+        if (leftElem && fixedType === 'left') {
+          setScrollTop(bodyElem, scrollTop)
+          setScrollTop(rightElem, scrollTop)
+        } else if (rightElem && fixedType === 'right') {
+          setScrollTop(bodyElem, scrollTop)
+          setScrollTop(leftElem, scrollTop)
+        } else {
+          setScrollTop(leftElem, scrollTop)
+          setScrollTop(rightElem, scrollTop)
         }
-        if (leftElem || rightElem) {
-          $xetable.checkScrolling()
-          if (isRollY) {
-            syncBodyScroll($xetable, fixedType, scrollTop, leftElem, rightElem)
-          }
-        }
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+          type: renderType,
+          fixed: fixedType,
+          scrollTop,
+          scrollLeft
+        })
       }
-      if (scrollXLoad && isRollX) {
-        $xetable.triggerScrollXEvent(evnt)
+      if (xHandleEl) {
+        xHandleEl.scrollLeft = scrollLeft
+      } else if (isRollX) {
+        $xeTable.lastScrollTop = scrollTop
+        $xeTable.lastScrollLeft = scrollLeft
+        setScrollLeft(headerElem, scrollLeft)
+        setScrollLeft(footerElem, scrollLeft)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+          type: renderType,
+          fixed: fixedType,
+          scrollTop,
+          scrollLeft
+        })
       }
-      if (scrollYLoad && isRollY) {
-        $xetable.triggerScrollYEvent(evnt)
-      }
-      if (isRollX && validTip && validTip.visible) {
-        validTip.updatePlacement()
-      }
-      $xetable.emitEvent('scroll', {
-        type: renderType,
-        fixed: fixedType,
-        scrollTop,
-        scrollLeft,
-        scrollHeight: bodyElem.scrollHeight,
-        scrollWidth: bodyElem.scrollWidth,
-        bodyHeight,
-        bodyWidth,
-        isX: isRollX,
-        isY: isRollY
-      }, evnt)
     },
     handleWheel (evnt: any, isTopWheel: any, deltaTop: any, isRollX: any, isRollY: any) {
       const { $parent: $xetable } = this

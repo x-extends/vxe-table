@@ -25,7 +25,7 @@ import customMixin from '../module/custom/mixin'
 
 import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
 
-const { getConfig, getI18n, renderer, globalResize, globalEvents, globalMixins } = VxeUI
+const { getConfig, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
 /**
  * 渲染浮固定列
@@ -80,7 +80,7 @@ function renderFixed (h: CreateElement, $xetable: any, fixedType: any) {
   ])
 }
 
-function renderEmptyContenet (h: CreateElement, _vm: any) {
+function renderEmptyBody (h: CreateElement, _vm: any) {
   const { $scopedSlots, emptyOpts } = _vm
   let emptyContent: any = ''
   const params = { $table: _vm }
@@ -630,6 +630,16 @@ export default {
       }
       return false
     },
+    computeVirtualScrollBars () {
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { overflowX, scrollXLoad, overflowY, scrollYLoad } = reactData
+      return {
+        x: overflowX && scrollXLoad,
+        y: overflowY && scrollYLoad
+      }
+    },
     tabsResizeFlag () {
       const $xeTable = this
       const $xeTabs = $xeTable.$xeTabs
@@ -1024,6 +1034,8 @@ export default {
     const VxeUILoadingComponent = VxeUI.getComponent<VxeLoadingComponent>('VxeLoading')
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
+    const $xeTable = this
+
     const {
       _e,
       $scopedSlots,
@@ -1067,10 +1079,11 @@ export default {
       checkboxOpts,
       loadingOpts,
       editRules
-    } = this
+    } = $xeTable
     const { leftList, rightList } = columnStore
     const currLoading = this._isLoading || loading
     const vSize = computeSize
+    const virtualScrollBars = $xeTable.computeVirtualScrollBars
     return h('div', {
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         [`valid-msg--${validOpts.msgMode}`]: !!editRules,
@@ -1115,6 +1128,7 @@ export default {
         ref: 'hideColumn'
       }, this.$slots.default),
       h('div', {
+        key: 'tw',
         class: 'vxe-table--render-wrapper'
       }, [
         h('div', {
@@ -1162,37 +1176,74 @@ export default {
         h('div', {
           class: 'vxe-table--fixed-wrapper'
         }, [
-          /**
-           * 左侧固定区域
-           */
           leftList && leftList.length && overflowX ? renderFixed(h, this, 'left') : _e(),
-          /**
-           * 右侧固定区域
-           */
           rightList && rightList.length && overflowX ? renderFixed(h, this, 'right') : _e()
         ])
       ]),
+      virtualScrollBars.x
+        ? h('div', {
+          key: 'vx',
+          ref: 'refScrollXVirtualElem',
+          class: 'vxe-table--scroll-x-virtual'
+        }, [
+          h('div', {
+            ref: 'refScrollXHandleElem',
+            class: 'vxe-table--scroll-x-handle',
+            on: {
+              scroll: $xeTable.scrollXEvent
+            }
+          }, [
+            h('div', {
+              ref: 'refScrollXSpaceElem',
+              class: 'vxe-table--scroll-x-space'
+            })
+          ])
+        ])
+        : renderEmptyElement($xeTable),
+      virtualScrollBars.y
+        ? h('div', {
+          key: 'vy',
+          ref: 'refScrollYVirtualElem',
+          class: 'vxe-table--scroll-y-virtual'
+        }, [
+          h('div', {
+            ref: 'refScrollYHandleElem',
+            class: 'vxe-table--scroll-y-handle',
+            on: {
+              scroll: $xeTable.scrollYEvent
+            }
+          }, [
+            h('div', {
+              ref: 'refScrollYSpaceElem',
+              class: 'vxe-table--scroll-x-space'
+            })
+          ])
+        ])
+        : renderEmptyElement($xeTable),
       /**
        * 空数据
        */
       h('div', {
+        key: 'tn',
         ref: 'emptyPlaceholder',
         class: 'vxe-table--empty-placeholder'
       }, [
         h('div', {
           class: 'vxe-table--empty-content'
-        }, renderEmptyContenet(h, this))
+        }, renderEmptyBody(h, this))
       ]),
       /**
        * 边框线
        */
       h('div', {
+        key: 'tl',
         class: 'vxe-table--border-line'
       }),
       /**
        * 列宽线
        */
       h('div', {
+        key: 'cl',
         class: 'vxe-table--resizable-bar',
         style: overflowX
           ? {
@@ -1206,6 +1257,7 @@ export default {
        */
       VxeUILoadingComponent
         ? h(VxeUILoadingComponent, {
+          key: 'lg',
           class: 'vxe-table--loading',
           props: {
             value: currLoading,
@@ -1219,6 +1271,7 @@ export default {
        */
       initStore.custom
         ? h(TableCustomPanelComponent, {
+          key: 'cs',
           ref: 'customWrapper',
           props: {
             customStore
@@ -1230,6 +1283,7 @@ export default {
        */
       initStore.filter
         ? h(TableFilterPanelComponent, {
+          key: 'tf',
           ref: 'filterWrapper',
           props: {
             filterStore
@@ -1241,6 +1295,7 @@ export default {
        */
       initStore.import && this.importConfig
         ? h(TableImportPanelComponent, {
+          key: 'it',
           props: {
             defaultOptions: this.importParams,
             storeData: this.importStore
@@ -1252,6 +1307,7 @@ export default {
        */
       initStore.export && (this.exportConfig || this.printConfig)
         ? h(TableExportPanelComponent, {
+          key: 'et',
           props: {
             defaultOptions: this.exportParams,
             storeData: this.exportStore
@@ -1263,6 +1319,7 @@ export default {
        */
       ctxMenuStore.visible && this.isCtxMenu
         ? h(TableMenuPanelComponent, {
+          key: 'tm',
           ref: 'ctxWrapper',
           props: {
             ctxMenuStore,
@@ -1276,6 +1333,7 @@ export default {
          */
         VxeUITooltipComponent
           ? h(VxeUITooltipComponent, {
+            key: 'ctp',
             ref: 'commTip',
             props: {
               isArrow: false,
@@ -1288,6 +1346,7 @@ export default {
          */
         VxeUITooltipComponent
           ? h(VxeUITooltipComponent, {
+            key: 'btp',
             ref: 'tooltip',
             props: Object.assign({}, this.tipConfig, this.tooltipStore.currOpts)
           })
@@ -1297,6 +1356,7 @@ export default {
          */
         VxeUITooltipComponent && this.editRules && validOpts.showMessage && (validOpts.message === 'default' ? !height : validOpts.message === 'tooltip')
           ? h(VxeUITooltipComponent, {
+            key: 'vtp',
             ref: 'validTip',
             class: [{
               'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete'

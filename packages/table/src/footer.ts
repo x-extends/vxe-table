@@ -2,9 +2,9 @@ import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
-import { updateCellTitle } from '../../ui/src/dom'
+import { updateCellTitle, setScrollLeft } from '../../ui/src/dom'
 
-const cellType = 'footer'
+const renderType = 'footer'
 
 const { renderer } = VxeUI
 
@@ -141,7 +141,7 @@ export default {
           ref: 'tfoot'
         }, footerTableData.map((list: any, _rowIndex: any) => {
           const $rowIndex = _rowIndex
-          const rowParams = { $table: $xetable, row: list, _rowIndex, $rowIndex, fixed: fixedType, type: cellType }
+          const rowParams = { $table: $xetable, row: list, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
           return h('tr', {
             class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''],
             style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
@@ -176,7 +176,7 @@ export default {
               itemIndex,
               items: list,
               fixed: fixedType,
-              type: cellType,
+              type: renderType,
               data: footerTableData
             }
             // 虚拟滚动不支持动态高度
@@ -277,29 +277,31 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt: any) {
-      const { $parent: $xetable, fixedType } = this
-      const { $refs, scrollXLoad, triggerScrollXEvent, lastScrollLeft } = $xetable
-      const { tableHeader, tableBody, tableFooter, validTip } = $refs
+      const { $parent: $xeTable, fixedType } = this
+      const { $refs } = $xeTable
+      const { tableHeader, tableBody, tableFooter } = $refs
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
       const bodyElem = tableBody.$el
       const scrollLeft = footerElem ? footerElem.scrollLeft : 0
-      const isX = scrollLeft !== lastScrollLeft
-      $xetable.lastScrollLeft = scrollLeft
-      $xetable.lastScrollTime = Date.now()
-      if (headerElem) {
-        headerElem.scrollLeft = scrollLeft
+      const xHandleEl = $refs.refScrollXHandleElem
+      if (xHandleEl) {
+        xHandleEl.scrollLeft = scrollLeft
+      } else {
+        const isRollX = true
+        const isRollY = false
+        const scrollTop = bodyElem.scrollTop
+        $xeTable.lastScrollLeft = scrollLeft
+        $xeTable.lastScrollTime = Date.now()
+        setScrollLeft(headerElem, scrollLeft)
+        setScrollLeft(bodyElem, scrollLeft)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+          type: renderType,
+          fixed: fixedType,
+          scrollTop,
+          scrollLeft
+        })
       }
-      if (bodyElem) {
-        bodyElem.scrollLeft = scrollLeft
-      }
-      if (scrollXLoad && isX) {
-        triggerScrollXEvent(evnt)
-      }
-      if (isX && validTip && validTip.visible) {
-        validTip.updatePlacement()
-      }
-      $xetable.emitEvent('scroll', { type: cellType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }
   } as any
 } as any
