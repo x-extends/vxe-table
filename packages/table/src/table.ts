@@ -413,6 +413,10 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.columnConfig, props.columnConfig) as VxeTablePropTypes.ColumnOpts
     })
 
+    const computeCellOpts = computed(() => {
+      return Object.assign({}, getConfig().table.cellConfig, props.cellConfig) as VxeTablePropTypes.CellConfig
+    })
+
     const computeRowOpts = computed(() => {
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
     })
@@ -667,6 +671,7 @@ export default defineComponent({
       computeSXOpts,
       computeSYOpts,
       computeColumnOpts,
+      computeCellOpts,
       computeRowOpts,
       computeResizeOpts,
       computeResizableOpts,

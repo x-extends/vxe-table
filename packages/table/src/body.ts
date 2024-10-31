@@ -36,7 +36,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refTableBody, refTableHeader, refTableFooter, refTableLeftBody, refTableRightBody, refScrollXHandleElem, refScrollYHandleElem } = $xeTable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -134,6 +134,7 @@ export default defineComponent({
       const { columnKey, height, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
       const { tableData, overflowX, currentColumn, scrollYLoad, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData } = tableInternalData
+      const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
       const checkboxOpts = computeCheckboxOpts.value
       const editOpts = computeEditOpts.value
@@ -142,6 +143,7 @@ export default defineComponent({
       const sYOpts = computeSYOpts.value
       const columnOpts = computeColumnOpts.value
       const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
+      const { verticalAlign } = cellOpts
       const { actived } = editStore
       const { rHeight: scrollYRHeight } = sYOpts
       const { height: rowHeight } = rowOpts
@@ -327,6 +329,7 @@ export default defineComponent({
           colid,
           {
             [`col--${cellAlign}`]: cellAlign,
+            [`col--vertical-${verticalAlign}`]: verticalAlign,
             [`col--${type}`]: type,
             'col--last': $columnIndex === columns.length - 1,
             'col--tree-node': treeNode,

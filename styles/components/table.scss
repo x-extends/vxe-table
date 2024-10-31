@@ -131,15 +131,9 @@
   }
 }
 .vxe-body--column {
-  &.col--height {
+  &.col--vertical-top {
     &.col--active {
       & > .vxe-cell {
-        height: 100%;
-      }
-    }
-    & > .vxe-cell {
-      & > .vxe-textarea,
-      & > .vxe-default-textarea {
         height: 100%;
       }
     }
