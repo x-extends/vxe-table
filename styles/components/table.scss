@@ -132,15 +132,8 @@
 }
 .vxe-body--column {
   &.col--vertical-top {
-    &.col--active {
-      & > .vxe-cell {
-        height: 100%;
-      }
-    }
-  }
-  .vxe-cell--label {
-    &.is--textarea {
-      white-space: pre-line;
+    & > .vxe-cell {
+      height: 100%;
     }
   }
 }
@@ -1248,10 +1241,10 @@
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-      }
-      &:not(.col--height) {
-        & > .vxe-cell {
-          max-height: var(--vxe-ui-table-row-height-default);
+        &.col--vertical-top {
+          & > .vxe-cell {
+            white-space: pre-line;
+          }
         }
       }
     }
@@ -1262,11 +1255,6 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
-        &:not(.col--height) {
-          & > .vxe-cell {
-            max-height: var(--vxe-ui-table-row-height-medium);
-          }
-        }
       }
     }
     .vxe-cell--checkbox {
@@ -1282,11 +1270,6 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
-        &:not(.col--height) {
-          & > .vxe-cell {
-            max-height: var(--vxe-ui-table-row-height-small);
-          }
-        }
       }
     }
     .vxe-cell--checkbox {
@@ -1302,11 +1285,6 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
-        &:not(.col--height) {
-          & > .vxe-cell {
-            max-height: var(--vxe-ui-table-row-height-mini);
-          }
-        }
       }
     }
     .vxe-cell--checkbox {

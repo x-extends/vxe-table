@@ -402,7 +402,7 @@ export default {
       return Object.assign({}, getConfig().table.columnConfig, this.columnConfig)
     },
     computeCellOpts () {
-      return Object.assign({}, getConfig().table.cellConfig, this.rowConfig)
+      return Object.assign({}, getConfig().table.cellConfig, this.cellConfig)
     },
     rowOpts () {
       return this.computeRowOpts
