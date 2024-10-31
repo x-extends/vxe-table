@@ -2371,7 +2371,7 @@ export default defineComponent({
         const sXOpts = computeSXOpts.value
         // 计算 X 逻辑
         if (scrollXLoad) {
-          const { visibleSize: visibleXSize } = handleVirtualYVisible()
+          const { visibleSize: visibleXSize } = handleVirtualXVisible()
           const offsetXSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : (browse.edge ? 5 : 0)
           scrollXStore.offsetSize = offsetXSize
           scrollXStore.visibleSize = visibleXSize
