@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { updateCellTitle, getPropClass } from '../../ui/src/dom'
+import { updateCellTitle, getPropClass, setScrollLeft } from '../../ui/src/dom'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types'
 
@@ -47,7 +47,7 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { refTableHeader, refTableBody, refValidTooltip } = $xeTable.getRefMaps()
+    const { refTableHeader, refTableBody, refScrollXHandleElem } = $xeTable.getRefMaps()
     const { computeTooltipOpts, computeColumnOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
@@ -61,33 +61,32 @@ export default defineComponent({
      * 如果存在列固定左侧，同步更新滚动状态
      * 如果存在列固定右侧，同步更新滚动状态
      */
-    const scrollEvent = (evnt: MouseEvent) => {
+    const scrollEvent = (evnt: Event) => {
       const { fixedType } = props
-      const { scrollXLoad } = tableReactData
-      const { lastScrollLeft } = tableInternalData
-      const validTip = refValidTooltip.value
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = refElem.value
       const bodyElem = tableBody.$el as HTMLDivElement
       const scrollLeft = footerElem.scrollLeft
-      const isX = scrollLeft !== lastScrollLeft
-      tableInternalData.lastScrollLeft = scrollLeft
-      tableReactData.lastScrollTime = Date.now()
-      if (headerElem) {
-        headerElem.scrollLeft = scrollLeft
+      const xHandleEl = refScrollXHandleElem.value
+      if (xHandleEl) {
+        xHandleEl.scrollLeft = scrollLeft
+      } else {
+        const isRollX = true
+        const isRollY = false
+        const scrollTop = bodyElem.scrollTop
+        tableInternalData.lastScrollLeft = scrollLeft
+        tableReactData.lastScrollTime = Date.now()
+        setScrollLeft(headerElem, scrollLeft)
+        setScrollLeft(bodyElem, scrollLeft)
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+          type: renderType,
+          fixed: fixedType,
+          scrollTop,
+          scrollLeft
+        })
       }
-      if (bodyElem) {
-        bodyElem.scrollLeft = scrollLeft
-      }
-      if (scrollXLoad && isX) {
-        $xeTable.triggerScrollXEvent(evnt)
-      }
-      if (isX && validTip && validTip.reactData.visible) {
-        validTip.updatePlacement()
-      }
-      $xeTable.dispatchEvent('scroll', { type: renderType, fixed: fixedType, scrollTop: bodyElem.scrollTop, scrollLeft, isX, isY: false }, evnt)
     }
 
     onMounted(() => {

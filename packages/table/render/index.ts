@@ -13,7 +13,7 @@ const { getConfig, renderer, getI18n } = VxeUI
 
 const componentDefaultModelProp = 'modelValue'
 
-const defaultCompProps = { transfer: true }
+const defaultCompProps = {}
 
 function parseDate (value: any, props: any) {
   return value && props.valueFormat ? XEUtils.toStringDate(value, props.valueFormat) : value

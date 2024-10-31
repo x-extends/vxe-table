@@ -86,7 +86,7 @@ hooks.add('tableEditModule', {
           }
           parentChilds[funcName](item)
           mapChilds[funcName](item)
-          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1 }
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentChilds, parent: parentRow, level: parentLevel + 1, height: 0 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         } else {
@@ -97,7 +97,7 @@ hooks.add('tableEditModule', {
           }
           afterFullData[funcName](item)
           tableFullTreeData[funcName](item)
-          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0 }
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: tableFullTreeData, parent: null, level: 0, height: 0 }
           fullDataRowIdData[rowid] = rest
           fullAllDataRowIdData[rowid] = rest
         }
@@ -172,7 +172,7 @@ hooks.add('tableEditModule', {
                   targetIndex = targetIndex + 1
                 }
                 parentMapChilds.splice(targetIndex, 0, item)
-                const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1 }
+                const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: parentMapChilds, parent: parentRow, level: parentLevel + 1, height: 0 }
                 fullDataRowIdData[rowid] = rest
                 fullAllDataRowIdData[rowid] = rest
               })

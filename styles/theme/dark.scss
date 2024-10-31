@@ -5,13 +5,16 @@
 
   /*font color*/
   --vxe-ui-font-color: #a0a3a7;
+  --vxe-ui-font-tinge-color: #33353b;
+  --vxe-ui-font-lighten-color: #797b80;
+  --vxe-ui-font-darken-color: #47494c;
+  --vxe-ui-font-disabled-color: #464646;
+
+  /*font status color*/
   --vxe-ui-font-primary-color: #409eff;
-  --vxe-ui-font-lighten-color: #babdc0;
-  --vxe-ui-font-darken-color: #86898e;
-  --vxe-ui-font-disabled-color: #BFBFBF;
 
   /*base*/
-  --vxe-ui-base-popup-border-color: var(--vxe-ui-layout-background-color);
+  --vxe-ui-base-popup-border-color: #424242;
   --vxe-ui-base-popup-box-shadow: 0px 12px 30px 8px rgba(0, 0, 0, 0.5);
 
   /*layout*/

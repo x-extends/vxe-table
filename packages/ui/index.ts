@@ -6,7 +6,7 @@ import type { VxeUploadDefines, VxePrintDefines, VxeGlobalConfig } from 'vxe-pc-
 export const version = process.env.VUE_APP_VXE_VERSION as string
 
 VxeUI.version = version
-VxeUI.tableVersion = process.env.VUE_APP_VXE_VERSION as string
+VxeUI.tableVersion = version
 
 VxeUI.setConfig({
   emptyCell: '　',
