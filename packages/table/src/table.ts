@@ -401,6 +401,9 @@ export default {
     computeColumnOpts () {
       return Object.assign({}, getConfig().table.columnConfig, this.columnConfig)
     },
+    computeCellOpts () {
+      return Object.assign({}, getConfig().table.cellConfig, this.rowConfig)
+    },
     rowOpts () {
       return this.computeRowOpts
     },

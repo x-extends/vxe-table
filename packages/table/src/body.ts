@@ -90,7 +90,9 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     columnOpts,
     validErrorMaps
   } = $xetable
+  const cellOpts = $xetable.computeCellOpts
   const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
+  const { verticalAlign } = cellOpts
   const { actived } = editStore
   const { rHeight: scrollYRHeight } = sYOpts
   const { height: rowHeight } = rowOpts
@@ -272,6 +274,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
       column.id,
       {
         [`col--${cellAlign}`]: cellAlign,
+        [`col--vertical-${verticalAlign}`]: verticalAlign,
         [`col--${type}`]: type,
         'col--last': $columnIndex === columns.length - 1,
         'col--tree-node': treeNode,

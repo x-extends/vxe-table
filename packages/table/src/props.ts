@@ -161,6 +161,8 @@ export default {
   resizeConfig: Object,
   // 列配置信息
   columnConfig: Object,
+  // 单元格配置信息
+  cellConfig: Object as PropType<VxeTablePropTypes.CellConfig>,
   // 行配置信息
   rowConfig: Object,
   // 列调整配置项
