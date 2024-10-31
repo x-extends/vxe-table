@@ -89,10 +89,10 @@ function isImmediateCell (renderOpts: VxeColumnPropTypes.EditRender, params: any
 }
 
 function getCellLabelVNs (renderOpts: any, params: any, cellLabel: any) {
-  const { name, placeholder } = renderOpts
+  const { placeholder } = renderOpts
   return [
     h('span', {
-      class: ['vxe-cell--label', ['VxeTextarea', 'textarea'].includes(name) ? 'is--textarea' : '']
+      class: 'vxe-cell--label'
     }, placeholder && isEmptyValue(cellLabel)
       ? [
           h('span', {

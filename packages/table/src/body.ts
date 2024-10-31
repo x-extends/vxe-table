@@ -335,7 +335,6 @@ export default defineComponent({
             'col--tree-node': treeNode,
             'col--edit': isEdit,
             'col--ellipsis': hasEllipsis,
-            'col--height': !!rowOpts.height,
             'fixed--hidden': fixedHiddenColumn,
             'col--dirty': isDirty,
             'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
