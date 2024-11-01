@@ -279,7 +279,7 @@ function checkImportData (columns: any[], fields: string[]) {
   return fields.some(field => tableFields.indexOf(field) > -1)
 }
 
-const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'getPrintHtml', 'openImport', 'openExport', 'openPrint']
+const tableExportMethodKeys: (keyof TableExportMethods)[] = ['exportData', 'importByFile', 'importData', 'saveFile', 'readFile', 'print', 'getPrintHtml', 'openImport', 'closeImport', 'openExport', 'closeExport', 'openPrint', 'closePrint']
 
 hooks.add('tableExportModule', {
   setupTable ($xeTable) {
@@ -1039,6 +1039,13 @@ hooks.add('tableExportModule', {
       return nextTick()
     }
 
+    const handleCloseExport = () => {
+      if (VxeUI.modal) {
+        return VxeUI.modal.close('VXE_EXPORT_MODAL')
+      }
+      return Promise.resolve()
+    }
+
     const exportMethods: TableExportMethods = {
       /**
        * 导出文件，支持 csv/html/xml/txt
@@ -1337,6 +1344,12 @@ hooks.add('tableExportModule', {
           }
         })
       },
+      closeImport () {
+        if (VxeUI.modal) {
+          return VxeUI.modal.close('VXE_IMPORT_MODAL')
+        }
+        return Promise.resolve()
+      },
       openImport (options) {
         const { treeConfig, importConfig } = props
         const { initStore, importStore, importParams } = reactData
@@ -1394,6 +1407,7 @@ hooks.add('tableExportModule', {
         }
         initStore.import = true
       },
+      closeExport: handleCloseExport,
       openExport (options: any) {
         const exportOpts = computeExportOpts.value
         const defOpts = Object.assign({
@@ -1407,6 +1421,7 @@ hooks.add('tableExportModule', {
         }
         handleExportAndPrint(defOpts)
       },
+      closePrint: handleCloseExport,
       openPrint (options: any) {
         const printOpts = computePrintOpts.value
         const defOpts = Object.assign({

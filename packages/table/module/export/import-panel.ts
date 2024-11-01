@@ -94,20 +94,31 @@ export default defineComponent({
 
     const renderVN = () => {
       const { defaultOptions, storeData } = props
+      const importOpts = computeImportOpts.value
       const selectName = computeSelectName.value
       const hasFile = computeHasFile.value
       const parseTypeLabel = computeParseTypeLabel.value
+      const slots = importOpts.slots || {}
+      const topSlot = slots.top
+      const bottomSlot = slots.bottom
+      const defaultSlot = slots.default
+      const footerSlot = slots.footer
       return VxeUIModalComponent
         ? h(VxeUIModalComponent, {
+          id: 'VXE_IMPORT_MODAL',
           modelValue: storeData.visible,
           title: getI18n('vxe.import.impTitle'),
-          className: 'vxe-table-import-popup-wrapper',
+          className: 'vxe-table-export-popup-wrapper',
           width: 540,
+          minWidth: 360,
+          minHeight: 240,
           mask: true,
           lockView: true,
-          showFooter: false,
+          showFooter: true,
           escClosable: true,
           maskClosable: true,
+          showMaximize: true,
+          resize: true,
           loading: reactData.loading,
           'onUpdate:modelValue' (value: any) {
             storeData.visible = value
@@ -115,75 +126,114 @@ export default defineComponent({
           onShow: showEvent
         }, {
           default: () => {
+            const params = {
+              $table: $xeTable,
+              $grid: $xeTable.xegrid,
+              options: importOpts,
+              params: importOpts.params as any
+            }
             return h('div', {
-              class: 'vxe-export--panel'
+              class: 'vxe-table-export--panel'
             }, [
-              h('table', {
-                cellspacing: 0,
-                cellpadding: 0,
-                border: 0
-              }, [
-                h('tbody', [
-                  h('tr', [
-                    h('td', getI18n('vxe.import.impFile')),
-                    h('td', [
-                      hasFile
-                        ? h('div', {
-                          class: 'vxe-import-selected--file',
-                          title: selectName
-                        }, [
-                          h('span', selectName),
-                          h('i', {
-                            class: getIcon().INPUT_CLEAR,
-                            onClick: clearFileEvent
-                          })
-                        ])
-                        : h('button', {
-                          ref: refFileBtn,
-                          class: 'vxe-import-select--file',
-                          onClick: selectFileEvent
-                        }, getI18n('vxe.import.impSelect'))
-                    ])
-                  ]),
-                  h('tr', [
-                    h('td', getI18n('vxe.import.impType')),
-                    h('td', parseTypeLabel)
-                  ]),
-                  h('tr', [
-                    h('td', getI18n('vxe.import.impMode')),
-                    h('td', [
-                      VxeUISelectComponent
-                        ? h(VxeUISelectComponent, {
-                          modelValue: defaultOptions.mode,
-                          options: storeData.modeList,
-                          'onUpdate:modelValue' (value: any) {
-                            defaultOptions.mode = value
-                          }
-                        })
-                        : createCommentVNode()
-                    ])
-                  ])
-                ])
-              ]),
+              topSlot
+                ? h('div', {
+                  class: 'vxe-table-export--panel-top'
+                }, $xeTable.callSlot(topSlot, params))
+                : createCommentVNode(),
               h('div', {
-                class: 'vxe-export--panel-btns'
-              }, [
-                VxeUIButtonComponent
-                  ? h(VxeUIButtonComponent, {
-                    content: getI18n('vxe.import.impCancel'),
-                    onClick: cancelEvent
-                  })
-                  : createCommentVNode(),
-                VxeUIButtonComponent
-                  ? h(VxeUIButtonComponent, {
-                    status: 'primary',
-                    disabled: !hasFile,
-                    content: getI18n('vxe.import.impConfirm'),
-                    onClick: importEvent
-                  })
-                  : createCommentVNode()
-              ])
+                class: 'vxe-table-export--panel-body'
+              }, defaultSlot
+                ? $xeTable.callSlot(defaultSlot, params)
+                : [
+                    h('table', {
+                      class: 'vxe-table-export--panel-table',
+                      cellspacing: 0,
+                      cellpadding: 0,
+                      border: 0
+                    }, [
+                      h('tbody', [
+                        h('tr', [
+                          h('td', getI18n('vxe.import.impFile')),
+                          h('td', [
+                            hasFile
+                              ? h('div', {
+                                class: 'vxe-table-export--selected--file',
+                                title: selectName
+                              }, [
+                                h('span', selectName),
+                                h('i', {
+                                  class: getIcon().INPUT_CLEAR,
+                                  onClick: clearFileEvent
+                                })
+                              ])
+                              : h('button', {
+                                ref: refFileBtn,
+                                class: 'vxe-table-export--select--file',
+                                onClick: selectFileEvent
+                              }, getI18n('vxe.import.impSelect'))
+                          ])
+                        ]),
+                        h('tr', [
+                          h('td', getI18n('vxe.import.impType')),
+                          h('td', parseTypeLabel)
+                        ]),
+                        h('tr', [
+                          h('td', getI18n('vxe.import.impMode')),
+                          h('td', [
+                            VxeUISelectComponent
+                              ? h(VxeUISelectComponent, {
+                                modelValue: defaultOptions.mode,
+                                options: storeData.modeList,
+                                'onUpdate:modelValue' (value: any) {
+                                  defaultOptions.mode = value
+                                }
+                              })
+                              : createCommentVNode()
+                          ])
+                        ])
+                      ])
+                    ])
+                  ]
+              ),
+              bottomSlot
+                ? h('div', {
+                  class: 'vxe-table-export--panel-bottom'
+                }, $xeTable.callSlot(bottomSlot, params))
+                : createCommentVNode()
             ])
+          },
+          footer () {
+            const params = {
+              $table: $xeTable,
+              $grid: $xeTable.xegrid,
+              options: importOpts,
+              params: importOpts.params as any
+            }
+            return h('div', {
+              class: 'vxe-table-export--panel-footer'
+            }, footerSlot
+              ? $xeTable.callSlot(footerSlot, params)
+              : [
+                  h('div', {
+                    class: 'vxe-table-export--panel-btns'
+                  }, [
+                    VxeUIButtonComponent
+                      ? h(VxeUIButtonComponent, {
+                        content: getI18n('vxe.import.impCancel'),
+                        onClick: cancelEvent
+                      })
+                      : createCommentVNode(),
+                    VxeUIButtonComponent
+                      ? h(VxeUIButtonComponent, {
+                        status: 'primary',
+                        disabled: !hasFile,
+                        content: getI18n('vxe.import.impConfirm'),
+                        onClick: importEvent
+                      })
+                      : createCommentVNode()
+                  ])
+                ]
+            )
           }
         })
         : createCommentVNode()

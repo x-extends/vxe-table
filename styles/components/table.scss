@@ -961,6 +961,15 @@
   }
 
   &.is--padding {
+    .vxe-body--column {
+      .vxe-cell {
+        padding-left: var(--vxe-ui-table-cell-padding-left);
+        padding-right: var(--vxe-ui-table-cell-padding-right);
+      }
+    }
+  }
+  .vxe-header--column,
+  .vxe-footer--column {
     .vxe-cell {
       padding-left: var(--vxe-ui-table-cell-padding-left);
       padding-right: var(--vxe-ui-table-cell-padding-right);

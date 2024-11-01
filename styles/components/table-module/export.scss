@@ -1,6 +1,6 @@
 @use '../../helpers/baseMixin.scss';
 
-.vxe-export--panel-column > ul {
+.vxe-table-export--panel-column > ul {
   list-style-type: none;
   overflow: auto;
   margin: 0;
@@ -15,8 +15,8 @@
   }
 }
 
-.vxe-export--panel {
-  & > table {
+.vxe-table-export--panel {
+  .vxe-table-export--panel-table {
     width: 100%;
     border: 0;
     table-layout: fixed;
@@ -36,13 +36,13 @@
         & > .vxe-select {
           width: 80%;
         }
-        & > .vxe-export--panel-option-row {
+        & > .vxe-table-export--panel-option-row {
           padding: 0.25em 0;
         }
       }
     }
   }
-  .vxe-export--panel-column {
+  .vxe-table-export--panel-column {
     width: 80%;
     border: 1px solid var(--vxe-ui-input-border-color);
     margin: 3px 0;
@@ -62,19 +62,26 @@
         }
       }
     }
-    .vxe-export--panel-column-header {
+    .vxe-table-export--panel-column-header {
       padding: 0.1em 0;
       background-color: var(--vxe-ui-table-header-background-color);
       font-weight: 700;
       border-bottom: 1px solid var(--vxe-ui-table-border-color);
     }
-    .vxe-export--panel-column-body {
+    .vxe-table-export--panel-column-body {
       padding: 0.2em 0;
       min-height: 10em;
       max-height: 17.6em;
     }
   }
-  .vxe-import-selected--file {
+  .vxe-table-export--panel-btns {
+    text-align: right;
+    padding: 0.8em 0.25em 0.25em 0.25em;
+  }
+}
+
+.vxe-table-export--panel {
+  .vxe-table-export--selected--file {
     padding-right: 40px;
     position: relative;
     overflow: hidden;
@@ -97,7 +104,7 @@
       }
     }
   }
-  .vxe-import-select--file {
+  .vxe-table-export--select--file {
     width: 80%;
     border: 1px dashed var(--vxe-ui-input-border-color);
     padding: 6px 34px;
@@ -116,12 +123,8 @@
       border-color: var(--vxe-ui-font-primary-color);
     }
   }
-  .vxe-export--panel-btns {
-    text-align: right;
-    padding: 0.8em 0.25em 0.25em 0.25em;
-  }
 }
 
-.vxe-export--panel-column-option {
+.vxe-table-export--panel-column-option {
   @include baseMixin.createCheckboxIcon();
 }
