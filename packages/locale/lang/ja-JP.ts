@@ -37,6 +37,7 @@ export default {
       checkProp: 'パフマンス低下になる可能性があります。パラメータ "{0}" の値を指定してください',
       coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error',
       uniField: '字段名 "{0}" 重复定义，这可能会出现错误',
+      repeatKey: '主键重复 {0}="{1}"，这可能会出现错误',
       delFunc: '"{0}" functionが非推奨です。"{1}"を使用してください',
       delProp: '"{0}" propertyが非推奨です。"{1}"を使用してください',
       delEvent: 'イベント "{0}" が廃止されました。 "{1}" を使用してください',

@@ -919,6 +919,13 @@ function handleFileImport ($xetable: any, file: any, opts: any) {
   })
 }
 
+function handleCloseExport () {
+  if (VxeUI.modal) {
+    return VxeUI.modal.close('VXE_EXPORT_MODAL')
+  }
+  return Promise.resolve()
+}
+
 /**
  * 读取本地文件
  * @param {*} options 参数
@@ -1429,6 +1436,12 @@ export default {
         }
       })
     },
+    _closeImport () {
+      if (VxeUI.modal) {
+        return VxeUI.modal.close('VXE_IMPORT_MODAL')
+      }
+      return Promise.resolve()
+    },
     _openImport (options: any) {
       const { importOpts } = this
       const defOpts = Object.assign({
@@ -1482,6 +1495,7 @@ export default {
       }
       this.initStore.import = true
     },
+    _closeExport: handleCloseExport,
     _openExport (options: any) {
       const { exportOpts } = this
       if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -1491,6 +1505,7 @@ export default {
       }
       return handleExportAndPrint(this, Object.assign({}, exportOpts, options))
     },
+    _closePrint: handleCloseExport,
     _openPrint (options: any) {
       const { printOpts } = this
       if (process.env.VUE_APP_VXE_ENV === 'development') {

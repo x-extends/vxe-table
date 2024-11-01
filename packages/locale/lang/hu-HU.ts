@@ -37,6 +37,7 @@ export default {
       checkProp: 'Ha az adatmennyiség túl nagy, a jelölőnégyzet lefagyhat. Javasoljuk, hogy a "{0}" paramétert állítsa be a megjelenítési sebesség javítása érdekében.',
       coverProp: 'A(z) "{0}" "{1}" paramétere ismételten definiálva van, ami hibát okozhat.',
       uniField: 'A(z) "{0}" mezőnév többször is meghatározásra kerül, ami hibát okozhat',
+      repeatKey: '主键重复 {0}="{1}"，这可能会出现错误',
       delFunc: 'A(z) "{0}" módszer elavult, kérjük, használja a "{1}"',
       delProp: 'A "{0}" paraméter elavult, kérjük, használja a "{1}" paramétert',
       delEvent: 'A(z) "{0}" esemény elavult, kérjük, használja a "{1}" eseményt',

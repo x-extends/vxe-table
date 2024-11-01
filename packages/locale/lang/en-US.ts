@@ -37,6 +37,7 @@ export default {
       checkProp: 'The checkbox may stall when the amount of data is too large, it is recommended to set the parameter "{0}" to increase the rendering speed ',
       coverProp: 'The parameter "{1}" to "{0}" is repeatedly defined. This may cause an error.',
       uniField: 'The field "{0}" is repeatedly defined, which may cause an error.',
+      repeatKey: 'The primary key repeats {0}="{1}", which may cause an error',
       delFunc: 'The function "{0}" is deprecated, please use "{1}".',
       delProp: 'The property "{0}" is deprecated, please use "{1}".',
       delEvent: 'The event "{0}" is deprecated, please use "{1}"',
