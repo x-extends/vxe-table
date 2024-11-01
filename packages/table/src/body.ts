@@ -348,7 +348,7 @@ export default defineComponent({
         key: columnKey || columnOpts.useKey ? colid : $columnIndex,
         ...attrs,
         style: Object.assign({
-          height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : (scrollYLoad ? `${rest.height || scrollYRHeight || rowHeight}px` : '')
+          height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : (scrollYLoad ? `${rest.height || 24}px` : '')
         }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
         ...tdOns
       }, tdVNs)

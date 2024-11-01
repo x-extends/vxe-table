@@ -162,12 +162,11 @@ export default defineComponent({
       const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
       const { isHeader } = defaultOptions
       const cols: any[] = []
-      const exportOpts = computeExportOpts.value
       const checkedAll = computeCheckedAll.value
       const showSheet = computeShowSheet.value
       const supportMerge = computeSupportMerge.value
       const supportStyle = computeSupportStyle.value
-      const slots = exportOpts.slots || {}
+      const slots = defaultOptions.slots || {}
       const topSlot = slots.top
       const bottomSlot = slots.bottom
       const defaultSlot = slots.default
@@ -238,9 +237,9 @@ export default defineComponent({
             const params = {
               $table: $xeTable,
               $grid: $xeTable.xegrid,
-              options: exportOpts,
+              options: defaultOptions,
               columns,
-              params: exportOpts.params as any
+              params: defaultOptions.params as any
             }
             return h('div', {
               class: 'vxe-table-export--panel'
@@ -476,9 +475,9 @@ export default defineComponent({
             const params = {
               $table: $xeTable,
               $grid: $xeTable.xegrid,
-              options: exportOpts,
+              options: defaultOptions,
               columns,
-              params: exportOpts.params as any
+              params: defaultOptions.params as any
             }
             return h('div', {
               class: 'vxe-table-export--panel-footer'

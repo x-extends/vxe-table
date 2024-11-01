@@ -94,11 +94,10 @@ export default defineComponent({
 
     const renderVN = () => {
       const { defaultOptions, storeData } = props
-      const importOpts = computeImportOpts.value
       const selectName = computeSelectName.value
       const hasFile = computeHasFile.value
       const parseTypeLabel = computeParseTypeLabel.value
-      const slots = importOpts.slots || {}
+      const slots = defaultOptions.slots || {}
       const topSlot = slots.top
       const bottomSlot = slots.bottom
       const defaultSlot = slots.default
@@ -129,8 +128,8 @@ export default defineComponent({
             const params = {
               $table: $xeTable,
               $grid: $xeTable.xegrid,
-              options: importOpts,
-              params: importOpts.params as any
+              options: defaultOptions,
+              params: defaultOptions.params as any
             }
             return h('div', {
               class: 'vxe-table-export--panel'
@@ -206,8 +205,8 @@ export default defineComponent({
             const params = {
               $table: $xeTable,
               $grid: $xeTable.xegrid,
-              options: importOpts,
-              params: importOpts.params as any
+              options: defaultOptions,
+              params: defaultOptions.params as any
             }
             return h('div', {
               class: 'vxe-table-export--panel-footer'
