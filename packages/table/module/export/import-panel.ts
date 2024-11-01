@@ -72,9 +72,8 @@ export default {
   render (this: any, h: CreateElement) {
     const $xeTable = this.$xeTable
 
-    const importOpts = $xeTable.importOpts
     const { hasFile, parseTypeLabel, defaultOptions, storeData, selectName } = this
-    const slots = importOpts.slots || {}
+    const slots = defaultOptions.slots || {}
     const topSlot = slots.top
     const bottomSlot = slots.bottom
     const defaultSlot = slots.default
@@ -109,8 +108,8 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeTable.xegrid,
-            options: importOpts,
-            params: importOpts.params as any
+            options: defaultOptions,
+            params: defaultOptions.params as any
           }
 
           return h('div', {
@@ -200,8 +199,8 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeTable.xegrid,
-            options: importOpts,
-            params: importOpts.params as any
+            options: defaultOptions,
+            params: defaultOptions.params as any
           }
           return h('div', {
             class: 'vxe-table-export--panel-footer'

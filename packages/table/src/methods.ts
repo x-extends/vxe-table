@@ -5489,12 +5489,18 @@ const Methods = {
   },
   // 计算可视渲染相关数据
   computeScrollLoad () {
+    const $xeTable = this
+    const props = $xeTable
+
     return this.$nextTick().then(() => {
+      const { showOverflow } = props
       const { sYOpts, sXOpts, scrollXLoad, scrollYLoad, scrollXStore, scrollYStore } = this
       // 计算 X 逻辑
       if (scrollXLoad) {
         const { visibleSize: visibleXSize } = handleVirtualXVisible(this)
-        const offsetXSize = sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0)
+        // 动态列缓冲量
+        const bufferSize = showOverflow ? 0 : 2
+        const offsetXSize = Math.max(bufferSize, sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : browse.msie ? 10 : (browse.edge ? 5 : 0))
         scrollXStore.offsetSize = offsetXSize
         scrollXStore.visibleSize = visibleXSize
         scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
@@ -5509,7 +5515,9 @@ const Methods = {
       this.rowHeight = rowHeight
       const { visibleSize: visibleYSize } = handleVirtualYVisible(this)
       if (scrollYLoad) {
-        const offsetYSize = sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : browse.msie ? 20 : (browse.edge ? 10 : 0)
+        // 动态高缓冲量
+        const bufferSize = showOverflow ? 0 : 2
+        const offsetYSize = Math.max(bufferSize, sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : (browse.edge ? 10 : 0))
         scrollYStore.offsetSize = offsetYSize
         scrollYStore.visibleSize = visibleYSize
         scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)

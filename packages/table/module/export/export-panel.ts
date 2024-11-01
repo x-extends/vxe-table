@@ -84,11 +84,10 @@ export default {
   render (this: any, h: CreateElement) {
     const $xeTable = this.$xeTable
 
-    const exportOpts = $xeTable.exportOpts
     const { _e, checkedAll, isAll: isAllChecked, isIndeterminate: isAllIndeterminate, showSheet, supportMerge, supportStyle, defaultOptions, storeData } = this
     const { hasTree, hasMerge, isPrint, hasColgroup, columns } = storeData
     const { isHeader } = defaultOptions
-    const slots = exportOpts.slots || {}
+    const slots = defaultOptions.slots || {}
     const topSlot = slots.top
     const bottomSlot = slots.bottom
     const defaultSlot = slots.default
@@ -167,9 +166,9 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeTable.xegrid,
-            options: exportOpts,
+            options: defaultOptions,
             columns,
-            params: exportOpts.params as any
+            params: defaultOptions.params as any
           }
 
           return h('div', {
@@ -431,9 +430,9 @@ export default {
           const params = {
             $table: $xeTable,
             $grid: $xeTable.xegrid,
-            options: exportOpts,
+            options: defaultOptions,
             columns,
-            params: exportOpts.params as any
+            params: defaultOptions.params as any
           }
           return h('div', {
             class: 'vxe-table-export--panel-footer'

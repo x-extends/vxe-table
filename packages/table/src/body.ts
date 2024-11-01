@@ -293,7 +293,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
-      height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : (scrollYLoad ? `${rest.height || scrollYRHeight || rowHeight}px` : '')
+      height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : (scrollYLoad ? `${rest.height || 24}px` : '')
     }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
     on: tdOns
   }, tdVNs)
