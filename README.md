@@ -213,8 +213,8 @@ export default {
 
 该群供大家交流問題，如果群人数已满，将会不定期剔除不活跃的。  
 
-![qq](https://vxetable.cn/static/donation/qq1.png)
-![qq](https://vxetable.cn/static/donation/qq2.png)
+![qq](https://vxeui.com/resource/donation/qq1.png)
+![qq](https://vxeui.com/resource/donation/qq2.png)
 
 ## 运行项目
 
