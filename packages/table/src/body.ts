@@ -268,6 +268,15 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
       )
     }
   }
+  let cellHeight = ''
+  if (hasEllipsis && (scrollYRHeight || rowHeight)) {
+    cellHeight = `${scrollYRHeight || rowHeight}px`
+  } else if (scrollYLoad) {
+    if (!hasEllipsis) {
+      cellHeight = `${rest.height || 24}px`
+    }
+  }
+
   return h('td', {
     class: [
       'vxe-body--column',
@@ -293,7 +302,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
-      height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : (scrollYLoad ? `${rest.height || 24}px` : '')
+      height: cellHeight
     }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
     on: tdOns
   }, tdVNs)

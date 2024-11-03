@@ -3,8 +3,6 @@ import { ColumnInfo } from './columnInfo'
 import { isScale, isPx } from '../../ui/src/dom'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
-
 const getAllConvertColumns = (columns: any, parentColumn?: any) => {
   const result: any[] = []
   columns.forEach((column: any) => {
@@ -336,8 +334,9 @@ export function createColumn ($xeTable: any, options: any, renderOptions: any): 
   return isColumnInfo(options) ? options : new ColumnInfo($xeTable, options, renderOptions)
 }
 
-export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, row: any) {
-  const { reactData, internalData } = $xeTable
+export function rowToVisible ($xeTable: any, row: any) {
+  const reactData = $xeTable
+  const internalData = $xeTable
   const tableProps = $xeTable
   const { showOverflow } = tableProps
   const tableBody: any = $xeTable.$refs.tableBody
@@ -347,11 +346,11 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
   const rowid = getRowid($xeTable, row)
   let offsetFixedLeft = 0
-  leftList.forEach(item => {
+  leftList.forEach((item: any) => {
     offsetFixedLeft += item.renderWidth
   })
   let offsetFixedRight = 0
-  rightList.forEach(item => {
+  rightList.forEach((item: any) => {
     offsetFixedRight += item.renderWidth
   })
   if (bodyElem) {
