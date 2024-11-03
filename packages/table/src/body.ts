@@ -322,6 +322,14 @@ export default defineComponent({
           )
         }
       }
+      let cellHeight = ''
+      if (hasEllipsis && (scrollYRHeight || rowHeight)) {
+        cellHeight = `${scrollYRHeight || rowHeight}px`
+      } else if (scrollYLoad) {
+        if (!hasEllipsis) {
+          cellHeight = `${rest.height || 24}px`
+        }
+      }
 
       return h('td', {
         class: [
@@ -348,7 +356,7 @@ export default defineComponent({
         key: columnKey || columnOpts.useKey ? colid : $columnIndex,
         ...attrs,
         style: Object.assign({
-          height: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : (scrollYLoad ? `${rest.height || 24}px` : '')
+          height: cellHeight
         }, XEUtils.isFunction(compCellStyle) ? compCellStyle(params) : compCellStyle, XEUtils.isFunction(cellStyle) ? cellStyle(params) : cellStyle),
         ...tdOns
       }, tdVNs)
