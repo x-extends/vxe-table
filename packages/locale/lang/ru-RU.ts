@@ -62,6 +62,7 @@ export default {
       impSuccess: 'Успешно импортировано {0} записей.',
       expLoading: 'Экспорт',
       expSuccess: 'Экспорт выполнен успешно',
+      expError: 'Export failure',
       expFilename: 'Экспорт_{0}',
       expOriginFilename: 'экспорт_источник_{0}',
       customTitle: 'Настройки столбца',

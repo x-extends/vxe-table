@@ -62,6 +62,7 @@ export default {
       impSuccess: '{0} rekord sikeresen importálva',
       expLoading: 'Exportálás',
       expSuccess: 'Az exportálás sikeres volt',
+      expError: 'Export failure',
       expFilename: 'Exportálás_{0}',
       expOriginFilename: 'export_source_{0}',
       customTitle: 'Oszlopbeállítások',

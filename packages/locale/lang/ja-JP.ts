@@ -62,6 +62,7 @@ export default {
       impSuccess: '{0} レコードがインポートされました',
       expLoading: 'エクスポート中',
       expSuccess: 'エクスポートが成功しました',
+      expError: 'Export failure',
       expOriginFilename: 'エクスポート_{0}',
       expSrcFilename: 'エクスポート_ソース_{0}',
       customTitle: '列設定',

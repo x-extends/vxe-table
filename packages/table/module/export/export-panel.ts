@@ -226,7 +226,7 @@ export default {
                                   options: storeData.typeList
                                 },
                                 on: {
-                                  input (value: any) {
+                                  modelValue (value: any) {
                                     defaultOptions.type = value
                                   }
                                 }
@@ -263,7 +263,7 @@ export default {
                                 options: storeData.modeList
                               },
                               on: {
-                                input (value: any) {
+                                modelValue (value: any) {
                                   defaultOptions.mode = value
                                 }
                               }

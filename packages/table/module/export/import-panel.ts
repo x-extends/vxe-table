@@ -177,7 +177,7 @@ export default {
                               options: storeData.modeList
                             },
                             on: {
-                              input (value: any) {
+                              modelValue (value: any) {
                                 defaultOptions.mode = value
                               }
                             }

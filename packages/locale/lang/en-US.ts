@@ -62,6 +62,7 @@ export default {
       impSuccess: 'Successfully imported {0} records',
       expLoading: 'Exporting',
       expSuccess: 'Export success',
+      expError: 'Export failure',
       expFilename: 'Export_{0}',
       expOriginFilename: 'Export_original_{0}',
       customTitle: 'Column settings',

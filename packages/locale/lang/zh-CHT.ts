@@ -62,6 +62,7 @@ export default {
       impSuccess: '成功導入 {0} 筆記錄',
       expLoading: '正在匯出中',
       expSuccess: '匯出成功',
+      expError: '导出失败',
       expFilename: '導出_{0}',
       expOriginFilename: '匯出_來源_{0}',
       customTitle: '列設定',
