@@ -44,7 +44,7 @@ VxeUI.setConfig({
       strict: true
     },
     dragConfig: {
-      showIcon: true
+      showRowIcon: true
     },
     checkboxConfig: {
       // trigger: 'default',

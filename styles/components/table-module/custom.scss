@@ -299,6 +299,11 @@
 }
 
 .vxe-table-custom-popup--row {
+  &.active--drag-origin {
+    .vxe-table-custom-popup--column-item {
+      opacity: 0.5;
+    }
+  }
   &.active--drag-target {
     &[drag-pos="top"] {
       .vxe-table-custom-popup--column-item {

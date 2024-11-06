@@ -6642,8 +6642,8 @@ export default defineComponent({
       },
       handleRowDragDragendEvent (evnt) {
         const { treeConfig } = props
-        const rowOpts = computeRowOpts.value
-        const { dragEndMethod } = rowOpts
+        const dragOpts = computeDragOpts.value
+        const { dragEndMethod } = dragOpts
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         const { dragRow } = reactData
@@ -6739,8 +6739,8 @@ export default defineComponent({
       },
       handleCellDragMousedownEvent (evnt, params) {
         evnt.stopPropagation()
-        const rowOpts = computeRowOpts.value
-        const { dragStartMethod } = rowOpts
+        const dragOpts = computeDragOpts.value
+        const { dragStartMethod } = dragOpts
         const { row } = params
         const dragEl = evnt.currentTarget as HTMLElement
         const tdEl = dragEl.parentNode?.parentNode as HTMLElement

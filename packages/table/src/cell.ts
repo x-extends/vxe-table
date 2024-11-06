@@ -48,11 +48,19 @@ function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams) 
 
 function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
   const { $table } = params
+  const { computeDragOpts } = $table.getComputeMaps()
+  const dragOpts = computeDragOpts.value
+  const { rowDisabledMethod } = dragOpts
+  const isDisabled = rowDisabledMethod && rowDisabledMethod(params)
   return h('span', {
     key: 'dg',
-    class: 'vxe-cell--drag-handle',
+    class: ['vxe-cell--drag-handle', {
+      'is--disabled': isDisabled
+    }],
     onMousedown (evnt) {
-      $table.handleCellDragMousedownEvent(evnt, params)
+      if (!isDisabled) {
+        $table.handleCellDragMousedownEvent(evnt, params)
+      }
     },
     onMouseup: $table.handleCellDragMouseupEvent
   }, [
@@ -69,7 +77,8 @@ function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams, conten
   const { computeRowOpts, computeDragOpts } = $table.getComputeMaps()
   const rowOpts = computeRowOpts.value
   const dragOpts = computeDragOpts.value
-  if (dragSort && rowOpts.drag && dragOpts.showIcon) {
+  const { showRowIcon, rowVisibleMethod } = dragOpts
+  if (dragSort && rowOpts.drag && (showRowIcon && (!rowVisibleMethod || rowVisibleMethod(params)))) {
     vns.unshift(
       renderCellDragIcon(params)
     )
@@ -939,14 +948,14 @@ export const Cell = {
       return []
     }
     if (defaultSlot) {
-      return $table.callSlot(defaultSlot, cellParams)
+      return renderCellBaseVNs(params, $table.callSlot(defaultSlot, cellParams))
     }
     if (formatter) {
-      return [
+      return renderCellBaseVNs(params, [
         h('span', {
           class: 'vxe-cell--label'
         }, getDefaultCellLabel(cellParams))
-      ]
+      ])
     }
     return Cell.renderDefaultCell(cellParams)
   }
