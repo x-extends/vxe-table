@@ -16,7 +16,7 @@ hooks.add('tableEditModule', {
   setupTable ($xeTable) {
     const { props, reactData, internalData } = $xeTable
     const { refElem } = $xeTable.getRefMaps()
-    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeTreeOpts } = $xeTable.getComputeMaps()
+    const { computeMouseOpts, computeEditOpts, computeCheckboxOpts, computeTreeOpts, computeValidOpts } = $xeTable.getComputeMaps()
 
     let editMethods = {} as TableEditMethods
     let editPrivateMethods = {} as TableEditPrivateMethods
@@ -528,6 +528,7 @@ hooks.add('tableEditModule', {
         const { editStore } = reactData
         const { actived, focused } = editStore
         const { row, column } = actived
+        const validOpts = computeValidOpts.value
         if (row || column) {
           syncActivedCell()
           actived.args = null
@@ -543,9 +544,11 @@ hooks.add('tableEditModule', {
             $columnIndex: $xeTable.getVMColumnIndex(column)
           }, evnt || null)
         }
-        if (getConfig().cellVaildMode === 'obsolete') {
-          if ($xeTable.clearValidate) {
-            return $xeTable.clearValidate()
+        if (validOpts.autoClear) {
+          if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
+            if ($xeTable.clearValidate) {
+              return $xeTable.clearValidate()
+            }
           }
         }
         focused.row = null

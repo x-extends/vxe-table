@@ -62,6 +62,7 @@ export default {
       impSuccess: 'Успешно импортировано {0} записей.',
       expLoading: 'Экспорт',
       expSuccess: 'Экспорт выполнен успешно',
+      expError: 'Export failure',
       expFilename: 'Экспорт_{0}',
       expOriginFilename: 'экспорт_источник_{0}',
       customTitle: 'Настройки столбца',
@@ -70,7 +71,8 @@ export default {
       customClose: 'закрытие',
       customCancel: 'Отмена',
       customRestore: 'Восстановить настройки по умолчанию',
-      maxFixedCol: 'Максимальное количество замороженных столбцов не может превышать {0}.'
+      maxFixedCol: 'Максимальное количество замороженных столбцов не может превышать {0}.',
+      dragTip: '移动：{0}'
     },
     grid: {
       selectOneRecord: 'Пожалуйста, выберите хотя бы одну запись!',
@@ -121,7 +123,7 @@ export default {
       cstmCancel: 'Отмена',
       cstmConfirm: 'Конечно',
       cstmConfirmRestore: 'Пожалуйста, подтвердите, нужно ли восстановить конфигурацию столбца по умолчанию?',
-      cstmDragTarget: 'Движущаяся цель: {0}',
+      cstmDragTarget: '移动：{0}',
       setting: {
         colSort: 'сортировать',
         sortHelpTip: 'Нажмите и перетащите значок, чтобы изменить порядок столбцов.',

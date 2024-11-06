@@ -81,8 +81,10 @@ export const columnProps = {
   filterRecoverMethod: Function as PropType<VxeColumnPropTypes.FilterRecoverMethod>,
   // 筛选模板配置项
   filterRender: Object as PropType<VxeColumnPropTypes.FilterRender>,
-  // 指定为树节点
+  // 设置为树节点
   treeNode: Boolean as PropType<VxeColumnPropTypes.TreeNode>,
+  // 指定为树节点
+  dragSort: Boolean as PropType<VxeColumnPropTypes.DragSort>,
   // 是否可视
   visible: {
     type: Boolean as PropType<VxeColumnPropTypes.Visible>,

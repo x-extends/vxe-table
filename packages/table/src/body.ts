@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
+import { createCommentVNode, defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { mergeBodyMethod, getRowid, XEBodyScrollElement } from './util'
@@ -353,7 +353,7 @@ export default defineComponent({
           getPropClass(className, params),
           getPropClass(allCellClassName, params)
         ],
-        key: columnKey || columnOpts.useKey ? colid : $columnIndex,
+        key: columnKey || columnOpts.useKey || rowOpts.useKey ? colid : $columnIndex,
         ...attrs,
         style: Object.assign({
           height: cellHeight
@@ -379,7 +379,7 @@ export default defineComponent({
         let rowIndex = $rowIndex
         // 确保任何情况下 rowIndex 都精准指向真实 data 索引
         rowIndex = $xeTable.getRowIndex(row)
-        // 事件绑定
+        // 当前行事件
         if (rowOpts.isHover || highlightHoverRow) {
           trOn.onMouseenter = (evnt: any) => {
             if (isVMScrollProcess()) {
@@ -393,6 +393,12 @@ export default defineComponent({
             }
             $xeTable.clearHoverRow()
           }
+        }
+        // 拖拽行事件
+        if (rowOpts.drag) {
+          trOn.onDragstart = $xeTable.handleRowDragDragstartEvent
+          trOn.onDragend = $xeTable.handleRowDragDragendEvent
+          trOn.onDragover = $xeTable.handleRowDragDragoverEvent
         }
         const rowid = getRowid($xeTable, row)
         const rest = fullAllDataRowIdData[rowid]
@@ -438,7 +444,7 @@ export default defineComponent({
             ],
             rowid: rowid,
             style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-            key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,
+            key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
             ...trOn
           }, tableColumn.map((column: any, $columnIndex: any) => {
             return renderColumn(seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
@@ -700,9 +706,10 @@ export default defineComponent({
     const renderVN = () => {
       let { fixedColumn, fixedType, tableColumn } = props
       const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig } = tableProps
-      const { tableData, mergeList, scrollYLoad, isAllOverflow } = tableReactData
+      const { tableData, mergeList, scrollYLoad, isAllOverflow, isDragRowMove } = tableReactData
       const { visibleColumn } = tableInternalData
       const { slots } = tableContext
+      const rowOpts = computeRowOpts.value
       const sYOpts = computeSYOpts.value
       const emptyOpts = computeEmptyOpts.value
       const keyboardOpts = computeKeyboardOpts.value
@@ -782,9 +789,16 @@ export default defineComponent({
           /**
            * 内容
            */
-          h('tbody', {
-            ref: refBodyTBody
-          }, renderRows(fixedType, tableData, tableColumn))
+          rowOpts.drag
+            ? h(TransitionGroup, {
+              name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`,
+              tag: 'tbody'
+            }, {
+              default: () => renderRows(fixedType, tableData, tableColumn)
+            })
+            : h('tbody', {
+              ref: refBodyTBody
+            }, renderRows(fixedType, tableData, tableColumn))
         ]),
         h('div', {
           class: 'vxe-table--checkbox-range'

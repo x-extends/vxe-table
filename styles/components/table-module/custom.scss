@@ -4,6 +4,9 @@
   position: relative;
   display: flex;
   flex-direction: row;
+  &.active--drag-origin {
+    opacity: 0.5;
+  }
   &.active--drag-target {
     &[drag-pos="top"] {
       &::after {
@@ -166,7 +169,10 @@
   padding-left: 0.2em;
   padding-right: 0.4em;
   &:not(.is--disabled) {
-    cursor: grabbing;
+    cursor: grab;
+    &:active {
+      cursor: grabbing;
+    }
     &:hover {
       color: var(--vxe-ui-font-primary-color);
     }
@@ -247,7 +253,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  padding: 0.6em 1em 0.6em 1.8em;
+  padding: 0.6em 1em 0.6em 1.6em;
   max-width: 300px;
   border-radius: var(--vxe-ui-border-radius);
   overflow: hidden;
@@ -338,7 +344,7 @@
     position: absolute;
     left: -1px;
     width: calc(100% + 1px);
-    height: 3px;
+    height: 2px;
     background-color: var(--vxe-ui-font-primary-color);
     z-index: 12;
   }

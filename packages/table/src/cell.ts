@@ -8,7 +8,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 
 import type { VxeTableConstructor, VxeTableDefines, VxeColumnPropTypes, VxeTablePrivateMethods, VxeComponentSlotType } from '../../../types'
 
-const { getI18n, getIcon, renderer, formats } = VxeUI
+const { getI18n, getIcon, renderer, formats, renderEmptyElement } = VxeUI
 
 function renderTitlePrefixIcon (params: VxeTableDefines.CellRenderHeaderParams) {
   const { $table, column } = params
@@ -44,6 +44,37 @@ function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams) 
         })
       ]
     : []
+}
+
+function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
+  const { $table } = params
+  return h('span', {
+    key: 'dg',
+    class: 'vxe-cell--drag-handle',
+    onMousedown (evnt) {
+      $table.handleCellDragMousedownEvent(evnt, params)
+    },
+    onMouseup: $table.handleCellDragMouseupEvent
+  }, [
+    h('i', {
+      class: 'vxe-table-icon-drag-handle'
+    })
+  ])
+}
+
+function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams, content: VxeComponentSlotType | VxeComponentSlotType[]) {
+  const { $table, column } = params
+  const { dragSort } = column
+  const vns: VxeComponentSlotType[] = XEUtils.isArray(content) ? content : [content]
+  const { computeRowOpts, computeDragOpts } = $table.getComputeMaps()
+  const rowOpts = computeRowOpts.value
+  const dragOpts = computeDragOpts.value
+  if (dragSort && rowOpts.drag && dragOpts.showIcon) {
+    vns.unshift(
+      renderCellDragIcon(params)
+    )
+  }
+  return vns
 }
 
 function renderTitleContent (params: VxeTableDefines.CellRenderHeaderParams, content: VxeComponentSlotType | VxeComponentSlotType[]) {
@@ -250,7 +281,7 @@ export const Cell = {
     const renderOpts = editRender || cellRender
     const defaultSlot = slots ? slots.default : null
     if (defaultSlot) {
-      return $table.callSlot(defaultSlot, params)
+      return renderCellBaseVNs(params, $table.callSlot(defaultSlot, params))
     }
     if (renderOpts) {
       const compConf = renderer.get(renderOpts.name)
@@ -259,13 +290,13 @@ export const Cell = {
         const rtDefault = compConf.renderTableDefault || compConf.renderDefault
         const renderFn = editRender ? rtCell : rtDefault
         if (renderFn) {
-          return getSlotVNs(renderFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params)))
+          return renderCellBaseVNs(params, getSlotVNs(renderFn(renderOpts, Object.assign({ $type: editRender ? 'edit' : 'cell' }, params))))
         }
       }
     }
     const cellValue = $table.getCellLabel(row, column)
     const cellPlaceholder = editRender ? editRender.placeholder : ''
-    return [
+    return renderCellBaseVNs(params, [
       h('span', {
         class: 'vxe-cell--label'
       }, [
@@ -277,7 +308,7 @@ export const Cell = {
           : h('span', formatText(cellValue, 1))
       ]
       )
-    ]
+    ])
   },
   renderTreeCell (params: VxeTableDefines.CellRenderBodyParams) {
     return Cell.renderTreeIcon(params, Cell.renderDefaultCell(params) as VNode[])
@@ -377,11 +408,13 @@ export const Cell = {
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     if (defaultSlot) {
-      return $table.callSlot(defaultSlot, params)
+      return renderCellBaseVNs(params, $table.callSlot(defaultSlot, params))
     }
     const { seq } = params
     const seqMethod = seqOpts.seqMethod
-    return [formatText(seqMethod ? seqMethod(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + (seq as number), 1)]
+    return renderCellBaseVNs(params, [
+      h('span', `${formatText(seqMethod ? seqMethod(params) : treeConfig ? seq : (seqOpts.startIndex || 0) + (seq as number), 1)}`)
+    ])
   },
   renderTreeIndexCell (params: VxeTableDefines.CellRenderBodyParams) {
     return Cell.renderTreeIcon(params, Cell.renderSeqCell(params) as VNode[])
@@ -432,7 +465,7 @@ export const Cell = {
     }
     const radioParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible }
     if (radioSlot) {
-      return $table.callSlot(radioSlot, radioParams)
+      return renderCellBaseVNs(params, $table.callSlot(radioSlot, radioParams))
     }
     const radioVNs: VNode[] = []
     if (isVisible) {
@@ -449,7 +482,7 @@ export const Cell = {
         }, defaultSlot ? $table.callSlot(defaultSlot, radioParams) : XEUtils.get(row, labelField as string))
       )
     }
-    return [
+    return renderCellBaseVNs(params, [
       h('span', {
         class: ['vxe-cell--radio', {
           'is--checked': isChecked,
@@ -457,7 +490,7 @@ export const Cell = {
         }],
         ...ons
       }, radioVNs)
-    ]
+    ])
   },
   renderTreeRadioCell (params: VxeTableDefines.CellRenderBodyParams) {
     return Cell.renderTreeIcon(params, Cell.renderRadioCell(params))
@@ -555,7 +588,7 @@ export const Cell = {
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate }
     if (checkboxSlot) {
-      return $table.callSlot(checkboxSlot, checkboxParams)
+      return renderCellBaseVNs(params, $table.callSlot(checkboxSlot, checkboxParams))
     }
     const checkVNs: VNode[] = []
     if (isVisible) {
@@ -572,7 +605,7 @@ export const Cell = {
         }, defaultSlot ? $table.callSlot(defaultSlot, checkboxParams) : XEUtils.get(row, labelField as string))
       )
     }
-    return [
+    return renderCellBaseVNs(params, [
       h('span', {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
@@ -582,7 +615,7 @@ export const Cell = {
         }],
         ...ons
       }, checkVNs)
-    ]
+    ])
   },
   renderTreeSelectionCell (params: VxeTableDefines.CellRenderBodyParams) {
     return Cell.renderTreeIcon(params, Cell.renderCheckboxCell(params))
@@ -623,7 +656,7 @@ export const Cell = {
     }
     const checkboxParams = { ...params, checked: isChecked, disabled: isDisabled, visible: isVisible, indeterminate: isIndeterminate }
     if (checkboxSlot) {
-      return $table.callSlot(checkboxSlot, checkboxParams)
+      return renderCellBaseVNs(params, $table.callSlot(checkboxSlot, checkboxParams))
     }
     const checkVNs: VNode[] = []
     if (isVisible) {
@@ -640,7 +673,7 @@ export const Cell = {
         )
       }
     }
-    return [
+    return renderCellBaseVNs(params, [
       h('span', {
         class: ['vxe-cell--checkbox', {
           'is--checked': isChecked,
@@ -650,7 +683,7 @@ export const Cell = {
         }],
         ...ons
       }, checkVNs)
-    ]
+    ])
   },
   renderTreeSelectionCellByProp (params: VxeTableDefines.CellRenderBodyParams) {
     return Cell.renderTreeIcon(params, Cell.renderCheckboxCellByProp(params))
@@ -672,7 +705,7 @@ export const Cell = {
     let isAceived = false
     let isLazyLoading = false
     if (iconSlot) {
-      return $table.callSlot(iconSlot, params)
+      return renderCellBaseVNs(params, $table.callSlot(iconSlot, params))
     }
     if (!isHidden) {
       const rowid = getRowid($table, row)
@@ -681,7 +714,7 @@ export const Cell = {
         isLazyLoading = !!rowExpandLazyLoadedMaps[rowid]
       }
     }
-    return [
+    return renderCellBaseVNs(params, [
       showIcon && (!visibleMethod || visibleMethod(params))
         ? h('span', {
           class: ['vxe-table--expanded', {
@@ -695,13 +728,13 @@ export const Cell = {
             class: ['vxe-table--expand-btn', isLazyLoading ? (iconLoaded || getIcon().TABLE_EXPAND_LOADED) : (isAceived ? (iconOpen || getIcon().TABLE_EXPAND_OPEN) : (iconClose || getIcon().TABLE_EXPAND_CLOSE))]
           })
         ])
-        : null,
+        : renderEmptyElement($table),
       defaultSlot || labelField
         ? h('span', {
           class: 'vxe-table--expand-label'
         }, defaultSlot ? $table.callSlot(defaultSlot, params) : XEUtils.get(row, labelField as string))
-        : null
-    ]
+        : renderEmptyElement($table)
+    ])
   },
   renderExpandData (params: VxeTableDefines.CellRenderDataParams) {
     const { $table, column } = params
@@ -730,14 +763,14 @@ export const Cell = {
     const { slots } = column
     const defaultSlot = slots ? slots.default : null
     if (defaultSlot) {
-      return $table.callSlot(defaultSlot, params)
+      return renderCellBaseVNs(params, $table.callSlot(defaultSlot, params))
     }
-    return [
+    return renderCellBaseVNs(params, [
       h('span', {
         class: 'vxe-cell--html',
         innerHTML: getDefaultCellLabel(params)
       })
-    ]
+    ])
   },
   renderTreeHTMLCell (params: VxeTableDefines.CellRenderBodyParams) {
     return Cell.renderTreeIcon(params, Cell.renderHTMLCell(params) as VNode[])

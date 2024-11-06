@@ -18,8 +18,8 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
-import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableProps, VxeColumnPropTypes } from '../../../types'
+import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf } from 'vxe-pc-ui'
+import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes } from '../../../types'
 
 const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns } = VxeUI
 
@@ -260,6 +260,9 @@ export default defineComponent({
         isFooter: false
       },
       scrollVMLoading: false,
+      isDragRowMove: false,
+      dragRow: null,
+      dragTipText: '',
       _isResize: false,
       _isLoading: false
     })
@@ -335,6 +338,8 @@ export default defineComponent({
       columnStatusMaps: {},
       // 行选取状态
       rowStatusMaps: {},
+      // prevDragRow: null,
+
       inited: false,
       tooltipTimeout: null,
       initStatus: false,
@@ -366,6 +371,8 @@ export default defineComponent({
     const refRightContainer = ref() as Ref<HTMLDivElement>
     const refCellResizeBar = ref() as Ref<HTMLDivElement>
     const refEmptyPlaceholder = ref() as Ref<HTMLDivElement>
+
+    const refRowDragTipElem = ref<HTMLDivElement>()
 
     const refScrollXVirtualElem = ref<HTMLDivElement>()
     const refScrollYVirtualElem = ref<HTMLDivElement>()
@@ -419,6 +426,10 @@ export default defineComponent({
 
     const computeRowOpts = computed(() => {
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
+    })
+
+    const computeDragOpts = computed(() => {
+      return Object.assign({}, getConfig().table.dragConfig, props.dragConfig) as VxeTablePropTypes.DragConfig
     })
 
     const computeResizeOpts = computed(() => {
@@ -673,6 +684,7 @@ export default defineComponent({
       computeColumnOpts,
       computeCellOpts,
       computeRowOpts,
+      computeDragOpts,
       computeResizeOpts,
       computeResizableOpts,
       computeSeqOpts,
@@ -2846,7 +2858,7 @@ export default defineComponent({
     const handleCheckAllEvent = (evnt: Event | null, value: any) => {
       handleCheckedAllCheckboxRow(value)
       if (evnt) {
-        tableMethods.dispatchEvent('checkbox-all', {
+        dispatchEvent('checkbox-all', {
           records: tableMethods.getCheckboxRecords(),
           reserves: tableMethods.getCheckboxReserveRecords(),
           indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
@@ -2909,22 +2921,29 @@ export default defineComponent({
       loadScrollYData()
     }, 20, { leading: false, trailing: true })
 
-    const scrollXEvent = (evnt: Event) => {
-      const wrapperEl = evnt.currentTarget as HTMLDivElement
+    const handleSyncScrollX = (scrollLeft: number) => {
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableFooter = refTableFooter.value
       const bodyElem = tableBody.$el as HTMLDivElement
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+      setScrollLeft(bodyElem, scrollLeft)
+      setScrollLeft(headerElem, scrollLeft)
+      setScrollLeft(footerElem, scrollLeft)
+      setScrollLeft(bodyElem, scrollLeft)
+      setScrollLeft(headerElem, scrollLeft)
+      setScrollLeft(footerElem, scrollLeft)
+    }
+
+    const scrollXEvent = (evnt: Event) => {
+      const wrapperEl = evnt.currentTarget as HTMLDivElement
       const { scrollTop, scrollLeft } = wrapperEl
       const isRollX = true
       const isRollY = false
       internalData.lastScrollLeft = scrollLeft
       reactData.lastScrollTime = Date.now()
-      setScrollLeft(bodyElem, scrollLeft)
-      setScrollLeft(headerElem, scrollLeft)
-      setScrollLeft(footerElem, scrollLeft)
+      handleSyncScrollX(scrollLeft)
       $xeTable.triggerScrollXEvent(evnt)
       $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
         type: 'table',
@@ -2938,22 +2957,26 @@ export default defineComponent({
       tablePrivateMethods.updateScrollYSpace()
     }, 1000, { leading: false, trailing: true })
 
-    const scrollYEvent = (evnt: Event) => {
-      const wrapperEl = evnt.currentTarget as HTMLDivElement
+    const handleSyncScrollY = (scrollTop: number) => {
       const tableBody = refTableBody.value
       const leftBody = refTableLeftBody.value
       const rightBody = refTableRightBody.value
       const bodyElem = tableBody.$el as HTMLDivElement
       const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
       const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
+      setScrollTop(bodyElem, scrollTop)
+      setScrollTop(leftElem, scrollTop)
+      setScrollTop(rightElem, scrollTop)
+    }
+
+    const scrollYEvent = (evnt: Event) => {
+      const wrapperEl = evnt.currentTarget as HTMLDivElement
       const { scrollTop, scrollLeft } = wrapperEl
       const isRollX = false
       const isRollY = true
       internalData.lastScrollTop = scrollTop
       reactData.lastScrollTime = Date.now()
-      setScrollTop(bodyElem, scrollTop)
-      setScrollTop(leftElem, scrollTop)
-      setScrollTop(rightElem, scrollTop)
+      handleSyncScrollY(scrollTop)
       $xeTable.triggerScrollYEvent(evnt)
       $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
         type: 'table',
@@ -2965,10 +2988,12 @@ export default defineComponent({
 
     let keyCtxTimeout: any
 
+    const dispatchEvent = (type: ValueOf<VxeTableEmits>, params: Record<string, any>, evnt: Event | null) => {
+      emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
+    }
+
     tableMethods = {
-      dispatchEvent (type, params, evnt) {
-        emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
-      },
+      dispatchEvent,
       /**
        * 重置表格的一切数据状态
        */
@@ -4291,7 +4316,7 @@ export default defineComponent({
           visible: false
         })
         if (visible) {
-          $xeTable.dispatchEvent('filter-visible', { column, property: column.field, field: column.field, filterList: $xeTable.getCheckedFilters(), visible: false }, null)
+          dispatchEvent('filter-visible', { column, property: column.field, field: column.field, filterList: $xeTable.getCheckedFilters(), visible: false }, null)
         }
         return nextTick()
       },
@@ -5101,7 +5126,7 @@ export default defineComponent({
                 tablePrivateMethods.preventEvent(evnt, 'event.clearAreas', {}, () => {
                   $xeTable.clearCellAreas()
                   $xeTable.clearCopyCellArea()
-                  $xeTable.dispatchEvent('clear-cell-area-selection', { cellAreas }, evnt)
+                  dispatchEvent('clear-cell-area-selection', { cellAreas }, evnt)
                 })
               }
             }
@@ -5155,7 +5180,7 @@ export default defineComponent({
       const isEsc = globalEvents.hasKey(evnt, GLOBAL_EVENT_KEYS.ESCAPE)
       if (isEsc) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
-          tableMethods.dispatchEvent('keydown-start', {}, evnt)
+          dispatchEvent('keydown-start', {}, evnt)
           if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardEvent) {
             $xeTable.handleKeyboardEvent(evnt)
           } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
@@ -5177,8 +5202,8 @@ export default defineComponent({
               }
             }
           }
-          tableMethods.dispatchEvent('keydown', {}, evnt)
-          tableMethods.dispatchEvent('keydown-end', {}, evnt)
+          dispatchEvent('keydown', {}, evnt)
+          dispatchEvent('keydown-end', {}, evnt)
         })
       }
     }
@@ -5358,7 +5383,7 @@ export default defineComponent({
                 }
                 // 如果按下 del 键，更新表尾数据
                 tableMethods.updateFooter()
-                $xeTable.dispatchEvent('cell-delete-value', params, evnt)
+                dispatchEvent('cell-delete-value', params, evnt)
               }
             }
           } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
@@ -5382,7 +5407,7 @@ export default defineComponent({
                     setCellValue(selected.row, selected.column, null)
                     $xeTable.handleEdit(selected.args, evnt)
                   }
-                  $xeTable.dispatchEvent('cell-backspace-value', params, evnt)
+                  dispatchEvent('cell-backspace-value', params, evnt)
                 }
               }
             }
@@ -5429,7 +5454,7 @@ export default defineComponent({
               }
             }
           }
-          tableMethods.dispatchEvent('keydown', {}, evnt)
+          dispatchEvent('keydown', {}, evnt)
         })
       }
     }
@@ -5447,7 +5472,7 @@ export default defineComponent({
             $xeTable.handlePasteCellAreaEvent(evnt)
           }
         }
-        tableMethods.dispatchEvent('paste', {}, evnt)
+        dispatchEvent('paste', {}, evnt)
       }
     }
 
@@ -5464,7 +5489,7 @@ export default defineComponent({
             $xeTable.handleCopyCellAreaEvent(evnt)
           }
         }
-        tableMethods.dispatchEvent('copy', {}, evnt)
+        dispatchEvent('copy', {}, evnt)
       }
     }
 
@@ -5481,7 +5506,7 @@ export default defineComponent({
             $xeTable.handleCutCellAreaEvent(evnt)
           }
         }
-        tableMethods.dispatchEvent('cut', {}, evnt)
+        dispatchEvent('cut', {}, evnt)
       }
     }
 
@@ -5507,6 +5532,55 @@ export default defineComponent({
           $tooltip.setActived(true)
         }
       }
+    }
+
+    const clearRowDropOrigin = () => {
+      const el = refElem.value
+      if (el) {
+        const clss = 'row--drag-origin'
+        XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
+          (elem as HTMLTableCellElement).draggable = false
+          removeClass(elem, clss)
+        })
+      }
+    }
+
+    const clearRowDropTarget = () => {
+      const el = refElem.value
+      if (el) {
+        const clss = 'row--drag-active-target'
+        XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
+          removeClass(elem, clss)
+        })
+      }
+    }
+
+    const showRowDropTip = (evnt: DragEvent | MouseEvent) => {
+      const rdTipEl = refRowDragTipElem.value
+      if (!rdTipEl) {
+        return
+      }
+      const el = refElem.value
+      if (!el) {
+        return
+      }
+      if (rdTipEl) {
+        const wrapperRect = el.getBoundingClientRect()
+        rdTipEl.style.display = 'block'
+        rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
+        rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
+      }
+    }
+
+    const hideRowDropTip = () => {
+      const rdTipEl = refRowDragTipElem.value
+      if (rdTipEl) {
+        rdTipEl.style.display = ''
+      }
+    }
+
+    const updateRowDropTipContent = (tdEl: HTMLElement) => {
+      reactData.dragTipText = tdEl.textContent || ''
     }
 
     /**
@@ -6254,13 +6328,13 @@ export default defineComponent({
         if (sortOpts.trigger === 'cell' && !(triggerResizable || triggerSort || triggerFilter)) {
           tablePrivateMethods.triggerSortEvent(evnt, column, getNextSortOrder(column))
         }
-        tableMethods.dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
+        dispatchEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
         if (columnOpts.isCurrent || props.highlightCurrentColumn) {
           tablePrivateMethods.triggerCurrentColumnEvent(evnt, params)
         }
       },
       triggerHeaderCellDblclickEvent (evnt, params) {
-        tableMethods.dispatchEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+        dispatchEvent('header-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, params), evnt)
       },
       /**
        * 列点击事件
@@ -6339,7 +6413,7 @@ export default defineComponent({
             }
           }
         }
-        tableMethods.dispatchEvent('cell-click', params, evnt)
+        dispatchEvent('cell-click', params, evnt)
       },
       /**
        * 列双击点击事件
@@ -6369,7 +6443,7 @@ export default defineComponent({
             }
           }
         }
-        tableMethods.dispatchEvent('cell-dblclick', params, evnt)
+        dispatchEvent('cell-dblclick', params, evnt)
       },
       handleToggleCheckRowEvent (evnt, params) {
         const { selectCheckboxMaps } = reactData
@@ -6411,7 +6485,7 @@ export default defineComponent({
               tableMethods.setAllCheckboxRow(false)
               const rangeRows = _rowIndex < _firstRowIndex ? afterFullData.slice(_rowIndex, _firstRowIndex + 1) : afterFullData.slice(_firstRowIndex, _rowIndex + 1)
               handleCheckedCheckboxRow(rangeRows, true, false)
-              tableMethods.dispatchEvent('checkbox-range-select', Object.assign({ rangeRecords: rangeRows }, params), evnt)
+              dispatchEvent('checkbox-range-select', Object.assign({ rangeRecords: rangeRows }, params), evnt)
               return
             }
           }
@@ -6419,7 +6493,7 @@ export default defineComponent({
         if (!checkMethod || checkMethod({ row })) {
           tablePrivateMethods.handleSelectRow(params, value)
           tablePrivateMethods.checkSelectionStatus()
-          tableMethods.dispatchEvent('checkbox-change', Object.assign({
+          dispatchEvent('checkbox-change', Object.assign({
             records: tableMethods.getCheckboxRecords(),
             reserves: tableMethods.getCheckboxReserveRecords(),
             indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
@@ -6465,7 +6539,7 @@ export default defineComponent({
           }
         }
         if (isChange) {
-          tableMethods.dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
+          dispatchEvent('radio-change', { oldValue, newValue, ...params }, evnt)
         }
       },
       triggerCurrentColumnEvent (evnt, params) {
@@ -6485,7 +6559,7 @@ export default defineComponent({
         if (!currentMethod || currentMethod({ row: newValue })) {
           tableMethods.setCurrentRow(newValue)
           if (isChange) {
-            tableMethods.dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
+            dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
           }
         }
       },
@@ -6507,7 +6581,7 @@ export default defineComponent({
           const columnIndex = tableMethods.getColumnIndex(column)
           const $columnIndex = tableMethods.getVMColumnIndex(column)
           tableMethods.setRowExpand(row, expanded)
-          tableMethods.dispatchEvent('toggle-row-expand', {
+          dispatchEvent('toggle-row-expand', {
             expanded,
             column,
             columnIndex,
@@ -6536,7 +6610,7 @@ export default defineComponent({
           const columnIndex = tableMethods.getColumnIndex(column)
           const $columnIndex = tableMethods.getVMColumnIndex(column)
           tableMethods.setTreeExpand(row, expanded)
-          tableMethods.dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
+          dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
         }
       },
       /**
@@ -6557,8 +6631,140 @@ export default defineComponent({
           if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
             $xeTable.handleSortEvent(evnt, params)
           }
-          tableMethods.dispatchEvent('sort-change', params, evnt)
+          dispatchEvent('sort-change', params, evnt)
         }
+      },
+      handleRowDragDragstartEvent (evnt) {
+        const img = new Image()
+        if (evnt.dataTransfer) {
+          evnt.dataTransfer.setDragImage(img, 0, 0)
+        }
+      },
+      handleRowDragDragendEvent (evnt) {
+        const { treeConfig } = props
+        const rowOpts = computeRowOpts.value
+        const { dragEndMethod } = rowOpts
+        const treeOpts = computeTreeOpts.value
+        const { transform } = treeOpts
+        const { dragRow } = reactData
+        const { afterFullData, tableFullData, prevDragRow, prevDragPos } = internalData
+        if (prevDragRow && dragRow) {
+          // 判断是否有拖动
+          if (prevDragRow !== dragRow) {
+            Promise.resolve(
+              dragEndMethod
+                ? dragEndMethod({
+                  oldRow: dragRow,
+                  newRow: prevDragRow
+                })
+                : true
+            ).then((status) => {
+              if (!status) {
+                return
+              }
+              const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
+
+              // 移出源位置
+              const oafIndex = $xeTable.findRowIndexOf(afterFullData, dragRow)
+              const otfIndex = $xeTable.findRowIndexOf(tableFullData, dragRow)
+              afterFullData.splice(oafIndex, 1)
+              tableFullData.splice(otfIndex, 1)
+              // 插新位置
+              const pafIndex = $xeTable.findRowIndexOf(afterFullData, prevDragRow)
+              const ptfIndex = $xeTable.findRowIndexOf(tableFullData, prevDragRow)
+              const nafIndex = pafIndex + dragOffsetIndex
+              const ntfIndex = ptfIndex + dragOffsetIndex
+              afterFullData.splice(nafIndex, 0, dragRow)
+              tableFullData.splice(ntfIndex, 0, dragRow)
+
+              reactData.isDragRowMove = true
+              $xeTable.cacheRowMap()
+              $xeTable.updateScrollYStatus()
+              $xeTable.handleTableData(treeConfig && transform)
+              if (!(treeConfig && transform)) {
+                $xeTable.updateAfterDataIndex()
+              }
+              $xeTable.updateFooter()
+              $xeTable.checkSelectionStatus()
+              if (reactData.scrollYLoad) {
+                $xeTable.updateScrollYSpace()
+              }
+              nextTick().then(() => {
+                $xeTable.updateCellAreas()
+                return $xeTable.recalculate()
+              })
+
+              dispatchEvent('row-dragend', {
+                oldRow: dragRow,
+                newRow: prevDragRow,
+                _index: {
+                  newIndex: nafIndex,
+                  oldIndex: oafIndex
+                }
+              }, evnt)
+            }).catch(() => {
+            })
+          }
+        }
+        hideRowDropTip()
+        clearRowDropOrigin()
+        clearRowDropTarget()
+        reactData.dragRow = null
+        setTimeout(() => {
+          reactData.isDragRowMove = false
+        }, 500)
+      },
+      handleRowDragDragoverEvent (evnt) {
+        const trEl = evnt.currentTarget as HTMLElement
+        const rowid = trEl.getAttribute('rowid')
+        const row = $xeTable.getRowById(rowid)
+        clearRowDropTarget()
+        if (row) {
+          evnt.preventDefault()
+          evnt.preventDefault()
+          const { dragRow } = reactData
+          const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
+          const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
+          addClass(trEl, 'row--drag-active-target')
+          trEl.setAttribute('drag-pos', dragPos)
+          internalData.prevDragRow = row
+          internalData.prevDragPos = dragPos
+          dispatchEvent('row-dragover', {
+            oldRow: dragRow,
+            targetRow: row,
+            dragPos
+          }, evnt)
+        }
+        showRowDropTip(evnt)
+      },
+      handleCellDragMousedownEvent (evnt, params) {
+        evnt.stopPropagation()
+        const rowOpts = computeRowOpts.value
+        const { dragStartMethod } = rowOpts
+        const { row } = params
+        const dragEl = evnt.currentTarget as HTMLElement
+        const tdEl = dragEl.parentNode?.parentNode as HTMLElement
+        const trEl = tdEl.parentNode as HTMLElement
+        reactData.isDragRowMove = false
+        clearRowDropOrigin()
+        if (dragStartMethod && !dragStartMethod(params)) {
+          trEl.draggable = false
+          reactData.dragRow = null
+          hideRowDropTip()
+          return
+        }
+        reactData.dragRow = row
+        trEl.draggable = true
+        addClass(trEl, 'row--drag-origin')
+        showRowDropTip(evnt)
+        updateRowDropTipContent(tdEl)
+        dispatchEvent('row-dragstart', params, evnt)
+      },
+      handleCellDragMouseupEvent () {
+        clearRowDropOrigin()
+        hideRowDropTip()
+        reactData.dragRow = null
+        reactData.isDragRowMove = false
       },
       /**
        * 横向 X 可视渲染事件处理
@@ -6589,7 +6795,7 @@ export default defineComponent({
         const bodyWidth = bodyElem ? bodyElem.clientWidth : 0
         const scrollHeight = bodyElem ? bodyElem.scrollHeight : 0
         const scrollWidth = bodyElem ? bodyElem.scrollWidth : 0
-        $xeTable.dispatchEvent('scroll', {
+        const evntParams = {
           bodyHeight,
           bodyWidth,
           scrollHeight,
@@ -6597,7 +6803,8 @@ export default defineComponent({
           isX: isRollX,
           isY: isRollY,
           ...params
-        }, evnt)
+        }
+        dispatchEvent('scroll', evntParams, evnt)
       },
       /**
        * 纵向 Y 可视渲染事件处理
@@ -6741,14 +6948,14 @@ export default defineComponent({
       },
       updateScrollXData () {
         // reactData.tableColumn = []
-        nextTick(() => {
+        return nextTick().then(() => {
           handleTableColumn()
           tablePrivateMethods.updateScrollXSpace()
         })
       },
       updateScrollYData () {
         // reactData.tableData = []
-        nextTick(() => {
+        return nextTick().then(() => {
           tablePrivateMethods.handleTableData()
           calcCellHeight()
           tablePrivateMethods.updateScrollYSpace()
@@ -7149,6 +7356,15 @@ export default defineComponent({
             key: 'tm',
             ref: refTableMenu
           })
+          : createCommentVNode(),
+        /**
+         * 拖拽提示
+         */
+        rowOpts.drag
+          ? h('div', {
+            ref: refRowDragTipElem,
+            class: 'vxe-table--row-drag-hint'
+          }, getI18n('vxe.table.dragTip', [reactData.dragTipText]))
           : createCommentVNode(),
         /**
          * 提示相关

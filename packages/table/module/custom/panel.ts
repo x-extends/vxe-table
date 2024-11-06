@@ -261,7 +261,7 @@ export default defineComponent({
       addClass(trEl, 'active--drag-origin')
     }
 
-    const sortMouseupEvent = (evnt: DragEvent) => {
+    const sortMouseupEvent = (evnt: MouseEvent) => {
       const btnEl = evnt.currentTarget as HTMLElement
       const tdEl = btnEl.parentNode as HTMLElement
       const trEl = tdEl.parentNode as HTMLElement

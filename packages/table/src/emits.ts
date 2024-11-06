@@ -42,6 +42,10 @@ export default [
   'menu-click',
   'edit-closed',
 
+  'row-dragstart',
+  'row-dragover',
+  'row-dragend',
+
   'edit-actived', // 废弃
 
   'edit-activated',

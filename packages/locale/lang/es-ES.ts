@@ -62,6 +62,7 @@ export default {
       impSuccess: 'Se importaron {0} registros con éxito',
       expLoading: 'Exportando',
       expSuccess: 'Éxito al exportar',
+      expError: 'Export failure',
       expFilename: 'Exportar_{0}',
       expOriginFilename: 'Exportar_original_{0}',
       customTitle: 'Configuraciones de columna',
@@ -70,7 +71,8 @@ export default {
       customClose: 'Close',
       customCancel: 'Cancel',
       customRestore: 'Restore',
-      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
+      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}',
+      dragTip: 'Moving: {0}'
     },
     grid: {
       selectOneRecord: '¡Seleccione al menos un registro!',
@@ -121,7 +123,7 @@ export default {
       cstmCancel: 'Cancelar',
       cstmConfirm: 'Confirm',
       cstmConfirmRestore: 'Please confirm whether to restore the default column configuration?',
-      cstmDragTarget: 'Moving target: {0}',
+      cstmDragTarget: 'Moving: {0}',
       setting: {
         colSort: 'Sort',
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
