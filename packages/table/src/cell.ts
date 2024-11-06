@@ -50,12 +50,19 @@ function renderTitleSuffixIcon (h: CreateElement, params: any) {
 
 function renderCellDragIcon (h: CreateElement, params: any) {
   const { $table } = params
+  const dragOpts = $table.computeDragOpts
+  const { rowDisabledMethod } = dragOpts
+  const isDisabled = rowDisabledMethod && rowDisabledMethod(params)
   return h('span', {
     key: 'dg',
-    class: 'vxe-cell--drag-handle',
+    class: ['vxe-cell--drag-handle', {
+      'is--disabled': isDisabled
+    }],
     on: {
       mousedown (evnt: DragEvent) {
-        $table.handleCellDragMousedownEvent(evnt, params)
+        if (!isDisabled) {
+          $table.handleCellDragMousedownEvent(evnt, params)
+        }
       },
       mouseup: $table.handleCellDragMouseupEvent
     }
@@ -67,12 +74,13 @@ function renderCellDragIcon (h: CreateElement, params: any) {
 }
 
 function renderCellBaseVNs (h: CreateElement, params: any, content: any) {
-  const { $table, column } = params
+  const { $table, column, row } = params
   const { dragSort } = column
   const vns: any[] = XEUtils.isArray(content) ? content : [content]
   const rowOpts = $table.computeRowOpts
   const dragOpts = $table.computeDragOpts
-  if (dragSort && rowOpts.drag && dragOpts.showIcon) {
+  const { showRowIcon, rowVisibleMethod } = dragOpts
+  if (dragSort && rowOpts.drag && (showRowIcon && (!rowVisibleMethod || rowVisibleMethod({ row, column })))) {
     vns.unshift(
       renderCellDragIcon(h, params)
     )
@@ -890,14 +898,14 @@ export const Cell = {
       return []
     }
     if (slots && slots.default) {
-      return $table.callSlot(slots.default, cellParams, h)
+      return renderCellBaseVNs(h, params, $table.callSlot(slots.default, cellParams, h))
     }
     if (formatter) {
-      return [
+      return renderCellBaseVNs(h, params, [
         h('span', {
           class: 'vxe-cell--label'
         }, [getDefaultCellLabel(cellParams)])
-      ]
+      ])
     }
     return Cell.renderDefaultCell.call(_vm, h, cellParams)
   }

@@ -4595,8 +4595,8 @@ const Methods = {
     const internalData = $xeTable
 
     const { treeConfig } = props
-    const rowOpts = $xeTable.computeRowOpts
-    const { dragEndMethod } = rowOpts
+    const dragOpts = $xeTable.computeDragOpts
+    const { dragEndMethod } = dragOpts
     const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
     const { dragRow } = reactData
@@ -4699,8 +4699,8 @@ const Methods = {
     const reactData = $xeTable
 
     evnt.stopPropagation()
-    const rowOpts = $xeTable.computeRowOpts
-    const { dragStartMethod } = rowOpts
+    const dragOpts = $xeTable.computeDragOpts
+    const { dragStartMethod } = dragOpts
     const { row } = params
     const dragEl = evnt.currentTarget as HTMLElement
     const tdEl = dragEl.parentNode?.parentNode as HTMLElement
