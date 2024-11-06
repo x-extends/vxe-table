@@ -547,9 +547,13 @@ export default {
      * 清除激活的编辑
      */
     _clearEdit (evnt: any) {
-      const { editStore } = this
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { editStore } = reactData
       const { actived, focused } = editStore
       const { row, column } = actived
+      const validOpts = $xeTable.validOpts
       if (row || column) {
         this._syncActivedCell()
         actived.args = null
@@ -567,9 +571,11 @@ export default {
       }
       focused.row = null
       focused.column = null
-      if (getConfig().cellVaildMode === 'obsolete') {
-        if (this.clearValidate) {
-          return this.clearValidate()
+      if (validOpts.autoClear) {
+        if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
+          if (this.clearValidate) {
+            return this.clearValidate()
+          }
         }
       }
       return this.$nextTick()

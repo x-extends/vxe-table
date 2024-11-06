@@ -328,6 +328,57 @@ function getOrderField (_vm: any, column: any) {
   }
 }
 
+function clearRowDropOrigin ($xeTable: any) {
+  const el = $xeTable.$el
+  if (el) {
+    const clss = 'row--drag-origin'
+    XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
+      (elem as HTMLTableCellElement).draggable = false
+      removeClass(elem, clss)
+    })
+  }
+}
+
+function clearRowDropTarget ($xeTable: any) {
+  const el = $xeTable.$el
+  if (el) {
+    const clss = 'row--drag-active-target'
+    XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
+      removeClass(elem, clss)
+    })
+  }
+}
+
+function showRowDropTip (evnt: DragEvent | MouseEvent, $xeTable: any) {
+  const rdTipEl = $xeTable.$refs.refRowDragTipElem as HTMLDivElement
+  if (!rdTipEl) {
+    return
+  }
+  const el = $xeTable.$el
+  if (!el) {
+    return
+  }
+  if (rdTipEl) {
+    const wrapperRect = el.getBoundingClientRect()
+    rdTipEl.style.display = 'block'
+    rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
+    rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
+  }
+}
+
+const hideRowDropTip = ($xeTable: any) => {
+  const rdTipEl = $xeTable.$refs.refRowDragTipElem as HTMLDivElement
+  if (rdTipEl) {
+    rdTipEl.style.display = ''
+  }
+}
+
+const updateRowDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
+  const reactData = $xeTable
+
+  reactData.dragTipText = tdEl.textContent || ''
+}
+
 const Methods = {
   callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
     if (slotFunc) {
@@ -4531,6 +4582,153 @@ const Methods = {
       this.emitEvent('sort-change', params, evnt)
     }
   },
+  handleRowDragDragstartEvent (evnt: DragEvent) {
+    const img = new Image()
+    if (evnt.dataTransfer) {
+      evnt.dataTransfer.setDragImage(img, 0, 0)
+    }
+  },
+  handleRowDragDragendEvent (evnt: DragEvent) {
+    const $xeTable = this
+    const props = $xeTable
+    const reactData = $xeTable
+    const internalData = $xeTable
+
+    const { treeConfig } = props
+    const rowOpts = $xeTable.computeRowOpts
+    const { dragEndMethod } = rowOpts
+    const treeOpts = $xeTable.computeTreeOpts
+    const { transform } = treeOpts
+    const { dragRow } = reactData
+    const { afterFullData, tableFullData, prevDragRow, prevDragPos } = internalData
+    if (prevDragRow && dragRow) {
+      // 判断是否有拖动
+      if (prevDragRow !== dragRow) {
+        Promise.resolve(
+          dragEndMethod
+            ? dragEndMethod({
+              oldRow: dragRow,
+              newRow: prevDragRow
+            })
+            : true
+        ).then((status) => {
+          if (!status) {
+            return
+          }
+          const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
+
+          // 移出源位置
+          const oafIndex = $xeTable.findRowIndexOf(afterFullData, dragRow)
+          const otfIndex = $xeTable.findRowIndexOf(tableFullData, dragRow)
+          afterFullData.splice(oafIndex, 1)
+          tableFullData.splice(otfIndex, 1)
+          // 插新位置
+          const pafIndex = $xeTable.findRowIndexOf(afterFullData, prevDragRow)
+          const ptfIndex = $xeTable.findRowIndexOf(tableFullData, prevDragRow)
+          const nafIndex = pafIndex + dragOffsetIndex
+          const ntfIndex = ptfIndex + dragOffsetIndex
+          afterFullData.splice(nafIndex, 0, dragRow)
+          tableFullData.splice(ntfIndex, 0, dragRow)
+
+          reactData.isDragRowMove = true
+          $xeTable.cacheRowMap()
+          $xeTable.updateScrollYStatus()
+          $xeTable.handleTableData(treeConfig && transform)
+          if (!(treeConfig && transform)) {
+            $xeTable.updateAfterDataIndex()
+          }
+          $xeTable.updateFooter()
+          $xeTable.checkSelectionStatus()
+          if (reactData.scrollYLoad) {
+            $xeTable.updateScrollYSpace()
+          }
+          $xeTable.$nextTick().then(() => {
+            $xeTable.updateCellAreas()
+            return $xeTable.recalculate()
+          })
+
+          $xeTable.dispatchEvent('row-dragend', {
+            oldRow: dragRow,
+            newRow: prevDragRow,
+            _index: {
+              newIndex: nafIndex,
+              oldIndex: oafIndex
+            }
+          }, evnt)
+        }).catch(() => {
+        })
+      }
+    }
+    hideRowDropTip($xeTable)
+    clearRowDropOrigin($xeTable)
+    clearRowDropTarget($xeTable)
+    reactData.dragRow = null
+    setTimeout(() => {
+      reactData.isDragRowMove = false
+    }, 500)
+  },
+  handleRowDragDragoverEvent (evnt: DragEvent) {
+    const $xeTable = this
+    const internalData = $xeTable
+    const reactData = $xeTable
+
+    const trEl = evnt.currentTarget as HTMLElement
+    const rowid = trEl.getAttribute('rowid')
+    const row = $xeTable.getRowById(rowid)
+    clearRowDropTarget($xeTable)
+    if (row) {
+      evnt.preventDefault()
+      evnt.preventDefault()
+      const { dragRow } = reactData
+      const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
+      const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
+      addClass(trEl, 'row--drag-active-target')
+      trEl.setAttribute('drag-pos', dragPos)
+      internalData.prevDragRow = row
+      internalData.prevDragPos = dragPos
+      $xeTable.dispatchEvent('row-dragover', {
+        oldRow: dragRow,
+        targetRow: row,
+        dragPos
+      }, evnt)
+    }
+    showRowDropTip(evnt, $xeTable)
+  },
+  handleCellDragMousedownEvent (evnt: MouseEvent, params: any) {
+    const $xeTable = this
+    const reactData = $xeTable
+
+    evnt.stopPropagation()
+    const rowOpts = $xeTable.computeRowOpts
+    const { dragStartMethod } = rowOpts
+    const { row } = params
+    const dragEl = evnt.currentTarget as HTMLElement
+    const tdEl = dragEl.parentNode?.parentNode as HTMLElement
+    const trEl = tdEl.parentNode as HTMLElement
+    reactData.isDragRowMove = false
+    clearRowDropOrigin($xeTable)
+    if (dragStartMethod && !dragStartMethod(params)) {
+      trEl.draggable = false
+      reactData.dragRow = null
+      hideRowDropTip($xeTable)
+      return
+    }
+    reactData.dragRow = row
+    trEl.draggable = true
+    addClass(trEl, 'row--drag-origin')
+    showRowDropTip(evnt, $xeTable)
+    updateRowDropTipContent($xeTable, tdEl)
+    $xeTable.dispatchEvent('row-dragstart', params, evnt)
+  },
+  handleCellDragMouseupEvent () {
+    const $xeTable = this
+    const reactData = $xeTable
+
+    clearRowDropOrigin($xeTable)
+    hideRowDropTip($xeTable)
+    reactData.dragRow = null
+    reactData.isDragRowMove = false
+  },
   setPendingRow (rows: any, status: any) {
     const pendingMaps = { ...this.pendingRowMaps }
     const pendingList = [...this.pendingRowList]
@@ -5384,7 +5582,7 @@ const Methods = {
     const bodyWidth = bodyElem ? bodyElem.clientWidth : 0
     const scrollHeight = bodyElem ? bodyElem.scrollHeight : 0
     const scrollWidth = bodyElem ? bodyElem.scrollWidth : 0
-    $xeTable.dispatchEvent('scroll', {
+    const evntParams = {
       bodyHeight,
       bodyWidth,
       scrollHeight,
@@ -5392,7 +5590,8 @@ const Methods = {
       isX: isRollX,
       isY: isRollY,
       ...params
-    }, evnt)
+    }
+    $xeTable.dispatchEvent('scroll', evntParams, evnt)
   },
   /**
    * 纵向 Y 可视渲染事件处理
@@ -5411,24 +5610,31 @@ const Methods = {
   debounceScrollYData: XEUtils.debounce(function () {
     this.loadScrollYData()
   }, debounceScrollYDuration, { leading: false, trailing: true }),
-  scrollXEvent (evnt: Event) {
+  handleSyncScrollX (scrollLeft: number) {
     const $xeTable = this
 
-    const wrapperEl = evnt.currentTarget as HTMLDivElement
     const tableHeader = $xeTable.$refs.tableHeader
     const tableBody = $xeTable.$refs.tableBody
     const tableFooter = $xeTable.$refs.tableFooter
     const bodyElem = tableBody.$el as HTMLDivElement
     const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
     const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-    const { scrollTop, scrollLeft } = wrapperEl
-    const isRollX = true
-    const isRollY = false
     $xeTable.lastScrollLeft = scrollLeft
     $xeTable.lastScrollTime = Date.now()
     setScrollLeft(bodyElem, scrollLeft)
     setScrollLeft(headerElem, scrollLeft)
     setScrollLeft(footerElem, scrollLeft)
+  },
+  scrollXEvent (evnt: Event) {
+    const $xeTable = this
+
+    const wrapperEl = evnt.currentTarget as HTMLDivElement
+    const { scrollTop, scrollLeft } = wrapperEl
+    const isRollX = true
+    const isRollY = false
+    $xeTable.lastScrollLeft = scrollLeft
+    $xeTable.lastScrollTime = Date.now()
+    $xeTable.handleSyncScrollX(scrollLeft)
     $xeTable.triggerScrollXEvent(evnt)
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
       type: 'table',
@@ -5440,24 +5646,31 @@ const Methods = {
   debounceScrollYCalculate: XEUtils.debounce(function () {
     this.updateScrollYSpace()
   }, 1000, { leading: false, trailing: true }),
-  scrollYEvent (evnt: Event) {
+  handleSyncScrollY (scrollTop: number) {
     const $xeTable = this
 
-    const wrapperEl = evnt.currentTarget as HTMLDivElement
     const tableBody = $xeTable.$refs.tableBody
     const leftBody = $xeTable.$refs.leftBody
     const rightBody = $xeTable.$refs.rightBody
     const bodyElem = tableBody.$el as HTMLDivElement
     const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
     const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
-    const { scrollTop, scrollLeft } = wrapperEl
-    const isRollX = false
-    const isRollY = true
     $xeTable.lastScrollTop = scrollTop
     $xeTable.lastScrollTime = Date.now()
     setScrollTop(bodyElem, scrollTop)
     setScrollTop(leftElem, scrollTop)
     setScrollTop(rightElem, scrollTop)
+  },
+  scrollYEvent (evnt: Event) {
+    const $xeTable = this
+
+    const wrapperEl = evnt.currentTarget as HTMLDivElement
+    const { scrollTop, scrollLeft } = wrapperEl
+    const isRollX = false
+    const isRollY = true
+    $xeTable.lastScrollTop = scrollTop
+    $xeTable.lastScrollTime = Date.now()
+    $xeTable.handleSyncScrollY(scrollTop)
     $xeTable.triggerScrollYEvent(evnt)
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
       type: 'table',
@@ -5542,7 +5755,7 @@ const Methods = {
   },
   updateScrollXData () {
     // this.tableColumn = []
-    this.$nextTick(() => {
+    return this.$nextTick().then(() => {
       this.handleTableColumn()
       this.updateScrollXSpace()
     })
@@ -5593,7 +5806,7 @@ const Methods = {
     const $xeTable = this
 
     // this.tableData = []
-    this.$nextTick(() => {
+    return this.$nextTick().then(() => {
       this.handleTableData()
       calcCellHeight($xeTable)
       this.updateScrollYSpace()

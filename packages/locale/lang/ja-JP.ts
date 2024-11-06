@@ -71,7 +71,8 @@ export default {
       customClose: '关闭',
       customCancel: 'Cancel',
       customRestore: 'リセット',
-      maxFixedCol: '最大固定列数が {0} です。'
+      maxFixedCol: '最大固定列数が {0} です。',
+      dragTip: '移动：{0}'
     },
     grid: {
       selectOneRecord: '1つ以上のレコードを選択してください',
@@ -122,7 +123,7 @@ export default {
       cstmCancel: 'キャンセル',
       cstmConfirm: 'OK',
       cstmConfirmRestore: '列をデフォルト状態に戻します。よろしいですか？',
-      cstmDragTarget: '移動ターゲット: {0}',
+      cstmDragTarget: '移动：{0}',
       setting: {
         colSort: 'ソート',
         sortHelpTip: 'ドラッグして列を並べ替えます',

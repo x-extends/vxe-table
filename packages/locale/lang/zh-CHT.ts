@@ -71,7 +71,8 @@ export default {
       customClose: '關閉',
       customCancel: '取消',
       customRestore: '恢復預設',
-      maxFixedCol: '最大凍結列的數量不能超過 {0} 個'
+      maxFixedCol: '最大凍結列的數量不能超過 {0} 個',
+      dragTip: '移动：{0}'
     },
     grid: {
       selectOneRecord: '請至少選擇一筆記錄！',
@@ -122,7 +123,7 @@ export default {
       cstmCancel: '取消',
       cstmConfirm: '確定',
       cstmConfirmRestore: '請確認是否恢復成預設列配置？',
-      cstmDragTarget: '移動目標：{0}',
+      cstmDragTarget: '移動：{0}',
       setting: {
         colSort: '排序',
         sortHelpTip: '點擊並拖曳圖示可以調整列的排序',

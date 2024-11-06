@@ -88,6 +88,7 @@ export class ColumnInfo {
       filterRecoverMethod: _vm.filterRecoverMethod,
       filterRender: _vm.filterRender,
       treeNode: _vm.treeNode,
+      dragSort: _vm.dragSort,
       cellType: _vm.cellType,
       cellRender: _vm.cellRender,
       editRender: _vm.editRender,

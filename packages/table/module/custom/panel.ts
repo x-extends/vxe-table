@@ -901,21 +901,21 @@ export default {
       }
       $xetable.checkCustomStatus()
     },
-    sortMousedownEvent (evnt: any) {
+    sortMousedownEvent (evnt: MouseEvent) {
       const { $xetable } = this
-      const btnEl = evnt.currentTarget
-      const tdEl = btnEl.parentNode
-      const trEl = tdEl.parentNode
+      const btnEl = evnt.currentTarget as HTMLElement
+      const tdEl = btnEl.parentNode as HTMLElement
+      const trEl = tdEl.parentNode as HTMLElement
       const colid = trEl.getAttribute('colid')
       const column = $xetable.getColumnById(colid)
       trEl.draggable = true
       this.dragColumn = column
       addClass(trEl, 'active--drag-origin')
     },
-    sortMouseupEvent  (evnt: any) {
-      const btnEl = evnt.currentTarget
-      const tdEl = btnEl.parentNode
-      const trEl = tdEl.parentNode
+    sortMouseupEvent  (evnt: MouseEvent) {
+      const btnEl = evnt.currentTarget as HTMLElement
+      const tdEl = btnEl.parentNode as HTMLElement
+      const trEl = tdEl.parentNode as HTMLElement
       const dragHintEl = this.$refs.dragHintElemRef
       trEl.draggable = false
       this.dragColumn = null

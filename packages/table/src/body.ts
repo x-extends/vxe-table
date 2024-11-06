@@ -299,7 +299,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
       getClass(className, params),
       getClass(allCellClassName, params)
     ],
-    key: columnKey || columnOpts.useKey ? column.id : $columnIndex,
+    key: columnKey || columnOpts.useKey || rowOpts.useKey ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
       height: cellHeight
@@ -308,7 +308,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   }, tdVNs)
 }
 
-function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, tableData: any, tableColumn: any) {
+function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, tableData: any, tableColumn: any) {
   const {
     stripe,
     rowKey,
@@ -332,35 +332,47 @@ function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, 
     rowOpts,
     pendingRowList,
     pendingRowMaps
-  } = $xetable
+  } = $xeTable
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rows: any[] = []
   tableData.forEach((row: any, $rowIndex: any) => {
     const trOn: any = {}
     let rowIndex = $rowIndex
-    const _rowIndex = $xetable.getVTRowIndex(row)
+    const _rowIndex = $xeTable.getVTRowIndex(row)
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
-    rowIndex = $xetable.getRowIndex(row)
-    // 事件绑定
+    rowIndex = $xeTable.getRowIndex(row)
+    // 当前行事件
     if (rowOpts.isHover || highlightHoverRow) {
       trOn.mouseenter = (evnt: any) => {
-        if (isVMScrollProcess($xetable)) {
+        if (isVMScrollProcess($xeTable)) {
           return
         }
-        $xetable.triggerHoverEvent(evnt, { row, rowIndex })
+        $xeTable.triggerHoverEvent(evnt, { row, rowIndex })
       }
       trOn.mouseleave = () => {
-        if (isVMScrollProcess($xetable)) {
+        if (isVMScrollProcess($xeTable)) {
           return
         }
-        $xetable.clearHoverRow()
+        $xeTable.clearHoverRow()
       }
     }
-    const rowid = getRowid($xetable, row)
+    // 拖拽行事件
+    if (rowOpts.drag) {
+      trOn.dragstart = (evnt: DragEvent) => {
+        $xeTable.handleRowDragDragstartEvent(evnt)
+      }
+      trOn.dragover = (evnt: DragEvent) => {
+        $xeTable.handleRowDragDragoverEvent(evnt)
+      }
+      trOn.dragend = (evnt: DragEvent) => {
+        $xeTable.handleRowDragDragendEvent(evnt)
+      }
+    }
+    const rowid = getRowid($xeTable, row)
     const rest = fullAllDataRowIdData[rowid]
     const rowLevel = rest ? rest.level : 0
     const seq = rest ? rest.seq : -1
-    const params = { $table: $xetable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
+    const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
     // 行是否被展开
     const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
     // 树节点是否被展开
@@ -369,7 +381,7 @@ function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, 
     // 是否新增行
     let isNewRow = false
     if (editConfig) {
-      isNewRow = $xetable.isInsertByRow(row)
+      isNewRow = $xeTable.isInsertByRow(row)
     }
     if (treeConfig && !scrollYLoad && !treeOpts.transform) {
       rowChildren = row[childrenField]
@@ -381,13 +393,13 @@ function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, 
           'vxe-body--row',
           treeConfig ? `row--level-${rowLevel}` : '',
           {
-            'row--stripe': stripe && ($xetable.getVTRowIndex(row) + 1) % 2 === 0,
+            'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
             'is--new': isNewRow,
             'is--expand-row': isExpandRow,
             'is--expand-tree': isExpandTree,
             'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-            'row--radio': radioOpts.highlight && $xetable.selectRadioRow === row,
-            'row--checked': checkboxOpts.highlight && $xetable.isCheckedByCheckboxRow(row),
+            'row--radio': radioOpts.highlight && $xeTable.selectRadioRow === row,
+            'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
             'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
           },
           rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
@@ -396,10 +408,10 @@ function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, 
           rowid
         },
         style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-        key: (rowKey || rowOpts.useKey) || treeConfig ? rowid : $rowIndex,
+        key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
         on: trOn
       }, tableColumn.map((column: any, $columnIndex: any) => {
-        return renderColumn(h, _vm, $xetable, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
+        return renderColumn(h, _vm, $xeTable, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
       }))
     )
     // 如果行被展开了
@@ -414,7 +426,7 @@ function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, 
       }
       const { showOverflow } = expandColumn
       const hasEllipsis = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
-      const expandParams = { $table: $xetable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
+      const expandParams = { $table: $xeTable, seq, column: expandColumn, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
       rows.push(
         h('tr', {
           class: ['vxe-body--expanded-row', {
@@ -449,7 +461,7 @@ function renderRows (h: CreateElement, _vm: any, $xetable: any, fixedType: any, 
     }
     // 如果是树形表格
     if (isExpandTree) {
-      rows.push(...renderRows(h, _vm, $xetable, fixedType, rowChildren, tableColumn))
+      rows.push(...renderRows(h, _vm, $xeTable, fixedType, rowChildren, tableColumn))
     }
   })
   return rows
@@ -501,7 +513,7 @@ export default {
   },
   render (this: any, h: CreateElement) {
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts } = $xetable
+    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts, rowOpts, isDragRowMove } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
       // 如果存在展开行使用全量渲染
@@ -580,9 +592,16 @@ export default {
         /**
          * 内容
          */
-        h('tbody', {
-          ref: 'tbody'
-        }, renderRows(h, this, $xetable, fixedType, tableData, tableColumn))
+        rowOpts.drag
+          ? h('transition-group', {
+            props: {
+              tag: 'tbody',
+              name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`
+            }
+          }, renderRows(h, this, $xetable, fixedType, tableData, tableColumn))
+          : h('tbody', {
+            ref: 'tbody'
+          }, renderRows(h, this, $xetable, fixedType, tableData, tableColumn))
       ]),
       h('div', {
         class: 'vxe-table--checkbox-range'

@@ -71,7 +71,8 @@ export default {
       customClose: '关闭',
       customCancel: 'Cancel',
       customRestore: 'Restore',
-      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}'
+      maxFixedCol: 'The maximum number of Freeze columns cannot exceed {0}',
+      dragTip: '移动：{0}'
     },
     grid: {
       selectOneRecord: 'Por favor, selecione pelo menos um registro!',
@@ -122,7 +123,7 @@ export default {
       cstmCancel: 'Cancelar',
       cstmConfirm: 'Confirm',
       cstmConfirmRestore: 'Please confirm whether to restore the default column configuration?',
-      cstmDragTarget: 'Moving target: {0}',
+      cstmDragTarget: 'Moving: {0}',
       setting: {
         colSort: 'Sort',
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',

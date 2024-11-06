@@ -165,6 +165,8 @@ export default {
   cellConfig: Object as PropType<VxeTablePropTypes.CellConfig>,
   // 行配置信息
   rowConfig: Object,
+  // 可拖拽配置项
+  dragConfig: Object as PropType<VxeTablePropTypes.DragConfig>,
   // 列调整配置项
   resizableConfig: Object,
   // 序号配置项

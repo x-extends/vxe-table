@@ -352,6 +352,9 @@ export default {
         isHeader: false,
         isFooter: false
       },
+      isDragRowMove: false,
+      dragRow: null,
+      dragTipText: '',
       _isLoading: false
     }
   },
@@ -409,6 +412,9 @@ export default {
     },
     computeRowOpts () {
       return Object.assign({}, getConfig().table.rowConfig, this.rowConfig)
+    },
+    computeDragOpts () {
+      return Object.assign({}, getConfig().table.dragConfig, this.dragConfig)
     },
     resizeOpts () {
       return this.computeResizeOpts
@@ -1330,9 +1336,18 @@ export default {
           }
         })
         : _e(),
+      /**
+         * 拖拽提示
+         */
+      rowOpts.drag
+        ? h('div', {
+          ref: 'refRowDragTipElem',
+          class: 'vxe-table--row-drag-hint'
+        }, getI18n('vxe.table.dragTip', [this.dragTipText]))
+        : _e(),
       h('div', {}, [
         /**
-         * 通用提示
+         * 提示相关
          */
         VxeUITooltipComponent
           ? h(VxeUITooltipComponent, {

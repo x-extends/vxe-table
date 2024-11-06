@@ -71,7 +71,8 @@ export default {
       customClose: '关闭',
       customCancel: '取消',
       customRestore: '恢复默认',
-      maxFixedCol: '最大冻结列的数量不能超过 {0} 个'
+      maxFixedCol: '最大冻结列的数量不能超过 {0} 个',
+      dragTip: '移动：{0}'
     },
     grid: {
       selectOneRecord: '请至少选择一条记录！',
@@ -122,7 +123,7 @@ export default {
       cstmCancel: '取消',
       cstmConfirm: '确定',
       cstmConfirmRestore: '请确认是否恢复成默认列配置？',
-      cstmDragTarget: '移动目标：{0}',
+      cstmDragTarget: '移动：{0}',
       setting: {
         colSort: '排序',
         sortHelpTip: '点击并拖动图标可以调整列的排序',

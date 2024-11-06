@@ -43,6 +43,9 @@ VxeUI.setConfig({
       // trigger: 'default'
       strict: true
     },
+    dragConfig: {
+      showIcon: true
+    },
     checkboxConfig: {
       // trigger: 'default',
       strict: true

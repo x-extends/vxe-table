@@ -64,8 +64,10 @@ const props = {
   filterRecoverMethod: Function,
   // 筛选模板配置项
   filterRender: Object,
-  // 指定为树节点
+  // 设置为树节点
   treeNode: Boolean,
+  // 设置为拖拽排序
+  dragSort: Boolean,
   // 是否可视
   visible: { type: Boolean, default: null },
   // 表头单元格数据导出方法

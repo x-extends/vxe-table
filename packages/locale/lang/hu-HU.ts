@@ -71,7 +71,8 @@ export default {
       customClose: 'bezárás',
       customCancel: 'Mégsem',
       customRestore: 'Alapértelmezés visszaállítása',
-      maxFixedCol: 'A rögzített oszlopok maximális száma nem haladhatja meg a következőt: {0}'
+      maxFixedCol: 'A rögzített oszlopok maximális száma nem haladhatja meg a következőt: {0}',
+      dragTip: '移动：{0}'
     },
     grid: {
       selectOneRecord: 'Kérjük, válasszon legalább egy rekordot!',
@@ -122,7 +123,7 @@ export default {
       cstmCancel: 'Mégsem',
       cstmConfirm: 'Persze',
       cstmConfirmRestore: 'Kérjük, erősítse meg, hogy visszaállítja-e az alapértelmezett oszlopkonfigurációt?',
-      cstmDragTarget: 'Cél mozgatása: {0}',
+      cstmDragTarget: '移动：{0}',
       setting: {
         colSort: 'fajta',
         sortHelpTip: 'Kattintson és húzza az ikont az oszlopok sorrendjének módosításához',
