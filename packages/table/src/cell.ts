@@ -50,7 +50,7 @@ function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
   const { $table } = params
   const { computeDragOpts } = $table.getComputeMaps()
   const dragOpts = computeDragOpts.value
-  const { rowDisabledMethod } = dragOpts
+  const { rowIcon, rowDisabledMethod } = dragOpts
   const isDisabled = rowDisabledMethod && rowDisabledMethod(params)
   return h('span', {
     key: 'dg',
@@ -65,7 +65,7 @@ function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
     onMouseup: $table.handleCellDragMouseupEvent
   }, [
     h('i', {
-      class: 'vxe-table-icon-drag-handle'
+      class: rowIcon || getIcon().TABLE_DRAG_ROW
     })
   ])
 }
