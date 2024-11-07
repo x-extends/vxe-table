@@ -684,7 +684,7 @@ export default {
           this.openExport(btnParams)
           break
         case 'reset_custom':
-          this.resetColumn(true)
+          this.resetCustom(true)
           break
         case '_init':
         case 'reload':

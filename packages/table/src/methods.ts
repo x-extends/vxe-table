@@ -1862,31 +1862,8 @@ const Methods = {
    * 如果已关联工具栏，则会同步更新
    */
   resetColumn (options: any) {
-    const { collectColumn, customOpts } = this
-    const { checkMethod } = customOpts
-    const opts = Object.assign({
-      visible: true,
-      resizable: options === true,
-      fixed: options === true,
-      sort: options === true
-    }, options)
-    XEUtils.eachTree(collectColumn, (column) => {
-      if (opts.resizable) {
-        column.resizeWidth = 0
-      }
-      if (opts.fixed) {
-        column.fixed = column.defaultFixed
-      }
-      if (opts.sort) {
-        column.renderSortNumber = column.sortNumber
-      }
-      if (!checkMethod || checkMethod({ column })) {
-        column.visible = column.defaultVisible
-      }
-      column.renderResizeWidth = column.renderWidth
-    })
-    this.saveCustomStore('reset')
-    return this.handleCustom()
+    warnLog('vxe.error.delFunc', ['resetColumn', 'resetCustom'])
+    return this.resetCustom(options)
   },
   handleCustom () {
     const { mouseConfig } = this
@@ -5319,7 +5296,9 @@ const Methods = {
         Promise.resolve(
           loadMethod({ $table: $xeTable, row })
         ).then((childRecords: any) => {
-          rowRest.treeLoaded = true
+          if (rowRest) {
+            rowRest.treeLoaded = true
+          }
           if (treeExpandLazyLoadedMaps[rowid]) {
             delete treeExpandLazyLoadedMaps[rowid]
           }
@@ -5345,7 +5324,9 @@ const Methods = {
           }
         }).catch(() => {
           const { treeExpandLazyLoadedMaps } = this
-          rowRest.treeLoaded = false
+          if (rowRest) {
+            rowRest.treeLoaded = false
+          }
           if (treeExpandLazyLoadedMaps[rowid]) {
             delete treeExpandLazyLoadedMaps[rowid]
           }
@@ -6192,7 +6173,7 @@ const Methods = {
 } as any
 
 // Module methods
-const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,openCustom,closeCustom'.split(',')
+const funcs = 'setFilter,openFilter,clearFilter,getCheckedFilters,updateFilterOptionStatus,closeMenu,setActiveCellArea,getActiveCellArea,getCellAreas,clearCellAreas,copyCellArea,cutCellArea,pasteCellArea,getCopyCellArea,getCopyCellAreas,clearCopyCellArea,setCellAreas,openFNR,openFind,openReplace,closeFNR,getSelectedCell,clearSelected,insert,insertAt,insertNextAt,remove,removeCheckboxRow,removeRadioRow,removeCurrentRow,getRecordset,getInsertRecords,getRemoveRecords,getUpdateRecords,clearEdit,clearActived,getEditRecord,getActiveRecord,isEditByRow,isActiveByRow,setEditRow,setActiveRow,setEditCell,setActiveCell,setSelectCell,clearValidate,fullValidate,validate,openExport,closeExport,openPrint,closePrint,getPrintHtml,exportData,openImport,closeImport,importData,saveFile,readFile,importByFile,print,openCustom,closeCustom,saveCustom,cancelCustom,resetCustom,toggleCustomAllCheckbox,setCustomAllCheckbox'.split(',')
 
 funcs.forEach(name => {
   Methods[name] = function (...args: any[]) {

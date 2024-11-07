@@ -311,7 +311,7 @@ export default {
                             ? h('td', [
                               h('div', {
                                 class: 'vxe-table-export--panel-option-row'
-                              }, $xeTable.callSlot(parameterSlot, params))
+                              }, $xeTable.callSlot(parameterSlot, params, h))
                             ])
                             : h('td', [
                               h('div', {
@@ -437,7 +437,7 @@ export default {
           return h('div', {
             class: 'vxe-table-export--panel-footer'
           }, footerSlot
-            ? $xeTable.callSlot(footerSlot, params)
+            ? $xeTable.callSlot(footerSlot, params, h)
             : [
                 h('div', {
                   class: 'vxe-table-export--panel-btns'
