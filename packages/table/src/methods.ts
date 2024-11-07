@@ -5393,13 +5393,15 @@ const Methods = {
         const rowid = getRowid(this, row)
         if (!treeTempExpandedMaps[rowid]) {
           const rowRest = fullAllDataRowIdData[rowid]
-          const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
-          // 是否使用懒加载
-          if (isLoad) {
-            result.push(this.handleAsyncTreeExpandChilds(row))
-          } else {
-            if (row[childrenField] && row[childrenField].length) {
-              treeTempExpandedMaps[rowid] = row
+          if (rowRest) {
+            const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
+            // 是否使用懒加载
+            if (isLoad) {
+              result.push(this.handleAsyncTreeExpandChilds(row))
+            } else {
+              if (row[childrenField] && row[childrenField].length) {
+                treeTempExpandedMaps[rowid] = row
+              }
             }
           }
         }
