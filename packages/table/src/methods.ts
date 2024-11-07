@@ -5026,10 +5026,14 @@ const Methods = {
         rowExpandLazyLoadedMaps[rowid] = row
         loadMethod({ $table: $xeTable, row, rowIndex: this.getRowIndex(row), $rowIndex: this.getVMRowIndex(row) }).then(() => {
           const { rowExpandedMaps } = this
-          rowRest.expandLoaded = true
+          if (rowRest) {
+            rowRest.expandLoaded = true
+          }
           rowExpandedMaps[rowid] = row
         }).catch(() => {
-          rowRest.expandLoaded = false
+          if (rowRest) {
+            rowRest.expandLoaded = false
+          }
         }).finally(() => {
           const { rowExpandLazyLoadedMaps } = this
           if (rowExpandLazyLoadedMaps[rowid]) {
