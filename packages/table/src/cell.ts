@@ -51,7 +51,7 @@ function renderTitleSuffixIcon (h: CreateElement, params: any) {
 function renderCellDragIcon (h: CreateElement, params: any) {
   const { $table } = params
   const dragOpts = $table.computeDragOpts
-  const { rowDisabledMethod } = dragOpts
+  const { rowIcon, rowDisabledMethod } = dragOpts
   const isDisabled = rowDisabledMethod && rowDisabledMethod(params)
   return h('span', {
     key: 'dg',
@@ -68,7 +68,7 @@ function renderCellDragIcon (h: CreateElement, params: any) {
     }
   }, [
     h('i', {
-      class: 'vxe-table-icon-drag-handle'
+      class: rowIcon || getIcon().TABLE_DRAG_ROW
     })
   ])
 }

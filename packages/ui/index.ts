@@ -239,6 +239,7 @@ VxeUI.setIcon({
   TABLE_RADIO_UNCHECKED: iconPrefix + 'radio-unchecked',
   TABLE_CUSTOM_SORT: iconPrefix + 'drag-handle',
   TABLE_MENU_OPTIONS: iconPrefix + 'arrow-right',
+  TABLE_DRAG_ROW: iconPrefix + 'drag-handle',
 
   // toolbar
   TOOLBAR_TOOLS_REFRESH: iconPrefix + 'repeat',
