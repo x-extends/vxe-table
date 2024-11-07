@@ -27,6 +27,12 @@
   * [x] v4.7 基于 vue3.2+，内部重构，只支持现代浏览器，不支持 IE
   * [ ] 下一阶段：sticky 渲染模式、将虚拟滚动提升到极致、虚拟表单、数据图表可视化
 
+## 浏览器支持
+
+![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
+--- | --- | --- | --- | --- |
+80+ ✔ | 80+ ✔ | 90+ ✔ | 75+ ✔ | 10+ ✔ |
+
 ## 在线文档
 
 👉 [组件文档](https://vxeui.com)  
@@ -38,12 +44,6 @@
 
 ![qq](https://vxeui.com/resource/donation/qq1.png)
 ![qq](https://vxeui.com/resource/donation/qq2.png)
-
-## 浏览器支持
-
-![Edge](https://raw.github.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/src/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/src/safari/safari_48x48.png)
---- | --- | --- | --- | --- |
-80+ ✔ | 80+ ✔ | 90+ ✔ | 75+ ✔ | 10+ ✔ |
 
 ## 功能点
 
