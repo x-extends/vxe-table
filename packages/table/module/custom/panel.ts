@@ -8,7 +8,7 @@ import XEUtils from 'xe-utils'
 import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent, VxeButtonEvents } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes } from '../../../../types'
 
-const { getI18n, getIcon } = VxeUI
+const { getI18n, getIcon, renderEmptyElement } = VxeUI
 
 export default defineComponent({
   name: 'TableCustomPanel',
@@ -56,37 +56,9 @@ export default defineComponent({
     }
 
     const confirmCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
-      const { customColumnList } = reactData
-      const customOpts = computeCustomOpts.value
-      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
-      XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
-        if (parent) {
-          // 更新子列信息
-          column.fixed = parent.fixed
-        } else {
-          if (allowSort) {
-            const sortIndex = index + 1
-            column.renderSortNumber = sortIndex
-          }
-          if (allowFixed) {
-            column.fixed = column.renderFixed
-          }
-        }
-        if (allowResizable) {
-          if (column.renderVisible && (!column.children || column.children.length)) {
-            if (column.renderResizeWidth !== column.renderWidth) {
-              column.resizeWidth = column.renderResizeWidth
-              column.renderWidth = column.renderResizeWidth
-            }
-          }
-        }
-        if (allowVisible) {
-          column.visible = column.renderVisible
-        }
-      })
+      $xeTable.saveCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', $event)
-      $xeTable.saveCustomStore('confirm')
     }
 
     const cancelCloseEvent: VxeButtonEvents.Click = ({ $event }) => {
@@ -95,36 +67,13 @@ export default defineComponent({
     }
 
     const cancelCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
-      const { customStore } = props
-      const { customColumnList } = reactData
-      const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
-      const customOpts = computeCustomOpts.value
-      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
-      XEUtils.eachTree(customColumnList, column => {
-        const colid = column.getKey()
-        const visible = !!oldVisibleMaps[colid]
-        const fixed = oldFixedMaps[colid] || ''
-        if (allowVisible) {
-          column.renderVisible = visible
-          column.visible = visible
-        }
-        if (allowFixed) {
-          column.renderFixed = fixed
-          column.fixed = fixed
-        }
-        if (allowSort) {
-          column.renderSortNumber = oldSortMaps[colid] || 0
-        }
-        if (allowResizable) {
-          column.renderResizeWidth = column.renderWidth
-        }
-      }, { children: 'children' })
+      $xeTable.cancelCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('cancel', $event)
     }
 
     const handleResetCustomEvent = (evnt: Event) => {
-      $xeTable.resetColumn(true)
+      $xeTable.resetCustom(true)
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('reset', evnt)
     }
@@ -214,40 +163,7 @@ export default defineComponent({
     }
 
     const allOptionEvent = () => {
-      const { customStore } = props
-      const { customColumnList } = reactData
-      const customOpts = computeCustomOpts.value
-      const { checkMethod, visibleMethod } = customOpts
-      const isAll = !customStore.isAll
-      if (customOpts.immediate) {
-        XEUtils.eachTree(customColumnList, (column) => {
-          if (visibleMethod && !visibleMethod({ column })) {
-            return
-          }
-          if (checkMethod && !checkMethod({ column })) {
-            return
-          }
-          column.visible = isAll
-          column.renderVisible = isAll
-          column.halfVisible = false
-        })
-        customStore.isAll = isAll
-        $xeTable.handleCustom()
-        $xeTable.saveCustomStore('update:visible')
-      } else {
-        XEUtils.eachTree(customColumnList, (column) => {
-          if (visibleMethod && !visibleMethod({ column })) {
-            return
-          }
-          if (checkMethod && !checkMethod({ column })) {
-            return
-          }
-          column.renderVisible = isAll
-          column.halfVisible = false
-        })
-        customStore.isAll = isAll
-      }
-      $xeTable.checkCustomStatus()
+      $xeTable.toggleCustomAllCheckbox()
     }
 
     const sortMousedownEvent = (evnt: DragEvent) => {
@@ -259,6 +175,7 @@ export default defineComponent({
       trEl.draggable = true
       dragColumnRef.value = column
       addClass(trEl, 'active--drag-origin')
+      updateDropHint(evnt)
     }
 
     const sortMouseupEvent = (evnt: MouseEvent) => {
@@ -373,12 +290,28 @@ export default defineComponent({
       const { maxHeight } = customStore
       const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
+      const slots = customOpts.slots || {}
+      const headerSlot = slots.header
+      const topSlot = slots.top
+      const bottomSlot = slots.bottom
+      const defaultSlot = slots.default
+      const footerSlot = slots.footer
       const colVNs: VNode[] = []
       const customWrapperOns: any = {}
+      const isAllChecked = customStore.isAll
+      const isAllIndeterminate = customStore.isIndeterminate
+      const dragColumn = dragColumnRef.value
       // hover 触发
       if (trigger === 'hover') {
         customWrapperOns.onMouseenter = handleWrapperMouseenterEvent
         customWrapperOns.onMouseleave = handleWrapperMouseleaveEvent
+      }
+      const params = {
+        $table: $xeTable,
+        $grid: $xeTable.xegrid,
+        columns: customColumnList,
+        isAllChecked,
+        isAllIndeterminate
       }
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
         const isVisible = visibleMethod ? visibleMethod({ column }) : true
@@ -486,9 +419,6 @@ export default defineComponent({
           )
         }
       })
-      const isAllChecked = customStore.isAll
-      const isAllIndeterminate = customStore.isIndeterminate
-      const dragColumn = dragColumnRef.value
       return h('div', {
         ref: refElem,
         key: 'simple',
@@ -502,45 +432,65 @@ export default defineComponent({
           : {}
       }, customStore.visible
         ? [
-            h('ul', {
+            h('div', {
               class: 'vxe-table-custom--header'
-            }, [
-              h('li', {
-                class: 'vxe-table-custom--option'
-              }, [
-                allowVisible
-                  ? h('div', {
-                    class: ['vxe-table-custom--checkbox-option', {
-                      'is--checked': isAllChecked,
-                      'is--indeterminate': isAllIndeterminate
-                    }],
-                    title: getI18n('vxe.table.allTitle'),
-                    onClick: allOptionEvent
+            }, headerSlot
+              ? $xeTable.callSlot(headerSlot, params)
+              : [
+                  h('ul', {
+                    class: 'vxe-table-custom--panel-list'
                   }, [
-                    h('span', {
-                      class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-                    }),
-                    h('span', {
-                      class: 'vxe-checkbox--label'
-                    }, getI18n('vxe.toolbar.customAll'))
+                    h('li', {
+                      class: 'vxe-table-custom--option'
+                    }, [
+                      allowVisible
+                        ? h('div', {
+                          class: ['vxe-table-custom--checkbox-option', {
+                            'is--checked': isAllChecked,
+                            'is--indeterminate': isAllIndeterminate
+                          }],
+                          title: getI18n('vxe.table.allTitle'),
+                          onClick: allOptionEvent
+                        }, [
+                          h('span', {
+                            class: ['vxe-checkbox--icon', isAllIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+                          }),
+                          h('span', {
+                            class: 'vxe-checkbox--label'
+                          }, getI18n('vxe.toolbar.customAll'))
+                        ])
+                        : h('span', {
+                          class: 'vxe-checkbox--label'
+                        }, getI18n('vxe.table.customTitle'))
+                    ])
                   ])
-                  : h('span', {
-                    class: 'vxe-checkbox--label'
-                  }, getI18n('vxe.table.customTitle'))
-              ])
-            ]),
+                ]),
             h('div', {
               ref: bodyElemRef,
-              class: 'vxe-table-custom--list-wrapper'
+              class: 'vxe-table-custom--body'
             }, [
-              h(TransitionGroup, {
-                class: 'vxe-table-custom--body',
-                name: 'vxe-table-custom--list',
-                tag: 'ul',
-                ...customWrapperOns
-              }, {
-                default: () => colVNs
-              }),
+              topSlot
+                ? h('div', {
+                  class: 'vxe-table-custom--panel-top'
+                }, $xeTable.callSlot(topSlot, params))
+                : renderEmptyElement($xeTable),
+              defaultSlot
+                ? h('div', {
+                  class: 'vxe-table-custom--panel-body'
+                }, $xeTable.callSlot(defaultSlot, params))
+                : h(TransitionGroup, {
+                  class: 'vxe-table-custom--panel-list',
+                  name: 'vxe-table-custom--list',
+                  tag: 'ul',
+                  ...customWrapperOns
+                }, {
+                  default: () => colVNs
+                }),
+              bottomSlot
+                ? h('div', {
+                  class: 'vxe-table-custom--panel-bottom'
+                }, $xeTable.callSlot(bottomSlot, params))
+                : renderEmptyElement($xeTable),
               h('div', {
                 ref: dragHintElemRef,
                 class: 'vxe-table-custom-popup--drag-hint'
@@ -549,40 +499,46 @@ export default defineComponent({
             customOpts.showFooter
               ? h('div', {
                 class: 'vxe-table-custom--footer'
-              }, [
-                VxeUIButtonComponent
-                  ? h(VxeUIButtonComponent, {
-                    mode: 'text',
-                    content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
-                    onClick: resetCustomEvent
-                  })
-                  : createCommentVNode(),
-                customOpts.immediate
-                  ? (VxeUIButtonComponent
-                      ? h(VxeUIButtonComponent, {
-                        mode: 'text',
-                        content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
-                        onClick: cancelCloseEvent
-                      })
-                      : createCommentVNode())
-                  : (VxeUIButtonComponent
-                      ? h(VxeUIButtonComponent, {
-                        mode: 'text',
-                        content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
-                        onClick: cancelCustomEvent
-                      })
-                      : createCommentVNode()),
-                customOpts.immediate
-                  ? createCommentVNode()
-                  : (VxeUIButtonComponent
-                      ? h(VxeUIButtonComponent, {
-                        mode: 'text',
-                        status: 'primary',
-                        content: customOpts.confirmButtonText || getI18n('vxe.table.customConfirm'),
-                        onClick: confirmCustomEvent
-                      })
-                      : createCommentVNode())
-              ])
+              }, footerSlot
+                ? $xeTable.callSlot(footerSlot, params)
+                : [
+                    h('div', {
+                      class: 'vxe-table-custom--footer-buttons'
+                    }, [
+                      VxeUIButtonComponent
+                        ? h(VxeUIButtonComponent, {
+                          mode: 'text',
+                          content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
+                          onClick: resetCustomEvent
+                        })
+                        : createCommentVNode(),
+                      customOpts.immediate
+                        ? (VxeUIButtonComponent
+                            ? h(VxeUIButtonComponent, {
+                              mode: 'text',
+                              content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
+                              onClick: cancelCloseEvent
+                            })
+                            : createCommentVNode())
+                        : (VxeUIButtonComponent
+                            ? h(VxeUIButtonComponent, {
+                              mode: 'text',
+                              content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
+                              onClick: cancelCustomEvent
+                            })
+                            : createCommentVNode()),
+                      customOpts.immediate
+                        ? createCommentVNode()
+                        : (VxeUIButtonComponent
+                            ? h(VxeUIButtonComponent, {
+                              mode: 'text',
+                              status: 'primary',
+                              content: customOpts.confirmButtonText || getI18n('vxe.table.customConfirm'),
+                              onClick: confirmCustomEvent
+                            })
+                            : createCommentVNode())
+                    ])
+                  ])
               : null
           ]
         : [])
@@ -599,7 +555,23 @@ export default defineComponent({
       const modalOpts = Object.assign({}, modalOptions)
       const drawerOpts = Object.assign({}, drawerOptions)
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
+      const slots = customOpts.slots || {}
+      const headerSlot = slots.header
+      const topSlot = slots.top
+      const bottomSlot = slots.bottom
+      const defaultSlot = slots.default
+      const footerSlot = slots.footer
       const trVNs: VNode[] = []
+      const isAllChecked = customStore.isAll
+      const isAllIndeterminate = customStore.isIndeterminate
+      const dragColumn = dragColumnRef.value
+      const params = {
+        $table: $xeTable,
+        $grid: $xeTable.xegrid,
+        columns: customColumnList,
+        isAllChecked,
+        isAllIndeterminate
+      }
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
         const isVisible = visibleMethod ? visibleMethod({ column }) : true
         if (isVisible) {
@@ -732,15 +704,20 @@ export default defineComponent({
           )
         }
       })
-      const isAllChecked = customStore.isAll
-      const isAllIndeterminate = customStore.isIndeterminate
-      const dragColumn = dragColumnRef.value
-      const scopedSlots = {
+      const scopedSlots: Record<string, any> = {
         default: () => {
+          if (defaultSlot) {
+            return $xeTable.callSlot(defaultSlot, params)
+          }
           return h('div', {
             ref: bodyElemRef,
             class: 'vxe-table-custom-popup--body'
           }, [
+            topSlot
+              ? h('div', {
+                class: 'vxe-table-custom-popup--table-top'
+              }, $xeTable.callSlot(topSlot, params))
+              : renderEmptyElement($xeTable),
             h('div', {
               class: 'vxe-table-custom-popup--table-wrapper'
             }, [
@@ -748,35 +725,25 @@ export default defineComponent({
                 h('colgroup', {}, [
                   allowVisible
                     ? h('col', {
-                      style: {
-                        width: '80px'
-                      }
+                      class: 'vxe-table-custom-popup--table-col-seq'
                     })
                     : createCommentVNode(),
                   allowSort
                     ? h('col', {
-                      style: {
-                        width: '80px'
-                      }
+                      class: 'vxe-table-custom-popup--table-col-sort'
                     })
                     : createCommentVNode(),
                   h('col', {
-                    style: {
-                      minWidth: '120px'
-                    }
+                    class: 'vxe-table-custom-popup--table-col-title'
                   }),
                   allowResizable
                     ? h('col', {
-                      style: {
-                        width: '140px'
-                      }
+                      class: 'vxe-table-custom-popup--table-col-width'
                     })
                     : createCommentVNode(),
                   allowFixed
                     ? h('col', {
-                      style: {
-                        width: '200px'
-                      }
+                      class: 'vxe-table-custom-popup--table-col-fixed'
                     })
                     : createCommentVNode()
                 ]),
@@ -831,7 +798,7 @@ export default defineComponent({
                   ])
                 ]),
                 h(TransitionGroup, {
-                  class: 'vxe-table-custom--body',
+                  class: 'vxe-table-custom--panel-list',
                   tag: 'tbody',
                   name: 'vxe-table-custom--list'
                 }, {
@@ -839,6 +806,11 @@ export default defineComponent({
                 })
               ])
             ]),
+            bottomSlot
+              ? h('div', {
+                class: 'vxe-table-custom-popup--table-bottom'
+              }, $xeTable.callSlot(bottomSlot, params))
+              : renderEmptyElement($xeTable),
             h('div', {
               ref: dragHintElemRef,
               class: 'vxe-table-custom-popup--drag-hint'
@@ -846,6 +818,9 @@ export default defineComponent({
           ])
         },
         footer: () => {
+          if (footerSlot) {
+            return $xeTable.callSlot(footerSlot, params)
+          }
           return h('div', {
             class: 'vxe-table-custom-popup--footer'
           }, [
@@ -870,6 +845,9 @@ export default defineComponent({
               : createCommentVNode()
           ])
         }
+      }
+      if (headerSlot) {
+        scopedSlots.header = () => $xeTable.callSlot(headerSlot, params)
       }
       if (mode === 'drawer') {
         return VxeUIDrawerComponent

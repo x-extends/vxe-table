@@ -810,7 +810,7 @@ export default defineComponent({
             $xeTable.openExport(btnParams)
             break
           case 'reset_custom':
-            return $xeTable.resetColumn(true)
+            return $xeTable.resetCustom(true)
           case '_init':
           case 'reload':
           case 'query': {

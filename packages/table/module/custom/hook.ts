@@ -4,7 +4,7 @@ import XEUtils from 'xe-utils'
 
 import type { TableCustomMethods, TableCustomPrivateMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../../types'
 
-const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom']
+const tableCustomMethodKeys: (keyof TableCustomMethods)[] = ['openCustom', 'closeCustom', 'saveCustom', 'cancelCustom', 'resetCustom', 'toggleCustomAllCheckbox', 'setCustomAllCheckbox']
 
 VxeUI.hooks.add('tableCustomModule', {
   setupTable ($xeTable) {
@@ -22,7 +22,7 @@ VxeUI.hooks.add('tableCustomModule', {
       if (el) {
         tableHeight = el.clientHeight - 28
       }
-      customStore.maxHeight = Math.max(4, tableHeight)
+      customStore.maxHeight = Math.max(88, tableHeight)
     }
 
     const openCustom = () => {
@@ -63,9 +63,142 @@ VxeUI.hooks.add('tableCustomModule', {
       return nextTick()
     }
 
+    const saveCustom = () => {
+      const { customColumnList } = reactData
+      const customOpts = computeCustomOpts.value
+      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
+        if (parent) {
+          // 更新子列信息
+          column.fixed = parent.fixed
+        } else {
+          if (allowSort) {
+            const sortIndex = index + 1
+            column.renderSortNumber = sortIndex
+          }
+          if (allowFixed) {
+            column.fixed = column.renderFixed
+          }
+        }
+        if (allowResizable) {
+          if (column.renderVisible && (!column.children || column.children.length)) {
+            if (column.renderResizeWidth !== column.renderWidth) {
+              column.resizeWidth = column.renderResizeWidth
+              column.renderWidth = column.renderResizeWidth
+            }
+          }
+        }
+        if (allowVisible) {
+          column.visible = column.renderVisible
+        }
+      })
+      return $xeTable.saveCustomStore('confirm')
+    }
+
+    const cancelCustom = () => {
+      const { customColumnList, customStore } = reactData
+      const { oldSortMaps, oldFixedMaps, oldVisibleMaps } = customStore
+      const customOpts = computeCustomOpts.value
+      const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
+      XEUtils.eachTree(customColumnList, column => {
+        const colid = column.getKey()
+        const visible = !!oldVisibleMaps[colid]
+        const fixed = oldFixedMaps[colid] || ''
+        if (allowVisible) {
+          column.renderVisible = visible
+          column.visible = visible
+        }
+        if (allowFixed) {
+          column.renderFixed = fixed
+          column.fixed = fixed
+        }
+        if (allowSort) {
+          column.renderSortNumber = oldSortMaps[colid] || 0
+        }
+        if (allowResizable) {
+          column.renderResizeWidth = column.renderWidth
+        }
+      }, { children: 'children' })
+      return nextTick()
+    }
+
+    const setCustomAllCheckbox = (checked: boolean) => {
+      const { customStore } = reactData
+      const { customColumnList } = reactData
+      const customOpts = computeCustomOpts.value
+      const { checkMethod, visibleMethod } = customOpts
+      const isAll = !!checked
+      if (customOpts.immediate) {
+        XEUtils.eachTree(customColumnList, (column) => {
+          if (visibleMethod && !visibleMethod({ column })) {
+            return
+          }
+          if (checkMethod && !checkMethod({ column })) {
+            return
+          }
+          column.visible = isAll
+          column.renderVisible = isAll
+          column.halfVisible = false
+        })
+        customStore.isAll = isAll
+        $xeTable.handleCustom()
+        $xeTable.saveCustomStore('update:visible')
+      } else {
+        XEUtils.eachTree(customColumnList, (column) => {
+          if (visibleMethod && !visibleMethod({ column })) {
+            return
+          }
+          if (checkMethod && !checkMethod({ column })) {
+            return
+          }
+          column.renderVisible = isAll
+          column.halfVisible = false
+        })
+        customStore.isAll = isAll
+      }
+      $xeTable.checkCustomStatus()
+      return nextTick()
+    }
+
     const customMethods: TableCustomMethods = {
       openCustom,
-      closeCustom
+      closeCustom,
+      saveCustom,
+      cancelCustom,
+      resetCustom (options) {
+        const { collectColumn } = internalData
+        const customOpts = computeCustomOpts.value
+        const { checkMethod } = customOpts
+        const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({
+          visible: true,
+          resizable: options === true,
+          fixed: options === true,
+          sort: options === true
+        }, options)
+        XEUtils.eachTree(collectColumn, (column) => {
+          if (opts.resizable) {
+            column.resizeWidth = 0
+          }
+          if (opts.fixed) {
+            column.fixed = column.defaultFixed
+          }
+          if (opts.sort) {
+            column.renderSortNumber = column.sortNumber
+          }
+          if (!checkMethod || checkMethod({ column })) {
+            column.visible = column.defaultVisible
+          }
+          column.renderResizeWidth = column.renderWidth
+        })
+        $xeTable.saveCustomStore('reset')
+        return $xeTable.handleCustom()
+      },
+      toggleCustomAllCheckbox () {
+        const { customStore } = reactData
+        const isAll = !customStore.isAll
+        return setCustomAllCheckbox(isAll)
+      },
+      setCustomAllCheckbox
     }
 
     const checkCustomStatus = () => {

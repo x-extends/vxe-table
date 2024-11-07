@@ -2271,7 +2271,9 @@ export default defineComponent({
           Promise.resolve(
             loadMethod({ $table: $xeTable, row })
           ).then((childRecords: any) => {
-            rowRest.treeLoaded = true
+            if (rowRest) {
+              rowRest.treeLoaded = true
+            }
             if (treeExpandLazyLoadedMaps[rowid]) {
               delete treeExpandLazyLoadedMaps[rowid]
             }
@@ -2297,7 +2299,9 @@ export default defineComponent({
             }
           }).catch(() => {
             const { treeExpandLazyLoadedMaps } = reactData
-            rowRest.treeLoaded = false
+            if (rowRest) {
+              rowRest.treeLoaded = false
+            }
             if (treeExpandLazyLoadedMaps[rowid]) {
               delete treeExpandLazyLoadedMaps[rowid]
             }
@@ -3721,32 +3725,8 @@ export default defineComponent({
        * 如果已关联工具栏，则会同步更新
        */
       resetColumn (options) {
-        const { collectColumn } = internalData
-        const customOpts = computeCustomOpts.value
-        const { checkMethod } = customOpts
-        const opts: VxeTableDefines.VxeTableCustomStorageObj = Object.assign({
-          visible: true,
-          resizable: options === true,
-          fixed: options === true,
-          sort: options === true
-        }, options)
-        XEUtils.eachTree(collectColumn, (column) => {
-          if (opts.resizable) {
-            column.resizeWidth = 0
-          }
-          if (opts.fixed) {
-            column.fixed = column.defaultFixed
-          }
-          if (opts.sort) {
-            column.renderSortNumber = column.sortNumber
-          }
-          if (!checkMethod || checkMethod({ column })) {
-            column.visible = column.defaultVisible
-          }
-          column.renderResizeWidth = column.renderWidth
-        })
-        $xeTable.saveCustomStore('reset')
-        return tablePrivateMethods.handleCustom()
+        warnLog('vxe.error.delFunc', ['resetColumn', 'resetCustom'])
+        return $xeTable.resetCustom(options)
       },
       /**
        * 刷新列信息
