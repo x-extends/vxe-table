@@ -28,7 +28,7 @@ export default defineComponent({
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { reactData } = $xeTable
+    const { props: tableProps, reactData } = $xeTable
     const { computeCustomOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
@@ -546,6 +546,7 @@ export default defineComponent({
 
     const renderPopupPanel = () => {
       const { customStore } = props
+      const { resizable: allResizable } = tableProps
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
       const { modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
@@ -679,7 +680,10 @@ export default defineComponent({
                 ? h('td', {
                   class: 'vxe-table-custom-popup--column-item col--resizable'
                 }, [
-                  column.children && column.children.length
+                  (
+                    (column.children && column.children.length) ||
+                    !(XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+                  )
                     ? h('span', '-')
                     : (
                         VxeUINumberInputComponent

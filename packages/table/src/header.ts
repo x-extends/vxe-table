@@ -168,7 +168,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
-      const { resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
+      const { resizable: allResizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { isGroup, currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
       const { visibleColumn } = tableInternalData
       const columnOpts = computeColumnOpts.value
@@ -293,7 +293,7 @@ export default defineComponent({
                 /**
                  * 列宽拖动
                  */
-                !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || resizable))
+                !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
                   ? h('div', {
                     class: ['vxe-resizable', {
                       'is--line': !border || border === 'none'
