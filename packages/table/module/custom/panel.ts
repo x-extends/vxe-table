@@ -319,7 +319,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
 const renderPopupPanel = (h: CreateElement, _vm: any) => {
   const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
   const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-  const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+  const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
   const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
   const $xeTableCustomPanel = _vm
 
@@ -328,6 +328,8 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xeTable
   const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
   const { maxFixedSize } = columnOpts
+  const resizableOpts = $xeTable.computeResizableOpts
+  const { minWidth: reMinWidth, maxWidth: reMaxWidth } = resizableOpts
   const modalOpts = Object.assign({}, modalOptions)
   const slots = customOpts.slots || {}
   const headerSlot = slots.header
@@ -348,6 +350,25 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
     const isVisible = visibleMethod ? visibleMethod({ column }) : true
     if (isVisible) {
+      // 默认继承调整宽度
+      let customMinWidth = 0
+      let customMaxWidth = 0
+      if (allowResizable) {
+        const resizeParams = {
+          $table: $xeTable,
+          column,
+          columnIndex: index,
+          $columnIndex: index,
+          $rowIndex: -1
+        }
+        if (reMinWidth) {
+          customMinWidth = XEUtils.toNumber(XEUtils.isFunction(reMinWidth) ? reMinWidth(resizeParams) : reMinWidth)
+        }
+        if (reMaxWidth) {
+          customMaxWidth = XEUtils.toNumber(XEUtils.isFunction(reMaxWidth) ? reMaxWidth(resizeParams) : reMaxWidth)
+        }
+      }
+
       const isChecked = column.renderVisible
       const isIndeterminate = column.halfVisible
       const colTitle = formatText(column.getTitle(), 1)
@@ -447,12 +468,14 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
             }, [
               column.children && column.children.length
                 ? h('span', '-')
-                : (VxeUIInputComponent
-                    ? h(VxeUIInputComponent, {
+                : (VxeUINumberInputComponent
+                    ? h(VxeUINumberInputComponent, {
                       props: {
                         type: 'integer',
                         disabled: isDisabled || isHidden,
-                        value: column.renderResizeWidth
+                        value: column.renderResizeWidth,
+                        min: customMinWidth || undefined,
+                        max: customMaxWidth || undefined
                       },
                       on: {
                         modelValue (value: any) {
@@ -712,7 +735,7 @@ export default {
       const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
       const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
       const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-      const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+      const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeNumberInput')
       const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
       const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
 
@@ -729,7 +752,7 @@ export default {
         if (!VxeUIButtonComponent) {
           errLog('vxe.error.reqComp', ['vxe-button'])
         }
-        if (!VxeUIInputComponent) {
+        if (!VxeUINumberInputComponent) {
           errLog('vxe.error.reqComp', ['vxe-input'])
         }
         if (!VxeUITooltipComponent) {

@@ -376,7 +376,18 @@ const hideRowDropTip = ($xeTable: any) => {
 const updateRowDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
   const reactData = $xeTable
 
-  reactData.dragTipText = tdEl.textContent || ''
+  const { dragRow } = reactData
+  const dragOpts = $xeTable.computeDragOpts
+  const { rowTooltipMethod } = dragOpts
+  let tipContent = ''
+  if (rowTooltipMethod) {
+    tipContent = `${rowTooltipMethod({
+      row: dragRow
+    }) || ''}`
+  } else {
+    tipContent = getI18n('vxe.table.dragTip', [tdEl.textContent || ''])
+  }
+  reactData.dragTipText = tipContent
 }
 
 const Methods = {

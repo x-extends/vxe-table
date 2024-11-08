@@ -1299,7 +1299,7 @@
   .vxe-body--row-list-move {
     transition: transform 0.35s;
   }
-  .vxe-table--row-drag-hint {
+  .vxe-table--row-drag-tip {
     display: none;
     position: absolute;
     top: 0;
@@ -1427,30 +1427,40 @@
 
   /*校验不通过*/
   .vxe-body--column {
+    .vxe-cell--valid-error-tip {
+      width: 100%;
+      position: absolute;
+      left: 50%;
+      font-size: 12px;
+      line-height: 1.2em;
+      transform: translateX(-50%);
+      text-align: left;
+      z-index: 4;
+      padding-left: var(--vxe-ui-table-cell-padding-left);
+      padding-right: var(--vxe-ui-table-cell-padding-right);
+    }
+    .vxe-cell--valid-error-wrapper {
+      display: inline-block;
+      border-radius: var(--vxe-ui-border-radius);
+      pointer-events: auto;
+    }
+    .vxe-cell--valid-error-theme-beautify {
+      padding: 0.4em 0.8em;
+      color: #fff;
+      background-color: #f56c6c;
+      .vxe-cell--valid-error-msg {
+        background: transparent;
+      }
+    }
+    .vxe-cell--valid-error-theme-normal {
+      color: var(--vxe-ui-table-validate-error-color);
+      background-color: var(--vxe-ui-table-validate-error-background-color);
+    }
     &.col--active,
     &.col--selected {
       position: relative;
     }
     &.col--valid-error {
-      .vxe-cell--valid-error-hint {
-        width: 100%;
-        position: absolute;
-        left: 50%;
-        font-size: 12px;
-        line-height: 1.2em;
-        transform: translateX(-50%);
-        text-align: left;
-        z-index: 4;
-        padding-left: var(--vxe-ui-table-cell-padding-left);
-        padding-right: var(--vxe-ui-table-cell-padding-right);
-        .vxe-cell--valid-error-msg {
-          display: inline-block;
-          border-radius: var(--vxe-ui-border-radius);
-          color: var(--vxe-ui-table-validate-error-color);
-          background-color: var(--vxe-ui-table-validate-error-background-color);
-          pointer-events: auto;
-        }
-      }
       .vxe-default-input,
       .vxe-default-textarea,
       .vxe-default-select {
@@ -1465,11 +1475,11 @@
   &.valid-msg--single {
     .vxe-body--row {
       &:last-child {
-        .vxe-cell--valid-error-hint {
+        .vxe-cell--valid-error-tip {
           bottom: calc(100%);
         }
         &:first-child {
-          .vxe-cell--valid-error-hint {
+          .vxe-cell--valid-error-tip {
             bottom: auto;
           }
         }
@@ -1479,7 +1489,7 @@
   &.valid-msg--full {
     .vxe-body--row {
       &:last-child {
-        .vxe-cell--valid-error-hint {
+        .vxe-cell--valid-error-tip {
           top: calc(100% - 1.3em);
         }
       }
@@ -1489,7 +1499,7 @@
   &.old-cell-valid {
     .vxe-body--column {
       &.col--valid-error {
-        .vxe-cell--valid-error-hint {
+        .vxe-cell--valid-error-tip {
           width: 320px;
           position: absolute;
           bottom: calc(100% + 4px);
@@ -1511,7 +1521,7 @@
     }
     .vxe-body--row {
       &:first-child {
-        .vxe-cell--valid-error-hint {
+        .vxe-cell--valid-error-tip {
           bottom: auto;
           top: calc(100% + 4px);
         }
@@ -1519,7 +1529,7 @@
     }
     .vxe-body--column {
       &:first-child {
-        .vxe-cell--valid-error-hint {
+        .vxe-cell--valid-error-tip {
           left: 10px;
           transform: translateX(0);
           text-align: left;

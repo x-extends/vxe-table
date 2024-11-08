@@ -108,7 +108,12 @@ export default {
       const { validOpts } = this
       if (validOpts.msgMode === 'single') {
         const keys = Object.keys(validErrMaps)
-        const resMaps = validErrMaps
+        const resMaps: Record<string, {
+          row: any;
+          column: any;
+          rule: any;
+          content: any;
+        }> = {}
         if (keys.length) {
           const firstKey = keys[0]
           resMaps[firstKey] = validErrMaps[firstKey]

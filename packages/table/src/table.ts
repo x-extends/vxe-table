@@ -1044,6 +1044,7 @@ export default {
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
     const $xeTable = this
+    const reactData = $xeTable
 
     const {
       _e,
@@ -1089,10 +1090,14 @@ export default {
       loadingOpts,
       editRules
     } = $xeTable
+    const { dragRow, dragTipText } = reactData
     const { leftList, rightList } = columnStore
     const currLoading = this._isLoading || loading
     const vSize = computeSize
+    const dragOpts = $xeTable.computeDragOpts
     const virtualScrollBars = $xeTable.computeVirtualScrollBars
+    const dragSlots = dragOpts.slots || {}
+    const rowTipSlot = dragSlots.rowTip
     return h('div', {
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         [`valid-msg--${validOpts.msgMode}`]: !!editRules,
@@ -1339,11 +1344,13 @@ export default {
       /**
          * 拖拽提示
          */
-      rowOpts.drag
+      rowOpts.drag && (dragRow || dragTipText)
         ? h('div', {
           ref: 'refRowDragTipElem',
-          class: 'vxe-table--row-drag-hint'
-        }, getI18n('vxe.table.dragTip', [this.dragTipText]))
+          class: 'vxe-table--row-drag-tip'
+        }, rowTipSlot
+          ? (dragRow ? this.callSlot(rowTipSlot, { row: dragRow }, h) : [renderEmptyElement($xeTable)])
+          : (dragTipText ? [h('span', dragTipText)] : [renderEmptyElement($xeTable)]))
         : _e(),
       h('div', {}, [
         /**

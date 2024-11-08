@@ -252,19 +252,25 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
       const validParams = { ...params, ...errorValidItem }
       tdVNs.push(
         h('div', {
-          class: ['vxe-cell--valid-error-hint', getClass(validOpts.className, errorValidItem)],
+          class: ['vxe-cell--valid-error-tip', getClass(validOpts.className, errorValidItem)],
           style: errRule && errRule.maxWidth
             ? {
                 width: `${errRule.maxWidth}px`
               }
             : null
-        }, validSlot
-          ? $xetable.callSlot(validSlot, validParams, h)
-          : [
-              h('span', {
-                class: 'vxe-cell--valid-error-msg'
-              }, errorValidItem.content)
-            ])
+        }, [
+          h('div', {
+            class: `vxe-cell--valid-error-wrapper vxe-cell--valid-error-theme-${validOpts.theme || 'normal'}`
+          }, [
+            validSlot
+              ? $xetable.callSlot(validSlot, validParams, h)
+              : [
+                  h('span', {
+                    class: 'vxe-cell--valid-error-msg'
+                  }, errorValidItem.content)
+                ]
+          ])
+        ])
       )
     }
   }
