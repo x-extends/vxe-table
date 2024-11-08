@@ -325,7 +325,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
 
   const $xeTable = _vm.$xeTable
   const { _e, customStore } = _vm
-  const { customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xeTable
+  const { resizable: allResizable, customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xeTable
   const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
   const { maxFixedSize } = columnOpts
   const resizableOpts = $xeTable.computeResizableOpts
@@ -466,7 +466,10 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
             ? h('td', {
               class: 'vxe-table-custom-popup--column-item col--resizable'
             }, [
-              column.children && column.children.length
+              (
+                (column.children && column.children.length) ||
+                !(XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+              )
                 ? h('span', '-')
                 : (VxeUINumberInputComponent
                     ? h(VxeUINumberInputComponent, {

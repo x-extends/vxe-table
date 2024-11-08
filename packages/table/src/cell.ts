@@ -74,16 +74,20 @@ function renderCellDragIcon (h: CreateElement, params: any) {
 }
 
 function renderCellBaseVNs (h: CreateElement, params: any, content: any) {
-  const { $table, column, row } = params
+  const { $table, column, row, level } = params
   const { dragSort } = column
-  const vns: any[] = XEUtils.isArray(content) ? content : [content]
+  const tableProps = $table
+  const { treeConfig } = tableProps
   const rowOpts = $table.computeRowOpts
   const dragOpts = $table.computeDragOpts
   const { showRowIcon, rowVisibleMethod } = dragOpts
+  const vns: any[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && (showRowIcon && (!rowVisibleMethod || rowVisibleMethod({ row, column })))) {
-    vns.unshift(
-      renderCellDragIcon(h, params)
-    )
+    if (!treeConfig || !level) {
+      vns.unshift(
+        renderCellDragIcon(h, params)
+      )
+    }
   }
   return vns
 }

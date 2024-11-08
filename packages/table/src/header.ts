@@ -56,7 +56,7 @@ export default {
   },
   render (h: CreateElement) {
     const { _e, $parent: $xetable, fixedType, headerColumn, tableColumn, fixedColumn } = this
-    const { $listeners: tableListeners, tId, isGroup, visibleColumn, resizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable
+    const { $listeners: tableListeners, tId, isGroup, visibleColumn, resizable: allResizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable
     let headerGroups = headerColumn
     let renderColumnList = tableColumn
     if (isGroup) {
@@ -188,7 +188,7 @@ export default {
               /**
                * 列宽拖动
                */
-              !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || resizable))
+              !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
                 ? h('div', {
                   class: ['vxe-resizable', {
                     'is--line': !border || border === 'none'
