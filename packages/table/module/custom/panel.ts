@@ -22,14 +22,14 @@ export default defineComponent({
     const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
     const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
     const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
-    const VxeUIInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
+    const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeNumberInput')
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
     const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { reactData } = $xeTable
-    const { computeCustomOpts, computeColumnOpts, computeIsMaxFixedColumn } = $xeTable.getComputeMaps()
+    const { computeCustomOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const bodyElemRef = ref() as Ref<HTMLDivElement>
@@ -551,6 +551,8 @@ export default defineComponent({
       const { modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
       const { maxFixedSize } = columnOpts
+      const resizableOpts = computeResizableOpts.value
+      const { minWidth: reMinWidth, maxWidth: reMaxWidth } = resizableOpts
       const { mode } = customOpts
       const modalOpts = Object.assign({}, modalOptions)
       const drawerOpts = Object.assign({}, drawerOptions)
@@ -575,6 +577,25 @@ export default defineComponent({
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
         const isVisible = visibleMethod ? visibleMethod({ column }) : true
         if (isVisible) {
+          // 默认继承调整宽度
+          let customMinWidth = 0
+          let customMaxWidth = 0
+          if (allowResizable) {
+            const resizeParams = {
+              $table: $xeTable,
+              column,
+              columnIndex: index,
+              $columnIndex: index,
+              $rowIndex: -1
+            }
+            if (reMinWidth) {
+              customMinWidth = XEUtils.toNumber(XEUtils.isFunction(reMinWidth) ? reMinWidth(resizeParams) : reMinWidth)
+            }
+            if (reMaxWidth) {
+              customMaxWidth = XEUtils.toNumber(XEUtils.isFunction(reMaxWidth) ? reMaxWidth(resizeParams) : reMaxWidth)
+            }
+          }
+
           const isChecked = column.renderVisible
           const isIndeterminate = column.halfVisible
           const colTitle = formatText(column.getTitle(), 1)
@@ -661,11 +682,13 @@ export default defineComponent({
                   column.children && column.children.length
                     ? h('span', '-')
                     : (
-                        VxeUIInputComponent
-                          ? h(VxeUIInputComponent, {
+                        VxeUINumberInputComponent
+                          ? h(VxeUINumberInputComponent, {
                             type: 'integer',
                             disabled: isDisabled || isHidden,
                             modelValue: column.renderResizeWidth,
+                            min: customMinWidth || undefined,
+                            max: customMaxWidth || undefined,
                             'onUpdate:modelValue' (value: any) {
                               column.renderResizeWidth = Math.max(0, Number(value))
                             }
@@ -914,8 +937,8 @@ export default defineComponent({
         if (!VxeUIButtonComponent) {
           errLog('vxe.error.reqComp', ['vxe-button'])
         }
-        if (!VxeUIInputComponent) {
-          errLog('vxe.error.reqComp', ['vxe-input'])
+        if (!VxeUINumberInputComponent) {
+          errLog('vxe.error.reqComp', ['vxe-number-input'])
         }
         if (!VxeUITooltipComponent) {
           errLog('vxe.error.reqComp', ['vxe-tooltip'])

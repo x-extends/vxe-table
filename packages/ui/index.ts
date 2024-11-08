@@ -58,7 +58,8 @@ VxeUI.setConfig({
       autoClear: true,
       autoPos: true,
       message: 'inline',
-      msgMode: 'single'
+      msgMode: 'single',
+      theme: 'normal'
     },
     columnConfig: {
       maxFixedSize: 4

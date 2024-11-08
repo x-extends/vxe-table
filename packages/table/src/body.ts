@@ -306,19 +306,25 @@ export default defineComponent({
           const validParams = { ...params, ...errorValidItem }
           tdVNs.push(
             h('div', {
-              class: ['vxe-cell--valid-error-hint', getPropClass(validOpts.className, validParams)],
+              class: ['vxe-cell--valid-error-tip', getPropClass(validOpts.className, validParams)],
               style: errRule && errRule.maxWidth
                 ? {
                     width: `${errRule.maxWidth}px`
                   }
                 : null
-            }, validSlot
-              ? $xeTable.callSlot(validSlot, validParams)
-              : [
-                  h('span', {
-                    class: 'vxe-cell--valid-error-msg'
-                  }, errorValidItem.content)
-                ])
+            }, [
+              h('div', {
+                class: `vxe-cell--valid-error-wrapper vxe-cell--valid-error-theme-${validOpts.theme || 'normal'}`
+              }, [
+                validSlot
+                  ? $xeTable.callSlot(validSlot, validParams)
+                  : [
+                      h('span', {
+                        class: 'vxe-cell--valid-error-msg'
+                      }, errorValidItem.content)
+                    ]
+              ])
+            ])
           )
         }
       }

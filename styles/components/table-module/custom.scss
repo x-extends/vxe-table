@@ -292,7 +292,8 @@
     text-align: center;
   }
   &.col--resizable {
-    & > .vxe-input {
+    & > .vxe-input,
+    & > .vxe-number-input {
       width: 100%;
     }
   }

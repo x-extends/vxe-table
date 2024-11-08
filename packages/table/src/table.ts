@@ -1,4 +1,4 @@
-import { defineComponent, h, createCommentVNode, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
+import { defineComponent, h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
@@ -18,10 +18,10 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf } from 'vxe-pc-ui'
+import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes } from '../../../types'
 
-const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns } = VxeUI
+const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
 
 const isWebkit = browse['-webkit'] && !browse.edge
 
@@ -2339,10 +2339,14 @@ export default defineComponent({
           rowExpandLazyLoadedMaps[rowid] = row
           loadMethod({ $table: $xeTable, row, rowIndex: tableMethods.getRowIndex(row), $rowIndex: tableMethods.getVMRowIndex(row) }).then(() => {
             const { rowExpandedMaps } = reactData
-            rowRest.expandLoaded = true
+            if (rowRest) {
+              rowRest.expandLoaded = true
+            }
             rowExpandedMaps[rowid] = row
           }).catch(() => {
-            rowRest.expandLoaded = false
+            if (rowRest) {
+              rowRest.expandLoaded = false
+            }
           }).finally(() => {
             const { rowExpandLazyLoadedMaps } = reactData
             if (rowExpandLazyLoadedMaps[rowid]) {
@@ -2816,13 +2820,15 @@ export default defineComponent({
           const rowid = getRowid($xeTable, row)
           if (!treeTempExpandedMaps[rowid]) {
             const rowRest = fullAllDataRowIdData[rowid]
-            const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
-            // 是否使用懒加载
-            if (isLoad) {
-              result.push(handleAsyncTreeExpandChilds(row))
-            } else {
-              if (row[childrenField] && row[childrenField].length) {
-                treeTempExpandedMaps[rowid] = row
+            if (rowRest) {
+              const isLoad = lazy && row[hasChildField] && !rowRest.treeLoaded && !treeExpandLazyLoadedMaps[rowid]
+              // 是否使用懒加载
+              if (isLoad) {
+                result.push(handleAsyncTreeExpandChilds(row))
+              } else {
+                if (row[childrenField] && row[childrenField].length) {
+                  treeTempExpandedMaps[rowid] = row
+                }
               }
             }
           }
@@ -5560,7 +5566,18 @@ export default defineComponent({
     }
 
     const updateRowDropTipContent = (tdEl: HTMLElement) => {
-      reactData.dragTipText = tdEl.textContent || ''
+      const { dragRow } = reactData
+      const dragOpts = computeDragOpts.value
+      const { rowTooltipMethod } = dragOpts
+      let tipContent = ''
+      if (rowTooltipMethod) {
+        tipContent = `${rowTooltipMethod({
+          row: dragRow
+        }) || ''}`
+      } else {
+        tipContent = getI18n('vxe.table.dragTip', [tdEl.textContent || ''])
+      }
+      reactData.dragTipText = tipContent
     }
 
     /**
@@ -5595,6 +5612,18 @@ export default defineComponent({
       return nextTick()
     }
 
+    const callSlot = <T>(slotFunc: ((params: T) => VxeComponentSlotType | VxeComponentSlotType[]) | string | null, params: T): VxeComponentSlotType[] => {
+      if (slotFunc) {
+        if ($xeGrid) {
+          return $xeGrid.callSlot(slotFunc, params)
+        }
+        if (XEUtils.isFunction(slotFunc)) {
+          return getSlotVNs(slotFunc(params))
+        }
+      }
+      return []
+    }
+
     /**
      * 内部方法
      */
@@ -5603,17 +5632,7 @@ export default defineComponent({
         return getConfig()
       },
       updateAfterDataIndex,
-      callSlot (slotFunc, params) {
-        if (slotFunc) {
-          if ($xeGrid) {
-            return $xeGrid.callSlot(slotFunc, params)
-          }
-          if (XEUtils.isFunction(slotFunc)) {
-            return getSlotVNs(slotFunc(params))
-          }
-        }
-        return []
-      },
+      callSlot,
       /**
        * 获取父容器元素
        */
@@ -7059,7 +7078,7 @@ export default defineComponent({
             tableGroupColumn,
             fixedColumn
           })
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         h(TableBodyComponent, {
           ref: isFixedLeft ? refTableLeftBody : refTableRightBody,
           fixedType,
@@ -7075,7 +7094,7 @@ export default defineComponent({
             fixedColumn,
             fixedType
           })
-          : createCommentVNode()
+          : renderEmptyElement($xeTable)
       ])
     }
 
@@ -7103,7 +7122,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
+      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore, dragRow, dragTipText } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
@@ -7111,6 +7130,7 @@ export default defineComponent({
       const checkboxOpts = computeCheckboxOpts.value
       const treeOpts = computeTreeOpts.value
       const rowOpts = computeRowOpts.value
+      const dragOpts = computeDragOpts.value
       const columnOpts = computeColumnOpts.value
       const vSize = computeSize.value
       const tableBorder = computeTableBorder.value
@@ -7120,6 +7140,8 @@ export default defineComponent({
       const isMenu = computeIsMenu.value
       const currLoading = reactData._isLoading || loading
       const virtualScrollBars = computeVirtualScrollBars.value
+      const dragSlots = dragOpts.slots || {}
+      const rowTipSlot = dragSlots.rowTip
       return h('div', {
         ref: refElem,
         class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
@@ -7177,7 +7199,7 @@ export default defineComponent({
                 tableColumn,
                 tableGroupColumn
               })
-              : createCommentVNode(),
+              : renderEmptyElement($xeTable),
             /**
              * 表体
              */
@@ -7195,13 +7217,13 @@ export default defineComponent({
                 footerTableData,
                 tableColumn
               })
-              : createCommentVNode()
+              : renderEmptyElement($xeTable)
           ]),
           h('div', {
             class: 'vxe-table--fixed-wrapper'
           }, [
-            leftList && leftList.length && overflowX ? renderFixed('left') : createCommentVNode(),
-            rightList && rightList.length && overflowX ? renderFixed('right') : createCommentVNode()
+            leftList && leftList.length && overflowX ? renderFixed('left') : renderEmptyElement($xeTable),
+            rightList && rightList.length && overflowX ? renderFixed('right') : renderEmptyElement($xeTable)
           ])
         ]),
         virtualScrollBars.x
@@ -7221,7 +7243,7 @@ export default defineComponent({
               })
             ])
           ])
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         virtualScrollBars.y
           ? h('div', {
             key: 'vy',
@@ -7239,7 +7261,7 @@ export default defineComponent({
               })
             ])
           ])
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         /**
          * 空数据
          */
@@ -7287,7 +7309,7 @@ export default defineComponent({
                 default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
               }
             : {})
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         /**
          * 自定义列
          */
@@ -7297,7 +7319,7 @@ export default defineComponent({
             ref: refTableCustom,
             customStore
           })
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         /**
          * 筛选
          */
@@ -7307,7 +7329,7 @@ export default defineComponent({
             ref: refTableFilter,
             filterStore
           })
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         /**
          * 导入
          */
@@ -7317,7 +7339,7 @@ export default defineComponent({
             defaultOptions: reactData.importParams,
             storeData: reactData.importStore
           })
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         /**
          * 导出
          */
@@ -7327,7 +7349,7 @@ export default defineComponent({
             defaultOptions: reactData.exportParams,
             storeData: reactData.exportStore
           })
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         /**
          * 快捷菜单
          */
@@ -7336,16 +7358,18 @@ export default defineComponent({
             key: 'tm',
             ref: refTableMenu
           })
-          : createCommentVNode(),
+          : renderEmptyElement($xeTable),
         /**
          * 拖拽提示
          */
-        rowOpts.drag
+        rowOpts.drag && (dragRow || dragTipText)
           ? h('div', {
             ref: refRowDragTipElem,
-            class: 'vxe-table--row-drag-hint'
-          }, getI18n('vxe.table.dragTip', [reactData.dragTipText]))
-          : createCommentVNode(),
+            class: 'vxe-table--row-drag-tip'
+          }, rowTipSlot
+            ? (dragRow ? callSlot(rowTipSlot, { row: dragRow }) : [renderEmptyElement($xeTable)])
+            : (dragTipText ? [h('span', dragTipText)] : [renderEmptyElement($xeTable)]))
+          : renderEmptyElement($xeTable),
         /**
          * 提示相关
          */
@@ -7379,9 +7403,9 @@ export default defineComponent({
                 }, 'vxe-table--valid-error'],
                 ...(validOpts.message === 'tooltip' || tableData.length === 1 ? validTipOpts : {}) as any
               })
-              : createCommentVNode()
+              : renderEmptyElement($xeTable)
           ])
-          : createCommentVNode()
+          : renderEmptyElement($xeTable)
       ])
     }
 

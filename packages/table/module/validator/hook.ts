@@ -87,7 +87,7 @@ hooks.add('tableValidatorModule', {
           column: any;
           rule: any;
           content: any;
-        }> = validErrMaps
+        }> = {}
         if (keys.length) {
           const firstKey = keys[0]
           resMaps[firstKey] = validErrMaps[firstKey]
