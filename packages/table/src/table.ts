@@ -5531,12 +5531,35 @@ export default defineComponent({
       }
     }
 
+    const updateRowDropOrigin = (row: any) => {
+      const el = refElem.value
+      if (el) {
+        const clss = 'row--drag-origin'
+        const rowid = getRowid($xeTable, row)
+        XEUtils.arrayEach(el.querySelectorAll(`[rowid="${rowid}"]`), (elem) => {
+          addClass(elem, clss)
+        })
+      }
+    }
+
     const clearRowDropTarget = () => {
       const el = refElem.value
       if (el) {
         const clss = 'row--drag-active-target'
         XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
           removeClass(elem, clss)
+        })
+      }
+    }
+
+    const updateRowDropTarget = (row: any, dragPos: string) => {
+      const el = refElem.value
+      if (el) {
+        const clss = 'row--drag-active-target'
+        const rowid = getRowid($xeTable, row)
+        XEUtils.arrayEach(el.querySelectorAll(`[rowid="${rowid}"]`), (elem) => {
+          addClass(elem, clss)
+          elem.setAttribute('drag-pos', dragPos)
         })
       }
     }
@@ -6646,7 +6669,7 @@ export default defineComponent({
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         const { dragRow } = reactData
-        const { afterFullData, tableFullData, prevDragRow, prevDragPos } = internalData
+        const { afterFullData, afterTreeFullData, tableFullData, tableFullTreeData, prevDragRow, prevDragPos } = internalData
         if (prevDragRow && dragRow) {
           // 判断是否有拖动
           if (prevDragRow !== dragRow) {
@@ -6663,18 +6686,36 @@ export default defineComponent({
               }
               const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
 
-              // 移出源位置
-              const oafIndex = $xeTable.findRowIndexOf(afterFullData, dragRow)
-              const otfIndex = $xeTable.findRowIndexOf(tableFullData, dragRow)
-              afterFullData.splice(oafIndex, 1)
-              tableFullData.splice(otfIndex, 1)
-              // 插新位置
-              const pafIndex = $xeTable.findRowIndexOf(afterFullData, prevDragRow)
-              const ptfIndex = $xeTable.findRowIndexOf(tableFullData, prevDragRow)
-              const nafIndex = pafIndex + dragOffsetIndex
-              const ntfIndex = ptfIndex + dragOffsetIndex
-              afterFullData.splice(nafIndex, 0, dragRow)
-              tableFullData.splice(ntfIndex, 0, dragRow)
+              let oafIndex = -1
+              let nafIndex = -1
+              if (treeConfig) {
+                // 移出源位置
+                oafIndex = $xeTable.findRowIndexOf(afterTreeFullData, dragRow)
+                const otfIndex = $xeTable.findRowIndexOf(tableFullTreeData, dragRow)
+                afterTreeFullData.splice(oafIndex, 1)
+                tableFullTreeData.splice(otfIndex, 1)
+
+                // 插新位置
+                const pafIndex = $xeTable.findRowIndexOf(afterTreeFullData, prevDragRow)
+                const ptfIndex = $xeTable.findRowIndexOf(tableFullTreeData, prevDragRow)
+                nafIndex = pafIndex + dragOffsetIndex
+                const ntfIndex = ptfIndex + dragOffsetIndex
+                afterTreeFullData.splice(nafIndex, 0, dragRow)
+                tableFullTreeData.splice(ntfIndex, 0, dragRow)
+              } else {
+                // 移出源位置
+                oafIndex = $xeTable.findRowIndexOf(afterFullData, dragRow)
+                const otfIndex = $xeTable.findRowIndexOf(tableFullData, dragRow)
+                afterFullData.splice(oafIndex, 1)
+                tableFullData.splice(otfIndex, 1)
+                // 插新位置
+                const pafIndex = $xeTable.findRowIndexOf(afterFullData, prevDragRow)
+                const ptfIndex = $xeTable.findRowIndexOf(tableFullData, prevDragRow)
+                nafIndex = pafIndex + dragOffsetIndex
+                const ntfIndex = ptfIndex + dragOffsetIndex
+                afterFullData.splice(nafIndex, 0, dragRow)
+                tableFullData.splice(ntfIndex, 0, dragRow)
+              }
 
               reactData.isDragRowMove = true
               $xeTable.cacheRowMap()
@@ -6724,8 +6765,7 @@ export default defineComponent({
           const { dragRow } = reactData
           const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
           const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
-          addClass(trEl, 'row--drag-active-target')
-          trEl.setAttribute('drag-pos', dragPos)
+          updateRowDropTarget(row, dragPos)
           internalData.prevDragRow = row
           internalData.prevDragPos = dragPos
           dispatchEvent('row-dragover', {
@@ -6754,7 +6794,7 @@ export default defineComponent({
         }
         reactData.dragRow = row
         trEl.draggable = true
-        addClass(trEl, 'row--drag-origin')
+        updateRowDropOrigin(row)
         showRowDropTip(evnt)
         updateRowDropTipContent(tdEl)
         dispatchEvent('row-dragstart', params, evnt)

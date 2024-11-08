@@ -71,17 +71,21 @@ function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
 }
 
 function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams, content: VxeComponentSlotType | VxeComponentSlotType[]) {
-  const { $table, column } = params
+  const { $table, column, level } = params
   const { dragSort } = column
-  const vns: VxeComponentSlotType[] = XEUtils.isArray(content) ? content : [content]
+  const tableProps = $table.props
+  const { treeConfig } = tableProps
   const { computeRowOpts, computeDragOpts } = $table.getComputeMaps()
   const rowOpts = computeRowOpts.value
   const dragOpts = computeDragOpts.value
   const { showRowIcon, rowVisibleMethod } = dragOpts
+  const vns: VxeComponentSlotType[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && (showRowIcon && (!rowVisibleMethod || rowVisibleMethod(params)))) {
-    vns.unshift(
-      renderCellDragIcon(params)
-    )
+    if (!treeConfig || !level) {
+      vns.unshift(
+        renderCellDragIcon(params)
+      )
+    }
   }
   return vns
 }
