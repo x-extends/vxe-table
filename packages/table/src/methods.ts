@@ -1808,80 +1808,137 @@ const Methods = {
    * 设置为固定列
    */
   setColumnFixed (fieldOrColumn: any, fixed: any) {
-    const { isMaxFixedColumn, columnOpts } = this
-    const column = handleFieldOrColumn(this, fieldOrColumn)
-    const targetColumn = getRootColumn(this, column)
-    if (targetColumn && targetColumn.fixed !== fixed) {
-      // 是否超过最大固定列数量
-      if (!targetColumn.fixed && isMaxFixedColumn) {
-        if (VxeUI.modal) {
-          VxeUI.modal.message({
-            status: 'error',
-            content: getI18n('vxe.table.maxFixedCol', [columnOpts.maxFixedSize])
-          })
+    const $xeTable = this
+
+    let status = false
+    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+    const columnOpts = $xeTable.computeColumnOpts
+    const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
+    for (let i = 0; i < cols.length; i++) {
+      const item = cols[i]
+      const column = handleFieldOrColumn($xeTable, item)
+      const targetColumn = getRootColumn($xeTable, column as any)
+      if (targetColumn && targetColumn.fixed !== fixed) {
+        // 是否超过最大固定列数量
+        if (!targetColumn.fixed && isMaxFixedColumn) {
+          if (VxeUI.modal) {
+            VxeUI.modal.message({
+              status: 'error',
+              content: getI18n('vxe.table.maxFixedCol', [columnOpts.maxFixedSize])
+            })
+          }
+          return $xeTable.$nextTick()
         }
-        return this.$nextTick()
+        XEUtils.eachTree([targetColumn], (column) => {
+          column.fixed = fixed
+        })
+        $xeTable.saveCustomStore('update:fixed')
+        if (!status) {
+          status = true
+        }
       }
-      XEUtils.eachTree([targetColumn], (column) => {
-        column.fixed = fixed
-      })
-      this.saveCustomStore('update:fixed')
-      return this.refreshColumn()
     }
-    return this.$nextTick()
+    if (status) {
+      return $xeTable.refreshColumn()
+    }
+    return $xeTable.$nextTick()
   },
   /**
    * 取消指定固定列
    */
   clearColumnFixed (fieldOrColumn: any) {
-    const column = handleFieldOrColumn(this, fieldOrColumn)
-    const targetColumn = getRootColumn(this, column)
-    if (targetColumn && targetColumn.fixed) {
-      XEUtils.eachTree([targetColumn], (column) => {
-        column.fixed = null
-      })
-      this.saveCustomStore('update:fixed')
-      return this.refreshColumn()
+    const $xeTable = this
+
+    let status = false
+    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+    cols.forEach(item => {
+      const column = handleFieldOrColumn($xeTable, item)
+      const targetColumn = getRootColumn($xeTable, column as any)
+      if (targetColumn && targetColumn.fixed) {
+        XEUtils.eachTree([targetColumn], (column) => {
+          column.fixed = null
+        })
+        $xeTable.saveCustomStore('update:fixed')
+        if (!status) {
+          status = true
+        }
+      }
+    })
+    if (status) {
+      return $xeTable.refreshColumn()
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 隐藏指定列
    */
   hideColumn (fieldOrColumn: any) {
-    const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column && column.visible) {
-      column.visible = false
-      return this.handleCustom()
+    const $xeTable = this
+
+    let status = false
+    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+    cols.forEach(item => {
+      const column = handleFieldOrColumn($xeTable, item)
+      if (column && column.visible) {
+        column.visible = false
+        if (!status) {
+          status = true
+        }
+      }
+    })
+    if (status) {
+      return $xeTable.handleCustom()
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   /**
    * 显示指定列
    */
   showColumn (fieldOrColumn: any) {
-    const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column && !column.visible) {
-      column.visible = true
-      return this.handleCustom()
+    const $xeTable = this
+
+    let status = false
+    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+    cols.forEach(item => {
+      const column = handleFieldOrColumn($xeTable, item)
+      if (column && !column.visible) {
+        column.visible = true
+        if (!status) {
+          status = true
+        }
+      }
+    })
+    if (status) {
+      return $xeTable.handleCustom()
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   setColumnWidth (fieldOrColumn: any, width: any) {
-    const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column) {
-      const colWidth = XEUtils.toInteger(width)
-      let rdWidth = colWidth
-      if (isScale(width)) {
-        const { tableBody } = this.$refs
-        const tableBodyElem = tableBody ? tableBody.$el : null
-        const bodyWidth = tableBodyElem ? tableBodyElem.clientWidth - 1 : 0
-        rdWidth = Math.floor(colWidth * bodyWidth)
+    const $xeTable = this
+
+    let status = false
+    const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+    cols.forEach(item => {
+      const column = handleFieldOrColumn($xeTable, item)
+      if (column) {
+        const colWidth = XEUtils.toInteger(width)
+        let rdWidth = colWidth
+        if (isScale(width)) {
+          const tableBody = $xeTable.$refs.tableBody
+          const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+          const bodyWidth = bodyElem ? bodyElem.clientWidth - 1 : 0
+          rdWidth = Math.floor(colWidth * bodyWidth)
+        }
+        column.resizeWidth = rdWidth
+        if (!status) {
+          status = true
+        }
       }
-      column.resizeWidth = rdWidth
-      return this.refreshColumn()
+    })
+    if (status) {
+      return $xeTable.refreshColumn()
     }
-    return this.$nextTick()
+    return $xeTable.$nextTick()
   },
   getColumnWidth (fieldOrColumn: any) {
     const column = handleFieldOrColumn(this, fieldOrColumn)
@@ -5594,7 +5651,7 @@ const Methods = {
     }
     this.closeTooltip()
   },
-  handleScrollEvent (evnt: Event, isRollY: boolean, isRollX: boolean, params: any) {
+  handleScrollEvent (evnt: Event, isRollY: boolean, isRollX: boolean, scrollTop: number, scrollLeft: number, params: any) {
     const $xeTable = this
     const props = $xeTable
 
@@ -5620,13 +5677,35 @@ const Methods = {
     const bodyWidth = bodyElem ? bodyElem.clientWidth : 0
     const scrollHeight = bodyElem ? bodyElem.scrollHeight : 0
     const scrollWidth = bodyElem ? bodyElem.scrollWidth : 0
+    let isTop = false
+    let isBottom = false
+    let isLeft = false
+    let isRight = false
+    if (isRollX) {
+      isLeft = scrollLeft <= 0
+      if (!isTop) {
+        isRight = scrollLeft + bodyWidth >= scrollWidth
+      }
+      $xeTable.checkScrolling()
+    } else {
+      isTop = scrollTop <= 0
+      if (!isTop) {
+        isBottom = scrollTop + bodyHeight >= scrollHeight
+      }
+    }
     const evntParams = {
+      scrollTop,
+      scrollLeft,
       bodyHeight,
       bodyWidth,
       scrollHeight,
       scrollWidth,
       isX: isRollX,
       isY: isRollY,
+      isTop,
+      isBottom,
+      isLeft,
+      isRight,
       ...params
     }
     $xeTable.dispatchEvent('scroll', evntParams, evnt)
@@ -5674,11 +5753,9 @@ const Methods = {
     $xeTable.lastScrollTime = Date.now()
     $xeTable.handleSyncScrollX(scrollLeft)
     $xeTable.triggerScrollXEvent(evnt)
-    $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+    $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
       type: 'table',
-      fixed: '',
-      scrollTop,
-      scrollLeft
+      fixed: ''
     })
   },
   debounceScrollYCalculate: XEUtils.debounce(function () {
@@ -5710,11 +5787,9 @@ const Methods = {
     $xeTable.lastScrollTime = Date.now()
     $xeTable.handleSyncScrollY(scrollTop)
     $xeTable.triggerScrollYEvent(evnt)
-    $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+    $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
       type: 'table',
-      fixed: '',
-      scrollTop,
-      scrollLeft
+      fixed: ''
     })
   },
   /**
@@ -5911,16 +5986,34 @@ const Methods = {
    * @param {Number} scrollTop 上距离
    */
   scrollTo (scrollLeft: any, scrollTop: any) {
+    const $xeTable = this
+
     const { $refs } = this
-    const { tableBody, rightBody, tableFooter } = $refs
+    const { tableBody, tableHeader, leftBody, rightBody, tableFooter } = $refs
     const tableBodyElem = tableBody ? tableBody.$el : null
+    const leftBodyElem = leftBody ? leftBody.$el : null
     const rightBodyElem = rightBody ? rightBody.$el : null
+    const tableHeaderElem = tableHeader ? tableHeader.$el : null
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     if (XEUtils.isNumber(scrollLeft)) {
-      setScrollLeft(tableFooterElem || tableBodyElem, scrollLeft)
+      const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+      if (xHandleEl) {
+        setScrollLeft(xHandleEl, scrollLeft)
+      } else {
+        setScrollLeft(tableBodyElem, scrollLeft)
+        setScrollLeft(tableHeaderElem, scrollLeft)
+        setScrollLeft(tableFooterElem, scrollLeft)
+      }
     }
     if (XEUtils.isNumber(scrollTop)) {
-      setScrollTop(rightBodyElem || tableBodyElem, scrollTop)
+      const yHandleEl = $xeTable.$refs.refScrollYHandleElem
+      if (yHandleEl) {
+        setScrollTop(yHandleEl, scrollTop)
+      } else {
+        setScrollTop(tableBodyElem, scrollTop)
+        setScrollTop(leftBodyElem, scrollTop)
+        setScrollTop(rightBodyElem, scrollTop)
+      }
     }
     if (this.scrollXLoad || this.scrollYLoad) {
       return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))

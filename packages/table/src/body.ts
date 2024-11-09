@@ -692,11 +692,9 @@ export default {
           setScrollTop(leftElem, scrollTop)
           setScrollTop(rightElem, scrollTop)
         }
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: renderType,
-          fixed: fixedType,
-          scrollTop,
-          scrollLeft
+          fixed: fixedType
         })
       }
       if (xHandleEl) {
@@ -706,11 +704,9 @@ export default {
         $xeTable.lastScrollLeft = scrollLeft
         setScrollLeft(headerElem, scrollLeft)
         setScrollLeft(footerElem, scrollLeft)
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: renderType,
-          fixed: fixedType,
-          scrollTop,
-          scrollLeft
+          fixed: fixedType
         })
       }
     },
