@@ -2955,11 +2955,9 @@ export default defineComponent({
       reactData.lastScrollTime = Date.now()
       handleSyncScrollX(scrollLeft)
       $xeTable.triggerScrollXEvent(evnt)
-      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
         type: 'table',
-        fixed: '',
-        scrollTop,
-        scrollLeft
+        fixed: ''
       })
     }
 
@@ -2988,11 +2986,9 @@ export default defineComponent({
       reactData.lastScrollTime = Date.now()
       handleSyncScrollY(scrollTop)
       $xeTable.triggerScrollYEvent(evnt)
-      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
         type: 'table',
-        fixed: '',
-        scrollTop,
-        scrollLeft
+        fixed: ''
       })
     }
 
@@ -3642,25 +3638,35 @@ export default defineComponent({
        * 设置为固定列
        */
       setColumnFixed (fieldOrColumn, fixed) {
-        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
-        const targetColumn = getRootColumn($xeTable, column as any)
-        const isMaxFixedColumn = computeIsMaxFixedColumn.value
+        let status = false
+        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
         const columnOpts = computeColumnOpts.value
-        if (targetColumn && targetColumn.fixed !== fixed) {
-          // 是否超过最大固定列数量
-          if (!targetColumn.fixed && isMaxFixedColumn) {
-            if (VxeUI.modal) {
-              VxeUI.modal.message({
-                status: 'error',
-                content: getI18n('vxe.table.maxFixedCol', [columnOpts.maxFixedSize])
-              })
+        const isMaxFixedColumn = computeIsMaxFixedColumn.value
+        for (let i = 0; i < cols.length; i++) {
+          const item = cols[i]
+          const column = handleFieldOrColumn($xeTable, item)
+          const targetColumn = getRootColumn($xeTable, column as any)
+          if (targetColumn && targetColumn.fixed !== fixed) {
+            // 是否超过最大固定列数量
+            if (!targetColumn.fixed && isMaxFixedColumn) {
+              if (VxeUI.modal) {
+                VxeUI.modal.message({
+                  status: 'error',
+                  content: getI18n('vxe.table.maxFixedCol', [columnOpts.maxFixedSize])
+                })
+              }
+              return nextTick()
             }
-            return nextTick()
+            XEUtils.eachTree([targetColumn], (column) => {
+              column.fixed = fixed
+            })
+            tablePrivateMethods.saveCustomStore('update:fixed')
+            if (!status) {
+              status = true
+            }
           }
-          XEUtils.eachTree([targetColumn], (column) => {
-            column.fixed = fixed
-          })
-          tablePrivateMethods.saveCustomStore('update:fixed')
+        }
+        if (status) {
           return tableMethods.refreshColumn()
         }
         return nextTick()
@@ -3669,13 +3675,22 @@ export default defineComponent({
        * 取消指定固定列
        */
       clearColumnFixed (fieldOrColumn) {
-        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
-        const targetColumn = getRootColumn($xeTable, column as any)
-        if (targetColumn && targetColumn.fixed) {
-          XEUtils.eachTree([targetColumn], (column) => {
-            column.fixed = null
-          })
-          tablePrivateMethods.saveCustomStore('update:fixed')
+        let status = false
+        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+        cols.forEach(item => {
+          const column = handleFieldOrColumn($xeTable, item)
+          const targetColumn = getRootColumn($xeTable, column as any)
+          if (targetColumn && targetColumn.fixed) {
+            XEUtils.eachTree([targetColumn], (column) => {
+              column.fixed = null
+            })
+            tablePrivateMethods.saveCustomStore('update:fixed')
+            if (!status) {
+              status = true
+            }
+          }
+        })
+        if (status) {
           return tableMethods.refreshColumn()
         }
         return nextTick()
@@ -3684,9 +3699,18 @@ export default defineComponent({
        * 隐藏指定列
        */
       hideColumn (fieldOrColumn) {
-        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
-        if (column && column.visible) {
-          column.visible = false
+        let status = false
+        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+        cols.forEach(item => {
+          const column = handleFieldOrColumn($xeTable, item)
+          if (column && column.visible) {
+            column.visible = false
+            if (!status) {
+              status = true
+            }
+          }
+        })
+        if (status) {
           return tablePrivateMethods.handleCustom()
         }
         return nextTick()
@@ -3695,25 +3719,43 @@ export default defineComponent({
        * 显示指定列
        */
       showColumn (fieldOrColumn) {
-        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
-        if (column && !column.visible) {
-          column.visible = true
+        let status = false
+        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+        cols.forEach(item => {
+          const column = handleFieldOrColumn($xeTable, item)
+          if (column && !column.visible) {
+            column.visible = true
+            if (!status) {
+              status = true
+            }
+          }
+        })
+        if (status) {
           return tablePrivateMethods.handleCustom()
         }
         return nextTick()
       },
       setColumnWidth (fieldOrColumn, width) {
-        const column = handleFieldOrColumn($xeTable, fieldOrColumn)
-        if (column) {
-          const colWidth = XEUtils.toInteger(width)
-          let rdWidth = colWidth
-          if (isScale(width)) {
-            const tableBody = refTableBody.value
-            const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
-            const bodyWidth = bodyElem ? bodyElem.clientWidth - 1 : 0
-            rdWidth = Math.floor(colWidth * bodyWidth)
+        let status = false
+        const cols = XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : [fieldOrColumn]
+        cols.forEach(item => {
+          const column = handleFieldOrColumn($xeTable, item)
+          if (column) {
+            const colWidth = XEUtils.toInteger(width)
+            let rdWidth = colWidth
+            if (isScale(width)) {
+              const tableBody = refTableBody.value
+              const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+              const bodyWidth = bodyElem ? bodyElem.clientWidth - 1 : 0
+              rdWidth = Math.floor(colWidth * bodyWidth)
+            }
+            column.resizeWidth = rdWidth
+            if (!status) {
+              status = true
+            }
           }
-          column.resizeWidth = rdWidth
+        })
+        if (status) {
           return tableMethods.refreshColumn()
         }
         return nextTick()
@@ -4668,16 +4710,34 @@ export default defineComponent({
        */
       scrollTo (scrollLeft: number, scrollTop?: number) {
         const tableBody = refTableBody.value
+        const tableHeader = refTableHeader.value
         const tableFooter = refTableFooter.value
+        const leftBody = refTableLeftBody.value
         const rightBody = refTableRightBody.value
         const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+        const leftBodyElem = leftBody ? leftBody.$el as HTMLDivElement : null
         const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
+        const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
         if (XEUtils.isNumber(scrollLeft)) {
-          setScrollLeft(tableFooterElem || tableBodyElem, scrollLeft)
+          const xHandleEl = refScrollXHandleElem.value
+          if (xHandleEl) {
+            setScrollLeft(xHandleEl, scrollLeft)
+          } else {
+            setScrollLeft(tableBodyElem, scrollLeft)
+            setScrollLeft(tableHeaderElem, scrollLeft)
+            setScrollLeft(tableFooterElem, scrollLeft)
+          }
         }
         if (XEUtils.isNumber(scrollTop)) {
-          setScrollTop(rightBodyElem || tableBodyElem, scrollTop)
+          const yHandleEl = refScrollYHandleElem.value
+          if (yHandleEl) {
+            setScrollTop(yHandleEl, scrollTop)
+          } else {
+            setScrollTop(tableBodyElem, scrollTop)
+            setScrollTop(leftBodyElem, scrollTop)
+            setScrollTop(rightBodyElem, scrollTop)
+          }
         }
         if (reactData.scrollXLoad || reactData.scrollYLoad) {
           return new Promise(resolve => {
@@ -6811,7 +6871,7 @@ export default defineComponent({
       triggerScrollXEvent () {
         loadScrollXData()
       },
-      handleScrollEvent (evnt, isRollY, isRollX, params) {
+      handleScrollEvent (evnt, isRollY, isRollX, scrollTop, scrollLeft, params) {
         const { highlightHoverRow } = props
         const tableBody = refTableBody.value
         const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
@@ -6827,20 +6887,39 @@ export default defineComponent({
         if (tooltip && tooltip.reactData.visible) {
           tooltip.close()
         }
-        if (isRollX) {
-          tablePrivateMethods.checkScrolling()
-        }
         const bodyHeight = bodyElem ? bodyElem.clientHeight : 0
         const bodyWidth = bodyElem ? bodyElem.clientWidth : 0
         const scrollHeight = bodyElem ? bodyElem.scrollHeight : 0
         const scrollWidth = bodyElem ? bodyElem.scrollWidth : 0
+        let isTop = false
+        let isBottom = false
+        let isLeft = false
+        let isRight = false
+        if (isRollX) {
+          isLeft = scrollLeft <= 0
+          if (!isTop) {
+            isRight = scrollLeft + bodyWidth >= scrollWidth
+          }
+          tablePrivateMethods.checkScrolling()
+        } else {
+          isTop = scrollTop <= 0
+          if (!isTop) {
+            isBottom = scrollTop + bodyHeight >= scrollHeight
+          }
+        }
         const evntParams = {
+          scrollTop,
+          scrollLeft,
           bodyHeight,
           bodyWidth,
           scrollHeight,
           scrollWidth,
           isX: isRollX,
           isY: isRollY,
+          isTop,
+          isBottom,
+          isLeft,
+          isRight,
           ...params
         }
         dispatchEvent('scroll', evntParams, evnt)

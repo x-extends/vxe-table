@@ -80,11 +80,9 @@ export default defineComponent({
         tableReactData.lastScrollTime = Date.now()
         setScrollLeft(headerElem, scrollLeft)
         setScrollLeft(bodyElem, scrollLeft)
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, {
+        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
           type: renderType,
-          fixed: fixedType,
-          scrollTop,
-          scrollLeft
+          fixed: fixedType
         })
       }
     }
