@@ -536,8 +536,6 @@ export default defineComponent({
       if (yHandleEl) {
         yHandleEl.scrollTop = scrollTop
       } else if (isRollY) {
-        tableInternalData.lastScrollTop = scrollTop
-        tableInternalData.lastScrollLeft = scrollLeft
         if (leftElem && fixedType === 'left') {
           setScrollTop(bodyElem, scrollTop)
           setScrollTop(rightElem, scrollTop)
@@ -556,8 +554,6 @@ export default defineComponent({
       if (xHandleEl) {
         xHandleEl.scrollLeft = scrollLeft
       } else if (isRollX) {
-        tableInternalData.lastScrollTop = scrollTop
-        tableInternalData.lastScrollLeft = scrollLeft
         setScrollLeft(headerElem, scrollLeft)
         setScrollLeft(footerElem, scrollLeft)
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {

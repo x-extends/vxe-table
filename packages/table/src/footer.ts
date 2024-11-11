@@ -76,8 +76,6 @@ export default defineComponent({
         const isRollX = true
         const isRollY = false
         const scrollTop = bodyElem.scrollTop
-        tableInternalData.lastScrollLeft = scrollLeft
-        tableReactData.lastScrollTime = Date.now()
         setScrollLeft(headerElem, scrollLeft)
         setScrollLeft(bodyElem, scrollLeft)
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {

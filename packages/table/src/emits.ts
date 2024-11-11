@@ -52,6 +52,7 @@ export default [
   'edit-disabled',
   'valid-error',
   'scroll',
+  'scroll-boundary',
   'custom',
 
   'change-fnr', // 废弃
