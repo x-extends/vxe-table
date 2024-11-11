@@ -291,8 +291,6 @@ export default {
         const isRollX = true
         const isRollY = false
         const scrollTop = bodyElem.scrollTop
-        $xeTable.lastScrollLeft = scrollLeft
-        $xeTable.lastScrollTime = Date.now()
         setScrollLeft(headerElem, scrollLeft)
         setScrollLeft(bodyElem, scrollLeft)
         $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {

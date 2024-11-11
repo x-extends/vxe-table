@@ -384,11 +384,31 @@ export default {
     computeSXOpts () {
       return Object.assign({}, getConfig().table.scrollX, this.scrollX)
     },
+    computeScrollXThreshold () {
+      const $xeTable = this
+
+      const sXOpts = $xeTable.computeSXOpts
+      const { threshold } = sXOpts
+      if (threshold) {
+        return XEUtils.toNumber(threshold)
+      }
+      return 0
+    },
     sYOpts () {
       return this.computeSYOpts
     },
     computeSYOpts () {
       return Object.assign({}, getConfig().table.scrollY, this.scrollY)
+    },
+    computeScrollYThreshold () {
+      const $xeTable = this
+
+      const sYOpts = $xeTable.computeSYOpts
+      const { threshold } = sYOpts
+      if (threshold) {
+        return XEUtils.toNumber(threshold)
+      }
+      return 0
     },
     rowHeightMaps () {
       return {

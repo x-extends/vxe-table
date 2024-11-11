@@ -5654,25 +5654,16 @@ const Methods = {
   handleScrollEvent (evnt: Event, isRollY: boolean, isRollX: boolean, scrollTop: number, scrollLeft: number, params: any) {
     const $xeTable = this
     const props = $xeTable
+    const reactData = $xeTable
+    const internalData = $xeTable
 
     const { highlightHoverRow } = props
+    const { lastScrollLeft, lastScrollTop } = internalData
     const tableBody = $xeTable.$refs.tableBody
     const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
     const rowOpts = $xeTable.computeRowOpts
     const validTip = $xeTable.$refs.validTip
     const tooltip = $xeTable.$refs.tooltip
-    if (rowOpts.isHover || highlightHoverRow) {
-      $xeTable.clearHoverRow()
-    }
-    if (validTip && validTip.visible) {
-      validTip.close()
-    }
-    if (tooltip && tooltip.visible) {
-      tooltip.close()
-    }
-    if (isRollX) {
-      $xeTable.checkScrolling()
-    }
     const bodyHeight = bodyElem ? bodyElem.clientHeight : 0
     const bodyWidth = bodyElem ? bodyElem.clientWidth : 0
     const scrollHeight = bodyElem ? bodyElem.scrollHeight : 0
@@ -5681,17 +5672,50 @@ const Methods = {
     let isBottom = false
     let isLeft = false
     let isRight = false
+    let direction = ''
+    let isTopBoundary = false
+    let isBottomBoundary = false
+    let isLeftBoundary = false
+    let isRightBoundary = false
     if (isRollX) {
+      const xThreshold = $xeTable.computeScrollXThreshold
       isLeft = scrollLeft <= 0
-      if (!isTop) {
+      if (!isLeft) {
         isRight = scrollLeft + bodyWidth >= scrollWidth
       }
+      if (scrollLeft > lastScrollLeft) {
+        direction = 'right'
+        if (scrollLeft + bodyWidth >= scrollWidth - xThreshold) {
+          isRightBoundary = true
+        }
+      } else {
+        direction = 'left'
+        if (scrollLeft <= xThreshold) {
+          isLeftBoundary = true
+        }
+      }
       $xeTable.checkScrolling()
+      internalData.lastScrollLeft = scrollLeft
+      reactData.lastScrollTime = Date.now()
     } else {
+      const yThreshold = $xeTable.computeScrollYThreshold
       isTop = scrollTop <= 0
       if (!isTop) {
         isBottom = scrollTop + bodyHeight >= scrollHeight
       }
+      if (scrollTop > lastScrollTop) {
+        direction = 'bottom'
+        if (scrollTop + bodyHeight >= scrollHeight - yThreshold) {
+          isBottomBoundary = true
+        }
+      } else {
+        direction = 'top'
+        if (scrollTop <= yThreshold) {
+          isTopBoundary = true
+        }
+      }
+      internalData.lastScrollTop = scrollTop
+      reactData.lastScrollTime = Date.now()
     }
     const evntParams = {
       scrollTop,
@@ -5706,7 +5730,21 @@ const Methods = {
       isBottom,
       isLeft,
       isRight,
+      direction,
       ...params
+    }
+    if (rowOpts.isHover || highlightHoverRow) {
+      $xeTable.clearHoverRow()
+    }
+    if (validTip && validTip.visible) {
+      validTip.close()
+    }
+    if (tooltip && tooltip.visible) {
+      tooltip.close()
+    }
+
+    if (isBottomBoundary || isTopBoundary || isRightBoundary || isLeftBoundary) {
+      $xeTable.dispatchEvent('scroll-boundary', evntParams, evnt)
     }
     $xeTable.dispatchEvent('scroll', evntParams, evnt)
   },
@@ -5736,8 +5774,6 @@ const Methods = {
     const bodyElem = tableBody.$el as HTMLDivElement
     const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
     const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-    $xeTable.lastScrollLeft = scrollLeft
-    $xeTable.lastScrollTime = Date.now()
     setScrollLeft(bodyElem, scrollLeft)
     setScrollLeft(headerElem, scrollLeft)
     setScrollLeft(footerElem, scrollLeft)
@@ -5749,8 +5785,6 @@ const Methods = {
     const { scrollTop, scrollLeft } = wrapperEl
     const isRollX = true
     const isRollY = false
-    $xeTable.lastScrollLeft = scrollLeft
-    $xeTable.lastScrollTime = Date.now()
     $xeTable.handleSyncScrollX(scrollLeft)
     $xeTable.triggerScrollXEvent(evnt)
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
@@ -5770,8 +5804,6 @@ const Methods = {
     const bodyElem = tableBody.$el as HTMLDivElement
     const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
     const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
-    $xeTable.lastScrollTop = scrollTop
-    $xeTable.lastScrollTime = Date.now()
     setScrollTop(bodyElem, scrollTop)
     setScrollTop(leftElem, scrollTop)
     setScrollTop(rightElem, scrollTop)
@@ -5783,8 +5815,6 @@ const Methods = {
     const { scrollTop, scrollLeft } = wrapperEl
     const isRollX = false
     const isRollY = true
-    $xeTable.lastScrollTop = scrollTop
-    $xeTable.lastScrollTime = Date.now()
     $xeTable.handleSyncScrollY(scrollTop)
     $xeTable.triggerScrollYEvent(evnt)
     $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
