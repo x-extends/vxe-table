@@ -486,6 +486,7 @@ export default {
         area: {
           mergeErr: 'The operation cannot be performed on merged cells',
           multiErr: 'The operation cannot be performed on multiple selection areas',
+          selectErr: 'Unable to operate the cells in the designated area.',
           extendErr: 'If the extended area contains merged cells, all merged cells need to be the same size',
           pasteMultiErr: 'Cannot paste, copied area and pasted area of the same size are required to perform this operation',
           cpInvalidErr: 'This operation cannot be performed because there are prohibited columns in the area you selected ({0})'

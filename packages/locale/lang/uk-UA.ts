@@ -486,6 +486,7 @@ export default {
         area: {
           mergeErr: '无法对合并单元格进行该操作',
           multiErr: '无法对多重选择区域进行该操作',
+          selectErr: '无法操作指定区域的单元格',
           extendErr: '如果延伸的区域包含被合并的单元格，所有合并的单元格需大小相同',
           pasteMultiErr: '无法粘贴，需要相同大小的复制的区域和粘贴的区域才能执行此操作',
           cpInvalidErr: '该操作无法进行，您选择的区域中存在被禁止的列（{0}）'
