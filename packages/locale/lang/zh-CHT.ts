@@ -486,6 +486,7 @@ export default {
         area: {
           mergeErr: '無法對合併儲存格進行該操作',
           multiErr: '無法對多重選擇區域進行此操作',
+          selectErr: '无法操作指定区域的单元格',
           extendErr: '若延伸的區域包含被合併的儲存格，所有合併的儲存格需大小相同',
           pasteMultiErr: '無法貼上，需要相同大小的複製的區域和貼上的區域才能執行此操作',
           cpInvalidErr: '此操作無法進行，您選擇的區域中存在被禁止的列（{0}）'

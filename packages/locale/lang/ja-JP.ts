@@ -486,6 +486,7 @@ export default {
         area: {
           mergeErr: '該当セルに操作できません',
           multiErr: '複数の選択箇所に操作できません',
+          selectErr: '无法操作指定区域的单元格',
           extendErr: '結合セルが含まれている場合、すべての結合セルのサイズが同じでなければなりません',
           pasteMultiErr: 'ペーストできません。同じサーズの領域を選択してください',
           cpInvalidErr: '操作できません。選択禁止の列（{0}）が選択されています'

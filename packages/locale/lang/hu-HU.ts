@@ -486,6 +486,7 @@ export default {
         area: {
           mergeErr: 'Ez a művelet nem hajtható végre egyesített cellákon',
           multiErr: 'Ez a művelet nem hajtható végre több kiválasztási területen',
+          selectErr: 'Unable to operate the cells in the designated area.',
           extendErr: 'Ha a kiterjesztett tartomány egyesített cellákat tartalmaz, az összes egyesített cellának azonos méretűnek kell lennie',
           pasteMultiErr: 'Nem lehet beilleszteni, a másolt és beillesztett területeknek azonos méretűnek kell lenniük a művelet végrehajtásához',
           cpInvalidErr: 'A művelet nem hajtható végre. Tiltott oszlopok ({0}) vannak a kiválasztott tartományban.'
