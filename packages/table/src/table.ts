@@ -1233,7 +1233,7 @@ export default defineComponent({
                   titleWidth += (btnEl as HTMLElement).offsetWidth + 1
                 })
               } else {
-                const labelEl = cellEl.firstChild as HTMLElement
+                const labelEl = cellEl.firstElementChild as HTMLElement
                 if (labelEl) {
                   titleWidth = labelEl.offsetWidth
                 }
