@@ -6920,7 +6920,6 @@ export default defineComponent({
         let isBottomBoundary = false
         let isLeftBoundary = false
         let isRightBoundary = false
-        console.log(222)
         if (isRollX) {
           const xThreshold = computeScrollXThreshold.value
           isLeft = scrollLeft <= 0
