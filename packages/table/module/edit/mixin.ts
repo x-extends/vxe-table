@@ -634,7 +634,12 @@ export default {
           if (XEUtils.isFunction(autoFocus)) {
             inputElem = autoFocus.call(this, params)
           } else if (autoFocus) {
-            inputElem = cell.querySelector(autoFocus)
+            if (autoFocus === true) {
+              // 自动匹配模式，会自动匹配第一个可输入元素
+              inputElem = cell.querySelector('input,textarea')
+            } else {
+              inputElem = cell.querySelector(autoFocus)
+            }
             if (inputElem) {
               inputElem.focus()
             }

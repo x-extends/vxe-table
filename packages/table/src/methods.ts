@@ -1262,6 +1262,23 @@ const Methods = {
     }
     return this.createData(records).then((rows: any) => isArr ? rows : rows[0])
   },
+  // toOriginalRecords (rows: any[]) {
+  //   const { treeConfig } = props
+  //   const treeOpts = computeTreeOpts.value
+  //   const { transform, mapChildrenField } = treeOpts
+  //   const rowkey = getRowkey($xeTable)
+  //   if (treeConfig) {
+  //     if (transform) {
+  //       return []
+  //     }
+  //     return []
+  //   }
+  //   return rows.map(item => {
+  //     const obj = Object.assign({}, item)
+  //     delete obj.rowkey
+  //     return obj
+  //   })
+  // },
   /**
    * 还原数据
    * 如果不传任何参数，则还原整个表格
