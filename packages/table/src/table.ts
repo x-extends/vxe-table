@@ -1226,7 +1226,7 @@ export default defineComponent({
             let colWidth = column.renderAutoWidth - paddingSize
             XEUtils.arrayEach(cellElList, (itemEl) => {
               const cellEl = itemEl as HTMLElement
-              const thElem = cellEl.parentNode as HTMLElement
+              const thElem = cellEl.parentElement as HTMLElement
               let titleWidth = 0
               if (`${thElem.tagName}`.toLowerCase() === 'th') {
                 XEUtils.arrayEach(cellEl.children, (btnEl) => {
@@ -6920,6 +6920,7 @@ export default defineComponent({
         let isBottomBoundary = false
         let isLeftBoundary = false
         let isRightBoundary = false
+        console.log(222)
         if (isRollX) {
           const xThreshold = computeScrollXThreshold.value
           isLeft = scrollLeft <= 0
@@ -7442,7 +7443,7 @@ export default defineComponent({
             }, [
               h('div', {
                 ref: refScrollYSpaceElem,
-                class: 'vxe-table--scroll-x-space'
+                class: 'vxe-table--scroll-y-space'
               })
             ])
           ])
