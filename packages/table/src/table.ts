@@ -1249,7 +1249,7 @@ export default {
           }, [
             h('div', {
               ref: 'refScrollYSpaceElem',
-              class: 'vxe-table--scroll-x-space'
+              class: 'vxe-table--scroll-y-space'
             })
           ])
         ])

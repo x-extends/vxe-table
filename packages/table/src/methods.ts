@@ -2415,14 +2415,14 @@ const Methods = {
           let colWidth = column.renderAutoWidth - paddingSize
           XEUtils.arrayEach(cellElList, (itemEl) => {
             const cellEl = itemEl as HTMLElement
-            const thElem = cellEl.parentNode as HTMLElement
+            const thElem = cellEl.parentElement as HTMLElement
             let titleWidth = 0
             if (`${thElem.tagName}`.toLowerCase() === 'th') {
               XEUtils.arrayEach(cellEl.children, (btnEl) => {
                 titleWidth += (btnEl as HTMLElement).offsetWidth + 1
               })
             } else {
-              const labelEl = cellEl.firstChild as HTMLElement
+              const labelEl = cellEl.firstElementChild as HTMLElement
               if (labelEl) {
                 titleWidth = labelEl.offsetWidth
               }
