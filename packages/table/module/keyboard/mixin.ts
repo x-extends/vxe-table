@@ -23,25 +23,42 @@ function getTargetOffset (target: any, container: any) {
   return { offsetTop, offsetLeft }
 }
 
-function getCheckboxRangeRows (_vm: any, params: any, targetTrElem: any, moveRange: any) {
+function getCheckboxRangeRows ($xeTable: any, evnt: MouseEvent, params: any, targetTrElem: HTMLElement, trRect: DOMRect, offsetClientTop: number, moveRange: number) {
+  const reactData = $xeTable
+  const internalData = $xeTable
+
   let countHeight = 0
-  let rangeRows = []
+  let rangeRows: any[] = []
+  let moveSize = 0
   const isDown = moveRange > 0
-  const moveSize = moveRange > 0 ? moveRange : (Math.abs(moveRange) + targetTrElem.offsetHeight)
-  const { afterFullData, scrollYStore, scrollYLoad } = _vm
+  const { scrollYLoad } = reactData
+  const { afterFullData, scrollYStore } = internalData
   if (scrollYLoad) {
-    const _rowIndex = _vm.getVTRowIndex(params.row)
+    if (isDown) {
+      moveSize = offsetClientTop + moveRange
+    } else {
+      moveSize = (trRect.height - offsetClientTop) + Math.abs(moveRange)
+    }
+    const _rowIndex = $xeTable.getVTRowIndex(params.row)
     if (isDown) {
       rangeRows = afterFullData.slice(_rowIndex, _rowIndex + Math.ceil(moveSize / scrollYStore.rowHeight))
     } else {
-      rangeRows = afterFullData.slice(_rowIndex - Math.floor(moveSize / scrollYStore.rowHeight) + 1, _rowIndex + 1)
+      rangeRows = afterFullData.slice(_rowIndex - Math.floor(moveSize / scrollYStore.rowHeight), _rowIndex + 1)
     }
   } else {
+    if (isDown) {
+      moveSize = evnt.clientY - trRect.y
+    } else {
+      moveSize = trRect.y - evnt.clientY + trRect.height
+    }
     const siblingProp = isDown ? 'next' : 'previous'
     while (targetTrElem && countHeight < moveSize) {
-      rangeRows.push(_vm.getRowNode(targetTrElem).item)
-      countHeight += targetTrElem.offsetHeight
-      targetTrElem = targetTrElem[`${siblingProp}ElementSibling`]
+      const rowNodeRest = $xeTable.getRowNode(targetTrElem)
+      if (rowNodeRest) {
+        rangeRows.push(rowNodeRest.item)
+        countHeight += targetTrElem.offsetHeight
+        targetTrElem = targetTrElem[`${siblingProp}ElementSibling`] as HTMLElement
+      }
     }
   }
   return rangeRows
@@ -228,6 +245,8 @@ export default {
         const startLeft = offsetRest.offsetLeft + evnt.offsetX
         const startScrollTop = bodyWrapperElem.scrollTop
         const rowHeight = trElem.offsetHeight
+        const trRect = trElem.getBoundingClientRect()
+        const offsetClientTop = disY - trRect.y
         let mouseScrollTimeout: any = null
         let isMouseScrollDown: any = false
         let mouseScrollSpaceSize = 1
@@ -269,7 +288,7 @@ export default {
           checkboxRangeElem.style.left = `${rangeLeft}px`
           checkboxRangeElem.style.top = `${rangeTop}px`
           checkboxRangeElem.style.display = 'block'
-          const rangeRows = getCheckboxRangeRows(this, params, trElem, offsetTop < marginSize ? -rangeHeight : rangeHeight)
+          const rangeRows = getCheckboxRangeRows(this, evnt, params, trElem, trRect, offsetClientTop, offsetTop < marginSize ? -rangeHeight : rangeHeight)
           // 至少滑动 10px 才能有效匹配
           if (rangeHeight > 10 && rangeRows.length !== lastRangeRows.length) {
             lastRangeRows = rangeRows
