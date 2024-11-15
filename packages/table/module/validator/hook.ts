@@ -43,7 +43,7 @@ class Rule {
   [key: string]: any
 }
 
-const tableValidatorMethodKeys: (keyof TableValidatorMethods)[] = ['fullValidate', 'validate', 'clearValidate']
+const tableValidatorMethodKeys: (keyof TableValidatorMethods)[] = ['fullValidate', 'validate', 'fullValidateField', 'validateField', 'clearValidate']
 
 hooks.add('tableValidatorModule', {
   setupTable ($xeTable) {
@@ -106,7 +106,7 @@ hooks.add('tableValidatorModule', {
      * 如果只传 callback 否则默认验证整个表格数据
      * 返回 Promise 对象，或者使用回调方式
      */
-    const beginValidate = (rows: any, cb: any, isFull?: boolean): Promise<any> => {
+    const beginValidate = (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull?: boolean): Promise<any> => {
       const validRest: any = {}
       const { editRules, treeConfig } = props
       const { afterFullData, visibleColumn } = internalData
@@ -141,15 +141,16 @@ hooks.add('tableValidatorModule', {
         content: any;
       }> = {}
       if (editRules) {
-        const columns = $xeTable.getColumns()
+        const columns = cols && cols.length ? cols : $xeTable.getColumns()
         const handleVaild = (row: any) => {
           if (isFull || !validRuleErr) {
             const colVailds: any[] = []
-            columns.forEach((column: any) => {
-              if ((isFull || !validRuleErr) && XEUtils.has(editRules, column.property)) {
+            columns.forEach((column) => {
+              const field = XEUtils.isString(column) ? column : column.field
+              if ((isFull || !validRuleErr) && XEUtils.has(editRules, field)) {
                 colVailds.push(
                   validatorPrivateMethods.validCellRules('all', row, column)
-                    .catch(({ rule, rules }: any) => {
+                    .catch(({ rule, rules }) => {
                       const rest = {
                         rule,
                         rules,
@@ -157,11 +158,11 @@ hooks.add('tableValidatorModule', {
                         row,
                         columnIndex: $xeTable.getColumnIndex(column),
                         column,
-                        field: column.property,
+                        field,
                         $table: $xeTable
                       }
-                      if (!validRest[column.property]) {
-                        validRest[column.property] = []
+                      if (!validRest[field]) {
+                        validRest[field] = []
                       }
                       validErrMaps[`${getRowid($xeTable, row)}:${column.id}`] = {
                         column,
@@ -169,7 +170,7 @@ hooks.add('tableValidatorModule', {
                         rule,
                         content: rule.content
                       }
-                      validRest[column.property].push(rest)
+                      validRest[field].push(rest)
                       if (!isFull) {
                         validRuleErr = true
                         return Promise.reject(rest)
@@ -249,7 +250,7 @@ hooks.add('tableValidatorModule', {
 
     validatorMethods = {
       /**
-       * 完整校验，和 validate 的区别就是会给有效数据中的每一行进行校验
+       * 完整校验行，和 validate 的区别就是会给有效数据中的每一行进行校验
        */
       fullValidate (rows, cb) {
         if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -257,25 +258,40 @@ hooks.add('tableValidatorModule', {
             warnLog('vxe.error.notValidators', ['fullValidate(rows, callback)', 'fullValidate(rows)'])
           }
         }
-        return beginValidate(rows, cb, true)
+        return beginValidate(rows, null, cb, true)
       },
       /**
-       * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
+       * 快速校验行，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
        */
       validate (rows, cb) {
-        if (process.env.VUE_APP_VXE_ENV === 'development') {
-          if (XEUtils.isFunction(cb)) {
-            warnLog('vxe.error.notValidators', ['validate(rows, callback)', 'validate(rows)'])
-          }
+        return beginValidate(rows, null, cb)
+      },
+      /**
+       * 完整校验单元格，和 validateField 的区别就是会给有效数据中的每一行进行校验
+       */
+      fullValidateField (rows, fieldOrColumn) {
+        const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn($xeTable, column)) as VxeTableDefines.ColumnInfo<any>[]
+        if (colList.length) {
+          return beginValidate(rows, colList, null, true)
         }
-        return beginValidate(rows, cb)
+        return nextTick()
+      },
+      /**
+       * 快速校验单元格，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
+       */
+      validateField (rows, fieldOrColumn) {
+        const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn($xeTable, column)) as VxeTableDefines.ColumnInfo<any>[]
+        if (colList.length) {
+          return beginValidate(rows, colList, null)
+        }
+        return nextTick()
       },
       clearValidate (rows, fieldOrColumn) {
         const { validErrorMaps } = reactData
         const validTip = refValidTooltip.value
         const validOpts = computeValidOpts.value
         const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
-        const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : []).map(column => handleFieldOrColumn($xeTable, column))) as VxeTableDefines.ColumnInfo<any>[]
+        const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn($xeTable, column)) as VxeTableDefines.ColumnInfo<any>[]
         let validErrMaps: Record<string, {
           row: any;
           column: any;

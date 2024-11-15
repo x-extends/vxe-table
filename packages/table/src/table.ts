@@ -5181,7 +5181,14 @@ export default defineComponent({
                       // 如果点击了当前表格之外
                       !getEventTargetNode(evnt, el).flag
                   ) {
-                    setTimeout(() => $xeTable.clearEdit(evnt))
+                    setTimeout(() => {
+                      $xeTable.clearEdit(evnt).then(() => {
+                        // 如果存在校验，点击了表格之外则清除
+                        if (!internalData.isActivated && editRules && validOpts.autoClear) {
+                          reactData.validErrorMaps = {}
+                        }
+                      })
+                    })
                   }
                 })
               }
