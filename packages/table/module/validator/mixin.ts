@@ -5,6 +5,8 @@ import { scrollToView } from '../../../ui/src/dom'
 import { handleFieldOrColumn, getRowid } from '../../src/util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
+import type { VxeTableDefines } from '../../../../types'
+
 const { getConfig, validators } = VxeUI
 
 /**
@@ -73,7 +75,7 @@ export default {
           warnLog('vxe.error.notValidators', ['fullValidate(rows, callback)', 'fullValidate(rows)'])
         }
       }
-      return this.beginValidate(rows, cb, true)
+      return this.beginValidate(rows, null, cb, true)
     },
     /**
      * 快速校验，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
@@ -84,7 +86,27 @@ export default {
           warnLog('vxe.error.notValidators', ['validate(rows, callback)', 'validate(rows)'])
         }
       }
-      return this.beginValidate(rows, cb)
+      return this.beginValidate(rows, null, cb)
+    },
+    /**
+     * 完整校验单元格，和 validateField 的区别就是会给有效数据中的每一行进行校验
+     */
+    _fullValidateField (rows: any, fieldOrColumn: any) {
+      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn(this, column))
+      if (colList.length) {
+        return this.beginValidate(rows, colList, null, true)
+      }
+      return this.$nextTick()
+    },
+    /**
+     * 快速校验单元格，如果存在记录不通过的记录，则返回不再继续校验（异步校验除外）
+     */
+    _validateField (rows: any, fieldOrColumn: any) {
+      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn(this, column))
+      if (colList.length) {
+        return this.beginValidate(rows, colList, null)
+      }
+      return this.$nextTick()
     },
     /**
      * 聚焦到校验通过的单元格并弹出校验错误提示
@@ -131,7 +153,7 @@ export default {
      * 如果只传 callback 否则默认验证整个表格数据
      * 返回 Promise 对象，或者使用回调方式
      */
-    beginValidate (rows: any, cb: any, isFull: any) {
+    beginValidate (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull: any) {
       const validRest: any = {}
       const { editRules, afterFullData, visibleColumn, treeConfig, treeOpts } = this
       const childrenField = treeOpts.children || treeOpts.childrenField
@@ -154,12 +176,13 @@ export default {
       this.clearValidate()
       const validErrMaps: any = {}
       if (editRules) {
-        const columns = this.getColumns()
+        const columns = cols && cols.length ? cols : this.getColumns()
         const handleVaild = (row: any) => {
           if (isFull || !this.validRuleErr) {
             const colVailds: any[] = []
             columns.forEach((column: any) => {
-              if ((isFull || !this.validRuleErr) && XEUtils.has(editRules, column.property)) {
+              const field = XEUtils.isString(column) ? column : column.field
+              if ((isFull || !this.validRuleErr) && XEUtils.has(editRules, field)) {
                 colVailds.push(
                   this.validCellRules('all', row, column)
                     .catch(({ rule, rules }: any) => {
@@ -170,11 +193,11 @@ export default {
                         row,
                         columnIndex: this.getColumnIndex(column),
                         column,
-                        field: column.property,
+                        field,
                         $table: this
                       }
-                      if (!validRest[column.property]) {
-                        validRest[column.property] = []
+                      if (!validRest[field]) {
+                        validRest[field] = []
                       }
                       validErrMaps[`${getRowid(this, row)}:${column.id}`] = {
                         column,
@@ -182,7 +205,7 @@ export default {
                         rule,
                         content: rule.content
                       }
-                      validRest[column.property].push(rest)
+                      validRest[field].push(rest)
                       if (!isFull) {
                         this.validRuleErr = true
                         return Promise.reject(rest)
@@ -371,7 +394,7 @@ export default {
       const { validOpts, validErrorMaps } = this
       const validTip = this.$refs.validTip
       const rowList = XEUtils.isArray(rows) ? rows : (rows ? [rows] : [])
-      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : []).map(column => handleFieldOrColumn(this, column)))
+      const colList = (XEUtils.isArray(fieldOrColumn) ? fieldOrColumn : (fieldOrColumn ? [fieldOrColumn] : [])).map(column => handleFieldOrColumn(this, column))
       let validErrMaps: any = {}
       if (validTip && validTip.visible) {
         validTip.close()
