@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
-import { toFilters, handleFieldOrColumn } from '../../src/util'
+import { toFilters, handleFieldOrColumn, getRefElem } from '../../src/util'
 import { getDomNode, triggerEvent } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
@@ -251,8 +251,7 @@ hooks.add('tableFilterModule', {
           const { elemStore } = internalData
           const { fixed } = column
           return $xeTable.scrollToColumn(column).then(() => {
-            const headerWrapperRef = elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper']
-            const headerWrapperElem = headerWrapperRef ? headerWrapperRef.value : null
+            const headerWrapperElem = getRefElem(elemStore[`${fixed || 'main'}-header-wrapper`] || elemStore['main-header-wrapper'])
             if (headerWrapperElem) {
               const filterBtnElem = headerWrapperElem.querySelector(`.vxe-header--column.${column.id} .vxe-filter--btn`) as HTMLElement
               triggerEvent(filterBtnElem, 'click')

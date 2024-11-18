@@ -256,6 +256,41 @@ hooks.add('tableEditModule', {
       })
     }
 
+    const handleClearEdit = (evnt: Event | null, targetRow?: any) => {
+      const { editStore } = reactData
+      const { actived, focused } = editStore
+      const { row, column } = actived
+      const validOpts = computeValidOpts.value
+      if (row || column) {
+        if (targetRow && getRowid($xeTable, targetRow) !== getRowid($xeTable, row)) {
+          return nextTick()
+        }
+        syncActivedCell()
+        actived.args = null
+        actived.row = null
+        actived.column = null
+        $xeTable.updateFooter()
+        $xeTable.dispatchEvent('edit-closed', {
+          row,
+          rowIndex: $xeTable.getRowIndex(row),
+          $rowIndex: $xeTable.getVMRowIndex(row),
+          column,
+          columnIndex: $xeTable.getColumnIndex(column),
+          $columnIndex: $xeTable.getVMColumnIndex(column)
+        }, evnt || null)
+      }
+      if (validOpts.autoClear) {
+        if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
+          if ($xeTable.clearValidate) {
+            return $xeTable.clearValidate()
+          }
+        }
+      }
+      focused.row = null
+      focused.column = null
+      return nextTick()
+    }
+
     editMethods = {
       /**
        * 往表格中插入临时数据
@@ -514,46 +549,18 @@ hooks.add('tableEditModule', {
         }
         return null
       },
-      clearActived (evnt) {
+      clearActived (row) {
         // 即将废弃
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
         }
-        return this.clearEdit(evnt)
+        return this.clearEdit(row)
       },
       /**
        * 清除激活的编辑
        */
-      clearEdit (evnt) {
-        const { editStore } = reactData
-        const { actived, focused } = editStore
-        const { row, column } = actived
-        const validOpts = computeValidOpts.value
-        if (row || column) {
-          syncActivedCell()
-          actived.args = null
-          actived.row = null
-          actived.column = null
-          $xeTable.updateFooter()
-          $xeTable.dispatchEvent('edit-closed', {
-            row,
-            rowIndex: $xeTable.getRowIndex(row),
-            $rowIndex: $xeTable.getVMRowIndex(row),
-            column,
-            columnIndex: $xeTable.getColumnIndex(column),
-            $columnIndex: $xeTable.getVMColumnIndex(column)
-          }, evnt || null)
-        }
-        if (validOpts.autoClear) {
-          if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
-            if ($xeTable.clearValidate) {
-              return $xeTable.clearValidate()
-            }
-          }
-        }
-        focused.row = null
-        focused.column = null
-        return nextTick()
+      clearEdit (row) {
+        return handleClearEdit(null, row)
       },
       /**
        * 清除所选中源状态
@@ -687,7 +694,7 @@ hooks.add('tableEditModule', {
                 }
                 $xeTable.closeTooltip()
                 if (actived.column) {
-                  editMethods.clearEdit(evnt)
+                  handleClearEdit(evnt)
                 }
                 type = 'edit-activated'
                 column.renderHeight = cell.offsetHeight
@@ -766,6 +773,12 @@ hooks.add('tableEditModule', {
         return editPrivateMethods.handleEdit(params, evnt)
       },
       /**
+       * 处理取消编辑
+       * @param evnt
+       * @returns
+       */
+      handleClearEdit,
+      /**
        * 处理聚焦
        */
       handleFocus (params) {
@@ -836,7 +849,7 @@ hooks.add('tableEditModule', {
         const selectMethod = () => {
           if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
             if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
-              editMethods.clearEdit(evnt)
+              handleClearEdit(evnt)
               editMethods.clearSelected()
               if ($xeTable.clearCellAreas) {
                 $xeTable.clearCellAreas()

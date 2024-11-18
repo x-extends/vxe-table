@@ -10,7 +10,6 @@
       :column-config="{resizable: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
-      :checkbox-config="{labelField: 'name', highlight: true, range: true}"
       :data="tableData">
       <vxe-column type="checkbox" width="60"></vxe-column>
       <vxe-column field="col0" title="列0" width="100"></vxe-column>

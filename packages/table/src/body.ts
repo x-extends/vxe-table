@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { mergeBodyMethod, getRowid, XEBodyScrollElement } from './util'
+import { mergeBodyMethod, getRowid, XEBodyScrollElement, getRefElem } from './util'
 import { updateCellTitle, getPropClass, setScrollTop, setScrollLeft } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -359,7 +359,7 @@ export default defineComponent({
           getPropClass(className, params),
           getPropClass(allCellClassName, params)
         ],
-        key: columnKey || columnOpts.useKey || rowOpts.useKey ? colid : $columnIndex,
+        key: columnKey || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? colid : $columnIndex,
         ...attrs,
         style: Object.assign({
           height: cellHeight
@@ -370,13 +370,14 @@ export default defineComponent({
 
     const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, pendingRowList } = tableReactData
+      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, pendingRowList, isDragColMove } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
       const treeOpts = computeTreeOpts.value
       const editOpts = computeEditOpts.value
       const rowOpts = computeRowOpts.value
+      const columnOpts = computeColumnOpts.value
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       const rows: any[] = []
@@ -431,30 +432,44 @@ export default defineComponent({
           rowChildren = row[childrenField]
           isExpandTree = rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
         }
+        const trClass = [
+          'vxe-body--row',
+          treeConfig ? `row--level-${rowLevel}` : '',
+          {
+            'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
+            'is--new': isNewRow,
+            'is--expand-row': isExpandRow,
+            'is--expand-tree': isExpandTree,
+            'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
+            'row--radio': radioOpts.highlight && $xeTable.eqRow(selectRadioRow, row),
+            'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
+            'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
+          },
+          getPropClass(rowClassName, params)
+        ]
+        const tdVNs = tableColumn.map((column: any, $columnIndex: any) => {
+          return renderColumn(seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
+        })
         rows.push(
-          h('tr', {
-            class: [
-              'vxe-body--row',
-              treeConfig ? `row--level-${rowLevel}` : '',
-              {
-                'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
-                'is--new': isNewRow,
-                'is--expand-row': isExpandRow,
-                'is--expand-tree': isExpandTree,
-                'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-                'row--radio': radioOpts.highlight && $xeTable.eqRow(selectRadioRow, row),
-                'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-                'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
-              },
-              getPropClass(rowClassName, params)
-            ],
-            rowid: rowid,
-            style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-            key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
-            ...trOn
-          }, tableColumn.map((column: any, $columnIndex: any) => {
-            return renderColumn(seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
-          }))
+          columnOpts.drag
+            ? h(TransitionGroup, {
+              name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
+              tag: 'tr',
+              class: trClass,
+              rowid: rowid,
+              style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
+              key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
+              ...trOn
+            }, {
+              default: () => tdVNs
+            })
+            : h('tr', {
+              class: trClass,
+              rowid: rowid,
+              style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
+              key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
+              ...trOn
+            }, tdVNs)
         )
         // 如果行被展开了
         if (isExpandRow) {
@@ -578,10 +593,8 @@ export default defineComponent({
       const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
       const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
       const bodyElem = tableBody.$el as HTMLDivElement
-      const bodyYRef = elemStore['main-body-ySpace']
-      const bodyYElem = bodyYRef ? bodyYRef.value : null
-      const bodyXRef = elemStore['main-body-xSpace']
-      const bodyXElem = bodyXRef ? bodyXRef.value : null
+      const bodyYElem = getRefElem(elemStore['main-body-ySpace'])
+      const bodyXElem = getRefElem(elemStore['main-body-xSpace'])
       const bodyHeight = scrollYLoad && bodyYElem ? bodyYElem.clientHeight : bodyElem.clientHeight
       const bodyWidth = scrollXLoad && bodyXElem ? bodyXElem.clientWidth : bodyElem.clientWidth
       const remainSize = isPrevWheelTop === isTopWheel ? Math.max(0, wheelYSize - wheelYTotal) : 0
@@ -712,6 +725,7 @@ export default defineComponent({
       const emptyOpts = computeEmptyOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const mouseOpts = computeMouseOpts.value
+      const columnOpts = computeColumnOpts.value
       // const isMergeLeftFixedExceeded = computeIsMergeLeftFixedExceeded.value
       // const isMergeRightFixedExceeded = computeIsMergeRightFixedExceeded.value
       // 如果是使用优化模式
@@ -787,8 +801,9 @@ export default defineComponent({
           /**
            * 内容
            */
-          rowOpts.drag
+          rowOpts.drag || columnOpts.drag
             ? h(TransitionGroup, {
+              ref: refBodyTBody,
               name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`,
               tag: 'tbody'
             }, {

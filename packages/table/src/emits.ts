@@ -45,6 +45,9 @@ export default [
   'row-dragstart',
   'row-dragover',
   'row-dragend',
+  'column-dragstart',
+  'column-dragover',
+  'column-dragend',
 
   'edit-actived', // 废弃
 

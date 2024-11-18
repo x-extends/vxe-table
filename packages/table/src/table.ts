@@ -9,7 +9,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, XEBodyScrollElement, getRootColumn } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, XEBodyScrollElement, getRootColumn, getRefElem } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -259,10 +259,14 @@ export default defineComponent({
         isHeader: false,
         isFooter: false
       },
+
       scrollVMLoading: false,
       isDragRowMove: false,
       dragRow: null,
+      isDragColMove: false,
+      dragCol: null,
       dragTipText: '',
+
       _isResize: false,
       _isLoading: false
     })
@@ -372,7 +376,9 @@ export default defineComponent({
     const refCellResizeBar = ref() as Ref<HTMLDivElement>
     const refEmptyPlaceholder = ref() as Ref<HTMLDivElement>
 
-    const refRowDragTipElem = ref<HTMLDivElement>()
+    const refDragTipElem = ref<HTMLDivElement>()
+    const refDragRowLineElem = ref<HTMLDivElement>()
+    const refDragColLineElem = ref<HTMLDivElement>()
 
     const refScrollXVirtualElem = ref<HTMLDivElement>()
     const refScrollYVirtualElem = ref<HTMLDivElement>()
@@ -446,8 +452,12 @@ export default defineComponent({
       return Object.assign({}, getConfig().table.rowConfig, props.rowConfig) as VxeTablePropTypes.RowOpts
     })
 
-    const computeDragOpts = computed(() => {
-      return Object.assign({}, getConfig().table.dragConfig, props.dragConfig) as VxeTablePropTypes.DragConfig
+    const computeRowDragOpts = computed(() => {
+      return Object.assign({}, getConfig().table.rowDragConfig, props.rowDragConfig)
+    })
+
+    const computeColumnDragOpts = computed(() => {
+      return Object.assign({}, getConfig().table.columnDragConfig, props.columnDragConfig)
     })
 
     const computeResizeOpts = computed(() => {
@@ -702,7 +712,8 @@ export default defineComponent({
       computeColumnOpts,
       computeCellOpts,
       computeRowOpts,
-      computeDragOpts,
+      computeRowDragOpts,
+      computeColumnDragOpts,
       computeResizeOpts,
       computeResizableOpts,
       computeSeqOpts,
@@ -1662,8 +1673,7 @@ export default defineComponent({
       const cellOffsetWidth = computeCellOffsetWidth.value
       const mouseOpts = computeMouseOpts.value
       const keyboardOpts = computeKeyboardOpts.value
-      const bodyWrapperRef = elemStore['main-body-wrapper']
-      const bodyWrapperElem = bodyWrapperRef ? bodyWrapperRef.value : null
+      const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
       if (emptyPlaceholderElem) {
         emptyPlaceholderElem.style.top = `${headerHeight}px`
         emptyPlaceholderElem.style.height = bodyWrapperElem ? `${bodyWrapperElem.offsetHeight - scrollbarHeight}px` : ''
@@ -1711,10 +1721,8 @@ export default defineComponent({
           fixedWrapperElem = isFixedLeft ? refLeftContainer.value : refRightContainer.value
         }
         layoutList.forEach(layout => {
-          const wrapperRef = elemStore[`${name}-${layout}-wrapper`]
-          const wrapperElem = wrapperRef ? wrapperRef.value : null
-          const tableRef = elemStore[`${name}-${layout}-table`]
-          const tableElem = tableRef ? tableRef.value : null
+          const wrapperElem = getRefElem(elemStore[`${name}-${layout}-wrapper`])
+          const tableElem = getRefElem(elemStore[`${name}-${layout}-table`])
           if (layout === 'header') {
             // 表头体样式处理
             // 横向滚动渲染
@@ -1738,14 +1746,12 @@ export default defineComponent({
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
             }
 
-            const repairRef = elemStore[`${name}-${layout}-repair`]
-            const repairElem = repairRef ? repairRef.value : null
+            const repairElem = getRefElem(elemStore[`${name}-${layout}-repair`])
             if (repairElem) {
               repairElem.style.width = `${tableWidth}px`
             }
 
-            const listRef = elemStore[`${name}-${layout}-list`]
-            const listElem = listRef ? listRef.value : null
+            const listElem = getRefElem(elemStore[`${name}-${layout}-list`])
             if (isGroup && listElem) {
               XEUtils.arrayEach(listElem.querySelectorAll('.col--group'), (thElem: any) => {
                 const colNode = tableMethods.getColumnNode(thElem)
@@ -1772,8 +1778,7 @@ export default defineComponent({
               })
             }
           } else if (layout === 'body') {
-            const emptyBlockRef = elemStore[`${name}-${layout}-emptyBlock`]
-            const emptyBlockElem = emptyBlockRef ? emptyBlockRef.value : null
+            const emptyBlockElem = getRefElem(elemStore[`${name}-${layout}-emptyBlock`])
             if (isNodeElement(wrapperElem)) {
               let bodyMaxHeight = 0
               const bodyMinHeight = customMinHeight - headerHeight - footerHeight
@@ -1867,8 +1872,7 @@ export default defineComponent({
               tableElem.style.width = tWidth ? `${tWidth + scrollbarWidth}px` : ''
             }
           }
-          const colgroupRef = elemStore[`${name}-${layout}-colgroup`]
-          const colgroupElem = colgroupRef ? colgroupRef.value : null
+          const colgroupElem = getRefElem(elemStore[`${name}-${layout}-colgroup`])
           if (colgroupElem) {
             XEUtils.arrayEach(colgroupElem.children, (colElem: any) => {
               const colid = colElem.getAttribute('name')
@@ -1892,8 +1896,7 @@ export default defineComponent({
                 const showTitle = cellOverflow === 'title'
                 const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
                 let hasEllipsis = showTitle || showTooltip || showEllipsis
-                const listRef = elemStore[`${name}-${layout}-list`]
-                const listElem = listRef ? listRef.value : null
+                const listElem = getRefElem(elemStore[`${name}-${layout}-list`])
                 // 纵向虚拟滚动不支持动态行高
                 if (scrollYLoad && !hasEllipsis) {
                   hasEllipsis = true
@@ -2504,6 +2507,7 @@ export default defineComponent({
       editStore.removeMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
       reactData.scrollYLoad = sYLoad
+      reactData.isDragRowMove = false
       // 全量数据
       internalData.tableFullData = fullData
       internalData.tableFullTreeData = treeData
@@ -2762,6 +2766,7 @@ export default defineComponent({
       const tableFullColumn = getColumnList(collectColumn)
       internalData.tableFullColumn = tableFullColumn
       reactData._isLoading = true
+      reactData.isDragColMove = false
       initColumnSort()
       return Promise.resolve(
         restoreCustomStorage()
@@ -4988,8 +4993,8 @@ export default defineComponent({
       updateCellAreas () {
         const { mouseConfig } = props
         const mouseOpts = computeMouseOpts.value
-        if (mouseConfig && mouseOpts.area && $xeTable.handleUpdateCellAreas) {
-          return $xeTable.handleUpdateCellAreas()
+        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
+          return $xeTable.handleRecalculateCellAreas()
         }
         return nextTick()
       },
@@ -5182,7 +5187,7 @@ export default defineComponent({
                       !getEventTargetNode(evnt, el).flag
                   ) {
                     setTimeout(() => {
-                      $xeTable.clearEdit(evnt).then(() => {
+                      $xeTable.handleClearEdit(evnt).then(() => {
                         // 如果存在校验，点击了表格之外则清除
                         if (!internalData.isActivated && editRules && validOpts.autoClear) {
                           reactData.validErrorMaps = {}
@@ -5262,8 +5267,8 @@ export default defineComponent({
       if (isEsc) {
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
           dispatchEvent('keydown-start', {}, evnt)
-          if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardEvent) {
-            $xeTable.handleKeyboardEvent(evnt)
+          if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardCellAreaEvent) {
+            $xeTable.handleKeyboardCellAreaEvent(evnt)
           } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
             evnt.stopPropagation()
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
@@ -5275,7 +5280,7 @@ export default defineComponent({
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
-                $xeTable.clearEdit(evnt)
+                $xeTable.handleClearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
                   nextTick(() => $xeTable.handleSelected(params, evnt))
@@ -5337,8 +5342,8 @@ export default defineComponent({
             } else {
               $xeTable.moveCtxMenu(evnt, ctxMenuStore, 'selected', isRightArrow, true, menuList)
             }
-          } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardEvent) {
-            $xeTable.handleKeyboardEvent(evnt)
+          } else if (keyboardConfig && mouseConfig && mouseOpts.area && $xeTable.handleKeyboardCellAreaEvent) {
+            $xeTable.handleKeyboardCellAreaEvent(evnt)
           } else if (isEsc) {
             // 如果按下了 Esc 键，关闭快捷菜单、筛选
             if ($xeTable.closeMenu) {
@@ -5349,7 +5354,7 @@ export default defineComponent({
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
-                $xeTable.clearEdit(evnt)
+                $xeTable.handleClearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
                   nextTick(() => $xeTable.handleSelected(params, evnt))
@@ -5385,7 +5390,7 @@ export default defineComponent({
               // 如果是激活编辑状态，则取消编辑
               if (actived.row) {
                 const params = actived.args
-                $xeTable.clearEdit(evnt)
+                $xeTable.handleClearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
                   nextTick(() => $xeTable.handleSelected(params, evnt))
@@ -5599,8 +5604,8 @@ export default defineComponent({
       if (!el || !el.clientWidth) {
         return nextTick()
       }
-      tableMethods.updateCellAreas()
       tableMethods.recalculate(true)
+      tableMethods.updateCellAreas()
     }
 
     const handleTargetEnterEvent = (isClear: boolean) => {
@@ -5637,65 +5642,112 @@ export default defineComponent({
       }
     }
 
-    const clearRowDropTarget = () => {
-      const el = refElem.value
-      if (el) {
-        const clss = 'row--drag-active-target'
-        XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
-          removeClass(elem, clss)
-        })
-      }
-    }
-
-    const updateRowDropTarget = (row: any, dragPos: string) => {
-      const el = refElem.value
-      if (el) {
-        const clss = 'row--drag-active-target'
-        const rowid = getRowid($xeTable, row)
-        XEUtils.arrayEach(el.querySelectorAll(`[rowid="${rowid}"]`), (elem) => {
-          addClass(elem, clss)
-          elem.setAttribute('drag-pos', dragPos)
-        })
-      }
-    }
-
-    const showRowDropTip = (evnt: DragEvent | MouseEvent) => {
-      const rdTipEl = refRowDragTipElem.value
-      if (!rdTipEl) {
-        return
-      }
-      const el = refElem.value
-      if (!el) {
-        return
-      }
-      if (rdTipEl) {
-        const wrapperRect = el.getBoundingClientRect()
-        rdTipEl.style.display = 'block'
-        rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
-        rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
-      }
-    }
-
-    const hideRowDropTip = () => {
-      const rdTipEl = refRowDragTipElem.value
-      if (rdTipEl) {
-        rdTipEl.style.display = ''
-      }
-    }
-
     const updateRowDropTipContent = (tdEl: HTMLElement) => {
+      const { dragConfig } = props
       const { dragRow } = reactData
-      const dragOpts = computeDragOpts.value
-      const { rowTooltipMethod } = dragOpts
+      const rowDragOpts = computeRowDragOpts.value
+      const { tooltipMethod } = rowDragOpts
+      const rTooltipMethod = tooltipMethod || (dragConfig ? dragConfig.rowTooltipMethod : null)
       let tipContent = ''
-      if (rowTooltipMethod) {
-        tipContent = `${rowTooltipMethod({
+      if (rTooltipMethod) {
+        tipContent = `${rTooltipMethod({
           row: dragRow
         }) || ''}`
       } else {
         tipContent = getI18n('vxe.table.dragTip', [tdEl.textContent || ''])
       }
       reactData.dragTipText = tipContent
+    }
+
+    const updateColDropOrigin = (column: VxeTableDefines.ColumnInfo) => {
+      const el = refElem.value
+      if (el) {
+        const clss = 'col--drag-origin'
+        XEUtils.arrayEach(el.querySelectorAll(`[colid="${column.id}"]`), (elem) => {
+          addClass(elem, clss)
+        })
+      }
+    }
+
+    const clearColDropOrigin = () => {
+      const el = refElem.value
+      if (el) {
+        const clss = 'col--drag-origin'
+        XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
+          (elem as HTMLTableCellElement).draggable = false
+          removeClass(elem, clss)
+        })
+      }
+    }
+
+    const updateColDropTipContent = (tdEl: HTMLElement) => {
+      const { dragCol } = reactData
+      const columnDragOpts = computeColumnDragOpts.value
+      const { tooltipMethod } = columnDragOpts
+      let tipContent = ''
+      if (tooltipMethod) {
+        tipContent = `${tooltipMethod({
+          column: dragCol
+        }) || ''}`
+      } else {
+        tipContent = getI18n('vxe.table.dragTip', [tdEl.textContent || ''])
+      }
+      reactData.dragTipText = tipContent
+    }
+
+    const showDropTip = (evnt: DragEvent | MouseEvent, trEl: HTMLElement | null, thEl: HTMLElement | null, dragPos: string) => {
+      const el = refElem.value
+      if (!el) {
+        return
+      }
+      const { scrollbarWidth, scrollbarHeight } = reactData
+      const wrapperRect = el.getBoundingClientRect()
+      if (trEl) {
+        const rdLineEl = refDragRowLineElem.value
+        if (rdLineEl) {
+          const trRect = trEl.getBoundingClientRect()
+          let top = Math.max(1, trRect.y - wrapperRect.y)
+          if (dragPos === 'bottom') {
+            top = Math.min(wrapperRect.height - 1, trRect.y - wrapperRect.y + trRect.height)
+          }
+          rdLineEl.style.top = `${top}px`
+          rdLineEl.style.width = `${wrapperRect.width - scrollbarWidth}px`
+          rdLineEl.style.display = 'block'
+        }
+      } else if (thEl) {
+        const cdLineEl = refDragColLineElem.value
+        if (cdLineEl) {
+          const thRect = thEl.getBoundingClientRect()
+          let left = Math.max(1, thRect.x - wrapperRect.x)
+          if (dragPos === 'right') {
+            left = Math.min(wrapperRect.width - 2, thRect.x - wrapperRect.x + thRect.width)
+          }
+          cdLineEl.style.left = `${left}px`
+          cdLineEl.style.height = `${wrapperRect.height - scrollbarHeight}px`
+          cdLineEl.style.display = 'block'
+        }
+      }
+      const rdTipEl = refDragTipElem.value
+      if (rdTipEl) {
+        rdTipEl.style.display = 'block'
+        rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
+        rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
+      }
+    }
+
+    const hideDropTip = () => {
+      const rdTipEl = refDragTipElem.value
+      const rdLineEl = refDragRowLineElem.value
+      const cdLineEl = refDragColLineElem.value
+      if (rdTipEl) {
+        rdTipEl.style.display = ''
+      }
+      if (rdLineEl) {
+        rdLineEl.style.display = ''
+      }
+      if (cdLineEl) {
+        cdLineEl.style.display = ''
+      }
     }
 
     /**
@@ -6751,6 +6803,9 @@ export default defineComponent({
           dispatchEvent('sort-change', params, evnt)
         }
       },
+      /**
+       * 行拖拽
+       */
       handleRowDragDragstartEvent (evnt) {
         const img = new Image()
         if (evnt.dataTransfer) {
@@ -6758,28 +6813,31 @@ export default defineComponent({
         }
       },
       handleRowDragDragendEvent (evnt) {
-        const { treeConfig } = props
-        const dragOpts = computeDragOpts.value
-        const { dragEndMethod } = dragOpts
+        const { treeConfig, dragConfig } = props
+        const rowDragOpts = computeRowDragOpts.value
+        const { dragEndMethod } = rowDragOpts
         const treeOpts = computeTreeOpts.value
         const { transform } = treeOpts
         const { dragRow } = reactData
         const { afterFullData, afterTreeFullData, tableFullData, tableFullTreeData, prevDragRow, prevDragPos } = internalData
+        const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
+        const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
         if (prevDragRow && dragRow) {
           // 判断是否有拖动
           if (prevDragRow !== dragRow) {
             Promise.resolve(
-              dragEndMethod
-                ? dragEndMethod({
+              dEndMethod
+                ? dEndMethod({
                   oldRow: dragRow,
-                  newRow: prevDragRow
+                  newRow: prevDragRow,
+                  dragPos: prevDragPos as any,
+                  offsetIndex: dragOffsetIndex
                 })
                 : true
             ).then((status) => {
               if (!status) {
                 return
               }
-              const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
 
               let oafIndex = -1
               let nafIndex = -1
@@ -6790,7 +6848,7 @@ export default defineComponent({
                 afterTreeFullData.splice(oafIndex, 1)
                 tableFullTreeData.splice(otfIndex, 1)
 
-                // 插新位置
+                // 插入新位置
                 const pafIndex = $xeTable.findRowIndexOf(afterTreeFullData, prevDragRow)
                 const ptfIndex = $xeTable.findRowIndexOf(tableFullTreeData, prevDragRow)
                 nafIndex = pafIndex + dragOffsetIndex
@@ -6803,7 +6861,7 @@ export default defineComponent({
                 const otfIndex = $xeTable.findRowIndexOf(tableFullData, dragRow)
                 afterFullData.splice(oafIndex, 1)
                 tableFullData.splice(otfIndex, 1)
-                // 插新位置
+                // 插入新位置
                 const pafIndex = $xeTable.findRowIndexOf(afterFullData, prevDragRow)
                 const ptfIndex = $xeTable.findRowIndexOf(tableFullData, prevDragRow)
                 nafIndex = pafIndex + dragOffsetIndex
@@ -6814,24 +6872,25 @@ export default defineComponent({
 
               reactData.isDragRowMove = true
               $xeTable.cacheRowMap()
-              $xeTable.updateScrollYStatus()
+              updateScrollYStatus()
               $xeTable.handleTableData(treeConfig && transform)
               if (!(treeConfig && transform)) {
                 $xeTable.updateAfterDataIndex()
               }
-              $xeTable.updateFooter()
               $xeTable.checkSelectionStatus()
               if (reactData.scrollYLoad) {
                 $xeTable.updateScrollYSpace()
               }
               nextTick().then(() => {
                 $xeTable.updateCellAreas()
-                return $xeTable.recalculate()
+                $xeTable.recalculate()
               })
 
               dispatchEvent('row-dragend', {
                 oldRow: dragRow,
                 newRow: prevDragRow,
+                dragPos: prevDragPos as any,
+                offsetIndex: dragOffsetIndex,
                 _index: {
                   newIndex: nafIndex,
                   oldIndex: oafIndex
@@ -6841,64 +6900,216 @@ export default defineComponent({
             })
           }
         }
-        hideRowDropTip()
+        hideDropTip()
         clearRowDropOrigin()
-        clearRowDropTarget()
         reactData.dragRow = null
+        reactData.dragCol = null
         setTimeout(() => {
           reactData.isDragRowMove = false
         }, 500)
       },
       handleRowDragDragoverEvent (evnt) {
+        const { dragRow } = reactData
+        if (!dragRow) {
+          evnt.preventDefault()
+          return
+        }
         const trEl = evnt.currentTarget as HTMLElement
         const rowid = trEl.getAttribute('rowid')
         const row = $xeTable.getRowById(rowid)
-        clearRowDropTarget()
         if (row) {
           evnt.preventDefault()
           evnt.preventDefault()
           const { dragRow } = reactData
           const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
           const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
-          updateRowDropTarget(row, dragPos)
           internalData.prevDragRow = row
           internalData.prevDragPos = dragPos
+          showDropTip(evnt, trEl, null, dragPos)
           dispatchEvent('row-dragover', {
             oldRow: dragRow,
             targetRow: row,
             dragPos
           }, evnt)
         }
-        showRowDropTip(evnt)
       },
       handleCellDragMousedownEvent (evnt, params) {
         evnt.stopPropagation()
-        const dragOpts = computeDragOpts.value
-        const { dragStartMethod } = dragOpts
+        const { dragConfig } = props
+        const rowDragOpts = computeRowDragOpts.value
+        const { dragStartMethod } = rowDragOpts
         const { row } = params
         const dragEl = evnt.currentTarget as HTMLElement
-        const tdEl = dragEl.parentNode?.parentNode as HTMLElement
-        const trEl = tdEl.parentNode as HTMLElement
+        const tdEl = dragEl.parentElement?.parentElement as HTMLElement
+        const trEl = tdEl.parentElement as HTMLElement
+        const dStartMethod = dragStartMethod || (dragConfig ? dragConfig.dragStartMethod : null)
         reactData.isDragRowMove = false
         clearRowDropOrigin()
-        if (dragStartMethod && !dragStartMethod(params)) {
+        if (dStartMethod && !dStartMethod(params)) {
           trEl.draggable = false
           reactData.dragRow = null
-          hideRowDropTip()
+          reactData.dragCol = null
+          hideDropTip()
           return
         }
         reactData.dragRow = row
+        reactData.dragCol = null
         trEl.draggable = true
         updateRowDropOrigin(row)
-        showRowDropTip(evnt)
         updateRowDropTipContent(tdEl)
         dispatchEvent('row-dragstart', params, evnt)
       },
       handleCellDragMouseupEvent () {
         clearRowDropOrigin()
-        hideRowDropTip()
+        hideDropTip()
         reactData.dragRow = null
+        reactData.dragCol = null
         reactData.isDragRowMove = false
+      },
+      /**
+       * 列拖拽
+       */
+      handleHeaderCellDragDragstartEvent (evnt) {
+        const img = new Image()
+        if (evnt.dataTransfer) {
+          evnt.dataTransfer.setDragImage(img, 0, 0)
+        }
+      },
+      handleHeaderCellDragDragendEvent (evnt) {
+        const { mouseConfig } = props
+        const columnDragOpts = computeColumnDragOpts.value
+        const { dragEndMethod } = columnDragOpts
+        const { dragCol } = reactData
+        const { collectColumn, prevDragCol, prevDragPos } = internalData
+        const dragOffsetIndex = prevDragPos === 'right' ? 1 : 0
+        if (prevDragCol && dragCol) {
+          // 判断是否有拖动
+          if (prevDragCol !== dragCol) {
+            Promise.resolve(
+              dragEndMethod
+                ? dragEndMethod({
+                  oldColumn: dragCol,
+                  newColumn: prevDragCol,
+                  dragPos: prevDragPos as any,
+                  offsetIndex: dragOffsetIndex
+                })
+                : true
+            ).then((status) => {
+              if (!status) {
+                return
+              }
+
+              XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+                if (!parent) {
+                  const sortIndex = index + 1
+                  column.renderSortNumber = sortIndex
+                }
+              })
+
+              const oafIndex = XEUtils.findIndexOf(collectColumn, item => item.id === dragCol.id)
+              const nafIndex = XEUtils.findIndexOf(collectColumn, item => item.id === prevDragCol.id) + dragOffsetIndex
+
+              const newTargetCol = collectColumn[nafIndex]
+              if (newTargetCol) {
+                // 插入最后位置
+                dragCol.renderSortNumber = newTargetCol.renderSortNumber
+                newTargetCol.renderSortNumber = dragCol.renderSortNumber + 0.5
+              } else {
+                // 插入新位置
+                dragCol.renderSortNumber = collectColumn.length + 1.5
+              }
+
+              reactData.isDragColMove = true
+              if (mouseConfig) {
+                if ($xeTable.clearSelected) {
+                  $xeTable.clearSelected()
+                }
+                if ($xeTable.clearCellAreas) {
+                  $xeTable.clearCellAreas()
+                  $xeTable.clearCopyCellArea()
+                }
+              }
+              tablePrivateMethods.analyColumnWidth()
+              nextTick().then(() => {
+                $xeTable.updateCellAreas()
+                tableMethods.refreshColumn(true)
+              })
+
+              dispatchEvent('column-dragend', {
+                oldColumn: dragCol,
+                newColumn: prevDragCol,
+                dragPos: prevDragPos,
+                offsetIndex: dragOffsetIndex,
+                _index: {
+                  newIndex: nafIndex,
+                  oldIndex: oafIndex
+                }
+              }, evnt)
+            }).catch(() => {
+            })
+          }
+        }
+        hideDropTip()
+        clearColDropOrigin()
+        reactData.dragRow = null
+        reactData.dragCol = null
+        setTimeout(() => {
+          reactData.isDragColMove = false
+        }, 500)
+      },
+      handleHeaderCellDragDragoverEvent (evnt) {
+        const { dragCol } = reactData
+        if (!dragCol) {
+          evnt.preventDefault()
+          return
+        }
+        const thEl = evnt.currentTarget as HTMLElement
+        const colid = thEl.getAttribute('colid')
+        const column = $xeTable.getColumnById(colid)
+        if (column) {
+          evnt.preventDefault()
+          const { dragCol } = reactData
+          const offsetX = evnt.clientX - thEl.getBoundingClientRect().x
+          const dragPos = offsetX < thEl.clientWidth / 2 ? 'left' : 'right'
+          internalData.prevDragCol = column
+          internalData.prevDragPos = dragPos
+          showDropTip(evnt, null, thEl, dragPos)
+          dispatchEvent('column-dragover', {
+            oldColumn: dragCol,
+            targetColumn: column,
+            dragPos
+          }, evnt)
+        }
+      },
+      handleHeaderCellDragMousedownEvent (evnt, params) {
+        evnt.stopPropagation()
+        const columnDragOpts = computeColumnDragOpts.value
+        const { dragStartMethod } = columnDragOpts
+        const { column } = params
+        const dragEl = evnt.currentTarget as HTMLElement
+        const thEl = dragEl.parentElement?.parentElement as HTMLElement
+        reactData.isDragColMove = false
+        clearColDropOrigin()
+        if (dragStartMethod && !dragStartMethod(params)) {
+          thEl.draggable = false
+          reactData.dragRow = null
+          reactData.dragCol = null
+          hideDropTip()
+          return
+        }
+        reactData.dragCol = column
+        reactData.dragRow = null
+        thEl.draggable = true
+        updateColDropOrigin(column)
+        updateColDropTipContent(thEl)
+        dispatchEvent('column-dragstart', params, evnt)
+      },
+      handleHeaderCellDragMouseupEvent () {
+        clearColDropOrigin()
+        hideDropTip()
+        reactData.dragRow = null
+        reactData.dragCol = null
+        reactData.isDragColMove = false
       },
       /**
        * 横向 X 可视渲染事件处理
@@ -7066,8 +7277,7 @@ export default defineComponent({
           containerList.forEach(name => {
             const layoutList = ['header', 'body', 'footer']
             layoutList.forEach(layout => {
-              const xSpaceRef = elemStore[`${name}-${layout}-xSpace`]
-              const xSpaceElem = xSpaceRef ? xSpaceRef.value : null
+              const xSpaceElem = getRefElem(elemStore[`${name}-${layout}-xSpace`])
               if (xSpaceElem) {
                 xSpaceElem.style.width = scrollXLoad ? `${tableWidth + (layout === 'header' ? scrollbarWidth : 0)}px` : ''
               }
@@ -7118,14 +7328,12 @@ export default defineComponent({
         }
         containerList.forEach(name => {
           const layoutList = ['header', 'body', 'footer']
-          const tableRef = elemStore[`${name}-body-table`]
-          const tableElem = tableRef ? tableRef.value : null
+          const tableElem = getRefElem(elemStore[`${name}-body-table`])
           if (tableElem) {
             tableElem.style.marginTop = marginTop
           }
           layoutList.forEach(layout => {
-            const ySpaceRef = elemStore[`${name}-${layout}-ySpace`]
-            const ySpaceElem = ySpaceRef ? ySpaceRef.value : null
+            const ySpaceElem = getRefElem(elemStore[`${name}-${layout}-ySpace`])
             if (ySpaceElem) {
               ySpaceElem.style.height = ySpaceHeight
             }
@@ -7305,6 +7513,50 @@ export default defineComponent({
       return getFuncText(props.emptyText) || getI18n('vxe.table.emptyText')
     }
 
+    const renderDragTipContents = () => {
+      const { dragConfig } = props
+      const { dragRow, dragCol, dragTipText } = reactData
+      const columnDragOpts = computeColumnDragOpts.value
+      const rowDragOpts = computeRowDragOpts.value
+      const rowDragSlots = rowDragOpts.slots || {}
+      const rTipSlot = rowDragSlots.tip || (dragConfig && dragConfig.slots ? dragConfig.slots.rowTip : null)
+      const columnDragSlots = columnDragOpts.slots || {}
+      const cTipSlot = columnDragSlots.tip
+
+      if (dragRow && rTipSlot) {
+        return callSlot(rTipSlot, { row: dragRow })
+      }
+      if (dragCol && cTipSlot) {
+        return callSlot(cTipSlot, { column: dragCol })
+      }
+      return [h('span', dragTipText)]
+    }
+
+    const renderDragTip = () => {
+      const rowOpts = computeRowOpts.value
+      const columnOpts = computeColumnOpts.value
+
+      if (rowOpts.drag || columnOpts.drag) {
+        return h('div', {
+          class: 'vxe-table--drag-wrapper'
+        }, [
+          h('div', {
+            ref: refDragRowLineElem,
+            class: 'vxe-table--drag-row-line'
+          }),
+          h('div', {
+            ref: refDragColLineElem,
+            class: 'vxe-table--drag-col-line'
+          }),
+          h('div', {
+            ref: refDragTipElem,
+            class: 'vxe-table--drag-sort-tip'
+          }, renderDragTipContents())
+        ])
+      }
+      return renderEmptyElement($xeTable)
+    }
+
     function handleUupdateResize () {
       const el = refElem.value
       if (el && el.clientWidth && el.clientHeight) {
@@ -7314,7 +7566,7 @@ export default defineComponent({
 
     const renderVN = () => {
       const { loading, stripe, showHeader, height, treeConfig, mouseConfig, showFooter, highlightCell, highlightHoverRow, highlightHoverColumn, editConfig, editRules } = props
-      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore, dragRow, dragTipText } = reactData
+      const { isCalcColumn, isGroup, overflowX, overflowY, scrollXLoad, scrollYLoad, scrollbarHeight, tableData, tableColumn, tableGroupColumn, footerTableData, initStore, columnStore, filterStore, customStore, tooltipStore } = reactData
       const { leftList, rightList } = columnStore
       const loadingSlot = slots.loading
       const tipConfig = computeTipConfig.value
@@ -7322,18 +7574,17 @@ export default defineComponent({
       const checkboxOpts = computeCheckboxOpts.value
       const treeOpts = computeTreeOpts.value
       const rowOpts = computeRowOpts.value
-      const dragOpts = computeDragOpts.value
       const columnOpts = computeColumnOpts.value
       const vSize = computeSize.value
       const tableBorder = computeTableBorder.value
       const mouseOpts = computeMouseOpts.value
+      const areaOpts = computeAreaOpts.value
       const validTipOpts = computeValidTipOpts.value
       const loadingOpts = computeLoadingOpts.value
       const isMenu = computeIsMenu.value
       const currLoading = reactData._isLoading || loading
       const virtualScrollBars = computeVirtualScrollBars.value
-      const dragSlots = dragOpts.slots || {}
-      const rowTipSlot = dragSlots.rowTip
+      const isArea = mouseConfig && mouseOpts.area
       return h('div', {
         ref: refElem,
         class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
@@ -7343,7 +7594,9 @@ export default defineComponent({
           'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
           'cell--highlight': highlightCell,
           'cell--selected': mouseConfig && mouseOpts.selected,
-          'cell--area': mouseConfig && mouseOpts.area,
+          'cell--area': isArea,
+          'header-cell--area': isArea && areaOpts.selectCellByHeader,
+          'body-cell--area': isArea && areaOpts.selectCellByBody,
           'row--highlight': rowOpts.isHover || highlightHoverRow,
           'column--highlight': columnOpts.isHover || highlightHoverColumn,
           'checkbox--range': checkboxOpts.range,
@@ -7552,16 +7805,9 @@ export default defineComponent({
           })
           : renderEmptyElement($xeTable),
         /**
-         * 拖拽提示
+         * 拖拽排序提示
          */
-        rowOpts.drag && (dragRow || dragTipText)
-          ? h('div', {
-            ref: refRowDragTipElem,
-            class: 'vxe-table--row-drag-tip'
-          }, rowTipSlot
-            ? (dragRow ? callSlot(rowTipSlot, { row: dragRow }) : [renderEmptyElement($xeTable)])
-            : (dragTipText ? [h('span', dragTipText)] : [renderEmptyElement($xeTable)]))
-          : renderEmptyElement($xeTable),
+        renderDragTip(),
         /**
          * 提示相关
          */
@@ -7845,7 +8091,7 @@ export default defineComponent({
           if (rowOpts.height && !props.showOverflow) {
             warnLog('vxe.error.notProp', ['table.show-overflow'])
           }
-          if (!$xeTable.handleUpdateCellAreas) {
+          if (!$xeTable.handleRecalculateCellAreas) {
             if (props.clipConfig) {
               warnLog('vxe.error.notProp', ['clip-config'])
             }
@@ -7856,6 +8102,9 @@ export default defineComponent({
               errLog('vxe.error.notProp', ['mouse-config.area'])
               return
             }
+          }
+          if (props.dragConfig) {
+            warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
           }
           if (props.treeConfig && treeOpts.children) {
             warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])

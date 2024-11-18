@@ -6,12 +6,13 @@
       border
       stripe
       resizable
+      show-footer
       highlight-hover-row
       height="400"
       ref="tableRef"
       id="bbbbb"
       :row-config="{useKey: true,drag:true}"
-      :column-config="{useKey: true}"
+      :column-config="{useKey: true,drag: true}"
       :custom-config="customConfig"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"
@@ -19,6 +20,7 @@
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData"
+      :footer-data="demo1.footerData"
       @row-dragstart="rowDragstartEvent"
       @row-dragover="rowDragoverEvent"
       @row-dragend="rowDragendEvent">
@@ -85,6 +87,9 @@ const customConfig = reactive<VxeTablePropTypes.CustomConfig>({
 const demo1 = reactive({
   loading: false,
   tableData: [] as any[],
+  footerData: [
+    { role: '777', name: '11', sex11: '22', sex22: '44', name1: '66', sex: '5656', age: '666' }
+  ],
   sexList: [
     { label: '女', value: '0' },
     { label: '男', value: '1' }

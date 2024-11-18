@@ -12,7 +12,7 @@
 [![pull requests closed](https://img.shields.io/github/issues-pr-closed/x-extends/vxe-table.svg)](https://github.com/x-extends/vxe-table/pulls?q=is%3Apr+is%3Aclosed)
 [![npm license](https://img.shields.io/github/license/mashape/apistatus.svg)](LICENSE)
 
-A [vue](https://www.npmjs.com/package/vue) based PC form component, support add delete change check, virtual tree, column drag and drop, lazy loading, shortcut menu, data verification, import/export/print, form rendering, custom template, renderer, JSON configuration...
+A [vue](https://www.npmjs.com/package/vue) based PC form component, support add delete change check, virtual tree, drag and drop, lazy loading, shortcut menu, data verification, import/export/print, form rendering, custom template, renderer, JSON configuration...
 
 ## Browser Support
 

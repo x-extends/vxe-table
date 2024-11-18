@@ -1,5 +1,6 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
+import { getRefElem } from '../../src/util'
 import { browse, hasClass, getAbsolutePos, addClass, removeClass, getEventTargetNode } from '../../../ui/src/dom'
 
 import type { TableKeyboardPrivateMethods } from '../../../../types'
@@ -79,8 +80,7 @@ hooks.add('tableKeyboardModule', {
         const { elemStore } = internalData
         const disX = evnt.clientX
         const disY = evnt.clientY
-        const bodyWrapperRef = elemStore[`${column.fixed || 'main'}-body-wrapper`] || elemStore['main-body-wrapper']
-        const bodyWrapperElem = bodyWrapperRef ? bodyWrapperRef.value : null
+        const bodyWrapperElem = getRefElem(elemStore[`${column.fixed || 'main'}-body-wrapper`] || elemStore['main-body-wrapper'])
         if (!bodyWrapperElem) {
           return
         }

@@ -175,6 +175,16 @@ export function setCellValue (row: any, column: VxeTableDefines.ColumnInfo, valu
   return XEUtils.set(row, column.field, value)
 }
 
+export function getRefElem (refEl: any) {
+  if (refEl) {
+    const rest = refEl.value
+    if (rest) {
+      return (rest.$el || rest) as HTMLElement
+    }
+  }
+  return null
+}
+
 /**
  * 列宽拖动最大宽度
  * @param params

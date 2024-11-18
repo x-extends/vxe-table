@@ -663,9 +663,13 @@
       }
     }
   }
-  &.cell--area {
-    .vxe-table--body-wrapper,
-    .vxe-body--column {
+  &.header-cell--area {
+    .vxe-table--header-wrapper {
+      user-select: none;
+    }
+  }
+  &.body-cell--area {
+    .vxe-table--body-wrapper {
       user-select: none;
     }
   }
@@ -1077,6 +1081,7 @@
     width: 1px;
     height: 100%;
     z-index: 9;
+    pointer-events: none;
     cursor: col-resize;
     &:before {
       content: "";
@@ -1237,7 +1242,32 @@
     }
   }
 
-  /*拖拽行*/
+  /*拖拽列*/
+  .vxe-table--drag-col-line {
+    height: 100%;
+    width: 1px;
+    background-color: var(--vxe-ui-font-primary-color);
+  }
+  .vxe-header--column {
+    &.col--drag-origin {
+      & > .vxe-cell {
+        opacity: 0.5;
+      }
+    }
+  }
+  .vxe-header--col-list-move {
+    transition: transform 0.35s;
+  }
+
+  .vxe-table--drag-col-line,
+  .vxe-table--drag-row-line {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    pointer-events: none;
+  }
   .vxe-cell--drag-handle {
     user-select: none;
     & + span {
@@ -1257,6 +1287,13 @@
       cursor: not-allowed;
     }
   }
+
+  /*拖拽行*/
+  .vxe-table--drag-row-line {
+    width: 100%;
+    height: 1px;
+    background-color: var(--vxe-ui-font-primary-color);
+  }
   .vxe-body--row {
     &.row--drag-origin {
       & > .vxe-body--column {
@@ -1265,41 +1302,11 @@
         }
       }
     }
-    &.row--drag-active-target {
-      & > .vxe-body--column {
-        &::after {
-          display: none;
-          content: "";
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: 2px;
-          background-color: var(--vxe-ui-font-primary-color);
-          z-index: 12;
-        }
-      }
-      &[drag-pos="top"] {
-        & > .vxe-body--column {
-          &::after {
-            display: block;
-            top: 0;
-          }
-        }
-      }
-      &[drag-pos="bottom"] {
-        & > .vxe-body--column {
-          &::after {
-            display: block;
-            bottom: 0;
-          }
-        }
-      }
-    }
   }
   .vxe-body--row-list-move {
     transition: transform 0.35s;
   }
-  .vxe-table--row-drag-tip {
+  .vxe-table--drag-sort-tip {
     display: none;
     position: absolute;
     top: 0;

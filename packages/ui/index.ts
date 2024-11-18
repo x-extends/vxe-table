@@ -43,8 +43,11 @@ VxeUI.setConfig({
       // trigger: 'default'
       strict: true
     },
-    dragConfig: {
-      showRowIcon: true
+    rowDragConfig: {
+      showIcon: true
+    },
+    columnDragConfig: {
+      showIcon: true
     },
     checkboxConfig: {
       // trigger: 'default',
@@ -142,7 +145,8 @@ VxeUI.setConfig({
     },
     areaConfig: {
       autoClear: true,
-      selectCellByHeader: true
+      selectCellByHeader: true,
+      selectCellByBody: true
     },
     clipConfig: {
       isCopy: true,
@@ -241,6 +245,7 @@ VxeUI.setIcon({
   TABLE_CUSTOM_SORT: iconPrefix + 'drag-handle',
   TABLE_MENU_OPTIONS: iconPrefix + 'arrow-right',
   TABLE_DRAG_ROW: iconPrefix + 'drag-handle',
+  TABLE_DRAG_COLUMN: iconPrefix + 'drag-handle',
 
   // toolbar
   TOOLBAR_TOOLS_REFRESH: iconPrefix + 'repeat',

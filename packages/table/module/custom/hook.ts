@@ -92,6 +92,10 @@ VxeUI.hooks.add('tableCustomModule', {
           column.visible = column.renderVisible
         }
       })
+      reactData.isDragColMove = true
+      setTimeout(() => {
+        reactData.isDragColMove = false
+      }, 1000)
       return $xeTable.saveCustomStore('confirm')
     }
 
