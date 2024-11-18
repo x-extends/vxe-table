@@ -449,7 +449,7 @@ export default {
               }
               this.closeTooltip()
               if (actived.column) {
-                this.clearEdit(evnt)
+                this.handleClearEdit(evnt)
               }
               type = 'edit-activated'
               column.renderHeight = cell.offsetHeight
@@ -536,17 +536,23 @@ export default {
         }
       }
     },
-    _clearActived (evnt: any) {
+    _clearActived (row: any) {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         warnLog('vxe.error.delFunc', ['clearActived', 'clearEdit'])
       }
       // 即将废弃
-      return this.clearEdit(evnt)
+      return this.clearEdit(row)
     },
     /**
      * 清除激活的编辑
      */
-    _clearEdit (evnt: any) {
+    _clearEdit (row: any) {
+      return this.handleClearEdit(null, row)
+    },
+    /**
+     * 取消编辑
+     */
+    handleClearEdit (evnt: Event | null, targetRow?: any) {
       const $xeTable = this
       const reactData = $xeTable
 
@@ -555,30 +561,33 @@ export default {
       const { row, column } = actived
       const validOpts = $xeTable.validOpts
       if (row || column) {
-        this._syncActivedCell()
+        if (targetRow && getRowid($xeTable, targetRow) !== getRowid($xeTable, row)) {
+          return $xeTable.$nextTick()
+        }
+        $xeTable._syncActivedCell()
         actived.args = null
         actived.row = null
         actived.column = null
-        this.updateFooter()
-        this.emitEvent('edit-closed', {
+        $xeTable.updateFooter()
+        $xeTable.emitEvent('edit-closed', {
           row,
-          rowIndex: this.getRowIndex(row),
-          $rowIndex: this.getVMRowIndex(row),
+          rowIndex: $xeTable.getRowIndex(row),
+          $rowIndex: $xeTable.getVMRowIndex(row),
           column,
-          columnIndex: this.getColumnIndex(column),
-          $columnIndex: this.getVMColumnIndex(column)
+          columnIndex: $xeTable.getColumnIndex(column),
+          $columnIndex: $xeTable.getVMColumnIndex(column)
         }, evnt)
       }
       focused.row = null
       focused.column = null
       if (validOpts.autoClear) {
         if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
-          if (this.clearValidate) {
-            return this.clearValidate()
+          if ($xeTable.clearValidate) {
+            return $xeTable.clearValidate()
           }
         }
       }
-      return this.$nextTick()
+      return $xeTable.$nextTick()
     },
     _getActiveRecord () {
       if (process.env.VUE_APP_VXE_ENV === 'development') {
@@ -735,7 +744,7 @@ export default {
       const selectMethod = () => {
         if (isMouseSelected && (selected.row !== row || selected.column !== column)) {
           if (actived.row !== row || (editOpts.mode === 'cell' ? actived.column !== column : false)) {
-            this.clearEdit(evnt)
+            this.handleClearEdit(evnt)
             this.clearSelected(evnt)
             this.clearCellAreas(evnt)
             this.clearCopyCellArea(evnt)

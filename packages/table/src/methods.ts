@@ -350,67 +350,119 @@ function updateRowDropOrigin ($xeTable: any, row: any) {
   }
 }
 
-function clearRowDropTarget ($xeTable: any) {
-  const el = $xeTable.$el
+const updateRowDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
+  const reactData = $xeTable
+  const props = $xeTable
+
+  const { dragConfig } = props
+  const { dragRow } = reactData
+  const rowDragOpts = $xeTable.computeRowDragOpts
+  const { tooltipMethod } = rowDragOpts
+  const rTooltipMethod = tooltipMethod || (dragConfig ? dragConfig.rowTooltipMethod : null)
+  let tipContent = ''
+  if (rTooltipMethod) {
+    tipContent = `${rTooltipMethod({
+          row: dragRow
+        }) || ''}`
+  } else {
+    tipContent = getI18n('vxe.table.dragTip', [tdEl.textContent || ''])
+  }
+  reactData.dragTipText = tipContent
+}
+
+const updateColDropOrigin = ($xeTable: any, column: VxeTableDefines.ColumnInfo) => {
+  const el = $xeTable.$el as HTMLElement
   if (el) {
-    const clss = 'row--drag-active-target'
+    const clss = 'col--drag-origin'
+    XEUtils.arrayEach(el.querySelectorAll(`[colid="${column.id}"]`), (elem) => {
+      addClass(elem, clss)
+    })
+  }
+}
+
+const clearColDropOrigin = ($xeTable: any) => {
+  const el = $xeTable.$el as HTMLElement
+  if (el) {
+    const clss = 'col--drag-origin'
     XEUtils.arrayEach(el.querySelectorAll(`.${clss}`), (elem) => {
+      (elem as HTMLTableCellElement).draggable = false
       removeClass(elem, clss)
     })
   }
 }
 
-function updateRowDropTarget ($xeTable: any, row: any, dragPos: string) {
-  const el = $xeTable.$el
-  if (el) {
-    const clss = 'row--drag-active-target'
-    const rowid = getRowid($xeTable, row)
-    XEUtils.arrayEach(el.querySelectorAll(`[rowid="${rowid}"]`), (elem: any) => {
-      addClass(elem, clss)
-      elem.setAttribute('drag-pos', dragPos)
-    })
+const updateColDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
+  const reactData = $xeTable
+
+  const { dragCol } = reactData
+  const columnDragOpts = $xeTable.computeColumnDragOpts
+  const { tooltipMethod } = columnDragOpts
+  let tipContent = ''
+  if (tooltipMethod) {
+    tipContent = `${tooltipMethod({
+      column: dragCol
+    }) || ''}`
+  } else {
+    tipContent = getI18n('vxe.table.dragTip', [tdEl.textContent || ''])
   }
+  reactData.dragTipText = tipContent
 }
 
-function showRowDropTip (evnt: DragEvent | MouseEvent, $xeTable: any) {
-  const rdTipEl = $xeTable.$refs.refRowDragTipElem as HTMLDivElement
-  if (!rdTipEl) {
-    return
-  }
-  const el = $xeTable.$el
+function showDropTip ($xeTable: any, evnt: DragEvent | MouseEvent, trEl: HTMLElement | null, thEl: HTMLElement | null, dragPos: string) {
+  const reactData = $xeTable
+
+  const el = $xeTable.$refs.refElem as HTMLElement
   if (!el) {
     return
   }
+  const { scrollbarWidth, scrollbarHeight } = reactData
+  const wrapperRect = el.getBoundingClientRect()
+  if (trEl) {
+    const rdLineEl = $xeTable.$refs.refDragRowLineElem as HTMLElement
+    if (rdLineEl) {
+      const trRect = trEl.getBoundingClientRect()
+      let top = Math.max(1, trRect.y - wrapperRect.y)
+      if (dragPos === 'bottom') {
+        top = Math.min(wrapperRect.height - 1, trRect.y - wrapperRect.y + trRect.height)
+      }
+      rdLineEl.style.top = `${top}px`
+      rdLineEl.style.width = `${wrapperRect.width - scrollbarWidth}px`
+      rdLineEl.style.display = 'block'
+    }
+  } else if (thEl) {
+    const cdLineEl = $xeTable.$refs.refDragColLineElem as HTMLElement
+    if (cdLineEl) {
+      const thRect = thEl.getBoundingClientRect()
+      let left = Math.max(1, thRect.x - wrapperRect.x)
+      if (dragPos === 'right') {
+        left = Math.min(wrapperRect.width - 2, thRect.x - wrapperRect.x + thRect.width)
+      }
+      cdLineEl.style.left = `${left}px`
+      cdLineEl.style.height = `${wrapperRect.height - scrollbarHeight}px`
+      cdLineEl.style.display = 'block'
+    }
+  }
+  const rdTipEl = $xeTable.$refs.refDragTipElem as HTMLElement
   if (rdTipEl) {
-    const wrapperRect = el.getBoundingClientRect()
     rdTipEl.style.display = 'block'
     rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
     rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
   }
 }
 
-const hideRowDropTip = ($xeTable: any) => {
-  const rdTipEl = $xeTable.$refs.refRowDragTipElem as HTMLDivElement
+const hideDropTip = ($xeTable: any) => {
+  const rdTipEl = $xeTable.$refs.refDragTipElem as HTMLDivElement
+  const rdLineEl = $xeTable.$refs.refDragRowLineElem as HTMLDivElement
+  const cdLineEl = $xeTable.$refs.refDragColLineElem as HTMLDivElement
   if (rdTipEl) {
     rdTipEl.style.display = ''
   }
-}
-
-const updateRowDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
-  const reactData = $xeTable
-
-  const { dragRow } = reactData
-  const dragOpts = $xeTable.computeDragOpts
-  const { rowTooltipMethod } = dragOpts
-  let tipContent = ''
-  if (rowTooltipMethod) {
-    tipContent = `${rowTooltipMethod({
-      row: dragRow
-    }) || ''}`
-  } else {
-    tipContent = getI18n('vxe.table.dragTip', [tdEl.textContent || ''])
+  if (rdLineEl) {
+    rdLineEl.style.display = ''
   }
-  reactData.dragTipText = tipContent
+  if (cdLineEl) {
+    cdLineEl.style.display = ''
+  }
 }
 
 const Methods = {
@@ -579,6 +631,7 @@ const Methods = {
     editStore.removeMaps = {}
     const sYLoad = this.updateScrollYStatus(fullData)
     this.scrollYLoad = sYLoad
+    this.isDragRowMove = false
     // 全量数据
     this.tableFullData = fullData
     this.tableFullTreeData = treeData
@@ -759,6 +812,7 @@ const Methods = {
     const tableFullColumn = getColumnList(collectColumn)
     this.tableFullColumn = tableFullColumn
     this._isLoading = true
+    this.isDragColMove = false
     this.initColumnSort()
     return Promise.resolve(
       this.restoreCustomStorage()
@@ -3042,7 +3096,7 @@ const Methods = {
                     !getEventTargetNode(evnt, $el).flag
                 ) {
                   setTimeout(() => {
-                    this.clearEdit(evnt).then(() => {
+                    this.handleClearEdit(evnt).then(() => {
                       // 如果存在校验，点击了表格之外则清除
                       if (!this.isActivated && editRules && validOpts.autoClear) {
                         this.validErrorMaps = {}
@@ -3111,8 +3165,8 @@ const Methods = {
     if (isEsc) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
         this.emitEvent('keydown-start', {}, evnt)
-        if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardEvent) {
-          this.handleKeyboardEvent(evnt)
+        if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardCellAreaEvent) {
+          this.handleKeyboardCellAreaEvent(evnt)
         } else if (actived.row || filterStore.visible || ctxMenuStore.visible) {
           evnt.stopPropagation()
           // 如果按下了 Esc 键，关闭快捷菜单、筛选
@@ -3122,7 +3176,7 @@ const Methods = {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               const params = actived.args
-              this.clearEdit(evnt)
+              this.handleClearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
               if (mouseConfig && mouseOpts.selected) {
                 this.$nextTick(() => this.handleSelected(params, evnt))
@@ -3180,8 +3234,8 @@ const Methods = {
           } else {
             this.moveCtxMenu(evnt, keyCode, ctxMenuStore, 'selected', 39, true, this.ctxMenuList)
           }
-        } else if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardEvent) {
-          this.handleKeyboardEvent(evnt)
+        } else if (keyboardConfig && mouseConfig && mouseOpts.area && this.handleKeyboardCellAreaEvent) {
+          this.handleKeyboardCellAreaEvent(evnt)
         } else if (keyboardConfig && isSpacebar && keyboardOpts.isChecked && selected.row && selected.column && (selected.column.type === 'checkbox' || selected.column.type === 'radio')) {
           // 空格键支持选中复选框
           evnt.preventDefault()
@@ -3212,7 +3266,7 @@ const Methods = {
             // 如果是激活编辑状态，则取消编辑
             if (actived.row) {
               const params = actived.args
-              this.clearEdit(evnt)
+              this.handleClearEdit(evnt)
               // 如果配置了选中功能，则为选中状态
               if (mouseConfig && mouseOpts.selected) {
                 this.$nextTick(() => this.handleSelected(params, evnt))
@@ -4674,6 +4728,9 @@ const Methods = {
       this.emitEvent('sort-change', params, evnt)
     }
   },
+  /**
+   * 行拖拽
+   */
   handleRowDragDragstartEvent (evnt: DragEvent) {
     const img = new Image()
     if (evnt.dataTransfer) {
@@ -4686,28 +4743,31 @@ const Methods = {
     const reactData = $xeTable
     const internalData = $xeTable
 
-    const { treeConfig } = props
-    const dragOpts = $xeTable.computeDragOpts
-    const { dragEndMethod } = dragOpts
+    const { treeConfig, dragConfig } = props
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    const { dragEndMethod } = rowDragOpts
     const treeOpts = $xeTable.computeTreeOpts
     const { transform } = treeOpts
     const { dragRow } = reactData
     const { afterFullData, afterTreeFullData, tableFullData, tableFullTreeData, prevDragRow, prevDragPos } = internalData
+    const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
+    const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
     if (prevDragRow && dragRow) {
       // 判断是否有拖动
       if (prevDragRow !== dragRow) {
         Promise.resolve(
-          dragEndMethod
-            ? dragEndMethod({
+          dEndMethod
+            ? dEndMethod({
               oldRow: dragRow,
-              newRow: prevDragRow
+              newRow: prevDragRow,
+              dragPos: prevDragPos as any,
+              offsetIndex: dragOffsetIndex
             })
             : true
         ).then((status) => {
           if (!status) {
             return
           }
-          const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
 
           let oafIndex = -1
           let nafIndex = -1
@@ -4747,19 +4807,20 @@ const Methods = {
           if (!(treeConfig && transform)) {
             $xeTable.updateAfterDataIndex()
           }
-          $xeTable.updateFooter()
           $xeTable.checkSelectionStatus()
           if (reactData.scrollYLoad) {
             $xeTable.updateScrollYSpace()
           }
           $xeTable.$nextTick().then(() => {
             $xeTable.updateCellAreas()
-            return $xeTable.recalculate()
+            $xeTable.recalculate()
           })
 
           $xeTable.dispatchEvent('row-dragend', {
             oldRow: dragRow,
             newRow: prevDragRow,
+            dragPos: prevDragPos,
+            offsetIndex: dragOffsetIndex,
             _index: {
               newIndex: nafIndex,
               oldIndex: oafIndex
@@ -4769,10 +4830,10 @@ const Methods = {
         })
       }
     }
-    hideRowDropTip($xeTable)
+    hideDropTip($xeTable)
     clearRowDropOrigin($xeTable)
-    clearRowDropTarget($xeTable)
     reactData.dragRow = null
+    reactData.dragCol = null
     setTimeout(() => {
       reactData.isDragRowMove = false
     }, 500)
@@ -4782,50 +4843,57 @@ const Methods = {
     const internalData = $xeTable
     const reactData = $xeTable
 
+    const { dragRow } = reactData
+    if (!dragRow) {
+      evnt.preventDefault()
+      return
+    }
     const trEl = evnt.currentTarget as HTMLElement
     const rowid = trEl.getAttribute('rowid')
     const row = $xeTable.getRowById(rowid)
-    clearRowDropTarget($xeTable)
     if (row) {
       evnt.preventDefault()
       evnt.preventDefault()
       const { dragRow } = reactData
       const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
       const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
-      updateRowDropTarget($xeTable, row, dragPos)
       internalData.prevDragRow = row
       internalData.prevDragPos = dragPos
+      showDropTip($xeTable, evnt, trEl, null, dragPos)
       $xeTable.dispatchEvent('row-dragover', {
         oldRow: dragRow,
         targetRow: row,
         dragPos
       }, evnt)
     }
-    showRowDropTip(evnt, $xeTable)
   },
   handleCellDragMousedownEvent (evnt: MouseEvent, params: any) {
     const $xeTable = this
+    const props = $xeTable
     const reactData = $xeTable
 
     evnt.stopPropagation()
-    const dragOpts = $xeTable.computeDragOpts
-    const { dragStartMethod } = dragOpts
+    const { dragConfig } = props
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    const { dragStartMethod } = rowDragOpts
     const { row } = params
     const dragEl = evnt.currentTarget as HTMLElement
-    const tdEl = dragEl.parentNode?.parentNode as HTMLElement
-    const trEl = tdEl.parentNode as HTMLElement
+    const tdEl = dragEl.parentElement?.parentElement as HTMLElement
+    const trEl = tdEl.parentElement as HTMLElement
+    const dStartMethod = dragStartMethod || (dragConfig ? dragConfig.dragStartMethod : null)
     reactData.isDragRowMove = false
     clearRowDropOrigin($xeTable)
-    if (dragStartMethod && !dragStartMethod(params)) {
+    if (dStartMethod && !dStartMethod(params)) {
       trEl.draggable = false
       reactData.dragRow = null
-      hideRowDropTip($xeTable)
+      reactData.dragCol = null
+      hideDropTip($xeTable)
       return
     }
     reactData.dragRow = row
+    reactData.dragCol = null
     trEl.draggable = true
     updateRowDropOrigin($xeTable, row)
-    showRowDropTip(evnt, $xeTable)
     updateRowDropTipContent($xeTable, tdEl)
     $xeTable.dispatchEvent('row-dragstart', params, evnt)
   },
@@ -4834,9 +4902,170 @@ const Methods = {
     const reactData = $xeTable
 
     clearRowDropOrigin($xeTable)
-    hideRowDropTip($xeTable)
+    hideDropTip($xeTable)
     reactData.dragRow = null
+    reactData.dragCol = null
     reactData.isDragRowMove = false
+  },
+  /**
+   * 列拖拽
+   */
+  handleHeaderCellDragDragstartEvent (evnt: DragEvent) {
+    const img = new Image()
+    if (evnt.dataTransfer) {
+      evnt.dataTransfer.setDragImage(img, 0, 0)
+    }
+  },
+  handleHeaderCellDragDragendEvent (evnt: DragEvent) {
+    const $xeTable = this
+    const props = $xeTable
+    const reactData = $xeTable
+    const internalData = $xeTable
+
+    const { mouseConfig } = props
+    const columnDragOpts = $xeTable.computeColumnDragOpts
+    const { dragEndMethod } = columnDragOpts
+    const { dragCol } = reactData
+    const { collectColumn, prevDragCol, prevDragPos } = internalData
+    const dragOffsetIndex = prevDragPos === 'right' ? 1 : 0
+    if (prevDragCol && dragCol) {
+      // 判断是否有拖动
+      if (prevDragCol !== dragCol) {
+        Promise.resolve(
+          dragEndMethod
+            ? dragEndMethod({
+              oldColumn: dragCol,
+              newColumn: prevDragCol,
+              dragPos: prevDragPos as any,
+              offsetIndex: dragOffsetIndex
+            })
+            : true
+        ).then((status) => {
+          if (!status) {
+            return
+          }
+
+          XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+            if (!parent) {
+              const sortIndex = index + 1
+              column.renderSortNumber = sortIndex
+            }
+          })
+
+          const oafIndex = XEUtils.findIndexOf(collectColumn, item => item.id === dragCol.id)
+          const nafIndex = XEUtils.findIndexOf(collectColumn, item => item.id === prevDragCol.id) + dragOffsetIndex
+
+          const newTargetCol = collectColumn[nafIndex]
+          if (newTargetCol) {
+            // 插入最后位置
+            dragCol.renderSortNumber = newTargetCol.renderSortNumber
+            newTargetCol.renderSortNumber = dragCol.renderSortNumber + 0.5
+          } else {
+            // 插入新位置
+            dragCol.renderSortNumber = collectColumn.length + 1.5
+          }
+
+          reactData.isDragColMove = true
+          if (mouseConfig) {
+            if ($xeTable.clearSelected) {
+              $xeTable.clearSelected()
+            }
+            if ($xeTable.clearCellAreas) {
+              $xeTable.clearCellAreas()
+              $xeTable.clearCopyCellArea()
+            }
+          }
+          $xeTable.analyColumnWidth()
+          $xeTable.$nextTick().then(() => {
+            $xeTable.updateCellAreas()
+            $xeTable.refreshColumn(true)
+          })
+
+          $xeTable.dispatchEvent('column-dragend', {
+            oldColumn: dragCol,
+            newColumn: prevDragCol,
+            dragPos: prevDragPos,
+            offsetIndex: dragOffsetIndex,
+            _index: {
+              newIndex: nafIndex,
+              oldIndex: oafIndex
+            }
+          }, evnt)
+        }).catch(() => {
+        })
+      }
+    }
+    hideDropTip($xeTable)
+    clearColDropOrigin($xeTable)
+    reactData.dragRow = null
+    reactData.dragCol = null
+    setTimeout(() => {
+      reactData.isDragColMove = false
+    }, 500)
+  },
+  handleHeaderCellDragDragoverEvent (evnt: DragEvent) {
+    const $xeTable = this
+    const reactData = $xeTable
+    const internalData = $xeTable
+
+    const { dragCol } = reactData
+    if (!dragCol) {
+      evnt.preventDefault()
+      return
+    }
+    const thEl = evnt.currentTarget as HTMLElement
+    const colid = thEl.getAttribute('colid')
+    const column = $xeTable.getColumnById(colid)
+    if (column) {
+      evnt.preventDefault()
+      const { dragCol } = reactData
+      const offsetX = evnt.clientX - thEl.getBoundingClientRect().x
+      const dragPos = offsetX < thEl.clientWidth / 2 ? 'left' : 'right'
+      internalData.prevDragCol = column
+      internalData.prevDragPos = dragPos
+      showDropTip($xeTable, evnt, null, thEl, dragPos)
+      $xeTable.dispatchEvent('column-dragover', {
+        oldColumn: dragCol,
+        targetColumn: column,
+        dragPos
+      }, evnt)
+    }
+  },
+  handleHeaderCellDragMousedownEvent (evnt: MouseEvent, params: any) {
+    const $xeTable = this
+    const reactData = $xeTable
+
+    evnt.stopPropagation()
+    const columnDragOpts = $xeTable.computeColumnDragOpts
+    const { dragStartMethod } = columnDragOpts
+    const { column } = params
+    const dragEl = evnt.currentTarget as HTMLElement
+    const thEl = dragEl.parentElement?.parentElement as HTMLElement
+    reactData.isDragColMove = false
+    clearColDropOrigin($xeTable)
+    if (dragStartMethod && !dragStartMethod(params)) {
+      thEl.draggable = false
+      reactData.dragRow = null
+      reactData.dragCol = null
+      hideDropTip($xeTable)
+      return
+    }
+    reactData.dragCol = column
+    reactData.dragRow = null
+    thEl.draggable = true
+    updateColDropOrigin($xeTable, column)
+    updateColDropTipContent($xeTable, thEl)
+    $xeTable.dispatchEvent('column-dragstart', params, evnt)
+  },
+  handleHeaderCellDragMouseupEvent () {
+    const $xeTable = this
+    const reactData = $xeTable
+
+    clearColDropOrigin($xeTable)
+    hideDropTip($xeTable)
+    reactData.dragRow = null
+    reactData.dragCol = null
+    reactData.isDragColMove = false
   },
   setPendingRow (rows: any, status: any) {
     const pendingMaps = { ...this.pendingRowMaps }
@@ -6313,8 +6542,8 @@ const Methods = {
     }
   },
   updateCellAreas () {
-    if (this.mouseConfig && this.mouseOpts.area && this.handleUpdateCellAreas) {
-      return this.handleUpdateCellAreas()
+    if (this.mouseConfig && this.mouseOpts.area && this.handleRecalculateCellAreas) {
+      return this.handleRecalculateCellAreas()
     }
     return this.$nextTick()
   },

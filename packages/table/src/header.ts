@@ -5,9 +5,143 @@ import { getClass } from '../../ui/src/utils'
 import { getOffsetPos, hasClass, addClass, removeClass } from '../../ui/src/dom'
 import { convertHeaderColumnToRows, getColReMinWidth } from './util'
 
+import type { VxeTableDefines } from '../../../types'
+
 const { renderer } = VxeUI
 
 const cellType = 'header'
+
+const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
+  const { $parent: $xetable, fixedType } = _vm
+  const { $listeners: tableListeners, resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable
+
+  return cols.map((column: any, $columnIndex: any) => {
+    const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
+    // const { enabled } = tooltipOpts
+    const colid = column.id
+    const renderOpts = editRender || cellRender
+    const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+    const isColGroup = column.children && column.children.length
+    const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+    const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
+    const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
+    let showEllipsis = headOverflow === 'ellipsis'
+    const showTitle = headOverflow === 'title'
+    const showTooltip = headOverflow === true || headOverflow === 'tooltip'
+    let hasEllipsis = showTitle || showTooltip || showEllipsis
+    const thOns: any = {}
+    const hasFilter = column.filters && column.filters.some((item: any) => item.checked)
+    const columnIndex = $xetable.getColumnIndex(column)
+    const _columnIndex = $xetable.getVTColumnIndex(column)
+    const params = { $table: $xetable, $grid: $xetable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
+    // 虚拟滚动不支持动态高度
+    if (scrollXLoad && !hasEllipsis) {
+      showEllipsis = hasEllipsis = true
+    }
+    if (columnOpts.isCurrent || highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
+      thOns.click = (evnt: any) => $xetable.triggerHeaderCellClickEvent(evnt, params)
+    }
+    if (tableListeners['header-cell-dblclick']) {
+      thOns.dblclick = (evnt: any) => $xetable.triggerHeaderCellDblclickEvent(evnt, params)
+    }
+    // 按下事件处理
+    if (mouseConfig) {
+      thOns.mousedown = (evnt: any) => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
+    }
+    // 拖拽行事件
+    if (columnOpts.drag && !column.parentId) {
+      thOns.dragstart = $xetable.handleHeaderCellDragDragstartEvent
+      thOns.dragend = $xetable.handleHeaderCellDragDragendEvent
+      thOns.dragover = $xetable.handleHeaderCellDragDragoverEvent
+    }
+    return h('th', {
+      class: ['vxe-header--column', colid, {
+        [`col--${headAlign}`]: headAlign,
+        [`col--${type}`]: type,
+        'col--last': $columnIndex === cols.length - 1,
+        'col--fixed': column.fixed,
+        'col--group': isColGroup,
+        'col--ellipsis': hasEllipsis,
+        'fixed--hidden': fixedHiddenColumn,
+        'is--sortable': column.sortable,
+        'col--filter': !!column.filters,
+        'is--filter-active': hasFilter,
+        'col--current': currentColumn === column
+      }, getClass(headerClassName, params), getClass(headerCellClassName, params)],
+      attrs: {
+        colid,
+        colspan: column.colSpan > 1 ? column.colSpan : null,
+        rowspan: column.rowSpan > 1 ? column.rowSpan : null
+      },
+      style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
+      on: thOns,
+      key: columnKey || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
+    }, [
+      h('div', {
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }]
+      }, column.renderHeader(h, params)),
+      /**
+     * 列宽拖动
+     */
+      !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
+        ? h('div', {
+          class: ['vxe-resizable', {
+            'is--line': !border || border === 'none'
+          }],
+          on: {
+            mousedown: (evnt: any) => _vm.resizeMousedown(evnt, params)
+          }
+        })
+        : null
+    ])
+  }).concat(scrollbarWidth
+    ? [
+        h('th', {
+          key: `gr${$rowIndex}`,
+          class: 'vxe-header--gutter col--gutter'
+        })
+      ]
+    : [])
+}
+
+function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
+  const { $parent: $xetable } = _vm
+  const tableProps = $xetable
+
+  const { fixedType } = _vm
+  const { headerRowClassName, headerRowStyle } = tableProps
+  const { isDragColMove } = $xetable
+  const columnOpts = $xetable.columnOpts
+
+  return headerGroups.map((cols: any, $rowIndex: any) => {
+    const params = { $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }
+
+    if (columnOpts.drag) {
+      return h('transition-group', {
+        props: {
+          tag: 'tr',
+          name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
+          class: [
+            'vxe-header--row',
+            headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName : ''
+          ],
+          style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
+        }
+      }, renderRows(h, _vm, cols, $rowIndex))
+    }
+    return h('tr', {
+      class: [
+        'vxe-header--row',
+        headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName : ''
+      ],
+      style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle(params) : headerRowStyle) : null
+    }, renderRows(h, _vm, cols, $rowIndex))
+  })
+}
 
 export default {
   name: 'VxeTableHeader',
@@ -56,7 +190,7 @@ export default {
   },
   render (h: CreateElement) {
     const { _e, $parent: $xetable, fixedType, headerColumn, tableColumn, fixedColumn } = this
-    const { $listeners: tableListeners, tId, isGroup, visibleColumn, resizable: allResizable, border, columnKey, headerRowClassName, headerCellClassName, headerRowStyle, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable
+    const { tId, isGroup, visibleColumn, showHeaderOverflow: allColumnHeaderOverflow, scrollXLoad, scrollbarWidth } = $xetable
     let headerGroups = headerColumn
     let renderColumnList = tableColumn
     if (isGroup) {
@@ -118,95 +252,7 @@ export default {
          */
         h('thead', {
           ref: 'thead'
-        }, headerGroups.map((cols: any, $rowIndex: any) => {
-          return h('tr', {
-            class: ['vxe-header--row', headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowClassName : ''],
-            style: headerRowStyle ? (XEUtils.isFunction(headerRowStyle) ? headerRowStyle({ $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }) : headerRowStyle) : null
-          }, cols.map((column: any, $columnIndex: any) => {
-            const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
-            // const { enabled } = tooltipOpts
-            const colid = column.id
-            const renderOpts = editRender || cellRender
-            const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-            const isColGroup = column.children && column.children.length
-            const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
-            const headOverflow = XEUtils.isUndefined(showHeaderOverflow) || XEUtils.isNull(showHeaderOverflow) ? allColumnHeaderOverflow : showHeaderOverflow
-            const headAlign = headerAlign || (compConf ? compConf.tableHeaderCellAlign : '') || allHeaderAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-            let showEllipsis = headOverflow === 'ellipsis'
-            const showTitle = headOverflow === 'title'
-            const showTooltip = headOverflow === true || headOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            const thOns: any = {}
-            const hasFilter = column.filters && column.filters.some((item: any) => item.checked)
-            const columnIndex = $xetable.getColumnIndex(column)
-            const _columnIndex = $xetable.getVTColumnIndex(column)
-            const params = { $table: $xetable, $grid: $xetable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
-            // 虚拟滚动不支持动态高度
-            if (scrollXLoad && !hasEllipsis) {
-              showEllipsis = hasEllipsis = true
-            }
-            if (columnOpts.isCurrent || highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
-              thOns.click = (evnt: any) => $xetable.triggerHeaderCellClickEvent(evnt, params)
-            }
-            if (tableListeners['header-cell-dblclick']) {
-              thOns.dblclick = (evnt: any) => $xetable.triggerHeaderCellDblclickEvent(evnt, params)
-            }
-            // 按下事件处理
-            if (mouseConfig) {
-              thOns.mousedown = (evnt: any) => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
-            }
-            return h('th', {
-              class: ['vxe-header--column', colid, {
-                [`col--${headAlign}`]: headAlign,
-                [`col--${type}`]: type,
-                'col--last': $columnIndex === cols.length - 1,
-                'col--fixed': column.fixed,
-                'col--group': isColGroup,
-                'col--ellipsis': hasEllipsis,
-                'fixed--hidden': fixedHiddenColumn,
-                'is--sortable': column.sortable,
-                'col--filter': !!column.filters,
-                'is--filter-active': hasFilter,
-                'col--current': currentColumn === column
-              }, getClass(headerClassName, params), getClass(headerCellClassName, params)],
-              attrs: {
-                colid,
-                colspan: column.colSpan > 1 ? column.colSpan : null,
-                rowspan: column.rowSpan > 1 ? column.rowSpan : null
-              },
-              style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
-              on: thOns,
-              key: columnKey || columnOpts.useKey || isColGroup ? colid : $columnIndex
-            }, [
-              h('div', {
-                class: ['vxe-cell', {
-                  'c--title': showTitle,
-                  'c--tooltip': showTooltip,
-                  'c--ellipsis': showEllipsis
-                }]
-              }, column.renderHeader(h, params)),
-              /**
-               * 列宽拖动
-               */
-              !fixedHiddenColumn && !isColGroup && (XEUtils.isBoolean(column.resizable) ? column.resizable : (columnOpts.resizable || allResizable))
-                ? h('div', {
-                  class: ['vxe-resizable', {
-                    'is--line': !border || border === 'none'
-                  }],
-                  on: {
-                    mousedown: (evnt: any) => this.resizeMousedown(evnt, params)
-                  }
-                })
-                : null
-            ])
-          }).concat(scrollbarWidth
-            ? [
-                h('th', {
-                  class: 'vxe-header--gutter col--gutter'
-                })
-              ]
-            : []))
-        }))
+        }, renderHeads(h, this, headerGroups))
       ]),
       /**
        * 其他

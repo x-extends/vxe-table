@@ -337,7 +337,9 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     fullAllDataRowIdData,
     rowOpts,
     pendingRowList,
-    pendingRowMaps
+    pendingRowMaps,
+    columnOpts,
+    isDragColMove
   } = $xeTable
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rows: any[] = []
@@ -393,32 +395,48 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
       rowChildren = row[childrenField]
       isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
     }
+    const trClass = [
+      'vxe-body--row',
+      treeConfig ? `row--level-${rowLevel}` : '',
+      {
+        'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
+        'is--new': isNewRow,
+        'is--expand-row': isExpandRow,
+        'is--expand-tree': isExpandTree,
+        'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
+        'row--radio': radioOpts.highlight && $xeTable.selectRadioRow === row,
+        'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
+        'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
+      },
+      rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
+    ]
+    const tdVNs = tableColumn.map((column: any, $columnIndex: any) => {
+      return renderColumn(h, _vm, $xeTable, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
+    })
     rows.push(
-      h('tr', {
-        class: [
-          'vxe-body--row',
-          treeConfig ? `row--level-${rowLevel}` : '',
-          {
-            'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
-            'is--new': isNewRow,
-            'is--expand-row': isExpandRow,
-            'is--expand-tree': isExpandTree,
-            'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
-            'row--radio': radioOpts.highlight && $xeTable.selectRadioRow === row,
-            'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-            'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
+      columnOpts.drag
+        ? h('transition-group', {
+          props: {
+            tag: 'tr',
+            name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`
           },
-          rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
-        ],
-        attrs: {
-          rowid
-        },
-        style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-        key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
-        on: trOn
-      }, tableColumn.map((column: any, $columnIndex: any) => {
-        return renderColumn(h, _vm, $xeTable, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
-      }))
+          class: trClass,
+          attrs: {
+            rowid
+          },
+          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
+          key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
+          nativeOn: trOn
+        }, tdVNs)
+        : h('tr', {
+          class: trClass,
+          attrs: {
+            rowid
+          },
+          style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
+          key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
+          on: trOn
+        }, tdVNs)
     )
     // 如果行被展开了
     if (isExpandRow) {

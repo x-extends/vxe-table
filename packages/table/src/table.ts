@@ -98,6 +98,53 @@ function renderEmptyBody (h: CreateElement, _vm: any) {
   return emptyContent
 }
 
+const renderDragTipContents = (h: CreateElement, $xeTable: any) => {
+  const props = $xeTable
+  const reactData = $xeTable
+
+  const { dragConfig } = props
+  const { dragRow, dragCol, dragTipText } = reactData
+  const columnDragOpts = $xeTable.computeColumnDragOpts
+  const rowDragOpts = $xeTable.computeRowDragOpts
+  const rowDragSlots = rowDragOpts.slots || {}
+  const rTipSlot = rowDragSlots.tip || (dragConfig && dragConfig.slots ? dragConfig.slots.rowTip : null)
+  const columnDragSlots = columnDragOpts.slots || {}
+  const cTipSlot = columnDragSlots.tip
+
+  if (dragRow && rTipSlot) {
+    return $xeTable.callSlot(rTipSlot, { row: dragRow }, h)
+  }
+  if (dragCol && cTipSlot) {
+    return $xeTable.callSlot(cTipSlot, { column: dragCol }, h)
+  }
+  return [h('span', dragTipText)]
+}
+
+const renderDragTip = (h: CreateElement, $xeTable: any) => {
+  const rowOpts = $xeTable.computeRowOpts
+  const columnOpts = $xeTable.computeColumnOpts
+
+  if (rowOpts.drag || columnOpts.drag) {
+    return h('div', {
+      class: 'vxe-table--drag-wrapper'
+    }, [
+      h('div', {
+        ref: 'refDragRowLineElem',
+        class: 'vxe-table--drag-row-line'
+      }),
+      h('div', {
+        ref: 'refDragColLineElem',
+        class: 'vxe-table--drag-col-line'
+      }),
+      h('div', {
+        ref: 'refDragTipElem',
+        class: 'vxe-table--drag-sort-tip'
+      }, renderDragTipContents(h, $xeTable))
+    ])
+  }
+  return renderEmptyElement($xeTable)
+}
+
 function handleUupdateResize (_vm: any) {
   const { $el } = _vm
   if ($el && $el.clientWidth && $el.clientHeight) {
@@ -352,9 +399,15 @@ export default {
         isHeader: false,
         isFooter: false
       },
+
+      scrollVMLoading: false,
       isDragRowMove: false,
       dragRow: null,
+      isDragColMove: false,
+      dragCol: null,
       dragTipText: '',
+
+      _isResize: false,
       _isLoading: false
     }
   },
@@ -433,8 +486,11 @@ export default {
     computeRowOpts () {
       return Object.assign({}, getConfig().table.rowConfig, this.rowConfig)
     },
-    computeDragOpts () {
-      return Object.assign({}, getConfig().table.dragConfig, this.dragConfig)
+    computeRowDragOpts () {
+      return Object.assign({}, getConfig().table.rowDragConfig, this.rowDragConfig)
+    },
+    computeColumnDragOpts () {
+      return Object.assign({}, getConfig().table.columnDragConfig, this.columnDragConfig)
     },
     resizeOpts () {
       return this.computeResizeOpts
@@ -857,7 +913,7 @@ export default {
       if (this.rowOpts.height && !this.showOverflow) {
         warnLog('vxe.error.notProp', ['table.show-overflow'])
       }
-      if (!this.handleUpdateCellAreas) {
+      if (!this.handleRecalculateCellAreas) {
         if (this.clipConfig) {
           warnLog('vxe.error.notProp', ['clip-config'])
         }
@@ -868,6 +924,9 @@ export default {
           errLog('vxe.error.notProp', ['mouse-config.area'])
           return
         }
+      }
+      if (this.dragConfig) {
+        warnLog('vxe.error.delProp', ['drag-config', 'row-drag-config'])
       }
       if (this.treeConfig && treeOpts.children) {
         warnLog('vxe.error.delProp', ['tree-config.children', 'tree-config.childrenField'])
@@ -1064,7 +1123,6 @@ export default {
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
     const $xeTable = this
-    const reactData = $xeTable
 
     const {
       _e,
@@ -1084,6 +1142,7 @@ export default {
       treeConfig,
       mouseConfig,
       mouseOpts,
+      areaOpts,
       computeSize,
       validOpts,
       showFooter,
@@ -1110,22 +1169,22 @@ export default {
       loadingOpts,
       editRules
     } = $xeTable
-    const { dragRow, dragTipText } = reactData
     const { leftList, rightList } = columnStore
     const currLoading = this._isLoading || loading
     const vSize = computeSize
-    const dragOpts = $xeTable.computeDragOpts
     const virtualScrollBars = $xeTable.computeVirtualScrollBars
-    const dragSlots = dragOpts.slots || {}
-    const rowTipSlot = dragSlots.rowTip
+    const isArea = mouseConfig && mouseOpts.area
     return h('div', {
+      ref: 'refElem',
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
         [`valid-msg--${validOpts.msgMode}`]: !!editRules,
         'vxe-editable': !!editConfig,
         'old-cell-valid': editRules && getConfig().cellVaildMode === 'obsolete',
         'cell--highlight': highlightCell,
         'cell--selected': mouseConfig && mouseOpts.selected,
-        'cell--area': mouseConfig && mouseOpts.area,
+        'cell--area': isArea,
+        'header-cell--area': isArea && areaOpts.selectCellByHeader,
+        'body-cell--area': isArea && areaOpts.selectCellByBody,
         'row--highlight': rowOpts.isHover || highlightHoverRow,
         'column--highlight': columnOpts.isHover || highlightHoverColumn,
         'checkbox--range': checkboxOpts.range,
@@ -1362,16 +1421,9 @@ export default {
         })
         : _e(),
       /**
-         * 拖拽提示
-         */
-      rowOpts.drag && (dragRow || dragTipText)
-        ? h('div', {
-          ref: 'refRowDragTipElem',
-          class: 'vxe-table--row-drag-tip'
-        }, rowTipSlot
-          ? (dragRow ? this.callSlot(rowTipSlot, { row: dragRow }, h) : [renderEmptyElement($xeTable)])
-          : (dragTipText ? [h('span', dragTipText)] : [renderEmptyElement($xeTable)]))
-        : _e(),
+       * 拖拽提示
+       */
+      renderDragTip(h, this),
       h('div', {}, [
         /**
          * 提示相关

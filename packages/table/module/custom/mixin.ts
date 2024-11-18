@@ -38,6 +38,7 @@ export default {
     },
     _saveCustom () {
       const $xeTable = this
+      const reactData = $xeTable
 
       const { customOpts, customColumnList } = this
       const { allowVisible, allowSort, allowFixed, allowResizable } = customOpts
@@ -66,7 +67,10 @@ export default {
           column.visible = column.renderVisible
         }
       })
-      $xeTable.closeCustom()
+      reactData.isDragColMove = true
+      setTimeout(() => {
+        reactData.isDragColMove = false
+      }, 1000)
       return $xeTable.saveCustomStore('confirm')
     },
     _cancelCustom () {

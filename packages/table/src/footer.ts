@@ -4,6 +4,8 @@ import { VxeUI } from '../../ui'
 import { getClass } from '../../ui/src/utils'
 import { updateCellTitle, setScrollLeft } from '../../ui/src/dom'
 
+import type { VxeTableDefines } from '../../../types'
+
 const renderType = 'footer'
 
 const { renderer } = VxeUI
@@ -20,6 +22,166 @@ function mergeFooterMethod (mergeFooterList: any, _rowIndex: any, _columnIndex: 
       }
     }
   }
+}
+
+function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) {
+  const { $parent: $xetable, fixedType } = _vm
+  const { $listeners: tableListeners, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, mergeFooterList, footerSpanMethod, align: allAlign, scrollXLoad, columnKey, columnOpts, showFooterOverflow: allColumnFooterOverflow, currentColumn, overflowX, scrollbarWidth, tooltipOpts } = $xetable
+
+  return tableColumn.map((column: any, $columnIndex: any) => {
+    const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
+    const renderOpts = editRender || cellRender
+    const compConf = renderOpts ? renderer.get(renderOpts.name) : null
+    const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
+    const isColGroup = column.children && column.children.length
+    const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
+    const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
+    const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
+    let showEllipsis = footOverflow === 'ellipsis'
+    const showTitle = footOverflow === 'title'
+    const showTooltip = footOverflow === true || footOverflow === 'tooltip'
+    let hasEllipsis = showTitle || showTooltip || showEllipsis
+    const attrs: any = { colid: column.id }
+    const tfOns: any = {}
+    const columnIndex = $xetable.getColumnIndex(column)
+    const _columnIndex = $xetable.getVTColumnIndex(column)
+    const itemIndex = _columnIndex
+    const cellParams = {
+      $table: $xetable,
+      $grid: $xetable.xegrid,
+      row,
+      _rowIndex,
+      $rowIndex,
+      column,
+      columnIndex,
+      $columnIndex,
+      _columnIndex,
+      itemIndex,
+      items: row,
+      fixed: fixedType,
+      type: renderType,
+      data: footerTableData
+    }
+    // 虚拟滚动不支持动态高度
+    if (scrollXLoad && !hasEllipsis) {
+      showEllipsis = hasEllipsis = true
+    }
+    if (showTitle || showTooltip || showAllTip) {
+      tfOns.mouseenter = (evnt: any) => {
+        if (showTitle) {
+          updateCellTitle(evnt.currentTarget, column)
+        } else if (showTooltip || showAllTip) {
+          $xetable.triggerFooterTooltipEvent(evnt, cellParams)
+        }
+      }
+    }
+    if (showTooltip || showAllTip) {
+      tfOns.mouseleave = (evnt: any) => {
+        if (showTooltip || showAllTip) {
+          $xetable.handleTargetLeaveEvent(evnt)
+        }
+      }
+    }
+    if (tableListeners['footer-cell-click']) {
+      tfOns.click = (evnt: any) => {
+        $xetable.emitEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+      }
+    }
+    if (tableListeners['footer-cell-dblclick']) {
+      tfOns.dblclick = (evnt: any) => {
+        $xetable.emitEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
+      }
+    }
+    // 合并行或列
+    if (mergeFooterList.length) {
+      const spanRest = mergeFooterMethod(mergeFooterList, _rowIndex, _columnIndex)
+      if (spanRest) {
+        const { rowspan, colspan } = spanRest
+        if (!rowspan || !colspan) {
+          return null
+        }
+        if (rowspan > 1) {
+          attrs.rowspan = rowspan
+        }
+        if (colspan > 1) {
+          attrs.colspan = colspan
+        }
+      }
+    } else if (footerSpanMethod) {
+      // 自定义合并方法
+      const { rowspan = 1, colspan = 1 } = footerSpanMethod(cellParams) || {}
+      if (!rowspan || !colspan) {
+        return null
+      }
+      if (rowspan > 1) {
+        attrs.rowspan = rowspan
+      }
+      if (colspan > 1) {
+        attrs.colspan = colspan
+      }
+    }
+    return h('td', {
+      class: ['vxe-footer--column', column.id, {
+        [`col--${footAlign}`]: footAlign,
+        [`col--${type}`]: type,
+        'col--last': $columnIndex === tableColumn.length - 1,
+        'fixed--hidden': fixedHiddenColumn,
+        'col--ellipsis': hasEllipsis,
+        'col--current': currentColumn === column
+      }, getClass(footerClassName, cellParams), getClass(footerCellClassName, cellParams)],
+      attrs,
+      style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) : null,
+      on: tfOns,
+      key: columnKey || columnOpts.useKey || columnOpts.drag ? column.id : $columnIndex
+    }, [
+      h('div', {
+        class: ['vxe-cell', {
+          'c--title': showTitle,
+          'c--tooltip': showTooltip,
+          'c--ellipsis': showEllipsis
+        }]
+      }, column.renderFooter(h, cellParams))
+    ])
+  }).concat(scrollbarWidth
+    ? [
+        h('td', {
+          key: `gr${$rowIndex}`,
+          class: 'vxe-footer--gutter col--gutter'
+        })
+      ]
+    : [])
+}
+
+function renderHeads (h: CreateElement, _vm: any, footerTableData: any[]) {
+  const { $parent: $xetable, fixedType, tableColumn } = _vm
+  const { footerRowClassName, footerRowStyle, isDragColMove } = $xetable
+  const columnOpts = $xetable.columnOpts
+
+  return footerTableData.map((row: any, $rowIndex: any) => {
+    const _rowIndex = $rowIndex
+    const rowParams = { $table: $xetable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
+
+    if (columnOpts.drag) {
+      return h('transition-group', {
+        props: {
+          tag: 'tr',
+          name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
+          class: [
+            'vxe-footer--row',
+            footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
+          ],
+          style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
+        }
+      }, renderRows(h, _vm, tableColumn, footerTableData, row, $rowIndex, _rowIndex))
+    }
+    return h('tr', {
+      class: [
+        'vxe-footer--row',
+        footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
+      ],
+      style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
+    }, renderRows(h, _vm, tableColumn, footerTableData, row, $rowIndex, _rowIndex))
+  })
 }
 
 export default {
@@ -53,28 +215,7 @@ export default {
   },
   render (h: CreateElement) {
     let { _e, $parent: $xetable, fixedType, fixedColumn, tableColumn, footerTableData } = this
-    const {
-      $listeners: tableListeners,
-      tId,
-      footerRowClassName,
-      footerCellClassName,
-      footerRowStyle,
-      footerCellStyle,
-      footerAlign: allFooterAlign,
-      mergeFooterList,
-      footerSpanMethod,
-      align: allAlign,
-      scrollXLoad,
-      columnKey,
-      columnOpts,
-      showFooterOverflow: allColumnFooterOverflow,
-      currentColumn,
-      overflowX,
-      scrollbarWidth,
-      tooltipOpts,
-      visibleColumn,
-      expandColumn
-    } = $xetable
+    const { tId, mergeFooterList, footerSpanMethod, scrollXLoad, showFooterOverflow: allColumnFooterOverflow, scrollbarWidth, visibleColumn, expandColumn } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
       // 如果存在展开行使用全量渲染
@@ -139,134 +280,7 @@ export default {
          */
         h('tfoot', {
           ref: 'tfoot'
-        }, footerTableData.map((list: any, _rowIndex: any) => {
-          const $rowIndex = _rowIndex
-          const rowParams = { $table: $xetable, row: list, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
-          return h('tr', {
-            class: ['vxe-footer--row', footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''],
-            style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
-          }, tableColumn.map((column: any, $columnIndex: any) => {
-            const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
-            const renderOpts = editRender || cellRender
-            const compConf = renderOpts ? renderer.get(renderOpts.name) : null
-            const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
-            const isColGroup = column.children && column.children.length
-            const fixedHiddenColumn = fixedType ? column.fixed !== fixedType && !isColGroup : column.fixed && overflowX
-            const footOverflow = XEUtils.isUndefined(showFooterOverflow) || XEUtils.isNull(showFooterOverflow) ? allColumnFooterOverflow : showFooterOverflow
-            const footAlign = footerAlign || (compConf ? compConf.tableFooterCellAlign : '') || allFooterAlign || align || (compConf ? compConf.tableCellAlign : '') || allAlign
-            let showEllipsis = footOverflow === 'ellipsis'
-            const showTitle = footOverflow === 'title'
-            const showTooltip = footOverflow === true || footOverflow === 'tooltip'
-            let hasEllipsis = showTitle || showTooltip || showEllipsis
-            const attrs: any = { colid: column.id }
-            const tfOns: any = {}
-            const columnIndex = $xetable.getColumnIndex(column)
-            const _columnIndex = $xetable.getVTColumnIndex(column)
-            const itemIndex = _columnIndex
-            const cellParams = {
-              $table: $xetable,
-              $grid: $xetable.xegrid,
-              row: list,
-              _rowIndex,
-              $rowIndex,
-              column,
-              columnIndex,
-              $columnIndex,
-              _columnIndex,
-              itemIndex,
-              items: list,
-              fixed: fixedType,
-              type: renderType,
-              data: footerTableData
-            }
-            // 虚拟滚动不支持动态高度
-            if (scrollXLoad && !hasEllipsis) {
-              showEllipsis = hasEllipsis = true
-            }
-            if (showTitle || showTooltip || showAllTip) {
-              tfOns.mouseenter = (evnt: any) => {
-                if (showTitle) {
-                  updateCellTitle(evnt.currentTarget, column)
-                } else if (showTooltip || showAllTip) {
-                  $xetable.triggerFooterTooltipEvent(evnt, cellParams)
-                }
-              }
-            }
-            if (showTooltip || showAllTip) {
-              tfOns.mouseleave = (evnt: any) => {
-                if (showTooltip || showAllTip) {
-                  $xetable.handleTargetLeaveEvent(evnt)
-                }
-              }
-            }
-            if (tableListeners['footer-cell-click']) {
-              tfOns.click = (evnt: any) => {
-                $xetable.emitEvent('footer-cell-click', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
-              }
-            }
-            if (tableListeners['footer-cell-dblclick']) {
-              tfOns.dblclick = (evnt: any) => {
-                $xetable.emitEvent('footer-cell-dblclick', Object.assign({ cell: evnt.currentTarget }, cellParams), evnt)
-              }
-            }
-            // 合并行或列
-            if (mergeFooterList.length) {
-              const spanRest = mergeFooterMethod(mergeFooterList, _rowIndex, _columnIndex)
-              if (spanRest) {
-                const { rowspan, colspan } = spanRest
-                if (!rowspan || !colspan) {
-                  return null
-                }
-                if (rowspan > 1) {
-                  attrs.rowspan = rowspan
-                }
-                if (colspan > 1) {
-                  attrs.colspan = colspan
-                }
-              }
-            } else if (footerSpanMethod) {
-              // 自定义合并方法
-              const { rowspan = 1, colspan = 1 } = footerSpanMethod(cellParams) || {}
-              if (!rowspan || !colspan) {
-                return null
-              }
-              if (rowspan > 1) {
-                attrs.rowspan = rowspan
-              }
-              if (colspan > 1) {
-                attrs.colspan = colspan
-              }
-            }
-            return h('td', {
-              class: ['vxe-footer--column', column.id, {
-                [`col--${footAlign}`]: footAlign,
-                [`col--${type}`]: type,
-                'col--last': $columnIndex === tableColumn.length - 1,
-                'fixed--hidden': fixedHiddenColumn,
-                'col--ellipsis': hasEllipsis,
-                'col--current': currentColumn === column
-              }, getClass(footerClassName, cellParams), getClass(footerCellClassName, cellParams)],
-              attrs,
-              style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) : null,
-              on: tfOns,
-              key: columnKey || columnOpts.useKey ? column.id : $columnIndex
-            }, [
-              h('div', {
-                class: ['vxe-cell', {
-                  'c--title': showTitle,
-                  'c--tooltip': showTooltip,
-                  'c--ellipsis': showEllipsis
-                }]
-              }, column.renderFooter(h, cellParams))
-            ])
-          }).concat(scrollbarWidth
-            ? [
-                h('td', {
-                  class: 'vxe-footer--gutter col--gutter'
-                })
-              ]
-            : []))
-        }))
+        }, renderHeads(h, this, footerTableData))
       ])
     ])
   },

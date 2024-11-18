@@ -1,10 +1,12 @@
-import { CreateElement } from 'vue'
+import { CreateElement, VNode } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { updateCellTitle } from '../../ui/src/dom'
 import { createColumn, getRowid } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
+
+import type { VxeTableDefines } from '../../../types'
 
 const { getI18n, getIcon, renderer, formats, renderEmptyElement } = VxeUI
 
@@ -50,9 +52,12 @@ function renderTitleSuffixIcon (h: CreateElement, params: any) {
 
 function renderCellDragIcon (h: CreateElement, params: any) {
   const { $table } = params
-  const dragOpts = $table.computeDragOpts
-  const { rowIcon, rowDisabledMethod } = dragOpts
-  const isDisabled = rowDisabledMethod && rowDisabledMethod(params)
+  const tableProps = $table
+  const { dragConfig } = tableProps
+  const rowDragOpts = $table.computeRowDragOpts
+  const { icon, disabledMethod } = rowDragOpts
+  const rDisabledMethod = disabledMethod || (dragConfig ? dragConfig.rowDisabledMethod : null)
+  const isDisabled = rDisabledMethod && rDisabledMethod(params)
   return h('span', {
     key: 'dg',
     class: ['vxe-cell--drag-handle', {
@@ -68,27 +73,69 @@ function renderCellDragIcon (h: CreateElement, params: any) {
     }
   }, [
     h('i', {
-      class: rowIcon || getIcon().TABLE_DRAG_ROW
+      class: icon || (dragConfig ? dragConfig.rowIcon : '') || getIcon().TABLE_DRAG_ROW
     })
   ])
 }
 
 function renderCellBaseVNs (h: CreateElement, params: any, content: any) {
-  const { $table, column, row, level } = params
+  const { $table, column, level } = params
   const { dragSort } = column
   const tableProps = $table
-  const { treeConfig } = tableProps
+  const { treeConfig, dragConfig } = tableProps
   const rowOpts = $table.computeRowOpts
-  const dragOpts = $table.computeDragOpts
-  const { showRowIcon, rowVisibleMethod } = dragOpts
+  const rowDragOpts = $table.computeRowDragOpts
+  const { showIcon, visibleMethod } = rowDragOpts
+  const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
   const vns: any[] = XEUtils.isArray(content) ? content : [content]
-  if (dragSort && rowOpts.drag && (showRowIcon && (!rowVisibleMethod || rowVisibleMethod({ row, column })))) {
+  if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
     if (!treeConfig || !level) {
       vns.unshift(
         renderCellDragIcon(h, params)
       )
     }
   }
+  return vns
+}
+
+function renderHeaderCellDragIcon (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams) {
+  const { $table, column } = params
+  const columnOpts = $table.computeColumnOpts
+  const columnDragOpts = $table.computeColumnDragOpts
+  const { showIcon, icon, visibleMethod, disabledMethod } = columnDragOpts
+  const isDisabled = disabledMethod && disabledMethod(params)
+  if (columnOpts.drag && showIcon && (!visibleMethod || visibleMethod(params))) {
+    if (!(column.fixed || column.parentId)) {
+      return h('span', {
+        key: 'dg',
+        class: ['vxe-cell--drag-handle', {
+          'is--disabled': isDisabled
+        }],
+        on: {
+          mousedown (evnt: MouseEvent) {
+            if (!isDisabled) {
+              $table.handleHeaderCellDragMousedownEvent(evnt, params)
+            }
+          },
+          mouseup: $table.handleHeaderCellDragMouseupEvent
+        }
+      }, [
+        h('i', {
+          class: icon || getIcon().TABLE_DRAG_COLUMN
+        })
+      ])
+    }
+  }
+  return renderEmptyElement($table)
+}
+
+function renderHeaderCellBaseVNs (h: CreateElement, params: VxeTableDefines.CellRenderHeaderParams, content: VNode | VNode[]) {
+  const vns = [
+    renderTitlePrefixIcon(h, params),
+    renderHeaderCellDragIcon(h, params),
+    ...(XEUtils.isArray(content) ? content : [content]),
+    renderTitleSuffixIcon(h, params)
+  ]
   return vns
 }
 
@@ -252,7 +299,7 @@ export const Cell = {
     return createColumn($xetable, _vm, renMaps)
   },
   /**
-   * 单元格
+   * 列头标题
    */
   renderHeaderTitle (h: any, params: any) {
     const { $table, column } = params
@@ -271,7 +318,7 @@ export const Cell = {
     return renderTitleContent(h, params, formatText(column.getTitle(), 1))
   },
   renderDefaultHeader (h: CreateElement, params: any) {
-    return renderTitlePrefixIcon(h, params).concat(Cell.renderHeaderTitle(h, params)).concat(renderTitleSuffixIcon(h, params))
+    return renderHeaderCellBaseVNs(h, params, Cell.renderHeaderTitle(h, params))
   },
   renderDefaultCell (h: CreateElement, params: any) {
     const { $table, row, column } = params
@@ -380,12 +427,12 @@ export const Cell = {
   },
 
   /**
-   * 索引
+   * 序号
    */
   renderSeqHeader (h: CreateElement, params: any) {
     const { $table, column } = params
     const { slots } = column
-    return renderTitleContent(h, params, slots && slots.header ? $table.callSlot(slots.header, params, h) : formatText(column.getTitle(), 1))
+    return renderHeaderCellBaseVNs(h, params, renderTitleContent(h, params, slots && slots.header ? $table.callSlot(slots.header, params, h) : formatText(column.getTitle(), 1)))
   },
   renderSeqCell (h: CreateElement, params: any) {
     const { $table, column } = params
@@ -412,13 +459,15 @@ export const Cell = {
     const { slots } = column
     const headerSlot = slots ? slots.header : null
     const titleSlot = slots ? slots.title : null
-    return renderTitleContent(h, params, headerSlot
-      ? $table.callSlot(headerSlot, params, h)
-      : [
-          h('span', {
-            class: 'vxe-radio--label'
-          }, titleSlot ? $table.callSlot(titleSlot, params, h) : formatText(column.getTitle(), 1))
-        ])
+    return renderHeaderCellBaseVNs(h, params,
+      renderTitleContent(h, params, headerSlot
+        ? $table.callSlot(headerSlot, params, h)
+        : [
+            h('span', {
+              class: 'vxe-radio--label'
+            }, titleSlot ? $table.callSlot(titleSlot, params, h) : formatText(column.getTitle(), 1))
+          ])
+    )
   },
   renderRadioCell (h: CreateElement, params: any) {
     const { $table, column, isHidden } = params
@@ -500,38 +549,40 @@ export const Cell = {
     }
     const checkboxParams = { ...params, checked: isAllCheckboxSelected, disabled: isAllCheckboxDisabled, indeterminate: isAllCheckboxIndeterminate }
     if (headerSlot) {
-      return renderTitleContent(h, checkboxParams, $table.callSlot(headerSlot, checkboxParams, h))
+      return renderHeaderCellBaseVNs(h, params, renderTitleContent(h, checkboxParams, $table.callSlot(headerSlot, checkboxParams, h)))
     }
     if (checkboxOpts.checkStrictly ? !checkboxOpts.showHeader : checkboxOpts.showHeader === false) {
-      return renderTitleContent(h, checkboxParams, [
+      return renderHeaderCellBaseVNs(h, params, renderTitleContent(h, checkboxParams, [
         h('span', {
           class: 'vxe-checkbox--label'
         }, titleSlot ? $table.callSlot(titleSlot, checkboxParams, h) : headerTitle)
-      ])
+      ]))
     }
-    return renderTitleContent(h, checkboxParams, [
-      h('span', {
-        class: ['vxe-cell--checkbox', {
-          'is--checked': isAllCheckboxSelected,
-          'is--disabled': isAllCheckboxDisabled,
-          'is--indeterminate': isAllCheckboxIndeterminate
-        }],
-        attrs: {
-          title: getI18n('vxe.table.allTitle')
-        },
-        on
-      }, [
+    return renderHeaderCellBaseVNs(h, params,
+      renderTitleContent(h, checkboxParams, [
         h('span', {
-          class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
-        })
-      ].concat(titleSlot || headerTitle
-        ? [
-            h('span', {
-              class: 'vxe-checkbox--label'
-            }, titleSlot ? $table.callSlot(titleSlot, checkboxParams, h) : headerTitle)
-          ]
-        : []))
-    ])
+          class: ['vxe-cell--checkbox', {
+            'is--checked': isAllCheckboxSelected,
+            'is--disabled': isAllCheckboxDisabled,
+            'is--indeterminate': isAllCheckboxIndeterminate
+          }],
+          attrs: {
+            title: getI18n('vxe.table.allTitle')
+          },
+          on
+        }, [
+          h('span', {
+            class: ['vxe-checkbox--icon', isAllCheckboxIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isAllCheckboxSelected ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
+          })
+        ].concat(titleSlot || headerTitle
+          ? [
+              h('span', {
+                class: 'vxe-checkbox--label'
+              }, titleSlot ? $table.callSlot(titleSlot, checkboxParams, h) : headerTitle)
+            ]
+          : []))
+      ])
+    )
   },
   renderCheckboxCell (h: CreateElement, params: any) {
     const { $table, row, column, isHidden } = params
@@ -748,16 +799,14 @@ export const Cell = {
    * 排序和筛选
    */
   renderSortAndFilterHeader (h: CreateElement, params: any) {
-    return Cell.renderDefaultHeader(h, params)
-      .concat(Cell.renderSortIcon(h, params))
-      .concat(Cell.renderFilterIcon(h, params))
+    return renderHeaderCellBaseVNs(h, params, Cell.renderHeaderTitle(h, params).concat(Cell.renderSortIcon(h, params)))
   },
 
   /**
    * 排序
    */
   renderSortHeader (h: CreateElement, params: any) {
-    return Cell.renderDefaultHeader(h, params).concat(Cell.renderSortIcon(h, params))
+    return renderHeaderCellBaseVNs(h, params, Cell.renderHeaderTitle(h, params).concat(Cell.renderSortIcon(h, params)))
   },
   renderSortIcon (h: CreateElement, params: any) {
     const { $table, column } = params
@@ -804,7 +853,7 @@ export const Cell = {
    * 筛选
    */
   renderFilterHeader (h: CreateElement, params: any) {
-    return Cell.renderDefaultHeader(h, params).concat(Cell.renderFilterIcon(h, params))
+    return renderHeaderCellBaseVNs(h, params, Cell.renderHeaderTitle(h, params).concat(Cell.renderFilterIcon(h, params)))
   },
   renderFilterIcon (h: CreateElement, params: any) {
     const { $table, column, hasFilter } = params
@@ -849,22 +898,26 @@ export const Cell = {
         isRequired = columnRules.some((rule: any) => rule.required)
       }
     }
-    return (isEnableConf(editConfig)
-      ? [
-          isRequired && editOpts.showAsterisk
-            ? h('i', {
-              class: 'vxe-cell--required-icon'
-            })
-            : null,
-          isEnableConf(editRender) && editOpts.showIcon
-            ? h('i', {
-              class: ['vxe-cell--edit-icon', editOpts.icon || getIcon().TABLE_EDIT]
-            })
-            : null
-        ]
-      : []).concat(Cell.renderDefaultHeader(h, params))
-      .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])
-      .concat(filters ? Cell.renderFilterIcon(h, params) : [])
+    let editIconVNs: VNode[] = []
+    if (isEnableConf(editConfig)) {
+      editIconVNs = [
+        isRequired && editOpts.showAsterisk
+          ? h('i', {
+            class: 'vxe-cell--required-icon'
+          })
+          : renderEmptyElement($table),
+        isEnableConf(editRender) && editOpts.showIcon
+          ? h('i', {
+            class: ['vxe-cell--edit-icon', editOpts.icon || getIcon().TABLE_EDIT]
+          })
+          : renderEmptyElement($table)
+      ]
+    }
+    return renderHeaderCellBaseVNs(h, params,
+      editIconVNs.concat(Cell.renderHeaderTitle(h, params))
+        .concat(sortable || remoteSort ? Cell.renderSortIcon(h, params) : [])
+        .concat(filters ? Cell.renderFilterIcon(h, params) : [])
+    )
   },
   // 行格编辑模式
   renderRowEdit (h: CreateElement, params: any) {
