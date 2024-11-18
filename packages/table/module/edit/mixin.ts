@@ -554,12 +554,15 @@ export default {
      */
     handleClearEdit (evnt: Event | null, targetRow?: any) {
       const $xeTable = this
+      const props = $xeTable
       const reactData = $xeTable
 
+      const { mouseConfig } = props
       const { editStore } = reactData
       const { actived, focused } = editStore
       const { row, column } = actived
       const validOpts = $xeTable.validOpts
+      const mouseOpts = $xeTable.computeMouseOpts
       if (row || column) {
         if (targetRow && getRowid($xeTable, targetRow) !== getRowid($xeTable, row)) {
           return $xeTable.$nextTick()
@@ -580,6 +583,11 @@ export default {
       }
       focused.row = null
       focused.column = null
+      $xeTable.$nextTick(() => {
+        if (mouseConfig && mouseOpts.area && $xeTable.handleRecalculateCellAreas) {
+          return $xeTable.handleRecalculateCellAreas()
+        }
+      })
       if (validOpts.autoClear) {
         if (validOpts.msgMode !== 'full' || getConfig().cellVaildMode === 'obsolete') {
           if ($xeTable.clearValidate) {

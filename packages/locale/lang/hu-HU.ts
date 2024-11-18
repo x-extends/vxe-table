@@ -308,6 +308,7 @@ export default {
       fileTypeHint: 'Támogatott {0} fájltípus',
       fileSizeHint: 'Egyetlen fájl mérete nem haladja meg a következőt: {0}',
       fileCountHint: 'Legfeljebb {0} fájl tölthető fel',
+      uploadTypeErr: '文件类型不匹配！',
       overCountErr: 'Csak {0} fájl választható ki!',
       overCountExtraErr: 'Túllépte a maximálisan megengedett {0} fájlt. A többlet {1} fájlt figyelmen kívül hagyja.',
       overSizeErr: 'A maximális fájlméret nem haladhatja meg a következőt: {0}!',
