@@ -308,6 +308,7 @@ export default {
       fileTypeHint: '支援 {0} 文件類型',
       fileSizeHint: '單一檔案大小不超過{0}',
       fileCountHint: '最多可上傳{0}個文件',
+      uploadTypeErr: '文件类型不匹配！',
       overCountErr: '最多只能選擇{0}個檔案！',
       overCountExtraErr: '已超出最大數量{0}個，超出的{1}個檔案將被忽略！',
       overSizeErr: '檔案大小最大不能超過{0}！',
