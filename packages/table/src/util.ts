@@ -448,7 +448,7 @@ export function rowToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   return Promise.resolve()
 }
 
-export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo) {
+export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMethods, column: VxeTableDefines.ColumnInfo, row?: any) {
   const { reactData, internalData } = $xeTable
   const { refTableBody } = $xeTable.getRefMaps()
   const { columnStore, scrollXLoad } = reactData
@@ -470,7 +470,14 @@ export function colToVisible ($xeTable: VxeTableConstructor & VxeTablePrivateMet
   if (bodyElem) {
     const bodyWidth = bodyElem.clientWidth
     const bodyScrollLeft = bodyElem.scrollLeft
-    const tdElem: HTMLTableCellElement | null = bodyElem.querySelector(`.${column.id}`)
+    let tdElem: HTMLTableCellElement | null = null
+    if (row) {
+      const rowid = getRowid($xeTable, row)
+      tdElem = bodyElem.querySelector(`[rowid="${rowid}"] .${column.id}`)
+    }
+    if (!tdElem) {
+      tdElem = bodyElem.querySelector(`.${column.id}`)
+    }
     if (tdElem) {
       const tdOffsetParent = tdElem.offsetParent as HTMLElement
       const tdOffsetLeft = tdElem.offsetLeft + (tdOffsetParent ? tdOffsetParent.offsetLeft : 0)

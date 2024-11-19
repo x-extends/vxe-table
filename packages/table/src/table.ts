@@ -3014,6 +3014,15 @@ export default defineComponent({
       emit(type, createEvent(evnt, { $table: $xeTable, $grid: $xeGrid }, params))
     }
 
+    const handleScrollToRowColumn = (fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row?: any) => {
+      const { fullColumnIdData } = internalData
+      const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+      if (column && fullColumnIdData[column.id]) {
+        return colToVisible($xeTable, column, row)
+      }
+      return nextTick()
+    }
+
     tableMethods = {
       dispatchEvent,
       /**
@@ -4798,7 +4807,7 @@ export default defineComponent({
           }
         }
         if (fieldOrColumn) {
-          rest.push(tableMethods.scrollToColumn(fieldOrColumn))
+          rest.push(handleScrollToRowColumn(fieldOrColumn, row))
         }
         return Promise.all(rest)
       },
