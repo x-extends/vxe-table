@@ -395,7 +395,7 @@ export function rowToVisible ($xeTable: any, row: any) {
   return Promise.resolve()
 }
 
-export function colToVisible ($xeTable: any, column: any) {
+export function colToVisible ($xeTable: any, column: any, row?: any) {
   const { columnStore, scrollXLoad, visibleColumn } = $xeTable
   const tableBody: any = $xeTable.$refs.tableBody
   const { leftList, rightList } = columnStore
@@ -414,9 +414,17 @@ export function colToVisible ($xeTable: any, column: any) {
   if (bodyElem) {
     const bodyWidth = bodyElem.clientWidth
     const bodyScrollLeft = bodyElem.scrollLeft
-    const tdElem = bodyElem.querySelector(`.${column.id}`)
+    let tdElem: HTMLTableCellElement | null = null
+    if (row) {
+      const rowid = getRowid($xeTable, row)
+      tdElem = bodyElem.querySelector(`[rowid="${rowid}"] .${column.id}`)
+    }
+    if (!tdElem) {
+      tdElem = bodyElem.querySelector(`.${column.id}`)
+    }
     if (tdElem) {
-      const tdOffsetLeft = tdElem.offsetLeft + (tdElem.offsetParent ? tdElem.offsetParent.offsetLeft : 0)
+      const tdOffsetParent = tdElem.offsetParent as HTMLElement
+      const tdOffsetLeft = tdElem.offsetLeft + (tdOffsetParent ? tdOffsetParent.offsetLeft : 0)
       const cellWidth = tdElem.clientWidth
       // 检测是否在可视区中
       if (tdOffsetLeft < (bodyScrollLeft + offsetFixedLeft)) {

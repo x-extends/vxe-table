@@ -465,6 +465,17 @@ const hideDropTip = ($xeTable: any) => {
   }
 }
 
+const handleScrollToRowColumn = ($xeTable: any, fieldOrColumn: string | VxeTableDefines.ColumnInfo | null, row?: any) => {
+  const internalData = $xeTable
+
+  const { fullColumnIdData } = internalData
+  const column = handleFieldOrColumn($xeTable, fieldOrColumn)
+  if (column && fullColumnIdData[column.id]) {
+    return colToVisible($xeTable, column, row)
+  }
+  return $xeTable.$nextTick()
+}
+
 const Methods = {
   callSlot (slotFunc: any, params: any, h: any, vNodes: any) {
     if (slotFunc) {
@@ -6309,6 +6320,8 @@ const Methods = {
    * @param {ColumnInfo} column 列配置
    */
   scrollToRow (row: any, fieldOrColumn: any) {
+    const $xeTable = this
+
     const rest = []
     if (row) {
       if (this.treeConfig) {
@@ -6318,7 +6331,7 @@ const Methods = {
       }
     }
     if (fieldOrColumn) {
-      rest.push(this.scrollToColumn(fieldOrColumn))
+      rest.push(handleScrollToRowColumn($xeTable, fieldOrColumn, row))
     }
     return Promise.all(rest)
   },
@@ -6327,11 +6340,9 @@ const Methods = {
    * @param {ColumnInfo} column 列配置
    */
   scrollToColumn (fieldOrColumn: any) {
-    const column = handleFieldOrColumn(this, fieldOrColumn)
-    if (column && this.fullColumnMap.has(column)) {
-      return colToVisible(this, column)
-    }
-    return this.$nextTick()
+    const $xeTable = this
+
+    return handleScrollToRowColumn($xeTable, fieldOrColumn)
   },
   /**
    * 对于树形结构中，可以直接滚动到指定深层节点中
