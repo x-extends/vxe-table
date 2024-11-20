@@ -13,41 +13,39 @@ const { getI18n, getIcon, renderer, formats, renderEmptyElement } = VxeUI
 function renderTitlePrefixIcon (h: CreateElement, params: any) {
   const { $table, column } = params
   const titlePrefix = column.titlePrefix || column.titleHelp
-  return titlePrefix
-    ? [
-        h('i', {
-          class: ['vxe-cell-title-prefix-icon', titlePrefix.icon || getIcon().TABLE_TITLE_PREFIX],
-          on: {
-            mouseenter (evnt: any) {
-              $table.triggerHeaderTitleEvent(evnt, titlePrefix, params)
-            },
-            mouseleave (evnt: any) {
-              $table.handleTargetLeaveEvent(evnt)
-            }
-          }
-        })
-      ]
-    : []
+  if (titlePrefix) {
+    return h('i', {
+      class: ['vxe-cell-title-prefix-icon', titlePrefix.icon || getIcon().TABLE_TITLE_PREFIX],
+      on: {
+        mouseenter (evnt: any) {
+          $table.triggerHeaderTitleEvent(evnt, titlePrefix, params)
+        },
+        mouseleave (evnt: any) {
+          $table.handleTargetLeaveEvent(evnt)
+        }
+      }
+    })
+  }
+  return renderEmptyElement($table)
 }
 
 function renderTitleSuffixIcon (h: CreateElement, params: any) {
   const { $table, column } = params
   const titleSuffix = column.titleSuffix
-  return titleSuffix
-    ? [
-        h('i', {
-          class: ['vxe-cell-title-suffix-icon', titleSuffix.icon || getIcon().TABLE_TITLE_SUFFIX],
-          on: {
-            mouseenter (evnt: any) {
-              $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
-            },
-            mouseleave (evnt: any) {
-              $table.handleTargetLeaveEvent(evnt)
-            }
-          }
-        })
-      ]
-    : []
+  if (titleSuffix) {
+    return h('i', {
+      class: ['vxe-cell-title-suffix-icon', titleSuffix.icon || getIcon().TABLE_TITLE_SUFFIX],
+      on: {
+        mouseenter (evnt: any) {
+          $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
+        },
+        mouseleave (evnt: any) {
+          $table.handleTargetLeaveEvent(evnt)
+        }
+      }
+    })
+  }
+  return renderEmptyElement($table)
 }
 
 function renderCellDragIcon (h: CreateElement, params: any) {
@@ -799,14 +797,22 @@ export const Cell = {
    * 排序和筛选
    */
   renderSortAndFilterHeader (h: CreateElement, params: any) {
-    return renderHeaderCellBaseVNs(h, params, Cell.renderHeaderTitle(h, params).concat(Cell.renderSortIcon(h, params)))
+    return renderHeaderCellBaseVNs(
+      h,
+      params,
+      Cell.renderHeaderTitle(h, params).concat(Cell.renderSortIcon(h, params).concat(Cell.renderFilterIcon(h, params)))
+    )
   },
 
   /**
    * 排序
    */
   renderSortHeader (h: CreateElement, params: any) {
-    return renderHeaderCellBaseVNs(h, params, Cell.renderHeaderTitle(h, params).concat(Cell.renderSortIcon(h, params)))
+    return renderHeaderCellBaseVNs(
+      h,
+      params,
+      Cell.renderHeaderTitle(h, params).concat(Cell.renderSortIcon(h, params))
+    )
   },
   renderSortIcon (h: CreateElement, params: any) {
     const { $table, column } = params

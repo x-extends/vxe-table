@@ -26,6 +26,8 @@
 * [x] 多种边框
 * [x] 单元格样式
 * [x] 列宽拖动
+* [x] 列拖拽排序
+* [x] 行拖拽排序
 * [x] 最小/最大高度
 * [x] 自适应宽高
 * [x] 固定列
@@ -62,6 +64,7 @@
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格复制/粘贴
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 单元格查找和替换
 * [x] ([企业版](https://vxetable.cn/pluginDocs/)) 全键盘操作
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 集成图表
 
 ## 安装
 
