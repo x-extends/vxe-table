@@ -417,6 +417,9 @@ export function colToVisible ($xetable: VxeTableConstructor & VxeTablePrivateMet
   const { visibleColumn } = internalData
   const tableBody = refTableBody.value
   const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+  if (column && column.fixed) {
+    return Promise.resolve()
+  }
   if (bodyElem) {
     const tdElem: HTMLTableCellElement | null = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {

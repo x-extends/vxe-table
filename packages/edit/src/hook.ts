@@ -768,7 +768,12 @@ const editHook: VxeGlobalHooksHandles.HookOptions = {
           if (XEUtils.isFunction(autofocus)) {
             inputElem = autofocus.call(this, params)
           } else if (autofocus) {
-            inputElem = cell.querySelector(autofocus)
+            if (autofocus === true) {
+              // 自动匹配模式，会自动匹配第一个可输入元素
+              inputElem = cell.querySelector('input,textarea')
+            } else {
+              inputElem = cell.querySelector(autofocus)
+            }
             if (inputElem) {
               inputElem.focus()
             }

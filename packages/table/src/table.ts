@@ -2315,14 +2315,14 @@ export default defineComponent({
       if (keepSource) {
         tablePrivateMethods.cacheSourceMap(fullData)
       }
-      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-        if (sYLoad) {
-          if (!(props.height || props.maxHeight)) {
-            errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
-          }
-          if (!props.showOverflow) {
-            warnLog('vxe.error.reqProp', ['table.show-overflow'])
-          }
+      if (sYLoad) {
+        if (!(props.height || props.maxHeight)) {
+          errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+        }
+        if (!props.showOverflow) {
+          errLog('vxe.error.reqProp', ['table.show-overflow'])
+        }
+        if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
           if (props.spanMethod) {
             warnLog('vxe.error.scrollErrProp', ['table.span-method'])
           }
@@ -3354,7 +3354,7 @@ export default defineComponent({
        * 如果为 true 则重置所有状态
        * 如果已关联工具栏，则会同步更新
        */
-      resetColumn (options) {
+      resetCustom (options) {
         const { collectColumn } = internalData
         const customOpts = computeCustomOpts.value
         const { checkMethod } = customOpts
@@ -3388,6 +3388,10 @@ export default defineComponent({
           tablePrivateMethods.saveCustomFixed()
         }
         return tablePrivateMethods.handleCustom()
+      },
+      resetColumn (options) {
+        warnLog('vxe.error.delFunc', ['resetColumn', 'resetCustom'])
+        return $xetable.resetCustom(options)
       },
       /**
        * 刷新列信息
