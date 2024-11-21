@@ -31,7 +31,7 @@ function renderTitleSuffixIcon (params: VxeTableDefines.CellRenderHeaderParams) 
   const { $table, column } = params
   const titleSuffix = column.titleSuffix
   if (titleSuffix) {
-    h('i', {
+    return h('i', {
       class: ['vxe-cell-title-suffix-icon', titleSuffix.icon || getIcon().TABLE_TITLE_SUFFIX],
       onMouseenter (evnt: MouseEvent) {
         $table.triggerHeaderTitleEvent(evnt, titleSuffix, params)
@@ -839,14 +839,20 @@ export const Cell = {
    * 排序和筛选
    */
   renderSortAndFilterHeader (params: VxeTableDefines.CellRenderHeaderParams) {
-    return renderHeaderCellBaseVNs(params, Cell.renderHeaderTitle(params).concat(Cell.renderSortIcon(params).concat(Cell.renderFilterIcon(params))))
+    return renderHeaderCellBaseVNs(
+      params,
+      Cell.renderHeaderTitle(params).concat(Cell.renderSortIcon(params).concat(Cell.renderFilterIcon(params)))
+    )
   },
 
   /**
    * 排序
    */
   renderSortHeader (params: VxeTableDefines.CellRenderHeaderParams) {
-    return renderHeaderCellBaseVNs(params, Cell.renderHeaderTitle(params).concat(Cell.renderSortIcon(params)))
+    return renderHeaderCellBaseVNs(
+      params,
+      Cell.renderHeaderTitle(params).concat(Cell.renderSortIcon(params))
+    )
   },
   renderSortIcon (params: VxeTableDefines.CellRenderHeaderParams | VxeTableDefines.CellRenderHeaderParams) {
     const { $table, column } = params

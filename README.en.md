@@ -28,6 +28,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] Table with border
 * [x] Cell style
 * [x] Column resizing
+* [x] Column drag and drop
+* [x] Row drag and drop
 * [x] Minimum/maximum height
 * [x] Resize height & width
 * [x] Fixed column
@@ -64,6 +66,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell copy & paste
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Cell find and replace
 * [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Full keyboard operation
+* [x] ([Enterprise](https://vxetable.cn/pluginDocs/)) Integrated chart
 
 ## Installing
 

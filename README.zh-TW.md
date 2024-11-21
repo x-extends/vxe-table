@@ -28,6 +28,8 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] 多種邊框
 * [x] 儲存格樣式
 * [x] 列寬拖動
+* [x] 列拖拽排序
+* [x] 行拖拽排序
 * [x] 最小/最大高度
 * [x] 自我調整寬高
 * [x] 固定列
@@ -63,6 +65,7 @@ Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ | Latest ✔ |
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格複製/粘貼
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 儲存格查找和替換
 * [x] ([企業版](https://vxetable.cn/pluginDocs/)) 全鍵盤操作
+* [x] ([企业版](https://vxetable.cn/pluginDocs/)) 集成图表
 
 ## 安裝
 

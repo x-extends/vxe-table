@@ -1,40 +1,40 @@
 @use './base.scss';
-@use '../variable.scss' as light-variable;
+@use '../variable.scss' as light_variable;
 
 [data-vxe-ui-theme="light"] {
   /*font color*/
-  --vxe-ui-font-color: #{light-variable.$vxe-ui-font-color};
-  --vxe-ui-font-primary-color: #{light-variable.$vxe-ui-font-primary-color};
-  --vxe-ui-font-lighten-color: #{light-variable.$vxe-ui-font-lighten-color};
-  --vxe-ui-font-darken-color: #{light-variable.$vxe-ui-font-darken-color};
-  --vxe-ui-font-disabled-color: #{light-variable.$vxe-ui-font-disabled-color};
+  --vxe-ui-font-color: #{light_variable.$vxe-ui-font-color};
+  --vxe-ui-font-primary-color: #{light_variable.$vxe-ui-font-primary-color};
+  --vxe-ui-font-lighten-color: #{light_variable.$vxe-ui-font-lighten-color};
+  --vxe-ui-font-darken-color: #{light_variable.$vxe-ui-font-darken-color};
+  --vxe-ui-font-disabled-color: #{light_variable.$vxe-ui-font-disabled-color};
 
   /*base*/
-  --vxe-ui-base-popup-border-color: #{light-variable.$vxe-ui-base-popup-border-color};
-  --vxe-ui-base-popup-box-shadow: #{light-variable.$vxe-ui-base-popup-box-shadow};
+  --vxe-ui-base-popup-border-color: #{light_variable.$vxe-ui-base-popup-border-color};
+  --vxe-ui-base-popup-box-shadow: #{light_variable.$vxe-ui-base-popup-box-shadow};
 
   /*layout*/
-  --vxe-ui-layout-background-color: #{light-variable.$vxe-ui-layout-background-color};
+  --vxe-ui-layout-background-color: #{light_variable.$vxe-ui-layout-background-color};
 
   /*input*/
-  --vxe-ui-input-border-color: #{light-variable.$vxe-ui-input-border-color};
-  --vxe-ui-input-placeholder-color: #{light-variable.$vxe-ui-input-placeholder-color};
-  --vxe-ui-input-disabled-background-color: #{light-variable.$vxe-ui-input-disabled-background-color};
+  --vxe-ui-input-border-color: #{light_variable.$vxe-ui-input-border-color};
+  --vxe-ui-input-placeholder-color: #{light_variable.$vxe-ui-input-placeholder-color};
+  --vxe-ui-input-disabled-background-color: #{light_variable.$vxe-ui-input-disabled-background-color};
 
   /*loading*/
-  --vxe-ui-loading-background-color: #{light-variable.$vxe-ui-loading-background-color};
+  --vxe-ui-loading-background-color: #{light_variable.$vxe-ui-loading-background-color};
 
   /*table*/
-  --vxe-ui-table-header-background-color: #{light-variable.$vxe-ui-table-header-background-color};
-  --vxe-ui-table-border-color: #{light-variable.$vxe-ui-table-border-color};
-  --vxe-ui-table-row-hover-background-color: #{light-variable.$vxe-ui-table-row-hover-background-color};
-  --vxe-ui-table-row-striped-background-color: #{light-variable.$vxe-ui-table-row-striped-background-color};
-  --vxe-ui-table-row-hover-striped-background-color: #{light-variable.$vxe-ui-table-row-hover-striped-background-color};
-  --vxe-ui-table-row-radio-checked-background-color: #{light-variable.$vxe-ui-table-row-radio-checked-background-color};
-  --vxe-ui-table-row-hover-radio-checked-background-color: #{light-variable.$vxe-ui-table-row-hover-radio-checked-background-color};
-  --vxe-ui-table-row-checkbox-checked-background-color: #{light-variable.$vxe-ui-table-row-checkbox-checked-background-color};
-  --vxe-ui-table-row-hover-checkbox-checked-background-color: #{light-variable.$vxe-ui-table-row-hover-checkbox-checked-background-color};
-  --vxe-ui-table-row-current-background-color: #{light-variable.$vxe-ui-table-row-current-background-color};
-  --vxe-ui-table-row-hover-current-background-color: #{light-variable.$vxe-ui-table-row-hover-current-background-color};
-  --vxe-ui-table-fixed-scrolling-box-shadow-color: #{light-variable.$vxe-ui-table-fixed-scrolling-box-shadow-color};
+  --vxe-ui-table-header-background-color: #{light_variable.$vxe-ui-table-header-background-color};
+  --vxe-ui-table-border-color: #{light_variable.$vxe-ui-table-border-color};
+  --vxe-ui-table-row-hover-background-color: #{light_variable.$vxe-ui-table-row-hover-background-color};
+  --vxe-ui-table-row-striped-background-color: #{light_variable.$vxe-ui-table-row-striped-background-color};
+  --vxe-ui-table-row-hover-striped-background-color: #{light_variable.$vxe-ui-table-row-hover-striped-background-color};
+  --vxe-ui-table-row-radio-checked-background-color: #{light_variable.$vxe-ui-table-row-radio-checked-background-color};
+  --vxe-ui-table-row-hover-radio-checked-background-color: #{light_variable.$vxe-ui-table-row-hover-radio-checked-background-color};
+  --vxe-ui-table-row-checkbox-checked-background-color: #{light_variable.$vxe-ui-table-row-checkbox-checked-background-color};
+  --vxe-ui-table-row-hover-checkbox-checked-background-color: #{light_variable.$vxe-ui-table-row-hover-checkbox-checked-background-color};
+  --vxe-ui-table-row-current-background-color: #{light_variable.$vxe-ui-table-row-current-background-color};
+  --vxe-ui-table-row-hover-current-background-color: #{light_variable.$vxe-ui-table-row-hover-current-background-color};
+  --vxe-ui-table-fixed-scrolling-box-shadow-color: #{light_variable.$vxe-ui-table-fixed-scrolling-box-shadow-color};
 }

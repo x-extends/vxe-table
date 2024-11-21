@@ -28,6 +28,8 @@
 * [x] 境界線付きテーブル
 * [x] セルスタイル
 * [x] 列のサイズ変更
+* [x] 列拖拽排序
+* [x] 行拖拽排序
 * [x] 最小/最大高さ
 * [x] 高さと幅のリサイズ
 * [x] 固定列
@@ -64,6 +66,7 @@
 * [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルのコピー＆ペースト
 * [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) セルの検索と置換
 * [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) フルキーボード操作
+* [x] ([エンタープライズ](https://vxetable.cn/pluginDocs/)) 集成图表
 
 ## インストール
 
