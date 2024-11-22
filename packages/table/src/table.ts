@@ -7760,17 +7760,15 @@ export default defineComponent({
             text: loadingOpts.text
           }, loadingSlot
             ? {
-                default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
+                default: () => callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading })
               }
             : {})
-          : currLoading && loadingSlot
+          : loadingSlot
             ? h('div', {
-              class: ['vxe-loading', {
+              class: ['vxe-loading--custom-wrapper', {
                 'is--visible': currLoading
               }]
-            }, h('div', { class: 'vxe-loading--wrapper' }, {
-              default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
-            }))
+            }, callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }))
             : renderEmptyElement($xeTable),
         /**
          * 自定义列
