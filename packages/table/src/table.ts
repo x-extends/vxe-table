@@ -7763,7 +7763,15 @@ export default defineComponent({
                 default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
               }
             : {})
-          : renderEmptyElement($xeTable),
+          : currLoading && loadingSlot
+            ? h('div', {
+              class: ['vxe-loading', {
+                'is--visible': currLoading
+              }]
+            }, h('div', { class: 'vxe-loading--wrapper' }, {
+              default: () => loadingSlot({ $table: $xeTable, $grid: $xeGrid })
+            }))
+            : renderEmptyElement($xeTable),
         /**
          * 自定义列
          */
