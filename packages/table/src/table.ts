@@ -1123,6 +1123,7 @@ export default {
     const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
 
     const $xeTable = this
+    const $xeGrid = $xeTable.$xeGrid
 
     const {
       _e,
@@ -1170,6 +1171,7 @@ export default {
       editRules
     } = $xeTable
     const { leftList, rightList } = columnStore
+    const loadingSlot = $scopedSlots.loading
     const currLoading = this._isLoading || loading
     const vSize = computeSize
     const virtualScrollBars = $xeTable.computeVirtualScrollBars
@@ -1357,8 +1359,14 @@ export default {
             icon: loadingOpts.icon,
             text: loadingOpts.text
           }
-        }, this.callSlot($scopedSlots.loading, {}, h))
-        : _e(),
+        }, $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }, h))
+        : loadingSlot
+          ? h('div', {
+            class: ['vxe-loading--custom-wrapper', {
+              'is--visible': currLoading
+            }]
+          }, $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }, h))
+          : renderEmptyElement($xeTable),
       /**
        * 自定义列
        */
@@ -1370,7 +1378,7 @@ export default {
             customStore
           }
         })
-        : _e(),
+        : renderEmptyElement($xeTable),
       /**
        * 筛选
        */
