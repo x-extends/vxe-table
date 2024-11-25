@@ -3970,16 +3970,21 @@ export default defineComponent({
        * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
        */
       recalculate (reFull?: boolean) {
-        const { rceTimeout } = internalData
-        if (rceTimeout) {
-          clearTimeout(rceTimeout)
-        } else {
-          handleRecalculateLayout(!!reFull)
-        }
-        return new Promise(resolve => {
+        return new Promise<void>(resolve => {
+          const { rceTimeout } = internalData
+          if (rceTimeout) {
+            clearTimeout(rceTimeout)
+            nextTick(() => {
+              resolve()
+            })
+          } else {
+            resolve(
+              handleRecalculateLayout(!!reFull)
+            )
+          }
           internalData.rceTimeout = setTimeout(() => {
             internalData.rceTimeout = undefined
-            resolve(handleRecalculateLayout(!!reFull))
+            handleRecalculateLayout(!!reFull)
           }, 20)
         })
       },
