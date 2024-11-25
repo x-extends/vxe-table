@@ -2506,16 +2506,21 @@ const Methods = {
    * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
    */
   recalculate (reFull?: boolean) {
-    const $xeTable = this
-    const internalData = $xeTable
+    return new Promise<void>(resolve => {
+      const $xeTable = this
+      const internalData = $xeTable
 
-    const { rceTimeout } = internalData
-    if (rceTimeout) {
-      clearTimeout(rceTimeout)
-    } else {
-      handleRecalculateLayout($xeTable, !!reFull)
-    }
-    return new Promise(resolve => {
+      const { rceTimeout } = internalData
+      if (rceTimeout) {
+        clearTimeout(rceTimeout)
+        $xeTable.$nextTick(() => {
+          resolve()
+        })
+      } else {
+        resolve(
+          handleRecalculateLayout($xeTable, !!reFull)
+        )
+      }
       internalData.rceTimeout = setTimeout(() => {
         internalData.rceTimeout = undefined
         resolve(handleRecalculateLayout($xeTable, !!reFull))
