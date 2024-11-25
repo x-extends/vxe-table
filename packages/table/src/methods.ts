@@ -508,7 +508,6 @@ function handleRecalculateLayout ($xeTable: any, reFull: boolean) {
   if (!el || !el.clientWidth) {
     return $xeTable.$nextTick()
   }
-  calcCellHeight($xeTable)
   $xeTable.calcCellWidth()
   $xeTable.autoCellWidth()
   if (reFull === true) {
@@ -2750,7 +2749,7 @@ const Methods = {
               height = Math.max(height, cellHeight)
             }
           }
-          rowRest.height = height
+          rowRest.height = scrollXLoad ? Math.max(rowRest.height, height) : height
         }
       })
     }
