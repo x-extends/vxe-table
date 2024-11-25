@@ -229,14 +229,18 @@ export default {
         tableColumn = visibleColumn
       }
     }
+
+    const ons: Record<string, any> = {}
+    if (!fixedType) {
+      ons.scroll = this.scrollEvent
+    }
+
     return h('div', {
       class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
         xid: tId
       },
-      on: {
-        scroll: this.scrollEvent
-      }
+      on: ons
     }, [
       fixedType
         ? _e()
@@ -291,27 +295,35 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt: any) {
-      const { $parent: $xeTable, fixedType } = this
-      const { $refs } = $xeTable
-      const { tableHeader, tableBody, tableFooter } = $refs
+      const $xeTable = this.$parent
+      const tableInternalData = $xeTable
+
+      const { inVirtualScroll, inBodyScroll } = tableInternalData
+      if (inVirtualScroll) {
+        return
+      }
+      if (inBodyScroll) {
+        return
+      }
+      const { fixedType } = this
+      const { tableHeader, tableBody, tableFooter } = $xeTable.$refs
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
       const bodyElem = tableBody.$el
-      const scrollLeft = footerElem ? footerElem.scrollLeft : 0
-      const xHandleEl = $refs.refScrollXHandleElem
-      if (xHandleEl) {
-        xHandleEl.scrollLeft = scrollLeft
-      } else {
-        const isRollX = true
-        const isRollY = false
-        const scrollTop = bodyElem.scrollTop
-        setScrollLeft(headerElem, scrollLeft)
-        setScrollLeft(bodyElem, scrollLeft)
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-          type: renderType,
-          fixed: fixedType
-        })
-      }
+      const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+      const scrollLeft = footerElem.scrollLeft
+      const isRollX = true
+      const isRollY = false
+      const scrollTop = bodyElem.scrollTop
+      tableInternalData.inFooterScroll = true
+      setScrollLeft(xHandleEl, scrollLeft)
+      setScrollLeft(headerElem, scrollLeft)
+      setScrollLeft(bodyElem, scrollLeft)
+      $xeTable.triggerScrollXEvent(evnt)
+      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+        type: renderType,
+        fixed: fixedType
+      })
     }
   } as any
 } as any

@@ -156,11 +156,20 @@
 .vxe-table--cell-main-area,
 .vxe-table--cell-extend-area,
 .vxe-table--cell-active-area,
-.vxe-table--cell-copy-area {
+.vxe-table--cell-copy-area,
+.vxe-table--cell-status {
   display: none;
   position: absolute;
   pointer-events: none;
   z-index: 1;
+}
+
+.vxe-table--cell-status {
+  top: 0;
+  left: 0;
+  width: var(--vxe-ui-table-cell-area-status-border-width);
+  height: 0;
+  background-color:  var(--vxe-ui-font-primary-color);
 }
 
 .vxe-table--fixed-left-wrapper,
@@ -1357,6 +1366,9 @@
           }
         }
       }
+      & > .vxe-cell {
+        max-height: var(--vxe-ui-table-row-height-default);
+      }
     }
   }
   &.size--medium {
@@ -1365,6 +1377,9 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MediumColumnHeight;
+        & > .vxe-cell {
+          max-height: var(--vxe-ui-table-row-height-medium);
+        }
       }
     }
     .vxe-cell--checkbox {
@@ -1380,6 +1395,9 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %SmallColumnHeight;
+        & > .vxe-cell {
+          max-height: var(--vxe-ui-table-row-height-small);
+        }
       }
     }
     .vxe-cell--checkbox {
@@ -1395,6 +1413,9 @@
     .vxe-footer--column {
       &.col--ellipsis {
         @extend %MiniColumnHeight;
+        & > .vxe-cell {
+          max-height: var(--vxe-ui-table-row-height-mini);
+        }
       }
     }
     .vxe-cell--checkbox {
@@ -1466,9 +1487,9 @@
       pointer-events: auto;
     }
     .vxe-cell--valid-error-theme-beautify {
-      padding: 0.4em 0.8em;
+      padding: 0.2em 0.6em 0.3em 0.6em;
       color: #fff;
-      background-color: #f56c6c;
+      background-color: var(--vxe-ui-table-validate-error-color);
       .vxe-cell--valid-error-msg {
         background: transparent;
       }

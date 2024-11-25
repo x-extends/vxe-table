@@ -6,7 +6,7 @@ import { getOffsetSize, calcTreeLine, mergeBodyMethod, getRowid } from './util'
 import { updateCellTitle, setScrollTop, setScrollLeft } from '../../ui/src/dom'
 import { getSlotVNs } from '../../ui/src/vn'
 
-const { getI18n, renderer } = VxeUI
+const { getI18n, renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'body'
 
@@ -64,6 +64,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     columnKey,
     overflowX,
     sYOpts,
+    scrollXLoad,
     scrollYLoad,
     highlightCurrentRow,
     showOverflow: allColumnOverflow,
@@ -88,8 +89,11 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     tooltipConfig,
     rowOpts,
     columnOpts,
+    mouseOpts,
+    areaOpts,
     validErrorMaps
   } = $xetable
+  const { selectCellToRow } = areaOpts
   const cellOpts = $xetable.computeCellOpts
   const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
   const { verticalAlign } = cellOpts
@@ -249,7 +253,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     if (showValidTip && errorValidItem) {
       const errRule = errorValidItem.rule
       const validSlot = slots ? slots.valid : null
-      const validParams = { ...params, ...errorValidItem }
+      const validParams = { ...params, ...errorValidItem, rule: errorValidItem }
       tdVNs.push(
         h('div', {
           class: ['vxe-cell--valid-error-tip', getClass(validOpts.className, errorValidItem)],
@@ -277,9 +281,22 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   let cellHeight = ''
   if (hasEllipsis && (scrollYRHeight || rowHeight)) {
     cellHeight = `${scrollYRHeight || rowHeight}px`
-  } else if (scrollYLoad) {
+  } else if (scrollXLoad || scrollYLoad) {
     if (!hasEllipsis) {
       cellHeight = `${rest.height || 24}px`
+    }
+  }
+
+  if (mouseConfig && mouseOpts.area && selectCellToRow) {
+    if (
+      (!$columnIndex && selectCellToRow === true) ||
+      (selectCellToRow === column.field)
+    ) {
+      tdVNs.push(
+        h('div', {
+          class: 'vxe-cell--area-status'
+        })
+      )
     }
   }
 
@@ -536,6 +553,8 @@ export default {
     elemStore[`${prefix}emptyBlock`] = null
   },
   render (this: any, h: CreateElement) {
+    const $xeTable = this.$parent
+
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
     let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts, rowOpts, isDragRowMove } = $xetable
     // 如果是使用优化模式
@@ -571,14 +590,21 @@ export default {
         emptyContent = $xetable.emptyText || getI18n('vxe.table.emptyText')
       }
     }
+
+    const ons: Record<string, any> = {
+      scroll: this.scrollEvent
+    }
+    if (sYOpts.mode === 'wheel') {
+      ons.wheel = this.wheelEvent
+    }
+
     return h('div', {
+      ref: 'refElem',
       class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {
         xid: tId
       },
-      on: Object.assign({
-        scroll: this.scrollEvent
-      }, scrollYLoad && sYOpts.mode === 'wheel' ? { wheel: this.wheelEvent } : null)
+      on: ons
     }, [
       fixedType
         ? _e()
@@ -661,7 +687,7 @@ export default {
             class: 'vxe-table--cell-active-area'
           })
         ])
-        : null,
+        : renderEmptyElement($xeTable),
       !fixedType
         ? h('div', {
           class: 'vxe-table--empty-block',
@@ -671,7 +697,7 @@ export default {
             class: 'vxe-table--empty-content'
           }, emptyContent)
         ])
-        : null
+        : renderEmptyElement($xeTable)
     ])
   },
   methods: {
@@ -681,23 +707,38 @@ export default {
      * 如果存在列固定右侧，同步更新滚动状态
      */
     scrollEvent (evnt: Event) {
-      const { $el: scrollBodyElem, $parent: $xeTable, fixedType } = this
-      const { $refs, lastScrollTop, lastScrollLeft } = $xeTable
-      const { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $refs
+      const $xeTable = this.$parent
+      const tableInternalData = $xeTable
+
+      const { fixedType } = this
+      const { lastScrollTop, lastScrollLeft, inVirtualScroll, inBodyScroll, bodyScrollType, inFooterScroll } = tableInternalData
+      if (inVirtualScroll) {
+        return
+      }
+      if (inFooterScroll) {
+        return
+      }
+      if (inBodyScroll) {
+        if (bodyScrollType !== fixedType) {
+          return
+        }
+      }
+      const { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $xeTable.$refs
+      const scrollBodyElem = this.$el
       const headerElem = tableHeader ? tableHeader.$el : null
       const footerElem = tableFooter ? tableFooter.$el : null
       const bodyElem = tableBody.$el
       const leftElem = leftBody ? leftBody.$el : null
       const rightElem = rightBody ? rightBody.$el : null
+      const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+      const yHandleEl = $xeTable.$refs.refScrollYHandleElem
       const scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isRollX = scrollLeft !== lastScrollLeft
       const isRollY = scrollTop !== lastScrollTop
-      const xHandleEl = $refs.refScrollXHandleElem
-      const yHandleEl = $refs.refScrollYHandleElem
-      if (yHandleEl) {
-        yHandleEl.scrollTop = scrollTop
-      } else if (isRollY) {
+      tableInternalData.inBodyScroll = true
+      tableInternalData.bodyScrollType = fixedType
+      if (isRollY) {
         if (leftElem && fixedType === 'left') {
           setScrollTop(bodyElem, scrollTop)
           setScrollTop(rightElem, scrollTop)
@@ -708,21 +749,19 @@ export default {
           setScrollTop(leftElem, scrollTop)
           setScrollTop(rightElem, scrollTop)
         }
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-          type: renderType,
-          fixed: fixedType
-        })
+        setScrollTop(yHandleEl, scrollTop)
+        $xeTable.triggerScrollYEvent(evnt)
       }
-      if (xHandleEl) {
-        xHandleEl.scrollLeft = scrollLeft
-      } else if (isRollX) {
+      if (isRollX) {
+        setScrollLeft(xHandleEl, scrollLeft)
         setScrollLeft(headerElem, scrollLeft)
         setScrollLeft(footerElem, scrollLeft)
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-          type: renderType,
-          fixed: fixedType
-        })
+        $xeTable.triggerScrollXEvent(evnt)
       }
+      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+        type: renderType,
+        fixed: fixedType
+      })
     },
     handleWheel (evnt: any, isTopWheel: any, deltaTop: any, isRollX: any, isRollY: any) {
       const { $parent: $xetable } = this

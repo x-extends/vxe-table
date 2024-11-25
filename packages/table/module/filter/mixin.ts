@@ -138,6 +138,28 @@ export default {
       }
       this.emitEvent('filter-visible', { column, field: column.field, property: column.field, filterList: this.getCheckedFilters(), visible: filterStore.visible }, evnt)
     },
+    handleFilterConfirmFilter (evnt: Event | null) {
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { filterStore } = reactData
+      filterStore.options.forEach((option: any) => {
+        option.checked = option._checked
+      })
+      $xeTable.confirmFilterEvent(evnt)
+    },
+    _saveFilterPanel () {
+      const $xeTable = this
+
+      $xeTable.handleFilterConfirmFilter(null)
+      return $xeTable.$nextTick()
+    },
+    _resetFilterPanel () {
+      const $xeTable = this
+
+      $xeTable.handleFilterResetFilter(null)
+      return $xeTable.$nextTick()
+    },
     _getCheckedFilters () {
       const { tableFullColumn } = this
       const filterList: any[] = []
@@ -186,7 +208,9 @@ export default {
       if (this.mouseConfig && this.mouseOpts.area && this.handleFilterEvent) {
         this.handleFilterEvent(evnt, params)
       }
-      this.emitEvent('filter-change', params, evnt)
+      if (evnt) {
+        this.emitEvent('filter-change', params, evnt)
+      }
       this.closeFilter()
       this.updateFooter().then(() => {
         const { scrollXLoad, scrollYLoad } = this
@@ -231,7 +255,7 @@ export default {
      * 当筛选面板中的重置按钮被按下时触发
      * @param {Event} evnt 事件
      */
-    resetFilterEvent (evnt: any) {
+    handleFilterResetFilter (evnt: any) {
       this.handleClearFilter(this.filterStore.column)
       this.confirmFilterEvent(evnt)
     },

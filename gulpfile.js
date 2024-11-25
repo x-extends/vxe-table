@@ -169,6 +169,14 @@ gulp.task('build_umdcss', () => {
   const styleStr = fs.readFileSync('lib_temp/index.css', 'utf-8')
   fs.writeFileSync('lib_temp/index.css', toCSSUnicode(styleStr))
   return gulp.src('lib_temp/index.css')
+    .pipe(gulp.dest('es'))
+    .pipe(gulp.dest('lib'))
+    .pipe(rename({
+      suffix: '.min',
+      extname: '.css'
+    }))
+    .pipe(gulp.dest('es'))
+    .pipe(gulp.dest('lib'))
     .pipe(rename({
       basename: 'style'
     }))

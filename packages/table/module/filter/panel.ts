@@ -202,16 +202,13 @@ export default {
     },
     // 确认筛选
     confirmFilter (evnt: any) {
-      const { $parent: $xetable, filterStore } = this
-      filterStore.options.forEach((option: any) => {
-        option.checked = option._checked
-      })
-      $xetable.confirmFilterEvent(evnt)
+      const { $parent: $xetable } = this
+      $xetable.handleFilterConfirmFilter(evnt)
     },
     // 重置筛选
     resetFilter (evnt: any) {
       const { $parent: $xetable } = this
-      $xetable.resetFilterEvent(evnt)
+      $xetable.handleFilterResetFilter(evnt)
     }
     /*************************
      * Publish methods
