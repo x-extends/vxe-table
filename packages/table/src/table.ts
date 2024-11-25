@@ -1444,7 +1444,7 @@ export default defineComponent({
                 height = Math.max(height, cellHeight)
               }
             }
-            rowRest.height = height
+            rowRest.height = scrollXLoad ? Math.max(rowRest.height, height) : height
           }
         })
       }
@@ -2471,7 +2471,6 @@ export default defineComponent({
       if (!el || !el.clientWidth) {
         return nextTick()
       }
-      calcCellHeight()
       calcCellWidth()
       autoCellWidth()
       if (reFull === true) {
