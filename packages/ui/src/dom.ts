@@ -81,13 +81,13 @@ export function getPaddingTopBottomSize (elem: HTMLElement) {
   return 0
 }
 
-export function setScrollTop (elem: HTMLElement | null, scrollTop: number) {
+export function setScrollTop (elem: HTMLElement | null | undefined, scrollTop: number) {
   if (elem) {
     elem.scrollTop = scrollTop
   }
 }
 
-export function setScrollLeft (elem: HTMLElement | null, scrollLeft: number) {
+export function setScrollLeft (elem: HTMLElement | null | undefined, scrollLeft: number) {
   if (elem) {
     elem.scrollLeft = scrollLeft
   }

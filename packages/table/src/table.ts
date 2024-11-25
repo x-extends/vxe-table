@@ -23,7 +23,7 @@ import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, Ta
 
 const { getConfig, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
 
-const isWebkit = browse['-webkit'] && !browse.edge
+// const isWebkit = browse['-webkit'] && !browse.edge
 
 const customStorageKey = 'VXE_CUSTOM_STORE'
 
@@ -844,24 +844,27 @@ export default defineComponent({
     }
 
     const computeRowHeight = () => {
+      const { showOverflow } = props
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
       const vSize = computeSize.value
       const rowHeightMaps = computeRowHeightMaps.value
-      let rowHeight = 0
-      if (tableBodyElem) {
-        const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-        let firstTrElem
-        firstTrElem = tableBodyElem.querySelector('tr')
-        if (!firstTrElem && tableHeaderElem) {
-          firstTrElem = tableHeaderElem.querySelector('tr')
-        }
-        if (firstTrElem) {
-          rowHeight = firstTrElem.clientHeight
-        }
-        if (!rowHeight) {
-          rowHeight = rowHeightMaps[vSize || 'default']
+      let rowHeight = 24
+      if (showOverflow) {
+        if (tableBodyElem) {
+          const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+          let firstTrElem
+          firstTrElem = tableBodyElem.querySelector('tr')
+          if (!firstTrElem && tableHeaderElem) {
+            firstTrElem = tableHeaderElem.querySelector('tr')
+          }
+          if (firstTrElem) {
+            rowHeight = firstTrElem.clientHeight
+          }
+          if (!rowHeight) {
+            rowHeight = rowHeightMaps[vSize || 'default']
+          }
         }
       }
       return rowHeight
@@ -1409,10 +1412,14 @@ export default defineComponent({
     }
 
     const calcCellHeight = () => {
-      const { tableData, scrollYLoad } = reactData
+      const { showOverflow } = props
+      const { tableData, scrollXLoad, scrollYLoad } = reactData
       const { fullAllDataRowIdData } = internalData
       const el = refElem.value
-      if (scrollYLoad && el) {
+      if (!showOverflow && (scrollXLoad || scrollYLoad) && el) {
+        let paddingTop = 0
+        let paddingBottom = 0
+        let calcPadding = false
         tableData.forEach(row => {
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid]
@@ -1421,7 +1428,21 @@ export default defineComponent({
             let height = 0
             for (let i = 0; i < trList.length; i++) {
               const trEl = trList[i] as HTMLTableRowElement
-              height = Math.max(height, trEl.offsetHeight)
+              const tdList = trEl.children
+              for (let j = 0; j < tdList.length; j++) {
+                const tdEl = tdList[j]
+                const cellElem = tdEl.querySelector('.vxe-cell') as HTMLDivElement
+                if (!calcPadding) {
+                  paddingTop = XEUtils.toNumber(getComputedStyle(tdEl).paddingTop)
+                  paddingBottom = XEUtils.toNumber(getComputedStyle(tdEl).paddingBottom)
+                  calcPadding = true
+                }
+                let cellHeight = paddingTop + paddingBottom
+                if (cellElem) {
+                  cellHeight += cellElem.offsetHeight
+                }
+                height = Math.max(height, cellHeight)
+              }
             }
             rowRest.height = height
           }
@@ -2411,7 +2432,6 @@ export default defineComponent({
     // 计算可视渲染相关数据
     const computeScrollLoad = () => {
       return nextTick().then(() => {
-        const { showOverflow } = props
         const { scrollXLoad, scrollYLoad } = reactData
         const { scrollXStore, scrollYStore } = internalData
         const sYOpts = computeSYOpts.value
@@ -2419,9 +2439,7 @@ export default defineComponent({
         // 计算 X 逻辑
         if (scrollXLoad) {
           const { visibleSize: visibleXSize } = handleVirtualXVisible()
-          // 动态列缓冲量
-          const bufferSize = showOverflow ? 0 : 2
-          const offsetXSize = Math.max(bufferSize, sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : (browse.edge ? 5 : 0))
+          const offsetXSize = Math.max(0, sXOpts.oSize ? XEUtils.toNumber(sXOpts.oSize) : (browse.edge ? 5 : 0))
           scrollXStore.offsetSize = offsetXSize
           scrollXStore.visibleSize = visibleXSize
           scrollXStore.endIndex = Math.max(scrollXStore.startIndex + scrollXStore.visibleSize + offsetXSize, scrollXStore.endIndex)
@@ -2436,9 +2454,7 @@ export default defineComponent({
         reactData.rowHeight = rowHeight
         const { visibleSize: visibleYSize } = handleVirtualYVisible()
         if (scrollYLoad) {
-          // 动态高缓冲量
-          const bufferSize = showOverflow ? 0 : 2
-          const offsetYSize = Math.max(bufferSize, sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : (browse.edge ? 10 : 0))
+          const offsetYSize = Math.max(0, sYOpts.oSize ? XEUtils.toNumber(sYOpts.oSize) : (browse.edge ? 10 : 0))
           scrollYStore.offsetSize = offsetYSize
           scrollYStore.visibleSize = visibleYSize
           scrollYStore.endIndex = Math.max(scrollYStore.startIndex + visibleYSize + offsetYSize, scrollYStore.endIndex)
@@ -2449,6 +2465,27 @@ export default defineComponent({
         nextTick(updateStyle)
       })
     }
+
+    const handleRecalculateLayout = (reFull: boolean) => {
+      const el = refElem.value
+      if (!el || !el.clientWidth) {
+        return nextTick()
+      }
+      calcCellHeight()
+      calcCellWidth()
+      autoCellWidth()
+      if (reFull === true) {
+        // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
+        return computeScrollLoad().then(() => {
+          calcCellHeight()
+          calcCellWidth()
+          autoCellWidth()
+          return computeScrollLoad()
+        })
+      }
+      return computeScrollLoad()
+    }
+
     /**
      * 加载表格数据
      * @param {Array} datas 数据
@@ -2904,13 +2941,15 @@ export default defineComponent({
      * 纵向 Y 可视渲染处理
      */
     const loadScrollYData = () => {
+      const { showOverflow } = props
       const { mergeList } = reactData
-      const { scrollYStore } = internalData
+      const { tableHeight, scrollYStore } = internalData
       const { startIndex, endIndex, offsetSize } = scrollYStore
+      const offsetYSize = showOverflow ? offsetSize : offsetSize + Math.min(8, Math.ceil(tableHeight / 200))
       const { toVisibleIndex, visibleSize } = handleVirtualYVisible()
       const offsetItem = {
-        startIndex: Math.max(0, toVisibleIndex - 1 - offsetSize),
-        endIndex: toVisibleIndex + visibleSize + offsetSize
+        startIndex: Math.max(0, toVisibleIndex - 1 - offsetYSize),
+        endIndex: toVisibleIndex + visibleSize + offsetYSize
       }
       calculateMergerOffsetIndex(mergeList, offsetItem, 'row')
       const { startIndex: offsetStartIndex, endIndex: offsetEndIndex } = offsetItem
@@ -2950,28 +2989,64 @@ export default defineComponent({
       }
     }
 
-    const debounceScrollYData = XEUtils.debounce(function () {
-      loadScrollYData()
-    }, 20, { leading: false, trailing: true })
+    const lazyScrollXData = () => {
+      const { lxTimeout, lxRunTime, scrollXStore } = internalData
+      const { visibleSize } = scrollXStore
+      const fpsTime = Math.min(80, Math.floor(visibleSize * 3))
+      if (lxTimeout) {
+        clearTimeout(lxTimeout)
+      }
+      if (!lxRunTime || lxRunTime + fpsTime < Date.now()) {
+        internalData.lxRunTime = Date.now()
+        loadScrollXData()
+      }
+      internalData.lxTimeout = setTimeout(() => {
+        internalData.lxRunTime = undefined
+        internalData.lxRunTime = undefined
+        loadScrollXData()
+      }, fpsTime)
+    }
 
-    const handleSyncScrollX = (scrollLeft: number) => {
+    const lazyScrollYData = () => {
+      const { lyTimeout, lyRunTime, scrollYStore } = internalData
+      const { visibleSize } = scrollYStore
+      const fpsTime = Math.min(80, Math.floor(visibleSize * 2))
+      if (lyTimeout) {
+        clearTimeout(lyTimeout)
+      }
+      if (!lyRunTime || lyRunTime + fpsTime < Date.now()) {
+        internalData.lyRunTime = Date.now()
+        loadScrollYData()
+      }
+      internalData.lyTimeout = setTimeout(() => {
+        internalData.lyTimeout = undefined
+        internalData.lyRunTime = undefined
+        loadScrollYData()
+      }, fpsTime)
+    }
+
+    const scrollXEvent = (evnt: Event) => {
+      const { inFooterScroll, inBodyScroll } = internalData
+      if (inFooterScroll) {
+        return
+      }
+      if (inBodyScroll) {
+        return
+      }
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableFooter = refTableFooter.value
       const bodyElem = tableBody.$el as HTMLDivElement
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-      setScrollLeft(bodyElem, scrollLeft)
-      setScrollLeft(headerElem, scrollLeft)
-      setScrollLeft(footerElem, scrollLeft)
-    }
-
-    const scrollXEvent = (evnt: Event) => {
       const wrapperEl = evnt.currentTarget as HTMLDivElement
       const { scrollTop, scrollLeft } = wrapperEl
       const isRollX = true
       const isRollY = false
-      handleSyncScrollX(scrollLeft)
+      internalData.inVirtualScroll = true
+      setScrollLeft(bodyElem, scrollLeft)
+      setScrollLeft(headerElem, scrollLeft)
+      setScrollLeft(footerElem, scrollLeft)
       $xeTable.triggerScrollXEvent(evnt)
       $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
         type: 'table',
@@ -2979,33 +3054,57 @@ export default defineComponent({
       })
     }
 
-    const debounceScrollYCalculate = XEUtils.debounce(function () {
-      tablePrivateMethods.updateScrollYSpace()
-    }, 1000, { leading: false, trailing: true })
+    const scrollYEvent = (evnt: Event) => {
+      const { inFooterScroll, inBodyScroll } = internalData
+      if (inFooterScroll) {
+        return
+      }
+      if (inBodyScroll) {
+        return
+      }
 
-    const handleSyncScrollY = (scrollTop: number) => {
       const tableBody = refTableBody.value
       const leftBody = refTableLeftBody.value
       const rightBody = refTableRightBody.value
       const bodyElem = tableBody.$el as HTMLDivElement
       const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
       const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
-      setScrollTop(bodyElem, scrollTop)
-      setScrollTop(leftElem, scrollTop)
-      setScrollTop(rightElem, scrollTop)
-    }
-
-    const scrollYEvent = (evnt: Event) => {
       const wrapperEl = evnt.currentTarget as HTMLDivElement
       const { scrollTop, scrollLeft } = wrapperEl
       const isRollX = false
       const isRollY = true
-      handleSyncScrollY(scrollTop)
+
+      internalData.inVirtualScroll = true
+      setScrollTop(bodyElem, scrollTop)
+      setScrollTop(leftElem, scrollTop)
+      setScrollTop(rightElem, scrollTop)
       $xeTable.triggerScrollYEvent(evnt)
       $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
         type: 'table',
         fixed: ''
       })
+    }
+
+    const checkLastSyncScroll = (isRollX: boolean, isRollY: boolean) => {
+      const { scrollXLoad, scrollYLoad } = reactData
+      const { lcsTimeout } = internalData
+      if (lcsTimeout) {
+        clearTimeout(lcsTimeout)
+      }
+      internalData.lcsTimeout = setTimeout(() => {
+        internalData.lcsTimeout = undefined
+        internalData.inVirtualScroll = false
+        internalData.inBodyScroll = false
+        internalData.bodyScrollType = ''
+        internalData.inFooterScroll = false
+        if (isRollX && scrollXLoad) {
+          tablePrivateMethods.updateScrollXData()
+        }
+        if (isRollY && scrollYLoad) {
+          tablePrivateMethods.updateScrollYData()
+        }
+        tableMethods.updateCellAreas()
+      }, 200)
     }
 
     let keyCtxTimeout: any
@@ -3872,22 +3971,18 @@ export default defineComponent({
        * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
        */
       recalculate (reFull?: boolean) {
-        const el = refElem.value
-        if (!el || !el.clientWidth) {
-          return nextTick()
+        const { rceTimeout } = internalData
+        if (rceTimeout) {
+          clearTimeout(rceTimeout)
+        } else {
+          handleRecalculateLayout(!!reFull)
         }
-        calcCellHeight()
-        calcCellWidth()
-        autoCellWidth()
-        if (reFull === true) {
-          // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-          return computeScrollLoad().then(() => {
-            calcCellHeight()
-            autoCellWidth()
-            return computeScrollLoad()
-          })
-        }
-        return computeScrollLoad()
+        return new Promise(resolve => {
+          internalData.rceTimeout = setTimeout(() => {
+            internalData.rceTimeout = undefined
+            resolve(handleRecalculateLayout(!!reFull))
+          }, 20)
+        })
       },
       openTooltip (target, content) {
         const $commTip = refCommTooltip.value
@@ -7120,12 +7215,6 @@ export default defineComponent({
         reactData.dragCol = null
         reactData.isDragColMove = false
       },
-      /**
-       * 横向 X 可视渲染事件处理
-       */
-      triggerScrollXEvent () {
-        loadScrollXData()
-      },
       handleScrollEvent (evnt, isRollY, isRollX, scrollTop, scrollLeft, params) {
         const { highlightHoverRow } = props
         const { lastScrollLeft, lastScrollTop } = internalData
@@ -7166,7 +7255,6 @@ export default defineComponent({
           }
           tablePrivateMethods.checkScrolling()
           internalData.lastScrollLeft = scrollLeft
-          reactData.lastScrollTime = Date.now()
         } else {
           const yThreshold = computeScrollYThreshold.value
           isTop = scrollTop <= 0
@@ -7185,8 +7273,8 @@ export default defineComponent({
             }
           }
           internalData.lastScrollTop = scrollTop
-          reactData.lastScrollTime = Date.now()
         }
+        reactData.lastScrollTime = Date.now()
         const evntParams = {
           scrollTop,
           scrollLeft,
@@ -7203,6 +7291,7 @@ export default defineComponent({
           direction,
           ...params
         }
+        checkLastSyncScroll(isRollX, isRollY)
         if (rowOpts.isHover || highlightHoverRow) {
           $xeTable.clearHoverRow()
         }
@@ -7218,18 +7307,26 @@ export default defineComponent({
         dispatchEvent('scroll', evntParams, evnt)
       },
       /**
+       * 横向 X 可视渲染事件处理
+       */
+      triggerScrollXEvent () {
+        const sXOpts = computeSXOpts.value
+        if (sXOpts.immediate) {
+          loadScrollXData()
+        } else {
+          lazyScrollXData()
+        }
+      },
+      /**
        * 纵向 Y 可视渲染事件处理
        */
       triggerScrollYEvent () {
-        const { scrollYStore } = internalData
-        const { adaptive, offsetSize, visibleSize } = scrollYStore
-        // webkit 浏览器使用最佳的渲染方式，且最高渲染量不能大于 40 条
-        if (isWebkit && adaptive && (offsetSize * 2 + visibleSize) <= 40) {
+        const sYOpts = computeSYOpts.value
+        if (sYOpts.immediate) {
           loadScrollYData()
         } else {
-          debounceScrollYData()
+          lazyScrollYData()
         }
-        debounceScrollYCalculate()
       },
       /**
        * 对于树形结构中，可以直接滚动到指定深层节点中
@@ -7355,10 +7452,15 @@ export default defineComponent({
         nextTick(updateStyle)
       },
       updateScrollXData () {
+        const { showOverflow } = props
         // reactData.tableColumn = []
         return nextTick().then(() => {
           handleTableColumn()
+          calcCellHeight()
           tablePrivateMethods.updateScrollXSpace()
+          if (!showOverflow) {
+            tablePrivateMethods.updateScrollYSpace()
+          }
         })
       },
       updateScrollYData () {
@@ -8221,6 +8323,8 @@ export default defineComponent({
       globalEvents.on($xeTable, 'contextmenu', $xeTable.handleGlobalContextmenuEvent)
       tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xeTable })
     })
+
+    ;(window as any).aaaa = $xeTable
 
     onBeforeUnmount(() => {
       if (resizeObserver) {

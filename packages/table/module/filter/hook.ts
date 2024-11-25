@@ -9,7 +9,7 @@ import type { TableFilterMethods, TableFilterPrivateMethods } from '../../../../
 
 const { renderer, hooks } = VxeUI
 
-const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['openFilter', 'setFilter', 'clearFilter', 'getCheckedFilters', 'updateFilterOptionStatus']
+const tableFilterMethodKeys: (keyof TableFilterMethods)[] = ['openFilter', 'setFilter', 'clearFilter', 'saveFilterPanel', 'resetFilterPanel', 'getCheckedFilters', 'updateFilterOptionStatus']
 
 hooks.add('tableFilterModule', {
   setupTable ($xeTable) {
@@ -18,7 +18,7 @@ hooks.add('tableFilterModule', {
     const { computeFilterOpts, computeMouseOpts } = $xeTable.getComputeMaps()
 
     // 确认筛选
-    const confirmFilter = (evnt: Event) => {
+    const handleFilterConfirmFilter = (evnt: Event | null) => {
       const { filterStore } = reactData
       filterStore.options.forEach((option: any) => {
         option.checked = option._checked
@@ -34,7 +34,7 @@ hooks.add('tableFilterModule', {
       })
       item._checked = checked
       $xeTable.checkFilterOptions()
-      confirmFilter(evnt)
+      handleFilterConfirmFilter(evnt)
     }
 
     // （多选）筛选发生改变
@@ -48,7 +48,7 @@ hooks.add('tableFilterModule', {
      * 当筛选面板中的重置按钮被按下时触发
      * @param {Event} evnt 事件
      */
-    const resetFilter = (evnt: Event) => {
+    const handleFilterResetFilter = (evnt: Event | null) => {
       const { filterStore } = reactData
       $xeTable.handleClearFilter(filterStore.column)
       $xeTable.confirmFilterEvent(evnt)
@@ -204,7 +204,9 @@ hooks.add('tableFilterModule', {
         if (mouseConfig && mouseOpts.area && $xeTable.handleFilterEvent) {
           $xeTable.handleFilterEvent(evnt, params)
         }
-        $xeTable.dispatchEvent('filter-change', params, evnt)
+        if (evnt) {
+          $xeTable.dispatchEvent('filter-change', params, evnt)
+        }
         $xeTable.closeFilter()
         $xeTable.updateFooter().then(() => {
           const { scrollXLoad, scrollYLoad } = reactData
@@ -236,8 +238,8 @@ hooks.add('tableFilterModule', {
           changeRadioOption(evnt, checked, item)
         }
       },
-      handleFilterConfirmFilter: confirmFilter,
-      handleFilterResetFilter: resetFilter
+      handleFilterConfirmFilter,
+      handleFilterResetFilter
     }
 
     const filterMethods: TableFilterMethods = {
@@ -304,6 +306,14 @@ hooks.add('tableFilterModule', {
         if (!filterOpts.remote) {
           return $xeTable.updateData()
         }
+        return nextTick()
+      },
+      saveFilterPanel () {
+        handleFilterConfirmFilter(null)
+        return nextTick()
+      },
+      resetFilterPanel () {
+        handleFilterResetFilter(null)
         return nextTick()
       },
       getCheckedFilters () {

@@ -6,9 +6,9 @@ import { updateCellTitle, getPropClass, setScrollTop, setScrollLeft } from '../.
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
 
-import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeColumnPropTypes, VxeComponentSlotType, VxeComponentSizeType } from '../../../types'
+import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableDefines, VxeTableMethods, VxeComponentSlotType, VxeComponentSizeType } from '../../../types'
 
-const { getI18n, renderer } = VxeUI
+const { getI18n, renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'body'
 
@@ -25,8 +25,8 @@ export default defineComponent({
     tableColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedColumn: Array as PropType<VxeTableDefines.ColumnInfo[]>,
     fixedType: {
-      type: String as PropType<VxeColumnPropTypes.Fixed>,
-      default: null
+      type: String as PropType<'right' | 'left' | ''>,
+      default: ''
     }
   },
   setup (props) {
@@ -36,7 +36,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refTableBody, refTableHeader, refTableFooter, refTableLeftBody, refTableRightBody, refScrollXHandleElem, refScrollYHandleElem } = $xeTable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<XEBodyScrollElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -132,7 +132,7 @@ export default defineComponent({
     const renderColumn = (seq: number | string, rowid: string, fixedType: any, rowLevel: number, row: any, rowIndex: number, $rowIndex: number, _rowIndex: number, column: any, $columnIndex: number, columns: any, items: any[]) => {
       const { fullAllDataRowIdData } = tableInternalData
       const { columnKey, height, showOverflow: allColumnOverflow, cellClassName: allCellClassName, cellStyle, align: allAlign, spanMethod, mouseConfig, editConfig, editRules, tooltipConfig } = tableProps
-      const { tableData, overflowX, currentColumn, scrollYLoad, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
+      const { tableData, overflowX, currentColumn, scrollXLoad, scrollYLoad, mergeList, editStore, isAllOverflow, validErrorMaps } = tableReactData
       const { afterFullData } = tableInternalData
       const cellOpts = computeCellOpts.value
       const validOpts = computeValidOpts.value
@@ -142,6 +142,9 @@ export default defineComponent({
       const rowOpts = computeRowOpts.value
       const sYOpts = computeSYOpts.value
       const columnOpts = computeColumnOpts.value
+      const mouseOpts = computeMouseOpts.value
+      const areaOpts = computeAreaOpts.value
+      const { selectCellToRow } = areaOpts
       const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
       const { verticalAlign } = cellOpts
       const { actived } = editStore
@@ -303,7 +306,7 @@ export default defineComponent({
         if (showValidTip && errorValidItem) {
           const errRule = errorValidItem.rule
           const validSlot = slots ? slots.valid : null
-          const validParams = { ...params, ...errorValidItem }
+          const validParams = { ...params, ...errorValidItem, rule: errorValidItem }
           tdVNs.push(
             h('div', {
               class: ['vxe-cell--valid-error-tip', getPropClass(validOpts.className, validParams)],
@@ -331,9 +334,22 @@ export default defineComponent({
       let cellHeight = ''
       if (hasEllipsis && (scrollYRHeight || rowHeight)) {
         cellHeight = `${scrollYRHeight || rowHeight}px`
-      } else if (scrollYLoad) {
+      } else if (scrollXLoad || scrollYLoad) {
         if (!hasEllipsis) {
           cellHeight = `${rest.height || 24}px`
+        }
+      }
+
+      if (mouseConfig && mouseOpts.area && selectCellToRow) {
+        if (
+          (!$columnIndex && selectCellToRow === true) ||
+          (selectCellToRow === column.field)
+        ) {
+          tdVNs.push(
+            h('div', {
+              class: 'vxe-cell--area-status'
+            })
+          )
         }
       }
 
@@ -530,7 +546,18 @@ export default defineComponent({
      */
     const scrollEvent = (evnt: Event) => {
       const { fixedType } = props
-      const { lastScrollTop, lastScrollLeft } = tableInternalData
+      const { lastScrollTop, lastScrollLeft, inVirtualScroll, inBodyScroll, bodyScrollType, inFooterScroll } = tableInternalData
+      if (inVirtualScroll) {
+        return
+      }
+      if (inFooterScroll) {
+        return
+      }
+      if (inBodyScroll) {
+        if (bodyScrollType !== fixedType) {
+          return
+        }
+      }
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableFooter = refTableFooter.value
@@ -542,15 +569,15 @@ export default defineComponent({
       const bodyElem = tableBody.$el as XEBodyScrollElement
       const leftElem = leftBody ? leftBody.$el as XEBodyScrollElement : null
       const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
+      const xHandleEl = refScrollXHandleElem.value
+      const yHandleEl = refScrollYHandleElem.value
       const scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isRollX = scrollLeft !== lastScrollLeft
       const isRollY = scrollTop !== lastScrollTop
-      const xHandleEl = refScrollXHandleElem.value
-      const yHandleEl = refScrollYHandleElem.value
-      if (yHandleEl) {
-        yHandleEl.scrollTop = scrollTop
-      } else if (isRollY) {
+      tableInternalData.inBodyScroll = true
+      tableInternalData.bodyScrollType = fixedType
+      if (isRollY) {
         if (leftElem && fixedType === 'left') {
           setScrollTop(bodyElem, scrollTop)
           setScrollTop(rightElem, scrollTop)
@@ -561,21 +588,19 @@ export default defineComponent({
           setScrollTop(leftElem, scrollTop)
           setScrollTop(rightElem, scrollTop)
         }
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-          type: renderType,
-          fixed: fixedType
-        })
+        setScrollTop(yHandleEl, scrollTop)
+        $xeTable.triggerScrollYEvent(evnt)
       }
-      if (xHandleEl) {
-        xHandleEl.scrollLeft = scrollLeft
-      } else if (isRollX) {
+      if (isRollX) {
+        setScrollLeft(xHandleEl, scrollLeft)
         setScrollLeft(headerElem, scrollLeft)
         setScrollLeft(footerElem, scrollLeft)
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-          type: renderType,
-          fixed: fixedType
-        })
+        $xeTable.triggerScrollXEvent(evnt)
       }
+      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+        type: renderType,
+        fixed: fixedType
+      })
     }
 
     let wheelTime: any
@@ -762,12 +787,19 @@ export default defineComponent({
           emptyContent = tableProps.emptyText || getI18n('vxe.table.emptyText')
         }
       }
+
+      const ons: Record<string, any> = {
+        onScroll: scrollEvent
+      }
+      if (sYOpts.mode === 'wheel') {
+        ons.onWheel = wheelEvent
+      }
+
       return h('div', {
         ref: refElem,
         class: ['vxe-table--body-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
         xid: xID,
-        onScroll: scrollEvent,
-        ...(sYOpts.mode === 'wheel' ? { onWheel: wheelEvent } : {})
+        ...ons
       }, [
         fixedType
           ? createCommentVNode()
@@ -845,7 +877,7 @@ export default defineComponent({
               class: 'vxe-table--cell-active-area'
             })
           ])
-          : null,
+          : renderEmptyElement($xeTable),
         !fixedType
           ? h('div', {
             class: 'vxe-table--empty-block',
@@ -855,7 +887,7 @@ export default defineComponent({
               class: 'vxe-table--empty-content'
             }, emptyContent)
           ])
-          : null
+          : renderEmptyElement($xeTable)
       ])
     }
 

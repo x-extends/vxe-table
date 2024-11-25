@@ -4,12 +4,14 @@
     <vxe-button @click="loadData(10000)">加载1w条</vxe-button>
     <vxe-table
       border
+      show-footer
       height="800"
       :loading="loading"
       :column-config="{resizable: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
-      :data="tableData">
+      :data="tableData"
+      :footer-data="footerData">
       <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
       <vxe-column field="col0" title="列0" width="100" fixed="left"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" fixed="left" :cell-render="imgUrlCellRender"></vxe-column>
@@ -120,6 +122,9 @@ interface RowVO {
 }
 
 const tableData = ref<RowVO[]>([])
+const footerData = ref([
+  { col2: '456', col3: '324', col4: '98', col6: '11', col74: '546', col75: '78', col83: '45', col86: '444' }
+])
 const loading = ref(false)
 
 const flag1CellRender = reactive<VxeColumnPropTypes.CellRender>({

@@ -62,27 +62,33 @@ export default defineComponent({
      * 如果存在列固定右侧，同步更新滚动状态
      */
     const scrollEvent = (evnt: Event) => {
+      const { inVirtualScroll, inBodyScroll } = tableInternalData
+      if (inVirtualScroll) {
+        return
+      }
+      if (inBodyScroll) {
+        return
+      }
       const { fixedType } = props
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = refElem.value
       const bodyElem = tableBody.$el as HTMLDivElement
-      const scrollLeft = footerElem.scrollLeft
       const xHandleEl = refScrollXHandleElem.value
-      if (xHandleEl) {
-        xHandleEl.scrollLeft = scrollLeft
-      } else {
-        const isRollX = true
-        const isRollY = false
-        const scrollTop = bodyElem.scrollTop
-        setScrollLeft(headerElem, scrollLeft)
-        setScrollLeft(bodyElem, scrollLeft)
-        $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
-          type: renderType,
-          fixed: fixedType
-        })
-      }
+      const scrollLeft = footerElem.scrollLeft
+      const isRollX = true
+      const isRollY = false
+      const scrollTop = bodyElem.scrollTop
+      tableInternalData.inFooterScroll = true
+      setScrollLeft(xHandleEl, scrollLeft)
+      setScrollLeft(headerElem, scrollLeft)
+      setScrollLeft(bodyElem, scrollLeft)
+      $xeTable.triggerScrollXEvent(evnt)
+      $xeTable.handleScrollEvent(evnt, isRollY, isRollX, scrollTop, scrollLeft, {
+        type: renderType,
+        fixed: fixedType
+      })
     }
 
     const renderRows = (tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
@@ -266,11 +272,16 @@ export default defineComponent({
         }
       }
 
+      const ons: Record<string, any> = {}
+      if (!fixedType) {
+        ons.onScroll = scrollEvent
+      }
+
       return h('div', {
         ref: refElem,
         class: ['vxe-table--footer-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
         xid: xID,
-        onScroll: scrollEvent
+        ...ons
       }, [
         fixedType
           ? createCommentVNode()

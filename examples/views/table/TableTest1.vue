@@ -16,7 +16,7 @@
       <vxe-column field="name" title="Name" sortable></vxe-column>
       <vxe-column field="age" title="Age" :filters="ageOptions" :filter-method="filterAgeMethod">
         <template #filter="{ $panel, column }">
-          <vxe-input class="my-input" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" @keyup.enter="$panel.confirmFilter()" placeholder="按回车确认筛选" />
+          <vxe-input class="my-input" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" placeholder="按回车确认筛选" />
         </template>
       </vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
@@ -71,8 +71,8 @@ const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {
   return item ? item.label : ''
 }
 
-const filterAgeMethod: VxeColumnPropTypes.FilterMethod = ({ value, row }) => {
-  return row.age >= value
+const filterAgeMethod: VxeColumnPropTypes.FilterMethod = ({ option, row }) => {
+  return row.age >= option.data
 }
 
 onMounted(() => {
