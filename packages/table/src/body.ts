@@ -859,7 +859,9 @@ export default defineComponent({
                   h('span', {
                     class: 'vxe-table--cell-main-area-btn',
                     onMousedown (evnt: any) {
-                      $xeTable.triggerCellExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
+                      if ($xeTable.triggerCellAreaExtendMousedownEvent) {
+                        $xeTable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
+                      }
                     }
                   })
                 ]

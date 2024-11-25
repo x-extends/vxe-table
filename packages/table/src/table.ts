@@ -1268,10 +1268,11 @@ export default defineComponent({
     }
 
     /**
-     * 列宽算法
+     * 列宽算法，计算单元格列宽，动态分配可用剩余空间
      * 支持 px、%、固定 混合分配
      * 支持动态列表调整分配
      * 支持自动分配偏移量
+     * 支持 width=60 width=60px width=10% min-width=60 min-width=60px min-width=10%
      */
     const autoCellWidth = () => {
       const tableHeader = refTableHeader.value
@@ -3966,8 +3967,8 @@ export default defineComponent({
         })
       },
       /**
-       * 计算单元格列宽，动态分配可用剩余空间
-       * 支持 width=? width=?px width=?% min-width=? min-width=?px min-width=?%
+       * 重新渲染布局
+       * 刷新布局
        */
       recalculate (reFull?: boolean) {
         return new Promise<void>(resolve => {
