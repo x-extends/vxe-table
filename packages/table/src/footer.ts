@@ -307,10 +307,16 @@ export default {
       }
       const { fixedType } = this
       const { tableHeader, tableBody, tableFooter } = $xeTable.$refs
-      const headerElem = tableHeader ? tableHeader.$el : null
-      const footerElem = tableFooter ? tableFooter.$el : null
-      const bodyElem = tableBody.$el
-      const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+      const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+      const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+      if (!footerElem) {
+        return
+      }
+      const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+      if (!bodyElem) {
+        return
+      }
+      const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
       const scrollLeft = footerElem.scrollLeft
       const isRollX = true
       const isRollY = false

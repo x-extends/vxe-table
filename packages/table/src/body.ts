@@ -726,14 +726,17 @@ export default {
         }
       }
       const { tableHeader, tableBody, leftBody, rightBody, tableFooter } = $xeTable.$refs
-      const scrollBodyElem = this.$el
-      const headerElem = tableHeader ? tableHeader.$el : null
-      const footerElem = tableFooter ? tableFooter.$el : null
-      const bodyElem = tableBody.$el
-      const leftElem = leftBody ? leftBody.$el : null
-      const rightElem = rightBody ? rightBody.$el : null
-      const xHandleEl = $xeTable.$refs.refScrollXHandleElem
-      const yHandleEl = $xeTable.$refs.refScrollYHandleElem
+      const scrollBodyElem = this.$el as HTMLDivElement
+      const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+      const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+      const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+      if (!bodyElem) {
+        return
+      }
+      const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
+      const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
+      const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
+      const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
       const scrollTop = scrollBodyElem.scrollTop
       const scrollLeft = bodyElem.scrollLeft
       const isRollX = scrollLeft !== lastScrollLeft
