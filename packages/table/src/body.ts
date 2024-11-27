@@ -1,7 +1,7 @@
 import { createCommentVNode, defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
-import { mergeBodyMethod, getRowid, XEBodyScrollElement, getRefElem } from './util'
+import { mergeBodyMethod, getRowid, getRefElem } from './util'
 import { updateCellTitle, getPropClass, setScrollTop, setScrollLeft } from '../../ui/src/dom'
 import { isEnableConf } from '../../ui/src/utils'
 import { getSlotVNs } from '../../ui/src/vn'
@@ -38,7 +38,7 @@ export default defineComponent({
     const { refTableBody, refTableHeader, refTableFooter, refTableLeftBody, refTableRightBody, refScrollXHandleElem, refScrollYHandleElem } = $xeTable.getRefMaps()
     const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xeTable.getComputeMaps()
 
-    const refElem = ref() as Ref<XEBodyScrollElement>
+    const refElem = ref() as Ref<HTMLDivElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
     const refBodyColgroup = ref() as Ref<HTMLTableColElement>
     const refBodyTBody = ref() as Ref<HTMLTableSectionElement>
@@ -566,9 +566,12 @@ export default defineComponent({
       const scrollBodyElem = refElem.value
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
-      const bodyElem = tableBody.$el as XEBodyScrollElement
-      const leftElem = leftBody ? leftBody.$el as XEBodyScrollElement : null
-      const rightElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
+      const bodyElem = tableBody.$el as HTMLDivElement
+      if (!bodyElem) {
+        return
+      }
+      const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
+      const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
       const xHandleEl = refScrollXHandleElem.value
       const yHandleEl = refScrollYHandleElem.value
       const scrollTop = scrollBodyElem.scrollTop

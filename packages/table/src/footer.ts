@@ -74,7 +74,13 @@ export default defineComponent({
       const tableBody = refTableBody.value
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = refElem.value
-      const bodyElem = tableBody.$el as HTMLDivElement
+      if (!footerElem) {
+        return
+      }
+      const bodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+      if (!bodyElem) {
+        return
+      }
       const xHandleEl = refScrollXHandleElem.value
       const scrollLeft = footerElem.scrollLeft
       const isRollX = true

@@ -68,10 +68,6 @@ export const convertHeaderColumnToRows = (originColumns: any): any[][] => {
   return rows
 }
 
-export interface XEBodyScrollElement extends HTMLDivElement {
-  _onscroll: ((evnt: Event) => void) | null;
-}
-
 export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
   const { internalData } = $xeTable
   return $xeTable.clearScroll().then(() => {
@@ -84,18 +80,6 @@ export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft
     }
   })
 }
-
-// export function removeScrollListener (scrollElem: XEBodyScrollElement | null) {
-//   if (scrollElem && scrollElem._onscroll) {
-//     scrollElem.onscroll = null
-//   }
-// }
-
-// export function restoreScrollListener (scrollElem: XEBodyScrollElement | null) {
-//   if (scrollElem && scrollElem._onscroll) {
-//     scrollElem.onscroll = scrollElem._onscroll
-//   }
-// }
 
 /**
  * 生成行的唯一主键

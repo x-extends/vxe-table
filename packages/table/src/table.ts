@@ -9,7 +9,7 @@ import TableHeaderComponent from './header'
 import TableFooterComponent from './footer'
 import tableProps from './props'
 import tableEmits from './emits'
-import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, XEBodyScrollElement, getRootColumn, getRefElem } from './util'
+import { getRowUniqueId, clearTableAllStatus, getRowkey, getRowid, rowToVisible, colToVisible, getCellValue, setCellValue, handleFieldOrColumn, toTreePathSeq, restoreScrollLocation, getRootColumn, getRefElem } from './util'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 import TableCustomPanelComponent from '../module/custom/panel'
@@ -3594,7 +3594,7 @@ export default defineComponent({
       isInsertByRow (row) {
         const { editStore } = reactData
         const rowid = getRowid($xeTable, row)
-        return editStore.insertMaps[rowid]
+        return !!editStore.insertMaps[rowid]
       },
       /**
        * 删除所有新增的临时数据
@@ -4933,8 +4933,8 @@ export default defineComponent({
         const leftBody = refTableLeftBody.value
         const rightBody = refTableRightBody.value
         const leftBodyElem = leftBody ? leftBody.$el as HTMLDivElement : null
-        const tableBodyElem = tableBody ? tableBody.$el as XEBodyScrollElement : null
-        const rightBodyElem = rightBody ? rightBody.$el as XEBodyScrollElement : null
+        const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+        const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
         const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
         const xHandleEl = refScrollXHandleElem.value
