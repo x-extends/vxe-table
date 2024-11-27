@@ -707,7 +707,6 @@ const Methods = {
     scrollYStore.endIndex = 1
     scrollXStore.startIndex = 0
     scrollXStore.endIndex = 1
-    editStore.insertList = []
     editStore.insertMaps = {}
     editStore.removeList = []
     editStore.removeMaps = {}
@@ -1558,14 +1557,19 @@ const Methods = {
   isInsertByRow (row: any) {
     const { editStore } = this
     const rowid = getRowid(this, row)
-    return editStore.insertList.length && editStore.insertMaps[rowid]
+    return !!editStore.insertMaps[rowid]
   },
   /**
    * 删除所有新增的临时数据
    * @returns
    */
   removeInsertRow () {
-    return this.remove(this.editStore.insertList)
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { editStore } = reactData
+    editStore.insertMaps = {}
+    return $xeTable.remove($xeTable.getInsertRecords())
   },
   /**
    * 检查行或列数据是否发生改变

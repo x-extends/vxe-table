@@ -49,20 +49,34 @@ function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
 }
 
 function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?: any) {
-  const { tableFullTreeData, mergeList, afterFullData, editStore, tableFullData, treeConfig, fullDataRowIdData, fullAllDataRowIdData, treeOpts } = _vm
+  const $xeTable = _vm
+  const props = $xeTable
+  const reactData = $xeTable
+  const internalData = $xeTable
+
+  const { treeConfig } = props
+  const { mergeList, editStore } = reactData
+  const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+  const treeOpts = $xeTable.computeTreeOpts
   const { transform, rowField, mapChildrenField } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   if (!XEUtils.isArray(records)) {
     records = [records]
   }
-  const newRecords = _vm.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
+  const newRecords: any[] = _vm.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
   if (XEUtils.eqNull(row)) {
   // 如果为虚拟树
     if (treeConfig && transform) {
       insertTreeRow(_vm, newRecords, false)
     } else {
-      afterFullData.unshift(...newRecords)
-      tableFullData.unshift(...newRecords)
+      newRecords.forEach(item => {
+        const rowid = getRowid($xeTable, item)
+        const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: afterFullData, parent: null, level: 0, height: 0 }
+        fullDataRowIdData[rowid] = rest
+        fullAllDataRowIdData[rowid] = rest
+        afterFullData.push(item)
+        tableFullData.push(item)
+      })
       // 刷新单元格合并
       mergeList.forEach((mergeItem: any) => {
         const { row: mergeRowIndex } = mergeItem
@@ -77,8 +91,14 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
       if (treeConfig && transform) {
         insertTreeRow(_vm, newRecords, true)
       } else {
-        afterFullData.push(...newRecords)
-        tableFullData.push(...newRecords)
+        newRecords.forEach(item => {
+          const rowid = getRowid($xeTable, item)
+          const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: afterFullData, parent: null, level: 0, height: 0 }
+          fullDataRowIdData[rowid] = rest
+          fullAllDataRowIdData[rowid] = rest
+          afterFullData.push(item)
+          tableFullData.push(item)
+        })
         // 刷新单元格合并
         mergeList.forEach((mergeItem: any) => {
           const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
@@ -170,12 +190,11 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
       }
     }
   }
-  const { insertList, insertMaps } = editStore
-  newRecords.forEach((newRow: any) => {
-    const rowid = getRowid(_vm, newRow)
+  const { insertMaps } = editStore
+  newRecords.forEach(newRow => {
+    const rowid = getRowid($xeTable, newRow)
     insertMaps[rowid] = newRow
   })
-  insertList.unshift(...newRecords)
   _vm.cacheRowMap()
   _vm.updateScrollYStatus()
   _vm.handleTableData(treeConfig && transform)
@@ -230,10 +249,19 @@ export default {
      * 如果为空则删除所有
      */
     _remove (rows: any[]) {
-      const { afterFullData, tableFullData, tableFullTreeData, treeConfig, mergeList, editStore, checkboxOpts, selectCheckboxMaps, isInsertByRow, treeOpts } = this
+      const $xeTable = this
+      const props = $xeTable
+      const reactData = $xeTable
+      const internalData = $xeTable
+
+      const { treeConfig } = props
+      const { mergeList, editStore, selectCheckboxMaps } = reactData
+      const { tableFullTreeData, afterFullData, tableFullData } = internalData
+      const checkboxOpts = $xeTable.computeCheckboxOpts
+      const treeOpts = $xeTable.computeTreeOpts
       const { transform, mapChildrenField } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
-      const { actived, removeList, insertList, insertMaps } = editStore
+      const { actived, removeList, insertMaps } = editStore
       const { checkField } = checkboxOpts
       let delList: any[] = []
       if (!rows) {
@@ -243,7 +271,7 @@ export default {
       }
       // 如果是新增，则保存记录
       rows.forEach(row => {
-        if (!isInsertByRow(row)) {
+        if (!$xeTable.isInsertByRow(row)) {
           removeList.push(row)
         }
       })
@@ -307,27 +335,25 @@ export default {
         }
       }
       // 如果当前行被激活编辑，则清除激活状态
-      if (actived.row && this.findRowIndexOf(rows, actived.row) > -1) {
-        this.clearEdit()
+      if (actived.row && $xeTable.findRowIndexOf(rows, actived.row) > -1) {
+        $xeTable.clearEdit()
       }
       // 从新增中移除已删除的数据
       rows.forEach((row: any) => {
-        const rowid = getRowid(this, row)
-        const iIndex = this.findRowIndexOf(insertList, row)
-        if (iIndex > -1) {
-          insertList.splice(iIndex, 1)
+        const rowid = getRowid($xeTable, row)
+        if (insertMaps[rowid]) {
+          delete insertMaps[rowid]
         }
-        delete insertMaps[rowid]
       })
-      this.handleTableData(treeConfig && transform)
+      $xeTable.updateFooter()
+      $xeTable.cacheRowMap()
+      $xeTable.handleTableData(treeConfig && transform)
       if (!(treeConfig && transform)) {
-        this.updateAfterDataIndex()
+        $xeTable.updateAfterDataIndex()
       }
-      this.updateFooter()
-      this.cacheRowMap()
-      this.checkSelectionStatus()
-      if (this.scrollYLoad) {
-        this.updateScrollYSpace()
+      $xeTable.checkSelectionStatus()
+      if (reactData.scrollYLoad) {
+        $xeTable.updateScrollYSpace()
       }
       return this.$nextTick().then(() => {
         this.updateCellAreas()
@@ -387,11 +413,15 @@ export default {
      * 获取新增的临时数据
      */
     _getInsertRecords () {
-      const { fullAllDataRowIdData } = this
-      const insertList = this.editStore.insertList as any[]
+      const $xeTable = this
+      const reactData = $xeTable
+      const internalData = $xeTable
+
+      const { editStore } = reactData
+      const { fullAllDataRowIdData } = internalData
+      const { insertMaps } = editStore
       const insertRecords: any[] = []
-      insertList.forEach(row => {
-        const rowid = getRowid(this, row)
+      XEUtils.each(insertMaps, (row, rowid) => {
         if (fullAllDataRowIdData[rowid]) {
           insertRecords.push(row)
         }

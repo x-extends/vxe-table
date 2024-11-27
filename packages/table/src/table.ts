@@ -339,7 +339,6 @@ export default {
           row: null,
           column: null
         },
-        insertList: [],
         insertMaps: {},
         removeList: [],
         removeMaps: {}
