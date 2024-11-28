@@ -2491,7 +2491,7 @@ export default defineComponent({
      * @param {Array} datas 数据
      */
     const loadTableData = (datas: any[]) => {
-      const { keepSource, treeConfig } = props
+      const { keepSource, treeConfig, showOverflow } = props
       const { editStore, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const treeOpts = computeTreeOpts.value
@@ -2556,8 +2556,15 @@ export default defineComponent({
       if (keepSource) {
         tablePrivateMethods.cacheSourceMap(fullData)
       }
-      if (process.env.VUE_APP_VXE_ENV === 'development') {
-        if (sYLoad) {
+      if (sYLoad) {
+        if (showOverflow) {
+          const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+          if (errColumn) {
+            errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+          }
+        }
+
+        if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (!(props.height || props.maxHeight)) {
             errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
           }

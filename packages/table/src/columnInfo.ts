@@ -13,6 +13,7 @@ export class ColumnInfo {
     const $xeGrid = $xeTable.xegrid
     const formatter: string | any[] = _vm.formatter
     const visible = XEUtils.isBoolean(_vm.visible) ? _vm.visible : true
+    const { props: tableProps } = $xeTable
 
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       const types = ['seq', 'checkbox', 'radio', 'expand', 'html']
@@ -29,7 +30,6 @@ export class ColumnInfo {
         warnLog('vxe.error.errConflicts', ['column.cell-render', 'column.edit-render'])
       }
       if (_vm.type === 'expand') {
-        const { props: tableProps } = $xeTable
         const { treeConfig } = tableProps
         const { computeTreeOpts } = $xeTable.getComputeMaps()
         const treeOpts = computeTreeOpts.value

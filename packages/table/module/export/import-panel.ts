@@ -225,7 +225,7 @@ export default defineComponent({
                     VxeUIButtonComponent
                       ? h(VxeUIButtonComponent, {
                         status: 'primary',
-                        disabled: !hasFile || reactData.loading, //没有文件或者正在导入时禁用
+                        disabled: !hasFile || reactData.loading,
                         content: getI18n('vxe.import.impConfirm'),
                         onClick: importEvent
                       })
