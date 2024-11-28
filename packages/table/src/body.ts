@@ -381,18 +381,6 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
         $xeTable.clearHoverRow()
       }
     }
-    // 拖拽行事件
-    if (rowOpts.drag) {
-      trOn.dragstart = (evnt: DragEvent) => {
-        $xeTable.handleRowDragDragstartEvent(evnt)
-      }
-      trOn.dragover = (evnt: DragEvent) => {
-        $xeTable.handleRowDragDragoverEvent(evnt)
-      }
-      trOn.dragend = (evnt: DragEvent) => {
-        $xeTable.handleRowDragDragendEvent(evnt)
-      }
-    }
     const rowid = getRowid($xeTable, row)
     const rest = fullAllDataRowIdData[rowid]
     const rowLevel = rest ? rest.level : 0
@@ -411,6 +399,18 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     if (treeConfig && !scrollYLoad && !treeOpts.transform) {
       rowChildren = row[childrenField]
       isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
+    }
+    // 拖拽行事件
+    if (rowOpts.drag && !rowLevel) {
+      trOn.dragstart = (evnt: DragEvent) => {
+        $xeTable.handleRowDragDragstartEvent(evnt)
+      }
+      trOn.dragover = (evnt: DragEvent) => {
+        $xeTable.handleRowDragDragoverEvent(evnt)
+      }
+      trOn.dragend = (evnt: DragEvent) => {
+        $xeTable.handleRowDragDragendEvent(evnt)
+      }
     }
     const trClass = [
       'vxe-body--row',

@@ -663,7 +663,7 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas: any) {
-    const { keepSource, treeConfig, treeOpts, editStore, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad, sXOpts, sYOpts } = this
+    const { keepSource, showOverflow, treeConfig, treeOpts, editStore, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad, sXOpts, sYOpts } = this
     const childrenField = treeOpts.children || treeOpts.childrenField
     let treeData = []
     let fullData = datas ? datas.slice(0) : []
@@ -724,8 +724,15 @@ const Methods = {
     if (keepSource) {
       this.cacheSourceMap(fullData)
     }
-    if (process.env.VUE_APP_VXE_ENV === 'development') {
-      if (sYLoad) {
+    if (sYLoad) {
+      if (showOverflow) {
+        const errColumn = this.tableFullColumn.find((column: any) => column.showOverflow === false)
+        if (errColumn) {
+          errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+        }
+      }
+
+      if (process.env.VUE_APP_VXE_ENV === 'development') {
         if (!(this.height || this.maxHeight)) {
           errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
         }
@@ -5101,6 +5108,8 @@ const Methods = {
               oldIndex: oafIndex
             }
           }, evnt)
+
+          $xeTable.saveCustomStore('update:sort')
         }).catch(() => {
         })
       }
@@ -5687,7 +5696,7 @@ const Methods = {
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowid = getRowid(this, row)
     if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
-      this.clearTreeExpandLoaded(row).then(() => {
+      return this.clearTreeExpandLoaded(row).then(() => {
         return this.handleAsyncTreeExpandChilds(row)
       }).then(() => {
         if (transform) {

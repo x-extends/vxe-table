@@ -72,7 +72,7 @@ export default {
   render (this: any, h: CreateElement) {
     const $xeTable = this.$xeTable
 
-    const { hasFile, parseTypeLabel, defaultOptions, storeData, selectName } = this
+    const { hasFile, loading, parseTypeLabel, defaultOptions, storeData, selectName } = this
     const slots = defaultOptions.slots || {}
     const topSlot = slots.top
     const bottomSlot = slots.bottom
@@ -95,7 +95,7 @@ export default {
         maskClosable: true,
         showMaximize: true,
         resize: true,
-        loading: this.loading
+        loading
       },
       on: {
         input (value: any) {
@@ -218,7 +218,7 @@ export default {
                   h('vxe-button', {
                     props: {
                       status: 'primary',
-                      disabled: !hasFile
+                      disabled: !hasFile || loading
                     },
                     on: {
                       click: this.importEvent
