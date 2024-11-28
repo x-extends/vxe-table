@@ -4721,7 +4721,7 @@ export default defineComponent({
         const { transform, lazy } = treeOpts
         const rowid = getRowid($xeTable, row)
         if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
-          tableMethods.clearTreeExpandLoaded(row).then(() => {
+          return tableMethods.clearTreeExpandLoaded(row).then(() => {
             return handleAsyncTreeExpandChilds(row)
           }).then(() => {
             if (transform) {
@@ -7026,6 +7026,7 @@ export default defineComponent({
         const trEl = evnt.currentTarget as HTMLElement
         const rowid = trEl.getAttribute('rowid')
         const row = $xeTable.getRowById(rowid)
+        console.log(rowid)
         if (row) {
           evnt.preventDefault()
           evnt.preventDefault()
@@ -7154,6 +7155,8 @@ export default defineComponent({
                   oldIndex: oafIndex
                 }
               }, evnt)
+
+              $xeTable.saveCustomStore('update:sort')
             }).catch(() => {
             })
           }

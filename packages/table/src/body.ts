@@ -417,12 +417,6 @@ export default defineComponent({
             $xeTable.clearHoverRow()
           }
         }
-        // 拖拽行事件
-        if (rowOpts.drag) {
-          trOn.onDragstart = $xeTable.handleRowDragDragstartEvent
-          trOn.onDragend = $xeTable.handleRowDragDragendEvent
-          trOn.onDragover = $xeTable.handleRowDragDragoverEvent
-        }
         const rowid = getRowid($xeTable, row)
         const rest = fullAllDataRowIdData[rowid]
         let rowLevel = 0
@@ -447,6 +441,12 @@ export default defineComponent({
         if (treeConfig && !scrollYLoad && !transform) {
           rowChildren = row[childrenField]
           isExpandTree = rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
+        }
+        // 拖拽行事件
+        if (rowOpts.drag && !rowLevel) {
+          trOn.onDragstart = $xeTable.handleRowDragDragstartEvent
+          trOn.onDragend = $xeTable.handleRowDragDragendEvent
+          trOn.onDragover = $xeTable.handleRowDragDragoverEvent
         }
         const trClass = [
           'vxe-body--row',
