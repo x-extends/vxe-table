@@ -318,6 +318,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
 
 const renderPopupPanel = (h: CreateElement, _vm: any) => {
   const VxeUIModalComponent = VxeUI.getComponent<VxeModalComponent>('VxeModal')
+  const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
   const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
   const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeInput')
   const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
@@ -326,11 +327,12 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   const $xeTable = _vm.$xeTable
   const { _e, customStore } = _vm
   const { resizable: allResizable, customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xeTable
-  const { modalOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+  const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
   const { maxFixedSize } = columnOpts
   const resizableOpts = $xeTable.computeResizableOpts
   const { minWidth: reMinWidth, maxWidth: reMaxWidth } = resizableOpts
   const modalOpts = Object.assign({}, modalOptions)
+  const drawerOpts = Object.assign({}, drawerOptions)
   const slots = customOpts.slots || {}
   const headerSlot = slots.header
   const topSlot = slots.top
@@ -679,6 +681,29 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   if (headerSlot) {
     scopedSlots.header = () => $xeTable.callSlot(headerSlot, params, h)
   }
+  if (mode === 'drawer') {
+    return VxeUIDrawerComponent
+      ? h(VxeUIDrawerComponent, {
+        key: 'drawer',
+        props: {
+          className: ['vxe-table-custom-drawer-wrapper', 'vxe-table--ignore-clear', drawerOpts.className || ''].join(' '),
+          value: customStore.visible,
+          title: drawerOpts.title || getI18n('vxe.custom.cstmTitle'),
+          width: drawerOpts.width || Math.min(880, Math.floor(document.documentElement.clientWidth * 0.6)),
+          position: drawerOpts.position,
+          escClosable: !!drawerOpts.escClosable,
+          destroyOnClose: true,
+          showFooter: true
+        },
+        on: {
+          input (value: any) {
+            customStore.visible = value
+          }
+        },
+        scopedSlots
+      })
+      : renderEmptyElement($xeTableCustomPanel)
+  }
   return VxeUIModalComponent
     ? h(VxeUIModalComponent, {
       key: 'modal',
@@ -770,7 +795,7 @@ export default {
   render (this: any, h: CreateElement) {
     const { $xetable } = this
     const { customOpts } = $xetable
-    if (['modal', 'popup'].includes(`${customOpts.mode}`)) {
+    if (['modal', 'drawer', 'popup'].includes(`${customOpts.mode}`)) {
       return renderPopupPanel(h, this)
     }
     return renderSimplePanel(h, this)
