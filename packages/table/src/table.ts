@@ -912,7 +912,10 @@ export default {
       if (this.rowOpts.height && !this.showOverflow) {
         warnLog('vxe.error.notProp', ['table.show-overflow'])
       }
-      if (!this.handleRecalculateCellAreas) {
+      if (!this.handleMousedownCellAreaEvent) {
+        if (this.areaConfig) {
+          warnLog('vxe.error.notProp', ['area-config'])
+        }
         if (this.clipConfig) {
           warnLog('vxe.error.notProp', ['clip-config'])
         }
@@ -939,7 +942,7 @@ export default {
       // if (this.mouseOpts.area && this.checkboxOpts.range) {
       //   warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
       // }
-      if (this.treeConfig && this.mouseOpts.area) {
+      if (this.mouseOpts.area && (this.treeConfig && !treeOpts.transform)) {
         errLog('vxe.error.noTree', ['mouse-config.area'])
       }
     }

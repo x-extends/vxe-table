@@ -510,16 +510,15 @@ function handleRecalculateLayout ($xeTable: any, reFull: boolean) {
   }
   $xeTable.calcCellWidth()
   $xeTable.autoCellWidth()
-  if (reFull === true) {
-    // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-    return $xeTable.computeScrollLoad().then(() => {
+  return $xeTable.computeScrollLoad().then(() => {
+    if (reFull === true) {
+      // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
       calcCellHeight($xeTable)
       $xeTable.calcCellWidth()
       $xeTable.autoCellWidth()
       return $xeTable.computeScrollLoad()
-    })
-  }
-  return $xeTable.computeScrollLoad()
+    }
+  })
 }
 
 function checkLastSyncScroll ($xeTable: any, isRollX: boolean, isRollY: boolean) {
@@ -1699,6 +1698,10 @@ const Methods = {
    * @returns
    */
   handleVirtualTreeToList () {
+    const $xeTable = this
+    const internalData = $xeTable
+
+    const { fullAllDataRowIdData } = internalData
     const { treeOpts, treeConfig, treeExpandedMaps, afterTreeFullData, afterFullData } = this
     const childrenField = treeOpts.children || treeOpts.childrenField
     if (treeConfig && treeOpts.transform) {
@@ -1708,6 +1711,10 @@ const Methods = {
         const rowid = getRowid(this, row)
         const parentRowid = getRowid(this, parent)
         if (!parent || (expandMaps[parentRowid] && treeExpandedMaps[parentRowid])) {
+          const rowRest = fullAllDataRowIdData[rowid]
+          if (rowRest) {
+            rowRest._index = fullData.length
+          }
           expandMaps[rowid] = 1
           fullData.push(row)
         }
@@ -1840,17 +1847,47 @@ const Methods = {
     this.afterTreeFullData = tableTree
     this.updateAfterDataIndex()
   },
+  updateTreeDataIndex () {
+    const $xeTable = this
+    const props = $xeTable
+    const internalData = $xeTable
+
+    const { treeConfig } = props
+    const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
+    if (treeConfig) {
+      if (treeOpts.transform) {
+        afterFullData.forEach((row: any, index: number) => {
+          const rowid = getRowid($xeTable, row)
+          const rowRest = fullAllDataRowIdData[rowid]
+          if (rowRest) {
+            rowRest._index = index
+          } else {
+            const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+            fullAllDataRowIdData[rowid] = rest
+            fullDataRowIdData[rowid] = rest
+          }
+        })
+      }
+    }
+  },
   /**
    * 预编译
    * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
    */
   updateAfterDataIndex () {
-    const { treeConfig, afterFullData, fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData, treeOpts } = this
+    const $xeTable = this
+    const props = $xeTable
+    const internalData = $xeTable
+
+    const { treeConfig } = props
+    const { afterFullData, fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const fullMaps: any = {}
     if (treeConfig) {
       XEUtils.eachTree(afterTreeFullData, (row, index, items, path) => {
-        const rowid = getRowid(this, row)
+        const rowid = getRowid($xeTable, row)
         const rowRest = fullAllDataRowIdData[rowid]
         const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
         if (rowRest) {
@@ -1863,9 +1900,10 @@ const Methods = {
         }
         fullMaps[rowid] = row
       }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
+      $xeTable.updateTreeDataIndex()
     } else {
-      afterFullData.forEach((row: any, index: any) => {
-        const rowid = getRowid(this, row)
+      afterFullData.forEach((row: any, index: number) => {
+        const rowid = getRowid($xeTable, row)
         const rowRest = fullAllDataRowIdData[rowid]
         const seq = index + 1
         if (rowRest) {
@@ -1882,9 +1920,39 @@ const Methods = {
     this.afterFullRowMaps = fullMaps
   },
   /**
+   * 只对 tree-config 有效，获取行的子级
+   */
+  getTreeRowChildren (rowOrRowid: any) {
+    const $xeTable = this
+    const props = $xeTable
+    const internalData = $xeTable
+
+    const { treeConfig } = props
+    const { fullDataRowIdData } = internalData
+    const treeOpts = $xeTable.computeTreeOpts
+    const { transform, mapChildrenField } = treeOpts
+    const childrenField = treeOpts.children || treeOpts.childrenField
+    if (rowOrRowid && treeConfig) {
+      let rowid
+      if (XEUtils.isString(rowOrRowid)) {
+        rowid = rowOrRowid
+      } else {
+        rowid = getRowid($xeTable, rowOrRowid)
+      }
+      if (rowid) {
+        const rest = fullDataRowIdData[rowid]
+        const row = rest ? rest.row : null
+        if (row) {
+          return row[transform ? mapChildrenField : childrenField] || []
+        }
+      }
+    }
+    return []
+  },
+  /**
    * 只对 tree-config 有效，获取行的父级
    */
-  getParentRow (rowOrRowid: any) {
+  getTreeParentRow (rowOrRowid: any) {
     const { treeConfig, fullDataRowIdData } = this
     if (rowOrRowid && treeConfig) {
       let rowid
@@ -1899,6 +1967,12 @@ const Methods = {
       }
     }
     return null
+  },
+  getParentRow (rowOrRowid: any) {
+    const $xeTable = this
+
+    warnLog('vxe.error.delFunc', ['getParentRow', 'getTreeParentRow'])
+    return $xeTable.getTreeParentRow(rowOrRowid)
   },
   /**
    * 根据行的唯一主键获取行
@@ -5801,7 +5875,9 @@ const Methods = {
               }
               return this.$nextTick().then(() => {
                 if (transform) {
-                  return this.handleTableData()
+                  this.handleTableData()
+                  this.updateTreeDataIndex()
+                  return this.$nextTick()
                 }
               })
             })
@@ -5898,7 +5974,9 @@ const Methods = {
       validRows.forEach((row: any) => this.handleTreeExpandReserve(row, expanded))
     }
     this.treeExpandedMaps = treeTempExpandedMaps
-    return Promise.all(result).then(this.recalculate)
+    return Promise.all(result).then(() => {
+      return this.recalculate()
+    })
   },
   /**
    * 虚拟树的展开与收起
@@ -5909,9 +5987,14 @@ const Methods = {
   handleVirtualTreeExpand (rows: any, expanded: any) {
     return this.handleBaseTreeExpand(rows, expanded).then(() => {
       this.handleVirtualTreeToList()
-      return this.handleTableData()
+      this.handleTableData()
+      this.updateTreeDataIndex()
     }).then(() => {
       return this.recalculate()
+    }).then(() => {
+      setTimeout(() => {
+        this.updateCellAreas()
+      }, 30)
     })
   },
   /**

@@ -213,8 +213,8 @@ export default {
     },
     handleCellMousedownEvent (evnt: any, params: any) {
       const { editConfig, editOpts, handleSelected, checkboxConfig, checkboxOpts, mouseConfig, mouseOpts } = this
-      if (mouseConfig && mouseOpts.area && this.handleCellAreaEvent) {
-        return this.handleCellAreaEvent(evnt, params)
+      if (mouseConfig && mouseOpts.area && this.handleMousedownCellAreaEvent) {
+        return this.handleMousedownCellAreaEvent(evnt, params)
       } else {
         if (checkboxConfig && checkboxOpts.range) {
           this.handleCheckboxRangeEvent(evnt, params)
