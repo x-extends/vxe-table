@@ -1471,14 +1471,34 @@ export default defineComponent({
       }
     }
 
+    const updateTreeDataIndex = () => {
+      const { treeConfig } = props
+      const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
+      const treeOpts = computeTreeOpts.value
+      if (treeConfig) {
+        if (treeOpts.transform) {
+          afterFullData.forEach((row, index) => {
+            const rowid = getRowid($xeTable, row)
+            const rowRest = fullAllDataRowIdData[rowid]
+            if (rowRest) {
+              rowRest._index = index
+            } else {
+              const rest = { row, rowid, seq: '-1', index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+              fullAllDataRowIdData[rowid] = rest
+              fullDataRowIdData[rowid] = rest
+            }
+          })
+        }
+      }
+    }
+
     /**
      * 预编译
      * 对渲染中的数据提前解析序号及索引。牺牲提前编译耗时换取渲染中额外损耗，使运行时更加流畅
      */
     const updateAfterDataIndex = () => {
       const { treeConfig } = props
-      const { afterFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
-      const { afterTreeFullData } = internalData
+      const { afterFullData, fullDataRowIdData, fullAllDataRowIdData, afterTreeFullData } = internalData
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const fullMaps: Record<string, any> = {}
@@ -1489,14 +1509,14 @@ export default defineComponent({
           const seq = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
           if (rowRest) {
             rowRest.seq = seq
-            rowRest._index = index
           } else {
-            const rest = { row, rowid, seq, index: -1, $index: -1, _index: index, items: [], parent: null, level: 0, height: 0 }
+            const rest = { row, rowid, seq, index: -1, $index: -1, _index: -1, items: [], parent: null, level: 0, height: 0 }
             fullAllDataRowIdData[rowid] = rest
             fullDataRowIdData[rowid] = rest
           }
           fullMaps[rowid] = row
         }, { children: treeOpts.transform ? treeOpts.mapChildrenField : childrenField })
+        updateTreeDataIndex()
       } else {
         afterFullData.forEach((row, index) => {
           const rowid = getRowid($xeTable, row)
@@ -1523,6 +1543,7 @@ export default defineComponent({
     const handleVirtualTreeToList = () => {
       const { treeConfig } = props
       const { treeExpandedMaps } = reactData
+      const { fullAllDataRowIdData } = internalData
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       if (treeConfig && treeOpts.transform) {
@@ -1534,6 +1555,10 @@ export default defineComponent({
           const rowid = getRowid($xeTable, row)
           const parentRowid = getRowid($xeTable, parent)
           if (!parent || (expandMaps[parentRowid] && treeExpandedMaps[parentRowid])) {
+            const rowRest = fullAllDataRowIdData[rowid]
+            if (rowRest) {
+              rowRest._index = fullData.length
+            }
             expandMaps[rowid] = 1
             fullData.push(row)
           }
@@ -2335,7 +2360,9 @@ export default defineComponent({
                 }
                 return nextTick().then(() => {
                   if (transform) {
-                    return tablePrivateMethods.handleTableData()
+                    tablePrivateMethods.handleTableData()
+                    updateTreeDataIndex()
+                    return nextTick()
                   }
                 })
               })
@@ -2474,16 +2501,15 @@ export default defineComponent({
       }
       calcCellWidth()
       autoCellWidth()
-      if (reFull === true) {
-        // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
-        return computeScrollLoad().then(() => {
+      return computeScrollLoad().then(() => {
+        if (reFull === true) {
+          // 初始化时需要在列计算之后再执行优化运算，达到最优显示效果
           calcCellHeight()
           calcCellWidth()
           autoCellWidth()
           return computeScrollLoad()
-        })
-      }
-      return computeScrollLoad()
+        }
+      })
     }
 
     /**
@@ -2926,9 +2952,14 @@ export default defineComponent({
     const handleVirtualTreeExpand = (rows: any[], expanded: boolean) => {
       return handleBaseTreeExpand(rows, expanded).then(() => {
         handleVirtualTreeToList()
-        return tablePrivateMethods.handleTableData()
+        tablePrivateMethods.handleTableData()
+        updateTreeDataIndex()
       }).then(() => {
         return tableMethods.recalculate()
+      }).then(() => {
+        setTimeout(() => {
+          tableMethods.updateCellAreas()
+        }, 30)
       })
     }
 
@@ -3732,9 +3763,35 @@ export default defineComponent({
         return rowList
       },
       /**
+       * 只对 tree-config 有效，获取行的子级
+       */
+      getTreeRowChildren (rowOrRowid) {
+        const { treeConfig } = props
+        const { fullDataRowIdData } = internalData
+        const treeOpts = computeTreeOpts.value
+        const { transform, mapChildrenField } = treeOpts
+        const childrenField = treeOpts.children || treeOpts.childrenField
+        if (rowOrRowid && treeConfig) {
+          let rowid
+          if (XEUtils.isString(rowOrRowid)) {
+            rowid = rowOrRowid
+          } else {
+            rowid = getRowid($xeTable, rowOrRowid)
+          }
+          if (rowid) {
+            const rest = fullDataRowIdData[rowid]
+            const row = rest ? rest.row : null
+            if (row) {
+              return row[transform ? mapChildrenField : childrenField] || []
+            }
+          }
+        }
+        return []
+      },
+      /**
        * 只对 tree-config 有效，获取行的父级
        */
-      getParentRow (rowOrRowid) {
+      getTreeParentRow (rowOrRowid) {
         const { treeConfig } = props
         const { fullDataRowIdData } = internalData
         if (rowOrRowid && treeConfig) {
@@ -3750,6 +3807,10 @@ export default defineComponent({
           }
         }
         return null
+      },
+      getParentRow (rowOrRowid) {
+        warnLog('vxe.error.delFunc', ['getParentRow', 'getTreeParentRow'])
+        return $xeTable.getTreeParentRow(rowOrRowid)
       },
       /**
        * 根据行的唯一主键获取行
@@ -8223,7 +8284,10 @@ export default defineComponent({
           if (rowOpts.height && !props.showOverflow) {
             warnLog('vxe.error.notProp', ['table.show-overflow'])
           }
-          if (!$xeTable.handleRecalculateCellAreas) {
+          if (!$xeTable.handleMousedownCellAreaEvent) {
+            if (props.areaConfig) {
+              warnLog('vxe.error.notProp', ['area-config'])
+            }
             if (props.clipConfig) {
               warnLog('vxe.error.notProp', ['clip-config'])
             }
@@ -8250,7 +8314,7 @@ export default defineComponent({
           // if (mouseOpts.area && checkboxOpts.range) {
           //   warnLog('vxe.error.errConflicts', ['mouse-config.area', 'checkbox-config.range'])
           // }
-          if (props.treeConfig && mouseOpts.area) {
+          if (mouseOpts.area && (props.treeConfig && !treeOpts.transform)) {
             errLog('vxe.error.noTree', ['mouse-config.area'])
           }
           if (props.editConfig && editOpts.activeMethod) {

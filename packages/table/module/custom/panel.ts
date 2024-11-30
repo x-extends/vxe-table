@@ -549,12 +549,11 @@ export default defineComponent({
       const { resizable: allResizable } = tableProps
       const { customColumnList } = reactData
       const customOpts = computeCustomOpts.value
-      const { modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+      const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
       const { maxFixedSize } = columnOpts
       const resizableOpts = computeResizableOpts.value
       const { minWidth: reMinWidth, maxWidth: reMaxWidth } = resizableOpts
-      const { mode } = customOpts
       const modalOpts = Object.assign({}, modalOptions)
       const drawerOpts = Object.assign({}, drawerOptions)
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
@@ -883,7 +882,7 @@ export default defineComponent({
             className: ['vxe-table-custom-drawer-wrapper', 'vxe-table--ignore-clear', drawerOpts.className || ''].join(' '),
             modelValue: customStore.visible,
             title: drawerOpts.title || getI18n('vxe.custom.cstmTitle'),
-            width: drawerOpts.width || Math.min(880, document.documentElement.clientWidth),
+            width: drawerOpts.width || Math.min(880, Math.floor(document.documentElement.clientWidth * 0.6)),
             position: drawerOpts.position,
             escClosable: !!drawerOpts.escClosable,
             destroyOnClose: true,
