@@ -46,7 +46,8 @@ export default {
       notType: 'Unsupported file types "{0}"',
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.',
-      treeNotImp: 'Tree table does not support import.'
+      treeNotImp: 'Tree table does not support import.',
+      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'No Data',

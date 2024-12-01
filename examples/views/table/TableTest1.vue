@@ -21,6 +21,10 @@
       </vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column field="address" title="Address" show-overflow></vxe-column>
+
+      <template #loading>
+        <div>加载中。。。。。。</div>
+      </template>
     </vxe-table>
   </div>
 </template>
@@ -106,7 +110,7 @@ export default Vue.extend({
         { id: 10020, name: 'Test20', role: 'Develop', sex: '1', age: 41, address: 'test abc' }
       ]
       this.demo1.loading = false
-    }, 100)
+    }, 500)
   }
 })
 </script>

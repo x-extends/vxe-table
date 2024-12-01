@@ -74,8 +74,8 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
         const rest = { row: item, rowid, seq: -1, index: -1, _index: -1, $index: -1, items: afterFullData, parent: null, level: 0, height: 0 }
         fullDataRowIdData[rowid] = rest
         fullAllDataRowIdData[rowid] = rest
-        afterFullData.push(item)
-        tableFullData.push(item)
+        afterFullData.unshift(item)
+        tableFullData.unshift(item)
       })
       // 刷新单元格合并
       mergeList.forEach((mergeItem: any) => {

@@ -358,12 +358,12 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     columnOpts,
     isDragColMove
   } = $xeTable
+  const { transform, seqMode } = treeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
   const rows: any[] = []
   tableData.forEach((row: any, $rowIndex: any) => {
     const trOn: any = {}
     let rowIndex = $rowIndex
-    const _rowIndex = $xeTable.getVTRowIndex(row)
     // 确保任何情况下 rowIndex 都精准指向真实 data 索引
     rowIndex = $xeTable.getRowIndex(row)
     // 当前行事件
@@ -383,8 +383,18 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     }
     const rowid = getRowid($xeTable, row)
     const rest = fullAllDataRowIdData[rowid]
-    const rowLevel = rest ? rest.level : 0
-    const seq = rest ? rest.seq : -1
+    let rowLevel = 0
+    let seq = -1
+    let _rowIndex = 0
+    if (rest) {
+      rowLevel = rest.level
+      if (treeConfig && transform && seqMode === 'increasing') {
+        seq = rest._index + 1
+      } else {
+        seq = rest.seq
+      }
+      _rowIndex = rest._index
+    }
     const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex }
     // 行是否被展开
     const isExpandRow = expandColumn && !!rowExpandedMaps[rowid]
@@ -416,7 +426,7 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
       'vxe-body--row',
       treeConfig ? `row--level-${rowLevel}` : '',
       {
-        'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
+        'row--stripe': stripe && (_rowIndex + 1) % 2 === 0,
         'is--new': isNewRow,
         'is--expand-row': isExpandRow,
         'is--expand-tree': isExpandTree,

@@ -46,7 +46,8 @@ export default {
       notType: 'サポートされていないファイルの種類 "{0}"',
       notExp: 'ご利用のブラウザはインポート/エクスポート機能を利用できません',
       impFields: 'インポートに失敗しました。フィールド名とデータ形式を確認してください',
-      treeNotImp: 'ツリーテーブルはインポートをサポートしていません'
+      treeNotImp: 'ツリーテーブルはインポートをサポートしていません',
+      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'データがありません',

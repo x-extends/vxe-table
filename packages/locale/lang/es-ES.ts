@@ -46,7 +46,8 @@ export default {
       notType: 'Tipos de archivo no compatibles "{0}"',
       notExp: 'El navegador no es compatible con la importación / exportación.',
       impFields: 'Error de importación, por favor revise que el nombre del campo y el formato de datos sean correctos.',
-      treeNotImp: 'La tabla de árbol no soporta importación.'
+      treeNotImp: 'La tabla de árbol no soporta importación.',
+      reqPlugin: 'Optional extension "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'No hay datos',

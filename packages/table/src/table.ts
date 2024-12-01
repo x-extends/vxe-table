@@ -873,7 +873,7 @@ export default {
       if (this.showFooter && !(this.footerMethod || this.footerData)) {
         warnLog('vxe.error.reqProp', ['footer-data | footer-method'])
       }
-      if (treeConfig && this.stripe) {
+      if (treeConfig && !treeOpts.transform && this.stripe) {
         warnLog('vxe.error.noTree', ['stripe'])
       }
       if (this.tooltipOpts.enabled) {
@@ -1059,7 +1059,7 @@ export default {
 
       $xeTable.$nextTick(() => {
         if (props.loading) {
-          if (!VxeUILoadingComponent) {
+          if (!VxeUILoadingComponent && !this.$scopedSlots.loading) {
             errLog('vxe.error.reqComp', ['vxe-loading'])
           }
         }
@@ -1360,8 +1360,13 @@ export default {
             value: currLoading,
             icon: loadingOpts.icon,
             text: loadingOpts.text
-          }
-        }, $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }, h))
+          },
+          scopedSlots: loadingSlot
+            ? {
+                default: () => $xeTable.callSlot(loadingSlot, { $table: $xeTable, $grid: $xeGrid, loading: currLoading }, h)
+              }
+            : {}
+        })
         : loadingSlot
           ? h('div', {
             class: ['vxe-loading--custom-wrapper', {

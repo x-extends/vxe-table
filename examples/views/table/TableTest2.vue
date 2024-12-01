@@ -1,5 +1,6 @@
 <template>
   <div>
+    <vxe-button @click="exportEvent">导出</vxe-button>
     <vxe-toolbar ref="toolbarRef" custom export import></vxe-toolbar>
 
     <vxe-table
@@ -123,6 +124,14 @@ export default Vue.extend({
     },
     rowDragendEvent (params: any) {
       console.log(params)
+    },
+    exportEvent () {
+      const $table = this.$refs.tableRef as VxeTableInstance
+      if ($table) {
+        $table.openExport({
+          types: ['xlsx', 'pdf', 'fff']
+        })
+      }
     }
   },
   created () {

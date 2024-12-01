@@ -46,7 +46,8 @@ export default {
       notType: 'Nem támogatott "{0}" fájltípus',
       notExp: 'Ez a böngésző nem támogatja az importálási/exportálási funkciókat',
       impFields: 'Az importálás nem sikerült, ellenőrizze, hogy a mezőnév és az adatformátum helyes-e',
-      treeNotImp: 'A fatáblák nem támogatják az importálást'
+      treeNotImp: 'A fatáblák nem támogatják az importálást',
+      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'Még nincsenek adatok',
