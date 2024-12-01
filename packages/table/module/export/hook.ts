@@ -1151,8 +1151,11 @@ hooks.add('tableExportModule', {
 
         // 检查类型，如果为自定义导出，则不需要校验类型
         if (!opts.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
+          errLog('vxe.error.notType', [type])
           if (process.env.VUE_APP_VXE_ENV === 'development') {
-            errLog('vxe.error.notType', [type])
+            if (['xlsx', 'pdf'].includes(type)) {
+              warnLog('vxe.error.reqPlugin', [4, 'plugin-export-xlsx'])
+            }
           }
           const params = { status: false }
           return Promise.reject(params)

@@ -46,7 +46,8 @@ export default {
       notType: '不支持的文件类型 "{0}"',
       notExp: '该浏览器不支持导入/导出功能',
       impFields: '导入失败，请检查字段名和数据格式是否正确',
-      treeNotImp: '树表格不支持导入'
+      treeNotImp: '树表格不支持导入',
+      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'لا توجد بيانات حتى الآن',

@@ -23,7 +23,7 @@
       <vxe-column field="address" title="Address" show-overflow></vxe-column>
 
       <template #loading>
-        <div>加载中。。。</div>
+        <div>加载中。。。。。。</div>
       </template>
     </vxe-table>
   </div>

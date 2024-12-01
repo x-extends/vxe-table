@@ -1,5 +1,6 @@
 <template>
   <div>
+    <vxe-button @click="exportEvent">导出</vxe-button>
     <vxe-toolbar ref="toolbarRef" custom export import></vxe-toolbar>
 
     <vxe-table
@@ -162,6 +163,15 @@ const rowDragoverEvent = (params: any) => {
 }
 const rowDragendEvent = (params: any) => {
   console.log(params)
+}
+
+const exportEvent = () => {
+  const $table = tableRef.value
+  if ($table) {
+    $table.openExport({
+      types: ['xlsx', 'pdf', 'fff']
+    })
+  }
 }
 
 nextTick(() => {

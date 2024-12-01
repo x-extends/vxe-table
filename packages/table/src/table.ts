@@ -8241,7 +8241,7 @@ export default defineComponent({
           if (treeConfig && (treeOpts.showLine || treeOpts.line) && (!(props.rowKey || rowOpts.useKey) || !showOverflow)) {
             warnLog('vxe.error.reqProp', ['row-config.useKey | show-overflow'])
           }
-          if (treeConfig && props.stripe) {
+          if (treeConfig && !treeOpts.transform && props.stripe) {
             warnLog('vxe.error.noTree', ['stripe'])
           }
           if (props.showFooter && !(props.footerMethod || props.footerData)) {
@@ -8432,7 +8432,7 @@ export default defineComponent({
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       nextTick(() => {
         if (props.loading) {
-          if (!VxeUILoadingComponent) {
+          if (!VxeUILoadingComponent && !slots.loading) {
             errLog('vxe.error.reqComp', ['vxe-loading'])
           }
         }

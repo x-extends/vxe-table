@@ -394,7 +394,7 @@ export default defineComponent({
       const editOpts = computeEditOpts.value
       const rowOpts = computeRowOpts.value
       const columnOpts = computeColumnOpts.value
-      const { transform } = treeOpts
+      const { transform, seqMode } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       const rows: any[] = []
       tableData.forEach((row: any, $rowIndex: any) => {
@@ -424,7 +424,11 @@ export default defineComponent({
         let _rowIndex = 0
         if (rest) {
           rowLevel = rest.level
-          seq = rest.seq
+          if (treeConfig && transform && seqMode === 'increasing') {
+            seq = rest._index + 1
+          } else {
+            seq = rest.seq
+          }
           _rowIndex = rest._index
         }
         const params = { $table: $xeTable, seq, rowid, fixed: fixedType, type: renderType, level: rowLevel, row, rowIndex, $rowIndex, _rowIndex }
@@ -433,7 +437,6 @@ export default defineComponent({
         // 树节点是否被展开
         let isExpandTree = false
         let rowChildren = []
-        // 处理新增状态
         let isNewRow = false
         if (editConfig) {
           isNewRow = $xeTable.isInsertByRow(row)
@@ -452,7 +455,7 @@ export default defineComponent({
           'vxe-body--row',
           treeConfig ? `row--level-${rowLevel}` : '',
           {
-            'row--stripe': stripe && ($xeTable.getVTRowIndex(row) + 1) % 2 === 0,
+            'row--stripe': stripe && (_rowIndex + 1) % 2 === 0,
             'is--new': isNewRow,
             'is--expand-row': isExpandRow,
             'is--expand-tree': isExpandTree,
