@@ -320,7 +320,7 @@ hooks.add('tableExportModule', {
       return XEUtils.isBoolean(cellValue) ? (cellValue ? 'TRUE' : 'FALSE') : cellValue
     }
 
-    const getLabelData = (opts: any, columns: any[], datas: any[]) => {
+    const getBodyLabelData = (opts: any, columns: any[], datas: any[]) => {
       const { isAllExpand, mode } = opts
       const { treeConfig } = props
       const radioOpts = computeRadioOpts.value
@@ -349,7 +349,7 @@ hooks.add('tableExportModule', {
             columns.forEach((column, $columnIndex) => {
               let cellValue: string | number | boolean = ''
               const renderOpts = column.editRender || column.cellRender
-              let bodyExportMethod = column.exportMethod
+              let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
                 const compConf = renderer.get(renderOpts.name)
                 if (compConf) {
@@ -410,15 +410,15 @@ hooks.add('tableExportModule', {
         columns.forEach((column, $columnIndex) => {
           let cellValue: string | number | boolean = ''
           const renderOpts = column.editRender || column.cellRender
-          let exportLabelMethod = column.exportMethod
-          if (!exportLabelMethod && renderOpts && renderOpts.name) {
+          let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
+          if (!bodyExportMethod && renderOpts && renderOpts.name) {
             const compConf = renderer.get(renderOpts.name)
             if (compConf) {
-              exportLabelMethod = compConf.exportMethod
+              bodyExportMethod = compConf.exportMethod
             }
           }
-          if (exportLabelMethod) {
-            cellValue = exportLabelMethod({ $table: $xeTable, row, column, options: opts })
+          if (bodyExportMethod) {
+            cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
           } else {
             switch (column.type) {
               case 'seq': {
@@ -465,7 +465,7 @@ hooks.add('tableExportModule', {
       if (dataFilterMethod) {
         datas = datas.filter((row: any, index: any) => dataFilterMethod({ row, $rowIndex: index }))
       }
-      return getLabelData(opts, columns, datas)
+      return getBodyLabelData(opts, columns, datas)
     }
 
     const getFooterCellValue = (opts: any, row: any, column: any) => {
