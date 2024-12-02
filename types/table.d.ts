@@ -495,11 +495,22 @@ export declare class VxeTable extends VXETableComponent {
   setColumnWidth(column: ColumnInfo | string, width: number | string): Promise<any>;
   getColumnWidth(column: ColumnInfo | string): number;
   /**
-   * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
-   * 如果已关联工具栏，则会同步更新
-   * @param options 可选参数
+   * 已废弃，被 resetCustom 替换
+   * @deprecated
    */
   resetColumn(options: boolean | {
+    visible?: boolean
+    resizable?: boolean
+    fixed?: boolean
+    order?: boolean
+   }): Promise<any>;
+
+  /**
+    * 手动重置列的显示隐藏、列宽拖动的状态；如果为 true 则重置所有状态
+    * 如果已关联工具栏，则会同步更新
+    * @param options 可选参数
+    */
+  resetCustom(options: boolean | {
     visible?: boolean
     resizable?: boolean
     fixed?: boolean

@@ -330,6 +330,9 @@ export function rowToVisible ($xetable, row) {
 export function colToVisible ($xetable, column) {
   const { tableBody } = $xetable.$refs
   const bodyElem = tableBody ? tableBody.$el : null
+  if (column && column.fixed) {
+    return Promise.resolve()
+  }
   if (bodyElem) {
     const tdElem = bodyElem.querySelector(`.${column.id}`)
     if (tdElem) {

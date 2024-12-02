@@ -430,14 +430,14 @@ const Methods = {
     if (keepSource) {
       this.cacheSourceMap(fullData)
     }
-    if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
-      if (sYLoad) {
-        if (!(this.height || this.maxHeight)) {
-          errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
-        }
-        if (!this.showOverflow) {
-          warnLog('vxe.error.reqProp', ['table.show-overflow'])
-        }
+    if (sYLoad) {
+      if (!(this.height || this.maxHeight)) {
+        errLog('vxe.error.reqProp', ['table.height | table.max-height | table.scroll-y={enabled: false}'])
+      }
+      if (!this.showOverflow) {
+        errLog('vxe.error.reqProp', ['table.show-overflow'])
+      }
+      if (process.env.VUE_APP_VXE_TABLE_ENV === 'development') {
         if (this.spanMethod) {
           warnLog('vxe.error.scrollErrProp', ['table.span-method'])
         }
@@ -1657,7 +1657,7 @@ const Methods = {
    * 如果为 true 则重置所有状态
    * 如果已关联工具栏，则会同步更新
    */
-  resetColumn (options) {
+  resetCustom (options) {
     const { collectColumn, customOpts } = this
     const { checkMethod } = customOpts
     const opts = Object.assign({
@@ -1683,6 +1683,10 @@ const Methods = {
     })
     this.saveCustomStore('reset')
     return this.handleCustom()
+  },
+  resetColumn (options) {
+    warnLog('vxe.error.delFunc', ['resetColumn', 'resetCustom'])
+    return this.resetCustom(options)
   },
   handleCustom () {
     const { mouseConfig } = this
@@ -4736,7 +4740,7 @@ const Methods = {
     const hasChildField = treeOpts.hasChild || treeOpts.hasChildField
     const rowid = getRowid(this, row)
     if (lazy && row[hasChildField] && !treeExpandLazyLoadedMaps[rowid]) {
-      this.clearTreeExpandLoaded(row).then(() => {
+      return this.clearTreeExpandLoaded(row).then(() => {
         return this.handleAsyncTreeExpandChilds(row)
       }).then(() => {
         if (transform) {
