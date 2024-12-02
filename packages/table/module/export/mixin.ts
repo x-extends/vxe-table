@@ -66,7 +66,7 @@ function toBooleanValue (cellValue: any) {
   return XEUtils.isBoolean(cellValue) ? (cellValue ? 'TRUE' : 'FALSE') : cellValue
 }
 
-function getLabelData ($xetable: any, opts: any, columns: any[], datas: any[]) {
+function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[]) {
   const { isAllExpand, mode } = opts
   const { treeConfig, treeOpts, radioOpts, checkboxOpts, columnOpts } = $xetable
   const childrenField = treeOpts.children || treeOpts.childrenField
@@ -152,15 +152,18 @@ function getLabelData ($xetable: any, opts: any, columns: any[], datas: any[]) {
     columns.forEach((column, $columnIndex) => {
       let cellValue = ''
       const renderOpts = column.editRender || column.cellRender
-      let exportLabelMethod = column.exportMethod
-      if (!exportLabelMethod && renderOpts && renderOpts.name) {
+      let bodyExportMethod = column.exportMethod
+      if (!bodyExportMethod && renderOpts && renderOpts.name) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
-          exportLabelMethod = compConf.tableExportMethod || compConf.exportMethod || (compConf as any).cellExportMethod
+          bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod || (compConf as any).cellExportMethod
         }
       }
-      if (exportLabelMethod) {
-        cellValue = exportLabelMethod({ $table: $xetable, row, column, options: opts })
+      if (!bodyExportMethod) {
+        bodyExportMethod = columnOpts.exportMethod
+      }
+      if (bodyExportMethod) {
+        cellValue = bodyExportMethod({ $table: $xetable, row, column, options: opts })
       } else {
         switch (column.type) {
           case 'seq': {
@@ -207,7 +210,7 @@ function getExportData ($xetable: any, opts: any) {
   if (dataFilterMethod) {
     datas = datas.filter((row: any, index: any) => dataFilterMethod({ row, $rowIndex: index }))
   }
-  return getLabelData($xetable, opts, columns, datas)
+  return getBodyLabelData($xetable, opts, columns, datas)
 }
 
 function getBooleanValue (cellValue: any) {
