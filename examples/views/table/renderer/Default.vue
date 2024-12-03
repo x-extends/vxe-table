@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      默认的渲染 <table-column-api-link prop="cell-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      默认的渲染 <table-column-api-link prop="cell-render"/>，查看 <a class="link" href="https://gitee.com/x-extends/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderHeader (renderOpts, params: { column, columnIndex, columnIndex, $rowIndex, $table }) 表头单元格显示内容<br>
       renderDefault (renderOpts, params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }) 单元格默认显示内容<br>
@@ -102,7 +102,7 @@ export default defineComponent({
               { id: 10007, name: 'Test7', role: 'Test', sex: 'Man', age: 29, address: 'Shenzhen' },
               { id: 10008, name: 'Test8', role: 'Develop', sex: 'Man', age: 35, address: 'Shenzhen' }
             ])
-            
+
             return {
               tableData,
               linkEvent

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      工具栏-左侧按钮 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      工具栏-左侧按钮 <grid-api-link prop="buttonRender"/>，查看 <a class="link" href="https://gitee.com/x-extends/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderToolbarButton (renderOpts: any, params: { button, $table }) 左侧按钮<br>
       renderToolbarTool (renderOpts: any, params: { tool, $table }) 右侧工具<br>

@@ -29,7 +29,7 @@
   "typings": "types/index.d.ts",
   "dependencies": {
     "dom-zindex": "^1.0.6",
-    "xe-utils": "^3.5.31"
+    "xe-utils": "^3.5.32"
   },
   "devDependencies": {
     "@types/resize-observer-browser": "^0.1.11",

@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      表单-项渲染 <grid-api-link prop="itemRender"/>，查看 <a class="link" href="https://gitee.com/x-extends/vxe-table/tree/master/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderItemTitle (renderOpts: any, params: { data, item, property, $form }) 表单项标题<br>
       renderItemContent (renderOpts: any, params: { data, item, property, $form }) 表单项内容<br>
