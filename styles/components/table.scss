@@ -1112,6 +1112,16 @@
       height: 100%;
       background-color: var(--vxe-ui-table-resizable-drag-line-color);
     }
+    .vxe-table--resizable-number-tip {
+      position: absolute;
+      left: 0;
+      top: 1em;
+      padding: 0.25em 0.25em;
+      font-size: 12px;
+      border-radius: var(--vxe-ui-border-radius);
+      color: #ffffff;
+      background-color: var(--vxe-ui-table-resizable-drag-line-color);
+    }
   }
 
   /*边框线*/

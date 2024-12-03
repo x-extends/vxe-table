@@ -374,6 +374,7 @@ export default defineComponent({
     const refLeftContainer = ref() as Ref<HTMLDivElement>
     const refRightContainer = ref() as Ref<HTMLDivElement>
     const refCellResizeBar = ref() as Ref<HTMLDivElement>
+    const refCellResizeTip = ref() as Ref<HTMLDivElement>
     const refEmptyPlaceholder = ref() as Ref<HTMLDivElement>
 
     const refDragTipElem = ref<HTMLDivElement>()
@@ -695,6 +696,7 @@ export default defineComponent({
       refLeftContainer,
       refRightContainer,
       refCellResizeBar,
+      refCellResizeTip,
       refScrollXVirtualElem,
       refScrollYVirtualElem,
       refScrollXHandleElem,
@@ -7771,6 +7773,7 @@ export default defineComponent({
       const isMenu = computeIsMenu.value
       const currLoading = reactData._isLoading || loading
       const virtualScrollBars = computeVirtualScrollBars.value
+      const resizableOpts = computeResizableOpts.value
       const isArea = mouseConfig && mouseOpts.area
       return h('div', {
         ref: refElem,
@@ -7925,7 +7928,14 @@ export default defineComponent({
                 'padding-bottom': `${scrollbarHeight}px`
               }
             : null
-        }),
+        }, resizableOpts.showDragTip
+          ? [
+              h('div', {
+                ref: refCellResizeTip,
+                class: 'vxe-table--resizable-number-tip'
+              }, '23432px')
+            ]
+          : []),
         /**
          * 加载中
          */

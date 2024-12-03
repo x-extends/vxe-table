@@ -26,8 +26,8 @@ export default defineComponent({
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
-    const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar } = $xeTable.getRefMaps()
-    const { computeColumnOpts } = $xeTable.getComputeMaps()
+    const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar, refCellResizeTip } = $xeTable.getRefMaps()
+    const { computeColumnOpts, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
@@ -46,10 +46,14 @@ export default defineComponent({
     const resizeMousedown = (evnt: MouseEvent, params: any) => {
       const { column } = params
       const { fixedType } = props
+      const { visibleColumn } = tableInternalData
+      const resizableOpts = computeResizableOpts.value
       const tableBody = refTableBody.value
+      const tableEl = tableRefElem.value
       const leftContainerElem = refLeftContainer.value
       const rightContainerElem = refRightContainer.value
       const resizeBarElem = refCellResizeBar.value
+      const resizeTipElem = refCellResizeTip.value
       const { clientX: dragClientX } = evnt
       const wrapperElem = refElem.value
       const dragBtnElem = evnt.target as HTMLDivElement
@@ -66,7 +70,6 @@ export default defineComponent({
       const domMouseup = document.onmouseup
       const isLeftFixed = fixedType === 'left'
       const isRightFixed = fixedType === 'right'
-      const tableEl = tableRefElem.value
 
       // 计算左右侧固定列偏移量
       let fixedOffsetWidth = 0
@@ -105,7 +108,24 @@ export default defineComponent({
           // left = Math.min(left, tableBodyElem.clientWidth + tableBodyElem.scrollLeft - 40)
         }
         dragLeft = Math.max(left, dragMinLeft)
-        resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
+        const resizeBarLeft = dragLeft - scrollLeft
+        resizeBarElem.style.left = `${resizeBarLeft}px`
+        if (resizableOpts.showDragTip && resizeTipElem) {
+          const tableWidth = tableEl.clientWidth
+          const wrapperRect = wrapperElem.getBoundingClientRect()
+          const resizeBarWidth = resizeBarElem.clientWidth
+          const resizeTipWidth = resizeTipElem.clientWidth
+          const resizeTipHeight = resizeTipElem.clientHeight
+          let resizeTipLeft = -resizeTipWidth
+          if (resizeBarLeft < resizeTipWidth + resizeBarWidth) {
+            resizeTipLeft = resizeTipWidth + resizeBarWidth - resizeBarLeft
+          } else if (resizeBarLeft > tableWidth) {
+            resizeTipLeft += tableWidth - resizeBarLeft
+          }
+          resizeTipElem.style.left = `${resizeTipLeft}px`
+          resizeTipElem.style.top = `${Math.min(tableEl.clientHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
+          resizeTipElem.textContent = `${column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)}px`
+        }
       }
 
       tableReactData._isResize = true
@@ -117,6 +137,15 @@ export default defineComponent({
         document.onmouseup = domMouseup
         const resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
         column.resizeWidth = resizeWidth
+        if (resizableOpts.dragMode === 'fixed') {
+          visibleColumn.forEach(item => {
+            if (item.id !== column.id) {
+              if (!item.resizeWidth) {
+                item.resizeWidth = item.renderWidth
+              }
+            }
+          })
+        }
         resizeBarElem.style.display = 'none'
         tableReactData._isResize = false
         tableInternalData._lastResizeTime = Date.now()

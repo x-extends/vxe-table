@@ -1,37 +1,41 @@
 <template>
-  <div style="height: 400px;overflow: hidden;">
-    <vxe-table
-      border
-      stripe
-      resizable
-      highlight-hover-row
-      height="100%"
-      :padding="false"
-      :loading="demo1.loading"
-      :checkbox-config="{labelField: 'id', highlight: true, range: true}"
-      :data="demo1.tableData">
-      <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
-      <vxe-column field="role" title="Role"></vxe-column>
-      <vxe-column field="name" title="Name" sortable></vxe-column>
-      <vxe-column field="age" title="Age" :filters="ageOptions" :filter-method="filterAgeMethod">
-        <template #filter="{ $panel, column }">
-          <vxe-input class="my-input" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" placeholder="按回车确认筛选" />
-        </template>
-      </vxe-column>
-      <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
-      <vxe-column field="address" title="Address" show-overflow></vxe-column>
+  <div>
+    <vxe-switch v-model="resizableConfig.dragMode" open-value="fixed" close-value="auto"></vxe-switch>
+    <div style="height: 400px;overflow: hidden;">
+      <vxe-table
+        border
+        stripe
+        resizable
+        highlight-hover-row
+        height="100%"
+        :padding="false"
+        :loading="demo1.loading"
+        :resizable-config="resizableConfig"
+        :checkbox-config="{labelField: 'id', highlight: true, range: true}"
+        :data="demo1.tableData">
+        <vxe-column type="seq" width="60"></vxe-column>
+        <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
+        <vxe-column field="role" title="Role"></vxe-column>
+        <vxe-column field="name" title="Name" sortable></vxe-column>
+        <vxe-column field="age" title="Age" :filters="ageOptions" :filter-method="filterAgeMethod">
+          <template #filter="{ $panel, column }">
+            <vxe-input class="my-input" v-for="(option, index) in column.filters" :key="index" v-model="option.data" @input="$panel.changeOption($event, !!option.data, option)" placeholder="按回车确认筛选" />
+          </template>
+        </vxe-column>
+        <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
+        <vxe-column field="address" title="Address" show-overflow></vxe-column>
 
-      <template #loading>
-        <div>加载中。。。。。。</div>
-      </template>
-    </vxe-table>
+        <template #loading>
+          <div>加载中。。。。。。</div>
+        </template>
+      </vxe-table>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref } from 'vue'
-import { VxeColumnPropTypes } from '../../../types'
+import { VxeColumnPropTypes, VxeTablePropTypes } from '../../../types'
 
 const ageOptions = ref<VxeColumnPropTypes.Filters>([
   { data: '' }
@@ -64,6 +68,10 @@ const demo1 = reactive({
     { label: '大于30岁', value: 30 },
     { label: '大于30岁', value: 30 }
   ]
+})
+
+const resizableConfig = reactive<VxeTablePropTypes.ResizableConfig>({
+  dragMode: 'fixed'
 })
 
 const formatterSex: VxeColumnPropTypes.Formatter = ({ cellValue }) => {

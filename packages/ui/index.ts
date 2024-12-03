@@ -39,6 +39,10 @@ VxeUI.setConfig({
     resizeConfig: {
       // refreshDelay: 250
     },
+    resizableConfig: {
+      dragMode: 'auto',
+      showDragTip: true
+    },
     radioConfig: {
       // trigger: 'default'
       strict: true
@@ -62,7 +66,7 @@ VxeUI.setConfig({
       autoPos: true,
       message: 'inline',
       msgMode: 'single',
-      theme: 'normal'
+      theme: 'beautify'
     },
     columnConfig: {
       maxFixedSize: 4
