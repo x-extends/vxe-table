@@ -269,14 +269,23 @@ export default {
       this.headerColumn = $xetable.isGroup ? convertHeaderColumnToRows(this.tableGroupColumn) : []
     },
     resizeMousedown (evnt: any, params: any) {
+      const $xeTable = this.$parent
+      const tableInternalData = $xeTable
+
       const { column } = params
-      const { $parent: $xetable, $el, fixedType } = this
-      const { tableBody, leftContainer, rightContainer, resizeBar: resizeBarElem } = $xetable.$refs
+      const { $parent: $xetable, fixedType } = this
+      const { visibleColumn } = tableInternalData
+      const { tableBody, leftContainer, rightContainer } = $xetable.$refs
+      const tableEl = $xeTable.$el as HTMLDivElement
+      const resizeBarElem = $xetable.$refs.resizeBar as HTMLDivElement
+      const resizeTipElem = $xetable.$refs.refCellResizeTip as HTMLDivElement
+      const wrapperElem = this.$el as HTMLDivElement
       const { target: dragBtnElem, clientX: dragClientX } = evnt
       const cell = params.cell = dragBtnElem.parentNode
+      const resizableOpts = $xeTable.computeResizableOpts
       let dragLeft = 0
       const tableBodyElem = tableBody.$el
-      const pos = getOffsetPos(dragBtnElem, $el)
+      const pos = getOffsetPos(dragBtnElem, tableEl)
       const dragBtnWidth = dragBtnElem.clientWidth
       const dragBtnOffsetWidth = Math.floor(dragBtnWidth / 2)
       const minInterval = getColReMinWidth(params) - dragBtnOffsetWidth // 列之间的最小间距
@@ -324,7 +333,24 @@ export default {
           // left = Math.min(left, tableBodyElem.clientWidth + tableBodyElem.scrollLeft - 40)
         }
         dragLeft = Math.max(left, dragMinLeft)
-        resizeBarElem.style.left = `${dragLeft - scrollLeft}px`
+        const resizeBarLeft = dragLeft - scrollLeft
+        resizeBarElem.style.left = `${resizeBarLeft}px`
+        if (resizableOpts.showDragTip && resizeTipElem) {
+          const tableWidth = tableEl.clientWidth
+          const wrapperRect = wrapperElem.getBoundingClientRect()
+          const resizeBarWidth = resizeBarElem.clientWidth
+          const resizeTipWidth = resizeTipElem.clientWidth
+          const resizeTipHeight = resizeTipElem.clientHeight
+          let resizeTipLeft = -resizeTipWidth
+          if (resizeBarLeft < resizeTipWidth + resizeBarWidth) {
+            resizeTipLeft = resizeTipWidth + resizeBarWidth - resizeBarLeft
+          } else if (resizeBarLeft > tableWidth) {
+            resizeTipLeft += tableWidth - resizeBarLeft
+          }
+          resizeTipElem.style.left = `${resizeTipLeft}px`
+          resizeTipElem.style.top = `${Math.min(tableEl.clientHeight - resizeTipHeight, Math.max(0, evnt.clientY - wrapperRect.y - resizeTipHeight / 2))}px`
+          resizeTipElem.textContent = `${column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)}px`
+        }
       }
 
       $xetable._isResize = true
@@ -336,6 +362,15 @@ export default {
         document.onmouseup = domMouseup
         const resizeWidth = column.renderWidth + (isRightFixed ? dragPosLeft - dragLeft : dragLeft - dragPosLeft)
         column.resizeWidth = resizeWidth
+        if (resizableOpts.dragMode === 'fixed') {
+          visibleColumn.forEach((item: any) => {
+            if (item.id !== column.id) {
+              if (!item.resizeWidth) {
+                item.resizeWidth = item.renderWidth
+              }
+            }
+          })
+        }
         resizeBarElem.style.display = 'none'
         $xetable._isResize = false
         $xetable._lastResizeTime = Date.now()

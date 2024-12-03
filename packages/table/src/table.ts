@@ -1170,6 +1170,7 @@ export default {
       rowOpts,
       checkboxOpts,
       loadingOpts,
+      resizableOpts,
       editRules
     } = $xeTable
     const { leftList, rightList } = columnStore
@@ -1348,7 +1349,14 @@ export default {
             }
           : {},
         ref: 'resizeBar'
-      }),
+      }, resizableOpts.showDragTip
+        ? [
+            h('div', {
+              ref: 'refCellResizeTip',
+              class: 'vxe-table--resizable-number-tip'
+            }, '23432px')
+          ]
+        : []),
       /**
        * 加载中
        */
