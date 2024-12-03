@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      默认的渲染 <table-column-api-link prop="cell-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      默认的渲染 <table-column-api-link prop="cell-render"/>，查看 <a class="link" href="https://gitee.com/x-extends/vxe-table/tree/v3/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderHeader (h, renderOpts, params: { column, columnIndex, columnIndex, $rowIndex, $table }) 表头单元格显示内容<br>
       renderDefault (h, renderOpts, params: { row, rowIndex, $rowIndex, column, columnIndex, $columnIndex, $table }) 单元格显示默认内容<br>

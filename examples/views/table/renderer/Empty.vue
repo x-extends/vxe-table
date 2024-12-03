@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      空内容渲染 <table-api-link prop="empty-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      空内容渲染 <table-api-link prop="empty-render"/>，查看 <a class="link" href="https://gitee.com/x-extends/vxe-table/tree/v3/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       renderTableEmptyView (h, renderOpts, params: { $table }) 空值时显示的内容<br>
     </p>

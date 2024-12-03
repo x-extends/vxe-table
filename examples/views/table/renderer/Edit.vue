@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="tip">
-      可编辑渲染 <table-column-api-link prop="edit-render"/>，查看 <a class="link" href="https://gitee.com/xuliangzhan_admin/vxe-table/tree/v3/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
+      可编辑渲染 <table-column-api-link prop="edit-render"/>，查看 <a class="link" href="https://gitee.com/x-extends/vxe-table/tree/v3/examples/plugins/table/renderer" target="_blank">示例的源码</a><span class="red">（具体请自行实现，该示例仅供参考）</span><br>
       配置参数：<br>
       autofocus 自动聚焦的类名<br>
       renderHeader (h, renderOpts, params: { column, columnIndex, columnIndex, $rowIndex, $table }) 表头单元格显示内容<br>
