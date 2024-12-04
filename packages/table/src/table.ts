@@ -5841,8 +5841,12 @@ export default defineComponent({
     const updateColDropOrigin = (column: VxeTableDefines.ColumnInfo) => {
       const el = refElem.value
       if (el) {
+        const colQuerys: string[] = []
+        XEUtils.eachTree([column], item => {
+          colQuerys.push(`[colid="${item.id}"]`)
+        })
         const clss = 'col--drag-origin'
-        XEUtils.arrayEach(el.querySelectorAll(`[colid="${column.id}"]`), (elem) => {
+        XEUtils.arrayEach(el.querySelectorAll(colQuerys.join(',')), (elem) => {
           addClass(elem, clss)
         })
       }
