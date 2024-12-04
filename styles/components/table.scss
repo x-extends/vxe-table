@@ -1281,7 +1281,9 @@
     width: 1px;
     background-color: var(--vxe-ui-font-primary-color);
   }
-  .vxe-header--column {
+  .vxe-header--column,
+  .vxe-body--column,
+  .vxe-footer--column {
     &.col--drag-origin {
       & > .vxe-cell {
         opacity: 0.5;

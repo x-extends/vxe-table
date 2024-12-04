@@ -400,8 +400,12 @@ const updateRowDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
 const updateColDropOrigin = ($xeTable: any, column: VxeTableDefines.ColumnInfo) => {
   const el = $xeTable.$el as HTMLElement
   if (el) {
+    const colQuerys: string[] = []
+    XEUtils.eachTree([column], item => {
+      colQuerys.push(`[colid="${item.id}"]`)
+    })
     const clss = 'col--drag-origin'
-    XEUtils.arrayEach(el.querySelectorAll(`[colid="${column.id}"]`), (elem) => {
+    XEUtils.arrayEach(el.querySelectorAll(colQuerys.join(',')), (elem) => {
       addClass(elem, clss)
     })
   }
