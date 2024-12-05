@@ -1078,7 +1078,7 @@ export default defineComponent({
       const isCustomVisible = isAllCustom || storageOpts.visible
       const isCustomFixed = isAllCustom || storageOpts.fixed
       const isCustomSort = isAllCustom || storageOpts.sort
-      if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+      if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
         if (!tableId) {
           errLog('vxe.error.reqProp', ['id'])
           return
@@ -1218,12 +1218,7 @@ export default defineComponent({
     }
 
     const calcCellWidth = () => {
-      const { tableData } = reactData
       const autoWidthColumnList = computeAutoWidthColumnList.value
-      if (!tableData.length || !autoWidthColumnList.length) {
-        reactData.isCalcColumn = false
-        return nextTick()
-      }
       reactData.isCalcColumn = true
       return nextTick().then(() => {
         const { fullColumnIdData } = internalData
@@ -2523,6 +2518,7 @@ export default defineComponent({
       const { editStore, scrollYLoad: oldScrollYLoad } = reactData
       const { scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop } = internalData
       const treeOpts = computeTreeOpts.value
+      const rowOpts = computeRowOpts.value
       const { transform } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       let treeData = []
@@ -2586,9 +2582,11 @@ export default defineComponent({
       }
       if (sYLoad) {
         if (showOverflow) {
-          const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
-          if (errColumn) {
-            errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+          if (!rowOpts.height) {
+            const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+            if (errColumn) {
+              errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+            }
           }
         }
 
@@ -2717,6 +2715,8 @@ export default defineComponent({
     }
 
     const parseColumns = () => {
+      const { showOverflow } = props
+      const rowOpts = computeRowOpts.value
       const leftList: VxeTableDefines.ColumnInfo[] = []
       const centerList: VxeTableDefines.ColumnInfo[] = []
       const rightList: VxeTableDefines.ColumnInfo[] = []
@@ -2781,6 +2781,14 @@ export default defineComponent({
       reactData.hasFixedColumn = leftList.length > 0 || rightList.length > 0
       Object.assign(columnStore, { leftList, centerList, rightList })
       if (scrollXLoad) {
+        if (showOverflow) {
+          if (!rowOpts.height) {
+            const errColumn = internalData.tableFullColumn.find(column => column.showOverflow === false)
+            if (errColumn) {
+              errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+            }
+          }
+        }
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           // if (props.showHeader && !props.showHeaderOverflow) {
           //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
@@ -3066,7 +3074,7 @@ export default defineComponent({
     }
 
     const scrollXEvent = (evnt: Event) => {
-      const { inFooterScroll, inBodyScroll } = internalData
+      const { inFooterScroll, inBodyScroll, lastScrollTop } = internalData
       if (inFooterScroll) {
         return
       }
@@ -3079,10 +3087,17 @@ export default defineComponent({
       const bodyElem = tableBody.$el as HTMLDivElement
       const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
       const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+      const yHandleEl = refScrollYHandleElem.value
       const wrapperEl = evnt.currentTarget as HTMLDivElement
-      const { scrollTop, scrollLeft } = wrapperEl
+      const { scrollLeft } = wrapperEl
+      const yBodyEl = yHandleEl || bodyElem
+      let scrollTop = 0
+      if (yBodyEl) {
+        scrollTop = yBodyEl.scrollTop
+      }
       const isRollX = true
-      const isRollY = false
+      const isRollY = scrollTop !== lastScrollTop
+
       internalData.inVirtualScroll = true
       setScrollLeft(bodyElem, scrollLeft)
       setScrollLeft(headerElem, scrollLeft)
@@ -3095,7 +3110,7 @@ export default defineComponent({
     }
 
     const scrollYEvent = (evnt: Event) => {
-      const { inFooterScroll, inBodyScroll } = internalData
+      const { inFooterScroll, inBodyScroll, lastScrollLeft } = internalData
       if (inFooterScroll) {
         return
       }
@@ -3109,9 +3124,15 @@ export default defineComponent({
       const bodyElem = tableBody.$el as HTMLDivElement
       const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
       const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
+      const xHandleEl = refScrollXHandleElem.value
       const wrapperEl = evnt.currentTarget as HTMLDivElement
-      const { scrollTop, scrollLeft } = wrapperEl
-      const isRollX = false
+      const { scrollTop } = wrapperEl
+      const xBodyEl = xHandleEl || bodyElem
+      let scrollLeft = 0
+      if (xBodyEl) {
+        scrollLeft = xBodyEl.scrollLeft
+      }
+      const isRollX = scrollLeft !== lastScrollLeft
       const isRollY = true
 
       internalData.inVirtualScroll = true
@@ -4957,7 +4978,7 @@ export default defineComponent({
               nextTick(() => {
                 resolve()
               })
-            }, 50)
+            }, 30)
           })
         }
         return nextTick()
@@ -5574,33 +5595,37 @@ export default defineComponent({
                 $xeTable.handleClearEdit(evnt)
                 // 如果配置了选中功能，则为选中状态
                 if (mouseOpts.selected) {
-                  nextTick(() => $xeTable.handleSelected(params, evnt))
+                  nextTick(() => {
+                    $xeTable.handleSelected(params, evnt)
+                  })
                 }
               }
             } else {
               // 如果是激活状态，退则出到上一行/下一行
               if (selected.row || actived.row) {
-                const targetArgs = selected.row ? selected.args : actived.args
+                const activeParams = selected.row ? selected.args : actived.args
                 if (hasShiftKey) {
                   if (keyboardOpts.enterToTab) {
-                    $xeTable.moveTabSelected(targetArgs, hasShiftKey, evnt)
+                    $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
                   } else {
-                    $xeTable.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
+                    $xeTable.moveSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
                   }
                 } else {
                   if (keyboardOpts.enterToTab) {
-                    $xeTable.moveTabSelected(targetArgs, hasShiftKey, evnt)
+                    $xeTable.moveTabSelected(activeParams, hasShiftKey, evnt)
                   } else {
-                    const _rowIndex = $xeTable.getVTRowIndex(selected.row)
+                    const activeRow = selected.row || actived.row
+                    const activeColumn = selected.column || actived.column
+                    const _rowIndex = $xeTable.getVTRowIndex(activeRow)
                     const etrParams = {
-                      row: selected.row,
-                      rowIndex: $xeTable.getRowIndex(selected.row),
-                      $rowIndex: $xeTable.getVMRowIndex(selected.row),
+                      row: activeRow,
+                      rowIndex: $xeTable.getRowIndex(activeRow),
+                      $rowIndex: $xeTable.getVMRowIndex(activeRow),
                       _rowIndex,
-                      column: selected.column,
-                      columnIndex: $xeTable.getColumnIndex(selected.column),
-                      $columnIndex: $xeTable.getVMColumnIndex(selected.column),
-                      _columnIndex: $xeTable.getVTColumnIndex(selected.column),
+                      column: activeColumn,
+                      columnIndex: $xeTable.getColumnIndex(activeColumn),
+                      $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                      _columnIndex: $xeTable.getVTColumnIndex(activeColumn),
                       $table: $xeTable
                     }
                     if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
@@ -5608,14 +5633,14 @@ export default defineComponent({
                       if (isLastEnterAppendRow) {
                         if (_rowIndex >= afterFullData.length - 1) {
                           $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
-                            $xeTable.scrollToRow(newRow, selected.column)
-                            $xeTable.setSelectCell(newRow, selected.column)
+                            $xeTable.scrollToRow(newRow, activeColumn)
+                            $xeTable.handleSelected({ ...activeParams, row: newRow }, evnt)
                           })
                           $xeTable.dispatchEvent('enter-append-row', etrParams, evnt)
                           return
                         }
                       }
-                      $xeTable.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
+                      $xeTable.moveSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                       if (enterMethod) {
                         enterMethod(etrParams)
                       }
@@ -6234,6 +6259,7 @@ export default defineComponent({
         Object.assign(reactData.columnStore, { resizeList, pxList, pxMinList, autoMinList, scaleList, scaleMinList, autoList, remainList })
       },
       saveCustomStore (type) {
+        const { customConfig } = props
         const tableId = computeTableId.value
         const customOpts = computeCustomOpts.value
         const { updateStore, storage } = customOpts
@@ -6243,7 +6269,7 @@ export default defineComponent({
         const isCustomVisible = isAllCustom || storageOpts.visible
         const isCustomFixed = isAllCustom || storageOpts.fixed
         const isCustomSort = isAllCustom || storageOpts.sort
-        if (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort) {
+        if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
           if (!tableId) {
             errLog('vxe.error.reqProp', ['id'])
             return nextTick()
@@ -7133,7 +7159,6 @@ export default defineComponent({
         const trEl = evnt.currentTarget as HTMLElement
         const rowid = trEl.getAttribute('rowid')
         const row = $xeTable.getRowById(rowid)
-        console.log(rowid)
         if (row) {
           evnt.preventDefault()
           evnt.preventDefault()
@@ -7370,7 +7395,8 @@ export default defineComponent({
           }
           tablePrivateMethods.checkScrolling()
           internalData.lastScrollLeft = scrollLeft
-        } else {
+        }
+        if (isRollY) {
           const yThreshold = computeScrollYThreshold.value
           isTop = scrollTop <= 0
           if (!isTop) {
@@ -8322,8 +8348,10 @@ export default defineComponent({
           const customOpts = computeCustomOpts.value
           const mouseOpts = computeMouseOpts.value
           const rowOpts = computeRowOpts.value
-          if (!props.id && props.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-            errLog('vxe.error.reqProp', ['id'])
+          if (!props.id) {
+            if ((props.customConfig ? isEnableConf(customOpts) : customOpts.enabled) && customOpts.storage) {
+              errLog('vxe.error.reqProp', ['id'])
+            }
           }
           if (props.treeConfig && checkboxOpts.range) {
             errLog('vxe.error.noTree', ['checkbox-config.range'])

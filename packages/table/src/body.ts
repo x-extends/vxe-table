@@ -164,7 +164,8 @@ export default defineComponent({
       const showEllipsis = cellOverflow === 'ellipsis'
       const showTitle = cellOverflow === 'title'
       const showTooltip = cellOverflow === true || cellOverflow === 'tooltip'
-      const hasEllipsis = showTitle || showTooltip || showEllipsis
+      // 如果表格加上 showOverflow 则不再支持列单独设置
+      const hasEllipsis = allColumnOverflow || showTitle || showTooltip || showEllipsis
       let isDirty
       const tdOns: any = {}
       const rest = fullAllDataRowIdData[rowid]
