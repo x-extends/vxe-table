@@ -3388,9 +3388,13 @@ const Methods = {
    * 全局键盘事件
    */
   handleGlobalKeydownEvent (evnt: any) {
+    const $xeTable = this
+    const internalData = $xeTable
+
     // 该行为只对当前激活的表格有效
     if (this.isActivated) {
       this.preventEvent(evnt, 'event.keydown', null, () => {
+        const { afterFullData } = internalData
         const { filterStore, isCtxMenu, ctxMenuStore, editStore, editOpts, editConfig, mouseConfig, mouseOpts, keyboardConfig, keyboardOpts, treeConfig, treeOpts, highlightCurrentRow, currentRow, bodyCtxMenu, rowOpts } = this
         const { selected, actived } = editStore
         const { keyCode } = evnt
@@ -3456,6 +3460,7 @@ const Methods = {
             this._keyCtx = false
           }, 1000)
         } else if (isEnter && !hasAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
+          const { isLastEnterAppendRow, beforeEnterMethod, enterMethod } = keyboardOpts
           // 退出选中
           if (hasCtrlKey) {
             // 如果是激活编辑状态，则取消编辑
@@ -3481,7 +3486,35 @@ const Methods = {
                 if (keyboardOpts.enterToTab) {
                   this.moveTabSelected(targetArgs, hasShiftKey, evnt)
                 } else {
-                  this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
+                  const _rowIndex = $xeTable.getVTRowIndex(selected.row)
+                  const etrParams = {
+                    row: selected.row,
+                    rowIndex: $xeTable.getRowIndex(selected.row),
+                    $rowIndex: $xeTable.getVMRowIndex(selected.row),
+                    _rowIndex,
+                    column: selected.column,
+                    columnIndex: $xeTable.getColumnIndex(selected.column),
+                    $columnIndex: $xeTable.getVMColumnIndex(selected.column),
+                    _columnIndex: $xeTable.getVTColumnIndex(selected.column),
+                    $table: $xeTable
+                  }
+                  if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
+                    // 最后一行按下回车键，自动追加一行
+                    if (isLastEnterAppendRow) {
+                      if (_rowIndex >= afterFullData.length - 1) {
+                        $xeTable.insertAt({}, -1).then(({ row: newRow }: any) => {
+                          $xeTable.scrollToRow(newRow, selected.column)
+                          $xeTable.setSelectCell(newRow, selected.column)
+                        })
+                        $xeTable.dispatchEvent('enter-append-row', etrParams, evnt)
+                        return
+                      }
+                    }
+                    this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
+                    if (enterMethod) {
+                      enterMethod(etrParams)
+                    }
+                  }
                 }
               }
             } else if (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
@@ -3540,7 +3573,7 @@ const Methods = {
           }
         } else if (hasBackspaceKey && keyboardConfig && keyboardOpts.isBack && isEnableConf(editConfig) && (selected.row || selected.column)) {
           if (!isEditStatus) {
-            const { backMethod } = keyboardOpts
+            const { editMode, backMethod } = keyboardOpts
             // 如果是删除键
             if (keyboardOpts.isDel && isEnableConf(editConfig) && (selected.row || selected.column)) {
               const params = {
@@ -3556,7 +3589,10 @@ const Methods = {
                 if (backMethod) {
                   backMethod(params)
                 } else {
-                  setCellValue(selected.row, selected.column, null)
+                  // 追加方式与覆盖式
+                  if (editMode !== 'insert') {
+                    setCellValue(selected.row, selected.column, null)
+                  }
                   this.handleEdit(selected.args, evnt)
                 }
                 this.emitEvent('cell-backspace-value', params, evnt)
