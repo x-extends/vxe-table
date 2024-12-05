@@ -75,6 +75,7 @@ VxeUI.setConfig({
     //   visibleMethod () {}
     // },
     customConfig: {
+      // enabled: false,
       allowVisible: true,
       allowResizable: true,
       allowFixed: true,

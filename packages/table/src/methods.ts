@@ -666,8 +666,11 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadTableData (datas: any) {
+    const $xeTable = this
+
     const { keepSource, showOverflow, treeConfig, treeOpts, editStore, scrollYStore, scrollXStore, lastScrollLeft, lastScrollTop, scrollYLoad: oldScrollYLoad, sXOpts, sYOpts } = this
     const childrenField = treeOpts.children || treeOpts.childrenField
+    const rowOpts = $xeTable.computeRowOpts
     let treeData = []
     let fullData = datas ? datas.slice(0) : []
     if (treeConfig) {
@@ -729,9 +732,11 @@ const Methods = {
     }
     if (sYLoad) {
       if (showOverflow) {
-        const errColumn = this.tableFullColumn.find((column: any) => column.showOverflow === false)
-        if (errColumn) {
-          errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+        if (!rowOpts.height) {
+          const errColumn = this.tableFullColumn.find((column: any) => column.showOverflow === false)
+          if (errColumn) {
+            errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+          }
         }
       }
 
@@ -2257,7 +2262,7 @@ const Methods = {
     const isCustomVisible = isAllCustom || storageOpts.visible
     const isCustomFixed = isAllCustom || storageOpts.fixed
     const isCustomSort = isAllCustom || storageOpts.sort
-    if (customConfig && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
+    if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return
@@ -2354,7 +2359,12 @@ const Methods = {
     return storeData
   },
   saveCustomStore (type: any) {
-    const { tableId, customOpts } = this
+    const $xeTable = this
+    const props = $xeTable
+
+    const { customConfig } = props
+    const tableId = $xeTable.computeTableId
+    const customOpts = $xeTable.computeCustomOpts
     const { updateStore, storage } = customOpts
     const isAllCustom = storage === true
     const storageOpts = isAllCustom ? {} : Object.assign({}, storage || {})
@@ -2362,7 +2372,7 @@ const Methods = {
     const isCustomVisible = isAllCustom || storageOpts.visible
     const isCustomFixed = isAllCustom || storageOpts.fixed
     const isCustomSort = isAllCustom || storageOpts.sort
-    if (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort) {
+    if ((customConfig ? isEnableConf(customOpts) : customOpts.enabled) && (isCustomResizable || isCustomVisible || isCustomFixed || isCustomSort)) {
       if (!tableId) {
         errLog('vxe.error.reqProp', ['id'])
         return this.$nextTick()
@@ -2415,6 +2425,12 @@ const Methods = {
    * 将固定的列左边、右边分别靠边
    */
   parseColumns () {
+    const $xeTable = this
+    const props = $xeTable
+    const internalData = $xeTable
+
+    const { showOverflow } = props
+    const rowOpts = $xeTable.computeRowOpts
     const leftList: any[] = []
     const centerList: any[] = []
     const rightList: any[] = []
@@ -2477,6 +2493,14 @@ const Methods = {
     this.hasFixedColumn = leftList.length > 0 || rightList.length > 0
     Object.assign(columnStore, { leftList, centerList, rightList })
     if (scrollXLoad) {
+      if (showOverflow) {
+        if (!rowOpts.height) {
+          const errColumn = internalData.tableFullColumn.find((column: any) => column.showOverflow === false)
+          if (errColumn) {
+            errLog('vxe.error.errProp', [`column[field="${errColumn.field}"].show-overflow=false`, 'show-overflow=true'])
+          }
+        }
+      }
       if (process.env.VUE_APP_VXE_ENV === 'development') {
         // if (this.showHeader && !this.showHeaderOverflow) {
         //   warnLog('vxe.error.reqProp', ['show-header-overflow'])
@@ -2619,11 +2643,7 @@ const Methods = {
   calcCellWidth () {
     const $xeTable = this
 
-    const { autoWidthColumnList, tableData } = this
-    if (!tableData.length || !autoWidthColumnList.length) {
-      this.isCalcColumn = false
-      return this.$nextTick()
-    }
+    const { autoWidthColumnList } = this
     this.isCalcColumn = true
     return this.$nextTick().then(() => {
       const internalData = $xeTable
@@ -3173,7 +3193,7 @@ const Methods = {
 
     const { tableBody, leftContainer, rightContainer } = $xeTable.$refs
     const bodyElem = tableBody ? tableBody.$el : null
-    const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+    const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const bodtTargetEl = xHandleEl || bodyElem
     if (bodtTargetEl) {
       if (leftContainer) {
@@ -3475,27 +3495,29 @@ const Methods = {
           } else {
             // 如果是激活状态，退则出到上一行/下一行
             if (selected.row || actived.row) {
-              const targetArgs = selected.row ? selected.args : actived.args
+              const activeParams = selected.row ? selected.args : actived.args
               if (hasShiftKey) {
                 if (keyboardOpts.enterToTab) {
-                  this.moveTabSelected(targetArgs, hasShiftKey, evnt)
+                  this.moveTabSelected(activeParams, hasShiftKey, evnt)
                 } else {
-                  this.moveSelected(targetArgs, isLeftArrow, true, isRightArrow, false, evnt)
+                  this.moveSelected(activeParams, isLeftArrow, true, isRightArrow, false, evnt)
                 }
               } else {
                 if (keyboardOpts.enterToTab) {
-                  this.moveTabSelected(targetArgs, hasShiftKey, evnt)
+                  this.moveTabSelected(activeParams, hasShiftKey, evnt)
                 } else {
-                  const _rowIndex = $xeTable.getVTRowIndex(selected.row)
+                  const activeRow = selected.row || actived.row
+                  const activeColumn = selected.column || actived.column
+                  const _rowIndex = $xeTable.getVTRowIndex(activeRow)
                   const etrParams = {
-                    row: selected.row,
-                    rowIndex: $xeTable.getRowIndex(selected.row),
-                    $rowIndex: $xeTable.getVMRowIndex(selected.row),
+                    row: activeRow,
+                    rowIndex: $xeTable.getRowIndex(activeRow),
+                    $rowIndex: $xeTable.getVMRowIndex(activeRow),
                     _rowIndex,
-                    column: selected.column,
-                    columnIndex: $xeTable.getColumnIndex(selected.column),
-                    $columnIndex: $xeTable.getVMColumnIndex(selected.column),
-                    _columnIndex: $xeTable.getVTColumnIndex(selected.column),
+                    column: activeColumn,
+                    columnIndex: $xeTable.getColumnIndex(activeColumn),
+                    $columnIndex: $xeTable.getVMColumnIndex(activeColumn),
+                    _columnIndex: $xeTable.getVTColumnIndex(activeColumn),
                     $table: $xeTable
                   }
                   if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
@@ -3504,13 +3526,13 @@ const Methods = {
                       if (_rowIndex >= afterFullData.length - 1) {
                         $xeTable.insertAt({}, -1).then(({ row: newRow }: any) => {
                           $xeTable.scrollToRow(newRow, selected.column)
-                          $xeTable.setSelectCell(newRow, selected.column)
+                          $xeTable.handleSelected({ ...activeParams, row: newRow }, evnt)
                         })
                         $xeTable.dispatchEvent('enter-append-row', etrParams, evnt)
                         return
                       }
                     }
-                    this.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
+                    this.moveSelected(activeParams, isLeftArrow, false, isRightArrow, true, evnt)
                     if (enterMethod) {
                       enterMethod(etrParams)
                     }
@@ -6190,7 +6212,8 @@ const Methods = {
       }
       $xeTable.checkScrolling()
       internalData.lastScrollLeft = scrollLeft
-    } else {
+    }
+    if (isRollY) {
       const yThreshold = $xeTable.computeScrollYThreshold
       isTop = scrollTop <= 0
       if (!isTop) {
@@ -6312,7 +6335,7 @@ const Methods = {
     const $xeTable = this
     const internalData = $xeTable
 
-    const { inFooterScroll, inBodyScroll } = internalData
+    const { inFooterScroll, inBodyScroll, lastScrollTop } = internalData
     if (inFooterScroll) {
       return
     }
@@ -6325,10 +6348,17 @@ const Methods = {
     const bodyElem = tableBody.$el as HTMLDivElement
     const headerElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
     const footerElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+    const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
     const wrapperEl = evnt.currentTarget as HTMLDivElement
-    const { scrollTop, scrollLeft } = wrapperEl
+    const { scrollLeft } = wrapperEl
+    const yBodyEl = yHandleEl || bodyElem
+    let scrollTop = 0
+    if (yBodyEl) {
+      scrollTop = yBodyEl.scrollTop
+    }
     const isRollX = true
-    const isRollY = false
+    const isRollY = scrollTop !== lastScrollTop
+
     internalData.inVirtualScroll = true
     setScrollLeft(bodyElem, scrollLeft)
     setScrollLeft(headerElem, scrollLeft)
@@ -6343,7 +6373,7 @@ const Methods = {
     const $xeTable = this
     const internalData = $xeTable
 
-    const { inFooterScroll, inBodyScroll } = internalData
+    const { inFooterScroll, inBodyScroll, lastScrollLeft } = internalData
     if (inFooterScroll) {
       return
     }
@@ -6356,9 +6386,15 @@ const Methods = {
     const bodyElem = tableBody.$el as HTMLDivElement
     const leftElem = leftBody ? leftBody.$el as HTMLDivElement : null
     const rightElem = rightBody ? rightBody.$el as HTMLDivElement : null
+    const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     const wrapperEl = evnt.currentTarget as HTMLDivElement
-    const { scrollTop, scrollLeft } = wrapperEl
-    const isRollX = false
+    const { scrollTop } = wrapperEl
+    const xBodyEl = xHandleEl || bodyElem
+    let scrollLeft = 0
+    if (xBodyEl) {
+      scrollLeft = xBodyEl.scrollLeft
+    }
+    const isRollX = scrollLeft !== lastScrollLeft
     const isRollY = true
 
     internalData.inVirtualScroll = true
@@ -6585,7 +6621,7 @@ const Methods = {
     const tableHeaderElem = tableHeader ? tableHeader.$el : null
     const tableFooterElem = tableFooter ? tableFooter.$el : null
     if (XEUtils.isNumber(scrollLeft)) {
-      const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+      const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
       if (xHandleEl) {
         setScrollLeft(xHandleEl, scrollLeft)
       } else {
@@ -6595,7 +6631,7 @@ const Methods = {
       }
     }
     if (XEUtils.isNumber(scrollTop)) {
-      const yHandleEl = $xeTable.$refs.refScrollYHandleElem
+      const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
       if (yHandleEl) {
         setScrollTop(yHandleEl, scrollTop)
       } else {
@@ -6605,7 +6641,7 @@ const Methods = {
       }
     }
     if (this.scrollXLoad || this.scrollYLoad) {
-      return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 50))
+      return new Promise(resolve => setTimeout(() => resolve(this.$nextTick()), 30))
     }
     return this.$nextTick()
   },
@@ -6674,7 +6710,7 @@ const Methods = {
     const rightBodyElem = rightBody ? rightBody.$el : null
     const tableHeaderElem = tableHeader ? tableHeader.$el : null
     const tableFooterElem = tableFooter ? tableFooter.$el : null
-    const xHandleEl = $xeTable.$refs.refScrollXHandleElem
+    const xHandleEl = $xeTable.$refs.refScrollXHandleElem as HTMLDivElement
     if (xHandleEl) {
       setScrollLeft(xHandleEl, 0)
     } else {
@@ -6682,7 +6718,7 @@ const Methods = {
       setScrollLeft(tableHeaderElem, 0)
       setScrollLeft(tableFooterElem, 0)
     }
-    const yHandleEl = $xeTable.$refs.refScrollYHandleElem
+    const yHandleEl = $xeTable.$refs.refScrollYHandleElem as HTMLDivElement
     if (yHandleEl) {
       setScrollTop(yHandleEl, 0)
     } else {

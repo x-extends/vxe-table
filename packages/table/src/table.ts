@@ -415,6 +415,9 @@ export default {
       $xeTabs(): (VxeTabsConstructor & VxeTabsPrivateMethods) | null
     }),
     tableId () {
+      return this.computeTableId
+    },
+    computeTableId () {
       const { id } = this
       if (id) {
         if (XEUtils.isFunction(id)) {
@@ -903,8 +906,10 @@ export default {
 
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       const customOpts = this.customOpts
-      if (!this.id && this.customConfig && (customOpts.storage === true || (customOpts.storage && customOpts.storage.resizable) || (customOpts.storage && customOpts.storage.visible))) {
-        errLog('vxe.error.reqProp', ['id'])
+      if (!this.id) {
+        if ((this.customConfig ? isEnableConf(customOpts) : customOpts.enabled) && customOpts.storage) {
+          errLog('vxe.error.reqProp', ['id'])
+        }
       }
       if (this.treeConfig && this.checkboxOpts.range) {
         errLog('vxe.error.noTree', ['checkbox-config.range'])
