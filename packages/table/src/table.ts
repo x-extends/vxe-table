@@ -5482,6 +5482,7 @@ export default defineComponent({
         tablePrivateMethods.preventEvent(evnt, 'event.keydown', null, () => {
           const { mouseConfig, keyboardConfig, treeConfig, editConfig, highlightCurrentRow } = props
           const { ctxMenuStore, editStore, currentRow } = reactData
+          const { afterFullData } = internalData
           const isMenu = computeIsMenu.value
           const bodyMenu = computeBodyMenu.value
           const keyboardOpts = computeKeyboardOpts.value
@@ -5564,6 +5565,7 @@ export default defineComponent({
               internalData._keyCtx = false
             }, 1000)
           } else if (isEnter && !isAltKey && keyboardConfig && keyboardOpts.isEnter && (selected.row || actived.row || (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow))) {
+            const { isLastEnterAppendRow, beforeEnterMethod, enterMethod } = keyboardOpts
             // 退出选中
             if (hasCtrlKey) {
               // 如果是激活编辑状态，则取消编辑
@@ -5589,7 +5591,35 @@ export default defineComponent({
                   if (keyboardOpts.enterToTab) {
                     $xeTable.moveTabSelected(targetArgs, hasShiftKey, evnt)
                   } else {
-                    $xeTable.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
+                    const _rowIndex = $xeTable.getVTRowIndex(selected.row)
+                    const etrParams = {
+                      row: selected.row,
+                      rowIndex: $xeTable.getRowIndex(selected.row),
+                      $rowIndex: $xeTable.getVMRowIndex(selected.row),
+                      _rowIndex,
+                      column: selected.column,
+                      columnIndex: $xeTable.getColumnIndex(selected.column),
+                      $columnIndex: $xeTable.getVMColumnIndex(selected.column),
+                      _columnIndex: $xeTable.getVTColumnIndex(selected.column),
+                      $table: $xeTable
+                    }
+                    if (!beforeEnterMethod || beforeEnterMethod(etrParams) !== false) {
+                      // 最后一行按下回车键，自动追加一行
+                      if (isLastEnterAppendRow) {
+                        if (_rowIndex >= afterFullData.length - 1) {
+                          $xeTable.insertAt({}, -1).then(({ row: newRow }) => {
+                            $xeTable.scrollToRow(newRow, selected.column)
+                            $xeTable.setSelectCell(newRow, selected.column)
+                          })
+                          $xeTable.dispatchEvent('enter-append-row', etrParams, evnt)
+                          return
+                        }
+                      }
+                      $xeTable.moveSelected(targetArgs, isLeftArrow, false, isRightArrow, true, evnt)
+                      if (enterMethod) {
+                        enterMethod(etrParams)
+                      }
+                    }
                   }
                 }
               } else if (treeConfig && (rowOpts.isCurrent || highlightCurrentRow) && currentRow) {
@@ -5693,7 +5723,7 @@ export default defineComponent({
                 .then(() => tablePrivateMethods.triggerCurrentRowEvent(evnt, params))
             }
           } else if (keyboardConfig && isEnableConf(editConfig) && keyboardOpts.isEdit && !hasCtrlKey && !hasMetaKey && (isSpacebar || (keyCode >= 48 && keyCode <= 57) || (keyCode >= 65 && keyCode <= 90) || (keyCode >= 96 && keyCode <= 111) || (keyCode >= 186 && keyCode <= 192) || (keyCode >= 219 && keyCode <= 222))) {
-            const { editMethod } = keyboardOpts
+            const { editMode, editMethod } = keyboardOpts
             // 启用编辑后，空格键功能将失效
             // if (isSpacebar) {
             //   evnt.preventDefault()
@@ -5713,7 +5743,10 @@ export default defineComponent({
                 if (editMethod) {
                   editMethod(params)
                 } else {
-                  setCellValue(selected.row, selected.column, null)
+                  // 追加方式与覆盖式
+                  if (editMode !== 'insert') {
+                    setCellValue(selected.row, selected.column, null)
+                  }
                   $xeTable.handleEdit(selected.args, evnt)
                 }
               }

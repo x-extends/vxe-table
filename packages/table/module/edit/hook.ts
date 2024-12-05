@@ -699,7 +699,7 @@ hooks.add('tableEditModule', {
         params.cell = cell
         if (cell && isEnableConf(editConfig) && isEnableConf(editRender)) {
           // 激活编辑
-          if (!$xeTable.hasPendingByRow(row)) {
+          if (!$xeTable.isPendingByRow(row)) {
             if (actived.row !== row || (mode === 'cell' ? actived.column !== column : false)) {
               // 判断是否禁用编辑
               let type: 'edit-disabled' | 'edit-activated' = 'edit-disabled'

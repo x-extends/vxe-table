@@ -49,6 +49,8 @@ export default [
   'column-dragover',
   'column-dragend',
 
+  'enter-append-row',
+
   'edit-actived', // 废弃
 
   'edit-activated',
