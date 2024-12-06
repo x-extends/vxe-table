@@ -91,6 +91,12 @@ VxeUI.setConfig({
         lockView: true,
         resize: true,
         escClosable: true
+      },
+      drawerOptions: {
+        mask: true,
+        lockView: true,
+        escClosable: true,
+        resize: true
       }
     },
     sortConfig: {
