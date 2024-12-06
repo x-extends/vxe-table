@@ -691,7 +691,9 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
           title: drawerOpts.title || getI18n('vxe.custom.cstmTitle'),
           width: drawerOpts.width || Math.min(880, Math.floor(document.documentElement.clientWidth * 0.6)),
           position: drawerOpts.position,
+          resize: !!drawerOpts.resize,
           escClosable: !!drawerOpts.escClosable,
+          maskClosable: !!drawerOpts.maskClosable,
           destroyOnClose: true,
           showFooter: true
         },
@@ -722,6 +724,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
         lockView: modalOpts.lockView,
         resize: modalOpts.resize,
         escClosable: !!modalOpts.escClosable,
+        maskClosable: !!modalOpts.maskClosable,
         destroyOnClose: true,
         showFooter: true
       },
