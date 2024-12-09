@@ -92,6 +92,7 @@ VxeUI.hooks.add('tableCustomModule', {
           column.visible = column.renderVisible
         }
       })
+      reactData.isCustomStatus = true
       reactData.isDragColMove = true
       setTimeout(() => {
         reactData.isDragColMove = false
@@ -194,6 +195,7 @@ VxeUI.hooks.add('tableCustomModule', {
           }
           column.renderResizeWidth = column.renderWidth
         })
+        reactData.isCustomStatus = false
         $xeTable.saveCustomStore('reset')
         return $xeTable.handleCustom()
       },

@@ -47,6 +47,8 @@ export default {
       notExp: '該瀏覽器不支援匯入/匯出功能',
       impFields: '匯入失敗，請檢查欄位名稱和資料格式是否正確',
       treeNotImp: '樹表格不支援導入',
+      treeCrossDrag: '只能拖拽第一层级的数据',
+      treeDragChild: '父级数据不能拖拽到子级中',
       reqPlugin: '可選擴展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {

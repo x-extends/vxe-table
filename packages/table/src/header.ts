@@ -199,7 +199,7 @@ export default defineComponent({
           thOns.onMousedown = (evnt: MouseEvent) => $xeTable.triggerHeaderCellMousedownEvent(evnt, params)
         }
         // 拖拽行事件
-        if (columnOpts.drag && !column.parentId) {
+        if (columnOpts.drag) {
           thOns.onDragstart = $xeTable.handleHeaderCellDragDragstartEvent
           thOns.onDragend = $xeTable.handleHeaderCellDragDragendEvent
           thOns.onDragover = $xeTable.handleHeaderCellDragDragoverEvent

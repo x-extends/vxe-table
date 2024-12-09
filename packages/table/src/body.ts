@@ -447,7 +447,7 @@ export default defineComponent({
           isExpandTree = rowChildren && rowChildren.length > 0 && !!treeExpandedMaps[rowid]
         }
         // 拖拽行事件
-        if (rowOpts.drag && !rowLevel) {
+        if (rowOpts.drag && (!treeConfig || transform)) {
           trOn.onDragstart = $xeTable.handleRowDragDragstartEvent
           trOn.onDragend = $xeTable.handleRowDragDragendEvent
           trOn.onDragover = $xeTable.handleRowDragDragoverEvent

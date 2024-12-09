@@ -285,7 +285,7 @@ export default defineComponent({
 
     const renderSimplePanel = () => {
       const { customStore } = props
-      const { customColumnList } = reactData
+      const { isCustomStatus, customColumnList } = reactData
       const customOpts = computeCustomOpts.value
       const { maxHeight } = customStore
       const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
@@ -311,7 +311,8 @@ export default defineComponent({
         $grid: $xeTable.xegrid,
         columns: customColumnList,
         isAllChecked,
-        isAllIndeterminate
+        isAllIndeterminate,
+        isCustomStatus
       }
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
         const isVisible = visibleMethod ? visibleMethod({ column }) : true
@@ -509,6 +510,7 @@ export default defineComponent({
                         ? h(VxeUIButtonComponent, {
                           mode: 'text',
                           content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
+                          disabled: !isCustomStatus,
                           onClick: resetCustomEvent
                         })
                         : createCommentVNode(),
@@ -547,7 +549,7 @@ export default defineComponent({
     const renderPopupPanel = () => {
       const { customStore } = props
       const { resizable: allResizable } = tableProps
-      const { customColumnList } = reactData
+      const { isCustomStatus, customColumnList } = reactData
       const customOpts = computeCustomOpts.value
       const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
@@ -572,7 +574,8 @@ export default defineComponent({
         $grid: $xeTable.xegrid,
         columns: customColumnList,
         isAllChecked,
-        isAllIndeterminate
+        isAllIndeterminate,
+        isCustomStatus
       }
       XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
         const isVisible = visibleMethod ? visibleMethod({ column }) : true
@@ -853,6 +856,7 @@ export default defineComponent({
             VxeUIButtonComponent
               ? h(VxeUIButtonComponent, {
                 content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore'),
+                disabled: !isCustomStatus,
                 onClick: resetCustomEvent
               })
               : createCommentVNode(),
