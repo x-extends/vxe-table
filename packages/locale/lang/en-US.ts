@@ -47,7 +47,9 @@ export default {
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.',
       treeNotImp: 'Tree table does not support import.',
-      reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      treeCrossDrag: 'Only drag and drop data from the first level',
+      treeDragChild: 'Parent data cannot be dragged and dropped into children',
+      reqPlugin: 'Optional extensions "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: 'No Data',

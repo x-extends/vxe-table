@@ -49,7 +49,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
       thOns.mousedown = (evnt: any) => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
     }
     // 拖拽行事件
-    if (columnOpts.drag && !column.parentId) {
+    if (columnOpts.drag) {
       thOns.dragstart = $xetable.handleHeaderCellDragDragstartEvent
       thOns.dragend = $xetable.handleHeaderCellDragDragendEvent
       thOns.dragover = $xetable.handleHeaderCellDragDragoverEvent

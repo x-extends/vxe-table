@@ -47,6 +47,8 @@ export default {
       notExp: 'بۇ تور كۆرگۈچ ئەكىرىش/ئاچىقىشنى قوللىمايدۇ',
       impFields: 'ئەكىرىشى مەغلۇپ بولدى،سۆز ھەم ئۇچۇر فورماتىنى تەكشۈرۈڭ',
       treeNotImp: 'دەرەخ شەكىللىك جەدىۋەلنى ئەكىرىشنى قوللىمايدۇ',
+      treeCrossDrag: '只能拖拽第一层级的数据',
+      treeDragChild: '父级数据不能拖拽到子级中',
       reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {

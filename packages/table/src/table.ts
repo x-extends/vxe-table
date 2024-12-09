@@ -25,7 +25,7 @@ import customMixin from '../module/custom/mixin'
 
 import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
 
-const { getConfig, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
+const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
 /**
  * 渲染浮固定列
@@ -121,8 +121,13 @@ const renderDragTipContents = (h: CreateElement, $xeTable: any) => {
 }
 
 const renderDragTip = (h: CreateElement, $xeTable: any) => {
+  const reactData = $xeTable
+
+  const { dragRow } = reactData
   const rowOpts = $xeTable.computeRowOpts
   const columnOpts = $xeTable.computeColumnOpts
+  const rowDragOpts = $xeTable.computeRowDragOpts
+  const columnDragOpts = $xeTable.computeColumnDragOpts
 
   if (rowOpts.drag || columnOpts.drag) {
     return h('div', {
@@ -130,16 +135,38 @@ const renderDragTip = (h: CreateElement, $xeTable: any) => {
     }, [
       h('div', {
         ref: 'refDragRowLineElem',
-        class: 'vxe-table--drag-row-line'
+        class: ['vxe-table--drag-row-line', {
+          'is--guides': rowDragOpts.showGuidesStatus
+        }]
       }),
       h('div', {
         ref: 'refDragColLineElem',
-        class: 'vxe-table--drag-col-line'
+        class: ['vxe-table--drag-col-line', {
+          'is--guides': columnDragOpts.showGuidesStatus
+        }]
       }),
       h('div', {
         ref: 'refDragTipElem',
         class: 'vxe-table--drag-sort-tip'
-      }, renderDragTipContents(h, $xeTable))
+      }, [
+        h('div', {
+          class: 'vxe-table--drag-sort-tip-wrapper'
+        }, [
+          h('div', {
+            class: 'vxe-table--drag-sort-tip-status'
+          }, [
+            h('span', {
+              class: ['vxe-table--drag-sort-tip-normal-status', dragRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
+            }),
+            h('span', {
+              class: ['vxe-table--drag-sort-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
+            })
+          ]),
+          h('div', {
+            class: 'vxe-table--drag-sort-tip-content'
+          }, renderDragTipContents(h, $xeTable))
+        ])
+      ])
     ])
   }
   return renderEmptyElement($xeTable)
@@ -400,6 +427,9 @@ export default {
       },
 
       scrollVMLoading: false,
+
+      isCustomStatus: false,
+
       isDragRowMove: false,
       dragRow: null,
       isDragColMove: false,

@@ -28,11 +28,17 @@ function updateDropHint (_vm: any, evnt: any) {
 const renderSimplePanel = (h: CreateElement, _vm: any) => {
   const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
 
+  const props = _vm
+
   const $xeTable = _vm.$xeTable
-  const { _e, customStore, dragColumn } = _vm
-  const { customColumnList, customOpts, isMaxFixedColumn } = $xeTable
+  const reactData = $xeTable
+
+  const { customStore } = props
+  const { isCustomStatus, customColumnList } = reactData
+  const customOpts = $xeTable.computeCustomOpts
   const { maxHeight } = customStore
   const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
+  const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
   const slots = customOpts.slots || {}
   const headerSlot = slots.header
   const topSlot = slots.top
@@ -41,19 +47,21 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
   const footerSlot = slots.footer
   const colVNs: any[] = []
   const customWrapperOns: any = {}
+  const isAllChecked = customStore.isAll
+  const isAllIndeterminate = customStore.isIndeterminate
+  const dragColumn = _vm.dragColumn
   // hover 触发
   if (trigger === 'hover') {
     customWrapperOns.mouseenter = _vm.handleWrapperMouseenterEvent
     customWrapperOns.mouseleave = _vm.handleWrapperMouseleaveEvent
   }
-  const isAllChecked = customStore.isAll
-  const isAllIndeterminate = customStore.isIndeterminate
   const params = {
     $table: $xeTable,
     $grid: $xeTable.xegrid,
     columns: customColumnList,
     isAllChecked,
-    isAllIndeterminate
+    isAllIndeterminate,
+    isCustomStatus
   }
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
     const isVisible = visibleMethod ? visibleMethod({ column }) : true
@@ -102,7 +110,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
                 class: ['vxe-checkbox--icon', isIndeterminate ? getIcon().TABLE_CHECKBOX_INDETERMINATE : (isChecked ? getIcon().TABLE_CHECKBOX_CHECKED : getIcon().TABLE_CHECKBOX_UNCHECKED)]
               })
             ])
-            : _e(),
+            : renderEmptyElement($xeTable),
           allowSort && column.level === 1
             ? h('div', {
               class: 'vxe-table-custom--sort-option'
@@ -126,7 +134,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
                 })
               ])
             ])
-            : _e(),
+            : renderEmptyElement($xeTable),
           column.type === 'html'
             ? h('div', {
               key: '1',
@@ -175,7 +183,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
                 }
               })
             ])
-            : _e()
+            : renderEmptyElement($xeTable)
         ])
       )
     }
@@ -272,7 +280,8 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
                   h(VxeUIButtonComponent, {
                     props: {
                       mode: 'text',
-                      content: customOpts.resetButtonText || getI18n('vxe.table.customRestore')
+                      content: customOpts.resetButtonText || getI18n('vxe.table.customRestore'),
+                      disabled: !isCustomStatus
                     },
                     on: {
                       click: _vm.resetCustomEvent
@@ -298,7 +307,7 @@ const renderSimplePanel = (h: CreateElement, _vm: any) => {
                       }
                     }),
                   customOpts.immediate
-                    ? _e()
+                    ? renderEmptyElement($xeTable)
                     : h(VxeUIButtonComponent, {
                       props: {
                         mode: 'text',
@@ -324,15 +333,24 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
   const $xeTableCustomPanel = _vm
 
+  const props = _vm
+
   const $xeTable = _vm.$xeTable
-  const { _e, customStore } = _vm
-  const { resizable: allResizable, customOpts, customColumnList, columnOpts, isMaxFixedColumn } = $xeTable
+  const tableProps = $xeTable
+  const reactData = $xeTable
+
+  const { customStore } = props
+  const { resizable: allResizable } = tableProps
+  const { isCustomStatus, customColumnList } = reactData
+  const customOpts = $xeTable.computeCustomOpts
   const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
+  const columnOpts = $xeTable.computeColumnOpts
   const { maxFixedSize } = columnOpts
   const resizableOpts = $xeTable.computeResizableOpts
   const { minWidth: reMinWidth, maxWidth: reMaxWidth } = resizableOpts
   const modalOpts = Object.assign({}, modalOptions)
   const drawerOpts = Object.assign({}, drawerOptions)
+  const isMaxFixedColumn = $xeTable.computeIsMaxFixedColumn
   const slots = customOpts.slots || {}
   const headerSlot = slots.header
   const topSlot = slots.top
@@ -342,12 +360,14 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
   const trVNs: VNode[] = []
   const isAllChecked = customStore.isAll
   const isAllIndeterminate = customStore.isIndeterminate
+  const dragColumn = _vm.dragColumn
   const params = {
     $table: $xeTable,
     $grid: $xeTable.xegrid,
     columns: customColumnList,
     isAllChecked,
-    isAllIndeterminate
+    isAllIndeterminate,
+    isCustomStatus
   }
   XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
     const isVisible = visibleMethod ? visibleMethod({ column }) : true
@@ -418,7 +438,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                 })
               ])
             ])
-            : _e(),
+            : renderEmptyElement($xeTable),
           allowSort
             ? h('td', {
               class: 'vxe-table-custom-popup--column-item col--sort'
@@ -444,7 +464,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                 ])
                 : h('span', '-')
             ])
-            : _e(),
+            : renderEmptyElement($xeTable),
           h('td', {
             class: 'vxe-table-custom-popup--column-item col--name'
           }, [
@@ -491,7 +511,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                     : renderEmptyElement($xeTableCustomPanel)
                   )
             ])
-            : _e(),
+            : renderEmptyElement($xeTable),
           allowFixed
             ? h('td', {
               class: 'vxe-table-custom-popup--column-item col--fixed'
@@ -517,7 +537,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                   }
                 })
             ])
-            : _e()
+            : renderEmptyElement($xeTable)
         ])
       )
     }
@@ -545,12 +565,12 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                 ? h('col', {
                   class: 'vxe-table-custom-popup--table-col-seq'
                 })
-                : _e(),
+                : renderEmptyElement($xeTable),
               allowSort
                 ? h('col', {
                   class: 'vxe-table-custom-popup--table-col-sort'
                 })
-                : _e(),
+                : renderEmptyElement($xeTable),
               h('col', {
                 class: 'vxe-table-custom-popup--table-col-title'
               }),
@@ -558,12 +578,12 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                 ? h('col', {
                   class: 'vxe-table-custom-popup--table-col-width'
                 })
-                : _e(),
+                : renderEmptyElement($xeTable),
               allowFixed
                 ? h('col', {
                   class: 'vxe-table-custom-popup--table-col-fixed'
                 })
-                : _e()
+                : renderEmptyElement($xeTable)
             ]),
             h('thead', {}, [
               h('tr', {}, [
@@ -590,7 +610,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                       }, getI18n('vxe.toolbar.customAll'))
                     ])
                   ])
-                  : _e(),
+                  : renderEmptyElement($xeTable),
                 allowSort
                   ? h('th', {}, [
                     h('span', {
@@ -613,14 +633,14 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
                       })
                       : renderEmptyElement($xeTableCustomPanel)
                   ])
-                  : _e(),
+                  : renderEmptyElement($xeTable),
                 h('th', {}, getI18n('vxe.custom.setting.colTitle')),
                 allowResizable
                   ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
-                  : _e(),
+                  : renderEmptyElement($xeTable),
                 allowFixed
                   ? h('th', {}, getI18n(`vxe.custom.setting.${maxFixedSize ? 'colFixedMax' : 'colFixed'}`, [maxFixedSize]))
-                  : _e()
+                  : renderEmptyElement($xeTable)
               ])
             ]),
             h('transition-group', {
@@ -640,7 +660,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
         h('div', {
           ref: 'dragHintElemRef',
           class: 'vxe-table-custom-popup--drag-hint'
-        }, getI18n('vxe.custom.cstmDragTarget', [_vm.dragColumn ? _vm.dragColumn.getTitle() : '']))
+        }, getI18n('vxe.custom.cstmDragTarget', [dragColumn ? dragColumn.getTitle() : '']))
       ])
     },
     footer: () => {
@@ -652,7 +672,8 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
       }, [
         h(VxeUIButtonComponent, {
           props: {
-            content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore')
+            content: customOpts.resetButtonText || getI18n('vxe.custom.cstmRestore'),
+            disabled: !isCustomStatus
           },
           on: {
             click: _vm.resetCustomEvent

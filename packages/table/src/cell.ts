@@ -83,11 +83,17 @@ function renderCellBaseVNs (h: CreateElement, params: any, content: any) {
   const { treeConfig, dragConfig } = tableProps
   const rowOpts = $table.computeRowOpts
   const rowDragOpts = $table.computeRowDragOpts
-  const { showIcon, visibleMethod } = rowDragOpts
+  const { showIcon, isCrossDrag, visibleMethod } = rowDragOpts
   const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
   const vns: any[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
-    if (!treeConfig || !level) {
+    if (treeConfig) {
+      if (isCrossDrag || !level) {
+        vns.unshift(
+          renderCellDragIcon(h, params)
+        )
+      }
+    } else {
       vns.unshift(
         renderCellDragIcon(h, params)
       )

@@ -67,6 +67,7 @@ export default {
           column.visible = column.renderVisible
         }
       })
+      reactData.isCustomStatus = true
       reactData.isDragColMove = true
       setTimeout(() => {
         reactData.isDragColMove = false
@@ -101,7 +102,11 @@ export default {
       return $xeTable.$nextTick()
     },
     _resetCustom (options: any) {
-      const { collectColumn, customOpts } = this
+      const $xeTable = this
+      const reactData = $xeTable
+      const internalData = $xeTable
+
+      const { collectColumn, customOpts } = internalData
       const { checkMethod } = customOpts
       const opts = Object.assign({
         visible: true,
@@ -124,8 +129,9 @@ export default {
         }
         column.renderResizeWidth = column.renderWidth
       })
-      this.saveCustomStore('reset')
-      return this.handleCustom()
+      reactData.isCustomStatus = false
+      $xeTable.saveCustomStore('reset')
+      return $xeTable.handleCustom()
     },
     _toggleCustomAllCheckbox () {
       const { customStore } = this

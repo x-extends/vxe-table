@@ -407,12 +407,12 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     if (editConfig) {
       isNewRow = $xeTable.isInsertByRow(row)
     }
-    if (treeConfig && !scrollYLoad && !treeOpts.transform) {
+    if (treeConfig && !scrollYLoad && !transform) {
       rowChildren = row[childrenField]
       isExpandTree = rowChildren && rowChildren.length && !!treeExpandedMaps[rowid]
     }
     // 拖拽行事件
-    if (rowOpts.drag && !rowLevel) {
+    if (rowOpts.drag && (!treeConfig || transform)) {
       trOn.dragstart = (evnt: DragEvent) => {
         $xeTable.handleRowDragDragstartEvent(evnt)
       }
