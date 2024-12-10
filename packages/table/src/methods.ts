@@ -4717,13 +4717,30 @@ const Methods = {
       this.emitEvent('radio-change', { oldValue, newValue, ...params }, evnt)
     }
   },
+  triggerCurrentColumnEvent (evnt: any, params: any) {
+    const $xeTable = this
+
+    const columnOpts = $xeTable.computeColumnOpts
+    const { currentMethod } = columnOpts
+    const { column } = params
+    if (!currentMethod || currentMethod({ column })) {
+      $xeTable.setCurrentColumn(column)
+    }
+  },
   triggerCurrentRowEvent (evnt: any, params: any) {
-    const { currentRow: oldValue } = this
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { currentRow: oldValue } = reactData
+    const rowOpts = $xeTable.computeRowOpts
+    const { currentMethod } = rowOpts
     const { row: newValue } = params
     const isChange = oldValue !== newValue
-    this.setCurrentRow(newValue)
-    if (isChange) {
-      this.emitEvent('current-change', { oldValue, newValue, ...params }, evnt)
+    if (!currentMethod || currentMethod({ row: newValue })) {
+      $xeTable.setCurrentRow(newValue)
+      if (isChange) {
+        $xeTable.dispatchEvent('current-change', { oldValue, newValue, ...params }, evnt)
+      }
     }
   },
   /**
@@ -4839,7 +4856,7 @@ const Methods = {
     }
     this.emitEvent('header-cell-click', Object.assign({ triggerResizable, triggerSort, triggerFilter, cell }, params), evnt)
     if (this.columnOpts.isCurrent || this.highlightCurrentColumn) {
-      return this.setCurrentColumn(column)
+      this.triggerCurrentColumnEvent(evnt, params)
     }
     return this.$nextTick()
   },

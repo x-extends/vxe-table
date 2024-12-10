@@ -617,16 +617,35 @@ renderer.mixin({
     renderTableCell (h, renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
-      const digits = props.digits || getConfig().numberInput?.digits || 2
+      const { type } = props
       let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
-        switch (props.type) {
-          case 'float':
-            cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
-            break
+        if (type === 'float') {
+          const digits = props.digits || getConfig().numberInput.digits || 1
+          cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+        } else if (type === 'amount') {
+          const digits = props.digits || getConfig().numberInput.digits || 2
+          cellValue = XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
         }
       }
       return getCellLabelVNs(h, renderOpts, params, cellValue)
+    },
+    renderTableFooter (h, renderOpts, params) {
+      const { props = {} } = renderOpts
+      const { row, column, _columnIndex } = params
+      const { type } = props
+      // 兼容老模式
+      const cellValue = XEUtils.isArray(row) ? row[_columnIndex] : XEUtils.get(row, column.field)
+      if (XEUtils.isNumber(cellValue)) {
+        if (type === 'float') {
+          const digits = props.digits || getConfig().numberInput.digits || 1
+          return XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+        } else if (type === 'amount') {
+          const digits = props.digits || getConfig().numberInput.digits || 2
+          return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
+        }
+      }
+      return getFuncText(cellValue, 1)
     },
     renderTableDefault: defaultEditRender,
     renderTableFilter: defaultFilterRender,
