@@ -48,7 +48,7 @@ export default {
       impFields: 'Falha na importação, verifique se o nome do campo e o formato dos dados estão corretos.',
       treeNotImp: 'A tabela de árvore não suporta importação.',
       treeCrossDrag: '只能拖拽第一层级的数据',
-      treeDragChild: '父级数据不能拖拽到子级中',
+      treeDragChild: '父级数据不能拖拽到自己的子级中',
       reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {

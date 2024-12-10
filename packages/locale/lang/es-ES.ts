@@ -47,8 +47,8 @@ export default {
       notExp: 'El navegador no es compatible con la importación / exportación.',
       impFields: 'Error de importación, por favor revise que el nombre del campo y el formato de datos sean correctos.',
       treeNotImp: 'La tabla de árbol no soporta importación.',
-      treeCrossDrag: '只能拖拽第一层级的数据',
-      treeDragChild: '父级数据不能拖拽到子级中',
+      treeCrossDrag: 'Only the first level of data can be dragged',
+      treeDragChild: 'Parent data cannot be dragged into its own child',
       reqPlugin: 'Optional extension "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {

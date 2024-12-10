@@ -6215,6 +6215,9 @@ export default defineComponent({
             cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent, level, height: 0 }
           }
           if (isSource) {
+            cacheItem.row = row
+            cacheItem.items = items
+            cacheItem.parent = parent
             cacheItem.level = level
             cacheItem.index = treeConfig && parent ? -1 : index
             fullDataRowIdMaps[rowid] = cacheItem
@@ -6995,8 +6998,8 @@ export default defineComponent({
         }
       },
       triggerCurrentColumnEvent (evnt, params) {
-        const columnOpts = computeColumnOpts
-        const { currentMethod } = columnOpts.value
+        const columnOpts = computeColumnOpts.value
+        const { currentMethod } = columnOpts
         const { column } = params
         if (!currentMethod || currentMethod({ column })) {
           tableMethods.setCurrentColumn(column)
@@ -7004,8 +7007,8 @@ export default defineComponent({
       },
       triggerCurrentRowEvent (evnt, params) {
         const { currentRow: oldValue } = reactData
-        const rowOpts = computeRowOpts
-        const { currentMethod } = rowOpts.value
+        const rowOpts = computeRowOpts.value
+        const { currentMethod } = rowOpts
         const { row: newValue } = params
         const isChange = oldValue !== newValue
         if (!currentMethod || currentMethod({ row: newValue })) {

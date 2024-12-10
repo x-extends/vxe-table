@@ -48,7 +48,7 @@ export default {
       impFields: 'Az importálás nem sikerült, ellenőrizze, hogy a mezőnév és az adatformátum helyes-e',
       treeNotImp: 'A fatáblák nem támogatják az importálást',
       treeCrossDrag: '只能拖拽第一层级的数据',
-      treeDragChild: '父级数据不能拖拽到子级中',
+      treeDragChild: '父级数据不能拖拽到自己的子级中',
       reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
