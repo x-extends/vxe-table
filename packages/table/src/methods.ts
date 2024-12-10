@@ -969,6 +969,9 @@ const Methods = {
         cacheItem = { row, rowid, seq, index: -1, _index: -1, $index: -1, items, parent, level, height: 0 }
       }
       if (isSource) {
+        cacheItem.row = row
+        cacheItem.items = items
+        cacheItem.parent = parent
         cacheItem.level = level
         cacheItem.index = treeConfig && parent ? -1 : index
         fullDataRowIdMaps[rowid] = cacheItem
