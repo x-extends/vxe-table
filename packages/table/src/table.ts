@@ -4112,7 +4112,7 @@ export default defineComponent({
           internalData.rceTimeout = setTimeout(() => {
             internalData.rceTimeout = undefined
             handleRecalculateLayout(!!reFull)
-          }, 20)
+          }, 10)
         })
       },
       openTooltip (target, content) {

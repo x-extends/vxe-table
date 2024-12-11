@@ -76,7 +76,6 @@ VxeUI.setConfig({
     // },
     customConfig: {
       // enabled: false,
-      storage: true,
       allowVisible: true,
       allowResizable: true,
       allowFixed: true,
