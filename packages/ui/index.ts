@@ -259,6 +259,7 @@ VxeUI.setIcon({
   TABLE_DRAG_ROW: iconPrefix + 'drag-handle',
   TABLE_DRAG_COLUMN: iconPrefix + 'drag-handle',
   TABLE_DRAG_STATUS_ROW: iconPrefix + 'sort',
+  TABLE_DRAG_STATUS_SUB_ROW: iconPrefix + 'add-sub',
   TABLE_DRAG_STATUS_COLUMN: iconPrefix + 'swap',
   TABLE_DRAG_DISABLED: iconPrefix + 'no-drop',
 

@@ -174,17 +174,11 @@ hooks.add('tableFilterModule', {
           }
         }
       },
-      /**
-       * 确认筛选
-       * 当筛选面板中的确定按钮被按下时触发
-       * @param {Event} evnt 事件
-       */
-      confirmFilterEvent (evnt: Event) {
+      handleColumnConfirmFilter (column, evnt) {
         const { mouseConfig } = props
-        const { filterStore, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
+        const { scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
         const filterOpts = computeFilterOpts.value
         const mouseOpts = computeMouseOpts.value
-        const { column } = filterStore
         const { field } = column
         const values: any[] = []
         const datas: any[] = []
@@ -195,20 +189,20 @@ hooks.add('tableFilterModule', {
           }
         })
         const filterList = $xeTable.getCheckedFilters()
-        const params = { $table: $xeTable, $event: evnt, column, field, property: field, values, datas, filters: filterList, filterList }
+        const params = { $table: $xeTable, $event: evnt as Event, column, field, property: field, values, datas, filters: filterList, filterList }
         // 如果是服务端筛选，则跳过本地筛选处理
         if (!filterOpts.remote) {
           $xeTable.handleTableData(true)
           $xeTable.checkSelectionStatus()
         }
         if (mouseConfig && mouseOpts.area && $xeTable.handleFilterEvent) {
-          $xeTable.handleFilterEvent(evnt, params)
+          $xeTable.handleFilterEvent(evnt as Event, params)
         }
         if (evnt) {
           $xeTable.dispatchEvent('filter-change', params, evnt)
         }
         $xeTable.closeFilter()
-        $xeTable.updateFooter().then(() => {
+        return $xeTable.updateFooter().then(() => {
           const { scrollXLoad, scrollYLoad } = reactData
           if ((oldScrollXLoad || scrollXLoad) || (oldScrollYLoad || scrollYLoad)) {
             if (oldScrollXLoad || scrollXLoad) {
@@ -226,6 +220,16 @@ hooks.add('tableFilterModule', {
           // 存在滚动行为未结束情况
           setTimeout(() => $xeTable.recalculate(), 50)
         })
+      },
+      /**
+       * 确认筛选
+       * 当筛选面板中的确定按钮被按下时触发
+       * @param {Event} evnt 事件
+       */
+      confirmFilterEvent (evnt: Event) {
+        const { filterStore } = reactData
+        const { column } = filterStore
+        $xeTable.handleColumnConfirmFilter(column, evnt)
       },
       handleFilterChangeRadioOption: changeRadioOption,
       handleFilterChangeMultipleOption: changeMultipleOption,
@@ -267,10 +271,13 @@ hooks.add('tableFilterModule', {
        * @param {ColumnInfo} fieldOrColumn 列或字段名
        * @param {Array} options 选项
        */
-      setFilter (fieldOrColumn, options) {
+      setFilter (fieldOrColumn, options, isUpdate) {
         const column = handleFieldOrColumn($xeTable, fieldOrColumn)
         if (column && column.filters) {
           column.filters = toFilters(options || [])
+          if (isUpdate) {
+            return $xeTable.handleColumnConfirmFilter(column, new Event('click'))
+          }
         }
         return nextTick()
       },

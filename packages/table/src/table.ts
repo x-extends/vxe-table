@@ -4555,6 +4555,50 @@ export default defineComponent({
         }
         return nextTick()
       },
+      setSort (sortConfs, isUpdate) {
+        const sortOpts = computeSortOpts.value
+        const { multiple, remote, orders } = sortOpts
+        if (!XEUtils.isArray(sortConfs)) {
+          sortConfs = [sortConfs]
+        }
+        if (sortConfs && sortConfs.length) {
+          if (!multiple) {
+            sortConfs = [sortConfs[0]]
+            clearAllSort()
+          }
+          let firstColumn: any = null
+          sortConfs.forEach((confs: any, index: number) => {
+            let { field, order } = confs
+            let column = field
+            if (XEUtils.isString(field)) {
+              column = tableMethods.getColumnByField(field)
+            }
+            if (!firstColumn) {
+              firstColumn = column
+            }
+            if (column && column.sortable) {
+              if (orders.indexOf(order) === -1) {
+                order = getNextSortOrder(column)
+              }
+              if (column.order !== order) {
+                column.order = order
+              }
+              column.sortTime = Date.now() + index
+            }
+          })
+          if (isUpdate) {
+            if (!remote) {
+              tablePrivateMethods.handleTableData(true)
+            }
+            $xeTable.handleColumnSortEvent(new Event('click'), firstColumn)
+          }
+          return nextTick().then(() => {
+            tableMethods.updateCellAreas()
+            return updateStyle()
+          })
+        }
+        return nextTick()
+      },
       /**
        * 清空指定列的排序条件
        * 如果为空则清空所有列的排序条件
@@ -5977,6 +6021,7 @@ export default defineComponent({
         return
       }
       const { scrollbarWidth, scrollbarHeight } = reactData
+      const { prevDragToChild } = internalData
       const wrapperRect = el.getBoundingClientRect()
       if (trEl) {
         const rdLineEl = refDragRowLineElem.value
@@ -5988,6 +6033,7 @@ export default defineComponent({
             rdLineEl.style.height = `${trRect.height}px`
             rdLineEl.style.width = `${wrapperRect.width - scrollbarWidth}px`
             rdLineEl.setAttribute('drag-pos', dragPos)
+            rdLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
           } else {
             rdLineEl.style.display = ''
           }
@@ -6012,7 +6058,7 @@ export default defineComponent({
         rdTipEl.style.display = 'block'
         rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
         rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
-        rdTipEl.setAttribute('drag-status', showLine ? 'normal' : 'disabled')
+        rdTipEl.setAttribute('drag-status', showLine ? (prevDragToChild ? 'sub' : 'normal') : 'disabled')
       }
     }
 
@@ -7068,13 +7114,23 @@ export default defineComponent({
           dispatchEvent('toggle-tree-expand', { expanded, column, columnIndex, $columnIndex, row }, evnt)
         }
       },
+      handleColumnSortEvent (evnt, column) {
+        const { mouseConfig } = props
+        const mouseOpts = computeMouseOpts.value
+        const { field, sortable } = column
+        if (sortable) {
+          const params = { $table: $xeTable, $event: evnt, column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
+          if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
+            $xeTable.handleSortEvent(evnt, params)
+          }
+          dispatchEvent('sort-change', params, evnt)
+        }
+      },
       /**
        * 点击排序事件
        */
       triggerSortEvent (evnt, column, order) {
-        const { mouseConfig } = props
         const sortOpts = computeSortOpts.value
-        const mouseOpts = computeMouseOpts.value
         const { field, sortable } = column
         if (sortable) {
           if (!order || column.order === order) {
@@ -7082,11 +7138,7 @@ export default defineComponent({
           } else {
             tableMethods.sort({ field, order })
           }
-          const params = { $table: $xeTable, $event: evnt, column, field, property: field, order: column.order, sortList: tableMethods.getSortColumns(), sortTime: column.sortTime }
-          if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
-            $xeTable.handleSortEvent(evnt, params)
-          }
-          dispatchEvent('sort-change', params, evnt)
+          $xeTable.handleColumnSortEvent(evnt, column)
         }
       },
       /**
@@ -7101,15 +7153,16 @@ export default defineComponent({
       handleRowDragDragendEvent (evnt) {
         const { treeConfig, dragConfig } = props
         const rowDragOpts = computeRowDragOpts.value
-        const { fullAllDataRowIdData } = internalData
+        const { fullAllDataRowIdData, prevDragToChild } = internalData
         const { isCrossDrag, isSelfToChildDrag, dragEndMethod } = rowDragOpts
         const treeOpts = computeTreeOpts.value
-        const { transform, mapChildrenField, parentField } = treeOpts
+        const { transform, rowField, mapChildrenField, parentField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
         const { dragRow } = reactData
         const { afterFullData, tableFullData, prevDragRow, prevDragPos } = internalData
         const dEndMethod = dragEndMethod || (dragConfig ? dragConfig.dragEndMethod : null)
         const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
+        console.log(evnt.ctrlKey)
         if (prevDragRow && dragRow) {
           // 判断是否有拖动
           if (prevDragRow !== dragRow) {
@@ -7211,7 +7264,7 @@ export default defineComponent({
                         childRow[parentField] = dragRow[parentField]
                       })
                     }
-                    dragRow[parentField] = prevDragRow[parentField]
+                    dragRow[parentField] = prevDragToChild ? prevDragRow[rowField] : prevDragRow[parentField]
 
                     internalData.tableFullTreeData = XEUtils.toArrayTree(fullList, {
                       key: treeOpts.rowField,
@@ -7278,12 +7331,15 @@ export default defineComponent({
         const { treeConfig } = props
         const { fullAllDataRowIdData } = internalData
         const { dragRow } = reactData
+        const treeOpts = computeTreeOpts.value
+        const { transform } = treeOpts
         const rowDragOpts = computeRowDragOpts.value
-        const { isCrossDrag } = rowDragOpts
+        const { isCrossDrag, isToChildDrag } = rowDragOpts
         if (!dragRow) {
           evnt.preventDefault()
           return
         }
+        const hasCtrlKey = evnt.ctrlKey
         const trEl = evnt.currentTarget as HTMLElement
         const rowid = trEl.getAttribute('rowid') || ''
         const rest = fullAllDataRowIdData[rowid]
@@ -7297,6 +7353,7 @@ export default defineComponent({
             showDropTip(evnt, trEl, null, false, dragPos)
             return
           }
+          internalData.prevDragToChild = !!(treeConfig && transform && isToChildDrag && hasCtrlKey)
           internalData.prevDragRow = row
           internalData.prevDragPos = dragPos
           showDropTip(evnt, trEl, null, true, dragPos)
@@ -7451,6 +7508,7 @@ export default defineComponent({
             showDropTip(evnt, null, thEl, false, dragPos)
             return
           }
+          internalData.prevDragToChild = false
           internalData.prevDragCol = column
           internalData.prevDragPos = dragPos
           showDropTip(evnt, null, thEl, true, dragPos)
@@ -7955,6 +8013,9 @@ export default defineComponent({
               }, [
                 h('span', {
                   class: ['vxe-table--drag-sort-tip-normal-status', dragRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
+                }),
+                h('span', {
+                  class: ['vxe-table--drag-sort-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
                 }),
                 h('span', {
                   class: ['vxe-table--drag-sort-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
