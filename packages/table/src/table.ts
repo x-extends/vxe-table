@@ -159,6 +159,9 @@ const renderDragTip = (h: CreateElement, $xeTable: any) => {
               class: ['vxe-table--drag-sort-tip-normal-status', dragRow ? getIcon().TABLE_DRAG_STATUS_ROW : getIcon().TABLE_DRAG_STATUS_COLUMN]
             }),
             h('span', {
+              class: ['vxe-table--drag-sort-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
+            }),
+            h('span', {
               class: ['vxe-table--drag-sort-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
             })
           ]),

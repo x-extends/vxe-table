@@ -1343,6 +1343,11 @@
     &[drag-pos="bottom"] {
       border-bottom-color: var(--vxe-ui-font-primary-color);
     }
+    &[drag-to-child="y"] {
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+      border-left-color: var(--vxe-ui-status-success-color);
+    }
     &.is--guides {
       background-color: var( --vxe-ui-table-drag-over-background-color);
     }
@@ -1381,6 +1386,11 @@
         display: block;
       }
     }
+    &[drag-status="sub"] {
+      .vxe-table--drag-sort-tip-sub-status {
+        display: block;
+      }
+    }
     &[drag-status="disabled"] {
       .vxe-table--drag-sort-tip-disabled-status {
         display: block;
@@ -1400,7 +1410,8 @@
     flex-shrink: 0;
     color: var(--vxe-ui-status-error-color)
   }
-  .vxe-table--drag-sort-tip-normal-status {
+  .vxe-table--drag-sort-tip-normal-status,
+  .vxe-table--drag-sort-tip-sub-status {
     display: none;
   }
   .vxe-table--drag-sort-tip-content {

@@ -441,12 +441,14 @@ const updateColDropTipContent = ($xeTable: any, tdEl: HTMLElement) => {
 
 function showDropTip ($xeTable: any, evnt: DragEvent | MouseEvent, trEl: HTMLElement | null, thEl: HTMLElement | null, showLine: boolean, dragPos: string) {
   const reactData = $xeTable
+  const internalData = $xeTable
 
   const el = $xeTable.$refs.refElem as HTMLElement
   if (!el) {
     return
   }
   const { scrollbarWidth, scrollbarHeight } = reactData
+  const { prevDragToChild } = internalData
   const wrapperRect = el.getBoundingClientRect()
   if (trEl) {
     const rdLineEl = $xeTable.$refs.refDragRowLineElem as HTMLElement
@@ -458,6 +460,7 @@ function showDropTip ($xeTable: any, evnt: DragEvent | MouseEvent, trEl: HTMLEle
         rdLineEl.style.height = `${trRect.height}px`
         rdLineEl.style.width = `${wrapperRect.width - scrollbarWidth}px`
         rdLineEl.setAttribute('drag-pos', dragPos)
+        rdLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
       } else {
         rdLineEl.style.display = ''
       }
@@ -482,7 +485,7 @@ function showDropTip ($xeTable: any, evnt: DragEvent | MouseEvent, trEl: HTMLEle
     rdTipEl.style.display = 'block'
     rdTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - rdTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
     rdTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - rdTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
-    rdTipEl.setAttribute('drag-status', showLine ? 'normal' : 'disabled')
+    rdTipEl.setAttribute('drag-status', showLine ? (prevDragToChild ? 'sub' : 'normal') : 'disabled')
   }
 }
 
@@ -5031,23 +5034,36 @@ const Methods = {
       }
     }
   },
+  handleColumnSortEvent (evnt: any, column: any) {
+    const $xeTable = this
+    const props = $xeTable
+
+    const { mouseConfig } = props
+    const mouseOpts = $xeTable.computeMouseOpts
+    const { field, sortable } = column
+    if (sortable) {
+      const params = { $table: $xeTable, $event: evnt, column, field, property: field, order: column.order, sortList: $xeTable.getSortColumns(), sortTime: column.sortTime }
+      if (mouseConfig && mouseOpts.area && $xeTable.handleSortEvent) {
+        $xeTable.handleSortEvent(evnt, params)
+      }
+      $xeTable.dispatchEvent('sort-change', params, evnt)
+    }
+  },
   /**
    * 点击排序事件
    */
   triggerSortEvent (evnt: any, column: any, order: any) {
-    const { sortOpts } = this
+    const $xeTable = this
+
+    const sortOpts = $xeTable.computeSortOpts
     const { field, sortable, remoteSort } = column
     if (sortable || remoteSort) {
       if (!order || column.order === order) {
-        this.clearSort(sortOpts.multiple ? column : null)
+        $xeTable.clearSort(sortOpts.multiple ? column : null)
       } else {
-        this.sort({ field, order })
+        $xeTable.sort({ field, order })
       }
-      const params = { $table: this, $event: evnt, column, field, property: field, order: column.order, sortList: this.getSortColumns(), sortTime: column.sortTime }
-      if (this.mouseConfig && this.mouseOpts.area && this.handleSortEvent) {
-        this.handleSortEvent(evnt, params)
-      }
-      this.emitEvent('sort-change', params, evnt)
+      $xeTable.handleColumnSortEvent(evnt, column)
     }
   },
   /**
@@ -5067,10 +5083,10 @@ const Methods = {
 
     const { treeConfig, dragConfig } = props
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { fullAllDataRowIdData } = internalData
+    const { fullAllDataRowIdData, prevDragToChild } = internalData
     const { isCrossDrag, isSelfToChildDrag, dragEndMethod } = rowDragOpts
     const treeOpts = $xeTable.computeTreeOpts
-    const { transform, mapChildrenField, parentField } = treeOpts
+    const { transform, rowField, mapChildrenField, parentField } = treeOpts
     const childrenField = treeOpts.children || treeOpts.childrenField
     const { dragRow } = reactData
     const { afterFullData, tableFullData, prevDragRow, prevDragPos } = internalData
@@ -5177,7 +5193,7 @@ const Methods = {
                     childRow[parentField] = dragRow[parentField]
                   })
                 }
-                dragRow[parentField] = prevDragRow[parentField]
+                dragRow[parentField] = prevDragToChild ? prevDragRow[rowField] : prevDragRow[parentField]
 
                 internalData.tableFullTreeData = XEUtils.toArrayTree(fullList, {
                   key: treeOpts.rowField,
@@ -5249,12 +5265,15 @@ const Methods = {
     const { treeConfig } = props
     const { fullAllDataRowIdData } = internalData
     const { dragRow } = reactData
+    const treeOpts = $xeTable.computeTreeOpts
+    const { transform } = treeOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { isCrossDrag } = rowDragOpts
+    const { isCrossDrag, isToChildDrag } = rowDragOpts
     if (!dragRow) {
       evnt.preventDefault()
       return
     }
+    const hasCtrlKey = evnt.ctrlKey
     const trEl = evnt.currentTarget as HTMLElement
     const rowid = trEl.getAttribute('rowid') || ''
     const rest = fullAllDataRowIdData[rowid]
@@ -5268,6 +5287,7 @@ const Methods = {
         showDropTip($xeTable, evnt, trEl, null, false, dragPos)
         return
       }
+      internalData.prevDragToChild = !!(treeConfig && transform && isToChildDrag && hasCtrlKey)
       internalData.prevDragRow = row
       internalData.prevDragPos = dragPos
       showDropTip($xeTable, evnt, trEl, null, true, dragPos)
@@ -5438,6 +5458,7 @@ const Methods = {
         showDropTip($xeTable, evnt, null, thEl, false, dragPos)
         return
       }
+      internalData.prevDragToChild = false
       internalData.prevDragCol = column
       internalData.prevDragPos = dragPos
       showDropTip($xeTable, evnt, null, thEl, true, dragPos)
@@ -5599,6 +5620,52 @@ const Methods = {
       })
     }
     return this.$nextTick()
+  },
+  setSort (sortConfs: VxeTableDefines.SortConfs | VxeTableDefines.SortConfs[], isUpdate?: boolean) {
+    const $xeTable = this
+
+    const sortOpts = $xeTable.computeSortOpts
+    const { multiple, remote, orders } = sortOpts
+    if (!XEUtils.isArray(sortConfs)) {
+      sortConfs = [sortConfs]
+    }
+    if (sortConfs && sortConfs.length) {
+      if (!multiple) {
+        sortConfs = [sortConfs[0]]
+        clearAllSort($xeTable)
+      }
+      let firstColumn: any = null
+      sortConfs.forEach((confs: any, index: number) => {
+        let { field, order } = confs
+        let column = field
+        if (XEUtils.isString(field)) {
+          column = $xeTable.getColumnByField(field)
+        }
+        if (!firstColumn) {
+          firstColumn = column
+        }
+        if (column && column.sortable) {
+          if (orders.indexOf(order) === -1) {
+            order = getNextSortOrder($xeTable, column)
+          }
+          if (column.order !== order) {
+            column.order = order
+          }
+          column.sortTime = Date.now() + index
+        }
+      })
+      if (isUpdate) {
+        if (!remote) {
+          $xeTable.handleTableData(true)
+        }
+        $xeTable.handleColumnSortEvent(new Event('click'), firstColumn)
+      }
+      return $xeTable.$nextTick().then(() => {
+        $xeTable.updateCellAreas()
+        return $xeTable.updateStyle()
+      })
+    }
+    return $xeTable.$nextTick()
   },
   /**
    * 清空指定列的排序条件

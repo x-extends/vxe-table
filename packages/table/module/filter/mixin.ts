@@ -4,6 +4,8 @@ import { toFilters, handleFieldOrColumn } from '../../src/util'
 import { getDomNode, triggerEvent } from '../../../ui/src/dom'
 import { isEnableConf } from '../../../ui/src/utils'
 
+import type { VxeTableDefines } from '../../../../types'
+
 const { renderer } = VxeUI
 
 export default {
@@ -32,12 +34,17 @@ export default {
      * @param {ColumnInfo} fieldOrColumn 列
      * @param {Array} options 选项
      */
-    _setFilter (fieldOrColumn: any, options: any, update: any) {
+    _setFilter (fieldOrColumn: any, options: any, isUpdate: any) {
+      const $xeTable = this
+
       const column = handleFieldOrColumn(this, fieldOrColumn)
       if (column && column.filters) {
         column.filters = toFilters(options || [])
+        if (isUpdate) {
+          return $xeTable.handleColumnConfirmFilter(column, new Event('click'))
+        }
       }
-      return update ? this.updateData() : this.$nextTick()
+      return $xeTable.$nextTick()
     },
     checkFilterOptions () {
       const { filterStore } = this
@@ -181,14 +188,15 @@ export default {
       })
       return filterList
     },
-    /**
-     * 确认筛选
-     * 当筛选面板中的确定按钮被按下时触发
-     * @param {Event} evnt 事件
-     */
-    confirmFilterEvent (evnt: any) {
-      const { filterStore, filterOpts, scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = this
-      const { column } = filterStore
+    handleColumnConfirmFilter (column: VxeTableDefines.ColumnInfo, evnt: Event | null) {
+      const $xeTable = this
+      const props = $xeTable
+      const reactData = $xeTable
+
+      const { mouseConfig } = props
+      const { scrollXLoad: oldScrollXLoad, scrollYLoad: oldScrollYLoad } = reactData
+      const filterOpts = $xeTable.computeFilterOpts
+      const mouseOpts = $xeTable.computeMouseOpts
       const { field } = column
       const values: any[] = []
       const datas: any[] = []
@@ -205,31 +213,44 @@ export default {
         this.handleTableData(true)
         this.checkSelectionStatus()
       }
-      if (this.mouseConfig && this.mouseOpts.area && this.handleFilterEvent) {
-        this.handleFilterEvent(evnt, params)
+      if (mouseConfig && mouseOpts.area && this.handleFilterEvent) {
+        $xeTable.handleFilterEvent(evnt, params)
       }
       if (evnt) {
-        this.emitEvent('filter-change', params, evnt)
+        $xeTable.emitEvent('filter-change', params, evnt)
       }
-      this.closeFilter()
-      this.updateFooter().then(() => {
+      $xeTable.closeFilter()
+      return $xeTable.updateFooter().then(() => {
         const { scrollXLoad, scrollYLoad } = this
         if ((oldScrollXLoad || scrollXLoad) || (oldScrollYLoad || scrollYLoad)) {
           if ((oldScrollXLoad || scrollXLoad)) {
-            this.updateScrollXSpace()
+            $xeTable.updateScrollXSpace()
           }
           if ((oldScrollYLoad || scrollYLoad)) {
-            this.updateScrollYSpace()
+            $xeTable.updateScrollYSpace()
           }
-          return this.refreshScroll()
+          return $xeTable.refreshScroll()
         }
       }).then(() => {
-        this.updateCellAreas()
-        return this.recalculate(true)
+        $xeTable.updateCellAreas()
+        return $xeTable.recalculate(true)
       }).then(() => {
         // 存在滚动行为未结束情况
-        setTimeout(() => this.recalculate(), 50)
+        setTimeout(() => $xeTable.recalculate(), 50)
       })
+    },
+    /**
+     * 确认筛选
+     * 当筛选面板中的确定按钮被按下时触发
+     * @param {Event} evnt 事件
+     */
+    confirmFilterEvent (evnt: any) {
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { filterStore } = reactData
+      const { column } = filterStore
+      $xeTable.handleColumnConfirmFilter(column, evnt)
     },
     handleClearFilter (column: any) {
       if (column) {
