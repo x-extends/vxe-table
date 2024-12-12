@@ -17,7 +17,7 @@ export default defineComponent({
     }
     const columnConfig = Cell.createColumn($xeTable, props)
     const columnSlots: {
-      header?: Slot;
+      header?: Slot
     } = {}
 
     if (slots.header) {

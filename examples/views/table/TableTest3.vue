@@ -12,16 +12,17 @@
       id="aaaa"
       :row-config="{useKey: true}"
       :column-config="{useKey: true}"
+      :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true}"
       :print-config="{}"
       :import-config="{}"
       :export-config="{}"
-      :custom-config="{mode: 'popup',storage:true}"
+      :custom-config="{mode: 'popup',immediate: false}"
       :loading="demo1.loading"
       :expand-config="{iconOpen: 'vxe-icon-question-circle-fill', iconClose: 'vxe-icon-question-circle-fill'}"
       :checkbox-config="{labelField: 'id', highlight: true, range: true}"
       :data="demo1.tableData">
-      <vxe-column type="seq" width="60"></vxe-column>
-      <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
+      <vxe-column field="seq" type="seq" width="60"></vxe-column>
+      <vxe-column field="checkbox" type="checkbox" title="ID" width="140"></vxe-column>
       <vxe-colgroup title="分组1" field="g1">
         <vxe-column type="expand" field="role" title="Role">
           <template #content="{ row }">
@@ -30,8 +31,8 @@
         </vxe-column>
         <vxe-column field="name" title="Name" sortable></vxe-column>
       </vxe-colgroup>
-      <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html"></vxe-column>
-      <vxe-column field="sex22" title="<span style='color:red;'>Sex1111</span>" type="html" :visible="false"></vxe-column>
+      <vxe-column field="Sex222" title="<span style='color:red;'>Sex222</span>" type="html"></vxe-column>
+      <vxe-column field="Sex1111" title="<span style='color:red;'>Sex1111</span>" type="html" :visible="false"></vxe-column>
       <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
         field="age"

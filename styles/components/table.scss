@@ -1286,6 +1286,11 @@
     &[drag-pos="right"] {
       border-right-color: var(--vxe-ui-font-primary-color);
     }
+    &[drag-to-child="y"] {
+      border-left-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: var(--vxe-ui-status-success-color);
+    }
     &.is--guides {
       background-color: var( --vxe-ui-table-drag-over-background-color);
     }

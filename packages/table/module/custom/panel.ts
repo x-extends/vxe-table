@@ -1,11 +1,11 @@
 import { defineComponent, h, inject, ref, Ref, VNode, PropType, nextTick, TransitionGroup, createCommentVNode } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
-import { addClass, removeClass } from '../../../ui/src/dom'
+import { tpImg, addClass, removeClass } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
-import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeTooltipComponent, VxeInputComponent, VxeButtonEvents } from 'vxe-pc-ui'
+import type { VxeModalComponent, VxeDrawerComponent, VxeButtonComponent, VxeRadioGroupComponent, VxeInputComponent, VxeButtonEvents } from 'vxe-pc-ui'
 import type { VxeTableDefines, VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes } from '../../../../types'
 
 const { getI18n, getIcon, renderEmptyElement } = VxeUI
@@ -23,21 +23,23 @@ export default defineComponent({
     const VxeUIDrawerComponent = VxeUI.getComponent<VxeDrawerComponent>('VxeDrawer')
     const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
     const VxeUINumberInputComponent = VxeUI.getComponent<VxeInputComponent>('VxeNumberInput')
-    const VxeUITooltipComponent = VxeUI.getComponent<VxeTooltipComponent>('VxeTooltip')
     const VxeUIRadioGroupComponent = VxeUI.getComponent<VxeRadioGroupComponent>('VxeRadioGroup')
 
     const $xeTable = inject('$xeTable', {} as VxeTableConstructor & VxeTableMethods & VxeTablePrivateMethods)
 
-    const { props: tableProps, reactData } = $xeTable
-    const { computeCustomOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { props: tableProps, reactData, internalData } = $xeTable
+    const { computeCustomOpts, computeColumnDragOpts, computeColumnOpts, computeIsMaxFixedColumn, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const bodyElemRef = ref() as Ref<HTMLDivElement>
-    const dragHintElemRef = ref() as Ref<HTMLDivElement>
+    const refDragLineElem = ref() as Ref<HTMLDivElement>
+    const refDragTipElem = ref() as Ref<HTMLDivElement>
 
     const dragColumnRef = ref<VxeTableDefines.ColumnInfo | null>()
 
-    let prevDropTrEl: any
+    let prevDragCol: VxeTableDefines.ColumnInfo | undefined
+    let prevDragToChild = false
+    let prevDragPos: any
 
     const handleWrapperMouseenterEvent = (evnt: Event) => {
       const { customStore } = props
@@ -56,6 +58,7 @@ export default defineComponent({
     }
 
     const confirmCustomEvent: VxeButtonEvents.Click = ({ $event }) => {
+      reactData.isCustomStatus = true
       $xeTable.saveCustom()
       $xeTable.closeCustom()
       $xeTable.emitCustomEvent('confirm', $event)
@@ -116,6 +119,7 @@ export default defineComponent({
           item.renderVisible = isChecked
           item.halfVisible = false
         })
+        reactData.isCustomStatus = true
         $xeTable.handleCustom()
         $xeTable.saveCustomStore('update:visible')
       } else {
@@ -126,6 +130,19 @@ export default defineComponent({
       }
       handleOptionCheck(column)
       $xeTable.checkCustomStatus()
+    }
+
+    const changeColumnWidth = (column: VxeTableDefines.ColumnInfo) => {
+      const customOpts = computeCustomOpts.value
+      if (customOpts.immediate) {
+        if (column.renderResizeWidth !== column.renderWidth) {
+          column.resizeWidth = column.renderResizeWidth
+          column.renderWidth = column.renderResizeWidth
+          reactData.isCustomStatus = true
+          $xeTable.handleCustom()
+          $xeTable.saveCustomStore('update:width')
+        }
+      }
     }
 
     const changeFixedOption = (column: VxeTableDefines.ColumnInfo, colFixed: VxeColumnPropTypes.Fixed) => {
@@ -145,6 +162,7 @@ export default defineComponent({
             })
           }
         }
+        reactData.isCustomStatus = true
         $xeTable.handleCustom()
         $xeTable.saveCustomStore('update:fixed')
       } else {
@@ -166,130 +184,334 @@ export default defineComponent({
       $xeTable.toggleCustomAllCheckbox()
     }
 
+    const showDropTip = (evnt: DragEvent | MouseEvent, optEl: HTMLElement | null, showLine: boolean, dragPos: string) => {
+      const el = bodyElemRef.value
+      if (!el) {
+        return
+      }
+      const wrapperRect = el.getBoundingClientRect()
+      if (optEl) {
+        const dragLineEl = refDragLineElem.value
+        if (dragLineEl) {
+          if (showLine) {
+            const optRect = optEl.getBoundingClientRect()
+            dragLineEl.style.display = 'block'
+            dragLineEl.style.top = `${Math.max(1, optRect.y - wrapperRect.y)}px`
+            dragLineEl.style.height = `${optRect.height}px`
+            dragLineEl.style.width = `${optRect.width}px`
+            dragLineEl.setAttribute('drag-pos', dragPos)
+            dragLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
+          } else {
+            dragLineEl.style.display = ''
+          }
+        }
+      }
+      const dragTipEl = refDragTipElem.value
+      if (dragTipEl) {
+        dragTipEl.style.display = 'block'
+        dragTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - dragTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
+        dragTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - dragTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
+        dragTipEl.setAttribute('drag-status', showLine ? (prevDragToChild ? 'sub' : 'normal') : 'disabled')
+      }
+    }
+
+    const hideDropTip = () => {
+      const dragTipEl = refDragTipElem.value
+      const dragLineEl = refDragLineElem.value
+      if (dragTipEl) {
+        dragTipEl.style.display = ''
+      }
+      if (dragLineEl) {
+        dragLineEl.style.display = ''
+      }
+    }
+
     const sortMousedownEvent = (evnt: DragEvent) => {
       const btnEl = evnt.currentTarget as HTMLElement
-      const tdEl = btnEl.parentNode as HTMLElement
-      const trEl = tdEl.parentNode as HTMLElement
+      const cellEl = btnEl.parentElement as HTMLElement
+      const tdEl = cellEl.parentElement as HTMLElement
+      const trEl = tdEl.parentElement as HTMLElement
       const colid = trEl.getAttribute('colid')
       const column = $xeTable.getColumnById(colid)
       trEl.draggable = true
       dragColumnRef.value = column
       addClass(trEl, 'active--drag-origin')
-      updateDropHint(evnt)
     }
 
     const sortMouseupEvent = (evnt: MouseEvent) => {
       const btnEl = evnt.currentTarget as HTMLElement
-      const tdEl = btnEl.parentNode as HTMLElement
-      const trEl = tdEl.parentNode as HTMLElement
-      const dragHintEl = dragHintElemRef.value
+      const cellEl = btnEl.parentElement as HTMLElement
+      const tdEl = cellEl.parentElement as HTMLElement
+      const trEl = tdEl.parentElement as HTMLElement
+      hideDropTip()
       trEl.draggable = false
       dragColumnRef.value = null
       removeClass(trEl, 'active--drag-origin')
-      if (dragHintEl) {
-        dragHintEl.style.display = ''
-      }
     }
 
     const sortDragstartEvent = (evnt: DragEvent) => {
-      const img = new Image()
       if (evnt.dataTransfer) {
+        const img = new Image()
+        img.src = tpImg
         evnt.dataTransfer.setDragImage(img, 0, 0)
       }
     }
 
     const sortDragendEvent = (evnt: DragEvent) => {
+      const { mouseConfig } = tableProps
       const { customColumnList } = reactData
+      const { collectColumn } = internalData
       const customOpts = computeCustomOpts.value
+      const { immediate } = customOpts
       const trEl = evnt.currentTarget as HTMLElement
-      const dragHintEl = dragHintElemRef.value
-      if (prevDropTrEl) {
+      const dragCol = dragColumnRef.value
+      const columnDragOpts = computeColumnDragOpts.value
+      const { isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
+      const dragOffsetIndex = prevDragPos === 'bottom' ? 1 : 0
+      if (prevDragCol && dragCol) {
         // 判断是否有拖动
-        if (prevDropTrEl !== trEl) {
-          const dragOffset = prevDropTrEl.getAttribute('drag-pos')
-          const colid = trEl.getAttribute('colid')
-          const column = $xeTable.getColumnById(colid)
-          if (!column) {
-            return
-          }
-          const cIndex = XEUtils.findIndexOf(customColumnList, item => item.id === column.id)
-          const targetColid = prevDropTrEl.getAttribute('colid')
-          const targetColumn = $xeTable.getColumnById(targetColid)
-          if (!targetColumn) {
-            return
-          }
-          // 移出源位置
-          customColumnList.splice(cIndex, 1)
-          const tcIndex = XEUtils.findIndexOf(customColumnList, item => item.id === targetColumn.id)
-          // 插新位置
-          customColumnList.splice(tcIndex + (dragOffset === 'bottom' ? 1 : 0), 0, column)
+        if (prevDragCol !== dragCol) {
+          const oldColumn = dragCol
+          const newColumn = prevDragCol
+          Promise.resolve(
+            dragEndMethod
+              ? dragEndMethod({
+                oldColumn,
+                newColumn,
+                dragPos: prevDragPos as any,
+                offsetIndex: dragOffsetIndex
+              })
+              : true
+          ).then((status) => {
+            if (!status) {
+              return
+            }
+
+            let oafIndex = -1
+            let nafIndex = -1
+
+            const oldAllMaps: Record<string, any> = {}
+            XEUtils.eachTree([oldColumn], column => {
+              oldAllMaps[column.id] = column
+            })
+
+            let isSelfToChildStatus = false
+
+            // 只有实时拖拽支持跨层级
+            if (immediate) {
+              if (oldColumn.parentId && newColumn.parentId) {
+              // 子到子
+
+                if (!isCrossDrag) {
+                  return
+                }
+                if (oldAllMaps[newColumn.id]) {
+                  isSelfToChildStatus = true
+                  if (!isSelfToChildDrag) {
+                    if (VxeUI.modal) {
+                      VxeUI.modal.message({
+                        status: 'error',
+                        content: getI18n('vxe.error.treeDragChild')
+                      })
+                    }
+                    return
+                  }
+                }
+              } else if (oldColumn.parentId) {
+              // 子到根
+
+                if (!isCrossDrag) {
+                  return
+                }
+              } else if (newColumn.parentId) {
+              // 根到子
+
+                if (!isCrossDrag) {
+                  return
+                }
+                if (oldAllMaps[newColumn.id]) {
+                  isSelfToChildStatus = true
+                  if (!isSelfToChildDrag) {
+                    if (VxeUI.modal) {
+                      VxeUI.modal.message({
+                        status: 'error',
+                        content: getI18n('vxe.error.treeDragChild')
+                      })
+                    }
+                    return
+                  }
+                }
+              } else {
+              // 根到根
+              }
+
+              const oldewMatchRest = XEUtils.findTree(collectColumn, item => item.id === oldColumn.id)
+
+              // 改变层级
+              if (isSelfToChildStatus && isSelfToChildDrag) {
+                if (oldewMatchRest) {
+                  const { items: oCols, index: oIndex } = oldewMatchRest
+                  const childList = oldColumn.children || []
+                  childList.forEach(column => {
+                    column.parentId = oldColumn.parentId
+                  })
+                  oCols.splice(oIndex, 1, ...childList)
+                  oldColumn.children = []
+                }
+              } else {
+                if (oldewMatchRest) {
+                  const { items: oCols, index: oIndex, parent: oParent } = oldewMatchRest
+                  oCols.splice(oIndex, 1)
+                  if (!oParent) {
+                    oafIndex = oIndex
+                  }
+                }
+              }
+
+              const newMatchRest = XEUtils.findTree(collectColumn, item => item.id === newColumn.id)
+              if (newMatchRest) {
+                const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
+                // 转子级
+                if (isToChildDrag && prevDragToChild) {
+                  oldColumn.parentId = newColumn.id
+                  newColumn.children = (newColumn.children || []).concat([oldColumn])
+                } else {
+                  oldColumn.parentId = newColumn.parentId
+                  nCols.splice(nIndex + dragOffsetIndex, 0, oldColumn)
+                }
+                if (!nParent) {
+                  nafIndex = nIndex
+                }
+              }
+
+              XEUtils.eachTree(collectColumn, (column, index, items, path, parent) => {
+                if (!parent) {
+                  const sortIndex = index + 1
+                  column.renderSortNumber = sortIndex
+                }
+              })
+            } else {
+              oafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === oldColumn.id)
+              customColumnList.splice(oafIndex, 1)
+
+              nafIndex = XEUtils.findIndexOf(customColumnList, item => item.id === newColumn.id)
+              customColumnList.splice(nafIndex + dragOffsetIndex, 0, oldColumn)
+            }
+
+            reactData.isDragColMove = true
+            if (mouseConfig) {
+              if ($xeTable.clearSelected) {
+                $xeTable.clearSelected()
+              }
+              if ($xeTable.clearCellAreas) {
+                $xeTable.clearCellAreas()
+                $xeTable.clearCopyCellArea()
+              }
+            }
+
+            $xeTable.dispatchEvent('column-dragend', {
+              oldColumn,
+              newColumn,
+              dragPos: prevDragPos,
+              offsetIndex: dragOffsetIndex,
+              _index: {
+                newIndex: nafIndex,
+                oldIndex: oafIndex
+              }
+            }, evnt)
+
+            if (immediate) {
+              reactData.customColumnList = collectColumn.slice(0)
+              $xeTable.refreshColumn(true).then(() => {
+                $xeTable.updateCellAreas()
+                $xeTable.handleCustom()
+                $xeTable.saveCustomStore('update:sort')
+              })
+            }
+          }).catch(() => {
+          })
         }
-        prevDropTrEl.draggable = false
-        prevDropTrEl.removeAttribute('drag-pos')
-        removeClass(prevDropTrEl, 'active--drag-target')
       }
+
+      hideDropTip()
       dragColumnRef.value = null
       trEl.draggable = false
       trEl.removeAttribute('drag-pos')
-      if (dragHintEl) {
-        dragHintEl.style.display = ''
-      }
       removeClass(trEl, 'active--drag-target')
       removeClass(trEl, 'active--drag-origin')
-
-      if (customOpts.immediate) {
-        XEUtils.eachTree(customColumnList, (column, index, items, path, parent) => {
-          if (!parent) {
-            const sortIndex = index + 1
-            column.renderSortNumber = sortIndex
-          }
-        })
-        $xeTable.handleCustom()
-        $xeTable.saveCustomStore('update:sort')
-      }
     }
 
     const sortDragoverEvent = (evnt: DragEvent) => {
-      const trEl = evnt.currentTarget as HTMLElement
-      if (prevDropTrEl !== trEl) {
-        removeClass(prevDropTrEl, 'active--drag-target')
-      }
-      const colid = trEl.getAttribute('colid')
+      const customOpts = computeCustomOpts.value
+      const { immediate } = customOpts
+      const columnDragOpts = computeColumnDragOpts.value
+      const { isCrossDrag, isToChildDrag } = columnDragOpts
+      const optEl = evnt.currentTarget as HTMLElement
+      const hasCtrlKey = evnt.ctrlKey
+      const colid = optEl.getAttribute('colid')
       const column = $xeTable.getColumnById(colid)
-      // 是否移入有效元行
-      if (column && column.level === 1) {
+      const dragCol = dragColumnRef.value
+      // 是否移入有效列
+      if (column && (isCrossDrag || column.level === 1)) {
         evnt.preventDefault()
-        const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
-        const dragOffset = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
-        addClass(trEl, 'active--drag-target')
-        trEl.setAttribute('drag-pos', dragOffset)
-        prevDropTrEl = trEl
+        const offsetY = evnt.clientY - optEl.getBoundingClientRect().y
+        const dragPos = offsetY < optEl.clientHeight / 2 ? 'top' : 'bottom'
+        if ((dragCol && dragCol.id === column.id) || (!isCrossDrag && column.level === 1) || (!immediate && column.level > 1) || column.renderFixed) {
+          showDropTip(evnt, optEl, false, dragPos)
+          return
+        }
+        prevDragToChild = !!(isToChildDrag && hasCtrlKey && immediate)
+        prevDragCol = column
+        prevDragPos = dragPos
+        showDropTip(evnt, optEl, true, dragPos)
       }
-      updateDropHint(evnt)
     }
 
-    const updateDropHint = (evnt: DragEvent) => {
-      const dragHintEl = dragHintElemRef.value
-      const bodyEl = bodyElemRef.value
-      if (!bodyEl) {
-        return
-      }
-      if (dragHintEl) {
-        const wrapperEl = bodyEl.parentNode as HTMLElement
-        const wrapperRect = wrapperEl.getBoundingClientRect()
-        dragHintEl.style.display = 'block'
-        dragHintEl.style.top = `${Math.min(wrapperEl.clientHeight - wrapperEl.scrollTop - dragHintEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
-        dragHintEl.style.left = `${Math.min(wrapperEl.clientWidth - wrapperEl.scrollLeft - dragHintEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
-      }
+    const renderDragTip = () => {
+      const dragCol = dragColumnRef.value
+      return h('div', {}, [
+        h('div', {
+          ref: refDragLineElem,
+          class: 'vxe-table-custom-popup--drag-line'
+        }),
+        h('div', {
+          ref: refDragTipElem,
+          class: 'vxe-table-custom-popup--drag-tip'
+        }, [
+          h('div', {
+            class: 'vxe-table-custom-popup--drag-tip-wrapper'
+          }, [
+            h('div', {
+              class: 'vxe-table-custom-popup--drag-tip-status'
+            }, [
+              h('span', {
+                class: ['vxe-table-custom-popup--drag-tip-normal-status', getIcon().TABLE_DRAG_STATUS_ROW]
+              }),
+              h('span', {
+                class: ['vxe-table-custom-popup--drag-tip-sub-status', getIcon().TABLE_DRAG_STATUS_SUB_ROW]
+              }),
+              h('span', {
+                class: ['vxe-table-custom-popup--drag-tip-disabled-status', getIcon().TABLE_DRAG_DISABLED]
+              })
+            ]),
+            h('div', {
+              class: 'vxe-table--drag-tip-content'
+            }, getI18n('vxe.custom.cstmDragTarget', [dragCol && dragCol.type !== 'html' ? dragCol.getTitle() : '']))
+          ])
+        ])
+      ])
     }
 
     const renderSimplePanel = () => {
       const { customStore } = props
       const { isCustomStatus, customColumnList } = reactData
       const customOpts = computeCustomOpts.value
+      const { immediate } = customOpts
+      const columnDragOpts = computeColumnDragOpts.value
       const { maxHeight } = customStore
       const { checkMethod, visibleMethod, allowVisible, allowSort, allowFixed, trigger, placement } = customOpts
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
+      const { isCrossDrag } = columnDragOpts
       const slots = customOpts.slots || {}
       const headerSlot = slots.header
       const topSlot = slots.top
@@ -300,7 +522,6 @@ export default defineComponent({
       const customWrapperOns: any = {}
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
-      const dragColumn = dragColumnRef.value
       // hover 触发
       if (trigger === 'hover') {
         customWrapperOns.onMouseenter = handleWrapperMouseenterEvent
@@ -354,38 +575,42 @@ export default defineComponent({
                   })
                 ])
                 : createCommentVNode(),
-              allowSort && column.level === 1
-                ? h('div', {
-                  class: 'vxe-table-custom--sort-option'
-                }, [
-                  h('span', {
-                    class: ['vxe-table-custom--sort-btn', {
-                      'is--disabled': isDisabled || isHidden
-                    }],
-                    title: getI18n('vxe.custom.setting.sortHelpTip'),
-                    ...(isDisabled || isHidden
-                      ? {}
-                      : {
-                          onMousedown: sortMousedownEvent,
-                          onMouseup: sortMouseupEvent
-                        })
+              h('div', {
+                class: 'vxe-table-custom--name-option'
+              }, [
+                allowSort && ((isCrossDrag ? immediate : false) || column.level === 1)
+                  ? h('div', {
+                    class: 'vxe-table-custom--sort-option'
                   }, [
-                    h('i', {
-                      class: getIcon().TABLE_CUSTOM_SORT
-                    })
+                    h('span', {
+                      class: ['vxe-table-custom--sort-btn', {
+                        'is--disabled': isDisabled || isHidden || column.renderFixed
+                      }],
+                      title: getI18n('vxe.custom.setting.sortHelpTip'),
+                      ...(isDisabled || isHidden || column.renderFixed
+                        ? {}
+                        : {
+                            onMousedown: sortMousedownEvent,
+                            onMouseup: sortMouseupEvent
+                          })
+                    }, [
+                      h('i', {
+                        class: getIcon().TABLE_CUSTOM_SORT
+                      })
+                    ])
                   ])
-                ])
-                : createCommentVNode(),
-              column.type === 'html'
-                ? h('div', {
-                  key: '1',
-                  class: 'vxe-table-custom--checkbox-label',
-                  innerHTML: colTitle
-                })
-                : h('div', {
-                  key: '0',
-                  class: 'vxe-table-custom--checkbox-label'
-                }, colTitle),
+                  : createCommentVNode(),
+                column.type === 'html'
+                  ? h('div', {
+                    key: '1',
+                    class: 'vxe-table-custom--checkbox-label',
+                    innerHTML: colTitle
+                  })
+                  : h('div', {
+                    key: '0',
+                    class: 'vxe-table-custom--checkbox-label'
+                  }, colTitle)
+              ]),
               !parent && allowFixed
                 ? h('div', {
                   class: 'vxe-table-custom--fixed-option'
@@ -492,10 +717,7 @@ export default defineComponent({
                   class: 'vxe-table-custom--panel-bottom'
                 }, $xeTable.callSlot(bottomSlot, params))
                 : renderEmptyElement($xeTable),
-              h('div', {
-                ref: dragHintElemRef,
-                class: 'vxe-table-custom-popup--drag-hint'
-              }, getI18n('vxe.custom.cstmDragTarget', [dragColumn && dragColumn.type !== 'html' ? dragColumn.getTitle() : '']))
+              renderDragTip()
             ]),
             customOpts.showFooter
               ? h('div', {
@@ -514,7 +736,7 @@ export default defineComponent({
                           onClick: resetCustomEvent
                         })
                         : createCommentVNode(),
-                      customOpts.immediate
+                      immediate
                         ? (VxeUIButtonComponent
                             ? h(VxeUIButtonComponent, {
                               mode: 'text',
@@ -529,7 +751,7 @@ export default defineComponent({
                               onClick: cancelCustomEvent
                             })
                             : createCommentVNode()),
-                      customOpts.immediate
+                      immediate
                         ? createCommentVNode()
                         : (VxeUIButtonComponent
                             ? h(VxeUIButtonComponent, {
@@ -551,6 +773,8 @@ export default defineComponent({
       const { resizable: allResizable } = tableProps
       const { isCustomStatus, customColumnList } = reactData
       const customOpts = computeCustomOpts.value
+      const { immediate } = customOpts
+      const columnDragOpts = computeColumnDragOpts.value
       const { mode, modalOptions, drawerOptions, allowVisible, allowSort, allowFixed, allowResizable, checkMethod, visibleMethod } = customOpts
       const columnOpts = computeColumnOpts.value
       const { maxFixedSize } = columnOpts
@@ -559,6 +783,7 @@ export default defineComponent({
       const modalOpts = Object.assign({}, modalOptions)
       const drawerOpts = Object.assign({}, drawerOptions)
       const isMaxFixedColumn = computeIsMaxFixedColumn.value
+      const { isCrossDrag } = columnDragOpts
       const slots = customOpts.slots || {}
       const headerSlot = slots.header
       const topSlot = slots.top
@@ -568,7 +793,6 @@ export default defineComponent({
       const trVNs: VNode[] = []
       const isAllChecked = customStore.isAll
       const isAllIndeterminate = customStore.isIndeterminate
-      const dragColumn = dragColumnRef.value
       const params = {
         $table: $xeTable,
         $grid: $xeTable.xegrid,
@@ -639,44 +863,46 @@ export default defineComponent({
                   ])
                 ])
                 : createCommentVNode(),
-              allowSort
-                ? h('td', {
-                  class: 'vxe-table-custom-popup--column-item col--sort'
-                }, [
-                  column.level === 1
-                    ? h('span', {
-                      class: ['vxe-table-custom-popup--column-sort-btn', {
-                        'is--disabled': isDisabled || isHidden
-                      }],
-                      title: getI18n('vxe.custom.setting.sortHelpTip'),
-                      ...(isDisabled || isHidden
-                        ? {}
-                        : {
-                            onMousedown: sortMousedownEvent,
-                            onMouseup: sortMouseupEvent
-                          })
-                    }, [
-                      h('i', {
-                        class: getIcon().TABLE_CUSTOM_SORT
-                      })
-                    ])
-                    : h('span', '-')
-                ])
-                : createCommentVNode(),
               h('td', {
                 class: 'vxe-table-custom-popup--column-item col--name'
               }, [
-                column.type === 'html'
-                  ? h('div', {
-                    key: '1',
-                    class: 'vxe-table-custom-popup--name',
-                    innerHTML: colTitle
-                  })
-                  : h('div', {
-                    key: '0',
-                    class: 'vxe-table-custom-popup--name',
-                    title: colTitle
-                  }, colTitle)
+                h('div', {
+                  class: 'vxe-table-custom-popup--name'
+                }, [
+                  allowSort
+                    ? ((isCrossDrag ? immediate : false) || column.level === 1
+                        ? h('div', {
+                          class: ['vxe-table-custom-popup--column-sort-btn', {
+                            'is--disabled': isDisabled || isHidden || column.renderFixed
+                          }],
+                          title: getI18n('vxe.custom.setting.sortHelpTip'),
+                          ...(isDisabled || isHidden || column.renderFixed
+                            ? {}
+                            : {
+                                onMousedown: sortMousedownEvent,
+                                onMouseup: sortMouseupEvent
+                              })
+                        }, [
+                          h('i', {
+                            class: getIcon().TABLE_CUSTOM_SORT
+                          })
+                        ])
+                        : h('div', {
+                          class: 'vxe-table-custom-popup--column-sort-placeholder'
+                        }))
+                    : createCommentVNode(),
+                  column.type === 'html'
+                    ? h('div', {
+                      key: '1',
+                      class: 'vxe-table-custom-popup--title',
+                      innerHTML: colTitle
+                    })
+                    : h('div', {
+                      key: '0',
+                      class: 'vxe-table-custom-popup--title',
+                      title: colTitle
+                    }, colTitle)
+                ])
               ]),
               allowResizable
                 ? h('td', {
@@ -691,12 +917,17 @@ export default defineComponent({
                         VxeUINumberInputComponent
                           ? h(VxeUINumberInputComponent, {
                             type: 'integer',
+                            immediate: false,
                             disabled: isDisabled || isHidden,
                             modelValue: column.renderResizeWidth,
                             min: customMinWidth || undefined,
                             max: customMaxWidth || undefined,
                             'onUpdate:modelValue' (value: any) {
-                              column.renderResizeWidth = Math.max(0, Number(value))
+                              const width = Math.max(0, Number(value))
+                              column.renderResizeWidth = width
+                            },
+                            onChange () {
+                              changeColumnWidth(column)
                             }
                           })
                           : createCommentVNode()
@@ -722,7 +953,7 @@ export default defineComponent({
                               { label: getI18n('vxe.custom.setting.fixedRight'), value: 'right', disabled: isDisabled || isHidden || isMaxFixedColumn }
                             ],
                             'onUpdate:modelValue' (value: any) {
-                              column.renderFixed = value
+                              changeFixedOption(column, value)
                             }
                           })
                           : createCommentVNode()
@@ -755,11 +986,6 @@ export default defineComponent({
                   allowVisible
                     ? h('col', {
                       class: 'vxe-table-custom-popup--table-col-seq'
-                    })
-                    : createCommentVNode(),
-                  allowSort
-                    ? h('col', {
-                      class: 'vxe-table-custom-popup--table-col-sort'
                     })
                     : createCommentVNode(),
                   h('col', {
@@ -797,26 +1023,6 @@ export default defineComponent({
                         ])
                       ])
                       : createCommentVNode(),
-                    allowSort
-                      ? h('th', {}, [
-                        h('span', {
-                          class: 'vxe-table-custom-popup--table-sort-help-title'
-                        }, getI18n('vxe.custom.setting.colSort')),
-                        VxeUITooltipComponent
-                          ? h(VxeUITooltipComponent, {
-                            enterable: true,
-                            content: getI18n('vxe.custom.setting.sortHelpTip'),
-                            popupClassName: 'vxe-table--ignore-clear'
-                          }, {
-                            default: () => {
-                              return h('i', {
-                                class: 'vxe-table-custom-popup--table-sort-help-icon vxe-icon-question-circle-fill'
-                              })
-                            }
-                          })
-                          : createCommentVNode()
-                      ])
-                      : createCommentVNode(),
                     h('th', {}, getI18n('vxe.custom.setting.colTitle')),
                     allowResizable
                       ? h('th', {}, getI18n('vxe.custom.setting.colResizable'))
@@ -840,10 +1046,7 @@ export default defineComponent({
                 class: 'vxe-table-custom-popup--table-bottom'
               }, $xeTable.callSlot(bottomSlot, params))
               : renderEmptyElement($xeTable),
-            h('div', {
-              ref: dragHintElemRef,
-              class: 'vxe-table-custom-popup--drag-hint'
-            }, getI18n('vxe.custom.cstmDragTarget', [dragColumn ? dragColumn.getTitle() : '']))
+            renderDragTip()
           ])
         },
         footer: () => {
@@ -860,19 +1063,28 @@ export default defineComponent({
                 onClick: resetCustomEvent
               })
               : createCommentVNode(),
-            VxeUIButtonComponent
-              ? h(VxeUIButtonComponent, {
-                content: customOpts.resetButtonText || getI18n('vxe.custom.cstmCancel'),
-                onClick: cancelCustomEvent
-              })
-              : createCommentVNode(),
-            VxeUIButtonComponent
-              ? h(VxeUIButtonComponent, {
-                status: 'primary',
-                content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm'),
-                onClick: confirmCustomEvent
-              })
-              : createCommentVNode()
+            immediate
+              ? (VxeUIButtonComponent
+                  ? h(VxeUIButtonComponent, {
+                    content: customOpts.closeButtonText || getI18n('vxe.table.customClose'),
+                    onClick: cancelCloseEvent
+                  })
+                  : createCommentVNode())
+              : (VxeUIButtonComponent
+                  ? h(VxeUIButtonComponent, {
+                    content: customOpts.cancelButtonText || getI18n('vxe.table.customCancel'),
+                    onClick: cancelCustomEvent
+                  })
+                  : createCommentVNode()),
+            immediate
+              ? createCommentVNode()
+              : (VxeUIButtonComponent
+                  ? h(VxeUIButtonComponent, {
+                    status: 'primary',
+                    content: customOpts.confirmButtonText || getI18n('vxe.custom.cstmConfirm'),
+                    onClick: confirmCustomEvent
+                  })
+                  : createCommentVNode())
           ])
         }
       }
@@ -949,9 +1161,6 @@ export default defineComponent({
         }
         if (!VxeUINumberInputComponent) {
           errLog('vxe.error.reqComp', ['vxe-number-input'])
-        }
-        if (!VxeUITooltipComponent) {
-          errLog('vxe.error.reqComp', ['vxe-tooltip'])
         }
         if (!VxeUIRadioGroupComponent) {
           errLog('vxe.error.reqComp', ['vxe-radio-group'])

@@ -47,8 +47,8 @@ export default {
       notExp: '該瀏覽器不支援匯入/匯出功能',
       impFields: '匯入失敗，請檢查欄位名稱和資料格式是否正確',
       treeNotImp: '樹表格不支援導入',
-      treeCrossDrag: '只能拖拽第一层级的数据',
-      treeDragChild: '父级数据不能拖拽到自己的子级中',
+      treeCrossDrag: '只能拖拽第一层级',
+      treeDragChild: '父级不能拖拽到自己的子级中',
       reqPlugin: '可選擴展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
@@ -130,7 +130,7 @@ export default {
       setting: {
         colSort: '排序',
         sortHelpTip: '點擊並拖曳圖示可以調整列的排序',
-        colTitle: '標題',
+        colTitle: '列標題',
         colResizable: '列寬（像素）',
         colVisible: '是否顯示',
         colFixed: '凍結列',

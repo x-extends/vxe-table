@@ -39,7 +39,7 @@ VxeUI.hooks.add('tableCustomModule', {
         sortMaps[colid] = column.renderSortNumber
         fixedMaps[colid] = column.fixed
         visibleMaps[colid] = column.visible
-      }, { children: 'children' })
+      })
       customStore.oldSortMaps = sortMaps
       customStore.oldFixedMaps = fixedMaps
       customStore.oldVisibleMaps = visibleMaps
@@ -146,6 +146,7 @@ VxeUI.hooks.add('tableCustomModule', {
           column.halfVisible = false
         })
         customStore.isAll = isAll
+        reactData.isCustomStatus = true
         $xeTable.handleCustom()
         $xeTable.saveCustomStore('update:visible')
       } else {

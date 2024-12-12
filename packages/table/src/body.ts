@@ -478,7 +478,7 @@ export default defineComponent({
               class: trClass,
               rowid: rowid,
               style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-              key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
+              key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
               ...trOn
             }, {
               default: () => tdVNs

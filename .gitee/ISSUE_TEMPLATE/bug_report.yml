@@ -5,7 +5,7 @@ body:
 - type: input
   id: issue_link
   attributes:
-    label: "可复现的链接："
+    label: "可复现的链接（必须为公开链接，仅包含能复现问题的示例代码）："
     description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。如何创建，点击 v3：[codesandbox](https://codesandbox.io/s/vue-template-916h0)、[jsfiddle](https://jsfiddle.net/86p7Ltny/)、[jsrun](https://jsrun.net/vIyKp/edit) 或 v4：[codesandbox](https://codesandbox.io/s/vxe-table-wentiyanshi-forked-54v2j)、[jsfiddle](https://jsfiddle.net/9qoghkbj/)、[jsrun](https://jsrun.net/K5IKp/edit)，将代码示例编辑后保存。"
   validations:
     required: true
@@ -26,27 +26,27 @@ body:
   id: issue_os_version
   attributes:
     label: "操作系统："
-    placeholder: "例如：window10"
+    placeholder: "例如：window11"
   validations:
     required: true
 - type: input
   id: issue_browser_version
   attributes:
     label: "浏览器版本："
-    placeholder: "例如：chrome 95.0.4638.69"
+    placeholder: "例如：chrome 133.0.6876.4"
   validations:
     required: true
 - type: input
   id: issue_vue_version
   attributes:
     label: "vue 版本："
-    placeholder: "例如：2.6.0"
+    placeholder: "例如：3.5.0"
   validations:
     required: true
 - type: input
   id: issue_vxe_version
   attributes:
     label: "vxe-table 版本："
-    placeholder: "例如：3.4.0"
+    placeholder: "例如：3.9.0"
   validations:
     required: true

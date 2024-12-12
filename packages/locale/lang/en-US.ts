@@ -47,8 +47,8 @@ export default {
       notExp: 'The browser does not support import / export.',
       impFields: 'Import failed, please check that the field name and data format are correct.',
       treeNotImp: 'Tree table does not support import.',
-      treeCrossDrag: 'Only drag and drop data from the first level',
-      treeDragChild: 'Parent data cannot be dragged and dropped into children',
+      treeCrossDrag: 'Only drag and drop the first level',
+      treeDragChild: 'The parent cannot be dragged into its own child',
       reqPlugin: 'Optional extensions "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
@@ -130,7 +130,7 @@ export default {
       setting: {
         colSort: 'Sort',
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
-        colTitle: 'Title',
+        colTitle: 'Column title',
         colResizable: 'Column width (px)',
         colVisible: 'Display',
         colFixed: 'Freeze columns',

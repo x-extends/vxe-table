@@ -41,7 +41,7 @@
     position: absolute;
     left: -1px;
     width: calc(100% + 1px);
-    height: 3px;
+    height: 2px;
     background-color: var(--vxe-ui-font-primary-color);
     z-index: 12;
   }
@@ -95,6 +95,7 @@
 }
 
 .vxe-table-custom--body {
+  position: relative;
   display: block;
   flex-grow: 1;
   overflow-x: hidden;
@@ -107,15 +108,12 @@
   padding: 0;
   & > li {
     max-width: 26em;
-    min-width: 17em;
+    min-width: 18em;
     padding: 0.2em 1em 0.2em 1em;
     @for $i from 2 through 8 {
-      $interval: $i - 1 + 0.2;
+      $interval: $i - 1 + 0.5;
       &.level--#{$i}{
-        padding-left: #{$interval + 2.3}em;
-        .vxe-checkbox--icon {
-          left: #{$interval + 0.6}em;
-        }
+        padding-left: #{$interval + 1.2}em;
       }
     }
   }
@@ -130,7 +128,6 @@
 }
 
 .vxe-table-custom--panel-list {
-  padding: 0.2em 0;
   .vxe-table-custom--checkbox-option {
     &:hover {
       background-color: var(--vxe-ui-table-row-hover-background-color);
@@ -182,6 +179,12 @@
     cursor: not-allowed;
   }
 }
+.vxe-table-custom--name-option {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
 .vxe-table-custom--checkbox-label  {
   flex-grow: 1;
   overflow: hidden;
@@ -199,6 +202,7 @@
 }
 
 .vxe-table-custom-popup--body {
+  position: relative;
   overflow: auto;
   height: 100%;
   outline: 0;
@@ -248,13 +252,43 @@
   }
 }
 
-.vxe-table-custom-popup--drag-hint {
+/*拖拽列*/
+.vxe-table-custom-popup--drag-line {
   display: none;
   position: absolute;
   top: 0;
   left: 0;
-  padding: 0.6em 1em 0.6em 1.6em;
-  max-width: 300px;
+  z-index: 11;
+  pointer-events: none;
+}
+.vxe-table-custom-popup--drag-line {
+  width: 100%;
+  height: 1px;
+  border: 2px solid transparent;
+  &[drag-pos="top"] {
+    border-top-color: var(--vxe-ui-font-primary-color);
+  }
+  &[drag-pos="bottom"] {
+    border-bottom-color: var(--vxe-ui-font-primary-color);
+  }
+  &[drag-to-child="y"] {
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: var(--vxe-ui-status-success-color);
+  }
+  &.is--guides {
+    background-color: var( --vxe-ui-table-drag-over-background-color);
+  }
+}
+
+.vxe-table-custom-popup--drag-tip {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.6em 1.4em;
+  max-width: 50%;
+  min-width: 100px;
   border-radius: var(--vxe-ui-border-radius);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -264,9 +298,53 @@
   background-color: var(--vxe-ui-layout-background-color);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
   z-index: 33;
+  &[drag-status="normal"] {
+    .vxe-table-custom-popup--drag-tip-normal-status {
+      display: block;
+    }
+  }
+  &[drag-status="sub"] {
+    .vxe-table-custom-popup--drag-tip-sub-status {
+      display: block;
+    }
+  }
+  &[drag-status="disabled"] {
+    .vxe-table-custom-popup--drag-tip-disabled-status {
+      display: block;
+    }
+  }
+}
+.vxe-table-custom-popup--drag-tip-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.vxe-table-custom-popup--drag-tip-status {
+  padding-right: 0.4em;
+}
+.vxe-table-custom-popup--drag-tip-disabled-status {
+  display: none;
+  flex-shrink: 0;
+  color: var(--vxe-ui-status-error-color)
+}
+.vxe-table-custom-popup--drag-tip-normal-status,
+.vxe-table-custom-popup--drag-tip-sub-status {
+  display: none;
+}
+.vxe-table-custom-popup--drag-tip-content {
+  flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .vxe-table-custom-popup--name {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.vxe-table-custom-popup--title {
+  flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -285,7 +363,6 @@
 
 .vxe-table-custom-popup--column-item {
   position: relative;
-  &.col--sort,
   &.col--visible,
   &.col--resizable,
   &.col--fixed {
@@ -365,6 +442,9 @@
   transition: transform 0.35s;
 }
 
+.vxe-table-custom-popup--column-sort-placeholder {
+  padding: 0.2em 0.5em;
+}
 .vxe-table-custom-popup--column-sort-btn {
   font-size: 1.2em;
   padding: 0.2em 0.5em;

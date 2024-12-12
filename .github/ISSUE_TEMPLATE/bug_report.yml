@@ -5,7 +5,7 @@ body:
 - type: input
   id: issue_link
   attributes:
-    label: "可复现的链接（包含复现链接与示例代码）："
+    label: "可复现的链接（必须为公开链接，仅包含能复现问题的示例代码）："
     description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。"
   validations:
     required: true

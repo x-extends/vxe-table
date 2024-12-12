@@ -12,7 +12,7 @@
       id="bbbbb"
       :row-config="{useKey: true}"
       :column-config="{useKey: true}"
-      :custom-config="{storage:true,immediate:true}"
+      :custom-config="{storage:true,}"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"
       :export-config="{modes: exportModes}"
