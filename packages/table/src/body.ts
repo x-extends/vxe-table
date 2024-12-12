@@ -323,7 +323,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
       getClass(className, params),
       getClass(allCellClassName, params)
     ],
-    key: columnKey || columnOpts.useKey || rowOpts.useKey ? column.id : $columnIndex,
+    key: columnKey || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? column.id : $columnIndex,
     attrs,
     style: Object.assign({
       height: cellHeight
@@ -453,7 +453,7 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
             rowid
           },
           style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-          key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
+          key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
           nativeOn: trOn
         }, tdVNs)
         : h('tr', {

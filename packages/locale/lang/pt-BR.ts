@@ -47,8 +47,8 @@ export default {
       notExp: 'O navegador não suporta importação/exportação.',
       impFields: 'Falha na importação, verifique se o nome do campo e o formato dos dados estão corretos.',
       treeNotImp: 'A tabela de árvore não suporta importação.',
-      treeCrossDrag: '只能拖拽第一层级的数据',
-      treeDragChild: '父级数据不能拖拽到自己的子级中',
+      treeCrossDrag: '只能拖拽第一层级',
+      treeDragChild: '父级不能拖拽到自己的子级中',
       reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
@@ -130,7 +130,7 @@ export default {
       setting: {
         colSort: 'Sort',
         sortHelpTip: 'Click and drag the icon to adjust the order of the columns.',
-        colTitle: 'Title',
+        colTitle: '列标题',
         colResizable: 'Column width (px)',
         colVisible: 'Display',
         colFixed: 'Freeze columns',

@@ -106,10 +106,10 @@ function renderHeaderCellDragIcon (h: CreateElement, params: VxeTableDefines.Cel
   const { $table, column } = params
   const columnOpts = $table.computeColumnOpts
   const columnDragOpts = $table.computeColumnDragOpts
-  const { showIcon, icon, visibleMethod, disabledMethod } = columnDragOpts
+  const { showIcon, icon, isCrossDrag, visibleMethod, disabledMethod } = columnDragOpts
   const isDisabled = disabledMethod && disabledMethod(params)
   if (columnOpts.drag && showIcon && (!visibleMethod || visibleMethod(params))) {
-    if (!(column.fixed || column.parentId)) {
+    if (!column.fixed && (isCrossDrag || !column.parentId)) {
       return h('span', {
         key: 'dg',
         class: ['vxe-cell--drag-handle', {

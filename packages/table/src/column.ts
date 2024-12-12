@@ -1,7 +1,8 @@
 import Cell from './cell'
+import { defineVxeComponent } from '../../ui/src/comp'
 import { assembleColumn, destroyColumn } from './util'
 
-const props = {
+export const columnProps = {
   // 列唯一主键
   colId: [String, Number],
   // 渲染类型 seq,radio,checkbox,expand,html
@@ -94,9 +95,9 @@ const props = {
   params: Object
 }
 
-const watch: any = {}
-Object.keys(props).forEach(name => {
-  watch[name] = function (value: any) {
+export const columnWatch: Record<string, any> = {}
+Object.keys(columnProps).forEach(name => {
+  columnWatch[name] = function (value: any) {
     this.columnConfig.update(name, value)
     if (this.$xetable) {
       if (name === 'filters') {
@@ -109,9 +110,9 @@ Object.keys(props).forEach(name => {
   }
 })
 
-export default {
+export default defineVxeComponent({
   name: 'VxeColumn',
-  props,
+  props: columnProps,
   provide () {
     return {
       $xecolumn: this,
@@ -126,11 +127,12 @@ export default {
       default: null
     }
   },
-  watch,
+  watch: columnWatch,
   created (this: any) {
     this.columnConfig = this.createColumn(this.$xetable, this)
   },
   mounted () {
+    this.columnConfig.slots = this.$scopedSlots
     assembleColumn(this)
   },
   destroyed () {
@@ -140,4 +142,4 @@ export default {
     return h('div', this.$slots.default)
   },
   methods: Cell
-}
+})

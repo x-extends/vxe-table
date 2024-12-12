@@ -47,8 +47,8 @@ export default {
       notExp: 'Этот браузер не поддерживает функцию импорта/экспорта.',
       impFields: 'Не удалось выполнить импорт. Проверьте правильность имени поля и формата данных.',
       treeNotImp: 'Древовидные таблицы не поддерживают импорт.',
-      treeCrossDrag: '只能拖拽第一层级的数据',
-      treeDragChild: '父级数据不能拖拽到自己的子级中',
+      treeCrossDrag: '只能拖拽第一层级',
+      treeDragChild: '父级不能拖拽到自己的子级中',
       reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
@@ -130,7 +130,7 @@ export default {
       setting: {
         colSort: 'сортировать',
         sortHelpTip: 'Нажмите и перетащите значок, чтобы изменить порядок столбцов.',
-        colTitle: 'заголовок',
+        colTitle: '列标题',
         colResizable: 'Ширина столбца (пикселей)',
         colVisible: 'Отображать ли',
         colFixed: 'заморозить столбец',

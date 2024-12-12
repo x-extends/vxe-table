@@ -790,7 +790,7 @@ export default {
       })
     },
     staticColumns (value: any) {
-      this.handleColumn(value)
+      this.handleColumn(XEUtils.clone(value))
     },
     tableColumn () {
       this.analyColumnWidth()

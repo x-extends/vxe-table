@@ -14,6 +14,7 @@
       id="bbbbb"
       :row-config="{useKey: true,drag:true}"
       :column-config="{useKey: true,drag: true}"
+      :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true}"
       :custom-config="customConfig"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"
@@ -25,10 +26,10 @@
       @row-dragstart="rowDragstartEvent"
       @row-dragover="rowDragoverEvent"
       @row-dragend="rowDragendEvent">
-      <vxe-column type="seq" width="60" drag-sort></vxe-column>
-      <vxe-column type="checkbox" title="ID" width="140" drag-sort></vxe-column>
-      <vxe-colgroup title="分组1">
-        <vxe-colgroup title="分组2">
+      <vxe-column field="seq" type="seq" width="60" drag-sort></vxe-column>
+      <vxe-column field="checkbox" type="checkbox" title="ID" width="140" drag-sort></vxe-column>
+      <vxe-colgroup field="group1" title="分组1">
+        <vxe-colgroup field="group2" title="分组2">
           <vxe-column type="expand" field="role" title="Role" drag-sort>
             <template #content="{ row }">
               <div>{{ row.name }}</div>
@@ -70,7 +71,11 @@ export default Vue.extend({
         { label: 'current', value: 'current' }
       ],
       customConfig: {
-        storage: true,
+        immediate: true,
+        // storage: true,
+        checkMethod ({ column }: any) {
+          return column.type !== 'seq'
+        },
         visibleMethod ({ column }: any) {
           return column.field !== 'address'
         }

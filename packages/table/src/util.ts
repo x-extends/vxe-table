@@ -137,7 +137,6 @@ export function handleFieldOrColumn (_vm: any, fieldOrColumn: any) {
 export function assembleColumn (_vm: any) {
   const { $el, $xetable, $xecolumn, columnConfig } = _vm
   const groupConfig = $xecolumn ? $xecolumn.columnConfig : null
-  columnConfig.slots = _vm.$scopedSlots
   if (groupConfig) {
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       if ($xecolumn.$options._componentTag === 'vxe-table-column') {

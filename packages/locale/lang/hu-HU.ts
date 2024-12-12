@@ -47,8 +47,8 @@ export default {
       notExp: 'Ez a böngésző nem támogatja az importálási/exportálási funkciókat',
       impFields: 'Az importálás nem sikerült, ellenőrizze, hogy a mezőnév és az adatformátum helyes-e',
       treeNotImp: 'A fatáblák nem támogatják az importálást',
-      treeCrossDrag: '只能拖拽第一层级的数据',
-      treeDragChild: '父级数据不能拖拽到自己的子级中',
+      treeCrossDrag: '只能拖拽第一层级',
+      treeDragChild: '父级不能拖拽到自己的子级中',
       reqPlugin: '可选扩展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
@@ -130,7 +130,7 @@ export default {
       setting: {
         colSort: 'fajta',
         sortHelpTip: 'Kattintson és húzza az ikont az oszlopok sorrendjének módosításához',
-        colTitle: 'cím',
+        colTitle: '列标题',
         colResizable: 'Oszlopszélesség (pixel)',
         colVisible: 'Megjelenik-e',
         colFixed: 'fagyasztóoszlop',

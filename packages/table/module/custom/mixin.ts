@@ -140,6 +140,7 @@ export default {
     },
     _setCustomAllCheckbox (checked: boolean) {
       const $xeTable = this
+      const reactData = $xeTable
 
       const { customStore } = this
       const { customColumnList, customOpts } = this
@@ -158,6 +159,7 @@ export default {
           column.halfVisible = false
         })
         customStore.isAll = isAll
+        reactData.isCustomStatus = true
         $xeTable.handleCustom()
         $xeTable.saveCustomStore('update:visible')
       } else {
