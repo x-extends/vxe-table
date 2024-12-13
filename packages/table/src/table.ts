@@ -618,14 +618,17 @@ export default defineComponent({
     })
 
     const computeFixedColumnSize = computed(() => {
+      const { tableColumn } = reactData
       const { collectColumn } = internalData
       let fixedSize = 0
       // 只判断第一层
-      collectColumn.forEach((column) => {
-        if (column.renderFixed) {
-          fixedSize++
-        }
-      })
+      if (tableColumn.length && collectColumn.length) {
+        collectColumn.forEach((column) => {
+          if (column.renderFixed) {
+            fixedSize++
+          }
+        })
+      }
       return fixedSize
     })
 
@@ -2138,125 +2141,123 @@ export default defineComponent({
       if (rows && !XEUtils.isArray(rows)) {
         rows = [rows]
       }
-      tablePrivateMethods.handleBatchSelectRows(rows, !!value, isForce)
-      tablePrivateMethods.checkSelectionStatus()
+      $xeTable.handleBatchSelectRows(rows, !!value, isForce)
+      $xeTable.checkSelectionStatus()
       return nextTick()
     }
 
-    const handleCheckedAllCheckboxRow = (value: boolean, isForce?: boolean) => {
+    const handleCheckedAllCheckboxRow = (checked: boolean, isForce?: boolean) => {
       const { treeConfig } = props
       const { selectCheckboxMaps } = reactData
       const { afterFullData, checkboxReserveRowMap } = internalData
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const checkboxOpts = computeCheckboxOpts.value
-      const { checkField, reserve, checkStrictly, checkMethod } = checkboxOpts
+      const { checkField, reserve, checkMethod } = checkboxOpts
       const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
       const selectRowMaps: Record<string, any> = {}
-
-      if (checkStrictly) {
-        reactData.isAllSelected = value
+      /**
+       * 绑定属性方式（高性能，有污染）
+       * 必须在行数据存在对应的属性，否则将不响应
+       */
+      if (checkField) {
+        const checkValFn = (row: any) => {
+          if (isForce || (!checkMethod || checkMethod({ row }))) {
+            if (checked) {
+              selectRowMaps[getRowid($xeTable, row)] = row
+            }
+            XEUtils.set(row, checkField, checked)
+          }
+          if (treeConfig && indeterminateField) {
+            XEUtils.set(row, indeterminateField, false)
+          }
+        }
+        // 如果存在选中方法
+        // 如果方法成立，则更新值，否则忽略该数据
+        if (treeConfig) {
+          XEUtils.eachTree(afterFullData, checkValFn, { children: childrenField })
+        } else {
+          afterFullData.forEach(checkValFn)
+        }
       } else {
         /**
-         * 绑定属性方式（高性能，有污染）
-         * 必须在行数据存在对应的属性，否则将不响应
-         */
-        if (checkField) {
-          const checkValFn = (row: any) => {
-            if (isForce || (!checkMethod || checkMethod({ row }))) {
-              if (value) {
-                selectRowMaps[getRowid($xeTable, row)] = row
-              }
-              XEUtils.set(row, checkField, value)
-            }
-            if (treeConfig && indeterminateField) {
-              XEUtils.set(row, indeterminateField, false)
-            }
-          }
-          // 如果存在选中方法
-          // 如果方法成立，则更新值，否则忽略该数据
-          if (treeConfig) {
-            XEUtils.eachTree(afterFullData, checkValFn, { children: childrenField })
-          } else {
-            afterFullData.forEach(checkValFn)
-          }
-        } else {
-          /**
            * 默认方式（低性能，无污染）
            * 无需任何属性，直接绑定
            */
-          if (treeConfig) {
-            if (value) {
-              /**
+        if (treeConfig) {
+          if (checked) {
+            /**
                * 如果是树勾选
                * 如果方法成立，则添加到临时集合中
                */
-              XEUtils.eachTree(afterFullData, (row) => {
-                if (isForce || (!checkMethod || checkMethod({ row }))) {
-                  selectRowMaps[getRowid($xeTable, row)] = row
-                }
-              }, { children: childrenField })
-            } else {
-              /**
+            XEUtils.eachTree(afterFullData, (row) => {
+              if (isForce || (!checkMethod || checkMethod({ row }))) {
+                selectRowMaps[getRowid($xeTable, row)] = row
+              }
+            }, { children: childrenField })
+          } else {
+            /**
                * 如果是树取消
                * 如果方法成立，则不添加到临时集合中
                */
-              if (!isForce && checkMethod) {
-                XEUtils.eachTree(afterFullData, (row) => {
-                  const rowid = getRowid($xeTable, row)
-                  if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
-                    selectRowMaps[rowid] = row
-                  }
-                }, { children: childrenField })
-              }
+            if (!isForce && checkMethod) {
+              XEUtils.eachTree(afterFullData, (row) => {
+                const rowid = getRowid($xeTable, row)
+                if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
+                  selectRowMaps[rowid] = row
+                }
+              }, { children: childrenField })
             }
-          } else {
-            if (value) {
-              /**
+          }
+        } else {
+          if (checked) {
+            /**
                * 如果是行勾选
                * 如果存在选中方法且成立或者本身已勾选，则添加到临时集合中
                * 如果不存在选中方法，则添加所有数据到临时集合中
                */
-              if (!isForce && checkMethod) {
-                afterFullData.forEach((row) => {
-                  const rowid = getRowid($xeTable, row)
-                  if (selectCheckboxMaps[rowid] || checkMethod({ row })) {
-                    selectRowMaps[rowid] = row
-                  }
-                })
-              } else {
-                afterFullData.forEach(row => {
-                  selectRowMaps[getRowid($xeTable, row)] = row
-                })
-              }
+            if (!isForce && checkMethod) {
+              afterFullData.forEach((row) => {
+                const rowid = getRowid($xeTable, row)
+                if (selectCheckboxMaps[rowid] || checkMethod({ row })) {
+                  selectRowMaps[rowid] = row
+                }
+              })
             } else {
-              /**
+              afterFullData.forEach(row => {
+                selectRowMaps[getRowid($xeTable, row)] = row
+              })
+            }
+          } else {
+            /**
                * 如果是行取消
                * 如果方法成立，则不添加到临时集合中；如果方法不成立则判断当前是否已勾选，如果已被勾选则添加到新集合中
                * 如果不存在选中方法，无需处理，临时集合默认为空
                */
-              if (!isForce && checkMethod) {
-                afterFullData.forEach((row) => {
-                  const rowid = getRowid($xeTable, row)
-                  if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
-                    selectRowMaps[rowid] = row
-                  }
-                })
-              }
+            if (!isForce && checkMethod) {
+              afterFullData.forEach((row) => {
+                const rowid = getRowid($xeTable, row)
+                if (checkMethod({ row }) ? 0 : selectCheckboxMaps[rowid]) {
+                  selectRowMaps[rowid] = row
+                }
+              })
             }
           }
         }
-        if (reserve) {
-          if (value) {
-            XEUtils.each(selectRowMaps, (row, rowid) => {
-              checkboxReserveRowMap[rowid] = row
-            })
-          } else {
-            afterFullData.forEach((row) => handleCheckboxReserveRow(row, false))
-          }
-        }
-        reactData.selectCheckboxMaps = checkField ? {} : selectRowMaps
       }
+      if (reserve) {
+        if (checked) {
+          XEUtils.each(selectRowMaps, (row, rowid) => {
+            checkboxReserveRowMap[rowid] = row
+          })
+        } else {
+          afterFullData.forEach((row) => handleCheckboxReserveRow(row, false))
+        }
+      }
+      reactData.selectCheckboxMaps = checkField ? {} : selectRowMaps
+
+      reactData.isAllSelected = checked
+      reactData.isIndeterminate = false
       reactData.treeIndeterminateMaps = {}
       internalData.treeIndeterminateRowMaps = {}
       tablePrivateMethods.checkSelectionStatus()
@@ -2882,6 +2883,9 @@ export default defineComponent({
               collectColumn: internalData.collectColumn,
               $table: $xeTable
             })
+          }
+          if ($xeTable.handleUpdateCustomColumn) {
+            $xeTable.handleUpdateCustomColumn()
           }
           return tableMethods.recalculate()
         })
@@ -4225,8 +4229,8 @@ export default defineComponent({
         const { selectCheckboxMaps } = reactData
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField } = checkboxOpts
-        const value = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xeTable, row)]
-        tablePrivateMethods.handleSelectRow({ row }, value, true)
+        const checked = checkField ? !XEUtils.get(row, checkField) : !selectCheckboxMaps[getRowid($xeTable, row)]
+        tablePrivateMethods.handleBatchSelectRows([row], checked, true)
         tablePrivateMethods.checkSelectionStatus()
         return nextTick()
       },
@@ -6447,296 +6451,239 @@ export default defineComponent({
         }
         return rest
       },
-      checkSelectionStatus () {
-        const { treeConfig } = props
-        const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
-        const { afterFullData } = internalData
-        const checkboxOpts = computeCheckboxOpts.value
-        const { checkField, checkStrictly, checkMethod } = checkboxOpts
-        const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
-        if (!checkStrictly) {
-          const disableRows = []
-          const checkRows = []
-          let isAllResolve = false
-          let isAllSelected = false
-          let isIndeterminate = false
-          if (checkField) {
-            isAllResolve = afterFullData.every(
-              checkMethod
-                ? (row) => {
-                    if (!checkMethod({ row })) {
-                      disableRows.push(row)
-                      return true
-                    }
-                    if (XEUtils.get(row, checkField)) {
-                      checkRows.push(row)
-                      return true
-                    }
-                    return false
-                  }
-                : row => XEUtils.get(row, checkField)
-            )
-            isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
-            if (treeConfig) {
-              if (indeterminateField) {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField) || !!treeIndeterminateMaps[getRowid($xeTable, row)])
-              } else {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || !!treeIndeterminateMaps[getRowid($xeTable, row)])
-              }
-            } else {
-              if (indeterminateField) {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField) || XEUtils.get(row, indeterminateField))
-              } else {
-                isIndeterminate = !isAllSelected && afterFullData.some((row) => XEUtils.get(row, checkField))
-              }
-            }
-          } else {
-            isAllResolve = afterFullData.every(
-              checkMethod
-                ? (row) => {
-                    if (!checkMethod({ row })) {
-                      disableRows.push(row)
-                      return true
-                    }
-                    if (selectCheckboxMaps[getRowid($xeTable, row)]) {
-                      checkRows.push(row)
-                      return true
-                    }
-                    return false
-                  }
-                : row => selectCheckboxMaps[getRowid($xeTable, row)]
-            )
-            isAllSelected = isAllResolve && afterFullData.length !== disableRows.length
-            if (treeConfig) {
-              isIndeterminate = !isAllSelected && afterFullData.some((row) => {
-                const itemRid = getRowid($xeTable, row)
-                return treeIndeterminateMaps[itemRid] || selectCheckboxMaps[itemRid]
-              })
-            } else {
-              isIndeterminate = !isAllSelected && afterFullData.some((row) => selectCheckboxMaps[getRowid($xeTable, row)])
-            }
-          }
-          reactData.isAllSelected = isAllSelected
-          reactData.isIndeterminate = isIndeterminate
-        }
-      },
-      /**
-       * 多行
-       * 多选，行选中事件
-       * value 选中true 不选false 半选-1
-       */
-      handleBatchSelectRows (rows, value, isForce) {
-        const { treeConfig } = props
-        const { selectCheckboxMaps } = reactData
-        const checkboxOpts = computeCheckboxOpts.value
-        const { checkField, checkStrictly, checkMethod } = checkboxOpts
-        if (checkField) {
-          if (treeConfig && !checkStrictly) {
-            rows.forEach(row => {
-              tablePrivateMethods.handleSelectRow({ row }, value, isForce)
-            })
-          } else {
-            rows.forEach(row => {
-              if (isForce || (!checkMethod || checkMethod({ row }))) {
-                XEUtils.set(row, checkField, value)
-                handleCheckboxReserveRow(row, value)
-              }
-            })
-          }
-        } else {
-          if (treeConfig && !checkStrictly) {
-            rows.forEach(row => {
-              tablePrivateMethods.handleSelectRow({ row }, value, isForce)
-            })
-          } else {
-            const selectRowMaps = Object.assign({}, selectCheckboxMaps)
-            rows.forEach(row => {
-              const rowid = getRowid($xeTable, row)
-              if (isForce || (!checkMethod || checkMethod({ row }))) {
-                if (value) {
-                  if (!selectRowMaps[rowid]) {
-                    selectRowMaps[rowid] = row
-                  }
-                } else {
-                  if (selectRowMaps[rowid]) {
-                    delete selectRowMaps[rowid]
-                  }
-                }
-                handleCheckboxReserveRow(row, value)
-              }
-            })
-            reactData.selectCheckboxMaps = selectRowMaps
-          }
-        }
-      },
-      /**
-       * 单行
-       * 多选，行选中事件
-       * value 选中true 不选false 半选-1
-       */
-      handleSelectRow ({ row }, value, isForce) {
+      updateCheckboxStatus () {
         const { treeConfig } = props
         const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
         const selectRowMaps = Object.assign({}, selectCheckboxMaps)
-        const { afterFullData } = internalData
+        const halfRowMaps = Object.assign({}, treeIndeterminateMaps)
         const treeOpts = computeTreeOpts.value
+        const { transform, mapChildrenField } = treeOpts
+        const childrenField = treeOpts.children || treeOpts.childrenField
+        const checkboxOpts = computeCheckboxOpts.value
+        const { checkField, checkStrictly, checkMethod } = checkboxOpts
+        const { afterTreeFullData } = internalData
+        if (checkStrictly) {
+          return
+        }
+        // 树结构
+        if (treeConfig) {
+          const childRowMaps: Record<string, number> = {}
+          const childRowList: any[][] = []
+          XEUtils.eachTree(afterTreeFullData, (row) => {
+            const rowid = getRowid($xeTable, row)
+            const childList = row[transform ? mapChildrenField : childrenField]
+            if (childList && childList.length && !childRowMaps[rowid]) {
+              childRowMaps[rowid] = 1
+              childRowList.unshift([row, rowid, childList])
+            }
+          }, { children: transform ? mapChildrenField : childrenField })
+          childRowList.forEach(vals => {
+            const row: string = vals[0]
+            const rowid: string = vals[1]
+            const childList: any[] = vals[2]
+            let sLen = 0 // 已选
+            let hLen = 0 // 半选
+            let vLen = 0 // 有效行
+            childList.forEach(
+              checkMethod
+                ? (item) => {
+                    const childRowid = getRowid($xeTable, item)
+                    const isSelect = checkField ? XEUtils.get(item, checkField) : selectRowMaps[childRowid]
+                    if (checkMethod({ row: item })) {
+                      if (isSelect) {
+                        sLen++
+                      } else if (halfRowMaps[childRowid]) {
+                        hLen++
+                      }
+                      vLen++
+                    } else {
+                      if (isSelect) {
+                        sLen++
+                      } else if (halfRowMaps[childRowid]) {
+                        hLen++
+                      }
+                    }
+                  }
+                : item => {
+                  const childRowid = getRowid($xeTable, item)
+                  const isSelect = checkField ? XEUtils.get(item, checkField) : selectRowMaps[childRowid]
+                  if (isSelect) {
+                    sLen++
+                  } else if (halfRowMaps[childRowid]) {
+                    hLen++
+                  }
+                  vLen++
+                }
+            )
+            const isSelected = sLen >= vLen
+            const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+            if (checkField) {
+              XEUtils.get(row, checkField, isSelected)
+            }
+            if (isSelected) {
+              if (!checkField) {
+                selectRowMaps[rowid] = row
+              }
+              if (halfRowMaps[rowid]) {
+                delete halfRowMaps[rowid]
+              }
+            } else {
+              if (!checkField) {
+                if (selectRowMaps[rowid]) {
+                  delete selectRowMaps[rowid]
+                }
+              }
+              if (halfSelect) {
+                halfRowMaps[rowid] = row
+              } else {
+                if (halfRowMaps[rowid]) {
+                  delete halfRowMaps[rowid]
+                }
+              }
+            }
+          })
+        }
+        reactData.selectCheckboxMaps = selectRowMaps
+        reactData.treeIndeterminateMaps = halfRowMaps
+      },
+      updateAllCheckboxStatus () {
+        const { treeConfig } = props
+        const { selectCheckboxMaps, treeIndeterminateMaps } = reactData
+        const checkboxOpts = computeCheckboxOpts.value
+        const { checkField, checkMethod } = checkboxOpts
+        const { afterFullData, afterTreeFullData } = internalData
+
+        let sLen = 0 // 已选
+        let hLen = 0 // 半选
+        let vLen = 0 // 有效行
+
+        const rootList = (treeConfig ? afterTreeFullData : afterFullData)
+        rootList.forEach(checkMethod
+          ? row => {
+            const childRowid = getRowid($xeTable, row)
+            const selected = checkField ? XEUtils.get(row, checkField) : selectCheckboxMaps[childRowid]
+            if (checkMethod({ row })) {
+              if (selected) {
+                sLen++
+              } else if (treeIndeterminateMaps[childRowid]) {
+                hLen++
+              }
+              vLen++
+            } else {
+              if (selected) {
+                sLen++
+              } else if (treeIndeterminateMaps[childRowid]) {
+                hLen++
+              }
+            }
+          }
+          : row => {
+            const childRowid = getRowid($xeTable, row)
+            const selected = checkField ? XEUtils.get(row, checkField) : selectCheckboxMaps[childRowid]
+            if (selected) {
+              sLen++
+            } else if (treeIndeterminateMaps[childRowid]) {
+              hLen++
+            }
+            vLen++
+          })
+
+        const isSelected = sLen >= vLen
+        const halfSelect = !isSelected && (sLen >= 1 || hLen >= 1)
+
+        reactData.isAllSelected = isSelected
+        reactData.isIndeterminate = halfSelect
+      },
+      checkSelectionStatus () {
+        $xeTable.updateCheckboxStatus()
+        $xeTable.updateAllCheckboxStatus()
+      },
+      /**
+       * 切换选中
+       * 多选，行选中事件
+       */
+      handleBatchSelectRows (rows, checked, isForce) {
+        const { treeConfig } = props
+        const { selectCheckboxMaps } = reactData
+        const selectRowMaps = Object.assign({}, selectCheckboxMaps)
+        const treeOpts = computeTreeOpts.value
+        const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
         const checkboxOpts = computeCheckboxOpts.value
         const { checkField, checkStrictly, checkMethod } = checkboxOpts
         const indeterminateField = checkboxOpts.indeterminateField || checkboxOpts.halfField
-        const rowid = getRowid($xeTable, row)
         if (checkField) {
+          // 树结构
           if (treeConfig && !checkStrictly) {
-            if (value === -1) {
-              if (!treeIndeterminateMaps[rowid]) {
+            // 更新子节点状态
+            XEUtils.eachTree(rows, (row) => {
+              if (isForce || (!checkMethod || checkMethod({ row }))) {
+                XEUtils.set(row, checkField, checked)
                 if (indeterminateField) {
-                  XEUtils.set(row, indeterminateField, true)
+                  XEUtils.set(row, indeterminateField, false)
                 }
-                treeIndeterminateMaps[rowid] = row
+                handleCheckboxReserveRow(row, checked)
               }
-              XEUtils.set(row, checkField, false)
-            } else {
-              // 更新子节点状态
-              XEUtils.eachTree([row], (item) => {
-                if ($xeTable.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
-                  XEUtils.set(item, checkField, value)
-                  if (indeterminateField) {
-                    XEUtils.set(row, indeterminateField, false)
-                  }
-                  delete treeIndeterminateMaps[getRowid($xeTable, item)]
-                  handleCheckboxReserveRow(row, value)
-                }
-              }, { children: childrenField })
-            }
-            // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => $xeTable.eqRow(item, row), { children: childrenField })
-            if (matchObj && matchObj.parent) {
-              let parentStatus
-              const vItems: any[] = []
-              const vItemMaps: Record<string, any> = {}
-              if (!isForce && checkMethod) {
-                matchObj.items.forEach((item) => {
-                  if (checkMethod({ row: item })) {
-                    const itemRid = getRowid($xeTable, item)
-                    vItemMaps[itemRid] = item
-                    vItems.push(item)
-                  }
-                })
-              } else {
-                matchObj.items.forEach(item => {
-                  const itemRid = getRowid($xeTable, item)
-                  vItemMaps[itemRid] = item
-                  vItems.push(item)
-                })
-              }
-              const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid($xeTable, item)])
-              if (indeterminatesItem) {
-                parentStatus = -1
-              } else {
-                const selectItems: any[] = []
-                matchObj.items.forEach(item => {
-                  if (XEUtils.get(item, checkField)) {
-                    selectItems.push(item)
-                  }
-                })
-                parentStatus = selectItems.filter(item => vItemMaps[getRowid($xeTable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
-              }
-              reactData.selectCheckboxMaps = selectRowMaps
-              tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
-              return
-            }
+            }, { children: transform ? mapChildrenField : childrenField })
+            reactData.selectCheckboxMaps = selectRowMaps
+            return
           } else {
-            if (isForce || (!checkMethod || checkMethod({ row }))) {
-              XEUtils.set(row, checkField, value)
-              handleCheckboxReserveRow(row, value)
-            }
+            // 列表
+            rows.forEach(row => {
+              if (isForce || (!checkMethod || checkMethod({ row }))) {
+                XEUtils.set(row, checkField, checked)
+                handleCheckboxReserveRow(row, checked)
+              }
+            })
           }
-        } else {
-          if (treeConfig && !checkStrictly) {
-            if (value === -1) {
-              if (!treeIndeterminateMaps[rowid]) {
-                if (indeterminateField) {
-                  XEUtils.set(row, indeterminateField, true)
-                }
-                treeIndeterminateMaps[rowid] = row
-              }
-              if (selectRowMaps[rowid]) {
-                delete selectRowMaps[rowid]
-              }
-            } else {
-              // 更新子节点状态
-              XEUtils.eachTree([row], (item) => {
-                const itemRid = getRowid($xeTable, item)
-                if ($xeTable.eqRow(item, row) || (isForce || (!checkMethod || checkMethod({ row: item })))) {
-                  if (value) {
-                    selectRowMaps[itemRid] = item
-                  } else {
-                    if (selectRowMaps[itemRid]) {
-                      delete selectRowMaps[itemRid]
-                    }
-                  }
-                  if (indeterminateField) {
-                    XEUtils.set(row, indeterminateField, false)
-                  }
-                  delete treeIndeterminateMaps[getRowid($xeTable, item)]
-                  handleCheckboxReserveRow(row, value)
-                }
-              }, { children: childrenField })
-            }
-            // 如果存在父节点，更新父节点状态
-            const matchObj = XEUtils.findTree(afterFullData, item => $xeTable.eqRow(item, row), { children: childrenField })
-            if (matchObj && matchObj.parent) {
-              let parentStatus
-              const vItems: any[] = []
-              const vItemMaps: Record<string, any> = {}
-              if (!isForce && checkMethod) {
-                matchObj.items.forEach((item) => {
-                  if (checkMethod({ row: item })) {
-                    const itemRid = getRowid($xeTable, item)
-                    vItemMaps[itemRid] = item
-                    vItems.push(item)
-                  }
-                })
-              } else {
-                matchObj.items.forEach(item => {
-                  const itemRid = getRowid($xeTable, item)
-                  vItemMaps[itemRid] = item
-                  vItems.push(item)
-                })
-              }
-              const indeterminatesItem = XEUtils.find(matchObj.items, item => !!treeIndeterminateMaps[getRowid($xeTable, item)])
-              if (indeterminatesItem) {
-                parentStatus = -1
-              } else {
-                const selectItems: any[] = []
-                matchObj.items.forEach(item => {
-                  const itemRid = getRowid($xeTable, item)
-                  if (selectRowMaps[itemRid]) {
-                    selectItems.push(item)
-                  }
-                })
-                parentStatus = selectItems.filter(item => vItemMaps[getRowid($xeTable, item)]).length === vItems.length ? true : (selectItems.length || value === -1 ? -1 : false)
-              }
-              reactData.selectCheckboxMaps = selectRowMaps
-              tablePrivateMethods.handleSelectRow({ row: matchObj.parent }, parentStatus, isForce)
-              return
-            }
-          } else {
+          reactData.selectCheckboxMaps = selectRowMaps
+          return
+        }
+
+        // 树结构
+        if (treeConfig && !checkStrictly) {
+          // 更新子节点状态
+          XEUtils.eachTree(rows, (row) => {
+            const rowid = getRowid($xeTable, row)
             if (isForce || (!checkMethod || checkMethod({ row }))) {
-              if (value) {
-                if (!selectRowMaps[rowid]) {
-                  selectRowMaps[rowid] = row
-                }
+              if (checked) {
+                selectRowMaps[rowid] = row
               } else {
                 if (selectRowMaps[rowid]) {
                   delete selectRowMaps[rowid]
                 }
               }
-              handleCheckboxReserveRow(row, value)
+              handleCheckboxReserveRow(row, checked)
             }
-          }
+          }, { children: transform ? mapChildrenField : childrenField })
+          reactData.selectCheckboxMaps = selectRowMaps
+          return
         }
+
+        // 列表
+        rows.forEach(row => {
+          const rowid = getRowid($xeTable, row)
+          if (isForce || (!checkMethod || checkMethod({ row }))) {
+            if (checked) {
+              if (!selectRowMaps[rowid]) {
+                selectRowMaps[rowid] = row
+              }
+            } else {
+              if (selectRowMaps[rowid]) {
+                delete selectRowMaps[rowid]
+              }
+            }
+            handleCheckboxReserveRow(row, checked)
+          }
+        })
         reactData.selectCheckboxMaps = selectRowMaps
+      },
+      /**
+       * 即将移除
+       * @deprecated
+       */
+      handleSelectRow ({ row }, checked, isForce) {
+        $xeTable.handleBatchSelectRows([row], checked, isForce)
       },
       triggerHeaderTitleEvent (evnt, iconParams, params) {
         const tipContent = iconParams.content || (iconParams as any).message
@@ -6972,20 +6919,20 @@ export default defineComponent({
         if (trigger === 'manual') {
           return
         }
-        let value = false
+        let checked = false
         if (checkField) {
-          value = !XEUtils.get(row, checkField)
+          checked = !XEUtils.get(row, checkField)
         } else {
-          value = !selectCheckboxMaps[getRowid($xeTable, row)]
+          checked = !selectCheckboxMaps[getRowid($xeTable, row)]
         }
         if (evnt) {
-          tablePrivateMethods.triggerCheckRowEvent(evnt, params, value)
+          tablePrivateMethods.triggerCheckRowEvent(evnt, params, checked)
         } else {
-          tablePrivateMethods.handleSelectRow(params, value)
+          tablePrivateMethods.handleBatchSelectRows([row], checked)
           tablePrivateMethods.checkSelectionStatus()
         }
       },
-      triggerCheckRowEvent (evnt: MouseEvent, params, value) {
+      triggerCheckRowEvent (evnt: MouseEvent, params, checked) {
         const checkboxOpts = computeCheckboxOpts.value
         const { row } = params
         const { afterFullData } = internalData
@@ -7010,13 +6957,13 @@ export default defineComponent({
           }
         }
         if (!checkMethod || checkMethod({ row })) {
-          tablePrivateMethods.handleSelectRow(params, value)
+          tablePrivateMethods.handleBatchSelectRows([row], checked)
           tablePrivateMethods.checkSelectionStatus()
           dispatchEvent('checkbox-change', Object.assign({
             records: tableMethods.getCheckboxRecords(),
             reserves: tableMethods.getCheckboxReserveRecords(),
             indeterminates: tableMethods.getCheckboxIndeterminateRecords(),
-            checked: value
+            checked
           }, params), evnt)
         }
       },

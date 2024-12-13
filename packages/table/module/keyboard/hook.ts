@@ -146,7 +146,7 @@ hooks.add('tableKeyboardModule', {
             lastRangeRows = rangeRows
             if (evnt.ctrlKey) {
               rangeRows.forEach((row: any) => {
-                $xeTable.handleSelectRow({ row }, selectRecords.indexOf(row) === -1)
+                $xeTable.handleBatchSelectRows([row], selectRecords.indexOf(row) === -1)
               })
             } else {
               $xeTable.setAllCheckboxRow(false)

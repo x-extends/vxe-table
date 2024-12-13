@@ -27,28 +27,35 @@ VxeUI.hooks.add('tableCustomModule', {
 
     const openCustom = () => {
       const { initStore, customStore } = reactData
-      const { collectColumn } = internalData
-      const sortMaps: Record<string, number> = {}
-      const fixedMaps: Record<string, VxeColumnPropTypes.Fixed> = {}
-      const visibleMaps: Record<string, boolean> = {}
-      XEUtils.eachTree(collectColumn, column => {
-        const colid = column.getKey()
-        column.renderFixed = column.fixed
-        column.renderVisible = column.visible
-        column.renderResizeWidth = column.renderWidth
-        sortMaps[colid] = column.renderSortNumber
-        fixedMaps[colid] = column.fixed
-        visibleMaps[colid] = column.visible
-      })
-      customStore.oldSortMaps = sortMaps
-      customStore.oldFixedMaps = fixedMaps
-      customStore.oldVisibleMaps = visibleMaps
-      reactData.customColumnList = collectColumn.slice(0)
       customStore.visible = true
       initStore.custom = true
+      handleUpdateCustomColumn()
       checkCustomStatus()
       calcMaxHeight()
       return nextTick().then(() => calcMaxHeight())
+    }
+
+    const handleUpdateCustomColumn = () => {
+      const { customStore } = reactData
+      const { collectColumn } = internalData
+      if (customStore.visible) {
+        const sortMaps: Record<string, number> = {}
+        const fixedMaps: Record<string, VxeColumnPropTypes.Fixed> = {}
+        const visibleMaps: Record<string, boolean> = {}
+        XEUtils.eachTree(collectColumn, column => {
+          const colid = column.getKey()
+          column.renderFixed = column.fixed
+          column.renderVisible = column.visible
+          column.renderResizeWidth = column.renderWidth
+          sortMaps[colid] = column.renderSortNumber
+          fixedMaps[colid] = column.fixed
+          visibleMaps[colid] = column.visible
+        })
+        customStore.oldSortMaps = sortMaps
+        customStore.oldFixedMaps = fixedMaps
+        customStore.oldVisibleMaps = visibleMaps
+        reactData.customColumnList = collectColumn.slice(0)
+      }
     }
 
     const closeCustom = () => {
@@ -252,7 +259,8 @@ VxeUI.hooks.add('tableCustomModule', {
           $xeTable.closeCustom()
           $xeTable.emitCustomEvent('close', evnt)
         }
-      }
+      },
+      handleUpdateCustomColumn
     }
 
     return { ...customMethods, ...customPrivateMethods }
