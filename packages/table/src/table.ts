@@ -2878,7 +2878,10 @@ export default defineComponent({
         }
         return nextTick().then(() => {
           if ($xeToolbar) {
-            $xeToolbar.syncUpdate({ collectColumn, $table: $xeTable })
+            $xeToolbar.syncUpdate({
+              collectColumn: internalData.collectColumn,
+              $table: $xeTable
+            })
           }
           return tableMethods.recalculate()
         })

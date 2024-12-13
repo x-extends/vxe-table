@@ -196,7 +196,7 @@ export default defineComponent({
           if (showLine) {
             const optRect = optEl.getBoundingClientRect()
             dragLineEl.style.display = 'block'
-            dragLineEl.style.top = `${Math.max(1, optRect.y - wrapperRect.y)}px`
+            dragLineEl.style.top = `${Math.max(1, optRect.y + el.scrollTop - wrapperRect.y)}px`
             dragLineEl.style.height = `${optRect.height}px`
             dragLineEl.style.width = `${optRect.width}px`
             dragLineEl.setAttribute('drag-pos', dragPos)
@@ -209,8 +209,8 @@ export default defineComponent({
       const dragTipEl = refDragTipElem.value
       if (dragTipEl) {
         dragTipEl.style.display = 'block'
-        dragTipEl.style.top = `${Math.min(el.clientHeight - el.scrollTop - dragTipEl.clientHeight, evnt.clientY - wrapperRect.y)}px`
-        dragTipEl.style.left = `${Math.min(el.clientWidth - el.scrollLeft - dragTipEl.clientWidth - 16, evnt.clientX - wrapperRect.x)}px`
+        dragTipEl.style.top = `${Math.min(el.clientHeight + el.scrollTop - dragTipEl.clientHeight, evnt.clientY + el.scrollTop - wrapperRect.y)}px`
+        dragTipEl.style.left = `${Math.min(el.clientWidth + el.scrollLeft - dragTipEl.clientWidth, evnt.clientX + el.scrollLeft - wrapperRect.x)}px`
         dragTipEl.setAttribute('drag-status', showLine ? (prevDragToChild ? 'sub' : 'normal') : 'disabled')
       }
     }
@@ -500,7 +500,7 @@ export default defineComponent({
               })
             ]),
             h('div', {
-              class: 'vxe-table--drag-tip-content'
+              class: 'vxe-table-custom-popup--drag-tip-content'
             }, getI18n('vxe.custom.cstmDragTarget', [dragCol && dragCol.type !== 'html' ? dragCol.getTitle() : '']))
           ])
         ])
