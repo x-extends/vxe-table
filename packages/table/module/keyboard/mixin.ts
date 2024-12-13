@@ -227,6 +227,8 @@ export default {
       }
     },
     handleCheckboxRangeEvent (evnt: any, params: any) {
+      const $xeTable = this
+
       const { column, cell } = params
       if (column.type === 'checkbox') {
         const { $el, elemStore } = this
@@ -294,7 +296,7 @@ export default {
             lastRangeRows = rangeRows
             if (evnt.ctrlKey) {
               rangeRows.forEach((row: any) => {
-                this.handleSelectRow({ row }, selectRecords.indexOf(row) === -1)
+                $xeTable.handleBatchSelectRows([row], selectRecords.indexOf(row) === -1)
               })
             } else {
               this.setAllCheckboxRow(false)

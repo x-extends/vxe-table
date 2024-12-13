@@ -1,29 +1,19 @@
 import XEUtils from 'xe-utils'
 
+import type { VxeColumnPropTypes } from '../../../../types'
+
 export default {
   methods: {
     _openCustom () {
-      const { initStore, customStore, collectColumn } = this
-      const sortMaps: any = {}
-      const fixedMaps: any = {}
-      const visibleMaps: any = {}
-      XEUtils.eachTree(collectColumn, column => {
-        const colid = column.getKey()
-        column.renderFixed = column.fixed
-        column.renderVisible = column.visible
-        column.renderResizeWidth = column.renderWidth
-        sortMaps[colid] = column.renderSortNumber
-        fixedMaps[colid] = column.fixed
-        visibleMaps[colid] = column.visible
-      }, { children: 'children' })
-      customStore.oldSortMaps = sortMaps
-      customStore.oldFixedMaps = fixedMaps
-      customStore.oldVisibleMaps = visibleMaps
-      this.customColumnList = collectColumn.slice(0)
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { initStore, customStore } = reactData
       customStore.visible = true
       initStore.custom = true
-      this.checkCustomStatus()
-      this.calcMaxHeight()
+      $xeTable.handleUpdateCustomColumn()
+      $xeTable.checkCustomStatus()
+      $xeTable.calcMaxHeight()
       return this.$nextTick().then(() => this.calcMaxHeight())
     },
     _closeCustom () {
@@ -222,6 +212,32 @@ export default {
         customStore.activeBtn = false
         this.closeCustom()
         this.emitCustomEvent('close', evnt)
+      }
+    },
+    handleUpdateCustomColumn () {
+      const $xeTable = this
+      const reactData = $xeTable
+      const internalData = $xeTable
+
+      const { customStore } = reactData
+      const { collectColumn } = internalData
+      if (customStore.visible) {
+        const sortMaps: Record<string, number> = {}
+        const fixedMaps: Record<string, VxeColumnPropTypes.Fixed> = {}
+        const visibleMaps: Record<string, boolean> = {}
+        XEUtils.eachTree(collectColumn, column => {
+          const colid = column.getKey()
+          column.renderFixed = column.fixed
+          column.renderVisible = column.visible
+          column.renderResizeWidth = column.renderWidth
+          sortMaps[colid] = column.renderSortNumber
+          fixedMaps[colid] = column.fixed
+          visibleMaps[colid] = column.visible
+        })
+        customStore.oldSortMaps = sortMaps
+        customStore.oldFixedMaps = fixedMaps
+        customStore.oldVisibleMaps = visibleMaps
+        reactData.customColumnList = collectColumn.slice(0)
       }
     }
   } as any

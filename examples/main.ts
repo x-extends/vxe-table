@@ -8,7 +8,7 @@ import 'vxe-pc-ui/lib/style.css'
 
 import enUS from 'vxe-pc-ui/packages/language/en-US'
 
-import VxeTable from '../packages'
+import VxeUITable from '../packages'
 import '../styles/all.scss'
 
 import './style/index.scss'
@@ -16,7 +16,7 @@ import './style/index.scss'
 VxeUI.setI18n('en-US', enUS)
 
 Vue.use(VxeUI)
-Vue.use(VxeTable)
+Vue.use(VxeUITable)
 
 new Vue({
   router,

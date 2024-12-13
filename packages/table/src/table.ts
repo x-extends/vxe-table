@@ -702,20 +702,37 @@ export default {
       const { tableColumn, visibleColumn } = this
       return tableColumn.length || visibleColumn.length ? visibleColumn.filter((column: any) => column.width === 'auto' || column.minWidth === 'auto') : []
     },
-    fixedColumnSize () {
-      const { collectColumn } = this
+    computeFixedColumnSize () {
+      const $xeTable = this
+      const reactData = $xeTable
+      const internalData = $xeTable
+
+      const { tableColumn } = reactData
+      const { collectColumn } = internalData
       let fixedSize = 0
-      collectColumn.forEach((column: any) => {
-        if (column.renderFixed) {
-          fixedSize++
-        }
-      })
+      // 只判断第一层
+      if (tableColumn.length && collectColumn.length) {
+        collectColumn.forEach((column: any) => {
+          if (column.renderFixed) {
+            fixedSize++
+          }
+        })
+      }
       return fixedSize
     },
+    fixedColumnSize () {
+      const $xeTable = this
+
+      return $xeTable.computeFixedColumnSize
+    },
     computeIsMaxFixedColumn () {
-      const { maxFixedSize } = this.columnOpts
+      const $xeTable = this
+
+      const fixedColumnSize = $xeTable.computeFixedColumnSize
+      const columnOpts = $xeTable.columnOpts
+      const { maxFixedSize } = columnOpts
       if (maxFixedSize) {
-        return this.fixedColumnSize >= maxFixedSize
+        return fixedColumnSize >= maxFixedSize
       }
       return false
     },
