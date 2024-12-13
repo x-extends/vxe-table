@@ -456,7 +456,12 @@ export default defineComponent({
         evnt.preventDefault()
         const offsetY = evnt.clientY - optEl.getBoundingClientRect().y
         const dragPos = offsetY < optEl.clientHeight / 2 ? 'top' : 'bottom'
-        if ((dragCol && dragCol.id === column.id) || (!isCrossDrag && column.level === 1) || (!immediate && column.level > 1) || column.renderFixed) {
+        if (
+          (dragCol && dragCol.id === column.id) ||
+          (!isCrossDrag && column.level > 1) ||
+          (!immediate && column.level > 1) ||
+          column.renderFixed
+        ) {
           showDropTip(evnt, optEl, false, dragPos)
           return
         }

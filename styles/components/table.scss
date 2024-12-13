@@ -1305,7 +1305,9 @@
     }
   }
   .vxe-header--col-list-move {
-    transition: transform 0.35s;
+    transition-property: transform;
+    transition-duration: 0.35s;
+    transition-delay: var(--vxe-ui-table-drag-column-move-delay, 0.3s);
   }
 
   .vxe-table--drag-col-line,
@@ -1367,7 +1369,9 @@
     }
   }
   .vxe-body--row-list-move {
-    transition: transform 0.35s;
+    transition-property: transform;
+    transition-duration: 0.35s;
+    transition-delay: 0.05s;
   }
   .vxe-table--drag-sort-tip {
     display: none;

@@ -8201,6 +8201,9 @@ export default defineComponent({
           'is--virtual-x': scrollXLoad,
           'is--virtual-y': scrollYLoad
         }],
+        style: {
+          '--vxe-ui-table-drag-column-move-delay': `${Math.max(0.05, Math.min(0.3, tableData.length / 800))}s`
+        },
         spellcheck: false,
         onKeydown: keydownEvent
       }, [
