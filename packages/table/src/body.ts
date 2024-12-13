@@ -462,7 +462,7 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
             rowid
           },
           style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-          key: rowKey || rowOpts.useKey || rowOpts.drag || treeConfig ? rowid : $rowIndex,
+          key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
           on: trOn
         }, tdVNs)
     )

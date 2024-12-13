@@ -439,7 +439,9 @@
 }
 
 .vxe-table-custom--list-move {
-  transition: transform 0.35s;
+  transition-property: transform;
+  transition-duration: 0.35s;
+  transition-delay: 0.05s;
 }
 
 .vxe-table-custom-popup--column-sort-placeholder {
