@@ -945,7 +945,10 @@ const Methods = {
       }
       return this.$nextTick().then(() => {
         if (this.$toolbar) {
-          this.$toolbar.syncUpdate({ collectColumn, $table: this })
+          this.$toolbar.syncUpdate({
+            collectColumn: this.collectColumn,
+            $table: this
+          })
         }
         return this.recalculate()
       })

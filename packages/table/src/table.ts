@@ -712,7 +712,7 @@ export default {
       })
       return fixedSize
     },
-    isMaxFixedColumn () {
+    computeIsMaxFixedColumn () {
       const { maxFixedSize } = this.columnOpts
       if (maxFixedSize) {
         return this.fixedColumnSize >= maxFixedSize
@@ -843,9 +843,20 @@ export default {
       tZindex: 0,
       elemStore: {},
       // 存放横向 X 虚拟滚动相关的信息
-      scrollXStore: {},
+      scrollXStore: {
+        offsetSize: 0,
+        visibleSize: 0,
+        startIndex: 0,
+        endIndex: 0
+      },
       // 存放纵向 Y 虚拟滚动相关信息
-      scrollYStore: {},
+      scrollYStore: {
+        rowHeight: 0,
+        offsetSize: 0,
+        visibleSize: 0,
+        startIndex: 0,
+        endIndex: 0
+      },
       // 表格宽度
       tableWidth: 0,
       // 表格高度
