@@ -18,7 +18,7 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
+import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType, VxeComponentStyleType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
@@ -681,6 +681,16 @@ export default defineComponent({
         x: overflowX && scrollXLoad,
         y: overflowY && scrollYLoad
       }
+    })
+
+    const computeTableStyle = computed(() => {
+      const { tableData } = reactData
+      const columnOpts = computeColumnOpts.value
+      const stys: VxeComponentStyleType = {}
+      if (columnOpts.drag) {
+        stys['--vxe-ui-table-drag-column-move-delay'] = `${Math.max(0.06, Math.min(0.3, tableData.length / 800))}s`
+      }
+      return stys
     })
 
     const refMaps: VxeTablePrivateRef = {
@@ -4203,11 +4213,25 @@ export default defineComponent({
        * @param {Array/Row} rows 行数据
        * @param {Boolean} value 是否选中
        */
-      setCheckboxRow (rows, value) {
+      setCheckboxRow (rows, checked) {
         if (rows && !XEUtils.isArray(rows)) {
           rows = [rows]
         }
-        return handleCheckedCheckboxRow(rows, value, true)
+        return handleCheckedCheckboxRow(rows, checked, true)
+      },
+      setCheckboxRowKey (keys: any, checked) {
+        const { fullAllDataRowIdData } = internalData
+        if (!XEUtils.isArray(keys)) {
+          keys = [keys]
+        }
+        const rows: any = []
+        keys.forEach((rowid: string) => {
+          const rowRest = fullAllDataRowIdData[rowid]
+          if (rowRest) {
+            rows.push(rowRest.row)
+          }
+        })
+        return handleCheckedCheckboxRow(rows, checked, true)
       },
       isCheckedByCheckboxRow (row) {
         const { selectCheckboxMaps } = reactData
@@ -4218,9 +4242,27 @@ export default defineComponent({
         }
         return !!selectCheckboxMaps[getRowid($xeTable, row)]
       },
+      isCheckedByCheckboxRowKey (rowid: any) {
+        const { selectCheckboxMaps } = reactData
+        const { fullAllDataRowIdData } = internalData
+        const checkboxOpts = computeCheckboxOpts.value
+        const { checkField } = checkboxOpts
+        if (checkField) {
+          const rowRest = fullAllDataRowIdData[rowid]
+          if (rowRest) {
+            return XEUtils.get(rowRest.row, checkField)
+          }
+          return false
+        }
+        return !!selectCheckboxMaps[rowid]
+      },
       isIndeterminateByCheckboxRow (row) {
         const { treeIndeterminateMaps } = reactData
-        return !!treeIndeterminateMaps[getRowid($xeTable, row)] && !tableMethods.isCheckedByCheckboxRow(row)
+        return !!treeIndeterminateMaps[getRowid($xeTable, row)] && !$xeTable.isCheckedByCheckboxRow(row)
+      },
+      isIndeterminateByCheckboxRowKey (rowid: any) {
+        const { treeIndeterminateMaps } = reactData
+        return !!treeIndeterminateMaps[rowid] && !$xeTable.isCheckedByCheckboxRowKey(rowid)
       },
       /**
        * 多选，切换某一行的选中状态
@@ -4376,7 +4418,18 @@ export default defineComponent({
         return nextTick()
       },
       isCheckedByRadioRow (row) {
-        return $xeTable.eqRow(reactData.selectRadioRow, row)
+        const { selectRadioRow } = reactData
+        if (row && selectRadioRow) {
+          return $xeTable.eqRow(selectRadioRow, row)
+        }
+        return false
+      },
+      isCheckedByRadioRowKey (key) {
+        const { selectRadioRow } = reactData
+        if (selectRadioRow) {
+          return key === getRowid($xeTable, selectRadioRow)
+        }
+        return false
       },
       /**
        * 用于单选行，设置某一行为选中状态
@@ -4384,6 +4437,18 @@ export default defineComponent({
        */
       setRadioRow (row) {
         return handleCheckedRadioRow(row, true)
+      },
+      /**
+       * 用于单选行，设置某一行为选中状态
+       * @param key 行主键
+       */
+      setRadioRowKey (rowid: any) {
+        const { fullAllDataRowIdData } = internalData
+        const rowRest = fullAllDataRowIdData[rowid]
+        if (rowRest) {
+          return handleCheckedRadioRow(rowRest.row, true)
+        }
+        return nextTick()
       },
       /**
        * 用于当前行，手动清空当前高亮的状态
@@ -8118,6 +8183,7 @@ export default defineComponent({
       const virtualScrollBars = computeVirtualScrollBars.value
       const resizableOpts = computeResizableOpts.value
       const isArea = mouseConfig && mouseOpts.area
+      const tableStyle = computeTableStyle.value
       return h('div', {
         ref: refElem,
         class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
@@ -8151,9 +8217,7 @@ export default defineComponent({
           'is--virtual-x': scrollXLoad,
           'is--virtual-y': scrollYLoad
         }],
-        style: {
-          '--vxe-ui-table-drag-column-move-delay': `${Math.max(0.05, Math.min(0.3, tableData.length / 800))}s`
-        },
+        style: tableStyle,
         spellcheck: false,
         onKeydown: keydownEvent
       }, [
