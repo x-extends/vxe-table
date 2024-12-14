@@ -815,15 +815,12 @@ const Methods = {
    * @param {Array} datas 数据
    */
   loadData (datas: any) {
-    const { inited, initStatus } = this
+    const { initStatus } = this
     return this.loadTableData(datas).then(() => {
       this.inited = true
       this.initStatus = true
       if (!initStatus) {
         this.handleLoadDefaults()
-      }
-      if (!inited) {
-        this.handleInitDefaults()
       }
       return this.recalculate()
     })
@@ -833,7 +830,6 @@ const Methods = {
    * @param {Array} datas 数据
    */
   reloadData (datas: any) {
-    const { inited } = this
     return this.clearAll()
       .then(() => {
         this.inited = true
@@ -842,9 +838,6 @@ const Methods = {
       })
       .then(() => {
         this.handleLoadDefaults()
-        if (!inited) {
-          this.handleInitDefaults()
-        }
         return this.recalculate()
       })
   },
@@ -4020,23 +4013,74 @@ const Methods = {
    * @param {Array/Row} rows 行数据
    * @param {Boolean} value 是否选中
    */
-  setCheckboxRow (rows: any, value: any) {
+  setCheckboxRow (rows: any, checked: any) {
+    const $xeTable = this
+
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
-    return this.handleCheckedCheckboxRow(rows, value, true)
+    return $xeTable.handleCheckedCheckboxRow(rows, checked, true)
+  },
+  setCheckboxRowKey (keys: any, checked: boolean) {
+    const $xeTable = this
+    const internalData = $xeTable
+
+    const { fullAllDataRowIdData } = internalData
+    if (keys && !XEUtils.isArray(keys)) {
+      keys = [keys]
+    }
+    const rows: any = []
+    keys.forEach((rowid: string) => {
+      const rowRest = fullAllDataRowIdData[rowid]
+      if (rowRest) {
+        rows.push(rowRest.row)
+      }
+    })
+    return $xeTable.handleCheckedCheckboxRow(rows, checked, true)
   },
   isCheckedByCheckboxRow (row: any) {
-    const { selectCheckboxMaps } = this
-    const { checkField } = this.checkboxOpts
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { selectCheckboxMaps } = reactData
+    const checkboxOpts = $xeTable.computeCheckboxOpts
+    const { checkField } = checkboxOpts
     if (checkField) {
       return XEUtils.get(row, checkField)
     }
-    return !!selectCheckboxMaps[getRowid(this, row)]
+    return !!selectCheckboxMaps[getRowid($xeTable, row)]
+  },
+  isCheckedByCheckboxRowKey (rowid: string) {
+    const $xeTable = this
+    const reactData = $xeTable
+    const internalData = $xeTable
+
+    const { selectCheckboxMaps } = reactData
+    const { fullAllDataRowIdData } = internalData
+    const checkboxOpts = $xeTable.computeCheckboxOpts
+    const { checkField } = checkboxOpts
+    if (checkField) {
+      const rowRest = fullAllDataRowIdData[rowid]
+      if (rowRest) {
+        return XEUtils.get(rowRest.row, checkField)
+      }
+      return false
+    }
+    return !!selectCheckboxMaps[rowid]
   },
   isIndeterminateByCheckboxRow (row: any) {
-    const { treeIndeterminateMaps } = this
-    return !!treeIndeterminateMaps[getRowid(this, row)] && !this.isCheckedByCheckboxRow(row)
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { treeIndeterminateMaps } = reactData
+    return !!treeIndeterminateMaps[getRowid($xeTable, row)] && !$xeTable.isCheckedByCheckboxRow(row)
+  },
+  isIndeterminateByCheckboxRowKey (rowid: string) {
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { treeIndeterminateMaps } = reactData
+    return !!treeIndeterminateMaps[rowid] && !$xeTable.isCheckedByCheckboxRowKey(rowid)
   },
   /**
    * 切换选中
@@ -4762,7 +4806,24 @@ const Methods = {
     return this.$nextTick()
   },
   isCheckedByRadioRow (row: any) {
-    return this.selectRadioRow === row
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { selectRadioRow } = reactData
+    if (row && selectRadioRow) {
+      return $xeTable.eqRow(selectRadioRow, row)
+    }
+    return false
+  },
+  isCheckedByRadioRowKey (key: string) {
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const { selectRadioRow } = reactData
+    if (selectRadioRow) {
+      return key === getRowid($xeTable, selectRadioRow)
+    }
+    return false
   },
   handleCheckedRadioRow (row: any, isForce: any) {
     const { radioOpts } = this
@@ -4778,7 +4839,24 @@ const Methods = {
    * @param {Row} row 行对象
    */
   setRadioRow (row: any) {
-    return this.handleCheckedRadioRow(row, true)
+    const $xeTable = this
+
+    return $xeTable.handleCheckedRadioRow(row, true)
+  },
+  /**
+   * 用于单选行，设置某一行为选中状态
+   * @param key 行主键
+   */
+  setRadioRowKey (rowid: any) {
+    const $xeTable = this
+    const internalData = $xeTable
+
+    const { fullAllDataRowIdData } = internalData
+    const rowRest = fullAllDataRowIdData[rowid]
+    if (rowRest) {
+      return $xeTable.handleCheckedRadioRow(rowRest.row, true)
+    }
+    return $xeTable.$nextTick()
   },
   /**
    * 用于当前行，手动清空当前高亮的状态
@@ -4913,6 +4991,8 @@ const Methods = {
    * 如果是双击模式，则单击后选中状态
    */
   triggerCellClickEvent (evnt: any, params: any) {
+    const $xeTable = this
+
     const { highlightCurrentRow, editStore, radioOpts, expandOpts, treeOpts, keyboardOpts, editConfig, editOpts, checkboxOpts, rowOpts } = this
     const { actived, focused } = editStore
     const { row, column } = params
@@ -4972,6 +5052,20 @@ const Methods = {
             if (editOpts.mode === 'row' && actived.row === row) {
               this.handleChangeCell(evnt, params)
             }
+          }
+        }
+      }
+    }
+    // 如果是双击编辑模式
+    if (isEnableConf(editConfig) && editOpts.trigger === 'dblclick') {
+      if (actived.row && actived.column) {
+        if (editOpts.mode === 'row') {
+          if (!$xeTable.eqRow(actived.row, row)) {
+            $xeTable.handleClearEdit(evnt)
+          }
+        } else if (editOpts.mode === 'cell') {
+          if (!$xeTable.eqRow(actived.row, row) || actived.column.id !== column.id) {
+            $xeTable.handleClearEdit(evnt)
           }
         }
       }
@@ -5590,62 +5684,66 @@ const Methods = {
     reactData.isDragColMove = false
   },
   setPendingRow (rows: any, status: any) {
-    const pendingMaps = { ...this.pendingRowMaps }
-    const pendingList = [...this.pendingRowList]
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const pendingMaps = Object.assign({}, reactData.pendingRowMaps)
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
     if (status) {
       rows.forEach((row: any) => {
-        const rowid = getRowid(this, row)
+        const rowid = getRowid($xeTable, row)
         if (rowid && !pendingMaps[rowid]) {
-          pendingList.push(row)
           pendingMaps[rowid] = row
         }
       })
     } else {
       rows.forEach((row: any) => {
-        const rowid = getRowid(this, row)
+        const rowid = getRowid($xeTable, row)
         if (rowid && pendingMaps[rowid]) {
-          const pendingIndex = this.findRowIndexOf(pendingList, row)
-          if (pendingIndex > -1) {
-            pendingList.splice(pendingIndex, 1)
-          }
           delete pendingMaps[rowid]
         }
       })
     }
-    this.pendingRowMaps = pendingMaps
-    this.pendingRowList = pendingList
-    return this.$nextTick()
+    reactData.pendingRowMaps = pendingMaps
+    return $xeTable.$nextTick()
   },
   togglePendingRow (rows: any) {
-    const pendingMaps = { ...this.pendingRowMaps }
-    const pendingList = [...this.pendingRowList]
+    const $xeTable = this
+    const reactData = $xeTable
+
+    const pendingMaps = Object.assign({}, reactData.pendingRowMaps)
     if (rows && !XEUtils.isArray(rows)) {
       rows = [rows]
     }
     rows.forEach((row: any) => {
-      const rowid = getRowid(this, row)
+      const rowid = getRowid($xeTable, row)
       if (rowid) {
         if (pendingMaps[rowid]) {
-          const pendingIndex = this.findRowIndexOf(pendingList, row)
-          if (pendingIndex > -1) {
-            pendingList.splice(pendingIndex, 1)
-          }
           delete pendingMaps[rowid]
         } else {
-          pendingList.push(row)
           pendingMaps[rowid] = row
         }
       }
     })
-    this.pendingRowMaps = pendingMaps
-    this.pendingRowList = pendingList
-    return this.$nextTick()
+    reactData.pendingRowMaps = pendingMaps
+    return $xeTable.$nextTick()
   },
   getPendingRecords () {
-    return this.pendingRowList.slice(0)
+    const $xeTable = this
+    const reactData = $xeTable
+    const internalData = $xeTable
+
+    const { pendingRowMaps } = reactData
+    const { fullAllDataRowIdData } = internalData
+    const insertRecords: any[] = []
+    XEUtils.each(pendingRowMaps, (row, rowid) => {
+      if (fullAllDataRowIdData[rowid]) {
+        insertRecords.push(row)
+      }
+    })
+    return insertRecords
   },
   hasPendingByRow (row: any) {
     const { pendingRowMaps } = this
@@ -5654,7 +5752,6 @@ const Methods = {
   },
   clearPendingRow () {
     this.pendingRowMaps = {}
-    this.pendingRowList = []
     return this.$nextTick()
   },
   sort (sortConfs: any, sortOrder: any) {
@@ -6545,6 +6642,8 @@ const Methods = {
       }
       internalData.lastScrollTop = scrollTop
     }
+    reactData.isDragColMove = false
+    reactData.isDragRowMove = false
     reactData.lastScrollTime = Date.now()
     const evntParams = {
       scrollTop,

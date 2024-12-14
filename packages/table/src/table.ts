@@ -23,7 +23,7 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
-import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
+import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType } from 'vxe-pc-ui'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -291,8 +291,6 @@ export default {
       reColumnFlag: 0,
       // 已标记的对象集
       pendingRowMaps: {},
-      // 已标记的行
-      pendingRowList: [],
       // 自定义列相关的信息
       customStore: {
         btnEl: null,
@@ -777,6 +775,18 @@ export default {
         y: overflowY && scrollYLoad
       }
     },
+    computeTableStyle () {
+      const $xeTable = this
+      const reactData = $xeTable
+
+      const { tableData } = reactData
+      const columnOpts = $xeTable.computeColumnOpts
+      const stys: VxeComponentStyleType = {}
+      if (columnOpts.drag) {
+        stys['--vxe-ui-table-drag-column-move-delay'] = `${Math.max(0.06, Math.min(0.3, tableData.length / 800))}s`
+      }
+      return stys
+    },
     tabsResizeFlag () {
       const $xeTable = this
       const $xeTabs = $xeTable.$xeTabs
@@ -786,15 +796,12 @@ export default {
   } as any,
   watch: {
     data (value: any) {
-      const { inited, initStatus } = this
+      const { initStatus } = this
       this.loadTableData(value).then(() => {
         this.inited = true
         this.initStatus = true
         if (!initStatus) {
           this.handleLoadDefaults()
-        }
-        if (!inited) {
-          this.handleInitDefaults()
         }
         // const checkboxColumn = this.tableFullColumn.find(column => column.type === 'checkbox')
         // if (checkboxColumn && this.tableFullData.length > 300 && !this.checkboxOpts.checkField) {
@@ -1089,8 +1096,8 @@ export default {
         this.inited = true
         this.initStatus = true
         this.handleLoadDefaults()
-        this.handleInitDefaults()
       }
+      this.handleInitDefaults()
       this.updateStyle()
     })
     globalEvents.on(this, 'paste', this.handleGlobalPasteEvent)
@@ -1245,6 +1252,7 @@ export default {
     const vSize = computeSize
     const virtualScrollBars = $xeTable.computeVirtualScrollBars
     const isArea = mouseConfig && mouseOpts.area
+    const tableStyle = $xeTable.computeTableStyle
     return h('div', {
       ref: 'refElem',
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
@@ -1277,9 +1285,7 @@ export default {
         'is--virtual-x': scrollXLoad,
         'is--virtual-y': scrollYLoad
       }],
-      style: {
-        '--vxe-ui-table-drag-column-move-delay': `${Math.max(0.05, Math.min(0.3, tableData.length / 800))}s`
-      },
+      style: tableStyle,
       attrs: {
         spellcheck: false
       },

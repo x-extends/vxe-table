@@ -461,6 +461,12 @@ export default {
         tableProps.editConfig = Object.assign({}, editConfig)
       }
       return tableProps
+    },
+    computePageConfFlag () {
+      const $xeGrid = this
+
+      const pagerOpts = $xeGrid.computePagerOpts
+      return `${pagerOpts.currentPage}${pagerOpts.pageSize}`
     }
   } as any,
   watch: {
@@ -480,7 +486,7 @@ export default {
     proxyConfig () {
       this.initProxy()
     },
-    pagerConfig () {
+    computePageConfFlag () {
       this.initPages()
     }
   } as any,
@@ -1106,7 +1112,9 @@ export default {
     },
     resetEvent (params: any) {
       const { proxyConfig } = this
+      const $xeTable = this.$refs.xTable
       if (proxyConfig) {
+        $xeTable.clearScroll()
         this.commitProxy('reload').then((rest: any) => {
           this.$emit('proxy-query', { ...rest, isReload: true, $grid: this, $event: params.$event })
         })

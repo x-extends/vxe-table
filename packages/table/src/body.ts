@@ -354,7 +354,6 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     hasFixedColumn,
     fullAllDataRowIdData,
     rowOpts,
-    pendingRowList,
     pendingRowMaps,
     columnOpts,
     isDragColMove
@@ -434,7 +433,7 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
         'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
         'row--radio': radioOpts.highlight && $xeTable.selectRadioRow === row,
         'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-        'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
+        'row--pending': !!pendingRowMaps[rowid]
       },
       rowClassName ? (XEUtils.isFunction(rowClassName) ? rowClassName(params) : rowClassName) : ''
     ]
