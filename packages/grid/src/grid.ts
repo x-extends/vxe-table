@@ -193,6 +193,11 @@ export default defineComponent({
       return getConfig().grid.layouts || ['Form', 'Toolbar', 'Top', 'Table', 'Bottom', 'Pager']
     })
 
+    const computePageConfFlag = computed(() => {
+      const pagerOpts = computePagerOpts.value
+      return `${pagerOpts.currentPage}${pagerOpts.pageSize}`
+    })
+
     const refMaps: GridPrivateRef = {
       refElem,
       refTable,
@@ -374,7 +379,9 @@ export default defineComponent({
       const { proxyConfig } = props
       const { $event } = params
       const proxyOpts = computeProxyOpts.value
+      const $xeTable = refTable.value
       if (proxyConfig && isEnableConf(proxyOpts)) {
+        $xeTable.clearScroll()
         gridMethods.commitProxy('reload').then((rest) => {
           gridMethods.dispatchEvent('proxy-query', { ...rest, isReload: true }, $event)
         })
@@ -1236,7 +1243,7 @@ export default defineComponent({
       initToolbar()
     })
 
-    watch(() => props.pagerConfig, () => {
+    watch(computePageConfFlag, () => {
       initPages()
     })
 

@@ -387,7 +387,7 @@ export default defineComponent({
 
     const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, pendingRowList, isDragColMove } = tableReactData
+      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -463,7 +463,7 @@ export default defineComponent({
             'row--new': isNewRow && (editOpts.showStatus || editOpts.showInsertStatus),
             'row--radio': radioOpts.highlight && $xeTable.eqRow(selectRadioRow, row),
             'row--checked': checkboxOpts.highlight && $xeTable.isCheckedByCheckboxRow(row),
-            'row--pending': pendingRowList.length && !!pendingRowMaps[rowid]
+            'row--pending': !!pendingRowMaps[rowid]
           },
           getPropClass(rowClassName, params)
         ]

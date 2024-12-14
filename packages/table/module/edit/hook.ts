@@ -347,7 +347,9 @@ hooks.add('tableEditModule', {
         const treeOpts = computeTreeOpts.value
         const { transform, mapChildrenField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
-        const { actived, removeMaps, insertMaps } = editStore
+        const { actived, removeMaps } = editStore
+        const insertDataRowMaps = Object.assign({}, editStore.insertMaps)
+        const pendingDataRowMaps = Object.assign({}, reactData.pendingRowMaps)
         const { checkField } = checkboxOpts
         let delList: any[] = []
         if (!rows) {
@@ -428,10 +430,15 @@ hooks.add('tableEditModule', {
         // 从新增中移除已删除的数据
         rows.forEach((row: any) => {
           const rowid = getRowid($xeTable, row)
-          if (insertMaps[rowid]) {
-            delete insertMaps[rowid]
+          if (insertDataRowMaps[rowid]) {
+            delete insertDataRowMaps[rowid]
+          }
+          if (pendingDataRowMaps[rowid]) {
+            delete pendingDataRowMaps[rowid]
           }
         })
+        editStore.insertMaps = insertDataRowMaps
+        reactData.pendingRowMaps = pendingDataRowMaps
         $xeTable.updateFooter()
         $xeTable.cacheRowMap()
         $xeTable.handleTableData(treeConfig && transform)

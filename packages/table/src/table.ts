@@ -114,8 +114,6 @@ export default defineComponent({
       reColumnFlag: 0,
       // 已标记的对象集
       pendingRowMaps: {},
-      // 已标记的行
-      pendingRowList: [],
       // 初始化标识
       initStore: {
         filter: false,
@@ -3261,15 +3259,12 @@ export default defineComponent({
        * @param {Array} datas 数据
        */
       loadData (datas) {
-        const { inited, initStatus } = internalData
+        const { initStatus } = internalData
         return loadTableData(datas).then(() => {
           internalData.inited = true
           internalData.initStatus = true
           if (!initStatus) {
             handleLoadDefaults()
-          }
-          if (!inited) {
-            handleInitDefaults()
           }
           return tableMethods.recalculate()
         })
@@ -3279,7 +3274,6 @@ export default defineComponent({
        * @param {Array} datas 数据
        */
       reloadData (datas) {
-        const { inited } = internalData
         return tableMethods.clearAll()
           .then(() => {
             internalData.inited = true
@@ -3288,9 +3282,6 @@ export default defineComponent({
           })
           .then(() => {
             handleLoadDefaults()
-            if (!inited) {
-              handleInitDefaults()
-            }
             return tableMethods.recalculate()
           })
       },
@@ -4520,8 +4511,7 @@ export default defineComponent({
         return nextTick()
       },
       setPendingRow (rows: any | any[], status: boolean) {
-        const pendingMaps = { ...reactData.pendingRowMaps }
-        const pendingList = [...reactData.pendingRowList]
+        const pendingMaps = Object.assign({}, reactData.pendingRowMaps)
         if (rows && !XEUtils.isArray(rows)) {
           rows = [rows]
         }
@@ -4529,7 +4519,6 @@ export default defineComponent({
           rows.forEach((row: any) => {
             const rowid = getRowid($xeTable, row)
             if (rowid && !pendingMaps[rowid]) {
-              pendingList.push(row)
               pendingMaps[rowid] = row
             }
           })
@@ -4537,21 +4526,15 @@ export default defineComponent({
           rows.forEach((row: any) => {
             const rowid = getRowid($xeTable, row)
             if (rowid && pendingMaps[rowid]) {
-              const pendingIndex = $xeTable.findRowIndexOf(pendingList, row)
-              if (pendingIndex > -1) {
-                pendingList.splice(pendingIndex, 1)
-              }
               delete pendingMaps[rowid]
             }
           })
         }
         reactData.pendingRowMaps = pendingMaps
-        reactData.pendingRowList = pendingList
         return nextTick()
       },
       togglePendingRow (rows: any | any[]) {
-        const pendingMaps = { ...reactData.pendingRowMaps }
-        const pendingList = [...reactData.pendingRowList]
+        const pendingMaps = Object.assign({}, reactData.pendingRowMaps)
         if (rows && !XEUtils.isArray(rows)) {
           rows = [rows]
         }
@@ -4559,19 +4542,13 @@ export default defineComponent({
           const rowid = getRowid($xeTable, row)
           if (rowid) {
             if (pendingMaps[rowid]) {
-              const pendingIndex = $xeTable.findRowIndexOf(pendingList, row)
-              if (pendingIndex > -1) {
-                pendingList.splice(pendingIndex, 1)
-              }
               delete pendingMaps[rowid]
             } else {
-              pendingList.push(row)
               pendingMaps[rowid] = row
             }
           }
         })
         reactData.pendingRowMaps = pendingMaps
-        reactData.pendingRowList = pendingList
         return nextTick()
       },
       hasPendingByRow (row) {
@@ -4583,12 +4560,18 @@ export default defineComponent({
         return !!pendingRowMaps[rowid]
       },
       getPendingRecords () {
-        const { pendingRowList } = reactData
-        return pendingRowList.slice(0)
+        const { pendingRowMaps } = reactData
+        const { fullAllDataRowIdData } = internalData
+        const insertRecords: any[] = []
+        XEUtils.each(pendingRowMaps, (row, rowid) => {
+          if (fullAllDataRowIdData[rowid]) {
+            insertRecords.push(row)
+          }
+        })
+        return insertRecords
       },
       clearPendingRow () {
         reactData.pendingRowMaps = {}
-        reactData.pendingRowList = []
         return nextTick()
       },
       sort (sortConfs: any, sortOrder?: VxeTablePropTypes.SortOrder) {
@@ -6944,6 +6927,20 @@ export default defineComponent({
             }
           }
         }
+        // 如果是双击编辑模式
+        if (isEnableConf(editConfig) && editOpts.trigger === 'dblclick') {
+          if (actived.row && actived.column) {
+            if (editOpts.mode === 'row') {
+              if (!$xeTable.eqRow(actived.row, row)) {
+                $xeTable.handleClearEdit(evnt)
+              }
+            } else if (editOpts.mode === 'cell') {
+              if (!$xeTable.eqRow(actived.row, row) || actived.column.id !== column.id) {
+                $xeTable.handleClearEdit(evnt)
+              }
+            }
+          }
+        }
         dispatchEvent('cell-click', params, evnt)
       },
       /**
@@ -7732,6 +7729,8 @@ export default defineComponent({
           }
           internalData.lastScrollTop = scrollTop
         }
+        reactData.isDragColMove = false
+        reactData.isDragRowMove = false
         reactData.lastScrollTime = Date.now()
         const evntParams = {
           scrollTop,
@@ -8468,16 +8467,13 @@ export default defineComponent({
       dataFlag.value++
     })
     watch(dataFlag, () => {
-      const { inited, initStatus } = internalData
+      const { initStatus } = internalData
       loadTableData(props.data || []).then(() => {
         const { scrollXLoad, scrollYLoad, expandColumn } = reactData
         internalData.inited = true
         internalData.initStatus = true
         if (!initStatus) {
           handleLoadDefaults()
-        }
-        if (!inited) {
-          handleInitDefaults()
         }
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           // const checkboxOpts = computeCheckboxOpts.value
@@ -8783,8 +8779,8 @@ export default defineComponent({
             internalData.inited = true
             internalData.initStatus = true
             handleLoadDefaults()
-            handleInitDefaults()
           }
+          handleInitDefaults()
           updateStyle()
         })
 
@@ -8824,8 +8820,6 @@ export default defineComponent({
       globalEvents.on($xeTable, 'contextmenu', $xeTable.handleGlobalContextmenuEvent)
       tablePrivateMethods.preventEvent(null, 'mounted', { $table: $xeTable })
     })
-
-    ;(window as any).aaaa = $xeTable
 
     onBeforeUnmount(() => {
       if (resizeObserver) {
