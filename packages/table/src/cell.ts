@@ -50,20 +50,24 @@ function renderCellDragIcon (params: VxeTableDefines.CellRenderBodyParams) {
   const { dragConfig } = tableProps
   const { computeRowDragOpts } = $table.getComputeMaps()
   const rowDragOpts = computeRowDragOpts.value
-  const { icon, disabledMethod } = rowDragOpts
+  const { icon, trigger, disabledMethod } = rowDragOpts
   const rDisabledMethod = disabledMethod || (dragConfig ? dragConfig.rowDisabledMethod : null)
   const isDisabled = rDisabledMethod && rDisabledMethod(params)
+  const ons: Record<string, any> = {}
+  if (trigger !== 'cell') {
+    ons.onMousedown = (evnt: MouseEvent) => {
+      if (!isDisabled) {
+        $table.handleCellDragMousedownEvent(evnt, params)
+      }
+    }
+    ons.onMouseup = $table.handleCellDragMouseupEvent
+  }
   return h('span', {
     key: 'dg',
     class: ['vxe-cell--drag-handle', {
       'is--disabled': isDisabled
     }],
-    onMousedown (evnt) {
-      if (!isDisabled) {
-        $table.handleCellDragMousedownEvent(evnt, params)
-      }
-    },
-    onMouseup: $table.handleCellDragMouseupEvent
+    ...ons
   }, [
     h('i', {
       class: icon || (dragConfig ? dragConfig.rowIcon : '') || getIcon().TABLE_DRAG_ROW
@@ -103,21 +107,25 @@ function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParam
   const { computeColumnOpts, computeColumnDragOpts } = $table.getComputeMaps()
   const columnOpts = computeColumnOpts.value
   const columnDragOpts = computeColumnDragOpts.value
-  const { showIcon, icon, isCrossDrag, visibleMethod, disabledMethod } = columnDragOpts
-  const isDisabled = disabledMethod && disabledMethod(params)
+  const { showIcon, icon, trigger, isCrossDrag, visibleMethod, disabledMethod } = columnDragOpts
   if (columnOpts.drag && showIcon && (!visibleMethod || visibleMethod(params))) {
     if (!column.fixed && (isCrossDrag || !column.parentId)) {
+      const isDisabled = disabledMethod && disabledMethod(params)
+      const ons: Record<string, any> = {}
+      if (trigger !== 'cell') {
+        ons.onMousedown = (evnt: MouseEvent) => {
+          if (!isDisabled) {
+            $table.handleHeaderCellDragMousedownEvent(evnt, params)
+          }
+        }
+        ons.onMouseup = $table.handleHeaderCellDragMouseupEvent
+      }
       return h('span', {
         key: 'dg',
         class: ['vxe-cell--drag-handle', {
           'is--disabled': isDisabled
         }],
-        onMousedown (evnt) {
-          if (!isDisabled) {
-            $table.handleHeaderCellDragMousedownEvent(evnt, params)
-          }
-        },
-        onMouseup: $table.handleHeaderCellDragMouseupEvent
+        ...ons
       }, [
         h('i', {
           class: icon || getIcon().TABLE_DRAG_COLUMN

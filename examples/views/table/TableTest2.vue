@@ -13,8 +13,9 @@
       ref="tableRef"
       id="bbbbb"
       :row-config="{useKey: true,drag:true}"
+      :row-drag-config="{trigger:'row',disabledMethod:disabledRowMethod}"
       :column-config="{useKey: true,drag: true}"
-      :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true}"
+      :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true,trigger:'default',disabledMethod:disabledColumnMethod}"
       :custom-config="customConfig"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"
@@ -40,8 +41,8 @@
       </vxe-colgroup>
       <vxe-column field="sex11" title="<span style='color:red;'>Sex222</span>" type="html" drag-sort></vxe-column>
       <vxe-column field="sex22" title="<span style='color:red;'>Sex1111</span>" type="html" drag-sort :visible="false"></vxe-column>
-      <vxe-column field="name1" title="Name1" sortable drag-sort ></vxe-column>
-      <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex" drag-sort></vxe-column>
+      <vxe-column field="name1" title="Name1" sortable ></vxe-column>
+      <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
       <vxe-column
         field="age"
         title="Age"
@@ -156,6 +157,14 @@ onMounted(() => {
     demo1.loading = false
   }, 100)
 })
+
+const disabledColumnMethod = ({ column }: any) => {
+  return column.field === 'sex11'
+}
+
+const disabledRowMethod = ({ row }: any) => {
+  return row.id === 10002
+}
 
 const rowDragstartEvent = (params: any) => {
   console.log(params)

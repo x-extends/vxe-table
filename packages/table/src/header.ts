@@ -27,7 +27,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refElem: tableRefElem, refTableBody, refLeftContainer, refRightContainer, refCellResizeBar, refCellResizeTip } = $xeTable.getRefMaps()
-    const { computeColumnOpts, computeResizableOpts } = $xeTable.getComputeMaps()
+    const { computeColumnOpts, computeColumnDragOpts, computeResizableOpts } = $xeTable.getComputeMaps()
 
     const headerColumn = ref([] as VxeTableDefines.ColumnInfo[][])
 
@@ -169,6 +169,8 @@ export default defineComponent({
       const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
       const { currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
       const columnOpts = computeColumnOpts.value
+      const columnDragOpts = computeColumnDragOpts.value
+      const { disabledMethod: dragDisabledMethod } = columnDragOpts
       return cols.map((column, $columnIndex) => {
         const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
         const colid = column.id
@@ -186,6 +188,11 @@ export default defineComponent({
         const columnIndex = $xeTable.getColumnIndex(column)
         const _columnIndex = $xeTable.getVTColumnIndex(column)
         const params: VxeTableDefines.CellRenderHeaderParams = { $table: $xeTable, $grid: $xeTable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, hasFilter }
+        const thAttrs: Record<string, string | number | null> = {
+          colid,
+          colspan: column.colSpan > 1 ? column.colSpan : null,
+          rowspan: column.rowSpan > 1 ? column.rowSpan : null
+        }
         const thOns: any = {
           onClick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, params),
           onDblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, params)
@@ -194,15 +201,23 @@ export default defineComponent({
         if (scrollXLoad && !hasEllipsis) {
           showEllipsis = hasEllipsis = true
         }
+        const isColDragCell = columnOpts.drag && columnDragOpts.trigger === 'cell'
+        let isDisabledDrag = false
+        if (isColDragCell) {
+          isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(params))
+        }
         // 按下事件处理
-        if (mouseConfig) {
+        if (mouseConfig || isColDragCell) {
           thOns.onMousedown = (evnt: MouseEvent) => $xeTable.triggerHeaderCellMousedownEvent(evnt, params)
         }
-        // 拖拽行事件
+        // 拖拽列事件
         if (columnOpts.drag) {
           thOns.onDragstart = $xeTable.handleHeaderCellDragDragstartEvent
           thOns.onDragend = $xeTable.handleHeaderCellDragDragendEvent
           thOns.onDragover = $xeTable.handleHeaderCellDragDragoverEvent
+          if (isColDragCell) {
+            thOns.onMouseup = $xeTable.handleHeaderCellDragMouseupEvent
+          }
         }
         return h('th', {
           class: ['vxe-header--column', colid, {
@@ -216,15 +231,14 @@ export default defineComponent({
             'is--sortable': column.sortable,
             'col--filter': !!column.filters,
             'is--filter-active': hasFilter,
+            'is--drag-disabled': isDisabledDrag,
             'col--current': currentColumn === column
           },
           headerClassName ? (XEUtils.isFunction(headerClassName) ? headerClassName(params) : headerClassName) : '',
           headerCellClassName ? (XEUtils.isFunction(headerCellClassName) ? headerCellClassName(params) : headerCellClassName) : ''
           ],
-          colid,
-          colspan: column.colSpan > 1 ? column.colSpan : null,
-          rowspan: column.rowSpan > 1 ? column.rowSpan : null,
           style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
+          ...thAttrs,
           ...thOns,
           key: columnKey || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
         }, [

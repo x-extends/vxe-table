@@ -7169,6 +7169,74 @@ export default defineComponent({
         }
       },
       /**
+       * 表头单元格按下事件
+       */
+      triggerHeaderCellMousedownEvent (evnt, params) {
+        const { mouseConfig } = props
+        const mouseOpts = computeMouseOpts.value
+        const columnOpts = computeColumnOpts.value
+        const columnDragOpts = computeColumnDragOpts.value
+        const { trigger, disabledMethod } = columnDragOpts
+        const cell = evnt.currentTarget as HTMLDivElement
+        const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
+        const triggerCheckbox = getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
+        const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
+        const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
+        let triggerDrag = false
+        if (!(triggerInput || triggerCheckbox || triggerSort || triggerFilter)) {
+          if (columnOpts.drag && trigger === 'cell' && !(disabledMethod && disabledMethod(params))) {
+            triggerDrag = true
+            $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
+          }
+        }
+        if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaEvent) {
+          $xeTable.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+        }
+        $xeTable.focus()
+        if ($xeTable.closeMenu) {
+          $xeTable.closeMenu()
+        }
+      },
+      /**
+       * 单元格按下事件
+       */
+      triggerCellMousedownEvent (evnt, params) {
+        const { column } = params
+        const { type, treeNode } = column
+        const isRadioType = type === 'radio'
+        const isCheckboxType = type === 'checkbox'
+        const isExpandType = type === 'expand'
+        const rowOpts = computeRowOpts.value
+        const rowDragOpts = computeRowDragOpts.value
+        const { trigger, disabledMethod } = rowDragOpts
+        const cell = evnt.currentTarget
+        params.cell = cell
+        const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
+        const triggerRadio = isRadioType && getEventTargetNode(evnt, cell, 'vxe-cell--radio').flag
+        const triggerCheckbox = isCheckboxType && getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
+        const triggerTreeNode = treeNode && getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
+        const triggerExpandNode = isExpandType && getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
+        let isColDragCell = false
+        if (rowOpts.drag) {
+          isColDragCell = trigger === 'row' || (column.dragSort && trigger === 'cell')
+        }
+        let triggerDrag = false
+        if (!(triggerInput || triggerRadio || triggerCheckbox || triggerTreeNode || triggerExpandNode)) {
+          if (isColDragCell && !(disabledMethod && disabledMethod(params))) {
+            triggerDrag = true
+            $xeTable.handleCellDragMousedownEvent(evnt, params)
+          }
+        }
+        if (!triggerDrag && $xeTable.handleCellMousedownEvent) {
+          $xeTable.handleCellMousedownEvent(evnt, params)
+        }
+        $xeTable.focus()
+        $xeTable.closeFilter()
+        if ($xeTable.closeMenu) {
+          $xeTable.closeMenu()
+        }
+      },
+      /**
        * 行拖拽
        */
       handleRowDragDragstartEvent (evnt) {
@@ -7393,15 +7461,15 @@ export default defineComponent({
         }
       },
       handleCellDragMousedownEvent (evnt, params) {
+        evnt.stopPropagation()
         const { dragConfig } = props
         const rowDragOpts = computeRowDragOpts.value
-        const { dragStartMethod } = rowDragOpts
+        const { trigger, dragStartMethod } = rowDragOpts
         const { row } = params
         const dragEl = evnt.currentTarget as HTMLElement
-        const tdEl = dragEl.parentElement?.parentElement as HTMLElement
+        const tdEl = trigger === 'cell' || trigger === 'row' ? dragEl : dragEl.parentElement?.parentElement as HTMLElement
         const trEl = tdEl.parentElement as HTMLElement
         const dStartMethod = dragStartMethod || (dragConfig ? dragConfig.dragStartMethod : null)
-        reactData.isDragRowMove = false
         clearRowDropOrigin()
         if (dStartMethod && !dStartMethod(params)) {
           trEl.draggable = false
@@ -7641,11 +7709,12 @@ export default defineComponent({
         }
       },
       handleHeaderCellDragMousedownEvent (evnt, params) {
+        evnt.stopPropagation()
         const columnDragOpts = computeColumnDragOpts.value
-        const { dragStartMethod } = columnDragOpts
+        const { trigger, dragStartMethod } = columnDragOpts
         const { column } = params
         const dragEl = evnt.currentTarget as HTMLElement
-        const thEl = dragEl.parentElement?.parentElement as HTMLElement
+        const thEl = trigger === 'cell' ? dragEl : dragEl.parentElement?.parentElement as HTMLElement
         reactData.isDragColMove = false
         clearColDropOrigin()
         if (dragStartMethod && !dragStartMethod(params)) {
@@ -8183,6 +8252,7 @@ export default defineComponent({
       const resizableOpts = computeResizableOpts.value
       const isArea = mouseConfig && mouseOpts.area
       const tableStyle = computeTableStyle.value
+      const columnDragOpts = computeColumnDragOpts.value
       return h('div', {
         ref: refElem,
         class: ['vxe-table', 'vxe-table--render-default', `tid_${xID}`, `border--${tableBorder}`, {
@@ -8199,6 +8269,7 @@ export default defineComponent({
           'column--highlight': columnOpts.isHover || highlightHoverColumn,
           'checkbox--range': checkboxOpts.range,
           'column--calc': isCalcColumn,
+          'col--drag-cell': columnOpts.drag && columnDragOpts.trigger === 'cell',
           'is--header': showHeader,
           'is--footer': showFooter,
           'is--group': isGroup,
@@ -8754,7 +8825,7 @@ export default defineComponent({
           if (props.editRules && !$xeTable.validate) {
             errLog('vxe.error.reqModule', ['Validator'])
           }
-          if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.triggerCellMousedownEvent) {
+          if ((checkboxOpts.range || props.keyboardConfig || props.mouseConfig) && !$xeTable.handleCellMousedownEvent) {
             errLog('vxe.error.reqModule', ['Keyboard'])
           }
           if ((props.printConfig || props.importConfig || props.exportConfig) && !$xeTable.exportData) {

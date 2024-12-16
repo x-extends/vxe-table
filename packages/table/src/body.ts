@@ -36,7 +36,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refTableBody, refTableHeader, refTableFooter, refTableLeftBody, refTableRightBody, refScrollXHandleElem, refScrollYHandleElem } = $xeTable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -140,6 +140,8 @@ export default defineComponent({
       const editOpts = computeEditOpts.value
       const tooltipOpts = computeTooltipOpts.value
       const rowOpts = computeRowOpts.value
+      const rowDragOpts = computeRowDragOpts.value
+      const { disabledMethod: dragDisabledMethod } = rowDragOpts
       const sYOpts = computeSYOpts.value
       const columnOpts = computeColumnOpts.value
       const mouseOpts = computeMouseOpts.value
@@ -195,6 +197,14 @@ export default defineComponent({
         data: tableData,
         items
       }
+      let isColDragCell = false
+      let isDisabledDrag = false
+      if (rowOpts.drag) {
+        isColDragCell = rowDragOpts.trigger === 'row' || (column.dragSort && rowDragOpts.trigger === 'cell')
+      }
+      if (isColDragCell) {
+        isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(params))
+      }
       // hover 进入事件
       if (showTitle || showTooltip || showAllTip || tooltipConfig) {
         tdOns.onMouseenter = (evnt: MouseEvent) => {
@@ -223,7 +233,7 @@ export default defineComponent({
         }
       }
       // 按下事件处理
-      if (checkboxOpts.range || mouseConfig) {
+      if (isColDragCell || checkboxOpts.range || mouseConfig) {
         tdOns.onMousedown = (evnt: MouseEvent) => {
           $xeTable.triggerCellMousedownEvent(evnt, params)
         }
@@ -367,6 +377,8 @@ export default defineComponent({
             'col--edit': isEdit,
             'col--ellipsis': hasEllipsis,
             'fixed--hidden': fixedHiddenColumn,
+            'is--drag-cell': isColDragCell,
+            'is--drag-disabled': isDisabledDrag,
             'col--dirty': isDirty,
             'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
             'col--valid-error': !!errorValidItem,

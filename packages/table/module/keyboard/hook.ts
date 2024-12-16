@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { getRefElem } from '../../src/util'
-import { browse, hasClass, getAbsolutePos, addClass, removeClass, getEventTargetNode } from '../../../ui/src/dom'
+import { browse, hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
 
 import type { TableKeyboardPrivateMethods } from '../../../../types'
 
@@ -373,36 +373,7 @@ hooks.add('tableKeyboardModule', {
           $xeTable.handleSelected(params, evnt)
         })
       },
-      /**
-       * 表头单元格按下事件
-       */
-      triggerHeaderCellMousedownEvent (evnt, params) {
-        const { mouseConfig } = props
-        const mouseOpts = computeMouseOpts.value
-        if (mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaEvent) {
-          const cell = evnt.currentTarget
-          const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
-          const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
-          $xeTable.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
-        }
-        $xeTable.focus()
-        if ($xeTable.closeMenu) {
-          $xeTable.closeMenu()
-        }
-      },
-      /**
-       * 单元格按下事件
-       */
-      triggerCellMousedownEvent (evnt, params) {
-        const cell = evnt.currentTarget
-        params.cell = cell
-        handleCellMousedownEvent(evnt, params)
-        $xeTable.focus()
-        $xeTable.closeFilter()
-        if ($xeTable.closeMenu) {
-          $xeTable.closeMenu()
-        }
-      }
+      handleCellMousedownEvent
     }
 
     return keyboardMethods
