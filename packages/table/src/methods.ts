@@ -5157,6 +5157,79 @@ const Methods = {
     }
   },
   /**
+   * 表头单元格按下事件
+   */
+  triggerHeaderCellMousedownEvent (evnt: any, params: any) {
+    const $xeTable = this
+    const props = $xeTable
+
+    const { mouseConfig } = props
+    const mouseOpts = $xeTable.computeMouseOpts
+    const columnOpts = $xeTable.computeColumnOpts
+    const columnDragOpts = $xeTable.computeColumnDragOpts
+    const { trigger, disabledMethod } = columnDragOpts
+    const cell = evnt.currentTarget
+    const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
+    const triggerCheckbox = getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
+    const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
+    const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
+    let triggerDrag = false
+    if (!(triggerInput || triggerCheckbox || triggerSort || triggerFilter)) {
+      if (columnOpts.drag && trigger === 'cell' && !(disabledMethod && disabledMethod(params))) {
+        triggerDrag = true
+        $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
+      }
+    }
+    if (!triggerDrag && mouseConfig && mouseOpts.area && $xeTable.handleHeaderCellAreaEvent) {
+      $xeTable.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
+    }
+    $xeTable.focus()
+    if ($xeTable.closeMenu) {
+      $xeTable.closeMenu()
+    }
+  },
+  /**
+   * 单元格按下事件
+   */
+  triggerCellMousedownEvent (evnt: any, params: any) {
+    const $xeTable = this
+
+    const { column } = params
+    const { type, treeNode } = column
+    const isRadioType = type === 'radio'
+    const isCheckboxType = type === 'checkbox'
+    const isExpandType = type === 'expand'
+    const rowOpts = $xeTable.computeRowOpts
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    const { trigger, disabledMethod } = rowDragOpts
+    const cell = evnt.currentTarget
+    params.cell = cell
+    const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
+    const triggerRadio = isRadioType && getEventTargetNode(evnt, cell, 'vxe-cell--radio').flag
+    const triggerCheckbox = isCheckboxType && getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
+    const triggerTreeNode = treeNode && getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
+    const triggerExpandNode = isExpandType && getEventTargetNode(evnt, cell, 'vxe-table--expanded').flag
+    let isColDragCell = false
+    if (rowOpts.drag) {
+      isColDragCell = trigger === 'row' || (column.dragSort && trigger === 'cell')
+    }
+    let triggerDrag = false
+    if (!(triggerInput || triggerRadio || triggerCheckbox || triggerTreeNode || triggerExpandNode)) {
+      if (isColDragCell && !(disabledMethod && disabledMethod(params))) {
+        triggerDrag = true
+        $xeTable.handleCellDragMousedownEvent(evnt, params)
+      }
+    }
+    if (!triggerDrag && $xeTable.handleCellMousedownEvent) {
+      $xeTable.handleCellMousedownEvent(evnt, params)
+    }
+    $xeTable.focus()
+    $xeTable.closeFilter()
+    if ($xeTable.closeMenu) {
+      $xeTable.closeMenu()
+    }
+  },
+  /**
    * 行拖拽
    */
   handleRowDragDragstartEvent (evnt: DragEvent) {
@@ -5395,12 +5468,13 @@ const Methods = {
     const props = $xeTable
     const reactData = $xeTable
 
+    evnt.stopPropagation()
     const { dragConfig } = props
     const rowDragOpts = $xeTable.computeRowDragOpts
-    const { dragStartMethod } = rowDragOpts
+    const { trigger, dragStartMethod } = rowDragOpts
     const { row } = params
     const dragEl = evnt.currentTarget as HTMLElement
-    const tdEl = dragEl.parentElement?.parentElement as HTMLElement
+    const tdEl = trigger === 'cell' || trigger === 'row' ? dragEl : dragEl.parentElement?.parentElement as HTMLElement
     const trEl = tdEl.parentElement as HTMLElement
     const dStartMethod = dragStartMethod || (dragConfig ? dragConfig.dragStartMethod : null)
     reactData.isDragRowMove = false
@@ -5652,11 +5726,12 @@ const Methods = {
     const $xeTable = this
     const reactData = $xeTable
 
+    evnt.stopPropagation()
     const columnDragOpts = $xeTable.computeColumnDragOpts
-    const { dragStartMethod } = columnDragOpts
+    const { trigger, dragStartMethod } = columnDragOpts
     const { column } = params
     const dragEl = evnt.currentTarget as HTMLElement
-    const thEl = dragEl.parentElement?.parentElement as HTMLElement
+    const thEl = trigger === 'cell' ? dragEl : dragEl.parentElement?.parentElement as HTMLElement
     reactData.isDragColMove = false
     clearColDropOrigin($xeTable)
     if (dragStartMethod && !dragStartMethod(params)) {

@@ -1072,7 +1072,7 @@ export default {
       if (this.editRules && !this._validate) {
         errLog('vxe.error.reqModule', ['Validator'])
       }
-      if ((this.checkboxOpts.range || this.keyboardConfig || this.mouseConfig) && !this.triggerCellMousedownEvent) {
+      if ((this.checkboxOpts.range || this.keyboardConfig || this.mouseConfig) && !this.handleCellMousedownEvent) {
         errLog('vxe.error.reqModule', ['Keyboard'])
       }
       if ((this.printConfig || this.importConfig || this.exportConfig) && !this._exportData) {
@@ -1253,6 +1253,7 @@ export default {
     const virtualScrollBars = $xeTable.computeVirtualScrollBars
     const isArea = mouseConfig && mouseOpts.area
     const tableStyle = $xeTable.computeTableStyle
+    const columnDragOpts = $xeTable.computeColumnDragOpts
     return h('div', {
       ref: 'refElem',
       class: ['vxe-table', 'vxe-table--render-default', `tid_${tId}`, vSize ? `size--${vSize}` : '', `border--${tableBorder}`, {
@@ -1268,6 +1269,7 @@ export default {
         'column--highlight': columnOpts.isHover || highlightHoverColumn,
         'checkbox--range': checkboxOpts.range,
         'column--calc': isCalcColumn,
+        'col--drag-cell': columnOpts.drag && columnDragOpts.trigger === 'cell',
         'is--header': showHeader,
         'is--footer': showFooter,
         'is--group': isGroup,

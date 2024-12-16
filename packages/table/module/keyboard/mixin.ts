@@ -1,5 +1,5 @@
 import XEUtils from 'xe-utils'
-import { browse, hasClass, getAbsolutePos, addClass, removeClass, getEventTargetNode } from '../../../ui/src/dom'
+import { browse, hasClass, getAbsolutePos, addClass, removeClass } from '../../../ui/src/dom'
 
 function getTargetOffset (target: any, container: any) {
   let offsetTop = 0
@@ -185,31 +185,6 @@ export default {
         params.cell = this.getCellElement(params.row, params.column)
         this.handleSelected(params, evnt)
       })
-    },
-    /**
-     * 表头单元格按下事件
-     */
-    triggerHeaderCellMousedownEvent (evnt: any, params: any) {
-      const { mouseConfig, mouseOpts } = this
-      if (mouseConfig && mouseOpts.area && this.handleHeaderCellAreaEvent) {
-        const cell = evnt.currentTarget
-        const triggerSort = getEventTargetNode(evnt, cell, 'vxe-cell--sort').flag
-        const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
-        this.handleHeaderCellAreaEvent(evnt, Object.assign({ cell, triggerSort, triggerFilter }, params))
-      }
-      this.focus()
-      this.closeMenu()
-    },
-    /**
-     * 单元格按下事件
-     */
-    triggerCellMousedownEvent (evnt: any, params: any) {
-      const cell = evnt.currentTarget
-      params.cell = cell
-      this.handleCellMousedownEvent(evnt, params)
-      this.focus()
-      this.closeFilter()
-      this.closeMenu()
     },
     handleCellMousedownEvent (evnt: any, params: any) {
       const { editConfig, editOpts, handleSelected, checkboxConfig, checkboxOpts, mouseConfig, mouseOpts } = this

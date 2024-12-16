@@ -12,9 +12,14 @@ const { renderer } = VxeUI
 const cellType = 'header'
 
 const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
-  const { $parent: $xetable, fixedType } = _vm
-  const { $listeners: tableListeners, resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, highlightCurrentColumn, currentColumn, scrollXLoad, overflowX, scrollbarWidth, sortOpts, mouseConfig, columnOpts } = $xetable
+  const $xeTable = _vm.$parent
+  const $xeGrid = $xeTable.xegrid
 
+  const { fixedType } = _vm
+
+  const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, currentColumn, scrollXLoad, overflowX, scrollbarWidth, mouseConfig, columnOpts } = $xeTable
+  const columnDragOpts = $xeTable.computeColumnDragOpts
+  const { disabledMethod: dragDisabledMethod } = columnDragOpts
   return cols.map((column: any, $columnIndex: any) => {
     const { type, showHeaderOverflow, headerAlign, align, headerClassName, editRender, cellRender } = column
     // const { enabled } = tooltipOpts
@@ -29,30 +34,40 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
     const showTitle = headOverflow === 'title'
     const showTooltip = headOverflow === true || headOverflow === 'tooltip'
     let hasEllipsis = showTitle || showTooltip || showEllipsis
-    const thOns: any = {}
     const hasFilter = column.filters && column.filters.some((item: any) => item.checked)
-    const columnIndex = $xetable.getColumnIndex(column)
-    const _columnIndex = $xetable.getVTColumnIndex(column)
-    const params = { $table: $xetable, $grid: $xetable.xegrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
+    const columnIndex = $xeTable.getColumnIndex(column)
+    const _columnIndex = $xeTable.getVTColumnIndex(column)
+    const params = { $table: $xeTable, $grid: $xeGrid, $rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: cellType, isHidden: fixedHiddenColumn, hasFilter }
+    const thAttrs: Record<string, string | number | null> = {
+      colid,
+      colspan: column.colSpan > 1 ? column.colSpan : null,
+      rowspan: column.rowSpan > 1 ? column.rowSpan : null
+    }
+    const thOns: any = {
+      click: (evnt: MouseEvent) => $xeTable.triggerHeaderCellClickEvent(evnt, params),
+      dblclick: (evnt: MouseEvent) => $xeTable.triggerHeaderCellDblclickEvent(evnt, params)
+    }
     // 虚拟滚动不支持动态高度
     if (scrollXLoad && !hasEllipsis) {
       showEllipsis = hasEllipsis = true
     }
-    if (columnOpts.isCurrent || highlightCurrentColumn || tableListeners['header-cell-click'] || sortOpts.trigger === 'cell') {
-      thOns.click = (evnt: any) => $xetable.triggerHeaderCellClickEvent(evnt, params)
-    }
-    if (tableListeners['header-cell-dblclick']) {
-      thOns.dblclick = (evnt: any) => $xetable.triggerHeaderCellDblclickEvent(evnt, params)
+    const isColDragCell = columnOpts.drag && columnDragOpts.trigger === 'cell'
+    let isDisabledDrag = false
+    if (isColDragCell) {
+      isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(params))
     }
     // 按下事件处理
-    if (mouseConfig) {
-      thOns.mousedown = (evnt: any) => $xetable.triggerHeaderCellMousedownEvent(evnt, params)
+    if (mouseConfig || isColDragCell) {
+      thOns.mousedown = (evnt: any) => $xeTable.triggerHeaderCellMousedownEvent(evnt, params)
     }
-    // 拖拽行事件
+    // 拖拽列事件
     if (columnOpts.drag) {
-      thOns.dragstart = $xetable.handleHeaderCellDragDragstartEvent
-      thOns.dragend = $xetable.handleHeaderCellDragDragendEvent
-      thOns.dragover = $xetable.handleHeaderCellDragDragoverEvent
+      thOns.dragstart = $xeTable.handleHeaderCellDragDragstartEvent
+      thOns.dragend = $xeTable.handleHeaderCellDragDragendEvent
+      thOns.dragover = $xeTable.handleHeaderCellDragDragoverEvent
+      if (isColDragCell) {
+        thOns.mouseup = $xeTable.handleHeaderCellDragMouseupEvent
+      }
     }
     return h('th', {
       class: ['vxe-header--column', colid, {
@@ -66,13 +81,10 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
         'is--sortable': column.sortable,
         'col--filter': !!column.filters,
         'is--filter-active': hasFilter,
+        'is--drag-disabled': isDisabledDrag,
         'col--current': currentColumn === column
       }, getClass(headerClassName, params), getClass(headerCellClassName, params)],
-      attrs: {
-        colid,
-        colspan: column.colSpan > 1 ? column.colSpan : null,
-        rowspan: column.rowSpan > 1 ? column.rowSpan : null
-      },
+      attrs: thAttrs,
       style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
       on: thOns,
       key: columnKey || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex

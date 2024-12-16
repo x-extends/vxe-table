@@ -93,6 +93,8 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     areaOpts,
     validErrorMaps
   } = $xetable
+  const rowDragOpts = $xetable.computeRowDragOpts
+  const { disabledMethod: dragDisabledMethod } = rowDragOpts
   const { selectCellToRow } = areaOpts
   const cellOpts = $xetable.computeCellOpts
   const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
@@ -126,6 +128,14 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
   const params = { $table: $xetable, $grid: $xetable.$xegrid, isEdit: false, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+  let isColDragCell = false
+  let isDisabledDrag = false
+  if (rowOpts.drag) {
+    isColDragCell = rowDragOpts.trigger === 'row' || (column.dragSort && rowDragOpts.trigger === 'cell')
+  }
+  if (isColDragCell) {
+    isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(params))
+  }
   // hover 进入事件
   if (showTitle || showTooltip || showAllTip || bindMouseenter || tooltipConfig) {
     tdOns.mouseenter = (evnt: any) => {
@@ -158,7 +168,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     }
   }
   // 按下事件处理
-  if (checkboxOpts.range || mouseConfig) {
+  if (isColDragCell || checkboxOpts.range || mouseConfig) {
     tdOns.mousedown = (evnt: any) => {
       $xetable.triggerCellMousedownEvent(evnt, params)
     }
@@ -314,6 +324,8 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
         'col--edit': isEdit,
         'col--ellipsis': hasEllipsis,
         'fixed--hidden': fixedHiddenColumn,
+        'is--drag-cell': isColDragCell,
+        'is--drag-disabled': isDisabledDrag,
         'col--dirty': isDirty,
         'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
         'col--valid-error': !!errorValidItem,
