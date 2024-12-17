@@ -48,7 +48,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refTableHeader, refTableBody, refScrollXHandleElem } = $xeTable.getRefMaps()
-    const { computeTooltipOpts, computeColumnOpts } = $xeTable.getComputeMaps()
+    const { computeTooltipOpts, computeColumnOpts, computeColumnDragOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refFooterTable = ref() as Ref<HTMLTableElement>
@@ -230,12 +230,13 @@ export default defineComponent({
       const { footerRowClassName, footerRowStyle } = tableProps
       const { isDragColMove } = tableReactData
       const columnOpts = computeColumnOpts.value
+      const columnDragOpts = computeColumnDragOpts.value
 
       return footerTableData.map((row, $rowIndex) => {
         const _rowIndex = $rowIndex
         const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
-        if (columnOpts.drag) {
+        if (columnOpts.drag && columnDragOpts.animation) {
           return h(TransitionGroup, {
             name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
             tag: 'tr',

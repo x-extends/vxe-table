@@ -36,7 +36,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refTableBody, refTableHeader, refTableFooter, refTableLeftBody, refTableRightBody, refScrollXHandleElem, refScrollYHandleElem } = $xeTable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -407,6 +407,7 @@ export default defineComponent({
       const editOpts = computeEditOpts.value
       const rowOpts = computeRowOpts.value
       const columnOpts = computeColumnOpts.value
+      const columnDragOpts = computeColumnDragOpts.value
       const { transform, seqMode } = treeOpts
       const childrenField = treeOpts.children || treeOpts.childrenField
       const rows: any[] = []
@@ -483,7 +484,7 @@ export default defineComponent({
           return renderColumn(seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
         })
         rows.push(
-          columnOpts.drag
+          columnOpts.drag && columnDragOpts.animation
             ? h(TransitionGroup, {
               name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
               tag: 'tr',
@@ -769,7 +770,7 @@ export default defineComponent({
       const emptyOpts = computeEmptyOpts.value
       const keyboardOpts = computeKeyboardOpts.value
       const mouseOpts = computeMouseOpts.value
-      const columnOpts = computeColumnOpts.value
+      const rowDragOpts = computeRowDragOpts.value
       // const isMergeLeftFixedExceeded = computeIsMergeLeftFixedExceeded.value
       // const isMergeRightFixedExceeded = computeIsMergeRightFixedExceeded.value
       // 如果是使用优化模式
@@ -852,7 +853,7 @@ export default defineComponent({
           /**
            * 内容
            */
-          rowOpts.drag || columnOpts.drag
+          rowOpts.drag && rowDragOpts.animation
             ? h(TransitionGroup, {
               ref: refBodyTBody,
               name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`,

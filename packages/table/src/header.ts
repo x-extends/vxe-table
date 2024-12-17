@@ -276,11 +276,12 @@ export default defineComponent({
       const { headerRowClassName, headerRowStyle } = tableProps
       const { isDragColMove } = tableReactData
       const columnOpts = computeColumnOpts.value
+      const columnDragOpts = computeColumnDragOpts.value
 
       return headerGroups.map((cols, $rowIndex) => {
         const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: renderType }
 
-        if (columnOpts.drag) {
+        if (columnOpts.drag && columnDragOpts.animation) {
           return h(TransitionGroup, {
             name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
             tag: 'tr',

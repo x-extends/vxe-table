@@ -48,10 +48,12 @@ VxeUI.setConfig({
       strict: true
     },
     rowDragConfig: {
-      showIcon: true
+      showIcon: true,
+      animation: true
     },
     columnDragConfig: {
-      showIcon: true
+      showIcon: true,
+      animation: true
     },
     checkboxConfig: {
       // trigger: 'default',
