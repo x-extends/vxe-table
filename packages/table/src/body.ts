@@ -345,6 +345,8 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
 }
 
 function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, tableData: any, tableColumn: any) {
+  const columnOpts = $xeTable.computeColumnOpts
+  const columnDragOpts = $xeTable.computeColumnDragOpts
   const {
     stripe,
     rowKey,
@@ -367,7 +369,6 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     fullAllDataRowIdData,
     rowOpts,
     pendingRowMaps,
-    columnOpts,
     isDragColMove
   } = $xeTable
   const { transform, seqMode } = treeOpts
@@ -453,7 +454,7 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
       return renderColumn(h, _vm, $xeTable, seq, rowid, fixedType, rowLevel, row, rowIndex, $rowIndex, _rowIndex, column, $columnIndex, tableColumn, tableData)
     })
     rows.push(
-      columnOpts.drag
+      columnOpts.drag && columnDragOpts.animation
         ? h('transition-group', {
           props: {
             tag: 'tr',
@@ -578,7 +579,10 @@ export default {
     const $xeTable = this.$parent
 
     const { _e, $parent: $xetable, fixedColumn, fixedType } = this
-    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts, rowOpts, isDragRowMove } = $xetable
+
+    const rowOpts = $xeTable.computeRowOpts
+    const rowDragOpts = $xeTable.computeRowDragOpts
+    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts, isDragRowMove } = $xetable
     // 如果是使用优化模式
     if (fixedType) {
       // 如果存在展开行使用全量渲染
@@ -664,7 +668,7 @@ export default {
         /**
          * 内容
          */
-        rowOpts.drag
+        rowOpts.drag && rowDragOpts.animation
           ? h('transition-group', {
             props: {
               tag: 'tbody',

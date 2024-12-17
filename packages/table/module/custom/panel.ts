@@ -869,8 +869,9 @@ export default {
     }
   },
   render (this: any, h: CreateElement) {
-    const { $xetable } = this
-    const { customOpts } = $xetable
+    const $xeTable = this.$xeTable
+
+    const customOpts = $xeTable.computeCustomOpts
     if (['modal', 'drawer', 'popup'].includes(`${customOpts.mode}`)) {
       return renderPopupPanel(h, this)
     }
@@ -953,8 +954,10 @@ export default {
       }
     },
     handleOptionCheck (column: any) {
-      const { $xetable } = this
-      const { customColumnList } = $xetable
+      const $xeTable = this.$xeTable
+      const reactData = $xeTable
+
+      const { customColumnList } = reactData
       const matchObj = XEUtils.findTree(customColumnList, item => item === column) as any
       if (matchObj && matchObj.parent) {
         const { parent } = matchObj
@@ -966,10 +969,10 @@ export default {
       }
     },
     changeCheckboxOption (column: any) {
-      const $xeTable = this.$xetable
+      const $xeTable = this.$xeTable
       const reactData = $xeTable
 
-      const { customOpts } = $xeTable.customOpts
+      const customOpts = $xeTable.computeCustomOpts
       const isChecked = !column.renderVisible
       if (customOpts.immediate) {
         XEUtils.eachTree([column], (item) => {

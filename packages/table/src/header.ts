@@ -121,18 +121,21 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
 }
 
 function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
-  const { $parent: $xetable } = _vm
-  const tableProps = $xetable
+  const $xeTable = _vm.$parent
+  const tableProps = $xeTable
 
   const { fixedType } = _vm
+
+  const columnOpts = $xeTable.computeColumnOpts
+  const columnDragOpts = $xeTable.computeColumnDragOpts
+
   const { headerRowClassName, headerRowStyle } = tableProps
-  const { isDragColMove } = $xetable
-  const columnOpts = $xetable.columnOpts
+  const { isDragColMove } = $xeTable
 
   return headerGroups.map((cols: any, $rowIndex: any) => {
-    const params = { $table: $xetable, $rowIndex, fixed: fixedType, type: cellType }
+    const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: cellType }
 
-    if (columnOpts.drag) {
+    if (columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
         props: {
           tag: 'tr',

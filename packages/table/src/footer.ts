@@ -153,15 +153,19 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
 }
 
 function renderHeads (h: CreateElement, _vm: any, footerTableData: any[]) {
+  const $xeTable = _vm.$parent
+
+  const columnOpts = $xeTable.computeColumnOpts
+  const columnDragOpts = $xeTable.computeColumnDragOpts
+
   const { $parent: $xetable, fixedType, tableColumn } = _vm
   const { footerRowClassName, footerRowStyle, isDragColMove } = $xetable
-  const columnOpts = $xetable.columnOpts
 
   return footerTableData.map((row: any, $rowIndex: any) => {
     const _rowIndex = $rowIndex
     const rowParams = { $table: $xetable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
-    if (columnOpts.drag) {
+    if (columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
         props: {
           tag: 'tr',
