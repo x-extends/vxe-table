@@ -17,25 +17,29 @@ export default {
     }
   } as any,
   render (this: any, h: CreateElement) {
-    const { $parent: $xetable, filterStore } = this
-    const { args, column } = filterStore
+    const $xeTable = this.$parent
+
+    const { filterStore } = this
+    const { args, visible, multiple, column } = filterStore
     const filterRender = column ? column.filterRender : null
     const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
     const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
+    const filterOpts = $xeTable.computeFilterOpts
+    const { destroyOnClose } = filterOpts
     return h('div', {
       class: [
         'vxe-table--filter-wrapper',
         'filter--prevent-default',
         compConf && compConf.className ? compConf.className : '',
-        getClass(filterClassName, Object.assign({ $panel: this, $table: $xetable }, args)),
+        getClass(filterClassName, Object.assign({ $panel: this, $table: $xeTable }, args)),
         {
-          'is--animat': $xetable.animat,
-          'is--multiple': filterStore.multiple,
-          'is--active': filterStore.visible
+          'is--animat': $xeTable.animat,
+          'is--multiple': multiple,
+          'is--active': visible
         }
       ],
       style: filterStore.style
-    }, filterStore.visible && column ? this.renderOptions(h, filterRender, compConf).concat(this.renderFooter(h)) : [])
+    }, filterStore.visible && (destroyOnClose ? visible : true) && column ? this.renderOptions(h, filterRender, compConf).concat(this.renderFooter(h)) : [])
   },
   methods: {
     renderOptions (h: CreateElement, filterRender: any, compConf: any) {
