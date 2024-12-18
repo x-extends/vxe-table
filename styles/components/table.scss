@@ -60,6 +60,96 @@
 }
 
 /*默认的渲染*/
+.vxe-header--column,
+.vxe-footer--column {
+  &.fixed--width {
+    & > .vxe-cell {
+      .vxe-default-input,
+      .vxe-default-textarea,
+      .vxe-default-select {
+        width: 100%;
+      }
+      .vxe-input,
+      .vxe-textarea,
+      .vxe-select,
+      .vxe-tree-select,
+      .vxe-date-picker,
+      .vxe-number-input,
+      .vxe-ico-picker {
+        width: 100%;
+      }
+      .vxe-cell--tree-node {
+        .vxe-input,
+        .vxe-textarea,
+        .vxe-select,
+        .vxe-tree-select,
+        .vxe-date-picker,
+        .vxe-number-input,
+        .vxe-ico-picker {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+.vxe-body--column {
+  &.fixed--width {
+    & > .vxe-cell {
+      & > .vxe-default-input,
+      & > .vxe-default-textarea,
+      & > .vxe-default-select {
+        width: 100%;
+      }
+      & > .vxe-input,
+      & > .vxe-textarea,
+      & > .vxe-select,
+      & > .vxe-tree-select,
+      & > .vxe-date-picker,
+      & > .vxe-number-input,
+      & > .vxe-ico-picker {
+        width: 100%;
+      }
+      & > .vxe-cell--tree-node {
+        .vxe-input,
+        .vxe-textarea,
+        .vxe-select,
+        .vxe-tree-select,
+        .vxe-date-picker,
+        .vxe-number-input,
+        .vxe-ico-picker {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+.vxe-table--filter-template {
+  & > .vxe-default-input,
+  & > .vxe-default-textarea,
+  & > .vxe-default-select {
+    width: 100%;
+  }
+  & > .vxe-input,
+  & > .vxe-textarea,
+  & > .vxe-select,
+  & > .vxe-tree-select,
+  & > .vxe-date-picker,
+  & > .vxe-number-input,
+  & > .vxe-ico-picker {
+    width: 100%;
+  }
+  & > .vxe-cell--tree-node {
+    .vxe-input,
+    .vxe-textarea,
+    .vxe-select,
+    .vxe-tree-select,
+    .vxe-date-picker,
+    .vxe-number-input,
+    .vxe-ico-picker {
+      width: 100%;
+    }
+  }
+}
 .vxe-cell,
 .vxe-table--filter-template {
   .vxe-default-input,
@@ -71,7 +161,6 @@
   .vxe-default-select {
     outline: 0;
     padding: 0 2px;
-    width: 100%;
     color: var(--vxe-ui-font-color);
     border-radius: var(--vxe-ui-border-radius);
     border: 1px solid var(--vxe-ui-input-border-color);
@@ -107,15 +196,6 @@
       height: var(--vxe-ui-input-height-default);
     }
   }
-  & > .vxe-input,
-  & > .vxe-textarea,
-  & > .vxe-select,
-  & > .vxe-tree-select,
-  & > .vxe-date-picker,
-  & > .vxe-number-input,
-  & > .vxe-ico-picker {
-    width: 100%;
-  }
   & > .vxe-input > .vxe-input--inner,
   & > .vxe-textarea > .vxe-textarea--inner {
     padding: 0 2px;
@@ -125,15 +205,6 @@
     resize: none;
   }
   & > .vxe-cell--tree-node {
-    .vxe-input,
-    .vxe-textarea,
-    .vxe-select,
-    .vxe-tree-select,
-    .vxe-date-picker,
-    .vxe-number-input,
-    .vxe-ico-picker {
-      width: 100%;
-    }
     .vxe-input > .vxe-input--inner,
     .vxe-textarea > .vxe-textarea--inner {
       padding: 0 2px;

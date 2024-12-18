@@ -589,7 +589,8 @@ renderer.mixin({
     renderTableCell (h, renderOpts, params) {
       const { props = {} } = renderOpts
       const { row, column } = params
-      const digits = props.digits || getConfig().input?.digits || 2
+      const inputConfig = getConfig().input || {}
+      const digits = props.digits || inputConfig.digits || 2
       let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
         switch (props.type) {
@@ -620,12 +621,17 @@ renderer.mixin({
       const { type } = props
       let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
+        const numberInputConfig = getConfig().numberInput || {}
         if (type === 'float') {
-          const digits = props.digits || getConfig().numberInput.digits || 1
+          const digits = props.digits || numberInputConfig.digits || 1
           cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
         } else if (type === 'amount') {
-          const digits = props.digits || getConfig().numberInput.digits || 2
+          const digits = props.digits || numberInputConfig.digits || 2
           cellValue = XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
+          const showCurrency = props.showCurrency
+          if (XEUtils.isBoolean(showCurrency) ? showCurrency : numberInputConfig.showCurrency) {
+            cellValue = `${props.currencySymbol || numberInputConfig.currencySymbol || getI18n('vxe.numberInput.currencySymbol') || ''}${cellValue}`
+          }
         }
       }
       return getCellLabelVNs(h, renderOpts, params, cellValue)
@@ -637,11 +643,12 @@ renderer.mixin({
       // 兼容老模式
       const cellValue = XEUtils.isArray(row) ? row[_columnIndex] : XEUtils.get(row, column.field)
       if (XEUtils.isNumber(cellValue)) {
+        const numberInputConfig = getConfig().numberInput || {}
         if (type === 'float') {
-          const digits = props.digits || getConfig().numberInput.digits || 1
+          const digits = props.digits || numberInputConfig.digits || 1
           return XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
         } else if (type === 'amount') {
-          const digits = props.digits || getConfig().numberInput.digits || 2
+          const digits = props.digits || numberInputConfig.digits || 2
           return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
         }
       }
@@ -649,7 +656,12 @@ renderer.mixin({
     },
     renderTableDefault: defaultEditRender,
     renderTableFilter: defaultFilterRender,
-    tableFilterDefaultMethod: handleInputFilterMethod
+    tableFilterDefaultMethod: handleInputFilterMethod,
+    tableExportMethod (params) {
+      const { row, column } = params
+      const cellValue = XEUtils.get(row, column.field)
+      return cellValue
+    }
   },
   VxeDatePicker: {
     tableAutoFocus: 'input',

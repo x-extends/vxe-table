@@ -310,6 +310,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
       )
     }
   }
+  const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
   return h('td', {
     class: [
@@ -323,6 +324,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
         'col--tree-node': treeNode,
         'col--edit': isEdit,
         'col--ellipsis': hasEllipsis,
+        'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
         'is--drag-cell': isColDragCell,
         'is--drag-disabled': isDisabledDrag,

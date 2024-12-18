@@ -289,6 +289,9 @@ export default {
         }
       }
     },
+    numberInput: {
+      currencySymbol: '$'
+    },
     imagePreview: {
       popupTitle: 'كۆرۈش',
       operBtn: {

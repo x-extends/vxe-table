@@ -69,6 +69,8 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
         thOns.mouseup = $xeTable.handleHeaderCellDragMouseupEvent
       }
     }
+    const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
+
     return h('th', {
       class: ['vxe-header--column', colid, {
         [`col--${headAlign}`]: headAlign,
@@ -77,6 +79,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
         'col--fixed': column.fixed,
         'col--group': isColGroup,
         'col--ellipsis': hasEllipsis,
+        'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
         'is--sortable': column.sortable,
         'col--filter': !!column.filters,

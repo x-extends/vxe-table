@@ -49,7 +49,7 @@ function getSeq ($xetable: any, cellValue: any, row: any, $rowIndex: any, column
 }
 
 function defaultFilterExportColumn (column: any) {
-  return column.property || ['seq', 'checkbox', 'radio'].indexOf(column.type) > -1
+  return column.field || ['seq', 'checkbox', 'radio'].indexOf(column.type) > -1
 }
 
 function toTableBorder (border: any) {
@@ -220,7 +220,7 @@ function getBooleanValue (cellValue: any) {
 function getHeaderTitle ($xetable: any, opts: any, column: any) {
   const { columnOpts } = $xetable
   const headExportMethod = column.headerExportMethod || columnOpts.headerExportMethod
-  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xetable }) : ((opts.original ? column.property : column.getTitle()) || '')
+  return headExportMethod ? headExportMethod({ column, options: opts, $table: $xetable }) : ((opts.original ? column.field : column.getTitle()) || '')
 }
 
 function getFooterCellValue ($xetable: any, opts: any, row: any, column: any) {
@@ -776,7 +776,7 @@ function parseXML (columns: any, content: any) {
 function checkImportData (columns: any[], fields: any[]) {
   const tableFields: any[] = []
   columns.forEach((column) => {
-    const field = column.property
+    const field = column.field
     if (field) {
       tableFields.push(field)
     }
@@ -1083,13 +1083,13 @@ function handleExportAndPrint ($xetable: any, options: any, isPrint?: any) {
           } else {
             const colid = item.id || item.colId
             const type = item.type
-            const field = item.property || item.field
+            const field = item.field
             if (colid) {
               return column.id === colid
             } else if (field && type) {
-              return column.property === field && column.type === type
+              return column.field === field && column.type === type
             } else if (field) {
-              return column.property === field
+              return column.field === field
             } else if (type) {
               return column.type === type
             }
@@ -1219,13 +1219,26 @@ export default {
       }, exportOpts, {
         print: false
       }, options)
-      const { type, mode, columns, original, beforeExportMethod } = opts
+      const { type, mode, columns, original, beforeExportMethod, excludeFields, includeFields } = opts
       let groups = []
       const customCols = columns && columns.length ? columns : null
       // 如果设置源数据，则默认导出设置了字段的列
       let columnFilterMethod = opts.columnFilterMethod
       if (!customCols && !columnFilterMethod) {
-        columnFilterMethod = original ? ({ column }: any) => column.property : ({ column }: any) => defaultFilterExportColumn(column)
+        columnFilterMethod = ({ column }: any) => {
+          if (excludeFields) {
+            if (XEUtils.includes(excludeFields, column.field)) {
+              return false
+            }
+          }
+          if (includeFields) {
+            if (XEUtils.includes(includeFields, column.field)) {
+              return true
+            }
+            return false
+          }
+          return original ? column.field : defaultFilterExportColumn(column)
+        }
       }
       if (customCols) {
         opts._isCustomColumn = true
@@ -1240,11 +1253,11 @@ export default {
               } else {
                 const colid = item.id || item.colId
                 const type = item.type
-                const field = item.property || item.field
+                const field = item.field
                 if (colid) {
                   targetColumn = this.getColumnById(colid)
                 } else if (field && type) {
-                  targetColumn = tableFullColumn.find((column: any) => column.property === field && column.type === type)
+                  targetColumn = tableFullColumn.find((column: any) => column.field === field && column.type === type)
                 } else if (field) {
                   targetColumn = this.getColumnByField(field)
                 } else if (type) {
