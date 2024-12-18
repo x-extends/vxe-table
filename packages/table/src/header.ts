@@ -219,6 +219,8 @@ export default defineComponent({
             thOns.onMouseup = $xeTable.handleHeaderCellDragMouseupEvent
           }
         }
+        const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
+
         return h('th', {
           class: ['vxe-header--column', colid, {
             [`col--${headAlign}`]: headAlign,
@@ -227,6 +229,7 @@ export default defineComponent({
             'col--fixed': column.fixed,
             'col--group': isColGroup,
             'col--ellipsis': hasEllipsis,
+            'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
             'is--sortable': column.sortable,
             'col--filter': !!column.filters,

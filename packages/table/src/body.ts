@@ -363,6 +363,7 @@ export default defineComponent({
           )
         }
       }
+      const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
 
       return h('td', {
         class: [
@@ -376,6 +377,7 @@ export default defineComponent({
             'col--tree-node': treeNode,
             'col--edit': isEdit,
             'col--ellipsis': hasEllipsis,
+            'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
             'is--drag-cell': isColDragCell,
             'is--drag-disabled': isDisabledDrag,

@@ -193,11 +193,14 @@ export default defineComponent({
             attrs.colspan = colspan
           }
         }
+        const isAutoCellWidth = !column.resizeWidth && (column.minWidth === 'auto' || column.width === 'auto')
+
         return h('td', {
           class: ['vxe-footer--column', column.id, {
             [`col--${footAlign}`]: footAlign,
             [`col--${type}`]: type,
             'col--last': $columnIndex === tableColumn.length - 1,
+            'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
             'col--ellipsis': hasEllipsis,
             'col--current': currentColumn === column

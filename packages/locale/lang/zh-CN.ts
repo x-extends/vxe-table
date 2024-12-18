@@ -289,6 +289,9 @@ export default {
         }
       }
     },
+    numberInput: {
+      currencySymbol: '￥'
+    },
     imagePreview: {
       popupTitle: '预览',
       operBtn: {
