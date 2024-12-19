@@ -198,11 +198,13 @@ export default defineComponent({
     const renderVN = () => {
       const { filterStore } = props
       const { initStore } = tableReactData
-      const { column } = filterStore
+      const { visible, multiple, column } = filterStore
       const filterRender = column ? column.filterRender : null
       const compConf = isEnableConf(filterRender) ? renderer.get(filterRender.name) : null
       const filterClassName = compConf ? (compConf.tableFilterClassName || compConf.filterClassName) : ''
       const params = Object.assign({}, tableInternalData._currFilterParams, { $panel, $table: $xeTable })
+      const filterOpts = computeFilterOpts.value
+      const { destroyOnClose } = filterOpts
       return h('div', {
         class: [
           'vxe-table--filter-wrapper',
@@ -210,12 +212,12 @@ export default defineComponent({
           getPropClass(filterClassName, params),
           {
             'is--animat': $xeTable.props.animat,
-            'is--multiple': filterStore.multiple,
-            'is--active': filterStore.visible
+            'is--multiple': multiple,
+            'is--active': visible
           }
         ],
         style: filterStore.style
-      }, initStore.filter && column ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
+      }, initStore.filter && (destroyOnClose ? visible : true) && column ? renderOptions(filterRender, compConf).concat(renderFooters()) : [])
     }
 
     return renderVN

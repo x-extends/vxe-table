@@ -4924,18 +4924,25 @@ export default defineComponent({
         const rowRest = fullAllDataRowIdData[getRowid($xeTable, row)]
         return rowRest && !!rowRest.treeLoaded
       },
-      clearTreeExpandLoaded (row) {
+      clearTreeExpandLoaded (rows: any) {
         const { treeExpandedMaps } = reactData
         const { fullAllDataRowIdData } = internalData
         const treeOpts = computeTreeOpts.value
-        const { transform, lazy } = treeOpts
-        const rowid = getRowid($xeTable, row)
-        const rowRest = fullAllDataRowIdData[rowid]
-        if (lazy && rowRest) {
-          rowRest.treeLoaded = false
-          if (treeExpandedMaps[rowid]) {
-            delete treeExpandedMaps[rowid]
+        const { transform } = treeOpts
+        if (rows) {
+          if (!XEUtils.isArray(rows)) {
+            rows = [rows]
           }
+          rows.forEach((row: any) => {
+            const rowid = getRowid($xeTable, row)
+            const rowRest = fullAllDataRowIdData[rowid]
+            if (rowRest) {
+              rowRest.treeLoaded = false
+              if (treeExpandedMaps[rowid]) {
+                delete treeExpandedMaps[rowid]
+              }
+            }
+          })
         }
         if (transform) {
           handleVirtualTreeToList()

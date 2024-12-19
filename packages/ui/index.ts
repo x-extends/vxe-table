@@ -111,6 +111,7 @@ VxeUI.setConfig({
     filterConfig: {
       // remote: false,
       // filterMethod: null,
+      // destroyOnClose: false,
       showIcon: true
     },
     treeConfig: {
