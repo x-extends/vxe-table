@@ -390,7 +390,7 @@ export default defineComponent({
           getPropClass(className, params),
           getPropClass(allCellClassName, params)
         ],
-        key: columnKey || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? colid : $columnIndex,
+        key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || rowOpts.useKey || columnOpts.drag ? colid : $columnIndex,
         ...attrs,
         style: Object.assign({
           height: cellHeight
@@ -401,7 +401,7 @@ export default defineComponent({
 
     const renderRows = (fixedType: any, tableData: any, tableColumn: any) => {
       const { stripe, rowKey, highlightHoverRow, rowClassName, rowStyle, showOverflow: allColumnOverflow, editConfig, treeConfig } = tableProps
-      const { hasFixedColumn, treeExpandedMaps, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
+      const { hasFixedColumn, treeExpandedMaps, scrollXLoad, scrollYLoad, rowExpandedMaps, expandColumn, selectRadioRow, pendingRowMaps, isDragColMove } = tableReactData
       const { fullAllDataRowIdData } = tableInternalData
       const checkboxOpts = computeCheckboxOpts.value
       const radioOpts = computeRadioOpts.value
@@ -493,7 +493,7 @@ export default defineComponent({
               class: trClass,
               rowid: rowid,
               style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-              key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
+              key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
               ...trOn
             }, {
               default: () => tdVNs
@@ -502,7 +502,7 @@ export default defineComponent({
               class: trClass,
               rowid: rowid,
               style: rowStyle ? (XEUtils.isFunction(rowStyle) ? rowStyle(params) : rowStyle) : null,
-              key: rowKey || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
+              key: rowKey || scrollXLoad || scrollYLoad || rowOpts.useKey || rowOpts.drag || columnOpts.drag || treeConfig ? rowid : $rowIndex,
               ...trOn
             }, tdVNs)
         )

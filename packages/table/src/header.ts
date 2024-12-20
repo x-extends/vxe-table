@@ -167,7 +167,7 @@ export default defineComponent({
     const renderRows = (cols: VxeTableDefines.ColumnInfo[], $rowIndex: number) => {
       const { fixedType } = props
       const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, mouseConfig } = tableProps
-      const { currentColumn, scrollXLoad, overflowX, scrollbarWidth } = tableReactData
+      const { currentColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth } = tableReactData
       const columnOpts = computeColumnOpts.value
       const columnDragOpts = computeColumnDragOpts.value
       const { disabledMethod: dragDisabledMethod } = columnDragOpts
@@ -243,7 +243,7 @@ export default defineComponent({
           style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
           ...thAttrs,
           ...thOns,
-          key: columnKey || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
+          key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
         }, [
           h('div', {
             class: ['vxe-cell', {
@@ -286,6 +286,7 @@ export default defineComponent({
 
         if (columnOpts.drag && columnDragOpts.animation) {
           return h(TransitionGroup, {
+            key: $rowIndex,
             name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
             tag: 'tr',
             class: [
@@ -298,6 +299,7 @@ export default defineComponent({
           })
         }
         return h('tr', {
+          key: $rowIndex,
           class: [
             'vxe-header--row',
             headerRowClassName ? (XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName) : ''

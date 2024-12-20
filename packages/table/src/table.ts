@@ -3083,7 +3083,7 @@ export default defineComponent({
     const lazyScrollYData = () => {
       const { lyTimeout, lyRunTime, scrollYStore } = internalData
       const { visibleSize } = scrollYStore
-      const fpsTime = Math.min(80, Math.floor(visibleSize * 2))
+      const fpsTime = Math.min(80, Math.floor(visibleSize))
       if (lyTimeout) {
         clearTimeout(lyTimeout)
       }

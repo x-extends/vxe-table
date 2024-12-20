@@ -37,6 +37,9 @@ const gridOptions = reactive<VxeGridProps>({
   columnConfig: {
     useKey: true
   },
+  cellConfig: {
+    paddingMode: 'compact'
+  },
   rowConfig: {
     keyField: 'id',
     isHover: true

@@ -100,7 +100,7 @@ export default defineComponent({
     const renderRows = (tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) => {
       const { fixedType } = props
       const { footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, footerSpanMethod, align: allAlign, columnKey, showFooterOverflow: allColumnFooterOverflow } = tableProps
-      const { scrollXLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
+      const { scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, currentColumn, mergeFooterList } = tableReactData
       const tooltipOpts = computeTooltipOpts.value
       const columnOpts = computeColumnOpts.value
 
@@ -208,7 +208,7 @@ export default defineComponent({
           ...attrs,
           style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) : null,
           ...tfOns,
-          key: columnKey || columnOpts.useKey || columnOpts.drag ? column.id : $columnIndex
+          key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag ? column.id : $columnIndex
         }, [
           h('div', {
             class: ['vxe-cell', {
@@ -241,6 +241,7 @@ export default defineComponent({
 
         if (columnOpts.drag && columnDragOpts.animation) {
           return h(TransitionGroup, {
+            key: $rowIndex,
             name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
             tag: 'tr',
             class: [
@@ -253,6 +254,7 @@ export default defineComponent({
           })
         }
         return h('tr', {
+          key: $rowIndex,
           class: [
             'vxe-footer--row',
             footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
