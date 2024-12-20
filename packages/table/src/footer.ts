@@ -26,7 +26,7 @@ function mergeFooterMethod (mergeFooterList: any, _rowIndex: any, _columnIndex: 
 
 function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.ColumnInfo[], footerTableData: any[], row: any, $rowIndex: number, _rowIndex: number) {
   const { $parent: $xetable, fixedType } = _vm
-  const { $listeners: tableListeners, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, mergeFooterList, footerSpanMethod, align: allAlign, scrollXLoad, columnKey, columnOpts, showFooterOverflow: allColumnFooterOverflow, currentColumn, overflowX, scrollbarWidth, tooltipOpts } = $xetable
+  const { $listeners: tableListeners, footerCellClassName, footerCellStyle, footerAlign: allFooterAlign, mergeFooterList, footerSpanMethod, align: allAlign, scrollXLoad, columnKey, columnOpts, showFooterOverflow: allColumnFooterOverflow, currentColumn, overflowX, scrollYLoad, scrollbarWidth, tooltipOpts } = $xetable
 
   return tableColumn.map((column: any, $columnIndex: any) => {
     const { type, showFooterOverflow, footerAlign, align, footerClassName, editRender, cellRender } = column
@@ -135,7 +135,7 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
       attrs,
       style: footerCellStyle ? (XEUtils.isFunction(footerCellStyle) ? footerCellStyle(cellParams) : footerCellStyle) : null,
       on: tfOns,
-      key: columnKey || columnOpts.useKey || columnOpts.drag ? column.id : $columnIndex
+      key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag ? column.id : $columnIndex
     }, [
       h('div', {
         class: ['vxe-cell', {
@@ -170,6 +170,7 @@ function renderHeads (h: CreateElement, _vm: any, footerTableData: any[]) {
 
     if (columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
+        key: $rowIndex,
         props: {
           tag: 'tr',
           name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
@@ -182,6 +183,7 @@ function renderHeads (h: CreateElement, _vm: any, footerTableData: any[]) {
       }, renderRows(h, _vm, tableColumn, footerTableData, row, $rowIndex, _rowIndex))
     }
     return h('tr', {
+      key: $rowIndex,
       class: [
         'vxe-footer--row',
         footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''

@@ -17,7 +17,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
 
   const { fixedType } = _vm
 
-  const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, currentColumn, scrollXLoad, overflowX, scrollbarWidth, mouseConfig, columnOpts } = $xeTable
+  const { resizable: allResizable, border, columnKey, headerCellClassName, headerCellStyle, showHeaderOverflow: allColumnHeaderOverflow, headerAlign: allHeaderAlign, align: allAlign, currentColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, mouseConfig, columnOpts } = $xeTable
   const columnDragOpts = $xeTable.computeColumnDragOpts
   const { disabledMethod: dragDisabledMethod } = columnDragOpts
   return cols.map((column: any, $columnIndex: any) => {
@@ -90,7 +90,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
       attrs: thAttrs,
       style: headerCellStyle ? (XEUtils.isFunction(headerCellStyle) ? headerCellStyle(params) : headerCellStyle) : null,
       on: thOns,
-      key: columnKey || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
+      key: columnKey || scrollXLoad || scrollYLoad || columnOpts.useKey || columnOpts.drag || isColGroup ? colid : $columnIndex
     }, [
       h('div', {
         class: ['vxe-cell', {
@@ -140,6 +140,7 @@ function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
 
     if (columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
+        key: $rowIndex,
         props: {
           tag: 'tr',
           name: `vxe-header--col-list${isDragColMove ? '' : '-disabled'}`,
@@ -152,6 +153,7 @@ function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
       }, renderRows(h, _vm, cols, $rowIndex))
     }
     return h('tr', {
+      key: $rowIndex,
       class: [
         'vxe-header--row',
         headerRowClassName ? XEUtils.isFunction(headerRowClassName) ? headerRowClassName(params) : headerRowClassName : ''

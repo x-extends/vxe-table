@@ -734,8 +734,11 @@ export default {
       }
       return false
     },
-    tableBorder () {
-      const { border } = this
+    computeTableBorder () {
+      const $xeTable = this
+      const props = $xeTable
+
+      const { border } = props
       if (border === true) {
         return 'full'
       }
@@ -1213,7 +1216,6 @@ export default {
       stripe,
       showHeader,
       height,
-      tableBorder,
       treeOpts,
       treeConfig,
       mouseConfig,
@@ -1250,6 +1252,7 @@ export default {
     const loadingSlot = $scopedSlots.loading
     const currLoading = this._isLoading || loading
     const vSize = computeSize
+    const tableBorder = $xeTable.computeTableBorder
     const virtualScrollBars = $xeTable.computeVirtualScrollBars
     const isArea = mouseConfig && mouseOpts.area
     const tableStyle = $xeTable.computeTableStyle
