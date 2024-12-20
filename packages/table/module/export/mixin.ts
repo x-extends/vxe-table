@@ -1,7 +1,7 @@
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
-import { parseFile, formatText } from '../../../ui/src/utils'
+import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { browse } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
@@ -66,9 +66,13 @@ function toBooleanValue (cellValue: any) {
   return XEUtils.isBoolean(cellValue) ? (cellValue ? 'TRUE' : 'FALSE') : cellValue
 }
 
-function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[]) {
+const toStringValue = (cellValue: any) => {
+  return eqEmptyValue(cellValue) ? '' : `${cellValue}`
+}
+
+function getBodyLabelData ($xeTable: any, opts: any, columns: any[], datas: any[]) {
   const { isAllExpand, mode } = opts
-  const { treeConfig, treeOpts, radioOpts, checkboxOpts, columnOpts } = $xetable
+  const { treeConfig, treeOpts, radioOpts, checkboxOpts, columnOpts } = $xeTable
   const childrenField = treeOpts.children || treeOpts.childrenField
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
@@ -80,13 +84,13 @@ function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[
     XEUtils.eachTree(datas, (item, $rowIndex, items, path, parent, nodes) => {
       const row = item._row || item
       const parentRow = parent && parent._row ? parent._row : parent
-      if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xetable.isTreeExpandByRow(parentRow)))) {
-        const hasRowChild = hasTreeChildren($xetable, row)
+      if ((isAllExpand || !parentRow || (expandMaps.has(parentRow) && $xeTable.isTreeExpandByRow(parentRow)))) {
+        const hasRowChild = hasTreeChildren($xeTable, row)
         const item: any = {
           _row: row,
           _level: nodes.length - 1,
           _hasChild: hasRowChild,
-          _expand: hasRowChild && $xetable.isTreeExpandByRow(row)
+          _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
         }
         columns.forEach((column, $columnIndex) => {
           let cellValue = ''
@@ -102,21 +106,21 @@ function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[
             bodyExportMethod = columnOpts.exportMethod
           }
           if (bodyExportMethod) {
-            cellValue = bodyExportMethod({ $table: $xetable, row, column, options: opts })
+            cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
           } else {
             switch (column.type) {
               case 'seq': {
                 const seqValue = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-                cellValue = mode === 'all' ? seqValue : getSeq($xetable, seqValue, row, $rowIndex, column, $columnIndex)
+                cellValue = mode === 'all' ? seqValue : getSeq($xeTable, seqValue, row, $rowIndex, column, $columnIndex)
                 break
               }
               case 'checkbox':
-                cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
+                cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
                 item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
                 item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
                 break
               case 'radio':
-                cellValue = toBooleanValue($xetable.isCheckedByRadioRow(row))
+                cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
                 item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
                 item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
                 break
@@ -124,12 +128,12 @@ function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[
                 if (opts.original) {
                   cellValue = getCellValue(row, column)
                 } else {
-                  cellValue = $xetable.getCellLabel(row, column)
+                  cellValue = $xeTable.getCellLabel(row, column)
                   if (column.type === 'html') {
                     htmlCellElem.innerHTML = cellValue
                     cellValue = htmlCellElem.innerText.trim()
                   } else {
-                    const cell = $xetable.getCellElement(row, column)
+                    const cell = $xeTable.getCellElement(row, column)
                     if (cell) {
                       cellValue = cell.innerText.trim()
                     }
@@ -137,7 +141,7 @@ function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[
                 }
             }
           }
-          item[column.id] = XEUtils.toValueString(cellValue)
+          item[column.id] = toStringValue(cellValue)
         })
         expandMaps.set(row, 1)
         rest.push(Object.assign(item, row))
@@ -163,21 +167,21 @@ function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[
         bodyExportMethod = columnOpts.exportMethod
       }
       if (bodyExportMethod) {
-        cellValue = bodyExportMethod({ $table: $xetable, row, column, options: opts })
+        cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
       } else {
         switch (column.type) {
           case 'seq': {
             const seqValue = $rowIndex + 1
-            cellValue = mode === 'all' ? seqValue : getSeq($xetable, seqValue, row, $rowIndex, column, $columnIndex)
+            cellValue = mode === 'all' ? seqValue : getSeq($xeTable, seqValue, row, $rowIndex, column, $columnIndex)
             break
           }
           case 'checkbox':
-            cellValue = toBooleanValue($xetable.isCheckedByCheckboxRow(row))
+            cellValue = toBooleanValue($xeTable.isCheckedByCheckboxRow(row))
             item._checkboxLabel = checkboxOpts.labelField ? XEUtils.get(row, checkboxOpts.labelField) : ''
             item._checkboxDisabled = checkboxOpts.checkMethod && !checkboxOpts.checkMethod({ row })
             break
           case 'radio':
-            cellValue = toBooleanValue($xetable.isCheckedByRadioRow(row))
+            cellValue = toBooleanValue($xeTable.isCheckedByRadioRow(row))
             item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
             item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
             break
@@ -185,12 +189,12 @@ function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[
             if (opts.original) {
               cellValue = getCellValue(row, column)
             } else {
-              cellValue = $xetable.getCellLabel(row, column)
+              cellValue = $xeTable.getCellLabel(row, column)
               if (column.type === 'html') {
                 htmlCellElem.innerHTML = cellValue
                 cellValue = htmlCellElem.innerText.trim()
               } else {
-                const cell = $xetable.getCellElement(row, column)
+                const cell = $xeTable.getCellElement(row, column)
                 if (cell) {
                   cellValue = cell.innerText.trim()
                 }
@@ -198,7 +202,7 @@ function getBodyLabelData ($xetable: any, opts: any, columns: any[], datas: any[
             }
         }
       }
-      item[column.id] = XEUtils.toValueString(cellValue)
+      item[column.id] = toStringValue(cellValue)
     })
     return item
   })

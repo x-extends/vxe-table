@@ -48,8 +48,7 @@ function insertTreeRow (_vm: any, newRecords: any[], isAppend: any) {
   })
 }
 
-function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?: any) {
-  const $xeTable = _vm
+function handleInsertRowAt ($xeTable: any, records: any[], targetRow: any, isInsertNextRow?: any) {
   const props = $xeTable
   const reactData = $xeTable
   const internalData = $xeTable
@@ -63,11 +62,11 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
   if (!XEUtils.isArray(records)) {
     records = [records]
   }
-  const newRecords: any[] = _vm.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
-  if (XEUtils.eqNull(row)) {
+  const newRecords: any[] = $xeTable.defineField(records.map(record => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record)))
+  if (XEUtils.eqNull(targetRow)) {
   // 如果为虚拟树
     if (treeConfig && transform) {
-      insertTreeRow(_vm, newRecords, false)
+      insertTreeRow($xeTable, newRecords, false)
     } else {
       newRecords.forEach(item => {
         const rowid = getRowid($xeTable, item)
@@ -86,10 +85,10 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
       })
     }
   } else {
-    if (row === -1) {
+    if (targetRow === -1) {
       // 如果为虚拟树
       if (treeConfig && transform) {
-        insertTreeRow(_vm, newRecords, true)
+        insertTreeRow($xeTable, newRecords, true)
       } else {
         newRecords.forEach(item => {
           const rowid = getRowid($xeTable, item)
@@ -110,14 +109,14 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
     } else {
       // 如果为虚拟树
       if (treeConfig && transform) {
-        const matchMapObj = XEUtils.findTree(tableFullTreeData, (item: any) => row[rowField] === item[rowField], { children: mapChildrenField })
+        const matchMapObj = XEUtils.findTree(tableFullTreeData, (item: any) => targetRow[rowField] === item[rowField], { children: mapChildrenField })
         if (matchMapObj) {
           const { parent: parentRow } = matchMapObj as any
           const parentMapChilds = parentRow ? parentRow[mapChildrenField] : tableFullTreeData
-          const parentRest = fullAllDataRowIdData[getRowid(_vm, parentRow)]
+          const parentRest = fullAllDataRowIdData[getRowid($xeTable, parentRow)]
           const parentLevel = parentRest ? parentRest.level : 0
           newRecords.forEach((item: any, i: any) => {
-            const rowid = getRowid(_vm, item)
+            const rowid = getRowid($xeTable, item)
             if (process.env.VUE_APP_VXE_ENV === 'development') {
               if (item[treeOpts.parentField]) {
                 if (parentRow && item[treeOpts.parentField] !== parentRow[rowField]) {
@@ -140,7 +139,7 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
 
           // 源
           if (parentRow) {
-            const matchObj = XEUtils.findTree(tableFullTreeData, (item: any) => row[rowField] === item[rowField], { children: childrenField })
+            const matchObj = XEUtils.findTree(tableFullTreeData, (item: any) => targetRow[rowField] === item[rowField], { children: childrenField })
             if (matchObj) {
               const parentChilds = matchObj.items
               let targetIndex = matchObj.index
@@ -154,7 +153,7 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
           if (process.env.VUE_APP_VXE_ENV === 'development') {
             warnLog('vxe.error.unableInsert')
           }
-          insertTreeRow(_vm, newRecords, true)
+          insertTreeRow($xeTable, newRecords, true)
         }
       } else {
         if (treeConfig) {
@@ -162,12 +161,12 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
         }
         let afIndex = -1
         // 如果是可视索引
-        if (XEUtils.isNumber(row)) {
-          if (row < afterFullData.length) {
-            afIndex = row
+        if (XEUtils.isNumber(targetRow)) {
+          if (targetRow < afterFullData.length) {
+            afIndex = targetRow
           }
         } else {
-          afIndex = _vm.findRowIndexOf(afterFullData, row)
+          afIndex = $xeTable.findRowIndexOf(afterFullData, targetRow)
         }
         // 如果是插入指定行的下一行
         if (isInsertNextRow) {
@@ -177,7 +176,7 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
           throw new Error(errLog('vxe.error.unableInsert'))
         }
         afterFullData.splice(afIndex, 0, ...newRecords)
-        tableFullData.splice(_vm.findRowIndexOf(tableFullData, row), 0, ...newRecords)
+        tableFullData.splice($xeTable.findRowIndexOf(tableFullData, targetRow), 0, ...newRecords)
         // 刷新单元格合并
         mergeList.forEach((mergeItem: any) => {
           const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
@@ -195,26 +194,43 @@ function handleInsertRowAt (_vm: any, records: any[], row: any, isInsertNextRow?
     const rowid = getRowid($xeTable, newRow)
     insertMaps[rowid] = newRow
   })
-  _vm.cacheRowMap()
-  _vm.updateScrollYStatus()
-  _vm.handleTableData(treeConfig && transform)
+  $xeTable.cacheRowMap()
+  $xeTable.updateScrollYStatus()
+  $xeTable.handleTableData(treeConfig && transform)
   if (!(treeConfig && transform)) {
-    _vm.updateAfterDataIndex()
+    $xeTable.updateAfterDataIndex()
   }
-  _vm.updateFooter()
-  _vm.checkSelectionStatus()
-  if (_vm.scrollYLoad) {
-    _vm.updateScrollYSpace()
+  $xeTable.updateFooter()
+  $xeTable.checkSelectionStatus()
+  if ($xeTable.scrollYLoad) {
+    $xeTable.updateScrollYSpace()
   }
-  return _vm.$nextTick().then(() => {
-    _vm.updateCellAreas()
-    return _vm.recalculate()
+  return $xeTable.$nextTick().then(() => {
+    $xeTable.updateCellAreas()
+    return $xeTable.recalculate()
   }).then(() => {
     return {
       row: newRecords.length ? newRecords[newRecords.length - 1] : null,
       rows: newRecords
     }
   })
+}
+
+function handleInsertChildRowAt ($xeTable: any, records: any, parentRow: any, targetRow: any, isInsertNextRow?: boolean) {
+  const props = $xeTable
+
+  const { treeConfig } = props
+  const treeOpts = $xeTable.computeTreeOpts
+  const { transform, rowField, parentField } = treeOpts
+  if (treeConfig && transform) {
+    if (!XEUtils.isArray(records)) {
+      records = [records]
+    }
+    return handleInsertRowAt($xeTable, records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRow, isInsertNextRow)
+  } else {
+    errLog('vxe.error.errProp', ['tree-config.treeConfig=false', 'tree-config.treeConfig=true'])
+  }
+  return Promise.resolve({ row: null, rows: [] })
 }
 
 export default {
@@ -233,14 +249,23 @@ export default {
      * 如果 row 为 -1 则从插入到底部
      * 如果 row 为有效行则插入到该行的位置
      * @param {Object/Array} records 新的数据
-     * @param {Row} row 指定行
+     * @param {Row} targetRow 指定行
      * @returns
      */
-    _insertAt (records: any, row: any) {
-      return handleInsertRowAt(this, records, row)
+    _insertAt (records: any, targetRow: any) {
+      return handleInsertRowAt(this, records, targetRow)
     },
-    _insertNextAt (records: any, row: any) {
-      return handleInsertRowAt(this, records, row, true)
+    _insertNextAt (records: any, targetRow: any) {
+      return handleInsertRowAt(this, records, targetRow, true)
+    },
+    _insertChild (records: any, parentRow: any) {
+      return handleInsertChildRowAt(this, records, parentRow, null)
+    },
+    _insertChildAt (records: any, parentRow: any, targetRow: any) {
+      return handleInsertChildRowAt(this, records, parentRow, targetRow)
+    },
+    _insertChildNextAt (records: any, parentRow: any, targetRow: any) {
+      return handleInsertChildRowAt(this, records, parentRow, targetRow, true)
     },
     /**
      * 删除指定行数据
