@@ -2,7 +2,7 @@ import { inject, nextTick } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
-import { parseFile, formatText } from '../../../ui/src/utils'
+import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
@@ -320,6 +320,10 @@ hooks.add('tableExportModule', {
       return XEUtils.isBoolean(cellValue) ? (cellValue ? 'TRUE' : 'FALSE') : cellValue
     }
 
+    const toStringValue = (cellValue: any) => {
+      return eqEmptyValue(cellValue) ? '' : `${cellValue}`
+    }
+
     const getBodyLabelData = (opts: any, columns: any[], datas: any[]) => {
       const { isAllExpand, mode } = opts
       const { treeConfig } = props
@@ -347,7 +351,7 @@ hooks.add('tableExportModule', {
               _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
             }
             columns.forEach((column, $columnIndex) => {
-              let cellValue: string | number | boolean = ''
+              let cellValue: string | number | boolean | null = ''
               const renderOpts = column.editRender || column.cellRender
               let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
@@ -382,7 +386,7 @@ hooks.add('tableExportModule', {
                     if (opts.original) {
                       cellValue = getCellValue(row, column)
                     } else {
-                      cellValue = `${$xeTable.getCellLabel(row, column)}`
+                      cellValue = $xeTable.getCellLabel(row, column)
                       if (column.type === 'html') {
                         htmlCellElem.innerHTML = cellValue
                         cellValue = htmlCellElem.innerText.trim()
@@ -395,7 +399,7 @@ hooks.add('tableExportModule', {
                     }
                 }
               }
-              item[column.id] = XEUtils.toValueString(cellValue)
+              item[column.id] = toStringValue(cellValue)
             })
             expandMaps.set(row, 1)
             rest.push(Object.assign(item, row))
@@ -408,7 +412,7 @@ hooks.add('tableExportModule', {
           _row: row
         }
         columns.forEach((column, $columnIndex) => {
-          let cellValue: string | number | boolean = ''
+          let cellValue: string | number | boolean | null = ''
           const renderOpts = column.editRender || column.cellRender
           let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
@@ -440,7 +444,7 @@ hooks.add('tableExportModule', {
                 if (opts.original) {
                   cellValue = getCellValue(row, column)
                 } else {
-                  cellValue = `${$xeTable.getCellLabel(row, column)}`
+                  cellValue = $xeTable.getCellLabel(row, column)
                   if (column.type === 'html') {
                     htmlCellElem.innerHTML = cellValue
                     cellValue = htmlCellElem.innerText.trim()
@@ -453,7 +457,7 @@ hooks.add('tableExportModule', {
                 }
             }
           }
-          item[column.id] = XEUtils.toValueString(cellValue)
+          item[column.id] = toStringValue(cellValue)
         })
         return item
       })

@@ -78,17 +78,6 @@
       .vxe-ico-picker {
         width: 100%;
       }
-      .vxe-cell--tree-node {
-        .vxe-input,
-        .vxe-textarea,
-        .vxe-select,
-        .vxe-tree-select,
-        .vxe-date-picker,
-        .vxe-number-input,
-        .vxe-ico-picker {
-          width: 100%;
-        }
-      }
     }
   }
 }
@@ -110,6 +99,9 @@
         width: 100%;
       }
       & > .vxe-cell--tree-node {
+        .vxe-default-input,
+        .vxe-default-textarea,
+        .vxe-default-select,
         .vxe-input,
         .vxe-textarea,
         .vxe-select,
@@ -137,17 +129,6 @@
   & > .vxe-number-input,
   & > .vxe-ico-picker {
     width: 100%;
-  }
-  & > .vxe-cell--tree-node {
-    .vxe-input,
-    .vxe-textarea,
-    .vxe-select,
-    .vxe-tree-select,
-    .vxe-date-picker,
-    .vxe-number-input,
-    .vxe-ico-picker {
-      width: 100%;
-    }
   }
 }
 .vxe-cell,

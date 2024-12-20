@@ -10,7 +10,7 @@ import type { TableEditMethods, TableEditPrivateMethods } from '../../../../type
 
 const { getConfig, renderer, hooks, getI18n } = VxeUI
 
-const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'insertNextAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
+const tableEditMethodKeys: (keyof TableEditMethods)[] = ['insert', 'insertAt', 'insertNextAt', 'insertChild', 'insertChildAt', 'insertChildNextAt', 'remove', 'removeCheckboxRow', 'removeRadioRow', 'removeCurrentRow', 'getRecordset', 'getInsertRecords', 'getRemoveRecords', 'getUpdateRecords', 'getEditRecord', 'getActiveRecord', 'getSelectedCell', 'clearEdit', 'clearActived', 'clearSelected', 'isEditByRow', 'isActiveByRow', 'setEditRow', 'setActiveRow', 'setEditCell', 'setActiveCell', 'setSelectCell']
 
 hooks.add('tableEditModule', {
   setupTable ($xeTable) {
@@ -104,7 +104,7 @@ hooks.add('tableEditModule', {
       })
     }
 
-    const handleInsertRowAt = (records: any, row: any, isInsertNextRow?: boolean) => {
+    const handleInsertRowAt = (records: any, targetRow: any, isInsertNextRow?: boolean) => {
       const { treeConfig } = props
       const { mergeList, editStore } = reactData
       const { tableFullTreeData, afterFullData, tableFullData, fullDataRowIdData, fullAllDataRowIdData } = internalData
@@ -115,7 +115,7 @@ hooks.add('tableEditModule', {
         records = [records]
       }
       const newRecords: any[] = reactive($xeTable.defineField(records.map((record: any) => Object.assign(treeConfig && transform ? { [mapChildrenField]: [], [childrenField]: [] } : {}, record))))
-      if (XEUtils.eqNull(row)) {
+      if (XEUtils.eqNull(targetRow)) {
         // 如果为虚拟树
         if (treeConfig && transform) {
           insertTreeRow(newRecords, false)
@@ -137,7 +137,7 @@ hooks.add('tableEditModule', {
           })
         }
       } else {
-        if (row === -1) {
+        if (targetRow === -1) {
           // 如果为虚拟树
           if (treeConfig && transform) {
             insertTreeRow(newRecords, true)
@@ -161,7 +161,7 @@ hooks.add('tableEditModule', {
         } else {
           // 如果为虚拟树
           if (treeConfig && transform) {
-            const matchMapObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: mapChildrenField })
+            const matchMapObj = XEUtils.findTree(tableFullTreeData, item => targetRow[rowField] === item[rowField], { children: mapChildrenField })
             if (matchMapObj) {
               const { parent: parentRow } = matchMapObj
               const parentMapChilds = parentRow ? parentRow[mapChildrenField] : tableFullTreeData
@@ -191,7 +191,7 @@ hooks.add('tableEditModule', {
 
               // 源
               if (parentRow) {
-                const matchObj = XEUtils.findTree(tableFullTreeData, item => row[rowField] === item[rowField], { children: childrenField })
+                const matchObj = XEUtils.findTree(tableFullTreeData, item => targetRow[rowField] === item[rowField], { children: childrenField })
                 if (matchObj) {
                   const parentChilds = matchObj.items
                   let targetIndex = matchObj.index
@@ -213,12 +213,12 @@ hooks.add('tableEditModule', {
             }
             let afIndex = -1
             // 如果是可视索引
-            if (XEUtils.isNumber(row)) {
-              if (row < afterFullData.length) {
-                afIndex = row
+            if (XEUtils.isNumber(targetRow)) {
+              if (targetRow < afterFullData.length) {
+                afIndex = targetRow
               }
             } else {
-              afIndex = $xeTable.findRowIndexOf(afterFullData, row)
+              afIndex = $xeTable.findRowIndexOf(afterFullData, targetRow)
             }
             // 如果是插入指定行的下一行
             if (isInsertNextRow) {
@@ -228,7 +228,7 @@ hooks.add('tableEditModule', {
               throw new Error(getI18n('vxe.error.unableInsert'))
             }
             afterFullData.splice(afIndex, 0, ...newRecords)
-            tableFullData.splice($xeTable.findRowIndexOf(tableFullData, row), 0, ...newRecords)
+            tableFullData.splice($xeTable.findRowIndexOf(tableFullData, targetRow), 0, ...newRecords)
             // 刷新单元格合并
             mergeList.forEach((mergeItem: any) => {
               const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
@@ -266,6 +266,21 @@ hooks.add('tableEditModule', {
           rows: newRecords
         }
       })
+    }
+
+    const handleInsertChildRowAt = (records: any, parentRow: any, targetRow: any, isInsertNextRow?: boolean) => {
+      const { treeConfig } = props
+      const treeOpts = computeTreeOpts.value
+      const { transform, rowField, parentField } = treeOpts
+      if (treeConfig && transform) {
+        if (!XEUtils.isArray(records)) {
+          records = [records]
+        }
+        return handleInsertRowAt(records.map((item: any) => Object.assign({}, item, { [parentField]: parentRow[rowField] })), targetRow, isInsertNextRow)
+      } else {
+        errLog('vxe.error.errProp', ['tree-config.treeConfig=false', 'tree-config.treeConfig=true'])
+      }
+      return Promise.resolve({ row: null, rows: [] })
     }
 
     const handleClearEdit = (evnt: Event | null, targetRow?: any) => {
@@ -316,7 +331,7 @@ hooks.add('tableEditModule', {
        *
        * @param {*} records
        */
-      insert (records: any) {
+      insert (records) {
         return handleInsertRowAt(records, null)
       },
       /**
@@ -325,13 +340,22 @@ hooks.add('tableEditModule', {
        * 如果 row 为 -1 则从插入到底部，如果为树结构，则插入到目标节点底部
        * 如果 row 为有效行则插入到该行的位置，如果为树结构，则有插入到效的目标节点该行的位置
        * @param {Object/Array} records 新的数据
-       * @param {Row} row 指定行
+       * @param {Row} targetRow 指定行
        */
-      insertAt (records: any, row: any) {
-        return handleInsertRowAt(records, row)
+      insertAt (records, targetRow) {
+        return handleInsertRowAt(records, targetRow)
       },
-      insertNextAt (records: any, row: any) {
-        return handleInsertRowAt(records, row, true)
+      insertNextAt (records, targetRow) {
+        return handleInsertRowAt(records, targetRow, true)
+      },
+      insertChild (records, parentRow) {
+        return handleInsertChildRowAt(records, parentRow, null)
+      },
+      insertChildAt (records, parentRow, targetRow) {
+        return handleInsertChildRowAt(records, parentRow, targetRow)
+      },
+      insertChildNextAt (records, parentRow, targetRow) {
+        return handleInsertChildRowAt(records, parentRow, targetRow, true)
       },
       /**
        * 删除指定行数据
