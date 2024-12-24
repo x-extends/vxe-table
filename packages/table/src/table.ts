@@ -1730,14 +1730,13 @@ export default defineComponent({
     }
 
     const updateStyle = () => {
-      const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod, keyboardConfig } = props
-      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, scrollbarHeight, columnStore, editStore, mergeList, mergeFooterList, isAllOverflow } = reactData
+      const { border, showFooter, showOverflow: allColumnOverflow, showHeaderOverflow: allColumnHeaderOverflow, showFooterOverflow: allColumnFooterOverflow, mouseConfig, spanMethod, footerSpanMethod } = props
+      const { isGroup, currentRow, tableColumn, scrollXLoad, scrollYLoad, overflowX, scrollbarWidth, scrollbarHeight, columnStore, editStore, isAllOverflow, expandColumn } = reactData
       let { visibleColumn, fullColumnIdData, tableHeight, tableWidth, headerHeight, footerHeight, elemStore, customHeight, customMinHeight, customMaxHeight } = internalData
       const containerList = ['main', 'left', 'right']
       const emptyPlaceholderElem = refEmptyPlaceholder.value
       const cellOffsetWidth = computeCellOffsetWidth.value
       const mouseOpts = computeMouseOpts.value
-      const keyboardOpts = computeKeyboardOpts.value
       const bodyWrapperElem = getRefElem(elemStore['main-body-wrapper'])
       if (emptyPlaceholderElem) {
         emptyPlaceholderElem.style.top = `${headerHeight}px`
@@ -1797,10 +1796,16 @@ export default defineComponent({
             if (isGroup) {
               renderColumnList = visibleColumn
             } else {
-              // 如果是使用优化模式
               if (fixedType) {
-                if (scrollXLoad || allColumnHeaderOverflow) {
-                  renderColumnList = fixedColumn
+                renderColumnList = visibleColumn
+                // 如果是使用优化模式
+                if (allColumnHeaderOverflow) {
+                  // 如果不支持优化模式
+                  if (spanMethod || footerSpanMethod) {
+                    renderColumnList = visibleColumn
+                  } else {
+                    renderColumnList = fixedColumn || []
+                  }
                 }
               }
             }
@@ -1884,19 +1889,19 @@ export default defineComponent({
             let tWidth = tableWidth
             let renderColumnList = tableColumn
 
-            // 如果是使用优化模式
             if (fixedType) {
-              // 如果存在展开行使用全量渲染
-              if (!reactData.expandColumn && (scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
-                if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-                  renderColumnList = fixedColumn
-                } else {
+              renderColumnList = visibleColumn
+              // 如果是使用优化模式
+              if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
+                // 如果不支持优化模式
+                if (expandColumn || spanMethod || footerSpanMethod) {
                   renderColumnList = visibleColumn
+                } else {
+                  renderColumnList = fixedColumn || []
                 }
-              } else {
-                renderColumnList = visibleColumn
               }
             }
+
             tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
             if (tableElem) {
@@ -1911,19 +1916,20 @@ export default defineComponent({
             let tWidth = tableWidth
 
             let renderColumnList = tableColumn
-            // 如果是使用优化模式
+
             if (fixedType) {
-              // 如果存在展开行使用全量渲染
-              if (!reactData.expandColumn && (scrollXLoad || allColumnFooterOverflow)) {
-                if (!mergeFooterList.length || !footerSpanMethod) {
-                  renderColumnList = fixedColumn
-                } else {
+              renderColumnList = visibleColumn
+              // 如果是使用优化模式
+              if (allColumnFooterOverflow) {
+                // 如果不支持优化模式
+                if (spanMethod || footerSpanMethod) {
                   renderColumnList = visibleColumn
+                } else {
+                  renderColumnList = fixedColumn || []
                 }
-              } else {
-                renderColumnList = visibleColumn
               }
             }
+
             tWidth = renderColumnList.reduce((previous, column) => previous + column.renderWidth, 0)
 
             if (isNodeElement(wrapperElem)) {

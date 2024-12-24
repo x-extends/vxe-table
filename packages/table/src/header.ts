@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
+import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { convertHeaderColumnToRows, getColReMinWidth } from './util'
@@ -6,7 +6,7 @@ import { hasClass, getOffsetPos, addClass, removeClass } from '../../ui/src/dom'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeTableDefines, VxeColumnPropTypes } from '../../../types'
 
-const { renderer } = VxeUI
+const { renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'header'
 
@@ -311,18 +311,24 @@ export default defineComponent({
 
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
-      const { showHeaderOverflow: allColumnHeaderOverflow } = tableProps
-      const { isGroup, scrollXLoad, scrollbarWidth } = tableReactData
+      const { showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
+      const { isGroup, scrollbarWidth } = tableReactData
       const { visibleColumn } = tableInternalData
       let headerGroups: VxeTableDefines.ColumnInfo[][] = headerColumn.value
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
       if (isGroup) {
         renderColumnList = visibleColumn
       } else {
-        // 如果是使用优化模式
         if (fixedType) {
-          if (scrollXLoad || allColumnHeaderOverflow) {
-            renderColumnList = fixedColumn as VxeTableDefines.ColumnInfo[]
+          renderColumnList = visibleColumn
+          // 如果是使用优化模式
+          if (allColumnHeaderOverflow) {
+            // 如果不支持优化模式
+            if (spanMethod || footerSpanMethod) {
+              renderColumnList = visibleColumn
+            } else {
+              renderColumnList = fixedColumn || []
+            }
           }
         }
         headerGroups = [renderColumnList]
@@ -333,7 +339,7 @@ export default defineComponent({
         xid: xID
       }, [
         fixedType
-          ? createCommentVNode()
+          ? renderEmptyElement($xeTable)
           : h('div', {
             ref: refHeaderXSpace,
             class: 'vxe-body--x-space'

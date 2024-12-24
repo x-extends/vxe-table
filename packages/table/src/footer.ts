@@ -1,11 +1,11 @@
-import { createCommentVNode, defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
+import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { updateCellTitle, getPropClass, setScrollLeft } from '../../ui/src/dom'
 
 import type { VxeTablePrivateMethods, VxeTableConstructor, VxeTableMethods, VxeColumnPropTypes, VxeTableDefines } from '../../../types'
 
-const { renderer } = VxeUI
+const { renderer, renderEmptyElement } = VxeUI
 
 const renderType = 'footer'
 
@@ -228,8 +228,8 @@ export default defineComponent({
         : [])
     }
 
-    const renderHeads = (footerTableData: any[]) => {
-      const { fixedType, tableColumn } = props
+    const renderHeads = (renderColumnList: VxeTableDefines.ColumnInfo[]) => {
+      const { fixedType, footerTableData } = props
       const { footerRowClassName, footerRowStyle } = tableProps
       const { isDragColMove } = tableReactData
       const columnOpts = computeColumnOpts.value
@@ -250,7 +250,7 @@ export default defineComponent({
             ],
             style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
           }, {
-            default: () => renderRows(tableColumn, footerTableData, row, $rowIndex, _rowIndex)
+            default: () => renderRows(renderColumnList, footerTableData, row, $rowIndex, _rowIndex)
           })
         }
         return h('tr', {
@@ -260,27 +260,28 @@ export default defineComponent({
             footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
           ],
           style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
-        }, renderRows(tableColumn, footerTableData, row, $rowIndex, _rowIndex))
+        }, renderRows(renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
       })
     }
 
     const renderVN = () => {
-      let { fixedType, fixedColumn, tableColumn, footerTableData } = props
-      const { footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
+      const { fixedType, fixedColumn, tableColumn } = props
+      const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
       const { visibleColumn } = tableInternalData
-      const { scrollXLoad, scrollbarWidth, mergeFooterList } = tableReactData
+      const { scrollbarWidth } = tableReactData
 
-      // 如果是使用优化模式
+      let renderColumnList = tableColumn
+
       if (fixedType) {
-        // 如果存在展开行使用全量渲染
-        if (!tableReactData.expandColumn && (scrollXLoad || allColumnFooterOverflow)) {
-          if (!mergeFooterList.length || !footerSpanMethod) {
-            tableColumn = fixedColumn
+        renderColumnList = visibleColumn
+        // 如果是使用优化模式
+        if (allColumnFooterOverflow) {
+          // 如果不支持优化模式
+          if (spanMethod || footerSpanMethod) {
+            renderColumnList = visibleColumn
           } else {
-            tableColumn = visibleColumn
+            renderColumnList = fixedColumn || []
           }
-        } else {
-          tableColumn = visibleColumn
         }
       }
 
@@ -296,7 +297,7 @@ export default defineComponent({
         ...ons
       }, [
         fixedType
-          ? createCommentVNode()
+          ? renderEmptyElement($xeTable)
           : h('div', {
             ref: refFooterXSpace,
             class: 'vxe-body--x-space'
@@ -314,7 +315,7 @@ export default defineComponent({
            */
           h('colgroup', {
             ref: refFooterColgroup
-          }, tableColumn.map((column, $columnIndex) => {
+          }, renderColumnList.map((column, $columnIndex) => {
             return h('col', {
               name: column.id,
               key: $columnIndex
@@ -331,7 +332,7 @@ export default defineComponent({
            */
           h('tfoot', {
             ref: refFooterTFoot
-          }, renderHeads(footerTableData))
+          }, renderHeads(renderColumnList))
         ])
       ])
     }

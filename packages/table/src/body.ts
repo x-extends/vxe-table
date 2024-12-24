@@ -1,4 +1,4 @@
-import { createCommentVNode, defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
+import { defineComponent, TransitionGroup, h, ref, Ref, PropType, inject, nextTick, ComputedRef, onBeforeUnmount, onMounted, onUnmounted } from 'vue'
 import XEUtils from 'xe-utils'
 import { VxeUI } from '../../ui'
 import { mergeBodyMethod, getRowid, getRefElem } from './util'
@@ -36,7 +36,7 @@ export default defineComponent({
 
     const { xID, props: tableProps, context: tableContext, reactData: tableReactData, internalData: tableInternalData } = $xeTable
     const { refTableBody, refTableHeader, refTableFooter, refTableLeftBody, refTableRightBody, refScrollXHandleElem, refScrollYHandleElem } = $xeTable.getRefMaps()
-    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeKeyboardOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts } = $xeTable.getComputeMaps()
+    const { computeEditOpts, computeMouseOpts, computeAreaOpts, computeSYOpts, computeEmptyOpts, computeTooltipOpts, computeRadioOpts, computeExpandOpts, computeTreeOpts, computeCheckboxOpts, computeCellOpts, computeValidOpts, computeRowOpts, computeColumnOpts, computeRowDragOpts, computeColumnDragOpts } = $xeTable.getComputeMaps()
 
     const refElem = ref() as Ref<HTMLDivElement>
     const refBodyTable = ref() as Ref<HTMLTableElement>
@@ -762,40 +762,32 @@ export default defineComponent({
     })
 
     const renderVN = () => {
-      let { fixedColumn, fixedType, tableColumn } = props
-      const { keyboardConfig, showOverflow: allColumnOverflow, spanMethod, mouseConfig } = tableProps
-      const { tableData, mergeList, scrollYLoad, isAllOverflow, isDragRowMove } = tableReactData
+      const { fixedColumn, fixedType, tableColumn } = props
+      const { showOverflow: allColumnOverflow, spanMethod, footerSpanMethod, mouseConfig } = tableProps
+      const { tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn } = tableReactData
       const { visibleColumn } = tableInternalData
       const { slots } = tableContext
       const rowOpts = computeRowOpts.value
       const sYOpts = computeSYOpts.value
       const emptyOpts = computeEmptyOpts.value
-      const keyboardOpts = computeKeyboardOpts.value
       const mouseOpts = computeMouseOpts.value
       const rowDragOpts = computeRowDragOpts.value
-      // const isMergeLeftFixedExceeded = computeIsMergeLeftFixedExceeded.value
-      // const isMergeRightFixedExceeded = computeIsMergeRightFixedExceeded.value
-      // 如果是使用优化模式
+
+      let renderColumnList = tableColumn
+
       if (fixedType) {
-        // 如果存在展开行使用全量渲染
-        if (!tableReactData.expandColumn && (scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
-          if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-            tableColumn = fixedColumn
+        renderColumnList = visibleColumn
+        // 如果是使用优化模式
+        if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
+          // 如果不支持优化模式
+          if (expandColumn || spanMethod || footerSpanMethod) {
+            renderColumnList = visibleColumn
           } else {
-            tableColumn = visibleColumn
-            // 检查固定列是否被合并，合并范围是否超出固定列
-            // if (mergeList.length && !isMergeLeftFixedExceeded && fixedType === 'left') {
-            //   tableColumn = fixedColumn
-            // } else if (mergeList.length && !isMergeRightFixedExceeded && fixedType === 'right') {
-            //   tableColumn = fixedColumn
-            // } else {
-            //   tableColumn = visibleColumn
-            // }
+            renderColumnList = fixedColumn || []
           }
-        } else {
-          tableColumn = visibleColumn
         }
       }
+
       let emptyContent: string | VxeComponentSlotType | VxeComponentSlotType[]
       const emptySlot = slots ? slots.empty : null
       if (emptySlot) {
@@ -824,7 +816,7 @@ export default defineComponent({
         ...ons
       }, [
         fixedType
-          ? createCommentVNode()
+          ? renderEmptyElement($xeTable)
           : h('div', {
             ref: refBodyXSpace,
             class: 'vxe-body--x-space'
@@ -846,7 +838,7 @@ export default defineComponent({
            */
           h('colgroup', {
             ref: refBodyColgroup
-          }, (tableColumn as any[]).map((column, $columnIndex) => {
+          }, (renderColumnList as any[]).map((column, $columnIndex) => {
             return h('col', {
               name: column.id,
               key: $columnIndex
@@ -861,11 +853,11 @@ export default defineComponent({
               name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`,
               tag: 'tbody'
             }, {
-              default: () => renderRows(fixedType, tableData, tableColumn)
+              default: () => renderRows(fixedType, tableData, renderColumnList)
             })
             : h('tbody', {
               ref: refBodyTBody
-            }, renderRows(fixedType, tableData, tableColumn))
+            }, renderRows(fixedType, tableData, renderColumnList))
         ]),
         h('div', {
           class: 'vxe-table--checkbox-range'

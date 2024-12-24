@@ -15,6 +15,10 @@ const componentDefaultModelProp = 'modelValue'
 
 const defaultCompProps = {}
 
+function handleDefaultValue (value: any, defaultVal: any, initVal: any) {
+  return XEUtils.eqNull(value) ? (XEUtils.eqNull(defaultVal) ? initVal : defaultVal) : value
+}
+
 function parseDate (value: any, props: any) {
   return value && props.valueFormat ? XEUtils.toStringDate(value, props.valueFormat) : value
 }
@@ -612,13 +616,25 @@ renderer.mixin({
       if (cellValue) {
         const numberInputConfig = getConfig().numberInput || {}
         if (type === 'float') {
-          const digits = props.digits || numberInputConfig.digits || 1
+          const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
+          const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 1)
           cellValue = XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+          if (!autoFill) {
+            cellValue = XEUtils.toNumber(cellValue)
+          }
         } else if (type === 'amount') {
-          const digits = props.digits || numberInputConfig.digits || 2
+          const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
+          const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 2)
+          const showCurrency = handleDefaultValue(props.showCurrency, numberInputConfig.showCurrency, false)
           cellValue = XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
-          const showCurrency = props.showCurrency
-          if (XEUtils.isBoolean(showCurrency) ? showCurrency : numberInputConfig.showCurrency) {
+          if (!autoFill) {
+            const [iStr, dStr] = cellValue.split('.')
+            if (dStr) {
+              const dRest = dStr.replace(/0+$/, '')
+              cellValue = dRest ? [iStr, '.', dRest].join('') : iStr
+            }
+          }
+          if (showCurrency) {
             cellValue = `${props.currencySymbol || numberInputConfig.currencySymbol || getI18n('vxe.numberInput.currencySymbol') || ''}${cellValue}`
           }
         }
@@ -630,18 +646,36 @@ renderer.mixin({
       const { row, column, _columnIndex } = params
       const { type } = props
       // 兼容老模式
-      const cellValue = XEUtils.isArray(row) ? row[_columnIndex] : XEUtils.get(row, column.field)
-      if (XEUtils.isNumber(cellValue)) {
+      const itemValue = XEUtils.isArray(row) ? row[_columnIndex] : XEUtils.get(row, column.field)
+      if (XEUtils.isNumber(itemValue)) {
         const numberInputConfig = getConfig().numberInput || {}
         if (type === 'float') {
-          const digits = props.digits || numberInputConfig.digits || 1
-          return XEUtils.toFixed(XEUtils.floor(cellValue, digits), digits)
+          const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
+          const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 1)
+          let amountLabel = XEUtils.toFixed(XEUtils.floor(itemValue, digits), digits)
+          if (!autoFill) {
+            amountLabel = XEUtils.toNumber(amountLabel)
+          }
+          return amountLabel
         } else if (type === 'amount') {
-          const digits = props.digits || numberInputConfig.digits || 2
-          return XEUtils.commafy(XEUtils.toNumber(cellValue), { digits })
+          const autoFill = handleDefaultValue(props.autoFill, numberInputConfig.autoFill, true)
+          const digits = handleDefaultValue(props.digits, numberInputConfig.digits, 2)
+          const showCurrency = handleDefaultValue(props.showCurrency, numberInputConfig.showCurrency, false)
+          let amountLabel = XEUtils.commafy(XEUtils.toNumber(itemValue), { digits })
+          if (!autoFill) {
+            const [iStr, dStr] = amountLabel.split('.')
+            if (dStr) {
+              const dRest = dStr.replace(/0+$/, '')
+              amountLabel = dRest ? [iStr, '.', dRest].join('') : iStr
+            }
+          }
+          if (showCurrency) {
+            amountLabel = `${props.currencySymbol || numberInputConfig.currencySymbol || getI18n('vxe.numberInput.currencySymbol') || ''}${amountLabel}`
+          }
+          return amountLabel
         }
       }
-      return getFuncText(cellValue, 1)
+      return getFuncText(itemValue, 1)
     },
     renderTableDefault: defaultEditRender,
     renderTableFilter: defaultFilterRender,
