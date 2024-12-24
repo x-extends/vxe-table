@@ -333,6 +333,11 @@ export default {
     empty: {
       defText: '暂无数据'
     },
+    colorPicker: {
+      clear: '清除',
+      confirm: '确认',
+      copySuccess: '已复制到剪贴板：{0}'
+    },
     formDesign: {
       formName: '表單名稱',
       defFormTitle: '未命名的表單',
@@ -524,6 +529,10 @@ export default {
             seq: '#',
             cell: '單元格',
             value: '值'
+          },
+          body: {
+            row: '行：{0}',
+            col: '列：{0}'
           },
           empty: '(空值)',
           reError: '無效的正規表示式',

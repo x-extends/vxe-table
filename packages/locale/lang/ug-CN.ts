@@ -333,6 +333,11 @@ export default {
     empty: {
       defText: 'ھازىرچە ئۇچۇر يوق'
     },
+    colorPicker: {
+      clear: '清除',
+      confirm: '确认',
+      copySuccess: '已复制到剪贴板：{0}'
+    },
     formDesign: {
       formName: 'جەدۋەل ئىسمى',
       defFormTitle: 'نام قويۇلمىغان جەدىۋەل',
@@ -524,6 +529,10 @@ export default {
             seq: '#',
             cell: 'تاق كاتاكچە',
             value: 'قىممىتى'
+          },
+          body: {
+            row: '行：{0}',
+            col: '列：{0}'
           },
           empty: '(قۇرۇق)',
           reError: 'ئۈنۇمسىز لوگىكىلىق شەرىت',

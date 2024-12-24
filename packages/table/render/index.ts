@@ -459,7 +459,7 @@ function defaultSelectEditRender (h: CreateElement, renderOpts: any, params: any
   ]
 }
 
-function defaultTreeSelectEditRender (h: CreateElement, renderOpts: any, params: any) {
+function defaultTableOrTreeSelectEditRender (h: CreateElement, renderOpts: any, params: any) {
   const { row, column } = params
   const { options, optionProps } = renderOpts
   const cellValue = getCellValue(row, column)
@@ -724,7 +724,7 @@ renderer.mixin({
   },
   VxeTreeSelect: {
     tableAutoFocus: 'input',
-    renderTableEdit: defaultTreeSelectEditRender,
+    renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
@@ -732,15 +732,53 @@ renderer.mixin({
   },
   VxeTableSelect: {
     tableAutoFocus: 'input',
-    renderTableEdit: defaultTreeSelectEditRender,
+    renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (h, renderOpts, params) {
       return getCellLabelVNs(h, renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
     tableExportMethod: handleExportTreeSelectMethod
   },
+  VxeColorPicker: {
+    tableAutoFocus: 'input',
+    renderTableEdit (h, renderOpts, params) {
+      const { row, column } = params
+      const { options } = renderOpts
+      const cellValue = getCellValue(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          props: getCellEditProps(renderOpts, params, cellValue, { colors: options }),
+          on: getEditOns(renderOpts, params)
+        })
+      ]
+    },
+    renderTableCell (h, renderOpts, params) {
+      const { row, column } = params
+      const cellValue = XEUtils.get(row, column.field)
+      return h('span', {
+        class: 'vxe-color-picker--readonly'
+      }, [
+        h('div', {
+          class: 'vxe-color-picker--readonly-color',
+          style: {
+            backgroundColor: cellValue
+          }
+        })
+      ])
+    }
+  },
   VxeIconPicker: {
     tableAutoFocus: 'input',
-    renderTableEdit: defaultEditRender,
+    renderTableEdit (h, renderOpts, params) {
+      const { row, column } = params
+      const { options } = renderOpts
+      const cellValue = getCellValue(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          props: getCellEditProps(renderOpts, params, cellValue, { icons: options }),
+          on: getEditOns(renderOpts, params)
+        })
+      ]
+    },
     renderTableCell (h, renderOpts, params) {
       const { row, column } = params
       const cellValue = XEUtils.get(row, column.field)
