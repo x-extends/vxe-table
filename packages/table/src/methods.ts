@@ -2969,11 +2969,8 @@ const Methods = {
       editStore,
       currentRow,
       mouseConfig,
-      keyboardConfig,
-      keyboardOpts,
       spanMethod,
-      mergeList,
-      mergeFooterList,
+      expandColumn,
       footerSpanMethod,
       isAllOverflow,
       visibleColumn
@@ -3034,10 +3031,17 @@ const Methods = {
           if (isGroup) {
             renderColumnList = visibleColumn
           } else {
-            // 如果是使用优化模式
             if (fixedType) {
-              if (scrollXLoad || allColumnHeaderOverflow) {
-                renderColumnList = fixedColumn
+              // 如果是使用优化模式
+              if (allColumnHeaderOverflow) {
+                // 如果不支持优化模式
+                if (spanMethod || footerSpanMethod) {
+                  renderColumnList = visibleColumn
+                } else {
+                  renderColumnList = fixedColumn || []
+                }
+              } else {
+                renderColumnList = visibleColumn
               }
             }
           }
@@ -3129,19 +3133,20 @@ const Methods = {
           let tWidth = tableWidth
           let renderColumnList = tableColumn
 
-          // 如果是使用优化模式
           if (fixedType) {
-            // 如果存在展开行使用全量渲染
-            if (!this.expandColumn && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
-              if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-                renderColumnList = fixedColumn
-              } else {
+            // 如果是使用优化模式
+            if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
+              // 如果不支持优化模式
+              if (expandColumn || spanMethod || footerSpanMethod) {
                 renderColumnList = visibleColumn
+              } else {
+                renderColumnList = fixedColumn || []
               }
             } else {
               renderColumnList = visibleColumn
             }
           }
+
           tWidth = renderColumnList.reduce((previous: any, column: any) => previous + column.renderWidth, 0)
 
           if (tableElem) {
@@ -3156,19 +3161,20 @@ const Methods = {
           let tWidth = tableWidth
           let renderColumnList = tableColumn
 
-          // 如果是使用优化模式
           if (fixedType) {
-            // 如果存在展开行使用全量渲染
-            if (!this.expandColumn && (scrollXLoad || allColumnFooterOverflow)) {
-              if (!mergeFooterList.length || !footerSpanMethod) {
-                renderColumnList = fixedColumn
-              } else {
+            // 如果是使用优化模式
+            if (allColumnFooterOverflow) {
+              // 如果不支持优化模式
+              if (spanMethod || footerSpanMethod) {
                 renderColumnList = visibleColumn
+              } else {
+                renderColumnList = fixedColumn || []
               }
             } else {
               renderColumnList = visibleColumn
             }
           }
+
           tWidth = renderColumnList.reduce((previous: any, column: any) => previous + column.renderWidth, 0)
 
           if (isNodeElement(wrapperElem)) {

@@ -579,44 +579,50 @@ export default {
     elemStore[`${prefix}emptyBlock`] = null
   },
   render (this: any, h: CreateElement) {
+    const props = this
     const $xeTable = this.$parent
+    const tableProps = $xeTable
+    const tableReactData = $xeTable
+    const tableInternalData = $xeTable
 
-    const { _e, $parent: $xetable, fixedColumn, fixedType } = this
+    const { tId, $scopedSlots } = $xeTable
+    const { fixedColumn, fixedType, tableColumn } = props
 
+    const { showOverflow: allColumnOverflow, spanMethod, footerSpanMethod, mouseConfig } = tableProps
+    const { tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn } = tableReactData
+    const { visibleColumn } = tableInternalData
     const rowOpts = $xeTable.computeRowOpts
+    const sYOpts = $xeTable.computeSYOpts
+    const emptyOpts = $xeTable.computeEmptyOpts
+    const mouseOpts = $xeTable.computeMouseOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
-    let { $scopedSlots, tId, tableData, tableColumn, visibleColumn, expandColumn, showOverflow: allColumnOverflow, keyboardConfig, keyboardOpts, mergeList, spanMethod, scrollXLoad, scrollYLoad, isAllOverflow, emptyOpts, mouseConfig, mouseOpts, sYOpts, isDragRowMove } = $xetable
-    // 如果是使用优化模式
+
+    let renderColumnList = tableColumn
+
     if (fixedType) {
-      // 如果存在展开行使用全量渲染
-      if (!expandColumn && (scrollXLoad || scrollYLoad || (allColumnOverflow ? isAllOverflow : allColumnOverflow))) {
-        if (!mergeList.length && !spanMethod && !(keyboardConfig && keyboardOpts.isMerge)) {
-          tableColumn = fixedColumn
+      // 如果是使用优化模式
+      if (scrollXLoad || scrollYLoad || (allColumnOverflow && isAllOverflow)) {
+        // 如果不支持优化模式
+        if (expandColumn || spanMethod || footerSpanMethod) {
+          renderColumnList = visibleColumn
         } else {
-          tableColumn = visibleColumn
-          // 检查固定列是否被合并，合并范围是否超出固定列
-          // if (mergeList.length && !isMergeLeftFixedExceeded && fixedType === 'left') {
-          //   tableColumn = fixedColumn
-          // } else if (mergeList.length && !isMergeRightFixedExceeded && fixedType === 'right') {
-          //   tableColumn = fixedColumn
-          // } else {
-          //   tableColumn = visibleColumn
-          // }
+          renderColumnList = fixedColumn || []
         }
       } else {
-        tableColumn = visibleColumn
+        renderColumnList = visibleColumn
       }
     }
+
     let emptyContent
     if ($scopedSlots.empty) {
-      emptyContent = $scopedSlots.empty.call(this, { $table: $xetable }, h)
+      emptyContent = $scopedSlots.empty.call(this, { $table: $xeTable, $grid: $xeTable.xegrid }, h)
     } else {
       const compConf = emptyOpts.name ? renderer.get(emptyOpts.name) : null
       const rtEmptyView = compConf ? (compConf.renderTableEmpty || compConf.renderTableEmptyView || compConf.renderEmpty) : null
       if (rtEmptyView) {
-        emptyContent = getSlotVNs(rtEmptyView.call(this, h, emptyOpts, { $table: $xetable }))
+        emptyContent = getSlotVNs(rtEmptyView.call(this, h, emptyOpts, { $table: $xeTable }))
       } else {
-        emptyContent = $xetable.emptyText || getI18n('vxe.table.emptyText')
+        emptyContent = tableProps.emptyText || getI18n('vxe.table.emptyText')
       }
     }
 
@@ -636,7 +642,7 @@ export default {
       on: ons
     }, [
       fixedType
-        ? _e()
+        ? renderEmptyElement($xeTable)
         : h('div', {
           class: 'vxe-body--x-space',
           ref: 'xSpace'
@@ -660,7 +666,7 @@ export default {
          */
         h('colgroup', {
           ref: 'colgroup'
-        }, tableColumn.map((column: any, $columnIndex: any) => {
+        }, renderColumnList.map((column: any, $columnIndex: any) => {
           return h('col', {
             attrs: {
               name: column.id
@@ -677,10 +683,10 @@ export default {
               tag: 'tbody',
               name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`
             }
-          }, renderRows(h, this, $xetable, fixedType, tableData, tableColumn))
+          }, renderRows(h, this, $xeTable, fixedType, tableData, renderColumnList))
           : h('tbody', {
             ref: 'tbody'
-          }, renderRows(h, this, $xetable, fixedType, tableData, tableColumn))
+          }, renderRows(h, this, $xeTable, fixedType, tableData, renderColumnList))
       ]),
       h('div', {
         class: 'vxe-table--checkbox-range'
@@ -697,8 +703,8 @@ export default {
                   class: 'vxe-table--cell-main-area-btn',
                   on: {
                     mousedown (evnt: any) {
-                      if ($xetable.triggerCellAreaExtendMousedownEvent) {
-                        $xetable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xetable, fixed: fixedType, type: renderType })
+                      if ($xeTable.triggerCellAreaExtendMousedownEvent) {
+                        $xeTable.triggerCellAreaExtendMousedownEvent(evnt, { $table: $xeTable, fixed: fixedType, type: renderType })
                       }
                     }
                   }

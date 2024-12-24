@@ -8,7 +8,7 @@ import type { VxeTableDefines } from '../../../types'
 
 const renderType = 'footer'
 
-const { renderer } = VxeUI
+const { renderer, renderEmptyElement } = VxeUI
 
 function mergeFooterMethod (mergeFooterList: any, _rowIndex: any, _columnIndex: any) {
   for (let mIndex = 0; mIndex < mergeFooterList.length; mIndex++) {
@@ -155,18 +155,19 @@ function renderRows (h: CreateElement, _vm: any, tableColumn: VxeTableDefines.Co
     : [])
 }
 
-function renderHeads (h: CreateElement, _vm: any, footerTableData: any[]) {
+function renderHeads (h: CreateElement, _vm: any, renderColumnList: VxeTableDefines.ColumnInfo[]) {
   const $xeTable = _vm.$parent
+  const props = _vm
 
   const columnOpts = $xeTable.computeColumnOpts
   const columnDragOpts = $xeTable.computeColumnDragOpts
 
-  const { $parent: $xetable, fixedType, tableColumn } = _vm
-  const { footerRowClassName, footerRowStyle, isDragColMove } = $xetable
+  const { fixedType, footerTableData } = props
+  const { footerRowClassName, footerRowStyle, isDragColMove } = $xeTable
 
   return footerTableData.map((row: any, $rowIndex: any) => {
     const _rowIndex = $rowIndex
-    const rowParams = { $table: $xetable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
+    const rowParams = { $table: $xeTable, row, _rowIndex, $rowIndex, fixed: fixedType, type: renderType }
 
     if (columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
@@ -180,7 +181,7 @@ function renderHeads (h: CreateElement, _vm: any, footerTableData: any[]) {
           ],
           style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
         }
-      }, renderRows(h, _vm, tableColumn, footerTableData, row, $rowIndex, _rowIndex))
+      }, renderRows(h, _vm, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
     }
     return h('tr', {
       key: $rowIndex,
@@ -189,7 +190,7 @@ function renderHeads (h: CreateElement, _vm: any, footerTableData: any[]) {
         footerRowClassName ? XEUtils.isFunction(footerRowClassName) ? footerRowClassName(rowParams) : footerRowClassName : ''
       ],
       style: footerRowStyle ? (XEUtils.isFunction(footerRowStyle) ? footerRowStyle(rowParams) : footerRowStyle) : null
-    }, renderRows(h, _vm, tableColumn, footerTableData, row, $rowIndex, _rowIndex))
+    }, renderRows(h, _vm, renderColumnList, footerTableData, row, $rowIndex, _rowIndex))
   })
 }
 
@@ -223,19 +224,33 @@ export default {
     elemStore[`${prefix}xSpace`] = null
   },
   render (h: CreateElement) {
-    let { _e, $parent: $xetable, fixedType, fixedColumn, tableColumn, footerTableData } = this
-    const { tId, mergeFooterList, footerSpanMethod, scrollXLoad, showFooterOverflow: allColumnFooterOverflow, scrollbarWidth, visibleColumn, expandColumn } = $xetable
+    const props = this
+    const $xeTable = this.$parent
+    const tableProps = $xeTable
+    const tableReactData = $xeTable
+    const tableInternalData = $xeTable
+
+    const { tId } = $xeTable
+    const { fixedType, fixedColumn, tableColumn } = props
+
+    const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
+    const { visibleColumn } = tableInternalData
+    const { scrollbarWidth } = tableReactData
+
+    let renderColumnList = tableColumn
+
     // 如果是使用优化模式
     if (fixedType) {
-      // 如果存在展开行使用全量渲染
-      if (!expandColumn && (scrollXLoad || allColumnFooterOverflow)) {
-        if (!mergeFooterList.length || !footerSpanMethod) {
-          tableColumn = fixedColumn
+      // 如果是使用优化模式
+      if (allColumnFooterOverflow) {
+        // 如果不支持优化模式
+        if (spanMethod || footerSpanMethod) {
+          renderColumnList = visibleColumn
         } else {
-          tableColumn = visibleColumn
+          renderColumnList = fixedColumn || []
         }
       } else {
-        tableColumn = visibleColumn
+        renderColumnList = visibleColumn
       }
     }
 
@@ -252,7 +267,7 @@ export default {
       on: ons
     }, [
       fixedType
-        ? _e()
+        ? renderEmptyElement($xeTable)
         : h('div', {
           class: 'vxe-body--x-space',
           ref: 'xSpace'
@@ -272,7 +287,7 @@ export default {
          */
         h('colgroup', {
           ref: 'colgroup'
-        }, tableColumn.map((column: any, $columnIndex: any) => {
+        }, renderColumnList.map((column: any, $columnIndex: any) => {
           return h('col', {
             attrs: {
               name: column.id
@@ -293,7 +308,7 @@ export default {
          */
         h('tfoot', {
           ref: 'tfoot'
-        }, renderHeads(h, this, footerTableData))
+        }, renderHeads(h, this, renderColumnList))
       ])
     ])
   },

@@ -7,7 +7,7 @@ import { convertHeaderColumnToRows, getColReMinWidth } from './util'
 
 import type { VxeTableDefines } from '../../../types'
 
-const { renderer } = VxeUI
+const { renderer, renderEmptyElement } = VxeUI
 
 const cellType = 'header'
 
@@ -209,17 +209,35 @@ export default {
     elemStore[`${prefix}repair`] = null
   },
   render (h: CreateElement) {
-    const { _e, $parent: $xetable, fixedType, headerColumn, tableColumn, fixedColumn } = this
-    const { tId, isGroup, visibleColumn, showHeaderOverflow: allColumnHeaderOverflow, scrollXLoad, scrollbarWidth } = $xetable
+    const props = this
+    const $xeTable = this.$parent
+    const tableProps = $xeTable
+    const tableReactData = $xeTable
+    const tableInternalData = $xeTable
+
+    const { tId } = $xeTable
+    const { fixedType, fixedColumn, tableColumn } = props
+    const { headerColumn } = this
+
+    const { showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
+    const { isGroup, scrollbarWidth } = tableReactData
+    const { visibleColumn } = tableInternalData
     let headerGroups = headerColumn
     let renderColumnList = tableColumn
     if (isGroup) {
       renderColumnList = visibleColumn
     } else {
-      // 如果是使用优化模式
       if (fixedType) {
-        if (scrollXLoad || allColumnHeaderOverflow) {
-          renderColumnList = fixedColumn
+        // 如果是使用优化模式
+        if (allColumnHeaderOverflow) {
+          // 如果不支持优化模式
+          if (spanMethod || footerSpanMethod) {
+            renderColumnList = visibleColumn
+          } else {
+            renderColumnList = fixedColumn || []
+          }
+        } else {
+          renderColumnList = visibleColumn
         }
       }
       headerGroups = [renderColumnList]
@@ -231,7 +249,7 @@ export default {
       }
     }, [
       fixedType
-        ? _e()
+        ? renderEmptyElement($xeTable)
         : h('div', {
           class: 'vxe-body--x-space',
           ref: 'xSpace'
