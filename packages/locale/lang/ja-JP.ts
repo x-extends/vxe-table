@@ -333,6 +333,11 @@ export default {
     empty: {
       defText: '暂无数据'
     },
+    colorPicker: {
+      clear: '清除',
+      confirm: '确认',
+      copySuccess: '已复制到剪贴板：{0}'
+    },
     formDesign: {
       formName: 'Form name',
       defFormTitle: 'Unnamed form',
@@ -524,6 +529,10 @@ export default {
             seq: '#',
             cell: 'セル',
             value: '値'
+          },
+          body: {
+            row: '行：{0}',
+            col: '列：{0}'
           },
           empty: '(空白)',
           reError: '無効な正規表現',

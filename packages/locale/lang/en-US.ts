@@ -333,6 +333,11 @@ export default {
     empty: {
       defText: 'No Data'
     },
+    colorPicker: {
+      clear: 'Clear',
+      confirm: 'Confirm',
+      copySuccess: 'Copied to clipboard: {0}'
+    },
     formDesign: {
       formName: 'Form name',
       defFormTitle: 'Unnamed form',
@@ -524,6 +529,10 @@ export default {
             seq: '#',
             cell: 'Cell',
             value: 'Value'
+          },
+          body: {
+            row: '行：{0}',
+            col: '列：{0}'
           },
           empty: '(Empty)',
           reError: 'Invalid regular expression',

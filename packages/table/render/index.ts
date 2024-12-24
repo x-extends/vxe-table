@@ -448,7 +448,7 @@ function defaultSelectEditRender (renderOpts: any, params: any) {
   ]
 }
 
-function defaultTreeSelectEditRender (renderOpts: any, params: any) {
+function defaultTableOrTreeSelectEditRender (renderOpts: any, params: any) {
   const { row, column } = params
   const { options, optionProps } = renderOpts
   const cellValue = getCellValue(row, column)
@@ -716,7 +716,7 @@ renderer.mixin({
   },
   VxeTreeSelect: {
     tableAutoFocus: 'input',
-    renderTableEdit: defaultTreeSelectEditRender,
+    renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
@@ -724,15 +724,53 @@ renderer.mixin({
   },
   VxeTableSelect: {
     tableAutoFocus: 'input',
-    renderTableEdit: defaultTreeSelectEditRender,
+    renderTableEdit: defaultTableOrTreeSelectEditRender,
     renderTableCell (renderOpts, params) {
       return getCellLabelVNs(renderOpts, params, getTreeSelectCellValue(renderOpts, params))
     },
     tableExportMethod: handleExportTreeSelectMethod
   },
+  VxeColorPicker: {
+    tableAutoFocus: 'input',
+    renderTableEdit (renderOpts: any, params: any) {
+      const { row, column } = params
+      const { options } = renderOpts
+      const cellValue = getCellValue(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          ...getCellEditProps(renderOpts, params, cellValue, { colors: options }),
+          ...getEditOns(renderOpts, params)
+        })
+      ]
+    },
+    renderTableCell (renderOpts, params) {
+      const { row, column } = params
+      const cellValue = XEUtils.get(row, column.field)
+      return h('span', {
+        class: 'vxe-color-picker--readonly'
+      }, [
+        h('div', {
+          class: 'vxe-color-picker--readonly-color',
+          style: {
+            backgroundColor: cellValue
+          }
+        })
+      ])
+    }
+  },
   VxeIconPicker: {
     tableAutoFocus: 'input',
-    renderTableEdit: defaultEditRender,
+    renderTableEdit (renderOpts: any, params: any) {
+      const { row, column } = params
+      const { options } = renderOpts
+      const cellValue = getCellValue(row, column)
+      return [
+        h(getDefaultComponent(renderOpts), {
+          ...getCellEditProps(renderOpts, params, cellValue, { icons: options }),
+          ...getEditOns(renderOpts, params)
+        })
+      ]
+    },
     renderTableCell (renderOpts, params) {
       const { row, column } = params
       const cellValue = XEUtils.get(row, column.field)
