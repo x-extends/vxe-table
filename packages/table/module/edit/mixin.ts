@@ -176,7 +176,7 @@ function handleInsertRowAt ($xeTable: any, records: any[], targetRow: any, isIns
           throw new Error(errLog('vxe.error.unableInsert'))
         }
         afterFullData.splice(afIndex, 0, ...newRecords)
-        tableFullData.splice($xeTable.findRowIndexOf(tableFullData, targetRow), 0, ...newRecords)
+        tableFullData.splice($xeTable.findRowIndexOf(tableFullData, targetRow)+ (isInsertNextRow ? 1 : 0), 0, ...newRecords)
         // 刷新单元格合并
         mergeList.forEach((mergeItem: any) => {
           const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem
