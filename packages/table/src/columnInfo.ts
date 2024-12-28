@@ -145,7 +145,7 @@ export class ColumnInfo {
       // 单元格插槽，只对 grid 有效
       slots: _vm.slots,
       // 自定义render
-      _renderHeader: _vm.renderHeader,
+      _headerRender: _vm.headerRender,
       _render: _vm.render
     })
     if (proxyOpts && proxyOpts.beforeColumn) {

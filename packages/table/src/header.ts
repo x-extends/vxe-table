@@ -98,7 +98,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
         }]
-      }, (column._renderHeader && [column._renderHeader(h, params)]) || column.renderHeader(h, params)),
+      }, (column._headerRender && [column._headerRender(h, params)]) || column.renderHeader(h, params)),
       /**
      * 列宽拖动
      */

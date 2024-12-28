@@ -93,7 +93,7 @@ export const columnProps = {
   contentRender: Object,
   // 额外的参数
   params: Object,
-  renderHeader: Function,
+  headerRender: Function,
   render: Function
 }
 
