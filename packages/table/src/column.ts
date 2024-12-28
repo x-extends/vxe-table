@@ -92,7 +92,9 @@ export const columnProps = {
   // 内容渲染配置项
   contentRender: Object,
   // 额外的参数
-  params: Object
+  params: Object,
+  renderHeader: Function,
+  render: Function
 }
 
 export const columnWatch: Record<string, any> = {}

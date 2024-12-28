@@ -98,7 +98,7 @@ const renderRows = (h: CreateElement, _vm: any, cols: VxeTableDefines.ColumnInfo
           'c--tooltip': showTooltip,
           'c--ellipsis': showEllipsis
         }]
-      }, column.renderHeader(h, params)),
+      }, (column._renderHeader && [column._renderHeader(h, params)]) || column.renderHeader(h, params)),
       /**
      * 列宽拖动
      */
@@ -137,7 +137,9 @@ function renderHeads (h: CreateElement, _vm: any, headerGroups: any[]) {
 
   return headerGroups.map((cols: any, $rowIndex: any) => {
     const params = { $table: $xeTable, $rowIndex, fixed: fixedType, type: cellType }
-
+    if (cols === 'header-append') {
+      return $xeTable.$slots['header-append']
+    }
     if (columnOpts.drag && columnDragOpts.animation) {
       return h('transition-group', {
         key: $rowIndex,
@@ -242,6 +244,7 @@ export default {
       }
       headerGroups = [renderColumnList]
     }
+    headerGroups = [...headerGroups, 'header-append']
     return h('div', {
       class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
       attrs: {

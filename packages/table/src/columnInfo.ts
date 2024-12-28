@@ -143,7 +143,10 @@ export class ColumnInfo {
       renderFooter: renderFooter || _vm.renderFooter,
       renderData,
       // 单元格插槽，只对 grid 有效
-      slots: _vm.slots
+      slots: _vm.slots,
+      // 自定义render
+      _renderHeader: _vm.renderHeader,
+      _render: _vm.render
     })
     if (proxyOpts && proxyOpts.beforeColumn) {
       proxyOpts.beforeColumn({ $grid: $xegrid, column: this })

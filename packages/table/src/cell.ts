@@ -355,7 +355,7 @@ export const Cell = {
           ? h('span', {
             class: 'vxe-cell--placeholder'
           }, formatText(getFuncText(cellPlaceholder), 1))
-          : h('span', formatText(cellValue, 1))
+          : (column._render && [column._render(h, params)]) || h('span', formatText(cellValue, 1))
       ])
     ])
   },
