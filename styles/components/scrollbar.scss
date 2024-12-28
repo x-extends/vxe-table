@@ -7,6 +7,10 @@
   ::-webkit-scrollbar-track {
     background-color: transparent;
   }
+  // 滚动条的交汇处
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
   // 滚动条滑块
   ::-webkit-scrollbar-thumb {
     border-radius: 5px;
@@ -17,10 +21,6 @@
 // 默认模式
 [data-vxe-ui-theme="light"] {
   .vxe-table {
-    // 滚动条的交汇处
-    ::-webkit-scrollbar-corner {
-      background-color: #FFFFFF;
-    }
     ::-webkit-scrollbar-thumb {
       background-color: rgba(51, 51, 51, 0.3);
     }
@@ -34,9 +34,6 @@
 /** 暗黑模式 */
 [data-vxe-ui-theme="dark"] {
   .vxe-table {
-    ::-webkit-scrollbar-corner {
-      background-color: #FFFFFF;
-    }
     ::-webkit-scrollbar-thumb {
       background-color: rgba(204, 204, 204, 0.3);
     }
