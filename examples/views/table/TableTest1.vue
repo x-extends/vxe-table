@@ -13,6 +13,17 @@
         :resizable-config="resizableConfig"
         :checkbox-config="{labelField: 'id', highlight: true, range: true}"
         :data="demo1.tableData">
+        <template slot="header-append">
+          <tr class="vxe-header--row">
+            <th class="vxe-header--column">1</th>
+            <th class="vxe-header--column">2</th>
+            <th class="vxe-header--column">3</th>
+            <th class="vxe-header--column">1</th>
+            <th class="vxe-header--column">2</th>
+            <th class="vxe-header--column">3</th>
+            <th class="vxe-header--column">1</th>
+          </tr>
+        </template>
         <vxe-column type="seq" width="60"></vxe-column>
         <vxe-column type="checkbox" title="ID" width="140"></vxe-column>
         <vxe-column field="role" title="Role"></vxe-column>
@@ -23,7 +34,9 @@
           </template>
         </vxe-column>
         <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
-        <vxe-column field="address" title="Address" show-overflow></vxe-column>
+        <vxe-column field="address" title="Address" show-overflow :renderHeader="renderHeader"
+        :render="render"
+        :formatter="formatter"></vxe-column>
 
         <template #loading>
           <div>加载中。。。。。。</div>
@@ -120,6 +133,17 @@ export default Vue.extend({
       ]
       this.demo1.loading = false
     }, 500)
+  },
+  methods: {
+    renderHeader (h:any) {
+      return h('div', '哈哈哈')
+    },
+    render (h:any) {
+      return h('div', 'ddddd')
+    },
+    formatter () {
+      return '格式化'
+    }
   }
 })
 </script>
