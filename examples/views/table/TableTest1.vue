@@ -34,7 +34,7 @@
           </template>
         </vxe-column>
         <vxe-column field="sex" title="Sex" :filters="demo1.sexList" :filter-multiple="false" :formatter="formatterSex"></vxe-column>
-        <vxe-column field="address" title="Address" show-overflow :renderHeader="renderHeader"
+        <vxe-column field="address" title="Address" show-overflow :header-render="headerRender"
         :render="render"
         :formatter="formatter"></vxe-column>
 
@@ -135,7 +135,7 @@ export default Vue.extend({
     }, 500)
   },
   methods: {
-    renderHeader (h:any) {
+    headerRender (h:any) {
       return h('div', '哈哈哈')
     },
     render (h:any) {
