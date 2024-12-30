@@ -5,10 +5,18 @@ body:
 - type: input
   id: issue_link
   attributes:
-    label: "[可复现的链接](https://vxetable.cn/issues.html)（必须为公开链接，仅包含能复现问题的示例代码）："
+    label: "可复现的链接（必须为公开链接，仅包含能复现问题的示例代码）："
     description: "一个最小化的重现示例能让我们精确地定位问题，从而快速解决问题。"
   validations:
     required: true
+- type: checkboxes
+  id: issue_confirm_read_agreement
+  attributes:
+    label: "是否已准备好复现 demo？"
+    description: "按要求准备好复现 Demo，复现 Demo 操作步骤：https://vxetable.cn/issues.html"
+    options:
+    - label: "我已确认要求提供复现链接与示例代码"
+      required: true
 - type: textarea
   id: issue_describe
   attributes:
@@ -57,14 +65,6 @@ body:
     placeholder: "例如：4.9.35"
   validations:
     required: true
-- type: checkboxes
-  id: issue_confirm_read_agreement
-  attributes:
-    label: "反馈？"
-    description: "官方只维护最新版本，如果不是最新版本，请先更新到[最新版本](https://vxetable.cn/)之后再提！"
-    options:
-    - label: "我已确认要求提供复现链接与示例代码"
-      required: true
 - type: checkboxes
   id: issue_confirm_latest_version
   attributes:
