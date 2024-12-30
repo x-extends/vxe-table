@@ -1,6 +1,6 @@
 import { defineComponent, h, ComponentPublicInstance, reactive, ref, Ref, provide, inject, nextTick, onActivated, onDeactivated, onBeforeUnmount, onUnmounted, watch, computed, ComputedRef, onMounted } from 'vue'
 import XEUtils from 'xe-utils'
-import { tpImg, browse, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
+import { browse, initTpImg, getTpImg, isPx, isScale, hasClass, addClass, removeClass, getEventTargetNode, getPaddingTopBottomSize, setScrollTop, setScrollLeft, isNodeElement } from '../../ui/src/dom'
 import { getLastZIndex, nextZIndex, hasChildrenList, getFuncText, isEnableConf, formatText, eqEmptyValue } from '../../ui/src/utils'
 import { VxeUI } from '../../ui'
 import Cell from './cell'
@@ -18,12 +18,10 @@ import TableImportPanelComponent from '../module/export/import-panel'
 import TableExportPanelComponent from '../module/export/export-panel'
 import TableMenuPanelComponent from '../module/menu/panel'
 
-import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType, VxeComponentStyleType } from 'vxe-pc-ui'
+import type { VxeLoadingComponent, VxeTooltipInstance, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, ValueOf, VxeComponentSlotType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTableConstructor, TableReactData, TableInternalData, VxeTablePropTypes, VxeToolbarConstructor, TablePrivateMethods, VxeTablePrivateRef, VxeTablePrivateComputed, VxeTablePrivateMethods, TableMethods, VxeTableMethods, VxeTableDefines, VxeTableEmits, VxeTableProps, VxeColumnPropTypes } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, formats, createEvent, globalResize, interceptor, hooks, globalEvents, GLOBAL_EVENT_KEYS, useFns, renderEmptyElement } = VxeUI
-
-// const isWebkit = browse['-webkit'] && !browse.edge
 
 const customStorageKey = 'VXE_CUSTOM_STORE'
 
@@ -679,16 +677,6 @@ export default defineComponent({
         x: overflowX && scrollXLoad,
         y: overflowY && scrollYLoad
       }
-    })
-
-    const computeTableStyle = computed(() => {
-      const { tableData } = reactData
-      const columnOpts = computeColumnOpts.value
-      const stys: VxeComponentStyleType = {}
-      if (columnOpts.drag) {
-        stys['--vxe-ui-table-drag-column-move-delay'] = `${Math.max(0.06, Math.min(0.3, tableData.length / 800))}s`
-      }
-      return stys
     })
 
     const refMaps: VxeTablePrivateRef = {
@@ -1442,26 +1430,25 @@ export default defineComponent({
         tableData.forEach(row => {
           const rowid = getRowid($xeTable, row)
           const rowRest = fullAllDataRowIdData[rowid]
-          const trList = el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]`)
-          if (rowRest && trList.length) {
+          const cellList = el.querySelectorAll(`.vxe-body--row[rowid="${rowid}"]>.vxe-body--column>.vxe-cell`)
+          if (rowRest && cellList.length) {
             let height = 0
-            for (let i = 0; i < trList.length; i++) {
-              const trEl = trList[i] as HTMLTableRowElement
-              const tdList = trEl.children
-              for (let j = 0; j < tdList.length; j++) {
-                const tdEl = tdList[j]
-                const cellElem = tdEl.querySelector('.vxe-cell') as HTMLDivElement
-                if (!calcPadding) {
-                  paddingTop = XEUtils.toNumber(getComputedStyle(tdEl).paddingTop)
-                  paddingBottom = XEUtils.toNumber(getComputedStyle(tdEl).paddingBottom)
-                  calcPadding = true
-                }
-                let cellHeight = paddingTop + paddingBottom
-                if (cellElem) {
-                  cellHeight += cellElem.offsetHeight
-                }
-                height = Math.max(height, cellHeight)
+            for (let i = 0; i < cellList.length; i++) {
+              const cellElem = cellList[i] as HTMLElement
+              const tdEl = cellElem.parentElement as HTMLTableCellElement
+              if (!tdEl || !tdEl.clientWidth) {
+                break
               }
+              if (!calcPadding) {
+                paddingTop = XEUtils.toNumber(getComputedStyle(tdEl).paddingTop)
+                paddingBottom = XEUtils.toNumber(getComputedStyle(tdEl).paddingBottom)
+                calcPadding = true
+              }
+              let cellHeight = paddingTop + paddingBottom
+              if (cellElem) {
+                cellHeight += cellElem.clientHeight
+              }
+              height = Math.max(height, cellHeight)
             }
             rowRest.height = scrollXLoad ? Math.max(rowRest.height, height) : height
           }
@@ -1799,7 +1786,7 @@ export default defineComponent({
               if (fixedType) {
                 renderColumnList = visibleColumn
                 // 如果是使用优化模式
-                if (allColumnHeaderOverflow) {
+                if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
                   // 如果不支持优化模式
                   if (spanMethod || footerSpanMethod) {
                     renderColumnList = visibleColumn
@@ -1920,7 +1907,7 @@ export default defineComponent({
             if (fixedType) {
               renderColumnList = visibleColumn
               // 如果是使用优化模式
-              if (allColumnFooterOverflow) {
+              if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
                 // 如果不支持优化模式
                 if (spanMethod || footerSpanMethod) {
                   renderColumnList = visibleColumn
@@ -2518,6 +2505,7 @@ export default defineComponent({
 
     const handleRecalculateLayout = (reFull: boolean) => {
       const el = refElem.value
+      internalData.reRunTime = Date.now()
       if (!el || !el.clientWidth) {
         return nextTick()
       }
@@ -2592,7 +2580,6 @@ export default defineComponent({
       editStore.insertMaps = {}
       editStore.removeMaps = {}
       const sYLoad = updateScrollYStatus(fullData)
-      reactData.scrollYLoad = sYLoad
       reactData.isDragRowMove = false
       // 全量数据
       internalData.tableFullData = fullData
@@ -2709,6 +2696,14 @@ export default defineComponent({
       reactData.tableColumn = tableColumn
     }
 
+    const handleUpdateColumn = () => {
+      const columnList = XEUtils.orderBy(internalData.collectColumn, 'renderSortNumber')
+      internalData.collectColumn = columnList
+      const tableFullColumn = getColumnList(columnList)
+      internalData.tableFullColumn = tableFullColumn
+      cacheColumnMap()
+    }
+
     const loadScrollXData = () => {
       const { mergeList, mergeFooterList } = reactData
       const { scrollXStore } = internalData
@@ -2739,7 +2734,7 @@ export default defineComponent({
       return result
     }
 
-    const parseColumns = () => {
+    const parseColumns = (isReset: boolean) => {
       const { showOverflow } = props
       const rowOpts = computeRowOpts.value
       const leftList: VxeTableDefines.ColumnInfo[] = []
@@ -2828,10 +2823,12 @@ export default defineComponent({
             warnLog('vxe.error.scrollErrProp', ['footer-span-method'])
           }
         }
-        const { visibleSize } = handleVirtualXVisible()
-        scrollXStore.startIndex = 0
-        scrollXStore.endIndex = visibleSize
-        scrollXStore.visibleSize = visibleSize
+        if (isReset) {
+          const { visibleSize } = handleVirtualXVisible()
+          scrollXStore.startIndex = 0
+          scrollXStore.endIndex = visibleSize
+          scrollXStore.visibleSize = visibleSize
+        }
       }
       // 如果列被显示/隐藏，则清除合并状态
       // 如果列被设置为固定，则清除合并状态
@@ -2849,12 +2846,15 @@ export default defineComponent({
       })
       internalData.visibleColumn = visibleColumn
       handleTableColumn()
-      return tableMethods.updateFooter().then(() => {
-        return tableMethods.recalculate()
-      }).then(() => {
-        tableMethods.updateCellAreas()
-        return tableMethods.recalculate()
-      })
+      if (isReset) {
+        return tableMethods.updateFooter().then(() => {
+          return tableMethods.recalculate()
+        }).then(() => {
+          tableMethods.updateCellAreas()
+          return tableMethods.recalculate()
+        })
+      }
+      return tableMethods.updateFooter()
     }
 
     const initColumnSort = () => {
@@ -2878,7 +2878,7 @@ export default defineComponent({
       ).then(() => {
         reactData._isLoading = false
         cacheColumnMap()
-        parseColumns().then(() => {
+        parseColumns(true).then(() => {
           if (reactData.scrollXLoad) {
             loadScrollXData()
           }
@@ -3105,12 +3105,14 @@ export default defineComponent({
     }
 
     const scrollXEvent = (evnt: Event) => {
-      const { inFooterScroll, inBodyScroll, lastScrollTop } = internalData
-      if (inFooterScroll) {
-        return
-      }
-      if (inBodyScroll) {
-        return
+      const { intoRunScroll, inFooterScroll, inBodyScroll, lastScrollTop } = internalData
+      if (!intoRunScroll) {
+        if (inFooterScroll) {
+          return
+        }
+        if (inBodyScroll) {
+          return
+        }
       }
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
@@ -3141,14 +3143,15 @@ export default defineComponent({
     }
 
     const scrollYEvent = (evnt: Event) => {
-      const { inFooterScroll, inBodyScroll, lastScrollLeft } = internalData
-      if (inFooterScroll) {
-        return
+      const { intoRunScroll, inFooterScroll, inBodyScroll, lastScrollLeft } = internalData
+      if (!intoRunScroll) {
+        if (inFooterScroll) {
+          return
+        }
+        if (inBodyScroll) {
+          return
+        }
       }
-      if (inBodyScroll) {
-        return
-      }
-
       const tableBody = refTableBody.value
       const leftBody = refTableLeftBody.value
       const rightBody = refTableRightBody.value
@@ -3187,8 +3190,8 @@ export default defineComponent({
         internalData.lcsTimeout = undefined
         internalData.inVirtualScroll = false
         internalData.inBodyScroll = false
-        internalData.bodyScrollType = ''
         internalData.inFooterScroll = false
+        internalData.bodyScrollType = ''
         if (isRollX && scrollXLoad) {
           tablePrivateMethods.updateScrollXData()
         }
@@ -4066,15 +4069,11 @@ export default defineComponent({
        * 将固定的列左边、右边分别靠边
        * 如果传 true 则会检查列顺序并排序
        */
-      refreshColumn (initOrder) {
-        if (initOrder) {
-          const columnList = XEUtils.orderBy(internalData.collectColumn, 'renderSortNumber')
-          internalData.collectColumn = columnList
-          const tableFullColumn = getColumnList(columnList)
-          internalData.tableFullColumn = tableFullColumn
-          cacheColumnMap()
+      refreshColumn (initSort) {
+        if (initSort) {
+          handleUpdateColumn()
         }
-        return parseColumns().then(() => {
+        return parseColumns(true).then(() => {
           return tableMethods.refreshScroll()
         }).then(() => {
           return tableMethods.recalculate()
@@ -4116,16 +4115,24 @@ export default defineComponent({
        */
       recalculate (reFull?: boolean) {
         return new Promise<void>(resolve => {
-          const { rceTimeout } = internalData
+          const { rceTimeout, reRunTime } = internalData
+          const resizeOpts = computeResizeOpts.value
+          const refreshDelay = resizeOpts.refreshDelay || 20
           const el = refElem.value
           if (el && el.clientWidth) {
             autoCellWidth()
           }
           if (rceTimeout) {
             clearTimeout(rceTimeout)
-            nextTick(() => {
-              resolve()
-            })
+            if (reRunTime && reRunTime + (refreshDelay - 5) < Date.now()) {
+              resolve(
+                handleRecalculateLayout(!!reFull)
+              )
+            } else {
+              nextTick(() => {
+                resolve()
+              })
+            }
           } else {
             resolve(
               handleRecalculateLayout(!!reFull)
@@ -4134,7 +4141,7 @@ export default defineComponent({
           internalData.rceTimeout = setTimeout(() => {
             internalData.rceTimeout = undefined
             handleRecalculateLayout(!!reFull)
-          }, 20)
+          }, refreshDelay)
         })
       },
       openTooltip (target, content) {
@@ -5107,6 +5114,7 @@ export default defineComponent({
         const rightBodyElem = rightBody ? rightBody.$el as HTMLDivElement : null
         const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
         const tableFooterElem = tableFooter ? tableFooter.$el as HTMLDivElement : null
+        internalData.intoRunScroll = true
         if (XEUtils.isNumber(scrollLeft)) {
           const xHandleEl = refScrollXHandleElem.value
           if (xHandleEl) {
@@ -5128,9 +5136,10 @@ export default defineComponent({
           }
         }
         if (reactData.scrollXLoad || reactData.scrollYLoad) {
-          return new Promise(resolve => {
+          return new Promise<void>(resolve => {
             setTimeout(() => {
               nextTick(() => {
+                internalData.intoRunScroll = false
                 resolve()
               })
             }, 30)
@@ -6012,6 +6021,19 @@ export default defineComponent({
       }
     }
 
+    const clearDragStatus = () => {
+      const { dragRow, dragCol } = reactData
+      if (dragRow || dragCol) {
+        clearColDropOrigin()
+        clearRowDropOrigin()
+        hideDropTip()
+        reactData.dragRow = null
+        reactData.dragCol = null
+        reactData.isDragColMove = false
+        reactData.isDragRowMove = false
+      }
+    }
+
     const clearRowDropOrigin = () => {
       const el = refElem.value
       if (el) {
@@ -6099,15 +6121,22 @@ export default defineComponent({
       const { scrollbarWidth, scrollbarHeight } = reactData
       const { prevDragToChild } = internalData
       const wrapperRect = el.getBoundingClientRect()
+      const tableWidth = el.clientWidth
+      const tableHeight = el.clientHeight
       if (trEl) {
         const rdLineEl = refDragRowLineElem.value
         if (rdLineEl) {
           if (showLine) {
             const trRect = trEl.getBoundingClientRect()
+            let trHeight = trEl.clientHeight
+            const offsetTop = Math.max(1, trRect.y - wrapperRect.y)
+            if (offsetTop + trHeight > tableHeight - scrollbarHeight) {
+              trHeight = tableHeight - offsetTop - scrollbarHeight
+            }
             rdLineEl.style.display = 'block'
-            rdLineEl.style.top = `${Math.max(1, trRect.y - wrapperRect.y)}px`
-            rdLineEl.style.height = `${trRect.height}px`
-            rdLineEl.style.width = `${wrapperRect.width - scrollbarWidth}px`
+            rdLineEl.style.top = `${offsetTop}px`
+            rdLineEl.style.height = `${trHeight}px`
+            rdLineEl.style.width = `${tableWidth - scrollbarWidth}px`
             rdLineEl.setAttribute('drag-pos', dragPos)
             rdLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
           } else {
@@ -6118,16 +6147,31 @@ export default defineComponent({
         const cdLineEl = refDragColLineElem.value
         if (cdLineEl) {
           if (showLine) {
+            const leftContainerElem = refLeftContainer.value
+            const leftContainerWidth = leftContainerElem ? leftContainerElem.clientWidth : 0
+            const rightContainerElem = refRightContainer.value
+            const rightContainerWidth = rightContainerElem ? rightContainerElem.clientWidth : 0
             const thRect = thEl.getBoundingClientRect()
+            let thWidth = thEl.clientWidth
             const offsetTop = Math.max(0, thRect.y - wrapperRect.y)
+            const startX = leftContainerWidth
+            let offsetLeft = thRect.x - wrapperRect.x
+            if (offsetLeft < startX) {
+              thWidth -= startX - offsetLeft
+              offsetLeft = startX
+            }
+            const endX = tableWidth - rightContainerWidth - (rightContainerWidth ? 0 : scrollbarWidth)
+            if (offsetLeft + thWidth > endX) {
+              thWidth = endX - offsetLeft
+            }
             cdLineEl.style.display = 'block'
             cdLineEl.style.top = `${offsetTop}px`
-            cdLineEl.style.left = `${Math.max(1, thRect.x - wrapperRect.x)}px`
-            cdLineEl.style.width = `${thRect.width}px`
+            cdLineEl.style.left = `${offsetLeft}px`
+            cdLineEl.style.width = `${thWidth}px`
             if (prevDragToChild) {
               cdLineEl.style.height = `${thRect.height}px`
             } else {
-              cdLineEl.style.height = `${wrapperRect.height - offsetTop - scrollbarHeight}px`
+              cdLineEl.style.height = `${tableHeight - offsetTop - scrollbarHeight}px`
             }
             cdLineEl.setAttribute('drag-pos', dragPos)
             cdLineEl.setAttribute('drag-to-child', prevDragToChild ? 'y' : 'n')
@@ -6884,7 +6928,7 @@ export default defineComponent({
         const isRadioType = type === 'radio'
         const isCheckboxType = type === 'checkbox'
         const isExpandType = type === 'expand'
-        const cell = evnt.currentTarget
+        const cell = evnt.currentTarget as HTMLDivElement
         const triggerRadio = isRadioType && getEventTargetNode(evnt, cell, 'vxe-cell--radio').flag
         const triggerCheckbox = isCheckboxType && getEventTargetNode(evnt, cell, 'vxe-cell--checkbox').flag
         const triggerTreeNode = treeNode && getEventTargetNode(evnt, cell, 'vxe-tree--btn-wrapper').flag
@@ -6965,7 +7009,7 @@ export default defineComponent({
         const { editStore } = reactData
         const editOpts = computeEditOpts.value
         const { actived } = editStore
-        const cell = evnt.currentTarget
+        const cell = evnt.currentTarget as HTMLDivElement
         params = Object.assign({ cell }, params)
         if (isEnableConf(editConfig) && editOpts.trigger === 'dblclick') {
           if (!actived.args || evnt.currentTarget !== actived.args.cell) {
@@ -7197,7 +7241,8 @@ export default defineComponent({
         const triggerFilter = getEventTargetNode(evnt, cell, 'vxe-cell--filter').flag
         let triggerDrag = false
         if (!(triggerInput || triggerCheckbox || triggerSort || triggerFilter)) {
-          if (columnOpts.drag && trigger === 'cell' && !(disabledMethod && disabledMethod(params))) {
+          const { column } = params
+          if (columnOpts.drag && !column.fixed && trigger === 'cell' && !(disabledMethod && disabledMethod(params))) {
             triggerDrag = true
             $xeTable.handleHeaderCellDragMousedownEvent(evnt, params)
           }
@@ -7222,7 +7267,7 @@ export default defineComponent({
         const rowOpts = computeRowOpts.value
         const rowDragOpts = computeRowDragOpts.value
         const { trigger, disabledMethod } = rowDragOpts
-        const cell = evnt.currentTarget
+        const cell = evnt.currentTarget as HTMLElement
         params.cell = cell
         const triggerInput = cell && cell.tagName && cell.tagName.toLowerCase() === 'input'
         const triggerRadio = isRadioType && getEventTargetNode(evnt, cell, 'vxe-cell--radio').flag
@@ -7249,14 +7294,15 @@ export default defineComponent({
           $xeTable.closeMenu()
         }
       },
+      triggerCellMouseupEvent () {
+        clearDragStatus()
+      },
       /**
        * 行拖拽
        */
       handleRowDragDragstartEvent (evnt) {
         if (evnt.dataTransfer) {
-          const img = new Image()
-          img.src = tpImg
-          evnt.dataTransfer.setDragImage(img, 0, 0)
+          evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
         }
       },
       handleRowDragDragendEvent (evnt) {
@@ -7499,21 +7545,22 @@ export default defineComponent({
         dispatchEvent('row-dragstart', params, evnt)
       },
       handleCellDragMouseupEvent () {
-        clearRowDropOrigin()
-        hideDropTip()
-        reactData.dragRow = null
-        reactData.dragCol = null
-        reactData.isDragRowMove = false
+        clearDragStatus()
       },
       /**
        * 列拖拽
        */
       handleHeaderCellDragDragstartEvent (evnt) {
         if (evnt.dataTransfer) {
-          const img = new Image()
-          img.src = tpImg
-          evnt.dataTransfer.setDragImage(img, 0, 0)
+          evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
         }
+      },
+      handleColDragSwapColumn () {
+        handleUpdateColumn()
+        parseColumns(false).then(() => {
+          $xeTable.updateCellAreas()
+          $xeTable.saveCustomStore('update:sort')
+        })
       },
       handleColDragSwapEvent (evnt, isSyncColumn, dragCol, prevDragCol, prevDragPos, prevDragToChild) {
         const { mouseConfig } = props
@@ -7665,10 +7712,7 @@ export default defineComponent({
               }, evnt)
 
               if (isSyncColumn) {
-                return tableMethods.refreshColumn(true).then(() => {
-                  $xeTable.updateCellAreas()
-                  return $xeTable.saveCustomStore('update:sort')
-                })
+                $xeTable.handleColDragSwapColumn()
               }
             }).catch(() => {
             })
@@ -7687,6 +7731,9 @@ export default defineComponent({
         reactData.dragCol = null
         setTimeout(() => {
           reactData.isDragColMove = false
+          $xeTable.recalculate().then(() => {
+            loadScrollXData()
+          })
         }, 500)
       },
       handleHeaderCellDragDragoverEvent (evnt) {
@@ -7703,10 +7750,10 @@ export default defineComponent({
         const column = $xeTable.getColumnById(colid)
         if (column) {
           evnt.preventDefault()
-          const { dragCol } = reactData
-          const offsetX = evnt.clientX - thEl.getBoundingClientRect().x
+          const { clientX } = evnt
+          const offsetX = clientX - thEl.getBoundingClientRect().x
           const dragPos = offsetX < thEl.clientWidth / 2 ? 'left' : 'right'
-          if ((dragCol && dragCol.id === column.id) || (!isCrossDrag && column.parentId)) {
+          if (column.fixed || (dragCol && dragCol.id === column.id) || (!isCrossDrag && column.parentId)) {
             showDropTip(evnt, null, thEl, false, dragPos)
             return
           }
@@ -7719,6 +7766,36 @@ export default defineComponent({
             targetColumn: column,
             dragPos
           }, evnt)
+
+          // 边缘滚动
+          const el = refElem.value
+          if (!el) {
+            return
+          }
+          const xHandleEl = refScrollXHandleElem.value
+          const tableBody = refTableBody.value
+          const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
+          const scrollTargetEl = xHandleEl || tableBodyElem
+          if (scrollTargetEl) {
+            const wrapperRect = el.getBoundingClientRect()
+            const tableWidth = el.clientWidth
+            const leftContainerElem = refLeftContainer.value
+            const leftContainerWidth = leftContainerElem ? leftContainerElem.clientWidth : 0
+            const rightContainerElem = refRightContainer.value
+            const rightContainerWidth = rightContainerElem ? rightContainerElem.clientWidth : 0
+            const srartX = wrapperRect.x + leftContainerWidth
+            const endX = wrapperRect.x + tableWidth - rightContainerWidth
+            const distSize = 28
+            const startDistSize = clientX - srartX
+            const endDistSize = endX - clientX
+            if (startDistSize > 0 && startDistSize <= distSize) {
+              const scrollRatio = Math.floor(tableWidth / (startDistSize > distSize / 2 ? 240 : 120))
+              scrollTargetEl.scrollLeft -= scrollRatio * (distSize - startDistSize)
+            } else if (endDistSize > 0 && endDistSize <= distSize) {
+              const scrollRatio = Math.floor(tableWidth / (endDistSize > distSize / 2 ? 240 : 120))
+              scrollTargetEl.scrollLeft += scrollRatio * (distSize - endDistSize)
+            }
+          }
         }
       },
       handleHeaderCellDragMousedownEvent (evnt, params) {
@@ -7992,7 +8069,6 @@ export default defineComponent({
       },
       updateScrollXData () {
         const { showOverflow } = props
-        // reactData.tableColumn = []
         return nextTick().then(() => {
           handleTableColumn()
           calcCellHeight()
@@ -8003,7 +8079,6 @@ export default defineComponent({
         })
       },
       updateScrollYData () {
-        // reactData.tableData = []
         return nextTick().then(() => {
           tablePrivateMethods.handleTableData()
           calcCellHeight()
@@ -8264,7 +8339,6 @@ export default defineComponent({
       const virtualScrollBars = computeVirtualScrollBars.value
       const resizableOpts = computeResizableOpts.value
       const isArea = mouseConfig && mouseOpts.area
-      const tableStyle = computeTableStyle.value
       const columnDragOpts = computeColumnDragOpts.value
       return h('div', {
         ref: refElem,
@@ -8300,7 +8374,6 @@ export default defineComponent({
           'is--virtual-x': scrollXLoad,
           'is--virtual-y': scrollYLoad
         }],
-        style: tableStyle,
         spellcheck: false,
         onKeydown: keydownEvent
       }, [
@@ -8638,6 +8711,12 @@ export default defineComponent({
       nextTick(() => tableMethods.recalculate(true))
     })
 
+    watch(computeSize, () => {
+      nextTick(() => {
+        tableMethods.recalculate(true).then(() => tableMethods.refreshScroll())
+      })
+    })
+
     watch(() => props.syncResize, (value) => {
       if (value) {
         handleUupdateResize()
@@ -8711,6 +8790,14 @@ export default defineComponent({
     })
 
     onMounted(() => {
+      const columnOpts = computeColumnOpts.value
+      const rowOpts = computeRowOpts.value
+      const customOpts = computeCustomOpts.value
+
+      if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
+        initTpImg()
+      }
+
       nextTick(() => {
         const { data, treeConfig, showOverflow } = props
         const { scrollXStore, scrollYStore } = internalData
@@ -8869,22 +8956,13 @@ export default defineComponent({
         })
 
         if (props.autoResize) {
-          const resizeOpts = computeResizeOpts.value
-          const { refreshDelay } = resizeOpts
           const el = refElem.value
           const parentEl = tablePrivateMethods.getParentElem()
-          const handleOptimizeResize = refreshDelay ? XEUtils.throttle(() => tableMethods.recalculate(true), refreshDelay, { leading: true, trailing: true }) : null
-          resizeObserver = globalResize.create(handleOptimizeResize
-            ? () => {
-                if (props.autoResize) {
-                  handleOptimizeResize()
-                }
-              }
-            : () => {
-                if (props.autoResize) {
-                  tableMethods.recalculate(true)
-                }
-              })
+          resizeObserver = globalResize.create(() => {
+            if (props.autoResize) {
+              tableMethods.recalculate(true)
+            }
+          })
           if (el) {
             resizeObserver.observe(el)
           }

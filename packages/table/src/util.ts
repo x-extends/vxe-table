@@ -69,12 +69,18 @@ export const convertHeaderColumnToRows = (originColumns: any): any[][] => {
 }
 
 export function restoreScrollLocation ($xeTable: VxeTableConstructor, scrollLeft: number, scrollTop: number) {
-  const { internalData } = $xeTable
+  const internalData = $xeTable.internalData
+
   return $xeTable.clearScroll().then(() => {
     if (scrollLeft || scrollTop) {
       // 重置最后滚动状态
       internalData.lastScrollLeft = 0
       internalData.lastScrollTop = 0
+
+      internalData.inVirtualScroll = false
+      internalData.inBodyScroll = false
+      internalData.inFooterScroll = false
+      internalData.bodyScrollType = ''
       // 还原滚动状态
       return $xeTable.scrollTo(scrollLeft, scrollTop)
     }

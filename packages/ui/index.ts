@@ -37,7 +37,7 @@ VxeUI.setConfig({
     //   keyField: '_X_ROW_KEY' // 行数据的唯一主键字段名
     // },
     resizeConfig: {
-      // refreshDelay: 250
+      // refreshDelay: 20
     },
     resizableConfig: {
       dragMode: 'auto',
@@ -49,11 +49,13 @@ VxeUI.setConfig({
     },
     rowDragConfig: {
       showIcon: true,
-      animation: true
+      animation: true,
+      showGuidesStatus: true
     },
     columnDragConfig: {
       showIcon: true,
-      animation: true
+      animation: true,
+      showGuidesStatus: true
     },
     checkboxConfig: {
       // trigger: 'default',

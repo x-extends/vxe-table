@@ -1,7 +1,7 @@
 import { defineComponent, h, inject, ref, Ref, VNode, PropType, nextTick, TransitionGroup, createCommentVNode } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
-import { tpImg, addClass, removeClass } from '../../../ui/src/dom'
+import { getTpImg, addClass, removeClass } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
@@ -251,9 +251,7 @@ export default defineComponent({
 
     const sortDragstartEvent = (evnt: DragEvent) => {
       if (evnt.dataTransfer) {
-        const img = new Image()
-        img.src = tpImg
-        evnt.dataTransfer.setDragImage(img, 0, 0)
+        evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
       }
     }
 
@@ -422,11 +420,7 @@ export default defineComponent({
 
             if (immediate) {
               reactData.customColumnList = collectColumn.slice(0)
-              $xeTable.refreshColumn(true).then(() => {
-                $xeTable.updateCellAreas()
-                $xeTable.handleCustom()
-                $xeTable.saveCustomStore('update:sort')
-              })
+              $xeTable.handleColDragSwapColumn()
             }
           }).catch(() => {
           })
@@ -474,10 +468,13 @@ export default defineComponent({
 
     const renderDragTip = () => {
       const dragCol = dragColumnRef.value
+      const columnDragOpts = computeColumnDragOpts.value
       return h('div', {}, [
         h('div', {
           ref: refDragLineElem,
-          class: 'vxe-table-custom-popup--drag-line'
+          class: ['vxe-table-custom-popup--drag-line', {
+            'is--guides': columnDragOpts.showGuidesStatus
+          }]
         }),
         h('div', {
           ref: refDragTipElem,

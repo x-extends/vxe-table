@@ -4,7 +4,7 @@ import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { ValueOf, VxeButtonComponent, VxeButtonEvents } from 'vxe-pc-ui'
+import type { ValueOf, VxeButtonComponent, VxeButtonEvents, VxeComponentSlotType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
@@ -326,13 +326,18 @@ export default defineComponent({
     /**
      * 渲染按钮
      */
-    const renderBtns = () => {
+    const renderLeftBtns = () => {
       const { buttons } = props
       const { connectTable } = internalData
       const $table = connectTable
-      const btnVNs: VNode[] = []
+      const buttonPrefixSlot = slots.buttonPrefix || slots['button-prefix']
+      const buttonSuffixSlot = slots.buttonSuffix || slots['button-suffix']
+      const btnVNs: VxeComponentSlotType[] = []
+      if (buttonPrefixSlot) {
+        btnVNs.push(...getSlotVNs(buttonPrefixSlot({ buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+      }
       if (buttons) {
-        buttons.forEach((item) => {
+        buttons.forEach((item, index) => {
           const { dropdowns, buttonRender } = item
           if (item.visible !== false) {
             const compConf = buttonRender ? renderer.get(buttonRender.name) : null
@@ -341,6 +346,7 @@ export default defineComponent({
               const params = { $grid: $xeGrid, $table: $table!, button: item }
               btnVNs.push(
                 h('span', {
+                  key: `br${item.code || index}`,
                   class: ['vxe-button--item', toolbarButtonClassName ? (XEUtils.isFunction(toolbarButtonClassName) ? toolbarButtonClassName(params) : toolbarButtonClassName) : '']
                 }, getSlotVNs(compConf.renderToolbarButton(buttonRender, params)))
               )
@@ -348,6 +354,7 @@ export default defineComponent({
               if (VxeUIButtonComponent) {
                 btnVNs.push(
                   h(VxeUIButtonComponent, {
+                    key: `bd${item.code || index}`,
                     disabled: item.disabled,
                     loading: item.loading,
                     type: item.type,
@@ -377,6 +384,9 @@ export default defineComponent({
           }
         })
       }
+      if (buttonSuffixSlot) {
+        btnVNs.push(...getSlotVNs(buttonSuffixSlot({ buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+      }
       return btnVNs
     }
 
@@ -387,7 +397,12 @@ export default defineComponent({
       const { tools } = props
       const { connectTable } = internalData
       const $table = connectTable
-      const btnVNs: VNode[] = []
+      const toolPrefixSlot = slots.toolPrefix || slots['tool-prefix']
+      const toolSuffixSlot = slots.toolSuffix || slots['tool-suffix']
+      const btnVNs: VxeComponentSlotType[] = []
+      if (toolPrefixSlot) {
+        btnVNs.push(...getSlotVNs(toolPrefixSlot({ tools: tools || [], $grid: $xeGrid, $table: $table })))
+      }
       if (tools) {
         tools.forEach((item, tIndex) => {
           const { dropdowns, toolRender } = item
@@ -436,6 +451,9 @@ export default defineComponent({
             }
           }
         })
+      }
+      if (toolSuffixSlot) {
+        btnVNs.push(...getSlotVNs(toolSuffixSlot({ tools: tools || [], $grid: $xeGrid, $table: $table })))
       }
       return btnVNs
     }
@@ -553,7 +571,7 @@ export default defineComponent({
       }, [
         h('div', {
           class: 'vxe-buttons--wrapper'
-        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $table: $table }) : renderBtns()),
+        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $table: $table }) : renderLeftBtns()),
         h('div', {
           class: 'vxe-tools--wrapper'
         }, toolsSlot ? toolsSlot({ $grid: $xeGrid, $table: $table }) : renderRightTools()),

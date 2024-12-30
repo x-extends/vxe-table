@@ -228,7 +228,12 @@ hooks.add('tableEditModule', {
               throw new Error(getI18n('vxe.error.unableInsert'))
             }
             afterFullData.splice(afIndex, 0, ...newRecords)
-            tableFullData.splice($xeTable.findRowIndexOf(tableFullData, targetRow), 0, ...newRecords)
+            const tfIndex = $xeTable.findRowIndexOf(tableFullData, targetRow)
+            if (tfIndex > -1) {
+              tableFullData.splice(tfIndex + (isInsertNextRow ? 1 : 0), 0, ...newRecords)
+            } else {
+              tableFullData.push(...newRecords)
+            }
             // 刷新单元格合并
             mergeList.forEach((mergeItem: any) => {
               const { row: mergeRowIndex, rowspan: mergeRowspan } = mergeItem

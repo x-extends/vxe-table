@@ -29,7 +29,7 @@ body:
   id: issue_confirm_latest_version
   attributes:
     label: "是否使用当前最新版本？"
-    description: "官方只维护最新版本，如果不是最新版本，请先更新到[最新版本](https://vxetable.cn/)之后再提！"
+    description: "官方只维护最新版本，如果不是最新版本，请先更新到[最新版本](https://vxetable.cn/)之后再反馈问题！"
     options:
     - label: "我已确认是使用当前的最新版本。"
       required: true

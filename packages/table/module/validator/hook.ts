@@ -109,7 +109,7 @@ hooks.add('tableValidatorModule', {
     const beginValidate = (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull?: boolean): Promise<any> => {
       const validRest: any = {}
       const { editRules, treeConfig } = props
-      const { afterFullData, visibleColumn } = internalData
+      const { afterFullData } = internalData
       const treeOpts = computeTreeOpts.value
       const childrenField = treeOpts.children || treeOpts.childrenField
       const validOpts = computeValidOpts.value
@@ -230,11 +230,7 @@ hooks.add('tableValidatorModule', {
             } else {
               const row = firstErrParams.row
               const column = firstErrParams.column
-              const rowIndex = afterFullData.indexOf(row)
-              const columnIndex = visibleColumn.indexOf(column)
-              const targetRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
-              const targetColumn = columnIndex > 0 ? visibleColumn[columnIndex - 1] : column
-              $xeTable.scrollToRow(targetRow, targetColumn).then(posAndFinish)
+              $xeTable.scrollToRow(row, column).then(posAndFinish)
             }
           })
         })

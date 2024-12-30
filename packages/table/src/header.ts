@@ -234,6 +234,7 @@ export default defineComponent({
             'is--sortable': column.sortable,
             'col--filter': !!column.filters,
             'is--filter-active': hasFilter,
+            'is--drag-active': !column.fixed && !isDisabledDrag,
             'is--drag-disabled': isDisabledDrag,
             'col--current': currentColumn === column
           },
@@ -312,17 +313,19 @@ export default defineComponent({
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
       const { showHeaderOverflow: allColumnHeaderOverflow, spanMethod, footerSpanMethod } = tableProps
-      const { isGroup, scrollbarWidth } = tableReactData
-      const { visibleColumn } = tableInternalData
-      let headerGroups: VxeTableDefines.ColumnInfo[][] = headerColumn.value
+      const { isGroup, scrollXLoad, scrollYLoad, scrollbarWidth, dragCol } = tableReactData
+      const { visibleColumn, fullColumnIdData } = tableInternalData
+
+      let renderHeaderList = headerColumn.value
       let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
+
       if (isGroup) {
         renderColumnList = visibleColumn
       } else {
         if (fixedType) {
           renderColumnList = visibleColumn
           // 如果是使用优化模式
-          if (allColumnHeaderOverflow) {
+          if (scrollXLoad || scrollYLoad || allColumnHeaderOverflow) {
             // 如果不支持优化模式
             if (spanMethod || footerSpanMethod) {
               renderColumnList = visibleColumn
@@ -331,8 +334,36 @@ export default defineComponent({
             }
           }
         }
-        headerGroups = [renderColumnList]
+        renderHeaderList = [renderColumnList]
       }
+
+      if (!fixedType && !isGroup) {
+        // 列拖拽
+        if (scrollXLoad && dragCol) {
+          if (renderColumnList.length > 2) {
+            const dCowRest = fullColumnIdData[dragCol.id]
+            if (dCowRest) {
+              const dcIndex = dCowRest._index
+              const firstCol = renderColumnList[0]
+              const lastCol = renderColumnList[renderColumnList.length - 1]
+              const firstColRest = fullColumnIdData[firstCol.id]
+              const lastColRest = fullColumnIdData[lastCol.id]
+              if (firstColRest && lastColRest) {
+                const fcIndex = firstColRest._index
+                const lcIndex = lastColRest._index
+                if (dcIndex < fcIndex) {
+                  renderColumnList = [dragCol].concat(renderColumnList)
+                  renderHeaderList = [[dragCol].concat(renderHeaderList[0])].concat(renderHeaderList.slice(1))
+                } else if (dcIndex > lcIndex) {
+                  renderColumnList = renderColumnList.concat([dragCol])
+                  renderHeaderList = [renderHeaderList[0].concat([dragCol])].concat(renderHeaderList.slice(1))
+                }
+              }
+            }
+          }
+        }
+      }
+
       return h('div', {
         ref: refElem,
         class: ['vxe-table--header-wrapper', fixedType ? `fixed-${fixedType}--wrapper` : 'body--wrapper'],
@@ -374,7 +405,7 @@ export default defineComponent({
            */
           h('thead', {
             ref: refHeaderTHead
-          }, renderHeads(headerGroups))
+          }, renderHeads(renderHeaderList))
         ]),
         /**
          * 其他

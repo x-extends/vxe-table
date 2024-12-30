@@ -197,12 +197,12 @@ export default defineComponent({
         data: tableData,
         items
       }
-      let isColDragCell = false
+      let isRowDragCell = false
       let isDisabledDrag = false
       if (rowOpts.drag) {
-        isColDragCell = rowDragOpts.trigger === 'row' || (column.dragSort && rowDragOpts.trigger === 'cell')
+        isRowDragCell = rowDragOpts.trigger === 'row' || (column.dragSort && rowDragOpts.trigger === 'cell')
       }
-      if (isColDragCell) {
+      if (isRowDragCell) {
         isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(params))
       }
       // hover 进入事件
@@ -233,10 +233,14 @@ export default defineComponent({
         }
       }
       // 按下事件处理
-      if (isColDragCell || checkboxOpts.range || mouseConfig) {
+      if (isRowDragCell || checkboxOpts.range || mouseConfig) {
         tdOns.onMousedown = (evnt: MouseEvent) => {
           $xeTable.triggerCellMousedownEvent(evnt, params)
         }
+      }
+      // 拖拽列事件
+      if (isRowDragCell) {
+        tdOns.onMouseup = $xeTable.triggerCellMouseupEvent
       }
       // 点击事件处理
       tdOns.onClick = (evnt: MouseEvent) => {
@@ -379,7 +383,7 @@ export default defineComponent({
             'col--ellipsis': hasEllipsis,
             'fixed--width': !isAutoCellWidth,
             'fixed--hidden': fixedHiddenColumn,
-            'is--drag-cell': isColDragCell,
+            'is--drag-cell': isRowDragCell,
             'is--drag-disabled': isDisabledDrag,
             'col--dirty': isDirty,
             'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
@@ -762,18 +766,20 @@ export default defineComponent({
     })
 
     const renderVN = () => {
+      const { slots } = tableContext
+
       const { fixedColumn, fixedType, tableColumn } = props
       const { showOverflow: allColumnOverflow, spanMethod, footerSpanMethod, mouseConfig } = tableProps
-      const { tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn } = tableReactData
-      const { visibleColumn } = tableInternalData
-      const { slots } = tableContext
+      const { isGroup, tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
+      const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
       const rowOpts = computeRowOpts.value
       const sYOpts = computeSYOpts.value
       const emptyOpts = computeEmptyOpts.value
       const mouseOpts = computeMouseOpts.value
       const rowDragOpts = computeRowDragOpts.value
 
-      let renderColumnList = tableColumn
+      let renderDataList = tableData
+      let renderColumnList = tableColumn as VxeTableDefines.ColumnInfo[]
 
       if (fixedType) {
         renderColumnList = visibleColumn
@@ -784,6 +790,54 @@ export default defineComponent({
             renderColumnList = visibleColumn
           } else {
             renderColumnList = fixedColumn || []
+          }
+        }
+      }
+
+      // 行拖拽
+      if (scrollYLoad && dragRow) {
+        if (renderDataList.length > 2) {
+          const dRowRest = fullAllDataRowIdData[getRowid($xeTable, dragRow)]
+          if (dRowRest) {
+            const drIndex = dRowRest._index
+            const firstRow = renderDataList[0]
+            const lastRow = renderDataList[renderDataList.length - 1]
+            const firstRowRest = fullAllDataRowIdData[getRowid($xeTable, firstRow)]
+            const lastRowRest = fullAllDataRowIdData[getRowid($xeTable, lastRow)]
+            if (firstRowRest && lastRowRest) {
+              const frIndex = firstRowRest._index
+              const lrIndex = lastRowRest._index
+              if (drIndex < frIndex) {
+                renderDataList = [dragRow].concat(renderDataList)
+              } else if (drIndex > lrIndex) {
+                renderDataList = renderDataList.concat([dragRow])
+              }
+            }
+          }
+        }
+      }
+
+      if (!fixedType && !isGroup) {
+        // 列拖拽
+        if (scrollXLoad && dragCol) {
+          if (renderColumnList.length > 2) {
+            const dCowRest = fullColumnIdData[dragCol.id]
+            if (dCowRest) {
+              const dcIndex = dCowRest._index
+              const firstCol = renderColumnList[0]
+              const lastCol = renderColumnList[renderColumnList.length - 1]
+              const firstColRest = fullColumnIdData[firstCol.id]
+              const lastColRest = fullColumnIdData[lastCol.id]
+              if (firstColRest && lastColRest) {
+                const fcIndex = firstColRest._index
+                const lcIndex = lastColRest._index
+                if (dcIndex < fcIndex) {
+                  renderColumnList = [dragCol].concat(renderColumnList)
+                } else if (dcIndex > lcIndex) {
+                  renderColumnList = renderColumnList.concat([dragCol])
+                }
+              }
+            }
           }
         }
       }
@@ -853,11 +907,11 @@ export default defineComponent({
               name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`,
               tag: 'tbody'
             }, {
-              default: () => renderRows(fixedType, tableData, renderColumnList)
+              default: () => renderRows(fixedType, renderDataList, renderColumnList)
             })
             : h('tbody', {
               ref: refBodyTBody
-            }, renderRows(fixedType, tableData, renderColumnList))
+            }, renderRows(fixedType, renderDataList, renderColumnList))
         ]),
         h('div', {
           class: 'vxe-table--checkbox-range'

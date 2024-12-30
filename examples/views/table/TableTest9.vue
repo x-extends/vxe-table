@@ -12,7 +12,7 @@
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
       :data="tableData">
-      <vxe-column type="checkbox" width="60" drag-sort></vxe-column>
+      <vxe-column type="checkbox" width="80" drag-sort></vxe-column>
       <vxe-column field="col0" title="列0" width="100"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" :cell-render="imgUrlCellRender"></vxe-column>
       <vxe-column field="col2" title="列2" width="90"></vxe-column>

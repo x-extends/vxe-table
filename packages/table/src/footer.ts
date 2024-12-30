@@ -267,20 +267,45 @@ export default defineComponent({
     const renderVN = () => {
       const { fixedType, fixedColumn, tableColumn } = props
       const { spanMethod, footerSpanMethod, showFooterOverflow: allColumnFooterOverflow } = tableProps
-      const { visibleColumn } = tableInternalData
-      const { scrollbarWidth } = tableReactData
+      const { visibleColumn, fullColumnIdData } = tableInternalData
+      const { isGroup, scrollXLoad, scrollYLoad, scrollbarWidth, dragCol } = tableReactData
 
       let renderColumnList = tableColumn
 
       if (fixedType) {
         renderColumnList = visibleColumn
         // 如果是使用优化模式
-        if (allColumnFooterOverflow) {
+        if (scrollXLoad || scrollYLoad || allColumnFooterOverflow) {
           // 如果不支持优化模式
           if (spanMethod || footerSpanMethod) {
             renderColumnList = visibleColumn
           } else {
             renderColumnList = fixedColumn || []
+          }
+        }
+      }
+
+      if (!fixedType && !isGroup) {
+        // 列拖拽
+        if (scrollXLoad && dragCol) {
+          if (renderColumnList.length > 2) {
+            const dCowRest = fullColumnIdData[dragCol.id]
+            if (dCowRest) {
+              const dcIndex = dCowRest._index
+              const firstCol = renderColumnList[0]
+              const lastCol = renderColumnList[renderColumnList.length - 1]
+              const firstColRest = fullColumnIdData[firstCol.id]
+              const lastColRest = fullColumnIdData[lastCol.id]
+              if (firstColRest && lastColRest) {
+                const fcIndex = firstColRest._index
+                const lcIndex = lastColRest._index
+                if (dcIndex < fcIndex) {
+                  renderColumnList = [dragCol].concat(renderColumnList)
+                } else if (dcIndex > lcIndex) {
+                  renderColumnList = renderColumnList.concat([dragCol])
+                }
+              }
+            }
           }
         }
       }

@@ -7,12 +7,13 @@
       show-footer
       height="800"
       :loading="loading"
-      :column-config="{resizable: true}"
+      :column-config="{resizable: true,drag: true}"
+      :row-config="{drag: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
       :data="tableData"
       :footer-data="footerData">
-      <vxe-column type="checkbox" width="60" fixed="left"></vxe-column>
+      <vxe-column type="checkbox" width="80" fixed="left" drag-sort></vxe-column>
       <vxe-column field="col0" title="列0" width="100" fixed="left"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" fixed="left" :cell-render="imgUrlCellRender"></vxe-column>
       <vxe-column field="col2" title="列2" width="90"></vxe-column>
