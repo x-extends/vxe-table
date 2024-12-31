@@ -6,7 +6,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { ValueOf, VxeButtonComponent, VxeComponentSizeType, VxeComponentSlotType } from 'vxe-pc-ui'
-import type { VxeGridConstructor, GridPrivateMethods, ToolbarInternalData, VxeTablePrivateMethods, VxeTableDefines, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, VxeTablePropTypes, ToolbarReactData } from '../../../types'
+import type { VxeGridConstructor, GridPrivateMethods, ToolbarInternalData, VxeTableDefines, VxeToolbarEmits, VxeToolbarPropTypes, VxeTablePropTypes, ToolbarReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, globalMixins, renderEmptyElement } = VxeUI
 
@@ -139,13 +139,13 @@ export default defineVxeComponent({
     },
     syncUpdate (params: {
       collectColumn: VxeTableDefines.ColumnInfo<any>[]
-      $table: VxeTableConstructor<any> & VxeTablePrivateMethods<any>
+      $table: VxeTableConstructor
     }) {
       const $xeToolbar = this
       const reactData = $xeToolbar.reactData
       const internalData = $xeToolbar.internalData
 
-      internalData.connectTable = params.$table
+      internalData.connectTable = params.$table as (VxeTableConstructor & VxeTablePrivateMethods)
       reactData.columns = params.collectColumn
       reactData.connectFlag++
     },

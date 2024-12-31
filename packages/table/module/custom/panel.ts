@@ -1138,7 +1138,7 @@ export default {
                 }
                 if (oldAllMaps[newColumn.id]) {
                   isSelfToChildStatus = true
-                  if (!isSelfToChildDrag) {
+                  if (!(isCrossDrag && isSelfToChildDrag)) {
                     if (VxeUI.modal) {
                       VxeUI.modal.message({
                         status: 'error',
@@ -1162,7 +1162,7 @@ export default {
                 }
                 if (oldAllMaps[newColumn.id]) {
                   isSelfToChildStatus = true
-                  if (!isSelfToChildDrag) {
+                  if (!(isCrossDrag && isSelfToChildDrag)) {
                     if (VxeUI.modal) {
                       VxeUI.modal.message({
                         status: 'error',
@@ -1179,7 +1179,7 @@ export default {
               const oldewMatchRest = XEUtils.findTree(collectColumn as VxeTableDefines.ColumnInfo[], item => item.id === oldColumn.id)
 
               // 改变层级
-              if (isSelfToChildStatus && isSelfToChildDrag) {
+              if (isSelfToChildStatus && (isCrossDrag && isSelfToChildDrag)) {
                 if (oldewMatchRest) {
                   const { items: oCols, index: oIndex } = oldewMatchRest
                   const childList = oldColumn.children || []
@@ -1203,7 +1203,7 @@ export default {
               if (newMatchRest) {
                 const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
                 // 转子级
-                if (isToChildDrag && prevDragToChild) {
+                if ((isCrossDrag && isToChildDrag) && prevDragToChild) {
                   oldColumn.parentId = newColumn.id
                   newColumn.children = (newColumn.children || []).concat([oldColumn])
                 } else {
@@ -1294,7 +1294,7 @@ export default {
           showDropTip(this, evnt, optEl, false, dragPos)
           return
         }
-        this.prevDragToChild = !!(isToChildDrag && hasCtrlKey && immediate)
+        this.prevDragToChild = !!((isCrossDrag && isToChildDrag) && hasCtrlKey && immediate)
         this.prevDragCol = column
         this.prevDragPos = dragPos
         showDropTip(this, evnt, optEl, true, dragPos)

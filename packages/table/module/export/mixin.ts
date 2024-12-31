@@ -5,7 +5,7 @@ import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeTablePropTypes, VxeGridConstructor, VxeTableDefines, VxeGridPropTypes, GridReactData } from '../../../../types'
+import type { VxeTablePropTypes, VxeGridConstructor, VxeTableDefines, TableReactData, TableInternalData, GridReactData, VxeColumnPropTypes, VxeTableConstructor } from '../../../../types'
 
 const { getI18n, renderer } = VxeUI
 
@@ -18,22 +18,22 @@ let fileInput: any
 const csvBOM = '\ufeff'
 const enterSymbol = '\r\n'
 
-function hasTreeChildren ($xetable: any, row: any) {
-  const treeOpts = $xetable.treeOpts
+function hasTreeChildren ($xeTable: VxeTableConstructor, row: any) {
+  const treeOpts = $xeTable.computeTreeOpts
   const childrenField = treeOpts.children || treeOpts.childrenField
-  return row[childrenField] && row[childrenField].length > 0
+  return row[childrenField] && row[childrenField].length
 }
 
-function getSeq ($xetable: any, cellValue: any, row: any, $rowIndex: any, column: any, $columnIndex: any) {
-  const seqOpts = $xetable.seqOpts
+function getSeq ($xeTable: VxeTableConstructor, cellValue: any, row: any, $rowIndex: any, column: any, $columnIndex: any) {
+  const seqOpts = $xeTable.computeSeqOpts
   const seqMethod = seqOpts.seqMethod || column.seqMethod
   if (seqMethod) {
     return seqMethod({
       row,
-      rowIndex: $xetable.getRowIndex(row),
+      rowIndex: $xeTable.getRowIndex(row),
       $rowIndex,
       column,
-      columnIndex: $xetable.getColumnIndex(column),
+      columnIndex: $xeTable.getColumnIndex(column),
       $columnIndex
     })
   }
@@ -62,17 +62,23 @@ const toStringValue = (cellValue: any) => {
   return eqEmptyValue(cellValue) ? '' : `${cellValue}`
 }
 
-function getBodyLabelData ($xeTable: any, opts: any, columns: any[], datas: any[]) {
+function getBodyLabelData ($xeTable: VxeTableConstructor, opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) {
+  const props = $xeTable
+
   const { isAllExpand, mode } = opts
-  const { treeConfig, treeOpts, radioOpts, checkboxOpts, columnOpts } = $xeTable
-  const childrenField = treeOpts.children || treeOpts.childrenField
+  const { treeConfig } = props
+  const radioOpts = $xeTable.computeRadioOpts
+  const checkboxOpts = $xeTable.computeCheckboxOpts
+  const treeOpts = $xeTable.computeTreeOpts
+  const columnOpts = $xeTable.computeColumnOpts
   if (!htmlCellElem) {
     htmlCellElem = document.createElement('div')
   }
   if (treeConfig) {
+    const childrenField = treeOpts.children || treeOpts.childrenField
     // 如果是树表格只允许导出数据源
     const rest: any[] = []
-    const expandMaps = new Map()
+    const expandMaps: Map<any, number> = new Map()
     XEUtils.eachTree(datas, (item, $rowIndex, items, path, parent, nodes) => {
       const row = item._row || item
       const parentRow = parent && parent._row ? parent._row : parent
@@ -85,13 +91,13 @@ function getBodyLabelData ($xeTable: any, opts: any, columns: any[], datas: any[
           _expand: hasRowChild && $xeTable.isTreeExpandByRow(row)
         }
         columns.forEach((column, $columnIndex) => {
-          let cellValue = ''
+          let cellValue: string | number | boolean | null = ''
           const renderOpts = column.editRender || column.cellRender
-          let bodyExportMethod = column.exportMethod
+          let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
             const compConf = renderer.get(renderOpts.name)
             if (compConf) {
-              bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod || (compConf as any).cellExportMethod
+              bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
             }
           }
           if (!bodyExportMethod) {
@@ -102,8 +108,8 @@ function getBodyLabelData ($xeTable: any, opts: any, columns: any[], datas: any[
           } else {
             switch (column.type) {
               case 'seq': {
-                const seqValue = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
-                cellValue = mode === 'all' ? seqValue : getSeq($xeTable, seqValue, row, $rowIndex, column, $columnIndex)
+                const seqVal = path.map((num, i) => i % 2 === 0 ? (Number(num) + 1) : '.').join('')
+                cellValue = mode === 'all' ? seqVal : getSeq($xeTable, seqVal, row, $rowIndex, column, $columnIndex)
                 break
               }
               case 'checkbox':
@@ -146,17 +152,14 @@ function getBodyLabelData ($xeTable: any, opts: any, columns: any[], datas: any[
       _row: row
     }
     columns.forEach((column, $columnIndex) => {
-      let cellValue = ''
+      let cellValue: string | number | boolean | null = ''
       const renderOpts = column.editRender || column.cellRender
-      let bodyExportMethod = column.exportMethod
+      let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
       if (!bodyExportMethod && renderOpts && renderOpts.name) {
         const compConf = renderer.get(renderOpts.name)
         if (compConf) {
-          bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod || (compConf as any).cellExportMethod
+          bodyExportMethod = compConf.tableExportMethod || compConf.exportMethod
         }
-      }
-      if (!bodyExportMethod) {
-        bodyExportMethod = columnOpts.exportMethod
       }
       if (bodyExportMethod) {
         cellValue = bodyExportMethod({ $table: $xeTable, row, column, options: opts })
@@ -177,7 +180,7 @@ function getBodyLabelData ($xeTable: any, opts: any, columns: any[], datas: any[
             item._radioLabel = radioOpts.labelField ? XEUtils.get(row, radioOpts.labelField) : ''
             item._radioDisabled = radioOpts.checkMethod && !radioOpts.checkMethod({ row })
             break
-          default :
+          default:
             if (opts.original) {
               cellValue = getCellValue(row, column)
             } else {
@@ -200,7 +203,7 @@ function getBodyLabelData ($xeTable: any, opts: any, columns: any[], datas: any[
   })
 }
 
-function getExportData ($xetable: any, opts: any) {
+function getExportData ($xetable: any, opts: VxeTablePropTypes.ExportHandleOptions) {
   const { columns, dataFilterMethod } = opts
   let datas = opts.data
   if (dataFilterMethod) {
@@ -981,18 +984,29 @@ export function readLocalFile (options: any = {}) {
   })
 }
 
-function handleExportAndPrint ($xeTable: any, options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: any) {
+function handleExportAndPrint ($xeTable: VxeTableConstructor, options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: any) {
+  const props = $xeTable
+  const reactData = $xeTable as unknown as TableReactData
+  const internalData = $xeTable as unknown as TableInternalData
   const $xeGrid = $xeTable.$xeGrid
 
-  const { initStore, customOpts, collectColumn, footerTableData, treeConfig, mergeList, isGroup, exportParams, exportOpts } = $xeTable
-  const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {} as VxeGridPropTypes.ProxyOpts
-  const selectRecords = $xeTable.getCheckboxRecords()
-  const hasFooter = !!footerTableData.length
+  const { treeConfig, showHeader, showFooter } = props
+  const { initStore, mergeList, mergeFooterList, isGroup, footerTableData, exportStore, exportParams } = reactData
+  const { collectColumn } = internalData
+  const exportOpts = $xeTable.computeExportOpts
   const hasTree = treeConfig
-  const hasMerge = !hasTree && mergeList.length
+  const customOpts = $xeTable.computeCustomOpts
+  const selectRecords = $xeTable.getCheckboxRecords()
+  const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {}
+  const hasFooter = !!footerTableData.length
+  const hasMerge = !!(mergeList.length || mergeFooterList.length)
   const defOpts = Object.assign({
     message: true,
-    isHeader: true,
+    isHeader: showHeader,
+    isFooter: showFooter,
+    isColgroup: isGroup,
+    isMerge: hasMerge,
+    useStyle: true,
     current: 'current',
     modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
   }, options)
@@ -1027,7 +1041,7 @@ function handleExportAndPrint ($xeTable: any, options: VxeTablePropTypes.ExportO
       column.checked = columns
         ? columns.some((item: any) => {
           if (isColumnInfo(item)) {
-            return column === item
+            return column.id === (item as any).id
           } else if (XEUtils.isString(item)) {
             return column.field === item
           } else {
@@ -1052,7 +1066,7 @@ function handleExportAndPrint ($xeTable: any, options: VxeTablePropTypes.ExportO
     }
   })
   // 更新条件
-  Object.assign($xeTable.exportStore, {
+  Object.assign(exportStore, {
     columns: exportColumns,
     typeList,
     modeList,
