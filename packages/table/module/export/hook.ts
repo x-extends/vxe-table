@@ -1111,7 +1111,7 @@ hooks.add('tableExportModule', {
         const { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
         let groups: any[] = []
         const customCols = columns && columns.length ? columns : null
-        const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ }, opts, { filename: '', sheetName: '', colgroups: [], columns: [], data: [] })
+        const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
         // 如果设置源数据，则默认导出设置了字段的列
         if (!customCols && !columnFilterMethod) {
           handleOptions.columnFilterMethod = ({ column }) => {
