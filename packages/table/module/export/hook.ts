@@ -6,7 +6,7 @@ import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
 
-import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTablePropTypes, TableExportMethods, VxeGridPropTypes, VxeTableDefines } from '../../../../types'
+import type { VxeGridConstructor, VxeGridPrivateMethods, VxeTablePropTypes, VxeColumnPropTypes, TableExportMethods, VxeGridPropTypes, VxeTableDefines } from '../../../../types'
 
 const { getI18n, hooks, renderer } = VxeUI
 
@@ -324,7 +324,7 @@ hooks.add('tableExportModule', {
       return eqEmptyValue(cellValue) ? '' : `${cellValue}`
     }
 
-    const getBodyLabelData = (opts: any, columns: any[], datas: any[]) => {
+    const getBodyLabelData = (opts: VxeTablePropTypes.ExportHandleOptions, columns: VxeTableDefines.ColumnInfo[], datas: any[]) => {
       const { isAllExpand, mode } = opts
       const { treeConfig } = props
       const radioOpts = computeRadioOpts.value
@@ -353,7 +353,7 @@ hooks.add('tableExportModule', {
             columns.forEach((column, $columnIndex) => {
               let cellValue: string | number | boolean | null = ''
               const renderOpts = column.editRender || column.cellRender
-              let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
+              let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
               if (!bodyExportMethod && renderOpts && renderOpts.name) {
                 const compConf = renderer.get(renderOpts.name)
                 if (compConf) {
@@ -414,7 +414,7 @@ hooks.add('tableExportModule', {
         columns.forEach((column, $columnIndex) => {
           let cellValue: string | number | boolean | null = ''
           const renderOpts = column.editRender || column.cellRender
-          let bodyExportMethod = column.exportMethod || columnOpts.exportMethod
+          let bodyExportMethod: VxeColumnPropTypes.ExportMethod | undefined = column.exportMethod || columnOpts.exportMethod
           if (!bodyExportMethod && renderOpts && renderOpts.name) {
             const compConf = renderer.get(renderOpts.name)
             if (compConf) {
@@ -959,6 +959,9 @@ hooks.add('tableExportModule', {
         message: true,
         isHeader: showHeader,
         isFooter: showFooter,
+        isColgroup: isGroup,
+        isMerge: hasMerge,
+        useStyle: true,
         current: 'current',
         modes: ['current', 'selected'].concat(proxyOpts.ajax && proxyOpts.ajax.queryAll ? ['all'] : [])
       }, options)

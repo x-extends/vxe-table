@@ -848,30 +848,28 @@ export default defineComponent({
     }
 
     const computeRowHeight = () => {
-      const { showOverflow } = props
       const tableHeader = refTableHeader.value
       const tableBody = refTableBody.value
       const tableBodyElem = tableBody ? tableBody.$el as HTMLDivElement : null
       const vSize = computeSize.value
       const rowHeightMaps = computeRowHeightMaps.value
-      let rowHeight = 24
-      if (showOverflow) {
-        if (tableBodyElem) {
-          const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
-          let firstTrElem
-          firstTrElem = tableBodyElem.querySelector('tr')
-          if (!firstTrElem && tableHeaderElem) {
-            firstTrElem = tableHeaderElem.querySelector('tr')
-          }
-          if (firstTrElem) {
-            rowHeight = firstTrElem.clientHeight
-          }
-          if (!rowHeight) {
-            rowHeight = rowHeightMaps[vSize || 'default']
-          }
+      let rowHeight = 0
+      if (tableBodyElem) {
+        const tableHeaderElem = tableHeader ? tableHeader.$el as HTMLDivElement : null
+        let firstTrElem
+        firstTrElem = tableBodyElem.querySelector('tr')
+        if (!firstTrElem && tableHeaderElem) {
+          firstTrElem = tableHeaderElem.querySelector('tr')
+        }
+        if (firstTrElem) {
+          rowHeight = firstTrElem.clientHeight
         }
       }
-      return rowHeight
+      if (!rowHeight) {
+        rowHeight = rowHeightMaps[vSize || 'default']
+      }
+      // 最低支持 18px 行高
+      return Math.max(18, rowHeight)
     }
 
     const handleVirtualYVisible = () => {

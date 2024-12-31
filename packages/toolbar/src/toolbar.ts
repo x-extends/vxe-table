@@ -5,7 +5,7 @@ import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
 import type { ValueOf, VxeButtonComponent, VxeButtonEvents, VxeComponentSlotType } from 'vxe-pc-ui'
-import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData } from '../../../types'
+import type { VxeGridConstructor, GridPrivateMethods, ToolbarMethods, ToolbarInternalData, VxeToolbarConstructor, VxeToolbarEmits, VxeToolbarPropTypes, ToolbarPrivateRef, ToolbarReactData, VxeTableConstructor, VxeTablePrivateMethods } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, useFns } = VxeUI
 
@@ -282,7 +282,7 @@ export default defineComponent({
     toolbarMethods = {
       dispatchEvent,
       syncUpdate (params) {
-        internalData.connectTable = params.$table
+        internalData.connectTable = params.$table as (VxeTableConstructor & VxeTablePrivateMethods)
         reactData.columns = params.collectColumn
         reactData.connectFlag++
       }
