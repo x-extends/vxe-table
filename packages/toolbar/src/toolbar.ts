@@ -5,7 +5,7 @@ import { VxeUI } from '../../ui'
 import { getSlotVNs } from '../../ui/src/vn'
 import { warnLog, errLog } from '../../ui/src/log'
 
-import type { ValueOf, VxeButtonComponent, VxeComponentSizeType } from 'vxe-pc-ui'
+import type { ValueOf, VxeButtonComponent, VxeComponentSizeType, VxeComponentSlotType } from 'vxe-pc-ui'
 import type { VxeGridConstructor, GridPrivateMethods, ToolbarInternalData, VxeTablePrivateMethods, VxeTableDefines, VxeToolbarEmits, VxeToolbarPropTypes, VxeTableConstructor, VxeTablePropTypes, ToolbarReactData } from '../../../types'
 
 const { getConfig, getIcon, getI18n, renderer, commands, createEvent, globalMixins, renderEmptyElement } = VxeUI
@@ -376,19 +376,25 @@ export default defineVxeComponent({
     /**
      * 渲染按钮
      */
-    renderBtns  (h: CreateElement): VNode[] {
+    renderLeftBtns  (h: CreateElement): VxeComponentSlotType[] {
       // 使用已安装的组件，如果未安装则不渲染
       const VxeUIButtonComponent = VxeUI.getComponent<VxeButtonComponent>('VxeButton')
 
       const $xeToolbar = this
       const props = $xeToolbar
+      const slots = $xeToolbar.$scopedSlots
       const internalData = $xeToolbar.internalData
       const $xeGrid = $xeToolbar.$xeGrid
 
       const { buttons } = props
       const { connectTable } = internalData
       const $table = connectTable
-      const btnVNs: VNode[] = []
+      const buttonPrefixSlot = slots.buttonPrefix || slots['button-prefix']
+      const buttonSuffixSlot = slots.buttonSuffix || slots['button-suffix']
+      const btnVNs: VxeComponentSlotType[] = []
+      if (buttonPrefixSlot) {
+        btnVNs.push(...getSlotVNs(buttonPrefixSlot.call($xeToolbar, { buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+      }
       if (buttons) {
         buttons.forEach((item) => {
           const { dropdowns, buttonRender } = item
@@ -440,6 +446,9 @@ export default defineVxeComponent({
           }
         })
       }
+      if (buttonSuffixSlot) {
+        btnVNs.push(...getSlotVNs(buttonSuffixSlot.call($xeToolbar, { buttons: buttons || [], $grid: $xeGrid, $table: $table })))
+      }
       return btnVNs
     },
     /**
@@ -451,13 +460,19 @@ export default defineVxeComponent({
 
       const $xeToolbar = this
       const props = $xeToolbar
+      const slots = $xeToolbar.$scopedSlots
       const internalData = $xeToolbar.internalData
       const $xeGrid = $xeToolbar.$xeGrid
 
       const { tools } = props
       const { connectTable } = internalData
       const $table = connectTable
-      const btnVNs: VNode[] = []
+      const toolPrefixSlot = slots.toolPrefix || slots['tool-prefix']
+      const toolSuffixSlot = slots.toolSuffix || slots['tool-suffix']
+      const btnVNs: VxeComponentSlotType[] = []
+      if (toolPrefixSlot) {
+        btnVNs.push(...getSlotVNs(toolPrefixSlot.call($xeToolbar, { tools: tools || [], $grid: $xeGrid, $table: $table })))
+      }
       if (tools) {
         tools.forEach((item, tIndex) => {
           const { dropdowns, toolRender } = item
@@ -511,6 +526,9 @@ export default defineVxeComponent({
             }
           }
         })
+      }
+      if (toolSuffixSlot) {
+        btnVNs.push(...getSlotVNs(toolSuffixSlot.call($xeToolbar, { tools: tools || [], $grid: $xeGrid, $table: $table })))
       }
       return btnVNs
     },
@@ -680,7 +698,7 @@ export default defineVxeComponent({
       }, [
         h('div', {
           class: 'vxe-buttons--wrapper'
-        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $table: $table }) : $xeToolbar.renderBtns(h)),
+        }, buttonsSlot ? buttonsSlot({ $grid: $xeGrid, $table: $table }) : $xeToolbar.renderLeftBtns(h)),
         h('div', {
           class: 'vxe-tools--wrapper'
         }, toolsSlot ? toolsSlot({ $grid: $xeGrid, $table: $table }) : $xeToolbar.renderRightTools(h)),

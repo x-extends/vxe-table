@@ -72,14 +72,21 @@ const lineOffsetSizes: any = {
   medium: 1
 }
 
-export function restoreScrollLocation (_vm: any, scrollLeft: any, scrollTop: any) {
-  return _vm.clearScroll().then(() => {
+export function restoreScrollLocation ($xeTable: any, scrollLeft: any, scrollTop: any) {
+  const internalData = $xeTable
+
+  return $xeTable.clearScroll().then(() => {
     if (scrollLeft || scrollTop) {
       // 重置最后滚动状态
-      _vm.lastScrollLeft = 0
-      _vm.lastScrollTop = 0
+      internalData.lastScrollLeft = 0
+      internalData.lastScrollTop = 0
+
+      internalData.inVirtualScroll = false
+      internalData.inBodyScroll = false
+      internalData.inFooterScroll = false
+      internalData.bodyScrollType = ''
       // 还原滚动状态
-      return _vm.scrollTo(scrollLeft, scrollTop)
+      return $xeTable.scrollTo(scrollLeft, scrollTop)
     }
   })
 }

@@ -1,6 +1,7 @@
 import { CreateElement } from 'vue'
 import XEUtils from 'xe-utils'
 import { getFuncText, isEnableConf } from '../../ui/src/utils'
+import { initTpImg } from '../../ui/src/dom'
 import { VxeUI } from '../../ui'
 import methods from './methods'
 import TableBodyComponent from './body'
@@ -23,7 +24,7 @@ import keyboardMixin from '../module/keyboard/mixin'
 import validatorMixin from '../module/validator/mixin'
 import customMixin from '../module/custom/mixin'
 
-import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods, VxeComponentStyleType } from 'vxe-pc-ui'
+import type { VxeLoadingComponent, VxeTooltipComponent, VxeTabsConstructor, VxeTabsPrivateMethods } from 'vxe-pc-ui'
 
 const { getConfig, getIcon, getI18n, renderer, globalResize, globalEvents, globalMixins, renderEmptyElement } = VxeUI
 
@@ -497,6 +498,9 @@ export default {
       return 0
     },
     rowHeightMaps () {
+      return this.computeRowHeightMaps
+    },
+    computeRowHeightMaps () {
       return {
         default: 48,
         medium: 44,
@@ -778,18 +782,6 @@ export default {
         y: overflowY && scrollYLoad
       }
     },
-    computeTableStyle () {
-      const $xeTable = this
-      const reactData = $xeTable
-
-      const { tableData } = reactData
-      const columnOpts = $xeTable.computeColumnOpts
-      const stys: VxeComponentStyleType = {}
-      if (columnOpts.drag) {
-        stys['--vxe-ui-table-drag-column-move-delay'] = `${Math.max(0.06, Math.min(0.3, tableData.length / 800))}s`
-      }
-      return stys
-    },
     tabsResizeFlag () {
       const $xeTable = this
       const $xeTabs = $xeTable.$xeTabs
@@ -843,6 +835,11 @@ export default {
     },
     maxHeight () {
       this.$nextTick(() => this.recalculate(true))
+    },
+    computeSize () {
+      this.$nextTick(() => {
+        this.recalculate(true).then(() => this.refreshScroll())
+      })
     },
     syncResize (value: any) {
       if (value) {
@@ -1118,6 +1115,14 @@ export default {
     const $xeTable = this
     const props = $xeTable
 
+    const columnOpts = $xeTable.computeColumnOpts
+    const rowOpts = $xeTable.computeRowOpts
+    const customOpts = $xeTable.computeCustomOpts
+
+    if (columnOpts.drag || rowOpts.drag || customOpts.allowSort) {
+      initTpImg()
+    }
+
     if (process.env.VUE_APP_VXE_ENV === 'development') {
       const { $listeners } = this
       if (!this.menuConfig && ($listeners['menu-click'] || $listeners['cell-menu'] || $listeners['header-cell-menu'] || $listeners['footer-cell-menu'])) {
@@ -1150,18 +1155,11 @@ export default {
       })
     }
     if (this.autoResize) {
-      const handleWrapperResize = this.resizeOpts.refreshDelay ? XEUtils.throttle(() => this.recalculate(true), this.resizeOpts.refreshDelay, { leading: true, trailing: true }) : null
-      const resizeObserver = globalResize.create(handleWrapperResize
-        ? () => {
-            if (this.autoResize) {
-              handleWrapperResize()
-            }
-          }
-        : () => {
-            if (this.autoResize) {
-              this.recalculate(true)
-            }
-          })
+      const resizeObserver = globalResize.create(() => {
+        if (this.autoResize) {
+          this.recalculate(true)
+        }
+      })
       resizeObserver.observe(this.$el)
       resizeObserver.observe(this.getParentElem())
       this.$resize = resizeObserver
@@ -1255,7 +1253,6 @@ export default {
     const tableBorder = $xeTable.computeTableBorder
     const virtualScrollBars = $xeTable.computeVirtualScrollBars
     const isArea = mouseConfig && mouseOpts.area
-    const tableStyle = $xeTable.computeTableStyle
     const columnDragOpts = $xeTable.computeColumnDragOpts
     return h('div', {
       ref: 'refElem',
@@ -1290,7 +1287,6 @@ export default {
         'is--virtual-x': scrollXLoad,
         'is--virtual-y': scrollYLoad
       }],
-      style: tableStyle,
       attrs: {
         spellcheck: false
       },

@@ -2,9 +2,10 @@ import XEUtils from 'xe-utils'
 import { VxeUI } from '../../../ui'
 import { isColumnInfo, mergeBodyMethod, getCellValue } from '../../src/util'
 import { parseFile, formatText, eqEmptyValue } from '../../../ui/src/utils'
-import { browse } from '../../../ui/src/dom'
 import { createHtmlPage, getExportBlobByContent } from './util'
 import { warnLog, errLog } from '../../../ui/src/log'
+
+import type { VxeTablePropTypes, VxeGridConstructor, VxeTableDefines, VxeGridPropTypes, GridReactData } from '../../../../types'
 
 const { getI18n, renderer } = VxeUI
 
@@ -14,17 +15,8 @@ let htmlCellElem: any
 let fileForm: any
 let fileInput: any
 
-// 打印
-let printFrame: any
-
 const csvBOM = '\ufeff'
 const enterSymbol = '\r\n'
-
-function createFrame () {
-  const frame = document.createElement('iframe')
-  frame.className = 'vxe-table--print-frame'
-  return frame
-}
 
 function hasTreeChildren ($xetable: any, row: any) {
   const treeOpts = $xetable.treeOpts
@@ -611,17 +603,19 @@ function clearColumnConvert (columns: any) {
   }, { children: 'children' })
 }
 
-function handleExport ($xetable: any, opts: any) {
+function handleExport ($xeTable: any, opts: VxeTablePropTypes.ExportHandleOptions) {
+  const $xeGrid = $xeTable.$xeGrid
+
   const { remote, columns, colgroups, exportMethod, afterExportMethod } = opts
   return new Promise(resolve => {
     if (remote) {
-      const params = { options: opts, $table: $xetable, $grid: $xetable.$xegrid }
+      const params = { options: opts, $table: $xeTable, $grid: $xeGrid }
       resolve(exportMethod ? exportMethod(params) : params)
     } else {
-      const datas = getExportData($xetable, opts)
+      const datas = getExportData($xeTable, opts)
       resolve(
-        $xetable.preventEvent(null, 'event.export', { options: opts, columns, colgroups, datas }, () => {
-          return downloadFile($xetable, opts, getContent($xetable, opts, columns, datas))
+        $xeTable.preventEvent(null, 'event.export', { options: opts, columns, colgroups, datas }, () => {
+          return downloadFile($xeTable, opts, getContent($xeTable, opts, columns, datas))
         })
       )
     }
@@ -629,7 +623,7 @@ function handleExport ($xetable: any, opts: any) {
     clearColumnConvert(columns)
     if (!opts.print) {
       if (afterExportMethod) {
-        afterExportMethod({ status: true, options: opts, $table: $xetable, $grid: $xetable.$xegrid })
+        afterExportMethod({ status: true, options: opts, $table: $xeTable, $grid: $xeGrid })
       }
     }
     return Object.assign({ status: true }, params)
@@ -637,7 +631,7 @@ function handleExport ($xetable: any, opts: any) {
     clearColumnConvert(columns)
     if (!opts.print) {
       if (afterExportMethod) {
-        afterExportMethod({ status: false, options: opts, $table: $xetable, $grid: $xetable.$xegrid })
+        afterExportMethod({ status: false, options: opts, $table: $xeTable, $grid: $xeGrid })
       }
     }
     const params = { status: false }
@@ -987,60 +981,12 @@ export function readLocalFile (options: any = {}) {
   })
 }
 
-function removePrintFrame () {
-  if (printFrame) {
-    if (printFrame.parentNode) {
-      try {
-        printFrame.contentDocument.write('')
-      } catch (e) { }
-      printFrame.parentNode.removeChild(printFrame)
-    }
-    printFrame = null
-  }
-}
+function handleExportAndPrint ($xeTable: any, options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: any) {
+  const $xeGrid = $xeTable.$xeGrid
 
-function appendPrintFrame () {
-  if (!printFrame.parentNode) {
-    document.body.appendChild(printFrame)
-  }
-}
-
-function afterPrintEvent () {
-  requestAnimationFrame(removePrintFrame)
-}
-
-export function handlePrint ($xetable: any, opts: any, content: any) {
-  const { beforePrintMethod } = opts
-  if (beforePrintMethod) {
-    content = beforePrintMethod({ content, options: opts, $table: $xetable }) || ''
-  }
-  content = createHtmlPage(opts, content)
-  const blob = getExportBlobByContent(content, opts)
-  if (browse.msie) {
-    removePrintFrame()
-    printFrame = createFrame()
-    appendPrintFrame()
-    printFrame.contentDocument.write(content)
-    printFrame.contentDocument.execCommand('print')
-  } else {
-    if (!printFrame) {
-      printFrame = createFrame()
-      printFrame.onload = (evnt: any) => {
-        if (evnt.target.src) {
-          evnt.target.contentWindow.onafterprint = afterPrintEvent
-          evnt.target.contentWindow.print()
-        }
-      }
-    }
-    appendPrintFrame()
-    printFrame.src = URL.createObjectURL(blob as any)
-  }
-}
-
-function handleExportAndPrint ($xetable: any, options: any, isPrint?: any) {
-  const { $xegrid, initStore, customOpts, collectColumn, footerTableData, treeConfig, mergeList, isGroup, exportParams, exportOpts } = $xetable
-  const proxyOpts = $xegrid ? $xegrid.proxyOpts : {}
-  const selectRecords = $xetable.getCheckboxRecords()
+  const { initStore, customOpts, collectColumn, footerTableData, treeConfig, mergeList, isGroup, exportParams, exportOpts } = $xeTable
+  const proxyOpts = $xeGrid ? $xeGrid.computeProxyOpts : {} as VxeGridPropTypes.ProxyOpts
+  const selectRecords = $xeTable.getCheckboxRecords()
   const hasFooter = !!footerTableData.length
   const hasTree = treeConfig
   const hasMerge = !hasTree && mergeList.length
@@ -1056,7 +1002,7 @@ function handleExportAndPrint ($xetable: any, options: any, isPrint?: any) {
   const exportColumns = collectColumn.slice(0)
   const { columns } = defOpts
   // 处理类型
-  const typeList = types.map((value: any) => {
+  const typeList = types.map((value) => {
     return {
       value,
       label: getI18n(`vxe.export.types.${value}`)
@@ -1106,7 +1052,7 @@ function handleExportAndPrint ($xetable: any, options: any, isPrint?: any) {
     }
   })
   // 更新条件
-  Object.assign($xetable.exportStore, {
+  Object.assign($xeTable.exportStore, {
     columns: exportColumns,
     typeList,
     modeList,
@@ -1121,14 +1067,37 @@ function handleExportAndPrint ($xetable: any, options: any, isPrint?: any) {
   Object.assign(exportParams, {
     mode: selectRecords.length ? 'selected' : 'current'
   }, defOpts)
-  if (!modeList.some((item: any) => item.value === exportParams.mode)) {
+  const { filename, sheetName, mode, type } = exportParams
+  if (filename) {
+    if (XEUtils.isFunction(filename)) {
+      exportParams.filename = filename({
+        options: defOpts,
+        $table: $xeTable,
+        $grid: $xeGrid
+      })
+    } else {
+      exportParams.filename = `${filename}`
+    }
+  }
+  if (sheetName) {
+    if (XEUtils.isFunction(sheetName)) {
+      exportParams.sheetName = sheetName({
+        options: defOpts,
+        $table: $xeTable,
+        $grid: $xeGrid
+      })
+    } else {
+      exportParams.sheetName = `${sheetName}`
+    }
+  }
+  if (!modeList.some(item => item.value === mode)) {
     exportParams.mode = modeList[0].value
   }
-  if (!typeList.some((item: any) => item.value === exportParams.type)) {
+  if (!typeList.some(item => item.value === type)) {
     exportParams.type = typeList[0].value
   }
   initStore.export = true
-  return $xetable.$nextTick()
+  return $xeTable.$nextTick()
 }
 
 const getConvertColumns = (columns: any[]) => {
@@ -1194,11 +1163,14 @@ export default {
     /**
      * 导出文件，支持 csv/html/xml/txt
      * 如果是树表格，则默认是导出所有节点
-     * 如果是启用了虚拟滚动，则只能导出数据源，可以配合 dataFilterMethod 函数自行转换数据
+     * 如果是启用了虚拟滚动，则只能导出数据源，可以配合 dataFilterMethod 函数转换数据
      * @param {Object} options 参数
      */
     _exportData (options: any) {
-      const { $xegrid, isGroup, tableGroupColumn, tableFullColumn, afterFullData, treeConfig, treeOpts, exportOpts } = this
+      const $xeTable = this
+      const $xeGrid = $xeTable.$xeGrid as VxeGridConstructor
+
+      const { isGroup, tableGroupColumn, tableFullColumn, afterFullData, treeConfig, treeOpts, exportOpts } = this
       const opts = Object.assign({
         // filename: '',
         // sheetName: '',
@@ -1223,13 +1195,13 @@ export default {
       }, exportOpts, {
         print: false
       }, options)
-      const { type, mode, columns, original, beforeExportMethod, excludeFields, includeFields } = opts
+      const { filename, sheetName, type, mode, columns, original, columnFilterMethod, beforeExportMethod, includeFields, excludeFields } = opts
       let groups = []
       const customCols = columns && columns.length ? columns : null
+      const handleOptions: VxeTablePropTypes.ExportHandleOptions = Object.assign({ } as { data: any[], colgroups: any[], columns: any[] }, opts, { filename: '', sheetName: '' })
       // 如果设置源数据，则默认导出设置了字段的列
-      let columnFilterMethod = opts.columnFilterMethod
       if (!customCols && !columnFilterMethod) {
-        columnFilterMethod = ({ column }: any) => {
+        handleOptions.columnFilterMethod = ({ column }) => {
           if (excludeFields) {
             if (XEUtils.includes(excludeFields, column.field)) {
               return false
@@ -1245,27 +1217,27 @@ export default {
         }
       }
       if (customCols) {
-        opts._isCustomColumn = true
+        handleOptions._isCustomColumn = true
         groups = XEUtils.searchTree(
-          XEUtils.mapTree(customCols, item => {
+          XEUtils.mapTree(customCols, (item) => {
             let targetColumn
             if (item) {
               if (isColumnInfo(item)) {
                 targetColumn = item
               } else if (XEUtils.isString(item)) {
-                targetColumn = this.getColumnByField(item)
+                targetColumn = $xeTable.getColumnByField(item)
               } else {
                 const colid = item.id || item.colId
                 const type = item.type
                 const field = item.field
                 if (colid) {
-                  targetColumn = this.getColumnById(colid)
+                  targetColumn = $xeTable.getColumnById(colid)
                 } else if (field && type) {
-                  targetColumn = tableFullColumn.find((column: any) => column.field === field && column.type === type)
+                  targetColumn = tableFullColumn.find((column: VxeTableDefines.ColumnInfo) => column.field === field && column.type === type)
                 } else if (field) {
-                  targetColumn = this.getColumnByField(field)
+                  targetColumn = $xeTable.getColumnByField(field)
                 } else if (type) {
-                  targetColumn = tableFullColumn.find((column: any) => column.type === type)
+                  targetColumn = tableFullColumn.find((column: VxeTableDefines.ColumnInfo) => column.type === type)
                 }
               }
               return targetColumn || {}
@@ -1274,7 +1246,7 @@ export default {
             children: 'childNodes',
             mapChildren: '_children'
           }),
-          (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ column, $columnIndex: index })),
+          (column, index) => isColumnInfo(column) && (!columnFilterMethod || columnFilterMethod({ column: column as any, $columnIndex: index })),
           {
             children: '_children',
             mapChildren: 'childNodes',
@@ -1285,7 +1257,7 @@ export default {
         groups = XEUtils.searchTree(isGroup ? tableGroupColumn : tableFullColumn, (column, index) => column.visible && (!columnFilterMethod || columnFilterMethod({ column, $columnIndex: index })), { children: 'children', mapChildren: 'childNodes', original: true })
       }
       // 获取所有列
-      const cols: any[] = []
+      const cols: VxeTableDefines.ColumnInfo[] = []
       XEUtils.eachTree(groups, column => {
         const isColGroup = column.children && column.children.length
         if (!isColGroup) {
@@ -1293,17 +1265,40 @@ export default {
         }
       }, { children: 'childNodes' })
       // 构建分组层级
-      opts.columns = cols
-      opts.colgroups = convertToRows(groups)
-      if (!opts.filename) {
-        opts.filename = getI18n(opts.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
+      handleOptions.columns = cols
+      handleOptions.colgroups = convertToRows(groups)
+      if (filename) {
+        if (XEUtils.isFunction(filename)) {
+          handleOptions.filename = filename({
+            options: opts,
+            $table: $xeTable,
+            $grid: $xeGrid
+          })
+        } else {
+          handleOptions.filename = `${filename}`
+        }
       }
-      if (!opts.sheetName) {
-        opts.sheetName = document.title
+      if (!handleOptions.filename) {
+        handleOptions.filename = getI18n(handleOptions.original ? 'vxe.table.expOriginFilename' : 'vxe.table.expFilename', [XEUtils.toDateString(Date.now(), 'yyyyMMddHHmmss')])
+      }
+
+      if (sheetName) {
+        if (XEUtils.isFunction(sheetName)) {
+          handleOptions.sheetName = sheetName({
+            options: opts,
+            $table: $xeTable,
+            $grid: $xeGrid
+          })
+        } else {
+          handleOptions.sheetName = `${sheetName}`
+        }
+      }
+      if (!handleOptions.sheetName) {
+        handleOptions.sheetName = document.title || ''
       }
 
       // 检查类型，如果为自定义导出，则不需要校验类型
-      if (!opts.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
+      if (!handleOptions.exportMethod && !XEUtils.includes(XEUtils.keys(exportOpts._typeMaps), type)) {
         errLog('vxe.error.notType', [type])
         if (process.env.VUE_APP_VXE_ENV === 'development') {
           if (['xlsx', 'pdf'].includes(type)) {
@@ -1314,30 +1309,34 @@ export default {
         return Promise.reject(params)
       }
 
-      if (!opts.print) {
+      if (!handleOptions.print) {
         if (beforeExportMethod) {
-          beforeExportMethod({ options: opts, $table: this, $grid: $xegrid })
+          beforeExportMethod({ options: handleOptions, $table: $xeTable, $grid: $xeGrid })
         }
       }
 
       if (!opts.data) {
-        opts.data = []
+        handleOptions.data = []
         if (mode === 'selected') {
-          const selectRecords = this.getCheckboxRecords()
+          const selectRecords = $xeTable.getCheckboxRecords()
           if (['html', 'pdf'].indexOf(type) > -1 && treeConfig) {
-            opts.data = XEUtils.searchTree(this.getTableData().fullData, (item) => selectRecords.indexOf(item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
+            opts.data = XEUtils.searchTree($xeTable.getTableData().fullData, item => $xeTable.findRowIndexOf(selectRecords, item) > -1, Object.assign({}, treeOpts, { data: '_row' }))
           } else {
             opts.data = selectRecords
           }
         } else if (mode === 'all') {
           if (process.env.VUE_APP_VXE_ENV === 'development') {
-            if (!$xegrid) {
+            if (!$xeGrid) {
               warnLog('vxe.error.errProp', ['all', 'mode=current,selected'])
             }
           }
 
-          if ($xegrid && !opts.remote) {
-            const { beforeQueryAll, afterQueryAll, ajax = {}, props = {} } = $xegrid.proxyOpts
+          if ($xeGrid && !handleOptions.remote) {
+            const gridReactData = $xeGrid as unknown as GridReactData
+            const proxyOpts = $xeGrid.computeProxyOpts
+            const { sortData } = gridReactData
+            const { beforeQueryAll, afterQueryAll, ajax = {} } = proxyOpts
+            const resConfigs = proxyOpts.response || proxyOpts.props || {}
             const ajaxMethods = ajax.queryAll
             const queryAllSuccessMethods = ajax.queryAllSuccess
             const queryAllErrorMethods = ajax.queryAllError
@@ -1350,24 +1349,25 @@ export default {
 
             if (ajaxMethods) {
               const params = {
-                $table: this,
-                $grid: $xegrid,
-                sort: $xegrid.sortData,
-                filters: $xegrid.filterData,
-                form: $xegrid.formData,
-                target: ajaxMethods,
-                options: opts
+                $table: $xeTable,
+                $grid: $xeGrid,
+                sort: sortData.length ? sortData[0] : {} as any,
+                sorts: sortData as any[],
+                filters: gridReactData.filterData,
+                form: gridReactData.formData,
+                options: handleOptions
               }
               return Promise.resolve((beforeQueryAll || ajaxMethods)(params))
                 .then(rest => {
-                  opts.data = (props.list ? XEUtils.get(rest, props.list) : rest) || []
+                  const listProp = resConfigs.list
+                  handleOptions.data = (listProp ? (XEUtils.isFunction(listProp) ? listProp({ data: rest, $grid: $xeGrid }) : XEUtils.get(rest, listProp)) : rest) || []
                   if (afterQueryAll) {
                     afterQueryAll(params)
                   }
                   if (queryAllSuccessMethods) {
                     queryAllSuccessMethods({ ...params, response: rest })
                   }
-                  return handleExport(this, opts)
+                  return handleExport($xeTable, handleOptions)
                 })
                 .catch((rest) => {
                   if (queryAllErrorMethods) {
@@ -1377,10 +1377,10 @@ export default {
             }
           }
         } else if (mode === 'current') {
-          opts.data = afterFullData
+          handleOptions.data = afterFullData
         }
       }
-      return handleExport(this, opts)
+      return handleExport($xeTable, opts)
     },
     _importByFile (file: any, options: any) {
       const opts = Object.assign({}, options)
@@ -1418,6 +1418,9 @@ export default {
       return readLocalFile(options)
     },
     _print (options: any) {
+      const $xeTable = this
+      const $xeGrid = $xeTable.$xeGrid
+
       const opts = Object.assign({
         original: false
         // beforePrintMethod
@@ -1427,23 +1430,77 @@ export default {
         remote: false,
         print: true
       })
-      if (!opts.sheetName) {
-        opts.sheetName = document.title
-      }
-      return new Promise(resolve => {
-        if (opts.content) {
-          resolve(handlePrint(this, opts, opts.content))
+      const { sheetName } = opts
+      let printTitle = ''
+
+      if (sheetName) {
+        if (XEUtils.isFunction(sheetName)) {
+          printTitle = sheetName({
+            options: opts,
+            $table: $xeTable,
+            $grid: $xeGrid
+          })
         } else {
-          resolve(
-            this.exportData(opts).then(({ content }: any) => {
-              return handlePrint(this, opts, content)
-            })
-          )
+          printTitle = `${sheetName}`
+        }
+      }
+      if (!printTitle) {
+        printTitle = document.title || ''
+      }
+
+      const beforePrintMethod = opts.beforePrintMethod
+      const tableHtml = opts.html || opts.content
+      return new Promise((resolve, reject) => {
+        if (VxeUI.print) {
+          if (tableHtml) {
+            resolve(
+              VxeUI.print({
+                title: printTitle,
+                html: tableHtml,
+                customStyle: opts.style,
+                beforeMethod: beforePrintMethod
+                  ? ({ html }) => {
+                      return beforePrintMethod({
+                        html,
+                        content: html,
+                        options: opts,
+                        $table: $xeTable
+                      })
+                    }
+                  : undefined
+              })
+            )
+          } else {
+            resolve(
+              $xeTable.exportData(opts).then(({ content }: any) => {
+                return VxeUI.print({
+                  title: printTitle,
+                  html: content,
+                  customStyle: opts.style,
+                  beforeMethod: beforePrintMethod
+                    ? ({ html }) => {
+                        return beforePrintMethod({
+                          html,
+                          content: html,
+                          options: opts,
+                          $table: $xeTable
+                        })
+                      }
+                    : undefined
+                })
+              })
+            )
+          }
+        } else {
+          const e = { status: false }
+          reject(e)
         }
       })
     },
-    _getPrintHtml (options: any) {
-      const { printOpts } = this
+    _getPrintHtml (options: VxeTablePropTypes.PrintConfig) {
+      const $xeTable = this
+
+      const printOpts = $xeTable.computePrintOpts
       const opts = Object.assign({
         original: false
         // beforePrintMethod
@@ -1453,7 +1510,7 @@ export default {
         remote: false,
         print: true
       })
-      return this.exportData(opts).then(({ content }: any) => {
+      return $xeTable.exportData(opts).then(({ content }: any) => {
         return {
           html: content
         }

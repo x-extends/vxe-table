@@ -732,7 +732,7 @@
   &.col--drag-cell {
     .vxe-header--column {
       user-select: none;
-      &:not(.is--drag-disabled) {
+      &.is--drag-active {
         cursor: grab;
         &:active {
           cursor: grabbing;
@@ -1377,7 +1377,6 @@
   .vxe-header--col-list-move {
     transition-property: transform;
     transition-duration: 0.35s;
-    transition-delay: var(--vxe-ui-table-drag-column-move-delay, 0.3s);
   }
 
   .vxe-table--drag-col-line,
@@ -1459,7 +1458,6 @@
   .vxe-body--row-list-move {
     transition-property: transform;
     transition-duration: 0.35s;
-    transition-delay: 0.05s;
   }
   .vxe-table--drag-sort-tip {
     display: none;

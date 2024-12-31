@@ -54,7 +54,7 @@ function renderLine (h: CreateElement, _vm: any, $xetable: any, params: any) {
 /**
  * 渲染列
  */
-function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fixedType: any, rowLevel: any, row: any, rowIndex: any, $rowIndex: any, _rowIndex: any, column: any, $columnIndex: any, columns: any, items: any) {
+function renderColumn (h: any, _vm: any, $xeTable: any, seq: any, rowid: any, fixedType: any, rowLevel: any, row: any, rowIndex: any, $rowIndex: any, _rowIndex: any, column: any, $columnIndex: any, columns: any, items: any) {
   const {
     $listeners: tableListeners,
     fullAllDataRowIdData,
@@ -92,11 +92,11 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     mouseOpts,
     areaOpts,
     validErrorMaps
-  } = $xetable
-  const rowDragOpts = $xetable.computeRowDragOpts
+  } = $xeTable
+  const rowDragOpts = $xeTable.computeRowDragOpts
   const { disabledMethod: dragDisabledMethod } = rowDragOpts
   const { selectCellToRow } = areaOpts
-  const cellOpts = $xetable.computeCellOpts
+  const cellOpts = $xeTable.computeCellOpts
   const { type, cellRender, editRender, align, showOverflow, className, treeNode, slots } = column
   const { verticalAlign } = cellOpts
   const { actived } = editStore
@@ -107,8 +107,8 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   const compCellClassName = compConf ? (compConf.tableCellClassName || compConf.cellClassName) : ''
   const compCellStyle = compConf ? (compConf.tableCellStyle || compConf.cellStyle) : ''
   const showAllTip = tooltipOpts.showAll || tooltipOpts.enabled
-  const columnIndex = $xetable.getColumnIndex(column)
-  const _columnIndex = $xetable.getVTColumnIndex(column)
+  const columnIndex = $xeTable.getColumnIndex(column)
+  const _columnIndex = $xeTable.getVTColumnIndex(column)
   const isEdit = isEnableConf(editRender)
   let fixedHiddenColumn = fixedType ? column.fixed !== fixedType : column.fixed && overflowX
   const cellOverflow = (XEUtils.isUndefined(showOverflow) || XEUtils.isNull(showOverflow)) ? allColumnOverflow : showOverflow
@@ -127,51 +127,55 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   const bindMouseenter = tableListeners['cell-mouseenter']
   const bindMouseleave = tableListeners['cell-mouseleave']
   const triggerDblclick = (editRender && editConfig && editOpts.trigger === 'dblclick')
-  const params = { $table: $xetable, $grid: $xetable.$xegrid, isEdit: false, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
-  let isColDragCell = false
+  const params = { $table: $xeTable, $grid: $xeTable.$xegrid, isEdit: false, seq, rowid, row, rowIndex, $rowIndex, _rowIndex, column, columnIndex, $columnIndex, _columnIndex, fixed: fixedType, type: renderType, isHidden: fixedHiddenColumn, level: rowLevel, visibleData: afterFullData, data: tableData, items }
+  let isRowDragCell = false
   let isDisabledDrag = false
   if (rowOpts.drag) {
-    isColDragCell = rowDragOpts.trigger === 'row' || (column.dragSort && rowDragOpts.trigger === 'cell')
+    isRowDragCell = rowDragOpts.trigger === 'row' || (column.dragSort && rowDragOpts.trigger === 'cell')
   }
-  if (isColDragCell) {
+  if (isRowDragCell) {
     isDisabledDrag = !!(dragDisabledMethod && dragDisabledMethod(params))
   }
   // hover 进入事件
   if (showTitle || showTooltip || showAllTip || bindMouseenter || tooltipConfig) {
     tdOns.mouseenter = (evnt: any) => {
-      if (isVMScrollProcess($xetable)) {
+      if (isVMScrollProcess($xeTable)) {
         return
       }
       if (showTitle) {
         updateCellTitle(evnt.currentTarget, column)
       } else if (showTooltip || showAllTip) {
         // 如果配置了显示 tooltip
-        $xetable.triggerBodyTooltipEvent(evnt, params)
+        $xeTable.triggerBodyTooltipEvent(evnt, params)
       }
       if (bindMouseenter) {
-        $xetable.emitEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+        $xeTable.emitEvent('cell-mouseenter', Object.assign({ cell: evnt.currentTarget }, params), evnt)
       }
     }
   }
   // hover 退出事件
   if (showTooltip || showAllTip || bindMouseleave || tooltipConfig) {
     tdOns.mouseleave = (evnt: any) => {
-      if (isVMScrollProcess($xetable)) {
+      if (isVMScrollProcess($xeTable)) {
         return
       }
       if (showTooltip || showAllTip) {
-        $xetable.handleTargetLeaveEvent(evnt)
+        $xeTable.handleTargetLeaveEvent(evnt)
       }
       if (bindMouseleave) {
-        $xetable.emitEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, params), evnt)
+        $xeTable.emitEvent('cell-mouseleave', Object.assign({ cell: evnt.currentTarget }, params), evnt)
       }
     }
   }
   // 按下事件处理
-  if (isColDragCell || checkboxOpts.range || mouseConfig) {
+  if (isRowDragCell || checkboxOpts.range || mouseConfig) {
     tdOns.mousedown = (evnt: any) => {
-      $xetable.triggerCellMousedownEvent(evnt, params)
+      $xeTable.triggerCellMousedownEvent(evnt, params)
     }
+  }
+  // 拖拽列事件
+  if (isRowDragCell) {
+    tdOns.mouseup = $xeTable.triggerCellMouseupEvent
   }
   // 点击事件处理
   if ((rowOpts.isCurrent || highlightCurrentRow) ||
@@ -182,13 +186,13 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
     (checkboxOpts.trigger === 'row' || (column.type === 'checkbox' && checkboxOpts.trigger === 'cell')) ||
     (treeOpts.trigger === 'row' || (column.treeNode && treeOpts.trigger === 'cell'))) {
     tdOns.click = (evnt: any) => {
-      $xetable.triggerCellClickEvent(evnt, params)
+      $xeTable.triggerCellClickEvent(evnt, params)
     }
   }
   // 双击事件处理
   if (triggerDblclick || tableListeners['cell-dblclick']) {
     tdOns.dblclick = (evnt: any) => {
-      $xetable.triggerCellDblclickEvent(evnt, params)
+      $xeTable.triggerCellDblclickEvent(evnt, params)
     }
   }
   // 合并行或列
@@ -227,7 +231,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   }
   // 如果编辑列开启显示状态
   if (!fixedHiddenColumn && editConfig && (editRender || cellRender) && (editOpts.showStatus || editOpts.showUpdateStatus)) {
-    isDirty = $xetable.isUpdateByRow(row, column.field)
+    isDirty = $xeTable.isUpdateByRow(row, column.field)
   }
   const tdVNs = []
   if (fixedHiddenColumn && (allColumnOverflow ? isAllOverflow : allColumnOverflow)) {
@@ -246,7 +250,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
   } else {
     // 渲染单元格
     tdVNs.push(
-      ...renderLine(h, _vm, $xetable, params),
+      ...renderLine(h, _vm, $xeTable, params),
       h('div', {
         class: ['vxe-cell', {
           'c--title': showTitle,
@@ -257,7 +261,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
           maxHeight: hasEllipsis && (scrollYRHeight || rowHeight) ? `${scrollYRHeight || rowHeight}px` : ''
         },
         attrs: {
-          title: showTitle ? $xetable.getCellLabel(row, column) : null
+          title: showTitle ? $xeTable.getCellLabel(row, column) : null
         }
       }, column.renderCell(h, params))
     )
@@ -278,7 +282,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
             class: `vxe-cell--valid-error-wrapper vxe-cell--valid-error-theme-${validOpts.theme || 'normal'}`
           }, [
             validSlot
-              ? $xetable.callSlot(validSlot, validParams, h)
+              ? $xeTable.callSlot(validSlot, validParams, h)
               : [
                   h('span', {
                     class: 'vxe-cell--valid-error-msg'
@@ -326,7 +330,7 @@ function renderColumn (h: any, _vm: any, $xetable: any, seq: any, rowid: any, fi
         'col--ellipsis': hasEllipsis,
         'fixed--width': !isAutoCellWidth,
         'fixed--hidden': fixedHiddenColumn,
-        'is--drag-cell': isColDragCell,
+        'is--drag-cell': isRowDragCell,
         'is--drag-disabled': isDisabledDrag,
         'col--dirty': isDirty,
         'col--active': editConfig && isEdit && (actived.row === row && (actived.column === column || editOpts.mode === 'row')),
@@ -428,15 +432,9 @@ function renderRows (h: CreateElement, _vm: any, $xeTable: any, fixedType: any, 
     }
     // 拖拽行事件
     if (rowOpts.drag && (!treeConfig || transform)) {
-      trOn.dragstart = (evnt: DragEvent) => {
-        $xeTable.handleRowDragDragstartEvent(evnt)
-      }
-      trOn.dragover = (evnt: DragEvent) => {
-        $xeTable.handleRowDragDragoverEvent(evnt)
-      }
-      trOn.dragend = (evnt: DragEvent) => {
-        $xeTable.handleRowDragDragendEvent(evnt)
-      }
+      trOn.dragstart = $xeTable.handleRowDragDragstartEvent
+      trOn.dragend = $xeTable.handleRowDragDragendEvent
+      trOn.dragover = $xeTable.handleRowDragDragoverEvent
     }
     const trClass = [
       'vxe-body--row',
@@ -589,14 +587,15 @@ export default {
     const { fixedColumn, fixedType, tableColumn } = props
 
     const { showOverflow: allColumnOverflow, spanMethod, footerSpanMethod, mouseConfig } = tableProps
-    const { tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn } = tableReactData
-    const { visibleColumn } = tableInternalData
+    const { isGroup, tableData, scrollXLoad, scrollYLoad, isAllOverflow, isDragRowMove, expandColumn, dragRow, dragCol } = tableReactData
+    const { visibleColumn, fullAllDataRowIdData, fullColumnIdData } = tableInternalData
     const rowOpts = $xeTable.computeRowOpts
     const sYOpts = $xeTable.computeSYOpts
     const emptyOpts = $xeTable.computeEmptyOpts
     const mouseOpts = $xeTable.computeMouseOpts
     const rowDragOpts = $xeTable.computeRowDragOpts
 
+    let renderDataList = tableData
     let renderColumnList = tableColumn
 
     if (fixedType) {
@@ -610,6 +609,54 @@ export default {
         }
       } else {
         renderColumnList = visibleColumn
+      }
+    }
+
+    // 行拖拽
+    if (scrollYLoad && dragRow) {
+      if (renderDataList.length > 2) {
+        const dRowRest = fullAllDataRowIdData[getRowid($xeTable, dragRow)]
+        if (dRowRest) {
+          const drIndex = dRowRest._index
+          const firstRow = renderDataList[0]
+          const lastRow = renderDataList[renderDataList.length - 1]
+          const firstRowRest = fullAllDataRowIdData[getRowid($xeTable, firstRow)]
+          const lastRowRest = fullAllDataRowIdData[getRowid($xeTable, lastRow)]
+          if (firstRowRest && lastRowRest) {
+            const frIndex = firstRowRest._index
+            const lrIndex = lastRowRest._index
+            if (drIndex < frIndex) {
+              renderDataList = [dragRow].concat(renderDataList)
+            } else if (drIndex > lrIndex) {
+              renderDataList = renderDataList.concat([dragRow])
+            }
+          }
+        }
+      }
+    }
+
+    if (!fixedType && !isGroup) {
+      // 列拖拽
+      if (scrollXLoad && dragCol) {
+        if (renderColumnList.length > 2) {
+          const dCowRest = fullColumnIdData[dragCol.id]
+          if (dCowRest) {
+            const dcIndex = dCowRest._index
+            const firstCol = renderColumnList[0]
+            const lastCol = renderColumnList[renderColumnList.length - 1]
+            const firstColRest = fullColumnIdData[firstCol.id]
+            const lastColRest = fullColumnIdData[lastCol.id]
+            if (firstColRest && lastColRest) {
+              const fcIndex = firstColRest._index
+              const lcIndex = lastColRest._index
+              if (dcIndex < fcIndex) {
+                renderColumnList = [dragCol].concat(renderColumnList)
+              } else if (dcIndex > lcIndex) {
+                renderColumnList = renderColumnList.concat([dragCol])
+              }
+            }
+          }
+        }
       }
     }
 
@@ -683,10 +730,10 @@ export default {
               tag: 'tbody',
               name: `vxe-body--row-list${isDragRowMove ? '' : '-disabled'}`
             }
-          }, renderRows(h, this, $xeTable, fixedType, tableData, renderColumnList))
+          }, renderRows(h, this, $xeTable, fixedType, renderDataList, renderColumnList))
           : h('tbody', {
             ref: 'tbody'
-          }, renderRows(h, this, $xeTable, fixedType, tableData, renderColumnList))
+          }, renderRows(h, this, $xeTable, fixedType, renderDataList, renderColumnList))
       ]),
       h('div', {
         class: 'vxe-table--checkbox-range'

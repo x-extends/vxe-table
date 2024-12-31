@@ -8,11 +8,12 @@
       height="800"
       :loading="loading"
       :column-config="{resizable: true}"
+      :row-config="{drag: true}"
       :scroll-x="{enabled: true, gt: 0}"
       :scroll-y="{enabled: true, gt: 0}"
       :checkbox-config="{labelField: 'name', highlight: true, range: true}"
       :data="tableData">
-      <vxe-column type="checkbox" width="60"></vxe-column>
+      <vxe-column type="checkbox" width="80" drag-sort></vxe-column>
       <vxe-column field="col0" title="列0" width="100"></vxe-column>
       <vxe-column field="imgUrl" title="列1" width="80" :cell-render="imgUrlCellRender"></vxe-column>
       <vxe-column field="col2" title="列2" width="90"></vxe-column>

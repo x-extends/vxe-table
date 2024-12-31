@@ -31,7 +31,10 @@ export function getChangeEvent (renderOpts: any) {
   return 'change'
 }
 
-export function getSlotVNs (vns: VxeComponentSlotType | VxeComponentSlotType[]) {
+export function getSlotVNs (vns: VxeComponentSlotType | VxeComponentSlotType[] | undefined) {
+  if (vns === null || vns === undefined) {
+    return []
+  }
   if (XEUtils.isArray(vns)) {
     return vns
   }

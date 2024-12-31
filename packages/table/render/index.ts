@@ -705,7 +705,9 @@ renderer.mixin({
       const { row, column } = params
       let cellValue = XEUtils.get(row, column.field)
       if (cellValue) {
-        cellValue = getLabelFormatDate(cellValue, props)
+        if (props.type !== 'time') {
+          cellValue = getLabelFormatDate(cellValue, props)
+        }
       }
       return getCellLabelVNs(h, renderOpts, params, cellValue)
     },
