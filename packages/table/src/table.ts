@@ -7307,7 +7307,7 @@ export default defineComponent({
         const { treeConfig, dragConfig } = props
         const rowDragOpts = computeRowDragOpts.value
         const { fullAllDataRowIdData, prevDragToChild } = internalData
-        const { isCrossDrag, isSelfToChildDrag, dragEndMethod } = rowDragOpts
+        const { isPeerDrag, isCrossDrag, isSelfToChildDrag, dragEndMethod } = rowDragOpts
         const treeOpts = computeTreeOpts.value
         const { transform, rowField, mapChildrenField, parentField } = treeOpts
         const childrenField = treeOpts.children || treeOpts.childrenField
@@ -7356,19 +7356,26 @@ export default defineComponent({
                     if (oldLevel && newLevel) {
                       // 子到子
 
-                      if (!isCrossDrag) {
-                        return
-                      }
-                      if (oldAllMaps[newRowid]) {
-                        isSelfToChildStatus = true
-                        if (!isSelfToChildDrag) {
-                          if (VxeUI.modal) {
-                            VxeUI.modal.message({
-                              status: 'error',
-                              content: getI18n('vxe.error.treeDragChild')
-                            })
-                          }
+                      if (isPeerDrag) {
+                        if (oldRest.row[parentField] !== newRest.row[parentField]) {
+                          // 非同级
                           return
+                        }
+                      } else {
+                        if (!isCrossDrag) {
+                          return
+                        }
+                        if (oldAllMaps[newRowid]) {
+                          isSelfToChildStatus = true
+                          if (!(isCrossDrag && isSelfToChildDrag)) {
+                            if (VxeUI.modal) {
+                              VxeUI.modal.message({
+                                status: 'error',
+                                content: getI18n('vxe.error.treeDragChild')
+                              })
+                            }
+                            return
+                          }
                         }
                       }
                     } else if (oldLevel) {
@@ -7385,7 +7392,7 @@ export default defineComponent({
                       }
                       if (oldAllMaps[newRowid]) {
                         isSelfToChildStatus = true
-                        if (!isSelfToChildDrag) {
+                        if (!(isCrossDrag && isSelfToChildDrag)) {
                           if (VxeUI.modal) {
                             VxeUI.modal.message({
                               status: 'error',
@@ -7411,7 +7418,7 @@ export default defineComponent({
                     fullList.splice(ntfIndex, 0, dragRow)
 
                     // 改变层级
-                    if (isSelfToChildStatus && isSelfToChildDrag) {
+                    if (isSelfToChildStatus && (isCrossDrag && isSelfToChildDrag)) {
                       XEUtils.each(dragRow[childrenField], childRow => {
                         childRow[parentField] = dragRow[parentField]
                       })
@@ -7485,9 +7492,9 @@ export default defineComponent({
         const { fullAllDataRowIdData } = internalData
         const { dragRow } = reactData
         const treeOpts = computeTreeOpts.value
-        const { transform } = treeOpts
+        const { transform, parentField } = treeOpts
         const rowDragOpts = computeRowDragOpts.value
-        const { isCrossDrag, isToChildDrag } = rowDragOpts
+        const { isPeerDrag, isCrossDrag, isToChildDrag } = rowDragOpts
         if (!dragRow) {
           evnt.preventDefault()
           return
@@ -7502,11 +7509,13 @@ export default defineComponent({
           const { dragRow } = reactData
           const offsetY = evnt.clientY - trEl.getBoundingClientRect().y
           const dragPos = offsetY < trEl.clientHeight / 2 ? 'top' : 'bottom'
-          if ($xeTable.eqRow(dragRow, row) || (!isCrossDrag && treeConfig && rest.level)) {
+          if ($xeTable.eqRow(dragRow, row) ||
+            (!isCrossDrag && treeConfig && transform && (isPeerDrag ? dragRow[parentField] !== row[parentField] : rest.level))
+          ) {
             showDropTip(evnt, trEl, null, false, dragPos)
             return
           }
-          internalData.prevDragToChild = !!(treeConfig && transform && isToChildDrag && hasCtrlKey)
+          internalData.prevDragToChild = !!(treeConfig && transform && (isCrossDrag && isToChildDrag) && hasCtrlKey)
           internalData.prevDragRow = row
           internalData.prevDragPos = dragPos
           showDropTip(evnt, trEl, null, true, dragPos)
@@ -7563,7 +7572,7 @@ export default defineComponent({
       handleColDragSwapEvent (evnt, isSyncColumn, dragCol, prevDragCol, prevDragPos, prevDragToChild) {
         const { mouseConfig } = props
         const columnDragOpts = computeColumnDragOpts.value
-        const { isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
+        const { isPeerDrag, isCrossDrag, isSelfToChildDrag, isToChildDrag, dragEndMethod } = columnDragOpts
         const { collectColumn } = internalData
         const dragOffsetIndex = prevDragPos === 'right' ? 1 : 0
         if (prevDragCol && dragCol) {
@@ -7598,19 +7607,27 @@ export default defineComponent({
               if (oldColumn.parentId && newColumn.parentId) {
                 // 子到子
 
-                if (!isCrossDrag) {
-                  return
-                }
-                if (oldAllMaps[newColumn.id]) {
-                  isSelfToChildStatus = true
-                  if (!isSelfToChildDrag) {
-                    if (VxeUI.modal) {
-                      VxeUI.modal.message({
-                        status: 'error',
-                        content: getI18n('vxe.error.treeDragChild')
-                      })
-                    }
+                if (isPeerDrag) {
+                  if (oldColumn.parentId !== newColumn.parentId) {
+                    // 非同级
                     return
+                  }
+                } else {
+                  if (!isCrossDrag) {
+                    return
+                  }
+
+                  if (oldAllMaps[newColumn.id]) {
+                    isSelfToChildStatus = true
+                    if (!(isCrossDrag && isSelfToChildDrag)) {
+                      if (VxeUI.modal) {
+                        VxeUI.modal.message({
+                          status: 'error',
+                          content: getI18n('vxe.error.treeDragChild')
+                        })
+                      }
+                      return
+                    }
                   }
                 }
               } else if (oldColumn.parentId) {
@@ -7627,7 +7644,7 @@ export default defineComponent({
                 }
                 if (oldAllMaps[newColumn.id]) {
                   isSelfToChildStatus = true
-                  if (!isSelfToChildDrag) {
+                  if (!(isCrossDrag && isSelfToChildDrag)) {
                     if (VxeUI.modal) {
                       VxeUI.modal.message({
                         status: 'error',
@@ -7644,7 +7661,7 @@ export default defineComponent({
               const oldewMatchRest = XEUtils.findTree(collectColumn, item => item.id === oldColumn.id)
 
               // 改变层级
-              if (isSelfToChildStatus && isSelfToChildDrag) {
+              if (isSelfToChildStatus && (isCrossDrag && isSelfToChildDrag)) {
                 if (oldewMatchRest) {
                   const { items: oCols, index: oIndex } = oldewMatchRest
                   const childList = oldColumn.children || []
@@ -7668,7 +7685,7 @@ export default defineComponent({
               if (newMatchRest) {
                 const { items: nCols, index: nIndex, parent: nParent } = newMatchRest
                 // 转子级
-                if (isToChildDrag && prevDragToChild) {
+                if ((isCrossDrag && isToChildDrag) && prevDragToChild) {
                   oldColumn.parentId = newColumn.id
                   newColumn.children = (newColumn.children || []).concat([oldColumn])
                 } else {
@@ -7737,7 +7754,7 @@ export default defineComponent({
       handleHeaderCellDragDragoverEvent (evnt) {
         const { dragCol } = reactData
         const columnDragOpts = computeColumnDragOpts.value
-        const { isToChildDrag, isCrossDrag } = columnDragOpts
+        const { isToChildDrag, isPeerDrag, isCrossDrag } = columnDragOpts
         if (!dragCol) {
           evnt.preventDefault()
           return
@@ -7751,11 +7768,14 @@ export default defineComponent({
           const { clientX } = evnt
           const offsetX = clientX - thEl.getBoundingClientRect().x
           const dragPos = offsetX < thEl.clientWidth / 2 ? 'left' : 'right'
-          if (column.fixed || (dragCol && dragCol.id === column.id) || (!isCrossDrag && column.parentId)) {
+          if (column.fixed ||
+            (dragCol && dragCol.id === column.id) ||
+            (!isCrossDrag && (isPeerDrag ? dragCol.parentId !== column.parentId : column.parentId))
+          ) {
             showDropTip(evnt, null, thEl, false, dragPos)
             return
           }
-          internalData.prevDragToChild = !!(isToChildDrag && hasCtrlKey)
+          internalData.prevDragToChild = !!((isCrossDrag && isToChildDrag) && hasCtrlKey)
           internalData.prevDragCol = column
           internalData.prevDragPos = dragPos
           showDropTip(evnt, null, thEl, true, dragPos)

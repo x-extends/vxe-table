@@ -15,7 +15,7 @@
       :row-config="{useKey: true,drag:true}"
       :row-drag-config="{trigger:'row',disabledMethod:disabledRowMethod}"
       :column-config="{useKey: true,drag: true}"
-      :column-drag-config="{isCrossDrag:true,isToChildDrag:true,isSelfToChildDrag:true,trigger:'default',disabledMethod:disabledColumnMethod}"
+      :column-drag-config="{isPeerDrag:true,isToChildDrag:true,isSelfToChildDrag:true,trigger:'default',disabledMethod:disabledColumnMethod}"
       :custom-config="customConfig"
       :loading="demo1.loading"
       :import-config="{modes: importModes}"

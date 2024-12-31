@@ -83,12 +83,12 @@ function renderCellBaseVNs (params: VxeTableDefines.CellRenderBodyParams & { $ta
   const { computeRowOpts, computeRowDragOpts } = $table.getComputeMaps()
   const rowOpts = computeRowOpts.value
   const rowDragOpts = computeRowDragOpts.value
-  const { showIcon, isCrossDrag, visibleMethod } = rowDragOpts
+  const { showIcon, isPeerDrag, isCrossDrag, visibleMethod } = rowDragOpts
   const rVisibleMethod = visibleMethod || (dragConfig ? dragConfig.rowVisibleMethod : null)
   const vns: VxeComponentSlotType[] = XEUtils.isArray(content) ? content : [content]
   if (dragSort && rowOpts.drag && ((showIcon || (dragConfig ? dragConfig.showRowIcon : false)) && (!rVisibleMethod || rVisibleMethod(params)))) {
     if (treeConfig) {
-      if (isCrossDrag || !level) {
+      if (isPeerDrag || isCrossDrag || !level) {
         vns.unshift(
           renderCellDragIcon(params)
         )
@@ -107,9 +107,9 @@ function renderHeaderCellDragIcon (params: VxeTableDefines.CellRenderHeaderParam
   const { computeColumnOpts, computeColumnDragOpts } = $table.getComputeMaps()
   const columnOpts = computeColumnOpts.value
   const columnDragOpts = computeColumnDragOpts.value
-  const { showIcon, icon, trigger, isCrossDrag, visibleMethod, disabledMethod } = columnDragOpts
+  const { showIcon, icon, trigger, isPeerDrag, isCrossDrag, visibleMethod, disabledMethod } = columnDragOpts
   if (columnOpts.drag && showIcon && (!visibleMethod || visibleMethod(params))) {
-    if (!column.fixed && (isCrossDrag || !column.parentId)) {
+    if (!column.fixed && (isPeerDrag || isCrossDrag || !column.parentId)) {
       const isDisabled = disabledMethod && disabledMethod(params)
       const ons: Record<string, any> = {}
       if (trigger !== 'cell') {
