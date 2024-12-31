@@ -11,7 +11,7 @@ export default {
     },
     error: {
       downErr: '下載失敗',
-      groupFixed: '如果使用分組表頭，凍結列必須按組設置',
+      groupFixed: '如果使用分組表頭，凍結列必須按群組設定',
       groupMouseRange: '分組表頭與 "{0}" 不能同時使用，這可能會出現錯誤',
       groupTag: '分組列頭應該使用 "{0}" 而不是 "{1}"，這可能會出現錯誤',
       scrollErrProp: '啟用虛擬滾動後不支援此參數 "{0}"',
@@ -37,7 +37,7 @@ export default {
       checkProp: '當資料量過大時可能會導致複選框卡頓，建議設定參數 "{0}" 提升渲染速度',
       coverProp: '"{0}" 的參數 "{1}" 重複定義，這可能會出現錯誤',
       uniField: '欄位名稱 "{0}" 重複定義，這可能會出現錯誤',
-      repeatKey: '主键重复 {0}="{1}"，这可能会出现错误',
+      repeatKey: '主鍵重複 {0}="{1}"，這可能會出現錯誤',
       delFunc: '方法 "{0}" 已廢棄，請使用 "{1}"',
       delProp: '參數 "{0}" 已廢棄，請使用 "{1}"',
       delEvent: '事件 "{0}" 已廢棄，請使用 "{1}"',
@@ -47,9 +47,9 @@ export default {
       notExp: '該瀏覽器不支援匯入/匯出功能',
       impFields: '匯入失敗，請檢查欄位名稱和資料格式是否正確',
       treeNotImp: '樹表格不支援導入',
-      treeCrossDrag: '只能拖拽第一层级',
-      treeDragChild: '父级不能拖拽到自己的子级中',
-      reqPlugin: '可選擴展插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
+      treeCrossDrag: '只能拖曳第一層級',
+      treeDragChild: '父級不能拖曳到自己的子級中',
+      reqPlugin: '選用擴充插件 "{1}" https://vxeui.com/other{0}/#/{1}/install'
     },
     table: {
       emptyText: '暫無數據',
@@ -65,7 +65,7 @@ export default {
       impSuccess: '成功導入 {0} 筆記錄',
       expLoading: '正在匯出中',
       expSuccess: '匯出成功',
-      expError: '导出失败',
+      expError: '匯出失敗',
       expFilename: '導出_{0}',
       expOriginFilename: '匯出_來源_{0}',
       customTitle: '列設定',
@@ -207,7 +207,7 @@ export default {
       zoomOut: '還原',
       close: '關閉',
       miniMaxSize: '最小化視窗的數量不能超過 {0} 個',
-      footPropErr: 'show-footer 仅用于启用表尾，需配合 show-confirm-button | show-cancel-button | 插槽使用'
+      footPropErr: 'show-footer 僅用於啟用表尾，需搭配 show-confirm-button | show-cancel-button | 插槽使用'
     },
     drawer: {
       close: '關閉'
@@ -314,7 +314,7 @@ export default {
       fileTypeHint: '支援 {0} 文件類型',
       fileSizeHint: '單一檔案大小不超過{0}',
       fileCountHint: '最多可上傳{0}個文件',
-      uploadTypeErr: '文件类型不匹配！',
+      uploadTypeErr: '文件類型不符！',
       overCountErr: '最多只能選擇{0}個檔案！',
       overCountExtraErr: '已超出最大數量{0}個，超出的{1}個檔案將被忽略！',
       overSizeErr: '檔案大小最大不能超過{0}！',
@@ -331,12 +331,12 @@ export default {
       }
     },
     empty: {
-      defText: '暂无数据'
+      defText: '暫無數據'
     },
     colorPicker: {
       clear: '清除',
-      confirm: '确认',
-      copySuccess: '已复制到剪贴板：{0}'
+      confirm: '確認',
+      copySuccess: '已複製到剪貼簿：{0}'
     },
     formDesign: {
       formName: '表單名稱',
@@ -396,8 +396,8 @@ export default {
           VxeCheckboxGroup: '複選框',
           VxeUploadFile: '文件',
           VxeUploadImage: '圖片',
-          VxeRate: '评分',
-          VxeSlider: '滑块'
+          VxeRate: '評分',
+          VxeSlider: '滑桿'
         }
       },
       widgetProp: {
@@ -498,7 +498,7 @@ export default {
         area: {
           mergeErr: '無法對合併儲存格進行該操作',
           multiErr: '無法對多重選擇區域進行此操作',
-          selectErr: '无法操作指定区域的单元格',
+          selectErr: '無法操作指定區域的儲存格',
           extendErr: '若延伸的區域包含被合併的儲存格，所有合併的儲存格需大小相同',
           pasteMultiErr: '無法貼上，需要相同大小的複製的區域和貼上的區域才能執行此操作',
           cpInvalidErr: '此操作無法進行，您選擇的區域中存在被禁止的列（{0}）'
@@ -668,11 +668,11 @@ export default {
           clearSort: '清除排序',
           sortAsc: '升序',
           sortDesc: '降序',
-          fixedColumn: '冻结列',
-          fixedGroup: '冻结分组',
-          cancelFixed: '取消冻结',
-          fixedLeft: '冻结到左侧',
-          fixedRight: '冻结到右侧',
+          fixedColumn: '凍結列',
+          fixedGroup: '凍結分組',
+          cancelFixed: '取消凍結',
+          fixedLeft: '凍結到左側',
+          fixedRight: '凍結到右側',
           clearFilter: '清除篩選',
           textOption: '文字篩選',
           numberOption: '數值篩選'

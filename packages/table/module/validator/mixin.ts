@@ -155,7 +155,7 @@ export default {
      */
     beginValidate (rows: any, cols: VxeTableDefines.ColumnInfo[] | null, cb: any, isFull: any) {
       const validRest: any = {}
-      const { editRules, afterFullData, visibleColumn, treeConfig, treeOpts } = this
+      const { editRules, afterFullData, treeConfig, treeOpts } = this
       const childrenField = treeOpts.children || treeOpts.childrenField
       let validList
       if (rows === true) {
@@ -265,11 +265,7 @@ export default {
             } else {
               const row = firstErrParams.row
               const column = firstErrParams.column
-              const rowIndex = afterFullData.indexOf(row)
-              const columnIndex = visibleColumn.indexOf(column)
-              const targetRow = rowIndex > 0 ? afterFullData[rowIndex - 1] : row
-              const targetColumn = columnIndex > 0 ? visibleColumn[columnIndex - 1] : column
-              this.scrollToRow(targetRow, targetColumn).then(posAndFinish)
+              this.scrollToRow(row, column).then(posAndFinish)
             }
           })
         })

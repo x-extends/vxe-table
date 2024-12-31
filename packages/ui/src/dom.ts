@@ -4,7 +4,22 @@ const reClsMap: { [key: string]: any } = {}
 
 export const browse = XEUtils.browse()
 
-export const tpImg = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+let tpImgEl: HTMLImageElement | undefined
+
+export function initTpImg () {
+  if (!tpImgEl) {
+    tpImgEl = new Image()
+    tpImgEl.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+  }
+  return tpImgEl
+}
+
+export function getTpImg () {
+  if (!tpImgEl) {
+    return initTpImg()
+  }
+  return tpImgEl
+}
 
 export function getPropClass (property: any, params: any) {
   return property ? XEUtils.isFunction(property) ? property(params) : property : ''

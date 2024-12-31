@@ -1,7 +1,7 @@
 import { CreateElement, VNode } from 'vue'
 import { VxeUI } from '../../../ui'
 import { formatText } from '../../../ui/src/utils'
-import { tpImg, addClass, removeClass } from '../../../ui/src/dom'
+import { getTpImg, addClass, removeClass } from '../../../ui/src/dom'
 import { errLog } from '../../../ui/src/log'
 import XEUtils from 'xe-utils'
 
@@ -55,11 +55,16 @@ function hideDropTip (_vm: any) {
 }
 
 const renderDragTip = (h: CreateElement, _vm: any) => {
-  const { dragCol } = _vm
+  const $xeTable = _vm.$xeTable
+
+  const dragCol = $xeTable.dragColumnRef
+  const columnDragOpts = $xeTable.computeColumnDragOpts
   return h('div', {}, [
     h('div', {
       ref: 'refDragLineElem',
-      class: 'vxe-table-custom-popup--drag-line'
+      class: ['vxe-table-custom-popup--drag-line', {
+        'is--guides': columnDragOpts.showGuidesStatus
+      }]
     }),
     h('div', {
       ref: 'refDragTipElem',
@@ -725,7 +730,7 @@ const renderPopupPanel = (h: CreateElement, _vm: any) => {
         immediate
           ? h(VxeUIButtonComponent, {
             props: {
-              content: customOpts.resetButtonText || getI18n('vxe.custom.customClose')
+              content: customOpts.resetButtonText || getI18n('vxe.table.customClose')
             },
             on: {
               click: _vm.cancelCloseEvent
@@ -1074,9 +1079,7 @@ export default {
     },
     sortDragstartEvent (evnt: any) {
       if (evnt.dataTransfer) {
-        const img = new Image()
-        img.src = tpImg
-        evnt.dataTransfer.setDragImage(img, 0, 0)
+        evnt.dataTransfer.setDragImage(getTpImg(), 0, 0)
       }
     },
     sortDragendEvent (evnt: any) {
@@ -1250,11 +1253,7 @@ export default {
 
             if (immediate) {
               reactData.customColumnList = collectColumn.slice(0)
-              $xeTable.refreshColumn(true).then(() => {
-                $xeTable.updateCellAreas()
-                $xeTable.handleCustom()
-                $xeTable.saveCustomStore('update:sort')
-              })
+              $xeTable.handleColDragSwapColumn()
             }
           }).catch(() => {
           })
