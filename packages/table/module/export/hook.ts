@@ -946,7 +946,7 @@ hooks.add('tableExportModule', {
 
     const handleExportAndPrint = (options: VxeTablePropTypes.ExportOpts | VxeTablePropTypes.ExportConfig, isPrint?: boolean) => {
       const { treeConfig, showHeader, showFooter } = props
-      const { initStore, mergeList, isGroup, footerTableData, exportStore, exportParams } = reactData
+      const { initStore, mergeList, mergeFooterList, isGroup, footerTableData, exportStore, exportParams } = reactData
       const { collectColumn } = internalData
       const exportOpts = computeExportOpts.value
       const hasTree = treeConfig
@@ -954,7 +954,7 @@ hooks.add('tableExportModule', {
       const selectRecords = $xeTable.getCheckboxRecords()
       const proxyOpts = $xeGrid ? $xeGrid.getComputeMaps().computeProxyOpts.value : {} as VxeGridPropTypes.ProxyOpts
       const hasFooter = !!footerTableData.length
-      const hasMerge = !hasTree && mergeList.length
+      const hasMerge = !!(mergeList.length || mergeFooterList.length)
       const defOpts = Object.assign({
         message: true,
         isHeader: showHeader,
