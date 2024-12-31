@@ -1042,7 +1042,7 @@ export default defineComponent({
           const colKey = column.getKey()
           // 支持一级
           if (!parent) {
-            if (fixedData && fixedData[colKey]) {
+            if (fixedData && fixedData[colKey] !== undefined) {
               column.fixed = fixedData[colKey]
             }
             if (sortData && XEUtils.isNumber(sortData[colKey])) {
@@ -5395,7 +5395,7 @@ export default defineComponent({
                 sortData[colKey] = column.renderSortNumber
               }
             })
-            if (column.fixed && column.fixed !== column.defaultFixed) {
+            if (column.fixed !== column.defaultFixed) {
               const colKey = column.getKey()
               if (colKey) {
                 hasFixedt = 1
